@@ -357,6 +357,114 @@ func (phu *ProcedureHistoryUpdate) ClearSummary() *ProcedureHistoryUpdate {
 	return phu
 }
 
+// SetTagSuggestions sets the "tag_suggestions" field.
+func (phu *ProcedureHistoryUpdate) SetTagSuggestions(s []string) *ProcedureHistoryUpdate {
+	phu.mutation.SetTagSuggestions(s)
+	return phu
+}
+
+// AppendTagSuggestions appends s to the "tag_suggestions" field.
+func (phu *ProcedureHistoryUpdate) AppendTagSuggestions(s []string) *ProcedureHistoryUpdate {
+	phu.mutation.AppendTagSuggestions(s)
+	return phu
+}
+
+// ClearTagSuggestions clears the value of the "tag_suggestions" field.
+func (phu *ProcedureHistoryUpdate) ClearTagSuggestions() *ProcedureHistoryUpdate {
+	phu.mutation.ClearTagSuggestions()
+	return phu
+}
+
+// SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
+func (phu *ProcedureHistoryUpdate) SetDismissedTagSuggestions(s []string) *ProcedureHistoryUpdate {
+	phu.mutation.SetDismissedTagSuggestions(s)
+	return phu
+}
+
+// AppendDismissedTagSuggestions appends s to the "dismissed_tag_suggestions" field.
+func (phu *ProcedureHistoryUpdate) AppendDismissedTagSuggestions(s []string) *ProcedureHistoryUpdate {
+	phu.mutation.AppendDismissedTagSuggestions(s)
+	return phu
+}
+
+// ClearDismissedTagSuggestions clears the value of the "dismissed_tag_suggestions" field.
+func (phu *ProcedureHistoryUpdate) ClearDismissedTagSuggestions() *ProcedureHistoryUpdate {
+	phu.mutation.ClearDismissedTagSuggestions()
+	return phu
+}
+
+// SetControlSuggestions sets the "control_suggestions" field.
+func (phu *ProcedureHistoryUpdate) SetControlSuggestions(s []string) *ProcedureHistoryUpdate {
+	phu.mutation.SetControlSuggestions(s)
+	return phu
+}
+
+// AppendControlSuggestions appends s to the "control_suggestions" field.
+func (phu *ProcedureHistoryUpdate) AppendControlSuggestions(s []string) *ProcedureHistoryUpdate {
+	phu.mutation.AppendControlSuggestions(s)
+	return phu
+}
+
+// ClearControlSuggestions clears the value of the "control_suggestions" field.
+func (phu *ProcedureHistoryUpdate) ClearControlSuggestions() *ProcedureHistoryUpdate {
+	phu.mutation.ClearControlSuggestions()
+	return phu
+}
+
+// SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
+func (phu *ProcedureHistoryUpdate) SetDismissedControlSuggestions(s []string) *ProcedureHistoryUpdate {
+	phu.mutation.SetDismissedControlSuggestions(s)
+	return phu
+}
+
+// AppendDismissedControlSuggestions appends s to the "dismissed_control_suggestions" field.
+func (phu *ProcedureHistoryUpdate) AppendDismissedControlSuggestions(s []string) *ProcedureHistoryUpdate {
+	phu.mutation.AppendDismissedControlSuggestions(s)
+	return phu
+}
+
+// ClearDismissedControlSuggestions clears the value of the "dismissed_control_suggestions" field.
+func (phu *ProcedureHistoryUpdate) ClearDismissedControlSuggestions() *ProcedureHistoryUpdate {
+	phu.mutation.ClearDismissedControlSuggestions()
+	return phu
+}
+
+// SetImprovementSuggestions sets the "improvement_suggestions" field.
+func (phu *ProcedureHistoryUpdate) SetImprovementSuggestions(s []string) *ProcedureHistoryUpdate {
+	phu.mutation.SetImprovementSuggestions(s)
+	return phu
+}
+
+// AppendImprovementSuggestions appends s to the "improvement_suggestions" field.
+func (phu *ProcedureHistoryUpdate) AppendImprovementSuggestions(s []string) *ProcedureHistoryUpdate {
+	phu.mutation.AppendImprovementSuggestions(s)
+	return phu
+}
+
+// ClearImprovementSuggestions clears the value of the "improvement_suggestions" field.
+func (phu *ProcedureHistoryUpdate) ClearImprovementSuggestions() *ProcedureHistoryUpdate {
+	phu.mutation.ClearImprovementSuggestions()
+	return phu
+}
+
+// SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
+func (phu *ProcedureHistoryUpdate) SetDismissedImprovementSuggestions(s []string) *ProcedureHistoryUpdate {
+	phu.mutation.SetDismissedImprovementSuggestions(s)
+	return phu
+}
+
+// AppendDismissedImprovementSuggestions appends s to the "dismissed_improvement_suggestions" field.
+func (phu *ProcedureHistoryUpdate) AppendDismissedImprovementSuggestions(s []string) *ProcedureHistoryUpdate {
+	phu.mutation.AppendDismissedImprovementSuggestions(s)
+	return phu
+}
+
+// ClearDismissedImprovementSuggestions clears the value of the "dismissed_improvement_suggestions" field.
+func (phu *ProcedureHistoryUpdate) ClearDismissedImprovementSuggestions() *ProcedureHistoryUpdate {
+	phu.mutation.ClearDismissedImprovementSuggestions()
+	return phu
+}
+
 // Mutation returns the ProcedureHistoryMutation object of the builder.
 func (phu *ProcedureHistoryUpdate) Mutation() *ProcedureHistoryMutation {
 	return phu.mutation
@@ -543,6 +651,72 @@ func (phu *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	}
 	if phu.mutation.SummaryCleared() {
 		_spec.ClearField(procedurehistory.FieldSummary, field.TypeString)
+	}
+	if value, ok := phu.mutation.TagSuggestions(); ok {
+		_spec.SetField(procedurehistory.FieldTagSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := phu.mutation.AppendedTagSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedurehistory.FieldTagSuggestions, value)
+		})
+	}
+	if phu.mutation.TagSuggestionsCleared() {
+		_spec.ClearField(procedurehistory.FieldTagSuggestions, field.TypeJSON)
+	}
+	if value, ok := phu.mutation.DismissedTagSuggestions(); ok {
+		_spec.SetField(procedurehistory.FieldDismissedTagSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := phu.mutation.AppendedDismissedTagSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedurehistory.FieldDismissedTagSuggestions, value)
+		})
+	}
+	if phu.mutation.DismissedTagSuggestionsCleared() {
+		_spec.ClearField(procedurehistory.FieldDismissedTagSuggestions, field.TypeJSON)
+	}
+	if value, ok := phu.mutation.ControlSuggestions(); ok {
+		_spec.SetField(procedurehistory.FieldControlSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := phu.mutation.AppendedControlSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedurehistory.FieldControlSuggestions, value)
+		})
+	}
+	if phu.mutation.ControlSuggestionsCleared() {
+		_spec.ClearField(procedurehistory.FieldControlSuggestions, field.TypeJSON)
+	}
+	if value, ok := phu.mutation.DismissedControlSuggestions(); ok {
+		_spec.SetField(procedurehistory.FieldDismissedControlSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := phu.mutation.AppendedDismissedControlSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedurehistory.FieldDismissedControlSuggestions, value)
+		})
+	}
+	if phu.mutation.DismissedControlSuggestionsCleared() {
+		_spec.ClearField(procedurehistory.FieldDismissedControlSuggestions, field.TypeJSON)
+	}
+	if value, ok := phu.mutation.ImprovementSuggestions(); ok {
+		_spec.SetField(procedurehistory.FieldImprovementSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := phu.mutation.AppendedImprovementSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedurehistory.FieldImprovementSuggestions, value)
+		})
+	}
+	if phu.mutation.ImprovementSuggestionsCleared() {
+		_spec.ClearField(procedurehistory.FieldImprovementSuggestions, field.TypeJSON)
+	}
+	if value, ok := phu.mutation.DismissedImprovementSuggestions(); ok {
+		_spec.SetField(procedurehistory.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := phu.mutation.AppendedDismissedImprovementSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedurehistory.FieldDismissedImprovementSuggestions, value)
+		})
+	}
+	if phu.mutation.DismissedImprovementSuggestionsCleared() {
+		_spec.ClearField(procedurehistory.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
 	_spec.Node.Schema = phu.schemaConfig.ProcedureHistory
 	ctx = internal.NewSchemaConfigContext(ctx, phu.schemaConfig)
@@ -892,6 +1066,114 @@ func (phuo *ProcedureHistoryUpdateOne) ClearSummary() *ProcedureHistoryUpdateOne
 	return phuo
 }
 
+// SetTagSuggestions sets the "tag_suggestions" field.
+func (phuo *ProcedureHistoryUpdateOne) SetTagSuggestions(s []string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.SetTagSuggestions(s)
+	return phuo
+}
+
+// AppendTagSuggestions appends s to the "tag_suggestions" field.
+func (phuo *ProcedureHistoryUpdateOne) AppendTagSuggestions(s []string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.AppendTagSuggestions(s)
+	return phuo
+}
+
+// ClearTagSuggestions clears the value of the "tag_suggestions" field.
+func (phuo *ProcedureHistoryUpdateOne) ClearTagSuggestions() *ProcedureHistoryUpdateOne {
+	phuo.mutation.ClearTagSuggestions()
+	return phuo
+}
+
+// SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
+func (phuo *ProcedureHistoryUpdateOne) SetDismissedTagSuggestions(s []string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.SetDismissedTagSuggestions(s)
+	return phuo
+}
+
+// AppendDismissedTagSuggestions appends s to the "dismissed_tag_suggestions" field.
+func (phuo *ProcedureHistoryUpdateOne) AppendDismissedTagSuggestions(s []string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.AppendDismissedTagSuggestions(s)
+	return phuo
+}
+
+// ClearDismissedTagSuggestions clears the value of the "dismissed_tag_suggestions" field.
+func (phuo *ProcedureHistoryUpdateOne) ClearDismissedTagSuggestions() *ProcedureHistoryUpdateOne {
+	phuo.mutation.ClearDismissedTagSuggestions()
+	return phuo
+}
+
+// SetControlSuggestions sets the "control_suggestions" field.
+func (phuo *ProcedureHistoryUpdateOne) SetControlSuggestions(s []string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.SetControlSuggestions(s)
+	return phuo
+}
+
+// AppendControlSuggestions appends s to the "control_suggestions" field.
+func (phuo *ProcedureHistoryUpdateOne) AppendControlSuggestions(s []string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.AppendControlSuggestions(s)
+	return phuo
+}
+
+// ClearControlSuggestions clears the value of the "control_suggestions" field.
+func (phuo *ProcedureHistoryUpdateOne) ClearControlSuggestions() *ProcedureHistoryUpdateOne {
+	phuo.mutation.ClearControlSuggestions()
+	return phuo
+}
+
+// SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
+func (phuo *ProcedureHistoryUpdateOne) SetDismissedControlSuggestions(s []string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.SetDismissedControlSuggestions(s)
+	return phuo
+}
+
+// AppendDismissedControlSuggestions appends s to the "dismissed_control_suggestions" field.
+func (phuo *ProcedureHistoryUpdateOne) AppendDismissedControlSuggestions(s []string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.AppendDismissedControlSuggestions(s)
+	return phuo
+}
+
+// ClearDismissedControlSuggestions clears the value of the "dismissed_control_suggestions" field.
+func (phuo *ProcedureHistoryUpdateOne) ClearDismissedControlSuggestions() *ProcedureHistoryUpdateOne {
+	phuo.mutation.ClearDismissedControlSuggestions()
+	return phuo
+}
+
+// SetImprovementSuggestions sets the "improvement_suggestions" field.
+func (phuo *ProcedureHistoryUpdateOne) SetImprovementSuggestions(s []string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.SetImprovementSuggestions(s)
+	return phuo
+}
+
+// AppendImprovementSuggestions appends s to the "improvement_suggestions" field.
+func (phuo *ProcedureHistoryUpdateOne) AppendImprovementSuggestions(s []string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.AppendImprovementSuggestions(s)
+	return phuo
+}
+
+// ClearImprovementSuggestions clears the value of the "improvement_suggestions" field.
+func (phuo *ProcedureHistoryUpdateOne) ClearImprovementSuggestions() *ProcedureHistoryUpdateOne {
+	phuo.mutation.ClearImprovementSuggestions()
+	return phuo
+}
+
+// SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
+func (phuo *ProcedureHistoryUpdateOne) SetDismissedImprovementSuggestions(s []string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.SetDismissedImprovementSuggestions(s)
+	return phuo
+}
+
+// AppendDismissedImprovementSuggestions appends s to the "dismissed_improvement_suggestions" field.
+func (phuo *ProcedureHistoryUpdateOne) AppendDismissedImprovementSuggestions(s []string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.AppendDismissedImprovementSuggestions(s)
+	return phuo
+}
+
+// ClearDismissedImprovementSuggestions clears the value of the "dismissed_improvement_suggestions" field.
+func (phuo *ProcedureHistoryUpdateOne) ClearDismissedImprovementSuggestions() *ProcedureHistoryUpdateOne {
+	phuo.mutation.ClearDismissedImprovementSuggestions()
+	return phuo
+}
+
 // Mutation returns the ProcedureHistoryMutation object of the builder.
 func (phuo *ProcedureHistoryUpdateOne) Mutation() *ProcedureHistoryMutation {
 	return phuo.mutation
@@ -1108,6 +1390,72 @@ func (phuo *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proc
 	}
 	if phuo.mutation.SummaryCleared() {
 		_spec.ClearField(procedurehistory.FieldSummary, field.TypeString)
+	}
+	if value, ok := phuo.mutation.TagSuggestions(); ok {
+		_spec.SetField(procedurehistory.FieldTagSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := phuo.mutation.AppendedTagSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedurehistory.FieldTagSuggestions, value)
+		})
+	}
+	if phuo.mutation.TagSuggestionsCleared() {
+		_spec.ClearField(procedurehistory.FieldTagSuggestions, field.TypeJSON)
+	}
+	if value, ok := phuo.mutation.DismissedTagSuggestions(); ok {
+		_spec.SetField(procedurehistory.FieldDismissedTagSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := phuo.mutation.AppendedDismissedTagSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedurehistory.FieldDismissedTagSuggestions, value)
+		})
+	}
+	if phuo.mutation.DismissedTagSuggestionsCleared() {
+		_spec.ClearField(procedurehistory.FieldDismissedTagSuggestions, field.TypeJSON)
+	}
+	if value, ok := phuo.mutation.ControlSuggestions(); ok {
+		_spec.SetField(procedurehistory.FieldControlSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := phuo.mutation.AppendedControlSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedurehistory.FieldControlSuggestions, value)
+		})
+	}
+	if phuo.mutation.ControlSuggestionsCleared() {
+		_spec.ClearField(procedurehistory.FieldControlSuggestions, field.TypeJSON)
+	}
+	if value, ok := phuo.mutation.DismissedControlSuggestions(); ok {
+		_spec.SetField(procedurehistory.FieldDismissedControlSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := phuo.mutation.AppendedDismissedControlSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedurehistory.FieldDismissedControlSuggestions, value)
+		})
+	}
+	if phuo.mutation.DismissedControlSuggestionsCleared() {
+		_spec.ClearField(procedurehistory.FieldDismissedControlSuggestions, field.TypeJSON)
+	}
+	if value, ok := phuo.mutation.ImprovementSuggestions(); ok {
+		_spec.SetField(procedurehistory.FieldImprovementSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := phuo.mutation.AppendedImprovementSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedurehistory.FieldImprovementSuggestions, value)
+		})
+	}
+	if phuo.mutation.ImprovementSuggestionsCleared() {
+		_spec.ClearField(procedurehistory.FieldImprovementSuggestions, field.TypeJSON)
+	}
+	if value, ok := phuo.mutation.DismissedImprovementSuggestions(); ok {
+		_spec.SetField(procedurehistory.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := phuo.mutation.AppendedDismissedImprovementSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedurehistory.FieldDismissedImprovementSuggestions, value)
+		})
+	}
+	if phuo.mutation.DismissedImprovementSuggestionsCleared() {
+		_spec.ClearField(procedurehistory.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
 	_spec.Node.Schema = phuo.schemaConfig.ProcedureHistory
 	ctx = internal.NewSchemaConfigContext(ctx, phuo.schemaConfig)

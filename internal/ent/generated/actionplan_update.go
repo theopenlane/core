@@ -343,6 +343,114 @@ func (apu *ActionPlanUpdate) ClearSummary() *ActionPlanUpdate {
 	return apu
 }
 
+// SetTagSuggestions sets the "tag_suggestions" field.
+func (apu *ActionPlanUpdate) SetTagSuggestions(s []string) *ActionPlanUpdate {
+	apu.mutation.SetTagSuggestions(s)
+	return apu
+}
+
+// AppendTagSuggestions appends s to the "tag_suggestions" field.
+func (apu *ActionPlanUpdate) AppendTagSuggestions(s []string) *ActionPlanUpdate {
+	apu.mutation.AppendTagSuggestions(s)
+	return apu
+}
+
+// ClearTagSuggestions clears the value of the "tag_suggestions" field.
+func (apu *ActionPlanUpdate) ClearTagSuggestions() *ActionPlanUpdate {
+	apu.mutation.ClearTagSuggestions()
+	return apu
+}
+
+// SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
+func (apu *ActionPlanUpdate) SetDismissedTagSuggestions(s []string) *ActionPlanUpdate {
+	apu.mutation.SetDismissedTagSuggestions(s)
+	return apu
+}
+
+// AppendDismissedTagSuggestions appends s to the "dismissed_tag_suggestions" field.
+func (apu *ActionPlanUpdate) AppendDismissedTagSuggestions(s []string) *ActionPlanUpdate {
+	apu.mutation.AppendDismissedTagSuggestions(s)
+	return apu
+}
+
+// ClearDismissedTagSuggestions clears the value of the "dismissed_tag_suggestions" field.
+func (apu *ActionPlanUpdate) ClearDismissedTagSuggestions() *ActionPlanUpdate {
+	apu.mutation.ClearDismissedTagSuggestions()
+	return apu
+}
+
+// SetControlSuggestions sets the "control_suggestions" field.
+func (apu *ActionPlanUpdate) SetControlSuggestions(s []string) *ActionPlanUpdate {
+	apu.mutation.SetControlSuggestions(s)
+	return apu
+}
+
+// AppendControlSuggestions appends s to the "control_suggestions" field.
+func (apu *ActionPlanUpdate) AppendControlSuggestions(s []string) *ActionPlanUpdate {
+	apu.mutation.AppendControlSuggestions(s)
+	return apu
+}
+
+// ClearControlSuggestions clears the value of the "control_suggestions" field.
+func (apu *ActionPlanUpdate) ClearControlSuggestions() *ActionPlanUpdate {
+	apu.mutation.ClearControlSuggestions()
+	return apu
+}
+
+// SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
+func (apu *ActionPlanUpdate) SetDismissedControlSuggestions(s []string) *ActionPlanUpdate {
+	apu.mutation.SetDismissedControlSuggestions(s)
+	return apu
+}
+
+// AppendDismissedControlSuggestions appends s to the "dismissed_control_suggestions" field.
+func (apu *ActionPlanUpdate) AppendDismissedControlSuggestions(s []string) *ActionPlanUpdate {
+	apu.mutation.AppendDismissedControlSuggestions(s)
+	return apu
+}
+
+// ClearDismissedControlSuggestions clears the value of the "dismissed_control_suggestions" field.
+func (apu *ActionPlanUpdate) ClearDismissedControlSuggestions() *ActionPlanUpdate {
+	apu.mutation.ClearDismissedControlSuggestions()
+	return apu
+}
+
+// SetImprovementSuggestions sets the "improvement_suggestions" field.
+func (apu *ActionPlanUpdate) SetImprovementSuggestions(s []string) *ActionPlanUpdate {
+	apu.mutation.SetImprovementSuggestions(s)
+	return apu
+}
+
+// AppendImprovementSuggestions appends s to the "improvement_suggestions" field.
+func (apu *ActionPlanUpdate) AppendImprovementSuggestions(s []string) *ActionPlanUpdate {
+	apu.mutation.AppendImprovementSuggestions(s)
+	return apu
+}
+
+// ClearImprovementSuggestions clears the value of the "improvement_suggestions" field.
+func (apu *ActionPlanUpdate) ClearImprovementSuggestions() *ActionPlanUpdate {
+	apu.mutation.ClearImprovementSuggestions()
+	return apu
+}
+
+// SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
+func (apu *ActionPlanUpdate) SetDismissedImprovementSuggestions(s []string) *ActionPlanUpdate {
+	apu.mutation.SetDismissedImprovementSuggestions(s)
+	return apu
+}
+
+// AppendDismissedImprovementSuggestions appends s to the "dismissed_improvement_suggestions" field.
+func (apu *ActionPlanUpdate) AppendDismissedImprovementSuggestions(s []string) *ActionPlanUpdate {
+	apu.mutation.AppendDismissedImprovementSuggestions(s)
+	return apu
+}
+
+// ClearDismissedImprovementSuggestions clears the value of the "dismissed_improvement_suggestions" field.
+func (apu *ActionPlanUpdate) ClearDismissedImprovementSuggestions() *ActionPlanUpdate {
+	apu.mutation.ClearDismissedImprovementSuggestions()
+	return apu
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (apu *ActionPlanUpdate) SetOwnerID(s string) *ActionPlanUpdate {
 	apu.mutation.SetOwnerID(s)
@@ -791,6 +899,72 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if apu.mutation.SummaryCleared() {
 		_spec.ClearField(actionplan.FieldSummary, field.TypeString)
+	}
+	if value, ok := apu.mutation.TagSuggestions(); ok {
+		_spec.SetField(actionplan.FieldTagSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := apu.mutation.AppendedTagSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplan.FieldTagSuggestions, value)
+		})
+	}
+	if apu.mutation.TagSuggestionsCleared() {
+		_spec.ClearField(actionplan.FieldTagSuggestions, field.TypeJSON)
+	}
+	if value, ok := apu.mutation.DismissedTagSuggestions(); ok {
+		_spec.SetField(actionplan.FieldDismissedTagSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := apu.mutation.AppendedDismissedTagSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplan.FieldDismissedTagSuggestions, value)
+		})
+	}
+	if apu.mutation.DismissedTagSuggestionsCleared() {
+		_spec.ClearField(actionplan.FieldDismissedTagSuggestions, field.TypeJSON)
+	}
+	if value, ok := apu.mutation.ControlSuggestions(); ok {
+		_spec.SetField(actionplan.FieldControlSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := apu.mutation.AppendedControlSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplan.FieldControlSuggestions, value)
+		})
+	}
+	if apu.mutation.ControlSuggestionsCleared() {
+		_spec.ClearField(actionplan.FieldControlSuggestions, field.TypeJSON)
+	}
+	if value, ok := apu.mutation.DismissedControlSuggestions(); ok {
+		_spec.SetField(actionplan.FieldDismissedControlSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := apu.mutation.AppendedDismissedControlSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplan.FieldDismissedControlSuggestions, value)
+		})
+	}
+	if apu.mutation.DismissedControlSuggestionsCleared() {
+		_spec.ClearField(actionplan.FieldDismissedControlSuggestions, field.TypeJSON)
+	}
+	if value, ok := apu.mutation.ImprovementSuggestions(); ok {
+		_spec.SetField(actionplan.FieldImprovementSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := apu.mutation.AppendedImprovementSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplan.FieldImprovementSuggestions, value)
+		})
+	}
+	if apu.mutation.ImprovementSuggestionsCleared() {
+		_spec.ClearField(actionplan.FieldImprovementSuggestions, field.TypeJSON)
+	}
+	if value, ok := apu.mutation.DismissedImprovementSuggestions(); ok {
+		_spec.SetField(actionplan.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := apu.mutation.AppendedDismissedImprovementSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplan.FieldDismissedImprovementSuggestions, value)
+		})
+	}
+	if apu.mutation.DismissedImprovementSuggestionsCleared() {
+		_spec.ClearField(actionplan.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
 	if value, ok := apu.mutation.DueDate(); ok {
 		_spec.SetField(actionplan.FieldDueDate, field.TypeTime, value)
@@ -1423,6 +1597,114 @@ func (apuo *ActionPlanUpdateOne) ClearSummary() *ActionPlanUpdateOne {
 	return apuo
 }
 
+// SetTagSuggestions sets the "tag_suggestions" field.
+func (apuo *ActionPlanUpdateOne) SetTagSuggestions(s []string) *ActionPlanUpdateOne {
+	apuo.mutation.SetTagSuggestions(s)
+	return apuo
+}
+
+// AppendTagSuggestions appends s to the "tag_suggestions" field.
+func (apuo *ActionPlanUpdateOne) AppendTagSuggestions(s []string) *ActionPlanUpdateOne {
+	apuo.mutation.AppendTagSuggestions(s)
+	return apuo
+}
+
+// ClearTagSuggestions clears the value of the "tag_suggestions" field.
+func (apuo *ActionPlanUpdateOne) ClearTagSuggestions() *ActionPlanUpdateOne {
+	apuo.mutation.ClearTagSuggestions()
+	return apuo
+}
+
+// SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
+func (apuo *ActionPlanUpdateOne) SetDismissedTagSuggestions(s []string) *ActionPlanUpdateOne {
+	apuo.mutation.SetDismissedTagSuggestions(s)
+	return apuo
+}
+
+// AppendDismissedTagSuggestions appends s to the "dismissed_tag_suggestions" field.
+func (apuo *ActionPlanUpdateOne) AppendDismissedTagSuggestions(s []string) *ActionPlanUpdateOne {
+	apuo.mutation.AppendDismissedTagSuggestions(s)
+	return apuo
+}
+
+// ClearDismissedTagSuggestions clears the value of the "dismissed_tag_suggestions" field.
+func (apuo *ActionPlanUpdateOne) ClearDismissedTagSuggestions() *ActionPlanUpdateOne {
+	apuo.mutation.ClearDismissedTagSuggestions()
+	return apuo
+}
+
+// SetControlSuggestions sets the "control_suggestions" field.
+func (apuo *ActionPlanUpdateOne) SetControlSuggestions(s []string) *ActionPlanUpdateOne {
+	apuo.mutation.SetControlSuggestions(s)
+	return apuo
+}
+
+// AppendControlSuggestions appends s to the "control_suggestions" field.
+func (apuo *ActionPlanUpdateOne) AppendControlSuggestions(s []string) *ActionPlanUpdateOne {
+	apuo.mutation.AppendControlSuggestions(s)
+	return apuo
+}
+
+// ClearControlSuggestions clears the value of the "control_suggestions" field.
+func (apuo *ActionPlanUpdateOne) ClearControlSuggestions() *ActionPlanUpdateOne {
+	apuo.mutation.ClearControlSuggestions()
+	return apuo
+}
+
+// SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
+func (apuo *ActionPlanUpdateOne) SetDismissedControlSuggestions(s []string) *ActionPlanUpdateOne {
+	apuo.mutation.SetDismissedControlSuggestions(s)
+	return apuo
+}
+
+// AppendDismissedControlSuggestions appends s to the "dismissed_control_suggestions" field.
+func (apuo *ActionPlanUpdateOne) AppendDismissedControlSuggestions(s []string) *ActionPlanUpdateOne {
+	apuo.mutation.AppendDismissedControlSuggestions(s)
+	return apuo
+}
+
+// ClearDismissedControlSuggestions clears the value of the "dismissed_control_suggestions" field.
+func (apuo *ActionPlanUpdateOne) ClearDismissedControlSuggestions() *ActionPlanUpdateOne {
+	apuo.mutation.ClearDismissedControlSuggestions()
+	return apuo
+}
+
+// SetImprovementSuggestions sets the "improvement_suggestions" field.
+func (apuo *ActionPlanUpdateOne) SetImprovementSuggestions(s []string) *ActionPlanUpdateOne {
+	apuo.mutation.SetImprovementSuggestions(s)
+	return apuo
+}
+
+// AppendImprovementSuggestions appends s to the "improvement_suggestions" field.
+func (apuo *ActionPlanUpdateOne) AppendImprovementSuggestions(s []string) *ActionPlanUpdateOne {
+	apuo.mutation.AppendImprovementSuggestions(s)
+	return apuo
+}
+
+// ClearImprovementSuggestions clears the value of the "improvement_suggestions" field.
+func (apuo *ActionPlanUpdateOne) ClearImprovementSuggestions() *ActionPlanUpdateOne {
+	apuo.mutation.ClearImprovementSuggestions()
+	return apuo
+}
+
+// SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
+func (apuo *ActionPlanUpdateOne) SetDismissedImprovementSuggestions(s []string) *ActionPlanUpdateOne {
+	apuo.mutation.SetDismissedImprovementSuggestions(s)
+	return apuo
+}
+
+// AppendDismissedImprovementSuggestions appends s to the "dismissed_improvement_suggestions" field.
+func (apuo *ActionPlanUpdateOne) AppendDismissedImprovementSuggestions(s []string) *ActionPlanUpdateOne {
+	apuo.mutation.AppendDismissedImprovementSuggestions(s)
+	return apuo
+}
+
+// ClearDismissedImprovementSuggestions clears the value of the "dismissed_improvement_suggestions" field.
+func (apuo *ActionPlanUpdateOne) ClearDismissedImprovementSuggestions() *ActionPlanUpdateOne {
+	apuo.mutation.ClearDismissedImprovementSuggestions()
+	return apuo
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (apuo *ActionPlanUpdateOne) SetOwnerID(s string) *ActionPlanUpdateOne {
 	apuo.mutation.SetOwnerID(s)
@@ -1901,6 +2183,72 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 	}
 	if apuo.mutation.SummaryCleared() {
 		_spec.ClearField(actionplan.FieldSummary, field.TypeString)
+	}
+	if value, ok := apuo.mutation.TagSuggestions(); ok {
+		_spec.SetField(actionplan.FieldTagSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := apuo.mutation.AppendedTagSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplan.FieldTagSuggestions, value)
+		})
+	}
+	if apuo.mutation.TagSuggestionsCleared() {
+		_spec.ClearField(actionplan.FieldTagSuggestions, field.TypeJSON)
+	}
+	if value, ok := apuo.mutation.DismissedTagSuggestions(); ok {
+		_spec.SetField(actionplan.FieldDismissedTagSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := apuo.mutation.AppendedDismissedTagSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplan.FieldDismissedTagSuggestions, value)
+		})
+	}
+	if apuo.mutation.DismissedTagSuggestionsCleared() {
+		_spec.ClearField(actionplan.FieldDismissedTagSuggestions, field.TypeJSON)
+	}
+	if value, ok := apuo.mutation.ControlSuggestions(); ok {
+		_spec.SetField(actionplan.FieldControlSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := apuo.mutation.AppendedControlSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplan.FieldControlSuggestions, value)
+		})
+	}
+	if apuo.mutation.ControlSuggestionsCleared() {
+		_spec.ClearField(actionplan.FieldControlSuggestions, field.TypeJSON)
+	}
+	if value, ok := apuo.mutation.DismissedControlSuggestions(); ok {
+		_spec.SetField(actionplan.FieldDismissedControlSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := apuo.mutation.AppendedDismissedControlSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplan.FieldDismissedControlSuggestions, value)
+		})
+	}
+	if apuo.mutation.DismissedControlSuggestionsCleared() {
+		_spec.ClearField(actionplan.FieldDismissedControlSuggestions, field.TypeJSON)
+	}
+	if value, ok := apuo.mutation.ImprovementSuggestions(); ok {
+		_spec.SetField(actionplan.FieldImprovementSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := apuo.mutation.AppendedImprovementSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplan.FieldImprovementSuggestions, value)
+		})
+	}
+	if apuo.mutation.ImprovementSuggestionsCleared() {
+		_spec.ClearField(actionplan.FieldImprovementSuggestions, field.TypeJSON)
+	}
+	if value, ok := apuo.mutation.DismissedImprovementSuggestions(); ok {
+		_spec.SetField(actionplan.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := apuo.mutation.AppendedDismissedImprovementSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplan.FieldDismissedImprovementSuggestions, value)
+		})
+	}
+	if apuo.mutation.DismissedImprovementSuggestionsCleared() {
+		_spec.ClearField(actionplan.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
 	if value, ok := apuo.mutation.DueDate(); ok {
 		_spec.SetField(actionplan.FieldDueDate, field.TypeTime, value)

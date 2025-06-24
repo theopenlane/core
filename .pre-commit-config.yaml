@@ -11,11 +11,11 @@ repos:
         exclude: jsonschema/api-docs.md|internal/graphapi/generated/.+\.go|internal/graphapi/clientschema/.+\.graphql
       - id: detect-private-key
   - repo: https://github.com/google/yamlfmt
-    rev: v0.16.0
+    rev: v0.17.2
     hooks:
       - id: yamlfmt
   - repo: https://github.com/crate-ci/typos
-    rev: v1.32.0
+    rev: v1.33.1
     hooks:
       - id: typos
   - repo: local

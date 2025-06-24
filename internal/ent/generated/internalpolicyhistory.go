@@ -65,8 +65,20 @@ type InternalPolicyHistory struct {
 	// the id of the group responsible for approving the policy
 	DelegateID string `json:"delegate_id,omitempty"`
 	// Summary holds the value of the "summary" field.
-	Summary      string `json:"summary,omitempty"`
-	selectValues sql.SelectValues
+	Summary string `json:"summary,omitempty"`
+	// auto-generated tag suggestions for the policy
+	TagSuggestions []string `json:"tag_suggestions,omitempty"`
+	// tag suggestions dismissed by the user for the policy
+	DismissedTagSuggestions []string `json:"dismissed_tag_suggestions,omitempty"`
+	// proposed controls referenced in the policy
+	ControlSuggestions []string `json:"control_suggestions,omitempty"`
+	// control suggestions dismissed by the user for the policy
+	DismissedControlSuggestions []string `json:"dismissed_control_suggestions,omitempty"`
+	// suggested improvements for the policy
+	ImprovementSuggestions []string `json:"improvement_suggestions,omitempty"`
+	// improvement suggestions dismissed by the user for the policy
+	DismissedImprovementSuggestions []string `json:"dismissed_improvement_suggestions,omitempty"`
+	selectValues                    sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -74,7 +86,7 @@ func (*InternalPolicyHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case internalpolicyhistory.FieldTags:
+		case internalpolicyhistory.FieldTags, internalpolicyhistory.FieldTagSuggestions, internalpolicyhistory.FieldDismissedTagSuggestions, internalpolicyhistory.FieldControlSuggestions, internalpolicyhistory.FieldDismissedControlSuggestions, internalpolicyhistory.FieldImprovementSuggestions, internalpolicyhistory.FieldDismissedImprovementSuggestions:
 			values[i] = new([]byte)
 		case internalpolicyhistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -245,6 +257,54 @@ func (iph *InternalPolicyHistory) assignValues(columns []string, values []any) e
 			} else if value.Valid {
 				iph.Summary = value.String
 			}
+		case internalpolicyhistory.FieldTagSuggestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field tag_suggestions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &iph.TagSuggestions); err != nil {
+					return fmt.Errorf("unmarshal field tag_suggestions: %w", err)
+				}
+			}
+		case internalpolicyhistory.FieldDismissedTagSuggestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field dismissed_tag_suggestions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &iph.DismissedTagSuggestions); err != nil {
+					return fmt.Errorf("unmarshal field dismissed_tag_suggestions: %w", err)
+				}
+			}
+		case internalpolicyhistory.FieldControlSuggestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field control_suggestions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &iph.ControlSuggestions); err != nil {
+					return fmt.Errorf("unmarshal field control_suggestions: %w", err)
+				}
+			}
+		case internalpolicyhistory.FieldDismissedControlSuggestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field dismissed_control_suggestions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &iph.DismissedControlSuggestions); err != nil {
+					return fmt.Errorf("unmarshal field dismissed_control_suggestions: %w", err)
+				}
+			}
+		case internalpolicyhistory.FieldImprovementSuggestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field improvement_suggestions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &iph.ImprovementSuggestions); err != nil {
+					return fmt.Errorf("unmarshal field improvement_suggestions: %w", err)
+				}
+			}
+		case internalpolicyhistory.FieldDismissedImprovementSuggestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field dismissed_improvement_suggestions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &iph.DismissedImprovementSuggestions); err != nil {
+					return fmt.Errorf("unmarshal field dismissed_improvement_suggestions: %w", err)
+				}
+			}
 		default:
 			iph.selectValues.Set(columns[i], values[i])
 		}
@@ -349,6 +409,24 @@ func (iph *InternalPolicyHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("summary=")
 	builder.WriteString(iph.Summary)
+	builder.WriteString(", ")
+	builder.WriteString("tag_suggestions=")
+	builder.WriteString(fmt.Sprintf("%v", iph.TagSuggestions))
+	builder.WriteString(", ")
+	builder.WriteString("dismissed_tag_suggestions=")
+	builder.WriteString(fmt.Sprintf("%v", iph.DismissedTagSuggestions))
+	builder.WriteString(", ")
+	builder.WriteString("control_suggestions=")
+	builder.WriteString(fmt.Sprintf("%v", iph.ControlSuggestions))
+	builder.WriteString(", ")
+	builder.WriteString("dismissed_control_suggestions=")
+	builder.WriteString(fmt.Sprintf("%v", iph.DismissedControlSuggestions))
+	builder.WriteString(", ")
+	builder.WriteString("improvement_suggestions=")
+	builder.WriteString(fmt.Sprintf("%v", iph.ImprovementSuggestions))
+	builder.WriteString(", ")
+	builder.WriteString("dismissed_improvement_suggestions=")
+	builder.WriteString(fmt.Sprintf("%v", iph.DismissedImprovementSuggestions))
 	builder.WriteByte(')')
 	return builder.String()
 }

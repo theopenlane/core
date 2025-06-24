@@ -183,6 +183,54 @@ func (f ActionPlanHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m g
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ActionPlanHistoryMutation", m)
 }
 
+// The AssetQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type AssetQueryRuleFunc func(context.Context, *generated.AssetQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f AssetQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.AssetQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.AssetQuery", q)
+}
+
+// The AssetMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type AssetMutationRuleFunc func(context.Context, *generated.AssetMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f AssetMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.AssetMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.AssetMutation", m)
+}
+
+// The AssetHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type AssetHistoryQueryRuleFunc func(context.Context, *generated.AssetHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f AssetHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.AssetHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.AssetHistoryQuery", q)
+}
+
+// The AssetHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type AssetHistoryMutationRuleFunc func(context.Context, *generated.AssetHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f AssetHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.AssetHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.AssetHistoryMutation", m)
+}
+
 // The ContactQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type ContactQueryRuleFunc func(context.Context, *generated.ContactQuery) error
@@ -1935,6 +1983,54 @@ func (f RiskHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generat
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.RiskHistoryMutation", m)
 }
 
+// The ScanQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type ScanQueryRuleFunc func(context.Context, *generated.ScanQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f ScanQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ScanQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.ScanQuery", q)
+}
+
+// The ScanMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type ScanMutationRuleFunc func(context.Context, *generated.ScanMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f ScanMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.ScanMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ScanMutation", m)
+}
+
+// The ScanHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type ScanHistoryQueryRuleFunc func(context.Context, *generated.ScanHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f ScanHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ScanHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.ScanHistoryQuery", q)
+}
+
+// The ScanHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type ScanHistoryMutationRuleFunc func(context.Context, *generated.ScanHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f ScanHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.ScanHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ScanHistoryMutation", m)
+}
+
 // The ScheduledJobQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type ScheduledJobQueryRuleFunc func(context.Context, *generated.ScheduledJobQuery) error
@@ -2504,6 +2600,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.ActionPlanHistoryQuery:
 		return q.Filter(), nil
+	case *generated.AssetQuery:
+		return q.Filter(), nil
+	case *generated.AssetHistoryQuery:
+		return q.Filter(), nil
 	case *generated.ContactQuery:
 		return q.Filter(), nil
 	case *generated.ContactHistoryQuery:
@@ -2650,6 +2750,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.RiskHistoryQuery:
 		return q.Filter(), nil
+	case *generated.ScanQuery:
+		return q.Filter(), nil
+	case *generated.ScanHistoryQuery:
+		return q.Filter(), nil
 	case *generated.ScheduledJobQuery:
 		return q.Filter(), nil
 	case *generated.ScheduledJobHistoryQuery:
@@ -2706,6 +2810,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.ActionPlanMutation:
 		return m.Filter(), nil
 	case *generated.ActionPlanHistoryMutation:
+		return m.Filter(), nil
+	case *generated.AssetMutation:
+		return m.Filter(), nil
+	case *generated.AssetHistoryMutation:
 		return m.Filter(), nil
 	case *generated.ContactMutation:
 		return m.Filter(), nil
@@ -2852,6 +2960,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.RiskMutation:
 		return m.Filter(), nil
 	case *generated.RiskHistoryMutation:
+		return m.Filter(), nil
+	case *generated.ScanMutation:
+		return m.Filter(), nil
+	case *generated.ScanHistoryMutation:
 		return m.Filter(), nil
 	case *generated.ScheduledJobMutation:
 		return m.Filter(), nil

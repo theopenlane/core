@@ -103,6 +103,18 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_delegateID(ctx, field)
 			case "summary":
 				return ec.fieldContext_InternalPolicy_summary(ctx, field)
+			case "tagSuggestions":
+				return ec.fieldContext_InternalPolicy_tagSuggestions(ctx, field)
+			case "dismissedTagSuggestions":
+				return ec.fieldContext_InternalPolicy_dismissedTagSuggestions(ctx, field)
+			case "controlSuggestions":
+				return ec.fieldContext_InternalPolicy_controlSuggestions(ctx, field)
+			case "dismissedControlSuggestions":
+				return ec.fieldContext_InternalPolicy_dismissedControlSuggestions(ctx, field)
+			case "improvementSuggestions":
+				return ec.fieldContext_InternalPolicy_improvementSuggestions(ctx, field)
+			case "dismissedImprovementSuggestions":
+				return ec.fieldContext_InternalPolicy_dismissedImprovementSuggestions(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
@@ -213,6 +225,18 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_delegateID(ctx, field)
 			case "summary":
 				return ec.fieldContext_InternalPolicy_summary(ctx, field)
+			case "tagSuggestions":
+				return ec.fieldContext_InternalPolicy_tagSuggestions(ctx, field)
+			case "dismissedTagSuggestions":
+				return ec.fieldContext_InternalPolicy_dismissedTagSuggestions(ctx, field)
+			case "controlSuggestions":
+				return ec.fieldContext_InternalPolicy_controlSuggestions(ctx, field)
+			case "dismissedControlSuggestions":
+				return ec.fieldContext_InternalPolicy_dismissedControlSuggestions(ctx, field)
+			case "improvementSuggestions":
+				return ec.fieldContext_InternalPolicy_improvementSuggestions(ctx, field)
+			case "dismissedImprovementSuggestions":
+				return ec.fieldContext_InternalPolicy_dismissedImprovementSuggestions(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
@@ -367,6 +391,18 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_delegateID(ctx, field)
 			case "summary":
 				return ec.fieldContext_InternalPolicy_summary(ctx, field)
+			case "tagSuggestions":
+				return ec.fieldContext_InternalPolicy_tagSuggestions(ctx, field)
+			case "dismissedTagSuggestions":
+				return ec.fieldContext_InternalPolicy_dismissedTagSuggestions(ctx, field)
+			case "controlSuggestions":
+				return ec.fieldContext_InternalPolicy_controlSuggestions(ctx, field)
+			case "dismissedControlSuggestions":
+				return ec.fieldContext_InternalPolicy_dismissedControlSuggestions(ctx, field)
+			case "improvementSuggestions":
+				return ec.fieldContext_InternalPolicy_improvementSuggestions(ctx, field)
+			case "dismissedImprovementSuggestions":
+				return ec.fieldContext_InternalPolicy_dismissedImprovementSuggestions(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":

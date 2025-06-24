@@ -94,15 +94,21 @@ type RiskEdges struct {
 	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
 	// Tasks holds the value of the tasks edge.
 	Tasks []*Task `json:"tasks,omitempty"`
+	// Assets holds the value of the assets edge.
+	Assets []*Asset `json:"assets,omitempty"`
+	// Entities holds the value of the entities edge.
+	Entities []*Entity `json:"entities,omitempty"`
+	// Scans holds the value of the scans edge.
+	Scans []*Scan `json:"scans,omitempty"`
 	// the group of users who are responsible for risk oversight
 	Stakeholder *Group `json:"stakeholder,omitempty"`
 	// temporary delegates for the risk, used for temporary ownership
 	Delegate *Group `json:"delegate,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [13]bool
+	loadedTypes [16]bool
 	// totalCount holds the count of the edges above.
-	totalCount [13]map[string]int
+	totalCount [16]map[string]int
 
 	namedBlockedGroups    map[string][]*Group
 	namedEditors          map[string][]*Group
@@ -114,6 +120,9 @@ type RiskEdges struct {
 	namedPrograms         map[string][]*Program
 	namedActionPlans      map[string][]*ActionPlan
 	namedTasks            map[string][]*Task
+	namedAssets           map[string][]*Asset
+	namedEntities         map[string][]*Entity
+	namedScans            map[string][]*Scan
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -217,12 +226,39 @@ func (e RiskEdges) TasksOrErr() ([]*Task, error) {
 	return nil, &NotLoadedError{edge: "tasks"}
 }
 
+// AssetsOrErr returns the Assets value or an error if the edge
+// was not loaded in eager-loading.
+func (e RiskEdges) AssetsOrErr() ([]*Asset, error) {
+	if e.loadedTypes[11] {
+		return e.Assets, nil
+	}
+	return nil, &NotLoadedError{edge: "assets"}
+}
+
+// EntitiesOrErr returns the Entities value or an error if the edge
+// was not loaded in eager-loading.
+func (e RiskEdges) EntitiesOrErr() ([]*Entity, error) {
+	if e.loadedTypes[12] {
+		return e.Entities, nil
+	}
+	return nil, &NotLoadedError{edge: "entities"}
+}
+
+// ScansOrErr returns the Scans value or an error if the edge
+// was not loaded in eager-loading.
+func (e RiskEdges) ScansOrErr() ([]*Scan, error) {
+	if e.loadedTypes[13] {
+		return e.Scans, nil
+	}
+	return nil, &NotLoadedError{edge: "scans"}
+}
+
 // StakeholderOrErr returns the Stakeholder value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e RiskEdges) StakeholderOrErr() (*Group, error) {
 	if e.Stakeholder != nil {
 		return e.Stakeholder, nil
-	} else if e.loadedTypes[11] {
+	} else if e.loadedTypes[14] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "stakeholder"}
@@ -233,7 +269,7 @@ func (e RiskEdges) StakeholderOrErr() (*Group, error) {
 func (e RiskEdges) DelegateOrErr() (*Group, error) {
 	if e.Delegate != nil {
 		return e.Delegate, nil
-	} else if e.loadedTypes[12] {
+	} else if e.loadedTypes[15] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "delegate"}
@@ -476,6 +512,21 @@ func (r *Risk) QueryActionPlans() *ActionPlanQuery {
 // QueryTasks queries the "tasks" edge of the Risk entity.
 func (r *Risk) QueryTasks() *TaskQuery {
 	return NewRiskClient(r.config).QueryTasks(r)
+}
+
+// QueryAssets queries the "assets" edge of the Risk entity.
+func (r *Risk) QueryAssets() *AssetQuery {
+	return NewRiskClient(r.config).QueryAssets(r)
+}
+
+// QueryEntities queries the "entities" edge of the Risk entity.
+func (r *Risk) QueryEntities() *EntityQuery {
+	return NewRiskClient(r.config).QueryEntities(r)
+}
+
+// QueryScans queries the "scans" edge of the Risk entity.
+func (r *Risk) QueryScans() *ScanQuery {
+	return NewRiskClient(r.config).QueryScans(r)
 }
 
 // QueryStakeholder queries the "stakeholder" edge of the Risk entity.
@@ -814,6 +865,78 @@ func (r *Risk) appendNamedTasks(name string, edges ...*Task) {
 		r.Edges.namedTasks[name] = []*Task{}
 	} else {
 		r.Edges.namedTasks[name] = append(r.Edges.namedTasks[name], edges...)
+	}
+}
+
+// NamedAssets returns the Assets named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (r *Risk) NamedAssets(name string) ([]*Asset, error) {
+	if r.Edges.namedAssets == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := r.Edges.namedAssets[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (r *Risk) appendNamedAssets(name string, edges ...*Asset) {
+	if r.Edges.namedAssets == nil {
+		r.Edges.namedAssets = make(map[string][]*Asset)
+	}
+	if len(edges) == 0 {
+		r.Edges.namedAssets[name] = []*Asset{}
+	} else {
+		r.Edges.namedAssets[name] = append(r.Edges.namedAssets[name], edges...)
+	}
+}
+
+// NamedEntities returns the Entities named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (r *Risk) NamedEntities(name string) ([]*Entity, error) {
+	if r.Edges.namedEntities == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := r.Edges.namedEntities[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (r *Risk) appendNamedEntities(name string, edges ...*Entity) {
+	if r.Edges.namedEntities == nil {
+		r.Edges.namedEntities = make(map[string][]*Entity)
+	}
+	if len(edges) == 0 {
+		r.Edges.namedEntities[name] = []*Entity{}
+	} else {
+		r.Edges.namedEntities[name] = append(r.Edges.namedEntities[name], edges...)
+	}
+}
+
+// NamedScans returns the Scans named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (r *Risk) NamedScans(name string) ([]*Scan, error) {
+	if r.Edges.namedScans == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := r.Edges.namedScans[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (r *Risk) appendNamedScans(name string, edges ...*Scan) {
+	if r.Edges.namedScans == nil {
+		r.Edges.namedScans = make(map[string][]*Scan)
+	}
+	if len(edges) == 0 {
+		r.Edges.namedScans[name] = []*Scan{}
+	} else {
+		r.Edges.namedScans[name] = append(r.Edges.namedScans[name], edges...)
 	}
 }
 

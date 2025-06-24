@@ -61,6 +61,18 @@ type Procedure struct {
 	DelegateID string `json:"delegate_id,omitempty"`
 	// Summary holds the value of the "summary" field.
 	Summary string `json:"summary,omitempty"`
+	// auto-generated tag suggestions for the procedure
+	TagSuggestions []string `json:"tag_suggestions,omitempty"`
+	// tag suggestions dismissed by the user for the procedure
+	DismissedTagSuggestions []string `json:"dismissed_tag_suggestions,omitempty"`
+	// proposed controls referenced in the procedure
+	ControlSuggestions []string `json:"control_suggestions,omitempty"`
+	// control suggestions dismissed by the user for the procedure
+	DismissedControlSuggestions []string `json:"dismissed_control_suggestions,omitempty"`
+	// suggested improvements for the procedure
+	ImprovementSuggestions []string `json:"improvement_suggestions,omitempty"`
+	// improvement suggestions dismissed by the user for the procedure
+	DismissedImprovementSuggestions []string `json:"dismissed_improvement_suggestions,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProcedureQuery when eager-loading is set.
 	Edges                        ProcedureEdges `json:"edges"`
@@ -230,7 +242,7 @@ func (*Procedure) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case procedure.FieldTags:
+		case procedure.FieldTags, procedure.FieldTagSuggestions, procedure.FieldDismissedTagSuggestions, procedure.FieldControlSuggestions, procedure.FieldDismissedControlSuggestions, procedure.FieldImprovementSuggestions, procedure.FieldDismissedImprovementSuggestions:
 			values[i] = new([]byte)
 		case procedure.FieldApprovalRequired:
 			values[i] = new(sql.NullBool)
@@ -382,6 +394,54 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field summary", values[i])
 			} else if value.Valid {
 				pr.Summary = value.String
+			}
+		case procedure.FieldTagSuggestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field tag_suggestions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &pr.TagSuggestions); err != nil {
+					return fmt.Errorf("unmarshal field tag_suggestions: %w", err)
+				}
+			}
+		case procedure.FieldDismissedTagSuggestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field dismissed_tag_suggestions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &pr.DismissedTagSuggestions); err != nil {
+					return fmt.Errorf("unmarshal field dismissed_tag_suggestions: %w", err)
+				}
+			}
+		case procedure.FieldControlSuggestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field control_suggestions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &pr.ControlSuggestions); err != nil {
+					return fmt.Errorf("unmarshal field control_suggestions: %w", err)
+				}
+			}
+		case procedure.FieldDismissedControlSuggestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field dismissed_control_suggestions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &pr.DismissedControlSuggestions); err != nil {
+					return fmt.Errorf("unmarshal field dismissed_control_suggestions: %w", err)
+				}
+			}
+		case procedure.FieldImprovementSuggestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field improvement_suggestions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &pr.ImprovementSuggestions); err != nil {
+					return fmt.Errorf("unmarshal field improvement_suggestions: %w", err)
+				}
+			}
+		case procedure.FieldDismissedImprovementSuggestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field dismissed_improvement_suggestions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &pr.DismissedImprovementSuggestions); err != nil {
+					return fmt.Errorf("unmarshal field dismissed_improvement_suggestions: %w", err)
+				}
 			}
 		case procedure.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -545,6 +605,24 @@ func (pr *Procedure) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("summary=")
 	builder.WriteString(pr.Summary)
+	builder.WriteString(", ")
+	builder.WriteString("tag_suggestions=")
+	builder.WriteString(fmt.Sprintf("%v", pr.TagSuggestions))
+	builder.WriteString(", ")
+	builder.WriteString("dismissed_tag_suggestions=")
+	builder.WriteString(fmt.Sprintf("%v", pr.DismissedTagSuggestions))
+	builder.WriteString(", ")
+	builder.WriteString("control_suggestions=")
+	builder.WriteString(fmt.Sprintf("%v", pr.ControlSuggestions))
+	builder.WriteString(", ")
+	builder.WriteString("dismissed_control_suggestions=")
+	builder.WriteString(fmt.Sprintf("%v", pr.DismissedControlSuggestions))
+	builder.WriteString(", ")
+	builder.WriteString("improvement_suggestions=")
+	builder.WriteString(fmt.Sprintf("%v", pr.ImprovementSuggestions))
+	builder.WriteString(", ")
+	builder.WriteString("dismissed_improvement_suggestions=")
+	builder.WriteString(fmt.Sprintf("%v", pr.DismissedImprovementSuggestions))
 	builder.WriteByte(')')
 	return builder.String()
 }

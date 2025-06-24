@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
@@ -24,6 +25,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -575,6 +577,36 @@ func (cc *ControlCreate) AddPrograms(p ...*Program) *ControlCreate {
 		ids[i] = p[i].ID
 	}
 	return cc.AddProgramIDs(ids...)
+}
+
+// AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
+func (cc *ControlCreate) AddAssetIDs(ids ...string) *ControlCreate {
+	cc.mutation.AddAssetIDs(ids...)
+	return cc
+}
+
+// AddAssets adds the "assets" edges to the Asset entity.
+func (cc *ControlCreate) AddAssets(a ...*Asset) *ControlCreate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cc.AddAssetIDs(ids...)
+}
+
+// AddScanIDs adds the "scans" edge to the Scan entity by IDs.
+func (cc *ControlCreate) AddScanIDs(ids ...string) *ControlCreate {
+	cc.mutation.AddScanIDs(ids...)
+	return cc
+}
+
+// AddScans adds the "scans" edges to the Scan entity.
+func (cc *ControlCreate) AddScans(s ...*Scan) *ControlCreate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return cc.AddScanIDs(ids...)
 }
 
 // AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
@@ -1161,6 +1193,40 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = cc.schemaConfig.ProgramControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.AssetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.AssetsTable,
+			Columns: control.AssetsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.ControlAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.ScansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.ScansTable,
+			Columns: []string{control.ScansColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

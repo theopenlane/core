@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
@@ -52,6 +53,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
@@ -134,6 +136,8 @@ type OrganizationQuery struct {
 	withJobResults                         *JobResultQuery
 	withScheduledJobRuns                   *ScheduledJobRunQuery
 	withTrustCenters                       *TrustCenterQuery
+	withAssets                             *AssetQuery
+	withScans                              *ScanQuery
 	withMembers                            *OrgMembershipQuery
 	loadTotal                              []func(context.Context, []*Organization) error
 	modifiers                              []func(*sql.Selector)
@@ -196,6 +200,8 @@ type OrganizationQuery struct {
 	withNamedJobResults                    map[string]*JobResultQuery
 	withNamedScheduledJobRuns              map[string]*ScheduledJobRunQuery
 	withNamedTrustCenters                  map[string]*TrustCenterQuery
+	withNamedAssets                        map[string]*AssetQuery
+	withNamedScans                         map[string]*ScanQuery
 	withNamedMembers                       map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -1783,6 +1789,56 @@ func (oq *OrganizationQuery) QueryTrustCenters() *TrustCenterQuery {
 	return query
 }
 
+// QueryAssets chains the current query on the "assets" edge.
+func (oq *OrganizationQuery) QueryAssets() *AssetQuery {
+	query := (&AssetClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.AssetsTable, organization.AssetsColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.Asset
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryScans chains the current query on the "scans" edge.
+func (oq *OrganizationQuery) QueryScans() *ScanQuery {
+	query := (&ScanClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ScansTable, organization.ScansColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.Scan
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (oq *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: oq.config}).Query()
@@ -2062,6 +2118,8 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		withJobResults:                    oq.withJobResults.Clone(),
 		withScheduledJobRuns:              oq.withScheduledJobRuns.Clone(),
 		withTrustCenters:                  oq.withTrustCenters.Clone(),
+		withAssets:                        oq.withAssets.Clone(),
+		withScans:                         oq.withScans.Clone(),
 		withMembers:                       oq.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       oq.sql.Clone(),
@@ -2752,6 +2810,28 @@ func (oq *OrganizationQuery) WithTrustCenters(opts ...func(*TrustCenterQuery)) *
 	return oq
 }
 
+// WithAssets tells the query-builder to eager-load the nodes that are connected to
+// the "assets" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithAssets(opts ...func(*AssetQuery)) *OrganizationQuery {
+	query := (&AssetClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withAssets = query
+	return oq
+}
+
+// WithScans tells the query-builder to eager-load the nodes that are connected to
+// the "scans" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithScans(opts ...func(*ScanQuery)) *OrganizationQuery {
+	query := (&ScanClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withScans = query
+	return oq
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (oq *OrganizationQuery) WithMembers(opts ...func(*OrgMembershipQuery)) *OrganizationQuery {
@@ -2847,7 +2927,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = oq.querySpec()
-		loadedTypes = [63]bool{
+		loadedTypes = [65]bool{
 			oq.withControlCreators != nil,
 			oq.withControlImplementationCreators != nil,
 			oq.withControlObjectiveCreators != nil,
@@ -2910,6 +2990,8 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			oq.withJobResults != nil,
 			oq.withScheduledJobRuns != nil,
 			oq.withTrustCenters != nil,
+			oq.withAssets != nil,
+			oq.withScans != nil,
 			oq.withMembers != nil,
 		}
 	)
@@ -3395,6 +3477,20 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := oq.withAssets; query != nil {
+		if err := oq.loadAssets(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Assets = []*Asset{} },
+			func(n *Organization, e *Asset) { n.Edges.Assets = append(n.Edges.Assets, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := oq.withScans; query != nil {
+		if err := oq.loadScans(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Scans = []*Scan{} },
+			func(n *Organization, e *Scan) { n.Edges.Scans = append(n.Edges.Scans, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := oq.withMembers; query != nil {
 		if err := oq.loadMembers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Members = []*OrgMembership{} },
@@ -3814,6 +3910,20 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadTrustCenters(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedTrustCenters(name) },
 			func(n *Organization, e *TrustCenter) { n.appendNamedTrustCenters(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedAssets {
+		if err := oq.loadAssets(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedAssets(name) },
+			func(n *Organization, e *Asset) { n.appendNamedAssets(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedScans {
+		if err := oq.loadScans(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedScans(name) },
+			func(n *Organization, e *Scan) { n.appendNamedScans(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -4854,6 +4964,7 @@ func (oq *OrganizationQuery) loadOrgProducts(ctx context.Context, query *OrgProd
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(orgproduct.FieldOwnerID)
 	}
@@ -4914,6 +5025,7 @@ func (oq *OrganizationQuery) loadOrgModules(ctx context.Context, query *OrgModul
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(orgmodule.FieldOwnerID)
 	}
@@ -5827,6 +5939,68 @@ func (oq *OrganizationQuery) loadTrustCenters(ctx context.Context, query *TrustC
 	}
 	query.Where(predicate.TrustCenter(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(organization.TrustCentersColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (oq *OrganizationQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Asset)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(asset.FieldOwnerID)
+	}
+	query.Where(predicate.Asset(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.AssetsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (oq *OrganizationQuery) loadScans(ctx context.Context, query *ScanQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Scan)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(scan.FieldOwnerID)
+	}
+	query.Where(predicate.Scan(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.ScansColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -6800,6 +6974,34 @@ func (oq *OrganizationQuery) WithNamedTrustCenters(name string, opts ...func(*Tr
 		oq.withNamedTrustCenters = make(map[string]*TrustCenterQuery)
 	}
 	oq.withNamedTrustCenters[name] = query
+	return oq
+}
+
+// WithNamedAssets tells the query-builder to eager-load the nodes that are connected to the "assets"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedAssets(name string, opts ...func(*AssetQuery)) *OrganizationQuery {
+	query := (&AssetClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedAssets == nil {
+		oq.withNamedAssets = make(map[string]*AssetQuery)
+	}
+	oq.withNamedAssets[name] = query
+	return oq
+}
+
+// WithNamedScans tells the query-builder to eager-load the nodes that are connected to the "scans"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedScans(name string, opts ...func(*ScanQuery)) *OrganizationQuery {
+	query := (&ScanClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedScans == nil {
+		oq.withNamedScans = make(map[string]*ScanQuery)
+	}
+	oq.withNamedScans[name] = query
 	return oq
 }
 

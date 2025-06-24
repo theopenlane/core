@@ -60,6 +60,18 @@ const (
 	FieldDelegateID = "delegate_id"
 	// FieldSummary holds the string denoting the summary field in the database.
 	FieldSummary = "summary"
+	// FieldTagSuggestions holds the string denoting the tag_suggestions field in the database.
+	FieldTagSuggestions = "tag_suggestions"
+	// FieldDismissedTagSuggestions holds the string denoting the dismissed_tag_suggestions field in the database.
+	FieldDismissedTagSuggestions = "dismissed_tag_suggestions"
+	// FieldControlSuggestions holds the string denoting the control_suggestions field in the database.
+	FieldControlSuggestions = "control_suggestions"
+	// FieldDismissedControlSuggestions holds the string denoting the dismissed_control_suggestions field in the database.
+	FieldDismissedControlSuggestions = "dismissed_control_suggestions"
+	// FieldImprovementSuggestions holds the string denoting the improvement_suggestions field in the database.
+	FieldImprovementSuggestions = "improvement_suggestions"
+	// FieldDismissedImprovementSuggestions holds the string denoting the dismissed_improvement_suggestions field in the database.
+	FieldDismissedImprovementSuggestions = "dismissed_improvement_suggestions"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldDueDate holds the string denoting the due_date field in the database.
@@ -96,6 +108,12 @@ var Columns = []string{
 	FieldApproverID,
 	FieldDelegateID,
 	FieldSummary,
+	FieldTagSuggestions,
+	FieldDismissedTagSuggestions,
+	FieldControlSuggestions,
+	FieldDismissedControlSuggestions,
+	FieldImprovementSuggestions,
+	FieldDismissedImprovementSuggestions,
 	FieldOwnerID,
 	FieldDueDate,
 	FieldPriority,
@@ -135,6 +153,18 @@ var (
 	DefaultApprovalRequired bool
 	// DefaultReviewDue holds the default value on creation for the "review_due" field.
 	DefaultReviewDue time.Time
+	// DefaultTagSuggestions holds the default value on creation for the "tag_suggestions" field.
+	DefaultTagSuggestions []string
+	// DefaultDismissedTagSuggestions holds the default value on creation for the "dismissed_tag_suggestions" field.
+	DefaultDismissedTagSuggestions []string
+	// DefaultControlSuggestions holds the default value on creation for the "control_suggestions" field.
+	DefaultControlSuggestions []string
+	// DefaultDismissedControlSuggestions holds the default value on creation for the "dismissed_control_suggestions" field.
+	DefaultDismissedControlSuggestions []string
+	// DefaultImprovementSuggestions holds the default value on creation for the "improvement_suggestions" field.
+	DefaultImprovementSuggestions []string
+	// DefaultDismissedImprovementSuggestions holds the default value on creation for the "dismissed_improvement_suggestions" field.
+	DefaultDismissedImprovementSuggestions []string
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )

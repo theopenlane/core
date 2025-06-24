@@ -38,22 +38,21 @@ type OrgProduct struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// module key this product represents
 	Module string `json:"module,omitempty"`
-	// StripeProductID holds the value of the "stripe_product_id" field.
+	// the Stripe product ID for this subscription product
 	StripeProductID string `json:"stripe_product_id,omitempty"`
-	// Status holds the value of the "status" field.
+	// the status of the product, e.g. active, inactive, trialing
 	Status string `json:"status,omitempty"`
-	// Active holds the value of the "active" field.
+	// indicates if the product is active or not
 	Active bool `json:"active,omitempty"`
-	// TrialExpiresAt holds the value of the "trial_expires_at" field.
-	TrialExpiresAt *time.Time `json:"trial_expires_at,omitempty"`
-	// ExpiresAt holds the value of the "expires_at" field.
-	ExpiresAt *time.Time `json:"expires_at,omitempty"`
-	// SubscriptionID holds the value of the "subscription_id" field.
+	// the ID of the subscription this product is linked to
 	SubscriptionID string `json:"subscription_id,omitempty"`
+	// the internal ID of the price this product is associated with
+	PriceID string `json:"price_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrgProductQuery when eager-loading is set.
-	Edges        OrgProductEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                   OrgProductEdges `json:"edges"`
+	org_module_org_products *string
+	selectValues            sql.SelectValues
 }
 
 // OrgProductEdges holds the relations/edges for other nodes in the graph.
@@ -62,15 +61,18 @@ type OrgProductEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// OrgSubscription holds the value of the org_subscription edge.
 	OrgSubscription *OrgSubscription `json:"org_subscription,omitempty"`
-	// Prices holds the value of the prices edge.
-	Prices []*OrgPrice `json:"prices,omitempty"`
+	// OrgPrices holds the value of the org_prices edge.
+	OrgPrices []*OrgPrice `json:"org_prices,omitempty"`
+	// OrgModules holds the value of the org_modules edge.
+	OrgModules []*OrgModule `json:"org_modules,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
 	totalCount [2]map[string]int
 
-	namedPrices map[string][]*OrgPrice
+	namedOrgPrices  map[string][]*OrgPrice
+	namedOrgModules map[string][]*OrgModule
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -95,13 +97,22 @@ func (e OrgProductEdges) OrgSubscriptionOrErr() (*OrgSubscription, error) {
 	return nil, &NotLoadedError{edge: "org_subscription"}
 }
 
-// PricesOrErr returns the Prices value or an error if the edge
+// OrgPricesOrErr returns the OrgPrices value or an error if the edge
 // was not loaded in eager-loading.
-func (e OrgProductEdges) PricesOrErr() ([]*OrgPrice, error) {
+func (e OrgProductEdges) OrgPricesOrErr() ([]*OrgPrice, error) {
 	if e.loadedTypes[2] {
-		return e.Prices, nil
+		return e.OrgPrices, nil
 	}
-	return nil, &NotLoadedError{edge: "prices"}
+	return nil, &NotLoadedError{edge: "org_prices"}
+}
+
+// OrgModulesOrErr returns the OrgModules value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrgProductEdges) OrgModulesOrErr() ([]*OrgModule, error) {
+	if e.loadedTypes[3] {
+		return e.OrgModules, nil
+	}
+	return nil, &NotLoadedError{edge: "org_modules"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -113,10 +124,12 @@ func (*OrgProduct) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case orgproduct.FieldActive:
 			values[i] = new(sql.NullBool)
-		case orgproduct.FieldID, orgproduct.FieldCreatedBy, orgproduct.FieldUpdatedBy, orgproduct.FieldDeletedBy, orgproduct.FieldOwnerID, orgproduct.FieldModule, orgproduct.FieldStripeProductID, orgproduct.FieldStatus, orgproduct.FieldSubscriptionID:
+		case orgproduct.FieldID, orgproduct.FieldCreatedBy, orgproduct.FieldUpdatedBy, orgproduct.FieldDeletedBy, orgproduct.FieldOwnerID, orgproduct.FieldModule, orgproduct.FieldStripeProductID, orgproduct.FieldStatus, orgproduct.FieldSubscriptionID, orgproduct.FieldPriceID:
 			values[i] = new(sql.NullString)
-		case orgproduct.FieldCreatedAt, orgproduct.FieldUpdatedAt, orgproduct.FieldDeletedAt, orgproduct.FieldTrialExpiresAt, orgproduct.FieldExpiresAt:
+		case orgproduct.FieldCreatedAt, orgproduct.FieldUpdatedAt, orgproduct.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
+		case orgproduct.ForeignKeys[0]: // org_module_org_products
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -212,25 +225,24 @@ func (op *OrgProduct) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				op.Active = value.Bool
 			}
-		case orgproduct.FieldTrialExpiresAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field trial_expires_at", values[i])
-			} else if value.Valid {
-				op.TrialExpiresAt = new(time.Time)
-				*op.TrialExpiresAt = value.Time
-			}
-		case orgproduct.FieldExpiresAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field expires_at", values[i])
-			} else if value.Valid {
-				op.ExpiresAt = new(time.Time)
-				*op.ExpiresAt = value.Time
-			}
 		case orgproduct.FieldSubscriptionID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subscription_id", values[i])
 			} else if value.Valid {
 				op.SubscriptionID = value.String
+			}
+		case orgproduct.FieldPriceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field price_id", values[i])
+			} else if value.Valid {
+				op.PriceID = value.String
+			}
+		case orgproduct.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field org_module_org_products", values[i])
+			} else if value.Valid {
+				op.org_module_org_products = new(string)
+				*op.org_module_org_products = value.String
 			}
 		default:
 			op.selectValues.Set(columns[i], values[i])
@@ -255,9 +267,14 @@ func (op *OrgProduct) QueryOrgSubscription() *OrgSubscriptionQuery {
 	return NewOrgProductClient(op.config).QueryOrgSubscription(op)
 }
 
-// QueryPrices queries the "prices" edge of the OrgProduct entity.
-func (op *OrgProduct) QueryPrices() *OrgPriceQuery {
-	return NewOrgProductClient(op.config).QueryPrices(op)
+// QueryOrgPrices queries the "org_prices" edge of the OrgProduct entity.
+func (op *OrgProduct) QueryOrgPrices() *OrgPriceQuery {
+	return NewOrgProductClient(op.config).QueryOrgPrices(op)
+}
+
+// QueryOrgModules queries the "org_modules" edge of the OrgProduct entity.
+func (op *OrgProduct) QueryOrgModules() *OrgModuleQuery {
+	return NewOrgProductClient(op.config).QueryOrgModules(op)
 }
 
 // Update returns a builder for updating this OrgProduct.
@@ -319,43 +336,60 @@ func (op *OrgProduct) String() string {
 	builder.WriteString("active=")
 	builder.WriteString(fmt.Sprintf("%v", op.Active))
 	builder.WriteString(", ")
-	if v := op.TrialExpiresAt; v != nil {
-		builder.WriteString("trial_expires_at=")
-		builder.WriteString(v.Format(time.ANSIC))
-	}
-	builder.WriteString(", ")
-	if v := op.ExpiresAt; v != nil {
-		builder.WriteString("expires_at=")
-		builder.WriteString(v.Format(time.ANSIC))
-	}
-	builder.WriteString(", ")
 	builder.WriteString("subscription_id=")
 	builder.WriteString(op.SubscriptionID)
+	builder.WriteString(", ")
+	builder.WriteString("price_id=")
+	builder.WriteString(op.PriceID)
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// NamedPrices returns the Prices named value or an error if the edge was not
+// NamedOrgPrices returns the OrgPrices named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (op *OrgProduct) NamedPrices(name string) ([]*OrgPrice, error) {
-	if op.Edges.namedPrices == nil {
+func (op *OrgProduct) NamedOrgPrices(name string) ([]*OrgPrice, error) {
+	if op.Edges.namedOrgPrices == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := op.Edges.namedPrices[name]
+	nodes, ok := op.Edges.namedOrgPrices[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (op *OrgProduct) appendNamedPrices(name string, edges ...*OrgPrice) {
-	if op.Edges.namedPrices == nil {
-		op.Edges.namedPrices = make(map[string][]*OrgPrice)
+func (op *OrgProduct) appendNamedOrgPrices(name string, edges ...*OrgPrice) {
+	if op.Edges.namedOrgPrices == nil {
+		op.Edges.namedOrgPrices = make(map[string][]*OrgPrice)
 	}
 	if len(edges) == 0 {
-		op.Edges.namedPrices[name] = []*OrgPrice{}
+		op.Edges.namedOrgPrices[name] = []*OrgPrice{}
 	} else {
-		op.Edges.namedPrices[name] = append(op.Edges.namedPrices[name], edges...)
+		op.Edges.namedOrgPrices[name] = append(op.Edges.namedOrgPrices[name], edges...)
+	}
+}
+
+// NamedOrgModules returns the OrgModules named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (op *OrgProduct) NamedOrgModules(name string) ([]*OrgModule, error) {
+	if op.Edges.namedOrgModules == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := op.Edges.namedOrgModules[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (op *OrgProduct) appendNamedOrgModules(name string, edges ...*OrgModule) {
+	if op.Edges.namedOrgModules == nil {
+		op.Edges.namedOrgModules = make(map[string][]*OrgModule)
+	}
+	if len(edges) == 0 {
+		op.Edges.namedOrgModules[name] = []*OrgModule{}
+	} else {
+		op.Edges.namedOrgModules[name] = append(op.Edges.namedOrgModules[name], edges...)
 	}
 }
 

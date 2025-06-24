@@ -1,0 +1,2 @@
+Tags,AssetType,Name,Description,Identifier,Website,Cpe,Categories,OwnerId,BlockedGroupIDs,EditorIDs,ViewerIDs,ScanIDs,EntityIDs,ControlIDs
+example_tags,example_assettype,example_name,example_description,example_identifier,example_website,example_cpe,example_categories,example_ownerid,example_blockedgroupids,example_editorids,example_viewerids,example_scanids,example_entityids,example_controlids

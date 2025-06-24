@@ -65,6 +65,8 @@ const (
 	EdgeModules = "modules"
 	// EdgeProducts holds the string denoting the products edge name in mutations.
 	EdgeProducts = "products"
+	// EdgePrices holds the string denoting the prices edge name in mutations.
+	EdgePrices = "prices"
 	// Table holds the table name of the orgsubscription in the database.
 	Table = "org_subscriptions"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -93,6 +95,13 @@ const (
 	ProductsInverseTable = "org_products"
 	// ProductsColumn is the table column denoting the products relation/edge.
 	ProductsColumn = "subscription_id"
+	// PricesTable is the table that holds the prices relation/edge.
+	PricesTable = "org_prices"
+	// PricesInverseTable is the table name for the OrgPrice entity.
+	// It exists in this package in order to avoid circular dependency with the "orgprice" package.
+	PricesInverseTable = "org_prices"
+	// PricesColumn is the table column denoting the prices relation/edge.
+	PricesColumn = "subscription_id"
 )
 
 // Columns holds all SQL columns for orgsubscription fields.
@@ -302,6 +311,20 @@ func ByProducts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newProductsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByPricesCount orders the results by prices count.
+func ByPricesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPricesStep(), opts...)
+	}
+}
+
+// ByPrices orders the results by prices terms.
+func ByPrices(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPricesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -328,5 +351,12 @@ func newProductsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProductsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ProductsTable, ProductsColumn),
+	)
+}
+func newPricesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PricesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, PricesTable, PricesColumn),
 	)
 }

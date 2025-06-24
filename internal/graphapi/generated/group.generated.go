@@ -125,6 +125,12 @@ func (ec *executionContext) fieldContext_GroupBulkCreatePayload_groups(_ context
 				return ec.fieldContext_Group_controlImplementationBlockedGroups(ctx, field)
 			case "controlImplementationViewers":
 				return ec.fieldContext_Group_controlImplementationViewers(ctx, field)
+			case "scanEditors":
+				return ec.fieldContext_Group_scanEditors(ctx, field)
+			case "scanBlockedGroups":
+				return ec.fieldContext_Group_scanBlockedGroups(ctx, field)
+			case "scanViewers":
+				return ec.fieldContext_Group_scanViewers(ctx, field)
 			case "procedureEditors":
 				return ec.fieldContext_Group_procedureEditors(ctx, field)
 			case "procedureBlockedGroups":
@@ -263,6 +269,12 @@ func (ec *executionContext) fieldContext_GroupCreatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_controlImplementationBlockedGroups(ctx, field)
 			case "controlImplementationViewers":
 				return ec.fieldContext_Group_controlImplementationViewers(ctx, field)
+			case "scanEditors":
+				return ec.fieldContext_Group_scanEditors(ctx, field)
+			case "scanBlockedGroups":
+				return ec.fieldContext_Group_scanBlockedGroups(ctx, field)
+			case "scanViewers":
+				return ec.fieldContext_Group_scanViewers(ctx, field)
 			case "procedureEditors":
 				return ec.fieldContext_Group_procedureEditors(ctx, field)
 			case "procedureBlockedGroups":
@@ -445,6 +457,12 @@ func (ec *executionContext) fieldContext_GroupUpdatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_controlImplementationBlockedGroups(ctx, field)
 			case "controlImplementationViewers":
 				return ec.fieldContext_Group_controlImplementationViewers(ctx, field)
+			case "scanEditors":
+				return ec.fieldContext_Group_scanEditors(ctx, field)
+			case "scanBlockedGroups":
+				return ec.fieldContext_Group_scanBlockedGroups(ctx, field)
+			case "scanViewers":
+				return ec.fieldContext_Group_scanViewers(ctx, field)
 			case "procedureEditors":
 				return ec.fieldContext_Group_procedureEditors(ctx, field)
 			case "procedureBlockedGroups":

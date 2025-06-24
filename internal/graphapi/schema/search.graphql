@@ -50,6 +50,31 @@ extend type Query{
         last: Int
     ): ActionPlanConnection
     """
+    Search across Asset objects
+    """
+    assetSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): AssetConnection
+    """
     Search across Contact objects
     """
     contactSearch(
@@ -775,6 +800,31 @@ extend type Query{
         last: Int
     ): RiskConnection
     """
+    Search across Scan objects
+    """
+    scanSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): ScanConnection
+    """
     Search across ScheduledJob objects
     """
     scheduledJobSearch(
@@ -1036,6 +1086,7 @@ type SearchResults{
   totalCount: Int!
   apiTokens: APITokenConnection
   actionPlans: ActionPlanConnection
+  assets: AssetConnection
   contacts: ContactConnection
   controls: ControlConnection
   controlImplementations: ControlImplementationConnection
@@ -1065,6 +1116,7 @@ type SearchResults{
   procedures: ProcedureConnection
   programs: ProgramConnection
   risks: RiskConnection
+  scans: ScanConnection
   scheduledJobs: ScheduledJobConnection
   standards: StandardConnection
   subcontrols: SubcontrolConnection

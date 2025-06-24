@@ -117,6 +117,30 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetSummary(summary)
 	}
 
+	if tagSuggestions, exists := m.TagSuggestions(); exists {
+		create = create.SetTagSuggestions(tagSuggestions)
+	}
+
+	if dismissedTagSuggestions, exists := m.DismissedTagSuggestions(); exists {
+		create = create.SetDismissedTagSuggestions(dismissedTagSuggestions)
+	}
+
+	if controlSuggestions, exists := m.ControlSuggestions(); exists {
+		create = create.SetControlSuggestions(controlSuggestions)
+	}
+
+	if dismissedControlSuggestions, exists := m.DismissedControlSuggestions(); exists {
+		create = create.SetDismissedControlSuggestions(dismissedControlSuggestions)
+	}
+
+	if improvementSuggestions, exists := m.ImprovementSuggestions(); exists {
+		create = create.SetImprovementSuggestions(improvementSuggestions)
+	}
+
+	if dismissedImprovementSuggestions, exists := m.DismissedImprovementSuggestions(); exists {
+		create = create.SetDismissedImprovementSuggestions(dismissedImprovementSuggestions)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -271,6 +295,42 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetSummary(actionplan.Summary)
 		}
 
+		if tagSuggestions, exists := m.TagSuggestions(); exists {
+			create = create.SetTagSuggestions(tagSuggestions)
+		} else {
+			create = create.SetTagSuggestions(actionplan.TagSuggestions)
+		}
+
+		if dismissedTagSuggestions, exists := m.DismissedTagSuggestions(); exists {
+			create = create.SetDismissedTagSuggestions(dismissedTagSuggestions)
+		} else {
+			create = create.SetDismissedTagSuggestions(actionplan.DismissedTagSuggestions)
+		}
+
+		if controlSuggestions, exists := m.ControlSuggestions(); exists {
+			create = create.SetControlSuggestions(controlSuggestions)
+		} else {
+			create = create.SetControlSuggestions(actionplan.ControlSuggestions)
+		}
+
+		if dismissedControlSuggestions, exists := m.DismissedControlSuggestions(); exists {
+			create = create.SetDismissedControlSuggestions(dismissedControlSuggestions)
+		} else {
+			create = create.SetDismissedControlSuggestions(actionplan.DismissedControlSuggestions)
+		}
+
+		if improvementSuggestions, exists := m.ImprovementSuggestions(); exists {
+			create = create.SetImprovementSuggestions(improvementSuggestions)
+		} else {
+			create = create.SetImprovementSuggestions(actionplan.ImprovementSuggestions)
+		}
+
+		if dismissedImprovementSuggestions, exists := m.DismissedImprovementSuggestions(); exists {
+			create = create.SetDismissedImprovementSuggestions(dismissedImprovementSuggestions)
+		} else {
+			create = create.SetDismissedImprovementSuggestions(actionplan.DismissedImprovementSuggestions)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -345,10 +405,267 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetApproverID(actionplan.ApproverID).
 			SetDelegateID(actionplan.DelegateID).
 			SetSummary(actionplan.Summary).
+			SetTagSuggestions(actionplan.TagSuggestions).
+			SetDismissedTagSuggestions(actionplan.DismissedTagSuggestions).
+			SetControlSuggestions(actionplan.ControlSuggestions).
+			SetDismissedControlSuggestions(actionplan.DismissedControlSuggestions).
+			SetImprovementSuggestions(actionplan.ImprovementSuggestions).
+			SetDismissedImprovementSuggestions(actionplan.DismissedImprovementSuggestions).
 			SetOwnerID(actionplan.OwnerID).
 			SetDueDate(actionplan.DueDate).
 			SetPriority(actionplan.Priority).
 			SetSource(actionplan.Source).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *AssetMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.AssetHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if assetType, exists := m.AssetType(); exists {
+		create = create.SetAssetType(assetType)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
+	if description, exists := m.Description(); exists {
+		create = create.SetDescription(description)
+	}
+
+	if identifier, exists := m.Identifier(); exists {
+		create = create.SetIdentifier(identifier)
+	}
+
+	if website, exists := m.Website(); exists {
+		create = create.SetWebsite(website)
+	}
+
+	if cpe, exists := m.Cpe(); exists {
+		create = create.SetCpe(cpe)
+	}
+
+	if categories, exists := m.Categories(); exists {
+		create = create.SetCategories(categories)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *AssetMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		asset, err := client.Asset.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.AssetHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(asset.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(asset.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(asset.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(asset.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(asset.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(asset.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(asset.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(asset.OwnerID)
+		}
+
+		if assetType, exists := m.AssetType(); exists {
+			create = create.SetAssetType(assetType)
+		} else {
+			create = create.SetAssetType(asset.AssetType)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(asset.Name)
+		}
+
+		if description, exists := m.Description(); exists {
+			create = create.SetDescription(description)
+		} else {
+			create = create.SetDescription(asset.Description)
+		}
+
+		if identifier, exists := m.Identifier(); exists {
+			create = create.SetIdentifier(identifier)
+		} else {
+			create = create.SetIdentifier(asset.Identifier)
+		}
+
+		if website, exists := m.Website(); exists {
+			create = create.SetWebsite(website)
+		} else {
+			create = create.SetWebsite(asset.Website)
+		}
+
+		if cpe, exists := m.Cpe(); exists {
+			create = create.SetCpe(cpe)
+		} else {
+			create = create.SetCpe(asset.Cpe)
+		}
+
+		if categories, exists := m.Categories(); exists {
+			create = create.SetCategories(categories)
+		} else {
+			create = create.SetCategories(asset.Categories)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *AssetMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		asset, err := client.Asset.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.AssetHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(asset.CreatedAt).
+			SetUpdatedAt(asset.UpdatedAt).
+			SetCreatedBy(asset.CreatedBy).
+			SetUpdatedBy(asset.UpdatedBy).
+			SetDeletedAt(asset.DeletedAt).
+			SetDeletedBy(asset.DeletedBy).
+			SetTags(asset.Tags).
+			SetOwnerID(asset.OwnerID).
+			SetAssetType(asset.AssetType).
+			SetName(asset.Name).
+			SetDescription(asset.Description).
+			SetIdentifier(asset.Identifier).
+			SetWebsite(asset.Website).
+			SetCpe(asset.Cpe).
+			SetCategories(asset.Categories).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -4588,6 +4905,30 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetSummary(summary)
 	}
 
+	if tagSuggestions, exists := m.TagSuggestions(); exists {
+		create = create.SetTagSuggestions(tagSuggestions)
+	}
+
+	if dismissedTagSuggestions, exists := m.DismissedTagSuggestions(); exists {
+		create = create.SetDismissedTagSuggestions(dismissedTagSuggestions)
+	}
+
+	if controlSuggestions, exists := m.ControlSuggestions(); exists {
+		create = create.SetControlSuggestions(controlSuggestions)
+	}
+
+	if dismissedControlSuggestions, exists := m.DismissedControlSuggestions(); exists {
+		create = create.SetDismissedControlSuggestions(dismissedControlSuggestions)
+	}
+
+	if improvementSuggestions, exists := m.ImprovementSuggestions(); exists {
+		create = create.SetImprovementSuggestions(improvementSuggestions)
+	}
+
+	if dismissedImprovementSuggestions, exists := m.DismissedImprovementSuggestions(); exists {
+		create = create.SetDismissedImprovementSuggestions(dismissedImprovementSuggestions)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -4738,6 +5079,42 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetSummary(internalpolicy.Summary)
 		}
 
+		if tagSuggestions, exists := m.TagSuggestions(); exists {
+			create = create.SetTagSuggestions(tagSuggestions)
+		} else {
+			create = create.SetTagSuggestions(internalpolicy.TagSuggestions)
+		}
+
+		if dismissedTagSuggestions, exists := m.DismissedTagSuggestions(); exists {
+			create = create.SetDismissedTagSuggestions(dismissedTagSuggestions)
+		} else {
+			create = create.SetDismissedTagSuggestions(internalpolicy.DismissedTagSuggestions)
+		}
+
+		if controlSuggestions, exists := m.ControlSuggestions(); exists {
+			create = create.SetControlSuggestions(controlSuggestions)
+		} else {
+			create = create.SetControlSuggestions(internalpolicy.ControlSuggestions)
+		}
+
+		if dismissedControlSuggestions, exists := m.DismissedControlSuggestions(); exists {
+			create = create.SetDismissedControlSuggestions(dismissedControlSuggestions)
+		} else {
+			create = create.SetDismissedControlSuggestions(internalpolicy.DismissedControlSuggestions)
+		}
+
+		if improvementSuggestions, exists := m.ImprovementSuggestions(); exists {
+			create = create.SetImprovementSuggestions(improvementSuggestions)
+		} else {
+			create = create.SetImprovementSuggestions(internalpolicy.ImprovementSuggestions)
+		}
+
+		if dismissedImprovementSuggestions, exists := m.DismissedImprovementSuggestions(); exists {
+			create = create.SetDismissedImprovementSuggestions(dismissedImprovementSuggestions)
+		} else {
+			create = create.SetDismissedImprovementSuggestions(internalpolicy.DismissedImprovementSuggestions)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -4790,6 +5167,12 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetApproverID(internalpolicy.ApproverID).
 			SetDelegateID(internalpolicy.DelegateID).
 			SetSummary(internalpolicy.Summary).
+			SetTagSuggestions(internalpolicy.TagSuggestions).
+			SetDismissedTagSuggestions(internalpolicy.DismissedTagSuggestions).
+			SetControlSuggestions(internalpolicy.ControlSuggestions).
+			SetDismissedControlSuggestions(internalpolicy.DismissedControlSuggestions).
+			SetImprovementSuggestions(internalpolicy.ImprovementSuggestions).
+			SetDismissedImprovementSuggestions(internalpolicy.DismissedImprovementSuggestions).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -6430,6 +6813,38 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetAllowedEmailDomains(allowedEmailDomains)
 	}
 
+	if identityProvider, exists := m.IdentityProvider(); exists {
+		create = create.SetIdentityProvider(identityProvider)
+	}
+
+	if identityProviderClientID, exists := m.IdentityProviderClientID(); exists {
+		create = create.SetNillableIdentityProviderClientID(&identityProviderClientID)
+	}
+
+	if identityProviderClientSecret, exists := m.IdentityProviderClientSecret(); exists {
+		create = create.SetNillableIdentityProviderClientSecret(&identityProviderClientSecret)
+	}
+
+	if identityProviderMetadataEndpoint, exists := m.IdentityProviderMetadataEndpoint(); exists {
+		create = create.SetIdentityProviderMetadataEndpoint(identityProviderMetadataEndpoint)
+	}
+
+	if identityProviderEntityID, exists := m.IdentityProviderEntityID(); exists {
+		create = create.SetIdentityProviderEntityID(identityProviderEntityID)
+	}
+
+	if oidcDiscoveryEndpoint, exists := m.OidcDiscoveryEndpoint(); exists {
+		create = create.SetOidcDiscoveryEndpoint(oidcDiscoveryEndpoint)
+	}
+
+	if identityProviderLoginEnforced, exists := m.IdentityProviderLoginEnforced(); exists {
+		create = create.SetIdentityProviderLoginEnforced(identityProviderLoginEnforced)
+	}
+
+	if complianceWebhookToken, exists := m.ComplianceWebhookToken(); exists {
+		create = create.SetNillableComplianceWebhookToken(&complianceWebhookToken)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -6562,6 +6977,54 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetAllowedEmailDomains(organizationsetting.AllowedEmailDomains)
 		}
 
+		if identityProvider, exists := m.IdentityProvider(); exists {
+			create = create.SetIdentityProvider(identityProvider)
+		} else {
+			create = create.SetIdentityProvider(organizationsetting.IdentityProvider)
+		}
+
+		if identityProviderClientID, exists := m.IdentityProviderClientID(); exists {
+			create = create.SetNillableIdentityProviderClientID(&identityProviderClientID)
+		} else {
+			create = create.SetNillableIdentityProviderClientID(organizationsetting.IdentityProviderClientID)
+		}
+
+		if identityProviderClientSecret, exists := m.IdentityProviderClientSecret(); exists {
+			create = create.SetNillableIdentityProviderClientSecret(&identityProviderClientSecret)
+		} else {
+			create = create.SetNillableIdentityProviderClientSecret(organizationsetting.IdentityProviderClientSecret)
+		}
+
+		if identityProviderMetadataEndpoint, exists := m.IdentityProviderMetadataEndpoint(); exists {
+			create = create.SetIdentityProviderMetadataEndpoint(identityProviderMetadataEndpoint)
+		} else {
+			create = create.SetIdentityProviderMetadataEndpoint(organizationsetting.IdentityProviderMetadataEndpoint)
+		}
+
+		if identityProviderEntityID, exists := m.IdentityProviderEntityID(); exists {
+			create = create.SetIdentityProviderEntityID(identityProviderEntityID)
+		} else {
+			create = create.SetIdentityProviderEntityID(organizationsetting.IdentityProviderEntityID)
+		}
+
+		if oidcDiscoveryEndpoint, exists := m.OidcDiscoveryEndpoint(); exists {
+			create = create.SetOidcDiscoveryEndpoint(oidcDiscoveryEndpoint)
+		} else {
+			create = create.SetOidcDiscoveryEndpoint(organizationsetting.OidcDiscoveryEndpoint)
+		}
+
+		if identityProviderLoginEnforced, exists := m.IdentityProviderLoginEnforced(); exists {
+			create = create.SetIdentityProviderLoginEnforced(identityProviderLoginEnforced)
+		} else {
+			create = create.SetIdentityProviderLoginEnforced(organizationsetting.IdentityProviderLoginEnforced)
+		}
+
+		if complianceWebhookToken, exists := m.ComplianceWebhookToken(); exists {
+			create = create.SetNillableComplianceWebhookToken(&complianceWebhookToken)
+		} else {
+			create = create.SetNillableComplianceWebhookToken(organizationsetting.ComplianceWebhookToken)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -6611,6 +7074,14 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetOrganizationID(organizationsetting.OrganizationID).
 			SetBillingNotificationsEnabled(organizationsetting.BillingNotificationsEnabled).
 			SetAllowedEmailDomains(organizationsetting.AllowedEmailDomains).
+			SetIdentityProvider(organizationsetting.IdentityProvider).
+			SetNillableIdentityProviderClientID(organizationsetting.IdentityProviderClientID).
+			SetNillableIdentityProviderClientSecret(organizationsetting.IdentityProviderClientSecret).
+			SetIdentityProviderMetadataEndpoint(organizationsetting.IdentityProviderMetadataEndpoint).
+			SetIdentityProviderEntityID(organizationsetting.IdentityProviderEntityID).
+			SetOidcDiscoveryEndpoint(organizationsetting.OidcDiscoveryEndpoint).
+			SetIdentityProviderLoginEnforced(organizationsetting.IdentityProviderLoginEnforced).
+			SetNillableComplianceWebhookToken(organizationsetting.ComplianceWebhookToken).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -6713,6 +7184,30 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if summary, exists := m.Summary(); exists {
 		create = create.SetSummary(summary)
+	}
+
+	if tagSuggestions, exists := m.TagSuggestions(); exists {
+		create = create.SetTagSuggestions(tagSuggestions)
+	}
+
+	if dismissedTagSuggestions, exists := m.DismissedTagSuggestions(); exists {
+		create = create.SetDismissedTagSuggestions(dismissedTagSuggestions)
+	}
+
+	if controlSuggestions, exists := m.ControlSuggestions(); exists {
+		create = create.SetControlSuggestions(controlSuggestions)
+	}
+
+	if dismissedControlSuggestions, exists := m.DismissedControlSuggestions(); exists {
+		create = create.SetDismissedControlSuggestions(dismissedControlSuggestions)
+	}
+
+	if improvementSuggestions, exists := m.ImprovementSuggestions(); exists {
+		create = create.SetImprovementSuggestions(improvementSuggestions)
+	}
+
+	if dismissedImprovementSuggestions, exists := m.DismissedImprovementSuggestions(); exists {
+		create = create.SetDismissedImprovementSuggestions(dismissedImprovementSuggestions)
 	}
 
 	_, err := create.Save(ctx)
@@ -6865,6 +7360,42 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetSummary(procedure.Summary)
 		}
 
+		if tagSuggestions, exists := m.TagSuggestions(); exists {
+			create = create.SetTagSuggestions(tagSuggestions)
+		} else {
+			create = create.SetTagSuggestions(procedure.TagSuggestions)
+		}
+
+		if dismissedTagSuggestions, exists := m.DismissedTagSuggestions(); exists {
+			create = create.SetDismissedTagSuggestions(dismissedTagSuggestions)
+		} else {
+			create = create.SetDismissedTagSuggestions(procedure.DismissedTagSuggestions)
+		}
+
+		if controlSuggestions, exists := m.ControlSuggestions(); exists {
+			create = create.SetControlSuggestions(controlSuggestions)
+		} else {
+			create = create.SetControlSuggestions(procedure.ControlSuggestions)
+		}
+
+		if dismissedControlSuggestions, exists := m.DismissedControlSuggestions(); exists {
+			create = create.SetDismissedControlSuggestions(dismissedControlSuggestions)
+		} else {
+			create = create.SetDismissedControlSuggestions(procedure.DismissedControlSuggestions)
+		}
+
+		if improvementSuggestions, exists := m.ImprovementSuggestions(); exists {
+			create = create.SetImprovementSuggestions(improvementSuggestions)
+		} else {
+			create = create.SetImprovementSuggestions(procedure.ImprovementSuggestions)
+		}
+
+		if dismissedImprovementSuggestions, exists := m.DismissedImprovementSuggestions(); exists {
+			create = create.SetDismissedImprovementSuggestions(dismissedImprovementSuggestions)
+		} else {
+			create = create.SetDismissedImprovementSuggestions(procedure.DismissedImprovementSuggestions)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -6917,6 +7448,12 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetApproverID(procedure.ApproverID).
 			SetDelegateID(procedure.DelegateID).
 			SetSummary(procedure.Summary).
+			SetTagSuggestions(procedure.TagSuggestions).
+			SetDismissedTagSuggestions(procedure.DismissedTagSuggestions).
+			SetControlSuggestions(procedure.ControlSuggestions).
+			SetDismissedControlSuggestions(procedure.DismissedControlSuggestions).
+			SetImprovementSuggestions(procedure.ImprovementSuggestions).
+			SetDismissedImprovementSuggestions(procedure.DismissedImprovementSuggestions).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -7725,6 +8262,224 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetBusinessCosts(risk.BusinessCosts).
 			SetStakeholderID(risk.StakeholderID).
 			SetDelegateID(risk.DelegateID).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ScanMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.ScanHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if target, exists := m.Target(); exists {
+		create = create.SetTarget(target)
+	}
+
+	if scanType, exists := m.ScanType(); exists {
+		create = create.SetScanType(scanType)
+	}
+
+	if metadata, exists := m.Metadata(); exists {
+		create = create.SetMetadata(metadata)
+	}
+
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *ScanMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		scan, err := client.Scan.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.ScanHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(scan.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(scan.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(scan.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(scan.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(scan.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(scan.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(scan.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(scan.OwnerID)
+		}
+
+		if target, exists := m.Target(); exists {
+			create = create.SetTarget(target)
+		} else {
+			create = create.SetTarget(scan.Target)
+		}
+
+		if scanType, exists := m.ScanType(); exists {
+			create = create.SetScanType(scanType)
+		} else {
+			create = create.SetScanType(scan.ScanType)
+		}
+
+		if metadata, exists := m.Metadata(); exists {
+			create = create.SetMetadata(metadata)
+		} else {
+			create = create.SetMetadata(scan.Metadata)
+		}
+
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(scan.Status)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ScanMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		scan, err := client.Scan.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.ScanHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(scan.CreatedAt).
+			SetUpdatedAt(scan.UpdatedAt).
+			SetCreatedBy(scan.CreatedBy).
+			SetUpdatedBy(scan.UpdatedBy).
+			SetDeletedAt(scan.DeletedAt).
+			SetDeletedBy(scan.DeletedBy).
+			SetTags(scan.Tags).
+			SetOwnerID(scan.OwnerID).
+			SetTarget(scan.Target).
+			SetScanType(scan.ScanType).
+			SetMetadata(scan.Metadata).
+			SetStatus(scan.Status).
 			Save(ctx)
 		if err != nil {
 			return err

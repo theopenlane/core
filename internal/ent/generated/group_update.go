@@ -29,6 +29,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
@@ -475,6 +476,51 @@ func (gu *GroupUpdate) AddControlImplementationViewers(c ...*ControlImplementati
 		ids[i] = c[i].ID
 	}
 	return gu.AddControlImplementationViewerIDs(ids...)
+}
+
+// AddScanEditorIDs adds the "scan_editors" edge to the Scan entity by IDs.
+func (gu *GroupUpdate) AddScanEditorIDs(ids ...string) *GroupUpdate {
+	gu.mutation.AddScanEditorIDs(ids...)
+	return gu
+}
+
+// AddScanEditors adds the "scan_editors" edges to the Scan entity.
+func (gu *GroupUpdate) AddScanEditors(s ...*Scan) *GroupUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return gu.AddScanEditorIDs(ids...)
+}
+
+// AddScanBlockedGroupIDs adds the "scan_blocked_groups" edge to the Scan entity by IDs.
+func (gu *GroupUpdate) AddScanBlockedGroupIDs(ids ...string) *GroupUpdate {
+	gu.mutation.AddScanBlockedGroupIDs(ids...)
+	return gu
+}
+
+// AddScanBlockedGroups adds the "scan_blocked_groups" edges to the Scan entity.
+func (gu *GroupUpdate) AddScanBlockedGroups(s ...*Scan) *GroupUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return gu.AddScanBlockedGroupIDs(ids...)
+}
+
+// AddScanViewerIDs adds the "scan_viewers" edge to the Scan entity by IDs.
+func (gu *GroupUpdate) AddScanViewerIDs(ids ...string) *GroupUpdate {
+	gu.mutation.AddScanViewerIDs(ids...)
+	return gu
+}
+
+// AddScanViewers adds the "scan_viewers" edges to the Scan entity.
+func (gu *GroupUpdate) AddScanViewers(s ...*Scan) *GroupUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return gu.AddScanViewerIDs(ids...)
 }
 
 // AddProcedureEditorIDs adds the "procedure_editors" edge to the Procedure entity by IDs.
@@ -1030,6 +1076,69 @@ func (gu *GroupUpdate) RemoveControlImplementationViewers(c ...*ControlImplement
 		ids[i] = c[i].ID
 	}
 	return gu.RemoveControlImplementationViewerIDs(ids...)
+}
+
+// ClearScanEditors clears all "scan_editors" edges to the Scan entity.
+func (gu *GroupUpdate) ClearScanEditors() *GroupUpdate {
+	gu.mutation.ClearScanEditors()
+	return gu
+}
+
+// RemoveScanEditorIDs removes the "scan_editors" edge to Scan entities by IDs.
+func (gu *GroupUpdate) RemoveScanEditorIDs(ids ...string) *GroupUpdate {
+	gu.mutation.RemoveScanEditorIDs(ids...)
+	return gu
+}
+
+// RemoveScanEditors removes "scan_editors" edges to Scan entities.
+func (gu *GroupUpdate) RemoveScanEditors(s ...*Scan) *GroupUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return gu.RemoveScanEditorIDs(ids...)
+}
+
+// ClearScanBlockedGroups clears all "scan_blocked_groups" edges to the Scan entity.
+func (gu *GroupUpdate) ClearScanBlockedGroups() *GroupUpdate {
+	gu.mutation.ClearScanBlockedGroups()
+	return gu
+}
+
+// RemoveScanBlockedGroupIDs removes the "scan_blocked_groups" edge to Scan entities by IDs.
+func (gu *GroupUpdate) RemoveScanBlockedGroupIDs(ids ...string) *GroupUpdate {
+	gu.mutation.RemoveScanBlockedGroupIDs(ids...)
+	return gu
+}
+
+// RemoveScanBlockedGroups removes "scan_blocked_groups" edges to Scan entities.
+func (gu *GroupUpdate) RemoveScanBlockedGroups(s ...*Scan) *GroupUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return gu.RemoveScanBlockedGroupIDs(ids...)
+}
+
+// ClearScanViewers clears all "scan_viewers" edges to the Scan entity.
+func (gu *GroupUpdate) ClearScanViewers() *GroupUpdate {
+	gu.mutation.ClearScanViewers()
+	return gu
+}
+
+// RemoveScanViewerIDs removes the "scan_viewers" edge to Scan entities by IDs.
+func (gu *GroupUpdate) RemoveScanViewerIDs(ids ...string) *GroupUpdate {
+	gu.mutation.RemoveScanViewerIDs(ids...)
+	return gu
+}
+
+// RemoveScanViewers removes "scan_viewers" edges to Scan entities.
+func (gu *GroupUpdate) RemoveScanViewers(s ...*Scan) *GroupUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return gu.RemoveScanViewerIDs(ids...)
 }
 
 // ClearProcedureEditors clears all "procedure_editors" edges to the Procedure entity.
@@ -2241,6 +2350,150 @@ func (gu *GroupUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if gu.mutation.ScanEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanEditorsTable,
+			Columns: group.ScanEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.ScanEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.RemovedScanEditorsIDs(); len(nodes) > 0 && !gu.mutation.ScanEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanEditorsTable,
+			Columns: group.ScanEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.ScanEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.ScanEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanEditorsTable,
+			Columns: group.ScanEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.ScanEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if gu.mutation.ScanBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanBlockedGroupsTable,
+			Columns: group.ScanBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.ScanBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.RemovedScanBlockedGroupsIDs(); len(nodes) > 0 && !gu.mutation.ScanBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanBlockedGroupsTable,
+			Columns: group.ScanBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.ScanBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.ScanBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanBlockedGroupsTable,
+			Columns: group.ScanBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.ScanBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if gu.mutation.ScanViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanViewersTable,
+			Columns: group.ScanViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.ScanViewers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.RemovedScanViewersIDs(); len(nodes) > 0 && !gu.mutation.ScanViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanViewersTable,
+			Columns: group.ScanViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.ScanViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.ScanViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanViewersTable,
+			Columns: group.ScanViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.ScanViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if gu.mutation.ProcedureEditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -3417,6 +3670,51 @@ func (guo *GroupUpdateOne) AddControlImplementationViewers(c ...*ControlImplemen
 	return guo.AddControlImplementationViewerIDs(ids...)
 }
 
+// AddScanEditorIDs adds the "scan_editors" edge to the Scan entity by IDs.
+func (guo *GroupUpdateOne) AddScanEditorIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.AddScanEditorIDs(ids...)
+	return guo
+}
+
+// AddScanEditors adds the "scan_editors" edges to the Scan entity.
+func (guo *GroupUpdateOne) AddScanEditors(s ...*Scan) *GroupUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return guo.AddScanEditorIDs(ids...)
+}
+
+// AddScanBlockedGroupIDs adds the "scan_blocked_groups" edge to the Scan entity by IDs.
+func (guo *GroupUpdateOne) AddScanBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.AddScanBlockedGroupIDs(ids...)
+	return guo
+}
+
+// AddScanBlockedGroups adds the "scan_blocked_groups" edges to the Scan entity.
+func (guo *GroupUpdateOne) AddScanBlockedGroups(s ...*Scan) *GroupUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return guo.AddScanBlockedGroupIDs(ids...)
+}
+
+// AddScanViewerIDs adds the "scan_viewers" edge to the Scan entity by IDs.
+func (guo *GroupUpdateOne) AddScanViewerIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.AddScanViewerIDs(ids...)
+	return guo
+}
+
+// AddScanViewers adds the "scan_viewers" edges to the Scan entity.
+func (guo *GroupUpdateOne) AddScanViewers(s ...*Scan) *GroupUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return guo.AddScanViewerIDs(ids...)
+}
+
 // AddProcedureEditorIDs adds the "procedure_editors" edge to the Procedure entity by IDs.
 func (guo *GroupUpdateOne) AddProcedureEditorIDs(ids ...string) *GroupUpdateOne {
 	guo.mutation.AddProcedureEditorIDs(ids...)
@@ -3970,6 +4268,69 @@ func (guo *GroupUpdateOne) RemoveControlImplementationViewers(c ...*ControlImple
 		ids[i] = c[i].ID
 	}
 	return guo.RemoveControlImplementationViewerIDs(ids...)
+}
+
+// ClearScanEditors clears all "scan_editors" edges to the Scan entity.
+func (guo *GroupUpdateOne) ClearScanEditors() *GroupUpdateOne {
+	guo.mutation.ClearScanEditors()
+	return guo
+}
+
+// RemoveScanEditorIDs removes the "scan_editors" edge to Scan entities by IDs.
+func (guo *GroupUpdateOne) RemoveScanEditorIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.RemoveScanEditorIDs(ids...)
+	return guo
+}
+
+// RemoveScanEditors removes "scan_editors" edges to Scan entities.
+func (guo *GroupUpdateOne) RemoveScanEditors(s ...*Scan) *GroupUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return guo.RemoveScanEditorIDs(ids...)
+}
+
+// ClearScanBlockedGroups clears all "scan_blocked_groups" edges to the Scan entity.
+func (guo *GroupUpdateOne) ClearScanBlockedGroups() *GroupUpdateOne {
+	guo.mutation.ClearScanBlockedGroups()
+	return guo
+}
+
+// RemoveScanBlockedGroupIDs removes the "scan_blocked_groups" edge to Scan entities by IDs.
+func (guo *GroupUpdateOne) RemoveScanBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.RemoveScanBlockedGroupIDs(ids...)
+	return guo
+}
+
+// RemoveScanBlockedGroups removes "scan_blocked_groups" edges to Scan entities.
+func (guo *GroupUpdateOne) RemoveScanBlockedGroups(s ...*Scan) *GroupUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return guo.RemoveScanBlockedGroupIDs(ids...)
+}
+
+// ClearScanViewers clears all "scan_viewers" edges to the Scan entity.
+func (guo *GroupUpdateOne) ClearScanViewers() *GroupUpdateOne {
+	guo.mutation.ClearScanViewers()
+	return guo
+}
+
+// RemoveScanViewerIDs removes the "scan_viewers" edge to Scan entities by IDs.
+func (guo *GroupUpdateOne) RemoveScanViewerIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.RemoveScanViewerIDs(ids...)
+	return guo
+}
+
+// RemoveScanViewers removes "scan_viewers" edges to Scan entities.
+func (guo *GroupUpdateOne) RemoveScanViewers(s ...*Scan) *GroupUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return guo.RemoveScanViewerIDs(ids...)
 }
 
 // ClearProcedureEditors clears all "procedure_editors" edges to the Procedure entity.
@@ -5206,6 +5567,150 @@ func (guo *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error
 			},
 		}
 		edge.Schema = guo.schemaConfig.ControlImplementationViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if guo.mutation.ScanEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanEditorsTable,
+			Columns: group.ScanEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.ScanEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.RemovedScanEditorsIDs(); len(nodes) > 0 && !guo.mutation.ScanEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanEditorsTable,
+			Columns: group.ScanEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.ScanEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.ScanEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanEditorsTable,
+			Columns: group.ScanEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.ScanEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if guo.mutation.ScanBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanBlockedGroupsTable,
+			Columns: group.ScanBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.ScanBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.RemovedScanBlockedGroupsIDs(); len(nodes) > 0 && !guo.mutation.ScanBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanBlockedGroupsTable,
+			Columns: group.ScanBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.ScanBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.ScanBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanBlockedGroupsTable,
+			Columns: group.ScanBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.ScanBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if guo.mutation.ScanViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanViewersTable,
+			Columns: group.ScanViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.ScanViewers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.RemovedScanViewersIDs(); len(nodes) > 0 && !guo.mutation.ScanViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanViewersTable,
+			Columns: group.ScanViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.ScanViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.ScanViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanViewersTable,
+			Columns: group.ScanViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.ScanViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

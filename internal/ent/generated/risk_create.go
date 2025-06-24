@@ -11,13 +11,16 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/pkg/enums"
@@ -469,6 +472,51 @@ func (rc *RiskCreate) AddTasks(t ...*Task) *RiskCreate {
 	return rc.AddTaskIDs(ids...)
 }
 
+// AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
+func (rc *RiskCreate) AddAssetIDs(ids ...string) *RiskCreate {
+	rc.mutation.AddAssetIDs(ids...)
+	return rc
+}
+
+// AddAssets adds the "assets" edges to the Asset entity.
+func (rc *RiskCreate) AddAssets(a ...*Asset) *RiskCreate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return rc.AddAssetIDs(ids...)
+}
+
+// AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
+func (rc *RiskCreate) AddEntityIDs(ids ...string) *RiskCreate {
+	rc.mutation.AddEntityIDs(ids...)
+	return rc
+}
+
+// AddEntities adds the "entities" edges to the Entity entity.
+func (rc *RiskCreate) AddEntities(e ...*Entity) *RiskCreate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return rc.AddEntityIDs(ids...)
+}
+
+// AddScanIDs adds the "scans" edge to the Scan entity by IDs.
+func (rc *RiskCreate) AddScanIDs(ids ...string) *RiskCreate {
+	rc.mutation.AddScanIDs(ids...)
+	return rc
+}
+
+// AddScans adds the "scans" edges to the Scan entity.
+func (rc *RiskCreate) AddScans(s ...*Scan) *RiskCreate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return rc.AddScanIDs(ids...)
+}
+
 // SetStakeholder sets the "stakeholder" edge to the Group entity.
 func (rc *RiskCreate) SetStakeholder(g *Group) *RiskCreate {
 	return rc.SetStakeholderID(g.ID)
@@ -885,6 +933,57 @@ func (rc *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = rc.schemaConfig.RiskTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := rc.mutation.AssetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.AssetsTable,
+			Columns: []string{risk.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = rc.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := rc.mutation.EntitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.EntitiesTable,
+			Columns: []string{risk.EntitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = rc.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := rc.mutation.ScansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.ScansTable,
+			Columns: []string{risk.ScansColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = rc.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

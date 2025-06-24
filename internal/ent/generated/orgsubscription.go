@@ -83,15 +83,18 @@ type OrgSubscriptionEdges struct {
 	Modules []*OrgModule `json:"modules,omitempty"`
 	// Products holds the value of the products edge.
 	Products []*OrgProduct `json:"products,omitempty"`
+	// Prices holds the value of the prices edge.
+	Prices []*OrgPrice `json:"prices,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
 	totalCount [2]map[string]int
 
 	namedEvents   map[string][]*Event
 	namedModules  map[string][]*OrgModule
 	namedProducts map[string][]*OrgProduct
+	namedPrices   map[string][]*OrgPrice
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -130,6 +133,15 @@ func (e OrgSubscriptionEdges) ProductsOrErr() ([]*OrgProduct, error) {
 		return e.Products, nil
 	}
 	return nil, &NotLoadedError{edge: "products"}
+}
+
+// PricesOrErr returns the Prices value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrgSubscriptionEdges) PricesOrErr() ([]*OrgPrice, error) {
+	if e.loadedTypes[4] {
+		return e.Prices, nil
+	}
+	return nil, &NotLoadedError{edge: "prices"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -337,6 +349,11 @@ func (os *OrgSubscription) QueryProducts() *OrgProductQuery {
 	return NewOrgSubscriptionClient(os.config).QueryProducts(os)
 }
 
+// QueryPrices queries the "prices" edge of the OrgSubscription entity.
+func (os *OrgSubscription) QueryPrices() *OrgPriceQuery {
+	return NewOrgSubscriptionClient(os.config).QueryPrices(os)
+}
+
 // Update returns a builder for updating this OrgSubscription.
 // Note that you need to call OrgSubscription.Unwrap() before calling this method if this OrgSubscription
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -503,6 +520,30 @@ func (os *OrgSubscription) appendNamedProducts(name string, edges ...*OrgProduct
 		os.Edges.namedProducts[name] = []*OrgProduct{}
 	} else {
 		os.Edges.namedProducts[name] = append(os.Edges.namedProducts[name], edges...)
+	}
+}
+
+// NamedPrices returns the Prices named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (os *OrgSubscription) NamedPrices(name string) ([]*OrgPrice, error) {
+	if os.Edges.namedPrices == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := os.Edges.namedPrices[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (os *OrgSubscription) appendNamedPrices(name string, edges ...*OrgPrice) {
+	if os.Edges.namedPrices == nil {
+		os.Edges.namedPrices = make(map[string][]*OrgPrice)
+	}
+	if len(edges) == 0 {
+		os.Edges.namedPrices[name] = []*OrgPrice{}
+	} else {
+		os.Edges.namedPrices[name] = append(os.Edges.namedPrices[name], edges...)
 	}
 }
 

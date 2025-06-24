@@ -2128,6 +2128,64 @@ func HasProgramsWith(preds ...predicate.Program) predicate.Control {
 	})
 }
 
+// HasAssets applies the HasEdge predicate on the "assets" edge.
+func HasAssets() predicate.Control {
+	return predicate.Control(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, AssetsTable, AssetsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.ControlAssets
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAssetsWith applies the HasEdge predicate on the "assets" edge with a given conditions (other predicates).
+func HasAssetsWith(preds ...predicate.Asset) predicate.Control {
+	return predicate.Control(func(s *sql.Selector) {
+		step := newAssetsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.ControlAssets
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasScans applies the HasEdge predicate on the "scans" edge.
+func HasScans() predicate.Control {
+	return predicate.Control(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ScansTable, ScansColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.Scan
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasScansWith applies the HasEdge predicate on the "scans" edge with a given conditions (other predicates).
+func HasScansWith(preds ...predicate.Scan) predicate.Control {
+	return predicate.Control(func(s *sql.Selector) {
+		step := newScansStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.Scan
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasControlImplementations applies the HasEdge predicate on the "control_implementations" edge.
 func HasControlImplementations() predicate.Control {
 	return predicate.Control(func(s *sql.Selector) {

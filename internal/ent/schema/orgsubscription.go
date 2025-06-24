@@ -151,5 +151,10 @@ func (o OrgSubscription) Edges() []ent.Edge {
 			t:          OrgProduct.Type,
 			name:       "products",
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: o,
+			t:          OrgPrice.Type,
+			name:       "prices",
+		}),
 	}
 }

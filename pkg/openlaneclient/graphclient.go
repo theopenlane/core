@@ -31,6 +31,16 @@ type OpenlaneGraphClient interface {
 	GetAPITokenByID(ctx context.Context, apiTokenID string, interceptors ...clientv2.RequestInterceptor) (*GetAPITokenByID, error)
 	GetAPITokens(ctx context.Context, where *APITokenWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAPITokens, error)
 	UpdateAPIToken(ctx context.Context, updateAPITokenID string, input UpdateAPITokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAPIToken, error)
+	CreateBulkCSVAsset(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVAsset, error)
+	CreateBulkAsset(ctx context.Context, input []*CreateAssetInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkAsset, error)
+	CreateAsset(ctx context.Context, input CreateAssetInput, interceptors ...clientv2.RequestInterceptor) (*CreateAsset, error)
+	DeleteAsset(ctx context.Context, deleteAssetID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAsset, error)
+	GetAllAssets(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssets, error)
+	GetAssetByID(ctx context.Context, assetID string, interceptors ...clientv2.RequestInterceptor) (*GetAssetByID, error)
+	GetAssets(ctx context.Context, first *int64, last *int64, where *AssetWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssets, error)
+	UpdateAsset(ctx context.Context, updateAssetID string, input UpdateAssetInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAsset, error)
+	GetAllAssetHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssetHistories, error)
+	GetAssetHistories(ctx context.Context, first *int64, last *int64, where *AssetHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssetHistories, error)
 	AuditLogs(ctx context.Context, first *int64, last *int64, after *string, before *string, where *AuditLogWhereInput, orderBy *AuditLogOrder, interceptors ...clientv2.RequestInterceptor) (*AuditLogs, error)
 	CreateBulkContact(ctx context.Context, input []*CreateContactInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkContact, error)
 	CreateBulkCSVContact(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVContact, error)
@@ -351,6 +361,16 @@ type OpenlaneGraphClient interface {
 	UpdateRisk(ctx context.Context, updateRiskID string, input UpdateRiskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateRisk, error)
 	GetAllRiskHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllRiskHistories, error)
 	GetRiskHistories(ctx context.Context, where *RiskHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetRiskHistories, error)
+	CreateBulkCSVScan(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVScan, error)
+	CreateBulkScan(ctx context.Context, input []*CreateScanInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkScan, error)
+	CreateScan(ctx context.Context, input CreateScanInput, interceptors ...clientv2.RequestInterceptor) (*CreateScan, error)
+	DeleteScan(ctx context.Context, deleteScanID string, interceptors ...clientv2.RequestInterceptor) (*DeleteScan, error)
+	GetAllScans(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllScans, error)
+	GetScanByID(ctx context.Context, scanID string, interceptors ...clientv2.RequestInterceptor) (*GetScanByID, error)
+	GetScans(ctx context.Context, first *int64, last *int64, where *ScanWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetScans, error)
+	UpdateScan(ctx context.Context, updateScanID string, input UpdateScanInput, interceptors ...clientv2.RequestInterceptor) (*UpdateScan, error)
+	GetAllScanHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllScanHistories, error)
+	GetScanHistories(ctx context.Context, first *int64, last *int64, where *ScanHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetScanHistories, error)
 	CreateBulkCSVScheduledJob(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVScheduledJob, error)
 	CreateBulkScheduledJob(ctx context.Context, input []*CreateScheduledJobInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkScheduledJob, error)
 	CreateScheduledJob(ctx context.Context, input CreateScheduledJobInput, interceptors ...clientv2.RequestInterceptor) (*CreateScheduledJob, error)
@@ -1903,16 +1923,22 @@ func (t *AdminSearch_AdminSearch_ActionPlans_PageInfo) GetStartCursor() *string 
 }
 
 type AdminSearch_AdminSearch_ActionPlans_Edges_Node struct {
-	ActionPlanType *string  "json:\"actionPlanType,omitempty\" graphql:\"actionPlanType\""
-	ApproverID     *string  "json:\"approverID,omitempty\" graphql:\"approverID\""
-	DelegateID     *string  "json:\"delegateID,omitempty\" graphql:\"delegateID\""
-	Details        *string  "json:\"details,omitempty\" graphql:\"details\""
-	ID             string   "json:\"id\" graphql:\"id\""
-	Name           string   "json:\"name\" graphql:\"name\""
-	OwnerID        *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Revision       *string  "json:\"revision,omitempty\" graphql:\"revision\""
-	Source         *string  "json:\"source,omitempty\" graphql:\"source\""
-	Tags           []string "json:\"tags,omitempty\" graphql:\"tags\""
+	ActionPlanType                  *string  "json:\"actionPlanType,omitempty\" graphql:\"actionPlanType\""
+	ApproverID                      *string  "json:\"approverID,omitempty\" graphql:\"approverID\""
+	ControlSuggestions              []string "json:\"controlSuggestions,omitempty\" graphql:\"controlSuggestions\""
+	DelegateID                      *string  "json:\"delegateID,omitempty\" graphql:\"delegateID\""
+	Details                         *string  "json:\"details,omitempty\" graphql:\"details\""
+	DismissedControlSuggestions     []string "json:\"dismissedControlSuggestions,omitempty\" graphql:\"dismissedControlSuggestions\""
+	DismissedImprovementSuggestions []string "json:\"dismissedImprovementSuggestions,omitempty\" graphql:\"dismissedImprovementSuggestions\""
+	DismissedTagSuggestions         []string "json:\"dismissedTagSuggestions,omitempty\" graphql:\"dismissedTagSuggestions\""
+	ID                              string   "json:\"id\" graphql:\"id\""
+	ImprovementSuggestions          []string "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	Name                            string   "json:\"name\" graphql:\"name\""
+	OwnerID                         *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Revision                        *string  "json:\"revision,omitempty\" graphql:\"revision\""
+	Source                          *string  "json:\"source,omitempty\" graphql:\"source\""
+	TagSuggestions                  []string "json:\"tagSuggestions,omitempty\" graphql:\"tagSuggestions\""
+	Tags                            []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetActionPlanType() *string {
@@ -1927,6 +1953,12 @@ func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetApproverID() *string
 	}
 	return t.ApproverID
 }
+func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetControlSuggestions() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ActionPlans_Edges_Node{}
+	}
+	return t.ControlSuggestions
+}
 func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetDelegateID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_ActionPlans_Edges_Node{}
@@ -1939,11 +1971,35 @@ func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetDetails() *string {
 	}
 	return t.Details
 }
+func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetDismissedControlSuggestions() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ActionPlans_Edges_Node{}
+	}
+	return t.DismissedControlSuggestions
+}
+func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetDismissedImprovementSuggestions() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ActionPlans_Edges_Node{}
+	}
+	return t.DismissedImprovementSuggestions
+}
+func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetDismissedTagSuggestions() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ActionPlans_Edges_Node{}
+	}
+	return t.DismissedTagSuggestions
+}
 func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_ActionPlans_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetImprovementSuggestions() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ActionPlans_Edges_Node{}
+	}
+	return t.ImprovementSuggestions
 }
 func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetName() string {
 	if t == nil {
@@ -1968,6 +2024,12 @@ func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetSource() *string {
 		t = &AdminSearch_AdminSearch_ActionPlans_Edges_Node{}
 	}
 	return t.Source
+}
+func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetTagSuggestions() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_ActionPlans_Edges_Node{}
+	}
+	return t.TagSuggestions
 }
 func (t *AdminSearch_AdminSearch_ActionPlans_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -2008,6 +2070,134 @@ func (t *AdminSearch_AdminSearch_ActionPlans) GetPageInfo() *AdminSearch_AdminSe
 func (t *AdminSearch_AdminSearch_ActionPlans) GetTotalCount() int64 {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_ActionPlans{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_Assets_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Assets_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Assets_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Assets_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Assets_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Assets_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Assets_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Assets_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Assets_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Assets_Edges_Node struct {
+	Categories  []string "json:\"categories,omitempty\" graphql:\"categories\""
+	Description *string  "json:\"description,omitempty\" graphql:\"description\""
+	ID          string   "json:\"id\" graphql:\"id\""
+	Identifier  *string  "json:\"identifier,omitempty\" graphql:\"identifier\""
+	Name        string   "json:\"name\" graphql:\"name\""
+	OwnerID     *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
+	Website     *string  "json:\"website,omitempty\" graphql:\"website\""
+}
+
+func (t *AdminSearch_AdminSearch_Assets_Edges_Node) GetCategories() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Assets_Edges_Node{}
+	}
+	return t.Categories
+}
+func (t *AdminSearch_AdminSearch_Assets_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Assets_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *AdminSearch_AdminSearch_Assets_Edges_Node) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Assets_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Assets_Edges_Node) GetIdentifier() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Assets_Edges_Node{}
+	}
+	return t.Identifier
+}
+func (t *AdminSearch_AdminSearch_Assets_Edges_Node) GetName() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Assets_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *AdminSearch_AdminSearch_Assets_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Assets_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_Assets_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Assets_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Assets_Edges_Node) GetWebsite() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Assets_Edges_Node{}
+	}
+	return t.Website
+}
+
+type AdminSearch_AdminSearch_Assets_Edges struct {
+	Node *AdminSearch_AdminSearch_Assets_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *AdminSearch_AdminSearch_Assets_Edges) GetNode() *AdminSearch_AdminSearch_Assets_Edges_Node {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Assets_Edges{}
+	}
+	return t.Node
+}
+
+type AdminSearch_AdminSearch_Assets struct {
+	Edges      []*AdminSearch_AdminSearch_Assets_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Assets_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                   "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Assets) GetEdges() []*AdminSearch_AdminSearch_Assets_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Assets{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Assets) GetPageInfo() *AdminSearch_AdminSearch_Assets_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Assets{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Assets) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Assets{}
 	}
 	return t.TotalCount
 }
@@ -3879,16 +4069,22 @@ func (t *AdminSearch_AdminSearch_InternalPolicies_PageInfo) GetStartCursor() *st
 }
 
 type AdminSearch_AdminSearch_InternalPolicies_Edges_Node struct {
-	ApproverID *string  "json:\"approverID,omitempty\" graphql:\"approverID\""
-	DelegateID *string  "json:\"delegateID,omitempty\" graphql:\"delegateID\""
-	Details    *string  "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID  string   "json:\"displayID\" graphql:\"displayID\""
-	ID         string   "json:\"id\" graphql:\"id\""
-	Name       string   "json:\"name\" graphql:\"name\""
-	OwnerID    *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	PolicyType *string  "json:\"policyType,omitempty\" graphql:\"policyType\""
-	Revision   *string  "json:\"revision,omitempty\" graphql:\"revision\""
-	Tags       []string "json:\"tags,omitempty\" graphql:\"tags\""
+	ApproverID                      *string  "json:\"approverID,omitempty\" graphql:\"approverID\""
+	ControlSuggestions              []string "json:\"controlSuggestions,omitempty\" graphql:\"controlSuggestions\""
+	DelegateID                      *string  "json:\"delegateID,omitempty\" graphql:\"delegateID\""
+	Details                         *string  "json:\"details,omitempty\" graphql:\"details\""
+	DismissedControlSuggestions     []string "json:\"dismissedControlSuggestions,omitempty\" graphql:\"dismissedControlSuggestions\""
+	DismissedImprovementSuggestions []string "json:\"dismissedImprovementSuggestions,omitempty\" graphql:\"dismissedImprovementSuggestions\""
+	DismissedTagSuggestions         []string "json:\"dismissedTagSuggestions,omitempty\" graphql:\"dismissedTagSuggestions\""
+	DisplayID                       string   "json:\"displayID\" graphql:\"displayID\""
+	ID                              string   "json:\"id\" graphql:\"id\""
+	ImprovementSuggestions          []string "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	Name                            string   "json:\"name\" graphql:\"name\""
+	OwnerID                         *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyType                      *string  "json:\"policyType,omitempty\" graphql:\"policyType\""
+	Revision                        *string  "json:\"revision,omitempty\" graphql:\"revision\""
+	TagSuggestions                  []string "json:\"tagSuggestions,omitempty\" graphql:\"tagSuggestions\""
+	Tags                            []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetApproverID() *string {
@@ -3896,6 +4092,12 @@ func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetApproverID() *s
 		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
 	}
 	return t.ApproverID
+}
+func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetControlSuggestions() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
+	}
+	return t.ControlSuggestions
 }
 func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetDelegateID() *string {
 	if t == nil {
@@ -3909,6 +4111,24 @@ func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetDetails() *stri
 	}
 	return t.Details
 }
+func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetDismissedControlSuggestions() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
+	}
+	return t.DismissedControlSuggestions
+}
+func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetDismissedImprovementSuggestions() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
+	}
+	return t.DismissedImprovementSuggestions
+}
+func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetDismissedTagSuggestions() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
+	}
+	return t.DismissedTagSuggestions
+}
 func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetDisplayID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
@@ -3920,6 +4140,12 @@ func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetID() string {
 		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetImprovementSuggestions() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
+	}
+	return t.ImprovementSuggestions
 }
 func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetName() string {
 	if t == nil {
@@ -3944,6 +4170,12 @@ func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetRevision() *str
 		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
 	}
 	return t.Revision
+}
+func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetTagSuggestions() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_InternalPolicies_Edges_Node{}
+	}
+	return t.TagSuggestions
 }
 func (t *AdminSearch_AdminSearch_InternalPolicies_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -5033,16 +5265,20 @@ func (t *AdminSearch_AdminSearch_OrganizationSettings_PageInfo) GetStartCursor()
 }
 
 type AdminSearch_AdminSearch_OrganizationSettings_Edges_Node struct {
-	AllowedEmailDomains []string        "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
-	BillingAddress      *models.Address "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
-	BillingContact      *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
-	BillingEmail        *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
-	BillingPhone        *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	Domains             []string        "json:\"domains,omitempty\" graphql:\"domains\""
-	ID                  string          "json:\"id\" graphql:\"id\""
-	OrganizationID      *string         "json:\"organizationID,omitempty\" graphql:\"organizationID\""
-	Tags                []string        "json:\"tags,omitempty\" graphql:\"tags\""
-	TaxIdentifier       *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	AllowedEmailDomains              []string        "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
+	BillingAddress                   *models.Address "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	BillingContact                   *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail                     *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone                     *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	ComplianceWebhookToken           string          "json:\"complianceWebhookToken\" graphql:\"complianceWebhookToken\""
+	Domains                          []string        "json:\"domains,omitempty\" graphql:\"domains\""
+	ID                               string          "json:\"id\" graphql:\"id\""
+	IdentityProviderEntityID         *string         "json:\"identityProviderEntityID,omitempty\" graphql:\"identityProviderEntityID\""
+	IdentityProviderMetadataEndpoint *string         "json:\"identityProviderMetadataEndpoint,omitempty\" graphql:\"identityProviderMetadataEndpoint\""
+	OidcDiscoveryEndpoint            *string         "json:\"oidcDiscoveryEndpoint,omitempty\" graphql:\"oidcDiscoveryEndpoint\""
+	OrganizationID                   *string         "json:\"organizationID,omitempty\" graphql:\"organizationID\""
+	Tags                             []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIdentifier                    *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
 }
 
 func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetAllowedEmailDomains() []string {
@@ -5075,6 +5311,12 @@ func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetBillingPhon
 	}
 	return t.BillingPhone
 }
+func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetComplianceWebhookToken() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
+	}
+	return t.ComplianceWebhookToken
+}
 func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetDomains() []string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
@@ -5086,6 +5328,24 @@ func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetID() string
 		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetIdentityProviderEntityID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProviderEntityID
+}
+func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetIdentityProviderMetadataEndpoint() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProviderMetadataEndpoint
+}
+func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetOidcDiscoveryEndpoint() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
+	}
+	return t.OidcDiscoveryEndpoint
 }
 func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetOrganizationID() *string {
 	if t == nil {
@@ -5289,16 +5549,22 @@ func (t *AdminSearch_AdminSearch_Procedures_PageInfo) GetStartCursor() *string {
 }
 
 type AdminSearch_AdminSearch_Procedures_Edges_Node struct {
-	ApproverID    *string  "json:\"approverID,omitempty\" graphql:\"approverID\""
-	DelegateID    *string  "json:\"delegateID,omitempty\" graphql:\"delegateID\""
-	Details       *string  "json:\"details,omitempty\" graphql:\"details\""
-	DisplayID     string   "json:\"displayID\" graphql:\"displayID\""
-	ID            string   "json:\"id\" graphql:\"id\""
-	Name          string   "json:\"name\" graphql:\"name\""
-	OwnerID       *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	ProcedureType *string  "json:\"procedureType,omitempty\" graphql:\"procedureType\""
-	Revision      *string  "json:\"revision,omitempty\" graphql:\"revision\""
-	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
+	ApproverID                      *string  "json:\"approverID,omitempty\" graphql:\"approverID\""
+	ControlSuggestions              []string "json:\"controlSuggestions,omitempty\" graphql:\"controlSuggestions\""
+	DelegateID                      *string  "json:\"delegateID,omitempty\" graphql:\"delegateID\""
+	Details                         *string  "json:\"details,omitempty\" graphql:\"details\""
+	DismissedControlSuggestions     []string "json:\"dismissedControlSuggestions,omitempty\" graphql:\"dismissedControlSuggestions\""
+	DismissedImprovementSuggestions []string "json:\"dismissedImprovementSuggestions,omitempty\" graphql:\"dismissedImprovementSuggestions\""
+	DismissedTagSuggestions         []string "json:\"dismissedTagSuggestions,omitempty\" graphql:\"dismissedTagSuggestions\""
+	DisplayID                       string   "json:\"displayID\" graphql:\"displayID\""
+	ID                              string   "json:\"id\" graphql:\"id\""
+	ImprovementSuggestions          []string "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	Name                            string   "json:\"name\" graphql:\"name\""
+	OwnerID                         *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ProcedureType                   *string  "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	Revision                        *string  "json:\"revision,omitempty\" graphql:\"revision\""
+	TagSuggestions                  []string "json:\"tagSuggestions,omitempty\" graphql:\"tagSuggestions\""
+	Tags                            []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetApproverID() *string {
@@ -5306,6 +5572,12 @@ func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetApproverID() *string 
 		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
 	}
 	return t.ApproverID
+}
+func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetControlSuggestions() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
+	}
+	return t.ControlSuggestions
 }
 func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetDelegateID() *string {
 	if t == nil {
@@ -5319,6 +5591,24 @@ func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetDetails() *string {
 	}
 	return t.Details
 }
+func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetDismissedControlSuggestions() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
+	}
+	return t.DismissedControlSuggestions
+}
+func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetDismissedImprovementSuggestions() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
+	}
+	return t.DismissedImprovementSuggestions
+}
+func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetDismissedTagSuggestions() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
+	}
+	return t.DismissedTagSuggestions
+}
 func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetDisplayID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
@@ -5330,6 +5620,12 @@ func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetID() string {
 		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetImprovementSuggestions() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
+	}
+	return t.ImprovementSuggestions
 }
 func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetName() string {
 	if t == nil {
@@ -5354,6 +5650,12 @@ func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetRevision() *string {
 		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
 	}
 	return t.Revision
+}
+func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetTagSuggestions() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Procedures_Edges_Node{}
+	}
+	return t.TagSuggestions
 }
 func (t *AdminSearch_AdminSearch_Procedures_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -5692,6 +5994,113 @@ func (t *AdminSearch_AdminSearch_Risks) GetPageInfo() *AdminSearch_AdminSearch_R
 func (t *AdminSearch_AdminSearch_Risks) GetTotalCount() int64 {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Risks{}
+	}
+	return t.TotalCount
+}
+
+type AdminSearch_AdminSearch_Scans_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Scans_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Scans_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Scans_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Scans_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Scans_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Scans_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Scans_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Scans_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Scans_Edges_Node struct {
+	ID       string         "json:\"id\" graphql:\"id\""
+	Metadata map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	OwnerID  *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags     []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	Target   string         "json:\"target\" graphql:\"target\""
+}
+
+func (t *AdminSearch_AdminSearch_Scans_Edges_Node) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Scans_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Scans_Edges_Node) GetMetadata() map[string]any {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Scans_Edges_Node{}
+	}
+	return t.Metadata
+}
+func (t *AdminSearch_AdminSearch_Scans_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Scans_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_Scans_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Scans_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Scans_Edges_Node) GetTarget() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Scans_Edges_Node{}
+	}
+	return t.Target
+}
+
+type AdminSearch_AdminSearch_Scans_Edges struct {
+	Node *AdminSearch_AdminSearch_Scans_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *AdminSearch_AdminSearch_Scans_Edges) GetNode() *AdminSearch_AdminSearch_Scans_Edges_Node {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Scans_Edges{}
+	}
+	return t.Node
+}
+
+type AdminSearch_AdminSearch_Scans struct {
+	Edges      []*AdminSearch_AdminSearch_Scans_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Scans_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Scans) GetEdges() []*AdminSearch_AdminSearch_Scans_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Scans{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Scans) GetPageInfo() *AdminSearch_AdminSearch_Scans_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Scans{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Scans) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Scans{}
 	}
 	return t.TotalCount
 }
@@ -7014,6 +7423,7 @@ func (t *AdminSearch_AdminSearch_Webauthns) GetTotalCount() int64 {
 type AdminSearch_AdminSearch struct {
 	ActionPlans                 *AdminSearch_AdminSearch_ActionPlans                 "json:\"actionPlans,omitempty\" graphql:\"actionPlans\""
 	APITokens                   *AdminSearch_AdminSearch_APITokens                   "json:\"apiTokens,omitempty\" graphql:\"apiTokens\""
+	Assets                      *AdminSearch_AdminSearch_Assets                      "json:\"assets,omitempty\" graphql:\"assets\""
 	Contacts                    *AdminSearch_AdminSearch_Contacts                    "json:\"contacts,omitempty\" graphql:\"contacts\""
 	ControlImplementations      *AdminSearch_AdminSearch_ControlImplementations      "json:\"controlImplementations,omitempty\" graphql:\"controlImplementations\""
 	ControlObjectives           *AdminSearch_AdminSearch_ControlObjectives           "json:\"controlObjectives,omitempty\" graphql:\"controlObjectives\""
@@ -7043,6 +7453,7 @@ type AdminSearch_AdminSearch struct {
 	Procedures                  *AdminSearch_AdminSearch_Procedures                  "json:\"procedures,omitempty\" graphql:\"procedures\""
 	Programs                    *AdminSearch_AdminSearch_Programs                    "json:\"programs,omitempty\" graphql:\"programs\""
 	Risks                       *AdminSearch_AdminSearch_Risks                       "json:\"risks,omitempty\" graphql:\"risks\""
+	Scans                       *AdminSearch_AdminSearch_Scans                       "json:\"scans,omitempty\" graphql:\"scans\""
 	ScheduledJobs               *AdminSearch_AdminSearch_ScheduledJobs               "json:\"scheduledJobs,omitempty\" graphql:\"scheduledJobs\""
 	Standards                   *AdminSearch_AdminSearch_Standards                   "json:\"standards,omitempty\" graphql:\"standards\""
 	Subcontrols                 *AdminSearch_AdminSearch_Subcontrols                 "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
@@ -7067,6 +7478,12 @@ func (t *AdminSearch_AdminSearch) GetAPITokens() *AdminSearch_AdminSearch_APITok
 		t = &AdminSearch_AdminSearch{}
 	}
 	return t.APITokens
+}
+func (t *AdminSearch_AdminSearch) GetAssets() *AdminSearch_AdminSearch_Assets {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Assets
 }
 func (t *AdminSearch_AdminSearch) GetContacts() *AdminSearch_AdminSearch_Contacts {
 	if t == nil {
@@ -7241,6 +7658,12 @@ func (t *AdminSearch_AdminSearch) GetRisks() *AdminSearch_AdminSearch_Risks {
 		t = &AdminSearch_AdminSearch{}
 	}
 	return t.Risks
+}
+func (t *AdminSearch_AdminSearch) GetScans() *AdminSearch_AdminSearch_Scans {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Scans
 }
 func (t *AdminSearch_AdminSearch) GetScheduledJobs() *AdminSearch_AdminSearch_ScheduledJobs {
 	if t == nil {
@@ -8017,6 +8440,1293 @@ func (t *UpdateAPIToken_UpdateAPIToken) GetAPIToken() *UpdateAPIToken_UpdateAPIT
 		t = &UpdateAPIToken_UpdateAPIToken{}
 	}
 	return &t.APIToken
+}
+
+type CreateBulkCSVAsset_CreateBulkCSVAsset_Assets struct {
+	AssetType   enums.AssetType "json:\"assetType\" graphql:\"assetType\""
+	Categories  []string        "json:\"categories,omitempty\" graphql:\"categories\""
+	Cpe         *string         "json:\"cpe,omitempty\" graphql:\"cpe\""
+	CreatedAt   *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string         "json:\"description,omitempty\" graphql:\"description\""
+	ID          string          "json:\"id\" graphql:\"id\""
+	Identifier  *string         "json:\"identifier,omitempty\" graphql:\"identifier\""
+	Name        string          "json:\"name\" graphql:\"name\""
+	OwnerID     *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Website     *string         "json:\"website,omitempty\" graphql:\"website\""
+}
+
+func (t *CreateBulkCSVAsset_CreateBulkCSVAsset_Assets) GetAssetType() *enums.AssetType {
+	if t == nil {
+		t = &CreateBulkCSVAsset_CreateBulkCSVAsset_Assets{}
+	}
+	return &t.AssetType
+}
+func (t *CreateBulkCSVAsset_CreateBulkCSVAsset_Assets) GetCategories() []string {
+	if t == nil {
+		t = &CreateBulkCSVAsset_CreateBulkCSVAsset_Assets{}
+	}
+	return t.Categories
+}
+func (t *CreateBulkCSVAsset_CreateBulkCSVAsset_Assets) GetCpe() *string {
+	if t == nil {
+		t = &CreateBulkCSVAsset_CreateBulkCSVAsset_Assets{}
+	}
+	return t.Cpe
+}
+func (t *CreateBulkCSVAsset_CreateBulkCSVAsset_Assets) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVAsset_CreateBulkCSVAsset_Assets{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVAsset_CreateBulkCSVAsset_Assets) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVAsset_CreateBulkCSVAsset_Assets{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVAsset_CreateBulkCSVAsset_Assets) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkCSVAsset_CreateBulkCSVAsset_Assets{}
+	}
+	return t.Description
+}
+func (t *CreateBulkCSVAsset_CreateBulkCSVAsset_Assets) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVAsset_CreateBulkCSVAsset_Assets{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVAsset_CreateBulkCSVAsset_Assets) GetIdentifier() *string {
+	if t == nil {
+		t = &CreateBulkCSVAsset_CreateBulkCSVAsset_Assets{}
+	}
+	return t.Identifier
+}
+func (t *CreateBulkCSVAsset_CreateBulkCSVAsset_Assets) GetName() string {
+	if t == nil {
+		t = &CreateBulkCSVAsset_CreateBulkCSVAsset_Assets{}
+	}
+	return t.Name
+}
+func (t *CreateBulkCSVAsset_CreateBulkCSVAsset_Assets) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVAsset_CreateBulkCSVAsset_Assets{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVAsset_CreateBulkCSVAsset_Assets) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVAsset_CreateBulkCSVAsset_Assets{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVAsset_CreateBulkCSVAsset_Assets) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVAsset_CreateBulkCSVAsset_Assets{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVAsset_CreateBulkCSVAsset_Assets) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVAsset_CreateBulkCSVAsset_Assets{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkCSVAsset_CreateBulkCSVAsset_Assets) GetWebsite() *string {
+	if t == nil {
+		t = &CreateBulkCSVAsset_CreateBulkCSVAsset_Assets{}
+	}
+	return t.Website
+}
+
+type CreateBulkCSVAsset_CreateBulkCSVAsset struct {
+	Assets []*CreateBulkCSVAsset_CreateBulkCSVAsset_Assets "json:\"assets,omitempty\" graphql:\"assets\""
+}
+
+func (t *CreateBulkCSVAsset_CreateBulkCSVAsset) GetAssets() []*CreateBulkCSVAsset_CreateBulkCSVAsset_Assets {
+	if t == nil {
+		t = &CreateBulkCSVAsset_CreateBulkCSVAsset{}
+	}
+	return t.Assets
+}
+
+type CreateBulkAsset_CreateBulkAsset_Assets struct {
+	AssetType   enums.AssetType "json:\"assetType\" graphql:\"assetType\""
+	Categories  []string        "json:\"categories,omitempty\" graphql:\"categories\""
+	Cpe         *string         "json:\"cpe,omitempty\" graphql:\"cpe\""
+	CreatedAt   *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string         "json:\"description,omitempty\" graphql:\"description\""
+	ID          string          "json:\"id\" graphql:\"id\""
+	Identifier  *string         "json:\"identifier,omitempty\" graphql:\"identifier\""
+	Name        string          "json:\"name\" graphql:\"name\""
+	OwnerID     *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Website     *string         "json:\"website,omitempty\" graphql:\"website\""
+}
+
+func (t *CreateBulkAsset_CreateBulkAsset_Assets) GetAssetType() *enums.AssetType {
+	if t == nil {
+		t = &CreateBulkAsset_CreateBulkAsset_Assets{}
+	}
+	return &t.AssetType
+}
+func (t *CreateBulkAsset_CreateBulkAsset_Assets) GetCategories() []string {
+	if t == nil {
+		t = &CreateBulkAsset_CreateBulkAsset_Assets{}
+	}
+	return t.Categories
+}
+func (t *CreateBulkAsset_CreateBulkAsset_Assets) GetCpe() *string {
+	if t == nil {
+		t = &CreateBulkAsset_CreateBulkAsset_Assets{}
+	}
+	return t.Cpe
+}
+func (t *CreateBulkAsset_CreateBulkAsset_Assets) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkAsset_CreateBulkAsset_Assets{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkAsset_CreateBulkAsset_Assets) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkAsset_CreateBulkAsset_Assets{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkAsset_CreateBulkAsset_Assets) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkAsset_CreateBulkAsset_Assets{}
+	}
+	return t.Description
+}
+func (t *CreateBulkAsset_CreateBulkAsset_Assets) GetID() string {
+	if t == nil {
+		t = &CreateBulkAsset_CreateBulkAsset_Assets{}
+	}
+	return t.ID
+}
+func (t *CreateBulkAsset_CreateBulkAsset_Assets) GetIdentifier() *string {
+	if t == nil {
+		t = &CreateBulkAsset_CreateBulkAsset_Assets{}
+	}
+	return t.Identifier
+}
+func (t *CreateBulkAsset_CreateBulkAsset_Assets) GetName() string {
+	if t == nil {
+		t = &CreateBulkAsset_CreateBulkAsset_Assets{}
+	}
+	return t.Name
+}
+func (t *CreateBulkAsset_CreateBulkAsset_Assets) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkAsset_CreateBulkAsset_Assets{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkAsset_CreateBulkAsset_Assets) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkAsset_CreateBulkAsset_Assets{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkAsset_CreateBulkAsset_Assets) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkAsset_CreateBulkAsset_Assets{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkAsset_CreateBulkAsset_Assets) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkAsset_CreateBulkAsset_Assets{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkAsset_CreateBulkAsset_Assets) GetWebsite() *string {
+	if t == nil {
+		t = &CreateBulkAsset_CreateBulkAsset_Assets{}
+	}
+	return t.Website
+}
+
+type CreateBulkAsset_CreateBulkAsset struct {
+	Assets []*CreateBulkAsset_CreateBulkAsset_Assets "json:\"assets,omitempty\" graphql:\"assets\""
+}
+
+func (t *CreateBulkAsset_CreateBulkAsset) GetAssets() []*CreateBulkAsset_CreateBulkAsset_Assets {
+	if t == nil {
+		t = &CreateBulkAsset_CreateBulkAsset{}
+	}
+	return t.Assets
+}
+
+type CreateAsset_CreateAsset_Asset struct {
+	AssetType   enums.AssetType "json:\"assetType\" graphql:\"assetType\""
+	Categories  []string        "json:\"categories,omitempty\" graphql:\"categories\""
+	Cpe         *string         "json:\"cpe,omitempty\" graphql:\"cpe\""
+	CreatedAt   *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string         "json:\"description,omitempty\" graphql:\"description\""
+	ID          string          "json:\"id\" graphql:\"id\""
+	Identifier  *string         "json:\"identifier,omitempty\" graphql:\"identifier\""
+	Name        string          "json:\"name\" graphql:\"name\""
+	OwnerID     *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Website     *string         "json:\"website,omitempty\" graphql:\"website\""
+}
+
+func (t *CreateAsset_CreateAsset_Asset) GetAssetType() *enums.AssetType {
+	if t == nil {
+		t = &CreateAsset_CreateAsset_Asset{}
+	}
+	return &t.AssetType
+}
+func (t *CreateAsset_CreateAsset_Asset) GetCategories() []string {
+	if t == nil {
+		t = &CreateAsset_CreateAsset_Asset{}
+	}
+	return t.Categories
+}
+func (t *CreateAsset_CreateAsset_Asset) GetCpe() *string {
+	if t == nil {
+		t = &CreateAsset_CreateAsset_Asset{}
+	}
+	return t.Cpe
+}
+func (t *CreateAsset_CreateAsset_Asset) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateAsset_CreateAsset_Asset{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateAsset_CreateAsset_Asset) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateAsset_CreateAsset_Asset{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateAsset_CreateAsset_Asset) GetDescription() *string {
+	if t == nil {
+		t = &CreateAsset_CreateAsset_Asset{}
+	}
+	return t.Description
+}
+func (t *CreateAsset_CreateAsset_Asset) GetID() string {
+	if t == nil {
+		t = &CreateAsset_CreateAsset_Asset{}
+	}
+	return t.ID
+}
+func (t *CreateAsset_CreateAsset_Asset) GetIdentifier() *string {
+	if t == nil {
+		t = &CreateAsset_CreateAsset_Asset{}
+	}
+	return t.Identifier
+}
+func (t *CreateAsset_CreateAsset_Asset) GetName() string {
+	if t == nil {
+		t = &CreateAsset_CreateAsset_Asset{}
+	}
+	return t.Name
+}
+func (t *CreateAsset_CreateAsset_Asset) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateAsset_CreateAsset_Asset{}
+	}
+	return t.OwnerID
+}
+func (t *CreateAsset_CreateAsset_Asset) GetTags() []string {
+	if t == nil {
+		t = &CreateAsset_CreateAsset_Asset{}
+	}
+	return t.Tags
+}
+func (t *CreateAsset_CreateAsset_Asset) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateAsset_CreateAsset_Asset{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateAsset_CreateAsset_Asset) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateAsset_CreateAsset_Asset{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateAsset_CreateAsset_Asset) GetWebsite() *string {
+	if t == nil {
+		t = &CreateAsset_CreateAsset_Asset{}
+	}
+	return t.Website
+}
+
+type CreateAsset_CreateAsset struct {
+	Asset CreateAsset_CreateAsset_Asset "json:\"asset\" graphql:\"asset\""
+}
+
+func (t *CreateAsset_CreateAsset) GetAsset() *CreateAsset_CreateAsset_Asset {
+	if t == nil {
+		t = &CreateAsset_CreateAsset{}
+	}
+	return &t.Asset
+}
+
+type DeleteAsset_DeleteAsset struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteAsset_DeleteAsset) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteAsset_DeleteAsset{}
+	}
+	return t.DeletedID
+}
+
+type GetAllAssets_Assets_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllAssets_Assets_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllAssets_Assets_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllAssets_Assets_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllAssets_Assets_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllAssets_Assets_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllAssets_Assets_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllAssets_Assets_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllAssets_Assets_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllAssets_Assets_Edges_Node struct {
+	AssetType   enums.AssetType "json:\"assetType\" graphql:\"assetType\""
+	Categories  []string        "json:\"categories,omitempty\" graphql:\"categories\""
+	Cpe         *string         "json:\"cpe,omitempty\" graphql:\"cpe\""
+	CreatedAt   *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string         "json:\"description,omitempty\" graphql:\"description\""
+	ID          string          "json:\"id\" graphql:\"id\""
+	Identifier  *string         "json:\"identifier,omitempty\" graphql:\"identifier\""
+	Name        string          "json:\"name\" graphql:\"name\""
+	OwnerID     *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Website     *string         "json:\"website,omitempty\" graphql:\"website\""
+}
+
+func (t *GetAllAssets_Assets_Edges_Node) GetAssetType() *enums.AssetType {
+	if t == nil {
+		t = &GetAllAssets_Assets_Edges_Node{}
+	}
+	return &t.AssetType
+}
+func (t *GetAllAssets_Assets_Edges_Node) GetCategories() []string {
+	if t == nil {
+		t = &GetAllAssets_Assets_Edges_Node{}
+	}
+	return t.Categories
+}
+func (t *GetAllAssets_Assets_Edges_Node) GetCpe() *string {
+	if t == nil {
+		t = &GetAllAssets_Assets_Edges_Node{}
+	}
+	return t.Cpe
+}
+func (t *GetAllAssets_Assets_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssets_Assets_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllAssets_Assets_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllAssets_Assets_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllAssets_Assets_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetAllAssets_Assets_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetAllAssets_Assets_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllAssets_Assets_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllAssets_Assets_Edges_Node) GetIdentifier() *string {
+	if t == nil {
+		t = &GetAllAssets_Assets_Edges_Node{}
+	}
+	return t.Identifier
+}
+func (t *GetAllAssets_Assets_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllAssets_Assets_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAllAssets_Assets_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllAssets_Assets_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllAssets_Assets_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllAssets_Assets_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllAssets_Assets_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssets_Assets_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllAssets_Assets_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllAssets_Assets_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllAssets_Assets_Edges_Node) GetWebsite() *string {
+	if t == nil {
+		t = &GetAllAssets_Assets_Edges_Node{}
+	}
+	return t.Website
+}
+
+type GetAllAssets_Assets_Edges struct {
+	Node *GetAllAssets_Assets_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllAssets_Assets_Edges) GetNode() *GetAllAssets_Assets_Edges_Node {
+	if t == nil {
+		t = &GetAllAssets_Assets_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllAssets_Assets struct {
+	Edges      []*GetAllAssets_Assets_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllAssets_Assets_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                        "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllAssets_Assets) GetEdges() []*GetAllAssets_Assets_Edges {
+	if t == nil {
+		t = &GetAllAssets_Assets{}
+	}
+	return t.Edges
+}
+func (t *GetAllAssets_Assets) GetPageInfo() *GetAllAssets_Assets_PageInfo {
+	if t == nil {
+		t = &GetAllAssets_Assets{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllAssets_Assets) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllAssets_Assets{}
+	}
+	return t.TotalCount
+}
+
+type GetAssetByID_Asset struct {
+	AssetType   enums.AssetType "json:\"assetType\" graphql:\"assetType\""
+	Categories  []string        "json:\"categories,omitempty\" graphql:\"categories\""
+	Cpe         *string         "json:\"cpe,omitempty\" graphql:\"cpe\""
+	CreatedAt   *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string         "json:\"description,omitempty\" graphql:\"description\""
+	ID          string          "json:\"id\" graphql:\"id\""
+	Identifier  *string         "json:\"identifier,omitempty\" graphql:\"identifier\""
+	Name        string          "json:\"name\" graphql:\"name\""
+	OwnerID     *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Website     *string         "json:\"website,omitempty\" graphql:\"website\""
+}
+
+func (t *GetAssetByID_Asset) GetAssetType() *enums.AssetType {
+	if t == nil {
+		t = &GetAssetByID_Asset{}
+	}
+	return &t.AssetType
+}
+func (t *GetAssetByID_Asset) GetCategories() []string {
+	if t == nil {
+		t = &GetAssetByID_Asset{}
+	}
+	return t.Categories
+}
+func (t *GetAssetByID_Asset) GetCpe() *string {
+	if t == nil {
+		t = &GetAssetByID_Asset{}
+	}
+	return t.Cpe
+}
+func (t *GetAssetByID_Asset) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssetByID_Asset{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAssetByID_Asset) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAssetByID_Asset{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAssetByID_Asset) GetDescription() *string {
+	if t == nil {
+		t = &GetAssetByID_Asset{}
+	}
+	return t.Description
+}
+func (t *GetAssetByID_Asset) GetID() string {
+	if t == nil {
+		t = &GetAssetByID_Asset{}
+	}
+	return t.ID
+}
+func (t *GetAssetByID_Asset) GetIdentifier() *string {
+	if t == nil {
+		t = &GetAssetByID_Asset{}
+	}
+	return t.Identifier
+}
+func (t *GetAssetByID_Asset) GetName() string {
+	if t == nil {
+		t = &GetAssetByID_Asset{}
+	}
+	return t.Name
+}
+func (t *GetAssetByID_Asset) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAssetByID_Asset{}
+	}
+	return t.OwnerID
+}
+func (t *GetAssetByID_Asset) GetTags() []string {
+	if t == nil {
+		t = &GetAssetByID_Asset{}
+	}
+	return t.Tags
+}
+func (t *GetAssetByID_Asset) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssetByID_Asset{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAssetByID_Asset) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAssetByID_Asset{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAssetByID_Asset) GetWebsite() *string {
+	if t == nil {
+		t = &GetAssetByID_Asset{}
+	}
+	return t.Website
+}
+
+type GetAssets_Assets_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAssets_Assets_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAssets_Assets_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAssets_Assets_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAssets_Assets_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAssets_Assets_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAssets_Assets_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAssets_Assets_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAssets_Assets_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAssets_Assets_Edges_Node struct {
+	AssetType   enums.AssetType "json:\"assetType\" graphql:\"assetType\""
+	Categories  []string        "json:\"categories,omitempty\" graphql:\"categories\""
+	Cpe         *string         "json:\"cpe,omitempty\" graphql:\"cpe\""
+	CreatedAt   *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string         "json:\"description,omitempty\" graphql:\"description\""
+	ID          string          "json:\"id\" graphql:\"id\""
+	Identifier  *string         "json:\"identifier,omitempty\" graphql:\"identifier\""
+	Name        string          "json:\"name\" graphql:\"name\""
+	OwnerID     *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Website     *string         "json:\"website,omitempty\" graphql:\"website\""
+}
+
+func (t *GetAssets_Assets_Edges_Node) GetAssetType() *enums.AssetType {
+	if t == nil {
+		t = &GetAssets_Assets_Edges_Node{}
+	}
+	return &t.AssetType
+}
+func (t *GetAssets_Assets_Edges_Node) GetCategories() []string {
+	if t == nil {
+		t = &GetAssets_Assets_Edges_Node{}
+	}
+	return t.Categories
+}
+func (t *GetAssets_Assets_Edges_Node) GetCpe() *string {
+	if t == nil {
+		t = &GetAssets_Assets_Edges_Node{}
+	}
+	return t.Cpe
+}
+func (t *GetAssets_Assets_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssets_Assets_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAssets_Assets_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAssets_Assets_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAssets_Assets_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetAssets_Assets_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetAssets_Assets_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAssets_Assets_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAssets_Assets_Edges_Node) GetIdentifier() *string {
+	if t == nil {
+		t = &GetAssets_Assets_Edges_Node{}
+	}
+	return t.Identifier
+}
+func (t *GetAssets_Assets_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAssets_Assets_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAssets_Assets_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAssets_Assets_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAssets_Assets_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAssets_Assets_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAssets_Assets_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssets_Assets_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAssets_Assets_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAssets_Assets_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAssets_Assets_Edges_Node) GetWebsite() *string {
+	if t == nil {
+		t = &GetAssets_Assets_Edges_Node{}
+	}
+	return t.Website
+}
+
+type GetAssets_Assets_Edges struct {
+	Node *GetAssets_Assets_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAssets_Assets_Edges) GetNode() *GetAssets_Assets_Edges_Node {
+	if t == nil {
+		t = &GetAssets_Assets_Edges{}
+	}
+	return t.Node
+}
+
+type GetAssets_Assets struct {
+	Edges      []*GetAssets_Assets_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAssets_Assets_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                     "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAssets_Assets) GetEdges() []*GetAssets_Assets_Edges {
+	if t == nil {
+		t = &GetAssets_Assets{}
+	}
+	return t.Edges
+}
+func (t *GetAssets_Assets) GetPageInfo() *GetAssets_Assets_PageInfo {
+	if t == nil {
+		t = &GetAssets_Assets{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAssets_Assets) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAssets_Assets{}
+	}
+	return t.TotalCount
+}
+
+type UpdateAsset_UpdateAsset_Asset struct {
+	AssetType   enums.AssetType "json:\"assetType\" graphql:\"assetType\""
+	Categories  []string        "json:\"categories,omitempty\" graphql:\"categories\""
+	Cpe         *string         "json:\"cpe,omitempty\" graphql:\"cpe\""
+	CreatedAt   *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string         "json:\"description,omitempty\" graphql:\"description\""
+	ID          string          "json:\"id\" graphql:\"id\""
+	Identifier  *string         "json:\"identifier,omitempty\" graphql:\"identifier\""
+	Name        string          "json:\"name\" graphql:\"name\""
+	OwnerID     *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags        []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Website     *string         "json:\"website,omitempty\" graphql:\"website\""
+}
+
+func (t *UpdateAsset_UpdateAsset_Asset) GetAssetType() *enums.AssetType {
+	if t == nil {
+		t = &UpdateAsset_UpdateAsset_Asset{}
+	}
+	return &t.AssetType
+}
+func (t *UpdateAsset_UpdateAsset_Asset) GetCategories() []string {
+	if t == nil {
+		t = &UpdateAsset_UpdateAsset_Asset{}
+	}
+	return t.Categories
+}
+func (t *UpdateAsset_UpdateAsset_Asset) GetCpe() *string {
+	if t == nil {
+		t = &UpdateAsset_UpdateAsset_Asset{}
+	}
+	return t.Cpe
+}
+func (t *UpdateAsset_UpdateAsset_Asset) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAsset_UpdateAsset_Asset{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateAsset_UpdateAsset_Asset) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateAsset_UpdateAsset_Asset{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateAsset_UpdateAsset_Asset) GetDescription() *string {
+	if t == nil {
+		t = &UpdateAsset_UpdateAsset_Asset{}
+	}
+	return t.Description
+}
+func (t *UpdateAsset_UpdateAsset_Asset) GetID() string {
+	if t == nil {
+		t = &UpdateAsset_UpdateAsset_Asset{}
+	}
+	return t.ID
+}
+func (t *UpdateAsset_UpdateAsset_Asset) GetIdentifier() *string {
+	if t == nil {
+		t = &UpdateAsset_UpdateAsset_Asset{}
+	}
+	return t.Identifier
+}
+func (t *UpdateAsset_UpdateAsset_Asset) GetName() string {
+	if t == nil {
+		t = &UpdateAsset_UpdateAsset_Asset{}
+	}
+	return t.Name
+}
+func (t *UpdateAsset_UpdateAsset_Asset) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateAsset_UpdateAsset_Asset{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateAsset_UpdateAsset_Asset) GetTags() []string {
+	if t == nil {
+		t = &UpdateAsset_UpdateAsset_Asset{}
+	}
+	return t.Tags
+}
+func (t *UpdateAsset_UpdateAsset_Asset) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAsset_UpdateAsset_Asset{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateAsset_UpdateAsset_Asset) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateAsset_UpdateAsset_Asset{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateAsset_UpdateAsset_Asset) GetWebsite() *string {
+	if t == nil {
+		t = &UpdateAsset_UpdateAsset_Asset{}
+	}
+	return t.Website
+}
+
+type UpdateAsset_UpdateAsset struct {
+	Asset UpdateAsset_UpdateAsset_Asset "json:\"asset\" graphql:\"asset\""
+}
+
+func (t *UpdateAsset_UpdateAsset) GetAsset() *UpdateAsset_UpdateAsset_Asset {
+	if t == nil {
+		t = &UpdateAsset_UpdateAsset{}
+	}
+	return &t.Asset
+}
+
+type GetAllAssetHistories_AssetHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllAssetHistories_AssetHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllAssetHistories_AssetHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllAssetHistories_AssetHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllAssetHistories_AssetHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllAssetHistories_AssetHistories_Edges_Node struct {
+	AssetType   enums.AssetType "json:\"assetType\" graphql:\"assetType\""
+	Categories  []string        "json:\"categories,omitempty\" graphql:\"categories\""
+	Cpe         *string         "json:\"cpe,omitempty\" graphql:\"cpe\""
+	CreatedAt   *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string         "json:\"description,omitempty\" graphql:\"description\""
+	HistoryTime time.Time       "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string          "json:\"id\" graphql:\"id\""
+	Identifier  *string         "json:\"identifier,omitempty\" graphql:\"identifier\""
+	Name        string          "json:\"name\" graphql:\"name\""
+	Operation   history.OpType  "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref         *string         "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags        []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Website     *string         "json:\"website,omitempty\" graphql:\"website\""
+}
+
+func (t *GetAllAssetHistories_AssetHistories_Edges_Node) GetAssetType() *enums.AssetType {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return &t.AssetType
+}
+func (t *GetAllAssetHistories_AssetHistories_Edges_Node) GetCategories() []string {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.Categories
+}
+func (t *GetAllAssetHistories_AssetHistories_Edges_Node) GetCpe() *string {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.Cpe
+}
+func (t *GetAllAssetHistories_AssetHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllAssetHistories_AssetHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllAssetHistories_AssetHistories_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetAllAssetHistories_AssetHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllAssetHistories_AssetHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllAssetHistories_AssetHistories_Edges_Node) GetIdentifier() *string {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.Identifier
+}
+func (t *GetAllAssetHistories_AssetHistories_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAllAssetHistories_AssetHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllAssetHistories_AssetHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllAssetHistories_AssetHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllAssetHistories_AssetHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllAssetHistories_AssetHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllAssetHistories_AssetHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllAssetHistories_AssetHistories_Edges_Node) GetWebsite() *string {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.Website
+}
+
+type GetAllAssetHistories_AssetHistories_Edges struct {
+	Node *GetAllAssetHistories_AssetHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllAssetHistories_AssetHistories_Edges) GetNode() *GetAllAssetHistories_AssetHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllAssetHistories_AssetHistories struct {
+	Edges      []*GetAllAssetHistories_AssetHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllAssetHistories_AssetHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                        "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllAssetHistories_AssetHistories) GetEdges() []*GetAllAssetHistories_AssetHistories_Edges {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAllAssetHistories_AssetHistories) GetPageInfo() *GetAllAssetHistories_AssetHistories_PageInfo {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllAssetHistories_AssetHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllAssetHistories_AssetHistories{}
+	}
+	return t.TotalCount
+}
+
+type GetAssetHistories_AssetHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAssetHistories_AssetHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAssetHistories_AssetHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAssetHistories_AssetHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAssetHistories_AssetHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAssetHistories_AssetHistories_Edges_Node struct {
+	AssetType   enums.AssetType "json:\"assetType\" graphql:\"assetType\""
+	Categories  []string        "json:\"categories,omitempty\" graphql:\"categories\""
+	Cpe         *string         "json:\"cpe,omitempty\" graphql:\"cpe\""
+	CreatedAt   *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string         "json:\"description,omitempty\" graphql:\"description\""
+	HistoryTime time.Time       "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string          "json:\"id\" graphql:\"id\""
+	Identifier  *string         "json:\"identifier,omitempty\" graphql:\"identifier\""
+	Name        string          "json:\"name\" graphql:\"name\""
+	Operation   history.OpType  "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref         *string         "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags        []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Website     *string         "json:\"website,omitempty\" graphql:\"website\""
+}
+
+func (t *GetAssetHistories_AssetHistories_Edges_Node) GetAssetType() *enums.AssetType {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return &t.AssetType
+}
+func (t *GetAssetHistories_AssetHistories_Edges_Node) GetCategories() []string {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.Categories
+}
+func (t *GetAssetHistories_AssetHistories_Edges_Node) GetCpe() *string {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.Cpe
+}
+func (t *GetAssetHistories_AssetHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAssetHistories_AssetHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAssetHistories_AssetHistories_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetAssetHistories_AssetHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAssetHistories_AssetHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAssetHistories_AssetHistories_Edges_Node) GetIdentifier() *string {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.Identifier
+}
+func (t *GetAssetHistories_AssetHistories_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAssetHistories_AssetHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAssetHistories_AssetHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAssetHistories_AssetHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAssetHistories_AssetHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAssetHistories_AssetHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAssetHistories_AssetHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAssetHistories_AssetHistories_Edges_Node) GetWebsite() *string {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories_Edges_Node{}
+	}
+	return t.Website
+}
+
+type GetAssetHistories_AssetHistories_Edges struct {
+	Node *GetAssetHistories_AssetHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAssetHistories_AssetHistories_Edges) GetNode() *GetAssetHistories_AssetHistories_Edges_Node {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAssetHistories_AssetHistories struct {
+	Edges      []*GetAssetHistories_AssetHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAssetHistories_AssetHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                     "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAssetHistories_AssetHistories) GetEdges() []*GetAssetHistories_AssetHistories_Edges {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAssetHistories_AssetHistories) GetPageInfo() *GetAssetHistories_AssetHistories_PageInfo {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAssetHistories_AssetHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAssetHistories_AssetHistories{}
+	}
+	return t.TotalCount
 }
 
 type AuditLogs_AuditLogs_PageInfo struct {
@@ -61261,6 +62971,1104 @@ func (t *GetRiskHistories_RiskHistories) GetEdges() []*GetRiskHistories_RiskHist
 	return t.Edges
 }
 
+type CreateBulkCSVScan_CreateBulkCSVScan_Scans struct {
+	CreatedAt *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string           "json:\"id\" graphql:\"id\""
+	Metadata  map[string]any   "json:\"metadata,omitempty\" graphql:\"metadata\""
+	OwnerID   *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScanType  enums.ScanType   "json:\"scanType\" graphql:\"scanType\""
+	Status    enums.ScanStatus "json:\"status\" graphql:\"status\""
+	Tags      []string         "json:\"tags,omitempty\" graphql:\"tags\""
+	Target    string           "json:\"target\" graphql:\"target\""
+	UpdatedAt *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVScan_CreateBulkCSVScan_Scans{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVScan_CreateBulkCSVScan_Scans{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVScan_CreateBulkCSVScan_Scans{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetMetadata() map[string]any {
+	if t == nil {
+		t = &CreateBulkCSVScan_CreateBulkCSVScan_Scans{}
+	}
+	return t.Metadata
+}
+func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVScan_CreateBulkCSVScan_Scans{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetScanType() *enums.ScanType {
+	if t == nil {
+		t = &CreateBulkCSVScan_CreateBulkCSVScan_Scans{}
+	}
+	return &t.ScanType
+}
+func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetStatus() *enums.ScanStatus {
+	if t == nil {
+		t = &CreateBulkCSVScan_CreateBulkCSVScan_Scans{}
+	}
+	return &t.Status
+}
+func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVScan_CreateBulkCSVScan_Scans{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetTarget() string {
+	if t == nil {
+		t = &CreateBulkCSVScan_CreateBulkCSVScan_Scans{}
+	}
+	return t.Target
+}
+func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVScan_CreateBulkCSVScan_Scans{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVScan_CreateBulkCSVScan_Scans{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVScan_CreateBulkCSVScan struct {
+	Scans []*CreateBulkCSVScan_CreateBulkCSVScan_Scans "json:\"scans,omitempty\" graphql:\"scans\""
+}
+
+func (t *CreateBulkCSVScan_CreateBulkCSVScan) GetScans() []*CreateBulkCSVScan_CreateBulkCSVScan_Scans {
+	if t == nil {
+		t = &CreateBulkCSVScan_CreateBulkCSVScan{}
+	}
+	return t.Scans
+}
+
+type CreateBulkScan_CreateBulkScan_Scans struct {
+	CreatedAt *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string           "json:\"id\" graphql:\"id\""
+	Metadata  map[string]any   "json:\"metadata,omitempty\" graphql:\"metadata\""
+	OwnerID   *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScanType  enums.ScanType   "json:\"scanType\" graphql:\"scanType\""
+	Status    enums.ScanStatus "json:\"status\" graphql:\"status\""
+	Tags      []string         "json:\"tags,omitempty\" graphql:\"tags\""
+	Target    string           "json:\"target\" graphql:\"target\""
+	UpdatedAt *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkScan_CreateBulkScan_Scans) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkScan_CreateBulkScan_Scans{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkScan_CreateBulkScan_Scans) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkScan_CreateBulkScan_Scans{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkScan_CreateBulkScan_Scans) GetID() string {
+	if t == nil {
+		t = &CreateBulkScan_CreateBulkScan_Scans{}
+	}
+	return t.ID
+}
+func (t *CreateBulkScan_CreateBulkScan_Scans) GetMetadata() map[string]any {
+	if t == nil {
+		t = &CreateBulkScan_CreateBulkScan_Scans{}
+	}
+	return t.Metadata
+}
+func (t *CreateBulkScan_CreateBulkScan_Scans) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkScan_CreateBulkScan_Scans{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkScan_CreateBulkScan_Scans) GetScanType() *enums.ScanType {
+	if t == nil {
+		t = &CreateBulkScan_CreateBulkScan_Scans{}
+	}
+	return &t.ScanType
+}
+func (t *CreateBulkScan_CreateBulkScan_Scans) GetStatus() *enums.ScanStatus {
+	if t == nil {
+		t = &CreateBulkScan_CreateBulkScan_Scans{}
+	}
+	return &t.Status
+}
+func (t *CreateBulkScan_CreateBulkScan_Scans) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkScan_CreateBulkScan_Scans{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkScan_CreateBulkScan_Scans) GetTarget() string {
+	if t == nil {
+		t = &CreateBulkScan_CreateBulkScan_Scans{}
+	}
+	return t.Target
+}
+func (t *CreateBulkScan_CreateBulkScan_Scans) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkScan_CreateBulkScan_Scans{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkScan_CreateBulkScan_Scans) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkScan_CreateBulkScan_Scans{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkScan_CreateBulkScan struct {
+	Scans []*CreateBulkScan_CreateBulkScan_Scans "json:\"scans,omitempty\" graphql:\"scans\""
+}
+
+func (t *CreateBulkScan_CreateBulkScan) GetScans() []*CreateBulkScan_CreateBulkScan_Scans {
+	if t == nil {
+		t = &CreateBulkScan_CreateBulkScan{}
+	}
+	return t.Scans
+}
+
+type CreateScan_CreateScan_Scan struct {
+	CreatedAt *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string           "json:\"id\" graphql:\"id\""
+	Metadata  map[string]any   "json:\"metadata,omitempty\" graphql:\"metadata\""
+	OwnerID   *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScanType  enums.ScanType   "json:\"scanType\" graphql:\"scanType\""
+	Status    enums.ScanStatus "json:\"status\" graphql:\"status\""
+	Tags      []string         "json:\"tags,omitempty\" graphql:\"tags\""
+	Target    string           "json:\"target\" graphql:\"target\""
+	UpdatedAt *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateScan_CreateScan_Scan) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateScan_CreateScan_Scan{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateScan_CreateScan_Scan) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateScan_CreateScan_Scan{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateScan_CreateScan_Scan) GetID() string {
+	if t == nil {
+		t = &CreateScan_CreateScan_Scan{}
+	}
+	return t.ID
+}
+func (t *CreateScan_CreateScan_Scan) GetMetadata() map[string]any {
+	if t == nil {
+		t = &CreateScan_CreateScan_Scan{}
+	}
+	return t.Metadata
+}
+func (t *CreateScan_CreateScan_Scan) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateScan_CreateScan_Scan{}
+	}
+	return t.OwnerID
+}
+func (t *CreateScan_CreateScan_Scan) GetScanType() *enums.ScanType {
+	if t == nil {
+		t = &CreateScan_CreateScan_Scan{}
+	}
+	return &t.ScanType
+}
+func (t *CreateScan_CreateScan_Scan) GetStatus() *enums.ScanStatus {
+	if t == nil {
+		t = &CreateScan_CreateScan_Scan{}
+	}
+	return &t.Status
+}
+func (t *CreateScan_CreateScan_Scan) GetTags() []string {
+	if t == nil {
+		t = &CreateScan_CreateScan_Scan{}
+	}
+	return t.Tags
+}
+func (t *CreateScan_CreateScan_Scan) GetTarget() string {
+	if t == nil {
+		t = &CreateScan_CreateScan_Scan{}
+	}
+	return t.Target
+}
+func (t *CreateScan_CreateScan_Scan) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateScan_CreateScan_Scan{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateScan_CreateScan_Scan) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateScan_CreateScan_Scan{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateScan_CreateScan struct {
+	Scan CreateScan_CreateScan_Scan "json:\"scan\" graphql:\"scan\""
+}
+
+func (t *CreateScan_CreateScan) GetScan() *CreateScan_CreateScan_Scan {
+	if t == nil {
+		t = &CreateScan_CreateScan{}
+	}
+	return &t.Scan
+}
+
+type DeleteScan_DeleteScan struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteScan_DeleteScan) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteScan_DeleteScan{}
+	}
+	return t.DeletedID
+}
+
+type GetAllScans_Scans_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllScans_Scans_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllScans_Scans_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllScans_Scans_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllScans_Scans_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllScans_Scans_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllScans_Scans_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllScans_Scans_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllScans_Scans_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllScans_Scans_Edges_Node struct {
+	CreatedAt *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string           "json:\"id\" graphql:\"id\""
+	Metadata  map[string]any   "json:\"metadata,omitempty\" graphql:\"metadata\""
+	OwnerID   *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScanType  enums.ScanType   "json:\"scanType\" graphql:\"scanType\""
+	Status    enums.ScanStatus "json:\"status\" graphql:\"status\""
+	Tags      []string         "json:\"tags,omitempty\" graphql:\"tags\""
+	Target    string           "json:\"target\" graphql:\"target\""
+	UpdatedAt *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllScans_Scans_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllScans_Scans_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllScans_Scans_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllScans_Scans_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllScans_Scans_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllScans_Scans_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllScans_Scans_Edges_Node) GetMetadata() map[string]any {
+	if t == nil {
+		t = &GetAllScans_Scans_Edges_Node{}
+	}
+	return t.Metadata
+}
+func (t *GetAllScans_Scans_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllScans_Scans_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllScans_Scans_Edges_Node) GetScanType() *enums.ScanType {
+	if t == nil {
+		t = &GetAllScans_Scans_Edges_Node{}
+	}
+	return &t.ScanType
+}
+func (t *GetAllScans_Scans_Edges_Node) GetStatus() *enums.ScanStatus {
+	if t == nil {
+		t = &GetAllScans_Scans_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAllScans_Scans_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllScans_Scans_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllScans_Scans_Edges_Node) GetTarget() string {
+	if t == nil {
+		t = &GetAllScans_Scans_Edges_Node{}
+	}
+	return t.Target
+}
+func (t *GetAllScans_Scans_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllScans_Scans_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllScans_Scans_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllScans_Scans_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllScans_Scans_Edges struct {
+	Node *GetAllScans_Scans_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllScans_Scans_Edges) GetNode() *GetAllScans_Scans_Edges_Node {
+	if t == nil {
+		t = &GetAllScans_Scans_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllScans_Scans struct {
+	Edges      []*GetAllScans_Scans_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllScans_Scans_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                      "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllScans_Scans) GetEdges() []*GetAllScans_Scans_Edges {
+	if t == nil {
+		t = &GetAllScans_Scans{}
+	}
+	return t.Edges
+}
+func (t *GetAllScans_Scans) GetPageInfo() *GetAllScans_Scans_PageInfo {
+	if t == nil {
+		t = &GetAllScans_Scans{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllScans_Scans) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllScans_Scans{}
+	}
+	return t.TotalCount
+}
+
+type GetScanByID_Scan struct {
+	CreatedAt *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string           "json:\"id\" graphql:\"id\""
+	Metadata  map[string]any   "json:\"metadata,omitempty\" graphql:\"metadata\""
+	OwnerID   *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScanType  enums.ScanType   "json:\"scanType\" graphql:\"scanType\""
+	Status    enums.ScanStatus "json:\"status\" graphql:\"status\""
+	Tags      []string         "json:\"tags,omitempty\" graphql:\"tags\""
+	Target    string           "json:\"target\" graphql:\"target\""
+	UpdatedAt *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetScanByID_Scan) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetScanByID_Scan{}
+	}
+	return t.CreatedAt
+}
+func (t *GetScanByID_Scan) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetScanByID_Scan{}
+	}
+	return t.CreatedBy
+}
+func (t *GetScanByID_Scan) GetID() string {
+	if t == nil {
+		t = &GetScanByID_Scan{}
+	}
+	return t.ID
+}
+func (t *GetScanByID_Scan) GetMetadata() map[string]any {
+	if t == nil {
+		t = &GetScanByID_Scan{}
+	}
+	return t.Metadata
+}
+func (t *GetScanByID_Scan) GetOwnerID() *string {
+	if t == nil {
+		t = &GetScanByID_Scan{}
+	}
+	return t.OwnerID
+}
+func (t *GetScanByID_Scan) GetScanType() *enums.ScanType {
+	if t == nil {
+		t = &GetScanByID_Scan{}
+	}
+	return &t.ScanType
+}
+func (t *GetScanByID_Scan) GetStatus() *enums.ScanStatus {
+	if t == nil {
+		t = &GetScanByID_Scan{}
+	}
+	return &t.Status
+}
+func (t *GetScanByID_Scan) GetTags() []string {
+	if t == nil {
+		t = &GetScanByID_Scan{}
+	}
+	return t.Tags
+}
+func (t *GetScanByID_Scan) GetTarget() string {
+	if t == nil {
+		t = &GetScanByID_Scan{}
+	}
+	return t.Target
+}
+func (t *GetScanByID_Scan) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetScanByID_Scan{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetScanByID_Scan) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetScanByID_Scan{}
+	}
+	return t.UpdatedBy
+}
+
+type GetScans_Scans_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetScans_Scans_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetScans_Scans_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetScans_Scans_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetScans_Scans_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetScans_Scans_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetScans_Scans_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetScans_Scans_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetScans_Scans_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetScans_Scans_Edges_Node struct {
+	CreatedAt *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string           "json:\"id\" graphql:\"id\""
+	Metadata  map[string]any   "json:\"metadata,omitempty\" graphql:\"metadata\""
+	OwnerID   *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScanType  enums.ScanType   "json:\"scanType\" graphql:\"scanType\""
+	Status    enums.ScanStatus "json:\"status\" graphql:\"status\""
+	Tags      []string         "json:\"tags,omitempty\" graphql:\"tags\""
+	Target    string           "json:\"target\" graphql:\"target\""
+	UpdatedAt *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetScans_Scans_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetScans_Scans_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetScans_Scans_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetScans_Scans_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetScans_Scans_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetScans_Scans_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetScans_Scans_Edges_Node) GetMetadata() map[string]any {
+	if t == nil {
+		t = &GetScans_Scans_Edges_Node{}
+	}
+	return t.Metadata
+}
+func (t *GetScans_Scans_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetScans_Scans_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetScans_Scans_Edges_Node) GetScanType() *enums.ScanType {
+	if t == nil {
+		t = &GetScans_Scans_Edges_Node{}
+	}
+	return &t.ScanType
+}
+func (t *GetScans_Scans_Edges_Node) GetStatus() *enums.ScanStatus {
+	if t == nil {
+		t = &GetScans_Scans_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetScans_Scans_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetScans_Scans_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetScans_Scans_Edges_Node) GetTarget() string {
+	if t == nil {
+		t = &GetScans_Scans_Edges_Node{}
+	}
+	return t.Target
+}
+func (t *GetScans_Scans_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetScans_Scans_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetScans_Scans_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetScans_Scans_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetScans_Scans_Edges struct {
+	Node *GetScans_Scans_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetScans_Scans_Edges) GetNode() *GetScans_Scans_Edges_Node {
+	if t == nil {
+		t = &GetScans_Scans_Edges{}
+	}
+	return t.Node
+}
+
+type GetScans_Scans struct {
+	Edges      []*GetScans_Scans_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetScans_Scans_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                   "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetScans_Scans) GetEdges() []*GetScans_Scans_Edges {
+	if t == nil {
+		t = &GetScans_Scans{}
+	}
+	return t.Edges
+}
+func (t *GetScans_Scans) GetPageInfo() *GetScans_Scans_PageInfo {
+	if t == nil {
+		t = &GetScans_Scans{}
+	}
+	return &t.PageInfo
+}
+func (t *GetScans_Scans) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetScans_Scans{}
+	}
+	return t.TotalCount
+}
+
+type UpdateScan_UpdateScan_Scan struct {
+	CreatedAt *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string           "json:\"id\" graphql:\"id\""
+	Metadata  map[string]any   "json:\"metadata,omitempty\" graphql:\"metadata\""
+	OwnerID   *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ScanType  enums.ScanType   "json:\"scanType\" graphql:\"scanType\""
+	Status    enums.ScanStatus "json:\"status\" graphql:\"status\""
+	Tags      []string         "json:\"tags,omitempty\" graphql:\"tags\""
+	Target    string           "json:\"target\" graphql:\"target\""
+	UpdatedAt *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateScan_UpdateScan_Scan) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateScan_UpdateScan_Scan{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateScan_UpdateScan_Scan) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateScan_UpdateScan_Scan{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateScan_UpdateScan_Scan) GetID() string {
+	if t == nil {
+		t = &UpdateScan_UpdateScan_Scan{}
+	}
+	return t.ID
+}
+func (t *UpdateScan_UpdateScan_Scan) GetMetadata() map[string]any {
+	if t == nil {
+		t = &UpdateScan_UpdateScan_Scan{}
+	}
+	return t.Metadata
+}
+func (t *UpdateScan_UpdateScan_Scan) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateScan_UpdateScan_Scan{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateScan_UpdateScan_Scan) GetScanType() *enums.ScanType {
+	if t == nil {
+		t = &UpdateScan_UpdateScan_Scan{}
+	}
+	return &t.ScanType
+}
+func (t *UpdateScan_UpdateScan_Scan) GetStatus() *enums.ScanStatus {
+	if t == nil {
+		t = &UpdateScan_UpdateScan_Scan{}
+	}
+	return &t.Status
+}
+func (t *UpdateScan_UpdateScan_Scan) GetTags() []string {
+	if t == nil {
+		t = &UpdateScan_UpdateScan_Scan{}
+	}
+	return t.Tags
+}
+func (t *UpdateScan_UpdateScan_Scan) GetTarget() string {
+	if t == nil {
+		t = &UpdateScan_UpdateScan_Scan{}
+	}
+	return t.Target
+}
+func (t *UpdateScan_UpdateScan_Scan) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateScan_UpdateScan_Scan{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateScan_UpdateScan_Scan) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateScan_UpdateScan_Scan{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateScan_UpdateScan struct {
+	Scan UpdateScan_UpdateScan_Scan "json:\"scan\" graphql:\"scan\""
+}
+
+func (t *UpdateScan_UpdateScan) GetScan() *UpdateScan_UpdateScan_Scan {
+	if t == nil {
+		t = &UpdateScan_UpdateScan{}
+	}
+	return &t.Scan
+}
+
+type GetAllScanHistories_ScanHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllScanHistories_ScanHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllScanHistories_ScanHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllScanHistories_ScanHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllScanHistories_ScanHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllScanHistories_ScanHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllScanHistories_ScanHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllScanHistories_ScanHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllScanHistories_ScanHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllScanHistories_ScanHistories_Edges_Node struct {
+	CreatedAt   *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime time.Time        "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string           "json:\"id\" graphql:\"id\""
+	Metadata    map[string]any   "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Operation   history.OpType   "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref         *string          "json:\"ref,omitempty\" graphql:\"ref\""
+	ScanType    enums.ScanType   "json:\"scanType\" graphql:\"scanType\""
+	Status      enums.ScanStatus "json:\"status\" graphql:\"status\""
+	Tags        []string         "json:\"tags,omitempty\" graphql:\"tags\""
+	Target      string           "json:\"target\" graphql:\"target\""
+	UpdatedAt   *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllScanHistories_ScanHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllScanHistories_ScanHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllScanHistories_ScanHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllScanHistories_ScanHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllScanHistories_ScanHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllScanHistories_ScanHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllScanHistories_ScanHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllScanHistories_ScanHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllScanHistories_ScanHistories_Edges_Node) GetMetadata() map[string]any {
+	if t == nil {
+		t = &GetAllScanHistories_ScanHistories_Edges_Node{}
+	}
+	return t.Metadata
+}
+func (t *GetAllScanHistories_ScanHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllScanHistories_ScanHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllScanHistories_ScanHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllScanHistories_ScanHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllScanHistories_ScanHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllScanHistories_ScanHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllScanHistories_ScanHistories_Edges_Node) GetScanType() *enums.ScanType {
+	if t == nil {
+		t = &GetAllScanHistories_ScanHistories_Edges_Node{}
+	}
+	return &t.ScanType
+}
+func (t *GetAllScanHistories_ScanHistories_Edges_Node) GetStatus() *enums.ScanStatus {
+	if t == nil {
+		t = &GetAllScanHistories_ScanHistories_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAllScanHistories_ScanHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllScanHistories_ScanHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllScanHistories_ScanHistories_Edges_Node) GetTarget() string {
+	if t == nil {
+		t = &GetAllScanHistories_ScanHistories_Edges_Node{}
+	}
+	return t.Target
+}
+func (t *GetAllScanHistories_ScanHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllScanHistories_ScanHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllScanHistories_ScanHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllScanHistories_ScanHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllScanHistories_ScanHistories_Edges struct {
+	Node *GetAllScanHistories_ScanHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllScanHistories_ScanHistories_Edges) GetNode() *GetAllScanHistories_ScanHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllScanHistories_ScanHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllScanHistories_ScanHistories struct {
+	Edges      []*GetAllScanHistories_ScanHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllScanHistories_ScanHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                      "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllScanHistories_ScanHistories) GetEdges() []*GetAllScanHistories_ScanHistories_Edges {
+	if t == nil {
+		t = &GetAllScanHistories_ScanHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAllScanHistories_ScanHistories) GetPageInfo() *GetAllScanHistories_ScanHistories_PageInfo {
+	if t == nil {
+		t = &GetAllScanHistories_ScanHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllScanHistories_ScanHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllScanHistories_ScanHistories{}
+	}
+	return t.TotalCount
+}
+
+type GetScanHistories_ScanHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetScanHistories_ScanHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetScanHistories_ScanHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetScanHistories_ScanHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetScanHistories_ScanHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetScanHistories_ScanHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetScanHistories_ScanHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetScanHistories_ScanHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetScanHistories_ScanHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetScanHistories_ScanHistories_Edges_Node struct {
+	CreatedAt   *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime time.Time        "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string           "json:\"id\" graphql:\"id\""
+	Metadata    map[string]any   "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Operation   history.OpType   "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref         *string          "json:\"ref,omitempty\" graphql:\"ref\""
+	ScanType    enums.ScanType   "json:\"scanType\" graphql:\"scanType\""
+	Status      enums.ScanStatus "json:\"status\" graphql:\"status\""
+	Tags        []string         "json:\"tags,omitempty\" graphql:\"tags\""
+	Target      string           "json:\"target\" graphql:\"target\""
+	UpdatedAt   *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetScanHistories_ScanHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetScanHistories_ScanHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetScanHistories_ScanHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetScanHistories_ScanHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetScanHistories_ScanHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetScanHistories_ScanHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetScanHistories_ScanHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetScanHistories_ScanHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetScanHistories_ScanHistories_Edges_Node) GetMetadata() map[string]any {
+	if t == nil {
+		t = &GetScanHistories_ScanHistories_Edges_Node{}
+	}
+	return t.Metadata
+}
+func (t *GetScanHistories_ScanHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetScanHistories_ScanHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetScanHistories_ScanHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetScanHistories_ScanHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetScanHistories_ScanHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetScanHistories_ScanHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetScanHistories_ScanHistories_Edges_Node) GetScanType() *enums.ScanType {
+	if t == nil {
+		t = &GetScanHistories_ScanHistories_Edges_Node{}
+	}
+	return &t.ScanType
+}
+func (t *GetScanHistories_ScanHistories_Edges_Node) GetStatus() *enums.ScanStatus {
+	if t == nil {
+		t = &GetScanHistories_ScanHistories_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetScanHistories_ScanHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetScanHistories_ScanHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetScanHistories_ScanHistories_Edges_Node) GetTarget() string {
+	if t == nil {
+		t = &GetScanHistories_ScanHistories_Edges_Node{}
+	}
+	return t.Target
+}
+func (t *GetScanHistories_ScanHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetScanHistories_ScanHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetScanHistories_ScanHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetScanHistories_ScanHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetScanHistories_ScanHistories_Edges struct {
+	Node *GetScanHistories_ScanHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetScanHistories_ScanHistories_Edges) GetNode() *GetScanHistories_ScanHistories_Edges_Node {
+	if t == nil {
+		t = &GetScanHistories_ScanHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetScanHistories_ScanHistories struct {
+	Edges      []*GetScanHistories_ScanHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetScanHistories_ScanHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                   "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetScanHistories_ScanHistories) GetEdges() []*GetScanHistories_ScanHistories_Edges {
+	if t == nil {
+		t = &GetScanHistories_ScanHistories{}
+	}
+	return t.Edges
+}
+func (t *GetScanHistories_ScanHistories) GetPageInfo() *GetScanHistories_ScanHistories_PageInfo {
+	if t == nil {
+		t = &GetScanHistories_ScanHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetScanHistories_ScanHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetScanHistories_ScanHistories{}
+	}
+	return t.TotalCount
+}
+
 type CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs struct {
 	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
 	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
@@ -63193,6 +66001,99 @@ func (t *GlobalSearch_Search_ActionPlans) GetPageInfo() *GlobalSearch_Search_Act
 func (t *GlobalSearch_Search_ActionPlans) GetTotalCount() int64 {
 	if t == nil {
 		t = &GlobalSearch_Search_ActionPlans{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_Assets_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Assets_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Assets_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Assets_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Assets_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Assets_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Assets_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Assets_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Assets_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Assets_Edges_Node struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Name string   "json:\"name\" graphql:\"name\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Assets_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Assets_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Assets_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Assets_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GlobalSearch_Search_Assets_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Assets_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Assets_Edges struct {
+	Node *GlobalSearch_Search_Assets_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GlobalSearch_Search_Assets_Edges) GetNode() *GlobalSearch_Search_Assets_Edges_Node {
+	if t == nil {
+		t = &GlobalSearch_Search_Assets_Edges{}
+	}
+	return t.Node
+}
+
+type GlobalSearch_Search_Assets struct {
+	Edges      []*GlobalSearch_Search_Assets_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Assets_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                               "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Assets) GetEdges() []*GlobalSearch_Search_Assets_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Assets{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Assets) GetPageInfo() *GlobalSearch_Search_Assets_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Assets{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Assets) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Assets{}
 	}
 	return t.TotalCount
 }
@@ -65957,6 +68858,99 @@ func (t *GlobalSearch_Search_Risks) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type GlobalSearch_Search_Scans_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Scans_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Scans_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Scans_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Scans_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Scans_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Scans_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Scans_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Scans_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Scans_Edges_Node struct {
+	ID     string   "json:\"id\" graphql:\"id\""
+	Tags   []string "json:\"tags,omitempty\" graphql:\"tags\""
+	Target string   "json:\"target\" graphql:\"target\""
+}
+
+func (t *GlobalSearch_Search_Scans_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Scans_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Scans_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Scans_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GlobalSearch_Search_Scans_Edges_Node) GetTarget() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Scans_Edges_Node{}
+	}
+	return t.Target
+}
+
+type GlobalSearch_Search_Scans_Edges struct {
+	Node *GlobalSearch_Search_Scans_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GlobalSearch_Search_Scans_Edges) GetNode() *GlobalSearch_Search_Scans_Edges_Node {
+	if t == nil {
+		t = &GlobalSearch_Search_Scans_Edges{}
+	}
+	return t.Node
+}
+
+type GlobalSearch_Search_Scans struct {
+	Edges      []*GlobalSearch_Search_Scans_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Scans_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                              "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Scans) GetEdges() []*GlobalSearch_Search_Scans_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Scans{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Scans) GetPageInfo() *GlobalSearch_Search_Scans_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Scans{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Scans) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Scans{}
+	}
+	return t.TotalCount
+}
+
 type GlobalSearch_Search_ScheduledJobs_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -66960,6 +69954,7 @@ func (t *GlobalSearch_Search_Webauthns) GetTotalCount() int64 {
 type GlobalSearch_Search struct {
 	ActionPlans                 *GlobalSearch_Search_ActionPlans                 "json:\"actionPlans,omitempty\" graphql:\"actionPlans\""
 	APITokens                   *GlobalSearch_Search_APITokens                   "json:\"apiTokens,omitempty\" graphql:\"apiTokens\""
+	Assets                      *GlobalSearch_Search_Assets                      "json:\"assets,omitempty\" graphql:\"assets\""
 	Contacts                    *GlobalSearch_Search_Contacts                    "json:\"contacts,omitempty\" graphql:\"contacts\""
 	ControlImplementations      *GlobalSearch_Search_ControlImplementations      "json:\"controlImplementations,omitempty\" graphql:\"controlImplementations\""
 	ControlObjectives           *GlobalSearch_Search_ControlObjectives           "json:\"controlObjectives,omitempty\" graphql:\"controlObjectives\""
@@ -66989,6 +69984,7 @@ type GlobalSearch_Search struct {
 	Procedures                  *GlobalSearch_Search_Procedures                  "json:\"procedures,omitempty\" graphql:\"procedures\""
 	Programs                    *GlobalSearch_Search_Programs                    "json:\"programs,omitempty\" graphql:\"programs\""
 	Risks                       *GlobalSearch_Search_Risks                       "json:\"risks,omitempty\" graphql:\"risks\""
+	Scans                       *GlobalSearch_Search_Scans                       "json:\"scans,omitempty\" graphql:\"scans\""
 	ScheduledJobs               *GlobalSearch_Search_ScheduledJobs               "json:\"scheduledJobs,omitempty\" graphql:\"scheduledJobs\""
 	Standards                   *GlobalSearch_Search_Standards                   "json:\"standards,omitempty\" graphql:\"standards\""
 	Subcontrols                 *GlobalSearch_Search_Subcontrols                 "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
@@ -67013,6 +70009,12 @@ func (t *GlobalSearch_Search) GetAPITokens() *GlobalSearch_Search_APITokens {
 		t = &GlobalSearch_Search{}
 	}
 	return t.APITokens
+}
+func (t *GlobalSearch_Search) GetAssets() *GlobalSearch_Search_Assets {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Assets
 }
 func (t *GlobalSearch_Search) GetContacts() *GlobalSearch_Search_Contacts {
 	if t == nil {
@@ -67187,6 +70189,12 @@ func (t *GlobalSearch_Search) GetRisks() *GlobalSearch_Search_Risks {
 		t = &GlobalSearch_Search{}
 	}
 	return t.Risks
+}
+func (t *GlobalSearch_Search) GetScans() *GlobalSearch_Search_Scans {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Scans
 }
 func (t *GlobalSearch_Search) GetScheduledJobs() *GlobalSearch_Search_ScheduledJobs {
 	if t == nil {
@@ -80563,6 +83571,116 @@ func (t *UpdateAPIToken) GetUpdateAPIToken() *UpdateAPIToken_UpdateAPIToken {
 	return &t.UpdateAPIToken
 }
 
+type CreateBulkCSVAsset struct {
+	CreateBulkCSVAsset CreateBulkCSVAsset_CreateBulkCSVAsset "json:\"createBulkCSVAsset\" graphql:\"createBulkCSVAsset\""
+}
+
+func (t *CreateBulkCSVAsset) GetCreateBulkCSVAsset() *CreateBulkCSVAsset_CreateBulkCSVAsset {
+	if t == nil {
+		t = &CreateBulkCSVAsset{}
+	}
+	return &t.CreateBulkCSVAsset
+}
+
+type CreateBulkAsset struct {
+	CreateBulkAsset CreateBulkAsset_CreateBulkAsset "json:\"createBulkAsset\" graphql:\"createBulkAsset\""
+}
+
+func (t *CreateBulkAsset) GetCreateBulkAsset() *CreateBulkAsset_CreateBulkAsset {
+	if t == nil {
+		t = &CreateBulkAsset{}
+	}
+	return &t.CreateBulkAsset
+}
+
+type CreateAsset struct {
+	CreateAsset CreateAsset_CreateAsset "json:\"createAsset\" graphql:\"createAsset\""
+}
+
+func (t *CreateAsset) GetCreateAsset() *CreateAsset_CreateAsset {
+	if t == nil {
+		t = &CreateAsset{}
+	}
+	return &t.CreateAsset
+}
+
+type DeleteAsset struct {
+	DeleteAsset DeleteAsset_DeleteAsset "json:\"deleteAsset\" graphql:\"deleteAsset\""
+}
+
+func (t *DeleteAsset) GetDeleteAsset() *DeleteAsset_DeleteAsset {
+	if t == nil {
+		t = &DeleteAsset{}
+	}
+	return &t.DeleteAsset
+}
+
+type GetAllAssets struct {
+	Assets GetAllAssets_Assets "json:\"assets\" graphql:\"assets\""
+}
+
+func (t *GetAllAssets) GetAssets() *GetAllAssets_Assets {
+	if t == nil {
+		t = &GetAllAssets{}
+	}
+	return &t.Assets
+}
+
+type GetAssetByID struct {
+	Asset GetAssetByID_Asset "json:\"asset\" graphql:\"asset\""
+}
+
+func (t *GetAssetByID) GetAsset() *GetAssetByID_Asset {
+	if t == nil {
+		t = &GetAssetByID{}
+	}
+	return &t.Asset
+}
+
+type GetAssets struct {
+	Assets GetAssets_Assets "json:\"assets\" graphql:\"assets\""
+}
+
+func (t *GetAssets) GetAssets() *GetAssets_Assets {
+	if t == nil {
+		t = &GetAssets{}
+	}
+	return &t.Assets
+}
+
+type UpdateAsset struct {
+	UpdateAsset UpdateAsset_UpdateAsset "json:\"updateAsset\" graphql:\"updateAsset\""
+}
+
+func (t *UpdateAsset) GetUpdateAsset() *UpdateAsset_UpdateAsset {
+	if t == nil {
+		t = &UpdateAsset{}
+	}
+	return &t.UpdateAsset
+}
+
+type GetAllAssetHistories struct {
+	AssetHistories GetAllAssetHistories_AssetHistories "json:\"assetHistories\" graphql:\"assetHistories\""
+}
+
+func (t *GetAllAssetHistories) GetAssetHistories() *GetAllAssetHistories_AssetHistories {
+	if t == nil {
+		t = &GetAllAssetHistories{}
+	}
+	return &t.AssetHistories
+}
+
+type GetAssetHistories struct {
+	AssetHistories GetAssetHistories_AssetHistories "json:\"assetHistories\" graphql:\"assetHistories\""
+}
+
+func (t *GetAssetHistories) GetAssetHistories() *GetAssetHistories_AssetHistories {
+	if t == nil {
+		t = &GetAssetHistories{}
+	}
+	return &t.AssetHistories
+}
+
 type AuditLogs struct {
 	AuditLogs AuditLogs_AuditLogs "json:\"auditLogs\" graphql:\"auditLogs\""
 }
@@ -84083,6 +87201,116 @@ func (t *GetRiskHistories) GetRiskHistories() *GetRiskHistories_RiskHistories {
 	return &t.RiskHistories
 }
 
+type CreateBulkCSVScan struct {
+	CreateBulkCSVScan CreateBulkCSVScan_CreateBulkCSVScan "json:\"createBulkCSVScan\" graphql:\"createBulkCSVScan\""
+}
+
+func (t *CreateBulkCSVScan) GetCreateBulkCSVScan() *CreateBulkCSVScan_CreateBulkCSVScan {
+	if t == nil {
+		t = &CreateBulkCSVScan{}
+	}
+	return &t.CreateBulkCSVScan
+}
+
+type CreateBulkScan struct {
+	CreateBulkScan CreateBulkScan_CreateBulkScan "json:\"createBulkScan\" graphql:\"createBulkScan\""
+}
+
+func (t *CreateBulkScan) GetCreateBulkScan() *CreateBulkScan_CreateBulkScan {
+	if t == nil {
+		t = &CreateBulkScan{}
+	}
+	return &t.CreateBulkScan
+}
+
+type CreateScan struct {
+	CreateScan CreateScan_CreateScan "json:\"createScan\" graphql:\"createScan\""
+}
+
+func (t *CreateScan) GetCreateScan() *CreateScan_CreateScan {
+	if t == nil {
+		t = &CreateScan{}
+	}
+	return &t.CreateScan
+}
+
+type DeleteScan struct {
+	DeleteScan DeleteScan_DeleteScan "json:\"deleteScan\" graphql:\"deleteScan\""
+}
+
+func (t *DeleteScan) GetDeleteScan() *DeleteScan_DeleteScan {
+	if t == nil {
+		t = &DeleteScan{}
+	}
+	return &t.DeleteScan
+}
+
+type GetAllScans struct {
+	Scans GetAllScans_Scans "json:\"scans\" graphql:\"scans\""
+}
+
+func (t *GetAllScans) GetScans() *GetAllScans_Scans {
+	if t == nil {
+		t = &GetAllScans{}
+	}
+	return &t.Scans
+}
+
+type GetScanByID struct {
+	Scan GetScanByID_Scan "json:\"scan\" graphql:\"scan\""
+}
+
+func (t *GetScanByID) GetScan() *GetScanByID_Scan {
+	if t == nil {
+		t = &GetScanByID{}
+	}
+	return &t.Scan
+}
+
+type GetScans struct {
+	Scans GetScans_Scans "json:\"scans\" graphql:\"scans\""
+}
+
+func (t *GetScans) GetScans() *GetScans_Scans {
+	if t == nil {
+		t = &GetScans{}
+	}
+	return &t.Scans
+}
+
+type UpdateScan struct {
+	UpdateScan UpdateScan_UpdateScan "json:\"updateScan\" graphql:\"updateScan\""
+}
+
+func (t *UpdateScan) GetUpdateScan() *UpdateScan_UpdateScan {
+	if t == nil {
+		t = &UpdateScan{}
+	}
+	return &t.UpdateScan
+}
+
+type GetAllScanHistories struct {
+	ScanHistories GetAllScanHistories_ScanHistories "json:\"scanHistories\" graphql:\"scanHistories\""
+}
+
+func (t *GetAllScanHistories) GetScanHistories() *GetAllScanHistories_ScanHistories {
+	if t == nil {
+		t = &GetAllScanHistories{}
+	}
+	return &t.ScanHistories
+}
+
+type GetScanHistories struct {
+	ScanHistories GetScanHistories_ScanHistories "json:\"scanHistories\" graphql:\"scanHistories\""
+}
+
+func (t *GetScanHistories) GetScanHistories() *GetScanHistories_ScanHistories {
+	if t == nil {
+		t = &GetScanHistories{}
+	}
+	return &t.ScanHistories
+}
+
 type CreateBulkCSVScheduledJob struct {
 	CreateBulkCSVScheduledJob CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob "json:\"createBulkCSVScheduledJob\" graphql:\"createBulkCSVScheduledJob\""
 }
@@ -85591,8 +88819,35 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					details
 					approverID
 					delegateID
+					tagSuggestions
+					dismissedTagSuggestions
+					controlSuggestions
+					dismissedControlSuggestions
+					improvementSuggestions
+					dismissedImprovementSuggestions
 					ownerID
 					source
+				}
+			}
+		}
+		assets {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					tags
+					ownerID
+					name
+					description
+					identifier
+					website
+					categories
 				}
 			}
 		}
@@ -85916,6 +89171,12 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					details
 					approverID
 					delegateID
+					tagSuggestions
+					dismissedTagSuggestions
+					controlSuggestions
+					dismissedControlSuggestions
+					improvementSuggestions
+					dismissedImprovementSuggestions
 				}
 			}
 		}
@@ -86108,6 +89369,10 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					taxIdentifier
 					organizationID
 					allowedEmailDomains
+					identityProviderMetadataEndpoint
+					identityProviderEntityID
+					oidcDiscoveryEndpoint
+					complianceWebhookToken
 				}
 			}
 		}
@@ -86150,6 +89415,12 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					details
 					approverID
 					delegateID
+					tagSuggestions
+					dismissedTagSuggestions
+					controlSuggestions
+					dismissedControlSuggestions
+					improvementSuggestions
+					dismissedImprovementSuggestions
 				}
 			}
 		}
@@ -86198,6 +89469,24 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					businessCosts
 					stakeholderID
 					delegateID
+				}
+			}
+		}
+		scans {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					tags
+					ownerID
+					target
+					metadata
 				}
 			}
 		}
@@ -86665,6 +89954,422 @@ func (c *Client) UpdateAPIToken(ctx context.Context, updateAPITokenID string, in
 
 	var res UpdateAPIToken
 	if err := c.Client.Post(ctx, "UpdateAPIToken", UpdateAPITokenDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVAssetDocument = `mutation CreateBulkCSVAsset ($input: Upload!) {
+	createBulkCSVAsset(input: $input) {
+		assets {
+			assetType
+			categories
+			cpe
+			createdAt
+			createdBy
+			description
+			id
+			identifier
+			name
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+			website
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVAsset(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVAsset, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVAsset
+	if err := c.Client.Post(ctx, "CreateBulkCSVAsset", CreateBulkCSVAssetDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkAssetDocument = `mutation CreateBulkAsset ($input: [CreateAssetInput!]) {
+	createBulkAsset(input: $input) {
+		assets {
+			assetType
+			categories
+			cpe
+			createdAt
+			createdBy
+			description
+			id
+			identifier
+			name
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+			website
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkAsset(ctx context.Context, input []*CreateAssetInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkAsset, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkAsset
+	if err := c.Client.Post(ctx, "CreateBulkAsset", CreateBulkAssetDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateAssetDocument = `mutation CreateAsset ($input: CreateAssetInput!) {
+	createAsset(input: $input) {
+		asset {
+			assetType
+			categories
+			cpe
+			createdAt
+			createdBy
+			description
+			id
+			identifier
+			name
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+			website
+		}
+	}
+}
+`
+
+func (c *Client) CreateAsset(ctx context.Context, input CreateAssetInput, interceptors ...clientv2.RequestInterceptor) (*CreateAsset, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateAsset
+	if err := c.Client.Post(ctx, "CreateAsset", CreateAssetDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteAssetDocument = `mutation DeleteAsset ($deleteAssetId: ID!) {
+	deleteAsset(id: $deleteAssetId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteAsset(ctx context.Context, deleteAssetID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAsset, error) {
+	vars := map[string]any{
+		"deleteAssetId": deleteAssetID,
+	}
+
+	var res DeleteAsset
+	if err := c.Client.Post(ctx, "DeleteAsset", DeleteAssetDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllAssetsDocument = `query GetAllAssets {
+	assets {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assetType
+				categories
+				cpe
+				createdAt
+				createdBy
+				description
+				id
+				identifier
+				name
+				ownerID
+				tags
+				updatedAt
+				updatedBy
+				website
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllAssets(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssets, error) {
+	vars := map[string]any{}
+
+	var res GetAllAssets
+	if err := c.Client.Post(ctx, "GetAllAssets", GetAllAssetsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAssetByIDDocument = `query GetAssetByID ($assetId: ID!) {
+	asset(id: $assetId) {
+		assetType
+		categories
+		cpe
+		createdAt
+		createdBy
+		description
+		id
+		identifier
+		name
+		ownerID
+		tags
+		updatedAt
+		updatedBy
+		website
+	}
+}
+`
+
+func (c *Client) GetAssetByID(ctx context.Context, assetID string, interceptors ...clientv2.RequestInterceptor) (*GetAssetByID, error) {
+	vars := map[string]any{
+		"assetId": assetID,
+	}
+
+	var res GetAssetByID
+	if err := c.Client.Post(ctx, "GetAssetByID", GetAssetByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAssetsDocument = `query GetAssets ($first: Int, $last: Int, $where: AssetWhereInput) {
+	assets(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assetType
+				categories
+				cpe
+				createdAt
+				createdBy
+				description
+				id
+				identifier
+				name
+				ownerID
+				tags
+				updatedAt
+				updatedBy
+				website
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAssets(ctx context.Context, first *int64, last *int64, where *AssetWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssets, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetAssets
+	if err := c.Client.Post(ctx, "GetAssets", GetAssetsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateAssetDocument = `mutation UpdateAsset ($updateAssetId: ID!, $input: UpdateAssetInput!) {
+	updateAsset(id: $updateAssetId, input: $input) {
+		asset {
+			assetType
+			categories
+			cpe
+			createdAt
+			createdBy
+			description
+			id
+			identifier
+			name
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+			website
+		}
+	}
+}
+`
+
+func (c *Client) UpdateAsset(ctx context.Context, updateAssetID string, input UpdateAssetInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAsset, error) {
+	vars := map[string]any{
+		"updateAssetId": updateAssetID,
+		"input":         input,
+	}
+
+	var res UpdateAsset
+	if err := c.Client.Post(ctx, "UpdateAsset", UpdateAssetDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllAssetHistoriesDocument = `query GetAllAssetHistories {
+	assetHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assetType
+				categories
+				cpe
+				createdAt
+				createdBy
+				description
+				historyTime
+				id
+				identifier
+				name
+				operation
+				ownerID
+				ref
+				tags
+				updatedAt
+				updatedBy
+				website
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllAssetHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssetHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllAssetHistories
+	if err := c.Client.Post(ctx, "GetAllAssetHistories", GetAllAssetHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAssetHistoriesDocument = `query GetAssetHistories ($first: Int, $last: Int, $where: AssetHistoryWhereInput) {
+	assetHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assetType
+				categories
+				cpe
+				createdAt
+				createdBy
+				description
+				historyTime
+				id
+				identifier
+				name
+				operation
+				ownerID
+				ref
+				tags
+				updatedAt
+				updatedBy
+				website
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAssetHistories(ctx context.Context, first *int64, last *int64, where *AssetHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssetHistories, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetAssetHistories
+	if err := c.Client.Post(ctx, "GetAssetHistories", GetAssetHistoriesDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -102039,6 +105744,395 @@ func (c *Client) GetRiskHistories(ctx context.Context, where *RiskHistoryWhereIn
 	return &res, nil
 }
 
+const CreateBulkCSVScanDocument = `mutation CreateBulkCSVScan ($input: Upload!) {
+	createBulkCSVScan(input: $input) {
+		scans {
+			createdAt
+			createdBy
+			id
+			metadata
+			ownerID
+			scanType
+			status
+			tags
+			target
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVScan(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVScan, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVScan
+	if err := c.Client.Post(ctx, "CreateBulkCSVScan", CreateBulkCSVScanDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkScanDocument = `mutation CreateBulkScan ($input: [CreateScanInput!]) {
+	createBulkScan(input: $input) {
+		scans {
+			createdAt
+			createdBy
+			id
+			metadata
+			ownerID
+			scanType
+			status
+			tags
+			target
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkScan(ctx context.Context, input []*CreateScanInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkScan, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkScan
+	if err := c.Client.Post(ctx, "CreateBulkScan", CreateBulkScanDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateScanDocument = `mutation CreateScan ($input: CreateScanInput!) {
+	createScan(input: $input) {
+		scan {
+			createdAt
+			createdBy
+			id
+			metadata
+			ownerID
+			scanType
+			status
+			tags
+			target
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateScan(ctx context.Context, input CreateScanInput, interceptors ...clientv2.RequestInterceptor) (*CreateScan, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateScan
+	if err := c.Client.Post(ctx, "CreateScan", CreateScanDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteScanDocument = `mutation DeleteScan ($deleteScanId: ID!) {
+	deleteScan(id: $deleteScanId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteScan(ctx context.Context, deleteScanID string, interceptors ...clientv2.RequestInterceptor) (*DeleteScan, error) {
+	vars := map[string]any{
+		"deleteScanId": deleteScanID,
+	}
+
+	var res DeleteScan
+	if err := c.Client.Post(ctx, "DeleteScan", DeleteScanDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllScansDocument = `query GetAllScans {
+	scans {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				metadata
+				ownerID
+				scanType
+				status
+				tags
+				target
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllScans(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllScans, error) {
+	vars := map[string]any{}
+
+	var res GetAllScans
+	if err := c.Client.Post(ctx, "GetAllScans", GetAllScansDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetScanByIDDocument = `query GetScanByID ($scanId: ID!) {
+	scan(id: $scanId) {
+		createdAt
+		createdBy
+		id
+		metadata
+		ownerID
+		scanType
+		status
+		tags
+		target
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetScanByID(ctx context.Context, scanID string, interceptors ...clientv2.RequestInterceptor) (*GetScanByID, error) {
+	vars := map[string]any{
+		"scanId": scanID,
+	}
+
+	var res GetScanByID
+	if err := c.Client.Post(ctx, "GetScanByID", GetScanByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetScansDocument = `query GetScans ($first: Int, $last: Int, $where: ScanWhereInput) {
+	scans(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				metadata
+				ownerID
+				scanType
+				status
+				tags
+				target
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetScans(ctx context.Context, first *int64, last *int64, where *ScanWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetScans, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetScans
+	if err := c.Client.Post(ctx, "GetScans", GetScansDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateScanDocument = `mutation UpdateScan ($updateScanId: ID!, $input: UpdateScanInput!) {
+	updateScan(id: $updateScanId, input: $input) {
+		scan {
+			createdAt
+			createdBy
+			id
+			metadata
+			ownerID
+			scanType
+			status
+			tags
+			target
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateScan(ctx context.Context, updateScanID string, input UpdateScanInput, interceptors ...clientv2.RequestInterceptor) (*UpdateScan, error) {
+	vars := map[string]any{
+		"updateScanId": updateScanID,
+		"input":        input,
+	}
+
+	var res UpdateScan
+	if err := c.Client.Post(ctx, "UpdateScan", UpdateScanDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllScanHistoriesDocument = `query GetAllScanHistories {
+	scanHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				metadata
+				operation
+				ownerID
+				ref
+				scanType
+				status
+				tags
+				target
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllScanHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllScanHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllScanHistories
+	if err := c.Client.Post(ctx, "GetAllScanHistories", GetAllScanHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetScanHistoriesDocument = `query GetScanHistories ($first: Int, $last: Int, $where: ScanHistoryWhereInput) {
+	scanHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				metadata
+				operation
+				ownerID
+				ref
+				scanType
+				status
+				tags
+				target
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetScanHistories(ctx context.Context, first *int64, last *int64, where *ScanHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetScanHistories, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetScanHistories
+	if err := c.Client.Post(ctx, "GetScanHistories", GetScanHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateBulkCSVScheduledJobDocument = `mutation CreateBulkCSVScheduledJob ($input: Upload!) {
 	createBulkCSVScheduledJob(input: $input) {
 		scheduledJobs {
@@ -102626,6 +106720,22 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 				}
 			}
 		}
+		assets {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					name
+					tags
+				}
+			}
+		}
 		contacts {
 			totalCount
 			pageInfo {
@@ -103096,6 +107206,22 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 					id
 					name
 					tags
+				}
+			}
+		}
+		scans {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					tags
+					target
 				}
 			}
 		}
@@ -107120,6 +111246,16 @@ var DocumentOperationNames = map[string]string{
 	GetAPITokenByIDDocument:                      "GetAPITokenByID",
 	GetAPITokensDocument:                         "GetAPITokens",
 	UpdateAPITokenDocument:                       "UpdateAPIToken",
+	CreateBulkCSVAssetDocument:                   "CreateBulkCSVAsset",
+	CreateBulkAssetDocument:                      "CreateBulkAsset",
+	CreateAssetDocument:                          "CreateAsset",
+	DeleteAssetDocument:                          "DeleteAsset",
+	GetAllAssetsDocument:                         "GetAllAssets",
+	GetAssetByIDDocument:                         "GetAssetByID",
+	GetAssetsDocument:                            "GetAssets",
+	UpdateAssetDocument:                          "UpdateAsset",
+	GetAllAssetHistoriesDocument:                 "GetAllAssetHistories",
+	GetAssetHistoriesDocument:                    "GetAssetHistories",
 	AuditLogsDocument:                            "AuditLogs",
 	CreateBulkContactDocument:                    "CreateBulkContact",
 	CreateBulkCSVContactDocument:                 "CreateBulkCSVContact",
@@ -107440,6 +111576,16 @@ var DocumentOperationNames = map[string]string{
 	UpdateRiskDocument:                           "UpdateRisk",
 	GetAllRiskHistoriesDocument:                  "GetAllRiskHistories",
 	GetRiskHistoriesDocument:                     "GetRiskHistories",
+	CreateBulkCSVScanDocument:                    "CreateBulkCSVScan",
+	CreateBulkScanDocument:                       "CreateBulkScan",
+	CreateScanDocument:                           "CreateScan",
+	DeleteScanDocument:                           "DeleteScan",
+	GetAllScansDocument:                          "GetAllScans",
+	GetScanByIDDocument:                          "GetScanByID",
+	GetScansDocument:                             "GetScans",
+	UpdateScanDocument:                           "UpdateScan",
+	GetAllScanHistoriesDocument:                  "GetAllScanHistories",
+	GetScanHistoriesDocument:                     "GetScanHistories",
 	CreateBulkCSVScheduledJobDocument:            "CreateBulkCSVScheduledJob",
 	CreateBulkScheduledJobDocument:               "CreateBulkScheduledJob",
 	CreateScheduledJobDocument:                   "CreateScheduledJob",

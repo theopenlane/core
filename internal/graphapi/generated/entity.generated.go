@@ -93,6 +93,12 @@ func (ec *executionContext) fieldContext_EntityBulkCreatePayload_entities(_ cont
 				return ec.fieldContext_Entity_status(ctx, field)
 			case "owner":
 				return ec.fieldContext_Entity_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Entity_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Entity_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Entity_viewers(ctx, field)
 			case "contacts":
 				return ec.fieldContext_Entity_contacts(ctx, field)
 			case "documents":
@@ -101,6 +107,10 @@ func (ec *executionContext) fieldContext_EntityBulkCreatePayload_entities(_ cont
 				return ec.fieldContext_Entity_notes(ctx, field)
 			case "files":
 				return ec.fieldContext_Entity_files(ctx, field)
+			case "assets":
+				return ec.fieldContext_Entity_assets(ctx, field)
+			case "scans":
+				return ec.fieldContext_Entity_scans(ctx, field)
 			case "entityType":
 				return ec.fieldContext_Entity_entityType(ctx, field)
 			}
@@ -177,6 +187,12 @@ func (ec *executionContext) fieldContext_EntityCreatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_status(ctx, field)
 			case "owner":
 				return ec.fieldContext_Entity_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Entity_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Entity_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Entity_viewers(ctx, field)
 			case "contacts":
 				return ec.fieldContext_Entity_contacts(ctx, field)
 			case "documents":
@@ -185,6 +201,10 @@ func (ec *executionContext) fieldContext_EntityCreatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_notes(ctx, field)
 			case "files":
 				return ec.fieldContext_Entity_files(ctx, field)
+			case "assets":
+				return ec.fieldContext_Entity_assets(ctx, field)
+			case "scans":
+				return ec.fieldContext_Entity_scans(ctx, field)
 			case "entityType":
 				return ec.fieldContext_Entity_entityType(ctx, field)
 			}
@@ -305,6 +325,12 @@ func (ec *executionContext) fieldContext_EntityUpdatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_status(ctx, field)
 			case "owner":
 				return ec.fieldContext_Entity_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Entity_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Entity_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Entity_viewers(ctx, field)
 			case "contacts":
 				return ec.fieldContext_Entity_contacts(ctx, field)
 			case "documents":
@@ -313,6 +339,10 @@ func (ec *executionContext) fieldContext_EntityUpdatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_notes(ctx, field)
 			case "files":
 				return ec.fieldContext_Entity_files(ctx, field)
+			case "assets":
+				return ec.fieldContext_Entity_assets(ctx, field)
+			case "scans":
+				return ec.fieldContext_Entity_scans(ctx, field)
 			case "entityType":
 				return ec.fieldContext_Entity_entityType(ctx, field)
 			}

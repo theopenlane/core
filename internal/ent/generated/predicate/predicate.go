@@ -15,6 +15,12 @@ type ActionPlan func(*sql.Selector)
 // ActionPlanHistory is the predicate function for actionplanhistory builders.
 type ActionPlanHistory func(*sql.Selector)
 
+// Asset is the predicate function for asset builders.
+type Asset func(*sql.Selector)
+
+// AssetHistory is the predicate function for assethistory builders.
+type AssetHistory func(*sql.Selector)
+
 // Contact is the predicate function for contact builders.
 type Contact func(*sql.Selector)
 
@@ -233,6 +239,12 @@ type Risk func(*sql.Selector)
 
 // RiskHistory is the predicate function for riskhistory builders.
 type RiskHistory func(*sql.Selector)
+
+// Scan is the predicate function for scan builders.
+type Scan func(*sql.Selector)
+
+// ScanHistory is the predicate function for scanhistory builders.
+type ScanHistory func(*sql.Selector)
 
 // ScheduledJob is the predicate function for scheduledjob builders.
 type ScheduledJob func(*sql.Selector)

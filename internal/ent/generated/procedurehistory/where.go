@@ -1486,6 +1486,66 @@ func SummaryContainsFold(v string) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldContainsFold(FieldSummary, v))
 }
 
+// TagSuggestionsIsNil applies the IsNil predicate on the "tag_suggestions" field.
+func TagSuggestionsIsNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIsNull(FieldTagSuggestions))
+}
+
+// TagSuggestionsNotNil applies the NotNil predicate on the "tag_suggestions" field.
+func TagSuggestionsNotNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotNull(FieldTagSuggestions))
+}
+
+// DismissedTagSuggestionsIsNil applies the IsNil predicate on the "dismissed_tag_suggestions" field.
+func DismissedTagSuggestionsIsNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIsNull(FieldDismissedTagSuggestions))
+}
+
+// DismissedTagSuggestionsNotNil applies the NotNil predicate on the "dismissed_tag_suggestions" field.
+func DismissedTagSuggestionsNotNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotNull(FieldDismissedTagSuggestions))
+}
+
+// ControlSuggestionsIsNil applies the IsNil predicate on the "control_suggestions" field.
+func ControlSuggestionsIsNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIsNull(FieldControlSuggestions))
+}
+
+// ControlSuggestionsNotNil applies the NotNil predicate on the "control_suggestions" field.
+func ControlSuggestionsNotNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotNull(FieldControlSuggestions))
+}
+
+// DismissedControlSuggestionsIsNil applies the IsNil predicate on the "dismissed_control_suggestions" field.
+func DismissedControlSuggestionsIsNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIsNull(FieldDismissedControlSuggestions))
+}
+
+// DismissedControlSuggestionsNotNil applies the NotNil predicate on the "dismissed_control_suggestions" field.
+func DismissedControlSuggestionsNotNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotNull(FieldDismissedControlSuggestions))
+}
+
+// ImprovementSuggestionsIsNil applies the IsNil predicate on the "improvement_suggestions" field.
+func ImprovementSuggestionsIsNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIsNull(FieldImprovementSuggestions))
+}
+
+// ImprovementSuggestionsNotNil applies the NotNil predicate on the "improvement_suggestions" field.
+func ImprovementSuggestionsNotNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotNull(FieldImprovementSuggestions))
+}
+
+// DismissedImprovementSuggestionsIsNil applies the IsNil predicate on the "dismissed_improvement_suggestions" field.
+func DismissedImprovementSuggestionsIsNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIsNull(FieldDismissedImprovementSuggestions))
+}
+
+// DismissedImprovementSuggestionsNotNil applies the NotNil predicate on the "dismissed_improvement_suggestions" field.
+func DismissedImprovementSuggestionsNotNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotNull(FieldDismissedImprovementSuggestions))
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.ProcedureHistory) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.AndPredicates(predicates...))

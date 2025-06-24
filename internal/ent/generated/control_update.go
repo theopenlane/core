@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
@@ -26,6 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -719,6 +721,36 @@ func (cu *ControlUpdate) AddPrograms(p ...*Program) *ControlUpdate {
 	return cu.AddProgramIDs(ids...)
 }
 
+// AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
+func (cu *ControlUpdate) AddAssetIDs(ids ...string) *ControlUpdate {
+	cu.mutation.AddAssetIDs(ids...)
+	return cu
+}
+
+// AddAssets adds the "assets" edges to the Asset entity.
+func (cu *ControlUpdate) AddAssets(a ...*Asset) *ControlUpdate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cu.AddAssetIDs(ids...)
+}
+
+// AddScanIDs adds the "scans" edge to the Scan entity by IDs.
+func (cu *ControlUpdate) AddScanIDs(ids ...string) *ControlUpdate {
+	cu.mutation.AddScanIDs(ids...)
+	return cu
+}
+
+// AddScans adds the "scans" edges to the Scan entity.
+func (cu *ControlUpdate) AddScans(s ...*Scan) *ControlUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return cu.AddScanIDs(ids...)
+}
+
 // AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
 func (cu *ControlUpdate) AddControlImplementationIDs(ids ...string) *ControlUpdate {
 	cu.mutation.AddControlImplementationIDs(ids...)
@@ -1046,6 +1078,48 @@ func (cu *ControlUpdate) RemovePrograms(p ...*Program) *ControlUpdate {
 		ids[i] = p[i].ID
 	}
 	return cu.RemoveProgramIDs(ids...)
+}
+
+// ClearAssets clears all "assets" edges to the Asset entity.
+func (cu *ControlUpdate) ClearAssets() *ControlUpdate {
+	cu.mutation.ClearAssets()
+	return cu
+}
+
+// RemoveAssetIDs removes the "assets" edge to Asset entities by IDs.
+func (cu *ControlUpdate) RemoveAssetIDs(ids ...string) *ControlUpdate {
+	cu.mutation.RemoveAssetIDs(ids...)
+	return cu
+}
+
+// RemoveAssets removes "assets" edges to Asset entities.
+func (cu *ControlUpdate) RemoveAssets(a ...*Asset) *ControlUpdate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cu.RemoveAssetIDs(ids...)
+}
+
+// ClearScans clears all "scans" edges to the Scan entity.
+func (cu *ControlUpdate) ClearScans() *ControlUpdate {
+	cu.mutation.ClearScans()
+	return cu
+}
+
+// RemoveScanIDs removes the "scans" edge to Scan entities by IDs.
+func (cu *ControlUpdate) RemoveScanIDs(ids ...string) *ControlUpdate {
+	cu.mutation.RemoveScanIDs(ids...)
+	return cu
+}
+
+// RemoveScans removes "scans" edges to Scan entities.
+func (cu *ControlUpdate) RemoveScans(s ...*Scan) *ControlUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return cu.RemoveScanIDs(ids...)
 }
 
 // ClearControlImplementations clears all "control_implementations" edges to the ControlImplementation entity.
@@ -2040,6 +2114,102 @@ func (cu *ControlUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if cu.mutation.AssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.AssetsTable,
+			Columns: control.AssetsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.ControlAssets
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !cu.mutation.AssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.AssetsTable,
+			Columns: control.AssetsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.ControlAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.AssetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.AssetsTable,
+			Columns: control.AssetsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.ControlAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cu.mutation.ScansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.ScansTable,
+			Columns: []string{control.ScansColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.Scan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.RemovedScansIDs(); len(nodes) > 0 && !cu.mutation.ScansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.ScansTable,
+			Columns: []string{control.ScansColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.ScansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.ScansTable,
+			Columns: []string{control.ScansColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if cu.mutation.ControlImplementationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -2974,6 +3144,36 @@ func (cuo *ControlUpdateOne) AddPrograms(p ...*Program) *ControlUpdateOne {
 	return cuo.AddProgramIDs(ids...)
 }
 
+// AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
+func (cuo *ControlUpdateOne) AddAssetIDs(ids ...string) *ControlUpdateOne {
+	cuo.mutation.AddAssetIDs(ids...)
+	return cuo
+}
+
+// AddAssets adds the "assets" edges to the Asset entity.
+func (cuo *ControlUpdateOne) AddAssets(a ...*Asset) *ControlUpdateOne {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cuo.AddAssetIDs(ids...)
+}
+
+// AddScanIDs adds the "scans" edge to the Scan entity by IDs.
+func (cuo *ControlUpdateOne) AddScanIDs(ids ...string) *ControlUpdateOne {
+	cuo.mutation.AddScanIDs(ids...)
+	return cuo
+}
+
+// AddScans adds the "scans" edges to the Scan entity.
+func (cuo *ControlUpdateOne) AddScans(s ...*Scan) *ControlUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return cuo.AddScanIDs(ids...)
+}
+
 // AddControlImplementationIDs adds the "control_implementations" edge to the ControlImplementation entity by IDs.
 func (cuo *ControlUpdateOne) AddControlImplementationIDs(ids ...string) *ControlUpdateOne {
 	cuo.mutation.AddControlImplementationIDs(ids...)
@@ -3301,6 +3501,48 @@ func (cuo *ControlUpdateOne) RemovePrograms(p ...*Program) *ControlUpdateOne {
 		ids[i] = p[i].ID
 	}
 	return cuo.RemoveProgramIDs(ids...)
+}
+
+// ClearAssets clears all "assets" edges to the Asset entity.
+func (cuo *ControlUpdateOne) ClearAssets() *ControlUpdateOne {
+	cuo.mutation.ClearAssets()
+	return cuo
+}
+
+// RemoveAssetIDs removes the "assets" edge to Asset entities by IDs.
+func (cuo *ControlUpdateOne) RemoveAssetIDs(ids ...string) *ControlUpdateOne {
+	cuo.mutation.RemoveAssetIDs(ids...)
+	return cuo
+}
+
+// RemoveAssets removes "assets" edges to Asset entities.
+func (cuo *ControlUpdateOne) RemoveAssets(a ...*Asset) *ControlUpdateOne {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cuo.RemoveAssetIDs(ids...)
+}
+
+// ClearScans clears all "scans" edges to the Scan entity.
+func (cuo *ControlUpdateOne) ClearScans() *ControlUpdateOne {
+	cuo.mutation.ClearScans()
+	return cuo
+}
+
+// RemoveScanIDs removes the "scans" edge to Scan entities by IDs.
+func (cuo *ControlUpdateOne) RemoveScanIDs(ids ...string) *ControlUpdateOne {
+	cuo.mutation.RemoveScanIDs(ids...)
+	return cuo
+}
+
+// RemoveScans removes "scans" edges to Scan entities.
+func (cuo *ControlUpdateOne) RemoveScans(s ...*Scan) *ControlUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return cuo.RemoveScanIDs(ids...)
 }
 
 // ClearControlImplementations clears all "control_implementations" edges to the ControlImplementation entity.
@@ -4320,6 +4562,102 @@ func (cuo *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err e
 			},
 		}
 		edge.Schema = cuo.schemaConfig.ProgramControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cuo.mutation.AssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.AssetsTable,
+			Columns: control.AssetsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.ControlAssets
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !cuo.mutation.AssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.AssetsTable,
+			Columns: control.AssetsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.ControlAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.AssetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.AssetsTable,
+			Columns: control.AssetsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.ControlAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cuo.mutation.ScansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.ScansTable,
+			Columns: []string{control.ScansColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.Scan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.RemovedScansIDs(); len(nodes) > 0 && !cuo.mutation.ScansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.ScansTable,
+			Columns: []string{control.ScansColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.ScansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.ScansTable,
+			Columns: []string{control.ScansColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

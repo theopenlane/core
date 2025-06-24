@@ -67,6 +67,30 @@ type AddProgramMembershipInput struct {
 	UserID string      `json:"userID"`
 }
 
+// Return response for createBulkAsset mutation
+type AssetBulkCreatePayload struct {
+	// Created assets
+	Assets []*generated.Asset `json:"assets,omitempty"`
+}
+
+// Return response for createAsset mutation
+type AssetCreatePayload struct {
+	// Created asset
+	Asset *generated.Asset `json:"asset"`
+}
+
+// Return response for deleteAsset mutation
+type AssetDeletePayload struct {
+	// Deleted asset ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateAsset mutation
+type AssetUpdatePayload struct {
+	// Updated asset
+	Asset *generated.Asset `json:"asset"`
+}
+
 // CloneControlInput is used to clone controls and their subcontrols
 // under an organization (ownerID)
 type CloneControlInput struct {
@@ -997,6 +1021,30 @@ type RiskUpdatePayload struct {
 	Risk *generated.Risk `json:"risk"`
 }
 
+// Return response for createBulkScan mutation
+type ScanBulkCreatePayload struct {
+	// Created scans
+	Scans []*generated.Scan `json:"scans,omitempty"`
+}
+
+// Return response for createScan mutation
+type ScanCreatePayload struct {
+	// Created scan
+	Scan *generated.Scan `json:"scan"`
+}
+
+// Return response for deleteScan mutation
+type ScanDeletePayload struct {
+	// Deleted scan ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateScan mutation
+type ScanUpdatePayload struct {
+	// Updated scan
+	Scan *generated.Scan `json:"scan"`
+}
+
 // Return response for createBulkScheduledJob mutation
 type ScheduledJobBulkCreatePayload struct {
 	// Created scheduledJobs
@@ -1028,6 +1076,7 @@ type SearchResults struct {
 	TotalCount                  int                                             `json:"totalCount"`
 	APITokens                   *generated.APITokenConnection                   `json:"apiTokens,omitempty"`
 	ActionPlans                 *generated.ActionPlanConnection                 `json:"actionPlans,omitempty"`
+	Assets                      *generated.AssetConnection                      `json:"assets,omitempty"`
 	Contacts                    *generated.ContactConnection                    `json:"contacts,omitempty"`
 	Controls                    *generated.ControlConnection                    `json:"controls,omitempty"`
 	ControlImplementations      *generated.ControlImplementationConnection      `json:"controlImplementations,omitempty"`
@@ -1057,6 +1106,7 @@ type SearchResults struct {
 	Procedures                  *generated.ProcedureConnection                  `json:"procedures,omitempty"`
 	Programs                    *generated.ProgramConnection                    `json:"programs,omitempty"`
 	Risks                       *generated.RiskConnection                       `json:"risks,omitempty"`
+	Scans                       *generated.ScanConnection                       `json:"scans,omitempty"`
 	ScheduledJobs               *generated.ScheduledJobConnection               `json:"scheduledJobs,omitempty"`
 	Standards                   *generated.StandardConnection                   `json:"standards,omitempty"`
 	Subcontrols                 *generated.SubcontrolConnection                 `json:"subcontrols,omitempty"`

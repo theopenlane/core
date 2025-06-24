@@ -9,6 +9,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/assethistory"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -82,6 +84,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/scanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
@@ -267,6 +271,30 @@ func init() {
 	actionplanDescReviewDue := actionplanMixinFields6[5].Descriptor()
 	// actionplan.DefaultReviewDue holds the default value on creation for the review_due field.
 	actionplan.DefaultReviewDue = actionplanDescReviewDue.Default.(time.Time)
+	// actionplanDescTagSuggestions is the schema descriptor for tag_suggestions field.
+	actionplanDescTagSuggestions := actionplanMixinFields6[10].Descriptor()
+	// actionplan.DefaultTagSuggestions holds the default value on creation for the tag_suggestions field.
+	actionplan.DefaultTagSuggestions = actionplanDescTagSuggestions.Default.([]string)
+	// actionplanDescDismissedTagSuggestions is the schema descriptor for dismissed_tag_suggestions field.
+	actionplanDescDismissedTagSuggestions := actionplanMixinFields6[11].Descriptor()
+	// actionplan.DefaultDismissedTagSuggestions holds the default value on creation for the dismissed_tag_suggestions field.
+	actionplan.DefaultDismissedTagSuggestions = actionplanDescDismissedTagSuggestions.Default.([]string)
+	// actionplanDescControlSuggestions is the schema descriptor for control_suggestions field.
+	actionplanDescControlSuggestions := actionplanMixinFields6[12].Descriptor()
+	// actionplan.DefaultControlSuggestions holds the default value on creation for the control_suggestions field.
+	actionplan.DefaultControlSuggestions = actionplanDescControlSuggestions.Default.([]string)
+	// actionplanDescDismissedControlSuggestions is the schema descriptor for dismissed_control_suggestions field.
+	actionplanDescDismissedControlSuggestions := actionplanMixinFields6[13].Descriptor()
+	// actionplan.DefaultDismissedControlSuggestions holds the default value on creation for the dismissed_control_suggestions field.
+	actionplan.DefaultDismissedControlSuggestions = actionplanDescDismissedControlSuggestions.Default.([]string)
+	// actionplanDescImprovementSuggestions is the schema descriptor for improvement_suggestions field.
+	actionplanDescImprovementSuggestions := actionplanMixinFields6[14].Descriptor()
+	// actionplan.DefaultImprovementSuggestions holds the default value on creation for the improvement_suggestions field.
+	actionplan.DefaultImprovementSuggestions = actionplanDescImprovementSuggestions.Default.([]string)
+	// actionplanDescDismissedImprovementSuggestions is the schema descriptor for dismissed_improvement_suggestions field.
+	actionplanDescDismissedImprovementSuggestions := actionplanMixinFields6[15].Descriptor()
+	// actionplan.DefaultDismissedImprovementSuggestions holds the default value on creation for the dismissed_improvement_suggestions field.
+	actionplan.DefaultDismissedImprovementSuggestions = actionplanDescDismissedImprovementSuggestions.Default.([]string)
 	// actionplanDescOwnerID is the schema descriptor for owner_id field.
 	actionplanDescOwnerID := actionplanMixinFields7[0].Descriptor()
 	// actionplan.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
@@ -309,10 +337,126 @@ func init() {
 	actionplanhistoryDescReviewDue := actionplanhistoryFields[17].Descriptor()
 	// actionplanhistory.DefaultReviewDue holds the default value on creation for the review_due field.
 	actionplanhistory.DefaultReviewDue = actionplanhistoryDescReviewDue.Default.(time.Time)
+	// actionplanhistoryDescTagSuggestions is the schema descriptor for tag_suggestions field.
+	actionplanhistoryDescTagSuggestions := actionplanhistoryFields[22].Descriptor()
+	// actionplanhistory.DefaultTagSuggestions holds the default value on creation for the tag_suggestions field.
+	actionplanhistory.DefaultTagSuggestions = actionplanhistoryDescTagSuggestions.Default.([]string)
+	// actionplanhistoryDescDismissedTagSuggestions is the schema descriptor for dismissed_tag_suggestions field.
+	actionplanhistoryDescDismissedTagSuggestions := actionplanhistoryFields[23].Descriptor()
+	// actionplanhistory.DefaultDismissedTagSuggestions holds the default value on creation for the dismissed_tag_suggestions field.
+	actionplanhistory.DefaultDismissedTagSuggestions = actionplanhistoryDescDismissedTagSuggestions.Default.([]string)
+	// actionplanhistoryDescControlSuggestions is the schema descriptor for control_suggestions field.
+	actionplanhistoryDescControlSuggestions := actionplanhistoryFields[24].Descriptor()
+	// actionplanhistory.DefaultControlSuggestions holds the default value on creation for the control_suggestions field.
+	actionplanhistory.DefaultControlSuggestions = actionplanhistoryDescControlSuggestions.Default.([]string)
+	// actionplanhistoryDescDismissedControlSuggestions is the schema descriptor for dismissed_control_suggestions field.
+	actionplanhistoryDescDismissedControlSuggestions := actionplanhistoryFields[25].Descriptor()
+	// actionplanhistory.DefaultDismissedControlSuggestions holds the default value on creation for the dismissed_control_suggestions field.
+	actionplanhistory.DefaultDismissedControlSuggestions = actionplanhistoryDescDismissedControlSuggestions.Default.([]string)
+	// actionplanhistoryDescImprovementSuggestions is the schema descriptor for improvement_suggestions field.
+	actionplanhistoryDescImprovementSuggestions := actionplanhistoryFields[26].Descriptor()
+	// actionplanhistory.DefaultImprovementSuggestions holds the default value on creation for the improvement_suggestions field.
+	actionplanhistory.DefaultImprovementSuggestions = actionplanhistoryDescImprovementSuggestions.Default.([]string)
+	// actionplanhistoryDescDismissedImprovementSuggestions is the schema descriptor for dismissed_improvement_suggestions field.
+	actionplanhistoryDescDismissedImprovementSuggestions := actionplanhistoryFields[27].Descriptor()
+	// actionplanhistory.DefaultDismissedImprovementSuggestions holds the default value on creation for the dismissed_improvement_suggestions field.
+	actionplanhistory.DefaultDismissedImprovementSuggestions = actionplanhistoryDescDismissedImprovementSuggestions.Default.([]string)
 	// actionplanhistoryDescID is the schema descriptor for id field.
 	actionplanhistoryDescID := actionplanhistoryFields[9].Descriptor()
 	// actionplanhistory.DefaultID holds the default value on creation for the id field.
 	actionplanhistory.DefaultID = actionplanhistoryDescID.Default.(func() string)
+	assetMixin := schema.Asset{}.Mixin()
+	asset.Policy = privacy.NewPolicies(schema.Asset{})
+	asset.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := asset.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	assetMixinHooks0 := assetMixin[0].Hooks()
+	assetMixinHooks1 := assetMixin[1].Hooks()
+	assetMixinHooks5 := assetMixin[5].Hooks()
+	assetMixinHooks6 := assetMixin[6].Hooks()
+
+	asset.Hooks[1] = assetMixinHooks0[0]
+
+	asset.Hooks[2] = assetMixinHooks1[0]
+
+	asset.Hooks[3] = assetMixinHooks5[0]
+
+	asset.Hooks[4] = assetMixinHooks6[0]
+
+	asset.Hooks[5] = assetMixinHooks6[1]
+
+	asset.Hooks[6] = assetMixinHooks6[2]
+	assetMixinInters1 := assetMixin[1].Interceptors()
+	assetMixinInters5 := assetMixin[5].Interceptors()
+	asset.Interceptors[0] = assetMixinInters1[0]
+	asset.Interceptors[1] = assetMixinInters5[0]
+	assetMixinFields0 := assetMixin[0].Fields()
+	_ = assetMixinFields0
+	assetMixinFields2 := assetMixin[2].Fields()
+	_ = assetMixinFields2
+	assetMixinFields3 := assetMixin[3].Fields()
+	_ = assetMixinFields3
+	assetMixinFields5 := assetMixin[5].Fields()
+	_ = assetMixinFields5
+	assetFields := schema.Asset{}.Fields()
+	_ = assetFields
+	// assetDescCreatedAt is the schema descriptor for created_at field.
+	assetDescCreatedAt := assetMixinFields0[0].Descriptor()
+	// asset.DefaultCreatedAt holds the default value on creation for the created_at field.
+	asset.DefaultCreatedAt = assetDescCreatedAt.Default.(func() time.Time)
+	// assetDescUpdatedAt is the schema descriptor for updated_at field.
+	assetDescUpdatedAt := assetMixinFields0[1].Descriptor()
+	// asset.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	asset.DefaultUpdatedAt = assetDescUpdatedAt.Default.(func() time.Time)
+	// asset.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	asset.UpdateDefaultUpdatedAt = assetDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// assetDescTags is the schema descriptor for tags field.
+	assetDescTags := assetMixinFields3[0].Descriptor()
+	// asset.DefaultTags holds the default value on creation for the tags field.
+	asset.DefaultTags = assetDescTags.Default.([]string)
+	// assetDescOwnerID is the schema descriptor for owner_id field.
+	assetDescOwnerID := assetMixinFields5[0].Descriptor()
+	// asset.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	asset.OwnerIDValidator = assetDescOwnerID.Validators[0].(func(string) error)
+	// assetDescName is the schema descriptor for name field.
+	assetDescName := assetFields[1].Descriptor()
+	// asset.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	asset.NameValidator = assetDescName.Validators[0].(func(string) error)
+	// assetDescID is the schema descriptor for id field.
+	assetDescID := assetMixinFields2[0].Descriptor()
+	// asset.DefaultID holds the default value on creation for the id field.
+	asset.DefaultID = assetDescID.Default.(func() string)
+	assethistoryInters := schema.AssetHistory{}.Interceptors()
+	assethistory.Interceptors[0] = assethistoryInters[0]
+	assethistoryFields := schema.AssetHistory{}.Fields()
+	_ = assethistoryFields
+	// assethistoryDescHistoryTime is the schema descriptor for history_time field.
+	assethistoryDescHistoryTime := assethistoryFields[0].Descriptor()
+	// assethistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	assethistory.DefaultHistoryTime = assethistoryDescHistoryTime.Default.(func() time.Time)
+	// assethistoryDescCreatedAt is the schema descriptor for created_at field.
+	assethistoryDescCreatedAt := assethistoryFields[3].Descriptor()
+	// assethistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	assethistory.DefaultCreatedAt = assethistoryDescCreatedAt.Default.(func() time.Time)
+	// assethistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	assethistoryDescUpdatedAt := assethistoryFields[4].Descriptor()
+	// assethistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	assethistory.DefaultUpdatedAt = assethistoryDescUpdatedAt.Default.(func() time.Time)
+	// assethistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	assethistory.UpdateDefaultUpdatedAt = assethistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// assethistoryDescTags is the schema descriptor for tags field.
+	assethistoryDescTags := assethistoryFields[10].Descriptor()
+	// assethistory.DefaultTags holds the default value on creation for the tags field.
+	assethistory.DefaultTags = assethistoryDescTags.Default.([]string)
+	// assethistoryDescID is the schema descriptor for id field.
+	assethistoryDescID := assethistoryFields[9].Descriptor()
+	// assethistory.DefaultID holds the default value on creation for the id field.
+	assethistory.DefaultID = assethistoryDescID.Default.(func() string)
 	contactMixin := schema.Contact{}.Mixin()
 	contact.Policy = privacy.NewPolicies(schema.Contact{})
 	contact.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -1243,6 +1387,7 @@ func init() {
 	entityMixinHooks0 := entityMixin[0].Hooks()
 	entityMixinHooks1 := entityMixin[1].Hooks()
 	entityMixinHooks5 := entityMixin[5].Hooks()
+	entityMixinHooks6 := entityMixin[6].Hooks()
 	entityHooks := schema.Entity{}.Hooks()
 
 	entity.Hooks[1] = entityMixinHooks0[0]
@@ -1251,7 +1396,13 @@ func init() {
 
 	entity.Hooks[3] = entityMixinHooks5[0]
 
-	entity.Hooks[4] = entityHooks[0]
+	entity.Hooks[4] = entityMixinHooks6[0]
+
+	entity.Hooks[5] = entityMixinHooks6[1]
+
+	entity.Hooks[6] = entityMixinHooks6[2]
+
+	entity.Hooks[7] = entityHooks[0]
 	entityMixinInters1 := entityMixin[1].Interceptors()
 	entityMixinInters5 := entityMixin[5].Interceptors()
 	entity.Interceptors[0] = entityMixinInters1[0]
@@ -2238,6 +2389,30 @@ func init() {
 	internalpolicyDescReviewDue := internalpolicyMixinFields8[5].Descriptor()
 	// internalpolicy.DefaultReviewDue holds the default value on creation for the review_due field.
 	internalpolicy.DefaultReviewDue = internalpolicyDescReviewDue.Default.(time.Time)
+	// internalpolicyDescTagSuggestions is the schema descriptor for tag_suggestions field.
+	internalpolicyDescTagSuggestions := internalpolicyMixinFields8[10].Descriptor()
+	// internalpolicy.DefaultTagSuggestions holds the default value on creation for the tag_suggestions field.
+	internalpolicy.DefaultTagSuggestions = internalpolicyDescTagSuggestions.Default.([]string)
+	// internalpolicyDescDismissedTagSuggestions is the schema descriptor for dismissed_tag_suggestions field.
+	internalpolicyDescDismissedTagSuggestions := internalpolicyMixinFields8[11].Descriptor()
+	// internalpolicy.DefaultDismissedTagSuggestions holds the default value on creation for the dismissed_tag_suggestions field.
+	internalpolicy.DefaultDismissedTagSuggestions = internalpolicyDescDismissedTagSuggestions.Default.([]string)
+	// internalpolicyDescControlSuggestions is the schema descriptor for control_suggestions field.
+	internalpolicyDescControlSuggestions := internalpolicyMixinFields8[12].Descriptor()
+	// internalpolicy.DefaultControlSuggestions holds the default value on creation for the control_suggestions field.
+	internalpolicy.DefaultControlSuggestions = internalpolicyDescControlSuggestions.Default.([]string)
+	// internalpolicyDescDismissedControlSuggestions is the schema descriptor for dismissed_control_suggestions field.
+	internalpolicyDescDismissedControlSuggestions := internalpolicyMixinFields8[13].Descriptor()
+	// internalpolicy.DefaultDismissedControlSuggestions holds the default value on creation for the dismissed_control_suggestions field.
+	internalpolicy.DefaultDismissedControlSuggestions = internalpolicyDescDismissedControlSuggestions.Default.([]string)
+	// internalpolicyDescImprovementSuggestions is the schema descriptor for improvement_suggestions field.
+	internalpolicyDescImprovementSuggestions := internalpolicyMixinFields8[14].Descriptor()
+	// internalpolicy.DefaultImprovementSuggestions holds the default value on creation for the improvement_suggestions field.
+	internalpolicy.DefaultImprovementSuggestions = internalpolicyDescImprovementSuggestions.Default.([]string)
+	// internalpolicyDescDismissedImprovementSuggestions is the schema descriptor for dismissed_improvement_suggestions field.
+	internalpolicyDescDismissedImprovementSuggestions := internalpolicyMixinFields8[15].Descriptor()
+	// internalpolicy.DefaultDismissedImprovementSuggestions holds the default value on creation for the dismissed_improvement_suggestions field.
+	internalpolicy.DefaultDismissedImprovementSuggestions = internalpolicyDescDismissedImprovementSuggestions.Default.([]string)
 	// internalpolicyDescID is the schema descriptor for id field.
 	internalpolicyDescID := internalpolicyMixinFields2[0].Descriptor()
 	// internalpolicy.DefaultID holds the default value on creation for the id field.
@@ -2276,6 +2451,30 @@ func init() {
 	internalpolicyhistoryDescReviewDue := internalpolicyhistoryFields[19].Descriptor()
 	// internalpolicyhistory.DefaultReviewDue holds the default value on creation for the review_due field.
 	internalpolicyhistory.DefaultReviewDue = internalpolicyhistoryDescReviewDue.Default.(time.Time)
+	// internalpolicyhistoryDescTagSuggestions is the schema descriptor for tag_suggestions field.
+	internalpolicyhistoryDescTagSuggestions := internalpolicyhistoryFields[24].Descriptor()
+	// internalpolicyhistory.DefaultTagSuggestions holds the default value on creation for the tag_suggestions field.
+	internalpolicyhistory.DefaultTagSuggestions = internalpolicyhistoryDescTagSuggestions.Default.([]string)
+	// internalpolicyhistoryDescDismissedTagSuggestions is the schema descriptor for dismissed_tag_suggestions field.
+	internalpolicyhistoryDescDismissedTagSuggestions := internalpolicyhistoryFields[25].Descriptor()
+	// internalpolicyhistory.DefaultDismissedTagSuggestions holds the default value on creation for the dismissed_tag_suggestions field.
+	internalpolicyhistory.DefaultDismissedTagSuggestions = internalpolicyhistoryDescDismissedTagSuggestions.Default.([]string)
+	// internalpolicyhistoryDescControlSuggestions is the schema descriptor for control_suggestions field.
+	internalpolicyhistoryDescControlSuggestions := internalpolicyhistoryFields[26].Descriptor()
+	// internalpolicyhistory.DefaultControlSuggestions holds the default value on creation for the control_suggestions field.
+	internalpolicyhistory.DefaultControlSuggestions = internalpolicyhistoryDescControlSuggestions.Default.([]string)
+	// internalpolicyhistoryDescDismissedControlSuggestions is the schema descriptor for dismissed_control_suggestions field.
+	internalpolicyhistoryDescDismissedControlSuggestions := internalpolicyhistoryFields[27].Descriptor()
+	// internalpolicyhistory.DefaultDismissedControlSuggestions holds the default value on creation for the dismissed_control_suggestions field.
+	internalpolicyhistory.DefaultDismissedControlSuggestions = internalpolicyhistoryDescDismissedControlSuggestions.Default.([]string)
+	// internalpolicyhistoryDescImprovementSuggestions is the schema descriptor for improvement_suggestions field.
+	internalpolicyhistoryDescImprovementSuggestions := internalpolicyhistoryFields[28].Descriptor()
+	// internalpolicyhistory.DefaultImprovementSuggestions holds the default value on creation for the improvement_suggestions field.
+	internalpolicyhistory.DefaultImprovementSuggestions = internalpolicyhistoryDescImprovementSuggestions.Default.([]string)
+	// internalpolicyhistoryDescDismissedImprovementSuggestions is the schema descriptor for dismissed_improvement_suggestions field.
+	internalpolicyhistoryDescDismissedImprovementSuggestions := internalpolicyhistoryFields[29].Descriptor()
+	// internalpolicyhistory.DefaultDismissedImprovementSuggestions holds the default value on creation for the dismissed_improvement_suggestions field.
+	internalpolicyhistory.DefaultDismissedImprovementSuggestions = internalpolicyhistoryDescDismissedImprovementSuggestions.Default.([]string)
 	// internalpolicyhistoryDescID is the schema descriptor for id field.
 	internalpolicyhistoryDescID := internalpolicyhistoryFields[9].Descriptor()
 	// internalpolicyhistory.DefaultID holds the default value on creation for the id field.
@@ -3173,7 +3372,7 @@ func init() {
 	// orgmodule.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	orgmodule.OwnerIDValidator = orgmoduleDescOwnerID.Validators[0].(func(string) error)
 	// orgmoduleDescActive is the schema descriptor for active field.
-	orgmoduleDescActive := orgmoduleFields[4].Descriptor()
+	orgmoduleDescActive := orgmoduleFields[5].Descriptor()
 	// orgmodule.DefaultActive holds the default value on creation for the active field.
 	orgmodule.DefaultActive = orgmoduleDescActive.Default.(bool)
 	// orgmoduleDescID is the schema descriptor for id field.
@@ -3599,6 +3798,14 @@ func init() {
 	organizationsettingDescAllowedEmailDomains := organizationsettingFields[9].Descriptor()
 	// organizationsetting.AllowedEmailDomainsValidator is a validator for the "allowed_email_domains" field. It is called by the builders before save.
 	organizationsetting.AllowedEmailDomainsValidator = organizationsettingDescAllowedEmailDomains.Validators[0].(func([]string) error)
+	// organizationsettingDescIdentityProviderLoginEnforced is the schema descriptor for identity_provider_login_enforced field.
+	organizationsettingDescIdentityProviderLoginEnforced := organizationsettingFields[16].Descriptor()
+	// organizationsetting.DefaultIdentityProviderLoginEnforced holds the default value on creation for the identity_provider_login_enforced field.
+	organizationsetting.DefaultIdentityProviderLoginEnforced = organizationsettingDescIdentityProviderLoginEnforced.Default.(bool)
+	// organizationsettingDescComplianceWebhookToken is the schema descriptor for compliance_webhook_token field.
+	organizationsettingDescComplianceWebhookToken := organizationsettingFields[17].Descriptor()
+	// organizationsetting.DefaultComplianceWebhookToken holds the default value on creation for the compliance_webhook_token field.
+	organizationsetting.DefaultComplianceWebhookToken = organizationsettingDescComplianceWebhookToken.Default.(func() string)
 	// organizationsettingDescID is the schema descriptor for id field.
 	organizationsettingDescID := organizationsettingMixinFields2[0].Descriptor()
 	// organizationsetting.DefaultID holds the default value on creation for the id field.
@@ -3629,6 +3836,14 @@ func init() {
 	organizationsettinghistoryDescBillingNotificationsEnabled := organizationsettinghistoryFields[19].Descriptor()
 	// organizationsettinghistory.DefaultBillingNotificationsEnabled holds the default value on creation for the billing_notifications_enabled field.
 	organizationsettinghistory.DefaultBillingNotificationsEnabled = organizationsettinghistoryDescBillingNotificationsEnabled.Default.(bool)
+	// organizationsettinghistoryDescIdentityProviderLoginEnforced is the schema descriptor for identity_provider_login_enforced field.
+	organizationsettinghistoryDescIdentityProviderLoginEnforced := organizationsettinghistoryFields[27].Descriptor()
+	// organizationsettinghistory.DefaultIdentityProviderLoginEnforced holds the default value on creation for the identity_provider_login_enforced field.
+	organizationsettinghistory.DefaultIdentityProviderLoginEnforced = organizationsettinghistoryDescIdentityProviderLoginEnforced.Default.(bool)
+	// organizationsettinghistoryDescComplianceWebhookToken is the schema descriptor for compliance_webhook_token field.
+	organizationsettinghistoryDescComplianceWebhookToken := organizationsettinghistoryFields[28].Descriptor()
+	// organizationsettinghistory.DefaultComplianceWebhookToken holds the default value on creation for the compliance_webhook_token field.
+	organizationsettinghistory.DefaultComplianceWebhookToken = organizationsettinghistoryDescComplianceWebhookToken.Default.(func() string)
 	// organizationsettinghistoryDescID is the schema descriptor for id field.
 	organizationsettinghistoryDescID := organizationsettinghistoryFields[9].Descriptor()
 	// organizationsettinghistory.DefaultID holds the default value on creation for the id field.
@@ -3873,6 +4088,30 @@ func init() {
 	procedureDescReviewDue := procedureMixinFields8[5].Descriptor()
 	// procedure.DefaultReviewDue holds the default value on creation for the review_due field.
 	procedure.DefaultReviewDue = procedureDescReviewDue.Default.(time.Time)
+	// procedureDescTagSuggestions is the schema descriptor for tag_suggestions field.
+	procedureDescTagSuggestions := procedureMixinFields8[10].Descriptor()
+	// procedure.DefaultTagSuggestions holds the default value on creation for the tag_suggestions field.
+	procedure.DefaultTagSuggestions = procedureDescTagSuggestions.Default.([]string)
+	// procedureDescDismissedTagSuggestions is the schema descriptor for dismissed_tag_suggestions field.
+	procedureDescDismissedTagSuggestions := procedureMixinFields8[11].Descriptor()
+	// procedure.DefaultDismissedTagSuggestions holds the default value on creation for the dismissed_tag_suggestions field.
+	procedure.DefaultDismissedTagSuggestions = procedureDescDismissedTagSuggestions.Default.([]string)
+	// procedureDescControlSuggestions is the schema descriptor for control_suggestions field.
+	procedureDescControlSuggestions := procedureMixinFields8[12].Descriptor()
+	// procedure.DefaultControlSuggestions holds the default value on creation for the control_suggestions field.
+	procedure.DefaultControlSuggestions = procedureDescControlSuggestions.Default.([]string)
+	// procedureDescDismissedControlSuggestions is the schema descriptor for dismissed_control_suggestions field.
+	procedureDescDismissedControlSuggestions := procedureMixinFields8[13].Descriptor()
+	// procedure.DefaultDismissedControlSuggestions holds the default value on creation for the dismissed_control_suggestions field.
+	procedure.DefaultDismissedControlSuggestions = procedureDescDismissedControlSuggestions.Default.([]string)
+	// procedureDescImprovementSuggestions is the schema descriptor for improvement_suggestions field.
+	procedureDescImprovementSuggestions := procedureMixinFields8[14].Descriptor()
+	// procedure.DefaultImprovementSuggestions holds the default value on creation for the improvement_suggestions field.
+	procedure.DefaultImprovementSuggestions = procedureDescImprovementSuggestions.Default.([]string)
+	// procedureDescDismissedImprovementSuggestions is the schema descriptor for dismissed_improvement_suggestions field.
+	procedureDescDismissedImprovementSuggestions := procedureMixinFields8[15].Descriptor()
+	// procedure.DefaultDismissedImprovementSuggestions holds the default value on creation for the dismissed_improvement_suggestions field.
+	procedure.DefaultDismissedImprovementSuggestions = procedureDescDismissedImprovementSuggestions.Default.([]string)
 	// procedureDescID is the schema descriptor for id field.
 	procedureDescID := procedureMixinFields2[0].Descriptor()
 	// procedure.DefaultID holds the default value on creation for the id field.
@@ -3911,6 +4150,30 @@ func init() {
 	procedurehistoryDescReviewDue := procedurehistoryFields[19].Descriptor()
 	// procedurehistory.DefaultReviewDue holds the default value on creation for the review_due field.
 	procedurehistory.DefaultReviewDue = procedurehistoryDescReviewDue.Default.(time.Time)
+	// procedurehistoryDescTagSuggestions is the schema descriptor for tag_suggestions field.
+	procedurehistoryDescTagSuggestions := procedurehistoryFields[24].Descriptor()
+	// procedurehistory.DefaultTagSuggestions holds the default value on creation for the tag_suggestions field.
+	procedurehistory.DefaultTagSuggestions = procedurehistoryDescTagSuggestions.Default.([]string)
+	// procedurehistoryDescDismissedTagSuggestions is the schema descriptor for dismissed_tag_suggestions field.
+	procedurehistoryDescDismissedTagSuggestions := procedurehistoryFields[25].Descriptor()
+	// procedurehistory.DefaultDismissedTagSuggestions holds the default value on creation for the dismissed_tag_suggestions field.
+	procedurehistory.DefaultDismissedTagSuggestions = procedurehistoryDescDismissedTagSuggestions.Default.([]string)
+	// procedurehistoryDescControlSuggestions is the schema descriptor for control_suggestions field.
+	procedurehistoryDescControlSuggestions := procedurehistoryFields[26].Descriptor()
+	// procedurehistory.DefaultControlSuggestions holds the default value on creation for the control_suggestions field.
+	procedurehistory.DefaultControlSuggestions = procedurehistoryDescControlSuggestions.Default.([]string)
+	// procedurehistoryDescDismissedControlSuggestions is the schema descriptor for dismissed_control_suggestions field.
+	procedurehistoryDescDismissedControlSuggestions := procedurehistoryFields[27].Descriptor()
+	// procedurehistory.DefaultDismissedControlSuggestions holds the default value on creation for the dismissed_control_suggestions field.
+	procedurehistory.DefaultDismissedControlSuggestions = procedurehistoryDescDismissedControlSuggestions.Default.([]string)
+	// procedurehistoryDescImprovementSuggestions is the schema descriptor for improvement_suggestions field.
+	procedurehistoryDescImprovementSuggestions := procedurehistoryFields[28].Descriptor()
+	// procedurehistory.DefaultImprovementSuggestions holds the default value on creation for the improvement_suggestions field.
+	procedurehistory.DefaultImprovementSuggestions = procedurehistoryDescImprovementSuggestions.Default.([]string)
+	// procedurehistoryDescDismissedImprovementSuggestions is the schema descriptor for dismissed_improvement_suggestions field.
+	procedurehistoryDescDismissedImprovementSuggestions := procedurehistoryFields[29].Descriptor()
+	// procedurehistory.DefaultDismissedImprovementSuggestions holds the default value on creation for the dismissed_improvement_suggestions field.
+	procedurehistory.DefaultDismissedImprovementSuggestions = procedurehistoryDescDismissedImprovementSuggestions.Default.([]string)
 	// procedurehistoryDescID is the schema descriptor for id field.
 	procedurehistoryDescID := procedurehistoryFields[9].Descriptor()
 	// procedurehistory.DefaultID holds the default value on creation for the id field.
@@ -4218,6 +4481,98 @@ func init() {
 	riskhistoryDescID := riskhistoryFields[9].Descriptor()
 	// riskhistory.DefaultID holds the default value on creation for the id field.
 	riskhistory.DefaultID = riskhistoryDescID.Default.(func() string)
+	scanMixin := schema.Scan{}.Mixin()
+	scan.Policy = privacy.NewPolicies(schema.Scan{})
+	scan.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := scan.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	scanMixinHooks0 := scanMixin[0].Hooks()
+	scanMixinHooks1 := scanMixin[1].Hooks()
+	scanMixinHooks5 := scanMixin[5].Hooks()
+	scanMixinHooks6 := scanMixin[6].Hooks()
+
+	scan.Hooks[1] = scanMixinHooks0[0]
+
+	scan.Hooks[2] = scanMixinHooks1[0]
+
+	scan.Hooks[3] = scanMixinHooks5[0]
+
+	scan.Hooks[4] = scanMixinHooks6[0]
+
+	scan.Hooks[5] = scanMixinHooks6[1]
+
+	scan.Hooks[6] = scanMixinHooks6[2]
+	scanMixinInters1 := scanMixin[1].Interceptors()
+	scanMixinInters5 := scanMixin[5].Interceptors()
+	scan.Interceptors[0] = scanMixinInters1[0]
+	scan.Interceptors[1] = scanMixinInters5[0]
+	scanMixinFields0 := scanMixin[0].Fields()
+	_ = scanMixinFields0
+	scanMixinFields2 := scanMixin[2].Fields()
+	_ = scanMixinFields2
+	scanMixinFields3 := scanMixin[3].Fields()
+	_ = scanMixinFields3
+	scanMixinFields5 := scanMixin[5].Fields()
+	_ = scanMixinFields5
+	scanFields := schema.Scan{}.Fields()
+	_ = scanFields
+	// scanDescCreatedAt is the schema descriptor for created_at field.
+	scanDescCreatedAt := scanMixinFields0[0].Descriptor()
+	// scan.DefaultCreatedAt holds the default value on creation for the created_at field.
+	scan.DefaultCreatedAt = scanDescCreatedAt.Default.(func() time.Time)
+	// scanDescUpdatedAt is the schema descriptor for updated_at field.
+	scanDescUpdatedAt := scanMixinFields0[1].Descriptor()
+	// scan.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	scan.DefaultUpdatedAt = scanDescUpdatedAt.Default.(func() time.Time)
+	// scan.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	scan.UpdateDefaultUpdatedAt = scanDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// scanDescTags is the schema descriptor for tags field.
+	scanDescTags := scanMixinFields3[0].Descriptor()
+	// scan.DefaultTags holds the default value on creation for the tags field.
+	scan.DefaultTags = scanDescTags.Default.([]string)
+	// scanDescOwnerID is the schema descriptor for owner_id field.
+	scanDescOwnerID := scanMixinFields5[0].Descriptor()
+	// scan.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	scan.OwnerIDValidator = scanDescOwnerID.Validators[0].(func(string) error)
+	// scanDescTarget is the schema descriptor for target field.
+	scanDescTarget := scanFields[0].Descriptor()
+	// scan.TargetValidator is a validator for the "target" field. It is called by the builders before save.
+	scan.TargetValidator = scanDescTarget.Validators[0].(func(string) error)
+	// scanDescID is the schema descriptor for id field.
+	scanDescID := scanMixinFields2[0].Descriptor()
+	// scan.DefaultID holds the default value on creation for the id field.
+	scan.DefaultID = scanDescID.Default.(func() string)
+	scanhistoryInters := schema.ScanHistory{}.Interceptors()
+	scanhistory.Interceptors[0] = scanhistoryInters[0]
+	scanhistoryFields := schema.ScanHistory{}.Fields()
+	_ = scanhistoryFields
+	// scanhistoryDescHistoryTime is the schema descriptor for history_time field.
+	scanhistoryDescHistoryTime := scanhistoryFields[0].Descriptor()
+	// scanhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	scanhistory.DefaultHistoryTime = scanhistoryDescHistoryTime.Default.(func() time.Time)
+	// scanhistoryDescCreatedAt is the schema descriptor for created_at field.
+	scanhistoryDescCreatedAt := scanhistoryFields[3].Descriptor()
+	// scanhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	scanhistory.DefaultCreatedAt = scanhistoryDescCreatedAt.Default.(func() time.Time)
+	// scanhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	scanhistoryDescUpdatedAt := scanhistoryFields[4].Descriptor()
+	// scanhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	scanhistory.DefaultUpdatedAt = scanhistoryDescUpdatedAt.Default.(func() time.Time)
+	// scanhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	scanhistory.UpdateDefaultUpdatedAt = scanhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// scanhistoryDescTags is the schema descriptor for tags field.
+	scanhistoryDescTags := scanhistoryFields[10].Descriptor()
+	// scanhistory.DefaultTags holds the default value on creation for the tags field.
+	scanhistory.DefaultTags = scanhistoryDescTags.Default.([]string)
+	// scanhistoryDescID is the schema descriptor for id field.
+	scanhistoryDescID := scanhistoryFields[9].Descriptor()
+	// scanhistory.DefaultID holds the default value on creation for the id field.
+	scanhistory.DefaultID = scanhistoryDescID.Default.(func() string)
 	scheduledjobMixin := schema.ScheduledJob{}.Mixin()
 	scheduledjob.Policy = privacy.NewPolicies(schema.ScheduledJob{})
 	scheduledjob.Hooks[0] = func(next ent.Mutator) ent.Mutator {

@@ -1338,6 +1338,35 @@ func HasProductsWith(preds ...predicate.OrgProduct) predicate.OrgSubscription {
 	})
 }
 
+// HasPrices applies the HasEdge predicate on the "prices" edge.
+func HasPrices() predicate.OrgSubscription {
+	return predicate.OrgSubscription(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, PricesTable, PricesColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.OrgPrice
+		step.Edge.Schema = schemaConfig.OrgPrice
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPricesWith applies the HasEdge predicate on the "prices" edge with a given conditions (other predicates).
+func HasPricesWith(preds ...predicate.OrgPrice) predicate.OrgSubscription {
+	return predicate.OrgSubscription(func(s *sql.Selector) {
+		step := newPricesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.OrgPrice
+		step.Edge.Schema = schemaConfig.OrgPrice
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.OrgSubscription) predicate.OrgSubscription {
 	return predicate.OrgSubscription(sql.AndPredicates(predicates...))

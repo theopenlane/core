@@ -122,19 +122,14 @@ func Active(v bool) predicate.OrgProduct {
 	return predicate.OrgProduct(sql.FieldEQ(FieldActive, v))
 }
 
-// TrialExpiresAt applies equality check predicate on the "trial_expires_at" field. It's identical to TrialExpiresAtEQ.
-func TrialExpiresAt(v time.Time) predicate.OrgProduct {
-	return predicate.OrgProduct(sql.FieldEQ(FieldTrialExpiresAt, v))
-}
-
-// ExpiresAt applies equality check predicate on the "expires_at" field. It's identical to ExpiresAtEQ.
-func ExpiresAt(v time.Time) predicate.OrgProduct {
-	return predicate.OrgProduct(sql.FieldEQ(FieldExpiresAt, v))
-}
-
 // SubscriptionID applies equality check predicate on the "subscription_id" field. It's identical to SubscriptionIDEQ.
 func SubscriptionID(v string) predicate.OrgProduct {
 	return predicate.OrgProduct(sql.FieldEQ(FieldSubscriptionID, v))
+}
+
+// PriceID applies equality check predicate on the "price_id" field. It's identical to PriceIDEQ.
+func PriceID(v string) predicate.OrgProduct {
+	return predicate.OrgProduct(sql.FieldEQ(FieldPriceID, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -822,106 +817,6 @@ func ActiveNEQ(v bool) predicate.OrgProduct {
 	return predicate.OrgProduct(sql.FieldNEQ(FieldActive, v))
 }
 
-// TrialExpiresAtEQ applies the EQ predicate on the "trial_expires_at" field.
-func TrialExpiresAtEQ(v time.Time) predicate.OrgProduct {
-	return predicate.OrgProduct(sql.FieldEQ(FieldTrialExpiresAt, v))
-}
-
-// TrialExpiresAtNEQ applies the NEQ predicate on the "trial_expires_at" field.
-func TrialExpiresAtNEQ(v time.Time) predicate.OrgProduct {
-	return predicate.OrgProduct(sql.FieldNEQ(FieldTrialExpiresAt, v))
-}
-
-// TrialExpiresAtIn applies the In predicate on the "trial_expires_at" field.
-func TrialExpiresAtIn(vs ...time.Time) predicate.OrgProduct {
-	return predicate.OrgProduct(sql.FieldIn(FieldTrialExpiresAt, vs...))
-}
-
-// TrialExpiresAtNotIn applies the NotIn predicate on the "trial_expires_at" field.
-func TrialExpiresAtNotIn(vs ...time.Time) predicate.OrgProduct {
-	return predicate.OrgProduct(sql.FieldNotIn(FieldTrialExpiresAt, vs...))
-}
-
-// TrialExpiresAtGT applies the GT predicate on the "trial_expires_at" field.
-func TrialExpiresAtGT(v time.Time) predicate.OrgProduct {
-	return predicate.OrgProduct(sql.FieldGT(FieldTrialExpiresAt, v))
-}
-
-// TrialExpiresAtGTE applies the GTE predicate on the "trial_expires_at" field.
-func TrialExpiresAtGTE(v time.Time) predicate.OrgProduct {
-	return predicate.OrgProduct(sql.FieldGTE(FieldTrialExpiresAt, v))
-}
-
-// TrialExpiresAtLT applies the LT predicate on the "trial_expires_at" field.
-func TrialExpiresAtLT(v time.Time) predicate.OrgProduct {
-	return predicate.OrgProduct(sql.FieldLT(FieldTrialExpiresAt, v))
-}
-
-// TrialExpiresAtLTE applies the LTE predicate on the "trial_expires_at" field.
-func TrialExpiresAtLTE(v time.Time) predicate.OrgProduct {
-	return predicate.OrgProduct(sql.FieldLTE(FieldTrialExpiresAt, v))
-}
-
-// TrialExpiresAtIsNil applies the IsNil predicate on the "trial_expires_at" field.
-func TrialExpiresAtIsNil() predicate.OrgProduct {
-	return predicate.OrgProduct(sql.FieldIsNull(FieldTrialExpiresAt))
-}
-
-// TrialExpiresAtNotNil applies the NotNil predicate on the "trial_expires_at" field.
-func TrialExpiresAtNotNil() predicate.OrgProduct {
-	return predicate.OrgProduct(sql.FieldNotNull(FieldTrialExpiresAt))
-}
-
-// ExpiresAtEQ applies the EQ predicate on the "expires_at" field.
-func ExpiresAtEQ(v time.Time) predicate.OrgProduct {
-	return predicate.OrgProduct(sql.FieldEQ(FieldExpiresAt, v))
-}
-
-// ExpiresAtNEQ applies the NEQ predicate on the "expires_at" field.
-func ExpiresAtNEQ(v time.Time) predicate.OrgProduct {
-	return predicate.OrgProduct(sql.FieldNEQ(FieldExpiresAt, v))
-}
-
-// ExpiresAtIn applies the In predicate on the "expires_at" field.
-func ExpiresAtIn(vs ...time.Time) predicate.OrgProduct {
-	return predicate.OrgProduct(sql.FieldIn(FieldExpiresAt, vs...))
-}
-
-// ExpiresAtNotIn applies the NotIn predicate on the "expires_at" field.
-func ExpiresAtNotIn(vs ...time.Time) predicate.OrgProduct {
-	return predicate.OrgProduct(sql.FieldNotIn(FieldExpiresAt, vs...))
-}
-
-// ExpiresAtGT applies the GT predicate on the "expires_at" field.
-func ExpiresAtGT(v time.Time) predicate.OrgProduct {
-	return predicate.OrgProduct(sql.FieldGT(FieldExpiresAt, v))
-}
-
-// ExpiresAtGTE applies the GTE predicate on the "expires_at" field.
-func ExpiresAtGTE(v time.Time) predicate.OrgProduct {
-	return predicate.OrgProduct(sql.FieldGTE(FieldExpiresAt, v))
-}
-
-// ExpiresAtLT applies the LT predicate on the "expires_at" field.
-func ExpiresAtLT(v time.Time) predicate.OrgProduct {
-	return predicate.OrgProduct(sql.FieldLT(FieldExpiresAt, v))
-}
-
-// ExpiresAtLTE applies the LTE predicate on the "expires_at" field.
-func ExpiresAtLTE(v time.Time) predicate.OrgProduct {
-	return predicate.OrgProduct(sql.FieldLTE(FieldExpiresAt, v))
-}
-
-// ExpiresAtIsNil applies the IsNil predicate on the "expires_at" field.
-func ExpiresAtIsNil() predicate.OrgProduct {
-	return predicate.OrgProduct(sql.FieldIsNull(FieldExpiresAt))
-}
-
-// ExpiresAtNotNil applies the NotNil predicate on the "expires_at" field.
-func ExpiresAtNotNil() predicate.OrgProduct {
-	return predicate.OrgProduct(sql.FieldNotNull(FieldExpiresAt))
-}
-
 // SubscriptionIDEQ applies the EQ predicate on the "subscription_id" field.
 func SubscriptionIDEQ(v string) predicate.OrgProduct {
 	return predicate.OrgProduct(sql.FieldEQ(FieldSubscriptionID, v))
@@ -997,6 +892,81 @@ func SubscriptionIDContainsFold(v string) predicate.OrgProduct {
 	return predicate.OrgProduct(sql.FieldContainsFold(FieldSubscriptionID, v))
 }
 
+// PriceIDEQ applies the EQ predicate on the "price_id" field.
+func PriceIDEQ(v string) predicate.OrgProduct {
+	return predicate.OrgProduct(sql.FieldEQ(FieldPriceID, v))
+}
+
+// PriceIDNEQ applies the NEQ predicate on the "price_id" field.
+func PriceIDNEQ(v string) predicate.OrgProduct {
+	return predicate.OrgProduct(sql.FieldNEQ(FieldPriceID, v))
+}
+
+// PriceIDIn applies the In predicate on the "price_id" field.
+func PriceIDIn(vs ...string) predicate.OrgProduct {
+	return predicate.OrgProduct(sql.FieldIn(FieldPriceID, vs...))
+}
+
+// PriceIDNotIn applies the NotIn predicate on the "price_id" field.
+func PriceIDNotIn(vs ...string) predicate.OrgProduct {
+	return predicate.OrgProduct(sql.FieldNotIn(FieldPriceID, vs...))
+}
+
+// PriceIDGT applies the GT predicate on the "price_id" field.
+func PriceIDGT(v string) predicate.OrgProduct {
+	return predicate.OrgProduct(sql.FieldGT(FieldPriceID, v))
+}
+
+// PriceIDGTE applies the GTE predicate on the "price_id" field.
+func PriceIDGTE(v string) predicate.OrgProduct {
+	return predicate.OrgProduct(sql.FieldGTE(FieldPriceID, v))
+}
+
+// PriceIDLT applies the LT predicate on the "price_id" field.
+func PriceIDLT(v string) predicate.OrgProduct {
+	return predicate.OrgProduct(sql.FieldLT(FieldPriceID, v))
+}
+
+// PriceIDLTE applies the LTE predicate on the "price_id" field.
+func PriceIDLTE(v string) predicate.OrgProduct {
+	return predicate.OrgProduct(sql.FieldLTE(FieldPriceID, v))
+}
+
+// PriceIDContains applies the Contains predicate on the "price_id" field.
+func PriceIDContains(v string) predicate.OrgProduct {
+	return predicate.OrgProduct(sql.FieldContains(FieldPriceID, v))
+}
+
+// PriceIDHasPrefix applies the HasPrefix predicate on the "price_id" field.
+func PriceIDHasPrefix(v string) predicate.OrgProduct {
+	return predicate.OrgProduct(sql.FieldHasPrefix(FieldPriceID, v))
+}
+
+// PriceIDHasSuffix applies the HasSuffix predicate on the "price_id" field.
+func PriceIDHasSuffix(v string) predicate.OrgProduct {
+	return predicate.OrgProduct(sql.FieldHasSuffix(FieldPriceID, v))
+}
+
+// PriceIDIsNil applies the IsNil predicate on the "price_id" field.
+func PriceIDIsNil() predicate.OrgProduct {
+	return predicate.OrgProduct(sql.FieldIsNull(FieldPriceID))
+}
+
+// PriceIDNotNil applies the NotNil predicate on the "price_id" field.
+func PriceIDNotNil() predicate.OrgProduct {
+	return predicate.OrgProduct(sql.FieldNotNull(FieldPriceID))
+}
+
+// PriceIDEqualFold applies the EqualFold predicate on the "price_id" field.
+func PriceIDEqualFold(v string) predicate.OrgProduct {
+	return predicate.OrgProduct(sql.FieldEqualFold(FieldPriceID, v))
+}
+
+// PriceIDContainsFold applies the ContainsFold predicate on the "price_id" field.
+func PriceIDContainsFold(v string) predicate.OrgProduct {
+	return predicate.OrgProduct(sql.FieldContainsFold(FieldPriceID, v))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.OrgProduct {
 	return predicate.OrgProduct(func(s *sql.Selector) {
@@ -1055,27 +1025,56 @@ func HasOrgSubscriptionWith(preds ...predicate.OrgSubscription) predicate.OrgPro
 	})
 }
 
-// HasPrices applies the HasEdge predicate on the "prices" edge.
-func HasPrices() predicate.OrgProduct {
+// HasOrgPrices applies the HasEdge predicate on the "org_prices" edge.
+func HasOrgPrices() predicate.OrgProduct {
 	return predicate.OrgProduct(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, PricesTable, PricesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, OrgPricesTable, OrgPricesPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.OrgPrice
-		step.Edge.Schema = schemaConfig.OrgPrice
+		step.Edge.Schema = schemaConfig.OrgProductOrgPrices
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasPricesWith applies the HasEdge predicate on the "prices" edge with a given conditions (other predicates).
-func HasPricesWith(preds ...predicate.OrgPrice) predicate.OrgProduct {
+// HasOrgPricesWith applies the HasEdge predicate on the "org_prices" edge with a given conditions (other predicates).
+func HasOrgPricesWith(preds ...predicate.OrgPrice) predicate.OrgProduct {
 	return predicate.OrgProduct(func(s *sql.Selector) {
-		step := newPricesStep()
+		step := newOrgPricesStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.OrgPrice
-		step.Edge.Schema = schemaConfig.OrgPrice
+		step.Edge.Schema = schemaConfig.OrgProductOrgPrices
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasOrgModules applies the HasEdge predicate on the "org_modules" edge.
+func HasOrgModules() predicate.OrgProduct {
+	return predicate.OrgProduct(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, OrgModulesTable, OrgModulesColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.OrgModule
+		step.Edge.Schema = schemaConfig.OrgModule
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasOrgModulesWith applies the HasEdge predicate on the "org_modules" edge with a given conditions (other predicates).
+func HasOrgModulesWith(preds ...predicate.OrgModule) predicate.OrgProduct {
+	return predicate.OrgProduct(func(s *sql.Selector) {
+		step := newOrgModulesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.OrgModule
+		step.Edge.Schema = schemaConfig.OrgModule
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

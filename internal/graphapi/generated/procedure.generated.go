@@ -103,6 +103,18 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_delegateID(ctx, field)
 			case "summary":
 				return ec.fieldContext_Procedure_summary(ctx, field)
+			case "tagSuggestions":
+				return ec.fieldContext_Procedure_tagSuggestions(ctx, field)
+			case "dismissedTagSuggestions":
+				return ec.fieldContext_Procedure_dismissedTagSuggestions(ctx, field)
+			case "controlSuggestions":
+				return ec.fieldContext_Procedure_controlSuggestions(ctx, field)
+			case "dismissedControlSuggestions":
+				return ec.fieldContext_Procedure_dismissedControlSuggestions(ctx, field)
+			case "improvementSuggestions":
+				return ec.fieldContext_Procedure_improvementSuggestions(ctx, field)
+			case "dismissedImprovementSuggestions":
+				return ec.fieldContext_Procedure_dismissedImprovementSuggestions(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
@@ -211,6 +223,18 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_delegateID(ctx, field)
 			case "summary":
 				return ec.fieldContext_Procedure_summary(ctx, field)
+			case "tagSuggestions":
+				return ec.fieldContext_Procedure_tagSuggestions(ctx, field)
+			case "dismissedTagSuggestions":
+				return ec.fieldContext_Procedure_dismissedTagSuggestions(ctx, field)
+			case "controlSuggestions":
+				return ec.fieldContext_Procedure_controlSuggestions(ctx, field)
+			case "dismissedControlSuggestions":
+				return ec.fieldContext_Procedure_dismissedControlSuggestions(ctx, field)
+			case "improvementSuggestions":
+				return ec.fieldContext_Procedure_improvementSuggestions(ctx, field)
+			case "dismissedImprovementSuggestions":
+				return ec.fieldContext_Procedure_dismissedImprovementSuggestions(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
@@ -363,6 +387,18 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_delegateID(ctx, field)
 			case "summary":
 				return ec.fieldContext_Procedure_summary(ctx, field)
+			case "tagSuggestions":
+				return ec.fieldContext_Procedure_tagSuggestions(ctx, field)
+			case "dismissedTagSuggestions":
+				return ec.fieldContext_Procedure_dismissedTagSuggestions(ctx, field)
+			case "controlSuggestions":
+				return ec.fieldContext_Procedure_controlSuggestions(ctx, field)
+			case "dismissedControlSuggestions":
+				return ec.fieldContext_Procedure_dismissedControlSuggestions(ctx, field)
+			case "improvementSuggestions":
+				return ec.fieldContext_Procedure_improvementSuggestions(ctx, field)
+			case "dismissedImprovementSuggestions":
+				return ec.fieldContext_Procedure_dismissedImprovementSuggestions(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":

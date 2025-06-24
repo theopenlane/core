@@ -11,6 +11,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/assethistory"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -85,6 +87,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/scanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
@@ -244,6 +248,60 @@ func (f TraverseActionPlanHistory) Traverse(ctx context.Context, q generated.Que
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.ActionPlanHistoryQuery", q)
+}
+
+// The AssetFunc type is an adapter to allow the use of ordinary function as a Querier.
+type AssetFunc func(context.Context, *generated.AssetQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f AssetFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.AssetQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.AssetQuery", q)
+}
+
+// The TraverseAsset type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseAsset func(context.Context, *generated.AssetQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseAsset) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseAsset) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.AssetQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.AssetQuery", q)
+}
+
+// The AssetHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type AssetHistoryFunc func(context.Context, *generated.AssetHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f AssetHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.AssetHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.AssetHistoryQuery", q)
+}
+
+// The TraverseAssetHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseAssetHistory func(context.Context, *generated.AssetHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseAssetHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseAssetHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.AssetHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.AssetHistoryQuery", q)
 }
 
 // The ContactFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -2217,6 +2275,60 @@ func (f TraverseRiskHistory) Traverse(ctx context.Context, q generated.Query) er
 	return fmt.Errorf("unexpected query type %T. expect *generated.RiskHistoryQuery", q)
 }
 
+// The ScanFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ScanFunc func(context.Context, *generated.ScanQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ScanFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ScanQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ScanQuery", q)
+}
+
+// The TraverseScan type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseScan func(context.Context, *generated.ScanQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseScan) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseScan) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ScanQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ScanQuery", q)
+}
+
+// The ScanHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ScanHistoryFunc func(context.Context, *generated.ScanHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ScanHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ScanHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ScanHistoryQuery", q)
+}
+
+// The TraverseScanHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseScanHistory func(context.Context, *generated.ScanHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseScanHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseScanHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ScanHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ScanHistoryQuery", q)
+}
+
 // The ScheduledJobFunc type is an adapter to allow the use of ordinary function as a Querier.
 type ScheduledJobFunc func(context.Context, *generated.ScheduledJobQuery) (generated.Value, error)
 
@@ -2820,6 +2932,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.ActionPlanQuery, predicate.ActionPlan, actionplan.OrderOption]{typ: generated.TypeActionPlan, tq: q}, nil
 	case *generated.ActionPlanHistoryQuery:
 		return &query[*generated.ActionPlanHistoryQuery, predicate.ActionPlanHistory, actionplanhistory.OrderOption]{typ: generated.TypeActionPlanHistory, tq: q}, nil
+	case *generated.AssetQuery:
+		return &query[*generated.AssetQuery, predicate.Asset, asset.OrderOption]{typ: generated.TypeAsset, tq: q}, nil
+	case *generated.AssetHistoryQuery:
+		return &query[*generated.AssetHistoryQuery, predicate.AssetHistory, assethistory.OrderOption]{typ: generated.TypeAssetHistory, tq: q}, nil
 	case *generated.ContactQuery:
 		return &query[*generated.ContactQuery, predicate.Contact, contact.OrderOption]{typ: generated.TypeContact, tq: q}, nil
 	case *generated.ContactHistoryQuery:
@@ -2966,6 +3082,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.RiskQuery, predicate.Risk, risk.OrderOption]{typ: generated.TypeRisk, tq: q}, nil
 	case *generated.RiskHistoryQuery:
 		return &query[*generated.RiskHistoryQuery, predicate.RiskHistory, riskhistory.OrderOption]{typ: generated.TypeRiskHistory, tq: q}, nil
+	case *generated.ScanQuery:
+		return &query[*generated.ScanQuery, predicate.Scan, scan.OrderOption]{typ: generated.TypeScan, tq: q}, nil
+	case *generated.ScanHistoryQuery:
+		return &query[*generated.ScanHistoryQuery, predicate.ScanHistory, scanhistory.OrderOption]{typ: generated.TypeScanHistory, tq: q}, nil
 	case *generated.ScheduledJobQuery:
 		return &query[*generated.ScheduledJobQuery, predicate.ScheduledJob, scheduledjob.OrderOption]{typ: generated.TypeScheduledJob, tq: q}, nil
 	case *generated.ScheduledJobHistoryQuery:
