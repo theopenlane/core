@@ -108,6 +108,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -313,6 +317,14 @@ type Client struct {
 	Template *TemplateClient
 	// TemplateHistory is the client for interacting with the TemplateHistory builders.
 	TemplateHistory *TemplateHistoryClient
+	// TrustCenter is the client for interacting with the TrustCenter builders.
+	TrustCenter *TrustCenterClient
+	// TrustCenterHistory is the client for interacting with the TrustCenterHistory builders.
+	TrustCenterHistory *TrustCenterHistoryClient
+	// TrustCenterSetting is the client for interacting with the TrustCenterSetting builders.
+	TrustCenterSetting *TrustCenterSettingClient
+	// TrustCenterSettingHistory is the client for interacting with the TrustCenterSettingHistory builders.
+	TrustCenterSettingHistory *TrustCenterSettingHistoryClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 	// UserHistory is the client for interacting with the UserHistory builders.
@@ -432,6 +444,10 @@ func (c *Client) init() {
 	c.TaskHistory = NewTaskHistoryClient(c.config)
 	c.Template = NewTemplateClient(c.config)
 	c.TemplateHistory = NewTemplateHistoryClient(c.config)
+	c.TrustCenter = NewTrustCenterClient(c.config)
+	c.TrustCenterHistory = NewTrustCenterHistoryClient(c.config)
+	c.TrustCenterSetting = NewTrustCenterSettingClient(c.config)
+	c.TrustCenterSettingHistory = NewTrustCenterSettingHistoryClient(c.config)
 	c.User = NewUserClient(c.config)
 	c.UserHistory = NewUserHistoryClient(c.config)
 	c.UserSetting = NewUserSettingClient(c.config)
@@ -703,6 +719,10 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		TaskHistory:                  NewTaskHistoryClient(cfg),
 		Template:                     NewTemplateClient(cfg),
 		TemplateHistory:              NewTemplateHistoryClient(cfg),
+		TrustCenter:                  NewTrustCenterClient(cfg),
+		TrustCenterHistory:           NewTrustCenterHistoryClient(cfg),
+		TrustCenterSetting:           NewTrustCenterSettingClient(cfg),
+		TrustCenterSettingHistory:    NewTrustCenterSettingHistoryClient(cfg),
 		User:                         NewUserClient(cfg),
 		UserHistory:                  NewUserHistoryClient(cfg),
 		UserSetting:                  NewUserSettingClient(cfg),
@@ -816,6 +836,10 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		TaskHistory:                  NewTaskHistoryClient(cfg),
 		Template:                     NewTemplateClient(cfg),
 		TemplateHistory:              NewTemplateHistoryClient(cfg),
+		TrustCenter:                  NewTrustCenterClient(cfg),
+		TrustCenterHistory:           NewTrustCenterHistoryClient(cfg),
+		TrustCenterSetting:           NewTrustCenterSettingClient(cfg),
+		TrustCenterSettingHistory:    NewTrustCenterSettingHistoryClient(cfg),
 		User:                         NewUserClient(cfg),
 		UserHistory:                  NewUserHistoryClient(cfg),
 		UserSetting:                  NewUserSettingClient(cfg),
@@ -872,8 +896,9 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Risk, c.RiskHistory, c.ScheduledJob, c.ScheduledJobHistory,
 		c.ScheduledJobRun, c.Standard, c.StandardHistory, c.Subcontrol,
 		c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task, c.TaskHistory,
-		c.Template, c.TemplateHistory, c.User, c.UserHistory, c.UserSetting,
-		c.UserSettingHistory, c.Webauthn,
+		c.Template, c.TemplateHistory, c.TrustCenter, c.TrustCenterHistory,
+		c.TrustCenterSetting, c.TrustCenterSettingHistory, c.User, c.UserHistory,
+		c.UserSetting, c.UserSettingHistory, c.Webauthn,
 	} {
 		n.Use(hooks...)
 	}
@@ -905,8 +930,9 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Risk, c.RiskHistory, c.ScheduledJob, c.ScheduledJobHistory,
 		c.ScheduledJobRun, c.Standard, c.StandardHistory, c.Subcontrol,
 		c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task, c.TaskHistory,
-		c.Template, c.TemplateHistory, c.User, c.UserHistory, c.UserSetting,
-		c.UserSettingHistory, c.Webauthn,
+		c.Template, c.TemplateHistory, c.TrustCenter, c.TrustCenterHistory,
+		c.TrustCenterSetting, c.TrustCenterSettingHistory, c.User, c.UserHistory,
+		c.UserSetting, c.UserSettingHistory, c.Webauthn,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -1165,6 +1191,14 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Template.mutate(ctx, m)
 	case *TemplateHistoryMutation:
 		return c.TemplateHistory.mutate(ctx, m)
+	case *TrustCenterMutation:
+		return c.TrustCenter.mutate(ctx, m)
+	case *TrustCenterHistoryMutation:
+		return c.TrustCenterHistory.mutate(ctx, m)
+	case *TrustCenterSettingMutation:
+		return c.TrustCenterSetting.mutate(ctx, m)
+	case *TrustCenterSettingHistoryMutation:
+		return c.TrustCenterSettingHistory.mutate(ctx, m)
 	case *UserMutation:
 		return c.User.mutate(ctx, m)
 	case *UserHistoryMutation:
@@ -14665,6 +14699,25 @@ func (c *OrganizationClient) QueryScheduledJobRuns(o *Organization) *ScheduledJo
 	return query
 }
 
+// QueryTrustCenters queries the trust_centers edge of a Organization.
+func (c *OrganizationClient) QueryTrustCenters(o *Organization) *TrustCenterQuery {
+	query := (&TrustCenterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.TrustCentersTable, organization.TrustCentersColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.TrustCenter
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(o *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -19977,6 +20030,620 @@ func (c *TemplateHistoryClient) mutate(ctx context.Context, m *TemplateHistoryMu
 	}
 }
 
+// TrustCenterClient is a client for the TrustCenter schema.
+type TrustCenterClient struct {
+	config
+}
+
+// NewTrustCenterClient returns a client for the TrustCenter from the given config.
+func NewTrustCenterClient(c config) *TrustCenterClient {
+	return &TrustCenterClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `trustcenter.Hooks(f(g(h())))`.
+func (c *TrustCenterClient) Use(hooks ...Hook) {
+	c.hooks.TrustCenter = append(c.hooks.TrustCenter, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `trustcenter.Intercept(f(g(h())))`.
+func (c *TrustCenterClient) Intercept(interceptors ...Interceptor) {
+	c.inters.TrustCenter = append(c.inters.TrustCenter, interceptors...)
+}
+
+// Create returns a builder for creating a TrustCenter entity.
+func (c *TrustCenterClient) Create() *TrustCenterCreate {
+	mutation := newTrustCenterMutation(c.config, OpCreate)
+	return &TrustCenterCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of TrustCenter entities.
+func (c *TrustCenterClient) CreateBulk(builders ...*TrustCenterCreate) *TrustCenterCreateBulk {
+	return &TrustCenterCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TrustCenterClient) MapCreateBulk(slice any, setFunc func(*TrustCenterCreate, int)) *TrustCenterCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TrustCenterCreateBulk{err: fmt.Errorf("calling to TrustCenterClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TrustCenterCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TrustCenterCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for TrustCenter.
+func (c *TrustCenterClient) Update() *TrustCenterUpdate {
+	mutation := newTrustCenterMutation(c.config, OpUpdate)
+	return &TrustCenterUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TrustCenterClient) UpdateOne(tc *TrustCenter) *TrustCenterUpdateOne {
+	mutation := newTrustCenterMutation(c.config, OpUpdateOne, withTrustCenter(tc))
+	return &TrustCenterUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TrustCenterClient) UpdateOneID(id string) *TrustCenterUpdateOne {
+	mutation := newTrustCenterMutation(c.config, OpUpdateOne, withTrustCenterID(id))
+	return &TrustCenterUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for TrustCenter.
+func (c *TrustCenterClient) Delete() *TrustCenterDelete {
+	mutation := newTrustCenterMutation(c.config, OpDelete)
+	return &TrustCenterDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TrustCenterClient) DeleteOne(tc *TrustCenter) *TrustCenterDeleteOne {
+	return c.DeleteOneID(tc.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TrustCenterClient) DeleteOneID(id string) *TrustCenterDeleteOne {
+	builder := c.Delete().Where(trustcenter.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TrustCenterDeleteOne{builder}
+}
+
+// Query returns a query builder for TrustCenter.
+func (c *TrustCenterClient) Query() *TrustCenterQuery {
+	return &TrustCenterQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTrustCenter},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a TrustCenter entity by its id.
+func (c *TrustCenterClient) Get(ctx context.Context, id string) (*TrustCenter, error) {
+	return c.Query().Where(trustcenter.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TrustCenterClient) GetX(ctx context.Context, id string) *TrustCenter {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a TrustCenter.
+func (c *TrustCenterClient) QueryOwner(tc *TrustCenter) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := tc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, trustcenter.OwnerTable, trustcenter.OwnerColumn),
+		)
+		schemaConfig := tc.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.TrustCenter
+		fromV = sqlgraph.Neighbors(tc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCustomDomain queries the custom_domain edge of a TrustCenter.
+func (c *TrustCenterClient) QueryCustomDomain(tc *TrustCenter) *CustomDomainQuery {
+	query := (&CustomDomainClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := tc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, id),
+			sqlgraph.To(customdomain.Table, customdomain.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenter.CustomDomainTable, trustcenter.CustomDomainColumn),
+		)
+		schemaConfig := tc.schemaConfig
+		step.To.Schema = schemaConfig.CustomDomain
+		step.Edge.Schema = schemaConfig.TrustCenter
+		fromV = sqlgraph.Neighbors(tc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySetting queries the setting edge of a TrustCenter.
+func (c *TrustCenterClient) QuerySetting(tc *TrustCenter) *TrustCenterSettingQuery {
+	query := (&TrustCenterSettingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := tc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, id),
+			sqlgraph.To(trustcentersetting.Table, trustcentersetting.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, trustcenter.SettingTable, trustcenter.SettingColumn),
+		)
+		schemaConfig := tc.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterSetting
+		step.Edge.Schema = schemaConfig.TrustCenterSetting
+		fromV = sqlgraph.Neighbors(tc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *TrustCenterClient) Hooks() []Hook {
+	hooks := c.hooks.TrustCenter
+	return append(hooks[:len(hooks):len(hooks)], trustcenter.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *TrustCenterClient) Interceptors() []Interceptor {
+	inters := c.inters.TrustCenter
+	return append(inters[:len(inters):len(inters)], trustcenter.Interceptors[:]...)
+}
+
+func (c *TrustCenterClient) mutate(ctx context.Context, m *TrustCenterMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TrustCenterCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TrustCenterUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TrustCenterUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TrustCenterDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown TrustCenter mutation op: %q", m.Op())
+	}
+}
+
+// TrustCenterHistoryClient is a client for the TrustCenterHistory schema.
+type TrustCenterHistoryClient struct {
+	config
+}
+
+// NewTrustCenterHistoryClient returns a client for the TrustCenterHistory from the given config.
+func NewTrustCenterHistoryClient(c config) *TrustCenterHistoryClient {
+	return &TrustCenterHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `trustcenterhistory.Hooks(f(g(h())))`.
+func (c *TrustCenterHistoryClient) Use(hooks ...Hook) {
+	c.hooks.TrustCenterHistory = append(c.hooks.TrustCenterHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `trustcenterhistory.Intercept(f(g(h())))`.
+func (c *TrustCenterHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.TrustCenterHistory = append(c.inters.TrustCenterHistory, interceptors...)
+}
+
+// Create returns a builder for creating a TrustCenterHistory entity.
+func (c *TrustCenterHistoryClient) Create() *TrustCenterHistoryCreate {
+	mutation := newTrustCenterHistoryMutation(c.config, OpCreate)
+	return &TrustCenterHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of TrustCenterHistory entities.
+func (c *TrustCenterHistoryClient) CreateBulk(builders ...*TrustCenterHistoryCreate) *TrustCenterHistoryCreateBulk {
+	return &TrustCenterHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TrustCenterHistoryClient) MapCreateBulk(slice any, setFunc func(*TrustCenterHistoryCreate, int)) *TrustCenterHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TrustCenterHistoryCreateBulk{err: fmt.Errorf("calling to TrustCenterHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TrustCenterHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TrustCenterHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for TrustCenterHistory.
+func (c *TrustCenterHistoryClient) Update() *TrustCenterHistoryUpdate {
+	mutation := newTrustCenterHistoryMutation(c.config, OpUpdate)
+	return &TrustCenterHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TrustCenterHistoryClient) UpdateOne(tch *TrustCenterHistory) *TrustCenterHistoryUpdateOne {
+	mutation := newTrustCenterHistoryMutation(c.config, OpUpdateOne, withTrustCenterHistory(tch))
+	return &TrustCenterHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TrustCenterHistoryClient) UpdateOneID(id string) *TrustCenterHistoryUpdateOne {
+	mutation := newTrustCenterHistoryMutation(c.config, OpUpdateOne, withTrustCenterHistoryID(id))
+	return &TrustCenterHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for TrustCenterHistory.
+func (c *TrustCenterHistoryClient) Delete() *TrustCenterHistoryDelete {
+	mutation := newTrustCenterHistoryMutation(c.config, OpDelete)
+	return &TrustCenterHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TrustCenterHistoryClient) DeleteOne(tch *TrustCenterHistory) *TrustCenterHistoryDeleteOne {
+	return c.DeleteOneID(tch.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TrustCenterHistoryClient) DeleteOneID(id string) *TrustCenterHistoryDeleteOne {
+	builder := c.Delete().Where(trustcenterhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TrustCenterHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for TrustCenterHistory.
+func (c *TrustCenterHistoryClient) Query() *TrustCenterHistoryQuery {
+	return &TrustCenterHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTrustCenterHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a TrustCenterHistory entity by its id.
+func (c *TrustCenterHistoryClient) Get(ctx context.Context, id string) (*TrustCenterHistory, error) {
+	return c.Query().Where(trustcenterhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TrustCenterHistoryClient) GetX(ctx context.Context, id string) *TrustCenterHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *TrustCenterHistoryClient) Hooks() []Hook {
+	return c.hooks.TrustCenterHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *TrustCenterHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.TrustCenterHistory
+	return append(inters[:len(inters):len(inters)], trustcenterhistory.Interceptors[:]...)
+}
+
+func (c *TrustCenterHistoryClient) mutate(ctx context.Context, m *TrustCenterHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TrustCenterHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TrustCenterHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TrustCenterHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TrustCenterHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown TrustCenterHistory mutation op: %q", m.Op())
+	}
+}
+
+// TrustCenterSettingClient is a client for the TrustCenterSetting schema.
+type TrustCenterSettingClient struct {
+	config
+}
+
+// NewTrustCenterSettingClient returns a client for the TrustCenterSetting from the given config.
+func NewTrustCenterSettingClient(c config) *TrustCenterSettingClient {
+	return &TrustCenterSettingClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `trustcentersetting.Hooks(f(g(h())))`.
+func (c *TrustCenterSettingClient) Use(hooks ...Hook) {
+	c.hooks.TrustCenterSetting = append(c.hooks.TrustCenterSetting, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `trustcentersetting.Intercept(f(g(h())))`.
+func (c *TrustCenterSettingClient) Intercept(interceptors ...Interceptor) {
+	c.inters.TrustCenterSetting = append(c.inters.TrustCenterSetting, interceptors...)
+}
+
+// Create returns a builder for creating a TrustCenterSetting entity.
+func (c *TrustCenterSettingClient) Create() *TrustCenterSettingCreate {
+	mutation := newTrustCenterSettingMutation(c.config, OpCreate)
+	return &TrustCenterSettingCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of TrustCenterSetting entities.
+func (c *TrustCenterSettingClient) CreateBulk(builders ...*TrustCenterSettingCreate) *TrustCenterSettingCreateBulk {
+	return &TrustCenterSettingCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TrustCenterSettingClient) MapCreateBulk(slice any, setFunc func(*TrustCenterSettingCreate, int)) *TrustCenterSettingCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TrustCenterSettingCreateBulk{err: fmt.Errorf("calling to TrustCenterSettingClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TrustCenterSettingCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TrustCenterSettingCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for TrustCenterSetting.
+func (c *TrustCenterSettingClient) Update() *TrustCenterSettingUpdate {
+	mutation := newTrustCenterSettingMutation(c.config, OpUpdate)
+	return &TrustCenterSettingUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TrustCenterSettingClient) UpdateOne(tcs *TrustCenterSetting) *TrustCenterSettingUpdateOne {
+	mutation := newTrustCenterSettingMutation(c.config, OpUpdateOne, withTrustCenterSetting(tcs))
+	return &TrustCenterSettingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TrustCenterSettingClient) UpdateOneID(id string) *TrustCenterSettingUpdateOne {
+	mutation := newTrustCenterSettingMutation(c.config, OpUpdateOne, withTrustCenterSettingID(id))
+	return &TrustCenterSettingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for TrustCenterSetting.
+func (c *TrustCenterSettingClient) Delete() *TrustCenterSettingDelete {
+	mutation := newTrustCenterSettingMutation(c.config, OpDelete)
+	return &TrustCenterSettingDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TrustCenterSettingClient) DeleteOne(tcs *TrustCenterSetting) *TrustCenterSettingDeleteOne {
+	return c.DeleteOneID(tcs.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TrustCenterSettingClient) DeleteOneID(id string) *TrustCenterSettingDeleteOne {
+	builder := c.Delete().Where(trustcentersetting.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TrustCenterSettingDeleteOne{builder}
+}
+
+// Query returns a query builder for TrustCenterSetting.
+func (c *TrustCenterSettingClient) Query() *TrustCenterSettingQuery {
+	return &TrustCenterSettingQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTrustCenterSetting},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a TrustCenterSetting entity by its id.
+func (c *TrustCenterSettingClient) Get(ctx context.Context, id string) (*TrustCenterSetting, error) {
+	return c.Query().Where(trustcentersetting.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TrustCenterSettingClient) GetX(ctx context.Context, id string) *TrustCenterSetting {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryTrustCenter queries the trust_center edge of a TrustCenterSetting.
+func (c *TrustCenterSettingClient) QueryTrustCenter(tcs *TrustCenterSetting) *TrustCenterQuery {
+	query := (&TrustCenterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := tcs.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentersetting.Table, trustcentersetting.FieldID, id),
+			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, trustcentersetting.TrustCenterTable, trustcentersetting.TrustCenterColumn),
+		)
+		schemaConfig := tcs.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.TrustCenterSetting
+		fromV = sqlgraph.Neighbors(tcs.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *TrustCenterSettingClient) Hooks() []Hook {
+	hooks := c.hooks.TrustCenterSetting
+	return append(hooks[:len(hooks):len(hooks)], trustcentersetting.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *TrustCenterSettingClient) Interceptors() []Interceptor {
+	inters := c.inters.TrustCenterSetting
+	return append(inters[:len(inters):len(inters)], trustcentersetting.Interceptors[:]...)
+}
+
+func (c *TrustCenterSettingClient) mutate(ctx context.Context, m *TrustCenterSettingMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TrustCenterSettingCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TrustCenterSettingUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TrustCenterSettingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TrustCenterSettingDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown TrustCenterSetting mutation op: %q", m.Op())
+	}
+}
+
+// TrustCenterSettingHistoryClient is a client for the TrustCenterSettingHistory schema.
+type TrustCenterSettingHistoryClient struct {
+	config
+}
+
+// NewTrustCenterSettingHistoryClient returns a client for the TrustCenterSettingHistory from the given config.
+func NewTrustCenterSettingHistoryClient(c config) *TrustCenterSettingHistoryClient {
+	return &TrustCenterSettingHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `trustcentersettinghistory.Hooks(f(g(h())))`.
+func (c *TrustCenterSettingHistoryClient) Use(hooks ...Hook) {
+	c.hooks.TrustCenterSettingHistory = append(c.hooks.TrustCenterSettingHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `trustcentersettinghistory.Intercept(f(g(h())))`.
+func (c *TrustCenterSettingHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.TrustCenterSettingHistory = append(c.inters.TrustCenterSettingHistory, interceptors...)
+}
+
+// Create returns a builder for creating a TrustCenterSettingHistory entity.
+func (c *TrustCenterSettingHistoryClient) Create() *TrustCenterSettingHistoryCreate {
+	mutation := newTrustCenterSettingHistoryMutation(c.config, OpCreate)
+	return &TrustCenterSettingHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of TrustCenterSettingHistory entities.
+func (c *TrustCenterSettingHistoryClient) CreateBulk(builders ...*TrustCenterSettingHistoryCreate) *TrustCenterSettingHistoryCreateBulk {
+	return &TrustCenterSettingHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TrustCenterSettingHistoryClient) MapCreateBulk(slice any, setFunc func(*TrustCenterSettingHistoryCreate, int)) *TrustCenterSettingHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TrustCenterSettingHistoryCreateBulk{err: fmt.Errorf("calling to TrustCenterSettingHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TrustCenterSettingHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TrustCenterSettingHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for TrustCenterSettingHistory.
+func (c *TrustCenterSettingHistoryClient) Update() *TrustCenterSettingHistoryUpdate {
+	mutation := newTrustCenterSettingHistoryMutation(c.config, OpUpdate)
+	return &TrustCenterSettingHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TrustCenterSettingHistoryClient) UpdateOne(tcsh *TrustCenterSettingHistory) *TrustCenterSettingHistoryUpdateOne {
+	mutation := newTrustCenterSettingHistoryMutation(c.config, OpUpdateOne, withTrustCenterSettingHistory(tcsh))
+	return &TrustCenterSettingHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TrustCenterSettingHistoryClient) UpdateOneID(id string) *TrustCenterSettingHistoryUpdateOne {
+	mutation := newTrustCenterSettingHistoryMutation(c.config, OpUpdateOne, withTrustCenterSettingHistoryID(id))
+	return &TrustCenterSettingHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for TrustCenterSettingHistory.
+func (c *TrustCenterSettingHistoryClient) Delete() *TrustCenterSettingHistoryDelete {
+	mutation := newTrustCenterSettingHistoryMutation(c.config, OpDelete)
+	return &TrustCenterSettingHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TrustCenterSettingHistoryClient) DeleteOne(tcsh *TrustCenterSettingHistory) *TrustCenterSettingHistoryDeleteOne {
+	return c.DeleteOneID(tcsh.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TrustCenterSettingHistoryClient) DeleteOneID(id string) *TrustCenterSettingHistoryDeleteOne {
+	builder := c.Delete().Where(trustcentersettinghistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TrustCenterSettingHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for TrustCenterSettingHistory.
+func (c *TrustCenterSettingHistoryClient) Query() *TrustCenterSettingHistoryQuery {
+	return &TrustCenterSettingHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTrustCenterSettingHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a TrustCenterSettingHistory entity by its id.
+func (c *TrustCenterSettingHistoryClient) Get(ctx context.Context, id string) (*TrustCenterSettingHistory, error) {
+	return c.Query().Where(trustcentersettinghistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TrustCenterSettingHistoryClient) GetX(ctx context.Context, id string) *TrustCenterSettingHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *TrustCenterSettingHistoryClient) Hooks() []Hook {
+	return c.hooks.TrustCenterSettingHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *TrustCenterSettingHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.TrustCenterSettingHistory
+	return append(inters[:len(inters):len(inters)], trustcentersettinghistory.Interceptors[:]...)
+}
+
+func (c *TrustCenterSettingHistoryClient) mutate(ctx context.Context, m *TrustCenterSettingHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TrustCenterSettingHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TrustCenterSettingHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TrustCenterSettingHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TrustCenterSettingHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown TrustCenterSettingHistory mutation op: %q", m.Op())
+	}
+}
+
 // UserClient is a client for the User schema.
 type UserClient struct {
 	config
@@ -21109,8 +21776,9 @@ type (
 		ProcedureHistory, Program, ProgramHistory, ProgramMembership,
 		ProgramMembershipHistory, Risk, RiskHistory, ScheduledJob, ScheduledJobHistory,
 		ScheduledJobRun, Standard, StandardHistory, Subcontrol, SubcontrolHistory,
-		Subscriber, TFASetting, Task, TaskHistory, Template, TemplateHistory, User,
-		UserHistory, UserSetting, UserSettingHistory, Webauthn []ent.Hook
+		Subscriber, TFASetting, Task, TaskHistory, Template, TemplateHistory,
+		TrustCenter, TrustCenterHistory, TrustCenterSetting, TrustCenterSettingHistory,
+		User, UserHistory, UserSetting, UserSettingHistory, Webauthn []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, ActionPlanHistory, Contact, ContactHistory, Control,
@@ -21132,8 +21800,9 @@ type (
 		ProcedureHistory, Program, ProgramHistory, ProgramMembership,
 		ProgramMembershipHistory, Risk, RiskHistory, ScheduledJob, ScheduledJobHistory,
 		ScheduledJobRun, Standard, StandardHistory, Subcontrol, SubcontrolHistory,
-		Subscriber, TFASetting, Task, TaskHistory, Template, TemplateHistory, User,
-		UserHistory, UserSetting, UserSettingHistory, Webauthn []ent.Interceptor
+		Subscriber, TFASetting, Task, TaskHistory, Template, TemplateHistory,
+		TrustCenter, TrustCenterHistory, TrustCenterSetting, TrustCenterSettingHistory,
+		User, UserHistory, UserSetting, UserSettingHistory, Webauthn []ent.Interceptor
 	}
 )
 

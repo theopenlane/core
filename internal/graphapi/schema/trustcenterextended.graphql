@@ -1,0 +1,7 @@
+extend input UpdateTrustCenterInput {
+  updateTrustCenterSetting: UpdateTrustCenterSettingInput
+}
+
+extend input CreateTrustCenterInput {
+  createTrustCenterSetting: CreateTrustCenterSettingInput
+}
