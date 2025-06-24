@@ -2806,6 +2806,35 @@ func HasScheduledJobRunsWith(preds ...predicate.ScheduledJobRun) predicate.Organ
 	})
 }
 
+// HasTrustCenters applies the HasEdge predicate on the "trust_centers" edge.
+func HasTrustCenters() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, TrustCentersTable, TrustCentersColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.TrustCenter
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTrustCentersWith applies the HasEdge predicate on the "trust_centers" edge with a given conditions (other predicates).
+func HasTrustCentersWith(preds ...predicate.TrustCenter) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newTrustCentersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.TrustCenter
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasMembers applies the HasEdge predicate on the "members" edge.
 func HasMembers() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

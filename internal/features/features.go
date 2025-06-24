@@ -86,6 +86,8 @@ var FeatureOfType = map[string][]entx.FeatureModule{
     "Task": {"compliance","policy-management","risk-management","asset-management","entity-management","continuous-compliance-automation"},
     "TaskHistory": {"audit-log"},
     "TemplateHistory": {"audit-log"},
+    "TrustCenterHistory": {"audit-log"},
+    "TrustCenterSettingHistory": {"audit-log"},
     "User": {"base"},
     "UserHistory": {"audit-log"},
     "UserSetting": {"base"},
