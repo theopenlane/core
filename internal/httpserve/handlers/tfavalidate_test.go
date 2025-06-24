@@ -176,21 +176,27 @@ func decrypt(encryptedTxt string) (string, error) {
 		return "", err
 	}
 
-	if len(decoded) < aes.BlockSize {
-		return "", errors.New("ciphertext too short") //nolint:err113
-	}
-
 	block, err := aes.NewCipher(key[:])
 	if err != nil {
 		return "", err
 	}
 
-	iv := decoded[:aes.BlockSize]
-	cipherText := decoded[aes.BlockSize:]
+	gcm, err := cipher.NewGCM(block)
+	if err != nil {
+		return "", err
+	}
 
-	stream := cipher.NewCTR(block, iv)
-	plainText := make([]byte, len(cipherText))
-	stream.XORKeyStream(plainText, cipherText)
+	if len(decoded) < gcm.NonceSize() {
+		return "", errors.New("ciphertext too short") //nolint:err113
+	}
+
+	nonce := decoded[:gcm.NonceSize()]
+	cipherText := decoded[gcm.NonceSize():]
+
+	plainText, err := gcm.Open(nil, nonce, cipherText, nil)
+	if err != nil {
+		return "", err
+	}
 
 	return string(plainText), nil
 }
