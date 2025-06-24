@@ -2765,6 +2765,138 @@ func (r *queryResolver) TemplateHistories(ctx context.Context, after *entgql.Cur
 	return res, err
 }
 
+// TrustCenters is the resolver for the trustCenters field.
+func (r *queryResolver) TrustCenters(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterOrder, where *generated.TrustCenterWhereInput) (*generated.TrustCenterConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.TrustCenterOrder{
+			{
+				Field:     generated.TrustCenterOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).TrustCenter.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcenter"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTrustCenterOrder(orderBy),
+		generated.WithTrustCenterFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcenter"})
+	}
+
+	return res, err
+}
+
+// TrustCenterHistories is the resolver for the trustCenterHistories field.
+func (r *queryResolver) TrustCenterHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustCenterHistoryOrder, where *generated.TrustCenterHistoryWhereInput) (*generated.TrustCenterHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.TrustCenterHistoryOrder{
+			Field:     generated.TrustCenterHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).TrustCenterHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcenterhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTrustCenterHistoryOrder(orderBy),
+		generated.WithTrustCenterHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcenterhistory"})
+	}
+
+	return res, err
+}
+
+// TrustCenterSettings is the resolver for the trustCenterSettings field.
+func (r *queryResolver) TrustCenterSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterSettingOrder, where *generated.TrustCenterSettingWhereInput) (*generated.TrustCenterSettingConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.TrustCenterSettingOrder{
+			{
+				Field:     generated.TrustCenterSettingOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).TrustCenterSetting.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentersetting"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTrustCenterSettingOrder(orderBy),
+		generated.WithTrustCenterSettingFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentersetting"})
+	}
+
+	return res, err
+}
+
+// TrustCenterSettingHistories is the resolver for the trustCenterSettingHistories field.
+func (r *queryResolver) TrustCenterSettingHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustCenterSettingHistoryOrder, where *generated.TrustCenterSettingHistoryWhereInput) (*generated.TrustCenterSettingHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.TrustCenterSettingHistoryOrder{
+			Field:     generated.TrustCenterSettingHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).TrustCenterSettingHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentersettinghistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTrustCenterSettingHistoryOrder(orderBy),
+		generated.WithTrustCenterSettingHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentersettinghistory"})
+	}
+
+	return res, err
+}
+
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) (*generated.UserConnection, error) {
 	// set page limit if nothing was set
@@ -2950,6 +3082,11 @@ func (r *Resolver) CreateOrganizationInput() gqlgenerated.CreateOrganizationInpu
 	return &createOrganizationInputResolver{r}
 }
 
+// CreateTrustCenterInput returns gqlgenerated.CreateTrustCenterInputResolver implementation.
+func (r *Resolver) CreateTrustCenterInput() gqlgenerated.CreateTrustCenterInputResolver {
+	return &createTrustCenterInputResolver{r}
+}
+
 // UpdateActionPlanInput returns gqlgenerated.UpdateActionPlanInputResolver implementation.
 func (r *Resolver) UpdateActionPlanInput() gqlgenerated.UpdateActionPlanInputResolver {
 	return &updateActionPlanInputResolver{r}
@@ -3005,11 +3142,17 @@ func (r *Resolver) UpdateTaskInput() gqlgenerated.UpdateTaskInputResolver {
 	return &updateTaskInputResolver{r}
 }
 
+// UpdateTrustCenterInput returns gqlgenerated.UpdateTrustCenterInputResolver implementation.
+func (r *Resolver) UpdateTrustCenterInput() gqlgenerated.UpdateTrustCenterInputResolver {
+	return &updateTrustCenterInputResolver{r}
+}
+
 type groupResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
 type createEntityInputResolver struct{ *Resolver }
 type createGroupInputResolver struct{ *Resolver }
 type createOrganizationInputResolver struct{ *Resolver }
+type createTrustCenterInputResolver struct{ *Resolver }
 type updateActionPlanInputResolver struct{ *Resolver }
 type updateControlObjectiveInputResolver struct{ *Resolver }
 type updateEntityInputResolver struct{ *Resolver }
@@ -3021,3 +3164,4 @@ type updateProgramInputResolver struct{ *Resolver }
 type updateStandardInputResolver struct{ *Resolver }
 type updateTFASettingInputResolver struct{ *Resolver }
 type updateTaskInputResolver struct{ *Resolver }
+type updateTrustCenterInputResolver struct{ *Resolver }
