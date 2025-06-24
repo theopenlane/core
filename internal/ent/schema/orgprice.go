@@ -41,36 +41,34 @@ func (OrgPrice) PluralName() string {
 func (OrgPrice) Fields() []ent.Field {
 	return []ent.Field{
 		field.JSON("price", models.Price{}).
+			Comment("the price details for this subscription product").
 			Optional(),
 		field.String("stripe_price_id").
+			Comment("the Stripe price ID for this subscription product").
 			Optional(),
 		field.String("status").
+			Comment("the status of the subscription product").
 			Optional(),
 		field.Bool("active").
 			Default(true),
-		field.Time("trial_expires_at").
-			Optional().
-			Nillable().
-			Annotations(
-				entgql.OrderField("trial_expires_at"),
-			),
-		field.Time("expires_at").
-			Optional().
-			Nillable().
-			Annotations(
-				entgql.OrderField("expires_at"),
-			),
-		field.String("product_id").Optional(),
+		field.String("product_id").
+			Comment("the ID of the product this price is associated with").
+			Optional(),
+		field.String("subscription_id").
+			Optional(),
 	}
 }
 
 // Edges of the OrgPrice
 func (o OrgPrice) Edges() []ent.Edge {
 	return []ent.Edge{
+		defaultEdgeFromWithPagination(o, OrgProduct{}),
+		defaultEdgeFromWithPagination(o, OrgModule{}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: o,
-			edgeSchema: OrgProduct{},
-			field:      "product_id",
+			t:          OrgSubscription.Type,
+			edgeSchema: OrgSubscription{},
+			field:      "subscription_id",
 			ref:        "prices",
 		}),
 	}

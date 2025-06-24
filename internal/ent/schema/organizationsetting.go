@@ -11,6 +11,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/utils/keygen"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -92,6 +93,39 @@ func (OrganizationSetting) Fields() []ent.Field {
 			Comment("domains allowed to access the organization, if empty all domains are allowed").
 			Validate(validator.ValidateDomains()).
 			Optional(),
+		field.Enum("sso_provider").
+			Comment("SSO provider type for the organization").
+			GoType(enums.SSOProvider("")).
+			Optional().
+			Default(string(enums.SSOProviderNone)),
+		field.String("sso_client_id").
+			Comment("client ID for SSO integration").
+			Sensitive().
+			Nillable().
+			Optional(),
+		field.String("sso_client_secret").
+			Comment("client secret for SSO integration").
+			Sensitive().
+			Nillable().
+			Optional(),
+		field.String("sso_metadata_url").
+			Comment("metadata URL for the SSO provider").
+			Optional(),
+		field.String("sso_entity_id").
+			Comment("SAML entity ID for the SSO provider").
+			Optional(),
+		field.String("sso_oidc_discovery_url").
+			Comment("OIDC discovery URL for the SSO provider").
+			Optional(),
+		field.Bool("sso_enforced").
+			Comment("enforce SSO authentication for organization members").
+			Default(false),
+		field.String("compliance_webhook_token").
+			Comment("unique token used to receive compliance webhook events").
+			Unique().
+			DefaultFunc(func() string {
+				return keygen.PrefixedSecret("compwh")
+			}),
 	}
 }
 

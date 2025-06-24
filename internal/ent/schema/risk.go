@@ -130,6 +130,7 @@ func (r Risk) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(r, ActionPlan{}),
 		defaultEdgeToWithPagination(r, Task{}),
 		defaultEdgeToWithPagination(r, Asset{}),
+		defaultEdgeToWithPagination(r, Entity{}),
 		defaultEdgeToWithPagination(r, Scan{}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: r,

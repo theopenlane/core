@@ -96,6 +96,7 @@ func (e Entity) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(e),
+			newGroupPermissionsMixin(),
 		},
 	}.getMixins()
 }
@@ -107,6 +108,8 @@ func (e Entity) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(e, DocumentData{}),
 		defaultEdgeToWithPagination(e, Note{}),
 		defaultEdgeToWithPagination(e, File{}),
+		defaultEdgeToWithPagination(e, Asset{}),
+		defaultEdgeToWithPagination(e, Scan{}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: e,
 			edgeSchema: EntityType{},

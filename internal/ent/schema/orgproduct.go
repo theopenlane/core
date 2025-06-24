@@ -41,25 +41,20 @@ func (OrgProduct) Fields() []ent.Field {
 		field.String("module").
 			Comment("module key this product represents"),
 		field.String("stripe_product_id").
+			Comment("the Stripe product ID for this subscription product").
 			Optional(),
 		field.String("status").
+			Comment("the status of the product, e.g. active, inactive, trialing").
 			Optional(),
 		field.Bool("active").
+			Comment("indicates if the product is active or not").
 			Default(true),
-		field.Time("trial_expires_at").
-			Optional().
-			Nillable().
-			Annotations(
-				entgql.OrderField("trial_expires_at"),
-			),
-		field.Time("expires_at").
-			Optional().
-			Nillable().
-			Annotations(
-				entgql.OrderField("expires_at"),
-			),
 		field.String("subscription_id").
+			Comment("the ID of the subscription this product is linked to").
 			Optional(),
+		field.String("price_id").
+			Optional().
+			Comment("the internal ID of the price this product is associated with"),
 	}
 }
 
@@ -72,11 +67,8 @@ func (o OrgProduct) Edges() []ent.Edge {
 			field:      "subscription_id",
 			ref:        "products",
 		}),
-		edgeToWithPagination(&edgeDefinition{
-			fromSchema: o,
-			t:          OrgPrice.Type,
-			name:       "prices",
-		}),
+		defaultEdgeToWithPagination(o, OrgPrice{}),
+		defaultEdgeToWithPagination(o, OrgModule{}),
 	}
 }
 
