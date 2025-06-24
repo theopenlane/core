@@ -10,7 +10,6 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx"
 )
@@ -76,12 +75,10 @@ func (a Asset) Edges() []ent.Edge {
 func (Asset) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			rule.AllowQueryIfSystemAdmin(),
 			// object owner check done via scan
 			policy.CheckOrgReadAccess(),
 		),
 		policy.WithMutationRules(
-			rule.AllowMutationIfSystemAdmin(),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
