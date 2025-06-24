@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
+	"github.com/theopenlane/core/internal/ent/generated/orgprice"
 	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -447,6 +448,21 @@ func (osu *OrgSubscriptionUpdate) AddProducts(o ...*OrgProduct) *OrgSubscription
 	return osu.AddProductIDs(ids...)
 }
 
+// AddPriceIDs adds the "prices" edge to the OrgPrice entity by IDs.
+func (osu *OrgSubscriptionUpdate) AddPriceIDs(ids ...string) *OrgSubscriptionUpdate {
+	osu.mutation.AddPriceIDs(ids...)
+	return osu
+}
+
+// AddPrices adds the "prices" edges to the OrgPrice entity.
+func (osu *OrgSubscriptionUpdate) AddPrices(o ...*OrgPrice) *OrgSubscriptionUpdate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return osu.AddPriceIDs(ids...)
+}
+
 // Mutation returns the OrgSubscriptionMutation object of the builder.
 func (osu *OrgSubscriptionUpdate) Mutation() *OrgSubscriptionMutation {
 	return osu.mutation
@@ -519,6 +535,27 @@ func (osu *OrgSubscriptionUpdate) RemoveProducts(o ...*OrgProduct) *OrgSubscript
 		ids[i] = o[i].ID
 	}
 	return osu.RemoveProductIDs(ids...)
+}
+
+// ClearPrices clears all "prices" edges to the OrgPrice entity.
+func (osu *OrgSubscriptionUpdate) ClearPrices() *OrgSubscriptionUpdate {
+	osu.mutation.ClearPrices()
+	return osu
+}
+
+// RemovePriceIDs removes the "prices" edge to OrgPrice entities by IDs.
+func (osu *OrgSubscriptionUpdate) RemovePriceIDs(ids ...string) *OrgSubscriptionUpdate {
+	osu.mutation.RemovePriceIDs(ids...)
+	return osu
+}
+
+// RemovePrices removes "prices" edges to OrgPrice entities.
+func (osu *OrgSubscriptionUpdate) RemovePrices(o ...*OrgPrice) *OrgSubscriptionUpdate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return osu.RemovePriceIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -887,6 +924,54 @@ func (osu *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (n int, err error
 			},
 		}
 		edge.Schema = osu.schemaConfig.OrgProduct
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if osu.mutation.PricesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.PricesTable,
+			Columns: []string{orgsubscription.PricesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osu.schemaConfig.OrgPrice
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osu.mutation.RemovedPricesIDs(); len(nodes) > 0 && !osu.mutation.PricesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.PricesTable,
+			Columns: []string{orgsubscription.PricesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osu.schemaConfig.OrgPrice
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osu.mutation.PricesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.PricesTable,
+			Columns: []string{orgsubscription.PricesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osu.schemaConfig.OrgPrice
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1326,6 +1411,21 @@ func (osuo *OrgSubscriptionUpdateOne) AddProducts(o ...*OrgProduct) *OrgSubscrip
 	return osuo.AddProductIDs(ids...)
 }
 
+// AddPriceIDs adds the "prices" edge to the OrgPrice entity by IDs.
+func (osuo *OrgSubscriptionUpdateOne) AddPriceIDs(ids ...string) *OrgSubscriptionUpdateOne {
+	osuo.mutation.AddPriceIDs(ids...)
+	return osuo
+}
+
+// AddPrices adds the "prices" edges to the OrgPrice entity.
+func (osuo *OrgSubscriptionUpdateOne) AddPrices(o ...*OrgPrice) *OrgSubscriptionUpdateOne {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return osuo.AddPriceIDs(ids...)
+}
+
 // Mutation returns the OrgSubscriptionMutation object of the builder.
 func (osuo *OrgSubscriptionUpdateOne) Mutation() *OrgSubscriptionMutation {
 	return osuo.mutation
@@ -1398,6 +1498,27 @@ func (osuo *OrgSubscriptionUpdateOne) RemoveProducts(o ...*OrgProduct) *OrgSubsc
 		ids[i] = o[i].ID
 	}
 	return osuo.RemoveProductIDs(ids...)
+}
+
+// ClearPrices clears all "prices" edges to the OrgPrice entity.
+func (osuo *OrgSubscriptionUpdateOne) ClearPrices() *OrgSubscriptionUpdateOne {
+	osuo.mutation.ClearPrices()
+	return osuo
+}
+
+// RemovePriceIDs removes the "prices" edge to OrgPrice entities by IDs.
+func (osuo *OrgSubscriptionUpdateOne) RemovePriceIDs(ids ...string) *OrgSubscriptionUpdateOne {
+	osuo.mutation.RemovePriceIDs(ids...)
+	return osuo
+}
+
+// RemovePrices removes "prices" edges to OrgPrice entities.
+func (osuo *OrgSubscriptionUpdateOne) RemovePrices(o ...*OrgPrice) *OrgSubscriptionUpdateOne {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return osuo.RemovePriceIDs(ids...)
 }
 
 // Where appends a list predicates to the OrgSubscriptionUpdate builder.
@@ -1796,6 +1917,54 @@ func (osuo *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSu
 			},
 		}
 		edge.Schema = osuo.schemaConfig.OrgProduct
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if osuo.mutation.PricesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.PricesTable,
+			Columns: []string{orgsubscription.PricesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osuo.schemaConfig.OrgPrice
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osuo.mutation.RemovedPricesIDs(); len(nodes) > 0 && !osuo.mutation.PricesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.PricesTable,
+			Columns: []string{orgsubscription.PricesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osuo.schemaConfig.OrgPrice
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osuo.mutation.PricesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.PricesTable,
+			Columns: []string{orgsubscription.PricesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osuo.schemaConfig.OrgPrice
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -184,13 +184,17 @@ type OrganizationEdges struct {
 	ScheduledJobRuns []*ScheduledJobRun `json:"scheduled_job_runs,omitempty"`
 	// TrustCenters holds the value of the trust_centers edge.
 	TrustCenters []*TrustCenter `json:"trust_centers,omitempty"`
+	// Assets holds the value of the assets edge.
+	Assets []*Asset `json:"assets,omitempty"`
+	// Scans holds the value of the scans edge.
+	Scans []*Scan `json:"scans,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [63]bool
+	loadedTypes [65]bool
 	// totalCount holds the count of the edges above.
-	totalCount [60]map[string]int
+	totalCount [62]map[string]int
 
 	namedControlCreators               map[string][]*Group
 	namedControlImplementationCreators map[string][]*Group
@@ -251,6 +255,8 @@ type OrganizationEdges struct {
 	namedJobResults                    map[string][]*JobResult
 	namedScheduledJobRuns              map[string][]*ScheduledJobRun
 	namedTrustCenters                  map[string][]*TrustCenter
+	namedAssets                        map[string][]*Asset
+	namedScans                         map[string][]*Scan
 	namedMembers                       map[string][]*OrgMembership
 }
 
@@ -818,10 +824,28 @@ func (e OrganizationEdges) TrustCentersOrErr() ([]*TrustCenter, error) {
 	return nil, &NotLoadedError{edge: "trust_centers"}
 }
 
+// AssetsOrErr returns the Assets value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) AssetsOrErr() ([]*Asset, error) {
+	if e.loadedTypes[62] {
+		return e.Assets, nil
+	}
+	return nil, &NotLoadedError{edge: "assets"}
+}
+
+// ScansOrErr returns the Scans value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) ScansOrErr() ([]*Scan, error) {
+	if e.loadedTypes[63] {
+		return e.Scans, nil
+	}
+	return nil, &NotLoadedError{edge: "scans"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[62] {
+	if e.loadedTypes[64] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -1283,6 +1307,16 @@ func (o *Organization) QueryScheduledJobRuns() *ScheduledJobRunQuery {
 // QueryTrustCenters queries the "trust_centers" edge of the Organization entity.
 func (o *Organization) QueryTrustCenters() *TrustCenterQuery {
 	return NewOrganizationClient(o.config).QueryTrustCenters(o)
+}
+
+// QueryAssets queries the "assets" edge of the Organization entity.
+func (o *Organization) QueryAssets() *AssetQuery {
+	return NewOrganizationClient(o.config).QueryAssets(o)
+}
+
+// QueryScans queries the "scans" edge of the Organization entity.
+func (o *Organization) QueryScans() *ScanQuery {
+	return NewOrganizationClient(o.config).QueryScans(o)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -2783,6 +2817,54 @@ func (o *Organization) appendNamedTrustCenters(name string, edges ...*TrustCente
 		o.Edges.namedTrustCenters[name] = []*TrustCenter{}
 	} else {
 		o.Edges.namedTrustCenters[name] = append(o.Edges.namedTrustCenters[name], edges...)
+	}
+}
+
+// NamedAssets returns the Assets named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedAssets(name string) ([]*Asset, error) {
+	if o.Edges.namedAssets == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedAssets[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedAssets(name string, edges ...*Asset) {
+	if o.Edges.namedAssets == nil {
+		o.Edges.namedAssets = make(map[string][]*Asset)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedAssets[name] = []*Asset{}
+	} else {
+		o.Edges.namedAssets[name] = append(o.Edges.namedAssets[name], edges...)
+	}
+}
+
+// NamedScans returns the Scans named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedScans(name string) ([]*Scan, error) {
+	if o.Edges.namedScans == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedScans[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedScans(name string, edges ...*Scan) {
+	if o.Edges.namedScans == nil {
+		o.Edges.namedScans = make(map[string][]*Scan)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedScans[name] = []*Scan{}
+	} else {
+		o.Edges.namedScans[name] = append(o.Edges.namedScans[name], edges...)
 	}
 }
 

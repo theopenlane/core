@@ -22,6 +22,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/assethistory"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -95,6 +97,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/scanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
@@ -145,6 +149,10 @@ type Client struct {
 	ActionPlan *ActionPlanClient
 	// ActionPlanHistory is the client for interacting with the ActionPlanHistory builders.
 	ActionPlanHistory *ActionPlanHistoryClient
+	// Asset is the client for interacting with the Asset builders.
+	Asset *AssetClient
+	// AssetHistory is the client for interacting with the AssetHistory builders.
+	AssetHistory *AssetHistoryClient
 	// Contact is the client for interacting with the Contact builders.
 	Contact *ContactClient
 	// ContactHistory is the client for interacting with the ContactHistory builders.
@@ -291,6 +299,10 @@ type Client struct {
 	Risk *RiskClient
 	// RiskHistory is the client for interacting with the RiskHistory builders.
 	RiskHistory *RiskHistoryClient
+	// Scan is the client for interacting with the Scan builders.
+	Scan *ScanClient
+	// ScanHistory is the client for interacting with the ScanHistory builders.
+	ScanHistory *ScanHistoryClient
 	// ScheduledJob is the client for interacting with the ScheduledJob builders.
 	ScheduledJob *ScheduledJobClient
 	// ScheduledJobHistory is the client for interacting with the ScheduledJobHistory builders.
@@ -358,6 +370,8 @@ func (c *Client) init() {
 	c.APIToken = NewAPITokenClient(c.config)
 	c.ActionPlan = NewActionPlanClient(c.config)
 	c.ActionPlanHistory = NewActionPlanHistoryClient(c.config)
+	c.Asset = NewAssetClient(c.config)
+	c.AssetHistory = NewAssetHistoryClient(c.config)
 	c.Contact = NewContactClient(c.config)
 	c.ContactHistory = NewContactHistoryClient(c.config)
 	c.Control = NewControlClient(c.config)
@@ -431,6 +445,8 @@ func (c *Client) init() {
 	c.ProgramMembershipHistory = NewProgramMembershipHistoryClient(c.config)
 	c.Risk = NewRiskClient(c.config)
 	c.RiskHistory = NewRiskHistoryClient(c.config)
+	c.Scan = NewScanClient(c.config)
+	c.ScanHistory = NewScanHistoryClient(c.config)
 	c.ScheduledJob = NewScheduledJobClient(c.config)
 	c.ScheduledJobHistory = NewScheduledJobHistoryClient(c.config)
 	c.ScheduledJobRun = NewScheduledJobRunClient(c.config)
@@ -633,6 +649,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		APIToken:                     NewAPITokenClient(cfg),
 		ActionPlan:                   NewActionPlanClient(cfg),
 		ActionPlanHistory:            NewActionPlanHistoryClient(cfg),
+		Asset:                        NewAssetClient(cfg),
+		AssetHistory:                 NewAssetHistoryClient(cfg),
 		Contact:                      NewContactClient(cfg),
 		ContactHistory:               NewContactHistoryClient(cfg),
 		Control:                      NewControlClient(cfg),
@@ -706,6 +724,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ProgramMembershipHistory:     NewProgramMembershipHistoryClient(cfg),
 		Risk:                         NewRiskClient(cfg),
 		RiskHistory:                  NewRiskHistoryClient(cfg),
+		Scan:                         NewScanClient(cfg),
+		ScanHistory:                  NewScanHistoryClient(cfg),
 		ScheduledJob:                 NewScheduledJobClient(cfg),
 		ScheduledJobHistory:          NewScheduledJobHistoryClient(cfg),
 		ScheduledJobRun:              NewScheduledJobRunClient(cfg),
@@ -750,6 +770,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		APIToken:                     NewAPITokenClient(cfg),
 		ActionPlan:                   NewActionPlanClient(cfg),
 		ActionPlanHistory:            NewActionPlanHistoryClient(cfg),
+		Asset:                        NewAssetClient(cfg),
+		AssetHistory:                 NewAssetHistoryClient(cfg),
 		Contact:                      NewContactClient(cfg),
 		ContactHistory:               NewContactHistoryClient(cfg),
 		Control:                      NewControlClient(cfg),
@@ -823,6 +845,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ProgramMembershipHistory:     NewProgramMembershipHistoryClient(cfg),
 		Risk:                         NewRiskClient(cfg),
 		RiskHistory:                  NewRiskHistoryClient(cfg),
+		Scan:                         NewScanClient(cfg),
+		ScanHistory:                  NewScanHistoryClient(cfg),
 		ScheduledJob:                 NewScheduledJobClient(cfg),
 		ScheduledJobHistory:          NewScheduledJobHistoryClient(cfg),
 		ScheduledJobRun:              NewScheduledJobRunClient(cfg),
@@ -874,31 +898,32 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.APIToken, c.ActionPlan, c.ActionPlanHistory, c.Contact, c.ContactHistory,
-		c.Control, c.ControlHistory, c.ControlImplementation,
-		c.ControlImplementationHistory, c.ControlObjective, c.ControlObjectiveHistory,
-		c.ControlScheduledJob, c.ControlScheduledJobHistory, c.CustomDomain,
-		c.CustomDomainHistory, c.DNSVerification, c.DNSVerificationHistory,
-		c.DocumentData, c.DocumentDataHistory, c.EmailVerificationToken, c.Entity,
-		c.EntityHistory, c.EntityType, c.EntityTypeHistory, c.Event, c.Evidence,
-		c.EvidenceHistory, c.File, c.FileHistory, c.Group, c.GroupHistory,
-		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
-		c.GroupSettingHistory, c.Hush, c.HushHistory, c.Integration,
-		c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory, c.Invite,
-		c.JobResult, c.JobRunner, c.JobRunnerRegistrationToken, c.JobRunnerToken,
-		c.MappableDomain, c.MappableDomainHistory, c.MappedControl,
-		c.MappedControlHistory, c.Narrative, c.NarrativeHistory, c.Note, c.NoteHistory,
-		c.Onboarding, c.OrgMembership, c.OrgMembershipHistory, c.OrgModule, c.OrgPrice,
-		c.OrgProduct, c.OrgSubscription, c.OrgSubscriptionHistory, c.Organization,
+		c.APIToken, c.ActionPlan, c.ActionPlanHistory, c.Asset, c.AssetHistory,
+		c.Contact, c.ContactHistory, c.Control, c.ControlHistory,
+		c.ControlImplementation, c.ControlImplementationHistory, c.ControlObjective,
+		c.ControlObjectiveHistory, c.ControlScheduledJob, c.ControlScheduledJobHistory,
+		c.CustomDomain, c.CustomDomainHistory, c.DNSVerification,
+		c.DNSVerificationHistory, c.DocumentData, c.DocumentDataHistory,
+		c.EmailVerificationToken, c.Entity, c.EntityHistory, c.EntityType,
+		c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory, c.File,
+		c.FileHistory, c.Group, c.GroupHistory, c.GroupMembership,
+		c.GroupMembershipHistory, c.GroupSetting, c.GroupSettingHistory, c.Hush,
+		c.HushHistory, c.Integration, c.IntegrationHistory, c.InternalPolicy,
+		c.InternalPolicyHistory, c.Invite, c.JobResult, c.JobRunner,
+		c.JobRunnerRegistrationToken, c.JobRunnerToken, c.MappableDomain,
+		c.MappableDomainHistory, c.MappedControl, c.MappedControlHistory, c.Narrative,
+		c.NarrativeHistory, c.Note, c.NoteHistory, c.Onboarding, c.OrgMembership,
+		c.OrgMembershipHistory, c.OrgModule, c.OrgPrice, c.OrgProduct,
+		c.OrgSubscription, c.OrgSubscriptionHistory, c.Organization,
 		c.OrganizationHistory, c.OrganizationSetting, c.OrganizationSettingHistory,
 		c.PasswordResetToken, c.PersonalAccessToken, c.Procedure, c.ProcedureHistory,
 		c.Program, c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory,
-		c.Risk, c.RiskHistory, c.ScheduledJob, c.ScheduledJobHistory,
-		c.ScheduledJobRun, c.Standard, c.StandardHistory, c.Subcontrol,
-		c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task, c.TaskHistory,
-		c.Template, c.TemplateHistory, c.TrustCenter, c.TrustCenterHistory,
-		c.TrustCenterSetting, c.TrustCenterSettingHistory, c.User, c.UserHistory,
-		c.UserSetting, c.UserSettingHistory, c.Webauthn,
+		c.Risk, c.RiskHistory, c.Scan, c.ScanHistory, c.ScheduledJob,
+		c.ScheduledJobHistory, c.ScheduledJobRun, c.Standard, c.StandardHistory,
+		c.Subcontrol, c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task,
+		c.TaskHistory, c.Template, c.TemplateHistory, c.TrustCenter,
+		c.TrustCenterHistory, c.TrustCenterSetting, c.TrustCenterSettingHistory,
+		c.User, c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn,
 	} {
 		n.Use(hooks...)
 	}
@@ -908,31 +933,32 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.APIToken, c.ActionPlan, c.ActionPlanHistory, c.Contact, c.ContactHistory,
-		c.Control, c.ControlHistory, c.ControlImplementation,
-		c.ControlImplementationHistory, c.ControlObjective, c.ControlObjectiveHistory,
-		c.ControlScheduledJob, c.ControlScheduledJobHistory, c.CustomDomain,
-		c.CustomDomainHistory, c.DNSVerification, c.DNSVerificationHistory,
-		c.DocumentData, c.DocumentDataHistory, c.EmailVerificationToken, c.Entity,
-		c.EntityHistory, c.EntityType, c.EntityTypeHistory, c.Event, c.Evidence,
-		c.EvidenceHistory, c.File, c.FileHistory, c.Group, c.GroupHistory,
-		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
-		c.GroupSettingHistory, c.Hush, c.HushHistory, c.Integration,
-		c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory, c.Invite,
-		c.JobResult, c.JobRunner, c.JobRunnerRegistrationToken, c.JobRunnerToken,
-		c.MappableDomain, c.MappableDomainHistory, c.MappedControl,
-		c.MappedControlHistory, c.Narrative, c.NarrativeHistory, c.Note, c.NoteHistory,
-		c.Onboarding, c.OrgMembership, c.OrgMembershipHistory, c.OrgModule, c.OrgPrice,
-		c.OrgProduct, c.OrgSubscription, c.OrgSubscriptionHistory, c.Organization,
+		c.APIToken, c.ActionPlan, c.ActionPlanHistory, c.Asset, c.AssetHistory,
+		c.Contact, c.ContactHistory, c.Control, c.ControlHistory,
+		c.ControlImplementation, c.ControlImplementationHistory, c.ControlObjective,
+		c.ControlObjectiveHistory, c.ControlScheduledJob, c.ControlScheduledJobHistory,
+		c.CustomDomain, c.CustomDomainHistory, c.DNSVerification,
+		c.DNSVerificationHistory, c.DocumentData, c.DocumentDataHistory,
+		c.EmailVerificationToken, c.Entity, c.EntityHistory, c.EntityType,
+		c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory, c.File,
+		c.FileHistory, c.Group, c.GroupHistory, c.GroupMembership,
+		c.GroupMembershipHistory, c.GroupSetting, c.GroupSettingHistory, c.Hush,
+		c.HushHistory, c.Integration, c.IntegrationHistory, c.InternalPolicy,
+		c.InternalPolicyHistory, c.Invite, c.JobResult, c.JobRunner,
+		c.JobRunnerRegistrationToken, c.JobRunnerToken, c.MappableDomain,
+		c.MappableDomainHistory, c.MappedControl, c.MappedControlHistory, c.Narrative,
+		c.NarrativeHistory, c.Note, c.NoteHistory, c.Onboarding, c.OrgMembership,
+		c.OrgMembershipHistory, c.OrgModule, c.OrgPrice, c.OrgProduct,
+		c.OrgSubscription, c.OrgSubscriptionHistory, c.Organization,
 		c.OrganizationHistory, c.OrganizationSetting, c.OrganizationSettingHistory,
 		c.PasswordResetToken, c.PersonalAccessToken, c.Procedure, c.ProcedureHistory,
 		c.Program, c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory,
-		c.Risk, c.RiskHistory, c.ScheduledJob, c.ScheduledJobHistory,
-		c.ScheduledJobRun, c.Standard, c.StandardHistory, c.Subcontrol,
-		c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task, c.TaskHistory,
-		c.Template, c.TemplateHistory, c.TrustCenter, c.TrustCenterHistory,
-		c.TrustCenterSetting, c.TrustCenterSettingHistory, c.User, c.UserHistory,
-		c.UserSetting, c.UserSettingHistory, c.Webauthn,
+		c.Risk, c.RiskHistory, c.Scan, c.ScanHistory, c.ScheduledJob,
+		c.ScheduledJobHistory, c.ScheduledJobRun, c.Standard, c.StandardHistory,
+		c.Subcontrol, c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task,
+		c.TaskHistory, c.Template, c.TemplateHistory, c.TrustCenter,
+		c.TrustCenterHistory, c.TrustCenterSetting, c.TrustCenterSettingHistory,
+		c.User, c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -1019,6 +1045,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.ActionPlan.mutate(ctx, m)
 	case *ActionPlanHistoryMutation:
 		return c.ActionPlanHistory.mutate(ctx, m)
+	case *AssetMutation:
+		return c.Asset.mutate(ctx, m)
+	case *AssetHistoryMutation:
+		return c.AssetHistory.mutate(ctx, m)
 	case *ContactMutation:
 		return c.Contact.mutate(ctx, m)
 	case *ContactHistoryMutation:
@@ -1165,6 +1195,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Risk.mutate(ctx, m)
 	case *RiskHistoryMutation:
 		return c.RiskHistory.mutate(ctx, m)
+	case *ScanMutation:
+		return c.Scan.mutate(ctx, m)
+	case *ScanHistoryMutation:
+		return c.ScanHistory.mutate(ctx, m)
 	case *ScheduledJobMutation:
 		return c.ScheduledJob.mutate(ctx, m)
 	case *ScheduledJobHistoryMutation:
@@ -1767,6 +1801,408 @@ func (c *ActionPlanHistoryClient) mutate(ctx context.Context, m *ActionPlanHisto
 		return (&ActionPlanHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown ActionPlanHistory mutation op: %q", m.Op())
+	}
+}
+
+// AssetClient is a client for the Asset schema.
+type AssetClient struct {
+	config
+}
+
+// NewAssetClient returns a client for the Asset from the given config.
+func NewAssetClient(c config) *AssetClient {
+	return &AssetClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `asset.Hooks(f(g(h())))`.
+func (c *AssetClient) Use(hooks ...Hook) {
+	c.hooks.Asset = append(c.hooks.Asset, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `asset.Intercept(f(g(h())))`.
+func (c *AssetClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Asset = append(c.inters.Asset, interceptors...)
+}
+
+// Create returns a builder for creating a Asset entity.
+func (c *AssetClient) Create() *AssetCreate {
+	mutation := newAssetMutation(c.config, OpCreate)
+	return &AssetCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Asset entities.
+func (c *AssetClient) CreateBulk(builders ...*AssetCreate) *AssetCreateBulk {
+	return &AssetCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *AssetClient) MapCreateBulk(slice any, setFunc func(*AssetCreate, int)) *AssetCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &AssetCreateBulk{err: fmt.Errorf("calling to AssetClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*AssetCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &AssetCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Asset.
+func (c *AssetClient) Update() *AssetUpdate {
+	mutation := newAssetMutation(c.config, OpUpdate)
+	return &AssetUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *AssetClient) UpdateOne(a *Asset) *AssetUpdateOne {
+	mutation := newAssetMutation(c.config, OpUpdateOne, withAsset(a))
+	return &AssetUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *AssetClient) UpdateOneID(id string) *AssetUpdateOne {
+	mutation := newAssetMutation(c.config, OpUpdateOne, withAssetID(id))
+	return &AssetUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Asset.
+func (c *AssetClient) Delete() *AssetDelete {
+	mutation := newAssetMutation(c.config, OpDelete)
+	return &AssetDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *AssetClient) DeleteOne(a *Asset) *AssetDeleteOne {
+	return c.DeleteOneID(a.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *AssetClient) DeleteOneID(id string) *AssetDeleteOne {
+	builder := c.Delete().Where(asset.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &AssetDeleteOne{builder}
+}
+
+// Query returns a query builder for Asset.
+func (c *AssetClient) Query() *AssetQuery {
+	return &AssetQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeAsset},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Asset entity by its id.
+func (c *AssetClient) Get(ctx context.Context, id string) (*Asset, error) {
+	return c.Query().Where(asset.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *AssetClient) GetX(ctx context.Context, id string) *Asset {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a Asset.
+func (c *AssetClient) QueryOwner(a *Asset) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, asset.OwnerTable, asset.OwnerColumn),
+		)
+		schemaConfig := a.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Asset
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryBlockedGroups queries the blocked_groups edge of a Asset.
+func (c *AssetClient) QueryBlockedGroups(a *Asset) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, asset.BlockedGroupsTable, asset.BlockedGroupsColumn),
+		)
+		schemaConfig := a.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEditors queries the editors edge of a Asset.
+func (c *AssetClient) QueryEditors(a *Asset) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, asset.EditorsTable, asset.EditorsColumn),
+		)
+		schemaConfig := a.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryViewers queries the viewers edge of a Asset.
+func (c *AssetClient) QueryViewers(a *Asset) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, asset.ViewersTable, asset.ViewersColumn),
+		)
+		schemaConfig := a.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScans queries the scans edge of a Asset.
+func (c *AssetClient) QueryScans(a *Asset) *ScanQuery {
+	query := (&ScanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, asset.ScansTable, asset.ScansPrimaryKey...),
+		)
+		schemaConfig := a.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.ScanAssets
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEntities queries the entities edge of a Asset.
+func (c *AssetClient) QueryEntities(a *Asset) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, asset.EntitiesTable, asset.EntitiesPrimaryKey...),
+		)
+		schemaConfig := a.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.EntityAssets
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControls queries the controls edge of a Asset.
+func (c *AssetClient) QueryControls(a *Asset) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, asset.ControlsTable, asset.ControlsPrimaryKey...),
+		)
+		schemaConfig := a.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlAssets
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *AssetClient) Hooks() []Hook {
+	hooks := c.hooks.Asset
+	return append(hooks[:len(hooks):len(hooks)], asset.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *AssetClient) Interceptors() []Interceptor {
+	inters := c.inters.Asset
+	return append(inters[:len(inters):len(inters)], asset.Interceptors[:]...)
+}
+
+func (c *AssetClient) mutate(ctx context.Context, m *AssetMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&AssetCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&AssetUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&AssetUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&AssetDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown Asset mutation op: %q", m.Op())
+	}
+}
+
+// AssetHistoryClient is a client for the AssetHistory schema.
+type AssetHistoryClient struct {
+	config
+}
+
+// NewAssetHistoryClient returns a client for the AssetHistory from the given config.
+func NewAssetHistoryClient(c config) *AssetHistoryClient {
+	return &AssetHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `assethistory.Hooks(f(g(h())))`.
+func (c *AssetHistoryClient) Use(hooks ...Hook) {
+	c.hooks.AssetHistory = append(c.hooks.AssetHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `assethistory.Intercept(f(g(h())))`.
+func (c *AssetHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.AssetHistory = append(c.inters.AssetHistory, interceptors...)
+}
+
+// Create returns a builder for creating a AssetHistory entity.
+func (c *AssetHistoryClient) Create() *AssetHistoryCreate {
+	mutation := newAssetHistoryMutation(c.config, OpCreate)
+	return &AssetHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of AssetHistory entities.
+func (c *AssetHistoryClient) CreateBulk(builders ...*AssetHistoryCreate) *AssetHistoryCreateBulk {
+	return &AssetHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *AssetHistoryClient) MapCreateBulk(slice any, setFunc func(*AssetHistoryCreate, int)) *AssetHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &AssetHistoryCreateBulk{err: fmt.Errorf("calling to AssetHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*AssetHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &AssetHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for AssetHistory.
+func (c *AssetHistoryClient) Update() *AssetHistoryUpdate {
+	mutation := newAssetHistoryMutation(c.config, OpUpdate)
+	return &AssetHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *AssetHistoryClient) UpdateOne(ah *AssetHistory) *AssetHistoryUpdateOne {
+	mutation := newAssetHistoryMutation(c.config, OpUpdateOne, withAssetHistory(ah))
+	return &AssetHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *AssetHistoryClient) UpdateOneID(id string) *AssetHistoryUpdateOne {
+	mutation := newAssetHistoryMutation(c.config, OpUpdateOne, withAssetHistoryID(id))
+	return &AssetHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for AssetHistory.
+func (c *AssetHistoryClient) Delete() *AssetHistoryDelete {
+	mutation := newAssetHistoryMutation(c.config, OpDelete)
+	return &AssetHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *AssetHistoryClient) DeleteOne(ah *AssetHistory) *AssetHistoryDeleteOne {
+	return c.DeleteOneID(ah.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *AssetHistoryClient) DeleteOneID(id string) *AssetHistoryDeleteOne {
+	builder := c.Delete().Where(assethistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &AssetHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for AssetHistory.
+func (c *AssetHistoryClient) Query() *AssetHistoryQuery {
+	return &AssetHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeAssetHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a AssetHistory entity by its id.
+func (c *AssetHistoryClient) Get(ctx context.Context, id string) (*AssetHistory, error) {
+	return c.Query().Where(assethistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *AssetHistoryClient) GetX(ctx context.Context, id string) *AssetHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *AssetHistoryClient) Hooks() []Hook {
+	return c.hooks.AssetHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *AssetHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.AssetHistory
+	return append(inters[:len(inters):len(inters)], assethistory.Interceptors[:]...)
+}
+
+func (c *AssetHistoryClient) mutate(ctx context.Context, m *AssetHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&AssetHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&AssetHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&AssetHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&AssetHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown AssetHistory mutation op: %q", m.Op())
 	}
 }
 
@@ -2483,6 +2919,44 @@ func (c *ControlClient) QueryPrograms(co *Control) *ProgramQuery {
 		schemaConfig := co.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramControls
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssets queries the assets edge of a Control.
+func (c *ControlClient) QueryAssets(co *Control) *AssetQuery {
+	query := (&AssetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, control.AssetsTable, control.AssetsPrimaryKey...),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.ControlAssets
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScans queries the scans edge of a Control.
+func (c *ControlClient) QueryScans(co *Control) *ScanQuery {
+	query := (&ScanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, control.ScansTable, control.ScansColumn),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.Scan
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -5267,6 +5741,63 @@ func (c *EntityClient) QueryOwner(e *Entity) *OrganizationQuery {
 	return query
 }
 
+// QueryBlockedGroups queries the blocked_groups edge of a Entity.
+func (c *EntityClient) QueryBlockedGroups(e *Entity) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, entity.BlockedGroupsTable, entity.BlockedGroupsColumn),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEditors queries the editors edge of a Entity.
+func (c *EntityClient) QueryEditors(e *Entity) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, entity.EditorsTable, entity.EditorsColumn),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryViewers queries the viewers edge of a Entity.
+func (c *EntityClient) QueryViewers(e *Entity) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, entity.ViewersTable, entity.ViewersColumn),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryContacts queries the contacts edge of a Entity.
 func (c *EntityClient) QueryContacts(e *Entity) *ContactQuery {
 	query := (&ContactClient{config: c.config}).Query()
@@ -5337,6 +5868,44 @@ func (c *EntityClient) QueryFiles(e *Entity) *FileQuery {
 		schemaConfig := e.schemaConfig
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.EntityFiles
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssets queries the assets edge of a Entity.
+func (c *EntityClient) QueryAssets(e *Entity) *AssetQuery {
+	query := (&AssetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, entity.AssetsTable, entity.AssetsPrimaryKey...),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.EntityAssets
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScans queries the scans edge of a Entity.
+func (c *EntityClient) QueryScans(e *Entity) *ScanQuery {
+	query := (&ScanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, entity.ScansTable, entity.ScansColumn),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.Scan
 		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -7497,6 +8066,63 @@ func (c *GroupClient) QueryControlImplementationViewers(gr *Group) *ControlImple
 		schemaConfig := gr.schemaConfig
 		step.To.Schema = schemaConfig.ControlImplementation
 		step.Edge.Schema = schemaConfig.ControlImplementationViewers
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScanEditors queries the scan_editors edge of a Group.
+func (c *GroupClient) QueryScanEditors(gr *Group) *ScanQuery {
+	query := (&ScanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.ScanEditorsTable, group.ScanEditorsPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.ScanEditors
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScanBlockedGroups queries the scan_blocked_groups edge of a Group.
+func (c *GroupClient) QueryScanBlockedGroups(gr *Group) *ScanQuery {
+	query := (&ScanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.ScanBlockedGroupsTable, group.ScanBlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.ScanBlockedGroups
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScanViewers queries the scan_viewers edge of a Group.
+func (c *GroupClient) QueryScanViewers(gr *Group) *ScanQuery {
+	query := (&ScanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.ScanViewersTable, group.ScanViewersPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.ScanViewers
 		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -12696,6 +13322,44 @@ func (c *OrgModuleClient) QueryOrgSubscription(om *OrgModule) *OrgSubscriptionQu
 	return query
 }
 
+// QueryOrgProducts queries the org_products edge of a OrgModule.
+func (c *OrgModuleClient) QueryOrgProducts(om *OrgModule) *OrgProductQuery {
+	query := (&OrgProductClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := om.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgmodule.Table, orgmodule.FieldID, id),
+			sqlgraph.To(orgproduct.Table, orgproduct.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, orgmodule.OrgProductsTable, orgmodule.OrgProductsColumn),
+		)
+		schemaConfig := om.schemaConfig
+		step.To.Schema = schemaConfig.OrgProduct
+		step.Edge.Schema = schemaConfig.OrgProduct
+		fromV = sqlgraph.Neighbors(om.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrgPrices queries the org_prices edge of a OrgModule.
+func (c *OrgModuleClient) QueryOrgPrices(om *OrgModule) *OrgPriceQuery {
+	query := (&OrgPriceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := om.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgmodule.Table, orgmodule.FieldID, id),
+			sqlgraph.To(orgprice.Table, orgprice.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, orgmodule.OrgPricesTable, orgmodule.OrgPricesPrimaryKey...),
+		)
+		schemaConfig := om.schemaConfig
+		step.To.Schema = schemaConfig.OrgPrice
+		step.Edge.Schema = schemaConfig.OrgModuleOrgPrices
+		fromV = sqlgraph.Neighbors(om.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *OrgModuleClient) Hooks() []Hook {
 	hooks := c.hooks.OrgModule
@@ -12850,18 +13514,56 @@ func (c *OrgPriceClient) QueryOwner(op *OrgPrice) *OrganizationQuery {
 	return query
 }
 
-// QueryOrgProduct queries the org_product edge of a OrgPrice.
-func (c *OrgPriceClient) QueryOrgProduct(op *OrgPrice) *OrgProductQuery {
+// QueryOrgProducts queries the org_products edge of a OrgPrice.
+func (c *OrgPriceClient) QueryOrgProducts(op *OrgPrice) *OrgProductQuery {
 	query := (&OrgProductClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := op.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(orgprice.Table, orgprice.FieldID, id),
 			sqlgraph.To(orgproduct.Table, orgproduct.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, orgprice.OrgProductTable, orgprice.OrgProductColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, orgprice.OrgProductsTable, orgprice.OrgProductsPrimaryKey...),
 		)
 		schemaConfig := op.schemaConfig
 		step.To.Schema = schemaConfig.OrgProduct
+		step.Edge.Schema = schemaConfig.OrgProductOrgPrices
+		fromV = sqlgraph.Neighbors(op.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrgModules queries the org_modules edge of a OrgPrice.
+func (c *OrgPriceClient) QueryOrgModules(op *OrgPrice) *OrgModuleQuery {
+	query := (&OrgModuleClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := op.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgprice.Table, orgprice.FieldID, id),
+			sqlgraph.To(orgmodule.Table, orgmodule.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, orgprice.OrgModulesTable, orgprice.OrgModulesPrimaryKey...),
+		)
+		schemaConfig := op.schemaConfig
+		step.To.Schema = schemaConfig.OrgModule
+		step.Edge.Schema = schemaConfig.OrgModuleOrgPrices
+		fromV = sqlgraph.Neighbors(op.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrgSubscription queries the org_subscription edge of a OrgPrice.
+func (c *OrgPriceClient) QueryOrgSubscription(op *OrgPrice) *OrgSubscriptionQuery {
+	query := (&OrgSubscriptionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := op.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgprice.Table, orgprice.FieldID, id),
+			sqlgraph.To(orgsubscription.Table, orgsubscription.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, orgprice.OrgSubscriptionTable, orgprice.OrgSubscriptionColumn),
+		)
+		schemaConfig := op.schemaConfig
+		step.To.Schema = schemaConfig.OrgSubscription
 		step.Edge.Schema = schemaConfig.OrgPrice
 		fromV = sqlgraph.Neighbors(op.driver.Dialect(), step)
 		return fromV, nil
@@ -13042,19 +13744,38 @@ func (c *OrgProductClient) QueryOrgSubscription(op *OrgProduct) *OrgSubscription
 	return query
 }
 
-// QueryPrices queries the prices edge of a OrgProduct.
-func (c *OrgProductClient) QueryPrices(op *OrgProduct) *OrgPriceQuery {
+// QueryOrgPrices queries the org_prices edge of a OrgProduct.
+func (c *OrgProductClient) QueryOrgPrices(op *OrgProduct) *OrgPriceQuery {
 	query := (&OrgPriceClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := op.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(orgproduct.Table, orgproduct.FieldID, id),
 			sqlgraph.To(orgprice.Table, orgprice.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, orgproduct.PricesTable, orgproduct.PricesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, orgproduct.OrgPricesTable, orgproduct.OrgPricesPrimaryKey...),
 		)
 		schemaConfig := op.schemaConfig
 		step.To.Schema = schemaConfig.OrgPrice
-		step.Edge.Schema = schemaConfig.OrgPrice
+		step.Edge.Schema = schemaConfig.OrgProductOrgPrices
+		fromV = sqlgraph.Neighbors(op.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrgModules queries the org_modules edge of a OrgProduct.
+func (c *OrgProductClient) QueryOrgModules(op *OrgProduct) *OrgModuleQuery {
+	query := (&OrgModuleClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := op.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgproduct.Table, orgproduct.FieldID, id),
+			sqlgraph.To(orgmodule.Table, orgmodule.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, orgproduct.OrgModulesTable, orgproduct.OrgModulesColumn),
+		)
+		schemaConfig := op.schemaConfig
+		step.To.Schema = schemaConfig.OrgModule
+		step.Edge.Schema = schemaConfig.OrgModule
 		fromV = sqlgraph.Neighbors(op.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -13266,6 +13987,25 @@ func (c *OrgSubscriptionClient) QueryProducts(os *OrgSubscription) *OrgProductQu
 		schemaConfig := os.schemaConfig
 		step.To.Schema = schemaConfig.OrgProduct
 		step.Edge.Schema = schemaConfig.OrgProduct
+		fromV = sqlgraph.Neighbors(os.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPrices queries the prices edge of a OrgSubscription.
+func (c *OrgSubscriptionClient) QueryPrices(os *OrgSubscription) *OrgPriceQuery {
+	query := (&OrgPriceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := os.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgsubscription.Table, orgsubscription.FieldID, id),
+			sqlgraph.To(orgprice.Table, orgprice.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, orgsubscription.PricesTable, orgsubscription.PricesColumn),
+		)
+		schemaConfig := os.schemaConfig
+		step.To.Schema = schemaConfig.OrgPrice
+		step.Edge.Schema = schemaConfig.OrgPrice
 		fromV = sqlgraph.Neighbors(os.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -14712,6 +15452,44 @@ func (c *OrganizationClient) QueryTrustCenters(o *Organization) *TrustCenterQuer
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.TrustCenter
 		step.Edge.Schema = schemaConfig.TrustCenter
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssets queries the assets edge of a Organization.
+func (c *OrganizationClient) QueryAssets(o *Organization) *AssetQuery {
+	query := (&AssetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.AssetsTable, organization.AssetsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.Asset
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScans queries the scans edge of a Organization.
+func (c *OrganizationClient) QueryScans(o *Organization) *ScanQuery {
+	query := (&ScanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ScansTable, organization.ScansColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.Scan
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -17302,6 +18080,63 @@ func (c *RiskClient) QueryTasks(r *Risk) *TaskQuery {
 	return query
 }
 
+// QueryAssets queries the assets edge of a Risk.
+func (c *RiskClient) QueryAssets(r *Risk) *AssetQuery {
+	query := (&AssetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, risk.AssetsTable, risk.AssetsColumn),
+		)
+		schemaConfig := r.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.Asset
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEntities queries the entities edge of a Risk.
+func (c *RiskClient) QueryEntities(r *Risk) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, risk.EntitiesTable, risk.EntitiesColumn),
+		)
+		schemaConfig := r.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.Entity
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScans queries the scans edge of a Risk.
+func (c *RiskClient) QueryScans(r *Risk) *ScanQuery {
+	query := (&ScanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, risk.ScansTable, risk.ScansColumn),
+		)
+		schemaConfig := r.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.Scan
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryStakeholder queries the stakeholder edge of a Risk.
 func (c *RiskClient) QueryStakeholder(r *Risk) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
@@ -17498,6 +18333,389 @@ func (c *RiskHistoryClient) mutate(ctx context.Context, m *RiskHistoryMutation) 
 		return (&RiskHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown RiskHistory mutation op: %q", m.Op())
+	}
+}
+
+// ScanClient is a client for the Scan schema.
+type ScanClient struct {
+	config
+}
+
+// NewScanClient returns a client for the Scan from the given config.
+func NewScanClient(c config) *ScanClient {
+	return &ScanClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `scan.Hooks(f(g(h())))`.
+func (c *ScanClient) Use(hooks ...Hook) {
+	c.hooks.Scan = append(c.hooks.Scan, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `scan.Intercept(f(g(h())))`.
+func (c *ScanClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Scan = append(c.inters.Scan, interceptors...)
+}
+
+// Create returns a builder for creating a Scan entity.
+func (c *ScanClient) Create() *ScanCreate {
+	mutation := newScanMutation(c.config, OpCreate)
+	return &ScanCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Scan entities.
+func (c *ScanClient) CreateBulk(builders ...*ScanCreate) *ScanCreateBulk {
+	return &ScanCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ScanClient) MapCreateBulk(slice any, setFunc func(*ScanCreate, int)) *ScanCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ScanCreateBulk{err: fmt.Errorf("calling to ScanClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ScanCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ScanCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Scan.
+func (c *ScanClient) Update() *ScanUpdate {
+	mutation := newScanMutation(c.config, OpUpdate)
+	return &ScanUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ScanClient) UpdateOne(s *Scan) *ScanUpdateOne {
+	mutation := newScanMutation(c.config, OpUpdateOne, withScan(s))
+	return &ScanUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ScanClient) UpdateOneID(id string) *ScanUpdateOne {
+	mutation := newScanMutation(c.config, OpUpdateOne, withScanID(id))
+	return &ScanUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Scan.
+func (c *ScanClient) Delete() *ScanDelete {
+	mutation := newScanMutation(c.config, OpDelete)
+	return &ScanDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ScanClient) DeleteOne(s *Scan) *ScanDeleteOne {
+	return c.DeleteOneID(s.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ScanClient) DeleteOneID(id string) *ScanDeleteOne {
+	builder := c.Delete().Where(scan.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ScanDeleteOne{builder}
+}
+
+// Query returns a query builder for Scan.
+func (c *ScanClient) Query() *ScanQuery {
+	return &ScanQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeScan},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Scan entity by its id.
+func (c *ScanClient) Get(ctx context.Context, id string) (*Scan, error) {
+	return c.Query().Where(scan.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ScanClient) GetX(ctx context.Context, id string) *Scan {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a Scan.
+func (c *ScanClient) QueryOwner(s *Scan) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, scan.OwnerTable, scan.OwnerColumn),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Scan
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryBlockedGroups queries the blocked_groups edge of a Scan.
+func (c *ScanClient) QueryBlockedGroups(s *Scan) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, scan.BlockedGroupsTable, scan.BlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.ScanBlockedGroups
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEditors queries the editors edge of a Scan.
+func (c *ScanClient) QueryEditors(s *Scan) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, scan.EditorsTable, scan.EditorsPrimaryKey...),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.ScanEditors
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryViewers queries the viewers edge of a Scan.
+func (c *ScanClient) QueryViewers(s *Scan) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, scan.ViewersTable, scan.ViewersPrimaryKey...),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.ScanViewers
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssets queries the assets edge of a Scan.
+func (c *ScanClient) QueryAssets(s *Scan) *AssetQuery {
+	query := (&AssetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, scan.AssetsTable, scan.AssetsPrimaryKey...),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.ScanAssets
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEntities queries the entities edge of a Scan.
+func (c *ScanClient) QueryEntities(s *Scan) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, scan.EntitiesTable, scan.EntitiesColumn),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.Entity
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ScanClient) Hooks() []Hook {
+	hooks := c.hooks.Scan
+	return append(hooks[:len(hooks):len(hooks)], scan.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *ScanClient) Interceptors() []Interceptor {
+	inters := c.inters.Scan
+	return append(inters[:len(inters):len(inters)], scan.Interceptors[:]...)
+}
+
+func (c *ScanClient) mutate(ctx context.Context, m *ScanMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ScanCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ScanUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ScanUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ScanDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown Scan mutation op: %q", m.Op())
+	}
+}
+
+// ScanHistoryClient is a client for the ScanHistory schema.
+type ScanHistoryClient struct {
+	config
+}
+
+// NewScanHistoryClient returns a client for the ScanHistory from the given config.
+func NewScanHistoryClient(c config) *ScanHistoryClient {
+	return &ScanHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `scanhistory.Hooks(f(g(h())))`.
+func (c *ScanHistoryClient) Use(hooks ...Hook) {
+	c.hooks.ScanHistory = append(c.hooks.ScanHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `scanhistory.Intercept(f(g(h())))`.
+func (c *ScanHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ScanHistory = append(c.inters.ScanHistory, interceptors...)
+}
+
+// Create returns a builder for creating a ScanHistory entity.
+func (c *ScanHistoryClient) Create() *ScanHistoryCreate {
+	mutation := newScanHistoryMutation(c.config, OpCreate)
+	return &ScanHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ScanHistory entities.
+func (c *ScanHistoryClient) CreateBulk(builders ...*ScanHistoryCreate) *ScanHistoryCreateBulk {
+	return &ScanHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ScanHistoryClient) MapCreateBulk(slice any, setFunc func(*ScanHistoryCreate, int)) *ScanHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ScanHistoryCreateBulk{err: fmt.Errorf("calling to ScanHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ScanHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ScanHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ScanHistory.
+func (c *ScanHistoryClient) Update() *ScanHistoryUpdate {
+	mutation := newScanHistoryMutation(c.config, OpUpdate)
+	return &ScanHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ScanHistoryClient) UpdateOne(sh *ScanHistory) *ScanHistoryUpdateOne {
+	mutation := newScanHistoryMutation(c.config, OpUpdateOne, withScanHistory(sh))
+	return &ScanHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ScanHistoryClient) UpdateOneID(id string) *ScanHistoryUpdateOne {
+	mutation := newScanHistoryMutation(c.config, OpUpdateOne, withScanHistoryID(id))
+	return &ScanHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ScanHistory.
+func (c *ScanHistoryClient) Delete() *ScanHistoryDelete {
+	mutation := newScanHistoryMutation(c.config, OpDelete)
+	return &ScanHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ScanHistoryClient) DeleteOne(sh *ScanHistory) *ScanHistoryDeleteOne {
+	return c.DeleteOneID(sh.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ScanHistoryClient) DeleteOneID(id string) *ScanHistoryDeleteOne {
+	builder := c.Delete().Where(scanhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ScanHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for ScanHistory.
+func (c *ScanHistoryClient) Query() *ScanHistoryQuery {
+	return &ScanHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeScanHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ScanHistory entity by its id.
+func (c *ScanHistoryClient) Get(ctx context.Context, id string) (*ScanHistory, error) {
+	return c.Query().Where(scanhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ScanHistoryClient) GetX(ctx context.Context, id string) *ScanHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ScanHistoryClient) Hooks() []Hook {
+	return c.hooks.ScanHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *ScanHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.ScanHistory
+	return append(inters[:len(inters):len(inters)], scanhistory.Interceptors[:]...)
+}
+
+func (c *ScanHistoryClient) mutate(ctx context.Context, m *ScanHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ScanHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ScanHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ScanHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ScanHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown ScanHistory mutation op: %q", m.Op())
 	}
 }
 
@@ -21757,16 +22975,16 @@ func (c *WebauthnClient) mutate(ctx context.Context, m *WebauthnMutation) (Value
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		APIToken, ActionPlan, ActionPlanHistory, Contact, ContactHistory, Control,
-		ControlHistory, ControlImplementation, ControlImplementationHistory,
-		ControlObjective, ControlObjectiveHistory, ControlScheduledJob,
-		ControlScheduledJobHistory, CustomDomain, CustomDomainHistory, DNSVerification,
-		DNSVerificationHistory, DocumentData, DocumentDataHistory,
-		EmailVerificationToken, Entity, EntityHistory, EntityType, EntityTypeHistory,
-		Event, Evidence, EvidenceHistory, File, FileHistory, Group, GroupHistory,
-		GroupMembership, GroupMembershipHistory, GroupSetting, GroupSettingHistory,
-		Hush, HushHistory, Integration, IntegrationHistory, InternalPolicy,
-		InternalPolicyHistory, Invite, JobResult, JobRunner,
+		APIToken, ActionPlan, ActionPlanHistory, Asset, AssetHistory, Contact,
+		ContactHistory, Control, ControlHistory, ControlImplementation,
+		ControlImplementationHistory, ControlObjective, ControlObjectiveHistory,
+		ControlScheduledJob, ControlScheduledJobHistory, CustomDomain,
+		CustomDomainHistory, DNSVerification, DNSVerificationHistory, DocumentData,
+		DocumentDataHistory, EmailVerificationToken, Entity, EntityHistory, EntityType,
+		EntityTypeHistory, Event, Evidence, EvidenceHistory, File, FileHistory, Group,
+		GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
+		GroupSettingHistory, Hush, HushHistory, Integration, IntegrationHistory,
+		InternalPolicy, InternalPolicyHistory, Invite, JobResult, JobRunner,
 		JobRunnerRegistrationToken, JobRunnerToken, MappableDomain,
 		MappableDomainHistory, MappedControl, MappedControlHistory, Narrative,
 		NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
@@ -21774,23 +22992,24 @@ type (
 		OrgSubscriptionHistory, Organization, OrganizationHistory, OrganizationSetting,
 		OrganizationSettingHistory, PasswordResetToken, PersonalAccessToken, Procedure,
 		ProcedureHistory, Program, ProgramHistory, ProgramMembership,
-		ProgramMembershipHistory, Risk, RiskHistory, ScheduledJob, ScheduledJobHistory,
-		ScheduledJobRun, Standard, StandardHistory, Subcontrol, SubcontrolHistory,
-		Subscriber, TFASetting, Task, TaskHistory, Template, TemplateHistory,
-		TrustCenter, TrustCenterHistory, TrustCenterSetting, TrustCenterSettingHistory,
-		User, UserHistory, UserSetting, UserSettingHistory, Webauthn []ent.Hook
+		ProgramMembershipHistory, Risk, RiskHistory, Scan, ScanHistory, ScheduledJob,
+		ScheduledJobHistory, ScheduledJobRun, Standard, StandardHistory, Subcontrol,
+		SubcontrolHistory, Subscriber, TFASetting, Task, TaskHistory, Template,
+		TemplateHistory, TrustCenter, TrustCenterHistory, TrustCenterSetting,
+		TrustCenterSettingHistory, User, UserHistory, UserSetting, UserSettingHistory,
+		Webauthn []ent.Hook
 	}
 	inters struct {
-		APIToken, ActionPlan, ActionPlanHistory, Contact, ContactHistory, Control,
-		ControlHistory, ControlImplementation, ControlImplementationHistory,
-		ControlObjective, ControlObjectiveHistory, ControlScheduledJob,
-		ControlScheduledJobHistory, CustomDomain, CustomDomainHistory, DNSVerification,
-		DNSVerificationHistory, DocumentData, DocumentDataHistory,
-		EmailVerificationToken, Entity, EntityHistory, EntityType, EntityTypeHistory,
-		Event, Evidence, EvidenceHistory, File, FileHistory, Group, GroupHistory,
-		GroupMembership, GroupMembershipHistory, GroupSetting, GroupSettingHistory,
-		Hush, HushHistory, Integration, IntegrationHistory, InternalPolicy,
-		InternalPolicyHistory, Invite, JobResult, JobRunner,
+		APIToken, ActionPlan, ActionPlanHistory, Asset, AssetHistory, Contact,
+		ContactHistory, Control, ControlHistory, ControlImplementation,
+		ControlImplementationHistory, ControlObjective, ControlObjectiveHistory,
+		ControlScheduledJob, ControlScheduledJobHistory, CustomDomain,
+		CustomDomainHistory, DNSVerification, DNSVerificationHistory, DocumentData,
+		DocumentDataHistory, EmailVerificationToken, Entity, EntityHistory, EntityType,
+		EntityTypeHistory, Event, Evidence, EvidenceHistory, File, FileHistory, Group,
+		GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
+		GroupSettingHistory, Hush, HushHistory, Integration, IntegrationHistory,
+		InternalPolicy, InternalPolicyHistory, Invite, JobResult, JobRunner,
 		JobRunnerRegistrationToken, JobRunnerToken, MappableDomain,
 		MappableDomainHistory, MappedControl, MappedControlHistory, Narrative,
 		NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
@@ -21798,11 +23017,12 @@ type (
 		OrgSubscriptionHistory, Organization, OrganizationHistory, OrganizationSetting,
 		OrganizationSettingHistory, PasswordResetToken, PersonalAccessToken, Procedure,
 		ProcedureHistory, Program, ProgramHistory, ProgramMembership,
-		ProgramMembershipHistory, Risk, RiskHistory, ScheduledJob, ScheduledJobHistory,
-		ScheduledJobRun, Standard, StandardHistory, Subcontrol, SubcontrolHistory,
-		Subscriber, TFASetting, Task, TaskHistory, Template, TemplateHistory,
-		TrustCenter, TrustCenterHistory, TrustCenterSetting, TrustCenterSettingHistory,
-		User, UserHistory, UserSetting, UserSettingHistory, Webauthn []ent.Interceptor
+		ProgramMembershipHistory, Risk, RiskHistory, Scan, ScanHistory, ScheduledJob,
+		ScheduledJobHistory, ScheduledJobRun, Standard, StandardHistory, Subcontrol,
+		SubcontrolHistory, Subscriber, TFASetting, Task, TaskHistory, Template,
+		TemplateHistory, TrustCenter, TrustCenterHistory, TrustCenterSetting,
+		TrustCenterSettingHistory, User, UserHistory, UserSetting, UserSettingHistory,
+		Webauthn []ent.Interceptor
 	}
 )
 

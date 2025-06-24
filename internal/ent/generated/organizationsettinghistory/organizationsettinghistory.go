@@ -58,6 +58,22 @@ const (
 	FieldBillingNotificationsEnabled = "billing_notifications_enabled"
 	// FieldAllowedEmailDomains holds the string denoting the allowed_email_domains field in the database.
 	FieldAllowedEmailDomains = "allowed_email_domains"
+	// FieldIdentityProvider holds the string denoting the identity_provider field in the database.
+	FieldIdentityProvider = "identity_provider"
+	// FieldIdentityProviderClientID holds the string denoting the identity_provider_client_id field in the database.
+	FieldIdentityProviderClientID = "identity_provider_client_id"
+	// FieldIdentityProviderClientSecret holds the string denoting the identity_provider_client_secret field in the database.
+	FieldIdentityProviderClientSecret = "identity_provider_client_secret"
+	// FieldIdentityProviderMetadataEndpoint holds the string denoting the identity_provider_metadata_endpoint field in the database.
+	FieldIdentityProviderMetadataEndpoint = "identity_provider_metadata_endpoint"
+	// FieldIdentityProviderEntityID holds the string denoting the identity_provider_entity_id field in the database.
+	FieldIdentityProviderEntityID = "identity_provider_entity_id"
+	// FieldOidcDiscoveryEndpoint holds the string denoting the oidc_discovery_endpoint field in the database.
+	FieldOidcDiscoveryEndpoint = "oidc_discovery_endpoint"
+	// FieldIdentityProviderLoginEnforced holds the string denoting the identity_provider_login_enforced field in the database.
+	FieldIdentityProviderLoginEnforced = "identity_provider_login_enforced"
+	// FieldComplianceWebhookToken holds the string denoting the compliance_webhook_token field in the database.
+	FieldComplianceWebhookToken = "compliance_webhook_token"
 	// Table holds the table name of the organizationsettinghistory in the database.
 	Table = "organization_setting_history"
 )
@@ -85,6 +101,14 @@ var Columns = []string{
 	FieldOrganizationID,
 	FieldBillingNotificationsEnabled,
 	FieldAllowedEmailDomains,
+	FieldIdentityProvider,
+	FieldIdentityProviderClientID,
+	FieldIdentityProviderClientSecret,
+	FieldIdentityProviderMetadataEndpoint,
+	FieldIdentityProviderEntityID,
+	FieldOidcDiscoveryEndpoint,
+	FieldIdentityProviderLoginEnforced,
+	FieldComplianceWebhookToken,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -116,6 +140,10 @@ var (
 	DefaultTags []string
 	// DefaultBillingNotificationsEnabled holds the default value on creation for the "billing_notifications_enabled" field.
 	DefaultBillingNotificationsEnabled bool
+	// DefaultIdentityProviderLoginEnforced holds the default value on creation for the "identity_provider_login_enforced" field.
+	DefaultIdentityProviderLoginEnforced bool
+	// DefaultComplianceWebhookToken holds the default value on creation for the "compliance_webhook_token" field.
+	DefaultComplianceWebhookToken func() string
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -139,6 +167,18 @@ func GeoLocationValidator(gl enums.Region) error {
 		return nil
 	default:
 		return fmt.Errorf("organizationsettinghistory: invalid enum value for geo_location field: %q", gl)
+	}
+}
+
+const DefaultIdentityProvider enums.SSOProvider = "NONE"
+
+// IdentityProviderValidator is a validator for the "identity_provider" field enum values. It is called by the builders before save.
+func IdentityProviderValidator(ip enums.SSOProvider) error {
+	switch ip.String() {
+	case "OKTA", "ONELOGIN", "GOOGLEWORKSPACE", "SLACK", "GITHUB", "NONE":
+		return nil
+	default:
+		return fmt.Errorf("organizationsettinghistory: invalid enum value for identity_provider field: %q", ip)
 	}
 }
 
@@ -230,6 +270,46 @@ func ByBillingNotificationsEnabled(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldBillingNotificationsEnabled, opts...).ToFunc()
 }
 
+// ByIdentityProvider orders the results by the identity_provider field.
+func ByIdentityProvider(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIdentityProvider, opts...).ToFunc()
+}
+
+// ByIdentityProviderClientID orders the results by the identity_provider_client_id field.
+func ByIdentityProviderClientID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIdentityProviderClientID, opts...).ToFunc()
+}
+
+// ByIdentityProviderClientSecret orders the results by the identity_provider_client_secret field.
+func ByIdentityProviderClientSecret(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIdentityProviderClientSecret, opts...).ToFunc()
+}
+
+// ByIdentityProviderMetadataEndpoint orders the results by the identity_provider_metadata_endpoint field.
+func ByIdentityProviderMetadataEndpoint(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIdentityProviderMetadataEndpoint, opts...).ToFunc()
+}
+
+// ByIdentityProviderEntityID orders the results by the identity_provider_entity_id field.
+func ByIdentityProviderEntityID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIdentityProviderEntityID, opts...).ToFunc()
+}
+
+// ByOidcDiscoveryEndpoint orders the results by the oidc_discovery_endpoint field.
+func ByOidcDiscoveryEndpoint(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOidcDiscoveryEndpoint, opts...).ToFunc()
+}
+
+// ByIdentityProviderLoginEnforced orders the results by the identity_provider_login_enforced field.
+func ByIdentityProviderLoginEnforced(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIdentityProviderLoginEnforced, opts...).ToFunc()
+}
+
+// ByComplianceWebhookToken orders the results by the compliance_webhook_token field.
+func ByComplianceWebhookToken(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldComplianceWebhookToken, opts...).ToFunc()
+}
+
 var (
 	// history.OpType must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*history.OpType)(nil)
@@ -242,4 +322,11 @@ var (
 	_ graphql.Marshaler = (*enums.Region)(nil)
 	// enums.Region must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.Region)(nil)
+)
+
+var (
+	// enums.SSOProvider must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.SSOProvider)(nil)
+	// enums.SSOProvider must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.SSOProvider)(nil)
 )

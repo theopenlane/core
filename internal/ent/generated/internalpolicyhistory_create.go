@@ -312,6 +312,42 @@ func (iphc *InternalPolicyHistoryCreate) SetNillableSummary(s *string) *Internal
 	return iphc
 }
 
+// SetTagSuggestions sets the "tag_suggestions" field.
+func (iphc *InternalPolicyHistoryCreate) SetTagSuggestions(s []string) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetTagSuggestions(s)
+	return iphc
+}
+
+// SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
+func (iphc *InternalPolicyHistoryCreate) SetDismissedTagSuggestions(s []string) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetDismissedTagSuggestions(s)
+	return iphc
+}
+
+// SetControlSuggestions sets the "control_suggestions" field.
+func (iphc *InternalPolicyHistoryCreate) SetControlSuggestions(s []string) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetControlSuggestions(s)
+	return iphc
+}
+
+// SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
+func (iphc *InternalPolicyHistoryCreate) SetDismissedControlSuggestions(s []string) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetDismissedControlSuggestions(s)
+	return iphc
+}
+
+// SetImprovementSuggestions sets the "improvement_suggestions" field.
+func (iphc *InternalPolicyHistoryCreate) SetImprovementSuggestions(s []string) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetImprovementSuggestions(s)
+	return iphc
+}
+
+// SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
+func (iphc *InternalPolicyHistoryCreate) SetDismissedImprovementSuggestions(s []string) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetDismissedImprovementSuggestions(s)
+	return iphc
+}
+
 // SetID sets the "id" field.
 func (iphc *InternalPolicyHistoryCreate) SetID(s string) *InternalPolicyHistoryCreate {
 	iphc.mutation.SetID(s)
@@ -396,6 +432,30 @@ func (iphc *InternalPolicyHistoryCreate) defaults() {
 	if _, ok := iphc.mutation.ReviewFrequency(); !ok {
 		v := internalpolicyhistory.DefaultReviewFrequency
 		iphc.mutation.SetReviewFrequency(v)
+	}
+	if _, ok := iphc.mutation.TagSuggestions(); !ok {
+		v := internalpolicyhistory.DefaultTagSuggestions
+		iphc.mutation.SetTagSuggestions(v)
+	}
+	if _, ok := iphc.mutation.DismissedTagSuggestions(); !ok {
+		v := internalpolicyhistory.DefaultDismissedTagSuggestions
+		iphc.mutation.SetDismissedTagSuggestions(v)
+	}
+	if _, ok := iphc.mutation.ControlSuggestions(); !ok {
+		v := internalpolicyhistory.DefaultControlSuggestions
+		iphc.mutation.SetControlSuggestions(v)
+	}
+	if _, ok := iphc.mutation.DismissedControlSuggestions(); !ok {
+		v := internalpolicyhistory.DefaultDismissedControlSuggestions
+		iphc.mutation.SetDismissedControlSuggestions(v)
+	}
+	if _, ok := iphc.mutation.ImprovementSuggestions(); !ok {
+		v := internalpolicyhistory.DefaultImprovementSuggestions
+		iphc.mutation.SetImprovementSuggestions(v)
+	}
+	if _, ok := iphc.mutation.DismissedImprovementSuggestions(); !ok {
+		v := internalpolicyhistory.DefaultDismissedImprovementSuggestions
+		iphc.mutation.SetDismissedImprovementSuggestions(v)
 	}
 	if _, ok := iphc.mutation.ID(); !ok {
 		v := internalpolicyhistory.DefaultID()
@@ -559,6 +619,30 @@ func (iphc *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *
 	if value, ok := iphc.mutation.Summary(); ok {
 		_spec.SetField(internalpolicyhistory.FieldSummary, field.TypeString, value)
 		_node.Summary = value
+	}
+	if value, ok := iphc.mutation.TagSuggestions(); ok {
+		_spec.SetField(internalpolicyhistory.FieldTagSuggestions, field.TypeJSON, value)
+		_node.TagSuggestions = value
+	}
+	if value, ok := iphc.mutation.DismissedTagSuggestions(); ok {
+		_spec.SetField(internalpolicyhistory.FieldDismissedTagSuggestions, field.TypeJSON, value)
+		_node.DismissedTagSuggestions = value
+	}
+	if value, ok := iphc.mutation.ControlSuggestions(); ok {
+		_spec.SetField(internalpolicyhistory.FieldControlSuggestions, field.TypeJSON, value)
+		_node.ControlSuggestions = value
+	}
+	if value, ok := iphc.mutation.DismissedControlSuggestions(); ok {
+		_spec.SetField(internalpolicyhistory.FieldDismissedControlSuggestions, field.TypeJSON, value)
+		_node.DismissedControlSuggestions = value
+	}
+	if value, ok := iphc.mutation.ImprovementSuggestions(); ok {
+		_spec.SetField(internalpolicyhistory.FieldImprovementSuggestions, field.TypeJSON, value)
+		_node.ImprovementSuggestions = value
+	}
+	if value, ok := iphc.mutation.DismissedImprovementSuggestions(); ok {
+		_spec.SetField(internalpolicyhistory.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
+		_node.DismissedImprovementSuggestions = value
 	}
 	return _node, _spec
 }

@@ -62,6 +62,18 @@ type ActionPlanHistory struct {
 	DelegateID string `json:"delegate_id,omitempty"`
 	// Summary holds the value of the "summary" field.
 	Summary string `json:"summary,omitempty"`
+	// auto-generated tag suggestions for the action_plan
+	TagSuggestions []string `json:"tag_suggestions,omitempty"`
+	// tag suggestions dismissed by the user for the action_plan
+	DismissedTagSuggestions []string `json:"dismissed_tag_suggestions,omitempty"`
+	// proposed controls referenced in the action_plan
+	ControlSuggestions []string `json:"control_suggestions,omitempty"`
+	// control suggestions dismissed by the user for the action_plan
+	DismissedControlSuggestions []string `json:"dismissed_control_suggestions,omitempty"`
+	// suggested improvements for the action_plan
+	ImprovementSuggestions []string `json:"improvement_suggestions,omitempty"`
+	// improvement suggestions dismissed by the user for the action_plan
+	DismissedImprovementSuggestions []string `json:"dismissed_improvement_suggestions,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// due date of the action plan
@@ -78,7 +90,7 @@ func (*ActionPlanHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case actionplanhistory.FieldTags:
+		case actionplanhistory.FieldTags, actionplanhistory.FieldTagSuggestions, actionplanhistory.FieldDismissedTagSuggestions, actionplanhistory.FieldControlSuggestions, actionplanhistory.FieldDismissedControlSuggestions, actionplanhistory.FieldImprovementSuggestions, actionplanhistory.FieldDismissedImprovementSuggestions:
 			values[i] = new([]byte)
 		case actionplanhistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -237,6 +249,54 @@ func (aph *ActionPlanHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				aph.Summary = value.String
 			}
+		case actionplanhistory.FieldTagSuggestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field tag_suggestions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &aph.TagSuggestions); err != nil {
+					return fmt.Errorf("unmarshal field tag_suggestions: %w", err)
+				}
+			}
+		case actionplanhistory.FieldDismissedTagSuggestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field dismissed_tag_suggestions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &aph.DismissedTagSuggestions); err != nil {
+					return fmt.Errorf("unmarshal field dismissed_tag_suggestions: %w", err)
+				}
+			}
+		case actionplanhistory.FieldControlSuggestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field control_suggestions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &aph.ControlSuggestions); err != nil {
+					return fmt.Errorf("unmarshal field control_suggestions: %w", err)
+				}
+			}
+		case actionplanhistory.FieldDismissedControlSuggestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field dismissed_control_suggestions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &aph.DismissedControlSuggestions); err != nil {
+					return fmt.Errorf("unmarshal field dismissed_control_suggestions: %w", err)
+				}
+			}
+		case actionplanhistory.FieldImprovementSuggestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field improvement_suggestions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &aph.ImprovementSuggestions); err != nil {
+					return fmt.Errorf("unmarshal field improvement_suggestions: %w", err)
+				}
+			}
+		case actionplanhistory.FieldDismissedImprovementSuggestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field dismissed_improvement_suggestions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &aph.DismissedImprovementSuggestions); err != nil {
+					return fmt.Errorf("unmarshal field dismissed_improvement_suggestions: %w", err)
+				}
+			}
 		case actionplanhistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
@@ -359,6 +419,24 @@ func (aph *ActionPlanHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("summary=")
 	builder.WriteString(aph.Summary)
+	builder.WriteString(", ")
+	builder.WriteString("tag_suggestions=")
+	builder.WriteString(fmt.Sprintf("%v", aph.TagSuggestions))
+	builder.WriteString(", ")
+	builder.WriteString("dismissed_tag_suggestions=")
+	builder.WriteString(fmt.Sprintf("%v", aph.DismissedTagSuggestions))
+	builder.WriteString(", ")
+	builder.WriteString("control_suggestions=")
+	builder.WriteString(fmt.Sprintf("%v", aph.ControlSuggestions))
+	builder.WriteString(", ")
+	builder.WriteString("dismissed_control_suggestions=")
+	builder.WriteString(fmt.Sprintf("%v", aph.DismissedControlSuggestions))
+	builder.WriteString(", ")
+	builder.WriteString("improvement_suggestions=")
+	builder.WriteString(fmt.Sprintf("%v", aph.ImprovementSuggestions))
+	builder.WriteString(", ")
+	builder.WriteString("dismissed_improvement_suggestions=")
+	builder.WriteString(fmt.Sprintf("%v", aph.DismissedImprovementSuggestions))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(aph.OwnerID)

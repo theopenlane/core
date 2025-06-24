@@ -238,6 +238,118 @@ func (osc *OrganizationSettingCreate) SetAllowedEmailDomains(s []string) *Organi
 	return osc
 }
 
+// SetIdentityProvider sets the "identity_provider" field.
+func (osc *OrganizationSettingCreate) SetIdentityProvider(ep enums.SSOProvider) *OrganizationSettingCreate {
+	osc.mutation.SetIdentityProvider(ep)
+	return osc
+}
+
+// SetNillableIdentityProvider sets the "identity_provider" field if the given value is not nil.
+func (osc *OrganizationSettingCreate) SetNillableIdentityProvider(ep *enums.SSOProvider) *OrganizationSettingCreate {
+	if ep != nil {
+		osc.SetIdentityProvider(*ep)
+	}
+	return osc
+}
+
+// SetIdentityProviderClientID sets the "identity_provider_client_id" field.
+func (osc *OrganizationSettingCreate) SetIdentityProviderClientID(s string) *OrganizationSettingCreate {
+	osc.mutation.SetIdentityProviderClientID(s)
+	return osc
+}
+
+// SetNillableIdentityProviderClientID sets the "identity_provider_client_id" field if the given value is not nil.
+func (osc *OrganizationSettingCreate) SetNillableIdentityProviderClientID(s *string) *OrganizationSettingCreate {
+	if s != nil {
+		osc.SetIdentityProviderClientID(*s)
+	}
+	return osc
+}
+
+// SetIdentityProviderClientSecret sets the "identity_provider_client_secret" field.
+func (osc *OrganizationSettingCreate) SetIdentityProviderClientSecret(s string) *OrganizationSettingCreate {
+	osc.mutation.SetIdentityProviderClientSecret(s)
+	return osc
+}
+
+// SetNillableIdentityProviderClientSecret sets the "identity_provider_client_secret" field if the given value is not nil.
+func (osc *OrganizationSettingCreate) SetNillableIdentityProviderClientSecret(s *string) *OrganizationSettingCreate {
+	if s != nil {
+		osc.SetIdentityProviderClientSecret(*s)
+	}
+	return osc
+}
+
+// SetIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field.
+func (osc *OrganizationSettingCreate) SetIdentityProviderMetadataEndpoint(s string) *OrganizationSettingCreate {
+	osc.mutation.SetIdentityProviderMetadataEndpoint(s)
+	return osc
+}
+
+// SetNillableIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field if the given value is not nil.
+func (osc *OrganizationSettingCreate) SetNillableIdentityProviderMetadataEndpoint(s *string) *OrganizationSettingCreate {
+	if s != nil {
+		osc.SetIdentityProviderMetadataEndpoint(*s)
+	}
+	return osc
+}
+
+// SetIdentityProviderEntityID sets the "identity_provider_entity_id" field.
+func (osc *OrganizationSettingCreate) SetIdentityProviderEntityID(s string) *OrganizationSettingCreate {
+	osc.mutation.SetIdentityProviderEntityID(s)
+	return osc
+}
+
+// SetNillableIdentityProviderEntityID sets the "identity_provider_entity_id" field if the given value is not nil.
+func (osc *OrganizationSettingCreate) SetNillableIdentityProviderEntityID(s *string) *OrganizationSettingCreate {
+	if s != nil {
+		osc.SetIdentityProviderEntityID(*s)
+	}
+	return osc
+}
+
+// SetOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field.
+func (osc *OrganizationSettingCreate) SetOidcDiscoveryEndpoint(s string) *OrganizationSettingCreate {
+	osc.mutation.SetOidcDiscoveryEndpoint(s)
+	return osc
+}
+
+// SetNillableOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field if the given value is not nil.
+func (osc *OrganizationSettingCreate) SetNillableOidcDiscoveryEndpoint(s *string) *OrganizationSettingCreate {
+	if s != nil {
+		osc.SetOidcDiscoveryEndpoint(*s)
+	}
+	return osc
+}
+
+// SetIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field.
+func (osc *OrganizationSettingCreate) SetIdentityProviderLoginEnforced(b bool) *OrganizationSettingCreate {
+	osc.mutation.SetIdentityProviderLoginEnforced(b)
+	return osc
+}
+
+// SetNillableIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field if the given value is not nil.
+func (osc *OrganizationSettingCreate) SetNillableIdentityProviderLoginEnforced(b *bool) *OrganizationSettingCreate {
+	if b != nil {
+		osc.SetIdentityProviderLoginEnforced(*b)
+	}
+	return osc
+}
+
+// SetComplianceWebhookToken sets the "compliance_webhook_token" field.
+func (osc *OrganizationSettingCreate) SetComplianceWebhookToken(s string) *OrganizationSettingCreate {
+	osc.mutation.SetComplianceWebhookToken(s)
+	return osc
+}
+
+// SetNillableComplianceWebhookToken sets the "compliance_webhook_token" field if the given value is not nil.
+func (osc *OrganizationSettingCreate) SetNillableComplianceWebhookToken(s *string) *OrganizationSettingCreate {
+	if s != nil {
+		osc.SetComplianceWebhookToken(*s)
+	}
+	return osc
+}
+
 // SetID sets the "id" field.
 func (osc *OrganizationSettingCreate) SetID(s string) *OrganizationSettingCreate {
 	osc.mutation.SetID(s)
@@ -335,6 +447,21 @@ func (osc *OrganizationSettingCreate) defaults() error {
 		v := organizationsetting.DefaultBillingNotificationsEnabled
 		osc.mutation.SetBillingNotificationsEnabled(v)
 	}
+	if _, ok := osc.mutation.IdentityProvider(); !ok {
+		v := organizationsetting.DefaultIdentityProvider
+		osc.mutation.SetIdentityProvider(v)
+	}
+	if _, ok := osc.mutation.IdentityProviderLoginEnforced(); !ok {
+		v := organizationsetting.DefaultIdentityProviderLoginEnforced
+		osc.mutation.SetIdentityProviderLoginEnforced(v)
+	}
+	if _, ok := osc.mutation.ComplianceWebhookToken(); !ok {
+		if organizationsetting.DefaultComplianceWebhookToken == nil {
+			return fmt.Errorf("generated: uninitialized organizationsetting.DefaultComplianceWebhookToken (forgotten import generated/runtime?)")
+		}
+		v := organizationsetting.DefaultComplianceWebhookToken()
+		osc.mutation.SetComplianceWebhookToken(v)
+	}
 	if _, ok := osc.mutation.ID(); !ok {
 		if organizationsetting.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized organizationsetting.DefaultID (forgotten import generated/runtime?)")
@@ -374,6 +501,17 @@ func (osc *OrganizationSettingCreate) check() error {
 		if err := organizationsetting.AllowedEmailDomainsValidator(v); err != nil {
 			return &ValidationError{Name: "allowed_email_domains", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.allowed_email_domains": %w`, err)}
 		}
+	}
+	if v, ok := osc.mutation.IdentityProvider(); ok {
+		if err := organizationsetting.IdentityProviderValidator(v); err != nil {
+			return &ValidationError{Name: "identity_provider", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.identity_provider": %w`, err)}
+		}
+	}
+	if _, ok := osc.mutation.IdentityProviderLoginEnforced(); !ok {
+		return &ValidationError{Name: "identity_provider_login_enforced", err: errors.New(`generated: missing required field "OrganizationSetting.identity_provider_login_enforced"`)}
+	}
+	if _, ok := osc.mutation.ComplianceWebhookToken(); !ok {
+		return &ValidationError{Name: "compliance_webhook_token", err: errors.New(`generated: missing required field "OrganizationSetting.compliance_webhook_token"`)}
 	}
 	return nil
 }
@@ -474,6 +612,38 @@ func (osc *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgr
 	if value, ok := osc.mutation.AllowedEmailDomains(); ok {
 		_spec.SetField(organizationsetting.FieldAllowedEmailDomains, field.TypeJSON, value)
 		_node.AllowedEmailDomains = value
+	}
+	if value, ok := osc.mutation.IdentityProvider(); ok {
+		_spec.SetField(organizationsetting.FieldIdentityProvider, field.TypeEnum, value)
+		_node.IdentityProvider = value
+	}
+	if value, ok := osc.mutation.IdentityProviderClientID(); ok {
+		_spec.SetField(organizationsetting.FieldIdentityProviderClientID, field.TypeString, value)
+		_node.IdentityProviderClientID = &value
+	}
+	if value, ok := osc.mutation.IdentityProviderClientSecret(); ok {
+		_spec.SetField(organizationsetting.FieldIdentityProviderClientSecret, field.TypeString, value)
+		_node.IdentityProviderClientSecret = &value
+	}
+	if value, ok := osc.mutation.IdentityProviderMetadataEndpoint(); ok {
+		_spec.SetField(organizationsetting.FieldIdentityProviderMetadataEndpoint, field.TypeString, value)
+		_node.IdentityProviderMetadataEndpoint = value
+	}
+	if value, ok := osc.mutation.IdentityProviderEntityID(); ok {
+		_spec.SetField(organizationsetting.FieldIdentityProviderEntityID, field.TypeString, value)
+		_node.IdentityProviderEntityID = value
+	}
+	if value, ok := osc.mutation.OidcDiscoveryEndpoint(); ok {
+		_spec.SetField(organizationsetting.FieldOidcDiscoveryEndpoint, field.TypeString, value)
+		_node.OidcDiscoveryEndpoint = value
+	}
+	if value, ok := osc.mutation.IdentityProviderLoginEnforced(); ok {
+		_spec.SetField(organizationsetting.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
+		_node.IdentityProviderLoginEnforced = value
+	}
+	if value, ok := osc.mutation.ComplianceWebhookToken(); ok {
+		_spec.SetField(organizationsetting.FieldComplianceWebhookToken, field.TypeString, value)
+		_node.ComplianceWebhookToken = &value
 	}
 	if nodes := osc.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

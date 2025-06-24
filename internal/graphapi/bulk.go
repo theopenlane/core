@@ -47,6 +47,25 @@ func (r *mutationResolver) bulkCreateAPIToken(ctx context.Context, input []*gene
 	}, nil
 }
 
+// bulkCreateAsset uses the CreateBulk function to create multiple Asset entities
+func (r *mutationResolver) bulkCreateAsset(ctx context.Context, input []*generated.CreateAssetInput) (*model.AssetBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.AssetCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Asset.Create().SetInput(*data)
+	}
+
+	res, err := c.Asset.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "asset"})
+	}
+
+	// return response
+	return &model.AssetBulkCreatePayload{
+		Assets: res,
+	}, nil
+}
+
 // bulkCreateContact uses the CreateBulk function to create multiple Contact entities
 func (r *mutationResolver) bulkCreateContact(ctx context.Context, input []*generated.CreateContactInput) (*model.ContactBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -557,6 +576,25 @@ func (r *mutationResolver) bulkCreateRisk(ctx context.Context, input []*generate
 	// return response
 	return &model.RiskBulkCreatePayload{
 		Risks: res,
+	}, nil
+}
+
+// bulkCreateScan uses the CreateBulk function to create multiple Scan entities
+func (r *mutationResolver) bulkCreateScan(ctx context.Context, input []*generated.CreateScanInput) (*model.ScanBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.ScanCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Scan.Create().SetInput(*data)
+	}
+
+	res, err := c.Scan.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "scan"})
+	}
+
+	// return response
+	return &model.ScanBulkCreatePayload{
+		Scans: res,
 	}, nil
 }
 

@@ -14,7 +14,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -22,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 
@@ -46,6 +49,9 @@ type RiskQuery struct {
 	withPrograms              *ProgramQuery
 	withActionPlans           *ActionPlanQuery
 	withTasks                 *TaskQuery
+	withAssets                *AssetQuery
+	withEntities              *EntityQuery
+	withScans                 *ScanQuery
 	withStakeholder           *GroupQuery
 	withDelegate              *GroupQuery
 	withFKs                   bool
@@ -61,6 +67,9 @@ type RiskQuery struct {
 	withNamedPrograms         map[string]*ProgramQuery
 	withNamedActionPlans      map[string]*ActionPlanQuery
 	withNamedTasks            map[string]*TaskQuery
+	withNamedAssets           map[string]*AssetQuery
+	withNamedEntities         map[string]*EntityQuery
+	withNamedScans            map[string]*ScanQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -372,6 +381,81 @@ func (rq *RiskQuery) QueryTasks() *TaskQuery {
 	return query
 }
 
+// QueryAssets chains the current query on the "assets" edge.
+func (rq *RiskQuery) QueryAssets() *AssetQuery {
+	query := (&AssetClient{config: rq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := rq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := rq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, risk.AssetsTable, risk.AssetsColumn),
+		)
+		schemaConfig := rq.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.Asset
+		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEntities chains the current query on the "entities" edge.
+func (rq *RiskQuery) QueryEntities() *EntityQuery {
+	query := (&EntityClient{config: rq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := rq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := rq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, risk.EntitiesTable, risk.EntitiesColumn),
+		)
+		schemaConfig := rq.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.Entity
+		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryScans chains the current query on the "scans" edge.
+func (rq *RiskQuery) QueryScans() *ScanQuery {
+	query := (&ScanClient{config: rq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := rq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := rq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, risk.ScansTable, risk.ScansColumn),
+		)
+		schemaConfig := rq.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.Scan
+		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryStakeholder chains the current query on the "stakeholder" edge.
 func (rq *RiskQuery) QueryStakeholder() *GroupQuery {
 	query := (&GroupClient{config: rq.config}).Query()
@@ -625,6 +709,9 @@ func (rq *RiskQuery) Clone() *RiskQuery {
 		withPrograms:         rq.withPrograms.Clone(),
 		withActionPlans:      rq.withActionPlans.Clone(),
 		withTasks:            rq.withTasks.Clone(),
+		withAssets:           rq.withAssets.Clone(),
+		withEntities:         rq.withEntities.Clone(),
+		withScans:            rq.withScans.Clone(),
 		withStakeholder:      rq.withStakeholder.Clone(),
 		withDelegate:         rq.withDelegate.Clone(),
 		// clone intermediate query.
@@ -755,6 +842,39 @@ func (rq *RiskQuery) WithTasks(opts ...func(*TaskQuery)) *RiskQuery {
 	return rq
 }
 
+// WithAssets tells the query-builder to eager-load the nodes that are connected to
+// the "assets" edge. The optional arguments are used to configure the query builder of the edge.
+func (rq *RiskQuery) WithAssets(opts ...func(*AssetQuery)) *RiskQuery {
+	query := (&AssetClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	rq.withAssets = query
+	return rq
+}
+
+// WithEntities tells the query-builder to eager-load the nodes that are connected to
+// the "entities" edge. The optional arguments are used to configure the query builder of the edge.
+func (rq *RiskQuery) WithEntities(opts ...func(*EntityQuery)) *RiskQuery {
+	query := (&EntityClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	rq.withEntities = query
+	return rq
+}
+
+// WithScans tells the query-builder to eager-load the nodes that are connected to
+// the "scans" edge. The optional arguments are used to configure the query builder of the edge.
+func (rq *RiskQuery) WithScans(opts ...func(*ScanQuery)) *RiskQuery {
+	query := (&ScanClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	rq.withScans = query
+	return rq
+}
+
 // WithStakeholder tells the query-builder to eager-load the nodes that are connected to
 // the "stakeholder" edge. The optional arguments are used to configure the query builder of the edge.
 func (rq *RiskQuery) WithStakeholder(opts ...func(*GroupQuery)) *RiskQuery {
@@ -862,7 +982,7 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		nodes       = []*Risk{}
 		withFKs     = rq.withFKs
 		_spec       = rq.querySpec()
-		loadedTypes = [13]bool{
+		loadedTypes = [16]bool{
 			rq.withOwner != nil,
 			rq.withBlockedGroups != nil,
 			rq.withEditors != nil,
@@ -874,6 +994,9 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 			rq.withPrograms != nil,
 			rq.withActionPlans != nil,
 			rq.withTasks != nil,
+			rq.withAssets != nil,
+			rq.withEntities != nil,
+			rq.withScans != nil,
 			rq.withStakeholder != nil,
 			rq.withDelegate != nil,
 		}
@@ -980,6 +1103,27 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 			return nil, err
 		}
 	}
+	if query := rq.withAssets; query != nil {
+		if err := rq.loadAssets(ctx, query, nodes,
+			func(n *Risk) { n.Edges.Assets = []*Asset{} },
+			func(n *Risk, e *Asset) { n.Edges.Assets = append(n.Edges.Assets, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := rq.withEntities; query != nil {
+		if err := rq.loadEntities(ctx, query, nodes,
+			func(n *Risk) { n.Edges.Entities = []*Entity{} },
+			func(n *Risk, e *Entity) { n.Edges.Entities = append(n.Edges.Entities, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := rq.withScans; query != nil {
+		if err := rq.loadScans(ctx, query, nodes,
+			func(n *Risk) { n.Edges.Scans = []*Scan{} },
+			func(n *Risk, e *Scan) { n.Edges.Scans = append(n.Edges.Scans, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := rq.withStakeholder; query != nil {
 		if err := rq.loadStakeholder(ctx, query, nodes, nil,
 			func(n *Risk, e *Group) { n.Edges.Stakeholder = e }); err != nil {
@@ -1059,6 +1203,27 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		if err := rq.loadTasks(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedTasks(name) },
 			func(n *Risk, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range rq.withNamedAssets {
+		if err := rq.loadAssets(ctx, query, nodes,
+			func(n *Risk) { n.appendNamedAssets(name) },
+			func(n *Risk, e *Asset) { n.appendNamedAssets(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range rq.withNamedEntities {
+		if err := rq.loadEntities(ctx, query, nodes,
+			func(n *Risk) { n.appendNamedEntities(name) },
+			func(n *Risk, e *Entity) { n.appendNamedEntities(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range rq.withNamedScans {
+		if err := rq.loadScans(ctx, query, nodes,
+			func(n *Risk) { n.appendNamedScans(name) },
+			func(n *Risk, e *Scan) { n.appendNamedScans(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1719,6 +1884,99 @@ func (rq *RiskQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*R
 	}
 	return nil
 }
+func (rq *RiskQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Asset)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Risk)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Asset(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(risk.AssetsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.risk_assets
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "risk_assets" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "risk_assets" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (rq *RiskQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Entity)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Risk)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Entity(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(risk.EntitiesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.risk_entities
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "risk_entities" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "risk_entities" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (rq *RiskQuery) loadScans(ctx context.Context, query *ScanQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Scan)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Risk)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Scan(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(risk.ScansColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.risk_scans
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "risk_scans" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "risk_scans" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (rq *RiskQuery) loadStakeholder(ctx context.Context, query *GroupQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Group)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Risk)
@@ -2022,6 +2280,48 @@ func (rq *RiskQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *Risk
 		rq.withNamedTasks = make(map[string]*TaskQuery)
 	}
 	rq.withNamedTasks[name] = query
+	return rq
+}
+
+// WithNamedAssets tells the query-builder to eager-load the nodes that are connected to the "assets"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (rq *RiskQuery) WithNamedAssets(name string, opts ...func(*AssetQuery)) *RiskQuery {
+	query := (&AssetClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if rq.withNamedAssets == nil {
+		rq.withNamedAssets = make(map[string]*AssetQuery)
+	}
+	rq.withNamedAssets[name] = query
+	return rq
+}
+
+// WithNamedEntities tells the query-builder to eager-load the nodes that are connected to the "entities"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (rq *RiskQuery) WithNamedEntities(name string, opts ...func(*EntityQuery)) *RiskQuery {
+	query := (&EntityClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if rq.withNamedEntities == nil {
+		rq.withNamedEntities = make(map[string]*EntityQuery)
+	}
+	rq.withNamedEntities[name] = query
+	return rq
+}
+
+// WithNamedScans tells the query-builder to eager-load the nodes that are connected to the "scans"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (rq *RiskQuery) WithNamedScans(name string, opts ...func(*ScanQuery)) *RiskQuery {
+	query := (&ScanClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if rq.withNamedScans == nil {
+		rq.withNamedScans = make(map[string]*ScanQuery)
+	}
+	rq.withNamedScans[name] = query
 	return rq
 }
 

@@ -312,6 +312,42 @@ func (phc *ProcedureHistoryCreate) SetNillableSummary(s *string) *ProcedureHisto
 	return phc
 }
 
+// SetTagSuggestions sets the "tag_suggestions" field.
+func (phc *ProcedureHistoryCreate) SetTagSuggestions(s []string) *ProcedureHistoryCreate {
+	phc.mutation.SetTagSuggestions(s)
+	return phc
+}
+
+// SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
+func (phc *ProcedureHistoryCreate) SetDismissedTagSuggestions(s []string) *ProcedureHistoryCreate {
+	phc.mutation.SetDismissedTagSuggestions(s)
+	return phc
+}
+
+// SetControlSuggestions sets the "control_suggestions" field.
+func (phc *ProcedureHistoryCreate) SetControlSuggestions(s []string) *ProcedureHistoryCreate {
+	phc.mutation.SetControlSuggestions(s)
+	return phc
+}
+
+// SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
+func (phc *ProcedureHistoryCreate) SetDismissedControlSuggestions(s []string) *ProcedureHistoryCreate {
+	phc.mutation.SetDismissedControlSuggestions(s)
+	return phc
+}
+
+// SetImprovementSuggestions sets the "improvement_suggestions" field.
+func (phc *ProcedureHistoryCreate) SetImprovementSuggestions(s []string) *ProcedureHistoryCreate {
+	phc.mutation.SetImprovementSuggestions(s)
+	return phc
+}
+
+// SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
+func (phc *ProcedureHistoryCreate) SetDismissedImprovementSuggestions(s []string) *ProcedureHistoryCreate {
+	phc.mutation.SetDismissedImprovementSuggestions(s)
+	return phc
+}
+
 // SetID sets the "id" field.
 func (phc *ProcedureHistoryCreate) SetID(s string) *ProcedureHistoryCreate {
 	phc.mutation.SetID(s)
@@ -396,6 +432,30 @@ func (phc *ProcedureHistoryCreate) defaults() {
 	if _, ok := phc.mutation.ReviewFrequency(); !ok {
 		v := procedurehistory.DefaultReviewFrequency
 		phc.mutation.SetReviewFrequency(v)
+	}
+	if _, ok := phc.mutation.TagSuggestions(); !ok {
+		v := procedurehistory.DefaultTagSuggestions
+		phc.mutation.SetTagSuggestions(v)
+	}
+	if _, ok := phc.mutation.DismissedTagSuggestions(); !ok {
+		v := procedurehistory.DefaultDismissedTagSuggestions
+		phc.mutation.SetDismissedTagSuggestions(v)
+	}
+	if _, ok := phc.mutation.ControlSuggestions(); !ok {
+		v := procedurehistory.DefaultControlSuggestions
+		phc.mutation.SetControlSuggestions(v)
+	}
+	if _, ok := phc.mutation.DismissedControlSuggestions(); !ok {
+		v := procedurehistory.DefaultDismissedControlSuggestions
+		phc.mutation.SetDismissedControlSuggestions(v)
+	}
+	if _, ok := phc.mutation.ImprovementSuggestions(); !ok {
+		v := procedurehistory.DefaultImprovementSuggestions
+		phc.mutation.SetImprovementSuggestions(v)
+	}
+	if _, ok := phc.mutation.DismissedImprovementSuggestions(); !ok {
+		v := procedurehistory.DefaultDismissedImprovementSuggestions
+		phc.mutation.SetDismissedImprovementSuggestions(v)
 	}
 	if _, ok := phc.mutation.ID(); !ok {
 		v := procedurehistory.DefaultID()
@@ -559,6 +619,30 @@ func (phc *ProcedureHistoryCreate) createSpec() (*ProcedureHistory, *sqlgraph.Cr
 	if value, ok := phc.mutation.Summary(); ok {
 		_spec.SetField(procedurehistory.FieldSummary, field.TypeString, value)
 		_node.Summary = value
+	}
+	if value, ok := phc.mutation.TagSuggestions(); ok {
+		_spec.SetField(procedurehistory.FieldTagSuggestions, field.TypeJSON, value)
+		_node.TagSuggestions = value
+	}
+	if value, ok := phc.mutation.DismissedTagSuggestions(); ok {
+		_spec.SetField(procedurehistory.FieldDismissedTagSuggestions, field.TypeJSON, value)
+		_node.DismissedTagSuggestions = value
+	}
+	if value, ok := phc.mutation.ControlSuggestions(); ok {
+		_spec.SetField(procedurehistory.FieldControlSuggestions, field.TypeJSON, value)
+		_node.ControlSuggestions = value
+	}
+	if value, ok := phc.mutation.DismissedControlSuggestions(); ok {
+		_spec.SetField(procedurehistory.FieldDismissedControlSuggestions, field.TypeJSON, value)
+		_node.DismissedControlSuggestions = value
+	}
+	if value, ok := phc.mutation.ImprovementSuggestions(); ok {
+		_spec.SetField(procedurehistory.FieldImprovementSuggestions, field.TypeJSON, value)
+		_node.ImprovementSuggestions = value
+	}
+	if value, ok := phc.mutation.DismissedImprovementSuggestions(); ok {
+		_spec.SetField(procedurehistory.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
+		_node.DismissedImprovementSuggestions = value
 	}
 	return _node, _spec
 }

@@ -399,6 +399,30 @@ type ActionPlan implements Node {
 	delegateID: ID
 	summary: String
 	"""
+	auto-generated tag suggestions for the action_plan
+	"""
+	tagSuggestions: [String!]
+	"""
+	tag suggestions dismissed by the user for the action_plan
+	"""
+	dismissedTagSuggestions: [String!]
+	"""
+	proposed controls referenced in the action_plan
+	"""
+	controlSuggestions: [String!]
+	"""
+	control suggestions dismissed by the user for the action_plan
+	"""
+	dismissedControlSuggestions: [String!]
+	"""
+	suggested improvements for the action_plan
+	"""
+	improvementSuggestions: [String!]
+	"""
+	improvement suggestions dismissed by the user for the action_plan
+	"""
+	dismissedImprovementSuggestions: [String!]
+	"""
 	the organization id that owns the object
 	"""
 	ownerID: ID
@@ -678,6 +702,30 @@ type ActionPlanHistory implements Node {
 	"""
 	delegateID: String
 	summary: String
+	"""
+	auto-generated tag suggestions for the action_plan
+	"""
+	tagSuggestions: [String!]
+	"""
+	tag suggestions dismissed by the user for the action_plan
+	"""
+	dismissedTagSuggestions: [String!]
+	"""
+	proposed controls referenced in the action_plan
+	"""
+	controlSuggestions: [String!]
+	"""
+	control suggestions dismissed by the user for the action_plan
+	"""
+	dismissedControlSuggestions: [String!]
+	"""
+	suggested improvements for the action_plan
+	"""
+	improvementSuggestions: [String!]
+	"""
+	improvement suggestions dismissed by the user for the action_plan
+	"""
+	dismissedImprovementSuggestions: [String!]
 	"""
 	the organization id that owns the object
 	"""
@@ -1500,6 +1548,872 @@ scalar AssessmentMethod
 The `AssessmentObjective` scalar type represents objectives that are validated during the audit to ensure the control is implemented
 """
 scalar AssessmentObjective
+type Asset implements Node {
+	id: ID!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	the organization id that owns the object
+	"""
+	ownerID: ID
+	"""
+	the type of the asset, e.g. technology, domain, device, etc
+	"""
+	assetType: AssetAssetType!
+	"""
+	the name of the asset, e.g. matts computer, office router, IP address, etc
+	"""
+	name: String!
+	description: String
+	"""
+	unique identifier like domain, device id, etc
+	"""
+	identifier: String
+	"""
+	the website of the asset, if applicable
+	"""
+	website: String
+	"""
+	the CPE (Common Platform Enumeration) of the asset, if applicable
+	"""
+	cpe: String
+	"""
+	the categories of the asset, e.g. web server, database, etc
+	"""
+	categories: [String!]
+	owner: Organization
+	blockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	editors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	viewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	scans(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Scans returned from the connection.
+		"""
+		orderBy: [ScanOrder!]
+
+		"""
+		Filtering options for Scans returned from the connection.
+		"""
+		where: ScanWhereInput
+	): ScanConnection!
+	entities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Entities returned from the connection.
+		"""
+		orderBy: [EntityOrder!]
+
+		"""
+		Filtering options for Entities returned from the connection.
+		"""
+		where: EntityWhereInput
+	): EntityConnection!
+	controls(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Controls returned from the connection.
+		"""
+		orderBy: [ControlOrder!]
+
+		"""
+		Filtering options for Controls returned from the connection.
+		"""
+		where: ControlWhereInput
+	): ControlConnection!
+}
+"""
+AssetAssetType is enum for the field asset_type
+"""
+enum AssetAssetType @goModel(model: "github.com/theopenlane/core/pkg/enums.AssetType") {
+	TECHNOLOGY
+	DOMAIN
+	DEVICE
+	TELEPHONE
+}
+"""
+Return response for createBulkAsset mutation
+"""
+type AssetBulkCreatePayload {
+	"""
+	Created assets
+	"""
+	assets: [Asset!]
+}
+"""
+A connection to a list of items.
+"""
+type AssetConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [AssetEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+Return response for createAsset mutation
+"""
+type AssetCreatePayload {
+	"""
+	Created asset
+	"""
+	asset: Asset!
+}
+"""
+Return response for deleteAsset mutation
+"""
+type AssetDeletePayload {
+	"""
+	Deleted asset ID
+	"""
+	deletedID: ID!
+}
+"""
+An edge in a connection.
+"""
+type AssetEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: Asset
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+type AssetHistory implements Node {
+	id: ID!
+	historyTime: Time!
+	ref: String
+	operation: AssetHistoryOpType!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	the organization id that owns the object
+	"""
+	ownerID: String
+	"""
+	the type of the asset, e.g. technology, domain, device, etc
+	"""
+	assetType: AssetHistoryAssetType!
+	"""
+	the name of the asset, e.g. matts computer, office router, IP address, etc
+	"""
+	name: String!
+	description: String
+	"""
+	unique identifier like domain, device id, etc
+	"""
+	identifier: String
+	"""
+	the website of the asset, if applicable
+	"""
+	website: String
+	"""
+	the CPE (Common Platform Enumeration) of the asset, if applicable
+	"""
+	cpe: String
+	"""
+	the categories of the asset, e.g. web server, database, etc
+	"""
+	categories: [String!]
+}
+"""
+AssetHistoryAssetType is enum for the field asset_type
+"""
+enum AssetHistoryAssetType @goModel(model: "github.com/theopenlane/core/pkg/enums.AssetType") {
+	TECHNOLOGY
+	DOMAIN
+	DEVICE
+	TELEPHONE
+}
+"""
+A connection to a list of items.
+"""
+type AssetHistoryConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [AssetHistoryEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type AssetHistoryEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: AssetHistory
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+"""
+AssetHistoryOpType is enum for the field operation
+"""
+enum AssetHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+	INSERT
+	UPDATE
+	DELETE
+}
+"""
+Ordering options for AssetHistory connections
+"""
+input AssetHistoryOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order AssetHistories.
+	"""
+	field: AssetHistoryOrderField!
+}
+"""
+Properties by which AssetHistory connections can be ordered.
+"""
+enum AssetHistoryOrderField {
+	history_time
+	created_at
+	updated_at
+	ASSET_TYPE
+	name
+}
+"""
+AssetHistoryWhereInput is used for filtering AssetHistory objects.
+Input was generated by ent.
+"""
+input AssetHistoryWhereInput {
+	not: AssetHistoryWhereInput
+	and: [AssetHistoryWhereInput!]
+	or: [AssetHistoryWhereInput!]
+	"""
+	id field predicates
+	"""
+	id: ID
+	idNEQ: ID
+	idIn: [ID!]
+	idNotIn: [ID!]
+	idGT: ID
+	idGTE: ID
+	idLT: ID
+	idLTE: ID
+	idEqualFold: ID
+	idContainsFold: ID
+	"""
+	history_time field predicates
+	"""
+	historyTime: Time
+	historyTimeNEQ: Time
+	historyTimeIn: [Time!]
+	historyTimeNotIn: [Time!]
+	historyTimeGT: Time
+	historyTimeGTE: Time
+	historyTimeLT: Time
+	historyTimeLTE: Time
+	"""
+	ref field predicates
+	"""
+	ref: String
+	refNEQ: String
+	refIn: [String!]
+	refNotIn: [String!]
+	refGT: String
+	refGTE: String
+	refLT: String
+	refLTE: String
+	refContains: String
+	refHasPrefix: String
+	refHasSuffix: String
+	refIsNil: Boolean
+	refNotNil: Boolean
+	refEqualFold: String
+	refContainsFold: String
+	"""
+	operation field predicates
+	"""
+	operation: AssetHistoryOpType
+	operationNEQ: AssetHistoryOpType
+	operationIn: [AssetHistoryOpType!]
+	operationNotIn: [AssetHistoryOpType!]
+	"""
+	created_at field predicates
+	"""
+	createdAt: Time
+	createdAtNEQ: Time
+	createdAtIn: [Time!]
+	createdAtNotIn: [Time!]
+	createdAtGT: Time
+	createdAtGTE: Time
+	createdAtLT: Time
+	createdAtLTE: Time
+	createdAtIsNil: Boolean
+	createdAtNotNil: Boolean
+	"""
+	updated_at field predicates
+	"""
+	updatedAt: Time
+	updatedAtNEQ: Time
+	updatedAtIn: [Time!]
+	updatedAtNotIn: [Time!]
+	updatedAtGT: Time
+	updatedAtGTE: Time
+	updatedAtLT: Time
+	updatedAtLTE: Time
+	updatedAtIsNil: Boolean
+	updatedAtNotNil: Boolean
+	"""
+	created_by field predicates
+	"""
+	createdBy: String
+	createdByNEQ: String
+	createdByIn: [String!]
+	createdByNotIn: [String!]
+	createdByGT: String
+	createdByGTE: String
+	createdByLT: String
+	createdByLTE: String
+	createdByContains: String
+	createdByHasPrefix: String
+	createdByHasSuffix: String
+	createdByIsNil: Boolean
+	createdByNotNil: Boolean
+	createdByEqualFold: String
+	createdByContainsFold: String
+	"""
+	updated_by field predicates
+	"""
+	updatedBy: String
+	updatedByNEQ: String
+	updatedByIn: [String!]
+	updatedByNotIn: [String!]
+	updatedByGT: String
+	updatedByGTE: String
+	updatedByLT: String
+	updatedByLTE: String
+	updatedByContains: String
+	updatedByHasPrefix: String
+	updatedByHasSuffix: String
+	updatedByIsNil: Boolean
+	updatedByNotNil: Boolean
+	updatedByEqualFold: String
+	updatedByContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: String
+	ownerIDNEQ: String
+	ownerIDIn: [String!]
+	ownerIDNotIn: [String!]
+	ownerIDGT: String
+	ownerIDGTE: String
+	ownerIDLT: String
+	ownerIDLTE: String
+	ownerIDContains: String
+	ownerIDHasPrefix: String
+	ownerIDHasSuffix: String
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: String
+	ownerIDContainsFold: String
+	"""
+	asset_type field predicates
+	"""
+	assetType: AssetHistoryAssetType
+	assetTypeNEQ: AssetHistoryAssetType
+	assetTypeIn: [AssetHistoryAssetType!]
+	assetTypeNotIn: [AssetHistoryAssetType!]
+	"""
+	name field predicates
+	"""
+	name: String
+	nameNEQ: String
+	nameIn: [String!]
+	nameNotIn: [String!]
+	nameGT: String
+	nameGTE: String
+	nameLT: String
+	nameLTE: String
+	nameContains: String
+	nameHasPrefix: String
+	nameHasSuffix: String
+	nameEqualFold: String
+	nameContainsFold: String
+	"""
+	description field predicates
+	"""
+	description: String
+	descriptionNEQ: String
+	descriptionIn: [String!]
+	descriptionNotIn: [String!]
+	descriptionGT: String
+	descriptionGTE: String
+	descriptionLT: String
+	descriptionLTE: String
+	descriptionContains: String
+	descriptionHasPrefix: String
+	descriptionHasSuffix: String
+	descriptionIsNil: Boolean
+	descriptionNotNil: Boolean
+	descriptionEqualFold: String
+	descriptionContainsFold: String
+	"""
+	identifier field predicates
+	"""
+	identifier: String
+	identifierNEQ: String
+	identifierIn: [String!]
+	identifierNotIn: [String!]
+	identifierGT: String
+	identifierGTE: String
+	identifierLT: String
+	identifierLTE: String
+	identifierContains: String
+	identifierHasPrefix: String
+	identifierHasSuffix: String
+	identifierIsNil: Boolean
+	identifierNotNil: Boolean
+	identifierEqualFold: String
+	identifierContainsFold: String
+	"""
+	website field predicates
+	"""
+	website: String
+	websiteNEQ: String
+	websiteIn: [String!]
+	websiteNotIn: [String!]
+	websiteGT: String
+	websiteGTE: String
+	websiteLT: String
+	websiteLTE: String
+	websiteContains: String
+	websiteHasPrefix: String
+	websiteHasSuffix: String
+	websiteIsNil: Boolean
+	websiteNotNil: Boolean
+	websiteEqualFold: String
+	websiteContainsFold: String
+}
+"""
+Ordering options for Asset connections
+"""
+input AssetOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order Assets.
+	"""
+	field: AssetOrderField!
+}
+"""
+Properties by which Asset connections can be ordered.
+"""
+enum AssetOrderField {
+	created_at
+	updated_at
+	ASSET_TYPE
+	name
+}
+"""
+Return response for updateAsset mutation
+"""
+type AssetUpdatePayload {
+	"""
+	Updated asset
+	"""
+	asset: Asset!
+}
+"""
+AssetWhereInput is used for filtering Asset objects.
+Input was generated by ent.
+"""
+input AssetWhereInput {
+	not: AssetWhereInput
+	and: [AssetWhereInput!]
+	or: [AssetWhereInput!]
+	"""
+	id field predicates
+	"""
+	id: ID
+	idNEQ: ID
+	idIn: [ID!]
+	idNotIn: [ID!]
+	idGT: ID
+	idGTE: ID
+	idLT: ID
+	idLTE: ID
+	idEqualFold: ID
+	idContainsFold: ID
+	"""
+	created_at field predicates
+	"""
+	createdAt: Time
+	createdAtNEQ: Time
+	createdAtIn: [Time!]
+	createdAtNotIn: [Time!]
+	createdAtGT: Time
+	createdAtGTE: Time
+	createdAtLT: Time
+	createdAtLTE: Time
+	createdAtIsNil: Boolean
+	createdAtNotNil: Boolean
+	"""
+	updated_at field predicates
+	"""
+	updatedAt: Time
+	updatedAtNEQ: Time
+	updatedAtIn: [Time!]
+	updatedAtNotIn: [Time!]
+	updatedAtGT: Time
+	updatedAtGTE: Time
+	updatedAtLT: Time
+	updatedAtLTE: Time
+	updatedAtIsNil: Boolean
+	updatedAtNotNil: Boolean
+	"""
+	created_by field predicates
+	"""
+	createdBy: String
+	createdByNEQ: String
+	createdByIn: [String!]
+	createdByNotIn: [String!]
+	createdByGT: String
+	createdByGTE: String
+	createdByLT: String
+	createdByLTE: String
+	createdByContains: String
+	createdByHasPrefix: String
+	createdByHasSuffix: String
+	createdByIsNil: Boolean
+	createdByNotNil: Boolean
+	createdByEqualFold: String
+	createdByContainsFold: String
+	"""
+	updated_by field predicates
+	"""
+	updatedBy: String
+	updatedByNEQ: String
+	updatedByIn: [String!]
+	updatedByNotIn: [String!]
+	updatedByGT: String
+	updatedByGTE: String
+	updatedByLT: String
+	updatedByLTE: String
+	updatedByContains: String
+	updatedByHasPrefix: String
+	updatedByHasSuffix: String
+	updatedByIsNil: Boolean
+	updatedByNotNil: Boolean
+	updatedByEqualFold: String
+	updatedByContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: ID
+	ownerIDNEQ: ID
+	ownerIDIn: [ID!]
+	ownerIDNotIn: [ID!]
+	ownerIDGT: ID
+	ownerIDGTE: ID
+	ownerIDLT: ID
+	ownerIDLTE: ID
+	ownerIDContains: ID
+	ownerIDHasPrefix: ID
+	ownerIDHasSuffix: ID
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: ID
+	ownerIDContainsFold: ID
+	"""
+	asset_type field predicates
+	"""
+	assetType: AssetAssetType
+	assetTypeNEQ: AssetAssetType
+	assetTypeIn: [AssetAssetType!]
+	assetTypeNotIn: [AssetAssetType!]
+	"""
+	name field predicates
+	"""
+	name: String
+	nameNEQ: String
+	nameIn: [String!]
+	nameNotIn: [String!]
+	nameGT: String
+	nameGTE: String
+	nameLT: String
+	nameLTE: String
+	nameContains: String
+	nameHasPrefix: String
+	nameHasSuffix: String
+	nameEqualFold: String
+	nameContainsFold: String
+	"""
+	description field predicates
+	"""
+	description: String
+	descriptionNEQ: String
+	descriptionIn: [String!]
+	descriptionNotIn: [String!]
+	descriptionGT: String
+	descriptionGTE: String
+	descriptionLT: String
+	descriptionLTE: String
+	descriptionContains: String
+	descriptionHasPrefix: String
+	descriptionHasSuffix: String
+	descriptionIsNil: Boolean
+	descriptionNotNil: Boolean
+	descriptionEqualFold: String
+	descriptionContainsFold: String
+	"""
+	identifier field predicates
+	"""
+	identifier: String
+	identifierNEQ: String
+	identifierIn: [String!]
+	identifierNotIn: [String!]
+	identifierGT: String
+	identifierGTE: String
+	identifierLT: String
+	identifierLTE: String
+	identifierContains: String
+	identifierHasPrefix: String
+	identifierHasSuffix: String
+	identifierIsNil: Boolean
+	identifierNotNil: Boolean
+	identifierEqualFold: String
+	identifierContainsFold: String
+	"""
+	website field predicates
+	"""
+	website: String
+	websiteNEQ: String
+	websiteIn: [String!]
+	websiteNotIn: [String!]
+	websiteGT: String
+	websiteGTE: String
+	websiteLT: String
+	websiteLTE: String
+	websiteContains: String
+	websiteHasPrefix: String
+	websiteHasSuffix: String
+	websiteIsNil: Boolean
+	websiteNotNil: Boolean
+	websiteEqualFold: String
+	websiteContainsFold: String
+	"""
+	owner edge predicates
+	"""
+	hasOwner: Boolean
+	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	blocked_groups edge predicates
+	"""
+	hasBlockedGroups: Boolean
+	hasBlockedGroupsWith: [GroupWhereInput!]
+	"""
+	editors edge predicates
+	"""
+	hasEditors: Boolean
+	hasEditorsWith: [GroupWhereInput!]
+	"""
+	viewers edge predicates
+	"""
+	hasViewers: Boolean
+	hasViewersWith: [GroupWhereInput!]
+	"""
+	scans edge predicates
+	"""
+	hasScans: Boolean
+	hasScansWith: [ScanWhereInput!]
+	"""
+	entities edge predicates
+	"""
+	hasEntities: Boolean
+	hasEntitiesWith: [EntityWhereInput!]
+	"""
+	controls edge predicates
+	"""
+	hasControls: Boolean
+	hasControlsWith: [ControlWhereInput!]
+}
 type AuditLog implements Node {
 	table: String
 	time: Time
@@ -2871,6 +3785,68 @@ type Control implements Node {
 		"""
 		where: ProgramWhereInput
 	): ProgramConnection!
+	assets(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Assets returned from the connection.
+		"""
+		orderBy: [AssetOrder!]
+
+		"""
+		Filtering options for Assets returned from the connection.
+		"""
+		where: AssetWhereInput
+	): AssetConnection!
+	scans(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Scans returned from the connection.
+		"""
+		orderBy: [ScanOrder!]
+
+		"""
+		Filtering options for Scans returned from the connection.
+		"""
+		where: ScanWhereInput
+	): ScanConnection!
 	controlImplementations(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -5703,6 +6679,7 @@ enum ControlOrderField {
 	category
 	subcategory
 	ref_code
+	CONTROL_OWNER_name
 }
 type ControlScheduledJob implements Node {
 	id: ID!
@@ -6737,6 +7714,16 @@ input ControlWhereInput {
 	hasPrograms: Boolean
 	hasProgramsWith: [ProgramWhereInput!]
 	"""
+	assets edge predicates
+	"""
+	hasAssets: Boolean
+	hasAssetsWith: [AssetWhereInput!]
+	"""
+	scans edge predicates
+	"""
+	hasScans: Boolean
+	hasScansWith: [ScanWhereInput!]
+	"""
 	control_implementations edge predicates
 	"""
 	hasControlImplementations: Boolean
@@ -6835,6 +7822,30 @@ input CreateActionPlanInput {
 	"""
 	reviewFrequency: ActionPlanFrequency
 	"""
+	auto-generated tag suggestions for the action_plan
+	"""
+	tagSuggestions: [String!]
+	"""
+	tag suggestions dismissed by the user for the action_plan
+	"""
+	dismissedTagSuggestions: [String!]
+	"""
+	proposed controls referenced in the action_plan
+	"""
+	controlSuggestions: [String!]
+	"""
+	control suggestions dismissed by the user for the action_plan
+	"""
+	dismissedControlSuggestions: [String!]
+	"""
+	suggested improvements for the action_plan
+	"""
+	improvementSuggestions: [String!]
+	"""
+	improvement suggestions dismissed by the user for the action_plan
+	"""
+	dismissedImprovementSuggestions: [String!]
+	"""
 	due date of the action plan
 	"""
 	dueDate: Time
@@ -6853,6 +7864,48 @@ input CreateActionPlanInput {
 	controlIDs: [ID!]
 	userIDs: [ID!]
 	programIDs: [ID!]
+}
+"""
+CreateAssetInput is used for create Asset object.
+Input was generated by ent.
+"""
+input CreateAssetInput {
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	the type of the asset, e.g. technology, domain, device, etc
+	"""
+	assetType: AssetAssetType
+	"""
+	the name of the asset, e.g. matts computer, office router, IP address, etc
+	"""
+	name: String!
+	description: String
+	"""
+	unique identifier like domain, device id, etc
+	"""
+	identifier: String
+	"""
+	the website of the asset, if applicable
+	"""
+	website: String
+	"""
+	the CPE (Common Platform Enumeration) of the asset, if applicable
+	"""
+	cpe: String
+	"""
+	the categories of the asset, e.g. web server, database, etc
+	"""
+	categories: [String!]
+	ownerID: ID
+	blockedGroupIDs: [ID!]
+	editorIDs: [ID!]
+	viewerIDs: [ID!]
+	scanIDs: [ID!]
+	entityIDs: [ID!]
+	controlIDs: [ID!]
 }
 """
 CreateContactInput is used for create Contact object.
@@ -7023,6 +8076,8 @@ input CreateControlInput {
 	editorIDs: [ID!]
 	standardID: ID
 	programIDs: [ID!]
+	assetIDs: [ID!]
+	scanIDs: [ID!]
 	controlImplementationIDs: [ID!]
 	subcontrolIDs: [ID!]
 	scheduledJobIDs: [ID!]
@@ -7218,10 +8273,15 @@ input CreateEntityInput {
 	"""
 	status: String
 	ownerID: ID
+	blockedGroupIDs: [ID!]
+	editorIDs: [ID!]
+	viewerIDs: [ID!]
 	contactIDs: [ID!]
 	documentIDs: [ID!]
 	noteIDs: [ID!]
 	fileIDs: [ID!]
+	assetIDs: [ID!]
+	scanIDs: [ID!]
 	entityTypeID: ID
 	note: CreateNoteInput
 }
@@ -7439,6 +8499,9 @@ input CreateGroupInput {
 	controlImplementationEditorIDs: [ID!]
 	controlImplementationBlockedGroupIDs: [ID!]
 	controlImplementationViewerIDs: [ID!]
+	scanEditorIDs: [ID!]
+	scanBlockedGroupIDs: [ID!]
+	scanViewerIDs: [ID!]
 	procedureEditorIDs: [ID!]
 	procedureBlockedGroupIDs: [ID!]
 	internalPolicyEditorIDs: [ID!]
@@ -7579,6 +8642,30 @@ input CreateInternalPolicyInput {
 	the frequency at which the policy should be reviewed, used to calculate the review_due date
 	"""
 	reviewFrequency: InternalPolicyFrequency
+	"""
+	auto-generated tag suggestions for the policy
+	"""
+	tagSuggestions: [String!]
+	"""
+	tag suggestions dismissed by the user for the policy
+	"""
+	dismissedTagSuggestions: [String!]
+	"""
+	proposed controls referenced in the policy
+	"""
+	controlSuggestions: [String!]
+	"""
+	control suggestions dismissed by the user for the policy
+	"""
+	dismissedControlSuggestions: [String!]
+	"""
+	suggested improvements for the policy
+	"""
+	improvementSuggestions: [String!]
+	"""
+	improvement suggestions dismissed by the user for the policy
+	"""
+	dismissedImprovementSuggestions: [String!]
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -7943,6 +9030,8 @@ input CreateOrganizationInput {
 	jobResultIDs: [ID!]
 	scheduledJobRunIDs: [ID!]
 	trustCenterIDs: [ID!]
+	assetIDs: [ID!]
+	scanIDs: [ID!]
 	createOrgSettings: CreateOrganizationSettingInput
 }
 """
@@ -7990,6 +9079,38 @@ input CreateOrganizationSettingInput {
 	domains allowed to access the organization, if empty all domains are allowed
 	"""
 	allowedEmailDomains: [String!]
+	"""
+	SSO provider type for the organization
+	"""
+	identityProvider: OrganizationSettingSSOProvider
+	"""
+	client ID for SSO integration
+	"""
+	identityProviderClientID: String
+	"""
+	client secret for SSO integration
+	"""
+	identityProviderClientSecret: String
+	"""
+	metadata URL for the SSO provider
+	"""
+	identityProviderMetadataEndpoint: String
+	"""
+	SAML entity ID for the SSO provider
+	"""
+	identityProviderEntityID: String
+	"""
+	OIDC discovery URL for the SSO provider
+	"""
+	oidcDiscoveryEndpoint: String
+	"""
+	enforce SSO authentication for organization members
+	"""
+	identityProviderLoginEnforced: Boolean
+	"""
+	unique token used to receive compliance webhook events
+	"""
+	complianceWebhookToken: String
 	organizationID: ID
 	fileIDs: [ID!]
 }
@@ -8064,6 +9185,30 @@ input CreateProcedureInput {
 	the frequency at which the procedure should be reviewed, used to calculate the review_due date
 	"""
 	reviewFrequency: ProcedureFrequency
+	"""
+	auto-generated tag suggestions for the procedure
+	"""
+	tagSuggestions: [String!]
+	"""
+	tag suggestions dismissed by the user for the procedure
+	"""
+	dismissedTagSuggestions: [String!]
+	"""
+	proposed controls referenced in the procedure
+	"""
+	controlSuggestions: [String!]
+	"""
+	control suggestions dismissed by the user for the procedure
+	"""
+	dismissedControlSuggestions: [String!]
+	"""
+	suggested improvements for the procedure
+	"""
+	improvementSuggestions: [String!]
+	"""
+	improvement suggestions dismissed by the user for the procedure
+	"""
+	dismissedImprovementSuggestions: [String!]
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -8229,8 +9374,43 @@ input CreateRiskInput {
 	programIDs: [ID!]
 	actionPlanIDs: [ID!]
 	taskIDs: [ID!]
+	assetIDs: [ID!]
+	entityIDs: [ID!]
+	scanIDs: [ID!]
 	stakeholderID: ID
 	delegateID: ID
+}
+"""
+CreateScanInput is used for create Scan object.
+Input was generated by ent.
+"""
+input CreateScanInput {
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	the target of the scan, e.g., a domain name or IP address, codebase
+	"""
+	target: String!
+	"""
+	the type of scan, e.g., domain scan, vulnerability scan, provider scan
+	"""
+	scanType: ScanScanType
+	"""
+	additional metadata for the scan, e.g., scan configuration, options, etc
+	"""
+	metadata: Map
+	"""
+	the status of the scan, e.g., processing, completed, failed
+	"""
+	status: ScanScanStatus
+	ownerID: ID
+	blockedGroupIDs: [ID!]
+	editorIDs: [ID!]
+	viewerIDs: [ID!]
+	assetIDs: [ID!]
+	entityIDs: [ID!]
 }
 """
 CreateScheduledJobInput is used for create ScheduledJob object.
@@ -10751,6 +11931,99 @@ type Entity implements Node {
 	"""
 	status: String
 	owner: Organization
+	blockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	editors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	viewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
 	contacts(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -10875,6 +12148,68 @@ type Entity implements Node {
 		"""
 		where: FileWhereInput
 	): FileConnection!
+	assets(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Assets returned from the connection.
+		"""
+		orderBy: [AssetOrder!]
+
+		"""
+		Filtering options for Assets returned from the connection.
+		"""
+		where: AssetWhereInput
+	): AssetConnection!
+	scans(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Scans returned from the connection.
+		"""
+		orderBy: [ScanOrder!]
+
+		"""
+		Filtering options for Scans returned from the connection.
+		"""
+		where: ScanWhereInput
+	): ScanConnection!
 	entityType: EntityType
 }
 """
@@ -11961,6 +13296,21 @@ input EntityWhereInput {
 	hasOwner: Boolean
 	hasOwnerWith: [OrganizationWhereInput!]
 	"""
+	blocked_groups edge predicates
+	"""
+	hasBlockedGroups: Boolean
+	hasBlockedGroupsWith: [GroupWhereInput!]
+	"""
+	editors edge predicates
+	"""
+	hasEditors: Boolean
+	hasEditorsWith: [GroupWhereInput!]
+	"""
+	viewers edge predicates
+	"""
+	hasViewers: Boolean
+	hasViewersWith: [GroupWhereInput!]
+	"""
 	contacts edge predicates
 	"""
 	hasContacts: Boolean
@@ -11980,6 +13330,16 @@ input EntityWhereInput {
 	"""
 	hasFiles: Boolean
 	hasFilesWith: [FileWhereInput!]
+	"""
+	assets edge predicates
+	"""
+	hasAssets: Boolean
+	hasAssetsWith: [AssetWhereInput!]
+	"""
+	scans edge predicates
+	"""
+	hasScans: Boolean
+	hasScansWith: [ScanWhereInput!]
 	"""
 	entity_type edge predicates
 	"""
@@ -15217,6 +16577,99 @@ type Group implements Node {
 		"""
 		where: ControlImplementationWhereInput
 	): ControlImplementationConnection!
+	scanEditors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Scans returned from the connection.
+		"""
+		orderBy: [ScanOrder!]
+
+		"""
+		Filtering options for Scans returned from the connection.
+		"""
+		where: ScanWhereInput
+	): ScanConnection!
+	scanBlockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Scans returned from the connection.
+		"""
+		orderBy: [ScanOrder!]
+
+		"""
+		Filtering options for Scans returned from the connection.
+		"""
+		where: ScanWhereInput
+	): ScanConnection!
+	scanViewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Scans returned from the connection.
+		"""
+		orderBy: [ScanOrder!]
+
+		"""
+		Filtering options for Scans returned from the connection.
+		"""
+		where: ScanWhereInput
+	): ScanConnection!
 	procedureEditors(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -17453,6 +18906,21 @@ input GroupWhereInput {
 	hasControlImplementationViewers: Boolean
 	hasControlImplementationViewersWith: [ControlImplementationWhereInput!]
 	"""
+	scan_editors edge predicates
+	"""
+	hasScanEditors: Boolean
+	hasScanEditorsWith: [ScanWhereInput!]
+	"""
+	scan_blocked_groups edge predicates
+	"""
+	hasScanBlockedGroups: Boolean
+	hasScanBlockedGroupsWith: [ScanWhereInput!]
+	"""
+	scan_viewers edge predicates
+	"""
+	hasScanViewers: Boolean
+	hasScanViewersWith: [ScanWhereInput!]
+	"""
 	procedure_editors edge predicates
 	"""
 	hasProcedureEditors: Boolean
@@ -18805,6 +20273,30 @@ type InternalPolicy implements Node {
 	"""
 	delegateID: ID
 	summary: String
+	"""
+	auto-generated tag suggestions for the policy
+	"""
+	tagSuggestions: [String!]
+	"""
+	tag suggestions dismissed by the user for the policy
+	"""
+	dismissedTagSuggestions: [String!]
+	"""
+	proposed controls referenced in the policy
+	"""
+	controlSuggestions: [String!]
+	"""
+	control suggestions dismissed by the user for the policy
+	"""
+	dismissedControlSuggestions: [String!]
+	"""
+	suggested improvements for the policy
+	"""
+	improvementSuggestions: [String!]
+	"""
+	improvement suggestions dismissed by the user for the policy
+	"""
+	dismissedImprovementSuggestions: [String!]
 	owner: Organization
 	blockedGroups(
 		"""
@@ -19263,6 +20755,30 @@ type InternalPolicyHistory implements Node {
 	"""
 	delegateID: String
 	summary: String
+	"""
+	auto-generated tag suggestions for the policy
+	"""
+	tagSuggestions: [String!]
+	"""
+	tag suggestions dismissed by the user for the policy
+	"""
+	dismissedTagSuggestions: [String!]
+	"""
+	proposed controls referenced in the policy
+	"""
+	controlSuggestions: [String!]
+	"""
+	control suggestions dismissed by the user for the policy
+	"""
+	dismissedControlSuggestions: [String!]
+	"""
+	suggested improvements for the policy
+	"""
+	improvementSuggestions: [String!]
+	"""
+	improvement suggestions dismissed by the user for the policy
+	"""
+	dismissedImprovementSuggestions: [String!]
 }
 """
 A connection to a list of items.
@@ -22969,6 +24485,56 @@ type Mutation {
 		id: ID!
 	): APITokenDeletePayload!
 	"""
+	Create a new asset
+	"""
+	createAsset(
+		"""
+		values of the asset
+		"""
+		input: CreateAssetInput!
+	): AssetCreatePayload!
+	"""
+	Create multiple new assets
+	"""
+	createBulkAsset(
+		"""
+		values of the asset
+		"""
+		input: [CreateAssetInput!]
+	): AssetBulkCreatePayload!
+	"""
+	Create multiple new assets via file upload
+	"""
+	createBulkCSVAsset(
+		"""
+		csv file containing values of the asset
+		"""
+		input: Upload!
+	): AssetBulkCreatePayload!
+	"""
+	Update an existing asset
+	"""
+	updateAsset(
+		"""
+		ID of the asset
+		"""
+		id: ID!
+
+		"""
+		New values for the asset
+		"""
+		input: UpdateAssetInput!
+	): AssetUpdatePayload!
+	"""
+	Delete an existing asset
+	"""
+	deleteAsset(
+		"""
+		ID of the asset
+		"""
+		id: ID!
+	): AssetDeletePayload!
+	"""
 	Create a new contact
 	"""
 	createContact(
@@ -24600,6 +26166,56 @@ type Mutation {
 		"""
 		id: ID!
 	): RiskDeletePayload!
+	"""
+	Create a new scan
+	"""
+	createScan(
+		"""
+		values of the scan
+		"""
+		input: CreateScanInput!
+	): ScanCreatePayload!
+	"""
+	Create multiple new scans
+	"""
+	createBulkScan(
+		"""
+		values of the scan
+		"""
+		input: [CreateScanInput!]
+	): ScanBulkCreatePayload!
+	"""
+	Create multiple new scans via file upload
+	"""
+	createBulkCSVScan(
+		"""
+		csv file containing values of the scan
+		"""
+		input: Upload!
+	): ScanBulkCreatePayload!
+	"""
+	Update an existing scan
+	"""
+	updateScan(
+		"""
+		ID of the scan
+		"""
+		id: ID!
+
+		"""
+		New values for the scan
+		"""
+		input: UpdateScanInput!
+	): ScanUpdatePayload!
+	"""
+	Delete an existing scan
+	"""
+	deleteScan(
+		"""
+		ID of the scan
+		"""
+		id: ID!
+	): ScanDeletePayload!
 	"""
 	Create a new scheduledJob
 	"""
@@ -29584,6 +31200,68 @@ type Organization implements Node {
 		"""
 		where: TrustCenterWhereInput
 	): TrustCenterConnection!
+	assets(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Assets returned from the connection.
+		"""
+		orderBy: [AssetOrder!]
+
+		"""
+		Filtering options for Assets returned from the connection.
+		"""
+		where: AssetWhereInput
+	): AssetConnection!
+	scans(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Scans returned from the connection.
+		"""
+		orderBy: [ScanOrder!]
+
+		"""
+		Filtering options for Scans returned from the connection.
+		"""
+		where: ScanWhereInput
+	): ScanConnection!
 	members(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -30062,6 +31740,30 @@ type OrganizationSetting implements Node {
 	domains allowed to access the organization, if empty all domains are allowed
 	"""
 	allowedEmailDomains: [String!]
+	"""
+	SSO provider type for the organization
+	"""
+	identityProvider: OrganizationSettingSSOProvider
+	"""
+	metadata URL for the SSO provider
+	"""
+	identityProviderMetadataEndpoint: String
+	"""
+	SAML entity ID for the SSO provider
+	"""
+	identityProviderEntityID: String
+	"""
+	OIDC discovery URL for the SSO provider
+	"""
+	oidcDiscoveryEndpoint: String
+	"""
+	enforce SSO authentication for organization members
+	"""
+	identityProviderLoginEnforced: Boolean!
+	"""
+	unique token used to receive compliance webhook events
+	"""
+	complianceWebhookToken: String!
 	organization: Organization
 	files(
 		"""
@@ -30205,6 +31907,30 @@ type OrganizationSettingHistory implements Node {
 	domains allowed to access the organization, if empty all domains are allowed
 	"""
 	allowedEmailDomains: [String!]
+	"""
+	SSO provider type for the organization
+	"""
+	identityProvider: OrganizationSettingHistorySSOProvider
+	"""
+	metadata URL for the SSO provider
+	"""
+	identityProviderMetadataEndpoint: String
+	"""
+	SAML entity ID for the SSO provider
+	"""
+	identityProviderEntityID: String
+	"""
+	OIDC discovery URL for the SSO provider
+	"""
+	oidcDiscoveryEndpoint: String
+	"""
+	enforce SSO authentication for organization members
+	"""
+	identityProviderLoginEnforced: Boolean!
+	"""
+	unique token used to receive compliance webhook events
+	"""
+	complianceWebhookToken: String!
 }
 """
 A connection to a list of items.
@@ -30272,6 +31998,17 @@ enum OrganizationSettingHistoryRegion @goModel(model: "github.com/theopenlane/co
 	AMER
 	EMEA
 	APAC
+}
+"""
+OrganizationSettingHistorySSOProvider is enum for the field identity_provider
+"""
+enum OrganizationSettingHistorySSOProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.SSOProvider") {
+	OKTA
+	ONELOGIN
+	GOOGLEWORKSPACE
+	SLACK
+	GITHUB
+	NONE
 }
 """
 OrganizationSettingHistoryWhereInput is used for filtering OrganizationSettingHistory objects.
@@ -30496,6 +32233,90 @@ input OrganizationSettingHistoryWhereInput {
 	"""
 	billingNotificationsEnabled: Boolean
 	billingNotificationsEnabledNEQ: Boolean
+	"""
+	identity_provider field predicates
+	"""
+	identityProvider: OrganizationSettingHistorySSOProvider
+	identityProviderNEQ: OrganizationSettingHistorySSOProvider
+	identityProviderIn: [OrganizationSettingHistorySSOProvider!]
+	identityProviderNotIn: [OrganizationSettingHistorySSOProvider!]
+	identityProviderIsNil: Boolean
+	identityProviderNotNil: Boolean
+	"""
+	identity_provider_metadata_endpoint field predicates
+	"""
+	identityProviderMetadataEndpoint: String
+	identityProviderMetadataEndpointNEQ: String
+	identityProviderMetadataEndpointIn: [String!]
+	identityProviderMetadataEndpointNotIn: [String!]
+	identityProviderMetadataEndpointGT: String
+	identityProviderMetadataEndpointGTE: String
+	identityProviderMetadataEndpointLT: String
+	identityProviderMetadataEndpointLTE: String
+	identityProviderMetadataEndpointContains: String
+	identityProviderMetadataEndpointHasPrefix: String
+	identityProviderMetadataEndpointHasSuffix: String
+	identityProviderMetadataEndpointIsNil: Boolean
+	identityProviderMetadataEndpointNotNil: Boolean
+	identityProviderMetadataEndpointEqualFold: String
+	identityProviderMetadataEndpointContainsFold: String
+	"""
+	identity_provider_entity_id field predicates
+	"""
+	identityProviderEntityID: String
+	identityProviderEntityIDNEQ: String
+	identityProviderEntityIDIn: [String!]
+	identityProviderEntityIDNotIn: [String!]
+	identityProviderEntityIDGT: String
+	identityProviderEntityIDGTE: String
+	identityProviderEntityIDLT: String
+	identityProviderEntityIDLTE: String
+	identityProviderEntityIDContains: String
+	identityProviderEntityIDHasPrefix: String
+	identityProviderEntityIDHasSuffix: String
+	identityProviderEntityIDIsNil: Boolean
+	identityProviderEntityIDNotNil: Boolean
+	identityProviderEntityIDEqualFold: String
+	identityProviderEntityIDContainsFold: String
+	"""
+	oidc_discovery_endpoint field predicates
+	"""
+	oidcDiscoveryEndpoint: String
+	oidcDiscoveryEndpointNEQ: String
+	oidcDiscoveryEndpointIn: [String!]
+	oidcDiscoveryEndpointNotIn: [String!]
+	oidcDiscoveryEndpointGT: String
+	oidcDiscoveryEndpointGTE: String
+	oidcDiscoveryEndpointLT: String
+	oidcDiscoveryEndpointLTE: String
+	oidcDiscoveryEndpointContains: String
+	oidcDiscoveryEndpointHasPrefix: String
+	oidcDiscoveryEndpointHasSuffix: String
+	oidcDiscoveryEndpointIsNil: Boolean
+	oidcDiscoveryEndpointNotNil: Boolean
+	oidcDiscoveryEndpointEqualFold: String
+	oidcDiscoveryEndpointContainsFold: String
+	"""
+	identity_provider_login_enforced field predicates
+	"""
+	identityProviderLoginEnforced: Boolean
+	identityProviderLoginEnforcedNEQ: Boolean
+	"""
+	compliance_webhook_token field predicates
+	"""
+	complianceWebhookToken: String
+	complianceWebhookTokenNEQ: String
+	complianceWebhookTokenIn: [String!]
+	complianceWebhookTokenNotIn: [String!]
+	complianceWebhookTokenGT: String
+	complianceWebhookTokenGTE: String
+	complianceWebhookTokenLT: String
+	complianceWebhookTokenLTE: String
+	complianceWebhookTokenContains: String
+	complianceWebhookTokenHasPrefix: String
+	complianceWebhookTokenHasSuffix: String
+	complianceWebhookTokenEqualFold: String
+	complianceWebhookTokenContainsFold: String
 }
 """
 Ordering options for OrganizationSetting connections
@@ -30524,6 +32345,17 @@ enum OrganizationSettingRegion @goModel(model: "github.com/theopenlane/core/pkg/
 	AMER
 	EMEA
 	APAC
+}
+"""
+OrganizationSettingSSOProvider is enum for the field identity_provider
+"""
+enum OrganizationSettingSSOProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.SSOProvider") {
+	OKTA
+	ONELOGIN
+	GOOGLEWORKSPACE
+	SLACK
+	GITHUB
+	NONE
 }
 """
 Return response for updateOrganizationSetting mutation
@@ -30721,6 +32553,90 @@ input OrganizationSettingWhereInput {
 	"""
 	billingNotificationsEnabled: Boolean
 	billingNotificationsEnabledNEQ: Boolean
+	"""
+	identity_provider field predicates
+	"""
+	identityProvider: OrganizationSettingSSOProvider
+	identityProviderNEQ: OrganizationSettingSSOProvider
+	identityProviderIn: [OrganizationSettingSSOProvider!]
+	identityProviderNotIn: [OrganizationSettingSSOProvider!]
+	identityProviderIsNil: Boolean
+	identityProviderNotNil: Boolean
+	"""
+	identity_provider_metadata_endpoint field predicates
+	"""
+	identityProviderMetadataEndpoint: String
+	identityProviderMetadataEndpointNEQ: String
+	identityProviderMetadataEndpointIn: [String!]
+	identityProviderMetadataEndpointNotIn: [String!]
+	identityProviderMetadataEndpointGT: String
+	identityProviderMetadataEndpointGTE: String
+	identityProviderMetadataEndpointLT: String
+	identityProviderMetadataEndpointLTE: String
+	identityProviderMetadataEndpointContains: String
+	identityProviderMetadataEndpointHasPrefix: String
+	identityProviderMetadataEndpointHasSuffix: String
+	identityProviderMetadataEndpointIsNil: Boolean
+	identityProviderMetadataEndpointNotNil: Boolean
+	identityProviderMetadataEndpointEqualFold: String
+	identityProviderMetadataEndpointContainsFold: String
+	"""
+	identity_provider_entity_id field predicates
+	"""
+	identityProviderEntityID: String
+	identityProviderEntityIDNEQ: String
+	identityProviderEntityIDIn: [String!]
+	identityProviderEntityIDNotIn: [String!]
+	identityProviderEntityIDGT: String
+	identityProviderEntityIDGTE: String
+	identityProviderEntityIDLT: String
+	identityProviderEntityIDLTE: String
+	identityProviderEntityIDContains: String
+	identityProviderEntityIDHasPrefix: String
+	identityProviderEntityIDHasSuffix: String
+	identityProviderEntityIDIsNil: Boolean
+	identityProviderEntityIDNotNil: Boolean
+	identityProviderEntityIDEqualFold: String
+	identityProviderEntityIDContainsFold: String
+	"""
+	oidc_discovery_endpoint field predicates
+	"""
+	oidcDiscoveryEndpoint: String
+	oidcDiscoveryEndpointNEQ: String
+	oidcDiscoveryEndpointIn: [String!]
+	oidcDiscoveryEndpointNotIn: [String!]
+	oidcDiscoveryEndpointGT: String
+	oidcDiscoveryEndpointGTE: String
+	oidcDiscoveryEndpointLT: String
+	oidcDiscoveryEndpointLTE: String
+	oidcDiscoveryEndpointContains: String
+	oidcDiscoveryEndpointHasPrefix: String
+	oidcDiscoveryEndpointHasSuffix: String
+	oidcDiscoveryEndpointIsNil: Boolean
+	oidcDiscoveryEndpointNotNil: Boolean
+	oidcDiscoveryEndpointEqualFold: String
+	oidcDiscoveryEndpointContainsFold: String
+	"""
+	identity_provider_login_enforced field predicates
+	"""
+	identityProviderLoginEnforced: Boolean
+	identityProviderLoginEnforcedNEQ: Boolean
+	"""
+	compliance_webhook_token field predicates
+	"""
+	complianceWebhookToken: String
+	complianceWebhookTokenNEQ: String
+	complianceWebhookTokenIn: [String!]
+	complianceWebhookTokenNotIn: [String!]
+	complianceWebhookTokenGT: String
+	complianceWebhookTokenGTE: String
+	complianceWebhookTokenLT: String
+	complianceWebhookTokenLTE: String
+	complianceWebhookTokenContains: String
+	complianceWebhookTokenHasPrefix: String
+	complianceWebhookTokenHasSuffix: String
+	complianceWebhookTokenEqualFold: String
+	complianceWebhookTokenContainsFold: String
 	"""
 	organization edge predicates
 	"""
@@ -31209,6 +33125,16 @@ input OrganizationWhereInput {
 	"""
 	hasTrustCenters: Boolean
 	hasTrustCentersWith: [TrustCenterWhereInput!]
+	"""
+	assets edge predicates
+	"""
+	hasAssets: Boolean
+	hasAssetsWith: [AssetWhereInput!]
+	"""
+	scans edge predicates
+	"""
+	hasScans: Boolean
+	hasScansWith: [ScanWhereInput!]
 	"""
 	members edge predicates
 	"""
@@ -31701,6 +33627,30 @@ type Procedure implements Node {
 	"""
 	delegateID: ID
 	summary: String
+	"""
+	auto-generated tag suggestions for the procedure
+	"""
+	tagSuggestions: [String!]
+	"""
+	tag suggestions dismissed by the user for the procedure
+	"""
+	dismissedTagSuggestions: [String!]
+	"""
+	proposed controls referenced in the procedure
+	"""
+	controlSuggestions: [String!]
+	"""
+	control suggestions dismissed by the user for the procedure
+	"""
+	dismissedControlSuggestions: [String!]
+	"""
+	suggested improvements for the procedure
+	"""
+	improvementSuggestions: [String!]
+	"""
+	improvement suggestions dismissed by the user for the procedure
+	"""
+	dismissedImprovementSuggestions: [String!]
 	owner: Organization
 	blockedGroups(
 		"""
@@ -32128,6 +34078,30 @@ type ProcedureHistory implements Node {
 	"""
 	delegateID: String
 	summary: String
+	"""
+	auto-generated tag suggestions for the procedure
+	"""
+	tagSuggestions: [String!]
+	"""
+	tag suggestions dismissed by the user for the procedure
+	"""
+	dismissedTagSuggestions: [String!]
+	"""
+	proposed controls referenced in the procedure
+	"""
+	controlSuggestions: [String!]
+	"""
+	control suggestions dismissed by the user for the procedure
+	"""
+	dismissedControlSuggestions: [String!]
+	"""
+	suggested improvements for the procedure
+	"""
+	improvementSuggestions: [String!]
+	"""
+	improvement suggestions dismissed by the user for the procedure
+	"""
+	dismissedImprovementSuggestions: [String!]
 }
 """
 A connection to a list of items.
@@ -34968,6 +36942,68 @@ type Query {
 		"""
 		where: ActionPlanHistoryWhereInput
 	): ActionPlanHistoryConnection!
+	assets(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Assets returned from the connection.
+		"""
+		orderBy: [AssetOrder!]
+
+		"""
+		Filtering options for Assets returned from the connection.
+		"""
+		where: AssetWhereInput
+	): AssetConnection!
+	assetHistories(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for AssetHistories returned from the connection.
+		"""
+		orderBy: AssetHistoryOrder
+
+		"""
+		Filtering options for AssetHistories returned from the connection.
+		"""
+		where: AssetHistoryWhereInput
+	): AssetHistoryConnection!
 	contacts(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -37045,6 +39081,68 @@ type Query {
 		"""
 		where: RiskHistoryWhereInput
 	): RiskHistoryConnection!
+	scans(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Scans returned from the connection.
+		"""
+		orderBy: [ScanOrder!]
+
+		"""
+		Filtering options for Scans returned from the connection.
+		"""
+		where: ScanWhereInput
+	): ScanConnection!
+	scanHistories(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for ScanHistories returned from the connection.
+		"""
+		orderBy: ScanHistoryOrder
+
+		"""
+		Filtering options for ScanHistories returned from the connection.
+		"""
+		where: ScanHistoryWhereInput
+	): ScanHistoryConnection!
 	scheduledJobs(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -37794,6 +39892,35 @@ type Query {
 		"""
 		last: Int
 	): ActionPlanConnection
+	"""
+	Search across Asset objects
+	"""
+	adminAssetSearch(
+		"""
+		Query string to search across objects
+		"""
+		query: String!
+
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+	): AssetConnection
 	"""
 	Search across Contact objects
 	"""
@@ -38636,6 +40763,35 @@ type Query {
 		last: Int
 	): RiskConnection
 	"""
+	Search across Scan objects
+	"""
+	adminScanSearch(
+		"""
+		Query string to search across objects
+		"""
+		query: String!
+
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+	): ScanConnection
+	"""
 	Search across ScheduledJob objects
 	"""
 	adminScheduledJobSearch(
@@ -38934,6 +41090,15 @@ type Query {
 		"""
 		id: ID!
 	): APIToken!
+	"""
+	Look up asset by ID
+	"""
+	asset(
+		"""
+		ID of the asset
+		"""
+		id: ID!
+	): Asset!
 	auditLogs(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -39307,6 +41472,15 @@ type Query {
 		id: ID!
 	): Risk!
 	"""
+	Look up scan by ID
+	"""
+	scan(
+		"""
+		ID of the scan
+		"""
+		id: ID!
+	): Scan!
+	"""
 	Look up scheduledJob by ID
 	"""
 	scheduledJob(
@@ -39382,6 +41556,35 @@ type Query {
 		"""
 		last: Int
 	): ActionPlanConnection
+	"""
+	Search across Asset objects
+	"""
+	assetSearch(
+		"""
+		Query string to search across objects
+		"""
+		query: String!
+
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+	): AssetConnection
 	"""
 	Search across Contact objects
 	"""
@@ -40224,6 +42427,35 @@ type Query {
 		last: Int
 	): RiskConnection
 	"""
+	Search across Scan objects
+	"""
+	scanSearch(
+		"""
+		Query string to search across objects
+		"""
+		query: String!
+
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+	): ScanConnection
+	"""
 	Search across ScheduledJob objects
 	"""
 	scheduledJobSearch(
@@ -41047,6 +43279,99 @@ type Risk implements Node {
 		"""
 		where: TaskWhereInput
 	): TaskConnection!
+	assets(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Assets returned from the connection.
+		"""
+		orderBy: [AssetOrder!]
+
+		"""
+		Filtering options for Assets returned from the connection.
+		"""
+		where: AssetWhereInput
+	): AssetConnection!
+	entities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Entities returned from the connection.
+		"""
+		orderBy: [EntityOrder!]
+
+		"""
+		Filtering options for Entities returned from the connection.
+		"""
+		where: EntityWhereInput
+	): EntityConnection!
+	scans(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Scans returned from the connection.
+		"""
+		orderBy: [ScanOrder!]
+
+		"""
+		Filtering options for Scans returned from the connection.
+		"""
+		where: ScanWhereInput
+	): ScanConnection!
 	"""
 	the group of users who are responsible for risk oversight
 	"""
@@ -42032,6 +44357,21 @@ input RiskWhereInput {
 	hasTasks: Boolean
 	hasTasksWith: [TaskWhereInput!]
 	"""
+	assets edge predicates
+	"""
+	hasAssets: Boolean
+	hasAssetsWith: [AssetWhereInput!]
+	"""
+	entities edge predicates
+	"""
+	hasEntities: Boolean
+	hasEntitiesWith: [EntityWhereInput!]
+	"""
+	scans edge predicates
+	"""
+	hasScans: Boolean
+	hasScansWith: [ScanWhereInput!]
+	"""
 	stakeholder edge predicates
 	"""
 	hasStakeholder: Boolean
@@ -42041,6 +44381,742 @@ input RiskWhereInput {
 	"""
 	hasDelegate: Boolean
 	hasDelegateWith: [GroupWhereInput!]
+}
+type Scan implements Node {
+	id: ID!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	the organization id that owns the object
+	"""
+	ownerID: ID
+	"""
+	the target of the scan, e.g., a domain name or IP address, codebase
+	"""
+	target: String!
+	"""
+	the type of scan, e.g., domain scan, vulnerability scan, provider scan
+	"""
+	scanType: ScanScanType!
+	"""
+	additional metadata for the scan, e.g., scan configuration, options, etc
+	"""
+	metadata: Map
+	"""
+	the status of the scan, e.g., processing, completed, failed
+	"""
+	status: ScanScanStatus!
+	owner: Organization
+	blockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	editors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	viewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	assets(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Assets returned from the connection.
+		"""
+		orderBy: [AssetOrder!]
+
+		"""
+		Filtering options for Assets returned from the connection.
+		"""
+		where: AssetWhereInput
+	): AssetConnection!
+	entities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Entities returned from the connection.
+		"""
+		orderBy: [EntityOrder!]
+
+		"""
+		Filtering options for Entities returned from the connection.
+		"""
+		where: EntityWhereInput
+	): EntityConnection!
+}
+"""
+Return response for createBulkScan mutation
+"""
+type ScanBulkCreatePayload {
+	"""
+	Created scans
+	"""
+	scans: [Scan!]
+}
+"""
+A connection to a list of items.
+"""
+type ScanConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [ScanEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+Return response for createScan mutation
+"""
+type ScanCreatePayload {
+	"""
+	Created scan
+	"""
+	scan: Scan!
+}
+"""
+Return response for deleteScan mutation
+"""
+type ScanDeletePayload {
+	"""
+	Deleted scan ID
+	"""
+	deletedID: ID!
+}
+"""
+An edge in a connection.
+"""
+type ScanEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: Scan
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+type ScanHistory implements Node {
+	id: ID!
+	historyTime: Time!
+	ref: String
+	operation: ScanHistoryOpType!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	the organization id that owns the object
+	"""
+	ownerID: String
+	"""
+	the target of the scan, e.g., a domain name or IP address, codebase
+	"""
+	target: String!
+	"""
+	the type of scan, e.g., domain scan, vulnerability scan, provider scan
+	"""
+	scanType: ScanHistoryScanType!
+	"""
+	additional metadata for the scan, e.g., scan configuration, options, etc
+	"""
+	metadata: Map
+	"""
+	the status of the scan, e.g., processing, completed, failed
+	"""
+	status: ScanHistoryScanStatus!
+}
+"""
+A connection to a list of items.
+"""
+type ScanHistoryConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [ScanHistoryEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ScanHistoryEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: ScanHistory
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+"""
+ScanHistoryOpType is enum for the field operation
+"""
+enum ScanHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+	INSERT
+	UPDATE
+	DELETE
+}
+"""
+Ordering options for ScanHistory connections
+"""
+input ScanHistoryOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order ScanHistories.
+	"""
+	field: ScanHistoryOrderField!
+}
+"""
+Properties by which ScanHistory connections can be ordered.
+"""
+enum ScanHistoryOrderField {
+	history_time
+	created_at
+	updated_at
+	SCAN_TYPE
+	STATUS
+}
+"""
+ScanHistoryScanStatus is enum for the field status
+"""
+enum ScanHistoryScanStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ScanStatus") {
+	PENDING
+	PROCESSING
+	COMPLETED
+	FAILED
+}
+"""
+ScanHistoryScanType is enum for the field scan_type
+"""
+enum ScanHistoryScanType @goModel(model: "github.com/theopenlane/core/pkg/enums.ScanType") {
+	DOMAIN
+	VULNERABILITY
+	VENDOR
+	PROVIDER
+}
+"""
+ScanHistoryWhereInput is used for filtering ScanHistory objects.
+Input was generated by ent.
+"""
+input ScanHistoryWhereInput {
+	not: ScanHistoryWhereInput
+	and: [ScanHistoryWhereInput!]
+	or: [ScanHistoryWhereInput!]
+	"""
+	id field predicates
+	"""
+	id: ID
+	idNEQ: ID
+	idIn: [ID!]
+	idNotIn: [ID!]
+	idGT: ID
+	idGTE: ID
+	idLT: ID
+	idLTE: ID
+	idEqualFold: ID
+	idContainsFold: ID
+	"""
+	history_time field predicates
+	"""
+	historyTime: Time
+	historyTimeNEQ: Time
+	historyTimeIn: [Time!]
+	historyTimeNotIn: [Time!]
+	historyTimeGT: Time
+	historyTimeGTE: Time
+	historyTimeLT: Time
+	historyTimeLTE: Time
+	"""
+	ref field predicates
+	"""
+	ref: String
+	refNEQ: String
+	refIn: [String!]
+	refNotIn: [String!]
+	refGT: String
+	refGTE: String
+	refLT: String
+	refLTE: String
+	refContains: String
+	refHasPrefix: String
+	refHasSuffix: String
+	refIsNil: Boolean
+	refNotNil: Boolean
+	refEqualFold: String
+	refContainsFold: String
+	"""
+	operation field predicates
+	"""
+	operation: ScanHistoryOpType
+	operationNEQ: ScanHistoryOpType
+	operationIn: [ScanHistoryOpType!]
+	operationNotIn: [ScanHistoryOpType!]
+	"""
+	created_at field predicates
+	"""
+	createdAt: Time
+	createdAtNEQ: Time
+	createdAtIn: [Time!]
+	createdAtNotIn: [Time!]
+	createdAtGT: Time
+	createdAtGTE: Time
+	createdAtLT: Time
+	createdAtLTE: Time
+	createdAtIsNil: Boolean
+	createdAtNotNil: Boolean
+	"""
+	updated_at field predicates
+	"""
+	updatedAt: Time
+	updatedAtNEQ: Time
+	updatedAtIn: [Time!]
+	updatedAtNotIn: [Time!]
+	updatedAtGT: Time
+	updatedAtGTE: Time
+	updatedAtLT: Time
+	updatedAtLTE: Time
+	updatedAtIsNil: Boolean
+	updatedAtNotNil: Boolean
+	"""
+	created_by field predicates
+	"""
+	createdBy: String
+	createdByNEQ: String
+	createdByIn: [String!]
+	createdByNotIn: [String!]
+	createdByGT: String
+	createdByGTE: String
+	createdByLT: String
+	createdByLTE: String
+	createdByContains: String
+	createdByHasPrefix: String
+	createdByHasSuffix: String
+	createdByIsNil: Boolean
+	createdByNotNil: Boolean
+	createdByEqualFold: String
+	createdByContainsFold: String
+	"""
+	updated_by field predicates
+	"""
+	updatedBy: String
+	updatedByNEQ: String
+	updatedByIn: [String!]
+	updatedByNotIn: [String!]
+	updatedByGT: String
+	updatedByGTE: String
+	updatedByLT: String
+	updatedByLTE: String
+	updatedByContains: String
+	updatedByHasPrefix: String
+	updatedByHasSuffix: String
+	updatedByIsNil: Boolean
+	updatedByNotNil: Boolean
+	updatedByEqualFold: String
+	updatedByContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: String
+	ownerIDNEQ: String
+	ownerIDIn: [String!]
+	ownerIDNotIn: [String!]
+	ownerIDGT: String
+	ownerIDGTE: String
+	ownerIDLT: String
+	ownerIDLTE: String
+	ownerIDContains: String
+	ownerIDHasPrefix: String
+	ownerIDHasSuffix: String
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: String
+	ownerIDContainsFold: String
+	"""
+	target field predicates
+	"""
+	target: String
+	targetNEQ: String
+	targetIn: [String!]
+	targetNotIn: [String!]
+	targetGT: String
+	targetGTE: String
+	targetLT: String
+	targetLTE: String
+	targetContains: String
+	targetHasPrefix: String
+	targetHasSuffix: String
+	targetEqualFold: String
+	targetContainsFold: String
+	"""
+	scan_type field predicates
+	"""
+	scanType: ScanHistoryScanType
+	scanTypeNEQ: ScanHistoryScanType
+	scanTypeIn: [ScanHistoryScanType!]
+	scanTypeNotIn: [ScanHistoryScanType!]
+	"""
+	status field predicates
+	"""
+	status: ScanHistoryScanStatus
+	statusNEQ: ScanHistoryScanStatus
+	statusIn: [ScanHistoryScanStatus!]
+	statusNotIn: [ScanHistoryScanStatus!]
+}
+"""
+Ordering options for Scan connections
+"""
+input ScanOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order Scans.
+	"""
+	field: ScanOrderField!
+}
+"""
+Properties by which Scan connections can be ordered.
+"""
+enum ScanOrderField {
+	created_at
+	updated_at
+	SCAN_TYPE
+	STATUS
+}
+"""
+ScanScanStatus is enum for the field status
+"""
+enum ScanScanStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ScanStatus") {
+	PENDING
+	PROCESSING
+	COMPLETED
+	FAILED
+}
+"""
+ScanScanType is enum for the field scan_type
+"""
+enum ScanScanType @goModel(model: "github.com/theopenlane/core/pkg/enums.ScanType") {
+	DOMAIN
+	VULNERABILITY
+	VENDOR
+	PROVIDER
+}
+"""
+Return response for updateScan mutation
+"""
+type ScanUpdatePayload {
+	"""
+	Updated scan
+	"""
+	scan: Scan!
+}
+"""
+ScanWhereInput is used for filtering Scan objects.
+Input was generated by ent.
+"""
+input ScanWhereInput {
+	not: ScanWhereInput
+	and: [ScanWhereInput!]
+	or: [ScanWhereInput!]
+	"""
+	id field predicates
+	"""
+	id: ID
+	idNEQ: ID
+	idIn: [ID!]
+	idNotIn: [ID!]
+	idGT: ID
+	idGTE: ID
+	idLT: ID
+	idLTE: ID
+	idEqualFold: ID
+	idContainsFold: ID
+	"""
+	created_at field predicates
+	"""
+	createdAt: Time
+	createdAtNEQ: Time
+	createdAtIn: [Time!]
+	createdAtNotIn: [Time!]
+	createdAtGT: Time
+	createdAtGTE: Time
+	createdAtLT: Time
+	createdAtLTE: Time
+	createdAtIsNil: Boolean
+	createdAtNotNil: Boolean
+	"""
+	updated_at field predicates
+	"""
+	updatedAt: Time
+	updatedAtNEQ: Time
+	updatedAtIn: [Time!]
+	updatedAtNotIn: [Time!]
+	updatedAtGT: Time
+	updatedAtGTE: Time
+	updatedAtLT: Time
+	updatedAtLTE: Time
+	updatedAtIsNil: Boolean
+	updatedAtNotNil: Boolean
+	"""
+	created_by field predicates
+	"""
+	createdBy: String
+	createdByNEQ: String
+	createdByIn: [String!]
+	createdByNotIn: [String!]
+	createdByGT: String
+	createdByGTE: String
+	createdByLT: String
+	createdByLTE: String
+	createdByContains: String
+	createdByHasPrefix: String
+	createdByHasSuffix: String
+	createdByIsNil: Boolean
+	createdByNotNil: Boolean
+	createdByEqualFold: String
+	createdByContainsFold: String
+	"""
+	updated_by field predicates
+	"""
+	updatedBy: String
+	updatedByNEQ: String
+	updatedByIn: [String!]
+	updatedByNotIn: [String!]
+	updatedByGT: String
+	updatedByGTE: String
+	updatedByLT: String
+	updatedByLTE: String
+	updatedByContains: String
+	updatedByHasPrefix: String
+	updatedByHasSuffix: String
+	updatedByIsNil: Boolean
+	updatedByNotNil: Boolean
+	updatedByEqualFold: String
+	updatedByContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: ID
+	ownerIDNEQ: ID
+	ownerIDIn: [ID!]
+	ownerIDNotIn: [ID!]
+	ownerIDGT: ID
+	ownerIDGTE: ID
+	ownerIDLT: ID
+	ownerIDLTE: ID
+	ownerIDContains: ID
+	ownerIDHasPrefix: ID
+	ownerIDHasSuffix: ID
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: ID
+	ownerIDContainsFold: ID
+	"""
+	target field predicates
+	"""
+	target: String
+	targetNEQ: String
+	targetIn: [String!]
+	targetNotIn: [String!]
+	targetGT: String
+	targetGTE: String
+	targetLT: String
+	targetLTE: String
+	targetContains: String
+	targetHasPrefix: String
+	targetHasSuffix: String
+	targetEqualFold: String
+	targetContainsFold: String
+	"""
+	scan_type field predicates
+	"""
+	scanType: ScanScanType
+	scanTypeNEQ: ScanScanType
+	scanTypeIn: [ScanScanType!]
+	scanTypeNotIn: [ScanScanType!]
+	"""
+	status field predicates
+	"""
+	status: ScanScanStatus
+	statusNEQ: ScanScanStatus
+	statusIn: [ScanScanStatus!]
+	statusNotIn: [ScanScanStatus!]
+	"""
+	owner edge predicates
+	"""
+	hasOwner: Boolean
+	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	blocked_groups edge predicates
+	"""
+	hasBlockedGroups: Boolean
+	hasBlockedGroupsWith: [GroupWhereInput!]
+	"""
+	editors edge predicates
+	"""
+	hasEditors: Boolean
+	hasEditorsWith: [GroupWhereInput!]
+	"""
+	viewers edge predicates
+	"""
+	hasViewers: Boolean
+	hasViewersWith: [GroupWhereInput!]
+	"""
+	assets edge predicates
+	"""
+	hasAssets: Boolean
+	hasAssetsWith: [AssetWhereInput!]
+	"""
+	entities edge predicates
+	"""
+	hasEntities: Boolean
+	hasEntitiesWith: [EntityWhereInput!]
 }
 type ScheduledJob implements Node {
 	id: ID!
@@ -42969,6 +46045,7 @@ type SearchResults {
 	totalCount: Int!
 	apiTokens: APITokenConnection
 	actionPlans: ActionPlanConnection
+	assets: AssetConnection
 	contacts: ContactConnection
 	controls: ControlConnection
 	controlImplementations: ControlImplementationConnection
@@ -42998,6 +46075,7 @@ type SearchResults {
 	procedures: ProcedureConnection
 	programs: ProgramConnection
 	risks: RiskConnection
+	scans: ScanConnection
 	scheduledJobs: ScheduledJobConnection
 	standards: StandardConnection
 	subcontrols: SubcontrolConnection
@@ -45146,6 +48224,7 @@ enum SubcontrolOrderField {
 	category
 	subcategory
 	ref_code
+	CONTROL_OWNER_name
 }
 """
 Return response for updateSubcontrol mutation
@@ -49071,6 +52150,42 @@ input UpdateActionPlanInput {
 	reviewFrequency: ActionPlanFrequency
 	clearReviewFrequency: Boolean
 	"""
+	auto-generated tag suggestions for the action_plan
+	"""
+	tagSuggestions: [String!]
+	appendTagSuggestions: [String!]
+	clearTagSuggestions: Boolean
+	"""
+	tag suggestions dismissed by the user for the action_plan
+	"""
+	dismissedTagSuggestions: [String!]
+	appendDismissedTagSuggestions: [String!]
+	clearDismissedTagSuggestions: Boolean
+	"""
+	proposed controls referenced in the action_plan
+	"""
+	controlSuggestions: [String!]
+	appendControlSuggestions: [String!]
+	clearControlSuggestions: Boolean
+	"""
+	control suggestions dismissed by the user for the action_plan
+	"""
+	dismissedControlSuggestions: [String!]
+	appendDismissedControlSuggestions: [String!]
+	clearDismissedControlSuggestions: Boolean
+	"""
+	suggested improvements for the action_plan
+	"""
+	improvementSuggestions: [String!]
+	appendImprovementSuggestions: [String!]
+	clearImprovementSuggestions: Boolean
+	"""
+	improvement suggestions dismissed by the user for the action_plan
+	"""
+	dismissedImprovementSuggestions: [String!]
+	appendDismissedImprovementSuggestions: [String!]
+	clearDismissedImprovementSuggestions: Boolean
+	"""
 	due date of the action plan
 	"""
 	dueDate: Time
@@ -49104,6 +52219,69 @@ input UpdateActionPlanInput {
 	removeProgramIDs: [ID!]
 	clearPrograms: Boolean
 	RevisionBump: VersionBump
+}
+"""
+UpdateAssetInput is used for update Asset object.
+Input was generated by ent.
+"""
+input UpdateAssetInput {
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	appendTags: [String!]
+	clearTags: Boolean
+	"""
+	the type of the asset, e.g. technology, domain, device, etc
+	"""
+	assetType: AssetAssetType
+	"""
+	the name of the asset, e.g. matts computer, office router, IP address, etc
+	"""
+	name: String
+	description: String
+	clearDescription: Boolean
+	"""
+	unique identifier like domain, device id, etc
+	"""
+	identifier: String
+	clearIdentifier: Boolean
+	"""
+	the website of the asset, if applicable
+	"""
+	website: String
+	clearWebsite: Boolean
+	"""
+	the CPE (Common Platform Enumeration) of the asset, if applicable
+	"""
+	cpe: String
+	clearCpe: Boolean
+	"""
+	the categories of the asset, e.g. web server, database, etc
+	"""
+	categories: [String!]
+	appendCategories: [String!]
+	clearCategories: Boolean
+	ownerID: ID
+	clearOwner: Boolean
+	addBlockedGroupIDs: [ID!]
+	removeBlockedGroupIDs: [ID!]
+	clearBlockedGroups: Boolean
+	addEditorIDs: [ID!]
+	removeEditorIDs: [ID!]
+	clearEditors: Boolean
+	addViewerIDs: [ID!]
+	removeViewerIDs: [ID!]
+	clearViewers: Boolean
+	addScanIDs: [ID!]
+	removeScanIDs: [ID!]
+	clearScans: Boolean
+	addEntityIDs: [ID!]
+	removeEntityIDs: [ID!]
+	clearEntities: Boolean
+	addControlIDs: [ID!]
+	removeControlIDs: [ID!]
+	clearControls: Boolean
 }
 """
 UpdateContactInput is used for update Contact object.
@@ -49351,6 +52529,12 @@ input UpdateControlInput {
 	addProgramIDs: [ID!]
 	removeProgramIDs: [ID!]
 	clearPrograms: Boolean
+	addAssetIDs: [ID!]
+	removeAssetIDs: [ID!]
+	clearAssets: Boolean
+	addScanIDs: [ID!]
+	removeScanIDs: [ID!]
+	clearScans: Boolean
 	addControlImplementationIDs: [ID!]
 	removeControlImplementationIDs: [ID!]
 	clearControlImplementations: Boolean
@@ -49611,6 +52795,15 @@ input UpdateEntityInput {
 	clearStatus: Boolean
 	ownerID: ID
 	clearOwner: Boolean
+	addBlockedGroupIDs: [ID!]
+	removeBlockedGroupIDs: [ID!]
+	clearBlockedGroups: Boolean
+	addEditorIDs: [ID!]
+	removeEditorIDs: [ID!]
+	clearEditors: Boolean
+	addViewerIDs: [ID!]
+	removeViewerIDs: [ID!]
+	clearViewers: Boolean
 	addContactIDs: [ID!]
 	removeContactIDs: [ID!]
 	clearContacts: Boolean
@@ -49623,6 +52816,12 @@ input UpdateEntityInput {
 	addFileIDs: [ID!]
 	removeFileIDs: [ID!]
 	clearFiles: Boolean
+	addAssetIDs: [ID!]
+	removeAssetIDs: [ID!]
+	clearAssets: Boolean
+	addScanIDs: [ID!]
+	removeScanIDs: [ID!]
+	clearScans: Boolean
 	entityTypeID: ID
 	clearEntityType: Boolean
 	note: CreateNoteInput
@@ -49953,6 +53152,15 @@ input UpdateGroupInput {
 	addControlImplementationViewerIDs: [ID!]
 	removeControlImplementationViewerIDs: [ID!]
 	clearControlImplementationViewers: Boolean
+	addScanEditorIDs: [ID!]
+	removeScanEditorIDs: [ID!]
+	clearScanEditors: Boolean
+	addScanBlockedGroupIDs: [ID!]
+	removeScanBlockedGroupIDs: [ID!]
+	clearScanBlockedGroups: Boolean
+	addScanViewerIDs: [ID!]
+	removeScanViewerIDs: [ID!]
+	clearScanViewers: Boolean
 	addProcedureEditorIDs: [ID!]
 	removeProcedureEditorIDs: [ID!]
 	clearProcedureEditors: Boolean
@@ -50145,6 +53353,42 @@ input UpdateInternalPolicyInput {
 	"""
 	reviewFrequency: InternalPolicyFrequency
 	clearReviewFrequency: Boolean
+	"""
+	auto-generated tag suggestions for the policy
+	"""
+	tagSuggestions: [String!]
+	appendTagSuggestions: [String!]
+	clearTagSuggestions: Boolean
+	"""
+	tag suggestions dismissed by the user for the policy
+	"""
+	dismissedTagSuggestions: [String!]
+	appendDismissedTagSuggestions: [String!]
+	clearDismissedTagSuggestions: Boolean
+	"""
+	proposed controls referenced in the policy
+	"""
+	controlSuggestions: [String!]
+	appendControlSuggestions: [String!]
+	clearControlSuggestions: Boolean
+	"""
+	control suggestions dismissed by the user for the policy
+	"""
+	dismissedControlSuggestions: [String!]
+	appendDismissedControlSuggestions: [String!]
+	clearDismissedControlSuggestions: Boolean
+	"""
+	suggested improvements for the policy
+	"""
+	improvementSuggestions: [String!]
+	appendImprovementSuggestions: [String!]
+	clearImprovementSuggestions: Boolean
+	"""
+	improvement suggestions dismissed by the user for the policy
+	"""
+	dismissedImprovementSuggestions: [String!]
+	appendDismissedImprovementSuggestions: [String!]
+	clearDismissedImprovementSuggestions: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addBlockedGroupIDs: [ID!]
@@ -50638,6 +53882,12 @@ input UpdateOrganizationInput {
 	addTrustCenterIDs: [ID!]
 	removeTrustCenterIDs: [ID!]
 	clearTrustCenters: Boolean
+	addAssetIDs: [ID!]
+	removeAssetIDs: [ID!]
+	clearAssets: Boolean
+	addScanIDs: [ID!]
+	removeScanIDs: [ID!]
+	clearScans: Boolean
 	addOrgMembers: [CreateOrgMembershipInput!]
 	removeOrgMembers: [ID!]
 	updateOrgSettings: UpdateOrganizationSettingInput
@@ -50699,6 +53949,44 @@ input UpdateOrganizationSettingInput {
 	allowedEmailDomains: [String!]
 	appendAllowedEmailDomains: [String!]
 	clearAllowedEmailDomains: Boolean
+	"""
+	SSO provider type for the organization
+	"""
+	identityProvider: OrganizationSettingSSOProvider
+	clearIdentityProvider: Boolean
+	"""
+	client ID for SSO integration
+	"""
+	identityProviderClientID: String
+	clearIdentityProviderClientID: Boolean
+	"""
+	client secret for SSO integration
+	"""
+	identityProviderClientSecret: String
+	clearIdentityProviderClientSecret: Boolean
+	"""
+	metadata URL for the SSO provider
+	"""
+	identityProviderMetadataEndpoint: String
+	clearIdentityProviderMetadataEndpoint: Boolean
+	"""
+	SAML entity ID for the SSO provider
+	"""
+	identityProviderEntityID: String
+	clearIdentityProviderEntityID: Boolean
+	"""
+	OIDC discovery URL for the SSO provider
+	"""
+	oidcDiscoveryEndpoint: String
+	clearOidcDiscoveryEndpoint: Boolean
+	"""
+	enforce SSO authentication for organization members
+	"""
+	identityProviderLoginEnforced: Boolean
+	"""
+	unique token used to receive compliance webhook events
+	"""
+	complianceWebhookToken: String
 	organizationID: ID
 	clearOrganization: Boolean
 	addFileIDs: [ID!]
@@ -50792,6 +54080,42 @@ input UpdateProcedureInput {
 	"""
 	reviewFrequency: ProcedureFrequency
 	clearReviewFrequency: Boolean
+	"""
+	auto-generated tag suggestions for the procedure
+	"""
+	tagSuggestions: [String!]
+	appendTagSuggestions: [String!]
+	clearTagSuggestions: Boolean
+	"""
+	tag suggestions dismissed by the user for the procedure
+	"""
+	dismissedTagSuggestions: [String!]
+	appendDismissedTagSuggestions: [String!]
+	clearDismissedTagSuggestions: Boolean
+	"""
+	proposed controls referenced in the procedure
+	"""
+	controlSuggestions: [String!]
+	appendControlSuggestions: [String!]
+	clearControlSuggestions: Boolean
+	"""
+	control suggestions dismissed by the user for the procedure
+	"""
+	dismissedControlSuggestions: [String!]
+	appendDismissedControlSuggestions: [String!]
+	clearDismissedControlSuggestions: Boolean
+	"""
+	suggested improvements for the procedure
+	"""
+	improvementSuggestions: [String!]
+	appendImprovementSuggestions: [String!]
+	clearImprovementSuggestions: Boolean
+	"""
+	improvement suggestions dismissed by the user for the procedure
+	"""
+	dismissedImprovementSuggestions: [String!]
+	appendDismissedImprovementSuggestions: [String!]
+	clearDismissedImprovementSuggestions: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addBlockedGroupIDs: [ID!]
@@ -51044,10 +54368,65 @@ input UpdateRiskInput {
 	addTaskIDs: [ID!]
 	removeTaskIDs: [ID!]
 	clearTasks: Boolean
+	addAssetIDs: [ID!]
+	removeAssetIDs: [ID!]
+	clearAssets: Boolean
+	addEntityIDs: [ID!]
+	removeEntityIDs: [ID!]
+	clearEntities: Boolean
+	addScanIDs: [ID!]
+	removeScanIDs: [ID!]
+	clearScans: Boolean
 	stakeholderID: ID
 	clearStakeholder: Boolean
 	delegateID: ID
 	clearDelegate: Boolean
+}
+"""
+UpdateScanInput is used for update Scan object.
+Input was generated by ent.
+"""
+input UpdateScanInput {
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	appendTags: [String!]
+	clearTags: Boolean
+	"""
+	the target of the scan, e.g., a domain name or IP address, codebase
+	"""
+	target: String
+	"""
+	the type of scan, e.g., domain scan, vulnerability scan, provider scan
+	"""
+	scanType: ScanScanType
+	"""
+	additional metadata for the scan, e.g., scan configuration, options, etc
+	"""
+	metadata: Map
+	clearMetadata: Boolean
+	"""
+	the status of the scan, e.g., processing, completed, failed
+	"""
+	status: ScanScanStatus
+	ownerID: ID
+	clearOwner: Boolean
+	addBlockedGroupIDs: [ID!]
+	removeBlockedGroupIDs: [ID!]
+	clearBlockedGroups: Boolean
+	addEditorIDs: [ID!]
+	removeEditorIDs: [ID!]
+	clearEditors: Boolean
+	addViewerIDs: [ID!]
+	removeViewerIDs: [ID!]
+	clearViewers: Boolean
+	addAssetIDs: [ID!]
+	removeAssetIDs: [ID!]
+	clearAssets: Boolean
+	addEntityIDs: [ID!]
+	removeEntityIDs: [ID!]
+	clearEntities: Boolean
 }
 """
 UpdateScheduledJobInput is used for update ScheduledJob object.

@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up asset by ID
+    """
+     asset(
+        """
+        ID of the asset
+        """
+        id: ID!
+    ):  Asset!
+}
+
+extend type Mutation{
+    """
+    Create a new asset
+    """
+    createAsset(
+        """
+        values of the asset
+        """
+        input: CreateAssetInput!
+    ): AssetCreatePayload!
+    """
+    Create multiple new assets
+    """
+    createBulkAsset(
+        """
+        values of the asset
+        """
+        input: [CreateAssetInput!]
+    ): AssetBulkCreatePayload!
+    """
+    Create multiple new assets via file upload
+    """
+    createBulkCSVAsset(
+        """
+        csv file containing values of the asset
+        """
+        input: Upload!
+    ): AssetBulkCreatePayload!
+    """
+    Update an existing asset
+    """
+    updateAsset(
+        """
+        ID of the asset
+        """
+        id: ID!
+        """
+        New values for the asset
+        """
+        input: UpdateAssetInput!
+    ): AssetUpdatePayload!
+    """
+    Delete an existing asset
+    """
+    deleteAsset(
+        """
+        ID of the asset
+        """
+        id: ID!
+    ): AssetDeletePayload!
+}
+
+"""
+Return response for createAsset mutation
+"""
+type AssetCreatePayload {
+    """
+    Created asset
+    """
+    asset: Asset!
+}
+
+"""
+Return response for updateAsset mutation
+"""
+type AssetUpdatePayload {
+    """
+    Updated asset
+    """
+    asset: Asset!
+}
+
+"""
+Return response for deleteAsset mutation
+"""
+type AssetDeletePayload {
+    """
+    Deleted asset ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkAsset mutation
+"""
+type AssetBulkCreatePayload {
+    """
+    Created assets
+    """
+    assets: [Asset!]
+}

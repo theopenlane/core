@@ -33,6 +33,22 @@ query GlobalSearch($query: String!) {
         }
       }
     }
+    assets {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          name
+          tags
+        }
+      }
+    }
     contacts {
       totalCount
       pageInfo {
@@ -503,6 +519,22 @@ query GlobalSearch($query: String!) {
           id
           name
           tags
+        }
+      }
+    }
+    scans {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+          target
         }
       }
     }

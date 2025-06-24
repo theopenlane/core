@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up scan by ID
+    """
+     scan(
+        """
+        ID of the scan
+        """
+        id: ID!
+    ):  Scan!
+}
+
+extend type Mutation{
+    """
+    Create a new scan
+    """
+    createScan(
+        """
+        values of the scan
+        """
+        input: CreateScanInput!
+    ): ScanCreatePayload!
+    """
+    Create multiple new scans
+    """
+    createBulkScan(
+        """
+        values of the scan
+        """
+        input: [CreateScanInput!]
+    ): ScanBulkCreatePayload!
+    """
+    Create multiple new scans via file upload
+    """
+    createBulkCSVScan(
+        """
+        csv file containing values of the scan
+        """
+        input: Upload!
+    ): ScanBulkCreatePayload!
+    """
+    Update an existing scan
+    """
+    updateScan(
+        """
+        ID of the scan
+        """
+        id: ID!
+        """
+        New values for the scan
+        """
+        input: UpdateScanInput!
+    ): ScanUpdatePayload!
+    """
+    Delete an existing scan
+    """
+    deleteScan(
+        """
+        ID of the scan
+        """
+        id: ID!
+    ): ScanDeletePayload!
+}
+
+"""
+Return response for createScan mutation
+"""
+type ScanCreatePayload {
+    """
+    Created scan
+    """
+    scan: Scan!
+}
+
+"""
+Return response for updateScan mutation
+"""
+type ScanUpdatePayload {
+    """
+    Updated scan
+    """
+    scan: Scan!
+}
+
+"""
+Return response for deleteScan mutation
+"""
+type ScanDeletePayload {
+    """
+    Deleted scan ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkScan mutation
+"""
+type ScanBulkCreatePayload {
+    """
+    Created scans
+    """
+    scans: [Scan!]
+}

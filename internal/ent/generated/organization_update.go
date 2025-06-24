@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
@@ -51,6 +52,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
@@ -1203,6 +1205,36 @@ func (ou *OrganizationUpdate) AddTrustCenters(t ...*TrustCenter) *OrganizationUp
 		ids[i] = t[i].ID
 	}
 	return ou.AddTrustCenterIDs(ids...)
+}
+
+// AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
+func (ou *OrganizationUpdate) AddAssetIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddAssetIDs(ids...)
+	return ou
+}
+
+// AddAssets adds the "assets" edges to the Asset entity.
+func (ou *OrganizationUpdate) AddAssets(a ...*Asset) *OrganizationUpdate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return ou.AddAssetIDs(ids...)
+}
+
+// AddScanIDs adds the "scans" edge to the Scan entity by IDs.
+func (ou *OrganizationUpdate) AddScanIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddScanIDs(ids...)
+	return ou
+}
+
+// AddScans adds the "scans" edges to the Scan entity.
+func (ou *OrganizationUpdate) AddScans(s ...*Scan) *OrganizationUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ou.AddScanIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -2474,6 +2506,48 @@ func (ou *OrganizationUpdate) RemoveTrustCenters(t ...*TrustCenter) *Organizatio
 		ids[i] = t[i].ID
 	}
 	return ou.RemoveTrustCenterIDs(ids...)
+}
+
+// ClearAssets clears all "assets" edges to the Asset entity.
+func (ou *OrganizationUpdate) ClearAssets() *OrganizationUpdate {
+	ou.mutation.ClearAssets()
+	return ou
+}
+
+// RemoveAssetIDs removes the "assets" edge to Asset entities by IDs.
+func (ou *OrganizationUpdate) RemoveAssetIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveAssetIDs(ids...)
+	return ou
+}
+
+// RemoveAssets removes "assets" edges to Asset entities.
+func (ou *OrganizationUpdate) RemoveAssets(a ...*Asset) *OrganizationUpdate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return ou.RemoveAssetIDs(ids...)
+}
+
+// ClearScans clears all "scans" edges to the Scan entity.
+func (ou *OrganizationUpdate) ClearScans() *OrganizationUpdate {
+	ou.mutation.ClearScans()
+	return ou
+}
+
+// RemoveScanIDs removes the "scans" edge to Scan entities by IDs.
+func (ou *OrganizationUpdate) RemoveScanIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveScanIDs(ids...)
+	return ou
+}
+
+// RemoveScans removes "scans" edges to Scan entities.
+func (ou *OrganizationUpdate) RemoveScans(s ...*Scan) *OrganizationUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ou.RemoveScanIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -5570,6 +5644,102 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ou.mutation.AssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssetsTable,
+			Columns: []string{organization.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !ou.mutation.AssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssetsTable,
+			Columns: []string{organization.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.AssetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssetsTable,
+			Columns: []string{organization.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ou.mutation.ScansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ScansTable,
+			Columns: []string{organization.ScansColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Scan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedScansIDs(); len(nodes) > 0 && !ou.mutation.ScansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ScansTable,
+			Columns: []string{organization.ScansColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.ScansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ScansTable,
+			Columns: []string{organization.ScansColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ou.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -6767,6 +6937,36 @@ func (ouo *OrganizationUpdateOne) AddTrustCenters(t ...*TrustCenter) *Organizati
 		ids[i] = t[i].ID
 	}
 	return ouo.AddTrustCenterIDs(ids...)
+}
+
+// AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
+func (ouo *OrganizationUpdateOne) AddAssetIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddAssetIDs(ids...)
+	return ouo
+}
+
+// AddAssets adds the "assets" edges to the Asset entity.
+func (ouo *OrganizationUpdateOne) AddAssets(a ...*Asset) *OrganizationUpdateOne {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return ouo.AddAssetIDs(ids...)
+}
+
+// AddScanIDs adds the "scans" edge to the Scan entity by IDs.
+func (ouo *OrganizationUpdateOne) AddScanIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddScanIDs(ids...)
+	return ouo
+}
+
+// AddScans adds the "scans" edges to the Scan entity.
+func (ouo *OrganizationUpdateOne) AddScans(s ...*Scan) *OrganizationUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ouo.AddScanIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -8038,6 +8238,48 @@ func (ouo *OrganizationUpdateOne) RemoveTrustCenters(t ...*TrustCenter) *Organiz
 		ids[i] = t[i].ID
 	}
 	return ouo.RemoveTrustCenterIDs(ids...)
+}
+
+// ClearAssets clears all "assets" edges to the Asset entity.
+func (ouo *OrganizationUpdateOne) ClearAssets() *OrganizationUpdateOne {
+	ouo.mutation.ClearAssets()
+	return ouo
+}
+
+// RemoveAssetIDs removes the "assets" edge to Asset entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveAssetIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveAssetIDs(ids...)
+	return ouo
+}
+
+// RemoveAssets removes "assets" edges to Asset entities.
+func (ouo *OrganizationUpdateOne) RemoveAssets(a ...*Asset) *OrganizationUpdateOne {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return ouo.RemoveAssetIDs(ids...)
+}
+
+// ClearScans clears all "scans" edges to the Scan entity.
+func (ouo *OrganizationUpdateOne) ClearScans() *OrganizationUpdateOne {
+	ouo.mutation.ClearScans()
+	return ouo
+}
+
+// RemoveScanIDs removes the "scans" edge to Scan entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveScanIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveScanIDs(ids...)
+	return ouo
+}
+
+// RemoveScans removes "scans" edges to Scan entities.
+func (ouo *OrganizationUpdateOne) RemoveScans(s ...*Scan) *OrganizationUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ouo.RemoveScanIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -11159,6 +11401,102 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			},
 		}
 		edge.Schema = ouo.schemaConfig.TrustCenter
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.AssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssetsTable,
+			Columns: []string{organization.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !ouo.mutation.AssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssetsTable,
+			Columns: []string{organization.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.AssetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssetsTable,
+			Columns: []string{organization.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.ScansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ScansTable,
+			Columns: []string{organization.ScansColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Scan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedScansIDs(); len(nodes) > 0 && !ouo.mutation.ScansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ScansTable,
+			Columns: []string{organization.ScansColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.ScansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ScansTable,
+			Columns: []string{organization.ScansColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

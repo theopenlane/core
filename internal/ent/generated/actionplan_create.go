@@ -263,6 +263,42 @@ func (apc *ActionPlanCreate) SetNillableSummary(s *string) *ActionPlanCreate {
 	return apc
 }
 
+// SetTagSuggestions sets the "tag_suggestions" field.
+func (apc *ActionPlanCreate) SetTagSuggestions(s []string) *ActionPlanCreate {
+	apc.mutation.SetTagSuggestions(s)
+	return apc
+}
+
+// SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
+func (apc *ActionPlanCreate) SetDismissedTagSuggestions(s []string) *ActionPlanCreate {
+	apc.mutation.SetDismissedTagSuggestions(s)
+	return apc
+}
+
+// SetControlSuggestions sets the "control_suggestions" field.
+func (apc *ActionPlanCreate) SetControlSuggestions(s []string) *ActionPlanCreate {
+	apc.mutation.SetControlSuggestions(s)
+	return apc
+}
+
+// SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
+func (apc *ActionPlanCreate) SetDismissedControlSuggestions(s []string) *ActionPlanCreate {
+	apc.mutation.SetDismissedControlSuggestions(s)
+	return apc
+}
+
+// SetImprovementSuggestions sets the "improvement_suggestions" field.
+func (apc *ActionPlanCreate) SetImprovementSuggestions(s []string) *ActionPlanCreate {
+	apc.mutation.SetImprovementSuggestions(s)
+	return apc
+}
+
+// SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
+func (apc *ActionPlanCreate) SetDismissedImprovementSuggestions(s []string) *ActionPlanCreate {
+	apc.mutation.SetDismissedImprovementSuggestions(s)
+	return apc
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (apc *ActionPlanCreate) SetOwnerID(s string) *ActionPlanCreate {
 	apc.mutation.SetOwnerID(s)
@@ -483,6 +519,30 @@ func (apc *ActionPlanCreate) defaults() error {
 		v := actionplan.DefaultReviewFrequency
 		apc.mutation.SetReviewFrequency(v)
 	}
+	if _, ok := apc.mutation.TagSuggestions(); !ok {
+		v := actionplan.DefaultTagSuggestions
+		apc.mutation.SetTagSuggestions(v)
+	}
+	if _, ok := apc.mutation.DismissedTagSuggestions(); !ok {
+		v := actionplan.DefaultDismissedTagSuggestions
+		apc.mutation.SetDismissedTagSuggestions(v)
+	}
+	if _, ok := apc.mutation.ControlSuggestions(); !ok {
+		v := actionplan.DefaultControlSuggestions
+		apc.mutation.SetControlSuggestions(v)
+	}
+	if _, ok := apc.mutation.DismissedControlSuggestions(); !ok {
+		v := actionplan.DefaultDismissedControlSuggestions
+		apc.mutation.SetDismissedControlSuggestions(v)
+	}
+	if _, ok := apc.mutation.ImprovementSuggestions(); !ok {
+		v := actionplan.DefaultImprovementSuggestions
+		apc.mutation.SetImprovementSuggestions(v)
+	}
+	if _, ok := apc.mutation.DismissedImprovementSuggestions(); !ok {
+		v := actionplan.DefaultDismissedImprovementSuggestions
+		apc.mutation.SetDismissedImprovementSuggestions(v)
+	}
 	if _, ok := apc.mutation.ID(); !ok {
 		if actionplan.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized actionplan.DefaultID (forgotten import generated/runtime?)")
@@ -627,6 +687,30 @@ func (apc *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 	if value, ok := apc.mutation.Summary(); ok {
 		_spec.SetField(actionplan.FieldSummary, field.TypeString, value)
 		_node.Summary = value
+	}
+	if value, ok := apc.mutation.TagSuggestions(); ok {
+		_spec.SetField(actionplan.FieldTagSuggestions, field.TypeJSON, value)
+		_node.TagSuggestions = value
+	}
+	if value, ok := apc.mutation.DismissedTagSuggestions(); ok {
+		_spec.SetField(actionplan.FieldDismissedTagSuggestions, field.TypeJSON, value)
+		_node.DismissedTagSuggestions = value
+	}
+	if value, ok := apc.mutation.ControlSuggestions(); ok {
+		_spec.SetField(actionplan.FieldControlSuggestions, field.TypeJSON, value)
+		_node.ControlSuggestions = value
+	}
+	if value, ok := apc.mutation.DismissedControlSuggestions(); ok {
+		_spec.SetField(actionplan.FieldDismissedControlSuggestions, field.TypeJSON, value)
+		_node.DismissedControlSuggestions = value
+	}
+	if value, ok := apc.mutation.ImprovementSuggestions(); ok {
+		_spec.SetField(actionplan.FieldImprovementSuggestions, field.TypeJSON, value)
+		_node.ImprovementSuggestions = value
+	}
+	if value, ok := apc.mutation.DismissedImprovementSuggestions(); ok {
+		_spec.SetField(actionplan.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
+		_node.DismissedImprovementSuggestions = value
 	}
 	if value, ok := apc.mutation.DueDate(); ok {
 		_spec.SetField(actionplan.FieldDueDate, field.TypeTime, value)

@@ -117,24 +117,29 @@ func Status(v string) predicate.OrgModule {
 	return predicate.OrgModule(sql.FieldEQ(FieldStatus, v))
 }
 
+// Visibility applies equality check predicate on the "visibility" field. It's identical to VisibilityEQ.
+func Visibility(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldEQ(FieldVisibility, v))
+}
+
 // Active applies equality check predicate on the "active" field. It's identical to ActiveEQ.
 func Active(v bool) predicate.OrgModule {
 	return predicate.OrgModule(sql.FieldEQ(FieldActive, v))
 }
 
-// TrialExpiresAt applies equality check predicate on the "trial_expires_at" field. It's identical to TrialExpiresAtEQ.
-func TrialExpiresAt(v time.Time) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldEQ(FieldTrialExpiresAt, v))
-}
-
-// ExpiresAt applies equality check predicate on the "expires_at" field. It's identical to ExpiresAtEQ.
-func ExpiresAt(v time.Time) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldEQ(FieldExpiresAt, v))
+// ModuleLookupKey applies equality check predicate on the "module_lookup_key" field. It's identical to ModuleLookupKeyEQ.
+func ModuleLookupKey(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldEQ(FieldModuleLookupKey, v))
 }
 
 // SubscriptionID applies equality check predicate on the "subscription_id" field. It's identical to SubscriptionIDEQ.
 func SubscriptionID(v string) predicate.OrgModule {
 	return predicate.OrgModule(sql.FieldEQ(FieldSubscriptionID, v))
+}
+
+// PriceID applies equality check predicate on the "price_id" field. It's identical to PriceIDEQ.
+func PriceID(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldEQ(FieldPriceID, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -822,6 +827,81 @@ func StatusContainsFold(v string) predicate.OrgModule {
 	return predicate.OrgModule(sql.FieldContainsFold(FieldStatus, v))
 }
 
+// VisibilityEQ applies the EQ predicate on the "visibility" field.
+func VisibilityEQ(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldEQ(FieldVisibility, v))
+}
+
+// VisibilityNEQ applies the NEQ predicate on the "visibility" field.
+func VisibilityNEQ(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldNEQ(FieldVisibility, v))
+}
+
+// VisibilityIn applies the In predicate on the "visibility" field.
+func VisibilityIn(vs ...string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldIn(FieldVisibility, vs...))
+}
+
+// VisibilityNotIn applies the NotIn predicate on the "visibility" field.
+func VisibilityNotIn(vs ...string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldNotIn(FieldVisibility, vs...))
+}
+
+// VisibilityGT applies the GT predicate on the "visibility" field.
+func VisibilityGT(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldGT(FieldVisibility, v))
+}
+
+// VisibilityGTE applies the GTE predicate on the "visibility" field.
+func VisibilityGTE(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldGTE(FieldVisibility, v))
+}
+
+// VisibilityLT applies the LT predicate on the "visibility" field.
+func VisibilityLT(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldLT(FieldVisibility, v))
+}
+
+// VisibilityLTE applies the LTE predicate on the "visibility" field.
+func VisibilityLTE(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldLTE(FieldVisibility, v))
+}
+
+// VisibilityContains applies the Contains predicate on the "visibility" field.
+func VisibilityContains(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldContains(FieldVisibility, v))
+}
+
+// VisibilityHasPrefix applies the HasPrefix predicate on the "visibility" field.
+func VisibilityHasPrefix(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldHasPrefix(FieldVisibility, v))
+}
+
+// VisibilityHasSuffix applies the HasSuffix predicate on the "visibility" field.
+func VisibilityHasSuffix(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldHasSuffix(FieldVisibility, v))
+}
+
+// VisibilityIsNil applies the IsNil predicate on the "visibility" field.
+func VisibilityIsNil() predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldIsNull(FieldVisibility))
+}
+
+// VisibilityNotNil applies the NotNil predicate on the "visibility" field.
+func VisibilityNotNil() predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldNotNull(FieldVisibility))
+}
+
+// VisibilityEqualFold applies the EqualFold predicate on the "visibility" field.
+func VisibilityEqualFold(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldEqualFold(FieldVisibility, v))
+}
+
+// VisibilityContainsFold applies the ContainsFold predicate on the "visibility" field.
+func VisibilityContainsFold(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldContainsFold(FieldVisibility, v))
+}
+
 // ActiveEQ applies the EQ predicate on the "active" field.
 func ActiveEQ(v bool) predicate.OrgModule {
 	return predicate.OrgModule(sql.FieldEQ(FieldActive, v))
@@ -832,104 +912,79 @@ func ActiveNEQ(v bool) predicate.OrgModule {
 	return predicate.OrgModule(sql.FieldNEQ(FieldActive, v))
 }
 
-// TrialExpiresAtEQ applies the EQ predicate on the "trial_expires_at" field.
-func TrialExpiresAtEQ(v time.Time) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldEQ(FieldTrialExpiresAt, v))
+// ModuleLookupKeyEQ applies the EQ predicate on the "module_lookup_key" field.
+func ModuleLookupKeyEQ(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldEQ(FieldModuleLookupKey, v))
 }
 
-// TrialExpiresAtNEQ applies the NEQ predicate on the "trial_expires_at" field.
-func TrialExpiresAtNEQ(v time.Time) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldNEQ(FieldTrialExpiresAt, v))
+// ModuleLookupKeyNEQ applies the NEQ predicate on the "module_lookup_key" field.
+func ModuleLookupKeyNEQ(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldNEQ(FieldModuleLookupKey, v))
 }
 
-// TrialExpiresAtIn applies the In predicate on the "trial_expires_at" field.
-func TrialExpiresAtIn(vs ...time.Time) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldIn(FieldTrialExpiresAt, vs...))
+// ModuleLookupKeyIn applies the In predicate on the "module_lookup_key" field.
+func ModuleLookupKeyIn(vs ...string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldIn(FieldModuleLookupKey, vs...))
 }
 
-// TrialExpiresAtNotIn applies the NotIn predicate on the "trial_expires_at" field.
-func TrialExpiresAtNotIn(vs ...time.Time) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldNotIn(FieldTrialExpiresAt, vs...))
+// ModuleLookupKeyNotIn applies the NotIn predicate on the "module_lookup_key" field.
+func ModuleLookupKeyNotIn(vs ...string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldNotIn(FieldModuleLookupKey, vs...))
 }
 
-// TrialExpiresAtGT applies the GT predicate on the "trial_expires_at" field.
-func TrialExpiresAtGT(v time.Time) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldGT(FieldTrialExpiresAt, v))
+// ModuleLookupKeyGT applies the GT predicate on the "module_lookup_key" field.
+func ModuleLookupKeyGT(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldGT(FieldModuleLookupKey, v))
 }
 
-// TrialExpiresAtGTE applies the GTE predicate on the "trial_expires_at" field.
-func TrialExpiresAtGTE(v time.Time) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldGTE(FieldTrialExpiresAt, v))
+// ModuleLookupKeyGTE applies the GTE predicate on the "module_lookup_key" field.
+func ModuleLookupKeyGTE(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldGTE(FieldModuleLookupKey, v))
 }
 
-// TrialExpiresAtLT applies the LT predicate on the "trial_expires_at" field.
-func TrialExpiresAtLT(v time.Time) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldLT(FieldTrialExpiresAt, v))
+// ModuleLookupKeyLT applies the LT predicate on the "module_lookup_key" field.
+func ModuleLookupKeyLT(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldLT(FieldModuleLookupKey, v))
 }
 
-// TrialExpiresAtLTE applies the LTE predicate on the "trial_expires_at" field.
-func TrialExpiresAtLTE(v time.Time) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldLTE(FieldTrialExpiresAt, v))
+// ModuleLookupKeyLTE applies the LTE predicate on the "module_lookup_key" field.
+func ModuleLookupKeyLTE(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldLTE(FieldModuleLookupKey, v))
 }
 
-// TrialExpiresAtIsNil applies the IsNil predicate on the "trial_expires_at" field.
-func TrialExpiresAtIsNil() predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldIsNull(FieldTrialExpiresAt))
+// ModuleLookupKeyContains applies the Contains predicate on the "module_lookup_key" field.
+func ModuleLookupKeyContains(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldContains(FieldModuleLookupKey, v))
 }
 
-// TrialExpiresAtNotNil applies the NotNil predicate on the "trial_expires_at" field.
-func TrialExpiresAtNotNil() predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldNotNull(FieldTrialExpiresAt))
+// ModuleLookupKeyHasPrefix applies the HasPrefix predicate on the "module_lookup_key" field.
+func ModuleLookupKeyHasPrefix(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldHasPrefix(FieldModuleLookupKey, v))
 }
 
-// ExpiresAtEQ applies the EQ predicate on the "expires_at" field.
-func ExpiresAtEQ(v time.Time) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldEQ(FieldExpiresAt, v))
+// ModuleLookupKeyHasSuffix applies the HasSuffix predicate on the "module_lookup_key" field.
+func ModuleLookupKeyHasSuffix(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldHasSuffix(FieldModuleLookupKey, v))
 }
 
-// ExpiresAtNEQ applies the NEQ predicate on the "expires_at" field.
-func ExpiresAtNEQ(v time.Time) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldNEQ(FieldExpiresAt, v))
+// ModuleLookupKeyIsNil applies the IsNil predicate on the "module_lookup_key" field.
+func ModuleLookupKeyIsNil() predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldIsNull(FieldModuleLookupKey))
 }
 
-// ExpiresAtIn applies the In predicate on the "expires_at" field.
-func ExpiresAtIn(vs ...time.Time) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldIn(FieldExpiresAt, vs...))
+// ModuleLookupKeyNotNil applies the NotNil predicate on the "module_lookup_key" field.
+func ModuleLookupKeyNotNil() predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldNotNull(FieldModuleLookupKey))
 }
 
-// ExpiresAtNotIn applies the NotIn predicate on the "expires_at" field.
-func ExpiresAtNotIn(vs ...time.Time) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldNotIn(FieldExpiresAt, vs...))
+// ModuleLookupKeyEqualFold applies the EqualFold predicate on the "module_lookup_key" field.
+func ModuleLookupKeyEqualFold(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldEqualFold(FieldModuleLookupKey, v))
 }
 
-// ExpiresAtGT applies the GT predicate on the "expires_at" field.
-func ExpiresAtGT(v time.Time) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldGT(FieldExpiresAt, v))
-}
-
-// ExpiresAtGTE applies the GTE predicate on the "expires_at" field.
-func ExpiresAtGTE(v time.Time) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldGTE(FieldExpiresAt, v))
-}
-
-// ExpiresAtLT applies the LT predicate on the "expires_at" field.
-func ExpiresAtLT(v time.Time) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldLT(FieldExpiresAt, v))
-}
-
-// ExpiresAtLTE applies the LTE predicate on the "expires_at" field.
-func ExpiresAtLTE(v time.Time) predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldLTE(FieldExpiresAt, v))
-}
-
-// ExpiresAtIsNil applies the IsNil predicate on the "expires_at" field.
-func ExpiresAtIsNil() predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldIsNull(FieldExpiresAt))
-}
-
-// ExpiresAtNotNil applies the NotNil predicate on the "expires_at" field.
-func ExpiresAtNotNil() predicate.OrgModule {
-	return predicate.OrgModule(sql.FieldNotNull(FieldExpiresAt))
+// ModuleLookupKeyContainsFold applies the ContainsFold predicate on the "module_lookup_key" field.
+func ModuleLookupKeyContainsFold(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldContainsFold(FieldModuleLookupKey, v))
 }
 
 // SubscriptionIDEQ applies the EQ predicate on the "subscription_id" field.
@@ -1007,6 +1062,81 @@ func SubscriptionIDContainsFold(v string) predicate.OrgModule {
 	return predicate.OrgModule(sql.FieldContainsFold(FieldSubscriptionID, v))
 }
 
+// PriceIDEQ applies the EQ predicate on the "price_id" field.
+func PriceIDEQ(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldEQ(FieldPriceID, v))
+}
+
+// PriceIDNEQ applies the NEQ predicate on the "price_id" field.
+func PriceIDNEQ(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldNEQ(FieldPriceID, v))
+}
+
+// PriceIDIn applies the In predicate on the "price_id" field.
+func PriceIDIn(vs ...string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldIn(FieldPriceID, vs...))
+}
+
+// PriceIDNotIn applies the NotIn predicate on the "price_id" field.
+func PriceIDNotIn(vs ...string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldNotIn(FieldPriceID, vs...))
+}
+
+// PriceIDGT applies the GT predicate on the "price_id" field.
+func PriceIDGT(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldGT(FieldPriceID, v))
+}
+
+// PriceIDGTE applies the GTE predicate on the "price_id" field.
+func PriceIDGTE(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldGTE(FieldPriceID, v))
+}
+
+// PriceIDLT applies the LT predicate on the "price_id" field.
+func PriceIDLT(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldLT(FieldPriceID, v))
+}
+
+// PriceIDLTE applies the LTE predicate on the "price_id" field.
+func PriceIDLTE(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldLTE(FieldPriceID, v))
+}
+
+// PriceIDContains applies the Contains predicate on the "price_id" field.
+func PriceIDContains(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldContains(FieldPriceID, v))
+}
+
+// PriceIDHasPrefix applies the HasPrefix predicate on the "price_id" field.
+func PriceIDHasPrefix(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldHasPrefix(FieldPriceID, v))
+}
+
+// PriceIDHasSuffix applies the HasSuffix predicate on the "price_id" field.
+func PriceIDHasSuffix(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldHasSuffix(FieldPriceID, v))
+}
+
+// PriceIDIsNil applies the IsNil predicate on the "price_id" field.
+func PriceIDIsNil() predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldIsNull(FieldPriceID))
+}
+
+// PriceIDNotNil applies the NotNil predicate on the "price_id" field.
+func PriceIDNotNil() predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldNotNull(FieldPriceID))
+}
+
+// PriceIDEqualFold applies the EqualFold predicate on the "price_id" field.
+func PriceIDEqualFold(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldEqualFold(FieldPriceID, v))
+}
+
+// PriceIDContainsFold applies the ContainsFold predicate on the "price_id" field.
+func PriceIDContainsFold(v string) predicate.OrgModule {
+	return predicate.OrgModule(sql.FieldContainsFold(FieldPriceID, v))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.OrgModule {
 	return predicate.OrgModule(func(s *sql.Selector) {
@@ -1057,6 +1187,64 @@ func HasOrgSubscriptionWith(preds ...predicate.OrgSubscription) predicate.OrgMod
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.OrgSubscription
 		step.Edge.Schema = schemaConfig.OrgModule
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasOrgProducts applies the HasEdge predicate on the "org_products" edge.
+func HasOrgProducts() predicate.OrgModule {
+	return predicate.OrgModule(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, OrgProductsTable, OrgProductsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.OrgProduct
+		step.Edge.Schema = schemaConfig.OrgProduct
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasOrgProductsWith applies the HasEdge predicate on the "org_products" edge with a given conditions (other predicates).
+func HasOrgProductsWith(preds ...predicate.OrgProduct) predicate.OrgModule {
+	return predicate.OrgModule(func(s *sql.Selector) {
+		step := newOrgProductsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.OrgProduct
+		step.Edge.Schema = schemaConfig.OrgProduct
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasOrgPrices applies the HasEdge predicate on the "org_prices" edge.
+func HasOrgPrices() predicate.OrgModule {
+	return predicate.OrgModule(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, OrgPricesTable, OrgPricesPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.OrgPrice
+		step.Edge.Schema = schemaConfig.OrgModuleOrgPrices
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasOrgPricesWith applies the HasEdge predicate on the "org_prices" edge with a given conditions (other predicates).
+func HasOrgPricesWith(preds ...predicate.OrgPrice) predicate.OrgModule {
+	return predicate.OrgModule(func(s *sql.Selector) {
+		step := newOrgPricesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.OrgPrice
+		step.Edge.Schema = schemaConfig.OrgModuleOrgPrices
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

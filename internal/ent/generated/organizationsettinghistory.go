@@ -61,7 +61,23 @@ type OrganizationSettingHistory struct {
 	BillingNotificationsEnabled bool `json:"billing_notifications_enabled,omitempty"`
 	// domains allowed to access the organization, if empty all domains are allowed
 	AllowedEmailDomains []string `json:"allowed_email_domains,omitempty"`
-	selectValues        sql.SelectValues
+	// SSO provider type for the organization
+	IdentityProvider enums.SSOProvider `json:"identity_provider,omitempty"`
+	// client ID for SSO integration
+	IdentityProviderClientID *string `json:"-"`
+	// client secret for SSO integration
+	IdentityProviderClientSecret *string `json:"-"`
+	// metadata URL for the SSO provider
+	IdentityProviderMetadataEndpoint string `json:"identity_provider_metadata_endpoint,omitempty"`
+	// SAML entity ID for the SSO provider
+	IdentityProviderEntityID string `json:"identity_provider_entity_id,omitempty"`
+	// OIDC discovery URL for the SSO provider
+	OidcDiscoveryEndpoint string `json:"oidc_discovery_endpoint,omitempty"`
+	// enforce SSO authentication for organization members
+	IdentityProviderLoginEnforced bool `json:"identity_provider_login_enforced,omitempty"`
+	// unique token used to receive compliance webhook events
+	ComplianceWebhookToken *string `json:"compliance_webhook_token,omitempty"`
+	selectValues           sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -73,9 +89,9 @@ func (*OrganizationSettingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case organizationsettinghistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case organizationsettinghistory.FieldBillingNotificationsEnabled:
+		case organizationsettinghistory.FieldBillingNotificationsEnabled, organizationsettinghistory.FieldIdentityProviderLoginEnforced:
 			values[i] = new(sql.NullBool)
-		case organizationsettinghistory.FieldID, organizationsettinghistory.FieldRef, organizationsettinghistory.FieldCreatedBy, organizationsettinghistory.FieldUpdatedBy, organizationsettinghistory.FieldDeletedBy, organizationsettinghistory.FieldBillingContact, organizationsettinghistory.FieldBillingEmail, organizationsettinghistory.FieldBillingPhone, organizationsettinghistory.FieldTaxIdentifier, organizationsettinghistory.FieldGeoLocation, organizationsettinghistory.FieldOrganizationID:
+		case organizationsettinghistory.FieldID, organizationsettinghistory.FieldRef, organizationsettinghistory.FieldCreatedBy, organizationsettinghistory.FieldUpdatedBy, organizationsettinghistory.FieldDeletedBy, organizationsettinghistory.FieldBillingContact, organizationsettinghistory.FieldBillingEmail, organizationsettinghistory.FieldBillingPhone, organizationsettinghistory.FieldTaxIdentifier, organizationsettinghistory.FieldGeoLocation, organizationsettinghistory.FieldOrganizationID, organizationsettinghistory.FieldIdentityProvider, organizationsettinghistory.FieldIdentityProviderClientID, organizationsettinghistory.FieldIdentityProviderClientSecret, organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, organizationsettinghistory.FieldIdentityProviderEntityID, organizationsettinghistory.FieldOidcDiscoveryEndpoint, organizationsettinghistory.FieldComplianceWebhookToken:
 			values[i] = new(sql.NullString)
 		case organizationsettinghistory.FieldHistoryTime, organizationsettinghistory.FieldCreatedAt, organizationsettinghistory.FieldUpdatedAt, organizationsettinghistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -228,6 +244,57 @@ func (osh *OrganizationSettingHistory) assignValues(columns []string, values []a
 					return fmt.Errorf("unmarshal field allowed_email_domains: %w", err)
 				}
 			}
+		case organizationsettinghistory.FieldIdentityProvider:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field identity_provider", values[i])
+			} else if value.Valid {
+				osh.IdentityProvider = enums.SSOProvider(value.String)
+			}
+		case organizationsettinghistory.FieldIdentityProviderClientID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field identity_provider_client_id", values[i])
+			} else if value.Valid {
+				osh.IdentityProviderClientID = new(string)
+				*osh.IdentityProviderClientID = value.String
+			}
+		case organizationsettinghistory.FieldIdentityProviderClientSecret:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field identity_provider_client_secret", values[i])
+			} else if value.Valid {
+				osh.IdentityProviderClientSecret = new(string)
+				*osh.IdentityProviderClientSecret = value.String
+			}
+		case organizationsettinghistory.FieldIdentityProviderMetadataEndpoint:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field identity_provider_metadata_endpoint", values[i])
+			} else if value.Valid {
+				osh.IdentityProviderMetadataEndpoint = value.String
+			}
+		case organizationsettinghistory.FieldIdentityProviderEntityID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field identity_provider_entity_id", values[i])
+			} else if value.Valid {
+				osh.IdentityProviderEntityID = value.String
+			}
+		case organizationsettinghistory.FieldOidcDiscoveryEndpoint:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field oidc_discovery_endpoint", values[i])
+			} else if value.Valid {
+				osh.OidcDiscoveryEndpoint = value.String
+			}
+		case organizationsettinghistory.FieldIdentityProviderLoginEnforced:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field identity_provider_login_enforced", values[i])
+			} else if value.Valid {
+				osh.IdentityProviderLoginEnforced = value.Bool
+			}
+		case organizationsettinghistory.FieldComplianceWebhookToken:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field compliance_webhook_token", values[i])
+			} else if value.Valid {
+				osh.ComplianceWebhookToken = new(string)
+				*osh.ComplianceWebhookToken = value.String
+			}
 		default:
 			osh.selectValues.Set(columns[i], values[i])
 		}
@@ -323,6 +390,30 @@ func (osh *OrganizationSettingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("allowed_email_domains=")
 	builder.WriteString(fmt.Sprintf("%v", osh.AllowedEmailDomains))
+	builder.WriteString(", ")
+	builder.WriteString("identity_provider=")
+	builder.WriteString(fmt.Sprintf("%v", osh.IdentityProvider))
+	builder.WriteString(", ")
+	builder.WriteString("identity_provider_client_id=<sensitive>")
+	builder.WriteString(", ")
+	builder.WriteString("identity_provider_client_secret=<sensitive>")
+	builder.WriteString(", ")
+	builder.WriteString("identity_provider_metadata_endpoint=")
+	builder.WriteString(osh.IdentityProviderMetadataEndpoint)
+	builder.WriteString(", ")
+	builder.WriteString("identity_provider_entity_id=")
+	builder.WriteString(osh.IdentityProviderEntityID)
+	builder.WriteString(", ")
+	builder.WriteString("oidc_discovery_endpoint=")
+	builder.WriteString(osh.OidcDiscoveryEndpoint)
+	builder.WriteString(", ")
+	builder.WriteString("identity_provider_login_enforced=")
+	builder.WriteString(fmt.Sprintf("%v", osh.IdentityProviderLoginEnforced))
+	builder.WriteString(", ")
+	if v := osh.ComplianceWebhookToken; v != nil {
+		builder.WriteString("compliance_webhook_token=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -10,6 +10,8 @@ type SchemaConfig struct {
 	APIToken                           string // APIToken table.
 	ActionPlan                         string // ActionPlan table.
 	ActionPlanHistory                  string // ActionPlanHistory table.
+	Asset                              string // Asset table.
+	AssetHistory                       string // AssetHistory table.
 	Contact                            string // Contact table.
 	ContactFiles                       string // Contact-files->File table.
 	ContactHistory                     string // ContactHistory table.
@@ -22,6 +24,7 @@ type SchemaConfig struct {
 	ControlProcedures                  string // Control-procedures->Procedure table.
 	ControlBlockedGroups               string // Control-blocked_groups->Group table.
 	ControlEditors                     string // Control-editors->Group table.
+	ControlAssets                      string // Control-assets->Asset table.
 	ControlControlImplementations      string // Control-control_implementations->ControlImplementation table.
 	ControlHistory                     string // ControlHistory table.
 	ControlImplementation              string // ControlImplementation table.
@@ -51,6 +54,7 @@ type SchemaConfig struct {
 	EntityContacts                     string // Entity-contacts->Contact table.
 	EntityDocuments                    string // Entity-documents->DocumentData table.
 	EntityFiles                        string // Entity-files->File table.
+	EntityAssets                       string // Entity-assets->Asset table.
 	EntityHistory                      string // EntityHistory table.
 	EntityType                         string // EntityType table.
 	EntityTypeHistory                  string // EntityTypeHistory table.
@@ -121,8 +125,10 @@ type SchemaConfig struct {
 	OrgMembershipEvents                string // OrgMembership-events->Event table.
 	OrgMembershipHistory               string // OrgMembershipHistory table.
 	OrgModule                          string // OrgModule table.
+	OrgModuleOrgPrices                 string // OrgModule-org_prices->OrgPrice table.
 	OrgPrice                           string // OrgPrice table.
 	OrgProduct                         string // OrgProduct table.
+	OrgProductOrgPrices                string // OrgProduct-org_prices->OrgPrice table.
 	OrgSubscription                    string // OrgSubscription table.
 	OrgSubscriptionEvents              string // OrgSubscription-events->Event table.
 	OrgSubscriptionHistory             string // OrgSubscriptionHistory table.
@@ -168,6 +174,12 @@ type SchemaConfig struct {
 	RiskActionPlans                    string // Risk-action_plans->ActionPlan table.
 	RiskTasks                          string // Risk-tasks->Task table.
 	RiskHistory                        string // RiskHistory table.
+	Scan                               string // Scan table.
+	ScanBlockedGroups                  string // Scan-blocked_groups->Group table.
+	ScanEditors                        string // Scan-editors->Group table.
+	ScanViewers                        string // Scan-viewers->Group table.
+	ScanAssets                         string // Scan-assets->Asset table.
+	ScanHistory                        string // ScanHistory table.
 	ScheduledJob                       string // ScheduledJob table.
 	ScheduledJobHistory                string // ScheduledJobHistory table.
 	ScheduledJobRun                    string // ScheduledJobRun table.

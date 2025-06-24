@@ -12,6 +12,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/assethistory"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -80,6 +82,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/scanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
@@ -123,6 +127,16 @@ var actionplanhistoryImplementors = []string{"ActionPlanHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*ActionPlanHistory) IsNode() {}
+
+var assetImplementors = []string{"Asset", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Asset) IsNode() {}
+
+var assethistoryImplementors = []string{"AssetHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*AssetHistory) IsNode() {}
 
 var contactImplementors = []string{"Contact", "Node"}
 
@@ -464,6 +478,16 @@ var riskhistoryImplementors = []string{"RiskHistory", "Node"}
 // IsNode implements the Node interface check for GQLGen.
 func (*RiskHistory) IsNode() {}
 
+var scanImplementors = []string{"Scan", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Scan) IsNode() {}
+
+var scanhistoryImplementors = []string{"ScanHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ScanHistory) IsNode() {}
+
 var scheduledjobImplementors = []string{"ScheduledJob", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
@@ -655,6 +679,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(actionplanhistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, actionplanhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case asset.Table:
+		query := c.Asset.Query().
+			Where(asset.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, assetImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case assethistory.Table:
+		query := c.AssetHistory.Query().
+			Where(assethistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, assethistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1271,6 +1313,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
+	case scan.Table:
+		query := c.Scan.Query().
+			Where(scan.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, scanImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case scanhistory.Table:
+		query := c.ScanHistory.Query().
+			Where(scanhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, scanhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
 	case scheduledjob.Table:
 		query := c.ScheduledJob.Query().
 			Where(scheduledjob.ID(id))
@@ -1578,6 +1638,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.ActionPlanHistory.Query().
 			Where(actionplanhistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, actionplanhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case asset.Table:
+		query := c.Asset.Query().
+			Where(asset.IDIn(ids...))
+		query, err := query.CollectFields(ctx, assetImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case assethistory.Table:
+		query := c.AssetHistory.Query().
+			Where(assethistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, assethistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -2666,6 +2758,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.RiskHistory.Query().
 			Where(riskhistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, riskhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case scan.Table:
+		query := c.Scan.Query().
+			Where(scan.IDIn(ids...))
+		query, err := query.CollectFields(ctx, scanImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case scanhistory.Table:
+		query := c.ScanHistory.Query().
+			Where(scanhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, scanhistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

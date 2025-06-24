@@ -357,6 +357,114 @@ func (iphu *InternalPolicyHistoryUpdate) ClearSummary() *InternalPolicyHistoryUp
 	return iphu
 }
 
+// SetTagSuggestions sets the "tag_suggestions" field.
+func (iphu *InternalPolicyHistoryUpdate) SetTagSuggestions(s []string) *InternalPolicyHistoryUpdate {
+	iphu.mutation.SetTagSuggestions(s)
+	return iphu
+}
+
+// AppendTagSuggestions appends s to the "tag_suggestions" field.
+func (iphu *InternalPolicyHistoryUpdate) AppendTagSuggestions(s []string) *InternalPolicyHistoryUpdate {
+	iphu.mutation.AppendTagSuggestions(s)
+	return iphu
+}
+
+// ClearTagSuggestions clears the value of the "tag_suggestions" field.
+func (iphu *InternalPolicyHistoryUpdate) ClearTagSuggestions() *InternalPolicyHistoryUpdate {
+	iphu.mutation.ClearTagSuggestions()
+	return iphu
+}
+
+// SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
+func (iphu *InternalPolicyHistoryUpdate) SetDismissedTagSuggestions(s []string) *InternalPolicyHistoryUpdate {
+	iphu.mutation.SetDismissedTagSuggestions(s)
+	return iphu
+}
+
+// AppendDismissedTagSuggestions appends s to the "dismissed_tag_suggestions" field.
+func (iphu *InternalPolicyHistoryUpdate) AppendDismissedTagSuggestions(s []string) *InternalPolicyHistoryUpdate {
+	iphu.mutation.AppendDismissedTagSuggestions(s)
+	return iphu
+}
+
+// ClearDismissedTagSuggestions clears the value of the "dismissed_tag_suggestions" field.
+func (iphu *InternalPolicyHistoryUpdate) ClearDismissedTagSuggestions() *InternalPolicyHistoryUpdate {
+	iphu.mutation.ClearDismissedTagSuggestions()
+	return iphu
+}
+
+// SetControlSuggestions sets the "control_suggestions" field.
+func (iphu *InternalPolicyHistoryUpdate) SetControlSuggestions(s []string) *InternalPolicyHistoryUpdate {
+	iphu.mutation.SetControlSuggestions(s)
+	return iphu
+}
+
+// AppendControlSuggestions appends s to the "control_suggestions" field.
+func (iphu *InternalPolicyHistoryUpdate) AppendControlSuggestions(s []string) *InternalPolicyHistoryUpdate {
+	iphu.mutation.AppendControlSuggestions(s)
+	return iphu
+}
+
+// ClearControlSuggestions clears the value of the "control_suggestions" field.
+func (iphu *InternalPolicyHistoryUpdate) ClearControlSuggestions() *InternalPolicyHistoryUpdate {
+	iphu.mutation.ClearControlSuggestions()
+	return iphu
+}
+
+// SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
+func (iphu *InternalPolicyHistoryUpdate) SetDismissedControlSuggestions(s []string) *InternalPolicyHistoryUpdate {
+	iphu.mutation.SetDismissedControlSuggestions(s)
+	return iphu
+}
+
+// AppendDismissedControlSuggestions appends s to the "dismissed_control_suggestions" field.
+func (iphu *InternalPolicyHistoryUpdate) AppendDismissedControlSuggestions(s []string) *InternalPolicyHistoryUpdate {
+	iphu.mutation.AppendDismissedControlSuggestions(s)
+	return iphu
+}
+
+// ClearDismissedControlSuggestions clears the value of the "dismissed_control_suggestions" field.
+func (iphu *InternalPolicyHistoryUpdate) ClearDismissedControlSuggestions() *InternalPolicyHistoryUpdate {
+	iphu.mutation.ClearDismissedControlSuggestions()
+	return iphu
+}
+
+// SetImprovementSuggestions sets the "improvement_suggestions" field.
+func (iphu *InternalPolicyHistoryUpdate) SetImprovementSuggestions(s []string) *InternalPolicyHistoryUpdate {
+	iphu.mutation.SetImprovementSuggestions(s)
+	return iphu
+}
+
+// AppendImprovementSuggestions appends s to the "improvement_suggestions" field.
+func (iphu *InternalPolicyHistoryUpdate) AppendImprovementSuggestions(s []string) *InternalPolicyHistoryUpdate {
+	iphu.mutation.AppendImprovementSuggestions(s)
+	return iphu
+}
+
+// ClearImprovementSuggestions clears the value of the "improvement_suggestions" field.
+func (iphu *InternalPolicyHistoryUpdate) ClearImprovementSuggestions() *InternalPolicyHistoryUpdate {
+	iphu.mutation.ClearImprovementSuggestions()
+	return iphu
+}
+
+// SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
+func (iphu *InternalPolicyHistoryUpdate) SetDismissedImprovementSuggestions(s []string) *InternalPolicyHistoryUpdate {
+	iphu.mutation.SetDismissedImprovementSuggestions(s)
+	return iphu
+}
+
+// AppendDismissedImprovementSuggestions appends s to the "dismissed_improvement_suggestions" field.
+func (iphu *InternalPolicyHistoryUpdate) AppendDismissedImprovementSuggestions(s []string) *InternalPolicyHistoryUpdate {
+	iphu.mutation.AppendDismissedImprovementSuggestions(s)
+	return iphu
+}
+
+// ClearDismissedImprovementSuggestions clears the value of the "dismissed_improvement_suggestions" field.
+func (iphu *InternalPolicyHistoryUpdate) ClearDismissedImprovementSuggestions() *InternalPolicyHistoryUpdate {
+	iphu.mutation.ClearDismissedImprovementSuggestions()
+	return iphu
+}
+
 // Mutation returns the InternalPolicyHistoryMutation object of the builder.
 func (iphu *InternalPolicyHistoryUpdate) Mutation() *InternalPolicyHistoryMutation {
 	return iphu.mutation
@@ -543,6 +651,72 @@ func (iphu *InternalPolicyHistoryUpdate) sqlSave(ctx context.Context) (n int, er
 	}
 	if iphu.mutation.SummaryCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldSummary, field.TypeString)
+	}
+	if value, ok := iphu.mutation.TagSuggestions(); ok {
+		_spec.SetField(internalpolicyhistory.FieldTagSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := iphu.mutation.AppendedTagSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, internalpolicyhistory.FieldTagSuggestions, value)
+		})
+	}
+	if iphu.mutation.TagSuggestionsCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldTagSuggestions, field.TypeJSON)
+	}
+	if value, ok := iphu.mutation.DismissedTagSuggestions(); ok {
+		_spec.SetField(internalpolicyhistory.FieldDismissedTagSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := iphu.mutation.AppendedDismissedTagSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, internalpolicyhistory.FieldDismissedTagSuggestions, value)
+		})
+	}
+	if iphu.mutation.DismissedTagSuggestionsCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldDismissedTagSuggestions, field.TypeJSON)
+	}
+	if value, ok := iphu.mutation.ControlSuggestions(); ok {
+		_spec.SetField(internalpolicyhistory.FieldControlSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := iphu.mutation.AppendedControlSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, internalpolicyhistory.FieldControlSuggestions, value)
+		})
+	}
+	if iphu.mutation.ControlSuggestionsCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldControlSuggestions, field.TypeJSON)
+	}
+	if value, ok := iphu.mutation.DismissedControlSuggestions(); ok {
+		_spec.SetField(internalpolicyhistory.FieldDismissedControlSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := iphu.mutation.AppendedDismissedControlSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, internalpolicyhistory.FieldDismissedControlSuggestions, value)
+		})
+	}
+	if iphu.mutation.DismissedControlSuggestionsCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldDismissedControlSuggestions, field.TypeJSON)
+	}
+	if value, ok := iphu.mutation.ImprovementSuggestions(); ok {
+		_spec.SetField(internalpolicyhistory.FieldImprovementSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := iphu.mutation.AppendedImprovementSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, internalpolicyhistory.FieldImprovementSuggestions, value)
+		})
+	}
+	if iphu.mutation.ImprovementSuggestionsCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldImprovementSuggestions, field.TypeJSON)
+	}
+	if value, ok := iphu.mutation.DismissedImprovementSuggestions(); ok {
+		_spec.SetField(internalpolicyhistory.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := iphu.mutation.AppendedDismissedImprovementSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, internalpolicyhistory.FieldDismissedImprovementSuggestions, value)
+		})
+	}
+	if iphu.mutation.DismissedImprovementSuggestionsCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
 	_spec.Node.Schema = iphu.schemaConfig.InternalPolicyHistory
 	ctx = internal.NewSchemaConfigContext(ctx, iphu.schemaConfig)
@@ -892,6 +1066,114 @@ func (iphuo *InternalPolicyHistoryUpdateOne) ClearSummary() *InternalPolicyHisto
 	return iphuo
 }
 
+// SetTagSuggestions sets the "tag_suggestions" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetTagSuggestions(s []string) *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.SetTagSuggestions(s)
+	return iphuo
+}
+
+// AppendTagSuggestions appends s to the "tag_suggestions" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) AppendTagSuggestions(s []string) *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.AppendTagSuggestions(s)
+	return iphuo
+}
+
+// ClearTagSuggestions clears the value of the "tag_suggestions" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) ClearTagSuggestions() *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.ClearTagSuggestions()
+	return iphuo
+}
+
+// SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetDismissedTagSuggestions(s []string) *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.SetDismissedTagSuggestions(s)
+	return iphuo
+}
+
+// AppendDismissedTagSuggestions appends s to the "dismissed_tag_suggestions" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) AppendDismissedTagSuggestions(s []string) *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.AppendDismissedTagSuggestions(s)
+	return iphuo
+}
+
+// ClearDismissedTagSuggestions clears the value of the "dismissed_tag_suggestions" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) ClearDismissedTagSuggestions() *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.ClearDismissedTagSuggestions()
+	return iphuo
+}
+
+// SetControlSuggestions sets the "control_suggestions" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetControlSuggestions(s []string) *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.SetControlSuggestions(s)
+	return iphuo
+}
+
+// AppendControlSuggestions appends s to the "control_suggestions" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) AppendControlSuggestions(s []string) *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.AppendControlSuggestions(s)
+	return iphuo
+}
+
+// ClearControlSuggestions clears the value of the "control_suggestions" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) ClearControlSuggestions() *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.ClearControlSuggestions()
+	return iphuo
+}
+
+// SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetDismissedControlSuggestions(s []string) *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.SetDismissedControlSuggestions(s)
+	return iphuo
+}
+
+// AppendDismissedControlSuggestions appends s to the "dismissed_control_suggestions" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) AppendDismissedControlSuggestions(s []string) *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.AppendDismissedControlSuggestions(s)
+	return iphuo
+}
+
+// ClearDismissedControlSuggestions clears the value of the "dismissed_control_suggestions" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) ClearDismissedControlSuggestions() *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.ClearDismissedControlSuggestions()
+	return iphuo
+}
+
+// SetImprovementSuggestions sets the "improvement_suggestions" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetImprovementSuggestions(s []string) *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.SetImprovementSuggestions(s)
+	return iphuo
+}
+
+// AppendImprovementSuggestions appends s to the "improvement_suggestions" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) AppendImprovementSuggestions(s []string) *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.AppendImprovementSuggestions(s)
+	return iphuo
+}
+
+// ClearImprovementSuggestions clears the value of the "improvement_suggestions" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) ClearImprovementSuggestions() *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.ClearImprovementSuggestions()
+	return iphuo
+}
+
+// SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetDismissedImprovementSuggestions(s []string) *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.SetDismissedImprovementSuggestions(s)
+	return iphuo
+}
+
+// AppendDismissedImprovementSuggestions appends s to the "dismissed_improvement_suggestions" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) AppendDismissedImprovementSuggestions(s []string) *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.AppendDismissedImprovementSuggestions(s)
+	return iphuo
+}
+
+// ClearDismissedImprovementSuggestions clears the value of the "dismissed_improvement_suggestions" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) ClearDismissedImprovementSuggestions() *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.ClearDismissedImprovementSuggestions()
+	return iphuo
+}
+
 // Mutation returns the InternalPolicyHistoryMutation object of the builder.
 func (iphuo *InternalPolicyHistoryUpdateOne) Mutation() *InternalPolicyHistoryMutation {
 	return iphuo.mutation
@@ -1108,6 +1390,72 @@ func (iphuo *InternalPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node
 	}
 	if iphuo.mutation.SummaryCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldSummary, field.TypeString)
+	}
+	if value, ok := iphuo.mutation.TagSuggestions(); ok {
+		_spec.SetField(internalpolicyhistory.FieldTagSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := iphuo.mutation.AppendedTagSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, internalpolicyhistory.FieldTagSuggestions, value)
+		})
+	}
+	if iphuo.mutation.TagSuggestionsCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldTagSuggestions, field.TypeJSON)
+	}
+	if value, ok := iphuo.mutation.DismissedTagSuggestions(); ok {
+		_spec.SetField(internalpolicyhistory.FieldDismissedTagSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := iphuo.mutation.AppendedDismissedTagSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, internalpolicyhistory.FieldDismissedTagSuggestions, value)
+		})
+	}
+	if iphuo.mutation.DismissedTagSuggestionsCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldDismissedTagSuggestions, field.TypeJSON)
+	}
+	if value, ok := iphuo.mutation.ControlSuggestions(); ok {
+		_spec.SetField(internalpolicyhistory.FieldControlSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := iphuo.mutation.AppendedControlSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, internalpolicyhistory.FieldControlSuggestions, value)
+		})
+	}
+	if iphuo.mutation.ControlSuggestionsCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldControlSuggestions, field.TypeJSON)
+	}
+	if value, ok := iphuo.mutation.DismissedControlSuggestions(); ok {
+		_spec.SetField(internalpolicyhistory.FieldDismissedControlSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := iphuo.mutation.AppendedDismissedControlSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, internalpolicyhistory.FieldDismissedControlSuggestions, value)
+		})
+	}
+	if iphuo.mutation.DismissedControlSuggestionsCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldDismissedControlSuggestions, field.TypeJSON)
+	}
+	if value, ok := iphuo.mutation.ImprovementSuggestions(); ok {
+		_spec.SetField(internalpolicyhistory.FieldImprovementSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := iphuo.mutation.AppendedImprovementSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, internalpolicyhistory.FieldImprovementSuggestions, value)
+		})
+	}
+	if iphuo.mutation.ImprovementSuggestionsCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldImprovementSuggestions, field.TypeJSON)
+	}
+	if value, ok := iphuo.mutation.DismissedImprovementSuggestions(); ok {
+		_spec.SetField(internalpolicyhistory.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := iphuo.mutation.AppendedDismissedImprovementSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, internalpolicyhistory.FieldDismissedImprovementSuggestions, value)
+		})
+	}
+	if iphuo.mutation.DismissedImprovementSuggestionsCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
 	_spec.Node.Schema = iphuo.schemaConfig.InternalPolicyHistory
 	ctx = internal.NewSchemaConfigContext(ctx, iphuo.schemaConfig)

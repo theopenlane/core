@@ -18,6 +18,10 @@ type Tx struct {
 	ActionPlan *ActionPlanClient
 	// ActionPlanHistory is the client for interacting with the ActionPlanHistory builders.
 	ActionPlanHistory *ActionPlanHistoryClient
+	// Asset is the client for interacting with the Asset builders.
+	Asset *AssetClient
+	// AssetHistory is the client for interacting with the AssetHistory builders.
+	AssetHistory *AssetHistoryClient
 	// Contact is the client for interacting with the Contact builders.
 	Contact *ContactClient
 	// ContactHistory is the client for interacting with the ContactHistory builders.
@@ -164,6 +168,10 @@ type Tx struct {
 	Risk *RiskClient
 	// RiskHistory is the client for interacting with the RiskHistory builders.
 	RiskHistory *RiskHistoryClient
+	// Scan is the client for interacting with the Scan builders.
+	Scan *ScanClient
+	// ScanHistory is the client for interacting with the ScanHistory builders.
+	ScanHistory *ScanHistoryClient
 	// ScheduledJob is the client for interacting with the ScheduledJob builders.
 	ScheduledJob *ScheduledJobClient
 	// ScheduledJobHistory is the client for interacting with the ScheduledJobHistory builders.
@@ -342,6 +350,8 @@ func (tx *Tx) init() {
 	tx.APIToken = NewAPITokenClient(tx.config)
 	tx.ActionPlan = NewActionPlanClient(tx.config)
 	tx.ActionPlanHistory = NewActionPlanHistoryClient(tx.config)
+	tx.Asset = NewAssetClient(tx.config)
+	tx.AssetHistory = NewAssetHistoryClient(tx.config)
 	tx.Contact = NewContactClient(tx.config)
 	tx.ContactHistory = NewContactHistoryClient(tx.config)
 	tx.Control = NewControlClient(tx.config)
@@ -415,6 +425,8 @@ func (tx *Tx) init() {
 	tx.ProgramMembershipHistory = NewProgramMembershipHistoryClient(tx.config)
 	tx.Risk = NewRiskClient(tx.config)
 	tx.RiskHistory = NewRiskHistoryClient(tx.config)
+	tx.Scan = NewScanClient(tx.config)
+	tx.ScanHistory = NewScanHistoryClient(tx.config)
 	tx.ScheduledJob = NewScheduledJobClient(tx.config)
 	tx.ScheduledJobHistory = NewScheduledJobHistoryClient(tx.config)
 	tx.ScheduledJobRun = NewScheduledJobRunClient(tx.config)

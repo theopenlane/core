@@ -366,6 +366,114 @@ func (pu *ProcedureUpdate) ClearSummary() *ProcedureUpdate {
 	return pu
 }
 
+// SetTagSuggestions sets the "tag_suggestions" field.
+func (pu *ProcedureUpdate) SetTagSuggestions(s []string) *ProcedureUpdate {
+	pu.mutation.SetTagSuggestions(s)
+	return pu
+}
+
+// AppendTagSuggestions appends s to the "tag_suggestions" field.
+func (pu *ProcedureUpdate) AppendTagSuggestions(s []string) *ProcedureUpdate {
+	pu.mutation.AppendTagSuggestions(s)
+	return pu
+}
+
+// ClearTagSuggestions clears the value of the "tag_suggestions" field.
+func (pu *ProcedureUpdate) ClearTagSuggestions() *ProcedureUpdate {
+	pu.mutation.ClearTagSuggestions()
+	return pu
+}
+
+// SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
+func (pu *ProcedureUpdate) SetDismissedTagSuggestions(s []string) *ProcedureUpdate {
+	pu.mutation.SetDismissedTagSuggestions(s)
+	return pu
+}
+
+// AppendDismissedTagSuggestions appends s to the "dismissed_tag_suggestions" field.
+func (pu *ProcedureUpdate) AppendDismissedTagSuggestions(s []string) *ProcedureUpdate {
+	pu.mutation.AppendDismissedTagSuggestions(s)
+	return pu
+}
+
+// ClearDismissedTagSuggestions clears the value of the "dismissed_tag_suggestions" field.
+func (pu *ProcedureUpdate) ClearDismissedTagSuggestions() *ProcedureUpdate {
+	pu.mutation.ClearDismissedTagSuggestions()
+	return pu
+}
+
+// SetControlSuggestions sets the "control_suggestions" field.
+func (pu *ProcedureUpdate) SetControlSuggestions(s []string) *ProcedureUpdate {
+	pu.mutation.SetControlSuggestions(s)
+	return pu
+}
+
+// AppendControlSuggestions appends s to the "control_suggestions" field.
+func (pu *ProcedureUpdate) AppendControlSuggestions(s []string) *ProcedureUpdate {
+	pu.mutation.AppendControlSuggestions(s)
+	return pu
+}
+
+// ClearControlSuggestions clears the value of the "control_suggestions" field.
+func (pu *ProcedureUpdate) ClearControlSuggestions() *ProcedureUpdate {
+	pu.mutation.ClearControlSuggestions()
+	return pu
+}
+
+// SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
+func (pu *ProcedureUpdate) SetDismissedControlSuggestions(s []string) *ProcedureUpdate {
+	pu.mutation.SetDismissedControlSuggestions(s)
+	return pu
+}
+
+// AppendDismissedControlSuggestions appends s to the "dismissed_control_suggestions" field.
+func (pu *ProcedureUpdate) AppendDismissedControlSuggestions(s []string) *ProcedureUpdate {
+	pu.mutation.AppendDismissedControlSuggestions(s)
+	return pu
+}
+
+// ClearDismissedControlSuggestions clears the value of the "dismissed_control_suggestions" field.
+func (pu *ProcedureUpdate) ClearDismissedControlSuggestions() *ProcedureUpdate {
+	pu.mutation.ClearDismissedControlSuggestions()
+	return pu
+}
+
+// SetImprovementSuggestions sets the "improvement_suggestions" field.
+func (pu *ProcedureUpdate) SetImprovementSuggestions(s []string) *ProcedureUpdate {
+	pu.mutation.SetImprovementSuggestions(s)
+	return pu
+}
+
+// AppendImprovementSuggestions appends s to the "improvement_suggestions" field.
+func (pu *ProcedureUpdate) AppendImprovementSuggestions(s []string) *ProcedureUpdate {
+	pu.mutation.AppendImprovementSuggestions(s)
+	return pu
+}
+
+// ClearImprovementSuggestions clears the value of the "improvement_suggestions" field.
+func (pu *ProcedureUpdate) ClearImprovementSuggestions() *ProcedureUpdate {
+	pu.mutation.ClearImprovementSuggestions()
+	return pu
+}
+
+// SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
+func (pu *ProcedureUpdate) SetDismissedImprovementSuggestions(s []string) *ProcedureUpdate {
+	pu.mutation.SetDismissedImprovementSuggestions(s)
+	return pu
+}
+
+// AppendDismissedImprovementSuggestions appends s to the "dismissed_improvement_suggestions" field.
+func (pu *ProcedureUpdate) AppendDismissedImprovementSuggestions(s []string) *ProcedureUpdate {
+	pu.mutation.AppendDismissedImprovementSuggestions(s)
+	return pu
+}
+
+// ClearDismissedImprovementSuggestions clears the value of the "dismissed_improvement_suggestions" field.
+func (pu *ProcedureUpdate) ClearDismissedImprovementSuggestions() *ProcedureUpdate {
+	pu.mutation.ClearDismissedImprovementSuggestions()
+	return pu
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (pu *ProcedureUpdate) SetOwner(o *Organization) *ProcedureUpdate {
 	return pu.SetOwnerID(o.ID)
@@ -909,6 +1017,72 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.SummaryCleared() {
 		_spec.ClearField(procedure.FieldSummary, field.TypeString)
+	}
+	if value, ok := pu.mutation.TagSuggestions(); ok {
+		_spec.SetField(procedure.FieldTagSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := pu.mutation.AppendedTagSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedure.FieldTagSuggestions, value)
+		})
+	}
+	if pu.mutation.TagSuggestionsCleared() {
+		_spec.ClearField(procedure.FieldTagSuggestions, field.TypeJSON)
+	}
+	if value, ok := pu.mutation.DismissedTagSuggestions(); ok {
+		_spec.SetField(procedure.FieldDismissedTagSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := pu.mutation.AppendedDismissedTagSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedure.FieldDismissedTagSuggestions, value)
+		})
+	}
+	if pu.mutation.DismissedTagSuggestionsCleared() {
+		_spec.ClearField(procedure.FieldDismissedTagSuggestions, field.TypeJSON)
+	}
+	if value, ok := pu.mutation.ControlSuggestions(); ok {
+		_spec.SetField(procedure.FieldControlSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := pu.mutation.AppendedControlSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedure.FieldControlSuggestions, value)
+		})
+	}
+	if pu.mutation.ControlSuggestionsCleared() {
+		_spec.ClearField(procedure.FieldControlSuggestions, field.TypeJSON)
+	}
+	if value, ok := pu.mutation.DismissedControlSuggestions(); ok {
+		_spec.SetField(procedure.FieldDismissedControlSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := pu.mutation.AppendedDismissedControlSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedure.FieldDismissedControlSuggestions, value)
+		})
+	}
+	if pu.mutation.DismissedControlSuggestionsCleared() {
+		_spec.ClearField(procedure.FieldDismissedControlSuggestions, field.TypeJSON)
+	}
+	if value, ok := pu.mutation.ImprovementSuggestions(); ok {
+		_spec.SetField(procedure.FieldImprovementSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := pu.mutation.AppendedImprovementSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedure.FieldImprovementSuggestions, value)
+		})
+	}
+	if pu.mutation.ImprovementSuggestionsCleared() {
+		_spec.ClearField(procedure.FieldImprovementSuggestions, field.TypeJSON)
+	}
+	if value, ok := pu.mutation.DismissedImprovementSuggestions(); ok {
+		_spec.SetField(procedure.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := pu.mutation.AppendedDismissedImprovementSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedure.FieldDismissedImprovementSuggestions, value)
+		})
+	}
+	if pu.mutation.DismissedImprovementSuggestionsCleared() {
+		_spec.ClearField(procedure.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
 	if pu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1783,6 +1957,114 @@ func (puo *ProcedureUpdateOne) ClearSummary() *ProcedureUpdateOne {
 	return puo
 }
 
+// SetTagSuggestions sets the "tag_suggestions" field.
+func (puo *ProcedureUpdateOne) SetTagSuggestions(s []string) *ProcedureUpdateOne {
+	puo.mutation.SetTagSuggestions(s)
+	return puo
+}
+
+// AppendTagSuggestions appends s to the "tag_suggestions" field.
+func (puo *ProcedureUpdateOne) AppendTagSuggestions(s []string) *ProcedureUpdateOne {
+	puo.mutation.AppendTagSuggestions(s)
+	return puo
+}
+
+// ClearTagSuggestions clears the value of the "tag_suggestions" field.
+func (puo *ProcedureUpdateOne) ClearTagSuggestions() *ProcedureUpdateOne {
+	puo.mutation.ClearTagSuggestions()
+	return puo
+}
+
+// SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
+func (puo *ProcedureUpdateOne) SetDismissedTagSuggestions(s []string) *ProcedureUpdateOne {
+	puo.mutation.SetDismissedTagSuggestions(s)
+	return puo
+}
+
+// AppendDismissedTagSuggestions appends s to the "dismissed_tag_suggestions" field.
+func (puo *ProcedureUpdateOne) AppendDismissedTagSuggestions(s []string) *ProcedureUpdateOne {
+	puo.mutation.AppendDismissedTagSuggestions(s)
+	return puo
+}
+
+// ClearDismissedTagSuggestions clears the value of the "dismissed_tag_suggestions" field.
+func (puo *ProcedureUpdateOne) ClearDismissedTagSuggestions() *ProcedureUpdateOne {
+	puo.mutation.ClearDismissedTagSuggestions()
+	return puo
+}
+
+// SetControlSuggestions sets the "control_suggestions" field.
+func (puo *ProcedureUpdateOne) SetControlSuggestions(s []string) *ProcedureUpdateOne {
+	puo.mutation.SetControlSuggestions(s)
+	return puo
+}
+
+// AppendControlSuggestions appends s to the "control_suggestions" field.
+func (puo *ProcedureUpdateOne) AppendControlSuggestions(s []string) *ProcedureUpdateOne {
+	puo.mutation.AppendControlSuggestions(s)
+	return puo
+}
+
+// ClearControlSuggestions clears the value of the "control_suggestions" field.
+func (puo *ProcedureUpdateOne) ClearControlSuggestions() *ProcedureUpdateOne {
+	puo.mutation.ClearControlSuggestions()
+	return puo
+}
+
+// SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
+func (puo *ProcedureUpdateOne) SetDismissedControlSuggestions(s []string) *ProcedureUpdateOne {
+	puo.mutation.SetDismissedControlSuggestions(s)
+	return puo
+}
+
+// AppendDismissedControlSuggestions appends s to the "dismissed_control_suggestions" field.
+func (puo *ProcedureUpdateOne) AppendDismissedControlSuggestions(s []string) *ProcedureUpdateOne {
+	puo.mutation.AppendDismissedControlSuggestions(s)
+	return puo
+}
+
+// ClearDismissedControlSuggestions clears the value of the "dismissed_control_suggestions" field.
+func (puo *ProcedureUpdateOne) ClearDismissedControlSuggestions() *ProcedureUpdateOne {
+	puo.mutation.ClearDismissedControlSuggestions()
+	return puo
+}
+
+// SetImprovementSuggestions sets the "improvement_suggestions" field.
+func (puo *ProcedureUpdateOne) SetImprovementSuggestions(s []string) *ProcedureUpdateOne {
+	puo.mutation.SetImprovementSuggestions(s)
+	return puo
+}
+
+// AppendImprovementSuggestions appends s to the "improvement_suggestions" field.
+func (puo *ProcedureUpdateOne) AppendImprovementSuggestions(s []string) *ProcedureUpdateOne {
+	puo.mutation.AppendImprovementSuggestions(s)
+	return puo
+}
+
+// ClearImprovementSuggestions clears the value of the "improvement_suggestions" field.
+func (puo *ProcedureUpdateOne) ClearImprovementSuggestions() *ProcedureUpdateOne {
+	puo.mutation.ClearImprovementSuggestions()
+	return puo
+}
+
+// SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
+func (puo *ProcedureUpdateOne) SetDismissedImprovementSuggestions(s []string) *ProcedureUpdateOne {
+	puo.mutation.SetDismissedImprovementSuggestions(s)
+	return puo
+}
+
+// AppendDismissedImprovementSuggestions appends s to the "dismissed_improvement_suggestions" field.
+func (puo *ProcedureUpdateOne) AppendDismissedImprovementSuggestions(s []string) *ProcedureUpdateOne {
+	puo.mutation.AppendDismissedImprovementSuggestions(s)
+	return puo
+}
+
+// ClearDismissedImprovementSuggestions clears the value of the "dismissed_improvement_suggestions" field.
+func (puo *ProcedureUpdateOne) ClearDismissedImprovementSuggestions() *ProcedureUpdateOne {
+	puo.mutation.ClearDismissedImprovementSuggestions()
+	return puo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (puo *ProcedureUpdateOne) SetOwner(o *Organization) *ProcedureUpdateOne {
 	return puo.SetOwnerID(o.ID)
@@ -2356,6 +2638,72 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 	}
 	if puo.mutation.SummaryCleared() {
 		_spec.ClearField(procedure.FieldSummary, field.TypeString)
+	}
+	if value, ok := puo.mutation.TagSuggestions(); ok {
+		_spec.SetField(procedure.FieldTagSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := puo.mutation.AppendedTagSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedure.FieldTagSuggestions, value)
+		})
+	}
+	if puo.mutation.TagSuggestionsCleared() {
+		_spec.ClearField(procedure.FieldTagSuggestions, field.TypeJSON)
+	}
+	if value, ok := puo.mutation.DismissedTagSuggestions(); ok {
+		_spec.SetField(procedure.FieldDismissedTagSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := puo.mutation.AppendedDismissedTagSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedure.FieldDismissedTagSuggestions, value)
+		})
+	}
+	if puo.mutation.DismissedTagSuggestionsCleared() {
+		_spec.ClearField(procedure.FieldDismissedTagSuggestions, field.TypeJSON)
+	}
+	if value, ok := puo.mutation.ControlSuggestions(); ok {
+		_spec.SetField(procedure.FieldControlSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := puo.mutation.AppendedControlSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedure.FieldControlSuggestions, value)
+		})
+	}
+	if puo.mutation.ControlSuggestionsCleared() {
+		_spec.ClearField(procedure.FieldControlSuggestions, field.TypeJSON)
+	}
+	if value, ok := puo.mutation.DismissedControlSuggestions(); ok {
+		_spec.SetField(procedure.FieldDismissedControlSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := puo.mutation.AppendedDismissedControlSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedure.FieldDismissedControlSuggestions, value)
+		})
+	}
+	if puo.mutation.DismissedControlSuggestionsCleared() {
+		_spec.ClearField(procedure.FieldDismissedControlSuggestions, field.TypeJSON)
+	}
+	if value, ok := puo.mutation.ImprovementSuggestions(); ok {
+		_spec.SetField(procedure.FieldImprovementSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := puo.mutation.AppendedImprovementSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedure.FieldImprovementSuggestions, value)
+		})
+	}
+	if puo.mutation.ImprovementSuggestionsCleared() {
+		_spec.ClearField(procedure.FieldImprovementSuggestions, field.TypeJSON)
+	}
+	if value, ok := puo.mutation.DismissedImprovementSuggestions(); ok {
+		_spec.SetField(procedure.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := puo.mutation.AppendedDismissedImprovementSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedure.FieldDismissedImprovementSuggestions, value)
+		})
+	}
+	if puo.mutation.DismissedImprovementSuggestionsCleared() {
+		_spec.ClearField(procedure.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
 	if puo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

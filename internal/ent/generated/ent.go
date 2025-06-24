@@ -15,6 +15,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/assethistory"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -88,6 +90,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/scanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
@@ -173,6 +177,8 @@ func checkColumn(table, column string) error {
 			apitoken.Table:                     apitoken.ValidColumn,
 			actionplan.Table:                   actionplan.ValidColumn,
 			actionplanhistory.Table:            actionplanhistory.ValidColumn,
+			asset.Table:                        asset.ValidColumn,
+			assethistory.Table:                 assethistory.ValidColumn,
 			contact.Table:                      contact.ValidColumn,
 			contacthistory.Table:               contacthistory.ValidColumn,
 			control.Table:                      control.ValidColumn,
@@ -246,6 +252,8 @@ func checkColumn(table, column string) error {
 			programmembershiphistory.Table:     programmembershiphistory.ValidColumn,
 			risk.Table:                         risk.ValidColumn,
 			riskhistory.Table:                  riskhistory.ValidColumn,
+			scan.Table:                         scan.ValidColumn,
+			scanhistory.Table:                  scanhistory.ValidColumn,
 			scheduledjob.Table:                 scheduledjob.ValidColumn,
 			scheduledjobhistory.Table:          scheduledjobhistory.ValidColumn,
 			scheduledjobrun.Table:              scheduledjobrun.ValidColumn,

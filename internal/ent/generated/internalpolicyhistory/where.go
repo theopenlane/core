@@ -1486,6 +1486,66 @@ func SummaryContainsFold(v string) predicate.InternalPolicyHistory {
 	return predicate.InternalPolicyHistory(sql.FieldContainsFold(FieldSummary, v))
 }
 
+// TagSuggestionsIsNil applies the IsNil predicate on the "tag_suggestions" field.
+func TagSuggestionsIsNil() predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldIsNull(FieldTagSuggestions))
+}
+
+// TagSuggestionsNotNil applies the NotNil predicate on the "tag_suggestions" field.
+func TagSuggestionsNotNil() predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldNotNull(FieldTagSuggestions))
+}
+
+// DismissedTagSuggestionsIsNil applies the IsNil predicate on the "dismissed_tag_suggestions" field.
+func DismissedTagSuggestionsIsNil() predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldIsNull(FieldDismissedTagSuggestions))
+}
+
+// DismissedTagSuggestionsNotNil applies the NotNil predicate on the "dismissed_tag_suggestions" field.
+func DismissedTagSuggestionsNotNil() predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldNotNull(FieldDismissedTagSuggestions))
+}
+
+// ControlSuggestionsIsNil applies the IsNil predicate on the "control_suggestions" field.
+func ControlSuggestionsIsNil() predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldIsNull(FieldControlSuggestions))
+}
+
+// ControlSuggestionsNotNil applies the NotNil predicate on the "control_suggestions" field.
+func ControlSuggestionsNotNil() predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldNotNull(FieldControlSuggestions))
+}
+
+// DismissedControlSuggestionsIsNil applies the IsNil predicate on the "dismissed_control_suggestions" field.
+func DismissedControlSuggestionsIsNil() predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldIsNull(FieldDismissedControlSuggestions))
+}
+
+// DismissedControlSuggestionsNotNil applies the NotNil predicate on the "dismissed_control_suggestions" field.
+func DismissedControlSuggestionsNotNil() predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldNotNull(FieldDismissedControlSuggestions))
+}
+
+// ImprovementSuggestionsIsNil applies the IsNil predicate on the "improvement_suggestions" field.
+func ImprovementSuggestionsIsNil() predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldIsNull(FieldImprovementSuggestions))
+}
+
+// ImprovementSuggestionsNotNil applies the NotNil predicate on the "improvement_suggestions" field.
+func ImprovementSuggestionsNotNil() predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldNotNull(FieldImprovementSuggestions))
+}
+
+// DismissedImprovementSuggestionsIsNil applies the IsNil predicate on the "dismissed_improvement_suggestions" field.
+func DismissedImprovementSuggestionsIsNil() predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldIsNull(FieldDismissedImprovementSuggestions))
+}
+
+// DismissedImprovementSuggestionsNotNil applies the NotNil predicate on the "dismissed_improvement_suggestions" field.
+func DismissedImprovementSuggestionsNotNil() predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldNotNull(FieldDismissedImprovementSuggestions))
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.InternalPolicyHistory) predicate.InternalPolicyHistory {
 	return predicate.InternalPolicyHistory(sql.AndPredicates(predicates...))

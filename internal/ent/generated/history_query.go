@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
+	"github.com/theopenlane/core/internal/ent/generated/assethistory"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
@@ -39,6 +40,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programhistory"
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
+	"github.com/theopenlane/core/internal/ent/generated/scanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
@@ -93,6 +95,52 @@ func (aphq *ActionPlanHistoryQuery) AsOf(ctx context.Context, time time.Time) (*
 	return aphq.
 		Where(actionplanhistory.HistoryTimeLTE(time)).
 		Order(actionplanhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (a *Asset) History() *AssetHistoryQuery {
+	historyClient := NewAssetHistoryClient(a.config)
+	return historyClient.Query().Where(assethistory.Ref(a.ID))
+}
+
+func (ah *AssetHistory) Next(ctx context.Context) (*AssetHistory, error) {
+	client := NewAssetHistoryClient(ah.config)
+	return client.Query().
+		Where(
+			assethistory.Ref(ah.Ref),
+			assethistory.HistoryTimeGT(ah.HistoryTime),
+		).
+		Order(assethistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (ah *AssetHistory) Prev(ctx context.Context) (*AssetHistory, error) {
+	client := NewAssetHistoryClient(ah.config)
+	return client.Query().
+		Where(
+			assethistory.Ref(ah.Ref),
+			assethistory.HistoryTimeLT(ah.HistoryTime),
+		).
+		Order(assethistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (ahq *AssetHistoryQuery) Earliest(ctx context.Context) (*AssetHistory, error) {
+	return ahq.
+		Order(assethistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (ahq *AssetHistoryQuery) Latest(ctx context.Context) (*AssetHistory, error) {
+	return ahq.
+		Order(assethistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (ahq *AssetHistoryQuery) AsOf(ctx context.Context, time time.Time) (*AssetHistory, error) {
+	return ahq.
+		Where(assethistory.HistoryTimeLTE(time)).
+		Order(assethistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 
@@ -1473,6 +1521,52 @@ func (rhq *RiskHistoryQuery) AsOf(ctx context.Context, time time.Time) (*RiskHis
 	return rhq.
 		Where(riskhistory.HistoryTimeLTE(time)).
 		Order(riskhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (s *Scan) History() *ScanHistoryQuery {
+	historyClient := NewScanHistoryClient(s.config)
+	return historyClient.Query().Where(scanhistory.Ref(s.ID))
+}
+
+func (sh *ScanHistory) Next(ctx context.Context) (*ScanHistory, error) {
+	client := NewScanHistoryClient(sh.config)
+	return client.Query().
+		Where(
+			scanhistory.Ref(sh.Ref),
+			scanhistory.HistoryTimeGT(sh.HistoryTime),
+		).
+		Order(scanhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (sh *ScanHistory) Prev(ctx context.Context) (*ScanHistory, error) {
+	client := NewScanHistoryClient(sh.config)
+	return client.Query().
+		Where(
+			scanhistory.Ref(sh.Ref),
+			scanhistory.HistoryTimeLT(sh.HistoryTime),
+		).
+		Order(scanhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (shq *ScanHistoryQuery) Earliest(ctx context.Context) (*ScanHistory, error) {
+	return shq.
+		Order(scanhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (shq *ScanHistoryQuery) Latest(ctx context.Context) (*ScanHistory, error) {
+	return shq.
+		Order(scanhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (shq *ScanHistoryQuery) AsOf(ctx context.Context, time time.Time) (*ScanHistory, error) {
+	return shq.
+		Where(scanhistory.HistoryTimeLTE(time)).
+		Order(scanhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

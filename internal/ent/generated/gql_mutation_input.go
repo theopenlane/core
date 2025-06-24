@@ -171,25 +171,31 @@ func (c *APITokenUpdateOne) SetInput(i UpdateAPITokenInput) *APITokenUpdateOne {
 
 // CreateActionPlanInput represents a mutation input for creating actionplans.
 type CreateActionPlanInput struct {
-	Tags             []string
-	Revision         *string
-	Name             string
-	Status           *enums.DocumentStatus
-	ActionPlanType   *string
-	Details          *string
-	ApprovalRequired *bool
-	ReviewDue        *time.Time
-	ReviewFrequency  *enums.Frequency
-	DueDate          *time.Time
-	Priority         *enums.Priority
-	Source           *string
-	ApproverID       *string
-	DelegateID       *string
-	OwnerID          *string
-	RiskIDs          []string
-	ControlIDs       []string
-	UserIDs          []string
-	ProgramIDs       []string
+	Tags                            []string
+	Revision                        *string
+	Name                            string
+	Status                          *enums.DocumentStatus
+	ActionPlanType                  *string
+	Details                         *string
+	ApprovalRequired                *bool
+	ReviewDue                       *time.Time
+	ReviewFrequency                 *enums.Frequency
+	TagSuggestions                  []string
+	DismissedTagSuggestions         []string
+	ControlSuggestions              []string
+	DismissedControlSuggestions     []string
+	ImprovementSuggestions          []string
+	DismissedImprovementSuggestions []string
+	DueDate                         *time.Time
+	Priority                        *enums.Priority
+	Source                          *string
+	ApproverID                      *string
+	DelegateID                      *string
+	OwnerID                         *string
+	RiskIDs                         []string
+	ControlIDs                      []string
+	UserIDs                         []string
+	ProgramIDs                      []string
 }
 
 // Mutate applies the CreateActionPlanInput on the ActionPlanMutation builder.
@@ -218,6 +224,24 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.ReviewFrequency; v != nil {
 		m.SetReviewFrequency(*v)
+	}
+	if v := i.TagSuggestions; v != nil {
+		m.SetTagSuggestions(v)
+	}
+	if v := i.DismissedTagSuggestions; v != nil {
+		m.SetDismissedTagSuggestions(v)
+	}
+	if v := i.ControlSuggestions; v != nil {
+		m.SetControlSuggestions(v)
+	}
+	if v := i.DismissedControlSuggestions; v != nil {
+		m.SetDismissedControlSuggestions(v)
+	}
+	if v := i.ImprovementSuggestions; v != nil {
+		m.SetImprovementSuggestions(v)
+	}
+	if v := i.DismissedImprovementSuggestions; v != nil {
+		m.SetDismissedImprovementSuggestions(v)
 	}
 	if v := i.DueDate; v != nil {
 		m.SetDueDate(*v)
@@ -259,48 +283,66 @@ func (c *ActionPlanCreate) SetInput(i CreateActionPlanInput) *ActionPlanCreate {
 
 // UpdateActionPlanInput represents a mutation input for updating actionplans.
 type UpdateActionPlanInput struct {
-	ClearTags             bool
-	Tags                  []string
-	AppendTags            []string
-	ClearRevision         bool
-	Revision              *string
-	Name                  *string
-	ClearStatus           bool
-	Status                *enums.DocumentStatus
-	ClearActionPlanType   bool
-	ActionPlanType        *string
-	ClearDetails          bool
-	Details               *string
-	ClearApprovalRequired bool
-	ApprovalRequired      *bool
-	ClearReviewDue        bool
-	ReviewDue             *time.Time
-	ClearReviewFrequency  bool
-	ReviewFrequency       *enums.Frequency
-	ClearDueDate          bool
-	DueDate               *time.Time
-	ClearPriority         bool
-	Priority              *enums.Priority
-	ClearSource           bool
-	Source                *string
-	ClearApprover         bool
-	ApproverID            *string
-	ClearDelegate         bool
-	DelegateID            *string
-	ClearOwner            bool
-	OwnerID               *string
-	ClearRisks            bool
-	AddRiskIDs            []string
-	RemoveRiskIDs         []string
-	ClearControls         bool
-	AddControlIDs         []string
-	RemoveControlIDs      []string
-	ClearUsers            bool
-	AddUserIDs            []string
-	RemoveUserIDs         []string
-	ClearPrograms         bool
-	AddProgramIDs         []string
-	RemoveProgramIDs      []string
+	ClearTags                             bool
+	Tags                                  []string
+	AppendTags                            []string
+	ClearRevision                         bool
+	Revision                              *string
+	Name                                  *string
+	ClearStatus                           bool
+	Status                                *enums.DocumentStatus
+	ClearActionPlanType                   bool
+	ActionPlanType                        *string
+	ClearDetails                          bool
+	Details                               *string
+	ClearApprovalRequired                 bool
+	ApprovalRequired                      *bool
+	ClearReviewDue                        bool
+	ReviewDue                             *time.Time
+	ClearReviewFrequency                  bool
+	ReviewFrequency                       *enums.Frequency
+	ClearTagSuggestions                   bool
+	TagSuggestions                        []string
+	AppendTagSuggestions                  []string
+	ClearDismissedTagSuggestions          bool
+	DismissedTagSuggestions               []string
+	AppendDismissedTagSuggestions         []string
+	ClearControlSuggestions               bool
+	ControlSuggestions                    []string
+	AppendControlSuggestions              []string
+	ClearDismissedControlSuggestions      bool
+	DismissedControlSuggestions           []string
+	AppendDismissedControlSuggestions     []string
+	ClearImprovementSuggestions           bool
+	ImprovementSuggestions                []string
+	AppendImprovementSuggestions          []string
+	ClearDismissedImprovementSuggestions  bool
+	DismissedImprovementSuggestions       []string
+	AppendDismissedImprovementSuggestions []string
+	ClearDueDate                          bool
+	DueDate                               *time.Time
+	ClearPriority                         bool
+	Priority                              *enums.Priority
+	ClearSource                           bool
+	Source                                *string
+	ClearApprover                         bool
+	ApproverID                            *string
+	ClearDelegate                         bool
+	DelegateID                            *string
+	ClearOwner                            bool
+	OwnerID                               *string
+	ClearRisks                            bool
+	AddRiskIDs                            []string
+	RemoveRiskIDs                         []string
+	ClearControls                         bool
+	AddControlIDs                         []string
+	RemoveControlIDs                      []string
+	ClearUsers                            bool
+	AddUserIDs                            []string
+	RemoveUserIDs                         []string
+	ClearPrograms                         bool
+	AddProgramIDs                         []string
+	RemoveProgramIDs                      []string
 }
 
 // Mutate applies the UpdateActionPlanInput on the ActionPlanMutation builder.
@@ -358,6 +400,60 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.ReviewFrequency; v != nil {
 		m.SetReviewFrequency(*v)
+	}
+	if i.ClearTagSuggestions {
+		m.ClearTagSuggestions()
+	}
+	if v := i.TagSuggestions; v != nil {
+		m.SetTagSuggestions(v)
+	}
+	if i.AppendTagSuggestions != nil {
+		m.AppendTagSuggestions(i.TagSuggestions)
+	}
+	if i.ClearDismissedTagSuggestions {
+		m.ClearDismissedTagSuggestions()
+	}
+	if v := i.DismissedTagSuggestions; v != nil {
+		m.SetDismissedTagSuggestions(v)
+	}
+	if i.AppendDismissedTagSuggestions != nil {
+		m.AppendDismissedTagSuggestions(i.DismissedTagSuggestions)
+	}
+	if i.ClearControlSuggestions {
+		m.ClearControlSuggestions()
+	}
+	if v := i.ControlSuggestions; v != nil {
+		m.SetControlSuggestions(v)
+	}
+	if i.AppendControlSuggestions != nil {
+		m.AppendControlSuggestions(i.ControlSuggestions)
+	}
+	if i.ClearDismissedControlSuggestions {
+		m.ClearDismissedControlSuggestions()
+	}
+	if v := i.DismissedControlSuggestions; v != nil {
+		m.SetDismissedControlSuggestions(v)
+	}
+	if i.AppendDismissedControlSuggestions != nil {
+		m.AppendDismissedControlSuggestions(i.DismissedControlSuggestions)
+	}
+	if i.ClearImprovementSuggestions {
+		m.ClearImprovementSuggestions()
+	}
+	if v := i.ImprovementSuggestions; v != nil {
+		m.SetImprovementSuggestions(v)
+	}
+	if i.AppendImprovementSuggestions != nil {
+		m.AppendImprovementSuggestions(i.ImprovementSuggestions)
+	}
+	if i.ClearDismissedImprovementSuggestions {
+		m.ClearDismissedImprovementSuggestions()
+	}
+	if v := i.DismissedImprovementSuggestions; v != nil {
+		m.SetDismissedImprovementSuggestions(v)
+	}
+	if i.AppendDismissedImprovementSuggestions != nil {
+		m.AppendDismissedImprovementSuggestions(i.DismissedImprovementSuggestions)
 	}
 	if i.ClearDueDate {
 		m.ClearDueDate()
@@ -441,6 +537,242 @@ func (c *ActionPlanUpdate) SetInput(i UpdateActionPlanInput) *ActionPlanUpdate {
 
 // SetInput applies the change-set in the UpdateActionPlanInput on the ActionPlanUpdateOne builder.
 func (c *ActionPlanUpdateOne) SetInput(i UpdateActionPlanInput) *ActionPlanUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateAssetInput represents a mutation input for creating assets.
+type CreateAssetInput struct {
+	Tags            []string
+	AssetType       *enums.AssetType
+	Name            string
+	Description     *string
+	Identifier      *string
+	Website         *string
+	Cpe             *string
+	Categories      []string
+	OwnerID         *string
+	BlockedGroupIDs []string
+	EditorIDs       []string
+	ViewerIDs       []string
+	ScanIDs         []string
+	EntityIDs       []string
+	ControlIDs      []string
+}
+
+// Mutate applies the CreateAssetInput on the AssetMutation builder.
+func (i *CreateAssetInput) Mutate(m *AssetMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if v := i.AssetType; v != nil {
+		m.SetAssetType(*v)
+	}
+	m.SetName(i.Name)
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.Identifier; v != nil {
+		m.SetIdentifier(*v)
+	}
+	if v := i.Website; v != nil {
+		m.SetWebsite(*v)
+	}
+	if v := i.Cpe; v != nil {
+		m.SetCpe(*v)
+	}
+	if v := i.Categories; v != nil {
+		m.SetCategories(v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.ScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
+	if v := i.EntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateAssetInput on the AssetCreate builder.
+func (c *AssetCreate) SetInput(i CreateAssetInput) *AssetCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateAssetInput represents a mutation input for updating assets.
+type UpdateAssetInput struct {
+	ClearTags             bool
+	Tags                  []string
+	AppendTags            []string
+	AssetType             *enums.AssetType
+	Name                  *string
+	ClearDescription      bool
+	Description           *string
+	ClearIdentifier       bool
+	Identifier            *string
+	ClearWebsite          bool
+	Website               *string
+	ClearCpe              bool
+	Cpe                   *string
+	ClearCategories       bool
+	Categories            []string
+	AppendCategories      []string
+	ClearOwner            bool
+	OwnerID               *string
+	ClearBlockedGroups    bool
+	AddBlockedGroupIDs    []string
+	RemoveBlockedGroupIDs []string
+	ClearEditors          bool
+	AddEditorIDs          []string
+	RemoveEditorIDs       []string
+	ClearViewers          bool
+	AddViewerIDs          []string
+	RemoveViewerIDs       []string
+	ClearScans            bool
+	AddScanIDs            []string
+	RemoveScanIDs         []string
+	ClearEntities         bool
+	AddEntityIDs          []string
+	RemoveEntityIDs       []string
+	ClearControls         bool
+	AddControlIDs         []string
+	RemoveControlIDs      []string
+}
+
+// Mutate applies the UpdateAssetInput on the AssetMutation builder.
+func (i *UpdateAssetInput) Mutate(m *AssetMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.AssetType; v != nil {
+		m.SetAssetType(*v)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearIdentifier {
+		m.ClearIdentifier()
+	}
+	if v := i.Identifier; v != nil {
+		m.SetIdentifier(*v)
+	}
+	if i.ClearWebsite {
+		m.ClearWebsite()
+	}
+	if v := i.Website; v != nil {
+		m.SetWebsite(*v)
+	}
+	if i.ClearCpe {
+		m.ClearCpe()
+	}
+	if v := i.Cpe; v != nil {
+		m.SetCpe(*v)
+	}
+	if i.ClearCategories {
+		m.ClearCategories()
+	}
+	if v := i.Categories; v != nil {
+		m.SetCategories(v)
+	}
+	if i.AppendCategories != nil {
+		m.AppendCategories(i.Categories)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
+	}
+	if i.ClearScans {
+		m.ClearScans()
+	}
+	if v := i.AddScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
+	if v := i.RemoveScanIDs; len(v) > 0 {
+		m.RemoveScanIDs(v...)
+	}
+	if i.ClearEntities {
+		m.ClearEntities()
+	}
+	if v := i.AddEntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.RemoveEntityIDs; len(v) > 0 {
+		m.RemoveEntityIDs(v...)
+	}
+	if i.ClearControls {
+		m.ClearControls()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateAssetInput on the AssetUpdate builder.
+func (c *AssetUpdate) SetInput(i UpdateAssetInput) *AssetUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateAssetInput on the AssetUpdateOne builder.
+func (c *AssetUpdateOne) SetInput(i UpdateAssetInput) *AssetUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -648,6 +980,8 @@ type CreateControlInput struct {
 	EditorIDs                []string
 	StandardID               *string
 	ProgramIDs               []string
+	AssetIDs                 []string
+	ScanIDs                  []string
 	ControlImplementationIDs []string
 	SubcontrolIDs            []string
 	ScheduledJobIDs          []string
@@ -752,6 +1086,12 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
 	}
+	if v := i.AssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.ScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
 	if v := i.ControlImplementationIDs; len(v) > 0 {
 		m.AddControlImplementationIDs(v...)
 	}
@@ -853,6 +1193,12 @@ type UpdateControlInput struct {
 	ClearPrograms                  bool
 	AddProgramIDs                  []string
 	RemoveProgramIDs               []string
+	ClearAssets                    bool
+	AddAssetIDs                    []string
+	RemoveAssetIDs                 []string
+	ClearScans                     bool
+	AddScanIDs                     []string
+	RemoveScanIDs                  []string
 	ClearControlImplementations    bool
 	AddControlImplementationIDs    []string
 	RemoveControlImplementationIDs []string
@@ -1111,6 +1457,24 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.RemoveProgramIDs; len(v) > 0 {
 		m.RemoveProgramIDs(v...)
+	}
+	if i.ClearAssets {
+		m.ClearAssets()
+	}
+	if v := i.AddAssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.RemoveAssetIDs; len(v) > 0 {
+		m.RemoveAssetIDs(v...)
+	}
+	if i.ClearScans {
+		m.ClearScans()
+	}
+	if v := i.AddScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
+	if v := i.RemoveScanIDs; len(v) > 0 {
+		m.RemoveScanIDs(v...)
 	}
 	if i.ClearControlImplementations {
 		m.ClearControlImplementations()
@@ -2141,18 +2505,23 @@ func (c *DocumentDataUpdateOne) SetInput(i UpdateDocumentDataInput) *DocumentDat
 
 // CreateEntityInput represents a mutation input for creating entities.
 type CreateEntityInput struct {
-	Tags         []string
-	Name         *string
-	DisplayName  *string
-	Description  *string
-	Domains      []string
-	Status       *string
-	OwnerID      *string
-	ContactIDs   []string
-	DocumentIDs  []string
-	NoteIDs      []string
-	FileIDs      []string
-	EntityTypeID *string
+	Tags            []string
+	Name            *string
+	DisplayName     *string
+	Description     *string
+	Domains         []string
+	Status          *string
+	OwnerID         *string
+	BlockedGroupIDs []string
+	EditorIDs       []string
+	ViewerIDs       []string
+	ContactIDs      []string
+	DocumentIDs     []string
+	NoteIDs         []string
+	FileIDs         []string
+	AssetIDs        []string
+	ScanIDs         []string
+	EntityTypeID    *string
 }
 
 // Mutate applies the CreateEntityInput on the EntityMutation builder.
@@ -2178,6 +2547,15 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
 	if v := i.ContactIDs; len(v) > 0 {
 		m.AddContactIDs(v...)
 	}
@@ -2189,6 +2567,12 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
+	}
+	if v := i.AssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.ScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
 	}
 	if v := i.EntityTypeID; v != nil {
 		m.SetEntityTypeID(*v)
@@ -2203,36 +2587,51 @@ func (c *EntityCreate) SetInput(i CreateEntityInput) *EntityCreate {
 
 // UpdateEntityInput represents a mutation input for updating entities.
 type UpdateEntityInput struct {
-	ClearTags         bool
-	Tags              []string
-	AppendTags        []string
-	ClearName         bool
-	Name              *string
-	ClearDisplayName  bool
-	DisplayName       *string
-	ClearDescription  bool
-	Description       *string
-	ClearDomains      bool
-	Domains           []string
-	AppendDomains     []string
-	ClearStatus       bool
-	Status            *string
-	ClearOwner        bool
-	OwnerID           *string
-	ClearContacts     bool
-	AddContactIDs     []string
-	RemoveContactIDs  []string
-	ClearDocuments    bool
-	AddDocumentIDs    []string
-	RemoveDocumentIDs []string
-	ClearNotes        bool
-	AddNoteIDs        []string
-	RemoveNoteIDs     []string
-	ClearFiles        bool
-	AddFileIDs        []string
-	RemoveFileIDs     []string
-	ClearEntityType   bool
-	EntityTypeID      *string
+	ClearTags             bool
+	Tags                  []string
+	AppendTags            []string
+	ClearName             bool
+	Name                  *string
+	ClearDisplayName      bool
+	DisplayName           *string
+	ClearDescription      bool
+	Description           *string
+	ClearDomains          bool
+	Domains               []string
+	AppendDomains         []string
+	ClearStatus           bool
+	Status                *string
+	ClearOwner            bool
+	OwnerID               *string
+	ClearBlockedGroups    bool
+	AddBlockedGroupIDs    []string
+	RemoveBlockedGroupIDs []string
+	ClearEditors          bool
+	AddEditorIDs          []string
+	RemoveEditorIDs       []string
+	ClearViewers          bool
+	AddViewerIDs          []string
+	RemoveViewerIDs       []string
+	ClearContacts         bool
+	AddContactIDs         []string
+	RemoveContactIDs      []string
+	ClearDocuments        bool
+	AddDocumentIDs        []string
+	RemoveDocumentIDs     []string
+	ClearNotes            bool
+	AddNoteIDs            []string
+	RemoveNoteIDs         []string
+	ClearFiles            bool
+	AddFileIDs            []string
+	RemoveFileIDs         []string
+	ClearAssets           bool
+	AddAssetIDs           []string
+	RemoveAssetIDs        []string
+	ClearScans            bool
+	AddScanIDs            []string
+	RemoveScanIDs         []string
+	ClearEntityType       bool
+	EntityTypeID          *string
 }
 
 // Mutate applies the UpdateEntityInput on the EntityMutation builder.
@@ -2285,6 +2684,33 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
+	}
 	if i.ClearContacts {
 		m.ClearContacts()
 	}
@@ -2320,6 +2746,24 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.RemoveFileIDs; len(v) > 0 {
 		m.RemoveFileIDs(v...)
+	}
+	if i.ClearAssets {
+		m.ClearAssets()
+	}
+	if v := i.AddAssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.RemoveAssetIDs; len(v) > 0 {
+		m.RemoveAssetIDs(v...)
+	}
+	if i.ClearScans {
+		m.ClearScans()
+	}
+	if v := i.AddScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
+	if v := i.RemoveScanIDs; len(v) > 0 {
+		m.RemoveScanIDs(v...)
 	}
 	if i.ClearEntityType {
 		m.ClearEntityType()
@@ -3328,6 +3772,9 @@ type CreateGroupInput struct {
 	ControlImplementationEditorIDs       []string
 	ControlImplementationBlockedGroupIDs []string
 	ControlImplementationViewerIDs       []string
+	ScanEditorIDs                        []string
+	ScanBlockedGroupIDs                  []string
+	ScanViewerIDs                        []string
 	ProcedureEditorIDs                   []string
 	ProcedureBlockedGroupIDs             []string
 	InternalPolicyEditorIDs              []string
@@ -3405,6 +3852,15 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.ControlImplementationViewerIDs; len(v) > 0 {
 		m.AddControlImplementationViewerIDs(v...)
+	}
+	if v := i.ScanEditorIDs; len(v) > 0 {
+		m.AddScanEditorIDs(v...)
+	}
+	if v := i.ScanBlockedGroupIDs; len(v) > 0 {
+		m.AddScanBlockedGroupIDs(v...)
+	}
+	if v := i.ScanViewerIDs; len(v) > 0 {
+		m.AddScanViewerIDs(v...)
 	}
 	if v := i.ProcedureEditorIDs; len(v) > 0 {
 		m.AddProcedureEditorIDs(v...)
@@ -3511,6 +3967,15 @@ type UpdateGroupInput struct {
 	ClearControlImplementationViewers          bool
 	AddControlImplementationViewerIDs          []string
 	RemoveControlImplementationViewerIDs       []string
+	ClearScanEditors                           bool
+	AddScanEditorIDs                           []string
+	RemoveScanEditorIDs                        []string
+	ClearScanBlockedGroups                     bool
+	AddScanBlockedGroupIDs                     []string
+	RemoveScanBlockedGroupIDs                  []string
+	ClearScanViewers                           bool
+	AddScanViewerIDs                           []string
+	RemoveScanViewerIDs                        []string
 	ClearProcedureEditors                      bool
 	AddProcedureEditorIDs                      []string
 	RemoveProcedureEditorIDs                   []string
@@ -3720,6 +4185,33 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.RemoveControlImplementationViewerIDs; len(v) > 0 {
 		m.RemoveControlImplementationViewerIDs(v...)
+	}
+	if i.ClearScanEditors {
+		m.ClearScanEditors()
+	}
+	if v := i.AddScanEditorIDs; len(v) > 0 {
+		m.AddScanEditorIDs(v...)
+	}
+	if v := i.RemoveScanEditorIDs; len(v) > 0 {
+		m.RemoveScanEditorIDs(v...)
+	}
+	if i.ClearScanBlockedGroups {
+		m.ClearScanBlockedGroups()
+	}
+	if v := i.AddScanBlockedGroupIDs; len(v) > 0 {
+		m.AddScanBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveScanBlockedGroupIDs; len(v) > 0 {
+		m.RemoveScanBlockedGroupIDs(v...)
+	}
+	if i.ClearScanViewers {
+		m.ClearScanViewers()
+	}
+	if v := i.AddScanViewerIDs; len(v) > 0 {
+		m.AddScanViewerIDs(v...)
+	}
+	if v := i.RemoveScanViewerIDs; len(v) > 0 {
+		m.RemoveScanViewerIDs(v...)
 	}
 	if i.ClearProcedureEditors {
 		m.ClearProcedureEditors()
@@ -4239,28 +4731,34 @@ func (c *IntegrationUpdateOne) SetInput(i UpdateIntegrationInput) *IntegrationUp
 
 // CreateInternalPolicyInput represents a mutation input for creating internalpolicies.
 type CreateInternalPolicyInput struct {
-	Tags                []string
-	Revision            *string
-	Name                string
-	Status              *enums.DocumentStatus
-	PolicyType          *string
-	Details             *string
-	ApprovalRequired    *bool
-	ReviewDue           *time.Time
-	ReviewFrequency     *enums.Frequency
-	OwnerID             *string
-	BlockedGroupIDs     []string
-	EditorIDs           []string
-	ApproverID          *string
-	DelegateID          *string
-	ControlObjectiveIDs []string
-	ControlIDs          []string
-	SubcontrolIDs       []string
-	ProcedureIDs        []string
-	NarrativeIDs        []string
-	TaskIDs             []string
-	RiskIDs             []string
-	ProgramIDs          []string
+	Tags                            []string
+	Revision                        *string
+	Name                            string
+	Status                          *enums.DocumentStatus
+	PolicyType                      *string
+	Details                         *string
+	ApprovalRequired                *bool
+	ReviewDue                       *time.Time
+	ReviewFrequency                 *enums.Frequency
+	TagSuggestions                  []string
+	DismissedTagSuggestions         []string
+	ControlSuggestions              []string
+	DismissedControlSuggestions     []string
+	ImprovementSuggestions          []string
+	DismissedImprovementSuggestions []string
+	OwnerID                         *string
+	BlockedGroupIDs                 []string
+	EditorIDs                       []string
+	ApproverID                      *string
+	DelegateID                      *string
+	ControlObjectiveIDs             []string
+	ControlIDs                      []string
+	SubcontrolIDs                   []string
+	ProcedureIDs                    []string
+	NarrativeIDs                    []string
+	TaskIDs                         []string
+	RiskIDs                         []string
+	ProgramIDs                      []string
 }
 
 // Mutate applies the CreateInternalPolicyInput on the InternalPolicyMutation builder.
@@ -4289,6 +4787,24 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.ReviewFrequency; v != nil {
 		m.SetReviewFrequency(*v)
+	}
+	if v := i.TagSuggestions; v != nil {
+		m.SetTagSuggestions(v)
+	}
+	if v := i.DismissedTagSuggestions; v != nil {
+		m.SetDismissedTagSuggestions(v)
+	}
+	if v := i.ControlSuggestions; v != nil {
+		m.SetControlSuggestions(v)
+	}
+	if v := i.DismissedControlSuggestions; v != nil {
+		m.SetDismissedControlSuggestions(v)
+	}
+	if v := i.ImprovementSuggestions; v != nil {
+		m.SetImprovementSuggestions(v)
+	}
+	if v := i.DismissedImprovementSuggestions; v != nil {
+		m.SetDismissedImprovementSuggestions(v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -4339,60 +4855,78 @@ func (c *InternalPolicyCreate) SetInput(i CreateInternalPolicyInput) *InternalPo
 
 // UpdateInternalPolicyInput represents a mutation input for updating internalpolicies.
 type UpdateInternalPolicyInput struct {
-	ClearTags                 bool
-	Tags                      []string
-	AppendTags                []string
-	ClearRevision             bool
-	Revision                  *string
-	Name                      *string
-	ClearStatus               bool
-	Status                    *enums.DocumentStatus
-	ClearPolicyType           bool
-	PolicyType                *string
-	ClearDetails              bool
-	Details                   *string
-	ClearApprovalRequired     bool
-	ApprovalRequired          *bool
-	ClearReviewDue            bool
-	ReviewDue                 *time.Time
-	ClearReviewFrequency      bool
-	ReviewFrequency           *enums.Frequency
-	ClearOwner                bool
-	OwnerID                   *string
-	ClearBlockedGroups        bool
-	AddBlockedGroupIDs        []string
-	RemoveBlockedGroupIDs     []string
-	ClearEditors              bool
-	AddEditorIDs              []string
-	RemoveEditorIDs           []string
-	ClearApprover             bool
-	ApproverID                *string
-	ClearDelegate             bool
-	DelegateID                *string
-	ClearControlObjectives    bool
-	AddControlObjectiveIDs    []string
-	RemoveControlObjectiveIDs []string
-	ClearControls             bool
-	AddControlIDs             []string
-	RemoveControlIDs          []string
-	ClearSubcontrols          bool
-	AddSubcontrolIDs          []string
-	RemoveSubcontrolIDs       []string
-	ClearProcedures           bool
-	AddProcedureIDs           []string
-	RemoveProcedureIDs        []string
-	ClearNarratives           bool
-	AddNarrativeIDs           []string
-	RemoveNarrativeIDs        []string
-	ClearTasks                bool
-	AddTaskIDs                []string
-	RemoveTaskIDs             []string
-	ClearRisks                bool
-	AddRiskIDs                []string
-	RemoveRiskIDs             []string
-	ClearPrograms             bool
-	AddProgramIDs             []string
-	RemoveProgramIDs          []string
+	ClearTags                             bool
+	Tags                                  []string
+	AppendTags                            []string
+	ClearRevision                         bool
+	Revision                              *string
+	Name                                  *string
+	ClearStatus                           bool
+	Status                                *enums.DocumentStatus
+	ClearPolicyType                       bool
+	PolicyType                            *string
+	ClearDetails                          bool
+	Details                               *string
+	ClearApprovalRequired                 bool
+	ApprovalRequired                      *bool
+	ClearReviewDue                        bool
+	ReviewDue                             *time.Time
+	ClearReviewFrequency                  bool
+	ReviewFrequency                       *enums.Frequency
+	ClearTagSuggestions                   bool
+	TagSuggestions                        []string
+	AppendTagSuggestions                  []string
+	ClearDismissedTagSuggestions          bool
+	DismissedTagSuggestions               []string
+	AppendDismissedTagSuggestions         []string
+	ClearControlSuggestions               bool
+	ControlSuggestions                    []string
+	AppendControlSuggestions              []string
+	ClearDismissedControlSuggestions      bool
+	DismissedControlSuggestions           []string
+	AppendDismissedControlSuggestions     []string
+	ClearImprovementSuggestions           bool
+	ImprovementSuggestions                []string
+	AppendImprovementSuggestions          []string
+	ClearDismissedImprovementSuggestions  bool
+	DismissedImprovementSuggestions       []string
+	AppendDismissedImprovementSuggestions []string
+	ClearOwner                            bool
+	OwnerID                               *string
+	ClearBlockedGroups                    bool
+	AddBlockedGroupIDs                    []string
+	RemoveBlockedGroupIDs                 []string
+	ClearEditors                          bool
+	AddEditorIDs                          []string
+	RemoveEditorIDs                       []string
+	ClearApprover                         bool
+	ApproverID                            *string
+	ClearDelegate                         bool
+	DelegateID                            *string
+	ClearControlObjectives                bool
+	AddControlObjectiveIDs                []string
+	RemoveControlObjectiveIDs             []string
+	ClearControls                         bool
+	AddControlIDs                         []string
+	RemoveControlIDs                      []string
+	ClearSubcontrols                      bool
+	AddSubcontrolIDs                      []string
+	RemoveSubcontrolIDs                   []string
+	ClearProcedures                       bool
+	AddProcedureIDs                       []string
+	RemoveProcedureIDs                    []string
+	ClearNarratives                       bool
+	AddNarrativeIDs                       []string
+	RemoveNarrativeIDs                    []string
+	ClearTasks                            bool
+	AddTaskIDs                            []string
+	RemoveTaskIDs                         []string
+	ClearRisks                            bool
+	AddRiskIDs                            []string
+	RemoveRiskIDs                         []string
+	ClearPrograms                         bool
+	AddProgramIDs                         []string
+	RemoveProgramIDs                      []string
 }
 
 // Mutate applies the UpdateInternalPolicyInput on the InternalPolicyMutation builder.
@@ -4450,6 +4984,60 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.ReviewFrequency; v != nil {
 		m.SetReviewFrequency(*v)
+	}
+	if i.ClearTagSuggestions {
+		m.ClearTagSuggestions()
+	}
+	if v := i.TagSuggestions; v != nil {
+		m.SetTagSuggestions(v)
+	}
+	if i.AppendTagSuggestions != nil {
+		m.AppendTagSuggestions(i.TagSuggestions)
+	}
+	if i.ClearDismissedTagSuggestions {
+		m.ClearDismissedTagSuggestions()
+	}
+	if v := i.DismissedTagSuggestions; v != nil {
+		m.SetDismissedTagSuggestions(v)
+	}
+	if i.AppendDismissedTagSuggestions != nil {
+		m.AppendDismissedTagSuggestions(i.DismissedTagSuggestions)
+	}
+	if i.ClearControlSuggestions {
+		m.ClearControlSuggestions()
+	}
+	if v := i.ControlSuggestions; v != nil {
+		m.SetControlSuggestions(v)
+	}
+	if i.AppendControlSuggestions != nil {
+		m.AppendControlSuggestions(i.ControlSuggestions)
+	}
+	if i.ClearDismissedControlSuggestions {
+		m.ClearDismissedControlSuggestions()
+	}
+	if v := i.DismissedControlSuggestions; v != nil {
+		m.SetDismissedControlSuggestions(v)
+	}
+	if i.AppendDismissedControlSuggestions != nil {
+		m.AppendDismissedControlSuggestions(i.DismissedControlSuggestions)
+	}
+	if i.ClearImprovementSuggestions {
+		m.ClearImprovementSuggestions()
+	}
+	if v := i.ImprovementSuggestions; v != nil {
+		m.SetImprovementSuggestions(v)
+	}
+	if i.AppendImprovementSuggestions != nil {
+		m.AppendImprovementSuggestions(i.ImprovementSuggestions)
+	}
+	if i.ClearDismissedImprovementSuggestions {
+		m.ClearDismissedImprovementSuggestions()
+	}
+	if v := i.DismissedImprovementSuggestions; v != nil {
+		m.SetDismissedImprovementSuggestions(v)
+	}
+	if i.AppendDismissedImprovementSuggestions != nil {
+		m.AppendDismissedImprovementSuggestions(i.DismissedImprovementSuggestions)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -5770,6 +6358,8 @@ type CreateOrganizationInput struct {
 	JobResultIDs                    []string
 	ScheduledJobRunIDs              []string
 	TrustCenterIDs                  []string
+	AssetIDs                        []string
+	ScanIDs                         []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -5967,6 +6557,12 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.TrustCenterIDs; len(v) > 0 {
 		m.AddTrustCenterIDs(v...)
 	}
+	if v := i.AssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.ScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -6154,6 +6750,12 @@ type UpdateOrganizationInput struct {
 	ClearTrustCenters                     bool
 	AddTrustCenterIDs                     []string
 	RemoveTrustCenterIDs                  []string
+	ClearAssets                           bool
+	AddAssetIDs                           []string
+	RemoveAssetIDs                        []string
+	ClearScans                            bool
+	AddScanIDs                            []string
+	RemoveScanIDs                         []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -6689,6 +7291,24 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveTrustCenterIDs; len(v) > 0 {
 		m.RemoveTrustCenterIDs(v...)
 	}
+	if i.ClearAssets {
+		m.ClearAssets()
+	}
+	if v := i.AddAssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.RemoveAssetIDs; len(v) > 0 {
+		m.RemoveAssetIDs(v...)
+	}
+	if i.ClearScans {
+		m.ClearScans()
+	}
+	if v := i.AddScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
+	if v := i.RemoveScanIDs; len(v) > 0 {
+		m.RemoveScanIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateOrganizationInput on the OrganizationUpdate builder.
@@ -6705,18 +7325,26 @@ func (c *OrganizationUpdateOne) SetInput(i UpdateOrganizationInput) *Organizatio
 
 // CreateOrganizationSettingInput represents a mutation input for creating organizationsettings.
 type CreateOrganizationSettingInput struct {
-	Tags                        []string
-	Domains                     []string
-	BillingContact              *string
-	BillingEmail                *string
-	BillingPhone                *string
-	BillingAddress              *models.Address
-	TaxIdentifier               *string
-	GeoLocation                 *enums.Region
-	BillingNotificationsEnabled *bool
-	AllowedEmailDomains         []string
-	OrganizationID              *string
-	FileIDs                     []string
+	Tags                             []string
+	Domains                          []string
+	BillingContact                   *string
+	BillingEmail                     *string
+	BillingPhone                     *string
+	BillingAddress                   *models.Address
+	TaxIdentifier                    *string
+	GeoLocation                      *enums.Region
+	BillingNotificationsEnabled      *bool
+	AllowedEmailDomains              []string
+	IdentityProvider                 *enums.SSOProvider
+	IdentityProviderClientID         *string
+	IdentityProviderClientSecret     *string
+	IdentityProviderMetadataEndpoint *string
+	IdentityProviderEntityID         *string
+	OidcDiscoveryEndpoint            *string
+	IdentityProviderLoginEnforced    *bool
+	ComplianceWebhookToken           *string
+	OrganizationID                   *string
+	FileIDs                          []string
 }
 
 // Mutate applies the CreateOrganizationSettingInput on the OrganizationSettingMutation builder.
@@ -6751,6 +7379,30 @@ func (i *CreateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	if v := i.AllowedEmailDomains; v != nil {
 		m.SetAllowedEmailDomains(v)
 	}
+	if v := i.IdentityProvider; v != nil {
+		m.SetIdentityProvider(*v)
+	}
+	if v := i.IdentityProviderClientID; v != nil {
+		m.SetIdentityProviderClientID(*v)
+	}
+	if v := i.IdentityProviderClientSecret; v != nil {
+		m.SetIdentityProviderClientSecret(*v)
+	}
+	if v := i.IdentityProviderMetadataEndpoint; v != nil {
+		m.SetIdentityProviderMetadataEndpoint(*v)
+	}
+	if v := i.IdentityProviderEntityID; v != nil {
+		m.SetIdentityProviderEntityID(*v)
+	}
+	if v := i.OidcDiscoveryEndpoint; v != nil {
+		m.SetOidcDiscoveryEndpoint(*v)
+	}
+	if v := i.IdentityProviderLoginEnforced; v != nil {
+		m.SetIdentityProviderLoginEnforced(*v)
+	}
+	if v := i.ComplianceWebhookToken; v != nil {
+		m.SetComplianceWebhookToken(*v)
+	}
 	if v := i.OrganizationID; v != nil {
 		m.SetOrganizationID(*v)
 	}
@@ -6767,33 +7419,47 @@ func (c *OrganizationSettingCreate) SetInput(i CreateOrganizationSettingInput) *
 
 // UpdateOrganizationSettingInput represents a mutation input for updating organizationsettings.
 type UpdateOrganizationSettingInput struct {
-	ClearTags                   bool
-	Tags                        []string
-	AppendTags                  []string
-	ClearDomains                bool
-	Domains                     []string
-	AppendDomains               []string
-	ClearBillingContact         bool
-	BillingContact              *string
-	ClearBillingEmail           bool
-	BillingEmail                *string
-	ClearBillingPhone           bool
-	BillingPhone                *string
-	ClearBillingAddress         bool
-	BillingAddress              *models.Address
-	ClearTaxIdentifier          bool
-	TaxIdentifier               *string
-	ClearGeoLocation            bool
-	GeoLocation                 *enums.Region
-	BillingNotificationsEnabled *bool
-	ClearAllowedEmailDomains    bool
-	AllowedEmailDomains         []string
-	AppendAllowedEmailDomains   []string
-	ClearOrganization           bool
-	OrganizationID              *string
-	ClearFiles                  bool
-	AddFileIDs                  []string
-	RemoveFileIDs               []string
+	ClearTags                             bool
+	Tags                                  []string
+	AppendTags                            []string
+	ClearDomains                          bool
+	Domains                               []string
+	AppendDomains                         []string
+	ClearBillingContact                   bool
+	BillingContact                        *string
+	ClearBillingEmail                     bool
+	BillingEmail                          *string
+	ClearBillingPhone                     bool
+	BillingPhone                          *string
+	ClearBillingAddress                   bool
+	BillingAddress                        *models.Address
+	ClearTaxIdentifier                    bool
+	TaxIdentifier                         *string
+	ClearGeoLocation                      bool
+	GeoLocation                           *enums.Region
+	BillingNotificationsEnabled           *bool
+	ClearAllowedEmailDomains              bool
+	AllowedEmailDomains                   []string
+	AppendAllowedEmailDomains             []string
+	ClearIdentityProvider                 bool
+	IdentityProvider                      *enums.SSOProvider
+	ClearIdentityProviderClientID         bool
+	IdentityProviderClientID              *string
+	ClearIdentityProviderClientSecret     bool
+	IdentityProviderClientSecret          *string
+	ClearIdentityProviderMetadataEndpoint bool
+	IdentityProviderMetadataEndpoint      *string
+	ClearIdentityProviderEntityID         bool
+	IdentityProviderEntityID              *string
+	ClearOidcDiscoveryEndpoint            bool
+	OidcDiscoveryEndpoint                 *string
+	IdentityProviderLoginEnforced         *bool
+	ComplianceWebhookToken                *string
+	ClearOrganization                     bool
+	OrganizationID                        *string
+	ClearFiles                            bool
+	AddFileIDs                            []string
+	RemoveFileIDs                         []string
 }
 
 // Mutate applies the UpdateOrganizationSettingInput on the OrganizationSettingMutation builder.
@@ -6863,6 +7529,48 @@ func (i *UpdateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	}
 	if i.AppendAllowedEmailDomains != nil {
 		m.AppendAllowedEmailDomains(i.AllowedEmailDomains)
+	}
+	if i.ClearIdentityProvider {
+		m.ClearIdentityProvider()
+	}
+	if v := i.IdentityProvider; v != nil {
+		m.SetIdentityProvider(*v)
+	}
+	if i.ClearIdentityProviderClientID {
+		m.ClearIdentityProviderClientID()
+	}
+	if v := i.IdentityProviderClientID; v != nil {
+		m.SetIdentityProviderClientID(*v)
+	}
+	if i.ClearIdentityProviderClientSecret {
+		m.ClearIdentityProviderClientSecret()
+	}
+	if v := i.IdentityProviderClientSecret; v != nil {
+		m.SetIdentityProviderClientSecret(*v)
+	}
+	if i.ClearIdentityProviderMetadataEndpoint {
+		m.ClearIdentityProviderMetadataEndpoint()
+	}
+	if v := i.IdentityProviderMetadataEndpoint; v != nil {
+		m.SetIdentityProviderMetadataEndpoint(*v)
+	}
+	if i.ClearIdentityProviderEntityID {
+		m.ClearIdentityProviderEntityID()
+	}
+	if v := i.IdentityProviderEntityID; v != nil {
+		m.SetIdentityProviderEntityID(*v)
+	}
+	if i.ClearOidcDiscoveryEndpoint {
+		m.ClearOidcDiscoveryEndpoint()
+	}
+	if v := i.OidcDiscoveryEndpoint; v != nil {
+		m.SetOidcDiscoveryEndpoint(*v)
+	}
+	if v := i.IdentityProviderLoginEnforced; v != nil {
+		m.SetIdentityProviderLoginEnforced(*v)
+	}
+	if v := i.ComplianceWebhookToken; v != nil {
+		m.SetComplianceWebhookToken(*v)
 	}
 	if i.ClearOrganization {
 		m.ClearOrganization()
@@ -7039,27 +7747,33 @@ func (c *PersonalAccessTokenUpdateOne) SetInput(i UpdatePersonalAccessTokenInput
 
 // CreateProcedureInput represents a mutation input for creating procedures.
 type CreateProcedureInput struct {
-	Tags              []string
-	Revision          *string
-	Name              string
-	Status            *enums.DocumentStatus
-	ProcedureType     *string
-	Details           *string
-	ApprovalRequired  *bool
-	ReviewDue         *time.Time
-	ReviewFrequency   *enums.Frequency
-	OwnerID           *string
-	BlockedGroupIDs   []string
-	EditorIDs         []string
-	ApproverID        *string
-	DelegateID        *string
-	ControlIDs        []string
-	SubcontrolIDs     []string
-	InternalPolicyIDs []string
-	ProgramIDs        []string
-	NarrativeIDs      []string
-	RiskIDs           []string
-	TaskIDs           []string
+	Tags                            []string
+	Revision                        *string
+	Name                            string
+	Status                          *enums.DocumentStatus
+	ProcedureType                   *string
+	Details                         *string
+	ApprovalRequired                *bool
+	ReviewDue                       *time.Time
+	ReviewFrequency                 *enums.Frequency
+	TagSuggestions                  []string
+	DismissedTagSuggestions         []string
+	ControlSuggestions              []string
+	DismissedControlSuggestions     []string
+	ImprovementSuggestions          []string
+	DismissedImprovementSuggestions []string
+	OwnerID                         *string
+	BlockedGroupIDs                 []string
+	EditorIDs                       []string
+	ApproverID                      *string
+	DelegateID                      *string
+	ControlIDs                      []string
+	SubcontrolIDs                   []string
+	InternalPolicyIDs               []string
+	ProgramIDs                      []string
+	NarrativeIDs                    []string
+	RiskIDs                         []string
+	TaskIDs                         []string
 }
 
 // Mutate applies the CreateProcedureInput on the ProcedureMutation builder.
@@ -7088,6 +7802,24 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.ReviewFrequency; v != nil {
 		m.SetReviewFrequency(*v)
+	}
+	if v := i.TagSuggestions; v != nil {
+		m.SetTagSuggestions(v)
+	}
+	if v := i.DismissedTagSuggestions; v != nil {
+		m.SetDismissedTagSuggestions(v)
+	}
+	if v := i.ControlSuggestions; v != nil {
+		m.SetControlSuggestions(v)
+	}
+	if v := i.DismissedControlSuggestions; v != nil {
+		m.SetDismissedControlSuggestions(v)
+	}
+	if v := i.ImprovementSuggestions; v != nil {
+		m.SetImprovementSuggestions(v)
+	}
+	if v := i.DismissedImprovementSuggestions; v != nil {
+		m.SetDismissedImprovementSuggestions(v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -7135,57 +7867,75 @@ func (c *ProcedureCreate) SetInput(i CreateProcedureInput) *ProcedureCreate {
 
 // UpdateProcedureInput represents a mutation input for updating procedures.
 type UpdateProcedureInput struct {
-	ClearTags               bool
-	Tags                    []string
-	AppendTags              []string
-	ClearRevision           bool
-	Revision                *string
-	Name                    *string
-	ClearStatus             bool
-	Status                  *enums.DocumentStatus
-	ClearProcedureType      bool
-	ProcedureType           *string
-	ClearDetails            bool
-	Details                 *string
-	ClearApprovalRequired   bool
-	ApprovalRequired        *bool
-	ClearReviewDue          bool
-	ReviewDue               *time.Time
-	ClearReviewFrequency    bool
-	ReviewFrequency         *enums.Frequency
-	ClearOwner              bool
-	OwnerID                 *string
-	ClearBlockedGroups      bool
-	AddBlockedGroupIDs      []string
-	RemoveBlockedGroupIDs   []string
-	ClearEditors            bool
-	AddEditorIDs            []string
-	RemoveEditorIDs         []string
-	ClearApprover           bool
-	ApproverID              *string
-	ClearDelegate           bool
-	DelegateID              *string
-	ClearControls           bool
-	AddControlIDs           []string
-	RemoveControlIDs        []string
-	ClearSubcontrols        bool
-	AddSubcontrolIDs        []string
-	RemoveSubcontrolIDs     []string
-	ClearInternalPolicies   bool
-	AddInternalPolicyIDs    []string
-	RemoveInternalPolicyIDs []string
-	ClearPrograms           bool
-	AddProgramIDs           []string
-	RemoveProgramIDs        []string
-	ClearNarratives         bool
-	AddNarrativeIDs         []string
-	RemoveNarrativeIDs      []string
-	ClearRisks              bool
-	AddRiskIDs              []string
-	RemoveRiskIDs           []string
-	ClearTasks              bool
-	AddTaskIDs              []string
-	RemoveTaskIDs           []string
+	ClearTags                             bool
+	Tags                                  []string
+	AppendTags                            []string
+	ClearRevision                         bool
+	Revision                              *string
+	Name                                  *string
+	ClearStatus                           bool
+	Status                                *enums.DocumentStatus
+	ClearProcedureType                    bool
+	ProcedureType                         *string
+	ClearDetails                          bool
+	Details                               *string
+	ClearApprovalRequired                 bool
+	ApprovalRequired                      *bool
+	ClearReviewDue                        bool
+	ReviewDue                             *time.Time
+	ClearReviewFrequency                  bool
+	ReviewFrequency                       *enums.Frequency
+	ClearTagSuggestions                   bool
+	TagSuggestions                        []string
+	AppendTagSuggestions                  []string
+	ClearDismissedTagSuggestions          bool
+	DismissedTagSuggestions               []string
+	AppendDismissedTagSuggestions         []string
+	ClearControlSuggestions               bool
+	ControlSuggestions                    []string
+	AppendControlSuggestions              []string
+	ClearDismissedControlSuggestions      bool
+	DismissedControlSuggestions           []string
+	AppendDismissedControlSuggestions     []string
+	ClearImprovementSuggestions           bool
+	ImprovementSuggestions                []string
+	AppendImprovementSuggestions          []string
+	ClearDismissedImprovementSuggestions  bool
+	DismissedImprovementSuggestions       []string
+	AppendDismissedImprovementSuggestions []string
+	ClearOwner                            bool
+	OwnerID                               *string
+	ClearBlockedGroups                    bool
+	AddBlockedGroupIDs                    []string
+	RemoveBlockedGroupIDs                 []string
+	ClearEditors                          bool
+	AddEditorIDs                          []string
+	RemoveEditorIDs                       []string
+	ClearApprover                         bool
+	ApproverID                            *string
+	ClearDelegate                         bool
+	DelegateID                            *string
+	ClearControls                         bool
+	AddControlIDs                         []string
+	RemoveControlIDs                      []string
+	ClearSubcontrols                      bool
+	AddSubcontrolIDs                      []string
+	RemoveSubcontrolIDs                   []string
+	ClearInternalPolicies                 bool
+	AddInternalPolicyIDs                  []string
+	RemoveInternalPolicyIDs               []string
+	ClearPrograms                         bool
+	AddProgramIDs                         []string
+	RemoveProgramIDs                      []string
+	ClearNarratives                       bool
+	AddNarrativeIDs                       []string
+	RemoveNarrativeIDs                    []string
+	ClearRisks                            bool
+	AddRiskIDs                            []string
+	RemoveRiskIDs                         []string
+	ClearTasks                            bool
+	AddTaskIDs                            []string
+	RemoveTaskIDs                         []string
 }
 
 // Mutate applies the UpdateProcedureInput on the ProcedureMutation builder.
@@ -7243,6 +7993,60 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.ReviewFrequency; v != nil {
 		m.SetReviewFrequency(*v)
+	}
+	if i.ClearTagSuggestions {
+		m.ClearTagSuggestions()
+	}
+	if v := i.TagSuggestions; v != nil {
+		m.SetTagSuggestions(v)
+	}
+	if i.AppendTagSuggestions != nil {
+		m.AppendTagSuggestions(i.TagSuggestions)
+	}
+	if i.ClearDismissedTagSuggestions {
+		m.ClearDismissedTagSuggestions()
+	}
+	if v := i.DismissedTagSuggestions; v != nil {
+		m.SetDismissedTagSuggestions(v)
+	}
+	if i.AppendDismissedTagSuggestions != nil {
+		m.AppendDismissedTagSuggestions(i.DismissedTagSuggestions)
+	}
+	if i.ClearControlSuggestions {
+		m.ClearControlSuggestions()
+	}
+	if v := i.ControlSuggestions; v != nil {
+		m.SetControlSuggestions(v)
+	}
+	if i.AppendControlSuggestions != nil {
+		m.AppendControlSuggestions(i.ControlSuggestions)
+	}
+	if i.ClearDismissedControlSuggestions {
+		m.ClearDismissedControlSuggestions()
+	}
+	if v := i.DismissedControlSuggestions; v != nil {
+		m.SetDismissedControlSuggestions(v)
+	}
+	if i.AppendDismissedControlSuggestions != nil {
+		m.AppendDismissedControlSuggestions(i.DismissedControlSuggestions)
+	}
+	if i.ClearImprovementSuggestions {
+		m.ClearImprovementSuggestions()
+	}
+	if v := i.ImprovementSuggestions; v != nil {
+		m.SetImprovementSuggestions(v)
+	}
+	if i.AppendImprovementSuggestions != nil {
+		m.AppendImprovementSuggestions(i.ImprovementSuggestions)
+	}
+	if i.ClearDismissedImprovementSuggestions {
+		m.ClearDismissedImprovementSuggestions()
+	}
+	if v := i.DismissedImprovementSuggestions; v != nil {
+		m.SetDismissedImprovementSuggestions(v)
+	}
+	if i.AppendDismissedImprovementSuggestions != nil {
+		m.AppendDismissedImprovementSuggestions(i.DismissedImprovementSuggestions)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -7859,6 +8663,9 @@ type CreateRiskInput struct {
 	ProgramIDs        []string
 	ActionPlanIDs     []string
 	TaskIDs           []string
+	AssetIDs          []string
+	EntityIDs         []string
+	ScanIDs           []string
 	StakeholderID     *string
 	DelegateID        *string
 }
@@ -7929,6 +8736,15 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.TaskIDs; len(v) > 0 {
 		m.AddTaskIDs(v...)
 	}
+	if v := i.AssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.EntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.ScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
 	if v := i.StakeholderID; v != nil {
 		m.SetStakeholderID(*v)
 	}
@@ -7997,6 +8813,15 @@ type UpdateRiskInput struct {
 	ClearTasks              bool
 	AddTaskIDs              []string
 	RemoveTaskIDs           []string
+	ClearAssets             bool
+	AddAssetIDs             []string
+	RemoveAssetIDs          []string
+	ClearEntities           bool
+	AddEntityIDs            []string
+	RemoveEntityIDs         []string
+	ClearScans              bool
+	AddScanIDs              []string
+	RemoveScanIDs           []string
 	ClearStakeholder        bool
 	StakeholderID           *string
 	ClearDelegate           bool
@@ -8161,6 +8986,33 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.RemoveTaskIDs; len(v) > 0 {
 		m.RemoveTaskIDs(v...)
 	}
+	if i.ClearAssets {
+		m.ClearAssets()
+	}
+	if v := i.AddAssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.RemoveAssetIDs; len(v) > 0 {
+		m.RemoveAssetIDs(v...)
+	}
+	if i.ClearEntities {
+		m.ClearEntities()
+	}
+	if v := i.AddEntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.RemoveEntityIDs; len(v) > 0 {
+		m.RemoveEntityIDs(v...)
+	}
+	if i.ClearScans {
+		m.ClearScans()
+	}
+	if v := i.AddScanIDs; len(v) > 0 {
+		m.AddScanIDs(v...)
+	}
+	if v := i.RemoveScanIDs; len(v) > 0 {
+		m.RemoveScanIDs(v...)
+	}
 	if i.ClearStakeholder {
 		m.ClearStakeholder()
 	}
@@ -8183,6 +9035,182 @@ func (c *RiskUpdate) SetInput(i UpdateRiskInput) *RiskUpdate {
 
 // SetInput applies the change-set in the UpdateRiskInput on the RiskUpdateOne builder.
 func (c *RiskUpdateOne) SetInput(i UpdateRiskInput) *RiskUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateScanInput represents a mutation input for creating scans.
+type CreateScanInput struct {
+	Tags            []string
+	Target          string
+	ScanType        *enums.ScanType
+	Metadata        map[string]interface{}
+	Status          *enums.ScanStatus
+	OwnerID         *string
+	BlockedGroupIDs []string
+	EditorIDs       []string
+	ViewerIDs       []string
+	AssetIDs        []string
+	EntityIDs       []string
+}
+
+// Mutate applies the CreateScanInput on the ScanMutation builder.
+func (i *CreateScanInput) Mutate(m *ScanMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetTarget(i.Target)
+	if v := i.ScanType; v != nil {
+		m.SetScanType(*v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.AssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.EntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateScanInput on the ScanCreate builder.
+func (c *ScanCreate) SetInput(i CreateScanInput) *ScanCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateScanInput represents a mutation input for updating scans.
+type UpdateScanInput struct {
+	ClearTags             bool
+	Tags                  []string
+	AppendTags            []string
+	Target                *string
+	ScanType              *enums.ScanType
+	ClearMetadata         bool
+	Metadata              map[string]interface{}
+	Status                *enums.ScanStatus
+	ClearOwner            bool
+	OwnerID               *string
+	ClearBlockedGroups    bool
+	AddBlockedGroupIDs    []string
+	RemoveBlockedGroupIDs []string
+	ClearEditors          bool
+	AddEditorIDs          []string
+	RemoveEditorIDs       []string
+	ClearViewers          bool
+	AddViewerIDs          []string
+	RemoveViewerIDs       []string
+	ClearAssets           bool
+	AddAssetIDs           []string
+	RemoveAssetIDs        []string
+	ClearEntities         bool
+	AddEntityIDs          []string
+	RemoveEntityIDs       []string
+}
+
+// Mutate applies the UpdateScanInput on the ScanMutation builder.
+func (i *UpdateScanInput) Mutate(m *ScanMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Target; v != nil {
+		m.SetTarget(*v)
+	}
+	if v := i.ScanType; v != nil {
+		m.SetScanType(*v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
+	}
+	if i.ClearAssets {
+		m.ClearAssets()
+	}
+	if v := i.AddAssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.RemoveAssetIDs; len(v) > 0 {
+		m.RemoveAssetIDs(v...)
+	}
+	if i.ClearEntities {
+		m.ClearEntities()
+	}
+	if v := i.AddEntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.RemoveEntityIDs; len(v) > 0 {
+		m.RemoveEntityIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateScanInput on the ScanUpdate builder.
+func (c *ScanUpdate) SetInput(i UpdateScanInput) *ScanUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateScanInput on the ScanUpdateOne builder.
+func (c *ScanUpdateOne) SetInput(i UpdateScanInput) *ScanUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

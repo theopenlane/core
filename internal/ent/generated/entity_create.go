@@ -9,13 +9,16 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 )
 
 // EntityCreate is the builder for creating a Entity entity.
@@ -224,6 +227,51 @@ func (ec *EntityCreate) SetOwner(o *Organization) *EntityCreate {
 	return ec.SetOwnerID(o.ID)
 }
 
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (ec *EntityCreate) AddBlockedGroupIDs(ids ...string) *EntityCreate {
+	ec.mutation.AddBlockedGroupIDs(ids...)
+	return ec
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (ec *EntityCreate) AddBlockedGroups(g ...*Group) *EntityCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ec.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (ec *EntityCreate) AddEditorIDs(ids ...string) *EntityCreate {
+	ec.mutation.AddEditorIDs(ids...)
+	return ec
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (ec *EntityCreate) AddEditors(g ...*Group) *EntityCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ec.AddEditorIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (ec *EntityCreate) AddViewerIDs(ids ...string) *EntityCreate {
+	ec.mutation.AddViewerIDs(ids...)
+	return ec
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (ec *EntityCreate) AddViewers(g ...*Group) *EntityCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ec.AddViewerIDs(ids...)
+}
+
 // AddContactIDs adds the "contacts" edge to the Contact entity by IDs.
 func (ec *EntityCreate) AddContactIDs(ids ...string) *EntityCreate {
 	ec.mutation.AddContactIDs(ids...)
@@ -282,6 +330,36 @@ func (ec *EntityCreate) AddFiles(f ...*File) *EntityCreate {
 		ids[i] = f[i].ID
 	}
 	return ec.AddFileIDs(ids...)
+}
+
+// AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
+func (ec *EntityCreate) AddAssetIDs(ids ...string) *EntityCreate {
+	ec.mutation.AddAssetIDs(ids...)
+	return ec
+}
+
+// AddAssets adds the "assets" edges to the Asset entity.
+func (ec *EntityCreate) AddAssets(a ...*Asset) *EntityCreate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return ec.AddAssetIDs(ids...)
+}
+
+// AddScanIDs adds the "scans" edge to the Scan entity by IDs.
+func (ec *EntityCreate) AddScanIDs(ids ...string) *EntityCreate {
+	ec.mutation.AddScanIDs(ids...)
+	return ec
+}
+
+// AddScans adds the "scans" edges to the Scan entity.
+func (ec *EntityCreate) AddScans(s ...*Scan) *EntityCreate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ec.AddScanIDs(ids...)
 }
 
 // SetEntityType sets the "entity_type" edge to the EntityType entity.
@@ -482,6 +560,57 @@ func (ec *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := ec.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.BlockedGroupsTable,
+			Columns: []string{entity.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ec.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ec.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.EditorsTable,
+			Columns: []string{entity.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ec.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ec.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.ViewersTable,
+			Columns: []string{entity.ViewersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ec.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := ec.mutation.ContactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -545,6 +674,40 @@ func (ec *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = ec.schemaConfig.EntityFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ec.mutation.AssetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   entity.AssetsTable,
+			Columns: entity.AssetsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ec.schemaConfig.EntityAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ec.mutation.ScansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.ScansTable,
+			Columns: []string{entity.ScansColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ec.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

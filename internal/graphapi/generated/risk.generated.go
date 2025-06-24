@@ -127,6 +127,12 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_actionPlans(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Risk_tasks(ctx, field)
+			case "assets":
+				return ec.fieldContext_Risk_assets(ctx, field)
+			case "entities":
+				return ec.fieldContext_Risk_entities(ctx, field)
+			case "scans":
+				return ec.fieldContext_Risk_scans(ctx, field)
 			case "stakeholder":
 				return ec.fieldContext_Risk_stakeholder(ctx, field)
 			case "delegate":
@@ -239,6 +245,12 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_actionPlans(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Risk_tasks(ctx, field)
+			case "assets":
+				return ec.fieldContext_Risk_assets(ctx, field)
+			case "entities":
+				return ec.fieldContext_Risk_entities(ctx, field)
+			case "scans":
+				return ec.fieldContext_Risk_scans(ctx, field)
 			case "stakeholder":
 				return ec.fieldContext_Risk_stakeholder(ctx, field)
 			case "delegate":
@@ -395,6 +407,12 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_actionPlans(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Risk_tasks(ctx, field)
+			case "assets":
+				return ec.fieldContext_Risk_assets(ctx, field)
+			case "entities":
+				return ec.fieldContext_Risk_entities(ctx, field)
+			case "scans":
+				return ec.fieldContext_Risk_scans(ctx, field)
 			case "stakeholder":
 				return ec.fieldContext_Risk_stakeholder(ctx, field)
 			case "delegate":

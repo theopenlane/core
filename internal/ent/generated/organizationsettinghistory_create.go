@@ -271,6 +271,118 @@ func (oshc *OrganizationSettingHistoryCreate) SetAllowedEmailDomains(s []string)
 	return oshc
 }
 
+// SetIdentityProvider sets the "identity_provider" field.
+func (oshc *OrganizationSettingHistoryCreate) SetIdentityProvider(ep enums.SSOProvider) *OrganizationSettingHistoryCreate {
+	oshc.mutation.SetIdentityProvider(ep)
+	return oshc
+}
+
+// SetNillableIdentityProvider sets the "identity_provider" field if the given value is not nil.
+func (oshc *OrganizationSettingHistoryCreate) SetNillableIdentityProvider(ep *enums.SSOProvider) *OrganizationSettingHistoryCreate {
+	if ep != nil {
+		oshc.SetIdentityProvider(*ep)
+	}
+	return oshc
+}
+
+// SetIdentityProviderClientID sets the "identity_provider_client_id" field.
+func (oshc *OrganizationSettingHistoryCreate) SetIdentityProviderClientID(s string) *OrganizationSettingHistoryCreate {
+	oshc.mutation.SetIdentityProviderClientID(s)
+	return oshc
+}
+
+// SetNillableIdentityProviderClientID sets the "identity_provider_client_id" field if the given value is not nil.
+func (oshc *OrganizationSettingHistoryCreate) SetNillableIdentityProviderClientID(s *string) *OrganizationSettingHistoryCreate {
+	if s != nil {
+		oshc.SetIdentityProviderClientID(*s)
+	}
+	return oshc
+}
+
+// SetIdentityProviderClientSecret sets the "identity_provider_client_secret" field.
+func (oshc *OrganizationSettingHistoryCreate) SetIdentityProviderClientSecret(s string) *OrganizationSettingHistoryCreate {
+	oshc.mutation.SetIdentityProviderClientSecret(s)
+	return oshc
+}
+
+// SetNillableIdentityProviderClientSecret sets the "identity_provider_client_secret" field if the given value is not nil.
+func (oshc *OrganizationSettingHistoryCreate) SetNillableIdentityProviderClientSecret(s *string) *OrganizationSettingHistoryCreate {
+	if s != nil {
+		oshc.SetIdentityProviderClientSecret(*s)
+	}
+	return oshc
+}
+
+// SetIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field.
+func (oshc *OrganizationSettingHistoryCreate) SetIdentityProviderMetadataEndpoint(s string) *OrganizationSettingHistoryCreate {
+	oshc.mutation.SetIdentityProviderMetadataEndpoint(s)
+	return oshc
+}
+
+// SetNillableIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field if the given value is not nil.
+func (oshc *OrganizationSettingHistoryCreate) SetNillableIdentityProviderMetadataEndpoint(s *string) *OrganizationSettingHistoryCreate {
+	if s != nil {
+		oshc.SetIdentityProviderMetadataEndpoint(*s)
+	}
+	return oshc
+}
+
+// SetIdentityProviderEntityID sets the "identity_provider_entity_id" field.
+func (oshc *OrganizationSettingHistoryCreate) SetIdentityProviderEntityID(s string) *OrganizationSettingHistoryCreate {
+	oshc.mutation.SetIdentityProviderEntityID(s)
+	return oshc
+}
+
+// SetNillableIdentityProviderEntityID sets the "identity_provider_entity_id" field if the given value is not nil.
+func (oshc *OrganizationSettingHistoryCreate) SetNillableIdentityProviderEntityID(s *string) *OrganizationSettingHistoryCreate {
+	if s != nil {
+		oshc.SetIdentityProviderEntityID(*s)
+	}
+	return oshc
+}
+
+// SetOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field.
+func (oshc *OrganizationSettingHistoryCreate) SetOidcDiscoveryEndpoint(s string) *OrganizationSettingHistoryCreate {
+	oshc.mutation.SetOidcDiscoveryEndpoint(s)
+	return oshc
+}
+
+// SetNillableOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field if the given value is not nil.
+func (oshc *OrganizationSettingHistoryCreate) SetNillableOidcDiscoveryEndpoint(s *string) *OrganizationSettingHistoryCreate {
+	if s != nil {
+		oshc.SetOidcDiscoveryEndpoint(*s)
+	}
+	return oshc
+}
+
+// SetIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field.
+func (oshc *OrganizationSettingHistoryCreate) SetIdentityProviderLoginEnforced(b bool) *OrganizationSettingHistoryCreate {
+	oshc.mutation.SetIdentityProviderLoginEnforced(b)
+	return oshc
+}
+
+// SetNillableIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field if the given value is not nil.
+func (oshc *OrganizationSettingHistoryCreate) SetNillableIdentityProviderLoginEnforced(b *bool) *OrganizationSettingHistoryCreate {
+	if b != nil {
+		oshc.SetIdentityProviderLoginEnforced(*b)
+	}
+	return oshc
+}
+
+// SetComplianceWebhookToken sets the "compliance_webhook_token" field.
+func (oshc *OrganizationSettingHistoryCreate) SetComplianceWebhookToken(s string) *OrganizationSettingHistoryCreate {
+	oshc.mutation.SetComplianceWebhookToken(s)
+	return oshc
+}
+
+// SetNillableComplianceWebhookToken sets the "compliance_webhook_token" field if the given value is not nil.
+func (oshc *OrganizationSettingHistoryCreate) SetNillableComplianceWebhookToken(s *string) *OrganizationSettingHistoryCreate {
+	if s != nil {
+		oshc.SetComplianceWebhookToken(*s)
+	}
+	return oshc
+}
+
 // SetID sets the "id" field.
 func (oshc *OrganizationSettingHistoryCreate) SetID(s string) *OrganizationSettingHistoryCreate {
 	oshc.mutation.SetID(s)
@@ -344,6 +456,18 @@ func (oshc *OrganizationSettingHistoryCreate) defaults() {
 		v := organizationsettinghistory.DefaultBillingNotificationsEnabled
 		oshc.mutation.SetBillingNotificationsEnabled(v)
 	}
+	if _, ok := oshc.mutation.IdentityProvider(); !ok {
+		v := organizationsettinghistory.DefaultIdentityProvider
+		oshc.mutation.SetIdentityProvider(v)
+	}
+	if _, ok := oshc.mutation.IdentityProviderLoginEnforced(); !ok {
+		v := organizationsettinghistory.DefaultIdentityProviderLoginEnforced
+		oshc.mutation.SetIdentityProviderLoginEnforced(v)
+	}
+	if _, ok := oshc.mutation.ComplianceWebhookToken(); !ok {
+		v := organizationsettinghistory.DefaultComplianceWebhookToken()
+		oshc.mutation.SetComplianceWebhookToken(v)
+	}
 	if _, ok := oshc.mutation.ID(); !ok {
 		v := organizationsettinghistory.DefaultID()
 		oshc.mutation.SetID(v)
@@ -370,6 +494,17 @@ func (oshc *OrganizationSettingHistoryCreate) check() error {
 	}
 	if _, ok := oshc.mutation.BillingNotificationsEnabled(); !ok {
 		return &ValidationError{Name: "billing_notifications_enabled", err: errors.New(`generated: missing required field "OrganizationSettingHistory.billing_notifications_enabled"`)}
+	}
+	if v, ok := oshc.mutation.IdentityProvider(); ok {
+		if err := organizationsettinghistory.IdentityProviderValidator(v); err != nil {
+			return &ValidationError{Name: "identity_provider", err: fmt.Errorf(`generated: validator failed for field "OrganizationSettingHistory.identity_provider": %w`, err)}
+		}
+	}
+	if _, ok := oshc.mutation.IdentityProviderLoginEnforced(); !ok {
+		return &ValidationError{Name: "identity_provider_login_enforced", err: errors.New(`generated: missing required field "OrganizationSettingHistory.identity_provider_login_enforced"`)}
+	}
+	if _, ok := oshc.mutation.ComplianceWebhookToken(); !ok {
+		return &ValidationError{Name: "compliance_webhook_token", err: errors.New(`generated: missing required field "OrganizationSettingHistory.compliance_webhook_token"`)}
 	}
 	return nil
 }
@@ -486,6 +621,38 @@ func (oshc *OrganizationSettingHistoryCreate) createSpec() (*OrganizationSetting
 	if value, ok := oshc.mutation.AllowedEmailDomains(); ok {
 		_spec.SetField(organizationsettinghistory.FieldAllowedEmailDomains, field.TypeJSON, value)
 		_node.AllowedEmailDomains = value
+	}
+	if value, ok := oshc.mutation.IdentityProvider(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProvider, field.TypeEnum, value)
+		_node.IdentityProvider = value
+	}
+	if value, ok := oshc.mutation.IdentityProviderClientID(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderClientID, field.TypeString, value)
+		_node.IdentityProviderClientID = &value
+	}
+	if value, ok := oshc.mutation.IdentityProviderClientSecret(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderClientSecret, field.TypeString, value)
+		_node.IdentityProviderClientSecret = &value
+	}
+	if value, ok := oshc.mutation.IdentityProviderMetadataEndpoint(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, field.TypeString, value)
+		_node.IdentityProviderMetadataEndpoint = value
+	}
+	if value, ok := oshc.mutation.IdentityProviderEntityID(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderEntityID, field.TypeString, value)
+		_node.IdentityProviderEntityID = value
+	}
+	if value, ok := oshc.mutation.OidcDiscoveryEndpoint(); ok {
+		_spec.SetField(organizationsettinghistory.FieldOidcDiscoveryEndpoint, field.TypeString, value)
+		_node.OidcDiscoveryEndpoint = value
+	}
+	if value, ok := oshc.mutation.IdentityProviderLoginEnforced(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
+		_node.IdentityProviderLoginEnforced = value
+	}
+	if value, ok := oshc.mutation.ComplianceWebhookToken(); ok {
+		_spec.SetField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString, value)
+		_node.ComplianceWebhookToken = &value
 	}
 	return _node, _spec
 }

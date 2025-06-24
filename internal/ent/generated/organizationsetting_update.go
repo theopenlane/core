@@ -316,6 +316,154 @@ func (osu *OrganizationSettingUpdate) ClearAllowedEmailDomains() *OrganizationSe
 	return osu
 }
 
+// SetIdentityProvider sets the "identity_provider" field.
+func (osu *OrganizationSettingUpdate) SetIdentityProvider(ep enums.SSOProvider) *OrganizationSettingUpdate {
+	osu.mutation.SetIdentityProvider(ep)
+	return osu
+}
+
+// SetNillableIdentityProvider sets the "identity_provider" field if the given value is not nil.
+func (osu *OrganizationSettingUpdate) SetNillableIdentityProvider(ep *enums.SSOProvider) *OrganizationSettingUpdate {
+	if ep != nil {
+		osu.SetIdentityProvider(*ep)
+	}
+	return osu
+}
+
+// ClearIdentityProvider clears the value of the "identity_provider" field.
+func (osu *OrganizationSettingUpdate) ClearIdentityProvider() *OrganizationSettingUpdate {
+	osu.mutation.ClearIdentityProvider()
+	return osu
+}
+
+// SetIdentityProviderClientID sets the "identity_provider_client_id" field.
+func (osu *OrganizationSettingUpdate) SetIdentityProviderClientID(s string) *OrganizationSettingUpdate {
+	osu.mutation.SetIdentityProviderClientID(s)
+	return osu
+}
+
+// SetNillableIdentityProviderClientID sets the "identity_provider_client_id" field if the given value is not nil.
+func (osu *OrganizationSettingUpdate) SetNillableIdentityProviderClientID(s *string) *OrganizationSettingUpdate {
+	if s != nil {
+		osu.SetIdentityProviderClientID(*s)
+	}
+	return osu
+}
+
+// ClearIdentityProviderClientID clears the value of the "identity_provider_client_id" field.
+func (osu *OrganizationSettingUpdate) ClearIdentityProviderClientID() *OrganizationSettingUpdate {
+	osu.mutation.ClearIdentityProviderClientID()
+	return osu
+}
+
+// SetIdentityProviderClientSecret sets the "identity_provider_client_secret" field.
+func (osu *OrganizationSettingUpdate) SetIdentityProviderClientSecret(s string) *OrganizationSettingUpdate {
+	osu.mutation.SetIdentityProviderClientSecret(s)
+	return osu
+}
+
+// SetNillableIdentityProviderClientSecret sets the "identity_provider_client_secret" field if the given value is not nil.
+func (osu *OrganizationSettingUpdate) SetNillableIdentityProviderClientSecret(s *string) *OrganizationSettingUpdate {
+	if s != nil {
+		osu.SetIdentityProviderClientSecret(*s)
+	}
+	return osu
+}
+
+// ClearIdentityProviderClientSecret clears the value of the "identity_provider_client_secret" field.
+func (osu *OrganizationSettingUpdate) ClearIdentityProviderClientSecret() *OrganizationSettingUpdate {
+	osu.mutation.ClearIdentityProviderClientSecret()
+	return osu
+}
+
+// SetIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field.
+func (osu *OrganizationSettingUpdate) SetIdentityProviderMetadataEndpoint(s string) *OrganizationSettingUpdate {
+	osu.mutation.SetIdentityProviderMetadataEndpoint(s)
+	return osu
+}
+
+// SetNillableIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field if the given value is not nil.
+func (osu *OrganizationSettingUpdate) SetNillableIdentityProviderMetadataEndpoint(s *string) *OrganizationSettingUpdate {
+	if s != nil {
+		osu.SetIdentityProviderMetadataEndpoint(*s)
+	}
+	return osu
+}
+
+// ClearIdentityProviderMetadataEndpoint clears the value of the "identity_provider_metadata_endpoint" field.
+func (osu *OrganizationSettingUpdate) ClearIdentityProviderMetadataEndpoint() *OrganizationSettingUpdate {
+	osu.mutation.ClearIdentityProviderMetadataEndpoint()
+	return osu
+}
+
+// SetIdentityProviderEntityID sets the "identity_provider_entity_id" field.
+func (osu *OrganizationSettingUpdate) SetIdentityProviderEntityID(s string) *OrganizationSettingUpdate {
+	osu.mutation.SetIdentityProviderEntityID(s)
+	return osu
+}
+
+// SetNillableIdentityProviderEntityID sets the "identity_provider_entity_id" field if the given value is not nil.
+func (osu *OrganizationSettingUpdate) SetNillableIdentityProviderEntityID(s *string) *OrganizationSettingUpdate {
+	if s != nil {
+		osu.SetIdentityProviderEntityID(*s)
+	}
+	return osu
+}
+
+// ClearIdentityProviderEntityID clears the value of the "identity_provider_entity_id" field.
+func (osu *OrganizationSettingUpdate) ClearIdentityProviderEntityID() *OrganizationSettingUpdate {
+	osu.mutation.ClearIdentityProviderEntityID()
+	return osu
+}
+
+// SetOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field.
+func (osu *OrganizationSettingUpdate) SetOidcDiscoveryEndpoint(s string) *OrganizationSettingUpdate {
+	osu.mutation.SetOidcDiscoveryEndpoint(s)
+	return osu
+}
+
+// SetNillableOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field if the given value is not nil.
+func (osu *OrganizationSettingUpdate) SetNillableOidcDiscoveryEndpoint(s *string) *OrganizationSettingUpdate {
+	if s != nil {
+		osu.SetOidcDiscoveryEndpoint(*s)
+	}
+	return osu
+}
+
+// ClearOidcDiscoveryEndpoint clears the value of the "oidc_discovery_endpoint" field.
+func (osu *OrganizationSettingUpdate) ClearOidcDiscoveryEndpoint() *OrganizationSettingUpdate {
+	osu.mutation.ClearOidcDiscoveryEndpoint()
+	return osu
+}
+
+// SetIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field.
+func (osu *OrganizationSettingUpdate) SetIdentityProviderLoginEnforced(b bool) *OrganizationSettingUpdate {
+	osu.mutation.SetIdentityProviderLoginEnforced(b)
+	return osu
+}
+
+// SetNillableIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field if the given value is not nil.
+func (osu *OrganizationSettingUpdate) SetNillableIdentityProviderLoginEnforced(b *bool) *OrganizationSettingUpdate {
+	if b != nil {
+		osu.SetIdentityProviderLoginEnforced(*b)
+	}
+	return osu
+}
+
+// SetComplianceWebhookToken sets the "compliance_webhook_token" field.
+func (osu *OrganizationSettingUpdate) SetComplianceWebhookToken(s string) *OrganizationSettingUpdate {
+	osu.mutation.SetComplianceWebhookToken(s)
+	return osu
+}
+
+// SetNillableComplianceWebhookToken sets the "compliance_webhook_token" field if the given value is not nil.
+func (osu *OrganizationSettingUpdate) SetNillableComplianceWebhookToken(s *string) *OrganizationSettingUpdate {
+	if s != nil {
+		osu.SetComplianceWebhookToken(*s)
+	}
+	return osu
+}
+
 // SetOrganization sets the "organization" edge to the Organization entity.
 func (osu *OrganizationSettingUpdate) SetOrganization(o *Organization) *OrganizationSettingUpdate {
 	return osu.SetOrganizationID(o.ID)
@@ -435,6 +583,11 @@ func (osu *OrganizationSettingUpdate) check() error {
 	if v, ok := osu.mutation.AllowedEmailDomains(); ok {
 		if err := organizationsetting.AllowedEmailDomainsValidator(v); err != nil {
 			return &ValidationError{Name: "allowed_email_domains", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.allowed_email_domains": %w`, err)}
+		}
+	}
+	if v, ok := osu.mutation.IdentityProvider(); ok {
+		if err := organizationsetting.IdentityProviderValidator(v); err != nil {
+			return &ValidationError{Name: "identity_provider", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.identity_provider": %w`, err)}
 		}
 	}
 	return nil
@@ -559,6 +712,48 @@ func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 	}
 	if osu.mutation.AllowedEmailDomainsCleared() {
 		_spec.ClearField(organizationsetting.FieldAllowedEmailDomains, field.TypeJSON)
+	}
+	if value, ok := osu.mutation.IdentityProvider(); ok {
+		_spec.SetField(organizationsetting.FieldIdentityProvider, field.TypeEnum, value)
+	}
+	if osu.mutation.IdentityProviderCleared() {
+		_spec.ClearField(organizationsetting.FieldIdentityProvider, field.TypeEnum)
+	}
+	if value, ok := osu.mutation.IdentityProviderClientID(); ok {
+		_spec.SetField(organizationsetting.FieldIdentityProviderClientID, field.TypeString, value)
+	}
+	if osu.mutation.IdentityProviderClientIDCleared() {
+		_spec.ClearField(organizationsetting.FieldIdentityProviderClientID, field.TypeString)
+	}
+	if value, ok := osu.mutation.IdentityProviderClientSecret(); ok {
+		_spec.SetField(organizationsetting.FieldIdentityProviderClientSecret, field.TypeString, value)
+	}
+	if osu.mutation.IdentityProviderClientSecretCleared() {
+		_spec.ClearField(organizationsetting.FieldIdentityProviderClientSecret, field.TypeString)
+	}
+	if value, ok := osu.mutation.IdentityProviderMetadataEndpoint(); ok {
+		_spec.SetField(organizationsetting.FieldIdentityProviderMetadataEndpoint, field.TypeString, value)
+	}
+	if osu.mutation.IdentityProviderMetadataEndpointCleared() {
+		_spec.ClearField(organizationsetting.FieldIdentityProviderMetadataEndpoint, field.TypeString)
+	}
+	if value, ok := osu.mutation.IdentityProviderEntityID(); ok {
+		_spec.SetField(organizationsetting.FieldIdentityProviderEntityID, field.TypeString, value)
+	}
+	if osu.mutation.IdentityProviderEntityIDCleared() {
+		_spec.ClearField(organizationsetting.FieldIdentityProviderEntityID, field.TypeString)
+	}
+	if value, ok := osu.mutation.OidcDiscoveryEndpoint(); ok {
+		_spec.SetField(organizationsetting.FieldOidcDiscoveryEndpoint, field.TypeString, value)
+	}
+	if osu.mutation.OidcDiscoveryEndpointCleared() {
+		_spec.ClearField(organizationsetting.FieldOidcDiscoveryEndpoint, field.TypeString)
+	}
+	if value, ok := osu.mutation.IdentityProviderLoginEnforced(); ok {
+		_spec.SetField(organizationsetting.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
+	}
+	if value, ok := osu.mutation.ComplianceWebhookToken(); ok {
+		_spec.SetField(organizationsetting.FieldComplianceWebhookToken, field.TypeString, value)
 	}
 	if osu.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -943,6 +1138,154 @@ func (osuo *OrganizationSettingUpdateOne) ClearAllowedEmailDomains() *Organizati
 	return osuo
 }
 
+// SetIdentityProvider sets the "identity_provider" field.
+func (osuo *OrganizationSettingUpdateOne) SetIdentityProvider(ep enums.SSOProvider) *OrganizationSettingUpdateOne {
+	osuo.mutation.SetIdentityProvider(ep)
+	return osuo
+}
+
+// SetNillableIdentityProvider sets the "identity_provider" field if the given value is not nil.
+func (osuo *OrganizationSettingUpdateOne) SetNillableIdentityProvider(ep *enums.SSOProvider) *OrganizationSettingUpdateOne {
+	if ep != nil {
+		osuo.SetIdentityProvider(*ep)
+	}
+	return osuo
+}
+
+// ClearIdentityProvider clears the value of the "identity_provider" field.
+func (osuo *OrganizationSettingUpdateOne) ClearIdentityProvider() *OrganizationSettingUpdateOne {
+	osuo.mutation.ClearIdentityProvider()
+	return osuo
+}
+
+// SetIdentityProviderClientID sets the "identity_provider_client_id" field.
+func (osuo *OrganizationSettingUpdateOne) SetIdentityProviderClientID(s string) *OrganizationSettingUpdateOne {
+	osuo.mutation.SetIdentityProviderClientID(s)
+	return osuo
+}
+
+// SetNillableIdentityProviderClientID sets the "identity_provider_client_id" field if the given value is not nil.
+func (osuo *OrganizationSettingUpdateOne) SetNillableIdentityProviderClientID(s *string) *OrganizationSettingUpdateOne {
+	if s != nil {
+		osuo.SetIdentityProviderClientID(*s)
+	}
+	return osuo
+}
+
+// ClearIdentityProviderClientID clears the value of the "identity_provider_client_id" field.
+func (osuo *OrganizationSettingUpdateOne) ClearIdentityProviderClientID() *OrganizationSettingUpdateOne {
+	osuo.mutation.ClearIdentityProviderClientID()
+	return osuo
+}
+
+// SetIdentityProviderClientSecret sets the "identity_provider_client_secret" field.
+func (osuo *OrganizationSettingUpdateOne) SetIdentityProviderClientSecret(s string) *OrganizationSettingUpdateOne {
+	osuo.mutation.SetIdentityProviderClientSecret(s)
+	return osuo
+}
+
+// SetNillableIdentityProviderClientSecret sets the "identity_provider_client_secret" field if the given value is not nil.
+func (osuo *OrganizationSettingUpdateOne) SetNillableIdentityProviderClientSecret(s *string) *OrganizationSettingUpdateOne {
+	if s != nil {
+		osuo.SetIdentityProviderClientSecret(*s)
+	}
+	return osuo
+}
+
+// ClearIdentityProviderClientSecret clears the value of the "identity_provider_client_secret" field.
+func (osuo *OrganizationSettingUpdateOne) ClearIdentityProviderClientSecret() *OrganizationSettingUpdateOne {
+	osuo.mutation.ClearIdentityProviderClientSecret()
+	return osuo
+}
+
+// SetIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field.
+func (osuo *OrganizationSettingUpdateOne) SetIdentityProviderMetadataEndpoint(s string) *OrganizationSettingUpdateOne {
+	osuo.mutation.SetIdentityProviderMetadataEndpoint(s)
+	return osuo
+}
+
+// SetNillableIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field if the given value is not nil.
+func (osuo *OrganizationSettingUpdateOne) SetNillableIdentityProviderMetadataEndpoint(s *string) *OrganizationSettingUpdateOne {
+	if s != nil {
+		osuo.SetIdentityProviderMetadataEndpoint(*s)
+	}
+	return osuo
+}
+
+// ClearIdentityProviderMetadataEndpoint clears the value of the "identity_provider_metadata_endpoint" field.
+func (osuo *OrganizationSettingUpdateOne) ClearIdentityProviderMetadataEndpoint() *OrganizationSettingUpdateOne {
+	osuo.mutation.ClearIdentityProviderMetadataEndpoint()
+	return osuo
+}
+
+// SetIdentityProviderEntityID sets the "identity_provider_entity_id" field.
+func (osuo *OrganizationSettingUpdateOne) SetIdentityProviderEntityID(s string) *OrganizationSettingUpdateOne {
+	osuo.mutation.SetIdentityProviderEntityID(s)
+	return osuo
+}
+
+// SetNillableIdentityProviderEntityID sets the "identity_provider_entity_id" field if the given value is not nil.
+func (osuo *OrganizationSettingUpdateOne) SetNillableIdentityProviderEntityID(s *string) *OrganizationSettingUpdateOne {
+	if s != nil {
+		osuo.SetIdentityProviderEntityID(*s)
+	}
+	return osuo
+}
+
+// ClearIdentityProviderEntityID clears the value of the "identity_provider_entity_id" field.
+func (osuo *OrganizationSettingUpdateOne) ClearIdentityProviderEntityID() *OrganizationSettingUpdateOne {
+	osuo.mutation.ClearIdentityProviderEntityID()
+	return osuo
+}
+
+// SetOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field.
+func (osuo *OrganizationSettingUpdateOne) SetOidcDiscoveryEndpoint(s string) *OrganizationSettingUpdateOne {
+	osuo.mutation.SetOidcDiscoveryEndpoint(s)
+	return osuo
+}
+
+// SetNillableOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field if the given value is not nil.
+func (osuo *OrganizationSettingUpdateOne) SetNillableOidcDiscoveryEndpoint(s *string) *OrganizationSettingUpdateOne {
+	if s != nil {
+		osuo.SetOidcDiscoveryEndpoint(*s)
+	}
+	return osuo
+}
+
+// ClearOidcDiscoveryEndpoint clears the value of the "oidc_discovery_endpoint" field.
+func (osuo *OrganizationSettingUpdateOne) ClearOidcDiscoveryEndpoint() *OrganizationSettingUpdateOne {
+	osuo.mutation.ClearOidcDiscoveryEndpoint()
+	return osuo
+}
+
+// SetIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field.
+func (osuo *OrganizationSettingUpdateOne) SetIdentityProviderLoginEnforced(b bool) *OrganizationSettingUpdateOne {
+	osuo.mutation.SetIdentityProviderLoginEnforced(b)
+	return osuo
+}
+
+// SetNillableIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field if the given value is not nil.
+func (osuo *OrganizationSettingUpdateOne) SetNillableIdentityProviderLoginEnforced(b *bool) *OrganizationSettingUpdateOne {
+	if b != nil {
+		osuo.SetIdentityProviderLoginEnforced(*b)
+	}
+	return osuo
+}
+
+// SetComplianceWebhookToken sets the "compliance_webhook_token" field.
+func (osuo *OrganizationSettingUpdateOne) SetComplianceWebhookToken(s string) *OrganizationSettingUpdateOne {
+	osuo.mutation.SetComplianceWebhookToken(s)
+	return osuo
+}
+
+// SetNillableComplianceWebhookToken sets the "compliance_webhook_token" field if the given value is not nil.
+func (osuo *OrganizationSettingUpdateOne) SetNillableComplianceWebhookToken(s *string) *OrganizationSettingUpdateOne {
+	if s != nil {
+		osuo.SetComplianceWebhookToken(*s)
+	}
+	return osuo
+}
+
 // SetOrganization sets the "organization" edge to the Organization entity.
 func (osuo *OrganizationSettingUpdateOne) SetOrganization(o *Organization) *OrganizationSettingUpdateOne {
 	return osuo.SetOrganizationID(o.ID)
@@ -1075,6 +1418,11 @@ func (osuo *OrganizationSettingUpdateOne) check() error {
 	if v, ok := osuo.mutation.AllowedEmailDomains(); ok {
 		if err := organizationsetting.AllowedEmailDomainsValidator(v); err != nil {
 			return &ValidationError{Name: "allowed_email_domains", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.allowed_email_domains": %w`, err)}
+		}
+	}
+	if v, ok := osuo.mutation.IdentityProvider(); ok {
+		if err := organizationsetting.IdentityProviderValidator(v); err != nil {
+			return &ValidationError{Name: "identity_provider", err: fmt.Errorf(`generated: validator failed for field "OrganizationSetting.identity_provider": %w`, err)}
 		}
 	}
 	return nil
@@ -1216,6 +1564,48 @@ func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *O
 	}
 	if osuo.mutation.AllowedEmailDomainsCleared() {
 		_spec.ClearField(organizationsetting.FieldAllowedEmailDomains, field.TypeJSON)
+	}
+	if value, ok := osuo.mutation.IdentityProvider(); ok {
+		_spec.SetField(organizationsetting.FieldIdentityProvider, field.TypeEnum, value)
+	}
+	if osuo.mutation.IdentityProviderCleared() {
+		_spec.ClearField(organizationsetting.FieldIdentityProvider, field.TypeEnum)
+	}
+	if value, ok := osuo.mutation.IdentityProviderClientID(); ok {
+		_spec.SetField(organizationsetting.FieldIdentityProviderClientID, field.TypeString, value)
+	}
+	if osuo.mutation.IdentityProviderClientIDCleared() {
+		_spec.ClearField(organizationsetting.FieldIdentityProviderClientID, field.TypeString)
+	}
+	if value, ok := osuo.mutation.IdentityProviderClientSecret(); ok {
+		_spec.SetField(organizationsetting.FieldIdentityProviderClientSecret, field.TypeString, value)
+	}
+	if osuo.mutation.IdentityProviderClientSecretCleared() {
+		_spec.ClearField(organizationsetting.FieldIdentityProviderClientSecret, field.TypeString)
+	}
+	if value, ok := osuo.mutation.IdentityProviderMetadataEndpoint(); ok {
+		_spec.SetField(organizationsetting.FieldIdentityProviderMetadataEndpoint, field.TypeString, value)
+	}
+	if osuo.mutation.IdentityProviderMetadataEndpointCleared() {
+		_spec.ClearField(organizationsetting.FieldIdentityProviderMetadataEndpoint, field.TypeString)
+	}
+	if value, ok := osuo.mutation.IdentityProviderEntityID(); ok {
+		_spec.SetField(organizationsetting.FieldIdentityProviderEntityID, field.TypeString, value)
+	}
+	if osuo.mutation.IdentityProviderEntityIDCleared() {
+		_spec.ClearField(organizationsetting.FieldIdentityProviderEntityID, field.TypeString)
+	}
+	if value, ok := osuo.mutation.OidcDiscoveryEndpoint(); ok {
+		_spec.SetField(organizationsetting.FieldOidcDiscoveryEndpoint, field.TypeString, value)
+	}
+	if osuo.mutation.OidcDiscoveryEndpointCleared() {
+		_spec.ClearField(organizationsetting.FieldOidcDiscoveryEndpoint, field.TypeString)
+	}
+	if value, ok := osuo.mutation.IdentityProviderLoginEnforced(); ok {
+		_spec.SetField(organizationsetting.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
+	}
+	if value, ok := osuo.mutation.ComplianceWebhookToken(); ok {
+		_spec.SetField(organizationsetting.FieldComplianceWebhookToken, field.TypeString, value)
 	}
 	if osuo.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{

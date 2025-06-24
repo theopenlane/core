@@ -292,6 +292,42 @@ func (aphc *ActionPlanHistoryCreate) SetNillableSummary(s *string) *ActionPlanHi
 	return aphc
 }
 
+// SetTagSuggestions sets the "tag_suggestions" field.
+func (aphc *ActionPlanHistoryCreate) SetTagSuggestions(s []string) *ActionPlanHistoryCreate {
+	aphc.mutation.SetTagSuggestions(s)
+	return aphc
+}
+
+// SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
+func (aphc *ActionPlanHistoryCreate) SetDismissedTagSuggestions(s []string) *ActionPlanHistoryCreate {
+	aphc.mutation.SetDismissedTagSuggestions(s)
+	return aphc
+}
+
+// SetControlSuggestions sets the "control_suggestions" field.
+func (aphc *ActionPlanHistoryCreate) SetControlSuggestions(s []string) *ActionPlanHistoryCreate {
+	aphc.mutation.SetControlSuggestions(s)
+	return aphc
+}
+
+// SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
+func (aphc *ActionPlanHistoryCreate) SetDismissedControlSuggestions(s []string) *ActionPlanHistoryCreate {
+	aphc.mutation.SetDismissedControlSuggestions(s)
+	return aphc
+}
+
+// SetImprovementSuggestions sets the "improvement_suggestions" field.
+func (aphc *ActionPlanHistoryCreate) SetImprovementSuggestions(s []string) *ActionPlanHistoryCreate {
+	aphc.mutation.SetImprovementSuggestions(s)
+	return aphc
+}
+
+// SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
+func (aphc *ActionPlanHistoryCreate) SetDismissedImprovementSuggestions(s []string) *ActionPlanHistoryCreate {
+	aphc.mutation.SetDismissedImprovementSuggestions(s)
+	return aphc
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (aphc *ActionPlanHistoryCreate) SetOwnerID(s string) *ActionPlanHistoryCreate {
 	aphc.mutation.SetOwnerID(s)
@@ -432,6 +468,30 @@ func (aphc *ActionPlanHistoryCreate) defaults() {
 	if _, ok := aphc.mutation.ReviewFrequency(); !ok {
 		v := actionplanhistory.DefaultReviewFrequency
 		aphc.mutation.SetReviewFrequency(v)
+	}
+	if _, ok := aphc.mutation.TagSuggestions(); !ok {
+		v := actionplanhistory.DefaultTagSuggestions
+		aphc.mutation.SetTagSuggestions(v)
+	}
+	if _, ok := aphc.mutation.DismissedTagSuggestions(); !ok {
+		v := actionplanhistory.DefaultDismissedTagSuggestions
+		aphc.mutation.SetDismissedTagSuggestions(v)
+	}
+	if _, ok := aphc.mutation.ControlSuggestions(); !ok {
+		v := actionplanhistory.DefaultControlSuggestions
+		aphc.mutation.SetControlSuggestions(v)
+	}
+	if _, ok := aphc.mutation.DismissedControlSuggestions(); !ok {
+		v := actionplanhistory.DefaultDismissedControlSuggestions
+		aphc.mutation.SetDismissedControlSuggestions(v)
+	}
+	if _, ok := aphc.mutation.ImprovementSuggestions(); !ok {
+		v := actionplanhistory.DefaultImprovementSuggestions
+		aphc.mutation.SetImprovementSuggestions(v)
+	}
+	if _, ok := aphc.mutation.DismissedImprovementSuggestions(); !ok {
+		v := actionplanhistory.DefaultDismissedImprovementSuggestions
+		aphc.mutation.SetDismissedImprovementSuggestions(v)
 	}
 	if _, ok := aphc.mutation.ID(); !ok {
 		v := actionplanhistory.DefaultID()
@@ -589,6 +649,30 @@ func (aphc *ActionPlanHistoryCreate) createSpec() (*ActionPlanHistory, *sqlgraph
 	if value, ok := aphc.mutation.Summary(); ok {
 		_spec.SetField(actionplanhistory.FieldSummary, field.TypeString, value)
 		_node.Summary = value
+	}
+	if value, ok := aphc.mutation.TagSuggestions(); ok {
+		_spec.SetField(actionplanhistory.FieldTagSuggestions, field.TypeJSON, value)
+		_node.TagSuggestions = value
+	}
+	if value, ok := aphc.mutation.DismissedTagSuggestions(); ok {
+		_spec.SetField(actionplanhistory.FieldDismissedTagSuggestions, field.TypeJSON, value)
+		_node.DismissedTagSuggestions = value
+	}
+	if value, ok := aphc.mutation.ControlSuggestions(); ok {
+		_spec.SetField(actionplanhistory.FieldControlSuggestions, field.TypeJSON, value)
+		_node.ControlSuggestions = value
+	}
+	if value, ok := aphc.mutation.DismissedControlSuggestions(); ok {
+		_spec.SetField(actionplanhistory.FieldDismissedControlSuggestions, field.TypeJSON, value)
+		_node.DismissedControlSuggestions = value
+	}
+	if value, ok := aphc.mutation.ImprovementSuggestions(); ok {
+		_spec.SetField(actionplanhistory.FieldImprovementSuggestions, field.TypeJSON, value)
+		_node.ImprovementSuggestions = value
+	}
+	if value, ok := aphc.mutation.DismissedImprovementSuggestions(); ok {
+		_spec.SetField(actionplanhistory.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
+		_node.DismissedImprovementSuggestions = value
 	}
 	if value, ok := aphc.mutation.OwnerID(); ok {
 		_spec.SetField(actionplanhistory.FieldOwnerID, field.TypeString, value)

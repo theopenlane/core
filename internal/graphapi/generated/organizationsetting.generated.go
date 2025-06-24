@@ -97,6 +97,18 @@ func (ec *executionContext) fieldContext_OrganizationSettingBulkCreatePayload_or
 				return ec.fieldContext_OrganizationSetting_billingNotificationsEnabled(ctx, field)
 			case "allowedEmailDomains":
 				return ec.fieldContext_OrganizationSetting_allowedEmailDomains(ctx, field)
+			case "identityProvider":
+				return ec.fieldContext_OrganizationSetting_identityProvider(ctx, field)
+			case "identityProviderMetadataEndpoint":
+				return ec.fieldContext_OrganizationSetting_identityProviderMetadataEndpoint(ctx, field)
+			case "identityProviderEntityID":
+				return ec.fieldContext_OrganizationSetting_identityProviderEntityID(ctx, field)
+			case "oidcDiscoveryEndpoint":
+				return ec.fieldContext_OrganizationSetting_oidcDiscoveryEndpoint(ctx, field)
+			case "identityProviderLoginEnforced":
+				return ec.fieldContext_OrganizationSetting_identityProviderLoginEnforced(ctx, field)
+			case "complianceWebhookToken":
+				return ec.fieldContext_OrganizationSetting_complianceWebhookToken(ctx, field)
 			case "organization":
 				return ec.fieldContext_OrganizationSetting_organization(ctx, field)
 			case "files":
@@ -179,6 +191,18 @@ func (ec *executionContext) fieldContext_OrganizationSettingCreatePayload_organi
 				return ec.fieldContext_OrganizationSetting_billingNotificationsEnabled(ctx, field)
 			case "allowedEmailDomains":
 				return ec.fieldContext_OrganizationSetting_allowedEmailDomains(ctx, field)
+			case "identityProvider":
+				return ec.fieldContext_OrganizationSetting_identityProvider(ctx, field)
+			case "identityProviderMetadataEndpoint":
+				return ec.fieldContext_OrganizationSetting_identityProviderMetadataEndpoint(ctx, field)
+			case "identityProviderEntityID":
+				return ec.fieldContext_OrganizationSetting_identityProviderEntityID(ctx, field)
+			case "oidcDiscoveryEndpoint":
+				return ec.fieldContext_OrganizationSetting_oidcDiscoveryEndpoint(ctx, field)
+			case "identityProviderLoginEnforced":
+				return ec.fieldContext_OrganizationSetting_identityProviderLoginEnforced(ctx, field)
+			case "complianceWebhookToken":
+				return ec.fieldContext_OrganizationSetting_complianceWebhookToken(ctx, field)
 			case "organization":
 				return ec.fieldContext_OrganizationSetting_organization(ctx, field)
 			case "files":
@@ -305,6 +329,18 @@ func (ec *executionContext) fieldContext_OrganizationSettingUpdatePayload_organi
 				return ec.fieldContext_OrganizationSetting_billingNotificationsEnabled(ctx, field)
 			case "allowedEmailDomains":
 				return ec.fieldContext_OrganizationSetting_allowedEmailDomains(ctx, field)
+			case "identityProvider":
+				return ec.fieldContext_OrganizationSetting_identityProvider(ctx, field)
+			case "identityProviderMetadataEndpoint":
+				return ec.fieldContext_OrganizationSetting_identityProviderMetadataEndpoint(ctx, field)
+			case "identityProviderEntityID":
+				return ec.fieldContext_OrganizationSetting_identityProviderEntityID(ctx, field)
+			case "oidcDiscoveryEndpoint":
+				return ec.fieldContext_OrganizationSetting_oidcDiscoveryEndpoint(ctx, field)
+			case "identityProviderLoginEnforced":
+				return ec.fieldContext_OrganizationSetting_identityProviderLoginEnforced(ctx, field)
+			case "complianceWebhookToken":
+				return ec.fieldContext_OrganizationSetting_complianceWebhookToken(ctx, field)
 			case "organization":
 				return ec.fieldContext_OrganizationSetting_organization(ctx, field)
 			case "files":

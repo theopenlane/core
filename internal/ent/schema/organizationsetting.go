@@ -93,38 +93,40 @@ func (OrganizationSetting) Fields() []ent.Field {
 			Comment("domains allowed to access the organization, if empty all domains are allowed").
 			Validate(validator.ValidateDomains()).
 			Optional(),
-		field.Enum("sso_provider").
+		field.Enum("identity_provider").
 			Comment("SSO provider type for the organization").
 			GoType(enums.SSOProvider("")).
 			Optional().
 			Default(string(enums.SSOProviderNone)),
-		field.String("sso_client_id").
+		field.String("identity_provider_client_id").
 			Comment("client ID for SSO integration").
 			Sensitive().
 			Nillable().
 			Optional(),
-		field.String("sso_client_secret").
+		field.String("identity_provider_client_secret").
 			Comment("client secret for SSO integration").
 			Sensitive().
 			Nillable().
 			Optional(),
-		field.String("sso_metadata_url").
+		field.String("identity_provider_metadata_endpoint").
 			Comment("metadata URL for the SSO provider").
 			Optional(),
-		field.String("sso_entity_id").
+		field.String("identity_provider_entity_id").
 			Comment("SAML entity ID for the SSO provider").
 			Optional(),
-		field.String("sso_oidc_discovery_url").
+		field.String("oidc_discovery_endpoint").
 			Comment("OIDC discovery URL for the SSO provider").
 			Optional(),
-		field.Bool("sso_enforced").
+		field.Bool("identity_provider_login_enforced").
 			Comment("enforce SSO authentication for organization members").
 			Default(false),
 		field.String("compliance_webhook_token").
 			Comment("unique token used to receive compliance webhook events").
 			Unique().
+			Nillable().
 			DefaultFunc(func() string {
-				return keygen.PrefixedSecret("compwh")
+				token := keygen.PrefixedSecret("tola_wsec")
+				return token
 			}),
 	}
 }

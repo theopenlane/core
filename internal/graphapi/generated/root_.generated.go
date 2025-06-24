@@ -111,34 +111,40 @@ type ComplexityRoot struct {
 	}
 
 	ActionPlan struct {
-		ActionPlanType   func(childComplexity int) int
-		ApprovalRequired func(childComplexity int) int
-		Approver         func(childComplexity int) int
-		ApproverID       func(childComplexity int) int
-		Controls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		Delegate         func(childComplexity int) int
-		DelegateID       func(childComplexity int) int
-		Details          func(childComplexity int) int
-		DueDate          func(childComplexity int) int
-		ID               func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Owner            func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Priority         func(childComplexity int) int
-		Programs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		ReviewDue        func(childComplexity int) int
-		ReviewFrequency  func(childComplexity int) int
-		Revision         func(childComplexity int) int
-		Risks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
-		Source           func(childComplexity int) int
-		Status           func(childComplexity int) int
-		Summary          func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
-		Users            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
+		ActionPlanType                  func(childComplexity int) int
+		ApprovalRequired                func(childComplexity int) int
+		Approver                        func(childComplexity int) int
+		ApproverID                      func(childComplexity int) int
+		ControlSuggestions              func(childComplexity int) int
+		Controls                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt                       func(childComplexity int) int
+		CreatedBy                       func(childComplexity int) int
+		Delegate                        func(childComplexity int) int
+		DelegateID                      func(childComplexity int) int
+		Details                         func(childComplexity int) int
+		DismissedControlSuggestions     func(childComplexity int) int
+		DismissedImprovementSuggestions func(childComplexity int) int
+		DismissedTagSuggestions         func(childComplexity int) int
+		DueDate                         func(childComplexity int) int
+		ID                              func(childComplexity int) int
+		ImprovementSuggestions          func(childComplexity int) int
+		Name                            func(childComplexity int) int
+		Owner                           func(childComplexity int) int
+		OwnerID                         func(childComplexity int) int
+		Priority                        func(childComplexity int) int
+		Programs                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		ReviewDue                       func(childComplexity int) int
+		ReviewFrequency                 func(childComplexity int) int
+		Revision                        func(childComplexity int) int
+		Risks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Source                          func(childComplexity int) int
+		Status                          func(childComplexity int) int
+		Summary                         func(childComplexity int) int
+		TagSuggestions                  func(childComplexity int) int
+		Tags                            func(childComplexity int) int
+		UpdatedAt                       func(childComplexity int) int
+		UpdatedBy                       func(childComplexity int) int
+		Users                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
 	}
 
 	ActionPlanBulkCreatePayload struct {
@@ -165,30 +171,36 @@ type ComplexityRoot struct {
 	}
 
 	ActionPlanHistory struct {
-		ActionPlanType   func(childComplexity int) int
-		ApprovalRequired func(childComplexity int) int
-		ApproverID       func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		DelegateID       func(childComplexity int) int
-		Details          func(childComplexity int) int
-		DueDate          func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Priority         func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		ReviewDue        func(childComplexity int) int
-		ReviewFrequency  func(childComplexity int) int
-		Revision         func(childComplexity int) int
-		Source           func(childComplexity int) int
-		Status           func(childComplexity int) int
-		Summary          func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		ActionPlanType                  func(childComplexity int) int
+		ApprovalRequired                func(childComplexity int) int
+		ApproverID                      func(childComplexity int) int
+		ControlSuggestions              func(childComplexity int) int
+		CreatedAt                       func(childComplexity int) int
+		CreatedBy                       func(childComplexity int) int
+		DelegateID                      func(childComplexity int) int
+		Details                         func(childComplexity int) int
+		DismissedControlSuggestions     func(childComplexity int) int
+		DismissedImprovementSuggestions func(childComplexity int) int
+		DismissedTagSuggestions         func(childComplexity int) int
+		DueDate                         func(childComplexity int) int
+		HistoryTime                     func(childComplexity int) int
+		ID                              func(childComplexity int) int
+		ImprovementSuggestions          func(childComplexity int) int
+		Name                            func(childComplexity int) int
+		Operation                       func(childComplexity int) int
+		OwnerID                         func(childComplexity int) int
+		Priority                        func(childComplexity int) int
+		Ref                             func(childComplexity int) int
+		ReviewDue                       func(childComplexity int) int
+		ReviewFrequency                 func(childComplexity int) int
+		Revision                        func(childComplexity int) int
+		Source                          func(childComplexity int) int
+		Status                          func(childComplexity int) int
+		Summary                         func(childComplexity int) int
+		TagSuggestions                  func(childComplexity int) int
+		Tags                            func(childComplexity int) int
+		UpdatedAt                       func(childComplexity int) int
+		UpdatedBy                       func(childComplexity int) int
 	}
 
 	ActionPlanHistoryConnection struct {
@@ -204,6 +216,88 @@ type ComplexityRoot struct {
 
 	ActionPlanUpdatePayload struct {
 		ActionPlan func(childComplexity int) int
+	}
+
+	Asset struct {
+		AssetType     func(childComplexity int) int
+		BlockedGroups func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Categories    func(childComplexity int) int
+		Controls      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		Cpe           func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		Description   func(childComplexity int) int
+		Editors       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Entities      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		ID            func(childComplexity int) int
+		Identifier    func(childComplexity int) int
+		Name          func(childComplexity int) int
+		Owner         func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		Scans         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		Tags          func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
+		Viewers       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Website       func(childComplexity int) int
+	}
+
+	AssetBulkCreatePayload struct {
+		Assets func(childComplexity int) int
+	}
+
+	AssetConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	AssetCreatePayload struct {
+		Asset func(childComplexity int) int
+	}
+
+	AssetDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	AssetEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	AssetHistory struct {
+		AssetType   func(childComplexity int) int
+		Categories  func(childComplexity int) int
+		Cpe         func(childComplexity int) int
+		CreatedAt   func(childComplexity int) int
+		CreatedBy   func(childComplexity int) int
+		Description func(childComplexity int) int
+		HistoryTime func(childComplexity int) int
+		ID          func(childComplexity int) int
+		Identifier  func(childComplexity int) int
+		Name        func(childComplexity int) int
+		Operation   func(childComplexity int) int
+		OwnerID     func(childComplexity int) int
+		Ref         func(childComplexity int) int
+		Tags        func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
+		UpdatedBy   func(childComplexity int) int
+		Website     func(childComplexity int) int
+	}
+
+	AssetHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	AssetHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	AssetUpdatePayload struct {
+		Asset func(childComplexity int) int
 	}
 
 	AuditLog struct {
@@ -308,6 +402,7 @@ type ComplexityRoot struct {
 		ActionPlans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		AssessmentMethods      func(childComplexity int) int
 		AssessmentObjectives   func(childComplexity int) int
+		Assets                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
 		AuditorReferenceID     func(childComplexity int) int
 		BlockedGroups          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Category               func(childComplexity int) int
@@ -341,6 +436,7 @@ type ComplexityRoot struct {
 		ReferenceID            func(childComplexity int) int
 		References             func(childComplexity int) int
 		Risks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Scans                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		ScheduledJobs          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlScheduledJobOrder, where *generated.ControlScheduledJobWhereInput) int
 		Source                 func(childComplexity int) int
 		Standard               func(childComplexity int) int
@@ -891,25 +987,30 @@ type ComplexityRoot struct {
 	}
 
 	Entity struct {
-		Contacts     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
-		CreatedAt    func(childComplexity int) int
-		CreatedBy    func(childComplexity int) int
-		Description  func(childComplexity int) int
-		DisplayName  func(childComplexity int) int
-		Documents    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
-		Domains      func(childComplexity int) int
-		EntityType   func(childComplexity int) int
-		EntityTypeID func(childComplexity int) int
-		Files        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		ID           func(childComplexity int) int
-		Name         func(childComplexity int) int
-		Notes        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
-		Owner        func(childComplexity int) int
-		OwnerID      func(childComplexity int) int
-		Status       func(childComplexity int) int
-		Tags         func(childComplexity int) int
-		UpdatedAt    func(childComplexity int) int
-		UpdatedBy    func(childComplexity int) int
+		Assets        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		BlockedGroups func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Contacts      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		Description   func(childComplexity int) int
+		DisplayName   func(childComplexity int) int
+		Documents     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
+		Domains       func(childComplexity int) int
+		Editors       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		EntityType    func(childComplexity int) int
+		EntityTypeID  func(childComplexity int) int
+		Files         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		ID            func(childComplexity int) int
+		Name          func(childComplexity int) int
+		Notes         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		Owner         func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		Scans         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		Status        func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
+		Viewers       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
 	EntityBulkCreatePayload struct {
@@ -1301,6 +1402,9 @@ type ComplexityRoot struct {
 		RiskBlockedGroups                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		RiskEditors                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		RiskViewers                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		ScanBlockedGroups                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		ScanEditors                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		ScanViewers                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		Setting                            func(childComplexity int) int
 		Tags                               func(childComplexity int) int
 		Tasks                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
@@ -1661,38 +1765,44 @@ type ComplexityRoot struct {
 	}
 
 	InternalPolicy struct {
-		ApprovalRequired  func(childComplexity int) int
-		Approver          func(childComplexity int) int
-		ApproverID        func(childComplexity int) int
-		BlockedGroups     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ControlObjectives func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
-		Controls          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt         func(childComplexity int) int
-		CreatedBy         func(childComplexity int) int
-		Delegate          func(childComplexity int) int
-		DelegateID        func(childComplexity int) int
-		Details           func(childComplexity int) int
-		DisplayID         func(childComplexity int) int
-		Editors           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ID                func(childComplexity int) int
-		Name              func(childComplexity int) int
-		Narratives        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
-		Owner             func(childComplexity int) int
-		OwnerID           func(childComplexity int) int
-		PolicyType        func(childComplexity int) int
-		Procedures        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
-		Programs          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		ReviewDue         func(childComplexity int) int
-		ReviewFrequency   func(childComplexity int) int
-		Revision          func(childComplexity int) int
-		Risks             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
-		Status            func(childComplexity int) int
-		Subcontrols       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		Summary           func(childComplexity int) int
-		Tags              func(childComplexity int) int
-		Tasks             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		UpdatedAt         func(childComplexity int) int
-		UpdatedBy         func(childComplexity int) int
+		ApprovalRequired                func(childComplexity int) int
+		Approver                        func(childComplexity int) int
+		ApproverID                      func(childComplexity int) int
+		BlockedGroups                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ControlObjectives               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
+		ControlSuggestions              func(childComplexity int) int
+		Controls                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt                       func(childComplexity int) int
+		CreatedBy                       func(childComplexity int) int
+		Delegate                        func(childComplexity int) int
+		DelegateID                      func(childComplexity int) int
+		Details                         func(childComplexity int) int
+		DismissedControlSuggestions     func(childComplexity int) int
+		DismissedImprovementSuggestions func(childComplexity int) int
+		DismissedTagSuggestions         func(childComplexity int) int
+		DisplayID                       func(childComplexity int) int
+		Editors                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ID                              func(childComplexity int) int
+		ImprovementSuggestions          func(childComplexity int) int
+		Name                            func(childComplexity int) int
+		Narratives                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
+		Owner                           func(childComplexity int) int
+		OwnerID                         func(childComplexity int) int
+		PolicyType                      func(childComplexity int) int
+		Procedures                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
+		Programs                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		ReviewDue                       func(childComplexity int) int
+		ReviewFrequency                 func(childComplexity int) int
+		Revision                        func(childComplexity int) int
+		Risks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Status                          func(childComplexity int) int
+		Subcontrols                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Summary                         func(childComplexity int) int
+		TagSuggestions                  func(childComplexity int) int
+		Tags                            func(childComplexity int) int
+		Tasks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		UpdatedAt                       func(childComplexity int) int
+		UpdatedBy                       func(childComplexity int) int
 	}
 
 	InternalPolicyBulkCreatePayload struct {
@@ -1719,28 +1829,34 @@ type ComplexityRoot struct {
 	}
 
 	InternalPolicyHistory struct {
-		ApprovalRequired func(childComplexity int) int
-		ApproverID       func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		DelegateID       func(childComplexity int) int
-		Details          func(childComplexity int) int
-		DisplayID        func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		PolicyType       func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		ReviewDue        func(childComplexity int) int
-		ReviewFrequency  func(childComplexity int) int
-		Revision         func(childComplexity int) int
-		Status           func(childComplexity int) int
-		Summary          func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		ApprovalRequired                func(childComplexity int) int
+		ApproverID                      func(childComplexity int) int
+		ControlSuggestions              func(childComplexity int) int
+		CreatedAt                       func(childComplexity int) int
+		CreatedBy                       func(childComplexity int) int
+		DelegateID                      func(childComplexity int) int
+		Details                         func(childComplexity int) int
+		DismissedControlSuggestions     func(childComplexity int) int
+		DismissedImprovementSuggestions func(childComplexity int) int
+		DismissedTagSuggestions         func(childComplexity int) int
+		DisplayID                       func(childComplexity int) int
+		HistoryTime                     func(childComplexity int) int
+		ID                              func(childComplexity int) int
+		ImprovementSuggestions          func(childComplexity int) int
+		Name                            func(childComplexity int) int
+		Operation                       func(childComplexity int) int
+		OwnerID                         func(childComplexity int) int
+		PolicyType                      func(childComplexity int) int
+		Ref                             func(childComplexity int) int
+		ReviewDue                       func(childComplexity int) int
+		ReviewFrequency                 func(childComplexity int) int
+		Revision                        func(childComplexity int) int
+		Status                          func(childComplexity int) int
+		Summary                         func(childComplexity int) int
+		TagSuggestions                  func(childComplexity int) int
+		Tags                            func(childComplexity int) int
+		UpdatedAt                       func(childComplexity int) int
+		UpdatedBy                       func(childComplexity int) int
 	}
 
 	InternalPolicyHistoryConnection struct {
@@ -2091,10 +2207,13 @@ type ComplexityRoot struct {
 	Mutation struct {
 		CreateAPIToken                     func(childComplexity int, input generated.CreateAPITokenInput) int
 		CreateActionPlan                   func(childComplexity int, input generated.CreateActionPlanInput) int
+		CreateAsset                        func(childComplexity int, input generated.CreateAssetInput) int
 		CreateBulkAPIToken                 func(childComplexity int, input []*generated.CreateAPITokenInput) int
 		CreateBulkActionPlan               func(childComplexity int, input []*generated.CreateActionPlanInput) int
+		CreateBulkAsset                    func(childComplexity int, input []*generated.CreateAssetInput) int
 		CreateBulkCSVAPIToken              func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVActionPlan            func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVAsset                 func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVContact               func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVControl               func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVControlImplementation func(childComplexity int, input graphql.Upload) int
@@ -2122,6 +2241,7 @@ type ComplexityRoot struct {
 		CreateBulkCSVProgram               func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVProgramMembership     func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVRisk                  func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVScan                  func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVScheduledJob          func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVSubcontrol            func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVSubscriber            func(childComplexity int, input graphql.Upload) int
@@ -2155,6 +2275,7 @@ type ComplexityRoot struct {
 		CreateBulkProgram                  func(childComplexity int, input []*generated.CreateProgramInput) int
 		CreateBulkProgramMembership        func(childComplexity int, input []*generated.CreateProgramMembershipInput) int
 		CreateBulkRisk                     func(childComplexity int, input []*generated.CreateRiskInput) int
+		CreateBulkScan                     func(childComplexity int, input []*generated.CreateScanInput) int
 		CreateBulkScheduledJob             func(childComplexity int, input []*generated.CreateScheduledJobInput) int
 		CreateBulkSubcontrol               func(childComplexity int, input []*generated.CreateSubcontrolInput) int
 		CreateBulkSubscriber               func(childComplexity int, input []*generated.CreateSubscriberInput) int
@@ -2201,6 +2322,7 @@ type ComplexityRoot struct {
 		CreateProgramMembership            func(childComplexity int, input generated.CreateProgramMembershipInput) int
 		CreateProgramWithMembers           func(childComplexity int, input model.CreateProgramWithMembersInput) int
 		CreateRisk                         func(childComplexity int, input generated.CreateRiskInput) int
+		CreateScan                         func(childComplexity int, input generated.CreateScanInput) int
 		CreateScheduledJob                 func(childComplexity int, input generated.CreateScheduledJobInput) int
 		CreateStandard                     func(childComplexity int, input generated.CreateStandardInput) int
 		CreateSubcontrol                   func(childComplexity int, input generated.CreateSubcontrolInput) int
@@ -2214,6 +2336,7 @@ type ComplexityRoot struct {
 		CreateUserSetting                  func(childComplexity int, input generated.CreateUserSettingInput) int
 		DeleteAPIToken                     func(childComplexity int, id string) int
 		DeleteActionPlan                   func(childComplexity int, id string) int
+		DeleteAsset                        func(childComplexity int, id string) int
 		DeleteContact                      func(childComplexity int, id string) int
 		DeleteControl                      func(childComplexity int, id string) int
 		DeleteControlImplementation        func(childComplexity int, id string) int
@@ -2248,6 +2371,7 @@ type ComplexityRoot struct {
 		DeleteProgram                      func(childComplexity int, id string) int
 		DeleteProgramMembership            func(childComplexity int, id string) int
 		DeleteRisk                         func(childComplexity int, id string) int
+		DeleteScan                         func(childComplexity int, id string) int
 		DeleteScheduledJob                 func(childComplexity int, id string) int
 		DeleteStandard                     func(childComplexity int, id string) int
 		DeleteSubcontrol                   func(childComplexity int, id string) int
@@ -2260,6 +2384,7 @@ type ComplexityRoot struct {
 		DeleteWebauthn                     func(childComplexity int, id string) int
 		UpdateAPIToken                     func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
 		UpdateActionPlan                   func(childComplexity int, id string, input generated.UpdateActionPlanInput) int
+		UpdateAsset                        func(childComplexity int, id string, input generated.UpdateAssetInput) int
 		UpdateContact                      func(childComplexity int, id string, input generated.UpdateContactInput) int
 		UpdateControl                      func(childComplexity int, id string, input generated.UpdateControlInput) int
 		UpdateControlImplementation        func(childComplexity int, id string, input generated.UpdateControlImplementationInput) int
@@ -2291,6 +2416,7 @@ type ComplexityRoot struct {
 		UpdateProgram                      func(childComplexity int, id string, input generated.UpdateProgramInput) int
 		UpdateProgramMembership            func(childComplexity int, id string, input generated.UpdateProgramMembershipInput) int
 		UpdateRisk                         func(childComplexity int, id string, input generated.UpdateRiskInput) int
+		UpdateScan                         func(childComplexity int, id string, input generated.UpdateScanInput) int
 		UpdateScheduledJob                 func(childComplexity int, id string, input generated.UpdateScheduledJobInput) int
 		UpdateStandard                     func(childComplexity int, id string, input generated.UpdateStandardInput) int
 		UpdateSubcontrol                   func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
@@ -2592,6 +2718,7 @@ type ComplexityRoot struct {
 	Organization struct {
 		APITokens                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.APITokenOrder, where *generated.APITokenWhereInput) int
 		ActionPlans                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		Assets                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
 		AvatarFile                    func(childComplexity int) int
 		AvatarLocalFileID             func(childComplexity int) int
 		AvatarRemoteURL               func(childComplexity int) int
@@ -2647,6 +2774,7 @@ type ComplexityRoot struct {
 		Programs                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		RiskCreators                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Risks                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Scans                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		ScheduledJobCreators          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ScheduledJobRuns              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobRunOrder, where *generated.ScheduledJobRunWhereInput) int
 		ScheduledJobs                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlScheduledJobOrder, where *generated.ControlScheduledJobWhereInput) int
@@ -2721,24 +2849,30 @@ type ComplexityRoot struct {
 	}
 
 	OrganizationSetting struct {
-		AllowedEmailDomains         func(childComplexity int) int
-		BillingAddress              func(childComplexity int) int
-		BillingContact              func(childComplexity int) int
-		BillingEmail                func(childComplexity int) int
-		BillingNotificationsEnabled func(childComplexity int) int
-		BillingPhone                func(childComplexity int) int
-		CreatedAt                   func(childComplexity int) int
-		CreatedBy                   func(childComplexity int) int
-		Domains                     func(childComplexity int) int
-		Files                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		GeoLocation                 func(childComplexity int) int
-		ID                          func(childComplexity int) int
-		Organization                func(childComplexity int) int
-		OrganizationID              func(childComplexity int) int
-		Tags                        func(childComplexity int) int
-		TaxIdentifier               func(childComplexity int) int
-		UpdatedAt                   func(childComplexity int) int
-		UpdatedBy                   func(childComplexity int) int
+		AllowedEmailDomains              func(childComplexity int) int
+		BillingAddress                   func(childComplexity int) int
+		BillingContact                   func(childComplexity int) int
+		BillingEmail                     func(childComplexity int) int
+		BillingNotificationsEnabled      func(childComplexity int) int
+		BillingPhone                     func(childComplexity int) int
+		ComplianceWebhookToken           func(childComplexity int) int
+		CreatedAt                        func(childComplexity int) int
+		CreatedBy                        func(childComplexity int) int
+		Domains                          func(childComplexity int) int
+		Files                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		GeoLocation                      func(childComplexity int) int
+		ID                               func(childComplexity int) int
+		IdentityProvider                 func(childComplexity int) int
+		IdentityProviderEntityID         func(childComplexity int) int
+		IdentityProviderLoginEnforced    func(childComplexity int) int
+		IdentityProviderMetadataEndpoint func(childComplexity int) int
+		OidcDiscoveryEndpoint            func(childComplexity int) int
+		Organization                     func(childComplexity int) int
+		OrganizationID                   func(childComplexity int) int
+		Tags                             func(childComplexity int) int
+		TaxIdentifier                    func(childComplexity int) int
+		UpdatedAt                        func(childComplexity int) int
+		UpdatedBy                        func(childComplexity int) int
 	}
 
 	OrganizationSettingBulkCreatePayload struct {
@@ -2765,25 +2899,31 @@ type ComplexityRoot struct {
 	}
 
 	OrganizationSettingHistory struct {
-		AllowedEmailDomains         func(childComplexity int) int
-		BillingAddress              func(childComplexity int) int
-		BillingContact              func(childComplexity int) int
-		BillingEmail                func(childComplexity int) int
-		BillingNotificationsEnabled func(childComplexity int) int
-		BillingPhone                func(childComplexity int) int
-		CreatedAt                   func(childComplexity int) int
-		CreatedBy                   func(childComplexity int) int
-		Domains                     func(childComplexity int) int
-		GeoLocation                 func(childComplexity int) int
-		HistoryTime                 func(childComplexity int) int
-		ID                          func(childComplexity int) int
-		Operation                   func(childComplexity int) int
-		OrganizationID              func(childComplexity int) int
-		Ref                         func(childComplexity int) int
-		Tags                        func(childComplexity int) int
-		TaxIdentifier               func(childComplexity int) int
-		UpdatedAt                   func(childComplexity int) int
-		UpdatedBy                   func(childComplexity int) int
+		AllowedEmailDomains              func(childComplexity int) int
+		BillingAddress                   func(childComplexity int) int
+		BillingContact                   func(childComplexity int) int
+		BillingEmail                     func(childComplexity int) int
+		BillingNotificationsEnabled      func(childComplexity int) int
+		BillingPhone                     func(childComplexity int) int
+		ComplianceWebhookToken           func(childComplexity int) int
+		CreatedAt                        func(childComplexity int) int
+		CreatedBy                        func(childComplexity int) int
+		Domains                          func(childComplexity int) int
+		GeoLocation                      func(childComplexity int) int
+		HistoryTime                      func(childComplexity int) int
+		ID                               func(childComplexity int) int
+		IdentityProvider                 func(childComplexity int) int
+		IdentityProviderEntityID         func(childComplexity int) int
+		IdentityProviderLoginEnforced    func(childComplexity int) int
+		IdentityProviderMetadataEndpoint func(childComplexity int) int
+		OidcDiscoveryEndpoint            func(childComplexity int) int
+		Operation                        func(childComplexity int) int
+		OrganizationID                   func(childComplexity int) int
+		Ref                              func(childComplexity int) int
+		Tags                             func(childComplexity int) int
+		TaxIdentifier                    func(childComplexity int) int
+		UpdatedAt                        func(childComplexity int) int
+		UpdatedBy                        func(childComplexity int) int
 	}
 
 	OrganizationSettingHistoryConnection struct {
@@ -2862,37 +3002,43 @@ type ComplexityRoot struct {
 	}
 
 	Procedure struct {
-		ApprovalRequired func(childComplexity int) int
-		Approver         func(childComplexity int) int
-		ApproverID       func(childComplexity int) int
-		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Controls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		Delegate         func(childComplexity int) int
-		DelegateID       func(childComplexity int) int
-		Details          func(childComplexity int) int
-		DisplayID        func(childComplexity int) int
-		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ID               func(childComplexity int) int
-		InternalPolicies func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
-		Name             func(childComplexity int) int
-		Narratives       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
-		Owner            func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		ProcedureType    func(childComplexity int) int
-		Programs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		ReviewDue        func(childComplexity int) int
-		ReviewFrequency  func(childComplexity int) int
-		Revision         func(childComplexity int) int
-		Risks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
-		Status           func(childComplexity int) int
-		Subcontrols      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		Summary          func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		Tasks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		ApprovalRequired                func(childComplexity int) int
+		Approver                        func(childComplexity int) int
+		ApproverID                      func(childComplexity int) int
+		BlockedGroups                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ControlSuggestions              func(childComplexity int) int
+		Controls                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt                       func(childComplexity int) int
+		CreatedBy                       func(childComplexity int) int
+		Delegate                        func(childComplexity int) int
+		DelegateID                      func(childComplexity int) int
+		Details                         func(childComplexity int) int
+		DismissedControlSuggestions     func(childComplexity int) int
+		DismissedImprovementSuggestions func(childComplexity int) int
+		DismissedTagSuggestions         func(childComplexity int) int
+		DisplayID                       func(childComplexity int) int
+		Editors                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ID                              func(childComplexity int) int
+		ImprovementSuggestions          func(childComplexity int) int
+		InternalPolicies                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
+		Name                            func(childComplexity int) int
+		Narratives                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
+		Owner                           func(childComplexity int) int
+		OwnerID                         func(childComplexity int) int
+		ProcedureType                   func(childComplexity int) int
+		Programs                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		ReviewDue                       func(childComplexity int) int
+		ReviewFrequency                 func(childComplexity int) int
+		Revision                        func(childComplexity int) int
+		Risks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Status                          func(childComplexity int) int
+		Subcontrols                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Summary                         func(childComplexity int) int
+		TagSuggestions                  func(childComplexity int) int
+		Tags                            func(childComplexity int) int
+		Tasks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		UpdatedAt                       func(childComplexity int) int
+		UpdatedBy                       func(childComplexity int) int
 	}
 
 	ProcedureBulkCreatePayload struct {
@@ -2919,28 +3065,34 @@ type ComplexityRoot struct {
 	}
 
 	ProcedureHistory struct {
-		ApprovalRequired func(childComplexity int) int
-		ApproverID       func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		DelegateID       func(childComplexity int) int
-		Details          func(childComplexity int) int
-		DisplayID        func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		ProcedureType    func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		ReviewDue        func(childComplexity int) int
-		ReviewFrequency  func(childComplexity int) int
-		Revision         func(childComplexity int) int
-		Status           func(childComplexity int) int
-		Summary          func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		ApprovalRequired                func(childComplexity int) int
+		ApproverID                      func(childComplexity int) int
+		ControlSuggestions              func(childComplexity int) int
+		CreatedAt                       func(childComplexity int) int
+		CreatedBy                       func(childComplexity int) int
+		DelegateID                      func(childComplexity int) int
+		Details                         func(childComplexity int) int
+		DismissedControlSuggestions     func(childComplexity int) int
+		DismissedImprovementSuggestions func(childComplexity int) int
+		DismissedTagSuggestions         func(childComplexity int) int
+		DisplayID                       func(childComplexity int) int
+		HistoryTime                     func(childComplexity int) int
+		ID                              func(childComplexity int) int
+		ImprovementSuggestions          func(childComplexity int) int
+		Name                            func(childComplexity int) int
+		Operation                       func(childComplexity int) int
+		OwnerID                         func(childComplexity int) int
+		ProcedureType                   func(childComplexity int) int
+		Ref                             func(childComplexity int) int
+		ReviewDue                       func(childComplexity int) int
+		ReviewFrequency                 func(childComplexity int) int
+		Revision                        func(childComplexity int) int
+		Status                          func(childComplexity int) int
+		Summary                         func(childComplexity int) int
+		TagSuggestions                  func(childComplexity int) int
+		Tags                            func(childComplexity int) int
+		UpdatedAt                       func(childComplexity int) int
+		UpdatedBy                       func(childComplexity int) int
 	}
 
 	ProcedureHistoryConnection struct {
@@ -3140,6 +3292,7 @@ type ComplexityRoot struct {
 		ActionPlans                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		AdminAPITokenSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminActionPlanSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminAssetSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminContactSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminControlImplementationSearch      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminControlObjectiveSearch           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -3169,6 +3322,7 @@ type ComplexityRoot struct {
 		AdminProcedureSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminProgramSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminRiskSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminScanSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminScheduledJobSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminSearch                           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminStandardSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -3180,6 +3334,10 @@ type ComplexityRoot struct {
 		AdminUserSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminUserSettingSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminWebauthnSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Asset                                 func(childComplexity int, id string) int
+		AssetHistories                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.AssetHistoryOrder, where *generated.AssetHistoryWhereInput) int
+		AssetSearch                           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Assets                                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
 		AuditLogs                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.AuditLogWhereInput, orderBy *generated.AuditLogOrder) int
 		Contact                               func(childComplexity int, id string) int
 		ContactHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ContactHistoryOrder, where *generated.ContactHistoryWhereInput) int
@@ -3318,6 +3476,10 @@ type ComplexityRoot struct {
 		RiskHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.RiskHistoryOrder, where *generated.RiskHistoryWhereInput) int
 		RiskSearch                            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Risks                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Scan                                  func(childComplexity int, id string) int
+		ScanHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ScanHistoryOrder, where *generated.ScanHistoryWhereInput) int
+		ScanSearch                            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Scans                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		ScheduledJob                          func(childComplexity int, id string) int
 		ScheduledJobHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ScheduledJobHistoryOrder, where *generated.ScheduledJobHistoryWhereInput) int
 		ScheduledJobRun                       func(childComplexity int, id string) int
@@ -3368,6 +3530,7 @@ type ComplexityRoot struct {
 
 	Risk struct {
 		ActionPlans      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		Assets           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
 		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		BusinessCosts    func(childComplexity int) int
 		Category         func(childComplexity int) int
@@ -3379,6 +3542,7 @@ type ComplexityRoot struct {
 		Details          func(childComplexity int) int
 		DisplayID        func(childComplexity int) int
 		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Entities         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		ID               func(childComplexity int) int
 		Impact           func(childComplexity int) int
 		InternalPolicies func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
@@ -3390,6 +3554,7 @@ type ComplexityRoot struct {
 		Procedures       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		Programs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		RiskType         func(childComplexity int) int
+		Scans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		Score            func(childComplexity int) int
 		Stakeholder      func(childComplexity int) int
 		StakeholderID    func(childComplexity int) int
@@ -3464,6 +3629,81 @@ type ComplexityRoot struct {
 
 	RiskUpdatePayload struct {
 		Risk func(childComplexity int) int
+	}
+
+	Scan struct {
+		Assets        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		BlockedGroups func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		Editors       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Entities      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		ID            func(childComplexity int) int
+		Metadata      func(childComplexity int) int
+		Owner         func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		ScanType      func(childComplexity int) int
+		Status        func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		Target        func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
+		Viewers       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+	}
+
+	ScanBulkCreatePayload struct {
+		Scans func(childComplexity int) int
+	}
+
+	ScanConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	ScanCreatePayload struct {
+		Scan func(childComplexity int) int
+	}
+
+	ScanDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	ScanEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	ScanHistory struct {
+		CreatedAt   func(childComplexity int) int
+		CreatedBy   func(childComplexity int) int
+		HistoryTime func(childComplexity int) int
+		ID          func(childComplexity int) int
+		Metadata    func(childComplexity int) int
+		Operation   func(childComplexity int) int
+		OwnerID     func(childComplexity int) int
+		Ref         func(childComplexity int) int
+		ScanType    func(childComplexity int) int
+		Status      func(childComplexity int) int
+		Tags        func(childComplexity int) int
+		Target      func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
+		UpdatedBy   func(childComplexity int) int
+	}
+
+	ScanHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	ScanHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	ScanUpdatePayload struct {
+		Scan func(childComplexity int) int
 	}
 
 	ScheduledJob struct {
@@ -3577,6 +3817,7 @@ type ComplexityRoot struct {
 	SearchResults struct {
 		APITokens                   func(childComplexity int) int
 		ActionPlans                 func(childComplexity int) int
+		Assets                      func(childComplexity int) int
 		Contacts                    func(childComplexity int) int
 		ControlImplementations      func(childComplexity int) int
 		ControlObjectives           func(childComplexity int) int
@@ -3607,6 +3848,7 @@ type ComplexityRoot struct {
 		Procedures                  func(childComplexity int) int
 		Programs                    func(childComplexity int) int
 		Risks                       func(childComplexity int) int
+		Scans                       func(childComplexity int) int
 		ScheduledJobs               func(childComplexity int) int
 		Standards                   func(childComplexity int) int
 		Subcontrols                 func(childComplexity int) int
@@ -4650,6 +4892,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlan.ApproverID(childComplexity), true
 
+	case "ActionPlan.controlSuggestions":
+		if e.complexity.ActionPlan.ControlSuggestions == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.ControlSuggestions(childComplexity), true
+
 	case "ActionPlan.controls":
 		if e.complexity.ActionPlan.Controls == nil {
 			break
@@ -4697,6 +4946,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlan.Details(childComplexity), true
 
+	case "ActionPlan.dismissedControlSuggestions":
+		if e.complexity.ActionPlan.DismissedControlSuggestions == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.DismissedControlSuggestions(childComplexity), true
+
+	case "ActionPlan.dismissedImprovementSuggestions":
+		if e.complexity.ActionPlan.DismissedImprovementSuggestions == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.DismissedImprovementSuggestions(childComplexity), true
+
+	case "ActionPlan.dismissedTagSuggestions":
+		if e.complexity.ActionPlan.DismissedTagSuggestions == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.DismissedTagSuggestions(childComplexity), true
+
 	case "ActionPlan.dueDate":
 		if e.complexity.ActionPlan.DueDate == nil {
 			break
@@ -4710,6 +4980,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlan.ID(childComplexity), true
+
+	case "ActionPlan.improvementSuggestions":
+		if e.complexity.ActionPlan.ImprovementSuggestions == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.ImprovementSuggestions(childComplexity), true
 
 	case "ActionPlan.name":
 		if e.complexity.ActionPlan.Name == nil {
@@ -4804,6 +5081,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlan.Summary(childComplexity), true
+
+	case "ActionPlan.tagSuggestions":
+		if e.complexity.ActionPlan.TagSuggestions == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.TagSuggestions(childComplexity), true
 
 	case "ActionPlan.tags":
 		if e.complexity.ActionPlan.Tags == nil {
@@ -4915,6 +5199,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlanHistory.ApproverID(childComplexity), true
 
+	case "ActionPlanHistory.controlSuggestions":
+		if e.complexity.ActionPlanHistory.ControlSuggestions == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.ControlSuggestions(childComplexity), true
+
 	case "ActionPlanHistory.createdAt":
 		if e.complexity.ActionPlanHistory.CreatedAt == nil {
 			break
@@ -4943,6 +5234,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlanHistory.Details(childComplexity), true
 
+	case "ActionPlanHistory.dismissedControlSuggestions":
+		if e.complexity.ActionPlanHistory.DismissedControlSuggestions == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.DismissedControlSuggestions(childComplexity), true
+
+	case "ActionPlanHistory.dismissedImprovementSuggestions":
+		if e.complexity.ActionPlanHistory.DismissedImprovementSuggestions == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.DismissedImprovementSuggestions(childComplexity), true
+
+	case "ActionPlanHistory.dismissedTagSuggestions":
+		if e.complexity.ActionPlanHistory.DismissedTagSuggestions == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.DismissedTagSuggestions(childComplexity), true
+
 	case "ActionPlanHistory.dueDate":
 		if e.complexity.ActionPlanHistory.DueDate == nil {
 			break
@@ -4963,6 +5275,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlanHistory.ID(childComplexity), true
+
+	case "ActionPlanHistory.improvementSuggestions":
+		if e.complexity.ActionPlanHistory.ImprovementSuggestions == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.ImprovementSuggestions(childComplexity), true
 
 	case "ActionPlanHistory.name":
 		if e.complexity.ActionPlanHistory.Name == nil {
@@ -5041,6 +5360,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlanHistory.Summary(childComplexity), true
 
+	case "ActionPlanHistory.tagSuggestions":
+		if e.complexity.ActionPlanHistory.TagSuggestions == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.TagSuggestions(childComplexity), true
+
 	case "ActionPlanHistory.tags":
 		if e.complexity.ActionPlanHistory.Tags == nil {
 			break
@@ -5103,6 +5429,400 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlanUpdatePayload.ActionPlan(childComplexity), true
+
+	case "Asset.assetType":
+		if e.complexity.Asset.AssetType == nil {
+			break
+		}
+
+		return e.complexity.Asset.AssetType(childComplexity), true
+
+	case "Asset.blockedGroups":
+		if e.complexity.Asset.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Asset_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Asset.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Asset.categories":
+		if e.complexity.Asset.Categories == nil {
+			break
+		}
+
+		return e.complexity.Asset.Categories(childComplexity), true
+
+	case "Asset.controls":
+		if e.complexity.Asset.Controls == nil {
+			break
+		}
+
+		args, err := ec.field_Asset_controls_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Asset.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
+
+	case "Asset.cpe":
+		if e.complexity.Asset.Cpe == nil {
+			break
+		}
+
+		return e.complexity.Asset.Cpe(childComplexity), true
+
+	case "Asset.createdAt":
+		if e.complexity.Asset.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Asset.CreatedAt(childComplexity), true
+
+	case "Asset.createdBy":
+		if e.complexity.Asset.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.Asset.CreatedBy(childComplexity), true
+
+	case "Asset.description":
+		if e.complexity.Asset.Description == nil {
+			break
+		}
+
+		return e.complexity.Asset.Description(childComplexity), true
+
+	case "Asset.editors":
+		if e.complexity.Asset.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_Asset_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Asset.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Asset.entities":
+		if e.complexity.Asset.Entities == nil {
+			break
+		}
+
+		args, err := ec.field_Asset_entities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Asset.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
+	case "Asset.id":
+		if e.complexity.Asset.ID == nil {
+			break
+		}
+
+		return e.complexity.Asset.ID(childComplexity), true
+
+	case "Asset.identifier":
+		if e.complexity.Asset.Identifier == nil {
+			break
+		}
+
+		return e.complexity.Asset.Identifier(childComplexity), true
+
+	case "Asset.name":
+		if e.complexity.Asset.Name == nil {
+			break
+		}
+
+		return e.complexity.Asset.Name(childComplexity), true
+
+	case "Asset.owner":
+		if e.complexity.Asset.Owner == nil {
+			break
+		}
+
+		return e.complexity.Asset.Owner(childComplexity), true
+
+	case "Asset.ownerID":
+		if e.complexity.Asset.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.Asset.OwnerID(childComplexity), true
+
+	case "Asset.scans":
+		if e.complexity.Asset.Scans == nil {
+			break
+		}
+
+		args, err := ec.field_Asset_scans_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Asset.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
+
+	case "Asset.tags":
+		if e.complexity.Asset.Tags == nil {
+			break
+		}
+
+		return e.complexity.Asset.Tags(childComplexity), true
+
+	case "Asset.updatedAt":
+		if e.complexity.Asset.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Asset.UpdatedAt(childComplexity), true
+
+	case "Asset.updatedBy":
+		if e.complexity.Asset.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.Asset.UpdatedBy(childComplexity), true
+
+	case "Asset.viewers":
+		if e.complexity.Asset.Viewers == nil {
+			break
+		}
+
+		args, err := ec.field_Asset_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Asset.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Asset.website":
+		if e.complexity.Asset.Website == nil {
+			break
+		}
+
+		return e.complexity.Asset.Website(childComplexity), true
+
+	case "AssetBulkCreatePayload.assets":
+		if e.complexity.AssetBulkCreatePayload.Assets == nil {
+			break
+		}
+
+		return e.complexity.AssetBulkCreatePayload.Assets(childComplexity), true
+
+	case "AssetConnection.edges":
+		if e.complexity.AssetConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.AssetConnection.Edges(childComplexity), true
+
+	case "AssetConnection.pageInfo":
+		if e.complexity.AssetConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.AssetConnection.PageInfo(childComplexity), true
+
+	case "AssetConnection.totalCount":
+		if e.complexity.AssetConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.AssetConnection.TotalCount(childComplexity), true
+
+	case "AssetCreatePayload.asset":
+		if e.complexity.AssetCreatePayload.Asset == nil {
+			break
+		}
+
+		return e.complexity.AssetCreatePayload.Asset(childComplexity), true
+
+	case "AssetDeletePayload.deletedID":
+		if e.complexity.AssetDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.AssetDeletePayload.DeletedID(childComplexity), true
+
+	case "AssetEdge.cursor":
+		if e.complexity.AssetEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.AssetEdge.Cursor(childComplexity), true
+
+	case "AssetEdge.node":
+		if e.complexity.AssetEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.AssetEdge.Node(childComplexity), true
+
+	case "AssetHistory.assetType":
+		if e.complexity.AssetHistory.AssetType == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.AssetType(childComplexity), true
+
+	case "AssetHistory.categories":
+		if e.complexity.AssetHistory.Categories == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.Categories(childComplexity), true
+
+	case "AssetHistory.cpe":
+		if e.complexity.AssetHistory.Cpe == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.Cpe(childComplexity), true
+
+	case "AssetHistory.createdAt":
+		if e.complexity.AssetHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.CreatedAt(childComplexity), true
+
+	case "AssetHistory.createdBy":
+		if e.complexity.AssetHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.CreatedBy(childComplexity), true
+
+	case "AssetHistory.description":
+		if e.complexity.AssetHistory.Description == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.Description(childComplexity), true
+
+	case "AssetHistory.historyTime":
+		if e.complexity.AssetHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.HistoryTime(childComplexity), true
+
+	case "AssetHistory.id":
+		if e.complexity.AssetHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.ID(childComplexity), true
+
+	case "AssetHistory.identifier":
+		if e.complexity.AssetHistory.Identifier == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.Identifier(childComplexity), true
+
+	case "AssetHistory.name":
+		if e.complexity.AssetHistory.Name == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.Name(childComplexity), true
+
+	case "AssetHistory.operation":
+		if e.complexity.AssetHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.Operation(childComplexity), true
+
+	case "AssetHistory.ownerID":
+		if e.complexity.AssetHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.OwnerID(childComplexity), true
+
+	case "AssetHistory.ref":
+		if e.complexity.AssetHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.Ref(childComplexity), true
+
+	case "AssetHistory.tags":
+		if e.complexity.AssetHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.Tags(childComplexity), true
+
+	case "AssetHistory.updatedAt":
+		if e.complexity.AssetHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.UpdatedAt(childComplexity), true
+
+	case "AssetHistory.updatedBy":
+		if e.complexity.AssetHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.UpdatedBy(childComplexity), true
+
+	case "AssetHistory.website":
+		if e.complexity.AssetHistory.Website == nil {
+			break
+		}
+
+		return e.complexity.AssetHistory.Website(childComplexity), true
+
+	case "AssetHistoryConnection.edges":
+		if e.complexity.AssetHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.AssetHistoryConnection.Edges(childComplexity), true
+
+	case "AssetHistoryConnection.pageInfo":
+		if e.complexity.AssetHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.AssetHistoryConnection.PageInfo(childComplexity), true
+
+	case "AssetHistoryConnection.totalCount":
+		if e.complexity.AssetHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.AssetHistoryConnection.TotalCount(childComplexity), true
+
+	case "AssetHistoryEdge.cursor":
+		if e.complexity.AssetHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.AssetHistoryEdge.Cursor(childComplexity), true
+
+	case "AssetHistoryEdge.node":
+		if e.complexity.AssetHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.AssetHistoryEdge.Node(childComplexity), true
+
+	case "AssetUpdatePayload.asset":
+		if e.complexity.AssetUpdatePayload.Asset == nil {
+			break
+		}
+
+		return e.complexity.AssetUpdatePayload.Asset(childComplexity), true
 
 	case "AuditLog.changes":
 		if e.complexity.AuditLog.Changes == nil {
@@ -5553,6 +6273,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Control.AssessmentObjectives(childComplexity), true
 
+	case "Control.assets":
+		if e.complexity.Control.Assets == nil {
+			break
+		}
+
+		args, err := ec.field_Control_assets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+
 	case "Control.auditorReferenceID":
 		if e.complexity.Control.AuditorReferenceID == nil {
 			break
@@ -5833,6 +6565,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Control.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
+
+	case "Control.scans":
+		if e.complexity.Control.Scans == nil {
+			break
+		}
+
+		args, err := ec.field_Control_scans_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
 
 	case "Control.scheduledJobs":
 		if e.complexity.Control.ScheduledJobs == nil {
@@ -8339,6 +9083,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.DocumentDataUpdatePayload.DocumentData(childComplexity), true
 
+	case "Entity.assets":
+		if e.complexity.Entity.Assets == nil {
+			break
+		}
+
+		args, err := ec.field_Entity_assets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Entity.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+
+	case "Entity.blockedGroups":
+		if e.complexity.Entity.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Entity_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Entity.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
 	case "Entity.contacts":
 		if e.complexity.Entity.Contacts == nil {
 			break
@@ -8397,6 +9165,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Entity.Domains(childComplexity), true
+
+	case "Entity.editors":
+		if e.complexity.Entity.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_Entity_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Entity.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Entity.entityType":
 		if e.complexity.Entity.EntityType == nil {
@@ -8464,6 +9244,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Entity.OwnerID(childComplexity), true
 
+	case "Entity.scans":
+		if e.complexity.Entity.Scans == nil {
+			break
+		}
+
+		args, err := ec.field_Entity_scans_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Entity.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
+
 	case "Entity.status":
 		if e.complexity.Entity.Status == nil {
 			break
@@ -8491,6 +9283,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Entity.UpdatedBy(childComplexity), true
+
+	case "Entity.viewers":
+		if e.complexity.Entity.Viewers == nil {
+			break
+		}
+
+		args, err := ec.field_Entity_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Entity.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "EntityBulkCreatePayload.entities":
 		if e.complexity.EntityBulkCreatePayload.Entities == nil {
@@ -10550,6 +11354,42 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Group.RiskViewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 
+	case "Group.scanBlockedGroups":
+		if e.complexity.Group.ScanBlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Group_scanBlockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.ScanBlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
+
+	case "Group.scanEditors":
+		if e.complexity.Group.ScanEditors == nil {
+			break
+		}
+
+		args, err := ec.field_Group_scanEditors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.ScanEditors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
+
+	case "Group.scanViewers":
+		if e.complexity.Group.ScanViewers == nil {
+			break
+		}
+
+		args, err := ec.field_Group_scanViewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Group.ScanViewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
+
 	case "Group.setting":
 		if e.complexity.Group.Setting == nil {
 			break
@@ -12037,6 +12877,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicy.ControlObjectives(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlObjectiveOrder), args["where"].(*generated.ControlObjectiveWhereInput)), true
 
+	case "InternalPolicy.controlSuggestions":
+		if e.complexity.InternalPolicy.ControlSuggestions == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.ControlSuggestions(childComplexity), true
+
 	case "InternalPolicy.controls":
 		if e.complexity.InternalPolicy.Controls == nil {
 			break
@@ -12084,6 +12931,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicy.Details(childComplexity), true
 
+	case "InternalPolicy.dismissedControlSuggestions":
+		if e.complexity.InternalPolicy.DismissedControlSuggestions == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.DismissedControlSuggestions(childComplexity), true
+
+	case "InternalPolicy.dismissedImprovementSuggestions":
+		if e.complexity.InternalPolicy.DismissedImprovementSuggestions == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.DismissedImprovementSuggestions(childComplexity), true
+
+	case "InternalPolicy.dismissedTagSuggestions":
+		if e.complexity.InternalPolicy.DismissedTagSuggestions == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.DismissedTagSuggestions(childComplexity), true
+
 	case "InternalPolicy.displayID":
 		if e.complexity.InternalPolicy.DisplayID == nil {
 			break
@@ -12109,6 +12977,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicy.ID(childComplexity), true
+
+	case "InternalPolicy.improvementSuggestions":
+		if e.complexity.InternalPolicy.ImprovementSuggestions == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.ImprovementSuggestions(childComplexity), true
 
 	case "InternalPolicy.name":
 		if e.complexity.InternalPolicy.Name == nil {
@@ -12233,6 +13108,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicy.Summary(childComplexity), true
 
+	case "InternalPolicy.tagSuggestions":
+		if e.complexity.InternalPolicy.TagSuggestions == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.TagSuggestions(childComplexity), true
+
 	case "InternalPolicy.tags":
 		if e.complexity.InternalPolicy.Tags == nil {
 			break
@@ -12336,6 +13218,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicyHistory.ApproverID(childComplexity), true
 
+	case "InternalPolicyHistory.controlSuggestions":
+		if e.complexity.InternalPolicyHistory.ControlSuggestions == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.ControlSuggestions(childComplexity), true
+
 	case "InternalPolicyHistory.createdAt":
 		if e.complexity.InternalPolicyHistory.CreatedAt == nil {
 			break
@@ -12364,6 +13253,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicyHistory.Details(childComplexity), true
 
+	case "InternalPolicyHistory.dismissedControlSuggestions":
+		if e.complexity.InternalPolicyHistory.DismissedControlSuggestions == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.DismissedControlSuggestions(childComplexity), true
+
+	case "InternalPolicyHistory.dismissedImprovementSuggestions":
+		if e.complexity.InternalPolicyHistory.DismissedImprovementSuggestions == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.DismissedImprovementSuggestions(childComplexity), true
+
+	case "InternalPolicyHistory.dismissedTagSuggestions":
+		if e.complexity.InternalPolicyHistory.DismissedTagSuggestions == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.DismissedTagSuggestions(childComplexity), true
+
 	case "InternalPolicyHistory.displayID":
 		if e.complexity.InternalPolicyHistory.DisplayID == nil {
 			break
@@ -12384,6 +13294,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicyHistory.ID(childComplexity), true
+
+	case "InternalPolicyHistory.improvementSuggestions":
+		if e.complexity.InternalPolicyHistory.ImprovementSuggestions == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.ImprovementSuggestions(childComplexity), true
 
 	case "InternalPolicyHistory.name":
 		if e.complexity.InternalPolicyHistory.Name == nil {
@@ -12454,6 +13371,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicyHistory.Summary(childComplexity), true
+
+	case "InternalPolicyHistory.tagSuggestions":
+		if e.complexity.InternalPolicyHistory.TagSuggestions == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.TagSuggestions(childComplexity), true
 
 	case "InternalPolicyHistory.tags":
 		if e.complexity.InternalPolicyHistory.Tags == nil {
@@ -13915,6 +14839,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateActionPlan(childComplexity, args["input"].(generated.CreateActionPlanInput)), true
 
+	case "Mutation.createAsset":
+		if e.complexity.Mutation.CreateAsset == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createAsset_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateAsset(childComplexity, args["input"].(generated.CreateAssetInput)), true
+
 	case "Mutation.createBulkAPIToken":
 		if e.complexity.Mutation.CreateBulkAPIToken == nil {
 			break
@@ -13939,6 +14875,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkActionPlan(childComplexity, args["input"].([]*generated.CreateActionPlanInput)), true
 
+	case "Mutation.createBulkAsset":
+		if e.complexity.Mutation.CreateBulkAsset == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkAsset_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkAsset(childComplexity, args["input"].([]*generated.CreateAssetInput)), true
+
 	case "Mutation.createBulkCSVAPIToken":
 		if e.complexity.Mutation.CreateBulkCSVAPIToken == nil {
 			break
@@ -13962,6 +14910,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkCSVActionPlan(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.createBulkCSVAsset":
+		if e.complexity.Mutation.CreateBulkCSVAsset == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVAsset_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVAsset(childComplexity, args["input"].(graphql.Upload)), true
 
 	case "Mutation.createBulkCSVContact":
 		if e.complexity.Mutation.CreateBulkCSVContact == nil {
@@ -14286,6 +15246,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkCSVRisk(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.createBulkCSVScan":
+		if e.complexity.Mutation.CreateBulkCSVScan == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVScan_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVScan(childComplexity, args["input"].(graphql.Upload)), true
 
 	case "Mutation.createBulkCSVScheduledJob":
 		if e.complexity.Mutation.CreateBulkCSVScheduledJob == nil {
@@ -14682,6 +15654,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkRisk(childComplexity, args["input"].([]*generated.CreateRiskInput)), true
+
+	case "Mutation.createBulkScan":
+		if e.complexity.Mutation.CreateBulkScan == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkScan_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkScan(childComplexity, args["input"].([]*generated.CreateScanInput)), true
 
 	case "Mutation.createBulkScheduledJob":
 		if e.complexity.Mutation.CreateBulkScheduledJob == nil {
@@ -15235,6 +16219,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateRisk(childComplexity, args["input"].(generated.CreateRiskInput)), true
 
+	case "Mutation.createScan":
+		if e.complexity.Mutation.CreateScan == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createScan_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateScan(childComplexity, args["input"].(generated.CreateScanInput)), true
+
 	case "Mutation.createScheduledJob":
 		if e.complexity.Mutation.CreateScheduledJob == nil {
 			break
@@ -15390,6 +16386,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.DeleteActionPlan(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteAsset":
+		if e.complexity.Mutation.DeleteAsset == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteAsset_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteAsset(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteContact":
 		if e.complexity.Mutation.DeleteContact == nil {
@@ -15799,6 +16807,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteRisk(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteScan":
+		if e.complexity.Mutation.DeleteScan == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteScan_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteScan(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteScheduledJob":
 		if e.complexity.Mutation.DeleteScheduledJob == nil {
 			break
@@ -15942,6 +16962,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateActionPlan(childComplexity, args["id"].(string), args["input"].(generated.UpdateActionPlanInput)), true
+
+	case "Mutation.updateAsset":
+		if e.complexity.Mutation.UpdateAsset == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateAsset_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateAsset(childComplexity, args["id"].(string), args["input"].(generated.UpdateAssetInput)), true
 
 	case "Mutation.updateContact":
 		if e.complexity.Mutation.UpdateContact == nil {
@@ -16314,6 +17346,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateRisk(childComplexity, args["id"].(string), args["input"].(generated.UpdateRiskInput)), true
+
+	case "Mutation.updateScan":
+		if e.complexity.Mutation.UpdateScan == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateScan_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateScan(childComplexity, args["id"].(string), args["input"].(generated.UpdateScanInput)), true
 
 	case "Mutation.updateScheduledJob":
 		if e.complexity.Mutation.UpdateScheduledJob == nil {
@@ -17807,6 +18851,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Organization.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
 
+	case "Organization.assets":
+		if e.complexity.Organization.Assets == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_assets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+
 	case "Organization.avatarFile":
 		if e.complexity.Organization.AvatarFile == nil {
 			break
@@ -18397,6 +19453,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Organization.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 
+	case "Organization.scans":
+		if e.complexity.Organization.Scans == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_scans_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
+
 	case "Organization.scheduledJobCreators":
 		if e.complexity.Organization.ScheduledJobCreators == nil {
 			break
@@ -18833,6 +19901,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrganizationSetting.BillingPhone(childComplexity), true
 
+	case "OrganizationSetting.complianceWebhookToken":
+		if e.complexity.OrganizationSetting.ComplianceWebhookToken == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.ComplianceWebhookToken(childComplexity), true
+
 	case "OrganizationSetting.createdAt":
 		if e.complexity.OrganizationSetting.CreatedAt == nil {
 			break
@@ -18879,6 +19954,41 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrganizationSetting.ID(childComplexity), true
+
+	case "OrganizationSetting.identityProvider":
+		if e.complexity.OrganizationSetting.IdentityProvider == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.IdentityProvider(childComplexity), true
+
+	case "OrganizationSetting.identityProviderEntityID":
+		if e.complexity.OrganizationSetting.IdentityProviderEntityID == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.IdentityProviderEntityID(childComplexity), true
+
+	case "OrganizationSetting.identityProviderLoginEnforced":
+		if e.complexity.OrganizationSetting.IdentityProviderLoginEnforced == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.IdentityProviderLoginEnforced(childComplexity), true
+
+	case "OrganizationSetting.identityProviderMetadataEndpoint":
+		if e.complexity.OrganizationSetting.IdentityProviderMetadataEndpoint == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.IdentityProviderMetadataEndpoint(childComplexity), true
+
+	case "OrganizationSetting.oidcDiscoveryEndpoint":
+		if e.complexity.OrganizationSetting.OidcDiscoveryEndpoint == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.OidcDiscoveryEndpoint(childComplexity), true
 
 	case "OrganizationSetting.organization":
 		if e.complexity.OrganizationSetting.Organization == nil {
@@ -19020,6 +20130,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrganizationSettingHistory.BillingPhone(childComplexity), true
 
+	case "OrganizationSettingHistory.complianceWebhookToken":
+		if e.complexity.OrganizationSettingHistory.ComplianceWebhookToken == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.ComplianceWebhookToken(childComplexity), true
+
 	case "OrganizationSettingHistory.createdAt":
 		if e.complexity.OrganizationSettingHistory.CreatedAt == nil {
 			break
@@ -19061,6 +20178,41 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrganizationSettingHistory.ID(childComplexity), true
+
+	case "OrganizationSettingHistory.identityProvider":
+		if e.complexity.OrganizationSettingHistory.IdentityProvider == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.IdentityProvider(childComplexity), true
+
+	case "OrganizationSettingHistory.identityProviderEntityID":
+		if e.complexity.OrganizationSettingHistory.IdentityProviderEntityID == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.IdentityProviderEntityID(childComplexity), true
+
+	case "OrganizationSettingHistory.identityProviderLoginEnforced":
+		if e.complexity.OrganizationSettingHistory.IdentityProviderLoginEnforced == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.IdentityProviderLoginEnforced(childComplexity), true
+
+	case "OrganizationSettingHistory.identityProviderMetadataEndpoint":
+		if e.complexity.OrganizationSettingHistory.IdentityProviderMetadataEndpoint == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.IdentityProviderMetadataEndpoint(childComplexity), true
+
+	case "OrganizationSettingHistory.oidcDiscoveryEndpoint":
+		if e.complexity.OrganizationSettingHistory.OidcDiscoveryEndpoint == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.OidcDiscoveryEndpoint(childComplexity), true
 
 	case "OrganizationSettingHistory.operation":
 		if e.complexity.OrganizationSettingHistory.Operation == nil {
@@ -19427,6 +20579,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Procedure.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
+	case "Procedure.controlSuggestions":
+		if e.complexity.Procedure.ControlSuggestions == nil {
+			break
+		}
+
+		return e.complexity.Procedure.ControlSuggestions(childComplexity), true
+
 	case "Procedure.controls":
 		if e.complexity.Procedure.Controls == nil {
 			break
@@ -19474,6 +20633,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Procedure.Details(childComplexity), true
 
+	case "Procedure.dismissedControlSuggestions":
+		if e.complexity.Procedure.DismissedControlSuggestions == nil {
+			break
+		}
+
+		return e.complexity.Procedure.DismissedControlSuggestions(childComplexity), true
+
+	case "Procedure.dismissedImprovementSuggestions":
+		if e.complexity.Procedure.DismissedImprovementSuggestions == nil {
+			break
+		}
+
+		return e.complexity.Procedure.DismissedImprovementSuggestions(childComplexity), true
+
+	case "Procedure.dismissedTagSuggestions":
+		if e.complexity.Procedure.DismissedTagSuggestions == nil {
+			break
+		}
+
+		return e.complexity.Procedure.DismissedTagSuggestions(childComplexity), true
+
 	case "Procedure.displayID":
 		if e.complexity.Procedure.DisplayID == nil {
 			break
@@ -19499,6 +20679,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Procedure.ID(childComplexity), true
+
+	case "Procedure.improvementSuggestions":
+		if e.complexity.Procedure.ImprovementSuggestions == nil {
+			break
+		}
+
+		return e.complexity.Procedure.ImprovementSuggestions(childComplexity), true
 
 	case "Procedure.internalPolicies":
 		if e.complexity.Procedure.InternalPolicies == nil {
@@ -19623,6 +20810,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Procedure.Summary(childComplexity), true
 
+	case "Procedure.tagSuggestions":
+		if e.complexity.Procedure.TagSuggestions == nil {
+			break
+		}
+
+		return e.complexity.Procedure.TagSuggestions(childComplexity), true
+
 	case "Procedure.tags":
 		if e.complexity.Procedure.Tags == nil {
 			break
@@ -19726,6 +20920,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ProcedureHistory.ApproverID(childComplexity), true
 
+	case "ProcedureHistory.controlSuggestions":
+		if e.complexity.ProcedureHistory.ControlSuggestions == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.ControlSuggestions(childComplexity), true
+
 	case "ProcedureHistory.createdAt":
 		if e.complexity.ProcedureHistory.CreatedAt == nil {
 			break
@@ -19754,6 +20955,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ProcedureHistory.Details(childComplexity), true
 
+	case "ProcedureHistory.dismissedControlSuggestions":
+		if e.complexity.ProcedureHistory.DismissedControlSuggestions == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.DismissedControlSuggestions(childComplexity), true
+
+	case "ProcedureHistory.dismissedImprovementSuggestions":
+		if e.complexity.ProcedureHistory.DismissedImprovementSuggestions == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.DismissedImprovementSuggestions(childComplexity), true
+
+	case "ProcedureHistory.dismissedTagSuggestions":
+		if e.complexity.ProcedureHistory.DismissedTagSuggestions == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.DismissedTagSuggestions(childComplexity), true
+
 	case "ProcedureHistory.displayID":
 		if e.complexity.ProcedureHistory.DisplayID == nil {
 			break
@@ -19774,6 +20996,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ProcedureHistory.ID(childComplexity), true
+
+	case "ProcedureHistory.improvementSuggestions":
+		if e.complexity.ProcedureHistory.ImprovementSuggestions == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.ImprovementSuggestions(childComplexity), true
 
 	case "ProcedureHistory.name":
 		if e.complexity.ProcedureHistory.Name == nil {
@@ -19844,6 +21073,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ProcedureHistory.Summary(childComplexity), true
+
+	case "ProcedureHistory.tagSuggestions":
+		if e.complexity.ProcedureHistory.TagSuggestions == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.TagSuggestions(childComplexity), true
 
 	case "ProcedureHistory.tags":
 		if e.complexity.ProcedureHistory.Tags == nil {
@@ -20885,6 +22121,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.AdminActionPlanSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
+	case "Query.adminAssetSearch":
+		if e.complexity.Query.AdminAssetSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminAssetSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminAssetSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
 	case "Query.adminContactSearch":
 		if e.complexity.Query.AdminContactSearch == nil {
 			break
@@ -21233,6 +22481,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.AdminRiskSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
+	case "Query.adminScanSearch":
+		if e.complexity.Query.AdminScanSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminScanSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminScanSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
 	case "Query.adminScheduledJobSearch":
 		if e.complexity.Query.AdminScheduledJobSearch == nil {
 			break
@@ -21364,6 +22624,54 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.AdminWebauthnSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.asset":
+		if e.complexity.Query.Asset == nil {
+			break
+		}
+
+		args, err := ec.field_Query_asset_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Asset(childComplexity, args["id"].(string)), true
+
+	case "Query.assetHistories":
+		if e.complexity.Query.AssetHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_assetHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AssetHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.AssetHistoryOrder), args["where"].(*generated.AssetHistoryWhereInput)), true
+
+	case "Query.assetSearch":
+		if e.complexity.Query.AssetSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_assetSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AssetSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.assets":
+		if e.complexity.Query.Assets == nil {
+			break
+		}
+
+		args, err := ec.field_Query_assets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
 
 	case "Query.auditLogs":
 		if e.complexity.Query.AuditLogs == nil {
@@ -23011,6 +24319,54 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 
+	case "Query.scan":
+		if e.complexity.Query.Scan == nil {
+			break
+		}
+
+		args, err := ec.field_Query_scan_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Scan(childComplexity, args["id"].(string)), true
+
+	case "Query.scanHistories":
+		if e.complexity.Query.ScanHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_scanHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ScanHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.ScanHistoryOrder), args["where"].(*generated.ScanHistoryWhereInput)), true
+
+	case "Query.scanSearch":
+		if e.complexity.Query.ScanSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_scanSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ScanSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.scans":
+		if e.complexity.Query.Scans == nil {
+			break
+		}
+
+		args, err := ec.field_Query_scans_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
+
 	case "Query.scheduledJob":
 		if e.complexity.Query.ScheduledJob == nil {
 			break
@@ -23570,6 +24926,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Risk.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
 
+	case "Risk.assets":
+		if e.complexity.Risk.Assets == nil {
+			break
+		}
+
+		args, err := ec.field_Risk_assets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Risk.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+
 	case "Risk.blockedGroups":
 		if e.complexity.Risk.BlockedGroups == nil {
 			break
@@ -23662,6 +25030,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Risk.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
+	case "Risk.entities":
+		if e.complexity.Risk.Entities == nil {
+			break
+		}
+
+		args, err := ec.field_Risk_entities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Risk.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
 	case "Risk.id":
 		if e.complexity.Risk.ID == nil {
 			break
@@ -23753,6 +25133,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Risk.RiskType(childComplexity), true
+
+	case "Risk.scans":
+		if e.complexity.Risk.Scans == nil {
+			break
+		}
+
+		args, err := ec.field_Risk_scans_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Risk.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
 
 	case "Risk.score":
 		if e.complexity.Risk.Score == nil {
@@ -24097,6 +25489,346 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.RiskUpdatePayload.Risk(childComplexity), true
+
+	case "Scan.assets":
+		if e.complexity.Scan.Assets == nil {
+			break
+		}
+
+		args, err := ec.field_Scan_assets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Scan.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+
+	case "Scan.blockedGroups":
+		if e.complexity.Scan.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Scan_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Scan.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Scan.createdAt":
+		if e.complexity.Scan.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Scan.CreatedAt(childComplexity), true
+
+	case "Scan.createdBy":
+		if e.complexity.Scan.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.Scan.CreatedBy(childComplexity), true
+
+	case "Scan.editors":
+		if e.complexity.Scan.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_Scan_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Scan.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Scan.entities":
+		if e.complexity.Scan.Entities == nil {
+			break
+		}
+
+		args, err := ec.field_Scan_entities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Scan.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
+	case "Scan.id":
+		if e.complexity.Scan.ID == nil {
+			break
+		}
+
+		return e.complexity.Scan.ID(childComplexity), true
+
+	case "Scan.metadata":
+		if e.complexity.Scan.Metadata == nil {
+			break
+		}
+
+		return e.complexity.Scan.Metadata(childComplexity), true
+
+	case "Scan.owner":
+		if e.complexity.Scan.Owner == nil {
+			break
+		}
+
+		return e.complexity.Scan.Owner(childComplexity), true
+
+	case "Scan.ownerID":
+		if e.complexity.Scan.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.Scan.OwnerID(childComplexity), true
+
+	case "Scan.scanType":
+		if e.complexity.Scan.ScanType == nil {
+			break
+		}
+
+		return e.complexity.Scan.ScanType(childComplexity), true
+
+	case "Scan.status":
+		if e.complexity.Scan.Status == nil {
+			break
+		}
+
+		return e.complexity.Scan.Status(childComplexity), true
+
+	case "Scan.tags":
+		if e.complexity.Scan.Tags == nil {
+			break
+		}
+
+		return e.complexity.Scan.Tags(childComplexity), true
+
+	case "Scan.target":
+		if e.complexity.Scan.Target == nil {
+			break
+		}
+
+		return e.complexity.Scan.Target(childComplexity), true
+
+	case "Scan.updatedAt":
+		if e.complexity.Scan.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Scan.UpdatedAt(childComplexity), true
+
+	case "Scan.updatedBy":
+		if e.complexity.Scan.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.Scan.UpdatedBy(childComplexity), true
+
+	case "Scan.viewers":
+		if e.complexity.Scan.Viewers == nil {
+			break
+		}
+
+		args, err := ec.field_Scan_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Scan.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "ScanBulkCreatePayload.scans":
+		if e.complexity.ScanBulkCreatePayload.Scans == nil {
+			break
+		}
+
+		return e.complexity.ScanBulkCreatePayload.Scans(childComplexity), true
+
+	case "ScanConnection.edges":
+		if e.complexity.ScanConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.ScanConnection.Edges(childComplexity), true
+
+	case "ScanConnection.pageInfo":
+		if e.complexity.ScanConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.ScanConnection.PageInfo(childComplexity), true
+
+	case "ScanConnection.totalCount":
+		if e.complexity.ScanConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.ScanConnection.TotalCount(childComplexity), true
+
+	case "ScanCreatePayload.scan":
+		if e.complexity.ScanCreatePayload.Scan == nil {
+			break
+		}
+
+		return e.complexity.ScanCreatePayload.Scan(childComplexity), true
+
+	case "ScanDeletePayload.deletedID":
+		if e.complexity.ScanDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.ScanDeletePayload.DeletedID(childComplexity), true
+
+	case "ScanEdge.cursor":
+		if e.complexity.ScanEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.ScanEdge.Cursor(childComplexity), true
+
+	case "ScanEdge.node":
+		if e.complexity.ScanEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.ScanEdge.Node(childComplexity), true
+
+	case "ScanHistory.createdAt":
+		if e.complexity.ScanHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.CreatedAt(childComplexity), true
+
+	case "ScanHistory.createdBy":
+		if e.complexity.ScanHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.CreatedBy(childComplexity), true
+
+	case "ScanHistory.historyTime":
+		if e.complexity.ScanHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.HistoryTime(childComplexity), true
+
+	case "ScanHistory.id":
+		if e.complexity.ScanHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.ID(childComplexity), true
+
+	case "ScanHistory.metadata":
+		if e.complexity.ScanHistory.Metadata == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.Metadata(childComplexity), true
+
+	case "ScanHistory.operation":
+		if e.complexity.ScanHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.Operation(childComplexity), true
+
+	case "ScanHistory.ownerID":
+		if e.complexity.ScanHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.OwnerID(childComplexity), true
+
+	case "ScanHistory.ref":
+		if e.complexity.ScanHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.Ref(childComplexity), true
+
+	case "ScanHistory.scanType":
+		if e.complexity.ScanHistory.ScanType == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.ScanType(childComplexity), true
+
+	case "ScanHistory.status":
+		if e.complexity.ScanHistory.Status == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.Status(childComplexity), true
+
+	case "ScanHistory.tags":
+		if e.complexity.ScanHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.Tags(childComplexity), true
+
+	case "ScanHistory.target":
+		if e.complexity.ScanHistory.Target == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.Target(childComplexity), true
+
+	case "ScanHistory.updatedAt":
+		if e.complexity.ScanHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.UpdatedAt(childComplexity), true
+
+	case "ScanHistory.updatedBy":
+		if e.complexity.ScanHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.ScanHistory.UpdatedBy(childComplexity), true
+
+	case "ScanHistoryConnection.edges":
+		if e.complexity.ScanHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.ScanHistoryConnection.Edges(childComplexity), true
+
+	case "ScanHistoryConnection.pageInfo":
+		if e.complexity.ScanHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.ScanHistoryConnection.PageInfo(childComplexity), true
+
+	case "ScanHistoryConnection.totalCount":
+		if e.complexity.ScanHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.ScanHistoryConnection.TotalCount(childComplexity), true
+
+	case "ScanHistoryEdge.cursor":
+		if e.complexity.ScanHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.ScanHistoryEdge.Cursor(childComplexity), true
+
+	case "ScanHistoryEdge.node":
+		if e.complexity.ScanHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.ScanHistoryEdge.Node(childComplexity), true
+
+	case "ScanUpdatePayload.scan":
+		if e.complexity.ScanUpdatePayload.Scan == nil {
+			break
+		}
+
+		return e.complexity.ScanUpdatePayload.Scan(childComplexity), true
 
 	case "ScheduledJob.cadence":
 		if e.complexity.ScheduledJob.Cadence == nil {
@@ -24595,6 +26327,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SearchResults.ActionPlans(childComplexity), true
 
+	case "SearchResults.assets":
+		if e.complexity.SearchResults.Assets == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.Assets(childComplexity), true
+
 	case "SearchResults.contacts":
 		if e.complexity.SearchResults.Contacts == nil {
 			break
@@ -24804,6 +26543,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SearchResults.Risks(childComplexity), true
+
+	case "SearchResults.scans":
+		if e.complexity.SearchResults.Scans == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.Scans(childComplexity), true
 
 	case "SearchResults.scheduledJobs":
 		if e.complexity.SearchResults.ScheduledJobs == nil {
@@ -28674,6 +30420,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputActionPlanOrder,
 		ec.unmarshalInputActionPlanWhereInput,
 		ec.unmarshalInputAddProgramMembershipInput,
+		ec.unmarshalInputAssetHistoryOrder,
+		ec.unmarshalInputAssetHistoryWhereInput,
+		ec.unmarshalInputAssetOrder,
+		ec.unmarshalInputAssetWhereInput,
 		ec.unmarshalInputAuditLogOrder,
 		ec.unmarshalInputAuditLogWhereInput,
 		ec.unmarshalInputCloneControlInput,
@@ -28699,6 +30449,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputControlWhereInput,
 		ec.unmarshalInputCreateAPITokenInput,
 		ec.unmarshalInputCreateActionPlanInput,
+		ec.unmarshalInputCreateAssetInput,
 		ec.unmarshalInputCreateContactInput,
 		ec.unmarshalInputCreateControlImplementationInput,
 		ec.unmarshalInputCreateControlInput,
@@ -28740,6 +30491,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateProgramMembershipInput,
 		ec.unmarshalInputCreateProgramWithMembersInput,
 		ec.unmarshalInputCreateRiskInput,
+		ec.unmarshalInputCreateScanInput,
 		ec.unmarshalInputCreateScheduledJobInput,
 		ec.unmarshalInputCreateScheduledJobRunInput,
 		ec.unmarshalInputCreateStandardInput,
@@ -28871,6 +30623,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputRiskHistoryWhereInput,
 		ec.unmarshalInputRiskOrder,
 		ec.unmarshalInputRiskWhereInput,
+		ec.unmarshalInputScanHistoryOrder,
+		ec.unmarshalInputScanHistoryWhereInput,
+		ec.unmarshalInputScanOrder,
+		ec.unmarshalInputScanWhereInput,
 		ec.unmarshalInputScheduledJobHistoryOrder,
 		ec.unmarshalInputScheduledJobHistoryWhereInput,
 		ec.unmarshalInputScheduledJobOrder,
@@ -28907,6 +30663,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputTrustCenterWhereInput,
 		ec.unmarshalInputUpdateAPITokenInput,
 		ec.unmarshalInputUpdateActionPlanInput,
+		ec.unmarshalInputUpdateAssetInput,
 		ec.unmarshalInputUpdateContactInput,
 		ec.unmarshalInputUpdateControlImplementationInput,
 		ec.unmarshalInputUpdateControlInput,
@@ -28943,6 +30700,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateProgramInput,
 		ec.unmarshalInputUpdateProgramMembershipInput,
 		ec.unmarshalInputUpdateRiskInput,
+		ec.unmarshalInputUpdateScanInput,
 		ec.unmarshalInputUpdateScheduledJobInput,
 		ec.unmarshalInputUpdateScheduledJobRunInput,
 		ec.unmarshalInputUpdateStandardInput,
@@ -29216,6 +30974,31 @@ type ActionPlanBulkCreatePayload {
         """
         last: Int
     ): ActionPlanConnection
+    """
+    Search across Asset objects
+    """
+    adminAssetSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): AssetConnection
     """
     Search across Contact objects
     """
@@ -29942,6 +31725,31 @@ type ActionPlanBulkCreatePayload {
         last: Int
     ): RiskConnection
     """
+    Search across Scan objects
+    """
+    adminScanSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): ScanConnection
+    """
     Search across ScheduledJob objects
     """
     adminScheduledJobSearch(
@@ -30294,6 +32102,109 @@ type APITokenBulkCreatePayload {
     Created apiTokens
     """
     apiTokens: [APIToken!]
+}`, BuiltIn: false},
+	{Name: "../schema/asset.graphql", Input: `extend type Query {
+    """
+    Look up asset by ID
+    """
+     asset(
+        """
+        ID of the asset
+        """
+        id: ID!
+    ):  Asset!
+}
+
+extend type Mutation{
+    """
+    Create a new asset
+    """
+    createAsset(
+        """
+        values of the asset
+        """
+        input: CreateAssetInput!
+    ): AssetCreatePayload!
+    """
+    Create multiple new assets
+    """
+    createBulkAsset(
+        """
+        values of the asset
+        """
+        input: [CreateAssetInput!]
+    ): AssetBulkCreatePayload!
+    """
+    Create multiple new assets via file upload
+    """
+    createBulkCSVAsset(
+        """
+        csv file containing values of the asset
+        """
+        input: Upload!
+    ): AssetBulkCreatePayload!
+    """
+    Update an existing asset
+    """
+    updateAsset(
+        """
+        ID of the asset
+        """
+        id: ID!
+        """
+        New values for the asset
+        """
+        input: UpdateAssetInput!
+    ): AssetUpdatePayload!
+    """
+    Delete an existing asset
+    """
+    deleteAsset(
+        """
+        ID of the asset
+        """
+        id: ID!
+    ): AssetDeletePayload!
+}
+
+"""
+Return response for createAsset mutation
+"""
+type AssetCreatePayload {
+    """
+    Created asset
+    """
+    asset: Asset!
+}
+
+"""
+Return response for updateAsset mutation
+"""
+type AssetUpdatePayload {
+    """
+    Updated asset
+    """
+    asset: Asset!
+}
+
+"""
+Return response for deleteAsset mutation
+"""
+type AssetDeletePayload {
+    """
+    Deleted asset ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkAsset mutation
+"""
+type AssetBulkCreatePayload {
+    """
+    Created assets
+    """
+    assets: [Asset!]
 }`, BuiltIn: false},
 	{Name: "../schema/audit.graphql", Input: `extend type Query {
   auditLogs(
@@ -31644,6 +33555,30 @@ type ActionPlan implements Node {
   delegateID: ID
   summary: String
   """
+  auto-generated tag suggestions for the action_plan
+  """
+  tagSuggestions: [String!]
+  """
+  tag suggestions dismissed by the user for the action_plan
+  """
+  dismissedTagSuggestions: [String!]
+  """
+  proposed controls referenced in the action_plan
+  """
+  controlSuggestions: [String!]
+  """
+  control suggestions dismissed by the user for the action_plan
+  """
+  dismissedControlSuggestions: [String!]
+  """
+  suggested improvements for the action_plan
+  """
+  improvementSuggestions: [String!]
+  """
+  improvement suggestions dismissed by the user for the action_plan
+  """
+  dismissedImprovementSuggestions: [String!]
+  """
   the organization id that owns the object
   """
   ownerID: ID
@@ -31896,6 +33831,30 @@ type ActionPlanHistory implements Node {
   """
   delegateID: String
   summary: String
+  """
+  auto-generated tag suggestions for the action_plan
+  """
+  tagSuggestions: [String!]
+  """
+  tag suggestions dismissed by the user for the action_plan
+  """
+  dismissedTagSuggestions: [String!]
+  """
+  proposed controls referenced in the action_plan
+  """
+  controlSuggestions: [String!]
+  """
+  control suggestions dismissed by the user for the action_plan
+  """
+  dismissedControlSuggestions: [String!]
+  """
+  suggested improvements for the action_plan
+  """
+  improvementSuggestions: [String!]
+  """
+  improvement suggestions dismissed by the user for the action_plan
+  """
+  dismissedImprovementSuggestions: [String!]
   """
   the organization id that owns the object
   """
@@ -32687,6 +34646,836 @@ input ActionPlanWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+}
+type Asset implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  the type of the asset, e.g. technology, domain, device, etc
+  """
+  assetType: AssetAssetType!
+  """
+  the name of the asset, e.g. matts computer, office router, IP address, etc
+  """
+  name: String!
+  description: String
+  """
+  unique identifier like domain, device id, etc
+  """
+  identifier: String
+  """
+  the website of the asset, if applicable
+  """
+  website: String
+  """
+  the CPE (Common Platform Enumeration) of the asset, if applicable
+  """
+  cpe: String
+  """
+  the categories of the asset, e.g. web server, database, etc
+  """
+  categories: [String!]
+  owner: Organization
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  scans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Scans returned from the connection.
+    """
+    orderBy: [ScanOrder!]
+
+    """
+    Filtering options for Scans returned from the connection.
+    """
+    where: ScanWhereInput
+  ): ScanConnection!
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+}
+"""
+AssetAssetType is enum for the field asset_type
+"""
+enum AssetAssetType @goModel(model: "github.com/theopenlane/core/pkg/enums.AssetType") {
+  TECHNOLOGY
+  DOMAIN
+  DEVICE
+  TELEPHONE
+}
+"""
+A connection to a list of items.
+"""
+type AssetConnection {
+  """
+  A list of edges.
+  """
+  edges: [AssetEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type AssetEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Asset
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type AssetHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: AssetHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  the type of the asset, e.g. technology, domain, device, etc
+  """
+  assetType: AssetHistoryAssetType!
+  """
+  the name of the asset, e.g. matts computer, office router, IP address, etc
+  """
+  name: String!
+  description: String
+  """
+  unique identifier like domain, device id, etc
+  """
+  identifier: String
+  """
+  the website of the asset, if applicable
+  """
+  website: String
+  """
+  the CPE (Common Platform Enumeration) of the asset, if applicable
+  """
+  cpe: String
+  """
+  the categories of the asset, e.g. web server, database, etc
+  """
+  categories: [String!]
+}
+"""
+AssetHistoryAssetType is enum for the field asset_type
+"""
+enum AssetHistoryAssetType @goModel(model: "github.com/theopenlane/core/pkg/enums.AssetType") {
+  TECHNOLOGY
+  DOMAIN
+  DEVICE
+  TELEPHONE
+}
+"""
+A connection to a list of items.
+"""
+type AssetHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [AssetHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type AssetHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: AssetHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+AssetHistoryOpType is enum for the field operation
+"""
+enum AssetHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for AssetHistory connections
+"""
+input AssetHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order AssetHistories.
+  """
+  field: AssetHistoryOrderField!
+}
+"""
+Properties by which AssetHistory connections can be ordered.
+"""
+enum AssetHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  ASSET_TYPE
+  name
+}
+"""
+AssetHistoryWhereInput is used for filtering AssetHistory objects.
+Input was generated by ent.
+"""
+input AssetHistoryWhereInput {
+  not: AssetHistoryWhereInput
+  and: [AssetHistoryWhereInput!]
+  or: [AssetHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: AssetHistoryOpType
+  operationNEQ: AssetHistoryOpType
+  operationIn: [AssetHistoryOpType!]
+  operationNotIn: [AssetHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  asset_type field predicates
+  """
+  assetType: AssetHistoryAssetType
+  assetTypeNEQ: AssetHistoryAssetType
+  assetTypeIn: [AssetHistoryAssetType!]
+  assetTypeNotIn: [AssetHistoryAssetType!]
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  identifier field predicates
+  """
+  identifier: String
+  identifierNEQ: String
+  identifierIn: [String!]
+  identifierNotIn: [String!]
+  identifierGT: String
+  identifierGTE: String
+  identifierLT: String
+  identifierLTE: String
+  identifierContains: String
+  identifierHasPrefix: String
+  identifierHasSuffix: String
+  identifierIsNil: Boolean
+  identifierNotNil: Boolean
+  identifierEqualFold: String
+  identifierContainsFold: String
+  """
+  website field predicates
+  """
+  website: String
+  websiteNEQ: String
+  websiteIn: [String!]
+  websiteNotIn: [String!]
+  websiteGT: String
+  websiteGTE: String
+  websiteLT: String
+  websiteLTE: String
+  websiteContains: String
+  websiteHasPrefix: String
+  websiteHasSuffix: String
+  websiteIsNil: Boolean
+  websiteNotNil: Boolean
+  websiteEqualFold: String
+  websiteContainsFold: String
+}
+"""
+Ordering options for Asset connections
+"""
+input AssetOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Assets.
+  """
+  field: AssetOrderField!
+}
+"""
+Properties by which Asset connections can be ordered.
+"""
+enum AssetOrderField {
+  created_at
+  updated_at
+  ASSET_TYPE
+  name
+}
+"""
+AssetWhereInput is used for filtering Asset objects.
+Input was generated by ent.
+"""
+input AssetWhereInput {
+  not: AssetWhereInput
+  and: [AssetWhereInput!]
+  or: [AssetWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  asset_type field predicates
+  """
+  assetType: AssetAssetType
+  assetTypeNEQ: AssetAssetType
+  assetTypeIn: [AssetAssetType!]
+  assetTypeNotIn: [AssetAssetType!]
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  identifier field predicates
+  """
+  identifier: String
+  identifierNEQ: String
+  identifierIn: [String!]
+  identifierNotIn: [String!]
+  identifierGT: String
+  identifierGTE: String
+  identifierLT: String
+  identifierLTE: String
+  identifierContains: String
+  identifierHasPrefix: String
+  identifierHasSuffix: String
+  identifierIsNil: Boolean
+  identifierNotNil: Boolean
+  identifierEqualFold: String
+  identifierContainsFold: String
+  """
+  website field predicates
+  """
+  website: String
+  websiteNEQ: String
+  websiteIn: [String!]
+  websiteNotIn: [String!]
+  websiteGT: String
+  websiteGTE: String
+  websiteLT: String
+  websiteLTE: String
+  websiteContains: String
+  websiteHasPrefix: String
+  websiteHasSuffix: String
+  websiteIsNil: Boolean
+  websiteNotNil: Boolean
+  websiteEqualFold: String
+  websiteContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
+  """
+  scans edge predicates
+  """
+  hasScans: Boolean
+  hasScansWith: [ScanWhereInput!]
+  """
+  entities edge predicates
+  """
+  hasEntities: Boolean
+  hasEntitiesWith: [EntityWhereInput!]
+  """
+  controls edge predicates
+  """
+  hasControls: Boolean
+  hasControlsWith: [ControlWhereInput!]
 }
 type Contact implements Node {
   id: ID!
@@ -33913,6 +36702,68 @@ type Control implements Node {
     """
     where: ProgramWhereInput
   ): ProgramConnection!
+  assets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assets returned from the connection.
+    """
+    orderBy: [AssetOrder!]
+
+    """
+    Filtering options for Assets returned from the connection.
+    """
+    where: AssetWhereInput
+  ): AssetConnection!
+  scans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Scans returned from the connection.
+    """
+    orderBy: [ScanOrder!]
+
+    """
+    Filtering options for Scans returned from the connection.
+    """
+    where: ScanWhereInput
+  ): ScanConnection!
   controlImplementations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -36646,6 +39497,7 @@ enum ControlOrderField {
   category
   subcategory
   ref_code
+  CONTROL_OWNER_name
 }
 type ControlScheduledJob implements Node {
   id: ID!
@@ -37635,6 +40487,16 @@ input ControlWhereInput {
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
   """
+  assets edge predicates
+  """
+  hasAssets: Boolean
+  hasAssetsWith: [AssetWhereInput!]
+  """
+  scans edge predicates
+  """
+  hasScans: Boolean
+  hasScansWith: [ScanWhereInput!]
+  """
   control_implementations edge predicates
   """
   hasControlImplementations: Boolean
@@ -37733,6 +40595,30 @@ input CreateActionPlanInput {
   """
   reviewFrequency: ActionPlanFrequency
   """
+  auto-generated tag suggestions for the action_plan
+  """
+  tagSuggestions: [String!]
+  """
+  tag suggestions dismissed by the user for the action_plan
+  """
+  dismissedTagSuggestions: [String!]
+  """
+  proposed controls referenced in the action_plan
+  """
+  controlSuggestions: [String!]
+  """
+  control suggestions dismissed by the user for the action_plan
+  """
+  dismissedControlSuggestions: [String!]
+  """
+  suggested improvements for the action_plan
+  """
+  improvementSuggestions: [String!]
+  """
+  improvement suggestions dismissed by the user for the action_plan
+  """
+  dismissedImprovementSuggestions: [String!]
+  """
   due date of the action plan
   """
   dueDate: Time
@@ -37751,6 +40637,48 @@ input CreateActionPlanInput {
   controlIDs: [ID!]
   userIDs: [ID!]
   programIDs: [ID!]
+}
+"""
+CreateAssetInput is used for create Asset object.
+Input was generated by ent.
+"""
+input CreateAssetInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the type of the asset, e.g. technology, domain, device, etc
+  """
+  assetType: AssetAssetType
+  """
+  the name of the asset, e.g. matts computer, office router, IP address, etc
+  """
+  name: String!
+  description: String
+  """
+  unique identifier like domain, device id, etc
+  """
+  identifier: String
+  """
+  the website of the asset, if applicable
+  """
+  website: String
+  """
+  the CPE (Common Platform Enumeration) of the asset, if applicable
+  """
+  cpe: String
+  """
+  the categories of the asset, e.g. web server, database, etc
+  """
+  categories: [String!]
+  ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
+  scanIDs: [ID!]
+  entityIDs: [ID!]
+  controlIDs: [ID!]
 }
 """
 CreateContactInput is used for create Contact object.
@@ -37921,6 +40849,8 @@ input CreateControlInput {
   editorIDs: [ID!]
   standardID: ID
   programIDs: [ID!]
+  assetIDs: [ID!]
+  scanIDs: [ID!]
   controlImplementationIDs: [ID!]
   subcontrolIDs: [ID!]
   scheduledJobIDs: [ID!]
@@ -38112,10 +41042,15 @@ input CreateEntityInput {
   """
   status: String
   ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
   contactIDs: [ID!]
   documentIDs: [ID!]
   noteIDs: [ID!]
   fileIDs: [ID!]
+  assetIDs: [ID!]
+  scanIDs: [ID!]
   entityTypeID: ID
 }
 """
@@ -38323,6 +41258,9 @@ input CreateGroupInput {
   controlImplementationEditorIDs: [ID!]
   controlImplementationBlockedGroupIDs: [ID!]
   controlImplementationViewerIDs: [ID!]
+  scanEditorIDs: [ID!]
+  scanBlockedGroupIDs: [ID!]
+  scanViewerIDs: [ID!]
   procedureEditorIDs: [ID!]
   procedureBlockedGroupIDs: [ID!]
   internalPolicyEditorIDs: [ID!]
@@ -38462,6 +41400,30 @@ input CreateInternalPolicyInput {
   the frequency at which the policy should be reviewed, used to calculate the review_due date
   """
   reviewFrequency: InternalPolicyFrequency
+  """
+  auto-generated tag suggestions for the policy
+  """
+  tagSuggestions: [String!]
+  """
+  tag suggestions dismissed by the user for the policy
+  """
+  dismissedTagSuggestions: [String!]
+  """
+  proposed controls referenced in the policy
+  """
+  controlSuggestions: [String!]
+  """
+  control suggestions dismissed by the user for the policy
+  """
+  dismissedControlSuggestions: [String!]
+  """
+  suggested improvements for the policy
+  """
+  improvementSuggestions: [String!]
+  """
+  improvement suggestions dismissed by the user for the policy
+  """
+  dismissedImprovementSuggestions: [String!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -38822,6 +41784,8 @@ input CreateOrganizationInput {
   jobResultIDs: [ID!]
   scheduledJobRunIDs: [ID!]
   trustCenterIDs: [ID!]
+  assetIDs: [ID!]
+  scanIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -38868,6 +41832,38 @@ input CreateOrganizationSettingInput {
   domains allowed to access the organization, if empty all domains are allowed
   """
   allowedEmailDomains: [String!]
+  """
+  SSO provider type for the organization
+  """
+  identityProvider: OrganizationSettingSSOProvider
+  """
+  client ID for SSO integration
+  """
+  identityProviderClientID: String
+  """
+  client secret for SSO integration
+  """
+  identityProviderClientSecret: String
+  """
+  metadata URL for the SSO provider
+  """
+  identityProviderMetadataEndpoint: String
+  """
+  SAML entity ID for the SSO provider
+  """
+  identityProviderEntityID: String
+  """
+  OIDC discovery URL for the SSO provider
+  """
+  oidcDiscoveryEndpoint: String
+  """
+  enforce SSO authentication for organization members
+  """
+  identityProviderLoginEnforced: Boolean
+  """
+  unique token used to receive compliance webhook events
+  """
+  complianceWebhookToken: String
   organizationID: ID
   fileIDs: [ID!]
 }
@@ -38942,6 +41938,30 @@ input CreateProcedureInput {
   the frequency at which the procedure should be reviewed, used to calculate the review_due date
   """
   reviewFrequency: ProcedureFrequency
+  """
+  auto-generated tag suggestions for the procedure
+  """
+  tagSuggestions: [String!]
+  """
+  tag suggestions dismissed by the user for the procedure
+  """
+  dismissedTagSuggestions: [String!]
+  """
+  proposed controls referenced in the procedure
+  """
+  controlSuggestions: [String!]
+  """
+  control suggestions dismissed by the user for the procedure
+  """
+  dismissedControlSuggestions: [String!]
+  """
+  suggested improvements for the procedure
+  """
+  improvementSuggestions: [String!]
+  """
+  improvement suggestions dismissed by the user for the procedure
+  """
+  dismissedImprovementSuggestions: [String!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -39102,8 +42122,43 @@ input CreateRiskInput {
   programIDs: [ID!]
   actionPlanIDs: [ID!]
   taskIDs: [ID!]
+  assetIDs: [ID!]
+  entityIDs: [ID!]
+  scanIDs: [ID!]
   stakeholderID: ID
   delegateID: ID
+}
+"""
+CreateScanInput is used for create Scan object.
+Input was generated by ent.
+"""
+input CreateScanInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the target of the scan, e.g., a domain name or IP address, codebase
+  """
+  target: String!
+  """
+  the type of scan, e.g., domain scan, vulnerability scan, provider scan
+  """
+  scanType: ScanScanType
+  """
+  additional metadata for the scan, e.g., scan configuration, options, etc
+  """
+  metadata: Map
+  """
+  the status of the scan, e.g., processing, completed, failed
+  """
+  status: ScanScanStatus
+  ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
+  assetIDs: [ID!]
+  entityIDs: [ID!]
 }
 """
 CreateScheduledJobInput is used for create ScheduledJob object.
@@ -41511,6 +44566,99 @@ type Entity implements Node {
   """
   status: String
   owner: Organization
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   contacts(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -41635,6 +44783,68 @@ type Entity implements Node {
     """
     where: FileWhereInput
   ): FileConnection!
+  assets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assets returned from the connection.
+    """
+    orderBy: [AssetOrder!]
+
+    """
+    Filtering options for Assets returned from the connection.
+    """
+    where: AssetWhereInput
+  ): AssetConnection!
+  scans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Scans returned from the connection.
+    """
+    orderBy: [ScanOrder!]
+
+    """
+    Filtering options for Scans returned from the connection.
+    """
+    where: ScanWhereInput
+  ): ScanConnection!
   entityType: EntityType
 }
 """
@@ -42649,6 +45859,21 @@ input EntityWhereInput {
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
   """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
+  """
   contacts edge predicates
   """
   hasContacts: Boolean
@@ -42668,6 +45893,16 @@ input EntityWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  assets edge predicates
+  """
+  hasAssets: Boolean
+  hasAssetsWith: [AssetWhereInput!]
+  """
+  scans edge predicates
+  """
+  hasScans: Boolean
+  hasScansWith: [ScanWhereInput!]
   """
   entity_type edge predicates
   """
@@ -45819,6 +49054,99 @@ type Group implements Node {
     """
     where: ControlImplementationWhereInput
   ): ControlImplementationConnection!
+  scanEditors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Scans returned from the connection.
+    """
+    orderBy: [ScanOrder!]
+
+    """
+    Filtering options for Scans returned from the connection.
+    """
+    where: ScanWhereInput
+  ): ScanConnection!
+  scanBlockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Scans returned from the connection.
+    """
+    orderBy: [ScanOrder!]
+
+    """
+    Filtering options for Scans returned from the connection.
+    """
+    where: ScanWhereInput
+  ): ScanConnection!
+  scanViewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Scans returned from the connection.
+    """
+    orderBy: [ScanOrder!]
+
+    """
+    Filtering options for Scans returned from the connection.
+    """
+    where: ScanWhereInput
+  ): ScanConnection!
   procedureEditors(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -47775,6 +51103,21 @@ input GroupWhereInput {
   hasControlImplementationViewers: Boolean
   hasControlImplementationViewersWith: [ControlImplementationWhereInput!]
   """
+  scan_editors edge predicates
+  """
+  hasScanEditors: Boolean
+  hasScanEditorsWith: [ScanWhereInput!]
+  """
+  scan_blocked_groups edge predicates
+  """
+  hasScanBlockedGroups: Boolean
+  hasScanBlockedGroupsWith: [ScanWhereInput!]
+  """
+  scan_viewers edge predicates
+  """
+  hasScanViewers: Boolean
+  hasScanViewersWith: [ScanWhereInput!]
+  """
   procedure_editors edge predicates
   """
   hasProcedureEditors: Boolean
@@ -49051,6 +52394,30 @@ type InternalPolicy implements Node {
   """
   delegateID: ID
   summary: String
+  """
+  auto-generated tag suggestions for the policy
+  """
+  tagSuggestions: [String!]
+  """
+  tag suggestions dismissed by the user for the policy
+  """
+  dismissedTagSuggestions: [String!]
+  """
+  proposed controls referenced in the policy
+  """
+  controlSuggestions: [String!]
+  """
+  control suggestions dismissed by the user for the policy
+  """
+  dismissedControlSuggestions: [String!]
+  """
+  suggested improvements for the policy
+  """
+  improvementSuggestions: [String!]
+  """
+  improvement suggestions dismissed by the user for the policy
+  """
+  dismissedImprovementSuggestions: [String!]
   owner: Organization
   blockedGroups(
     """
@@ -49482,6 +52849,30 @@ type InternalPolicyHistory implements Node {
   """
   delegateID: String
   summary: String
+  """
+  auto-generated tag suggestions for the policy
+  """
+  tagSuggestions: [String!]
+  """
+  tag suggestions dismissed by the user for the policy
+  """
+  dismissedTagSuggestions: [String!]
+  """
+  proposed controls referenced in the policy
+  """
+  controlSuggestions: [String!]
+  """
+  control suggestions dismissed by the user for the policy
+  """
+  dismissedControlSuggestions: [String!]
+  """
+  suggested improvements for the policy
+  """
+  improvementSuggestions: [String!]
+  """
+  improvement suggestions dismissed by the user for the policy
+  """
+  dismissedImprovementSuggestions: [String!]
 }
 """
 A connection to a list of items.
@@ -57326,6 +60717,68 @@ type Organization implements Node {
     """
     where: TrustCenterWhereInput
   ): TrustCenterConnection!
+  assets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assets returned from the connection.
+    """
+    orderBy: [AssetOrder!]
+
+    """
+    Filtering options for Assets returned from the connection.
+    """
+    where: AssetWhereInput
+  ): AssetConnection!
+  scans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Scans returned from the connection.
+    """
+    orderBy: [ScanOrder!]
+
+    """
+    Filtering options for Scans returned from the connection.
+    """
+    where: ScanWhereInput
+  ): ScanConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -57777,6 +61230,30 @@ type OrganizationSetting implements Node {
   domains allowed to access the organization, if empty all domains are allowed
   """
   allowedEmailDomains: [String!]
+  """
+  SSO provider type for the organization
+  """
+  identityProvider: OrganizationSettingSSOProvider
+  """
+  metadata URL for the SSO provider
+  """
+  identityProviderMetadataEndpoint: String
+  """
+  SAML entity ID for the SSO provider
+  """
+  identityProviderEntityID: String
+  """
+  OIDC discovery URL for the SSO provider
+  """
+  oidcDiscoveryEndpoint: String
+  """
+  enforce SSO authentication for organization members
+  """
+  identityProviderLoginEnforced: Boolean!
+  """
+  unique token used to receive compliance webhook events
+  """
+  complianceWebhookToken: String!
   organization: Organization
   files(
     """
@@ -57893,6 +61370,30 @@ type OrganizationSettingHistory implements Node {
   domains allowed to access the organization, if empty all domains are allowed
   """
   allowedEmailDomains: [String!]
+  """
+  SSO provider type for the organization
+  """
+  identityProvider: OrganizationSettingHistorySSOProvider
+  """
+  metadata URL for the SSO provider
+  """
+  identityProviderMetadataEndpoint: String
+  """
+  SAML entity ID for the SSO provider
+  """
+  identityProviderEntityID: String
+  """
+  OIDC discovery URL for the SSO provider
+  """
+  oidcDiscoveryEndpoint: String
+  """
+  enforce SSO authentication for organization members
+  """
+  identityProviderLoginEnforced: Boolean!
+  """
+  unique token used to receive compliance webhook events
+  """
+  complianceWebhookToken: String!
 }
 """
 A connection to a list of items.
@@ -57960,6 +61461,17 @@ enum OrganizationSettingHistoryRegion @goModel(model: "github.com/theopenlane/co
   AMER
   EMEA
   APAC
+}
+"""
+OrganizationSettingHistorySSOProvider is enum for the field identity_provider
+"""
+enum OrganizationSettingHistorySSOProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.SSOProvider") {
+  OKTA
+  ONELOGIN
+  GOOGLEWORKSPACE
+  SLACK
+  GITHUB
+  NONE
 }
 """
 OrganizationSettingHistoryWhereInput is used for filtering OrganizationSettingHistory objects.
@@ -58184,6 +61696,90 @@ input OrganizationSettingHistoryWhereInput {
   """
   billingNotificationsEnabled: Boolean
   billingNotificationsEnabledNEQ: Boolean
+  """
+  identity_provider field predicates
+  """
+  identityProvider: OrganizationSettingHistorySSOProvider
+  identityProviderNEQ: OrganizationSettingHistorySSOProvider
+  identityProviderIn: [OrganizationSettingHistorySSOProvider!]
+  identityProviderNotIn: [OrganizationSettingHistorySSOProvider!]
+  identityProviderIsNil: Boolean
+  identityProviderNotNil: Boolean
+  """
+  identity_provider_metadata_endpoint field predicates
+  """
+  identityProviderMetadataEndpoint: String
+  identityProviderMetadataEndpointNEQ: String
+  identityProviderMetadataEndpointIn: [String!]
+  identityProviderMetadataEndpointNotIn: [String!]
+  identityProviderMetadataEndpointGT: String
+  identityProviderMetadataEndpointGTE: String
+  identityProviderMetadataEndpointLT: String
+  identityProviderMetadataEndpointLTE: String
+  identityProviderMetadataEndpointContains: String
+  identityProviderMetadataEndpointHasPrefix: String
+  identityProviderMetadataEndpointHasSuffix: String
+  identityProviderMetadataEndpointIsNil: Boolean
+  identityProviderMetadataEndpointNotNil: Boolean
+  identityProviderMetadataEndpointEqualFold: String
+  identityProviderMetadataEndpointContainsFold: String
+  """
+  identity_provider_entity_id field predicates
+  """
+  identityProviderEntityID: String
+  identityProviderEntityIDNEQ: String
+  identityProviderEntityIDIn: [String!]
+  identityProviderEntityIDNotIn: [String!]
+  identityProviderEntityIDGT: String
+  identityProviderEntityIDGTE: String
+  identityProviderEntityIDLT: String
+  identityProviderEntityIDLTE: String
+  identityProviderEntityIDContains: String
+  identityProviderEntityIDHasPrefix: String
+  identityProviderEntityIDHasSuffix: String
+  identityProviderEntityIDIsNil: Boolean
+  identityProviderEntityIDNotNil: Boolean
+  identityProviderEntityIDEqualFold: String
+  identityProviderEntityIDContainsFold: String
+  """
+  oidc_discovery_endpoint field predicates
+  """
+  oidcDiscoveryEndpoint: String
+  oidcDiscoveryEndpointNEQ: String
+  oidcDiscoveryEndpointIn: [String!]
+  oidcDiscoveryEndpointNotIn: [String!]
+  oidcDiscoveryEndpointGT: String
+  oidcDiscoveryEndpointGTE: String
+  oidcDiscoveryEndpointLT: String
+  oidcDiscoveryEndpointLTE: String
+  oidcDiscoveryEndpointContains: String
+  oidcDiscoveryEndpointHasPrefix: String
+  oidcDiscoveryEndpointHasSuffix: String
+  oidcDiscoveryEndpointIsNil: Boolean
+  oidcDiscoveryEndpointNotNil: Boolean
+  oidcDiscoveryEndpointEqualFold: String
+  oidcDiscoveryEndpointContainsFold: String
+  """
+  identity_provider_login_enforced field predicates
+  """
+  identityProviderLoginEnforced: Boolean
+  identityProviderLoginEnforcedNEQ: Boolean
+  """
+  compliance_webhook_token field predicates
+  """
+  complianceWebhookToken: String
+  complianceWebhookTokenNEQ: String
+  complianceWebhookTokenIn: [String!]
+  complianceWebhookTokenNotIn: [String!]
+  complianceWebhookTokenGT: String
+  complianceWebhookTokenGTE: String
+  complianceWebhookTokenLT: String
+  complianceWebhookTokenLTE: String
+  complianceWebhookTokenContains: String
+  complianceWebhookTokenHasPrefix: String
+  complianceWebhookTokenHasSuffix: String
+  complianceWebhookTokenEqualFold: String
+  complianceWebhookTokenContainsFold: String
 }
 """
 Ordering options for OrganizationSetting connections
@@ -58212,6 +61808,17 @@ enum OrganizationSettingRegion @goModel(model: "github.com/theopenlane/core/pkg/
   AMER
   EMEA
   APAC
+}
+"""
+OrganizationSettingSSOProvider is enum for the field identity_provider
+"""
+enum OrganizationSettingSSOProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.SSOProvider") {
+  OKTA
+  ONELOGIN
+  GOOGLEWORKSPACE
+  SLACK
+  GITHUB
+  NONE
 }
 """
 OrganizationSettingWhereInput is used for filtering OrganizationSetting objects.
@@ -58400,6 +62007,90 @@ input OrganizationSettingWhereInput {
   """
   billingNotificationsEnabled: Boolean
   billingNotificationsEnabledNEQ: Boolean
+  """
+  identity_provider field predicates
+  """
+  identityProvider: OrganizationSettingSSOProvider
+  identityProviderNEQ: OrganizationSettingSSOProvider
+  identityProviderIn: [OrganizationSettingSSOProvider!]
+  identityProviderNotIn: [OrganizationSettingSSOProvider!]
+  identityProviderIsNil: Boolean
+  identityProviderNotNil: Boolean
+  """
+  identity_provider_metadata_endpoint field predicates
+  """
+  identityProviderMetadataEndpoint: String
+  identityProviderMetadataEndpointNEQ: String
+  identityProviderMetadataEndpointIn: [String!]
+  identityProviderMetadataEndpointNotIn: [String!]
+  identityProviderMetadataEndpointGT: String
+  identityProviderMetadataEndpointGTE: String
+  identityProviderMetadataEndpointLT: String
+  identityProviderMetadataEndpointLTE: String
+  identityProviderMetadataEndpointContains: String
+  identityProviderMetadataEndpointHasPrefix: String
+  identityProviderMetadataEndpointHasSuffix: String
+  identityProviderMetadataEndpointIsNil: Boolean
+  identityProviderMetadataEndpointNotNil: Boolean
+  identityProviderMetadataEndpointEqualFold: String
+  identityProviderMetadataEndpointContainsFold: String
+  """
+  identity_provider_entity_id field predicates
+  """
+  identityProviderEntityID: String
+  identityProviderEntityIDNEQ: String
+  identityProviderEntityIDIn: [String!]
+  identityProviderEntityIDNotIn: [String!]
+  identityProviderEntityIDGT: String
+  identityProviderEntityIDGTE: String
+  identityProviderEntityIDLT: String
+  identityProviderEntityIDLTE: String
+  identityProviderEntityIDContains: String
+  identityProviderEntityIDHasPrefix: String
+  identityProviderEntityIDHasSuffix: String
+  identityProviderEntityIDIsNil: Boolean
+  identityProviderEntityIDNotNil: Boolean
+  identityProviderEntityIDEqualFold: String
+  identityProviderEntityIDContainsFold: String
+  """
+  oidc_discovery_endpoint field predicates
+  """
+  oidcDiscoveryEndpoint: String
+  oidcDiscoveryEndpointNEQ: String
+  oidcDiscoveryEndpointIn: [String!]
+  oidcDiscoveryEndpointNotIn: [String!]
+  oidcDiscoveryEndpointGT: String
+  oidcDiscoveryEndpointGTE: String
+  oidcDiscoveryEndpointLT: String
+  oidcDiscoveryEndpointLTE: String
+  oidcDiscoveryEndpointContains: String
+  oidcDiscoveryEndpointHasPrefix: String
+  oidcDiscoveryEndpointHasSuffix: String
+  oidcDiscoveryEndpointIsNil: Boolean
+  oidcDiscoveryEndpointNotNil: Boolean
+  oidcDiscoveryEndpointEqualFold: String
+  oidcDiscoveryEndpointContainsFold: String
+  """
+  identity_provider_login_enforced field predicates
+  """
+  identityProviderLoginEnforced: Boolean
+  identityProviderLoginEnforcedNEQ: Boolean
+  """
+  compliance_webhook_token field predicates
+  """
+  complianceWebhookToken: String
+  complianceWebhookTokenNEQ: String
+  complianceWebhookTokenIn: [String!]
+  complianceWebhookTokenNotIn: [String!]
+  complianceWebhookTokenGT: String
+  complianceWebhookTokenGTE: String
+  complianceWebhookTokenLT: String
+  complianceWebhookTokenLTE: String
+  complianceWebhookTokenContains: String
+  complianceWebhookTokenHasPrefix: String
+  complianceWebhookTokenHasSuffix: String
+  complianceWebhookTokenEqualFold: String
+  complianceWebhookTokenContainsFold: String
   """
   organization edge predicates
   """
@@ -58880,6 +62571,16 @@ input OrganizationWhereInput {
   hasTrustCenters: Boolean
   hasTrustCentersWith: [TrustCenterWhereInput!]
   """
+  assets edge predicates
+  """
+  hasAssets: Boolean
+  hasAssetsWith: [AssetWhereInput!]
+  """
+  scans edge predicates
+  """
+  hasScans: Boolean
+  hasScansWith: [ScanWhereInput!]
+  """
   members edge predicates
   """
   hasMembers: Boolean
@@ -59322,6 +63023,30 @@ type Procedure implements Node {
   """
   delegateID: ID
   summary: String
+  """
+  auto-generated tag suggestions for the procedure
+  """
+  tagSuggestions: [String!]
+  """
+  tag suggestions dismissed by the user for the procedure
+  """
+  dismissedTagSuggestions: [String!]
+  """
+  proposed controls referenced in the procedure
+  """
+  controlSuggestions: [String!]
+  """
+  control suggestions dismissed by the user for the procedure
+  """
+  dismissedControlSuggestions: [String!]
+  """
+  suggested improvements for the procedure
+  """
+  improvementSuggestions: [String!]
+  """
+  improvement suggestions dismissed by the user for the procedure
+  """
+  dismissedImprovementSuggestions: [String!]
   owner: Organization
   blockedGroups(
     """
@@ -59722,6 +63447,30 @@ type ProcedureHistory implements Node {
   """
   delegateID: String
   summary: String
+  """
+  auto-generated tag suggestions for the procedure
+  """
+  tagSuggestions: [String!]
+  """
+  tag suggestions dismissed by the user for the procedure
+  """
+  dismissedTagSuggestions: [String!]
+  """
+  proposed controls referenced in the procedure
+  """
+  controlSuggestions: [String!]
+  """
+  control suggestions dismissed by the user for the procedure
+  """
+  dismissedControlSuggestions: [String!]
+  """
+  suggested improvements for the procedure
+  """
+  improvementSuggestions: [String!]
+  """
+  improvement suggestions dismissed by the user for the procedure
+  """
+  dismissedImprovementSuggestions: [String!]
 }
 """
 A connection to a list of items.
@@ -62479,6 +66228,68 @@ type Query {
     """
     where: ActionPlanHistoryWhereInput
   ): ActionPlanHistoryConnection!
+  assets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assets returned from the connection.
+    """
+    orderBy: [AssetOrder!]
+
+    """
+    Filtering options for Assets returned from the connection.
+    """
+    where: AssetWhereInput
+  ): AssetConnection!
+  assetHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AssetHistories returned from the connection.
+    """
+    orderBy: AssetHistoryOrder
+
+    """
+    Filtering options for AssetHistories returned from the connection.
+    """
+    where: AssetHistoryWhereInput
+  ): AssetHistoryConnection!
   contacts(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -64556,6 +68367,68 @@ type Query {
     """
     where: RiskHistoryWhereInput
   ): RiskHistoryConnection!
+  scans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Scans returned from the connection.
+    """
+    orderBy: [ScanOrder!]
+
+    """
+    Filtering options for Scans returned from the connection.
+    """
+    where: ScanWhereInput
+  ): ScanConnection!
+  scanHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ScanHistories returned from the connection.
+    """
+    orderBy: ScanHistoryOrder
+
+    """
+    Filtering options for ScanHistories returned from the connection.
+    """
+    where: ScanHistoryWhereInput
+  ): ScanHistoryConnection!
   scheduledJobs(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -65616,6 +69489,99 @@ type Risk implements Node {
     """
     where: TaskWhereInput
   ): TaskConnection!
+  assets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assets returned from the connection.
+    """
+    orderBy: [AssetOrder!]
+
+    """
+    Filtering options for Assets returned from the connection.
+    """
+    where: AssetWhereInput
+  ): AssetConnection!
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  scans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Scans returned from the connection.
+    """
+    orderBy: [ScanOrder!]
+
+    """
+    Filtering options for Scans returned from the connection.
+    """
+    where: ScanWhereInput
+  ): ScanConnection!
   """
   the group of users who are responsible for risk oversight
   """
@@ -66565,6 +70531,21 @@ input RiskWhereInput {
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
   """
+  assets edge predicates
+  """
+  hasAssets: Boolean
+  hasAssetsWith: [AssetWhereInput!]
+  """
+  entities edge predicates
+  """
+  hasEntities: Boolean
+  hasEntitiesWith: [EntityWhereInput!]
+  """
+  scans edge predicates
+  """
+  hasScans: Boolean
+  hasScansWith: [ScanWhereInput!]
+  """
   stakeholder edge predicates
   """
   hasStakeholder: Boolean
@@ -66574,6 +70555,706 @@ input RiskWhereInput {
   """
   hasDelegate: Boolean
   hasDelegateWith: [GroupWhereInput!]
+}
+type Scan implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  the target of the scan, e.g., a domain name or IP address, codebase
+  """
+  target: String!
+  """
+  the type of scan, e.g., domain scan, vulnerability scan, provider scan
+  """
+  scanType: ScanScanType!
+  """
+  additional metadata for the scan, e.g., scan configuration, options, etc
+  """
+  metadata: Map
+  """
+  the status of the scan, e.g., processing, completed, failed
+  """
+  status: ScanScanStatus!
+  owner: Organization
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  assets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assets returned from the connection.
+    """
+    orderBy: [AssetOrder!]
+
+    """
+    Filtering options for Assets returned from the connection.
+    """
+    where: AssetWhereInput
+  ): AssetConnection!
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+}
+"""
+A connection to a list of items.
+"""
+type ScanConnection {
+  """
+  A list of edges.
+  """
+  edges: [ScanEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ScanEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Scan
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type ScanHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: ScanHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  the target of the scan, e.g., a domain name or IP address, codebase
+  """
+  target: String!
+  """
+  the type of scan, e.g., domain scan, vulnerability scan, provider scan
+  """
+  scanType: ScanHistoryScanType!
+  """
+  additional metadata for the scan, e.g., scan configuration, options, etc
+  """
+  metadata: Map
+  """
+  the status of the scan, e.g., processing, completed, failed
+  """
+  status: ScanHistoryScanStatus!
+}
+"""
+A connection to a list of items.
+"""
+type ScanHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [ScanHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ScanHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: ScanHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+ScanHistoryOpType is enum for the field operation
+"""
+enum ScanHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for ScanHistory connections
+"""
+input ScanHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ScanHistories.
+  """
+  field: ScanHistoryOrderField!
+}
+"""
+Properties by which ScanHistory connections can be ordered.
+"""
+enum ScanHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  SCAN_TYPE
+  STATUS
+}
+"""
+ScanHistoryScanStatus is enum for the field status
+"""
+enum ScanHistoryScanStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ScanStatus") {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+"""
+ScanHistoryScanType is enum for the field scan_type
+"""
+enum ScanHistoryScanType @goModel(model: "github.com/theopenlane/core/pkg/enums.ScanType") {
+  DOMAIN
+  VULNERABILITY
+  VENDOR
+  PROVIDER
+}
+"""
+ScanHistoryWhereInput is used for filtering ScanHistory objects.
+Input was generated by ent.
+"""
+input ScanHistoryWhereInput {
+  not: ScanHistoryWhereInput
+  and: [ScanHistoryWhereInput!]
+  or: [ScanHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: ScanHistoryOpType
+  operationNEQ: ScanHistoryOpType
+  operationIn: [ScanHistoryOpType!]
+  operationNotIn: [ScanHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  target field predicates
+  """
+  target: String
+  targetNEQ: String
+  targetIn: [String!]
+  targetNotIn: [String!]
+  targetGT: String
+  targetGTE: String
+  targetLT: String
+  targetLTE: String
+  targetContains: String
+  targetHasPrefix: String
+  targetHasSuffix: String
+  targetEqualFold: String
+  targetContainsFold: String
+  """
+  scan_type field predicates
+  """
+  scanType: ScanHistoryScanType
+  scanTypeNEQ: ScanHistoryScanType
+  scanTypeIn: [ScanHistoryScanType!]
+  scanTypeNotIn: [ScanHistoryScanType!]
+  """
+  status field predicates
+  """
+  status: ScanHistoryScanStatus
+  statusNEQ: ScanHistoryScanStatus
+  statusIn: [ScanHistoryScanStatus!]
+  statusNotIn: [ScanHistoryScanStatus!]
+}
+"""
+Ordering options for Scan connections
+"""
+input ScanOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Scans.
+  """
+  field: ScanOrderField!
+}
+"""
+Properties by which Scan connections can be ordered.
+"""
+enum ScanOrderField {
+  created_at
+  updated_at
+  SCAN_TYPE
+  STATUS
+}
+"""
+ScanScanStatus is enum for the field status
+"""
+enum ScanScanStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ScanStatus") {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+"""
+ScanScanType is enum for the field scan_type
+"""
+enum ScanScanType @goModel(model: "github.com/theopenlane/core/pkg/enums.ScanType") {
+  DOMAIN
+  VULNERABILITY
+  VENDOR
+  PROVIDER
+}
+"""
+ScanWhereInput is used for filtering Scan objects.
+Input was generated by ent.
+"""
+input ScanWhereInput {
+  not: ScanWhereInput
+  and: [ScanWhereInput!]
+  or: [ScanWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  target field predicates
+  """
+  target: String
+  targetNEQ: String
+  targetIn: [String!]
+  targetNotIn: [String!]
+  targetGT: String
+  targetGTE: String
+  targetLT: String
+  targetLTE: String
+  targetContains: String
+  targetHasPrefix: String
+  targetHasSuffix: String
+  targetEqualFold: String
+  targetContainsFold: String
+  """
+  scan_type field predicates
+  """
+  scanType: ScanScanType
+  scanTypeNEQ: ScanScanType
+  scanTypeIn: [ScanScanType!]
+  scanTypeNotIn: [ScanScanType!]
+  """
+  status field predicates
+  """
+  status: ScanScanStatus
+  statusNEQ: ScanScanStatus
+  statusIn: [ScanScanStatus!]
+  statusNotIn: [ScanScanStatus!]
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
+  """
+  assets edge predicates
+  """
+  hasAssets: Boolean
+  hasAssetsWith: [AssetWhereInput!]
+  """
+  entities edge predicates
+  """
+  hasEntities: Boolean
+  hasEntitiesWith: [EntityWhereInput!]
 }
 type ScheduledJob implements Node {
   id: ID!
@@ -69529,6 +74210,7 @@ enum SubcontrolOrderField {
   category
   subcategory
   ref_code
+  CONTROL_OWNER_name
 }
 """
 SubcontrolWhereInput is used for filtering Subcontrol objects.
@@ -73251,6 +77933,42 @@ input UpdateActionPlanInput {
   reviewFrequency: ActionPlanFrequency
   clearReviewFrequency: Boolean
   """
+  auto-generated tag suggestions for the action_plan
+  """
+  tagSuggestions: [String!]
+  appendTagSuggestions: [String!]
+  clearTagSuggestions: Boolean
+  """
+  tag suggestions dismissed by the user for the action_plan
+  """
+  dismissedTagSuggestions: [String!]
+  appendDismissedTagSuggestions: [String!]
+  clearDismissedTagSuggestions: Boolean
+  """
+  proposed controls referenced in the action_plan
+  """
+  controlSuggestions: [String!]
+  appendControlSuggestions: [String!]
+  clearControlSuggestions: Boolean
+  """
+  control suggestions dismissed by the user for the action_plan
+  """
+  dismissedControlSuggestions: [String!]
+  appendDismissedControlSuggestions: [String!]
+  clearDismissedControlSuggestions: Boolean
+  """
+  suggested improvements for the action_plan
+  """
+  improvementSuggestions: [String!]
+  appendImprovementSuggestions: [String!]
+  clearImprovementSuggestions: Boolean
+  """
+  improvement suggestions dismissed by the user for the action_plan
+  """
+  dismissedImprovementSuggestions: [String!]
+  appendDismissedImprovementSuggestions: [String!]
+  clearDismissedImprovementSuggestions: Boolean
+  """
   due date of the action plan
   """
   dueDate: Time
@@ -73283,6 +78001,69 @@ input UpdateActionPlanInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+}
+"""
+UpdateAssetInput is used for update Asset object.
+Input was generated by ent.
+"""
+input UpdateAssetInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  the type of the asset, e.g. technology, domain, device, etc
+  """
+  assetType: AssetAssetType
+  """
+  the name of the asset, e.g. matts computer, office router, IP address, etc
+  """
+  name: String
+  description: String
+  clearDescription: Boolean
+  """
+  unique identifier like domain, device id, etc
+  """
+  identifier: String
+  clearIdentifier: Boolean
+  """
+  the website of the asset, if applicable
+  """
+  website: String
+  clearWebsite: Boolean
+  """
+  the CPE (Common Platform Enumeration) of the asset, if applicable
+  """
+  cpe: String
+  clearCpe: Boolean
+  """
+  the categories of the asset, e.g. web server, database, etc
+  """
+  categories: [String!]
+  appendCategories: [String!]
+  clearCategories: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
+  addScanIDs: [ID!]
+  removeScanIDs: [ID!]
+  clearScans: Boolean
+  addEntityIDs: [ID!]
+  removeEntityIDs: [ID!]
+  clearEntities: Boolean
+  addControlIDs: [ID!]
+  removeControlIDs: [ID!]
+  clearControls: Boolean
 }
 """
 UpdateContactInput is used for update Contact object.
@@ -73530,6 +78311,12 @@ input UpdateControlInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addAssetIDs: [ID!]
+  removeAssetIDs: [ID!]
+  clearAssets: Boolean
+  addScanIDs: [ID!]
+  removeScanIDs: [ID!]
+  clearScans: Boolean
   addControlImplementationIDs: [ID!]
   removeControlImplementationIDs: [ID!]
   clearControlImplementations: Boolean
@@ -73789,6 +78576,15 @@ input UpdateEntityInput {
   clearStatus: Boolean
   ownerID: ID
   clearOwner: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
   addContactIDs: [ID!]
   removeContactIDs: [ID!]
   clearContacts: Boolean
@@ -73801,6 +78597,12 @@ input UpdateEntityInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+  addAssetIDs: [ID!]
+  removeAssetIDs: [ID!]
+  clearAssets: Boolean
+  addScanIDs: [ID!]
+  removeScanIDs: [ID!]
+  clearScans: Boolean
   entityTypeID: ID
   clearEntityType: Boolean
 }
@@ -74130,6 +78932,15 @@ input UpdateGroupInput {
   addControlImplementationViewerIDs: [ID!]
   removeControlImplementationViewerIDs: [ID!]
   clearControlImplementationViewers: Boolean
+  addScanEditorIDs: [ID!]
+  removeScanEditorIDs: [ID!]
+  clearScanEditors: Boolean
+  addScanBlockedGroupIDs: [ID!]
+  removeScanBlockedGroupIDs: [ID!]
+  clearScanBlockedGroups: Boolean
+  addScanViewerIDs: [ID!]
+  removeScanViewerIDs: [ID!]
+  clearScanViewers: Boolean
   addProcedureEditorIDs: [ID!]
   removeProcedureEditorIDs: [ID!]
   clearProcedureEditors: Boolean
@@ -74314,6 +79125,42 @@ input UpdateInternalPolicyInput {
   """
   reviewFrequency: InternalPolicyFrequency
   clearReviewFrequency: Boolean
+  """
+  auto-generated tag suggestions for the policy
+  """
+  tagSuggestions: [String!]
+  appendTagSuggestions: [String!]
+  clearTagSuggestions: Boolean
+  """
+  tag suggestions dismissed by the user for the policy
+  """
+  dismissedTagSuggestions: [String!]
+  appendDismissedTagSuggestions: [String!]
+  clearDismissedTagSuggestions: Boolean
+  """
+  proposed controls referenced in the policy
+  """
+  controlSuggestions: [String!]
+  appendControlSuggestions: [String!]
+  clearControlSuggestions: Boolean
+  """
+  control suggestions dismissed by the user for the policy
+  """
+  dismissedControlSuggestions: [String!]
+  appendDismissedControlSuggestions: [String!]
+  clearDismissedControlSuggestions: Boolean
+  """
+  suggested improvements for the policy
+  """
+  improvementSuggestions: [String!]
+  appendImprovementSuggestions: [String!]
+  clearImprovementSuggestions: Boolean
+  """
+  improvement suggestions dismissed by the user for the policy
+  """
+  dismissedImprovementSuggestions: [String!]
+  appendDismissedImprovementSuggestions: [String!]
+  clearDismissedImprovementSuggestions: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
@@ -74806,6 +79653,12 @@ input UpdateOrganizationInput {
   addTrustCenterIDs: [ID!]
   removeTrustCenterIDs: [ID!]
   clearTrustCenters: Boolean
+  addAssetIDs: [ID!]
+  removeAssetIDs: [ID!]
+  clearAssets: Boolean
+  addScanIDs: [ID!]
+  removeScanIDs: [ID!]
+  clearScans: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -74864,6 +79717,44 @@ input UpdateOrganizationSettingInput {
   allowedEmailDomains: [String!]
   appendAllowedEmailDomains: [String!]
   clearAllowedEmailDomains: Boolean
+  """
+  SSO provider type for the organization
+  """
+  identityProvider: OrganizationSettingSSOProvider
+  clearIdentityProvider: Boolean
+  """
+  client ID for SSO integration
+  """
+  identityProviderClientID: String
+  clearIdentityProviderClientID: Boolean
+  """
+  client secret for SSO integration
+  """
+  identityProviderClientSecret: String
+  clearIdentityProviderClientSecret: Boolean
+  """
+  metadata URL for the SSO provider
+  """
+  identityProviderMetadataEndpoint: String
+  clearIdentityProviderMetadataEndpoint: Boolean
+  """
+  SAML entity ID for the SSO provider
+  """
+  identityProviderEntityID: String
+  clearIdentityProviderEntityID: Boolean
+  """
+  OIDC discovery URL for the SSO provider
+  """
+  oidcDiscoveryEndpoint: String
+  clearOidcDiscoveryEndpoint: Boolean
+  """
+  enforce SSO authentication for organization members
+  """
+  identityProviderLoginEnforced: Boolean
+  """
+  unique token used to receive compliance webhook events
+  """
+  complianceWebhookToken: String
   organizationID: ID
   clearOrganization: Boolean
   addFileIDs: [ID!]
@@ -74957,6 +79848,42 @@ input UpdateProcedureInput {
   """
   reviewFrequency: ProcedureFrequency
   clearReviewFrequency: Boolean
+  """
+  auto-generated tag suggestions for the procedure
+  """
+  tagSuggestions: [String!]
+  appendTagSuggestions: [String!]
+  clearTagSuggestions: Boolean
+  """
+  tag suggestions dismissed by the user for the procedure
+  """
+  dismissedTagSuggestions: [String!]
+  appendDismissedTagSuggestions: [String!]
+  clearDismissedTagSuggestions: Boolean
+  """
+  proposed controls referenced in the procedure
+  """
+  controlSuggestions: [String!]
+  appendControlSuggestions: [String!]
+  clearControlSuggestions: Boolean
+  """
+  control suggestions dismissed by the user for the procedure
+  """
+  dismissedControlSuggestions: [String!]
+  appendDismissedControlSuggestions: [String!]
+  clearDismissedControlSuggestions: Boolean
+  """
+  suggested improvements for the procedure
+  """
+  improvementSuggestions: [String!]
+  appendImprovementSuggestions: [String!]
+  clearImprovementSuggestions: Boolean
+  """
+  improvement suggestions dismissed by the user for the procedure
+  """
+  dismissedImprovementSuggestions: [String!]
+  appendDismissedImprovementSuggestions: [String!]
+  clearDismissedImprovementSuggestions: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
@@ -75206,10 +80133,65 @@ input UpdateRiskInput {
   addTaskIDs: [ID!]
   removeTaskIDs: [ID!]
   clearTasks: Boolean
+  addAssetIDs: [ID!]
+  removeAssetIDs: [ID!]
+  clearAssets: Boolean
+  addEntityIDs: [ID!]
+  removeEntityIDs: [ID!]
+  clearEntities: Boolean
+  addScanIDs: [ID!]
+  removeScanIDs: [ID!]
+  clearScans: Boolean
   stakeholderID: ID
   clearStakeholder: Boolean
   delegateID: ID
   clearDelegate: Boolean
+}
+"""
+UpdateScanInput is used for update Scan object.
+Input was generated by ent.
+"""
+input UpdateScanInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  the target of the scan, e.g., a domain name or IP address, codebase
+  """
+  target: String
+  """
+  the type of scan, e.g., domain scan, vulnerability scan, provider scan
+  """
+  scanType: ScanScanType
+  """
+  additional metadata for the scan, e.g., scan configuration, options, etc
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  """
+  the status of the scan, e.g., processing, completed, failed
+  """
+  status: ScanScanStatus
+  ownerID: ID
+  clearOwner: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
+  addAssetIDs: [ID!]
+  removeAssetIDs: [ID!]
+  clearAssets: Boolean
+  addEntityIDs: [ID!]
+  removeEntityIDs: [ID!]
+  clearEntities: Boolean
 }
 """
 UpdateScheduledJobInput is used for update ScheduledJob object.
@@ -80993,6 +85975,109 @@ the audit history resolvers
 """
 scalar Change
 `, BuiltIn: false},
+	{Name: "../schema/scan.graphql", Input: `extend type Query {
+    """
+    Look up scan by ID
+    """
+     scan(
+        """
+        ID of the scan
+        """
+        id: ID!
+    ):  Scan!
+}
+
+extend type Mutation{
+    """
+    Create a new scan
+    """
+    createScan(
+        """
+        values of the scan
+        """
+        input: CreateScanInput!
+    ): ScanCreatePayload!
+    """
+    Create multiple new scans
+    """
+    createBulkScan(
+        """
+        values of the scan
+        """
+        input: [CreateScanInput!]
+    ): ScanBulkCreatePayload!
+    """
+    Create multiple new scans via file upload
+    """
+    createBulkCSVScan(
+        """
+        csv file containing values of the scan
+        """
+        input: Upload!
+    ): ScanBulkCreatePayload!
+    """
+    Update an existing scan
+    """
+    updateScan(
+        """
+        ID of the scan
+        """
+        id: ID!
+        """
+        New values for the scan
+        """
+        input: UpdateScanInput!
+    ): ScanUpdatePayload!
+    """
+    Delete an existing scan
+    """
+    deleteScan(
+        """
+        ID of the scan
+        """
+        id: ID!
+    ): ScanDeletePayload!
+}
+
+"""
+Return response for createScan mutation
+"""
+type ScanCreatePayload {
+    """
+    Created scan
+    """
+    scan: Scan!
+}
+
+"""
+Return response for updateScan mutation
+"""
+type ScanUpdatePayload {
+    """
+    Updated scan
+    """
+    scan: Scan!
+}
+
+"""
+Return response for deleteScan mutation
+"""
+type ScanDeletePayload {
+    """
+    Deleted scan ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkScan mutation
+"""
+type ScanBulkCreatePayload {
+    """
+    Created scans
+    """
+    scans: [Scan!]
+}`, BuiltIn: false},
 	{Name: "../schema/scheduledjob.graphql", Input: `extend type Query {
     """
     Look up scheduledJob by ID
@@ -81161,6 +86246,31 @@ type ScheduledJobBulkCreatePayload {
         """
         last: Int
     ): ActionPlanConnection
+    """
+    Search across Asset objects
+    """
+    assetSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): AssetConnection
     """
     Search across Contact objects
     """
@@ -81887,6 +86997,31 @@ type ScheduledJobBulkCreatePayload {
         last: Int
     ): RiskConnection
     """
+    Search across Scan objects
+    """
+    scanSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): ScanConnection
+    """
     Search across ScheduledJob objects
     """
     scheduledJobSearch(
@@ -82148,6 +87283,7 @@ type SearchResults{
   totalCount: Int!
   apiTokens: APITokenConnection
   actionPlans: ActionPlanConnection
+  assets: AssetConnection
   contacts: ContactConnection
   controls: ControlConnection
   controlImplementations: ControlImplementationConnection
@@ -82177,6 +87313,7 @@ type SearchResults{
   procedures: ProcedureConnection
   programs: ProgramConnection
   risks: RiskConnection
+  scans: ScanConnection
   scheduledJobs: ScheduledJobConnection
   standards: StandardConnection
   subcontrols: SubcontrolConnection

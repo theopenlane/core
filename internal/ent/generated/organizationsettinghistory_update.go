@@ -314,6 +314,154 @@ func (oshu *OrganizationSettingHistoryUpdate) ClearAllowedEmailDomains() *Organi
 	return oshu
 }
 
+// SetIdentityProvider sets the "identity_provider" field.
+func (oshu *OrganizationSettingHistoryUpdate) SetIdentityProvider(ep enums.SSOProvider) *OrganizationSettingHistoryUpdate {
+	oshu.mutation.SetIdentityProvider(ep)
+	return oshu
+}
+
+// SetNillableIdentityProvider sets the "identity_provider" field if the given value is not nil.
+func (oshu *OrganizationSettingHistoryUpdate) SetNillableIdentityProvider(ep *enums.SSOProvider) *OrganizationSettingHistoryUpdate {
+	if ep != nil {
+		oshu.SetIdentityProvider(*ep)
+	}
+	return oshu
+}
+
+// ClearIdentityProvider clears the value of the "identity_provider" field.
+func (oshu *OrganizationSettingHistoryUpdate) ClearIdentityProvider() *OrganizationSettingHistoryUpdate {
+	oshu.mutation.ClearIdentityProvider()
+	return oshu
+}
+
+// SetIdentityProviderClientID sets the "identity_provider_client_id" field.
+func (oshu *OrganizationSettingHistoryUpdate) SetIdentityProviderClientID(s string) *OrganizationSettingHistoryUpdate {
+	oshu.mutation.SetIdentityProviderClientID(s)
+	return oshu
+}
+
+// SetNillableIdentityProviderClientID sets the "identity_provider_client_id" field if the given value is not nil.
+func (oshu *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderClientID(s *string) *OrganizationSettingHistoryUpdate {
+	if s != nil {
+		oshu.SetIdentityProviderClientID(*s)
+	}
+	return oshu
+}
+
+// ClearIdentityProviderClientID clears the value of the "identity_provider_client_id" field.
+func (oshu *OrganizationSettingHistoryUpdate) ClearIdentityProviderClientID() *OrganizationSettingHistoryUpdate {
+	oshu.mutation.ClearIdentityProviderClientID()
+	return oshu
+}
+
+// SetIdentityProviderClientSecret sets the "identity_provider_client_secret" field.
+func (oshu *OrganizationSettingHistoryUpdate) SetIdentityProviderClientSecret(s string) *OrganizationSettingHistoryUpdate {
+	oshu.mutation.SetIdentityProviderClientSecret(s)
+	return oshu
+}
+
+// SetNillableIdentityProviderClientSecret sets the "identity_provider_client_secret" field if the given value is not nil.
+func (oshu *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderClientSecret(s *string) *OrganizationSettingHistoryUpdate {
+	if s != nil {
+		oshu.SetIdentityProviderClientSecret(*s)
+	}
+	return oshu
+}
+
+// ClearIdentityProviderClientSecret clears the value of the "identity_provider_client_secret" field.
+func (oshu *OrganizationSettingHistoryUpdate) ClearIdentityProviderClientSecret() *OrganizationSettingHistoryUpdate {
+	oshu.mutation.ClearIdentityProviderClientSecret()
+	return oshu
+}
+
+// SetIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field.
+func (oshu *OrganizationSettingHistoryUpdate) SetIdentityProviderMetadataEndpoint(s string) *OrganizationSettingHistoryUpdate {
+	oshu.mutation.SetIdentityProviderMetadataEndpoint(s)
+	return oshu
+}
+
+// SetNillableIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field if the given value is not nil.
+func (oshu *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderMetadataEndpoint(s *string) *OrganizationSettingHistoryUpdate {
+	if s != nil {
+		oshu.SetIdentityProviderMetadataEndpoint(*s)
+	}
+	return oshu
+}
+
+// ClearIdentityProviderMetadataEndpoint clears the value of the "identity_provider_metadata_endpoint" field.
+func (oshu *OrganizationSettingHistoryUpdate) ClearIdentityProviderMetadataEndpoint() *OrganizationSettingHistoryUpdate {
+	oshu.mutation.ClearIdentityProviderMetadataEndpoint()
+	return oshu
+}
+
+// SetIdentityProviderEntityID sets the "identity_provider_entity_id" field.
+func (oshu *OrganizationSettingHistoryUpdate) SetIdentityProviderEntityID(s string) *OrganizationSettingHistoryUpdate {
+	oshu.mutation.SetIdentityProviderEntityID(s)
+	return oshu
+}
+
+// SetNillableIdentityProviderEntityID sets the "identity_provider_entity_id" field if the given value is not nil.
+func (oshu *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderEntityID(s *string) *OrganizationSettingHistoryUpdate {
+	if s != nil {
+		oshu.SetIdentityProviderEntityID(*s)
+	}
+	return oshu
+}
+
+// ClearIdentityProviderEntityID clears the value of the "identity_provider_entity_id" field.
+func (oshu *OrganizationSettingHistoryUpdate) ClearIdentityProviderEntityID() *OrganizationSettingHistoryUpdate {
+	oshu.mutation.ClearIdentityProviderEntityID()
+	return oshu
+}
+
+// SetOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field.
+func (oshu *OrganizationSettingHistoryUpdate) SetOidcDiscoveryEndpoint(s string) *OrganizationSettingHistoryUpdate {
+	oshu.mutation.SetOidcDiscoveryEndpoint(s)
+	return oshu
+}
+
+// SetNillableOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field if the given value is not nil.
+func (oshu *OrganizationSettingHistoryUpdate) SetNillableOidcDiscoveryEndpoint(s *string) *OrganizationSettingHistoryUpdate {
+	if s != nil {
+		oshu.SetOidcDiscoveryEndpoint(*s)
+	}
+	return oshu
+}
+
+// ClearOidcDiscoveryEndpoint clears the value of the "oidc_discovery_endpoint" field.
+func (oshu *OrganizationSettingHistoryUpdate) ClearOidcDiscoveryEndpoint() *OrganizationSettingHistoryUpdate {
+	oshu.mutation.ClearOidcDiscoveryEndpoint()
+	return oshu
+}
+
+// SetIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field.
+func (oshu *OrganizationSettingHistoryUpdate) SetIdentityProviderLoginEnforced(b bool) *OrganizationSettingHistoryUpdate {
+	oshu.mutation.SetIdentityProviderLoginEnforced(b)
+	return oshu
+}
+
+// SetNillableIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field if the given value is not nil.
+func (oshu *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderLoginEnforced(b *bool) *OrganizationSettingHistoryUpdate {
+	if b != nil {
+		oshu.SetIdentityProviderLoginEnforced(*b)
+	}
+	return oshu
+}
+
+// SetComplianceWebhookToken sets the "compliance_webhook_token" field.
+func (oshu *OrganizationSettingHistoryUpdate) SetComplianceWebhookToken(s string) *OrganizationSettingHistoryUpdate {
+	oshu.mutation.SetComplianceWebhookToken(s)
+	return oshu
+}
+
+// SetNillableComplianceWebhookToken sets the "compliance_webhook_token" field if the given value is not nil.
+func (oshu *OrganizationSettingHistoryUpdate) SetNillableComplianceWebhookToken(s *string) *OrganizationSettingHistoryUpdate {
+	if s != nil {
+		oshu.SetComplianceWebhookToken(*s)
+	}
+	return oshu
+}
+
 // Mutation returns the OrganizationSettingHistoryMutation object of the builder.
 func (oshu *OrganizationSettingHistoryUpdate) Mutation() *OrganizationSettingHistoryMutation {
 	return oshu.mutation
@@ -360,6 +508,11 @@ func (oshu *OrganizationSettingHistoryUpdate) check() error {
 	if v, ok := oshu.mutation.GeoLocation(); ok {
 		if err := organizationsettinghistory.GeoLocationValidator(v); err != nil {
 			return &ValidationError{Name: "geo_location", err: fmt.Errorf(`generated: validator failed for field "OrganizationSettingHistory.geo_location": %w`, err)}
+		}
+	}
+	if v, ok := oshu.mutation.IdentityProvider(); ok {
+		if err := organizationsettinghistory.IdentityProviderValidator(v); err != nil {
+			return &ValidationError{Name: "identity_provider", err: fmt.Errorf(`generated: validator failed for field "OrganizationSettingHistory.identity_provider": %w`, err)}
 		}
 	}
 	return nil
@@ -493,6 +646,48 @@ func (oshu *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (n in
 	}
 	if oshu.mutation.AllowedEmailDomainsCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldAllowedEmailDomains, field.TypeJSON)
+	}
+	if value, ok := oshu.mutation.IdentityProvider(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProvider, field.TypeEnum, value)
+	}
+	if oshu.mutation.IdentityProviderCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldIdentityProvider, field.TypeEnum)
+	}
+	if value, ok := oshu.mutation.IdentityProviderClientID(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderClientID, field.TypeString, value)
+	}
+	if oshu.mutation.IdentityProviderClientIDCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderClientID, field.TypeString)
+	}
+	if value, ok := oshu.mutation.IdentityProviderClientSecret(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderClientSecret, field.TypeString, value)
+	}
+	if oshu.mutation.IdentityProviderClientSecretCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderClientSecret, field.TypeString)
+	}
+	if value, ok := oshu.mutation.IdentityProviderMetadataEndpoint(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, field.TypeString, value)
+	}
+	if oshu.mutation.IdentityProviderMetadataEndpointCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, field.TypeString)
+	}
+	if value, ok := oshu.mutation.IdentityProviderEntityID(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderEntityID, field.TypeString, value)
+	}
+	if oshu.mutation.IdentityProviderEntityIDCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderEntityID, field.TypeString)
+	}
+	if value, ok := oshu.mutation.OidcDiscoveryEndpoint(); ok {
+		_spec.SetField(organizationsettinghistory.FieldOidcDiscoveryEndpoint, field.TypeString, value)
+	}
+	if oshu.mutation.OidcDiscoveryEndpointCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldOidcDiscoveryEndpoint, field.TypeString)
+	}
+	if value, ok := oshu.mutation.IdentityProviderLoginEnforced(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
+	}
+	if value, ok := oshu.mutation.ComplianceWebhookToken(); ok {
+		_spec.SetField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString, value)
 	}
 	_spec.Node.Schema = oshu.schemaConfig.OrganizationSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, oshu.schemaConfig)
@@ -798,6 +993,154 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) ClearAllowedEmailDomains() *Or
 	return oshuo
 }
 
+// SetIdentityProvider sets the "identity_provider" field.
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetIdentityProvider(ep enums.SSOProvider) *OrganizationSettingHistoryUpdateOne {
+	oshuo.mutation.SetIdentityProvider(ep)
+	return oshuo
+}
+
+// SetNillableIdentityProvider sets the "identity_provider" field if the given value is not nil.
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProvider(ep *enums.SSOProvider) *OrganizationSettingHistoryUpdateOne {
+	if ep != nil {
+		oshuo.SetIdentityProvider(*ep)
+	}
+	return oshuo
+}
+
+// ClearIdentityProvider clears the value of the "identity_provider" field.
+func (oshuo *OrganizationSettingHistoryUpdateOne) ClearIdentityProvider() *OrganizationSettingHistoryUpdateOne {
+	oshuo.mutation.ClearIdentityProvider()
+	return oshuo
+}
+
+// SetIdentityProviderClientID sets the "identity_provider_client_id" field.
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetIdentityProviderClientID(s string) *OrganizationSettingHistoryUpdateOne {
+	oshuo.mutation.SetIdentityProviderClientID(s)
+	return oshuo
+}
+
+// SetNillableIdentityProviderClientID sets the "identity_provider_client_id" field if the given value is not nil.
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderClientID(s *string) *OrganizationSettingHistoryUpdateOne {
+	if s != nil {
+		oshuo.SetIdentityProviderClientID(*s)
+	}
+	return oshuo
+}
+
+// ClearIdentityProviderClientID clears the value of the "identity_provider_client_id" field.
+func (oshuo *OrganizationSettingHistoryUpdateOne) ClearIdentityProviderClientID() *OrganizationSettingHistoryUpdateOne {
+	oshuo.mutation.ClearIdentityProviderClientID()
+	return oshuo
+}
+
+// SetIdentityProviderClientSecret sets the "identity_provider_client_secret" field.
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetIdentityProviderClientSecret(s string) *OrganizationSettingHistoryUpdateOne {
+	oshuo.mutation.SetIdentityProviderClientSecret(s)
+	return oshuo
+}
+
+// SetNillableIdentityProviderClientSecret sets the "identity_provider_client_secret" field if the given value is not nil.
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderClientSecret(s *string) *OrganizationSettingHistoryUpdateOne {
+	if s != nil {
+		oshuo.SetIdentityProviderClientSecret(*s)
+	}
+	return oshuo
+}
+
+// ClearIdentityProviderClientSecret clears the value of the "identity_provider_client_secret" field.
+func (oshuo *OrganizationSettingHistoryUpdateOne) ClearIdentityProviderClientSecret() *OrganizationSettingHistoryUpdateOne {
+	oshuo.mutation.ClearIdentityProviderClientSecret()
+	return oshuo
+}
+
+// SetIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field.
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetIdentityProviderMetadataEndpoint(s string) *OrganizationSettingHistoryUpdateOne {
+	oshuo.mutation.SetIdentityProviderMetadataEndpoint(s)
+	return oshuo
+}
+
+// SetNillableIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field if the given value is not nil.
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderMetadataEndpoint(s *string) *OrganizationSettingHistoryUpdateOne {
+	if s != nil {
+		oshuo.SetIdentityProviderMetadataEndpoint(*s)
+	}
+	return oshuo
+}
+
+// ClearIdentityProviderMetadataEndpoint clears the value of the "identity_provider_metadata_endpoint" field.
+func (oshuo *OrganizationSettingHistoryUpdateOne) ClearIdentityProviderMetadataEndpoint() *OrganizationSettingHistoryUpdateOne {
+	oshuo.mutation.ClearIdentityProviderMetadataEndpoint()
+	return oshuo
+}
+
+// SetIdentityProviderEntityID sets the "identity_provider_entity_id" field.
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetIdentityProviderEntityID(s string) *OrganizationSettingHistoryUpdateOne {
+	oshuo.mutation.SetIdentityProviderEntityID(s)
+	return oshuo
+}
+
+// SetNillableIdentityProviderEntityID sets the "identity_provider_entity_id" field if the given value is not nil.
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderEntityID(s *string) *OrganizationSettingHistoryUpdateOne {
+	if s != nil {
+		oshuo.SetIdentityProviderEntityID(*s)
+	}
+	return oshuo
+}
+
+// ClearIdentityProviderEntityID clears the value of the "identity_provider_entity_id" field.
+func (oshuo *OrganizationSettingHistoryUpdateOne) ClearIdentityProviderEntityID() *OrganizationSettingHistoryUpdateOne {
+	oshuo.mutation.ClearIdentityProviderEntityID()
+	return oshuo
+}
+
+// SetOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field.
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetOidcDiscoveryEndpoint(s string) *OrganizationSettingHistoryUpdateOne {
+	oshuo.mutation.SetOidcDiscoveryEndpoint(s)
+	return oshuo
+}
+
+// SetNillableOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field if the given value is not nil.
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableOidcDiscoveryEndpoint(s *string) *OrganizationSettingHistoryUpdateOne {
+	if s != nil {
+		oshuo.SetOidcDiscoveryEndpoint(*s)
+	}
+	return oshuo
+}
+
+// ClearOidcDiscoveryEndpoint clears the value of the "oidc_discovery_endpoint" field.
+func (oshuo *OrganizationSettingHistoryUpdateOne) ClearOidcDiscoveryEndpoint() *OrganizationSettingHistoryUpdateOne {
+	oshuo.mutation.ClearOidcDiscoveryEndpoint()
+	return oshuo
+}
+
+// SetIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field.
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetIdentityProviderLoginEnforced(b bool) *OrganizationSettingHistoryUpdateOne {
+	oshuo.mutation.SetIdentityProviderLoginEnforced(b)
+	return oshuo
+}
+
+// SetNillableIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field if the given value is not nil.
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderLoginEnforced(b *bool) *OrganizationSettingHistoryUpdateOne {
+	if b != nil {
+		oshuo.SetIdentityProviderLoginEnforced(*b)
+	}
+	return oshuo
+}
+
+// SetComplianceWebhookToken sets the "compliance_webhook_token" field.
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetComplianceWebhookToken(s string) *OrganizationSettingHistoryUpdateOne {
+	oshuo.mutation.SetComplianceWebhookToken(s)
+	return oshuo
+}
+
+// SetNillableComplianceWebhookToken sets the "compliance_webhook_token" field if the given value is not nil.
+func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableComplianceWebhookToken(s *string) *OrganizationSettingHistoryUpdateOne {
+	if s != nil {
+		oshuo.SetComplianceWebhookToken(*s)
+	}
+	return oshuo
+}
+
 // Mutation returns the OrganizationSettingHistoryMutation object of the builder.
 func (oshuo *OrganizationSettingHistoryUpdateOne) Mutation() *OrganizationSettingHistoryMutation {
 	return oshuo.mutation
@@ -857,6 +1200,11 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) check() error {
 	if v, ok := oshuo.mutation.GeoLocation(); ok {
 		if err := organizationsettinghistory.GeoLocationValidator(v); err != nil {
 			return &ValidationError{Name: "geo_location", err: fmt.Errorf(`generated: validator failed for field "OrganizationSettingHistory.geo_location": %w`, err)}
+		}
+	}
+	if v, ok := oshuo.mutation.IdentityProvider(); ok {
+		if err := organizationsettinghistory.IdentityProviderValidator(v); err != nil {
+			return &ValidationError{Name: "identity_provider", err: fmt.Errorf(`generated: validator failed for field "OrganizationSettingHistory.identity_provider": %w`, err)}
 		}
 	}
 	return nil
@@ -1007,6 +1355,48 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (
 	}
 	if oshuo.mutation.AllowedEmailDomainsCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldAllowedEmailDomains, field.TypeJSON)
+	}
+	if value, ok := oshuo.mutation.IdentityProvider(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProvider, field.TypeEnum, value)
+	}
+	if oshuo.mutation.IdentityProviderCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldIdentityProvider, field.TypeEnum)
+	}
+	if value, ok := oshuo.mutation.IdentityProviderClientID(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderClientID, field.TypeString, value)
+	}
+	if oshuo.mutation.IdentityProviderClientIDCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderClientID, field.TypeString)
+	}
+	if value, ok := oshuo.mutation.IdentityProviderClientSecret(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderClientSecret, field.TypeString, value)
+	}
+	if oshuo.mutation.IdentityProviderClientSecretCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderClientSecret, field.TypeString)
+	}
+	if value, ok := oshuo.mutation.IdentityProviderMetadataEndpoint(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, field.TypeString, value)
+	}
+	if oshuo.mutation.IdentityProviderMetadataEndpointCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, field.TypeString)
+	}
+	if value, ok := oshuo.mutation.IdentityProviderEntityID(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderEntityID, field.TypeString, value)
+	}
+	if oshuo.mutation.IdentityProviderEntityIDCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderEntityID, field.TypeString)
+	}
+	if value, ok := oshuo.mutation.OidcDiscoveryEndpoint(); ok {
+		_spec.SetField(organizationsettinghistory.FieldOidcDiscoveryEndpoint, field.TypeString, value)
+	}
+	if oshuo.mutation.OidcDiscoveryEndpointCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldOidcDiscoveryEndpoint, field.TypeString)
+	}
+	if value, ok := oshuo.mutation.IdentityProviderLoginEnforced(); ok {
+		_spec.SetField(organizationsettinghistory.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
+	}
+	if value, ok := oshuo.mutation.ComplianceWebhookToken(); ok {
+		_spec.SetField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString, value)
 	}
 	_spec.Node.Schema = oshuo.schemaConfig.OrganizationSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, oshuo.schemaConfig)
