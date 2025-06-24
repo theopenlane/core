@@ -10,7 +10,7 @@ import (
 
 // GetUpdatedFields checks for updates to billing information in the properties and returns a stripe.CustomerParams object with the updated information
 // and a boolean indicating whether there are updates
-func GetUpdatedFields(props map[string]interface{}, orgCustomer *OrganizationCustomer) (params *stripe.CustomerUpdateParams) {
+func GetUpdatedFields(props map[string]any, orgCustomer *OrganizationCustomer) (params *stripe.CustomerUpdateParams) {
 	// Initialize params to avoid nil dereference
 	params = &stripe.CustomerUpdateParams{}
 
