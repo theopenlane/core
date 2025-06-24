@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
@@ -28,6 +29,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -57,6 +59,8 @@ type ControlQuery struct {
 	withEditors                     *GroupQuery
 	withStandard                    *StandardQuery
 	withPrograms                    *ProgramQuery
+	withAssets                      *AssetQuery
+	withScans                       *ScanQuery
 	withControlImplementations      *ControlImplementationQuery
 	withSubcontrols                 *SubcontrolQuery
 	withScheduledJobs               *ControlScheduledJobQuery
@@ -75,6 +79,8 @@ type ControlQuery struct {
 	withNamedBlockedGroups          map[string]*GroupQuery
 	withNamedEditors                map[string]*GroupQuery
 	withNamedPrograms               map[string]*ProgramQuery
+	withNamedAssets                 map[string]*AssetQuery
+	withNamedScans                  map[string]*ScanQuery
 	withNamedControlImplementations map[string]*ControlImplementationQuery
 	withNamedSubcontrols            map[string]*SubcontrolQuery
 	withNamedScheduledJobs          map[string]*ControlScheduledJobQuery
@@ -491,6 +497,56 @@ func (cq *ControlQuery) QueryPrograms() *ProgramQuery {
 	return query
 }
 
+// QueryAssets chains the current query on the "assets" edge.
+func (cq *ControlQuery) QueryAssets() *AssetQuery {
+	query := (&AssetClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, selector),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, control.AssetsTable, control.AssetsPrimaryKey...),
+		)
+		schemaConfig := cq.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.ControlAssets
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryScans chains the current query on the "scans" edge.
+func (cq *ControlQuery) QueryScans() *ScanQuery {
+	query := (&ScanClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, selector),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, control.ScansTable, control.ScansColumn),
+		)
+		schemaConfig := cq.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.Scan
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryControlImplementations chains the current query on the "control_implementations" edge.
 func (cq *ControlQuery) QueryControlImplementations() *ControlImplementationQuery {
 	query := (&ControlImplementationClient{config: cq.config}).Query()
@@ -823,6 +879,8 @@ func (cq *ControlQuery) Clone() *ControlQuery {
 		withEditors:                cq.withEditors.Clone(),
 		withStandard:               cq.withStandard.Clone(),
 		withPrograms:               cq.withPrograms.Clone(),
+		withAssets:                 cq.withAssets.Clone(),
+		withScans:                  cq.withScans.Clone(),
 		withControlImplementations: cq.withControlImplementations.Clone(),
 		withSubcontrols:            cq.withSubcontrols.Clone(),
 		withScheduledJobs:          cq.withScheduledJobs.Clone(),
@@ -1000,6 +1058,28 @@ func (cq *ControlQuery) WithPrograms(opts ...func(*ProgramQuery)) *ControlQuery 
 	return cq
 }
 
+// WithAssets tells the query-builder to eager-load the nodes that are connected to
+// the "assets" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *ControlQuery) WithAssets(opts ...func(*AssetQuery)) *ControlQuery {
+	query := (&AssetClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withAssets = query
+	return cq
+}
+
+// WithScans tells the query-builder to eager-load the nodes that are connected to
+// the "scans" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *ControlQuery) WithScans(opts ...func(*ScanQuery)) *ControlQuery {
+	query := (&ScanClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withScans = query
+	return cq
+}
+
 // WithControlImplementations tells the query-builder to eager-load the nodes that are connected to
 // the "control_implementations" edge. The optional arguments are used to configure the query builder of the edge.
 func (cq *ControlQuery) WithControlImplementations(opts ...func(*ControlImplementationQuery)) *ControlQuery {
@@ -1139,7 +1219,7 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 	var (
 		nodes       = []*Control{}
 		_spec       = cq.querySpec()
-		loadedTypes = [20]bool{
+		loadedTypes = [22]bool{
 			cq.withEvidence != nil,
 			cq.withControlObjectives != nil,
 			cq.withTasks != nil,
@@ -1155,6 +1235,8 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			cq.withEditors != nil,
 			cq.withStandard != nil,
 			cq.withPrograms != nil,
+			cq.withAssets != nil,
+			cq.withScans != nil,
 			cq.withControlImplementations != nil,
 			cq.withSubcontrols != nil,
 			cq.withScheduledJobs != nil,
@@ -1288,6 +1370,20 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			return nil, err
 		}
 	}
+	if query := cq.withAssets; query != nil {
+		if err := cq.loadAssets(ctx, query, nodes,
+			func(n *Control) { n.Edges.Assets = []*Asset{} },
+			func(n *Control, e *Asset) { n.Edges.Assets = append(n.Edges.Assets, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := cq.withScans; query != nil {
+		if err := cq.loadScans(ctx, query, nodes,
+			func(n *Control) { n.Edges.Scans = []*Scan{} },
+			func(n *Control, e *Scan) { n.Edges.Scans = append(n.Edges.Scans, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := cq.withControlImplementations; query != nil {
 		if err := cq.loadControlImplementations(ctx, query, nodes,
 			func(n *Control) { n.Edges.ControlImplementations = []*ControlImplementation{} },
@@ -1399,6 +1495,20 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := cq.loadPrograms(ctx, query, nodes,
 			func(n *Control) { n.appendNamedPrograms(name) },
 			func(n *Control, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedAssets {
+		if err := cq.loadAssets(ctx, query, nodes,
+			func(n *Control) { n.appendNamedAssets(name) },
+			func(n *Control, e *Asset) { n.appendNamedAssets(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedScans {
+		if err := cq.loadScans(ctx, query, nodes,
+			func(n *Control) { n.appendNamedScans(name) },
+			func(n *Control, e *Scan) { n.appendNamedScans(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2243,6 +2353,99 @@ func (cq *ControlQuery) loadPrograms(ctx context.Context, query *ProgramQuery, n
 	}
 	return nil
 }
+func (cq *ControlQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes []*Control, init func(*Control), assign func(*Control, *Asset)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Control)
+	nids := make(map[string]map[*Control]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(control.AssetsTable)
+		joinT.Schema(cq.schemaConfig.ControlAssets)
+		s.Join(joinT).On(s.C(asset.FieldID), joinT.C(control.AssetsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(control.AssetsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(control.AssetsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Control]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Asset](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "assets" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (cq *ControlQuery) loadScans(ctx context.Context, query *ScanQuery, nodes []*Control, init func(*Control), assign func(*Control, *Scan)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Control)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Scan(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(control.ScansColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.control_scans
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "control_scans" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "control_scans" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (cq *ControlQuery) loadControlImplementations(ctx context.Context, query *ControlImplementationQuery, nodes []*Control, init func(*Control), assign func(*Control, *ControlImplementation)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Control)
@@ -2784,6 +2987,34 @@ func (cq *ControlQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuer
 		cq.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
 	cq.withNamedPrograms[name] = query
+	return cq
+}
+
+// WithNamedAssets tells the query-builder to eager-load the nodes that are connected to the "assets"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *ControlQuery) WithNamedAssets(name string, opts ...func(*AssetQuery)) *ControlQuery {
+	query := (&AssetClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedAssets == nil {
+		cq.withNamedAssets = make(map[string]*AssetQuery)
+	}
+	cq.withNamedAssets[name] = query
+	return cq
+}
+
+// WithNamedScans tells the query-builder to eager-load the nodes that are connected to the "scans"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *ControlQuery) WithNamedScans(name string, opts ...func(*ScanQuery)) *ControlQuery {
+	query := (&ScanClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedScans == nil {
+		cq.withNamedScans = make(map[string]*ScanQuery)
+	}
+	cq.withNamedScans[name] = query
 	return cq
 }
 

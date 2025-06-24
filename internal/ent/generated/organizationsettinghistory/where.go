@@ -136,6 +136,41 @@ func BillingNotificationsEnabled(v bool) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldBillingNotificationsEnabled, v))
 }
 
+// IdentityProviderClientID applies equality check predicate on the "identity_provider_client_id" field. It's identical to IdentityProviderClientIDEQ.
+func IdentityProviderClientID(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldIdentityProviderClientID, v))
+}
+
+// IdentityProviderClientSecret applies equality check predicate on the "identity_provider_client_secret" field. It's identical to IdentityProviderClientSecretEQ.
+func IdentityProviderClientSecret(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldIdentityProviderClientSecret, v))
+}
+
+// IdentityProviderMetadataEndpoint applies equality check predicate on the "identity_provider_metadata_endpoint" field. It's identical to IdentityProviderMetadataEndpointEQ.
+func IdentityProviderMetadataEndpoint(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldIdentityProviderMetadataEndpoint, v))
+}
+
+// IdentityProviderEntityID applies equality check predicate on the "identity_provider_entity_id" field. It's identical to IdentityProviderEntityIDEQ.
+func IdentityProviderEntityID(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldIdentityProviderEntityID, v))
+}
+
+// OidcDiscoveryEndpoint applies equality check predicate on the "oidc_discovery_endpoint" field. It's identical to OidcDiscoveryEndpointEQ.
+func OidcDiscoveryEndpoint(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldOidcDiscoveryEndpoint, v))
+}
+
+// IdentityProviderLoginEnforced applies equality check predicate on the "identity_provider_login_enforced" field. It's identical to IdentityProviderLoginEnforcedEQ.
+func IdentityProviderLoginEnforced(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldIdentityProviderLoginEnforced, v))
+}
+
+// ComplianceWebhookToken applies equality check predicate on the "compliance_webhook_token" field. It's identical to ComplianceWebhookTokenEQ.
+func ComplianceWebhookToken(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldComplianceWebhookToken, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1109,6 +1144,496 @@ func AllowedEmailDomainsIsNil() predicate.OrganizationSettingHistory {
 // AllowedEmailDomainsNotNil applies the NotNil predicate on the "allowed_email_domains" field.
 func AllowedEmailDomainsNotNil() predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldAllowedEmailDomains))
+}
+
+// IdentityProviderEQ applies the EQ predicate on the "identity_provider" field.
+func IdentityProviderEQ(v enums.SSOProvider) predicate.OrganizationSettingHistory {
+	vc := v
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldIdentityProvider, vc))
+}
+
+// IdentityProviderNEQ applies the NEQ predicate on the "identity_provider" field.
+func IdentityProviderNEQ(v enums.SSOProvider) predicate.OrganizationSettingHistory {
+	vc := v
+	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldIdentityProvider, vc))
+}
+
+// IdentityProviderIn applies the In predicate on the "identity_provider" field.
+func IdentityProviderIn(vs ...enums.SSOProvider) predicate.OrganizationSettingHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.OrganizationSettingHistory(sql.FieldIn(FieldIdentityProvider, v...))
+}
+
+// IdentityProviderNotIn applies the NotIn predicate on the "identity_provider" field.
+func IdentityProviderNotIn(vs ...enums.SSOProvider) predicate.OrganizationSettingHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.OrganizationSettingHistory(sql.FieldNotIn(FieldIdentityProvider, v...))
+}
+
+// IdentityProviderIsNil applies the IsNil predicate on the "identity_provider" field.
+func IdentityProviderIsNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIsNull(FieldIdentityProvider))
+}
+
+// IdentityProviderNotNil applies the NotNil predicate on the "identity_provider" field.
+func IdentityProviderNotNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldIdentityProvider))
+}
+
+// IdentityProviderClientIDEQ applies the EQ predicate on the "identity_provider_client_id" field.
+func IdentityProviderClientIDEQ(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldIdentityProviderClientID, v))
+}
+
+// IdentityProviderClientIDNEQ applies the NEQ predicate on the "identity_provider_client_id" field.
+func IdentityProviderClientIDNEQ(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldIdentityProviderClientID, v))
+}
+
+// IdentityProviderClientIDIn applies the In predicate on the "identity_provider_client_id" field.
+func IdentityProviderClientIDIn(vs ...string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIn(FieldIdentityProviderClientID, vs...))
+}
+
+// IdentityProviderClientIDNotIn applies the NotIn predicate on the "identity_provider_client_id" field.
+func IdentityProviderClientIDNotIn(vs ...string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotIn(FieldIdentityProviderClientID, vs...))
+}
+
+// IdentityProviderClientIDGT applies the GT predicate on the "identity_provider_client_id" field.
+func IdentityProviderClientIDGT(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldGT(FieldIdentityProviderClientID, v))
+}
+
+// IdentityProviderClientIDGTE applies the GTE predicate on the "identity_provider_client_id" field.
+func IdentityProviderClientIDGTE(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldGTE(FieldIdentityProviderClientID, v))
+}
+
+// IdentityProviderClientIDLT applies the LT predicate on the "identity_provider_client_id" field.
+func IdentityProviderClientIDLT(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldLT(FieldIdentityProviderClientID, v))
+}
+
+// IdentityProviderClientIDLTE applies the LTE predicate on the "identity_provider_client_id" field.
+func IdentityProviderClientIDLTE(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldLTE(FieldIdentityProviderClientID, v))
+}
+
+// IdentityProviderClientIDContains applies the Contains predicate on the "identity_provider_client_id" field.
+func IdentityProviderClientIDContains(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldContains(FieldIdentityProviderClientID, v))
+}
+
+// IdentityProviderClientIDHasPrefix applies the HasPrefix predicate on the "identity_provider_client_id" field.
+func IdentityProviderClientIDHasPrefix(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldHasPrefix(FieldIdentityProviderClientID, v))
+}
+
+// IdentityProviderClientIDHasSuffix applies the HasSuffix predicate on the "identity_provider_client_id" field.
+func IdentityProviderClientIDHasSuffix(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldHasSuffix(FieldIdentityProviderClientID, v))
+}
+
+// IdentityProviderClientIDIsNil applies the IsNil predicate on the "identity_provider_client_id" field.
+func IdentityProviderClientIDIsNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIsNull(FieldIdentityProviderClientID))
+}
+
+// IdentityProviderClientIDNotNil applies the NotNil predicate on the "identity_provider_client_id" field.
+func IdentityProviderClientIDNotNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldIdentityProviderClientID))
+}
+
+// IdentityProviderClientIDEqualFold applies the EqualFold predicate on the "identity_provider_client_id" field.
+func IdentityProviderClientIDEqualFold(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEqualFold(FieldIdentityProviderClientID, v))
+}
+
+// IdentityProviderClientIDContainsFold applies the ContainsFold predicate on the "identity_provider_client_id" field.
+func IdentityProviderClientIDContainsFold(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldContainsFold(FieldIdentityProviderClientID, v))
+}
+
+// IdentityProviderClientSecretEQ applies the EQ predicate on the "identity_provider_client_secret" field.
+func IdentityProviderClientSecretEQ(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldIdentityProviderClientSecret, v))
+}
+
+// IdentityProviderClientSecretNEQ applies the NEQ predicate on the "identity_provider_client_secret" field.
+func IdentityProviderClientSecretNEQ(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldIdentityProviderClientSecret, v))
+}
+
+// IdentityProviderClientSecretIn applies the In predicate on the "identity_provider_client_secret" field.
+func IdentityProviderClientSecretIn(vs ...string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIn(FieldIdentityProviderClientSecret, vs...))
+}
+
+// IdentityProviderClientSecretNotIn applies the NotIn predicate on the "identity_provider_client_secret" field.
+func IdentityProviderClientSecretNotIn(vs ...string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotIn(FieldIdentityProviderClientSecret, vs...))
+}
+
+// IdentityProviderClientSecretGT applies the GT predicate on the "identity_provider_client_secret" field.
+func IdentityProviderClientSecretGT(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldGT(FieldIdentityProviderClientSecret, v))
+}
+
+// IdentityProviderClientSecretGTE applies the GTE predicate on the "identity_provider_client_secret" field.
+func IdentityProviderClientSecretGTE(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldGTE(FieldIdentityProviderClientSecret, v))
+}
+
+// IdentityProviderClientSecretLT applies the LT predicate on the "identity_provider_client_secret" field.
+func IdentityProviderClientSecretLT(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldLT(FieldIdentityProviderClientSecret, v))
+}
+
+// IdentityProviderClientSecretLTE applies the LTE predicate on the "identity_provider_client_secret" field.
+func IdentityProviderClientSecretLTE(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldLTE(FieldIdentityProviderClientSecret, v))
+}
+
+// IdentityProviderClientSecretContains applies the Contains predicate on the "identity_provider_client_secret" field.
+func IdentityProviderClientSecretContains(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldContains(FieldIdentityProviderClientSecret, v))
+}
+
+// IdentityProviderClientSecretHasPrefix applies the HasPrefix predicate on the "identity_provider_client_secret" field.
+func IdentityProviderClientSecretHasPrefix(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldHasPrefix(FieldIdentityProviderClientSecret, v))
+}
+
+// IdentityProviderClientSecretHasSuffix applies the HasSuffix predicate on the "identity_provider_client_secret" field.
+func IdentityProviderClientSecretHasSuffix(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldHasSuffix(FieldIdentityProviderClientSecret, v))
+}
+
+// IdentityProviderClientSecretIsNil applies the IsNil predicate on the "identity_provider_client_secret" field.
+func IdentityProviderClientSecretIsNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIsNull(FieldIdentityProviderClientSecret))
+}
+
+// IdentityProviderClientSecretNotNil applies the NotNil predicate on the "identity_provider_client_secret" field.
+func IdentityProviderClientSecretNotNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldIdentityProviderClientSecret))
+}
+
+// IdentityProviderClientSecretEqualFold applies the EqualFold predicate on the "identity_provider_client_secret" field.
+func IdentityProviderClientSecretEqualFold(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEqualFold(FieldIdentityProviderClientSecret, v))
+}
+
+// IdentityProviderClientSecretContainsFold applies the ContainsFold predicate on the "identity_provider_client_secret" field.
+func IdentityProviderClientSecretContainsFold(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldContainsFold(FieldIdentityProviderClientSecret, v))
+}
+
+// IdentityProviderMetadataEndpointEQ applies the EQ predicate on the "identity_provider_metadata_endpoint" field.
+func IdentityProviderMetadataEndpointEQ(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldIdentityProviderMetadataEndpoint, v))
+}
+
+// IdentityProviderMetadataEndpointNEQ applies the NEQ predicate on the "identity_provider_metadata_endpoint" field.
+func IdentityProviderMetadataEndpointNEQ(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldIdentityProviderMetadataEndpoint, v))
+}
+
+// IdentityProviderMetadataEndpointIn applies the In predicate on the "identity_provider_metadata_endpoint" field.
+func IdentityProviderMetadataEndpointIn(vs ...string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIn(FieldIdentityProviderMetadataEndpoint, vs...))
+}
+
+// IdentityProviderMetadataEndpointNotIn applies the NotIn predicate on the "identity_provider_metadata_endpoint" field.
+func IdentityProviderMetadataEndpointNotIn(vs ...string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotIn(FieldIdentityProviderMetadataEndpoint, vs...))
+}
+
+// IdentityProviderMetadataEndpointGT applies the GT predicate on the "identity_provider_metadata_endpoint" field.
+func IdentityProviderMetadataEndpointGT(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldGT(FieldIdentityProviderMetadataEndpoint, v))
+}
+
+// IdentityProviderMetadataEndpointGTE applies the GTE predicate on the "identity_provider_metadata_endpoint" field.
+func IdentityProviderMetadataEndpointGTE(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldGTE(FieldIdentityProviderMetadataEndpoint, v))
+}
+
+// IdentityProviderMetadataEndpointLT applies the LT predicate on the "identity_provider_metadata_endpoint" field.
+func IdentityProviderMetadataEndpointLT(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldLT(FieldIdentityProviderMetadataEndpoint, v))
+}
+
+// IdentityProviderMetadataEndpointLTE applies the LTE predicate on the "identity_provider_metadata_endpoint" field.
+func IdentityProviderMetadataEndpointLTE(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldLTE(FieldIdentityProviderMetadataEndpoint, v))
+}
+
+// IdentityProviderMetadataEndpointContains applies the Contains predicate on the "identity_provider_metadata_endpoint" field.
+func IdentityProviderMetadataEndpointContains(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldContains(FieldIdentityProviderMetadataEndpoint, v))
+}
+
+// IdentityProviderMetadataEndpointHasPrefix applies the HasPrefix predicate on the "identity_provider_metadata_endpoint" field.
+func IdentityProviderMetadataEndpointHasPrefix(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldHasPrefix(FieldIdentityProviderMetadataEndpoint, v))
+}
+
+// IdentityProviderMetadataEndpointHasSuffix applies the HasSuffix predicate on the "identity_provider_metadata_endpoint" field.
+func IdentityProviderMetadataEndpointHasSuffix(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldHasSuffix(FieldIdentityProviderMetadataEndpoint, v))
+}
+
+// IdentityProviderMetadataEndpointIsNil applies the IsNil predicate on the "identity_provider_metadata_endpoint" field.
+func IdentityProviderMetadataEndpointIsNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIsNull(FieldIdentityProviderMetadataEndpoint))
+}
+
+// IdentityProviderMetadataEndpointNotNil applies the NotNil predicate on the "identity_provider_metadata_endpoint" field.
+func IdentityProviderMetadataEndpointNotNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldIdentityProviderMetadataEndpoint))
+}
+
+// IdentityProviderMetadataEndpointEqualFold applies the EqualFold predicate on the "identity_provider_metadata_endpoint" field.
+func IdentityProviderMetadataEndpointEqualFold(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEqualFold(FieldIdentityProviderMetadataEndpoint, v))
+}
+
+// IdentityProviderMetadataEndpointContainsFold applies the ContainsFold predicate on the "identity_provider_metadata_endpoint" field.
+func IdentityProviderMetadataEndpointContainsFold(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldContainsFold(FieldIdentityProviderMetadataEndpoint, v))
+}
+
+// IdentityProviderEntityIDEQ applies the EQ predicate on the "identity_provider_entity_id" field.
+func IdentityProviderEntityIDEQ(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldIdentityProviderEntityID, v))
+}
+
+// IdentityProviderEntityIDNEQ applies the NEQ predicate on the "identity_provider_entity_id" field.
+func IdentityProviderEntityIDNEQ(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldIdentityProviderEntityID, v))
+}
+
+// IdentityProviderEntityIDIn applies the In predicate on the "identity_provider_entity_id" field.
+func IdentityProviderEntityIDIn(vs ...string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIn(FieldIdentityProviderEntityID, vs...))
+}
+
+// IdentityProviderEntityIDNotIn applies the NotIn predicate on the "identity_provider_entity_id" field.
+func IdentityProviderEntityIDNotIn(vs ...string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotIn(FieldIdentityProviderEntityID, vs...))
+}
+
+// IdentityProviderEntityIDGT applies the GT predicate on the "identity_provider_entity_id" field.
+func IdentityProviderEntityIDGT(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldGT(FieldIdentityProviderEntityID, v))
+}
+
+// IdentityProviderEntityIDGTE applies the GTE predicate on the "identity_provider_entity_id" field.
+func IdentityProviderEntityIDGTE(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldGTE(FieldIdentityProviderEntityID, v))
+}
+
+// IdentityProviderEntityIDLT applies the LT predicate on the "identity_provider_entity_id" field.
+func IdentityProviderEntityIDLT(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldLT(FieldIdentityProviderEntityID, v))
+}
+
+// IdentityProviderEntityIDLTE applies the LTE predicate on the "identity_provider_entity_id" field.
+func IdentityProviderEntityIDLTE(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldLTE(FieldIdentityProviderEntityID, v))
+}
+
+// IdentityProviderEntityIDContains applies the Contains predicate on the "identity_provider_entity_id" field.
+func IdentityProviderEntityIDContains(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldContains(FieldIdentityProviderEntityID, v))
+}
+
+// IdentityProviderEntityIDHasPrefix applies the HasPrefix predicate on the "identity_provider_entity_id" field.
+func IdentityProviderEntityIDHasPrefix(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldHasPrefix(FieldIdentityProviderEntityID, v))
+}
+
+// IdentityProviderEntityIDHasSuffix applies the HasSuffix predicate on the "identity_provider_entity_id" field.
+func IdentityProviderEntityIDHasSuffix(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldHasSuffix(FieldIdentityProviderEntityID, v))
+}
+
+// IdentityProviderEntityIDIsNil applies the IsNil predicate on the "identity_provider_entity_id" field.
+func IdentityProviderEntityIDIsNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIsNull(FieldIdentityProviderEntityID))
+}
+
+// IdentityProviderEntityIDNotNil applies the NotNil predicate on the "identity_provider_entity_id" field.
+func IdentityProviderEntityIDNotNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldIdentityProviderEntityID))
+}
+
+// IdentityProviderEntityIDEqualFold applies the EqualFold predicate on the "identity_provider_entity_id" field.
+func IdentityProviderEntityIDEqualFold(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEqualFold(FieldIdentityProviderEntityID, v))
+}
+
+// IdentityProviderEntityIDContainsFold applies the ContainsFold predicate on the "identity_provider_entity_id" field.
+func IdentityProviderEntityIDContainsFold(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldContainsFold(FieldIdentityProviderEntityID, v))
+}
+
+// OidcDiscoveryEndpointEQ applies the EQ predicate on the "oidc_discovery_endpoint" field.
+func OidcDiscoveryEndpointEQ(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldOidcDiscoveryEndpoint, v))
+}
+
+// OidcDiscoveryEndpointNEQ applies the NEQ predicate on the "oidc_discovery_endpoint" field.
+func OidcDiscoveryEndpointNEQ(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldOidcDiscoveryEndpoint, v))
+}
+
+// OidcDiscoveryEndpointIn applies the In predicate on the "oidc_discovery_endpoint" field.
+func OidcDiscoveryEndpointIn(vs ...string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIn(FieldOidcDiscoveryEndpoint, vs...))
+}
+
+// OidcDiscoveryEndpointNotIn applies the NotIn predicate on the "oidc_discovery_endpoint" field.
+func OidcDiscoveryEndpointNotIn(vs ...string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotIn(FieldOidcDiscoveryEndpoint, vs...))
+}
+
+// OidcDiscoveryEndpointGT applies the GT predicate on the "oidc_discovery_endpoint" field.
+func OidcDiscoveryEndpointGT(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldGT(FieldOidcDiscoveryEndpoint, v))
+}
+
+// OidcDiscoveryEndpointGTE applies the GTE predicate on the "oidc_discovery_endpoint" field.
+func OidcDiscoveryEndpointGTE(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldGTE(FieldOidcDiscoveryEndpoint, v))
+}
+
+// OidcDiscoveryEndpointLT applies the LT predicate on the "oidc_discovery_endpoint" field.
+func OidcDiscoveryEndpointLT(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldLT(FieldOidcDiscoveryEndpoint, v))
+}
+
+// OidcDiscoveryEndpointLTE applies the LTE predicate on the "oidc_discovery_endpoint" field.
+func OidcDiscoveryEndpointLTE(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldLTE(FieldOidcDiscoveryEndpoint, v))
+}
+
+// OidcDiscoveryEndpointContains applies the Contains predicate on the "oidc_discovery_endpoint" field.
+func OidcDiscoveryEndpointContains(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldContains(FieldOidcDiscoveryEndpoint, v))
+}
+
+// OidcDiscoveryEndpointHasPrefix applies the HasPrefix predicate on the "oidc_discovery_endpoint" field.
+func OidcDiscoveryEndpointHasPrefix(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldHasPrefix(FieldOidcDiscoveryEndpoint, v))
+}
+
+// OidcDiscoveryEndpointHasSuffix applies the HasSuffix predicate on the "oidc_discovery_endpoint" field.
+func OidcDiscoveryEndpointHasSuffix(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldHasSuffix(FieldOidcDiscoveryEndpoint, v))
+}
+
+// OidcDiscoveryEndpointIsNil applies the IsNil predicate on the "oidc_discovery_endpoint" field.
+func OidcDiscoveryEndpointIsNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIsNull(FieldOidcDiscoveryEndpoint))
+}
+
+// OidcDiscoveryEndpointNotNil applies the NotNil predicate on the "oidc_discovery_endpoint" field.
+func OidcDiscoveryEndpointNotNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldOidcDiscoveryEndpoint))
+}
+
+// OidcDiscoveryEndpointEqualFold applies the EqualFold predicate on the "oidc_discovery_endpoint" field.
+func OidcDiscoveryEndpointEqualFold(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEqualFold(FieldOidcDiscoveryEndpoint, v))
+}
+
+// OidcDiscoveryEndpointContainsFold applies the ContainsFold predicate on the "oidc_discovery_endpoint" field.
+func OidcDiscoveryEndpointContainsFold(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldContainsFold(FieldOidcDiscoveryEndpoint, v))
+}
+
+// IdentityProviderLoginEnforcedEQ applies the EQ predicate on the "identity_provider_login_enforced" field.
+func IdentityProviderLoginEnforcedEQ(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldIdentityProviderLoginEnforced, v))
+}
+
+// IdentityProviderLoginEnforcedNEQ applies the NEQ predicate on the "identity_provider_login_enforced" field.
+func IdentityProviderLoginEnforcedNEQ(v bool) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldIdentityProviderLoginEnforced, v))
+}
+
+// ComplianceWebhookTokenEQ applies the EQ predicate on the "compliance_webhook_token" field.
+func ComplianceWebhookTokenEQ(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldComplianceWebhookToken, v))
+}
+
+// ComplianceWebhookTokenNEQ applies the NEQ predicate on the "compliance_webhook_token" field.
+func ComplianceWebhookTokenNEQ(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldComplianceWebhookToken, v))
+}
+
+// ComplianceWebhookTokenIn applies the In predicate on the "compliance_webhook_token" field.
+func ComplianceWebhookTokenIn(vs ...string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIn(FieldComplianceWebhookToken, vs...))
+}
+
+// ComplianceWebhookTokenNotIn applies the NotIn predicate on the "compliance_webhook_token" field.
+func ComplianceWebhookTokenNotIn(vs ...string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotIn(FieldComplianceWebhookToken, vs...))
+}
+
+// ComplianceWebhookTokenGT applies the GT predicate on the "compliance_webhook_token" field.
+func ComplianceWebhookTokenGT(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldGT(FieldComplianceWebhookToken, v))
+}
+
+// ComplianceWebhookTokenGTE applies the GTE predicate on the "compliance_webhook_token" field.
+func ComplianceWebhookTokenGTE(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldGTE(FieldComplianceWebhookToken, v))
+}
+
+// ComplianceWebhookTokenLT applies the LT predicate on the "compliance_webhook_token" field.
+func ComplianceWebhookTokenLT(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldLT(FieldComplianceWebhookToken, v))
+}
+
+// ComplianceWebhookTokenLTE applies the LTE predicate on the "compliance_webhook_token" field.
+func ComplianceWebhookTokenLTE(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldLTE(FieldComplianceWebhookToken, v))
+}
+
+// ComplianceWebhookTokenContains applies the Contains predicate on the "compliance_webhook_token" field.
+func ComplianceWebhookTokenContains(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldContains(FieldComplianceWebhookToken, v))
+}
+
+// ComplianceWebhookTokenHasPrefix applies the HasPrefix predicate on the "compliance_webhook_token" field.
+func ComplianceWebhookTokenHasPrefix(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldHasPrefix(FieldComplianceWebhookToken, v))
+}
+
+// ComplianceWebhookTokenHasSuffix applies the HasSuffix predicate on the "compliance_webhook_token" field.
+func ComplianceWebhookTokenHasSuffix(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldHasSuffix(FieldComplianceWebhookToken, v))
+}
+
+// ComplianceWebhookTokenEqualFold applies the EqualFold predicate on the "compliance_webhook_token" field.
+func ComplianceWebhookTokenEqualFold(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEqualFold(FieldComplianceWebhookToken, v))
+}
+
+// ComplianceWebhookTokenContainsFold applies the ContainsFold predicate on the "compliance_webhook_token" field.
+func ComplianceWebhookTokenContainsFold(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldContainsFold(FieldComplianceWebhookToken, v))
 }
 
 // And groups predicates with the AND operator between them.

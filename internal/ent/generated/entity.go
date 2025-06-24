@@ -52,6 +52,8 @@ type Entity struct {
 	// The values are being populated by the EntityQuery when eager-loading is set.
 	Edges                EntityEdges `json:"edges"`
 	entity_type_entities *string
+	risk_entities        *string
+	scan_entities        *string
 	selectValues         sql.SelectValues
 }
 
@@ -59,6 +61,12 @@ type Entity struct {
 type EntityEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
+	// provides view access to the risk to members of the group
+	Viewers []*Group `json:"viewers,omitempty"`
 	// Contacts holds the value of the contacts edge.
 	Contacts []*Contact `json:"contacts,omitempty"`
 	// Documents holds the value of the documents edge.
@@ -67,18 +75,27 @@ type EntityEdges struct {
 	Notes []*Note `json:"notes,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
+	// Assets holds the value of the assets edge.
+	Assets []*Asset `json:"assets,omitempty"`
+	// Scans holds the value of the scans edge.
+	Scans []*Scan `json:"scans,omitempty"`
 	// EntityType holds the value of the entity_type edge.
 	EntityType *EntityType `json:"entity_type,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [11]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [11]map[string]int
 
-	namedContacts  map[string][]*Contact
-	namedDocuments map[string][]*DocumentData
-	namedNotes     map[string][]*Note
-	namedFiles     map[string][]*File
+	namedBlockedGroups map[string][]*Group
+	namedEditors       map[string][]*Group
+	namedViewers       map[string][]*Group
+	namedContacts      map[string][]*Contact
+	namedDocuments     map[string][]*DocumentData
+	namedNotes         map[string][]*Note
+	namedFiles         map[string][]*File
+	namedAssets        map[string][]*Asset
+	namedScans         map[string][]*Scan
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -92,10 +109,37 @@ func (e EntityEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e EntityEdges) BlockedGroupsOrErr() ([]*Group, error) {
+	if e.loadedTypes[1] {
+		return e.BlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e EntityEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[2] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
+}
+
+// ViewersOrErr returns the Viewers value or an error if the edge
+// was not loaded in eager-loading.
+func (e EntityEdges) ViewersOrErr() ([]*Group, error) {
+	if e.loadedTypes[3] {
+		return e.Viewers, nil
+	}
+	return nil, &NotLoadedError{edge: "viewers"}
+}
+
 // ContactsOrErr returns the Contacts value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) ContactsOrErr() ([]*Contact, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[4] {
 		return e.Contacts, nil
 	}
 	return nil, &NotLoadedError{edge: "contacts"}
@@ -104,7 +148,7 @@ func (e EntityEdges) ContactsOrErr() ([]*Contact, error) {
 // DocumentsOrErr returns the Documents value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) DocumentsOrErr() ([]*DocumentData, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[5] {
 		return e.Documents, nil
 	}
 	return nil, &NotLoadedError{edge: "documents"}
@@ -113,7 +157,7 @@ func (e EntityEdges) DocumentsOrErr() ([]*DocumentData, error) {
 // NotesOrErr returns the Notes value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) NotesOrErr() ([]*Note, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[6] {
 		return e.Notes, nil
 	}
 	return nil, &NotLoadedError{edge: "notes"}
@@ -122,10 +166,28 @@ func (e EntityEdges) NotesOrErr() ([]*Note, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[7] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
+}
+
+// AssetsOrErr returns the Assets value or an error if the edge
+// was not loaded in eager-loading.
+func (e EntityEdges) AssetsOrErr() ([]*Asset, error) {
+	if e.loadedTypes[8] {
+		return e.Assets, nil
+	}
+	return nil, &NotLoadedError{edge: "assets"}
+}
+
+// ScansOrErr returns the Scans value or an error if the edge
+// was not loaded in eager-loading.
+func (e EntityEdges) ScansOrErr() ([]*Scan, error) {
+	if e.loadedTypes[9] {
+		return e.Scans, nil
+	}
+	return nil, &NotLoadedError{edge: "scans"}
 }
 
 // EntityTypeOrErr returns the EntityType value or an error if the edge
@@ -133,7 +195,7 @@ func (e EntityEdges) FilesOrErr() ([]*File, error) {
 func (e EntityEdges) EntityTypeOrErr() (*EntityType, error) {
 	if e.EntityType != nil {
 		return e.EntityType, nil
-	} else if e.loadedTypes[5] {
+	} else if e.loadedTypes[10] {
 		return nil, &NotFoundError{label: entitytype.Label}
 	}
 	return nil, &NotLoadedError{edge: "entity_type"}
@@ -151,6 +213,10 @@ func (*Entity) scanValues(columns []string) ([]any, error) {
 		case entity.FieldCreatedAt, entity.FieldUpdatedAt, entity.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
 		case entity.ForeignKeys[0]: // entity_type_entities
+			values[i] = new(sql.NullString)
+		case entity.ForeignKeys[1]: // risk_entities
+			values[i] = new(sql.NullString)
+		case entity.ForeignKeys[2]: // scan_entities
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -268,6 +334,20 @@ func (e *Entity) assignValues(columns []string, values []any) error {
 				e.entity_type_entities = new(string)
 				*e.entity_type_entities = value.String
 			}
+		case entity.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field risk_entities", values[i])
+			} else if value.Valid {
+				e.risk_entities = new(string)
+				*e.risk_entities = value.String
+			}
+		case entity.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scan_entities", values[i])
+			} else if value.Valid {
+				e.scan_entities = new(string)
+				*e.scan_entities = value.String
+			}
 		default:
 			e.selectValues.Set(columns[i], values[i])
 		}
@@ -284,6 +364,21 @@ func (e *Entity) Value(name string) (ent.Value, error) {
 // QueryOwner queries the "owner" edge of the Entity entity.
 func (e *Entity) QueryOwner() *OrganizationQuery {
 	return NewEntityClient(e.config).QueryOwner(e)
+}
+
+// QueryBlockedGroups queries the "blocked_groups" edge of the Entity entity.
+func (e *Entity) QueryBlockedGroups() *GroupQuery {
+	return NewEntityClient(e.config).QueryBlockedGroups(e)
+}
+
+// QueryEditors queries the "editors" edge of the Entity entity.
+func (e *Entity) QueryEditors() *GroupQuery {
+	return NewEntityClient(e.config).QueryEditors(e)
+}
+
+// QueryViewers queries the "viewers" edge of the Entity entity.
+func (e *Entity) QueryViewers() *GroupQuery {
+	return NewEntityClient(e.config).QueryViewers(e)
 }
 
 // QueryContacts queries the "contacts" edge of the Entity entity.
@@ -304,6 +399,16 @@ func (e *Entity) QueryNotes() *NoteQuery {
 // QueryFiles queries the "files" edge of the Entity entity.
 func (e *Entity) QueryFiles() *FileQuery {
 	return NewEntityClient(e.config).QueryFiles(e)
+}
+
+// QueryAssets queries the "assets" edge of the Entity entity.
+func (e *Entity) QueryAssets() *AssetQuery {
+	return NewEntityClient(e.config).QueryAssets(e)
+}
+
+// QueryScans queries the "scans" edge of the Entity entity.
+func (e *Entity) QueryScans() *ScanQuery {
+	return NewEntityClient(e.config).QueryScans(e)
 }
 
 // QueryEntityType queries the "entity_type" edge of the Entity entity.
@@ -377,6 +482,78 @@ func (e *Entity) String() string {
 	builder.WriteString(e.Status)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (e *Entity) NamedBlockedGroups(name string) ([]*Group, error) {
+	if e.Edges.namedBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := e.Edges.namedBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (e *Entity) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if e.Edges.namedBlockedGroups == nil {
+		e.Edges.namedBlockedGroups = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		e.Edges.namedBlockedGroups[name] = []*Group{}
+	} else {
+		e.Edges.namedBlockedGroups[name] = append(e.Edges.namedBlockedGroups[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (e *Entity) NamedEditors(name string) ([]*Group, error) {
+	if e.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := e.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (e *Entity) appendNamedEditors(name string, edges ...*Group) {
+	if e.Edges.namedEditors == nil {
+		e.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		e.Edges.namedEditors[name] = []*Group{}
+	} else {
+		e.Edges.namedEditors[name] = append(e.Edges.namedEditors[name], edges...)
+	}
+}
+
+// NamedViewers returns the Viewers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (e *Entity) NamedViewers(name string) ([]*Group, error) {
+	if e.Edges.namedViewers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := e.Edges.namedViewers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (e *Entity) appendNamedViewers(name string, edges ...*Group) {
+	if e.Edges.namedViewers == nil {
+		e.Edges.namedViewers = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		e.Edges.namedViewers[name] = []*Group{}
+	} else {
+		e.Edges.namedViewers[name] = append(e.Edges.namedViewers[name], edges...)
+	}
 }
 
 // NamedContacts returns the Contacts named value or an error if the edge was not
@@ -472,6 +649,54 @@ func (e *Entity) appendNamedFiles(name string, edges ...*File) {
 		e.Edges.namedFiles[name] = []*File{}
 	} else {
 		e.Edges.namedFiles[name] = append(e.Edges.namedFiles[name], edges...)
+	}
+}
+
+// NamedAssets returns the Assets named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (e *Entity) NamedAssets(name string) ([]*Asset, error) {
+	if e.Edges.namedAssets == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := e.Edges.namedAssets[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (e *Entity) appendNamedAssets(name string, edges ...*Asset) {
+	if e.Edges.namedAssets == nil {
+		e.Edges.namedAssets = make(map[string][]*Asset)
+	}
+	if len(edges) == 0 {
+		e.Edges.namedAssets[name] = []*Asset{}
+	} else {
+		e.Edges.namedAssets[name] = append(e.Edges.namedAssets[name], edges...)
+	}
+}
+
+// NamedScans returns the Scans named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (e *Entity) NamedScans(name string) ([]*Scan, error) {
+	if e.Edges.namedScans == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := e.Edges.namedScans[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (e *Entity) appendNamedScans(name string, edges ...*Scan) {
+	if e.Edges.namedScans == nil {
+		e.Edges.namedScans = make(map[string][]*Scan)
+	}
+	if len(edges) == 0 {
+		e.Edges.namedScans[name] = []*Scan{}
+	} else {
+		e.Edges.namedScans[name] = append(e.Edges.namedScans[name], edges...)
 	}
 }
 

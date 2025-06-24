@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
+	"github.com/theopenlane/core/internal/ent/generated/orgprice"
 	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/pkg/models"
@@ -359,6 +360,21 @@ func (osc *OrgSubscriptionCreate) AddProducts(o ...*OrgProduct) *OrgSubscription
 	return osc.AddProductIDs(ids...)
 }
 
+// AddPriceIDs adds the "prices" edge to the OrgPrice entity by IDs.
+func (osc *OrgSubscriptionCreate) AddPriceIDs(ids ...string) *OrgSubscriptionCreate {
+	osc.mutation.AddPriceIDs(ids...)
+	return osc
+}
+
+// AddPrices adds the "prices" edges to the OrgPrice entity.
+func (osc *OrgSubscriptionCreate) AddPrices(o ...*OrgPrice) *OrgSubscriptionCreate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return osc.AddPriceIDs(ids...)
+}
+
 // Mutation returns the OrgSubscriptionMutation object of the builder.
 func (osc *OrgSubscriptionCreate) Mutation() *OrgSubscriptionMutation {
 	return osc.mutation
@@ -618,6 +634,23 @@ func (osc *OrgSubscriptionCreate) createSpec() (*OrgSubscription, *sqlgraph.Crea
 			},
 		}
 		edge.Schema = osc.schemaConfig.OrgProduct
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := osc.mutation.PricesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgsubscription.PricesTable,
+			Columns: []string{orgsubscription.PricesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osc.schemaConfig.OrgPrice
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

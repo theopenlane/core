@@ -39,8 +39,35 @@ query AdminSearch($query: String!) {
           details
           approverID
           delegateID
+          tagSuggestions
+          dismissedTagSuggestions
+          controlSuggestions
+          dismissedControlSuggestions
+          improvementSuggestions
+          dismissedImprovementSuggestions
           ownerID
           source
+        }
+      }
+    }
+    assets {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+          ownerID
+          name
+          description
+          identifier
+          website
+          categories
         }
       }
     }
@@ -364,6 +391,12 @@ query AdminSearch($query: String!) {
           details
           approverID
           delegateID
+          tagSuggestions
+          dismissedTagSuggestions
+          controlSuggestions
+          dismissedControlSuggestions
+          improvementSuggestions
+          dismissedImprovementSuggestions
         }
       }
     }
@@ -556,6 +589,10 @@ query AdminSearch($query: String!) {
           taxIdentifier
           organizationID
           allowedEmailDomains
+          identityProviderMetadataEndpoint
+          identityProviderEntityID
+          oidcDiscoveryEndpoint
+          complianceWebhookToken
         }
       }
     }
@@ -598,6 +635,12 @@ query AdminSearch($query: String!) {
           details
           approverID
           delegateID
+          tagSuggestions
+          dismissedTagSuggestions
+          controlSuggestions
+          dismissedControlSuggestions
+          improvementSuggestions
+          dismissedImprovementSuggestions
         }
       }
     }
@@ -646,6 +689,24 @@ query AdminSearch($query: String!) {
           businessCosts
           stakeholderID
           delegateID
+        }
+      }
+    }
+    scans {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+          ownerID
+          target
+          metadata
         }
       }
     }

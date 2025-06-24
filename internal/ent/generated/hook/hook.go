@@ -45,6 +45,30 @@ func (f ActionPlanHistoryFunc) Mutate(ctx context.Context, m generated.Mutation)
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ActionPlanHistoryMutation", m)
 }
 
+// The AssetFunc type is an adapter to allow the use of ordinary
+// function as Asset mutator.
+type AssetFunc func(context.Context, *generated.AssetMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f AssetFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.AssetMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.AssetMutation", m)
+}
+
+// The AssetHistoryFunc type is an adapter to allow the use of ordinary
+// function as AssetHistory mutator.
+type AssetHistoryFunc func(context.Context, *generated.AssetHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f AssetHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.AssetHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.AssetHistoryMutation", m)
+}
+
 // The ContactFunc type is an adapter to allow the use of ordinary
 // function as Contact mutator.
 type ContactFunc func(context.Context, *generated.ContactMutation) (generated.Value, error)
@@ -919,6 +943,30 @@ func (f RiskHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (gene
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.RiskHistoryMutation", m)
+}
+
+// The ScanFunc type is an adapter to allow the use of ordinary
+// function as Scan mutator.
+type ScanFunc func(context.Context, *generated.ScanMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ScanFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ScanMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ScanMutation", m)
+}
+
+// The ScanHistoryFunc type is an adapter to allow the use of ordinary
+// function as ScanHistory mutator.
+type ScanHistoryFunc func(context.Context, *generated.ScanHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ScanHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ScanHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ScanHistoryMutation", m)
 }
 
 // The ScheduledJobFunc type is an adapter to allow the use of ordinary

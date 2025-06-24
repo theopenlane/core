@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
@@ -465,6 +466,51 @@ func (gc *GroupCreate) AddControlImplementationViewers(c ...*ControlImplementati
 		ids[i] = c[i].ID
 	}
 	return gc.AddControlImplementationViewerIDs(ids...)
+}
+
+// AddScanEditorIDs adds the "scan_editors" edge to the Scan entity by IDs.
+func (gc *GroupCreate) AddScanEditorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddScanEditorIDs(ids...)
+	return gc
+}
+
+// AddScanEditors adds the "scan_editors" edges to the Scan entity.
+func (gc *GroupCreate) AddScanEditors(s ...*Scan) *GroupCreate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return gc.AddScanEditorIDs(ids...)
+}
+
+// AddScanBlockedGroupIDs adds the "scan_blocked_groups" edge to the Scan entity by IDs.
+func (gc *GroupCreate) AddScanBlockedGroupIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddScanBlockedGroupIDs(ids...)
+	return gc
+}
+
+// AddScanBlockedGroups adds the "scan_blocked_groups" edges to the Scan entity.
+func (gc *GroupCreate) AddScanBlockedGroups(s ...*Scan) *GroupCreate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return gc.AddScanBlockedGroupIDs(ids...)
+}
+
+// AddScanViewerIDs adds the "scan_viewers" edge to the Scan entity by IDs.
+func (gc *GroupCreate) AddScanViewerIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddScanViewerIDs(ids...)
+	return gc
+}
+
+// AddScanViewers adds the "scan_viewers" edges to the Scan entity.
+func (gc *GroupCreate) AddScanViewers(s ...*Scan) *GroupCreate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return gc.AddScanViewerIDs(ids...)
 }
 
 // AddProcedureEditorIDs adds the "procedure_editors" edge to the Procedure entity by IDs.
@@ -1170,6 +1216,57 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = gc.schemaConfig.ControlImplementationViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ScanEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanEditorsTable,
+			Columns: group.ScanEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.ScanEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ScanBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanBlockedGroupsTable,
+			Columns: group.ScanBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.ScanBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ScanViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ScanViewersTable,
+			Columns: group.ScanViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.ScanViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

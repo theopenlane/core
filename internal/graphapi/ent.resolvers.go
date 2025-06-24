@@ -133,6 +133,72 @@ func (r *queryResolver) ActionPlanHistories(ctx context.Context, after *entgql.C
 	return res, err
 }
 
+// Assets is the resolver for the assets field.
+func (r *queryResolver) Assets(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) (*generated.AssetConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.AssetOrder{
+			{
+				Field:     generated.AssetOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).Asset.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "asset"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithAssetOrder(orderBy),
+		generated.WithAssetFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "asset"})
+	}
+
+	return res, err
+}
+
+// AssetHistories is the resolver for the assetHistories field.
+func (r *queryResolver) AssetHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.AssetHistoryOrder, where *generated.AssetHistoryWhereInput) (*generated.AssetHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.AssetHistoryOrder{
+			Field:     generated.AssetHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).AssetHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "assethistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithAssetHistoryOrder(orderBy),
+		generated.WithAssetHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "assethistory"})
+	}
+
+	return res, err
+}
+
 // Contacts is the resolver for the contacts field.
 func (r *queryResolver) Contacts(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) (*generated.ContactConnection, error) {
 	// set page limit if nothing was set
@@ -2328,6 +2394,72 @@ func (r *queryResolver) RiskHistories(ctx context.Context, after *entgql.Cursor[
 		generated.WithRiskHistoryFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "riskhistory"})
+	}
+
+	return res, err
+}
+
+// Scans is the resolver for the scans field.
+func (r *queryResolver) Scans(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) (*generated.ScanConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.ScanOrder{
+			{
+				Field:     generated.ScanOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).Scan.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "scan"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithScanOrder(orderBy),
+		generated.WithScanFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "scan"})
+	}
+
+	return res, err
+}
+
+// ScanHistories is the resolver for the scanHistories field.
+func (r *queryResolver) ScanHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ScanHistoryOrder, where *generated.ScanHistoryWhereInput) (*generated.ScanHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.ScanHistoryOrder{
+			Field:     generated.ScanHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).ScanHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "scanhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithScanHistoryOrder(orderBy),
+		generated.WithScanHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "scanhistory"})
 	}
 
 	return res, err

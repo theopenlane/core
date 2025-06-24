@@ -30,6 +30,7 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		errors                            []error
 		apitokenResults                   *generated.APITokenConnection
 		actionplanResults                 *generated.ActionPlanConnection
+		assetResults                      *generated.AssetConnection
 		contactResults                    *generated.ContactConnection
 		controlResults                    *generated.ControlConnection
 		controlimplementationResults      *generated.ControlImplementationConnection
@@ -59,6 +60,7 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		procedureResults                  *generated.ProcedureConnection
 		programResults                    *generated.ProgramConnection
 		riskResults                       *generated.RiskConnection
+		scanResults                       *generated.ScanConnection
 		scheduledjobResults               *generated.ScheduledJobConnection
 		standardResults                   *generated.StandardConnection
 		subcontrolResults                 *generated.SubcontrolConnection
@@ -82,6 +84,13 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		func() {
 			var err error
 			actionplanResults, err = searchActionPlans(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			assetResults, err = searchAssets(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
@@ -291,6 +300,13 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		},
 		func() {
 			var err error
+			scanResults, err = searchScans(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
 			scheduledjobResults, err = searchScheduledJobs(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
@@ -379,6 +395,11 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		res.ActionPlans = actionplanResults
 
 		res.TotalCount += actionplanResults.TotalCount
+	}
+	if assetResults != nil && len(assetResults.Edges) > 0 {
+		res.Assets = assetResults
+
+		res.TotalCount += assetResults.TotalCount
 	}
 	if contactResults != nil && len(contactResults.Edges) > 0 {
 		res.Contacts = contactResults
@@ -525,6 +546,11 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 
 		res.TotalCount += riskResults.TotalCount
 	}
+	if scanResults != nil && len(scanResults.Edges) > 0 {
+		res.Scans = scanResults
+
+		res.TotalCount += scanResults.TotalCount
+	}
 	if scheduledjobResults != nil && len(scheduledjobResults.Edges) > 0 {
 		res.ScheduledJobs = scheduledjobResults
 
@@ -613,6 +639,24 @@ func (r *queryResolver) AdminActionPlanSearch(ctx context.Context, query string,
 
 	// return the results
 	return actionplanResults, nil
+}
+func (r *queryResolver) AdminAssetSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.AssetConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	assetResults, err := adminSearchAssets(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return assetResults, nil
 }
 func (r *queryResolver) AdminContactSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ContactConnection, error) {
 	// ensure the user is a system admin
@@ -1135,6 +1179,24 @@ func (r *queryResolver) AdminRiskSearch(ctx context.Context, query string, after
 
 	// return the results
 	return riskResults, nil
+}
+func (r *queryResolver) AdminScanSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ScanConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	scanResults, err := adminSearchScans(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return scanResults, nil
 }
 func (r *queryResolver) AdminScheduledJobSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ScheduledJobConnection, error) {
 	// ensure the user is a system admin

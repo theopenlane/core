@@ -1351,6 +1351,66 @@ func SummaryContainsFold(v string) predicate.ActionPlanHistory {
 	return predicate.ActionPlanHistory(sql.FieldContainsFold(FieldSummary, v))
 }
 
+// TagSuggestionsIsNil applies the IsNil predicate on the "tag_suggestions" field.
+func TagSuggestionsIsNil() predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldIsNull(FieldTagSuggestions))
+}
+
+// TagSuggestionsNotNil applies the NotNil predicate on the "tag_suggestions" field.
+func TagSuggestionsNotNil() predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldNotNull(FieldTagSuggestions))
+}
+
+// DismissedTagSuggestionsIsNil applies the IsNil predicate on the "dismissed_tag_suggestions" field.
+func DismissedTagSuggestionsIsNil() predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldIsNull(FieldDismissedTagSuggestions))
+}
+
+// DismissedTagSuggestionsNotNil applies the NotNil predicate on the "dismissed_tag_suggestions" field.
+func DismissedTagSuggestionsNotNil() predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldNotNull(FieldDismissedTagSuggestions))
+}
+
+// ControlSuggestionsIsNil applies the IsNil predicate on the "control_suggestions" field.
+func ControlSuggestionsIsNil() predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldIsNull(FieldControlSuggestions))
+}
+
+// ControlSuggestionsNotNil applies the NotNil predicate on the "control_suggestions" field.
+func ControlSuggestionsNotNil() predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldNotNull(FieldControlSuggestions))
+}
+
+// DismissedControlSuggestionsIsNil applies the IsNil predicate on the "dismissed_control_suggestions" field.
+func DismissedControlSuggestionsIsNil() predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldIsNull(FieldDismissedControlSuggestions))
+}
+
+// DismissedControlSuggestionsNotNil applies the NotNil predicate on the "dismissed_control_suggestions" field.
+func DismissedControlSuggestionsNotNil() predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldNotNull(FieldDismissedControlSuggestions))
+}
+
+// ImprovementSuggestionsIsNil applies the IsNil predicate on the "improvement_suggestions" field.
+func ImprovementSuggestionsIsNil() predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldIsNull(FieldImprovementSuggestions))
+}
+
+// ImprovementSuggestionsNotNil applies the NotNil predicate on the "improvement_suggestions" field.
+func ImprovementSuggestionsNotNil() predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldNotNull(FieldImprovementSuggestions))
+}
+
+// DismissedImprovementSuggestionsIsNil applies the IsNil predicate on the "dismissed_improvement_suggestions" field.
+func DismissedImprovementSuggestionsIsNil() predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldIsNull(FieldDismissedImprovementSuggestions))
+}
+
+// DismissedImprovementSuggestionsNotNil applies the NotNil predicate on the "dismissed_improvement_suggestions" field.
+func DismissedImprovementSuggestionsNotNil() predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldNotNull(FieldDismissedImprovementSuggestions))
+}
+
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
 func OwnerIDEQ(v string) predicate.ActionPlanHistory {
 	return predicate.ActionPlanHistory(sql.FieldEQ(FieldOwnerID, v))

@@ -61,6 +61,18 @@ type InternalPolicy struct {
 	DelegateID string `json:"delegate_id,omitempty"`
 	// Summary holds the value of the "summary" field.
 	Summary string `json:"summary,omitempty"`
+	// auto-generated tag suggestions for the policy
+	TagSuggestions []string `json:"tag_suggestions,omitempty"`
+	// tag suggestions dismissed by the user for the policy
+	DismissedTagSuggestions []string `json:"dismissed_tag_suggestions,omitempty"`
+	// proposed controls referenced in the policy
+	ControlSuggestions []string `json:"control_suggestions,omitempty"`
+	// control suggestions dismissed by the user for the policy
+	DismissedControlSuggestions []string `json:"dismissed_control_suggestions,omitempty"`
+	// suggested improvements for the policy
+	ImprovementSuggestions []string `json:"improvement_suggestions,omitempty"`
+	// improvement suggestions dismissed by the user for the policy
+	DismissedImprovementSuggestions []string `json:"dismissed_improvement_suggestions,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the InternalPolicyQuery when eager-loading is set.
 	Edges        InternalPolicyEdges `json:"edges"`
@@ -241,7 +253,7 @@ func (*InternalPolicy) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case internalpolicy.FieldTags:
+		case internalpolicy.FieldTags, internalpolicy.FieldTagSuggestions, internalpolicy.FieldDismissedTagSuggestions, internalpolicy.FieldControlSuggestions, internalpolicy.FieldDismissedControlSuggestions, internalpolicy.FieldImprovementSuggestions, internalpolicy.FieldDismissedImprovementSuggestions:
 			values[i] = new([]byte)
 		case internalpolicy.FieldApprovalRequired:
 			values[i] = new(sql.NullBool)
@@ -391,6 +403,54 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field summary", values[i])
 			} else if value.Valid {
 				ip.Summary = value.String
+			}
+		case internalpolicy.FieldTagSuggestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field tag_suggestions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &ip.TagSuggestions); err != nil {
+					return fmt.Errorf("unmarshal field tag_suggestions: %w", err)
+				}
+			}
+		case internalpolicy.FieldDismissedTagSuggestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field dismissed_tag_suggestions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &ip.DismissedTagSuggestions); err != nil {
+					return fmt.Errorf("unmarshal field dismissed_tag_suggestions: %w", err)
+				}
+			}
+		case internalpolicy.FieldControlSuggestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field control_suggestions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &ip.ControlSuggestions); err != nil {
+					return fmt.Errorf("unmarshal field control_suggestions: %w", err)
+				}
+			}
+		case internalpolicy.FieldDismissedControlSuggestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field dismissed_control_suggestions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &ip.DismissedControlSuggestions); err != nil {
+					return fmt.Errorf("unmarshal field dismissed_control_suggestions: %w", err)
+				}
+			}
+		case internalpolicy.FieldImprovementSuggestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field improvement_suggestions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &ip.ImprovementSuggestions); err != nil {
+					return fmt.Errorf("unmarshal field improvement_suggestions: %w", err)
+				}
+			}
+		case internalpolicy.FieldDismissedImprovementSuggestions:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field dismissed_improvement_suggestions", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &ip.DismissedImprovementSuggestions); err != nil {
+					return fmt.Errorf("unmarshal field dismissed_improvement_suggestions: %w", err)
+				}
 			}
 		default:
 			ip.selectValues.Set(columns[i], values[i])
@@ -552,6 +612,24 @@ func (ip *InternalPolicy) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("summary=")
 	builder.WriteString(ip.Summary)
+	builder.WriteString(", ")
+	builder.WriteString("tag_suggestions=")
+	builder.WriteString(fmt.Sprintf("%v", ip.TagSuggestions))
+	builder.WriteString(", ")
+	builder.WriteString("dismissed_tag_suggestions=")
+	builder.WriteString(fmt.Sprintf("%v", ip.DismissedTagSuggestions))
+	builder.WriteString(", ")
+	builder.WriteString("control_suggestions=")
+	builder.WriteString(fmt.Sprintf("%v", ip.ControlSuggestions))
+	builder.WriteString(", ")
+	builder.WriteString("dismissed_control_suggestions=")
+	builder.WriteString(fmt.Sprintf("%v", ip.DismissedControlSuggestions))
+	builder.WriteString(", ")
+	builder.WriteString("improvement_suggestions=")
+	builder.WriteString(fmt.Sprintf("%v", ip.ImprovementSuggestions))
+	builder.WriteString(", ")
+	builder.WriteString("dismissed_improvement_suggestions=")
+	builder.WriteString(fmt.Sprintf("%v", ip.DismissedImprovementSuggestions))
 	builder.WriteByte(')')
 	return builder.String()
 }

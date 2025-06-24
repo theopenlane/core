@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
+	"github.com/theopenlane/core/internal/ent/generated/orgprice"
 	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -33,11 +34,13 @@ type OrgSubscriptionQuery struct {
 	withEvents        *EventQuery
 	withModules       *OrgModuleQuery
 	withProducts      *OrgProductQuery
+	withPrices        *OrgPriceQuery
 	loadTotal         []func(context.Context, []*OrgSubscription) error
 	modifiers         []func(*sql.Selector)
 	withNamedEvents   map[string]*EventQuery
 	withNamedModules  map[string]*OrgModuleQuery
 	withNamedProducts map[string]*OrgProductQuery
+	withNamedPrices   map[string]*OrgPriceQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -168,6 +171,31 @@ func (osq *OrgSubscriptionQuery) QueryProducts() *OrgProductQuery {
 		schemaConfig := osq.schemaConfig
 		step.To.Schema = schemaConfig.OrgProduct
 		step.Edge.Schema = schemaConfig.OrgProduct
+		fromU = sqlgraph.SetNeighbors(osq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPrices chains the current query on the "prices" edge.
+func (osq *OrgSubscriptionQuery) QueryPrices() *OrgPriceQuery {
+	query := (&OrgPriceClient{config: osq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := osq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := osq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(orgsubscription.Table, orgsubscription.FieldID, selector),
+			sqlgraph.To(orgprice.Table, orgprice.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, orgsubscription.PricesTable, orgsubscription.PricesColumn),
+		)
+		schemaConfig := osq.schemaConfig
+		step.To.Schema = schemaConfig.OrgPrice
+		step.Edge.Schema = schemaConfig.OrgPrice
 		fromU = sqlgraph.SetNeighbors(osq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -370,6 +398,7 @@ func (osq *OrgSubscriptionQuery) Clone() *OrgSubscriptionQuery {
 		withEvents:   osq.withEvents.Clone(),
 		withModules:  osq.withModules.Clone(),
 		withProducts: osq.withProducts.Clone(),
+		withPrices:   osq.withPrices.Clone(),
 		// clone intermediate query.
 		sql:       osq.sql.Clone(),
 		path:      osq.path,
@@ -418,6 +447,17 @@ func (osq *OrgSubscriptionQuery) WithProducts(opts ...func(*OrgProductQuery)) *O
 		opt(query)
 	}
 	osq.withProducts = query
+	return osq
+}
+
+// WithPrices tells the query-builder to eager-load the nodes that are connected to
+// the "prices" edge. The optional arguments are used to configure the query builder of the edge.
+func (osq *OrgSubscriptionQuery) WithPrices(opts ...func(*OrgPriceQuery)) *OrgSubscriptionQuery {
+	query := (&OrgPriceClient{config: osq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	osq.withPrices = query
 	return osq
 }
 
@@ -499,11 +539,12 @@ func (osq *OrgSubscriptionQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	var (
 		nodes       = []*OrgSubscription{}
 		_spec       = osq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [5]bool{
 			osq.withOwner != nil,
 			osq.withEvents != nil,
 			osq.withModules != nil,
 			osq.withProducts != nil,
+			osq.withPrices != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -556,6 +597,13 @@ func (osq *OrgSubscriptionQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 			return nil, err
 		}
 	}
+	if query := osq.withPrices; query != nil {
+		if err := osq.loadPrices(ctx, query, nodes,
+			func(n *OrgSubscription) { n.Edges.Prices = []*OrgPrice{} },
+			func(n *OrgSubscription, e *OrgPrice) { n.Edges.Prices = append(n.Edges.Prices, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range osq.withNamedEvents {
 		if err := osq.loadEvents(ctx, query, nodes,
 			func(n *OrgSubscription) { n.appendNamedEvents(name) },
@@ -574,6 +622,13 @@ func (osq *OrgSubscriptionQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 		if err := osq.loadProducts(ctx, query, nodes,
 			func(n *OrgSubscription) { n.appendNamedProducts(name) },
 			func(n *OrgSubscription, e *OrgProduct) { n.appendNamedProducts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range osq.withNamedPrices {
+		if err := osq.loadPrices(ctx, query, nodes,
+			func(n *OrgSubscription) { n.appendNamedPrices(name) },
+			func(n *OrgSubscription, e *OrgPrice) { n.appendNamedPrices(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -686,6 +741,7 @@ func (osq *OrgSubscriptionQuery) loadModules(ctx context.Context, query *OrgModu
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(orgmodule.FieldSubscriptionID)
 	}
@@ -716,11 +772,42 @@ func (osq *OrgSubscriptionQuery) loadProducts(ctx context.Context, query *OrgPro
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(orgproduct.FieldSubscriptionID)
 	}
 	query.Where(predicate.OrgProduct(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(orgsubscription.ProductsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.SubscriptionID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "subscription_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (osq *OrgSubscriptionQuery) loadPrices(ctx context.Context, query *OrgPriceQuery, nodes []*OrgSubscription, init func(*OrgSubscription), assign func(*OrgSubscription, *OrgPrice)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*OrgSubscription)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(orgprice.FieldSubscriptionID)
+	}
+	query.Where(predicate.OrgPrice(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(orgsubscription.PricesColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -877,6 +964,20 @@ func (osq *OrgSubscriptionQuery) WithNamedProducts(name string, opts ...func(*Or
 		osq.withNamedProducts = make(map[string]*OrgProductQuery)
 	}
 	osq.withNamedProducts[name] = query
+	return osq
+}
+
+// WithNamedPrices tells the query-builder to eager-load the nodes that are connected to the "prices"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (osq *OrgSubscriptionQuery) WithNamedPrices(name string, opts ...func(*OrgPriceQuery)) *OrgSubscriptionQuery {
+	query := (&OrgPriceClient{config: osq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if osq.withNamedPrices == nil {
+		osq.withNamedPrices = make(map[string]*OrgPriceQuery)
+	}
+	osq.withNamedPrices[name] = query
 	return osq
 }
 

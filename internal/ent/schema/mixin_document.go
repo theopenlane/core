@@ -123,6 +123,30 @@ func getDocumentFields(documentType string) []ent.Field {
 			Annotations(
 				entgql.Skip(^entgql.SkipType),
 			),
+		field.Strings("tag_suggestions").
+			Optional().
+			Default([]string{}).
+			Comment(fmt.Sprintf("auto-generated tag suggestions for the %s", documentType)),
+		field.Strings("dismissed_tag_suggestions").
+			Optional().
+			Default([]string{}).
+			Comment(fmt.Sprintf("tag suggestions dismissed by the user for the %s", documentType)),
+		field.Strings("control_suggestions").
+			Optional().
+			Default([]string{}).
+			Comment(fmt.Sprintf("proposed controls referenced in the %s", documentType)),
+		field.Strings("dismissed_control_suggestions").
+			Optional().
+			Default([]string{}).
+			Comment(fmt.Sprintf("control suggestions dismissed by the user for the %s", documentType)),
+		field.Strings("improvement_suggestions").
+			Optional().
+			Default([]string{}).
+			Comment(fmt.Sprintf("suggested improvements for the %s", documentType)),
+		field.Strings("dismissed_improvement_suggestions").
+			Optional().
+			Default([]string{}).
+			Comment(fmt.Sprintf("improvement suggestions dismissed by the user for the %s", documentType)),
 	}
 }
 

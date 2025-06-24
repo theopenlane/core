@@ -13,13 +13,16 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/pkg/enums"
@@ -522,6 +525,51 @@ func (ru *RiskUpdate) AddTasks(t ...*Task) *RiskUpdate {
 	return ru.AddTaskIDs(ids...)
 }
 
+// AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
+func (ru *RiskUpdate) AddAssetIDs(ids ...string) *RiskUpdate {
+	ru.mutation.AddAssetIDs(ids...)
+	return ru
+}
+
+// AddAssets adds the "assets" edges to the Asset entity.
+func (ru *RiskUpdate) AddAssets(a ...*Asset) *RiskUpdate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return ru.AddAssetIDs(ids...)
+}
+
+// AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
+func (ru *RiskUpdate) AddEntityIDs(ids ...string) *RiskUpdate {
+	ru.mutation.AddEntityIDs(ids...)
+	return ru
+}
+
+// AddEntities adds the "entities" edges to the Entity entity.
+func (ru *RiskUpdate) AddEntities(e ...*Entity) *RiskUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return ru.AddEntityIDs(ids...)
+}
+
+// AddScanIDs adds the "scans" edge to the Scan entity by IDs.
+func (ru *RiskUpdate) AddScanIDs(ids ...string) *RiskUpdate {
+	ru.mutation.AddScanIDs(ids...)
+	return ru
+}
+
+// AddScans adds the "scans" edges to the Scan entity.
+func (ru *RiskUpdate) AddScans(s ...*Scan) *RiskUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ru.AddScanIDs(ids...)
+}
+
 // SetStakeholder sets the "stakeholder" edge to the Group entity.
 func (ru *RiskUpdate) SetStakeholder(g *Group) *RiskUpdate {
 	return ru.SetStakeholderID(g.ID)
@@ -745,6 +793,69 @@ func (ru *RiskUpdate) RemoveTasks(t ...*Task) *RiskUpdate {
 		ids[i] = t[i].ID
 	}
 	return ru.RemoveTaskIDs(ids...)
+}
+
+// ClearAssets clears all "assets" edges to the Asset entity.
+func (ru *RiskUpdate) ClearAssets() *RiskUpdate {
+	ru.mutation.ClearAssets()
+	return ru
+}
+
+// RemoveAssetIDs removes the "assets" edge to Asset entities by IDs.
+func (ru *RiskUpdate) RemoveAssetIDs(ids ...string) *RiskUpdate {
+	ru.mutation.RemoveAssetIDs(ids...)
+	return ru
+}
+
+// RemoveAssets removes "assets" edges to Asset entities.
+func (ru *RiskUpdate) RemoveAssets(a ...*Asset) *RiskUpdate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return ru.RemoveAssetIDs(ids...)
+}
+
+// ClearEntities clears all "entities" edges to the Entity entity.
+func (ru *RiskUpdate) ClearEntities() *RiskUpdate {
+	ru.mutation.ClearEntities()
+	return ru
+}
+
+// RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
+func (ru *RiskUpdate) RemoveEntityIDs(ids ...string) *RiskUpdate {
+	ru.mutation.RemoveEntityIDs(ids...)
+	return ru
+}
+
+// RemoveEntities removes "entities" edges to Entity entities.
+func (ru *RiskUpdate) RemoveEntities(e ...*Entity) *RiskUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return ru.RemoveEntityIDs(ids...)
+}
+
+// ClearScans clears all "scans" edges to the Scan entity.
+func (ru *RiskUpdate) ClearScans() *RiskUpdate {
+	ru.mutation.ClearScans()
+	return ru
+}
+
+// RemoveScanIDs removes the "scans" edge to Scan entities by IDs.
+func (ru *RiskUpdate) RemoveScanIDs(ids ...string) *RiskUpdate {
+	ru.mutation.RemoveScanIDs(ids...)
+	return ru
+}
+
+// RemoveScans removes "scans" edges to Scan entities.
+func (ru *RiskUpdate) RemoveScans(s ...*Scan) *RiskUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ru.RemoveScanIDs(ids...)
 }
 
 // ClearStakeholder clears the "stakeholder" edge to the Group entity.
@@ -1425,6 +1536,150 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ru.mutation.AssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.AssetsTable,
+			Columns: []string{risk.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !ru.mutation.AssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.AssetsTable,
+			Columns: []string{risk.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.AssetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.AssetsTable,
+			Columns: []string{risk.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ru.mutation.EntitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.EntitiesTable,
+			Columns: []string{risk.EntitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.Entity
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !ru.mutation.EntitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.EntitiesTable,
+			Columns: []string{risk.EntitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.EntitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.EntitiesTable,
+			Columns: []string{risk.EntitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ru.mutation.ScansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.ScansTable,
+			Columns: []string{risk.ScansColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.Scan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.RemovedScansIDs(); len(nodes) > 0 && !ru.mutation.ScansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.ScansTable,
+			Columns: []string{risk.ScansColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.ScansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.ScansTable,
+			Columns: []string{risk.ScansColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ru.mutation.StakeholderCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1992,6 +2247,51 @@ func (ruo *RiskUpdateOne) AddTasks(t ...*Task) *RiskUpdateOne {
 	return ruo.AddTaskIDs(ids...)
 }
 
+// AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
+func (ruo *RiskUpdateOne) AddAssetIDs(ids ...string) *RiskUpdateOne {
+	ruo.mutation.AddAssetIDs(ids...)
+	return ruo
+}
+
+// AddAssets adds the "assets" edges to the Asset entity.
+func (ruo *RiskUpdateOne) AddAssets(a ...*Asset) *RiskUpdateOne {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return ruo.AddAssetIDs(ids...)
+}
+
+// AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
+func (ruo *RiskUpdateOne) AddEntityIDs(ids ...string) *RiskUpdateOne {
+	ruo.mutation.AddEntityIDs(ids...)
+	return ruo
+}
+
+// AddEntities adds the "entities" edges to the Entity entity.
+func (ruo *RiskUpdateOne) AddEntities(e ...*Entity) *RiskUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return ruo.AddEntityIDs(ids...)
+}
+
+// AddScanIDs adds the "scans" edge to the Scan entity by IDs.
+func (ruo *RiskUpdateOne) AddScanIDs(ids ...string) *RiskUpdateOne {
+	ruo.mutation.AddScanIDs(ids...)
+	return ruo
+}
+
+// AddScans adds the "scans" edges to the Scan entity.
+func (ruo *RiskUpdateOne) AddScans(s ...*Scan) *RiskUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ruo.AddScanIDs(ids...)
+}
+
 // SetStakeholder sets the "stakeholder" edge to the Group entity.
 func (ruo *RiskUpdateOne) SetStakeholder(g *Group) *RiskUpdateOne {
 	return ruo.SetStakeholderID(g.ID)
@@ -2215,6 +2515,69 @@ func (ruo *RiskUpdateOne) RemoveTasks(t ...*Task) *RiskUpdateOne {
 		ids[i] = t[i].ID
 	}
 	return ruo.RemoveTaskIDs(ids...)
+}
+
+// ClearAssets clears all "assets" edges to the Asset entity.
+func (ruo *RiskUpdateOne) ClearAssets() *RiskUpdateOne {
+	ruo.mutation.ClearAssets()
+	return ruo
+}
+
+// RemoveAssetIDs removes the "assets" edge to Asset entities by IDs.
+func (ruo *RiskUpdateOne) RemoveAssetIDs(ids ...string) *RiskUpdateOne {
+	ruo.mutation.RemoveAssetIDs(ids...)
+	return ruo
+}
+
+// RemoveAssets removes "assets" edges to Asset entities.
+func (ruo *RiskUpdateOne) RemoveAssets(a ...*Asset) *RiskUpdateOne {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return ruo.RemoveAssetIDs(ids...)
+}
+
+// ClearEntities clears all "entities" edges to the Entity entity.
+func (ruo *RiskUpdateOne) ClearEntities() *RiskUpdateOne {
+	ruo.mutation.ClearEntities()
+	return ruo
+}
+
+// RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
+func (ruo *RiskUpdateOne) RemoveEntityIDs(ids ...string) *RiskUpdateOne {
+	ruo.mutation.RemoveEntityIDs(ids...)
+	return ruo
+}
+
+// RemoveEntities removes "entities" edges to Entity entities.
+func (ruo *RiskUpdateOne) RemoveEntities(e ...*Entity) *RiskUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return ruo.RemoveEntityIDs(ids...)
+}
+
+// ClearScans clears all "scans" edges to the Scan entity.
+func (ruo *RiskUpdateOne) ClearScans() *RiskUpdateOne {
+	ruo.mutation.ClearScans()
+	return ruo
+}
+
+// RemoveScanIDs removes the "scans" edge to Scan entities by IDs.
+func (ruo *RiskUpdateOne) RemoveScanIDs(ids ...string) *RiskUpdateOne {
+	ruo.mutation.RemoveScanIDs(ids...)
+	return ruo
+}
+
+// RemoveScans removes "scans" edges to Scan entities.
+func (ruo *RiskUpdateOne) RemoveScans(s ...*Scan) *RiskUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ruo.RemoveScanIDs(ids...)
 }
 
 // ClearStakeholder clears the "stakeholder" edge to the Group entity.
@@ -2920,6 +3283,150 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 			},
 		}
 		edge.Schema = ruo.schemaConfig.RiskTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ruo.mutation.AssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.AssetsTable,
+			Columns: []string{risk.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !ruo.mutation.AssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.AssetsTable,
+			Columns: []string{risk.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.AssetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.AssetsTable,
+			Columns: []string{risk.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ruo.mutation.EntitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.EntitiesTable,
+			Columns: []string{risk.EntitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.Entity
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !ruo.mutation.EntitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.EntitiesTable,
+			Columns: []string{risk.EntitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.EntitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.EntitiesTable,
+			Columns: []string{risk.EntitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ruo.mutation.ScansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.ScansTable,
+			Columns: []string{risk.ScansColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.Scan
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.RemovedScansIDs(); len(nodes) > 0 && !ruo.mutation.ScansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.ScansTable,
+			Columns: []string{risk.ScansColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.ScansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.ScansTable,
+			Columns: []string{risk.ScansColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

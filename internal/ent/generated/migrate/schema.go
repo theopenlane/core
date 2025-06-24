@@ -84,6 +84,12 @@ var (
 		{Name: "review_due", Type: field.TypeTime, Nullable: true},
 		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY"}, Default: "YEARLY"},
 		{Name: "summary", Type: field.TypeString, Nullable: true},
+		{Name: "tag_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "dismissed_tag_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "control_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "dismissed_control_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "improvement_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "dismissed_improvement_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "due_date", Type: field.TypeTime, Nullable: true},
 		{Name: "priority", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MEDIUM", "HIGH", "CRITICAL"}},
 		{Name: "source", Type: field.TypeString, Nullable: true},
@@ -100,25 +106,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "action_plans_groups_approver",
-				Columns:    []*schema.Column{ActionPlansColumns[20]},
+				Columns:    []*schema.Column{ActionPlansColumns[26]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "action_plans_groups_delegate",
-				Columns:    []*schema.Column{ActionPlansColumns[21]},
+				Columns:    []*schema.Column{ActionPlansColumns[27]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "action_plans_organizations_action_plans",
-				Columns:    []*schema.Column{ActionPlansColumns[22]},
+				Columns:    []*schema.Column{ActionPlansColumns[28]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "action_plans_subcontrols_action_plans",
-				Columns:    []*schema.Column{ActionPlansColumns[23]},
+				Columns:    []*schema.Column{ActionPlansColumns[29]},
 				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -132,7 +138,7 @@ var (
 			{
 				Name:    "actionplan_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ActionPlansColumns[22]},
+				Columns: []*schema.Column{ActionPlansColumns[28]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -163,6 +169,12 @@ var (
 		{Name: "approver_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
 		{Name: "summary", Type: field.TypeString, Nullable: true},
+		{Name: "tag_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "dismissed_tag_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "control_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "dismissed_control_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "improvement_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "dismissed_improvement_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "due_date", Type: field.TypeTime, Nullable: true},
 		{Name: "priority", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MEDIUM", "HIGH", "CRITICAL"}},
@@ -178,6 +190,104 @@ var (
 				Name:    "actionplanhistory_history_time",
 				Unique:  false,
 				Columns: []*schema.Column{ActionPlanHistoryColumns[1]},
+			},
+		},
+	}
+	// AssetsColumns holds the columns for the "assets" table.
+	AssetsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "asset_type", Type: field.TypeEnum, Enums: []string{"TECHNOLOGY", "DOMAIN", "DEVICE", "TELEPHONE"}, Default: "TECHNOLOGY"},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "identifier", Type: field.TypeString, Nullable: true},
+		{Name: "website", Type: field.TypeString, Nullable: true},
+		{Name: "cpe", Type: field.TypeString, Nullable: true},
+		{Name: "categories", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "risk_assets", Type: field.TypeString, Nullable: true},
+	}
+	// AssetsTable holds the schema information for the "assets" table.
+	AssetsTable = &schema.Table{
+		Name:       "assets",
+		Columns:    AssetsColumns,
+		PrimaryKey: []*schema.Column{AssetsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "assets_organizations_assets",
+				Columns:    []*schema.Column{AssetsColumns[15]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "assets_risks_assets",
+				Columns:    []*schema.Column{AssetsColumns[16]},
+				RefColumns: []*schema.Column{RisksColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "asset_id",
+				Unique:  true,
+				Columns: []*schema.Column{AssetsColumns[0]},
+			},
+			{
+				Name:    "asset_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{AssetsColumns[15]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "asset_name_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{AssetsColumns[9], AssetsColumns[15]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
+	// AssetHistoryColumns holds the columns for the "asset_history" table.
+	AssetHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "asset_type", Type: field.TypeEnum, Enums: []string{"TECHNOLOGY", "DOMAIN", "DEVICE", "TELEPHONE"}, Default: "TECHNOLOGY"},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "identifier", Type: field.TypeString, Nullable: true},
+		{Name: "website", Type: field.TypeString, Nullable: true},
+		{Name: "cpe", Type: field.TypeString, Nullable: true},
+		{Name: "categories", Type: field.TypeJSON, Nullable: true},
+	}
+	// AssetHistoryTable holds the schema information for the "asset_history" table.
+	AssetHistoryTable = &schema.Table{
+		Name:       "asset_history",
+		Columns:    AssetHistoryColumns,
+		PrimaryKey: []*schema.Column{AssetHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "assethistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{AssetHistoryColumns[1]},
 			},
 		},
 	}
@@ -1029,6 +1139,8 @@ var (
 		{Name: "entity_type_id", Type: field.TypeString, Nullable: true},
 		{Name: "entity_type_entities", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "risk_entities", Type: field.TypeString, Nullable: true},
+		{Name: "scan_entities", Type: field.TypeString, Nullable: true},
 	}
 	// EntitiesTable holds the schema information for the "entities" table.
 	EntitiesTable = &schema.Table{
@@ -1052,6 +1164,18 @@ var (
 				Symbol:     "entities_organizations_entities",
 				Columns:    []*schema.Column{EntitiesColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entities_risks_entities",
+				Columns:    []*schema.Column{EntitiesColumns[16]},
+				RefColumns: []*schema.Column{RisksColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entities_scans_entities",
+				Columns:    []*schema.Column{EntitiesColumns[17]},
+				RefColumns: []*schema.Column{ScansColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -1417,6 +1541,12 @@ var (
 		{Name: "gravatar_logo_url", Type: field.TypeString, Nullable: true},
 		{Name: "logo_url", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Size: 64, Default: ""},
+		{Name: "asset_blocked_groups", Type: field.TypeString, Nullable: true},
+		{Name: "asset_editors", Type: field.TypeString, Nullable: true},
+		{Name: "asset_viewers", Type: field.TypeString, Nullable: true},
+		{Name: "entity_blocked_groups", Type: field.TypeString, Nullable: true},
+		{Name: "entity_editors", Type: field.TypeString, Nullable: true},
+		{Name: "entity_viewers", Type: field.TypeString, Nullable: true},
 		{Name: "organization_control_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_control_implementation_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_control_objective_creators", Type: field.TypeString, Nullable: true},
@@ -1440,92 +1570,128 @@ var (
 		PrimaryKey: []*schema.Column{GroupsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "groups_organizations_control_creators",
+				Symbol:     "groups_assets_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[15]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				RefColumns: []*schema.Column{AssetsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_control_implementation_creators",
+				Symbol:     "groups_assets_editors",
 				Columns:    []*schema.Column{GroupsColumns[16]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				RefColumns: []*schema.Column{AssetsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_control_objective_creators",
+				Symbol:     "groups_assets_viewers",
 				Columns:    []*schema.Column{GroupsColumns[17]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				RefColumns: []*schema.Column{AssetsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_evidence_creators",
+				Symbol:     "groups_entities_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[18]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				RefColumns: []*schema.Column{EntitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_group_creators",
+				Symbol:     "groups_entities_editors",
 				Columns:    []*schema.Column{GroupsColumns[19]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				RefColumns: []*schema.Column{EntitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_internal_policy_creators",
+				Symbol:     "groups_entities_viewers",
 				Columns:    []*schema.Column{GroupsColumns[20]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				RefColumns: []*schema.Column{EntitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_mapped_control_creators",
+				Symbol:     "groups_organizations_control_creators",
 				Columns:    []*schema.Column{GroupsColumns[21]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_narrative_creators",
+				Symbol:     "groups_organizations_control_implementation_creators",
 				Columns:    []*schema.Column{GroupsColumns[22]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_procedure_creators",
+				Symbol:     "groups_organizations_control_objective_creators",
 				Columns:    []*schema.Column{GroupsColumns[23]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_program_creators",
+				Symbol:     "groups_organizations_evidence_creators",
 				Columns:    []*schema.Column{GroupsColumns[24]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_risk_creators",
+				Symbol:     "groups_organizations_group_creators",
 				Columns:    []*schema.Column{GroupsColumns[25]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_scheduled_job_creators",
+				Symbol:     "groups_organizations_internal_policy_creators",
 				Columns:    []*schema.Column{GroupsColumns[26]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_standard_creators",
+				Symbol:     "groups_organizations_mapped_control_creators",
 				Columns:    []*schema.Column{GroupsColumns[27]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_template_creators",
+				Symbol:     "groups_organizations_narrative_creators",
 				Columns:    []*schema.Column{GroupsColumns[28]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_groups",
+				Symbol:     "groups_organizations_procedure_creators",
 				Columns:    []*schema.Column{GroupsColumns[29]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_organizations_program_creators",
+				Columns:    []*schema.Column{GroupsColumns[30]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_organizations_risk_creators",
+				Columns:    []*schema.Column{GroupsColumns[31]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_organizations_scheduled_job_creators",
+				Columns:    []*schema.Column{GroupsColumns[32]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_organizations_standard_creators",
+				Columns:    []*schema.Column{GroupsColumns[33]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_organizations_template_creators",
+				Columns:    []*schema.Column{GroupsColumns[34]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_organizations_groups",
+				Columns:    []*schema.Column{GroupsColumns[35]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1539,12 +1705,12 @@ var (
 			{
 				Name:    "group_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[7], GroupsColumns[29]},
+				Columns: []*schema.Column{GroupsColumns[7], GroupsColumns[35]},
 			},
 			{
 				Name:    "group_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{GroupsColumns[29]},
+				Columns: []*schema.Column{GroupsColumns[35]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -1552,7 +1718,7 @@ var (
 			{
 				Name:    "group_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[9], GroupsColumns[29]},
+				Columns: []*schema.Column{GroupsColumns[9], GroupsColumns[35]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -1917,6 +2083,12 @@ var (
 		{Name: "review_due", Type: field.TypeTime, Nullable: true},
 		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY"}, Default: "YEARLY"},
 		{Name: "summary", Type: field.TypeString, Nullable: true},
+		{Name: "tag_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "dismissed_tag_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "control_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "dismissed_control_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "improvement_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "dismissed_improvement_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "approver_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -1929,19 +2101,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "internal_policies_groups_approver",
-				Columns:    []*schema.Column{InternalPoliciesColumns[18]},
+				Columns:    []*schema.Column{InternalPoliciesColumns[24]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "internal_policies_groups_delegate",
-				Columns:    []*schema.Column{InternalPoliciesColumns[19]},
+				Columns:    []*schema.Column{InternalPoliciesColumns[25]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "internal_policies_organizations_internal_policies",
-				Columns:    []*schema.Column{InternalPoliciesColumns[20]},
+				Columns:    []*schema.Column{InternalPoliciesColumns[26]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1955,12 +2127,12 @@ var (
 			{
 				Name:    "internalpolicy_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{InternalPoliciesColumns[7], InternalPoliciesColumns[20]},
+				Columns: []*schema.Column{InternalPoliciesColumns[7], InternalPoliciesColumns[26]},
 			},
 			{
 				Name:    "internalpolicy_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{InternalPoliciesColumns[20]},
+				Columns: []*schema.Column{InternalPoliciesColumns[26]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -1993,6 +2165,12 @@ var (
 		{Name: "approver_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
 		{Name: "summary", Type: field.TypeString, Nullable: true},
+		{Name: "tag_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "dismissed_tag_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "control_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "dismissed_control_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "improvement_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "dismissed_improvement_suggestions", Type: field.TypeJSON, Nullable: true},
 	}
 	// InternalPolicyHistoryTable holds the schema information for the "internal_policy_history" table.
 	InternalPolicyHistoryTable = &schema.Table{
@@ -2726,9 +2904,11 @@ var (
 		{Name: "price", Type: field.TypeJSON, Nullable: true},
 		{Name: "stripe_price_id", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "visibility", Type: field.TypeString, Nullable: true},
 		{Name: "active", Type: field.TypeBool, Default: true},
-		{Name: "trial_expires_at", Type: field.TypeTime, Nullable: true},
-		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
+		{Name: "module_lookup_key", Type: field.TypeString, Nullable: true},
+		{Name: "price_id", Type: field.TypeString, Nullable: true},
+		{Name: "org_product_org_modules", Type: field.TypeString, Nullable: true},
 		{Name: "subscription_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
@@ -2739,14 +2919,20 @@ var (
 		PrimaryKey: []*schema.Column{OrgModulesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
+				Symbol:     "org_modules_org_products_org_modules",
+				Columns:    []*schema.Column{OrgModulesColumns[16]},
+				RefColumns: []*schema.Column{OrgProductsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "org_modules_org_subscriptions_modules",
-				Columns:    []*schema.Column{OrgModulesColumns[15]},
+				Columns:    []*schema.Column{OrgModulesColumns[17]},
 				RefColumns: []*schema.Column{OrgSubscriptionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "org_modules_organizations_org_modules",
-				Columns:    []*schema.Column{OrgModulesColumns[16]},
+				Columns:    []*schema.Column{OrgModulesColumns[18]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2760,7 +2946,7 @@ var (
 			{
 				Name:    "orgmodule_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{OrgModulesColumns[16]},
+				Columns: []*schema.Column{OrgModulesColumns[18]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2781,9 +2967,8 @@ var (
 		{Name: "stripe_price_id", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeString, Nullable: true},
 		{Name: "active", Type: field.TypeBool, Default: true},
-		{Name: "trial_expires_at", Type: field.TypeTime, Nullable: true},
-		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "product_id", Type: field.TypeString, Nullable: true},
+		{Name: "subscription_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// OrgPricesTable holds the schema information for the "org_prices" table.
@@ -2793,14 +2978,14 @@ var (
 		PrimaryKey: []*schema.Column{OrgPricesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "org_prices_org_products_prices",
-				Columns:    []*schema.Column{OrgPricesColumns[14]},
-				RefColumns: []*schema.Column{OrgProductsColumns[0]},
+				Symbol:     "org_prices_org_subscriptions_prices",
+				Columns:    []*schema.Column{OrgPricesColumns[13]},
+				RefColumns: []*schema.Column{OrgSubscriptionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "org_prices_organizations_org_prices",
-				Columns:    []*schema.Column{OrgPricesColumns[15]},
+				Columns:    []*schema.Column{OrgPricesColumns[14]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2814,7 +2999,7 @@ var (
 			{
 				Name:    "orgprice_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{OrgPricesColumns[15]},
+				Columns: []*schema.Column{OrgPricesColumns[14]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2835,8 +3020,8 @@ var (
 		{Name: "stripe_product_id", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeString, Nullable: true},
 		{Name: "active", Type: field.TypeBool, Default: true},
-		{Name: "trial_expires_at", Type: field.TypeTime, Nullable: true},
-		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
+		{Name: "price_id", Type: field.TypeString, Nullable: true},
+		{Name: "org_module_org_products", Type: field.TypeString, Nullable: true},
 		{Name: "subscription_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
@@ -2846,6 +3031,12 @@ var (
 		Columns:    OrgProductsColumns,
 		PrimaryKey: []*schema.Column{OrgProductsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "org_products_org_modules_org_products",
+				Columns:    []*schema.Column{OrgProductsColumns[13]},
+				RefColumns: []*schema.Column{OrgModulesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
 			{
 				Symbol:     "org_products_org_subscriptions_products",
 				Columns:    []*schema.Column{OrgProductsColumns[14]},
@@ -3080,6 +3271,14 @@ var (
 		{Name: "geo_location", Type: field.TypeEnum, Nullable: true, Enums: []string{"AMER", "EMEA", "APAC"}, Default: "AMER"},
 		{Name: "billing_notifications_enabled", Type: field.TypeBool, Default: true},
 		{Name: "allowed_email_domains", Type: field.TypeJSON, Nullable: true},
+		{Name: "identity_provider", Type: field.TypeEnum, Nullable: true, Enums: []string{"OKTA", "ONELOGIN", "GOOGLEWORKSPACE", "SLACK", "GITHUB", "NONE"}, Default: "NONE"},
+		{Name: "identity_provider_client_id", Type: field.TypeString, Nullable: true},
+		{Name: "identity_provider_client_secret", Type: field.TypeString, Nullable: true},
+		{Name: "identity_provider_metadata_endpoint", Type: field.TypeString, Nullable: true},
+		{Name: "identity_provider_entity_id", Type: field.TypeString, Nullable: true},
+		{Name: "oidc_discovery_endpoint", Type: field.TypeString, Nullable: true},
+		{Name: "identity_provider_login_enforced", Type: field.TypeBool, Default: false},
+		{Name: "compliance_webhook_token", Type: field.TypeString, Unique: true},
 		{Name: "organization_id", Type: field.TypeString, Unique: true, Nullable: true},
 	}
 	// OrganizationSettingsTable holds the schema information for the "organization_settings" table.
@@ -3090,7 +3289,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "organization_settings_organizations_setting",
-				Columns:    []*schema.Column{OrganizationSettingsColumns[17]},
+				Columns:    []*schema.Column{OrganizationSettingsColumns[25]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3126,6 +3325,14 @@ var (
 		{Name: "organization_id", Type: field.TypeString, Nullable: true},
 		{Name: "billing_notifications_enabled", Type: field.TypeBool, Default: true},
 		{Name: "allowed_email_domains", Type: field.TypeJSON, Nullable: true},
+		{Name: "identity_provider", Type: field.TypeEnum, Nullable: true, Enums: []string{"OKTA", "ONELOGIN", "GOOGLEWORKSPACE", "SLACK", "GITHUB", "NONE"}, Default: "NONE"},
+		{Name: "identity_provider_client_id", Type: field.TypeString, Nullable: true},
+		{Name: "identity_provider_client_secret", Type: field.TypeString, Nullable: true},
+		{Name: "identity_provider_metadata_endpoint", Type: field.TypeString, Nullable: true},
+		{Name: "identity_provider_entity_id", Type: field.TypeString, Nullable: true},
+		{Name: "oidc_discovery_endpoint", Type: field.TypeString, Nullable: true},
+		{Name: "identity_provider_login_enforced", Type: field.TypeBool, Default: false},
+		{Name: "compliance_webhook_token", Type: field.TypeString},
 	}
 	// OrganizationSettingHistoryTable holds the schema information for the "organization_setting_history" table.
 	OrganizationSettingHistoryTable = &schema.Table{
@@ -3252,6 +3459,12 @@ var (
 		{Name: "review_due", Type: field.TypeTime, Nullable: true},
 		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY"}, Default: "YEARLY"},
 		{Name: "summary", Type: field.TypeString, Nullable: true},
+		{Name: "tag_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "dismissed_tag_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "control_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "dismissed_control_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "improvement_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "dismissed_improvement_suggestions", Type: field.TypeJSON, Nullable: true},
 		{Name: "control_objective_procedures", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "approver_id", Type: field.TypeString, Nullable: true},
@@ -3265,25 +3478,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "procedures_control_objectives_procedures",
-				Columns:    []*schema.Column{ProceduresColumns[18]},
+				Columns:    []*schema.Column{ProceduresColumns[24]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "procedures_organizations_procedures",
-				Columns:    []*schema.Column{ProceduresColumns[19]},
+				Columns:    []*schema.Column{ProceduresColumns[25]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "procedures_groups_approver",
-				Columns:    []*schema.Column{ProceduresColumns[20]},
+				Columns:    []*schema.Column{ProceduresColumns[26]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "procedures_groups_delegate",
-				Columns:    []*schema.Column{ProceduresColumns[21]},
+				Columns:    []*schema.Column{ProceduresColumns[27]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3297,12 +3510,12 @@ var (
 			{
 				Name:    "procedure_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ProceduresColumns[7], ProceduresColumns[19]},
+				Columns: []*schema.Column{ProceduresColumns[7], ProceduresColumns[25]},
 			},
 			{
 				Name:    "procedure_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ProceduresColumns[19]},
+				Columns: []*schema.Column{ProceduresColumns[25]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3335,6 +3548,12 @@ var (
 		{Name: "approver_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
 		{Name: "summary", Type: field.TypeString, Nullable: true},
+		{Name: "tag_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "dismissed_tag_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "control_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "dismissed_control_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "improvement_suggestions", Type: field.TypeJSON, Nullable: true},
+		{Name: "dismissed_improvement_suggestions", Type: field.TypeJSON, Nullable: true},
 	}
 	// ProcedureHistoryTable holds the schema information for the "procedure_history" table.
 	ProcedureHistoryTable = &schema.Table{
@@ -3644,6 +3863,104 @@ var (
 				Name:    "riskhistory_history_time",
 				Unique:  false,
 				Columns: []*schema.Column{RiskHistoryColumns[1]},
+			},
+		},
+	}
+	// ScansColumns holds the columns for the "scans" table.
+	ScansColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "target", Type: field.TypeString},
+		{Name: "scan_type", Type: field.TypeEnum, Enums: []string{"DOMAIN", "VULNERABILITY", "VENDOR", "PROVIDER"}, Default: "DOMAIN"},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "PROCESSING", "COMPLETED", "FAILED"}, Default: "PROCESSING"},
+		{Name: "control_scans", Type: field.TypeString, Nullable: true},
+		{Name: "entity_scans", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "risk_scans", Type: field.TypeString, Nullable: true},
+	}
+	// ScansTable holds the schema information for the "scans" table.
+	ScansTable = &schema.Table{
+		Name:       "scans",
+		Columns:    ScansColumns,
+		PrimaryKey: []*schema.Column{ScansColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "scans_controls_scans",
+				Columns:    []*schema.Column{ScansColumns[12]},
+				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "scans_entities_scans",
+				Columns:    []*schema.Column{ScansColumns[13]},
+				RefColumns: []*schema.Column{EntitiesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "scans_organizations_scans",
+				Columns:    []*schema.Column{ScansColumns[14]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "scans_risks_scans",
+				Columns:    []*schema.Column{ScansColumns[15]},
+				RefColumns: []*schema.Column{RisksColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "scan_id",
+				Unique:  true,
+				Columns: []*schema.Column{ScansColumns[0]},
+			},
+			{
+				Name:    "scan_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{ScansColumns[14]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
+	// ScanHistoryColumns holds the columns for the "scan_history" table.
+	ScanHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "target", Type: field.TypeString},
+		{Name: "scan_type", Type: field.TypeEnum, Enums: []string{"DOMAIN", "VULNERABILITY", "VENDOR", "PROVIDER"}, Default: "DOMAIN"},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "PROCESSING", "COMPLETED", "FAILED"}, Default: "PROCESSING"},
+	}
+	// ScanHistoryTable holds the schema information for the "scan_history" table.
+	ScanHistoryTable = &schema.Table{
+		Name:       "scan_history",
+		Columns:    ScanHistoryColumns,
+		PrimaryKey: []*schema.Column{ScanHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "scanhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{ScanHistoryColumns[1]},
 			},
 		},
 	}
@@ -4954,6 +5271,31 @@ var (
 			},
 		},
 	}
+	// ControlAssetsColumns holds the columns for the "control_assets" table.
+	ControlAssetsColumns = []*schema.Column{
+		{Name: "control_id", Type: field.TypeString},
+		{Name: "asset_id", Type: field.TypeString},
+	}
+	// ControlAssetsTable holds the schema information for the "control_assets" table.
+	ControlAssetsTable = &schema.Table{
+		Name:       "control_assets",
+		Columns:    ControlAssetsColumns,
+		PrimaryKey: []*schema.Column{ControlAssetsColumns[0], ControlAssetsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "control_assets_control_id",
+				Columns:    []*schema.Column{ControlAssetsColumns[0]},
+				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "control_assets_asset_id",
+				Columns:    []*schema.Column{ControlAssetsColumns[1]},
+				RefColumns: []*schema.Column{AssetsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// ControlControlImplementationsColumns holds the columns for the "control_control_implementations" table.
 	ControlControlImplementationsColumns = []*schema.Column{
 		{Name: "control_id", Type: field.TypeString},
@@ -5300,6 +5642,31 @@ var (
 				Symbol:     "entity_files_file_id",
 				Columns:    []*schema.Column{EntityFilesColumns[1]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// EntityAssetsColumns holds the columns for the "entity_assets" table.
+	EntityAssetsColumns = []*schema.Column{
+		{Name: "entity_id", Type: field.TypeString},
+		{Name: "asset_id", Type: field.TypeString},
+	}
+	// EntityAssetsTable holds the schema information for the "entity_assets" table.
+	EntityAssetsTable = &schema.Table{
+		Name:       "entity_assets",
+		Columns:    EntityAssetsColumns,
+		PrimaryKey: []*schema.Column{EntityAssetsColumns[0], EntityAssetsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "entity_assets_entity_id",
+				Columns:    []*schema.Column{EntityAssetsColumns[0]},
+				RefColumns: []*schema.Column{EntitiesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "entity_assets_asset_id",
+				Columns:    []*schema.Column{EntityAssetsColumns[1]},
+				RefColumns: []*schema.Column{AssetsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -6129,6 +6496,56 @@ var (
 			},
 		},
 	}
+	// OrgModuleOrgPricesColumns holds the columns for the "org_module_org_prices" table.
+	OrgModuleOrgPricesColumns = []*schema.Column{
+		{Name: "org_module_id", Type: field.TypeString},
+		{Name: "org_price_id", Type: field.TypeString},
+	}
+	// OrgModuleOrgPricesTable holds the schema information for the "org_module_org_prices" table.
+	OrgModuleOrgPricesTable = &schema.Table{
+		Name:       "org_module_org_prices",
+		Columns:    OrgModuleOrgPricesColumns,
+		PrimaryKey: []*schema.Column{OrgModuleOrgPricesColumns[0], OrgModuleOrgPricesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "org_module_org_prices_org_module_id",
+				Columns:    []*schema.Column{OrgModuleOrgPricesColumns[0]},
+				RefColumns: []*schema.Column{OrgModulesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "org_module_org_prices_org_price_id",
+				Columns:    []*schema.Column{OrgModuleOrgPricesColumns[1]},
+				RefColumns: []*schema.Column{OrgPricesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// OrgProductOrgPricesColumns holds the columns for the "org_product_org_prices" table.
+	OrgProductOrgPricesColumns = []*schema.Column{
+		{Name: "org_product_id", Type: field.TypeString},
+		{Name: "org_price_id", Type: field.TypeString},
+	}
+	// OrgProductOrgPricesTable holds the schema information for the "org_product_org_prices" table.
+	OrgProductOrgPricesTable = &schema.Table{
+		Name:       "org_product_org_prices",
+		Columns:    OrgProductOrgPricesColumns,
+		PrimaryKey: []*schema.Column{OrgProductOrgPricesColumns[0], OrgProductOrgPricesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "org_product_org_prices_org_product_id",
+				Columns:    []*schema.Column{OrgProductOrgPricesColumns[0]},
+				RefColumns: []*schema.Column{OrgProductsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "org_product_org_prices_org_price_id",
+				Columns:    []*schema.Column{OrgProductOrgPricesColumns[1]},
+				RefColumns: []*schema.Column{OrgPricesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// OrgSubscriptionEventsColumns holds the columns for the "org_subscription_events" table.
 	OrgSubscriptionEventsColumns = []*schema.Column{
 		{Name: "org_subscription_id", Type: field.TypeString},
@@ -6854,6 +7271,106 @@ var (
 			},
 		},
 	}
+	// ScanBlockedGroupsColumns holds the columns for the "scan_blocked_groups" table.
+	ScanBlockedGroupsColumns = []*schema.Column{
+		{Name: "scan_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// ScanBlockedGroupsTable holds the schema information for the "scan_blocked_groups" table.
+	ScanBlockedGroupsTable = &schema.Table{
+		Name:       "scan_blocked_groups",
+		Columns:    ScanBlockedGroupsColumns,
+		PrimaryKey: []*schema.Column{ScanBlockedGroupsColumns[0], ScanBlockedGroupsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "scan_blocked_groups_scan_id",
+				Columns:    []*schema.Column{ScanBlockedGroupsColumns[0]},
+				RefColumns: []*schema.Column{ScansColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "scan_blocked_groups_group_id",
+				Columns:    []*schema.Column{ScanBlockedGroupsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ScanEditorsColumns holds the columns for the "scan_editors" table.
+	ScanEditorsColumns = []*schema.Column{
+		{Name: "scan_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// ScanEditorsTable holds the schema information for the "scan_editors" table.
+	ScanEditorsTable = &schema.Table{
+		Name:       "scan_editors",
+		Columns:    ScanEditorsColumns,
+		PrimaryKey: []*schema.Column{ScanEditorsColumns[0], ScanEditorsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "scan_editors_scan_id",
+				Columns:    []*schema.Column{ScanEditorsColumns[0]},
+				RefColumns: []*schema.Column{ScansColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "scan_editors_group_id",
+				Columns:    []*schema.Column{ScanEditorsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ScanViewersColumns holds the columns for the "scan_viewers" table.
+	ScanViewersColumns = []*schema.Column{
+		{Name: "scan_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// ScanViewersTable holds the schema information for the "scan_viewers" table.
+	ScanViewersTable = &schema.Table{
+		Name:       "scan_viewers",
+		Columns:    ScanViewersColumns,
+		PrimaryKey: []*schema.Column{ScanViewersColumns[0], ScanViewersColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "scan_viewers_scan_id",
+				Columns:    []*schema.Column{ScanViewersColumns[0]},
+				RefColumns: []*schema.Column{ScansColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "scan_viewers_group_id",
+				Columns:    []*schema.Column{ScanViewersColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ScanAssetsColumns holds the columns for the "scan_assets" table.
+	ScanAssetsColumns = []*schema.Column{
+		{Name: "scan_id", Type: field.TypeString},
+		{Name: "asset_id", Type: field.TypeString},
+	}
+	// ScanAssetsTable holds the schema information for the "scan_assets" table.
+	ScanAssetsTable = &schema.Table{
+		Name:       "scan_assets",
+		Columns:    ScanAssetsColumns,
+		PrimaryKey: []*schema.Column{ScanAssetsColumns[0], ScanAssetsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "scan_assets_scan_id",
+				Columns:    []*schema.Column{ScanAssetsColumns[0]},
+				RefColumns: []*schema.Column{ScansColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "scan_assets_asset_id",
+				Columns:    []*schema.Column{ScanAssetsColumns[1]},
+				RefColumns: []*schema.Column{AssetsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// SubcontrolControlObjectivesColumns holds the columns for the "subcontrol_control_objectives" table.
 	SubcontrolControlObjectivesColumns = []*schema.Column{
 		{Name: "subcontrol_id", Type: field.TypeString},
@@ -7159,6 +7676,8 @@ var (
 		APITokensTable,
 		ActionPlansTable,
 		ActionPlanHistoryTable,
+		AssetsTable,
+		AssetHistoryTable,
 		ContactsTable,
 		ContactHistoryTable,
 		ControlsTable,
@@ -7232,6 +7751,8 @@ var (
 		ProgramMembershipHistoryTable,
 		RisksTable,
 		RiskHistoryTable,
+		ScansTable,
+		ScanHistoryTable,
 		ScheduledJobsTable,
 		ScheduledJobHistoryTable,
 		ScheduledJobRunsTable,
@@ -7263,6 +7784,7 @@ var (
 		ControlProceduresTable,
 		ControlBlockedGroupsTable,
 		ControlEditorsTable,
+		ControlAssetsTable,
 		ControlControlImplementationsTable,
 		ControlImplementationBlockedGroupsTable,
 		ControlImplementationEditorsTable,
@@ -7277,6 +7799,7 @@ var (
 		EntityContactsTable,
 		EntityDocumentsTable,
 		EntityFilesTable,
+		EntityAssetsTable,
 		EvidenceControlObjectivesTable,
 		EvidenceControlsTable,
 		EvidenceSubcontrolsTable,
@@ -7310,6 +7833,8 @@ var (
 		NarrativeEditorsTable,
 		NarrativeViewersTable,
 		OrgMembershipEventsTable,
+		OrgModuleOrgPricesTable,
+		OrgProductOrgPricesTable,
 		OrgSubscriptionEventsTable,
 		OrganizationPersonalAccessTokensTable,
 		OrganizationFilesTable,
@@ -7339,6 +7864,10 @@ var (
 		RiskViewersTable,
 		RiskActionPlansTable,
 		RiskTasksTable,
+		ScanBlockedGroupsTable,
+		ScanEditorsTable,
+		ScanViewersTable,
+		ScanAssetsTable,
 		SubcontrolControlObjectivesTable,
 		SubcontrolTasksTable,
 		SubcontrolRisksTable,
@@ -7362,6 +7891,11 @@ func init() {
 	ActionPlansTable.ForeignKeys[3].RefTable = SubcontrolsTable
 	ActionPlanHistoryTable.Annotation = &entsql.Annotation{
 		Table: "action_plan_history",
+	}
+	AssetsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	AssetsTable.ForeignKeys[1].RefTable = RisksTable
+	AssetHistoryTable.Annotation = &entsql.Annotation{
+		Table: "asset_history",
 	}
 	ContactsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	ContactHistoryTable.Annotation = &entsql.Annotation{
@@ -7409,6 +7943,8 @@ func init() {
 	EntitiesTable.ForeignKeys[0].RefTable = EntityTypesTable
 	EntitiesTable.ForeignKeys[1].RefTable = EntityTypesTable
 	EntitiesTable.ForeignKeys[2].RefTable = OrganizationsTable
+	EntitiesTable.ForeignKeys[3].RefTable = RisksTable
+	EntitiesTable.ForeignKeys[4].RefTable = ScansTable
 	EntityHistoryTable.Annotation = &entsql.Annotation{
 		Table: "entity_history",
 	}
@@ -7424,12 +7960,12 @@ func init() {
 	FileHistoryTable.Annotation = &entsql.Annotation{
 		Table: "file_history",
 	}
-	GroupsTable.ForeignKeys[0].RefTable = OrganizationsTable
-	GroupsTable.ForeignKeys[1].RefTable = OrganizationsTable
-	GroupsTable.ForeignKeys[2].RefTable = OrganizationsTable
-	GroupsTable.ForeignKeys[3].RefTable = OrganizationsTable
-	GroupsTable.ForeignKeys[4].RefTable = OrganizationsTable
-	GroupsTable.ForeignKeys[5].RefTable = OrganizationsTable
+	GroupsTable.ForeignKeys[0].RefTable = AssetsTable
+	GroupsTable.ForeignKeys[1].RefTable = AssetsTable
+	GroupsTable.ForeignKeys[2].RefTable = AssetsTable
+	GroupsTable.ForeignKeys[3].RefTable = EntitiesTable
+	GroupsTable.ForeignKeys[4].RefTable = EntitiesTable
+	GroupsTable.ForeignKeys[5].RefTable = EntitiesTable
 	GroupsTable.ForeignKeys[6].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[7].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[8].RefTable = OrganizationsTable
@@ -7439,6 +7975,12 @@ func init() {
 	GroupsTable.ForeignKeys[12].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[13].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[14].RefTable = OrganizationsTable
+	GroupsTable.ForeignKeys[15].RefTable = OrganizationsTable
+	GroupsTable.ForeignKeys[16].RefTable = OrganizationsTable
+	GroupsTable.ForeignKeys[17].RefTable = OrganizationsTable
+	GroupsTable.ForeignKeys[18].RefTable = OrganizationsTable
+	GroupsTable.ForeignKeys[19].RefTable = OrganizationsTable
+	GroupsTable.ForeignKeys[20].RefTable = OrganizationsTable
 	GroupHistoryTable.Annotation = &entsql.Annotation{
 		Table: "group_history",
 	}
@@ -7501,12 +8043,14 @@ func init() {
 	OrgMembershipHistoryTable.Annotation = &entsql.Annotation{
 		Table: "org_membership_history",
 	}
-	OrgModulesTable.ForeignKeys[0].RefTable = OrgSubscriptionsTable
-	OrgModulesTable.ForeignKeys[1].RefTable = OrganizationsTable
-	OrgPricesTable.ForeignKeys[0].RefTable = OrgProductsTable
+	OrgModulesTable.ForeignKeys[0].RefTable = OrgProductsTable
+	OrgModulesTable.ForeignKeys[1].RefTable = OrgSubscriptionsTable
+	OrgModulesTable.ForeignKeys[2].RefTable = OrganizationsTable
+	OrgPricesTable.ForeignKeys[0].RefTable = OrgSubscriptionsTable
 	OrgPricesTable.ForeignKeys[1].RefTable = OrganizationsTable
-	OrgProductsTable.ForeignKeys[0].RefTable = OrgSubscriptionsTable
-	OrgProductsTable.ForeignKeys[1].RefTable = OrganizationsTable
+	OrgProductsTable.ForeignKeys[0].RefTable = OrgModulesTable
+	OrgProductsTable.ForeignKeys[1].RefTable = OrgSubscriptionsTable
+	OrgProductsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	OrgSubscriptionsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	OrgSubscriptionHistoryTable.Annotation = &entsql.Annotation{
 		Table: "org_subscription_history",
@@ -7545,6 +8089,13 @@ func init() {
 	RisksTable.ForeignKeys[3].RefTable = GroupsTable
 	RiskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "risk_history",
+	}
+	ScansTable.ForeignKeys[0].RefTable = ControlsTable
+	ScansTable.ForeignKeys[1].RefTable = EntitiesTable
+	ScansTable.ForeignKeys[2].RefTable = OrganizationsTable
+	ScansTable.ForeignKeys[3].RefTable = RisksTable
+	ScanHistoryTable.Annotation = &entsql.Annotation{
+		Table: "scan_history",
 	}
 	ScheduledJobsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	ScheduledJobHistoryTable.Annotation = &entsql.Annotation{
@@ -7615,6 +8166,8 @@ func init() {
 	ControlBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
 	ControlEditorsTable.ForeignKeys[0].RefTable = ControlsTable
 	ControlEditorsTable.ForeignKeys[1].RefTable = GroupsTable
+	ControlAssetsTable.ForeignKeys[0].RefTable = ControlsTable
+	ControlAssetsTable.ForeignKeys[1].RefTable = AssetsTable
 	ControlControlImplementationsTable.ForeignKeys[0].RefTable = ControlsTable
 	ControlControlImplementationsTable.ForeignKeys[1].RefTable = ControlImplementationsTable
 	ControlImplementationBlockedGroupsTable.ForeignKeys[0].RefTable = ControlImplementationsTable
@@ -7643,6 +8196,8 @@ func init() {
 	EntityDocumentsTable.ForeignKeys[1].RefTable = DocumentDataTable
 	EntityFilesTable.ForeignKeys[0].RefTable = EntitiesTable
 	EntityFilesTable.ForeignKeys[1].RefTable = FilesTable
+	EntityAssetsTable.ForeignKeys[0].RefTable = EntitiesTable
+	EntityAssetsTable.ForeignKeys[1].RefTable = AssetsTable
 	EvidenceControlObjectivesTable.ForeignKeys[0].RefTable = EvidencesTable
 	EvidenceControlObjectivesTable.ForeignKeys[1].RefTable = ControlObjectivesTable
 	EvidenceControlsTable.ForeignKeys[0].RefTable = EvidencesTable
@@ -7709,6 +8264,10 @@ func init() {
 	NarrativeViewersTable.ForeignKeys[1].RefTable = GroupsTable
 	OrgMembershipEventsTable.ForeignKeys[0].RefTable = OrgMembershipsTable
 	OrgMembershipEventsTable.ForeignKeys[1].RefTable = EventsTable
+	OrgModuleOrgPricesTable.ForeignKeys[0].RefTable = OrgModulesTable
+	OrgModuleOrgPricesTable.ForeignKeys[1].RefTable = OrgPricesTable
+	OrgProductOrgPricesTable.ForeignKeys[0].RefTable = OrgProductsTable
+	OrgProductOrgPricesTable.ForeignKeys[1].RefTable = OrgPricesTable
 	OrgSubscriptionEventsTable.ForeignKeys[0].RefTable = OrgSubscriptionsTable
 	OrgSubscriptionEventsTable.ForeignKeys[1].RefTable = EventsTable
 	OrganizationPersonalAccessTokensTable.ForeignKeys[0].RefTable = OrganizationsTable
@@ -7767,6 +8326,14 @@ func init() {
 	RiskActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	RiskTasksTable.ForeignKeys[0].RefTable = RisksTable
 	RiskTasksTable.ForeignKeys[1].RefTable = TasksTable
+	ScanBlockedGroupsTable.ForeignKeys[0].RefTable = ScansTable
+	ScanBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
+	ScanEditorsTable.ForeignKeys[0].RefTable = ScansTable
+	ScanEditorsTable.ForeignKeys[1].RefTable = GroupsTable
+	ScanViewersTable.ForeignKeys[0].RefTable = ScansTable
+	ScanViewersTable.ForeignKeys[1].RefTable = GroupsTable
+	ScanAssetsTable.ForeignKeys[0].RefTable = ScansTable
+	ScanAssetsTable.ForeignKeys[1].RefTable = AssetsTable
 	SubcontrolControlObjectivesTable.ForeignKeys[0].RefTable = SubcontrolsTable
 	SubcontrolControlObjectivesTable.ForeignKeys[1].RefTable = ControlObjectivesTable
 	SubcontrolTasksTable.ForeignKeys[0].RefTable = SubcontrolsTable

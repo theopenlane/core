@@ -72,6 +72,8 @@ func (c Control) Edges() []ent.Edge {
 			field:      "standard_id",
 		}),
 		defaultEdgeFromWithPagination(c, Program{}),
+		defaultEdgeToWithPagination(c, Asset{}),
+		defaultEdgeToWithPagination(c, Scan{}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: c,
 			edgeSchema: ControlImplementation{},

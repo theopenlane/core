@@ -39,18 +39,18 @@ const (
 	FieldStatus = "status"
 	// FieldActive holds the string denoting the active field in the database.
 	FieldActive = "active"
-	// FieldTrialExpiresAt holds the string denoting the trial_expires_at field in the database.
-	FieldTrialExpiresAt = "trial_expires_at"
-	// FieldExpiresAt holds the string denoting the expires_at field in the database.
-	FieldExpiresAt = "expires_at"
 	// FieldSubscriptionID holds the string denoting the subscription_id field in the database.
 	FieldSubscriptionID = "subscription_id"
+	// FieldPriceID holds the string denoting the price_id field in the database.
+	FieldPriceID = "price_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeOrgSubscription holds the string denoting the org_subscription edge name in mutations.
 	EdgeOrgSubscription = "org_subscription"
-	// EdgePrices holds the string denoting the prices edge name in mutations.
-	EdgePrices = "prices"
+	// EdgeOrgPrices holds the string denoting the org_prices edge name in mutations.
+	EdgeOrgPrices = "org_prices"
+	// EdgeOrgModules holds the string denoting the org_modules edge name in mutations.
+	EdgeOrgModules = "org_modules"
 	// Table holds the table name of the orgproduct in the database.
 	Table = "org_products"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -67,13 +67,18 @@ const (
 	OrgSubscriptionInverseTable = "org_subscriptions"
 	// OrgSubscriptionColumn is the table column denoting the org_subscription relation/edge.
 	OrgSubscriptionColumn = "subscription_id"
-	// PricesTable is the table that holds the prices relation/edge.
-	PricesTable = "org_prices"
-	// PricesInverseTable is the table name for the OrgPrice entity.
+	// OrgPricesTable is the table that holds the org_prices relation/edge. The primary key declared below.
+	OrgPricesTable = "org_product_org_prices"
+	// OrgPricesInverseTable is the table name for the OrgPrice entity.
 	// It exists in this package in order to avoid circular dependency with the "orgprice" package.
-	PricesInverseTable = "org_prices"
-	// PricesColumn is the table column denoting the prices relation/edge.
-	PricesColumn = "product_id"
+	OrgPricesInverseTable = "org_prices"
+	// OrgModulesTable is the table that holds the org_modules relation/edge.
+	OrgModulesTable = "org_modules"
+	// OrgModulesInverseTable is the table name for the OrgModule entity.
+	// It exists in this package in order to avoid circular dependency with the "orgmodule" package.
+	OrgModulesInverseTable = "org_modules"
+	// OrgModulesColumn is the table column denoting the org_modules relation/edge.
+	OrgModulesColumn = "org_product_org_modules"
 )
 
 // Columns holds all SQL columns for orgproduct fields.
@@ -91,15 +96,31 @@ var Columns = []string{
 	FieldStripeProductID,
 	FieldStatus,
 	FieldActive,
-	FieldTrialExpiresAt,
-	FieldExpiresAt,
 	FieldSubscriptionID,
+	FieldPriceID,
 }
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "org_products"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"org_module_org_products",
+}
+
+var (
+	// OrgPricesPrimaryKey and OrgPricesColumn2 are the table columns denoting the
+	// primary key for the org_prices relation (M2M).
+	OrgPricesPrimaryKey = []string{"org_product_id", "org_price_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -193,19 +214,14 @@ func ByActive(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldActive, opts...).ToFunc()
 }
 
-// ByTrialExpiresAt orders the results by the trial_expires_at field.
-func ByTrialExpiresAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldTrialExpiresAt, opts...).ToFunc()
-}
-
-// ByExpiresAt orders the results by the expires_at field.
-func ByExpiresAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldExpiresAt, opts...).ToFunc()
-}
-
 // BySubscriptionID orders the results by the subscription_id field.
 func BySubscriptionID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSubscriptionID, opts...).ToFunc()
+}
+
+// ByPriceID orders the results by the price_id field.
+func ByPriceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPriceID, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -222,17 +238,31 @@ func ByOrgSubscriptionField(field string, opts ...sql.OrderTermOption) OrderOpti
 	}
 }
 
-// ByPricesCount orders the results by prices count.
-func ByPricesCount(opts ...sql.OrderTermOption) OrderOption {
+// ByOrgPricesCount orders the results by org_prices count.
+func ByOrgPricesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newPricesStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newOrgPricesStep(), opts...)
 	}
 }
 
-// ByPrices orders the results by prices terms.
-func ByPrices(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByOrgPrices orders the results by org_prices terms.
+func ByOrgPrices(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newPricesStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newOrgPricesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByOrgModulesCount orders the results by org_modules count.
+func ByOrgModulesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newOrgModulesStep(), opts...)
+	}
+}
+
+// ByOrgModules orders the results by org_modules terms.
+func ByOrgModules(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOrgModulesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -249,10 +279,17 @@ func newOrgSubscriptionStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, OrgSubscriptionTable, OrgSubscriptionColumn),
 	)
 }
-func newPricesStep() *sqlgraph.Step {
+func newOrgPricesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(PricesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, PricesTable, PricesColumn),
+		sqlgraph.To(OrgPricesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, OrgPricesTable, OrgPricesPrimaryKey...),
+	)
+}
+func newOrgModulesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OrgModulesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, OrgModulesTable, OrgModulesColumn),
 	)
 }

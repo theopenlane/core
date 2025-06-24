@@ -121,6 +121,10 @@ type ControlEdges struct {
 	Standard *Standard `json:"standard,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
+	// Assets holds the value of the assets edge.
+	Assets []*Asset `json:"assets,omitempty"`
+	// Scans holds the value of the scans edge.
+	Scans []*Scan `json:"scans,omitempty"`
 	// the implementation(s) of the control
 	ControlImplementations []*ControlImplementation `json:"control_implementations,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
@@ -133,9 +137,9 @@ type ControlEdges struct {
 	MappedFromControls []*MappedControl `json:"mapped_from_controls,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [20]bool
+	loadedTypes [22]bool
 	// totalCount holds the count of the edges above.
-	totalCount [18]map[string]int
+	totalCount [20]map[string]int
 
 	namedEvidence               map[string][]*Evidence
 	namedControlObjectives      map[string][]*ControlObjective
@@ -148,6 +152,8 @@ type ControlEdges struct {
 	namedBlockedGroups          map[string][]*Group
 	namedEditors                map[string][]*Group
 	namedPrograms               map[string][]*Program
+	namedAssets                 map[string][]*Asset
+	namedScans                  map[string][]*Scan
 	namedControlImplementations map[string][]*ControlImplementation
 	namedSubcontrols            map[string][]*Subcontrol
 	namedScheduledJobs          map[string][]*ControlScheduledJob
@@ -298,10 +304,28 @@ func (e ControlEdges) ProgramsOrErr() ([]*Program, error) {
 	return nil, &NotLoadedError{edge: "programs"}
 }
 
+// AssetsOrErr returns the Assets value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlEdges) AssetsOrErr() ([]*Asset, error) {
+	if e.loadedTypes[15] {
+		return e.Assets, nil
+	}
+	return nil, &NotLoadedError{edge: "assets"}
+}
+
+// ScansOrErr returns the Scans value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlEdges) ScansOrErr() ([]*Scan, error) {
+	if e.loadedTypes[16] {
+		return e.Scans, nil
+	}
+	return nil, &NotLoadedError{edge: "scans"}
+}
+
 // ControlImplementationsOrErr returns the ControlImplementations value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ControlImplementationsOrErr() ([]*ControlImplementation, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[17] {
 		return e.ControlImplementations, nil
 	}
 	return nil, &NotLoadedError{edge: "control_implementations"}
@@ -310,7 +334,7 @@ func (e ControlEdges) ControlImplementationsOrErr() ([]*ControlImplementation, e
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[18] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -319,7 +343,7 @@ func (e ControlEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // ScheduledJobsOrErr returns the ScheduledJobs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ScheduledJobsOrErr() ([]*ControlScheduledJob, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[19] {
 		return e.ScheduledJobs, nil
 	}
 	return nil, &NotLoadedError{edge: "scheduled_jobs"}
@@ -328,7 +352,7 @@ func (e ControlEdges) ScheduledJobsOrErr() ([]*ControlScheduledJob, error) {
 // MappedToControlsOrErr returns the MappedToControls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) MappedToControlsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[20] {
 		return e.MappedToControls, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_to_controls"}
@@ -337,7 +361,7 @@ func (e ControlEdges) MappedToControlsOrErr() ([]*MappedControl, error) {
 // MappedFromControlsOrErr returns the MappedFromControls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) MappedFromControlsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[21] {
 		return e.MappedFromControls, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_from_controls"}
@@ -658,6 +682,16 @@ func (c *Control) QueryStandard() *StandardQuery {
 // QueryPrograms queries the "programs" edge of the Control entity.
 func (c *Control) QueryPrograms() *ProgramQuery {
 	return NewControlClient(c.config).QueryPrograms(c)
+}
+
+// QueryAssets queries the "assets" edge of the Control entity.
+func (c *Control) QueryAssets() *AssetQuery {
+	return NewControlClient(c.config).QueryAssets(c)
+}
+
+// QueryScans queries the "scans" edge of the Control entity.
+func (c *Control) QueryScans() *ScanQuery {
+	return NewControlClient(c.config).QueryScans(c)
 }
 
 // QueryControlImplementations queries the "control_implementations" edge of the Control entity.
@@ -1064,6 +1098,54 @@ func (c *Control) appendNamedPrograms(name string, edges ...*Program) {
 		c.Edges.namedPrograms[name] = []*Program{}
 	} else {
 		c.Edges.namedPrograms[name] = append(c.Edges.namedPrograms[name], edges...)
+	}
+}
+
+// NamedAssets returns the Assets named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Control) NamedAssets(name string) ([]*Asset, error) {
+	if c.Edges.namedAssets == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedAssets[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Control) appendNamedAssets(name string, edges ...*Asset) {
+	if c.Edges.namedAssets == nil {
+		c.Edges.namedAssets = make(map[string][]*Asset)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedAssets[name] = []*Asset{}
+	} else {
+		c.Edges.namedAssets[name] = append(c.Edges.namedAssets[name], edges...)
+	}
+}
+
+// NamedScans returns the Scans named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Control) NamedScans(name string) ([]*Scan, error) {
+	if c.Edges.namedScans == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedScans[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Control) appendNamedScans(name string, edges ...*Scan) {
+	if c.Edges.namedScans == nil {
+		c.Edges.namedScans = make(map[string][]*Scan)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedScans[name] = []*Scan{}
+	} else {
+		c.Edges.namedScans[name] = append(c.Edges.namedScans[name], edges...)
 	}
 }
 

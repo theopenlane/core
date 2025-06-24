@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/internal/ent/generated/orgprice"
 	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
@@ -213,46 +214,6 @@ func (opu *OrgProductUpdate) SetNillableActive(b *bool) *OrgProductUpdate {
 	return opu
 }
 
-// SetTrialExpiresAt sets the "trial_expires_at" field.
-func (opu *OrgProductUpdate) SetTrialExpiresAt(t time.Time) *OrgProductUpdate {
-	opu.mutation.SetTrialExpiresAt(t)
-	return opu
-}
-
-// SetNillableTrialExpiresAt sets the "trial_expires_at" field if the given value is not nil.
-func (opu *OrgProductUpdate) SetNillableTrialExpiresAt(t *time.Time) *OrgProductUpdate {
-	if t != nil {
-		opu.SetTrialExpiresAt(*t)
-	}
-	return opu
-}
-
-// ClearTrialExpiresAt clears the value of the "trial_expires_at" field.
-func (opu *OrgProductUpdate) ClearTrialExpiresAt() *OrgProductUpdate {
-	opu.mutation.ClearTrialExpiresAt()
-	return opu
-}
-
-// SetExpiresAt sets the "expires_at" field.
-func (opu *OrgProductUpdate) SetExpiresAt(t time.Time) *OrgProductUpdate {
-	opu.mutation.SetExpiresAt(t)
-	return opu
-}
-
-// SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
-func (opu *OrgProductUpdate) SetNillableExpiresAt(t *time.Time) *OrgProductUpdate {
-	if t != nil {
-		opu.SetExpiresAt(*t)
-	}
-	return opu
-}
-
-// ClearExpiresAt clears the value of the "expires_at" field.
-func (opu *OrgProductUpdate) ClearExpiresAt() *OrgProductUpdate {
-	opu.mutation.ClearExpiresAt()
-	return opu
-}
-
 // SetSubscriptionID sets the "subscription_id" field.
 func (opu *OrgProductUpdate) SetSubscriptionID(s string) *OrgProductUpdate {
 	opu.mutation.SetSubscriptionID(s)
@@ -270,6 +231,26 @@ func (opu *OrgProductUpdate) SetNillableSubscriptionID(s *string) *OrgProductUpd
 // ClearSubscriptionID clears the value of the "subscription_id" field.
 func (opu *OrgProductUpdate) ClearSubscriptionID() *OrgProductUpdate {
 	opu.mutation.ClearSubscriptionID()
+	return opu
+}
+
+// SetPriceID sets the "price_id" field.
+func (opu *OrgProductUpdate) SetPriceID(s string) *OrgProductUpdate {
+	opu.mutation.SetPriceID(s)
+	return opu
+}
+
+// SetNillablePriceID sets the "price_id" field if the given value is not nil.
+func (opu *OrgProductUpdate) SetNillablePriceID(s *string) *OrgProductUpdate {
+	if s != nil {
+		opu.SetPriceID(*s)
+	}
+	return opu
+}
+
+// ClearPriceID clears the value of the "price_id" field.
+func (opu *OrgProductUpdate) ClearPriceID() *OrgProductUpdate {
+	opu.mutation.ClearPriceID()
 	return opu
 }
 
@@ -297,19 +278,34 @@ func (opu *OrgProductUpdate) SetOrgSubscription(o *OrgSubscription) *OrgProductU
 	return opu.SetOrgSubscriptionID(o.ID)
 }
 
-// AddPriceIDs adds the "prices" edge to the OrgPrice entity by IDs.
-func (opu *OrgProductUpdate) AddPriceIDs(ids ...string) *OrgProductUpdate {
-	opu.mutation.AddPriceIDs(ids...)
+// AddOrgPriceIDs adds the "org_prices" edge to the OrgPrice entity by IDs.
+func (opu *OrgProductUpdate) AddOrgPriceIDs(ids ...string) *OrgProductUpdate {
+	opu.mutation.AddOrgPriceIDs(ids...)
 	return opu
 }
 
-// AddPrices adds the "prices" edges to the OrgPrice entity.
-func (opu *OrgProductUpdate) AddPrices(o ...*OrgPrice) *OrgProductUpdate {
+// AddOrgPrices adds the "org_prices" edges to the OrgPrice entity.
+func (opu *OrgProductUpdate) AddOrgPrices(o ...*OrgPrice) *OrgProductUpdate {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return opu.AddPriceIDs(ids...)
+	return opu.AddOrgPriceIDs(ids...)
+}
+
+// AddOrgModuleIDs adds the "org_modules" edge to the OrgModule entity by IDs.
+func (opu *OrgProductUpdate) AddOrgModuleIDs(ids ...string) *OrgProductUpdate {
+	opu.mutation.AddOrgModuleIDs(ids...)
+	return opu
+}
+
+// AddOrgModules adds the "org_modules" edges to the OrgModule entity.
+func (opu *OrgProductUpdate) AddOrgModules(o ...*OrgModule) *OrgProductUpdate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return opu.AddOrgModuleIDs(ids...)
 }
 
 // Mutation returns the OrgProductMutation object of the builder.
@@ -329,25 +325,46 @@ func (opu *OrgProductUpdate) ClearOrgSubscription() *OrgProductUpdate {
 	return opu
 }
 
-// ClearPrices clears all "prices" edges to the OrgPrice entity.
-func (opu *OrgProductUpdate) ClearPrices() *OrgProductUpdate {
-	opu.mutation.ClearPrices()
+// ClearOrgPrices clears all "org_prices" edges to the OrgPrice entity.
+func (opu *OrgProductUpdate) ClearOrgPrices() *OrgProductUpdate {
+	opu.mutation.ClearOrgPrices()
 	return opu
 }
 
-// RemovePriceIDs removes the "prices" edge to OrgPrice entities by IDs.
-func (opu *OrgProductUpdate) RemovePriceIDs(ids ...string) *OrgProductUpdate {
-	opu.mutation.RemovePriceIDs(ids...)
+// RemoveOrgPriceIDs removes the "org_prices" edge to OrgPrice entities by IDs.
+func (opu *OrgProductUpdate) RemoveOrgPriceIDs(ids ...string) *OrgProductUpdate {
+	opu.mutation.RemoveOrgPriceIDs(ids...)
 	return opu
 }
 
-// RemovePrices removes "prices" edges to OrgPrice entities.
-func (opu *OrgProductUpdate) RemovePrices(o ...*OrgPrice) *OrgProductUpdate {
+// RemoveOrgPrices removes "org_prices" edges to OrgPrice entities.
+func (opu *OrgProductUpdate) RemoveOrgPrices(o ...*OrgPrice) *OrgProductUpdate {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return opu.RemovePriceIDs(ids...)
+	return opu.RemoveOrgPriceIDs(ids...)
+}
+
+// ClearOrgModules clears all "org_modules" edges to the OrgModule entity.
+func (opu *OrgProductUpdate) ClearOrgModules() *OrgProductUpdate {
+	opu.mutation.ClearOrgModules()
+	return opu
+}
+
+// RemoveOrgModuleIDs removes the "org_modules" edge to OrgModule entities by IDs.
+func (opu *OrgProductUpdate) RemoveOrgModuleIDs(ids ...string) *OrgProductUpdate {
+	opu.mutation.RemoveOrgModuleIDs(ids...)
+	return opu
+}
+
+// RemoveOrgModules removes "org_modules" edges to OrgModule entities.
+func (opu *OrgProductUpdate) RemoveOrgModules(o ...*OrgModule) *OrgProductUpdate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return opu.RemoveOrgModuleIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -479,17 +496,11 @@ func (opu *OrgProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := opu.mutation.Active(); ok {
 		_spec.SetField(orgproduct.FieldActive, field.TypeBool, value)
 	}
-	if value, ok := opu.mutation.TrialExpiresAt(); ok {
-		_spec.SetField(orgproduct.FieldTrialExpiresAt, field.TypeTime, value)
+	if value, ok := opu.mutation.PriceID(); ok {
+		_spec.SetField(orgproduct.FieldPriceID, field.TypeString, value)
 	}
-	if opu.mutation.TrialExpiresAtCleared() {
-		_spec.ClearField(orgproduct.FieldTrialExpiresAt, field.TypeTime)
-	}
-	if value, ok := opu.mutation.ExpiresAt(); ok {
-		_spec.SetField(orgproduct.FieldExpiresAt, field.TypeTime, value)
-	}
-	if opu.mutation.ExpiresAtCleared() {
-		_spec.ClearField(orgproduct.FieldExpiresAt, field.TypeTime)
+	if opu.mutation.PriceIDCleared() {
+		_spec.ClearField(orgproduct.FieldPriceID, field.TypeString)
 	}
 	if opu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -553,49 +564,97 @@ func (opu *OrgProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if opu.mutation.PricesCleared() {
+	if opu.mutation.OrgPricesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   orgproduct.PricesTable,
-			Columns: []string{orgproduct.PricesColumn},
+			Table:   orgproduct.OrgPricesTable,
+			Columns: orgproduct.OrgPricesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = opu.schemaConfig.OrgPrice
+		edge.Schema = opu.schemaConfig.OrgProductOrgPrices
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := opu.mutation.RemovedPricesIDs(); len(nodes) > 0 && !opu.mutation.PricesCleared() {
+	if nodes := opu.mutation.RemovedOrgPricesIDs(); len(nodes) > 0 && !opu.mutation.OrgPricesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   orgproduct.PricesTable,
-			Columns: []string{orgproduct.PricesColumn},
+			Table:   orgproduct.OrgPricesTable,
+			Columns: orgproduct.OrgPricesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = opu.schemaConfig.OrgPrice
+		edge.Schema = opu.schemaConfig.OrgProductOrgPrices
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := opu.mutation.PricesIDs(); len(nodes) > 0 {
+	if nodes := opu.mutation.OrgPricesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   orgproduct.PricesTable,
-			Columns: []string{orgproduct.PricesColumn},
+			Table:   orgproduct.OrgPricesTable,
+			Columns: orgproduct.OrgPricesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = opu.schemaConfig.OrgPrice
+		edge.Schema = opu.schemaConfig.OrgProductOrgPrices
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if opu.mutation.OrgModulesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgproduct.OrgModulesTable,
+			Columns: []string{orgproduct.OrgModulesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = opu.schemaConfig.OrgModule
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := opu.mutation.RemovedOrgModulesIDs(); len(nodes) > 0 && !opu.mutation.OrgModulesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgproduct.OrgModulesTable,
+			Columns: []string{orgproduct.OrgModulesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = opu.schemaConfig.OrgModule
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := opu.mutation.OrgModulesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgproduct.OrgModulesTable,
+			Columns: []string{orgproduct.OrgModulesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = opu.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -803,46 +862,6 @@ func (opuo *OrgProductUpdateOne) SetNillableActive(b *bool) *OrgProductUpdateOne
 	return opuo
 }
 
-// SetTrialExpiresAt sets the "trial_expires_at" field.
-func (opuo *OrgProductUpdateOne) SetTrialExpiresAt(t time.Time) *OrgProductUpdateOne {
-	opuo.mutation.SetTrialExpiresAt(t)
-	return opuo
-}
-
-// SetNillableTrialExpiresAt sets the "trial_expires_at" field if the given value is not nil.
-func (opuo *OrgProductUpdateOne) SetNillableTrialExpiresAt(t *time.Time) *OrgProductUpdateOne {
-	if t != nil {
-		opuo.SetTrialExpiresAt(*t)
-	}
-	return opuo
-}
-
-// ClearTrialExpiresAt clears the value of the "trial_expires_at" field.
-func (opuo *OrgProductUpdateOne) ClearTrialExpiresAt() *OrgProductUpdateOne {
-	opuo.mutation.ClearTrialExpiresAt()
-	return opuo
-}
-
-// SetExpiresAt sets the "expires_at" field.
-func (opuo *OrgProductUpdateOne) SetExpiresAt(t time.Time) *OrgProductUpdateOne {
-	opuo.mutation.SetExpiresAt(t)
-	return opuo
-}
-
-// SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
-func (opuo *OrgProductUpdateOne) SetNillableExpiresAt(t *time.Time) *OrgProductUpdateOne {
-	if t != nil {
-		opuo.SetExpiresAt(*t)
-	}
-	return opuo
-}
-
-// ClearExpiresAt clears the value of the "expires_at" field.
-func (opuo *OrgProductUpdateOne) ClearExpiresAt() *OrgProductUpdateOne {
-	opuo.mutation.ClearExpiresAt()
-	return opuo
-}
-
 // SetSubscriptionID sets the "subscription_id" field.
 func (opuo *OrgProductUpdateOne) SetSubscriptionID(s string) *OrgProductUpdateOne {
 	opuo.mutation.SetSubscriptionID(s)
@@ -860,6 +879,26 @@ func (opuo *OrgProductUpdateOne) SetNillableSubscriptionID(s *string) *OrgProduc
 // ClearSubscriptionID clears the value of the "subscription_id" field.
 func (opuo *OrgProductUpdateOne) ClearSubscriptionID() *OrgProductUpdateOne {
 	opuo.mutation.ClearSubscriptionID()
+	return opuo
+}
+
+// SetPriceID sets the "price_id" field.
+func (opuo *OrgProductUpdateOne) SetPriceID(s string) *OrgProductUpdateOne {
+	opuo.mutation.SetPriceID(s)
+	return opuo
+}
+
+// SetNillablePriceID sets the "price_id" field if the given value is not nil.
+func (opuo *OrgProductUpdateOne) SetNillablePriceID(s *string) *OrgProductUpdateOne {
+	if s != nil {
+		opuo.SetPriceID(*s)
+	}
+	return opuo
+}
+
+// ClearPriceID clears the value of the "price_id" field.
+func (opuo *OrgProductUpdateOne) ClearPriceID() *OrgProductUpdateOne {
+	opuo.mutation.ClearPriceID()
 	return opuo
 }
 
@@ -887,19 +926,34 @@ func (opuo *OrgProductUpdateOne) SetOrgSubscription(o *OrgSubscription) *OrgProd
 	return opuo.SetOrgSubscriptionID(o.ID)
 }
 
-// AddPriceIDs adds the "prices" edge to the OrgPrice entity by IDs.
-func (opuo *OrgProductUpdateOne) AddPriceIDs(ids ...string) *OrgProductUpdateOne {
-	opuo.mutation.AddPriceIDs(ids...)
+// AddOrgPriceIDs adds the "org_prices" edge to the OrgPrice entity by IDs.
+func (opuo *OrgProductUpdateOne) AddOrgPriceIDs(ids ...string) *OrgProductUpdateOne {
+	opuo.mutation.AddOrgPriceIDs(ids...)
 	return opuo
 }
 
-// AddPrices adds the "prices" edges to the OrgPrice entity.
-func (opuo *OrgProductUpdateOne) AddPrices(o ...*OrgPrice) *OrgProductUpdateOne {
+// AddOrgPrices adds the "org_prices" edges to the OrgPrice entity.
+func (opuo *OrgProductUpdateOne) AddOrgPrices(o ...*OrgPrice) *OrgProductUpdateOne {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return opuo.AddPriceIDs(ids...)
+	return opuo.AddOrgPriceIDs(ids...)
+}
+
+// AddOrgModuleIDs adds the "org_modules" edge to the OrgModule entity by IDs.
+func (opuo *OrgProductUpdateOne) AddOrgModuleIDs(ids ...string) *OrgProductUpdateOne {
+	opuo.mutation.AddOrgModuleIDs(ids...)
+	return opuo
+}
+
+// AddOrgModules adds the "org_modules" edges to the OrgModule entity.
+func (opuo *OrgProductUpdateOne) AddOrgModules(o ...*OrgModule) *OrgProductUpdateOne {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return opuo.AddOrgModuleIDs(ids...)
 }
 
 // Mutation returns the OrgProductMutation object of the builder.
@@ -919,25 +973,46 @@ func (opuo *OrgProductUpdateOne) ClearOrgSubscription() *OrgProductUpdateOne {
 	return opuo
 }
 
-// ClearPrices clears all "prices" edges to the OrgPrice entity.
-func (opuo *OrgProductUpdateOne) ClearPrices() *OrgProductUpdateOne {
-	opuo.mutation.ClearPrices()
+// ClearOrgPrices clears all "org_prices" edges to the OrgPrice entity.
+func (opuo *OrgProductUpdateOne) ClearOrgPrices() *OrgProductUpdateOne {
+	opuo.mutation.ClearOrgPrices()
 	return opuo
 }
 
-// RemovePriceIDs removes the "prices" edge to OrgPrice entities by IDs.
-func (opuo *OrgProductUpdateOne) RemovePriceIDs(ids ...string) *OrgProductUpdateOne {
-	opuo.mutation.RemovePriceIDs(ids...)
+// RemoveOrgPriceIDs removes the "org_prices" edge to OrgPrice entities by IDs.
+func (opuo *OrgProductUpdateOne) RemoveOrgPriceIDs(ids ...string) *OrgProductUpdateOne {
+	opuo.mutation.RemoveOrgPriceIDs(ids...)
 	return opuo
 }
 
-// RemovePrices removes "prices" edges to OrgPrice entities.
-func (opuo *OrgProductUpdateOne) RemovePrices(o ...*OrgPrice) *OrgProductUpdateOne {
+// RemoveOrgPrices removes "org_prices" edges to OrgPrice entities.
+func (opuo *OrgProductUpdateOne) RemoveOrgPrices(o ...*OrgPrice) *OrgProductUpdateOne {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return opuo.RemovePriceIDs(ids...)
+	return opuo.RemoveOrgPriceIDs(ids...)
+}
+
+// ClearOrgModules clears all "org_modules" edges to the OrgModule entity.
+func (opuo *OrgProductUpdateOne) ClearOrgModules() *OrgProductUpdateOne {
+	opuo.mutation.ClearOrgModules()
+	return opuo
+}
+
+// RemoveOrgModuleIDs removes the "org_modules" edge to OrgModule entities by IDs.
+func (opuo *OrgProductUpdateOne) RemoveOrgModuleIDs(ids ...string) *OrgProductUpdateOne {
+	opuo.mutation.RemoveOrgModuleIDs(ids...)
+	return opuo
+}
+
+// RemoveOrgModules removes "org_modules" edges to OrgModule entities.
+func (opuo *OrgProductUpdateOne) RemoveOrgModules(o ...*OrgModule) *OrgProductUpdateOne {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return opuo.RemoveOrgModuleIDs(ids...)
 }
 
 // Where appends a list predicates to the OrgProductUpdate builder.
@@ -1099,17 +1174,11 @@ func (opuo *OrgProductUpdateOne) sqlSave(ctx context.Context) (_node *OrgProduct
 	if value, ok := opuo.mutation.Active(); ok {
 		_spec.SetField(orgproduct.FieldActive, field.TypeBool, value)
 	}
-	if value, ok := opuo.mutation.TrialExpiresAt(); ok {
-		_spec.SetField(orgproduct.FieldTrialExpiresAt, field.TypeTime, value)
+	if value, ok := opuo.mutation.PriceID(); ok {
+		_spec.SetField(orgproduct.FieldPriceID, field.TypeString, value)
 	}
-	if opuo.mutation.TrialExpiresAtCleared() {
-		_spec.ClearField(orgproduct.FieldTrialExpiresAt, field.TypeTime)
-	}
-	if value, ok := opuo.mutation.ExpiresAt(); ok {
-		_spec.SetField(orgproduct.FieldExpiresAt, field.TypeTime, value)
-	}
-	if opuo.mutation.ExpiresAtCleared() {
-		_spec.ClearField(orgproduct.FieldExpiresAt, field.TypeTime)
+	if opuo.mutation.PriceIDCleared() {
+		_spec.ClearField(orgproduct.FieldPriceID, field.TypeString)
 	}
 	if opuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1173,49 +1242,97 @@ func (opuo *OrgProductUpdateOne) sqlSave(ctx context.Context) (_node *OrgProduct
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if opuo.mutation.PricesCleared() {
+	if opuo.mutation.OrgPricesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   orgproduct.PricesTable,
-			Columns: []string{orgproduct.PricesColumn},
+			Table:   orgproduct.OrgPricesTable,
+			Columns: orgproduct.OrgPricesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = opuo.schemaConfig.OrgPrice
+		edge.Schema = opuo.schemaConfig.OrgProductOrgPrices
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := opuo.mutation.RemovedPricesIDs(); len(nodes) > 0 && !opuo.mutation.PricesCleared() {
+	if nodes := opuo.mutation.RemovedOrgPricesIDs(); len(nodes) > 0 && !opuo.mutation.OrgPricesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   orgproduct.PricesTable,
-			Columns: []string{orgproduct.PricesColumn},
+			Table:   orgproduct.OrgPricesTable,
+			Columns: orgproduct.OrgPricesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = opuo.schemaConfig.OrgPrice
+		edge.Schema = opuo.schemaConfig.OrgProductOrgPrices
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := opuo.mutation.PricesIDs(); len(nodes) > 0 {
+	if nodes := opuo.mutation.OrgPricesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   orgproduct.PricesTable,
-			Columns: []string{orgproduct.PricesColumn},
+			Table:   orgproduct.OrgPricesTable,
+			Columns: orgproduct.OrgPricesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = opuo.schemaConfig.OrgPrice
+		edge.Schema = opuo.schemaConfig.OrgProductOrgPrices
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if opuo.mutation.OrgModulesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgproduct.OrgModulesTable,
+			Columns: []string{orgproduct.OrgModulesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = opuo.schemaConfig.OrgModule
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := opuo.mutation.RemovedOrgModulesIDs(); len(nodes) > 0 && !opuo.mutation.OrgModulesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgproduct.OrgModulesTable,
+			Columns: []string{orgproduct.OrgModulesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = opuo.schemaConfig.OrgModule
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := opuo.mutation.OrgModulesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgproduct.OrgModulesTable,
+			Columns: []string{orgproduct.OrgModulesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = opuo.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

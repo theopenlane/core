@@ -56,6 +56,9 @@ func (m ControlMixin) Edges() []ent.Edge {
 			t:          Group.Type,
 			field:      "control_owner_id",
 			comment:    "the group of users who are responsible for the control, will be assigned tasks, approval, etc.",
+			annotations: []schema.Annotation{
+				entgql.OrderField("CONTROL_OWNER_name"),
+			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: c,

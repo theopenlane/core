@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
@@ -41,6 +42,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -137,8 +139,74 @@ func adminSearchActionPlans(ctx context.Context, query string, after *entgql.Cur
 				actionplan.DetailsContainsFold(query),        // search by Details
 				actionplan.ApproverIDContainsFold(query),     // search by ApproverID
 				actionplan.DelegateIDContainsFold(query),     // search by DelegateID
-				actionplan.OwnerIDContainsFold(query),        // search by OwnerID
-				actionplan.SourceContainsFold(query),         // search by Source
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tag_suggestions)::text LIKE $9", likeQuery)) // search by TagSuggestions
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(dismissed_tag_suggestions)::text LIKE $10", likeQuery)) // search by DismissedTagSuggestions
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(control_suggestions)::text LIKE $11", likeQuery)) // search by ControlSuggestions
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(dismissed_control_suggestions)::text LIKE $12", likeQuery)) // search by DismissedControlSuggestions
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(improvement_suggestions)::text LIKE $13", likeQuery)) // search by ImprovementSuggestions
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(dismissed_improvement_suggestions)::text LIKE $14", likeQuery)) // search by DismissedImprovementSuggestions
+				},
+				actionplan.OwnerIDContainsFold(query), // search by OwnerID
+				actionplan.SourceContainsFold(query),  // search by Source
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchAsset searches for Asset based on the query string looking for matches
+func searchAssets(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.AssetConnection, error) {
+	request := withTransactionalMutation(ctx).Asset.Query().
+		Where(
+			asset.Or(
+				asset.ID(query),               // search equal to ID
+				asset.NameContainsFold(query), // search by Name
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchAsset searches for Asset based on the query string looking for matches
+func adminSearchAssets(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.AssetConnection, error) {
+	request := withTransactionalMutation(ctx).Asset.Query().
+		Where(
+			asset.Or(
+				asset.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+				asset.OwnerIDContainsFold(query),     // search by OwnerID
+				asset.NameContainsFold(query),        // search by Name
+				asset.DescriptionContainsFold(query), // search by Description
+				asset.IdentifierContainsFold(query),  // search by Identifier
+				asset.WebsiteContainsFold(query),     // search by Website
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(categories)::text LIKE $8", likeQuery)) // search by Categories
+				},
 			),
 		)
 
@@ -773,6 +841,30 @@ func adminSearchInternalPolicies(ctx context.Context, query string, after *entgq
 				internalpolicy.DetailsContainsFold(query),    // search by Details
 				internalpolicy.ApproverIDContainsFold(query), // search by ApproverID
 				internalpolicy.DelegateIDContainsFold(query), // search by DelegateID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tag_suggestions)::text LIKE $11", likeQuery)) // search by TagSuggestions
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(dismissed_tag_suggestions)::text LIKE $12", likeQuery)) // search by DismissedTagSuggestions
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(control_suggestions)::text LIKE $13", likeQuery)) // search by ControlSuggestions
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(dismissed_control_suggestions)::text LIKE $14", likeQuery)) // search by DismissedControlSuggestions
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(improvement_suggestions)::text LIKE $15", likeQuery)) // search by ImprovementSuggestions
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(dismissed_improvement_suggestions)::text LIKE $16", likeQuery)) // search by DismissedImprovementSuggestions
+				},
 			),
 		)
 
@@ -1154,6 +1246,10 @@ func adminSearchOrganizationSettings(ctx context.Context, query string, after *e
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(allowed_email_domains)::text LIKE $10", likeQuery)) // search by AllowedEmailDomains
 				},
+				organizationsetting.IdentityProviderMetadataEndpointContainsFold(query), // search by IdentityProviderMetadataEndpoint
+				organizationsetting.IdentityProviderEntityIDContainsFold(query),         // search by IdentityProviderEntityID
+				organizationsetting.OidcDiscoveryEndpointContainsFold(query),            // search by OidcDiscoveryEndpoint
+				organizationsetting.ComplianceWebhookTokenContainsFold(query),           // search by ComplianceWebhookToken
 			),
 		)
 
@@ -1236,6 +1332,30 @@ func adminSearchProcedures(ctx context.Context, query string, after *entgql.Curs
 				procedure.DetailsContainsFold(query),       // search by Details
 				procedure.ApproverIDContainsFold(query),    // search by ApproverID
 				procedure.DelegateIDContainsFold(query),    // search by DelegateID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tag_suggestions)::text LIKE $11", likeQuery)) // search by TagSuggestions
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(dismissed_tag_suggestions)::text LIKE $12", likeQuery)) // search by DismissedTagSuggestions
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(control_suggestions)::text LIKE $13", likeQuery)) // search by ControlSuggestions
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(dismissed_control_suggestions)::text LIKE $14", likeQuery)) // search by DismissedControlSuggestions
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(improvement_suggestions)::text LIKE $15", likeQuery)) // search by ImprovementSuggestions
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(dismissed_improvement_suggestions)::text LIKE $16", likeQuery)) // search by DismissedImprovementSuggestions
+				},
 			),
 		)
 
@@ -1323,6 +1443,45 @@ func adminSearchRisks(ctx context.Context, query string, after *entgql.Cursor[st
 				risk.BusinessCostsContainsFold(query), // search by BusinessCosts
 				risk.StakeholderIDContainsFold(query), // search by StakeholderID
 				risk.DelegateIDContainsFold(query),    // search by DelegateID
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchScan searches for Scan based on the query string looking for matches
+func searchScans(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ScanConnection, error) {
+	request := withTransactionalMutation(ctx).Scan.Query().
+		Where(
+			scan.Or(
+				scan.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+				scan.TargetContainsFold(query), // search by Target
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchScan searches for Scan based on the query string looking for matches
+func adminSearchScans(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ScanConnection, error) {
+	request := withTransactionalMutation(ctx).Scan.Query().
+		Where(
+			scan.Or(
+				scan.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+				scan.OwnerIDContainsFold(query), // search by OwnerID
+				scan.TargetContainsFold(query),  // search by Target
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(metadata)::text LIKE $5", likeQuery)) // search by Metadata
+				},
 			),
 		)
 

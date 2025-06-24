@@ -287,6 +287,42 @@ func (ipc *InternalPolicyCreate) SetNillableSummary(s *string) *InternalPolicyCr
 	return ipc
 }
 
+// SetTagSuggestions sets the "tag_suggestions" field.
+func (ipc *InternalPolicyCreate) SetTagSuggestions(s []string) *InternalPolicyCreate {
+	ipc.mutation.SetTagSuggestions(s)
+	return ipc
+}
+
+// SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
+func (ipc *InternalPolicyCreate) SetDismissedTagSuggestions(s []string) *InternalPolicyCreate {
+	ipc.mutation.SetDismissedTagSuggestions(s)
+	return ipc
+}
+
+// SetControlSuggestions sets the "control_suggestions" field.
+func (ipc *InternalPolicyCreate) SetControlSuggestions(s []string) *InternalPolicyCreate {
+	ipc.mutation.SetControlSuggestions(s)
+	return ipc
+}
+
+// SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
+func (ipc *InternalPolicyCreate) SetDismissedControlSuggestions(s []string) *InternalPolicyCreate {
+	ipc.mutation.SetDismissedControlSuggestions(s)
+	return ipc
+}
+
+// SetImprovementSuggestions sets the "improvement_suggestions" field.
+func (ipc *InternalPolicyCreate) SetImprovementSuggestions(s []string) *InternalPolicyCreate {
+	ipc.mutation.SetImprovementSuggestions(s)
+	return ipc
+}
+
+// SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
+func (ipc *InternalPolicyCreate) SetDismissedImprovementSuggestions(s []string) *InternalPolicyCreate {
+	ipc.mutation.SetDismissedImprovementSuggestions(s)
+	return ipc
+}
+
 // SetID sets the "id" field.
 func (ipc *InternalPolicyCreate) SetID(s string) *InternalPolicyCreate {
 	ipc.mutation.SetID(s)
@@ -541,6 +577,30 @@ func (ipc *InternalPolicyCreate) defaults() error {
 		v := internalpolicy.DefaultReviewFrequency
 		ipc.mutation.SetReviewFrequency(v)
 	}
+	if _, ok := ipc.mutation.TagSuggestions(); !ok {
+		v := internalpolicy.DefaultTagSuggestions
+		ipc.mutation.SetTagSuggestions(v)
+	}
+	if _, ok := ipc.mutation.DismissedTagSuggestions(); !ok {
+		v := internalpolicy.DefaultDismissedTagSuggestions
+		ipc.mutation.SetDismissedTagSuggestions(v)
+	}
+	if _, ok := ipc.mutation.ControlSuggestions(); !ok {
+		v := internalpolicy.DefaultControlSuggestions
+		ipc.mutation.SetControlSuggestions(v)
+	}
+	if _, ok := ipc.mutation.DismissedControlSuggestions(); !ok {
+		v := internalpolicy.DefaultDismissedControlSuggestions
+		ipc.mutation.SetDismissedControlSuggestions(v)
+	}
+	if _, ok := ipc.mutation.ImprovementSuggestions(); !ok {
+		v := internalpolicy.DefaultImprovementSuggestions
+		ipc.mutation.SetImprovementSuggestions(v)
+	}
+	if _, ok := ipc.mutation.DismissedImprovementSuggestions(); !ok {
+		v := internalpolicy.DefaultDismissedImprovementSuggestions
+		ipc.mutation.SetDismissedImprovementSuggestions(v)
+	}
 	if _, ok := ipc.mutation.ID(); !ok {
 		if internalpolicy.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized internalpolicy.DefaultID (forgotten import generated/runtime?)")
@@ -692,6 +752,30 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 	if value, ok := ipc.mutation.Summary(); ok {
 		_spec.SetField(internalpolicy.FieldSummary, field.TypeString, value)
 		_node.Summary = value
+	}
+	if value, ok := ipc.mutation.TagSuggestions(); ok {
+		_spec.SetField(internalpolicy.FieldTagSuggestions, field.TypeJSON, value)
+		_node.TagSuggestions = value
+	}
+	if value, ok := ipc.mutation.DismissedTagSuggestions(); ok {
+		_spec.SetField(internalpolicy.FieldDismissedTagSuggestions, field.TypeJSON, value)
+		_node.DismissedTagSuggestions = value
+	}
+	if value, ok := ipc.mutation.ControlSuggestions(); ok {
+		_spec.SetField(internalpolicy.FieldControlSuggestions, field.TypeJSON, value)
+		_node.ControlSuggestions = value
+	}
+	if value, ok := ipc.mutation.DismissedControlSuggestions(); ok {
+		_spec.SetField(internalpolicy.FieldDismissedControlSuggestions, field.TypeJSON, value)
+		_node.DismissedControlSuggestions = value
+	}
+	if value, ok := ipc.mutation.ImprovementSuggestions(); ok {
+		_spec.SetField(internalpolicy.FieldImprovementSuggestions, field.TypeJSON, value)
+		_node.ImprovementSuggestions = value
+	}
+	if value, ok := ipc.mutation.DismissedImprovementSuggestions(); ok {
+		_spec.SetField(internalpolicy.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
+		_node.DismissedImprovementSuggestions = value
 	}
 	if nodes := ipc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

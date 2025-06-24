@@ -1343,6 +1343,66 @@ func SummaryContainsFold(v string) predicate.Procedure {
 	return predicate.Procedure(sql.FieldContainsFold(FieldSummary, v))
 }
 
+// TagSuggestionsIsNil applies the IsNil predicate on the "tag_suggestions" field.
+func TagSuggestionsIsNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldIsNull(FieldTagSuggestions))
+}
+
+// TagSuggestionsNotNil applies the NotNil predicate on the "tag_suggestions" field.
+func TagSuggestionsNotNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotNull(FieldTagSuggestions))
+}
+
+// DismissedTagSuggestionsIsNil applies the IsNil predicate on the "dismissed_tag_suggestions" field.
+func DismissedTagSuggestionsIsNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldIsNull(FieldDismissedTagSuggestions))
+}
+
+// DismissedTagSuggestionsNotNil applies the NotNil predicate on the "dismissed_tag_suggestions" field.
+func DismissedTagSuggestionsNotNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotNull(FieldDismissedTagSuggestions))
+}
+
+// ControlSuggestionsIsNil applies the IsNil predicate on the "control_suggestions" field.
+func ControlSuggestionsIsNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldIsNull(FieldControlSuggestions))
+}
+
+// ControlSuggestionsNotNil applies the NotNil predicate on the "control_suggestions" field.
+func ControlSuggestionsNotNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotNull(FieldControlSuggestions))
+}
+
+// DismissedControlSuggestionsIsNil applies the IsNil predicate on the "dismissed_control_suggestions" field.
+func DismissedControlSuggestionsIsNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldIsNull(FieldDismissedControlSuggestions))
+}
+
+// DismissedControlSuggestionsNotNil applies the NotNil predicate on the "dismissed_control_suggestions" field.
+func DismissedControlSuggestionsNotNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotNull(FieldDismissedControlSuggestions))
+}
+
+// ImprovementSuggestionsIsNil applies the IsNil predicate on the "improvement_suggestions" field.
+func ImprovementSuggestionsIsNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldIsNull(FieldImprovementSuggestions))
+}
+
+// ImprovementSuggestionsNotNil applies the NotNil predicate on the "improvement_suggestions" field.
+func ImprovementSuggestionsNotNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotNull(FieldImprovementSuggestions))
+}
+
+// DismissedImprovementSuggestionsIsNil applies the IsNil predicate on the "dismissed_improvement_suggestions" field.
+func DismissedImprovementSuggestionsIsNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldIsNull(FieldDismissedImprovementSuggestions))
+}
+
+// DismissedImprovementSuggestionsNotNil applies the NotNil predicate on the "dismissed_improvement_suggestions" field.
+func DismissedImprovementSuggestionsNotNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotNull(FieldDismissedImprovementSuggestions))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Procedure {
 	return predicate.Procedure(func(s *sql.Selector) {

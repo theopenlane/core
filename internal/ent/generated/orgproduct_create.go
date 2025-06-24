@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/internal/ent/generated/orgprice"
 	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
@@ -175,34 +176,6 @@ func (opc *OrgProductCreate) SetNillableActive(b *bool) *OrgProductCreate {
 	return opc
 }
 
-// SetTrialExpiresAt sets the "trial_expires_at" field.
-func (opc *OrgProductCreate) SetTrialExpiresAt(t time.Time) *OrgProductCreate {
-	opc.mutation.SetTrialExpiresAt(t)
-	return opc
-}
-
-// SetNillableTrialExpiresAt sets the "trial_expires_at" field if the given value is not nil.
-func (opc *OrgProductCreate) SetNillableTrialExpiresAt(t *time.Time) *OrgProductCreate {
-	if t != nil {
-		opc.SetTrialExpiresAt(*t)
-	}
-	return opc
-}
-
-// SetExpiresAt sets the "expires_at" field.
-func (opc *OrgProductCreate) SetExpiresAt(t time.Time) *OrgProductCreate {
-	opc.mutation.SetExpiresAt(t)
-	return opc
-}
-
-// SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
-func (opc *OrgProductCreate) SetNillableExpiresAt(t *time.Time) *OrgProductCreate {
-	if t != nil {
-		opc.SetExpiresAt(*t)
-	}
-	return opc
-}
-
 // SetSubscriptionID sets the "subscription_id" field.
 func (opc *OrgProductCreate) SetSubscriptionID(s string) *OrgProductCreate {
 	opc.mutation.SetSubscriptionID(s)
@@ -213,6 +186,20 @@ func (opc *OrgProductCreate) SetSubscriptionID(s string) *OrgProductCreate {
 func (opc *OrgProductCreate) SetNillableSubscriptionID(s *string) *OrgProductCreate {
 	if s != nil {
 		opc.SetSubscriptionID(*s)
+	}
+	return opc
+}
+
+// SetPriceID sets the "price_id" field.
+func (opc *OrgProductCreate) SetPriceID(s string) *OrgProductCreate {
+	opc.mutation.SetPriceID(s)
+	return opc
+}
+
+// SetNillablePriceID sets the "price_id" field if the given value is not nil.
+func (opc *OrgProductCreate) SetNillablePriceID(s *string) *OrgProductCreate {
+	if s != nil {
+		opc.SetPriceID(*s)
 	}
 	return opc
 }
@@ -255,19 +242,34 @@ func (opc *OrgProductCreate) SetOrgSubscription(o *OrgSubscription) *OrgProductC
 	return opc.SetOrgSubscriptionID(o.ID)
 }
 
-// AddPriceIDs adds the "prices" edge to the OrgPrice entity by IDs.
-func (opc *OrgProductCreate) AddPriceIDs(ids ...string) *OrgProductCreate {
-	opc.mutation.AddPriceIDs(ids...)
+// AddOrgPriceIDs adds the "org_prices" edge to the OrgPrice entity by IDs.
+func (opc *OrgProductCreate) AddOrgPriceIDs(ids ...string) *OrgProductCreate {
+	opc.mutation.AddOrgPriceIDs(ids...)
 	return opc
 }
 
-// AddPrices adds the "prices" edges to the OrgPrice entity.
-func (opc *OrgProductCreate) AddPrices(o ...*OrgPrice) *OrgProductCreate {
+// AddOrgPrices adds the "org_prices" edges to the OrgPrice entity.
+func (opc *OrgProductCreate) AddOrgPrices(o ...*OrgPrice) *OrgProductCreate {
 	ids := make([]string, len(o))
 	for i := range o {
 		ids[i] = o[i].ID
 	}
-	return opc.AddPriceIDs(ids...)
+	return opc.AddOrgPriceIDs(ids...)
+}
+
+// AddOrgModuleIDs adds the "org_modules" edge to the OrgModule entity by IDs.
+func (opc *OrgProductCreate) AddOrgModuleIDs(ids ...string) *OrgProductCreate {
+	opc.mutation.AddOrgModuleIDs(ids...)
+	return opc
+}
+
+// AddOrgModules adds the "org_modules" edges to the OrgModule entity.
+func (opc *OrgProductCreate) AddOrgModules(o ...*OrgModule) *OrgProductCreate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return opc.AddOrgModuleIDs(ids...)
 }
 
 // Mutation returns the OrgProductMutation object of the builder.
@@ -432,13 +434,9 @@ func (opc *OrgProductCreate) createSpec() (*OrgProduct, *sqlgraph.CreateSpec) {
 		_spec.SetField(orgproduct.FieldActive, field.TypeBool, value)
 		_node.Active = value
 	}
-	if value, ok := opc.mutation.TrialExpiresAt(); ok {
-		_spec.SetField(orgproduct.FieldTrialExpiresAt, field.TypeTime, value)
-		_node.TrialExpiresAt = &value
-	}
-	if value, ok := opc.mutation.ExpiresAt(); ok {
-		_spec.SetField(orgproduct.FieldExpiresAt, field.TypeTime, value)
-		_node.ExpiresAt = &value
+	if value, ok := opc.mutation.PriceID(); ok {
+		_spec.SetField(orgproduct.FieldPriceID, field.TypeString, value)
+		_node.PriceID = value
 	}
 	if nodes := opc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -476,18 +474,35 @@ func (opc *OrgProductCreate) createSpec() (*OrgProduct, *sqlgraph.CreateSpec) {
 		_node.SubscriptionID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := opc.mutation.PricesIDs(); len(nodes) > 0 {
+	if nodes := opc.mutation.OrgPricesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   orgproduct.PricesTable,
-			Columns: []string{orgproduct.PricesColumn},
+			Table:   orgproduct.OrgPricesTable,
+			Columns: orgproduct.OrgPricesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = opc.schemaConfig.OrgPrice
+		edge.Schema = opc.schemaConfig.OrgProductOrgPrices
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := opc.mutation.OrgModulesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   orgproduct.OrgModulesTable,
+			Columns: []string{orgproduct.OrgModulesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = opc.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

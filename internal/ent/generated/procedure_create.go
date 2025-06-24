@@ -286,6 +286,42 @@ func (pc *ProcedureCreate) SetNillableSummary(s *string) *ProcedureCreate {
 	return pc
 }
 
+// SetTagSuggestions sets the "tag_suggestions" field.
+func (pc *ProcedureCreate) SetTagSuggestions(s []string) *ProcedureCreate {
+	pc.mutation.SetTagSuggestions(s)
+	return pc
+}
+
+// SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
+func (pc *ProcedureCreate) SetDismissedTagSuggestions(s []string) *ProcedureCreate {
+	pc.mutation.SetDismissedTagSuggestions(s)
+	return pc
+}
+
+// SetControlSuggestions sets the "control_suggestions" field.
+func (pc *ProcedureCreate) SetControlSuggestions(s []string) *ProcedureCreate {
+	pc.mutation.SetControlSuggestions(s)
+	return pc
+}
+
+// SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
+func (pc *ProcedureCreate) SetDismissedControlSuggestions(s []string) *ProcedureCreate {
+	pc.mutation.SetDismissedControlSuggestions(s)
+	return pc
+}
+
+// SetImprovementSuggestions sets the "improvement_suggestions" field.
+func (pc *ProcedureCreate) SetImprovementSuggestions(s []string) *ProcedureCreate {
+	pc.mutation.SetImprovementSuggestions(s)
+	return pc
+}
+
+// SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
+func (pc *ProcedureCreate) SetDismissedImprovementSuggestions(s []string) *ProcedureCreate {
+	pc.mutation.SetDismissedImprovementSuggestions(s)
+	return pc
+}
+
 // SetID sets the "id" field.
 func (pc *ProcedureCreate) SetID(s string) *ProcedureCreate {
 	pc.mutation.SetID(s)
@@ -525,6 +561,30 @@ func (pc *ProcedureCreate) defaults() error {
 		v := procedure.DefaultReviewFrequency
 		pc.mutation.SetReviewFrequency(v)
 	}
+	if _, ok := pc.mutation.TagSuggestions(); !ok {
+		v := procedure.DefaultTagSuggestions
+		pc.mutation.SetTagSuggestions(v)
+	}
+	if _, ok := pc.mutation.DismissedTagSuggestions(); !ok {
+		v := procedure.DefaultDismissedTagSuggestions
+		pc.mutation.SetDismissedTagSuggestions(v)
+	}
+	if _, ok := pc.mutation.ControlSuggestions(); !ok {
+		v := procedure.DefaultControlSuggestions
+		pc.mutation.SetControlSuggestions(v)
+	}
+	if _, ok := pc.mutation.DismissedControlSuggestions(); !ok {
+		v := procedure.DefaultDismissedControlSuggestions
+		pc.mutation.SetDismissedControlSuggestions(v)
+	}
+	if _, ok := pc.mutation.ImprovementSuggestions(); !ok {
+		v := procedure.DefaultImprovementSuggestions
+		pc.mutation.SetImprovementSuggestions(v)
+	}
+	if _, ok := pc.mutation.DismissedImprovementSuggestions(); !ok {
+		v := procedure.DefaultDismissedImprovementSuggestions
+		pc.mutation.SetDismissedImprovementSuggestions(v)
+	}
 	if _, ok := pc.mutation.ID(); !ok {
 		if procedure.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized procedure.DefaultID (forgotten import generated/runtime?)")
@@ -676,6 +736,30 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.Summary(); ok {
 		_spec.SetField(procedure.FieldSummary, field.TypeString, value)
 		_node.Summary = value
+	}
+	if value, ok := pc.mutation.TagSuggestions(); ok {
+		_spec.SetField(procedure.FieldTagSuggestions, field.TypeJSON, value)
+		_node.TagSuggestions = value
+	}
+	if value, ok := pc.mutation.DismissedTagSuggestions(); ok {
+		_spec.SetField(procedure.FieldDismissedTagSuggestions, field.TypeJSON, value)
+		_node.DismissedTagSuggestions = value
+	}
+	if value, ok := pc.mutation.ControlSuggestions(); ok {
+		_spec.SetField(procedure.FieldControlSuggestions, field.TypeJSON, value)
+		_node.ControlSuggestions = value
+	}
+	if value, ok := pc.mutation.DismissedControlSuggestions(); ok {
+		_spec.SetField(procedure.FieldDismissedControlSuggestions, field.TypeJSON, value)
+		_node.DismissedControlSuggestions = value
+	}
+	if value, ok := pc.mutation.ImprovementSuggestions(); ok {
+		_spec.SetField(procedure.FieldImprovementSuggestions, field.TypeJSON, value)
+		_node.ImprovementSuggestions = value
+	}
+	if value, ok := pc.mutation.DismissedImprovementSuggestions(); ok {
+		_spec.SetField(procedure.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
+		_node.DismissedImprovementSuggestions = value
 	}
 	if nodes := pc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

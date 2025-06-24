@@ -337,6 +337,114 @@ func (aphu *ActionPlanHistoryUpdate) ClearSummary() *ActionPlanHistoryUpdate {
 	return aphu
 }
 
+// SetTagSuggestions sets the "tag_suggestions" field.
+func (aphu *ActionPlanHistoryUpdate) SetTagSuggestions(s []string) *ActionPlanHistoryUpdate {
+	aphu.mutation.SetTagSuggestions(s)
+	return aphu
+}
+
+// AppendTagSuggestions appends s to the "tag_suggestions" field.
+func (aphu *ActionPlanHistoryUpdate) AppendTagSuggestions(s []string) *ActionPlanHistoryUpdate {
+	aphu.mutation.AppendTagSuggestions(s)
+	return aphu
+}
+
+// ClearTagSuggestions clears the value of the "tag_suggestions" field.
+func (aphu *ActionPlanHistoryUpdate) ClearTagSuggestions() *ActionPlanHistoryUpdate {
+	aphu.mutation.ClearTagSuggestions()
+	return aphu
+}
+
+// SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
+func (aphu *ActionPlanHistoryUpdate) SetDismissedTagSuggestions(s []string) *ActionPlanHistoryUpdate {
+	aphu.mutation.SetDismissedTagSuggestions(s)
+	return aphu
+}
+
+// AppendDismissedTagSuggestions appends s to the "dismissed_tag_suggestions" field.
+func (aphu *ActionPlanHistoryUpdate) AppendDismissedTagSuggestions(s []string) *ActionPlanHistoryUpdate {
+	aphu.mutation.AppendDismissedTagSuggestions(s)
+	return aphu
+}
+
+// ClearDismissedTagSuggestions clears the value of the "dismissed_tag_suggestions" field.
+func (aphu *ActionPlanHistoryUpdate) ClearDismissedTagSuggestions() *ActionPlanHistoryUpdate {
+	aphu.mutation.ClearDismissedTagSuggestions()
+	return aphu
+}
+
+// SetControlSuggestions sets the "control_suggestions" field.
+func (aphu *ActionPlanHistoryUpdate) SetControlSuggestions(s []string) *ActionPlanHistoryUpdate {
+	aphu.mutation.SetControlSuggestions(s)
+	return aphu
+}
+
+// AppendControlSuggestions appends s to the "control_suggestions" field.
+func (aphu *ActionPlanHistoryUpdate) AppendControlSuggestions(s []string) *ActionPlanHistoryUpdate {
+	aphu.mutation.AppendControlSuggestions(s)
+	return aphu
+}
+
+// ClearControlSuggestions clears the value of the "control_suggestions" field.
+func (aphu *ActionPlanHistoryUpdate) ClearControlSuggestions() *ActionPlanHistoryUpdate {
+	aphu.mutation.ClearControlSuggestions()
+	return aphu
+}
+
+// SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
+func (aphu *ActionPlanHistoryUpdate) SetDismissedControlSuggestions(s []string) *ActionPlanHistoryUpdate {
+	aphu.mutation.SetDismissedControlSuggestions(s)
+	return aphu
+}
+
+// AppendDismissedControlSuggestions appends s to the "dismissed_control_suggestions" field.
+func (aphu *ActionPlanHistoryUpdate) AppendDismissedControlSuggestions(s []string) *ActionPlanHistoryUpdate {
+	aphu.mutation.AppendDismissedControlSuggestions(s)
+	return aphu
+}
+
+// ClearDismissedControlSuggestions clears the value of the "dismissed_control_suggestions" field.
+func (aphu *ActionPlanHistoryUpdate) ClearDismissedControlSuggestions() *ActionPlanHistoryUpdate {
+	aphu.mutation.ClearDismissedControlSuggestions()
+	return aphu
+}
+
+// SetImprovementSuggestions sets the "improvement_suggestions" field.
+func (aphu *ActionPlanHistoryUpdate) SetImprovementSuggestions(s []string) *ActionPlanHistoryUpdate {
+	aphu.mutation.SetImprovementSuggestions(s)
+	return aphu
+}
+
+// AppendImprovementSuggestions appends s to the "improvement_suggestions" field.
+func (aphu *ActionPlanHistoryUpdate) AppendImprovementSuggestions(s []string) *ActionPlanHistoryUpdate {
+	aphu.mutation.AppendImprovementSuggestions(s)
+	return aphu
+}
+
+// ClearImprovementSuggestions clears the value of the "improvement_suggestions" field.
+func (aphu *ActionPlanHistoryUpdate) ClearImprovementSuggestions() *ActionPlanHistoryUpdate {
+	aphu.mutation.ClearImprovementSuggestions()
+	return aphu
+}
+
+// SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
+func (aphu *ActionPlanHistoryUpdate) SetDismissedImprovementSuggestions(s []string) *ActionPlanHistoryUpdate {
+	aphu.mutation.SetDismissedImprovementSuggestions(s)
+	return aphu
+}
+
+// AppendDismissedImprovementSuggestions appends s to the "dismissed_improvement_suggestions" field.
+func (aphu *ActionPlanHistoryUpdate) AppendDismissedImprovementSuggestions(s []string) *ActionPlanHistoryUpdate {
+	aphu.mutation.AppendDismissedImprovementSuggestions(s)
+	return aphu
+}
+
+// ClearDismissedImprovementSuggestions clears the value of the "dismissed_improvement_suggestions" field.
+func (aphu *ActionPlanHistoryUpdate) ClearDismissedImprovementSuggestions() *ActionPlanHistoryUpdate {
+	aphu.mutation.ClearDismissedImprovementSuggestions()
+	return aphu
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (aphu *ActionPlanHistoryUpdate) SetOwnerID(s string) *ActionPlanHistoryUpdate {
 	aphu.mutation.SetOwnerID(s)
@@ -602,6 +710,72 @@ func (aphu *ActionPlanHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 	}
 	if aphu.mutation.SummaryCleared() {
 		_spec.ClearField(actionplanhistory.FieldSummary, field.TypeString)
+	}
+	if value, ok := aphu.mutation.TagSuggestions(); ok {
+		_spec.SetField(actionplanhistory.FieldTagSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := aphu.mutation.AppendedTagSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplanhistory.FieldTagSuggestions, value)
+		})
+	}
+	if aphu.mutation.TagSuggestionsCleared() {
+		_spec.ClearField(actionplanhistory.FieldTagSuggestions, field.TypeJSON)
+	}
+	if value, ok := aphu.mutation.DismissedTagSuggestions(); ok {
+		_spec.SetField(actionplanhistory.FieldDismissedTagSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := aphu.mutation.AppendedDismissedTagSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplanhistory.FieldDismissedTagSuggestions, value)
+		})
+	}
+	if aphu.mutation.DismissedTagSuggestionsCleared() {
+		_spec.ClearField(actionplanhistory.FieldDismissedTagSuggestions, field.TypeJSON)
+	}
+	if value, ok := aphu.mutation.ControlSuggestions(); ok {
+		_spec.SetField(actionplanhistory.FieldControlSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := aphu.mutation.AppendedControlSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplanhistory.FieldControlSuggestions, value)
+		})
+	}
+	if aphu.mutation.ControlSuggestionsCleared() {
+		_spec.ClearField(actionplanhistory.FieldControlSuggestions, field.TypeJSON)
+	}
+	if value, ok := aphu.mutation.DismissedControlSuggestions(); ok {
+		_spec.SetField(actionplanhistory.FieldDismissedControlSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := aphu.mutation.AppendedDismissedControlSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplanhistory.FieldDismissedControlSuggestions, value)
+		})
+	}
+	if aphu.mutation.DismissedControlSuggestionsCleared() {
+		_spec.ClearField(actionplanhistory.FieldDismissedControlSuggestions, field.TypeJSON)
+	}
+	if value, ok := aphu.mutation.ImprovementSuggestions(); ok {
+		_spec.SetField(actionplanhistory.FieldImprovementSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := aphu.mutation.AppendedImprovementSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplanhistory.FieldImprovementSuggestions, value)
+		})
+	}
+	if aphu.mutation.ImprovementSuggestionsCleared() {
+		_spec.ClearField(actionplanhistory.FieldImprovementSuggestions, field.TypeJSON)
+	}
+	if value, ok := aphu.mutation.DismissedImprovementSuggestions(); ok {
+		_spec.SetField(actionplanhistory.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := aphu.mutation.AppendedDismissedImprovementSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplanhistory.FieldDismissedImprovementSuggestions, value)
+		})
+	}
+	if aphu.mutation.DismissedImprovementSuggestionsCleared() {
+		_spec.ClearField(actionplanhistory.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
 	if value, ok := aphu.mutation.OwnerID(); ok {
 		_spec.SetField(actionplanhistory.FieldOwnerID, field.TypeString, value)
@@ -955,6 +1129,114 @@ func (aphuo *ActionPlanHistoryUpdateOne) ClearSummary() *ActionPlanHistoryUpdate
 	return aphuo
 }
 
+// SetTagSuggestions sets the "tag_suggestions" field.
+func (aphuo *ActionPlanHistoryUpdateOne) SetTagSuggestions(s []string) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.SetTagSuggestions(s)
+	return aphuo
+}
+
+// AppendTagSuggestions appends s to the "tag_suggestions" field.
+func (aphuo *ActionPlanHistoryUpdateOne) AppendTagSuggestions(s []string) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.AppendTagSuggestions(s)
+	return aphuo
+}
+
+// ClearTagSuggestions clears the value of the "tag_suggestions" field.
+func (aphuo *ActionPlanHistoryUpdateOne) ClearTagSuggestions() *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.ClearTagSuggestions()
+	return aphuo
+}
+
+// SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
+func (aphuo *ActionPlanHistoryUpdateOne) SetDismissedTagSuggestions(s []string) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.SetDismissedTagSuggestions(s)
+	return aphuo
+}
+
+// AppendDismissedTagSuggestions appends s to the "dismissed_tag_suggestions" field.
+func (aphuo *ActionPlanHistoryUpdateOne) AppendDismissedTagSuggestions(s []string) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.AppendDismissedTagSuggestions(s)
+	return aphuo
+}
+
+// ClearDismissedTagSuggestions clears the value of the "dismissed_tag_suggestions" field.
+func (aphuo *ActionPlanHistoryUpdateOne) ClearDismissedTagSuggestions() *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.ClearDismissedTagSuggestions()
+	return aphuo
+}
+
+// SetControlSuggestions sets the "control_suggestions" field.
+func (aphuo *ActionPlanHistoryUpdateOne) SetControlSuggestions(s []string) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.SetControlSuggestions(s)
+	return aphuo
+}
+
+// AppendControlSuggestions appends s to the "control_suggestions" field.
+func (aphuo *ActionPlanHistoryUpdateOne) AppendControlSuggestions(s []string) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.AppendControlSuggestions(s)
+	return aphuo
+}
+
+// ClearControlSuggestions clears the value of the "control_suggestions" field.
+func (aphuo *ActionPlanHistoryUpdateOne) ClearControlSuggestions() *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.ClearControlSuggestions()
+	return aphuo
+}
+
+// SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
+func (aphuo *ActionPlanHistoryUpdateOne) SetDismissedControlSuggestions(s []string) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.SetDismissedControlSuggestions(s)
+	return aphuo
+}
+
+// AppendDismissedControlSuggestions appends s to the "dismissed_control_suggestions" field.
+func (aphuo *ActionPlanHistoryUpdateOne) AppendDismissedControlSuggestions(s []string) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.AppendDismissedControlSuggestions(s)
+	return aphuo
+}
+
+// ClearDismissedControlSuggestions clears the value of the "dismissed_control_suggestions" field.
+func (aphuo *ActionPlanHistoryUpdateOne) ClearDismissedControlSuggestions() *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.ClearDismissedControlSuggestions()
+	return aphuo
+}
+
+// SetImprovementSuggestions sets the "improvement_suggestions" field.
+func (aphuo *ActionPlanHistoryUpdateOne) SetImprovementSuggestions(s []string) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.SetImprovementSuggestions(s)
+	return aphuo
+}
+
+// AppendImprovementSuggestions appends s to the "improvement_suggestions" field.
+func (aphuo *ActionPlanHistoryUpdateOne) AppendImprovementSuggestions(s []string) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.AppendImprovementSuggestions(s)
+	return aphuo
+}
+
+// ClearImprovementSuggestions clears the value of the "improvement_suggestions" field.
+func (aphuo *ActionPlanHistoryUpdateOne) ClearImprovementSuggestions() *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.ClearImprovementSuggestions()
+	return aphuo
+}
+
+// SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
+func (aphuo *ActionPlanHistoryUpdateOne) SetDismissedImprovementSuggestions(s []string) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.SetDismissedImprovementSuggestions(s)
+	return aphuo
+}
+
+// AppendDismissedImprovementSuggestions appends s to the "dismissed_improvement_suggestions" field.
+func (aphuo *ActionPlanHistoryUpdateOne) AppendDismissedImprovementSuggestions(s []string) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.AppendDismissedImprovementSuggestions(s)
+	return aphuo
+}
+
+// ClearDismissedImprovementSuggestions clears the value of the "dismissed_improvement_suggestions" field.
+func (aphuo *ActionPlanHistoryUpdateOne) ClearDismissedImprovementSuggestions() *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.ClearDismissedImprovementSuggestions()
+	return aphuo
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (aphuo *ActionPlanHistoryUpdateOne) SetOwnerID(s string) *ActionPlanHistoryUpdateOne {
 	aphuo.mutation.SetOwnerID(s)
@@ -1250,6 +1532,72 @@ func (aphuo *ActionPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Ac
 	}
 	if aphuo.mutation.SummaryCleared() {
 		_spec.ClearField(actionplanhistory.FieldSummary, field.TypeString)
+	}
+	if value, ok := aphuo.mutation.TagSuggestions(); ok {
+		_spec.SetField(actionplanhistory.FieldTagSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := aphuo.mutation.AppendedTagSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplanhistory.FieldTagSuggestions, value)
+		})
+	}
+	if aphuo.mutation.TagSuggestionsCleared() {
+		_spec.ClearField(actionplanhistory.FieldTagSuggestions, field.TypeJSON)
+	}
+	if value, ok := aphuo.mutation.DismissedTagSuggestions(); ok {
+		_spec.SetField(actionplanhistory.FieldDismissedTagSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := aphuo.mutation.AppendedDismissedTagSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplanhistory.FieldDismissedTagSuggestions, value)
+		})
+	}
+	if aphuo.mutation.DismissedTagSuggestionsCleared() {
+		_spec.ClearField(actionplanhistory.FieldDismissedTagSuggestions, field.TypeJSON)
+	}
+	if value, ok := aphuo.mutation.ControlSuggestions(); ok {
+		_spec.SetField(actionplanhistory.FieldControlSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := aphuo.mutation.AppendedControlSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplanhistory.FieldControlSuggestions, value)
+		})
+	}
+	if aphuo.mutation.ControlSuggestionsCleared() {
+		_spec.ClearField(actionplanhistory.FieldControlSuggestions, field.TypeJSON)
+	}
+	if value, ok := aphuo.mutation.DismissedControlSuggestions(); ok {
+		_spec.SetField(actionplanhistory.FieldDismissedControlSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := aphuo.mutation.AppendedDismissedControlSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplanhistory.FieldDismissedControlSuggestions, value)
+		})
+	}
+	if aphuo.mutation.DismissedControlSuggestionsCleared() {
+		_spec.ClearField(actionplanhistory.FieldDismissedControlSuggestions, field.TypeJSON)
+	}
+	if value, ok := aphuo.mutation.ImprovementSuggestions(); ok {
+		_spec.SetField(actionplanhistory.FieldImprovementSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := aphuo.mutation.AppendedImprovementSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplanhistory.FieldImprovementSuggestions, value)
+		})
+	}
+	if aphuo.mutation.ImprovementSuggestionsCleared() {
+		_spec.ClearField(actionplanhistory.FieldImprovementSuggestions, field.TypeJSON)
+	}
+	if value, ok := aphuo.mutation.DismissedImprovementSuggestions(); ok {
+		_spec.SetField(actionplanhistory.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
+	}
+	if value, ok := aphuo.mutation.AppendedDismissedImprovementSuggestions(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplanhistory.FieldDismissedImprovementSuggestions, value)
+		})
+	}
+	if aphuo.mutation.DismissedImprovementSuggestionsCleared() {
+		_spec.ClearField(actionplanhistory.FieldDismissedImprovementSuggestions, field.TypeJSON)
 	}
 	if value, ok := aphuo.mutation.OwnerID(); ok {
 		_spec.SetField(actionplanhistory.FieldOwnerID, field.TypeString, value)

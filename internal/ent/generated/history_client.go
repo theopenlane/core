@@ -11,6 +11,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*ActionPlanMutation]() {
 		c.ActionPlan.Use(hook)
 	}
+	for _, hook := range history.Hooks[*AssetMutation]() {
+		c.Asset.Use(hook)
+	}
 	for _, hook := range history.Hooks[*ContactMutation]() {
 		c.Contact.Use(hook)
 	}
@@ -100,6 +103,9 @@ func (c *Client) WithHistory() {
 	}
 	for _, hook := range history.Hooks[*RiskMutation]() {
 		c.Risk.Use(hook)
+	}
+	for _, hook := range history.Hooks[*ScanMutation]() {
+		c.Scan.Use(hook)
 	}
 	for _, hook := range history.Hooks[*ScheduledJobMutation]() {
 		c.ScheduledJob.Use(hook)
