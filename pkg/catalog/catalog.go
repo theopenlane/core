@@ -47,7 +47,7 @@ type Feature struct {
 	Description string  `json:"description" yaml:"description,omitempty" jsonschema:"description=Optional description of the feature,example=Provides advanced analytics and reporting capabilities"`
 	Billing     Billing `json:"billing" yaml:"billing" jsonschema:"description=Billing information for the feature"`
 	Audience    string  `json:"audience" yaml:"audience" jsonschema:"enum=public,enum=private,enum=beta,description=Intended audience for the feature,example=public"`
-	Usage       *Usage  `json:"usage" yaml:"usage" jsonschema:"description=Usage limits granted by the feature"`
+	Usage       *Usage  `json:"usage,omitempty" yaml:"usage" jsonschema:"description=Usage limits granted by the feature"`
 }
 
 // Usage defines usage limits granted by a feature.
@@ -211,6 +211,7 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 	if err != nil {
 		return err
 	}
+
 	prodMap := map[string]*stripe.Product{}
 	for _, p := range products {
 		prodMap[p.Name] = p
@@ -224,6 +225,7 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 			if err != nil {
 				return f, ErrFailedToCreateProduct
 			}
+
 			prodMap[f.DisplayName] = prod
 
 			lookup := makeLookupKey(f.DisplayName)
