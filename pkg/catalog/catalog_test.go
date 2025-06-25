@@ -20,24 +20,27 @@ func writeTempCatalog(t *testing.T, data string) string {
 }
 
 func TestLoadCatalog(t *testing.T) {
-	yaml := `modules:
+	yaml := `version: v0.0.1
+sha: ae5bcf31543244e0bc0b0a14a4374ae2f199eebe805de0ad58f20d36b5d5649b
+modules:
   mod1:
     display_name: M1
-	description: This is a module
+    description: This is a module
     billing:
       prices:
-      - interval: month
-        unit_amount: 100
-		nickname: mod1_monthly
-		lookup_key: mod1_monthly
+        - interval: month
+          unit_amount: 100
+          nickname: mod1_monthly
+          lookup_key: mod1_monthly
     audience: public
 addons:
   add1:
     display_name: A1
+    description: Addon description
     billing:
       prices:
-      - interval: month
-        unit_amount: 50
+        - interval: month
+          unit_amount: 50
     audience: private
 `
 	path := writeTempCatalog(t, yaml)
