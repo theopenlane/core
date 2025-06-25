@@ -74,13 +74,3 @@ func DenyMutationIfNotAuthenticated() privacy.MutationRule {
 		return nil
 	})
 }
-
-// CheckFeatureAccess ensures the requesting organization has the given feature enabled.
-func CheckFeatureAccess(feature string) privacy.QueryMutationRule {
-	return rule.AllowIfHasFeature(feature)
-}
-
-// CheckAnyFeatureAccess ensures the requesting organization has at least one of the provided features enabled.
-func CheckAnyFeatureAccess(features ...string) privacy.QueryMutationRule {
-	return rule.AllowIfHasAnyFeature(features...)
-}
