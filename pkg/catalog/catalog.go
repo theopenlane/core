@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/goccy/go-yaml"
+	"github.com/rs/zerolog/log"
 
 	"github.com/stripe/stripe-go/v82"
 	"github.com/xeipuuv/gojsonschema"
@@ -56,17 +57,17 @@ type Usage struct {
 	RecordCount       int64 `json:"record_count,omitempty" yaml:"record_count,omitempty" jsonschema:"description=Maximum number of records allowed,example=1000"`
 }
 
-// FeatureSet is a mapping of feature identifiers to metadata.
+// FeatureSet is a mapping of feature identifiers to metadata
 type FeatureSet map[string]Feature
 
-// Catalog contains all modules and addons offered by Openlane.
+// Catalog contains all modules and addons offered by Openlane
 type Catalog struct {
+	Version string     `json:"version" yaml:"version" jsonschema:"description=Catalog version,example=1.0.0"`
 	Modules FeatureSet `json:"modules" yaml:"modules" jsonschema:"description=Set of modules available in the catalog"`
 	Addons  FeatureSet `json:"addons" yaml:"addons" jsonschema:"description=Set of addons available in the catalog"`
 }
 
-// Visible returns modules and addons filtered by audience.
-// Providing "" returns everything.
+// Visible returns modules and addons filtered by audience
 func (c *Catalog) Visible(audience string) *Catalog {
 	if c == nil {
 		return &Catalog{}
@@ -114,12 +115,14 @@ func LoadCatalog(path string) (*Catalog, error) {
 
 	doc := gojsonschema.NewBytesLoader(jsonData)
 
+	// this effectively "lints" the catalog to ensure it conforms against the schema
 	res, err := gojsonschema.Validate(schema, doc)
 	if err != nil {
 		return nil, err
 	}
 
 	if !res.Valid() {
+		log.Debug().Msg("Catalog validation failed - ensure you have generated the latest schema file if you have modified the catalog structs")
 		return nil, ErrCatalogValidationFailed
 	}
 
@@ -307,53 +310,8 @@ func (c *Catalog) SaveCatalog(path string) error {
 		return err
 	}
 
-	// Unmarshal original YAML into a map for field presence tracking
-	var origMap map[string]any
-	if len(origData) > 0 {
-		_ = yaml.Unmarshal(origData, &origMap)
-	}
-
-	// Marshal the current catalog to a map
-	newData, err := yaml.Marshal(c)
-	if err != nil {
-		return err
-	}
-	var newMap map[string]any
-	_ = yaml.Unmarshal(newData, &newMap)
-
-	// Helper to recursively remove fields that were not present in the original
-	var prune func(newNode, origNode any)
-	prune = func(newNode, origNode any) {
-		switch n := newNode.(type) {
-		case map[string]any:
-			orig, _ := origNode.(map[string]any)
-			for k := range n {
-				if orig == nil || orig[k] == nil {
-					// Remove keys not present in original
-					delete(n, k)
-				} else {
-					prune(n[k], orig[k])
-				}
-			}
-		case []any:
-			origArr, _ := origNode.([]any)
-			for i := range n {
-				var origElem any
-				if origArr != nil && i < len(origArr) {
-					origElem = origArr[i]
-				}
-				prune(n[i], origElem)
-			}
-		}
-	}
-
-	// Only prune if original exists
-	if len(origMap) > 0 {
-		prune(newMap, origMap)
-	}
-
 	// Marshal pruned map back to YAML
-	finalData, err := yaml.Marshal(newMap)
+	finalData, err := yaml.Marshal(origData)
 	if err != nil {
 		return err
 	}

@@ -21,6 +21,13 @@
     },
     "Catalog": {
       "properties": {
+        "version": {
+          "type": "string",
+          "description": "Catalog version",
+          "examples": [
+            "1.0.0"
+          ]
+        },
         "modules": {
           "$ref": "#/$defs/FeatureSet",
           "description": "Set of modules available in the catalog"
@@ -33,6 +40,7 @@
       "additionalProperties": false,
       "type": "object",
       "required": [
+        "version",
         "modules",
         "addons"
       ]
