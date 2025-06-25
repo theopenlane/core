@@ -294,16 +294,69 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 	return ensure(c.Addons)
 }
 
-// SaveCatalog writes the catalog to disk in YAML format
+// SaveCatalog writes the catalog to disk in YAML format,
+// preserving fields that were omitted in the original file.
 func (c *Catalog) SaveCatalog(path string) error {
 	if c == nil {
 		return nil
 	}
 
-	data, err := yaml.Marshal(c)
+	// Read the original YAML to preserve omitted fields
+	origData, err := os.ReadFile(path)
+	if err != nil && !os.IsNotExist(err) {
+		return err
+	}
+
+	// Unmarshal original YAML into a map for field presence tracking
+	var origMap map[string]any
+	if len(origData) > 0 {
+		_ = yaml.Unmarshal(origData, &origMap)
+	}
+
+	// Marshal the current catalog to a map
+	newData, err := yaml.Marshal(c)
+	if err != nil {
+		return err
+	}
+	var newMap map[string]any
+	_ = yaml.Unmarshal(newData, &newMap)
+
+	// Helper to recursively remove fields that were not present in the original
+	var prune func(newNode, origNode any)
+	prune = func(newNode, origNode any) {
+		switch n := newNode.(type) {
+		case map[string]any:
+			orig, _ := origNode.(map[string]any)
+			for k := range n {
+				if orig == nil || orig[k] == nil {
+					// Remove keys not present in original
+					delete(n, k)
+				} else {
+					prune(n[k], orig[k])
+				}
+			}
+		case []any:
+			origArr, _ := origNode.([]any)
+			for i := range n {
+				var origElem any
+				if origArr != nil && i < len(origArr) {
+					origElem = origArr[i]
+				}
+				prune(n[i], origElem)
+			}
+		}
+	}
+
+	// Only prune if original exists
+	if len(origMap) > 0 {
+		prune(newMap, origMap)
+	}
+
+	// Marshal pruned map back to YAML
+	finalData, err := yaml.Marshal(newMap)
 	if err != nil {
 		return err
 	}
 
-	return os.WriteFile(path, data, 0o644) // nolint:mnd
+	return os.WriteFile(path, finalData, 0o644) // nolint:mnd
 }
