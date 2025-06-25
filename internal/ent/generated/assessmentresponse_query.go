@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
@@ -29,6 +30,7 @@ type AssessmentResponseQuery struct {
 	predicates     []predicate.AssessmentResponse
 	withAssessment *AssessmentQuery
 	withUser       *UserQuery
+	withDocument   *DocumentDataQuery
 	loadTotal      []func(context.Context, []*AssessmentResponse) error
 	modifiers      []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
@@ -110,6 +112,31 @@ func (arq *AssessmentResponseQuery) QueryUser() *UserQuery {
 		)
 		schemaConfig := arq.schemaConfig
 		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromU = sqlgraph.SetNeighbors(arq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDocument chains the current query on the "document" edge.
+func (arq *AssessmentResponseQuery) QueryDocument() *DocumentDataQuery {
+	query := (&DocumentDataClient{config: arq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := arq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := arq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessmentresponse.Table, assessmentresponse.FieldID, selector),
+			sqlgraph.To(documentdata.Table, documentdata.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, assessmentresponse.DocumentTable, assessmentresponse.DocumentColumn),
+		)
+		schemaConfig := arq.schemaConfig
+		step.To.Schema = schemaConfig.DocumentData
 		step.Edge.Schema = schemaConfig.AssessmentResponse
 		fromU = sqlgraph.SetNeighbors(arq.driver.Dialect(), step)
 		return fromU, nil
@@ -311,6 +338,7 @@ func (arq *AssessmentResponseQuery) Clone() *AssessmentResponseQuery {
 		predicates:     append([]predicate.AssessmentResponse{}, arq.predicates...),
 		withAssessment: arq.withAssessment.Clone(),
 		withUser:       arq.withUser.Clone(),
+		withDocument:   arq.withDocument.Clone(),
 		// clone intermediate query.
 		sql:       arq.sql.Clone(),
 		path:      arq.path,
@@ -337,6 +365,17 @@ func (arq *AssessmentResponseQuery) WithUser(opts ...func(*UserQuery)) *Assessme
 		opt(query)
 	}
 	arq.withUser = query
+	return arq
+}
+
+// WithDocument tells the query-builder to eager-load the nodes that are connected to
+// the "document" edge. The optional arguments are used to configure the query builder of the edge.
+func (arq *AssessmentResponseQuery) WithDocument(opts ...func(*DocumentDataQuery)) *AssessmentResponseQuery {
+	query := (&DocumentDataClient{config: arq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	arq.withDocument = query
 	return arq
 }
 
@@ -424,9 +463,10 @@ func (arq *AssessmentResponseQuery) sqlAll(ctx context.Context, hooks ...queryHo
 	var (
 		nodes       = []*AssessmentResponse{}
 		_spec       = arq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [3]bool{
 			arq.withAssessment != nil,
 			arq.withUser != nil,
+			arq.withDocument != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -461,6 +501,12 @@ func (arq *AssessmentResponseQuery) sqlAll(ctx context.Context, hooks ...queryHo
 	if query := arq.withUser; query != nil {
 		if err := arq.loadUser(ctx, query, nodes, nil,
 			func(n *AssessmentResponse, e *User) { n.Edges.User = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := arq.withDocument; query != nil {
+		if err := arq.loadDocument(ctx, query, nodes, nil,
+			func(n *AssessmentResponse, e *DocumentData) { n.Edges.Document = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -530,6 +576,35 @@ func (arq *AssessmentResponseQuery) loadUser(ctx context.Context, query *UserQue
 	}
 	return nil
 }
+func (arq *AssessmentResponseQuery) loadDocument(ctx context.Context, query *DocumentDataQuery, nodes []*AssessmentResponse, init func(*AssessmentResponse), assign func(*AssessmentResponse, *DocumentData)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*AssessmentResponse)
+	for i := range nodes {
+		fk := nodes[i].ResponseDataID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(documentdata.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "response_data_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 
 func (arq *AssessmentResponseQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := arq.querySpec()
@@ -566,6 +641,9 @@ func (arq *AssessmentResponseQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if arq.withUser != nil {
 			_spec.Node.AddColumnOnce(assessmentresponse.FieldUserID)
+		}
+		if arq.withDocument != nil {
+			_spec.Node.AddColumnOnce(assessmentresponse.FieldResponseDataID)
 		}
 	}
 	if ps := arq.predicates; len(ps) > 0 {

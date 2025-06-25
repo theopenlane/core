@@ -44,8 +44,10 @@ const (
 	FieldName = "name"
 	// FieldAssessmentType holds the string denoting the assessment_type field in the database.
 	FieldAssessmentType = "assessment_type"
-	// FieldQuestionnaireID holds the string denoting the questionnaire_id field in the database.
-	FieldQuestionnaireID = "questionnaire_id"
+	// FieldTemplateID holds the string denoting the template_id field in the database.
+	FieldTemplateID = "template_id"
+	// FieldAssessmentOwnerID holds the string denoting the assessment_owner_id field in the database.
+	FieldAssessmentOwnerID = "assessment_owner_id"
 	// Table holds the table name of the assessmenthistory in the database.
 	Table = "assessment_history"
 )
@@ -66,7 +68,8 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldName,
 	FieldAssessmentType,
-	FieldQuestionnaireID,
+	FieldTemplateID,
+	FieldAssessmentOwnerID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -115,7 +118,7 @@ const DefaultAssessmentType enums.AssessmentType = "INTERNAL"
 // AssessmentTypeValidator is a validator for the "assessment_type" field enum values. It is called by the builders before save.
 func AssessmentTypeValidator(at enums.AssessmentType) error {
 	switch at.String() {
-	case "INTERNAL":
+	case "INTERNAL", "EXTERNAL":
 		return nil
 	default:
 		return fmt.Errorf("assessmenthistory: invalid enum value for assessment_type field: %q", at)
@@ -190,9 +193,14 @@ func ByAssessmentType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAssessmentType, opts...).ToFunc()
 }
 
-// ByQuestionnaireID orders the results by the questionnaire_id field.
-func ByQuestionnaireID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldQuestionnaireID, opts...).ToFunc()
+// ByTemplateID orders the results by the template_id field.
+func ByTemplateID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTemplateID, opts...).ToFunc()
+}
+
+// ByAssessmentOwnerID orders the results by the assessment_owner_id field.
+func ByAssessmentOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssessmentOwnerID, opts...).ToFunc()
 }
 
 var (

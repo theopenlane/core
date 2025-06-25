@@ -136,6 +136,11 @@ func DueDate(v time.Time) predicate.AssessmentResponseHistory {
 	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldDueDate, v))
 }
 
+// ResponseDataID applies equality check predicate on the "response_data_id" field. It's identical to ResponseDataIDEQ.
+func ResponseDataID(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldResponseDataID, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.AssessmentResponseHistory {
 	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -906,16 +911,6 @@ func StartedAtLTE(v time.Time) predicate.AssessmentResponseHistory {
 	return predicate.AssessmentResponseHistory(sql.FieldLTE(FieldStartedAt, v))
 }
 
-// StartedAtIsNil applies the IsNil predicate on the "started_at" field.
-func StartedAtIsNil() predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldIsNull(FieldStartedAt))
-}
-
-// StartedAtNotNil applies the NotNil predicate on the "started_at" field.
-func StartedAtNotNil() predicate.AssessmentResponseHistory {
-	return predicate.AssessmentResponseHistory(sql.FieldNotNull(FieldStartedAt))
-}
-
 // CompletedAtEQ applies the EQ predicate on the "completed_at" field.
 func CompletedAtEQ(v time.Time) predicate.AssessmentResponseHistory {
 	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldCompletedAt, v))
@@ -1014,6 +1009,81 @@ func DueDateIsNil() predicate.AssessmentResponseHistory {
 // DueDateNotNil applies the NotNil predicate on the "due_date" field.
 func DueDateNotNil() predicate.AssessmentResponseHistory {
 	return predicate.AssessmentResponseHistory(sql.FieldNotNull(FieldDueDate))
+}
+
+// ResponseDataIDEQ applies the EQ predicate on the "response_data_id" field.
+func ResponseDataIDEQ(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEQ(FieldResponseDataID, v))
+}
+
+// ResponseDataIDNEQ applies the NEQ predicate on the "response_data_id" field.
+func ResponseDataIDNEQ(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNEQ(FieldResponseDataID, v))
+}
+
+// ResponseDataIDIn applies the In predicate on the "response_data_id" field.
+func ResponseDataIDIn(vs ...string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldIn(FieldResponseDataID, vs...))
+}
+
+// ResponseDataIDNotIn applies the NotIn predicate on the "response_data_id" field.
+func ResponseDataIDNotIn(vs ...string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNotIn(FieldResponseDataID, vs...))
+}
+
+// ResponseDataIDGT applies the GT predicate on the "response_data_id" field.
+func ResponseDataIDGT(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldGT(FieldResponseDataID, v))
+}
+
+// ResponseDataIDGTE applies the GTE predicate on the "response_data_id" field.
+func ResponseDataIDGTE(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldGTE(FieldResponseDataID, v))
+}
+
+// ResponseDataIDLT applies the LT predicate on the "response_data_id" field.
+func ResponseDataIDLT(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldLT(FieldResponseDataID, v))
+}
+
+// ResponseDataIDLTE applies the LTE predicate on the "response_data_id" field.
+func ResponseDataIDLTE(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldLTE(FieldResponseDataID, v))
+}
+
+// ResponseDataIDContains applies the Contains predicate on the "response_data_id" field.
+func ResponseDataIDContains(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldContains(FieldResponseDataID, v))
+}
+
+// ResponseDataIDHasPrefix applies the HasPrefix predicate on the "response_data_id" field.
+func ResponseDataIDHasPrefix(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldHasPrefix(FieldResponseDataID, v))
+}
+
+// ResponseDataIDHasSuffix applies the HasSuffix predicate on the "response_data_id" field.
+func ResponseDataIDHasSuffix(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldHasSuffix(FieldResponseDataID, v))
+}
+
+// ResponseDataIDIsNil applies the IsNil predicate on the "response_data_id" field.
+func ResponseDataIDIsNil() predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldIsNull(FieldResponseDataID))
+}
+
+// ResponseDataIDNotNil applies the NotNil predicate on the "response_data_id" field.
+func ResponseDataIDNotNil() predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldNotNull(FieldResponseDataID))
+}
+
+// ResponseDataIDEqualFold applies the EqualFold predicate on the "response_data_id" field.
+func ResponseDataIDEqualFold(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldEqualFold(FieldResponseDataID, v))
+}
+
+// ResponseDataIDContainsFold applies the ContainsFold predicate on the "response_data_id" field.
+func ResponseDataIDContainsFold(v string) predicate.AssessmentResponseHistory {
+	return predicate.AssessmentResponseHistory(sql.FieldContainsFold(FieldResponseDataID, v))
 }
 
 // And groups predicates with the AND operator between them.

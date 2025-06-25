@@ -12,7 +12,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -148,16 +150,22 @@ func (ac *AssessmentCreate) SetNillableAssessmentType(et *enums.AssessmentType) 
 	return ac
 }
 
-// SetQuestionnaireID sets the "questionnaire_id" field.
-func (ac *AssessmentCreate) SetQuestionnaireID(s string) *AssessmentCreate {
-	ac.mutation.SetQuestionnaireID(s)
+// SetTemplateID sets the "template_id" field.
+func (ac *AssessmentCreate) SetTemplateID(s string) *AssessmentCreate {
+	ac.mutation.SetTemplateID(s)
 	return ac
 }
 
-// SetNillableQuestionnaireID sets the "questionnaire_id" field if the given value is not nil.
-func (ac *AssessmentCreate) SetNillableQuestionnaireID(s *string) *AssessmentCreate {
+// SetAssessmentOwnerID sets the "assessment_owner_id" field.
+func (ac *AssessmentCreate) SetAssessmentOwnerID(s string) *AssessmentCreate {
+	ac.mutation.SetAssessmentOwnerID(s)
+	return ac
+}
+
+// SetNillableAssessmentOwnerID sets the "assessment_owner_id" field if the given value is not nil.
+func (ac *AssessmentCreate) SetNillableAssessmentOwnerID(s *string) *AssessmentCreate {
 	if s != nil {
-		ac.SetQuestionnaireID(*s)
+		ac.SetAssessmentOwnerID(*s)
 	}
 	return ac
 }
@@ -179,6 +187,56 @@ func (ac *AssessmentCreate) SetNillableID(s *string) *AssessmentCreate {
 // SetOwner sets the "owner" edge to the Organization entity.
 func (ac *AssessmentCreate) SetOwner(o *Organization) *AssessmentCreate {
 	return ac.SetOwnerID(o.ID)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (ac *AssessmentCreate) AddBlockedGroupIDs(ids ...string) *AssessmentCreate {
+	ac.mutation.AddBlockedGroupIDs(ids...)
+	return ac
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (ac *AssessmentCreate) AddBlockedGroups(g ...*Group) *AssessmentCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ac.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (ac *AssessmentCreate) AddEditorIDs(ids ...string) *AssessmentCreate {
+	ac.mutation.AddEditorIDs(ids...)
+	return ac
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (ac *AssessmentCreate) AddEditors(g ...*Group) *AssessmentCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ac.AddEditorIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (ac *AssessmentCreate) AddViewerIDs(ids ...string) *AssessmentCreate {
+	ac.mutation.AddViewerIDs(ids...)
+	return ac
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (ac *AssessmentCreate) AddViewers(g ...*Group) *AssessmentCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ac.AddViewerIDs(ids...)
+}
+
+// SetTemplate sets the "template" edge to the Template entity.
+func (ac *AssessmentCreate) SetTemplate(t *Template) *AssessmentCreate {
+	return ac.SetTemplateID(t.ID)
 }
 
 // AddUserIDs adds the "users" edge to the User entity by IDs.
@@ -209,6 +267,11 @@ func (ac *AssessmentCreate) AddAssessmentResponses(a ...*AssessmentResponse) *As
 		ids[i] = a[i].ID
 	}
 	return ac.AddAssessmentResponseIDs(ids...)
+}
+
+// SetAssessmentOwner sets the "assessment_owner" edge to the Group entity.
+func (ac *AssessmentCreate) SetAssessmentOwner(g *Group) *AssessmentCreate {
+	return ac.SetAssessmentOwnerID(g.ID)
 }
 
 // Mutation returns the AssessmentMutation object of the builder.
@@ -303,6 +366,12 @@ func (ac *AssessmentCreate) check() error {
 			return &ValidationError{Name: "assessment_type", err: fmt.Errorf(`generated: validator failed for field "Assessment.assessment_type": %w`, err)}
 		}
 	}
+	if _, ok := ac.mutation.TemplateID(); !ok {
+		return &ValidationError{Name: "template_id", err: errors.New(`generated: missing required field "Assessment.template_id"`)}
+	}
+	if len(ac.mutation.TemplateIDs()) == 0 {
+		return &ValidationError{Name: "template", err: errors.New(`generated: missing required edge "Assessment.template"`)}
+	}
 	return nil
 }
 
@@ -375,10 +444,6 @@ func (ac *AssessmentCreate) createSpec() (*Assessment, *sqlgraph.CreateSpec) {
 		_spec.SetField(assessment.FieldAssessmentType, field.TypeEnum, value)
 		_node.AssessmentType = value
 	}
-	if value, ok := ac.mutation.QuestionnaireID(); ok {
-		_spec.SetField(assessment.FieldQuestionnaireID, field.TypeString, value)
-		_node.QuestionnaireID = value
-	}
 	if nodes := ac.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -395,6 +460,75 @@ func (ac *AssessmentCreate) createSpec() (*Assessment, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   assessment.BlockedGroupsTable,
+			Columns: assessment.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ac.schemaConfig.AssessmentBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   assessment.EditorsTable,
+			Columns: assessment.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ac.schemaConfig.AssessmentEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   assessment.ViewersTable,
+			Columns: assessment.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ac.schemaConfig.AssessmentViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.TemplateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   assessment.TemplateTable,
+			Columns: []string{assessment.TemplateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ac.schemaConfig.Assessment
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.TemplateID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := ac.mutation.UsersIDs(); len(nodes) > 0 {
@@ -429,6 +563,24 @@ func (ac *AssessmentCreate) createSpec() (*Assessment, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.AssessmentOwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   assessment.AssessmentOwnerTable,
+			Columns: []string{assessment.AssessmentOwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ac.schemaConfig.Assessment
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.AssessmentOwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

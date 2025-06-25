@@ -53,8 +53,10 @@ type AssessmentResponseHistory struct {
 	// when the user completed the assessment
 	CompletedAt time.Time `json:"completed_at,omitempty"`
 	// when the assessment is due
-	DueDate      time.Time `json:"due_date,omitempty"`
-	selectValues sql.SelectValues
+	DueDate time.Time `json:"due_date,omitempty"`
+	// the document containing the user's response data
+	ResponseDataID string `json:"response_data_id,omitempty"`
+	selectValues   sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -66,7 +68,7 @@ func (*AssessmentResponseHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case assessmentresponsehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case assessmentresponsehistory.FieldID, assessmentresponsehistory.FieldRef, assessmentresponsehistory.FieldCreatedBy, assessmentresponsehistory.FieldUpdatedBy, assessmentresponsehistory.FieldDeletedBy, assessmentresponsehistory.FieldAssessmentID, assessmentresponsehistory.FieldUserID, assessmentresponsehistory.FieldStatus:
+		case assessmentresponsehistory.FieldID, assessmentresponsehistory.FieldRef, assessmentresponsehistory.FieldCreatedBy, assessmentresponsehistory.FieldUpdatedBy, assessmentresponsehistory.FieldDeletedBy, assessmentresponsehistory.FieldAssessmentID, assessmentresponsehistory.FieldUserID, assessmentresponsehistory.FieldStatus, assessmentresponsehistory.FieldResponseDataID:
 			values[i] = new(sql.NullString)
 		case assessmentresponsehistory.FieldHistoryTime, assessmentresponsehistory.FieldCreatedAt, assessmentresponsehistory.FieldUpdatedAt, assessmentresponsehistory.FieldDeletedAt, assessmentresponsehistory.FieldAssignedAt, assessmentresponsehistory.FieldStartedAt, assessmentresponsehistory.FieldCompletedAt, assessmentresponsehistory.FieldDueDate:
 			values[i] = new(sql.NullTime)
@@ -195,6 +197,12 @@ func (arh *AssessmentResponseHistory) assignValues(columns []string, values []an
 			} else if value.Valid {
 				arh.DueDate = value.Time
 			}
+		case assessmentresponsehistory.FieldResponseDataID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field response_data_id", values[i])
+			} else if value.Valid {
+				arh.ResponseDataID = value.String
+			}
 		default:
 			arh.selectValues.Set(columns[i], values[i])
 		}
@@ -281,6 +289,9 @@ func (arh *AssessmentResponseHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("due_date=")
 	builder.WriteString(arh.DueDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("response_data_id=")
+	builder.WriteString(arh.ResponseDataID)
 	builder.WriteByte(')')
 	return builder.String()
 }

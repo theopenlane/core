@@ -180,16 +180,22 @@ func (ahc *AssessmentHistoryCreate) SetNillableAssessmentType(et *enums.Assessme
 	return ahc
 }
 
-// SetQuestionnaireID sets the "questionnaire_id" field.
-func (ahc *AssessmentHistoryCreate) SetQuestionnaireID(s string) *AssessmentHistoryCreate {
-	ahc.mutation.SetQuestionnaireID(s)
+// SetTemplateID sets the "template_id" field.
+func (ahc *AssessmentHistoryCreate) SetTemplateID(s string) *AssessmentHistoryCreate {
+	ahc.mutation.SetTemplateID(s)
 	return ahc
 }
 
-// SetNillableQuestionnaireID sets the "questionnaire_id" field if the given value is not nil.
-func (ahc *AssessmentHistoryCreate) SetNillableQuestionnaireID(s *string) *AssessmentHistoryCreate {
+// SetAssessmentOwnerID sets the "assessment_owner_id" field.
+func (ahc *AssessmentHistoryCreate) SetAssessmentOwnerID(s string) *AssessmentHistoryCreate {
+	ahc.mutation.SetAssessmentOwnerID(s)
+	return ahc
+}
+
+// SetNillableAssessmentOwnerID sets the "assessment_owner_id" field if the given value is not nil.
+func (ahc *AssessmentHistoryCreate) SetNillableAssessmentOwnerID(s *string) *AssessmentHistoryCreate {
 	if s != nil {
-		ahc.SetQuestionnaireID(*s)
+		ahc.SetAssessmentOwnerID(*s)
 	}
 	return ahc
 }
@@ -293,6 +299,9 @@ func (ahc *AssessmentHistoryCreate) check() error {
 			return &ValidationError{Name: "assessment_type", err: fmt.Errorf(`generated: validator failed for field "AssessmentHistory.assessment_type": %w`, err)}
 		}
 	}
+	if _, ok := ahc.mutation.TemplateID(); !ok {
+		return &ValidationError{Name: "template_id", err: errors.New(`generated: missing required field "AssessmentHistory.template_id"`)}
+	}
 	return nil
 }
 
@@ -381,9 +390,13 @@ func (ahc *AssessmentHistoryCreate) createSpec() (*AssessmentHistory, *sqlgraph.
 		_spec.SetField(assessmenthistory.FieldAssessmentType, field.TypeEnum, value)
 		_node.AssessmentType = value
 	}
-	if value, ok := ahc.mutation.QuestionnaireID(); ok {
-		_spec.SetField(assessmenthistory.FieldQuestionnaireID, field.TypeString, value)
-		_node.QuestionnaireID = value
+	if value, ok := ahc.mutation.TemplateID(); ok {
+		_spec.SetField(assessmenthistory.FieldTemplateID, field.TypeString, value)
+		_node.TemplateID = value
+	}
+	if value, ok := ahc.mutation.AssessmentOwnerID(); ok {
+		_spec.SetField(assessmenthistory.FieldAssessmentOwnerID, field.TypeString, value)
+		_node.AssessmentOwnerID = value
 	}
 	return _node, _spec
 }

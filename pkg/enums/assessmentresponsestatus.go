@@ -3,55 +3,69 @@ package enums
 import (
 	"fmt"
 	"io"
-	"strconv"
+	"strings"
 )
 
+// AssessmentResponseStatus is a custom type representing the various states of AssessmentResponseStatus.
 type AssessmentResponseStatus string
 
-const (
-	// AssessmentResponseStatusNotStarted indicates the assessment has been assigned but not started
+var (
+	// AssessmentResponseStatusNotStarted indicates the not started.
 	AssessmentResponseStatusNotStarted AssessmentResponseStatus = "NOT_STARTED"
-	// AssessmentResponseStatusInProgress indicates the assessment has been started but not completed
+	// AssessmentResponseStatusInProgress indicates the in progress.
 	AssessmentResponseStatusInProgress AssessmentResponseStatus = "IN_PROGRESS"
-	// AssessmentResponseStatusCompleted indicates the assessment has been completed
+	// AssessmentResponseStatusCompleted indicates the completed.
 	AssessmentResponseStatusCompleted AssessmentResponseStatus = "COMPLETED"
-	// AssessmentResponseStatusOverdue indicates the assessment is past its due date
+	// AssessmentResponseStatusOverdue indicates the overdue.
 	AssessmentResponseStatusOverdue AssessmentResponseStatus = "OVERDUE"
-	// AssessmentResponseStatusReviewRequired indicates the assessment needs review
-	AssessmentResponseStatusReviewRequired AssessmentResponseStatus = "REVIEW_REQUIRED"
+	// AssessmentResponseStatusInvalid is used when an unknown or unsupported value is provided.
+	AssessmentResponseStatusInvalid AssessmentResponseStatus = "ASSESSMENTRESPONSESTATUS_INVALID"
 )
 
-// String returns the string representation of AssessmentResponseStatus
-func (ars AssessmentResponseStatus) String() string {
-	return string(ars)
-}
-
-// Values returns all possible values for AssessmentResponseStatus enum
-func (AssessmentResponseStatus) Values() (kinds []string) {
-	for _, s := range []AssessmentResponseStatus{
-		AssessmentResponseStatusNotStarted,
-		AssessmentResponseStatusInProgress,
-		AssessmentResponseStatusCompleted,
-		AssessmentResponseStatusOverdue,
-		AssessmentResponseStatusReviewRequired,
-	} {
-		kinds = append(kinds, string(s))
+// Values returns a slice of strings representing all valid AssessmentResponseStatus values.
+func (AssessmentResponseStatus) Values() []string {
+	return []string{
+		string(AssessmentResponseStatusNotStarted),
+		string(AssessmentResponseStatusInProgress),
+		string(AssessmentResponseStatusCompleted),
+		string(AssessmentResponseStatusOverdue),
 	}
-	return
 }
 
-// UnmarshalGQL implements the graphql.Unmarshaler interface
-func (ars *AssessmentResponseStatus) UnmarshalGQL(v interface{}) error {
+// String returns the string representation of the AssessmentResponseStatus value.
+func (r AssessmentResponseStatus) String() string {
+	return string(r)
+}
+
+// ToAssessmentResponseStatus converts a string to its corresponding AssessmentResponseStatus enum value.
+func ToAssessmentResponseStatus(r string) *AssessmentResponseStatus {
+	switch strings.ToUpper(r) {
+	case AssessmentResponseStatusNotStarted.String():
+		return &AssessmentResponseStatusNotStarted
+	case AssessmentResponseStatusInProgress.String():
+		return &AssessmentResponseStatusInProgress
+	case AssessmentResponseStatusCompleted.String():
+		return &AssessmentResponseStatusCompleted
+	case AssessmentResponseStatusOverdue.String():
+		return &AssessmentResponseStatusOverdue
+	default:
+		return &AssessmentResponseStatusInvalid
+	}
+}
+
+// MarshalGQL implements the gqlgen Marshaler interface.
+func (r AssessmentResponseStatus) MarshalGQL(w io.Writer) {
+	_, _ = w.Write([]byte(`"` + r.String() + `"`))
+}
+
+// UnmarshalGQL implements the gqlgen Unmarshaler interface.
+func (r *AssessmentResponseStatus) UnmarshalGQL(v interface{}) error {
 	str, ok := v.(string)
 	if !ok {
-		return fmt.Errorf("enums must be strings")
+		return fmt.Errorf("wrong type for AssessmentResponseStatus, got: %T", v) //nolint:err113
 	}
 
-	*ars = AssessmentResponseStatus(str)
-	return nil
-}
+	*r = AssessmentResponseStatus(str)
 
-// MarshalGQL implements the graphql.Marshaler interface
-func (ars AssessmentResponseStatus) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(ars.String()))
+	return nil
 }

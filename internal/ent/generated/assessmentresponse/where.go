@@ -128,6 +128,11 @@ func DueDate(v time.Time) predicate.AssessmentResponse {
 	return predicate.AssessmentResponse(sql.FieldEQ(FieldDueDate, v))
 }
 
+// ResponseDataID applies equality check predicate on the "response_data_id" field. It's identical to ResponseDataIDEQ.
+func ResponseDataID(v string) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldEQ(FieldResponseDataID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.AssessmentResponse {
 	return predicate.AssessmentResponse(sql.FieldEQ(FieldCreatedAt, v))
@@ -763,16 +768,6 @@ func StartedAtLTE(v time.Time) predicate.AssessmentResponse {
 	return predicate.AssessmentResponse(sql.FieldLTE(FieldStartedAt, v))
 }
 
-// StartedAtIsNil applies the IsNil predicate on the "started_at" field.
-func StartedAtIsNil() predicate.AssessmentResponse {
-	return predicate.AssessmentResponse(sql.FieldIsNull(FieldStartedAt))
-}
-
-// StartedAtNotNil applies the NotNil predicate on the "started_at" field.
-func StartedAtNotNil() predicate.AssessmentResponse {
-	return predicate.AssessmentResponse(sql.FieldNotNull(FieldStartedAt))
-}
-
 // CompletedAtEQ applies the EQ predicate on the "completed_at" field.
 func CompletedAtEQ(v time.Time) predicate.AssessmentResponse {
 	return predicate.AssessmentResponse(sql.FieldEQ(FieldCompletedAt, v))
@@ -873,6 +868,81 @@ func DueDateNotNil() predicate.AssessmentResponse {
 	return predicate.AssessmentResponse(sql.FieldNotNull(FieldDueDate))
 }
 
+// ResponseDataIDEQ applies the EQ predicate on the "response_data_id" field.
+func ResponseDataIDEQ(v string) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldEQ(FieldResponseDataID, v))
+}
+
+// ResponseDataIDNEQ applies the NEQ predicate on the "response_data_id" field.
+func ResponseDataIDNEQ(v string) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldNEQ(FieldResponseDataID, v))
+}
+
+// ResponseDataIDIn applies the In predicate on the "response_data_id" field.
+func ResponseDataIDIn(vs ...string) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldIn(FieldResponseDataID, vs...))
+}
+
+// ResponseDataIDNotIn applies the NotIn predicate on the "response_data_id" field.
+func ResponseDataIDNotIn(vs ...string) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldNotIn(FieldResponseDataID, vs...))
+}
+
+// ResponseDataIDGT applies the GT predicate on the "response_data_id" field.
+func ResponseDataIDGT(v string) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldGT(FieldResponseDataID, v))
+}
+
+// ResponseDataIDGTE applies the GTE predicate on the "response_data_id" field.
+func ResponseDataIDGTE(v string) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldGTE(FieldResponseDataID, v))
+}
+
+// ResponseDataIDLT applies the LT predicate on the "response_data_id" field.
+func ResponseDataIDLT(v string) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldLT(FieldResponseDataID, v))
+}
+
+// ResponseDataIDLTE applies the LTE predicate on the "response_data_id" field.
+func ResponseDataIDLTE(v string) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldLTE(FieldResponseDataID, v))
+}
+
+// ResponseDataIDContains applies the Contains predicate on the "response_data_id" field.
+func ResponseDataIDContains(v string) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldContains(FieldResponseDataID, v))
+}
+
+// ResponseDataIDHasPrefix applies the HasPrefix predicate on the "response_data_id" field.
+func ResponseDataIDHasPrefix(v string) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldHasPrefix(FieldResponseDataID, v))
+}
+
+// ResponseDataIDHasSuffix applies the HasSuffix predicate on the "response_data_id" field.
+func ResponseDataIDHasSuffix(v string) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldHasSuffix(FieldResponseDataID, v))
+}
+
+// ResponseDataIDIsNil applies the IsNil predicate on the "response_data_id" field.
+func ResponseDataIDIsNil() predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldIsNull(FieldResponseDataID))
+}
+
+// ResponseDataIDNotNil applies the NotNil predicate on the "response_data_id" field.
+func ResponseDataIDNotNil() predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldNotNull(FieldResponseDataID))
+}
+
+// ResponseDataIDEqualFold applies the EqualFold predicate on the "response_data_id" field.
+func ResponseDataIDEqualFold(v string) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldEqualFold(FieldResponseDataID, v))
+}
+
+// ResponseDataIDContainsFold applies the ContainsFold predicate on the "response_data_id" field.
+func ResponseDataIDContainsFold(v string) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldContainsFold(FieldResponseDataID, v))
+}
+
 // HasAssessment applies the HasEdge predicate on the "assessment" edge.
 func HasAssessment() predicate.AssessmentResponse {
 	return predicate.AssessmentResponse(func(s *sql.Selector) {
@@ -922,6 +992,35 @@ func HasUserWith(preds ...predicate.User) predicate.AssessmentResponse {
 		step := newUserStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.AssessmentResponse
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDocument applies the HasEdge predicate on the "document" edge.
+func HasDocument() predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, DocumentTable, DocumentColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DocumentData
+		step.Edge.Schema = schemaConfig.AssessmentResponse
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDocumentWith applies the HasEdge predicate on the "document" edge with a given conditions (other predicates).
+func HasDocumentWith(preds ...predicate.DocumentData) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(func(s *sql.Selector) {
+		step := newDocumentStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DocumentData
 		step.Edge.Schema = schemaConfig.AssessmentResponse
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

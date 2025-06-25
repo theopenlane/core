@@ -228,6 +228,20 @@ func (arhc *AssessmentResponseHistoryCreate) SetNillableDueDate(t *time.Time) *A
 	return arhc
 }
 
+// SetResponseDataID sets the "response_data_id" field.
+func (arhc *AssessmentResponseHistoryCreate) SetResponseDataID(s string) *AssessmentResponseHistoryCreate {
+	arhc.mutation.SetResponseDataID(s)
+	return arhc
+}
+
+// SetNillableResponseDataID sets the "response_data_id" field if the given value is not nil.
+func (arhc *AssessmentResponseHistoryCreate) SetNillableResponseDataID(s *string) *AssessmentResponseHistoryCreate {
+	if s != nil {
+		arhc.SetResponseDataID(*s)
+	}
+	return arhc
+}
+
 // SetID sets the "id" field.
 func (arhc *AssessmentResponseHistoryCreate) SetID(s string) *AssessmentResponseHistoryCreate {
 	arhc.mutation.SetID(s)
@@ -297,6 +311,10 @@ func (arhc *AssessmentResponseHistoryCreate) defaults() {
 		v := assessmentresponsehistory.DefaultStatus
 		arhc.mutation.SetStatus(v)
 	}
+	if _, ok := arhc.mutation.StartedAt(); !ok {
+		v := assessmentresponsehistory.DefaultStartedAt
+		arhc.mutation.SetStartedAt(v)
+	}
 	if _, ok := arhc.mutation.ID(); !ok {
 		v := assessmentresponsehistory.DefaultID()
 		arhc.mutation.SetID(v)
@@ -329,6 +347,9 @@ func (arhc *AssessmentResponseHistoryCreate) check() error {
 		if err := assessmentresponsehistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "AssessmentResponseHistory.status": %w`, err)}
 		}
+	}
+	if _, ok := arhc.mutation.StartedAt(); !ok {
+		return &ValidationError{Name: "started_at", err: errors.New(`generated: missing required field "AssessmentResponseHistory.started_at"`)}
 	}
 	return nil
 }
@@ -433,6 +454,10 @@ func (arhc *AssessmentResponseHistoryCreate) createSpec() (*AssessmentResponseHi
 	if value, ok := arhc.mutation.DueDate(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldDueDate, field.TypeTime, value)
 		_node.DueDate = value
+	}
+	if value, ok := arhc.mutation.ResponseDataID(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldResponseDataID, field.TypeString, value)
+		_node.ResponseDataID = value
 	}
 	return _node, _spec
 }

@@ -38,14 +38,26 @@ const (
 	FieldName = "name"
 	// FieldAssessmentType holds the string denoting the assessment_type field in the database.
 	FieldAssessmentType = "assessment_type"
-	// FieldQuestionnaireID holds the string denoting the questionnaire_id field in the database.
-	FieldQuestionnaireID = "questionnaire_id"
+	// FieldTemplateID holds the string denoting the template_id field in the database.
+	FieldTemplateID = "template_id"
+	// FieldAssessmentOwnerID holds the string denoting the assessment_owner_id field in the database.
+	FieldAssessmentOwnerID = "assessment_owner_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
+	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
+	EdgeBlockedGroups = "blocked_groups"
+	// EdgeEditors holds the string denoting the editors edge name in mutations.
+	EdgeEditors = "editors"
+	// EdgeViewers holds the string denoting the viewers edge name in mutations.
+	EdgeViewers = "viewers"
+	// EdgeTemplate holds the string denoting the template edge name in mutations.
+	EdgeTemplate = "template"
 	// EdgeUsers holds the string denoting the users edge name in mutations.
 	EdgeUsers = "users"
 	// EdgeAssessmentResponses holds the string denoting the assessment_responses edge name in mutations.
 	EdgeAssessmentResponses = "assessment_responses"
+	// EdgeAssessmentOwner holds the string denoting the assessment_owner edge name in mutations.
+	EdgeAssessmentOwner = "assessment_owner"
 	// Table holds the table name of the assessment in the database.
 	Table = "assessments"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -55,6 +67,28 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
+	// BlockedGroupsTable is the table that holds the blocked_groups relation/edge. The primary key declared below.
+	BlockedGroupsTable = "assessment_blocked_groups"
+	// BlockedGroupsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	BlockedGroupsInverseTable = "groups"
+	// EditorsTable is the table that holds the editors relation/edge. The primary key declared below.
+	EditorsTable = "assessment_editors"
+	// EditorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	EditorsInverseTable = "groups"
+	// ViewersTable is the table that holds the viewers relation/edge. The primary key declared below.
+	ViewersTable = "assessment_viewers"
+	// ViewersInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ViewersInverseTable = "groups"
+	// TemplateTable is the table that holds the template relation/edge.
+	TemplateTable = "assessments"
+	// TemplateInverseTable is the table name for the Template entity.
+	// It exists in this package in order to avoid circular dependency with the "template" package.
+	TemplateInverseTable = "templates"
+	// TemplateColumn is the table column denoting the template relation/edge.
+	TemplateColumn = "template_id"
 	// UsersTable is the table that holds the users relation/edge. The primary key declared below.
 	UsersTable = "assessment_users"
 	// UsersInverseTable is the table name for the User entity.
@@ -67,6 +101,13 @@ const (
 	AssessmentResponsesInverseTable = "assessment_responses"
 	// AssessmentResponsesColumn is the table column denoting the assessment_responses relation/edge.
 	AssessmentResponsesColumn = "assessment_id"
+	// AssessmentOwnerTable is the table that holds the assessment_owner relation/edge.
+	AssessmentOwnerTable = "assessments"
+	// AssessmentOwnerInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	AssessmentOwnerInverseTable = "groups"
+	// AssessmentOwnerColumn is the table column denoting the assessment_owner relation/edge.
+	AssessmentOwnerColumn = "assessment_owner_id"
 )
 
 // Columns holds all SQL columns for assessment fields.
@@ -82,10 +123,20 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldName,
 	FieldAssessmentType,
-	FieldQuestionnaireID,
+	FieldTemplateID,
+	FieldAssessmentOwnerID,
 }
 
 var (
+	// BlockedGroupsPrimaryKey and BlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the blocked_groups relation (M2M).
+	BlockedGroupsPrimaryKey = []string{"assessment_id", "group_id"}
+	// EditorsPrimaryKey and EditorsColumn2 are the table columns denoting the
+	// primary key for the editors relation (M2M).
+	EditorsPrimaryKey = []string{"assessment_id", "group_id"}
+	// ViewersPrimaryKey and ViewersColumn2 are the table columns denoting the
+	// primary key for the viewers relation (M2M).
+	ViewersPrimaryKey = []string{"assessment_id", "group_id"}
 	// UsersPrimaryKey and UsersColumn2 are the table columns denoting the
 	// primary key for the users relation (M2M).
 	UsersPrimaryKey = []string{"assessment_id", "user_id"}
@@ -107,8 +158,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [4]ent.Hook
-	Interceptors [2]ent.Interceptor
+	Hooks        [8]ent.Hook
+	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -131,7 +182,7 @@ const DefaultAssessmentType enums.AssessmentType = "INTERNAL"
 // AssessmentTypeValidator is a validator for the "assessment_type" field enum values. It is called by the builders before save.
 func AssessmentTypeValidator(at enums.AssessmentType) error {
 	switch at.String() {
-	case "INTERNAL":
+	case "INTERNAL", "EXTERNAL":
 		return nil
 	default:
 		return fmt.Errorf("assessment: invalid enum value for assessment_type field: %q", at)
@@ -191,15 +242,69 @@ func ByAssessmentType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAssessmentType, opts...).ToFunc()
 }
 
-// ByQuestionnaireID orders the results by the questionnaire_id field.
-func ByQuestionnaireID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldQuestionnaireID, opts...).ToFunc()
+// ByTemplateID orders the results by the template_id field.
+func ByTemplateID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTemplateID, opts...).ToFunc()
+}
+
+// ByAssessmentOwnerID orders the results by the assessment_owner_id field.
+func ByAssessmentOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssessmentOwnerID, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByBlockedGroupsCount orders the results by blocked_groups count.
+func ByBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByBlockedGroups orders the results by blocked_groups terms.
+func ByBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEditorsCount orders the results by editors count.
+func ByEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEditorsStep(), opts...)
+	}
+}
+
+// ByEditors orders the results by editors terms.
+func ByEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByViewersCount orders the results by viewers count.
+func ByViewersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newViewersStep(), opts...)
+	}
+}
+
+// ByViewers orders the results by viewers terms.
+func ByViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByTemplateField orders the results by template field.
+func ByTemplateField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTemplateStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -230,11 +335,46 @@ func ByAssessmentResponses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOpti
 		sqlgraph.OrderByNeighborTerms(s, newAssessmentResponsesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByAssessmentOwnerField orders the results by assessment_owner field.
+func ByAssessmentOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssessmentOwnerStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(OwnerInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+	)
+}
+func newBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(BlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, BlockedGroupsTable, BlockedGroupsPrimaryKey...),
+	)
+}
+func newEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, EditorsTable, EditorsPrimaryKey...),
+	)
+}
+func newViewersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ViewersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ViewersTable, ViewersPrimaryKey...),
+	)
+}
+func newTemplateStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TemplateInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, TemplateTable, TemplateColumn),
 	)
 }
 func newUsersStep() *sqlgraph.Step {
@@ -249,6 +389,13 @@ func newAssessmentResponsesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(AssessmentResponsesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, AssessmentResponsesTable, AssessmentResponsesColumn),
+	)
+}
+func newAssessmentOwnerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssessmentOwnerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, AssessmentOwnerTable, AssessmentOwnerColumn),
 	)
 }
 

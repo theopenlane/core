@@ -12,6 +12,8 @@ type AssessmentType string
 var (
 	// AssessmentTypeInternal indicates the internal.
 	AssessmentTypeInternal AssessmentType = "INTERNAL"
+	// AssessmentTypeExternal indicates the external.
+	AssessmentTypeExternal AssessmentType = "EXTERNAL"
 	// AssessmentTypeInvalid is used when an unknown or unsupported value is provided.
 	AssessmentTypeInvalid AssessmentType = "ASSESSMENTTYPE_INVALID"
 )
@@ -20,6 +22,7 @@ var (
 func (AssessmentType) Values() []string {
 	return []string{
 		string(AssessmentTypeInternal),
+		string(AssessmentTypeExternal),
 	}
 }
 
@@ -33,6 +36,8 @@ func ToAssessmentType(r string) *AssessmentType {
 	switch strings.ToUpper(r) {
 	case AssessmentTypeInternal.String():
 		return &AssessmentTypeInternal
+	case AssessmentTypeExternal.String():
+		return &AssessmentTypeExternal
 	default:
 		return &AssessmentTypeInvalid
 	}
@@ -47,7 +52,7 @@ func (r AssessmentType) MarshalGQL(w io.Writer) {
 func (r *AssessmentType) UnmarshalGQL(v interface{}) error {
 	str, ok := v.(string)
 	if !ok {
-		return fmt.Errorf("wrong type for AssessmentType, got: %T", v)  //nolint:err113
+		return fmt.Errorf("wrong type for AssessmentType, got: %T", v) //nolint:err113
 	}
 
 	*r = AssessmentType(str)

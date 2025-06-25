@@ -479,8 +479,12 @@ func (m *AssessmentMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetAssessmentType(assessmentType)
 	}
 
-	if questionnaireID, exists := m.QuestionnaireID(); exists {
-		create = create.SetQuestionnaireID(questionnaireID)
+	if templateID, exists := m.TemplateID(); exists {
+		create = create.SetTemplateID(templateID)
+	}
+
+	if assessmentOwnerID, exists := m.AssessmentOwnerID(); exists {
+		create = create.SetAssessmentOwnerID(assessmentOwnerID)
 	}
 
 	_, err := create.Save(ctx)
@@ -573,10 +577,16 @@ func (m *AssessmentMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetAssessmentType(assessment.AssessmentType)
 		}
 
-		if questionnaireID, exists := m.QuestionnaireID(); exists {
-			create = create.SetQuestionnaireID(questionnaireID)
+		if templateID, exists := m.TemplateID(); exists {
+			create = create.SetTemplateID(templateID)
 		} else {
-			create = create.SetQuestionnaireID(assessment.QuestionnaireID)
+			create = create.SetTemplateID(assessment.TemplateID)
+		}
+
+		if assessmentOwnerID, exists := m.AssessmentOwnerID(); exists {
+			create = create.SetAssessmentOwnerID(assessmentOwnerID)
+		} else {
+			create = create.SetAssessmentOwnerID(assessment.AssessmentOwnerID)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -621,7 +631,8 @@ func (m *AssessmentMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetOwnerID(assessment.OwnerID).
 			SetName(assessment.Name).
 			SetAssessmentType(assessment.AssessmentType).
-			SetQuestionnaireID(assessment.QuestionnaireID).
+			SetTemplateID(assessment.TemplateID).
+			SetAssessmentOwnerID(assessment.AssessmentOwnerID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -700,6 +711,10 @@ func (m *AssessmentResponseMutation) CreateHistoryFromCreate(ctx context.Context
 
 	if dueDate, exists := m.DueDate(); exists {
 		create = create.SetDueDate(dueDate)
+	}
+
+	if responseDataID, exists := m.ResponseDataID(); exists {
+		create = create.SetResponseDataID(responseDataID)
 	}
 
 	_, err := create.Save(ctx)
@@ -816,6 +831,12 @@ func (m *AssessmentResponseMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetDueDate(assessmentresponse.DueDate)
 		}
 
+		if responseDataID, exists := m.ResponseDataID(); exists {
+			create = create.SetResponseDataID(responseDataID)
+		} else {
+			create = create.SetResponseDataID(assessmentresponse.ResponseDataID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -862,6 +883,7 @@ func (m *AssessmentResponseMutation) CreateHistoryFromDelete(ctx context.Context
 			SetStartedAt(assessmentresponse.StartedAt).
 			SetCompletedAt(assessmentresponse.CompletedAt).
 			SetDueDate(assessmentresponse.DueDate).
+			SetResponseDataID(assessmentresponse.ResponseDataID).
 			Save(ctx)
 		if err != nil {
 			return err

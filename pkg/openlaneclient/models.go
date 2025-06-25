@@ -1030,11 +1030,19 @@ type Assessment struct {
 	// the name of the assessment, e.g. cloud providers, marketing team
 	Name           string               `json:"name"`
 	AssessmentType enums.AssessmentType `json:"assessmentType"`
-	// the questionnaire template id associated with the assessment
-	QuestionnaireID     *string                       `json:"questionnaireID,omitempty"`
+	// the template id associated with the assessment
+	TemplateID string `json:"templateID"`
+	// the id of the group that owns the assessment
+	AssessmentOwnerID   *string                       `json:"assessmentOwnerID,omitempty"`
 	Owner               *Organization                 `json:"owner,omitempty"`
+	BlockedGroups       *GroupConnection              `json:"blockedGroups"`
+	Editors             *GroupConnection              `json:"editors"`
+	Viewers             *GroupConnection              `json:"viewers"`
+	Template            *Template                     `json:"template"`
 	Users               *UserConnection               `json:"users"`
 	AssessmentResponses *AssessmentResponseConnection `json:"assessmentResponses"`
+	// the group of users who are responsible for the assessment, will be assigned tasks, approval, etc.
+	AssessmentOwner *Group `json:"assessmentOwner,omitempty"`
 }
 
 func (Assessment) IsNode() {}
@@ -1091,8 +1099,10 @@ type AssessmentHistory struct {
 	// the name of the assessment, e.g. cloud providers, marketing team
 	Name           string               `json:"name"`
 	AssessmentType enums.AssessmentType `json:"assessmentType"`
-	// the questionnaire template id associated with the assessment
-	QuestionnaireID *string `json:"questionnaireID,omitempty"`
+	// the template id associated with the assessment
+	TemplateID string `json:"templateID"`
+	// the id of the group that owns the assessment
+	AssessmentOwnerID *string `json:"assessmentOwnerID,omitempty"`
 }
 
 func (AssessmentHistory) IsNode() {}
@@ -1259,22 +1269,36 @@ type AssessmentHistoryWhereInput struct {
 	AssessmentTypeNeq   *enums.AssessmentType  `json:"assessmentTypeNEQ,omitempty"`
 	AssessmentTypeIn    []enums.AssessmentType `json:"assessmentTypeIn,omitempty"`
 	AssessmentTypeNotIn []enums.AssessmentType `json:"assessmentTypeNotIn,omitempty"`
-	// questionnaire_id field predicates
-	QuestionnaireID             *string  `json:"questionnaireID,omitempty"`
-	QuestionnaireIdneq          *string  `json:"questionnaireIDNEQ,omitempty"`
-	QuestionnaireIDIn           []string `json:"questionnaireIDIn,omitempty"`
-	QuestionnaireIDNotIn        []string `json:"questionnaireIDNotIn,omitempty"`
-	QuestionnaireIdgt           *string  `json:"questionnaireIDGT,omitempty"`
-	QuestionnaireIdgte          *string  `json:"questionnaireIDGTE,omitempty"`
-	QuestionnaireIdlt           *string  `json:"questionnaireIDLT,omitempty"`
-	QuestionnaireIdlte          *string  `json:"questionnaireIDLTE,omitempty"`
-	QuestionnaireIDContains     *string  `json:"questionnaireIDContains,omitempty"`
-	QuestionnaireIDHasPrefix    *string  `json:"questionnaireIDHasPrefix,omitempty"`
-	QuestionnaireIDHasSuffix    *string  `json:"questionnaireIDHasSuffix,omitempty"`
-	QuestionnaireIDIsNil        *bool    `json:"questionnaireIDIsNil,omitempty"`
-	QuestionnaireIDNotNil       *bool    `json:"questionnaireIDNotNil,omitempty"`
-	QuestionnaireIDEqualFold    *string  `json:"questionnaireIDEqualFold,omitempty"`
-	QuestionnaireIDContainsFold *string  `json:"questionnaireIDContainsFold,omitempty"`
+	// template_id field predicates
+	TemplateID             *string  `json:"templateID,omitempty"`
+	TemplateIdneq          *string  `json:"templateIDNEQ,omitempty"`
+	TemplateIDIn           []string `json:"templateIDIn,omitempty"`
+	TemplateIDNotIn        []string `json:"templateIDNotIn,omitempty"`
+	TemplateIdgt           *string  `json:"templateIDGT,omitempty"`
+	TemplateIdgte          *string  `json:"templateIDGTE,omitempty"`
+	TemplateIdlt           *string  `json:"templateIDLT,omitempty"`
+	TemplateIdlte          *string  `json:"templateIDLTE,omitempty"`
+	TemplateIDContains     *string  `json:"templateIDContains,omitempty"`
+	TemplateIDHasPrefix    *string  `json:"templateIDHasPrefix,omitempty"`
+	TemplateIDHasSuffix    *string  `json:"templateIDHasSuffix,omitempty"`
+	TemplateIDEqualFold    *string  `json:"templateIDEqualFold,omitempty"`
+	TemplateIDContainsFold *string  `json:"templateIDContainsFold,omitempty"`
+	// assessment_owner_id field predicates
+	AssessmentOwnerID             *string  `json:"assessmentOwnerID,omitempty"`
+	AssessmentOwnerIdneq          *string  `json:"assessmentOwnerIDNEQ,omitempty"`
+	AssessmentOwnerIDIn           []string `json:"assessmentOwnerIDIn,omitempty"`
+	AssessmentOwnerIDNotIn        []string `json:"assessmentOwnerIDNotIn,omitempty"`
+	AssessmentOwnerIdgt           *string  `json:"assessmentOwnerIDGT,omitempty"`
+	AssessmentOwnerIdgte          *string  `json:"assessmentOwnerIDGTE,omitempty"`
+	AssessmentOwnerIdlt           *string  `json:"assessmentOwnerIDLT,omitempty"`
+	AssessmentOwnerIdlte          *string  `json:"assessmentOwnerIDLTE,omitempty"`
+	AssessmentOwnerIDContains     *string  `json:"assessmentOwnerIDContains,omitempty"`
+	AssessmentOwnerIDHasPrefix    *string  `json:"assessmentOwnerIDHasPrefix,omitempty"`
+	AssessmentOwnerIDHasSuffix    *string  `json:"assessmentOwnerIDHasSuffix,omitempty"`
+	AssessmentOwnerIDIsNil        *bool    `json:"assessmentOwnerIDIsNil,omitempty"`
+	AssessmentOwnerIDNotNil       *bool    `json:"assessmentOwnerIDNotNil,omitempty"`
+	AssessmentOwnerIDEqualFold    *string  `json:"assessmentOwnerIDEqualFold,omitempty"`
+	AssessmentOwnerIDContainsFold *string  `json:"assessmentOwnerIDContainsFold,omitempty"`
 }
 
 // Ordering options for Assessment connections
@@ -1302,13 +1326,17 @@ type AssessmentResponse struct {
 	// when the assessment was assigned to the user
 	AssignedAt *time.Time `json:"assignedAt,omitempty"`
 	// when the user started the assessment
-	StartedAt *time.Time `json:"startedAt,omitempty"`
+	StartedAt time.Time `json:"startedAt"`
 	// when the user completed the assessment
 	CompletedAt *time.Time `json:"completedAt,omitempty"`
 	// when the assessment is due
-	DueDate    *time.Time  `json:"dueDate,omitempty"`
-	Assessment *Assessment `json:"assessment"`
-	User       *User       `json:"user"`
+	DueDate *time.Time `json:"dueDate,omitempty"`
+	// the document containing the user's response data
+	ResponseDataID *string     `json:"responseDataID,omitempty"`
+	Assessment     *Assessment `json:"assessment"`
+	User           *User       `json:"user"`
+	// the document containing the user's response data
+	Document *DocumentData `json:"document,omitempty"`
 }
 
 func (AssessmentResponse) IsNode() {}
@@ -1369,11 +1397,13 @@ type AssessmentResponseHistory struct {
 	// when the assessment was assigned to the user
 	AssignedAt *time.Time `json:"assignedAt,omitempty"`
 	// when the user started the assessment
-	StartedAt *time.Time `json:"startedAt,omitempty"`
+	StartedAt time.Time `json:"startedAt"`
 	// when the user completed the assessment
 	CompletedAt *time.Time `json:"completedAt,omitempty"`
 	// when the assessment is due
 	DueDate *time.Time `json:"dueDate,omitempty"`
+	// the document containing the user's response data
+	ResponseDataID *string `json:"responseDataID,omitempty"`
 }
 
 func (AssessmentResponseHistory) IsNode() {}
@@ -1550,16 +1580,14 @@ type AssessmentResponseHistoryWhereInput struct {
 	AssignedAtIsNil  *bool        `json:"assignedAtIsNil,omitempty"`
 	AssignedAtNotNil *bool        `json:"assignedAtNotNil,omitempty"`
 	// started_at field predicates
-	StartedAt       *time.Time   `json:"startedAt,omitempty"`
-	StartedAtNeq    *time.Time   `json:"startedAtNEQ,omitempty"`
-	StartedAtIn     []*time.Time `json:"startedAtIn,omitempty"`
-	StartedAtNotIn  []*time.Time `json:"startedAtNotIn,omitempty"`
-	StartedAtGt     *time.Time   `json:"startedAtGT,omitempty"`
-	StartedAtGte    *time.Time   `json:"startedAtGTE,omitempty"`
-	StartedAtLt     *time.Time   `json:"startedAtLT,omitempty"`
-	StartedAtLte    *time.Time   `json:"startedAtLTE,omitempty"`
-	StartedAtIsNil  *bool        `json:"startedAtIsNil,omitempty"`
-	StartedAtNotNil *bool        `json:"startedAtNotNil,omitempty"`
+	StartedAt      *time.Time   `json:"startedAt,omitempty"`
+	StartedAtNeq   *time.Time   `json:"startedAtNEQ,omitempty"`
+	StartedAtIn    []*time.Time `json:"startedAtIn,omitempty"`
+	StartedAtNotIn []*time.Time `json:"startedAtNotIn,omitempty"`
+	StartedAtGt    *time.Time   `json:"startedAtGT,omitempty"`
+	StartedAtGte   *time.Time   `json:"startedAtGTE,omitempty"`
+	StartedAtLt    *time.Time   `json:"startedAtLT,omitempty"`
+	StartedAtLte   *time.Time   `json:"startedAtLTE,omitempty"`
 	// completed_at field predicates
 	CompletedAt       *time.Time   `json:"completedAt,omitempty"`
 	CompletedAtNeq    *time.Time   `json:"completedAtNEQ,omitempty"`
@@ -1582,6 +1610,22 @@ type AssessmentResponseHistoryWhereInput struct {
 	DueDateLte    *time.Time   `json:"dueDateLTE,omitempty"`
 	DueDateIsNil  *bool        `json:"dueDateIsNil,omitempty"`
 	DueDateNotNil *bool        `json:"dueDateNotNil,omitempty"`
+	// response_data_id field predicates
+	ResponseDataID             *string  `json:"responseDataID,omitempty"`
+	ResponseDataIdneq          *string  `json:"responseDataIDNEQ,omitempty"`
+	ResponseDataIDIn           []string `json:"responseDataIDIn,omitempty"`
+	ResponseDataIDNotIn        []string `json:"responseDataIDNotIn,omitempty"`
+	ResponseDataIdgt           *string  `json:"responseDataIDGT,omitempty"`
+	ResponseDataIdgte          *string  `json:"responseDataIDGTE,omitempty"`
+	ResponseDataIdlt           *string  `json:"responseDataIDLT,omitempty"`
+	ResponseDataIdlte          *string  `json:"responseDataIDLTE,omitempty"`
+	ResponseDataIDContains     *string  `json:"responseDataIDContains,omitempty"`
+	ResponseDataIDHasPrefix    *string  `json:"responseDataIDHasPrefix,omitempty"`
+	ResponseDataIDHasSuffix    *string  `json:"responseDataIDHasSuffix,omitempty"`
+	ResponseDataIDIsNil        *bool    `json:"responseDataIDIsNil,omitempty"`
+	ResponseDataIDNotNil       *bool    `json:"responseDataIDNotNil,omitempty"`
+	ResponseDataIDEqualFold    *string  `json:"responseDataIDEqualFold,omitempty"`
+	ResponseDataIDContainsFold *string  `json:"responseDataIDContainsFold,omitempty"`
 }
 
 // Ordering options for AssessmentResponse connections
@@ -1714,16 +1758,14 @@ type AssessmentResponseWhereInput struct {
 	AssignedAtIsNil  *bool        `json:"assignedAtIsNil,omitempty"`
 	AssignedAtNotNil *bool        `json:"assignedAtNotNil,omitempty"`
 	// started_at field predicates
-	StartedAt       *time.Time   `json:"startedAt,omitempty"`
-	StartedAtNeq    *time.Time   `json:"startedAtNEQ,omitempty"`
-	StartedAtIn     []*time.Time `json:"startedAtIn,omitempty"`
-	StartedAtNotIn  []*time.Time `json:"startedAtNotIn,omitempty"`
-	StartedAtGt     *time.Time   `json:"startedAtGT,omitempty"`
-	StartedAtGte    *time.Time   `json:"startedAtGTE,omitempty"`
-	StartedAtLt     *time.Time   `json:"startedAtLT,omitempty"`
-	StartedAtLte    *time.Time   `json:"startedAtLTE,omitempty"`
-	StartedAtIsNil  *bool        `json:"startedAtIsNil,omitempty"`
-	StartedAtNotNil *bool        `json:"startedAtNotNil,omitempty"`
+	StartedAt      *time.Time   `json:"startedAt,omitempty"`
+	StartedAtNeq   *time.Time   `json:"startedAtNEQ,omitempty"`
+	StartedAtIn    []*time.Time `json:"startedAtIn,omitempty"`
+	StartedAtNotIn []*time.Time `json:"startedAtNotIn,omitempty"`
+	StartedAtGt    *time.Time   `json:"startedAtGT,omitempty"`
+	StartedAtGte   *time.Time   `json:"startedAtGTE,omitempty"`
+	StartedAtLt    *time.Time   `json:"startedAtLT,omitempty"`
+	StartedAtLte   *time.Time   `json:"startedAtLTE,omitempty"`
 	// completed_at field predicates
 	CompletedAt       *time.Time   `json:"completedAt,omitempty"`
 	CompletedAtNeq    *time.Time   `json:"completedAtNEQ,omitempty"`
@@ -1746,12 +1788,31 @@ type AssessmentResponseWhereInput struct {
 	DueDateLte    *time.Time   `json:"dueDateLTE,omitempty"`
 	DueDateIsNil  *bool        `json:"dueDateIsNil,omitempty"`
 	DueDateNotNil *bool        `json:"dueDateNotNil,omitempty"`
+	// response_data_id field predicates
+	ResponseDataID             *string  `json:"responseDataID,omitempty"`
+	ResponseDataIdneq          *string  `json:"responseDataIDNEQ,omitempty"`
+	ResponseDataIDIn           []string `json:"responseDataIDIn,omitempty"`
+	ResponseDataIDNotIn        []string `json:"responseDataIDNotIn,omitempty"`
+	ResponseDataIdgt           *string  `json:"responseDataIDGT,omitempty"`
+	ResponseDataIdgte          *string  `json:"responseDataIDGTE,omitempty"`
+	ResponseDataIdlt           *string  `json:"responseDataIDLT,omitempty"`
+	ResponseDataIdlte          *string  `json:"responseDataIDLTE,omitempty"`
+	ResponseDataIDContains     *string  `json:"responseDataIDContains,omitempty"`
+	ResponseDataIDHasPrefix    *string  `json:"responseDataIDHasPrefix,omitempty"`
+	ResponseDataIDHasSuffix    *string  `json:"responseDataIDHasSuffix,omitempty"`
+	ResponseDataIDIsNil        *bool    `json:"responseDataIDIsNil,omitempty"`
+	ResponseDataIDNotNil       *bool    `json:"responseDataIDNotNil,omitempty"`
+	ResponseDataIDEqualFold    *string  `json:"responseDataIDEqualFold,omitempty"`
+	ResponseDataIDContainsFold *string  `json:"responseDataIDContainsFold,omitempty"`
 	// assessment edge predicates
 	HasAssessment     *bool                   `json:"hasAssessment,omitempty"`
 	HasAssessmentWith []*AssessmentWhereInput `json:"hasAssessmentWith,omitempty"`
 	// user edge predicates
 	HasUser     *bool             `json:"hasUser,omitempty"`
 	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
+	// document edge predicates
+	HasDocument     *bool                     `json:"hasDocument,omitempty"`
+	HasDocumentWith []*DocumentDataWhereInput `json:"hasDocumentWith,omitempty"`
 }
 
 // Return response for updateAssessment mutation
@@ -1866,31 +1927,60 @@ type AssessmentWhereInput struct {
 	AssessmentTypeNeq   *enums.AssessmentType  `json:"assessmentTypeNEQ,omitempty"`
 	AssessmentTypeIn    []enums.AssessmentType `json:"assessmentTypeIn,omitempty"`
 	AssessmentTypeNotIn []enums.AssessmentType `json:"assessmentTypeNotIn,omitempty"`
-	// questionnaire_id field predicates
-	QuestionnaireID             *string  `json:"questionnaireID,omitempty"`
-	QuestionnaireIdneq          *string  `json:"questionnaireIDNEQ,omitempty"`
-	QuestionnaireIDIn           []string `json:"questionnaireIDIn,omitempty"`
-	QuestionnaireIDNotIn        []string `json:"questionnaireIDNotIn,omitempty"`
-	QuestionnaireIdgt           *string  `json:"questionnaireIDGT,omitempty"`
-	QuestionnaireIdgte          *string  `json:"questionnaireIDGTE,omitempty"`
-	QuestionnaireIdlt           *string  `json:"questionnaireIDLT,omitempty"`
-	QuestionnaireIdlte          *string  `json:"questionnaireIDLTE,omitempty"`
-	QuestionnaireIDContains     *string  `json:"questionnaireIDContains,omitempty"`
-	QuestionnaireIDHasPrefix    *string  `json:"questionnaireIDHasPrefix,omitempty"`
-	QuestionnaireIDHasSuffix    *string  `json:"questionnaireIDHasSuffix,omitempty"`
-	QuestionnaireIDIsNil        *bool    `json:"questionnaireIDIsNil,omitempty"`
-	QuestionnaireIDNotNil       *bool    `json:"questionnaireIDNotNil,omitempty"`
-	QuestionnaireIDEqualFold    *string  `json:"questionnaireIDEqualFold,omitempty"`
-	QuestionnaireIDContainsFold *string  `json:"questionnaireIDContainsFold,omitempty"`
+	// template_id field predicates
+	TemplateID             *string  `json:"templateID,omitempty"`
+	TemplateIdneq          *string  `json:"templateIDNEQ,omitempty"`
+	TemplateIDIn           []string `json:"templateIDIn,omitempty"`
+	TemplateIDNotIn        []string `json:"templateIDNotIn,omitempty"`
+	TemplateIdgt           *string  `json:"templateIDGT,omitempty"`
+	TemplateIdgte          *string  `json:"templateIDGTE,omitempty"`
+	TemplateIdlt           *string  `json:"templateIDLT,omitempty"`
+	TemplateIdlte          *string  `json:"templateIDLTE,omitempty"`
+	TemplateIDContains     *string  `json:"templateIDContains,omitempty"`
+	TemplateIDHasPrefix    *string  `json:"templateIDHasPrefix,omitempty"`
+	TemplateIDHasSuffix    *string  `json:"templateIDHasSuffix,omitempty"`
+	TemplateIDEqualFold    *string  `json:"templateIDEqualFold,omitempty"`
+	TemplateIDContainsFold *string  `json:"templateIDContainsFold,omitempty"`
+	// assessment_owner_id field predicates
+	AssessmentOwnerID             *string  `json:"assessmentOwnerID,omitempty"`
+	AssessmentOwnerIdneq          *string  `json:"assessmentOwnerIDNEQ,omitempty"`
+	AssessmentOwnerIDIn           []string `json:"assessmentOwnerIDIn,omitempty"`
+	AssessmentOwnerIDNotIn        []string `json:"assessmentOwnerIDNotIn,omitempty"`
+	AssessmentOwnerIdgt           *string  `json:"assessmentOwnerIDGT,omitempty"`
+	AssessmentOwnerIdgte          *string  `json:"assessmentOwnerIDGTE,omitempty"`
+	AssessmentOwnerIdlt           *string  `json:"assessmentOwnerIDLT,omitempty"`
+	AssessmentOwnerIdlte          *string  `json:"assessmentOwnerIDLTE,omitempty"`
+	AssessmentOwnerIDContains     *string  `json:"assessmentOwnerIDContains,omitempty"`
+	AssessmentOwnerIDHasPrefix    *string  `json:"assessmentOwnerIDHasPrefix,omitempty"`
+	AssessmentOwnerIDHasSuffix    *string  `json:"assessmentOwnerIDHasSuffix,omitempty"`
+	AssessmentOwnerIDIsNil        *bool    `json:"assessmentOwnerIDIsNil,omitempty"`
+	AssessmentOwnerIDNotNil       *bool    `json:"assessmentOwnerIDNotNil,omitempty"`
+	AssessmentOwnerIDEqualFold    *string  `json:"assessmentOwnerIDEqualFold,omitempty"`
+	AssessmentOwnerIDContainsFold *string  `json:"assessmentOwnerIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// blocked_groups edge predicates
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+	// editors edge predicates
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// viewers edge predicates
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
+	// template edge predicates
+	HasTemplate     *bool                 `json:"hasTemplate,omitempty"`
+	HasTemplateWith []*TemplateWhereInput `json:"hasTemplateWith,omitempty"`
 	// users edge predicates
 	HasUsers     *bool             `json:"hasUsers,omitempty"`
 	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
 	// assessment_responses edge predicates
 	HasAssessmentResponses     *bool                           `json:"hasAssessmentResponses,omitempty"`
 	HasAssessmentResponsesWith []*AssessmentResponseWhereInput `json:"hasAssessmentResponsesWith,omitempty"`
+	// assessment_owner edge predicates
+	HasAssessmentOwner     *bool              `json:"hasAssessmentOwner,omitempty"`
+	HasAssessmentOwnerWith []*GroupWhereInput `json:"hasAssessmentOwnerWith,omitempty"`
 }
 
 type Asset struct {
@@ -5512,13 +5602,16 @@ type CreateAssessmentInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the name of the assessment, e.g. cloud providers, marketing team
-	Name           string                `json:"name"`
-	AssessmentType *enums.AssessmentType `json:"assessmentType,omitempty"`
-	// the questionnaire template id associated with the assessment
-	QuestionnaireID       *string  `json:"questionnaireID,omitempty"`
-	OwnerID               *string  `json:"ownerID,omitempty"`
-	UserIDs               []string `json:"userIDs,omitempty"`
-	AssessmentResponseIDs []string `json:"assessmentResponseIDs,omitempty"`
+	Name                  string                `json:"name"`
+	AssessmentType        *enums.AssessmentType `json:"assessmentType,omitempty"`
+	OwnerID               *string               `json:"ownerID,omitempty"`
+	BlockedGroupIDs       []string              `json:"blockedGroupIDs,omitempty"`
+	EditorIDs             []string              `json:"editorIDs,omitempty"`
+	ViewerIDs             []string              `json:"viewerIDs,omitempty"`
+	TemplateID            string                `json:"templateID"`
+	UserIDs               []string              `json:"userIDs,omitempty"`
+	AssessmentResponseIDs []string              `json:"assessmentResponseIDs,omitempty"`
+	AssessmentOwnerID     *string               `json:"assessmentOwnerID,omitempty"`
 }
 
 // CreateAssessmentResponseInput is used for create AssessmentResponse object.
@@ -5538,6 +5631,7 @@ type CreateAssessmentResponseInput struct {
 	DueDate      *time.Time `json:"dueDate,omitempty"`
 	AssessmentID string     `json:"assessmentID"`
 	UserID       string     `json:"userID"`
+	DocumentID   *string    `json:"documentID,omitempty"`
 }
 
 // CreateAssetInput is used for create Asset object.
@@ -5961,6 +6055,9 @@ type CreateGroupInput struct {
 	ScanEditorIDs                        []string                 `json:"scanEditorIDs,omitempty"`
 	ScanBlockedGroupIDs                  []string                 `json:"scanBlockedGroupIDs,omitempty"`
 	ScanViewerIDs                        []string                 `json:"scanViewerIDs,omitempty"`
+	AssessmentEditorIDs                  []string                 `json:"assessmentEditorIDs,omitempty"`
+	AssessmentBlockedGroupIDs            []string                 `json:"assessmentBlockedGroupIDs,omitempty"`
+	AssessmentViewerIDs                  []string                 `json:"assessmentViewerIDs,omitempty"`
 	ProcedureEditorIDs                   []string                 `json:"procedureEditorIDs,omitempty"`
 	ProcedureBlockedGroupIDs             []string                 `json:"procedureBlockedGroupIDs,omitempty"`
 	InternalPolicyEditorIDs              []string                 `json:"internalPolicyEditorIDs,omitempty"`
@@ -10763,6 +10860,9 @@ type Group struct {
 	ScanEditors                        *ScanConnection                  `json:"scanEditors"`
 	ScanBlockedGroups                  *ScanConnection                  `json:"scanBlockedGroups"`
 	ScanViewers                        *ScanConnection                  `json:"scanViewers"`
+	AssessmentEditors                  *AssessmentConnection            `json:"assessmentEditors"`
+	AssessmentBlockedGroups            *AssessmentConnection            `json:"assessmentBlockedGroups"`
+	AssessmentViewers                  *AssessmentConnection            `json:"assessmentViewers"`
 	ProcedureEditors                   *ProcedureConnection             `json:"procedureEditors"`
 	ProcedureBlockedGroups             *ProcedureConnection             `json:"procedureBlockedGroups"`
 	InternalPolicyEditors              *InternalPolicyConnection        `json:"internalPolicyEditors"`
@@ -12047,6 +12147,15 @@ type GroupWhereInput struct {
 	// scan_viewers edge predicates
 	HasScanViewers     *bool             `json:"hasScanViewers,omitempty"`
 	HasScanViewersWith []*ScanWhereInput `json:"hasScanViewersWith,omitempty"`
+	// assessment_editors edge predicates
+	HasAssessmentEditors     *bool                   `json:"hasAssessmentEditors,omitempty"`
+	HasAssessmentEditorsWith []*AssessmentWhereInput `json:"hasAssessmentEditorsWith,omitempty"`
+	// assessment_blocked_groups edge predicates
+	HasAssessmentBlockedGroups     *bool                   `json:"hasAssessmentBlockedGroups,omitempty"`
+	HasAssessmentBlockedGroupsWith []*AssessmentWhereInput `json:"hasAssessmentBlockedGroupsWith,omitempty"`
+	// assessment_viewers edge predicates
+	HasAssessmentViewers     *bool                   `json:"hasAssessmentViewers,omitempty"`
+	HasAssessmentViewersWith []*AssessmentWhereInput `json:"hasAssessmentViewersWith,omitempty"`
 	// procedure_editors edge predicates
 	HasProcedureEditors     *bool                  `json:"hasProcedureEditors,omitempty"`
 	HasProcedureEditorsWith []*ProcedureWhereInput `json:"hasProcedureEditorsWith,omitempty"`
@@ -26684,19 +26793,28 @@ type UpdateAssessmentInput struct {
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
 	// the name of the assessment, e.g. cloud providers, marketing team
-	Name           *string               `json:"name,omitempty"`
-	AssessmentType *enums.AssessmentType `json:"assessmentType,omitempty"`
-	// the questionnaire template id associated with the assessment
-	QuestionnaireID             *string  `json:"questionnaireID,omitempty"`
-	ClearQuestionnaireID        *bool    `json:"clearQuestionnaireID,omitempty"`
-	OwnerID                     *string  `json:"ownerID,omitempty"`
-	ClearOwner                  *bool    `json:"clearOwner,omitempty"`
-	AddUserIDs                  []string `json:"addUserIDs,omitempty"`
-	RemoveUserIDs               []string `json:"removeUserIDs,omitempty"`
-	ClearUsers                  *bool    `json:"clearUsers,omitempty"`
-	AddAssessmentResponseIDs    []string `json:"addAssessmentResponseIDs,omitempty"`
-	RemoveAssessmentResponseIDs []string `json:"removeAssessmentResponseIDs,omitempty"`
-	ClearAssessmentResponses    *bool    `json:"clearAssessmentResponses,omitempty"`
+	Name                        *string               `json:"name,omitempty"`
+	AssessmentType              *enums.AssessmentType `json:"assessmentType,omitempty"`
+	OwnerID                     *string               `json:"ownerID,omitempty"`
+	ClearOwner                  *bool                 `json:"clearOwner,omitempty"`
+	AddBlockedGroupIDs          []string              `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs       []string              `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups          *bool                 `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs                []string              `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs             []string              `json:"removeEditorIDs,omitempty"`
+	ClearEditors                *bool                 `json:"clearEditors,omitempty"`
+	AddViewerIDs                []string              `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs             []string              `json:"removeViewerIDs,omitempty"`
+	ClearViewers                *bool                 `json:"clearViewers,omitempty"`
+	TemplateID                  *string               `json:"templateID,omitempty"`
+	AddUserIDs                  []string              `json:"addUserIDs,omitempty"`
+	RemoveUserIDs               []string              `json:"removeUserIDs,omitempty"`
+	ClearUsers                  *bool                 `json:"clearUsers,omitempty"`
+	AddAssessmentResponseIDs    []string              `json:"addAssessmentResponseIDs,omitempty"`
+	RemoveAssessmentResponseIDs []string              `json:"removeAssessmentResponseIDs,omitempty"`
+	ClearAssessmentResponses    *bool                 `json:"clearAssessmentResponses,omitempty"`
+	AssessmentOwnerID           *string               `json:"assessmentOwnerID,omitempty"`
+	ClearAssessmentOwner        *bool                 `json:"clearAssessmentOwner,omitempty"`
 }
 
 // UpdateAssessmentResponseInput is used for update AssessmentResponse object.
@@ -26712,16 +26830,17 @@ type UpdateAssessmentResponseInput struct {
 	AssignedAt      *time.Time `json:"assignedAt,omitempty"`
 	ClearAssignedAt *bool      `json:"clearAssignedAt,omitempty"`
 	// when the user started the assessment
-	StartedAt      *time.Time `json:"startedAt,omitempty"`
-	ClearStartedAt *bool      `json:"clearStartedAt,omitempty"`
+	StartedAt *time.Time `json:"startedAt,omitempty"`
 	// when the user completed the assessment
 	CompletedAt      *time.Time `json:"completedAt,omitempty"`
 	ClearCompletedAt *bool      `json:"clearCompletedAt,omitempty"`
 	// when the assessment is due
-	DueDate      *time.Time `json:"dueDate,omitempty"`
-	ClearDueDate *bool      `json:"clearDueDate,omitempty"`
-	AssessmentID *string    `json:"assessmentID,omitempty"`
-	UserID       *string    `json:"userID,omitempty"`
+	DueDate       *time.Time `json:"dueDate,omitempty"`
+	ClearDueDate  *bool      `json:"clearDueDate,omitempty"`
+	AssessmentID  *string    `json:"assessmentID,omitempty"`
+	UserID        *string    `json:"userID,omitempty"`
+	DocumentID    *string    `json:"documentID,omitempty"`
+	ClearDocument *bool      `json:"clearDocument,omitempty"`
 }
 
 // UpdateAssetInput is used for update Asset object.
@@ -27449,6 +27568,15 @@ type UpdateGroupInput struct {
 	AddScanViewerIDs                           []string                      `json:"addScanViewerIDs,omitempty"`
 	RemoveScanViewerIDs                        []string                      `json:"removeScanViewerIDs,omitempty"`
 	ClearScanViewers                           *bool                         `json:"clearScanViewers,omitempty"`
+	AddAssessmentEditorIDs                     []string                      `json:"addAssessmentEditorIDs,omitempty"`
+	RemoveAssessmentEditorIDs                  []string                      `json:"removeAssessmentEditorIDs,omitempty"`
+	ClearAssessmentEditors                     *bool                         `json:"clearAssessmentEditors,omitempty"`
+	AddAssessmentBlockedGroupIDs               []string                      `json:"addAssessmentBlockedGroupIDs,omitempty"`
+	RemoveAssessmentBlockedGroupIDs            []string                      `json:"removeAssessmentBlockedGroupIDs,omitempty"`
+	ClearAssessmentBlockedGroups               *bool                         `json:"clearAssessmentBlockedGroups,omitempty"`
+	AddAssessmentViewerIDs                     []string                      `json:"addAssessmentViewerIDs,omitempty"`
+	RemoveAssessmentViewerIDs                  []string                      `json:"removeAssessmentViewerIDs,omitempty"`
+	ClearAssessmentViewers                     *bool                         `json:"clearAssessmentViewers,omitempty"`
 	AddProcedureEditorIDs                      []string                      `json:"addProcedureEditorIDs,omitempty"`
 	RemoveProcedureEditorIDs                   []string                      `json:"removeProcedureEditorIDs,omitempty"`
 	ClearProcedureEditors                      *bool                         `json:"clearProcedureEditors,omitempty"`
@@ -30470,10 +30598,11 @@ func (e AssessmentHistoryOrderField) MarshalJSON() ([]byte, error) {
 type AssessmentOrderField string
 
 const (
-	AssessmentOrderFieldCreatedAt      AssessmentOrderField = "created_at"
-	AssessmentOrderFieldUpdatedAt      AssessmentOrderField = "updated_at"
-	AssessmentOrderFieldName           AssessmentOrderField = "name"
-	AssessmentOrderFieldAssessmentType AssessmentOrderField = "assessment_type"
+	AssessmentOrderFieldCreatedAt           AssessmentOrderField = "created_at"
+	AssessmentOrderFieldUpdatedAt           AssessmentOrderField = "updated_at"
+	AssessmentOrderFieldName                AssessmentOrderField = "name"
+	AssessmentOrderFieldAssessmentType      AssessmentOrderField = "assessment_type"
+	AssessmentOrderFieldAssessmentOwnerName AssessmentOrderField = "ASSESSMENT_OWNER_name"
 )
 
 var AllAssessmentOrderField = []AssessmentOrderField{
@@ -30481,11 +30610,12 @@ var AllAssessmentOrderField = []AssessmentOrderField{
 	AssessmentOrderFieldUpdatedAt,
 	AssessmentOrderFieldName,
 	AssessmentOrderFieldAssessmentType,
+	AssessmentOrderFieldAssessmentOwnerName,
 }
 
 func (e AssessmentOrderField) IsValid() bool {
 	switch e {
-	case AssessmentOrderFieldCreatedAt, AssessmentOrderFieldUpdatedAt, AssessmentOrderFieldName, AssessmentOrderFieldAssessmentType:
+	case AssessmentOrderFieldCreatedAt, AssessmentOrderFieldUpdatedAt, AssessmentOrderFieldName, AssessmentOrderFieldAssessmentType, AssessmentOrderFieldAssessmentOwnerName:
 		return true
 	}
 	return false

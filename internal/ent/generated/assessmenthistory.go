@@ -46,9 +46,11 @@ type AssessmentHistory struct {
 	Name string `json:"name,omitempty"`
 	// AssessmentType holds the value of the "assessment_type" field.
 	AssessmentType enums.AssessmentType `json:"assessment_type,omitempty"`
-	// the questionnaire template id associated with the assessment
-	QuestionnaireID string `json:"questionnaire_id,omitempty"`
-	selectValues    sql.SelectValues
+	// the template id associated with the assessment
+	TemplateID string `json:"template_id,omitempty"`
+	// the id of the group that owns the assessment
+	AssessmentOwnerID string `json:"assessment_owner_id,omitempty"`
+	selectValues      sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -60,7 +62,7 @@ func (*AssessmentHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case assessmenthistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case assessmenthistory.FieldID, assessmenthistory.FieldRef, assessmenthistory.FieldCreatedBy, assessmenthistory.FieldUpdatedBy, assessmenthistory.FieldDeletedBy, assessmenthistory.FieldOwnerID, assessmenthistory.FieldName, assessmenthistory.FieldAssessmentType, assessmenthistory.FieldQuestionnaireID:
+		case assessmenthistory.FieldID, assessmenthistory.FieldRef, assessmenthistory.FieldCreatedBy, assessmenthistory.FieldUpdatedBy, assessmenthistory.FieldDeletedBy, assessmenthistory.FieldOwnerID, assessmenthistory.FieldName, assessmenthistory.FieldAssessmentType, assessmenthistory.FieldTemplateID, assessmenthistory.FieldAssessmentOwnerID:
 			values[i] = new(sql.NullString)
 		case assessmenthistory.FieldHistoryTime, assessmenthistory.FieldCreatedAt, assessmenthistory.FieldUpdatedAt, assessmenthistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -165,11 +167,17 @@ func (ah *AssessmentHistory) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				ah.AssessmentType = enums.AssessmentType(value.String)
 			}
-		case assessmenthistory.FieldQuestionnaireID:
+		case assessmenthistory.FieldTemplateID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field questionnaire_id", values[i])
+				return fmt.Errorf("unexpected type %T for field template_id", values[i])
 			} else if value.Valid {
-				ah.QuestionnaireID = value.String
+				ah.TemplateID = value.String
+			}
+		case assessmenthistory.FieldAssessmentOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field assessment_owner_id", values[i])
+			} else if value.Valid {
+				ah.AssessmentOwnerID = value.String
 			}
 		default:
 			ah.selectValues.Set(columns[i], values[i])
@@ -246,8 +254,11 @@ func (ah *AssessmentHistory) String() string {
 	builder.WriteString("assessment_type=")
 	builder.WriteString(fmt.Sprintf("%v", ah.AssessmentType))
 	builder.WriteString(", ")
-	builder.WriteString("questionnaire_id=")
-	builder.WriteString(ah.QuestionnaireID)
+	builder.WriteString("template_id=")
+	builder.WriteString(ah.TemplateID)
+	builder.WriteString(", ")
+	builder.WriteString("assessment_owner_id=")
+	builder.WriteString(ah.AssessmentOwnerID)
 	builder.WriteByte(')')
 	return builder.String()
 }

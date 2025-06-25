@@ -171,23 +171,37 @@ func (ahu *AssessmentHistoryUpdate) SetNillableAssessmentType(et *enums.Assessme
 	return ahu
 }
 
-// SetQuestionnaireID sets the "questionnaire_id" field.
-func (ahu *AssessmentHistoryUpdate) SetQuestionnaireID(s string) *AssessmentHistoryUpdate {
-	ahu.mutation.SetQuestionnaireID(s)
+// SetTemplateID sets the "template_id" field.
+func (ahu *AssessmentHistoryUpdate) SetTemplateID(s string) *AssessmentHistoryUpdate {
+	ahu.mutation.SetTemplateID(s)
 	return ahu
 }
 
-// SetNillableQuestionnaireID sets the "questionnaire_id" field if the given value is not nil.
-func (ahu *AssessmentHistoryUpdate) SetNillableQuestionnaireID(s *string) *AssessmentHistoryUpdate {
+// SetNillableTemplateID sets the "template_id" field if the given value is not nil.
+func (ahu *AssessmentHistoryUpdate) SetNillableTemplateID(s *string) *AssessmentHistoryUpdate {
 	if s != nil {
-		ahu.SetQuestionnaireID(*s)
+		ahu.SetTemplateID(*s)
 	}
 	return ahu
 }
 
-// ClearQuestionnaireID clears the value of the "questionnaire_id" field.
-func (ahu *AssessmentHistoryUpdate) ClearQuestionnaireID() *AssessmentHistoryUpdate {
-	ahu.mutation.ClearQuestionnaireID()
+// SetAssessmentOwnerID sets the "assessment_owner_id" field.
+func (ahu *AssessmentHistoryUpdate) SetAssessmentOwnerID(s string) *AssessmentHistoryUpdate {
+	ahu.mutation.SetAssessmentOwnerID(s)
+	return ahu
+}
+
+// SetNillableAssessmentOwnerID sets the "assessment_owner_id" field if the given value is not nil.
+func (ahu *AssessmentHistoryUpdate) SetNillableAssessmentOwnerID(s *string) *AssessmentHistoryUpdate {
+	if s != nil {
+		ahu.SetAssessmentOwnerID(*s)
+	}
+	return ahu
+}
+
+// ClearAssessmentOwnerID clears the value of the "assessment_owner_id" field.
+func (ahu *AssessmentHistoryUpdate) ClearAssessmentOwnerID() *AssessmentHistoryUpdate {
+	ahu.mutation.ClearAssessmentOwnerID()
 	return ahu
 }
 
@@ -316,11 +330,14 @@ func (ahu *AssessmentHistoryUpdate) sqlSave(ctx context.Context) (n int, err err
 	if value, ok := ahu.mutation.AssessmentType(); ok {
 		_spec.SetField(assessmenthistory.FieldAssessmentType, field.TypeEnum, value)
 	}
-	if value, ok := ahu.mutation.QuestionnaireID(); ok {
-		_spec.SetField(assessmenthistory.FieldQuestionnaireID, field.TypeString, value)
+	if value, ok := ahu.mutation.TemplateID(); ok {
+		_spec.SetField(assessmenthistory.FieldTemplateID, field.TypeString, value)
 	}
-	if ahu.mutation.QuestionnaireIDCleared() {
-		_spec.ClearField(assessmenthistory.FieldQuestionnaireID, field.TypeString)
+	if value, ok := ahu.mutation.AssessmentOwnerID(); ok {
+		_spec.SetField(assessmenthistory.FieldAssessmentOwnerID, field.TypeString, value)
+	}
+	if ahu.mutation.AssessmentOwnerIDCleared() {
+		_spec.ClearField(assessmenthistory.FieldAssessmentOwnerID, field.TypeString)
 	}
 	_spec.Node.Schema = ahu.schemaConfig.AssessmentHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ahu.schemaConfig)
@@ -484,23 +501,37 @@ func (ahuo *AssessmentHistoryUpdateOne) SetNillableAssessmentType(et *enums.Asse
 	return ahuo
 }
 
-// SetQuestionnaireID sets the "questionnaire_id" field.
-func (ahuo *AssessmentHistoryUpdateOne) SetQuestionnaireID(s string) *AssessmentHistoryUpdateOne {
-	ahuo.mutation.SetQuestionnaireID(s)
+// SetTemplateID sets the "template_id" field.
+func (ahuo *AssessmentHistoryUpdateOne) SetTemplateID(s string) *AssessmentHistoryUpdateOne {
+	ahuo.mutation.SetTemplateID(s)
 	return ahuo
 }
 
-// SetNillableQuestionnaireID sets the "questionnaire_id" field if the given value is not nil.
-func (ahuo *AssessmentHistoryUpdateOne) SetNillableQuestionnaireID(s *string) *AssessmentHistoryUpdateOne {
+// SetNillableTemplateID sets the "template_id" field if the given value is not nil.
+func (ahuo *AssessmentHistoryUpdateOne) SetNillableTemplateID(s *string) *AssessmentHistoryUpdateOne {
 	if s != nil {
-		ahuo.SetQuestionnaireID(*s)
+		ahuo.SetTemplateID(*s)
 	}
 	return ahuo
 }
 
-// ClearQuestionnaireID clears the value of the "questionnaire_id" field.
-func (ahuo *AssessmentHistoryUpdateOne) ClearQuestionnaireID() *AssessmentHistoryUpdateOne {
-	ahuo.mutation.ClearQuestionnaireID()
+// SetAssessmentOwnerID sets the "assessment_owner_id" field.
+func (ahuo *AssessmentHistoryUpdateOne) SetAssessmentOwnerID(s string) *AssessmentHistoryUpdateOne {
+	ahuo.mutation.SetAssessmentOwnerID(s)
+	return ahuo
+}
+
+// SetNillableAssessmentOwnerID sets the "assessment_owner_id" field if the given value is not nil.
+func (ahuo *AssessmentHistoryUpdateOne) SetNillableAssessmentOwnerID(s *string) *AssessmentHistoryUpdateOne {
+	if s != nil {
+		ahuo.SetAssessmentOwnerID(*s)
+	}
+	return ahuo
+}
+
+// ClearAssessmentOwnerID clears the value of the "assessment_owner_id" field.
+func (ahuo *AssessmentHistoryUpdateOne) ClearAssessmentOwnerID() *AssessmentHistoryUpdateOne {
+	ahuo.mutation.ClearAssessmentOwnerID()
 	return ahuo
 }
 
@@ -659,11 +690,14 @@ func (ahuo *AssessmentHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Ass
 	if value, ok := ahuo.mutation.AssessmentType(); ok {
 		_spec.SetField(assessmenthistory.FieldAssessmentType, field.TypeEnum, value)
 	}
-	if value, ok := ahuo.mutation.QuestionnaireID(); ok {
-		_spec.SetField(assessmenthistory.FieldQuestionnaireID, field.TypeString, value)
+	if value, ok := ahuo.mutation.TemplateID(); ok {
+		_spec.SetField(assessmenthistory.FieldTemplateID, field.TypeString, value)
 	}
-	if ahuo.mutation.QuestionnaireIDCleared() {
-		_spec.ClearField(assessmenthistory.FieldQuestionnaireID, field.TypeString)
+	if value, ok := ahuo.mutation.AssessmentOwnerID(); ok {
+		_spec.SetField(assessmenthistory.FieldAssessmentOwnerID, field.TypeString, value)
+	}
+	if ahuo.mutation.AssessmentOwnerIDCleared() {
+		_spec.ClearField(assessmenthistory.FieldAssessmentOwnerID, field.TypeString)
 	}
 	_spec.Node.Schema = ahuo.schemaConfig.AssessmentHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ahuo.schemaConfig)

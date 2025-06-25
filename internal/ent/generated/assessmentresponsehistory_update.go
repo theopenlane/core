@@ -199,12 +199,6 @@ func (arhu *AssessmentResponseHistoryUpdate) SetNillableStartedAt(t *time.Time) 
 	return arhu
 }
 
-// ClearStartedAt clears the value of the "started_at" field.
-func (arhu *AssessmentResponseHistoryUpdate) ClearStartedAt() *AssessmentResponseHistoryUpdate {
-	arhu.mutation.ClearStartedAt()
-	return arhu
-}
-
 // SetCompletedAt sets the "completed_at" field.
 func (arhu *AssessmentResponseHistoryUpdate) SetCompletedAt(t time.Time) *AssessmentResponseHistoryUpdate {
 	arhu.mutation.SetCompletedAt(t)
@@ -242,6 +236,26 @@ func (arhu *AssessmentResponseHistoryUpdate) SetNillableDueDate(t *time.Time) *A
 // ClearDueDate clears the value of the "due_date" field.
 func (arhu *AssessmentResponseHistoryUpdate) ClearDueDate() *AssessmentResponseHistoryUpdate {
 	arhu.mutation.ClearDueDate()
+	return arhu
+}
+
+// SetResponseDataID sets the "response_data_id" field.
+func (arhu *AssessmentResponseHistoryUpdate) SetResponseDataID(s string) *AssessmentResponseHistoryUpdate {
+	arhu.mutation.SetResponseDataID(s)
+	return arhu
+}
+
+// SetNillableResponseDataID sets the "response_data_id" field if the given value is not nil.
+func (arhu *AssessmentResponseHistoryUpdate) SetNillableResponseDataID(s *string) *AssessmentResponseHistoryUpdate {
+	if s != nil {
+		arhu.SetResponseDataID(*s)
+	}
+	return arhu
+}
+
+// ClearResponseDataID clears the value of the "response_data_id" field.
+func (arhu *AssessmentResponseHistoryUpdate) ClearResponseDataID() *AssessmentResponseHistoryUpdate {
+	arhu.mutation.ClearResponseDataID()
 	return arhu
 }
 
@@ -376,9 +390,6 @@ func (arhu *AssessmentResponseHistoryUpdate) sqlSave(ctx context.Context) (n int
 	if value, ok := arhu.mutation.StartedAt(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldStartedAt, field.TypeTime, value)
 	}
-	if arhu.mutation.StartedAtCleared() {
-		_spec.ClearField(assessmentresponsehistory.FieldStartedAt, field.TypeTime)
-	}
 	if value, ok := arhu.mutation.CompletedAt(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldCompletedAt, field.TypeTime, value)
 	}
@@ -390,6 +401,12 @@ func (arhu *AssessmentResponseHistoryUpdate) sqlSave(ctx context.Context) (n int
 	}
 	if arhu.mutation.DueDateCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldDueDate, field.TypeTime)
+	}
+	if value, ok := arhu.mutation.ResponseDataID(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldResponseDataID, field.TypeString, value)
+	}
+	if arhu.mutation.ResponseDataIDCleared() {
+		_spec.ClearField(assessmentresponsehistory.FieldResponseDataID, field.TypeString)
 	}
 	_spec.Node.Schema = arhu.schemaConfig.AssessmentResponseHistory
 	ctx = internal.NewSchemaConfigContext(ctx, arhu.schemaConfig)
@@ -581,12 +598,6 @@ func (arhuo *AssessmentResponseHistoryUpdateOne) SetNillableStartedAt(t *time.Ti
 	return arhuo
 }
 
-// ClearStartedAt clears the value of the "started_at" field.
-func (arhuo *AssessmentResponseHistoryUpdateOne) ClearStartedAt() *AssessmentResponseHistoryUpdateOne {
-	arhuo.mutation.ClearStartedAt()
-	return arhuo
-}
-
 // SetCompletedAt sets the "completed_at" field.
 func (arhuo *AssessmentResponseHistoryUpdateOne) SetCompletedAt(t time.Time) *AssessmentResponseHistoryUpdateOne {
 	arhuo.mutation.SetCompletedAt(t)
@@ -624,6 +635,26 @@ func (arhuo *AssessmentResponseHistoryUpdateOne) SetNillableDueDate(t *time.Time
 // ClearDueDate clears the value of the "due_date" field.
 func (arhuo *AssessmentResponseHistoryUpdateOne) ClearDueDate() *AssessmentResponseHistoryUpdateOne {
 	arhuo.mutation.ClearDueDate()
+	return arhuo
+}
+
+// SetResponseDataID sets the "response_data_id" field.
+func (arhuo *AssessmentResponseHistoryUpdateOne) SetResponseDataID(s string) *AssessmentResponseHistoryUpdateOne {
+	arhuo.mutation.SetResponseDataID(s)
+	return arhuo
+}
+
+// SetNillableResponseDataID sets the "response_data_id" field if the given value is not nil.
+func (arhuo *AssessmentResponseHistoryUpdateOne) SetNillableResponseDataID(s *string) *AssessmentResponseHistoryUpdateOne {
+	if s != nil {
+		arhuo.SetResponseDataID(*s)
+	}
+	return arhuo
+}
+
+// ClearResponseDataID clears the value of the "response_data_id" field.
+func (arhuo *AssessmentResponseHistoryUpdateOne) ClearResponseDataID() *AssessmentResponseHistoryUpdateOne {
+	arhuo.mutation.ClearResponseDataID()
 	return arhuo
 }
 
@@ -788,9 +819,6 @@ func (arhuo *AssessmentResponseHistoryUpdateOne) sqlSave(ctx context.Context) (_
 	if value, ok := arhuo.mutation.StartedAt(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldStartedAt, field.TypeTime, value)
 	}
-	if arhuo.mutation.StartedAtCleared() {
-		_spec.ClearField(assessmentresponsehistory.FieldStartedAt, field.TypeTime)
-	}
 	if value, ok := arhuo.mutation.CompletedAt(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldCompletedAt, field.TypeTime, value)
 	}
@@ -802,6 +830,12 @@ func (arhuo *AssessmentResponseHistoryUpdateOne) sqlSave(ctx context.Context) (_
 	}
 	if arhuo.mutation.DueDateCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldDueDate, field.TypeTime)
+	}
+	if value, ok := arhuo.mutation.ResponseDataID(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldResponseDataID, field.TypeString, value)
+	}
+	if arhuo.mutation.ResponseDataIDCleared() {
+		_spec.ClearField(assessmentresponsehistory.FieldResponseDataID, field.TypeString)
 	}
 	_spec.Node.Schema = arhuo.schemaConfig.AssessmentResponseHistory
 	ctx = internal.NewSchemaConfigContext(ctx, arhuo.schemaConfig)

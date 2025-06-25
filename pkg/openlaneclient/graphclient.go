@@ -31,8 +31,6 @@ type OpenlaneGraphClient interface {
 	GetAPITokenByID(ctx context.Context, apiTokenID string, interceptors ...clientv2.RequestInterceptor) (*GetAPITokenByID, error)
 	GetAPITokens(ctx context.Context, where *APITokenWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAPITokens, error)
 	UpdateAPIToken(ctx context.Context, updateAPITokenID string, input UpdateAPITokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAPIToken, error)
-	CreateBulkCSVAssessment(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVAssessment, error)
-	CreateBulkAssessment(ctx context.Context, input []*CreateAssessmentInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkAssessment, error)
 	CreateAssessment(ctx context.Context, input CreateAssessmentInput, interceptors ...clientv2.RequestInterceptor) (*CreateAssessment, error)
 	DeleteAssessment(ctx context.Context, deleteAssessmentID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAssessment, error)
 	GetAllAssessments(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssessments, error)
@@ -2127,13 +2125,20 @@ func (t *AdminSearch_AdminSearch_Assessments_PageInfo) GetStartCursor() *string 
 }
 
 type AdminSearch_AdminSearch_Assessments_Edges_Node struct {
-	ID              string   "json:\"id\" graphql:\"id\""
-	Name            string   "json:\"name\" graphql:\"name\""
-	OwnerID         *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	QuestionnaireID *string  "json:\"questionnaireID,omitempty\" graphql:\"questionnaireID\""
-	Tags            []string "json:\"tags,omitempty\" graphql:\"tags\""
+	AssessmentOwnerID *string  "json:\"assessmentOwnerID,omitempty\" graphql:\"assessmentOwnerID\""
+	ID                string   "json:\"id\" graphql:\"id\""
+	Name              string   "json:\"name\" graphql:\"name\""
+	OwnerID           *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags              []string "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID        string   "json:\"templateID\" graphql:\"templateID\""
 }
 
+func (t *AdminSearch_AdminSearch_Assessments_Edges_Node) GetAssessmentOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Assessments_Edges_Node{}
+	}
+	return t.AssessmentOwnerID
+}
 func (t *AdminSearch_AdminSearch_Assessments_Edges_Node) GetID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Assessments_Edges_Node{}
@@ -2152,17 +2157,17 @@ func (t *AdminSearch_AdminSearch_Assessments_Edges_Node) GetOwnerID() *string {
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_AdminSearch_Assessments_Edges_Node) GetQuestionnaireID() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Assessments_Edges_Node{}
-	}
-	return t.QuestionnaireID
-}
 func (t *AdminSearch_AdminSearch_Assessments_Edges_Node) GetTags() []string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Assessments_Edges_Node{}
 	}
 	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Assessments_Edges_Node) GetTemplateID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Assessments_Edges_Node{}
+	}
+	return t.TemplateID
 }
 
 type AdminSearch_AdminSearch_Assessments_Edges struct {
@@ -2234,10 +2239,11 @@ func (t *AdminSearch_AdminSearch_AssessmentResponses_PageInfo) GetStartCursor() 
 }
 
 type AdminSearch_AdminSearch_AssessmentResponses_Edges_Node struct {
-	AssessmentID string   "json:\"assessmentID\" graphql:\"assessmentID\""
-	ID           string   "json:\"id\" graphql:\"id\""
-	Tags         []string "json:\"tags,omitempty\" graphql:\"tags\""
-	UserID       string   "json:\"userID\" graphql:\"userID\""
+	AssessmentID   string   "json:\"assessmentID\" graphql:\"assessmentID\""
+	ID             string   "json:\"id\" graphql:\"id\""
+	ResponseDataID *string  "json:\"responseDataID,omitempty\" graphql:\"responseDataID\""
+	Tags           []string "json:\"tags,omitempty\" graphql:\"tags\""
+	UserID         string   "json:\"userID\" graphql:\"userID\""
 }
 
 func (t *AdminSearch_AdminSearch_AssessmentResponses_Edges_Node) GetAssessmentID() string {
@@ -2251,6 +2257,12 @@ func (t *AdminSearch_AdminSearch_AssessmentResponses_Edges_Node) GetID() string 
 		t = &AdminSearch_AdminSearch_AssessmentResponses_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *AdminSearch_AdminSearch_AssessmentResponses_Edges_Node) GetResponseDataID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_AssessmentResponses_Edges_Node{}
+	}
+	return t.ResponseDataID
 }
 func (t *AdminSearch_AdminSearch_AssessmentResponses_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -8683,187 +8695,17 @@ func (t *UpdateAPIToken_UpdateAPIToken) GetAPIToken() *UpdateAPIToken_UpdateAPIT
 	return &t.APIToken
 }
 
-type CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments struct {
-	AssessmentType  enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
-	CreatedAt       *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID              string               "json:\"id\" graphql:\"id\""
-	Name            string               "json:\"name\" graphql:\"name\""
-	OwnerID         *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	QuestionnaireID *string              "json:\"questionnaireID,omitempty\" graphql:\"questionnaireID\""
-	Tags            []string             "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-}
-
-func (t *CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments) GetAssessmentType() *enums.AssessmentType {
-	if t == nil {
-		t = &CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments{}
-	}
-	return &t.AssessmentType
-}
-func (t *CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments{}
-	}
-	return t.CreatedAt
-}
-func (t *CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments) GetCreatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments{}
-	}
-	return t.CreatedBy
-}
-func (t *CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments{}
-	}
-	return t.ID
-}
-func (t *CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments) GetName() string {
-	if t == nil {
-		t = &CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments{}
-	}
-	return t.Name
-}
-func (t *CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments) GetOwnerID() *string {
-	if t == nil {
-		t = &CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments{}
-	}
-	return t.OwnerID
-}
-func (t *CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments) GetQuestionnaireID() *string {
-	if t == nil {
-		t = &CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments{}
-	}
-	return t.QuestionnaireID
-}
-func (t *CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments) GetTags() []string {
-	if t == nil {
-		t = &CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments{}
-	}
-	return t.Tags
-}
-func (t *CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments{}
-	}
-	return t.UpdatedAt
-}
-func (t *CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments{}
-	}
-	return t.UpdatedBy
-}
-
-type CreateBulkCSVAssessment_CreateBulkCSVAssessment struct {
-	Assessments []*CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments "json:\"assessments,omitempty\" graphql:\"assessments\""
-}
-
-func (t *CreateBulkCSVAssessment_CreateBulkCSVAssessment) GetAssessments() []*CreateBulkCSVAssessment_CreateBulkCSVAssessment_Assessments {
-	if t == nil {
-		t = &CreateBulkCSVAssessment_CreateBulkCSVAssessment{}
-	}
-	return t.Assessments
-}
-
-type CreateBulkAssessment_CreateBulkAssessment_Assessments struct {
-	AssessmentType  enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
-	CreatedAt       *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID              string               "json:\"id\" graphql:\"id\""
-	Name            string               "json:\"name\" graphql:\"name\""
-	OwnerID         *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	QuestionnaireID *string              "json:\"questionnaireID,omitempty\" graphql:\"questionnaireID\""
-	Tags            []string             "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-}
-
-func (t *CreateBulkAssessment_CreateBulkAssessment_Assessments) GetAssessmentType() *enums.AssessmentType {
-	if t == nil {
-		t = &CreateBulkAssessment_CreateBulkAssessment_Assessments{}
-	}
-	return &t.AssessmentType
-}
-func (t *CreateBulkAssessment_CreateBulkAssessment_Assessments) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkAssessment_CreateBulkAssessment_Assessments{}
-	}
-	return t.CreatedAt
-}
-func (t *CreateBulkAssessment_CreateBulkAssessment_Assessments) GetCreatedBy() *string {
-	if t == nil {
-		t = &CreateBulkAssessment_CreateBulkAssessment_Assessments{}
-	}
-	return t.CreatedBy
-}
-func (t *CreateBulkAssessment_CreateBulkAssessment_Assessments) GetID() string {
-	if t == nil {
-		t = &CreateBulkAssessment_CreateBulkAssessment_Assessments{}
-	}
-	return t.ID
-}
-func (t *CreateBulkAssessment_CreateBulkAssessment_Assessments) GetName() string {
-	if t == nil {
-		t = &CreateBulkAssessment_CreateBulkAssessment_Assessments{}
-	}
-	return t.Name
-}
-func (t *CreateBulkAssessment_CreateBulkAssessment_Assessments) GetOwnerID() *string {
-	if t == nil {
-		t = &CreateBulkAssessment_CreateBulkAssessment_Assessments{}
-	}
-	return t.OwnerID
-}
-func (t *CreateBulkAssessment_CreateBulkAssessment_Assessments) GetQuestionnaireID() *string {
-	if t == nil {
-		t = &CreateBulkAssessment_CreateBulkAssessment_Assessments{}
-	}
-	return t.QuestionnaireID
-}
-func (t *CreateBulkAssessment_CreateBulkAssessment_Assessments) GetTags() []string {
-	if t == nil {
-		t = &CreateBulkAssessment_CreateBulkAssessment_Assessments{}
-	}
-	return t.Tags
-}
-func (t *CreateBulkAssessment_CreateBulkAssessment_Assessments) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkAssessment_CreateBulkAssessment_Assessments{}
-	}
-	return t.UpdatedAt
-}
-func (t *CreateBulkAssessment_CreateBulkAssessment_Assessments) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateBulkAssessment_CreateBulkAssessment_Assessments{}
-	}
-	return t.UpdatedBy
-}
-
-type CreateBulkAssessment_CreateBulkAssessment struct {
-	Assessments []*CreateBulkAssessment_CreateBulkAssessment_Assessments "json:\"assessments,omitempty\" graphql:\"assessments\""
-}
-
-func (t *CreateBulkAssessment_CreateBulkAssessment) GetAssessments() []*CreateBulkAssessment_CreateBulkAssessment_Assessments {
-	if t == nil {
-		t = &CreateBulkAssessment_CreateBulkAssessment{}
-	}
-	return t.Assessments
-}
-
 type CreateAssessment_CreateAssessment_Assessment struct {
-	AssessmentType  enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
-	CreatedAt       *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID              string               "json:\"id\" graphql:\"id\""
-	Name            string               "json:\"name\" graphql:\"name\""
-	OwnerID         *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	QuestionnaireID *string              "json:\"questionnaireID,omitempty\" graphql:\"questionnaireID\""
-	Tags            []string             "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AssessmentType enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
+	CreatedAt      *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID             string               "json:\"id\" graphql:\"id\""
+	Name           string               "json:\"name\" graphql:\"name\""
+	OwnerID        *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags           []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID     string               "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt      *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateAssessment_CreateAssessment_Assessment) GetAssessmentType() *enums.AssessmentType {
@@ -8902,17 +8744,17 @@ func (t *CreateAssessment_CreateAssessment_Assessment) GetOwnerID() *string {
 	}
 	return t.OwnerID
 }
-func (t *CreateAssessment_CreateAssessment_Assessment) GetQuestionnaireID() *string {
-	if t == nil {
-		t = &CreateAssessment_CreateAssessment_Assessment{}
-	}
-	return t.QuestionnaireID
-}
 func (t *CreateAssessment_CreateAssessment_Assessment) GetTags() []string {
 	if t == nil {
 		t = &CreateAssessment_CreateAssessment_Assessment{}
 	}
 	return t.Tags
+}
+func (t *CreateAssessment_CreateAssessment_Assessment) GetTemplateID() string {
+	if t == nil {
+		t = &CreateAssessment_CreateAssessment_Assessment{}
+	}
+	return t.TemplateID
 }
 func (t *CreateAssessment_CreateAssessment_Assessment) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -8982,16 +8824,16 @@ func (t *GetAllAssessments_Assessments_PageInfo) GetStartCursor() *string {
 }
 
 type GetAllAssessments_Assessments_Edges_Node struct {
-	AssessmentType  enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
-	CreatedAt       *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID              string               "json:\"id\" graphql:\"id\""
-	Name            string               "json:\"name\" graphql:\"name\""
-	OwnerID         *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	QuestionnaireID *string              "json:\"questionnaireID,omitempty\" graphql:\"questionnaireID\""
-	Tags            []string             "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AssessmentType enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
+	CreatedAt      *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID             string               "json:\"id\" graphql:\"id\""
+	Name           string               "json:\"name\" graphql:\"name\""
+	OwnerID        *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags           []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID     string               "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt      *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllAssessments_Assessments_Edges_Node) GetAssessmentType() *enums.AssessmentType {
@@ -9030,17 +8872,17 @@ func (t *GetAllAssessments_Assessments_Edges_Node) GetOwnerID() *string {
 	}
 	return t.OwnerID
 }
-func (t *GetAllAssessments_Assessments_Edges_Node) GetQuestionnaireID() *string {
-	if t == nil {
-		t = &GetAllAssessments_Assessments_Edges_Node{}
-	}
-	return t.QuestionnaireID
-}
 func (t *GetAllAssessments_Assessments_Edges_Node) GetTags() []string {
 	if t == nil {
 		t = &GetAllAssessments_Assessments_Edges_Node{}
 	}
 	return t.Tags
+}
+func (t *GetAllAssessments_Assessments_Edges_Node) GetTemplateID() string {
+	if t == nil {
+		t = &GetAllAssessments_Assessments_Edges_Node{}
+	}
+	return t.TemplateID
 }
 func (t *GetAllAssessments_Assessments_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -9092,16 +8934,16 @@ func (t *GetAllAssessments_Assessments) GetTotalCount() int64 {
 }
 
 type GetAssessmentByID_Assessment struct {
-	AssessmentType  enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
-	CreatedAt       *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID              string               "json:\"id\" graphql:\"id\""
-	Name            string               "json:\"name\" graphql:\"name\""
-	OwnerID         *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	QuestionnaireID *string              "json:\"questionnaireID,omitempty\" graphql:\"questionnaireID\""
-	Tags            []string             "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AssessmentType enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
+	CreatedAt      *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID             string               "json:\"id\" graphql:\"id\""
+	Name           string               "json:\"name\" graphql:\"name\""
+	OwnerID        *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags           []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID     string               "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt      *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAssessmentByID_Assessment) GetAssessmentType() *enums.AssessmentType {
@@ -9140,17 +8982,17 @@ func (t *GetAssessmentByID_Assessment) GetOwnerID() *string {
 	}
 	return t.OwnerID
 }
-func (t *GetAssessmentByID_Assessment) GetQuestionnaireID() *string {
-	if t == nil {
-		t = &GetAssessmentByID_Assessment{}
-	}
-	return t.QuestionnaireID
-}
 func (t *GetAssessmentByID_Assessment) GetTags() []string {
 	if t == nil {
 		t = &GetAssessmentByID_Assessment{}
 	}
 	return t.Tags
+}
+func (t *GetAssessmentByID_Assessment) GetTemplateID() string {
+	if t == nil {
+		t = &GetAssessmentByID_Assessment{}
+	}
+	return t.TemplateID
 }
 func (t *GetAssessmentByID_Assessment) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -9198,16 +9040,16 @@ func (t *GetAssessments_Assessments_PageInfo) GetStartCursor() *string {
 }
 
 type GetAssessments_Assessments_Edges_Node struct {
-	AssessmentType  enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
-	CreatedAt       *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID              string               "json:\"id\" graphql:\"id\""
-	Name            string               "json:\"name\" graphql:\"name\""
-	OwnerID         *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	QuestionnaireID *string              "json:\"questionnaireID,omitempty\" graphql:\"questionnaireID\""
-	Tags            []string             "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AssessmentType enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
+	CreatedAt      *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID             string               "json:\"id\" graphql:\"id\""
+	Name           string               "json:\"name\" graphql:\"name\""
+	OwnerID        *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags           []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID     string               "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt      *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAssessments_Assessments_Edges_Node) GetAssessmentType() *enums.AssessmentType {
@@ -9246,17 +9088,17 @@ func (t *GetAssessments_Assessments_Edges_Node) GetOwnerID() *string {
 	}
 	return t.OwnerID
 }
-func (t *GetAssessments_Assessments_Edges_Node) GetQuestionnaireID() *string {
-	if t == nil {
-		t = &GetAssessments_Assessments_Edges_Node{}
-	}
-	return t.QuestionnaireID
-}
 func (t *GetAssessments_Assessments_Edges_Node) GetTags() []string {
 	if t == nil {
 		t = &GetAssessments_Assessments_Edges_Node{}
 	}
 	return t.Tags
+}
+func (t *GetAssessments_Assessments_Edges_Node) GetTemplateID() string {
+	if t == nil {
+		t = &GetAssessments_Assessments_Edges_Node{}
+	}
+	return t.TemplateID
 }
 func (t *GetAssessments_Assessments_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -9308,16 +9150,16 @@ func (t *GetAssessments_Assessments) GetTotalCount() int64 {
 }
 
 type UpdateAssessment_UpdateAssessment_Assessment struct {
-	AssessmentType  enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
-	CreatedAt       *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID              string               "json:\"id\" graphql:\"id\""
-	Name            string               "json:\"name\" graphql:\"name\""
-	OwnerID         *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	QuestionnaireID *string              "json:\"questionnaireID,omitempty\" graphql:\"questionnaireID\""
-	Tags            []string             "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AssessmentType enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
+	CreatedAt      *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID             string               "json:\"id\" graphql:\"id\""
+	Name           string               "json:\"name\" graphql:\"name\""
+	OwnerID        *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags           []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID     string               "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt      *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *UpdateAssessment_UpdateAssessment_Assessment) GetAssessmentType() *enums.AssessmentType {
@@ -9356,17 +9198,17 @@ func (t *UpdateAssessment_UpdateAssessment_Assessment) GetOwnerID() *string {
 	}
 	return t.OwnerID
 }
-func (t *UpdateAssessment_UpdateAssessment_Assessment) GetQuestionnaireID() *string {
-	if t == nil {
-		t = &UpdateAssessment_UpdateAssessment_Assessment{}
-	}
-	return t.QuestionnaireID
-}
 func (t *UpdateAssessment_UpdateAssessment_Assessment) GetTags() []string {
 	if t == nil {
 		t = &UpdateAssessment_UpdateAssessment_Assessment{}
 	}
 	return t.Tags
+}
+func (t *UpdateAssessment_UpdateAssessment_Assessment) GetTemplateID() string {
+	if t == nil {
+		t = &UpdateAssessment_UpdateAssessment_Assessment{}
+	}
+	return t.TemplateID
 }
 func (t *UpdateAssessment_UpdateAssessment_Assessment) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -9425,19 +9267,19 @@ func (t *GetAllAssessmentHistories_AssessmentHistories_PageInfo) GetStartCursor(
 }
 
 type GetAllAssessmentHistories_AssessmentHistories_Edges_Node struct {
-	AssessmentType  enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
-	CreatedAt       *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	HistoryTime     time.Time            "json:\"historyTime\" graphql:\"historyTime\""
-	ID              string               "json:\"id\" graphql:\"id\""
-	Name            string               "json:\"name\" graphql:\"name\""
-	Operation       history.OpType       "json:\"operation\" graphql:\"operation\""
-	OwnerID         *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	QuestionnaireID *string              "json:\"questionnaireID,omitempty\" graphql:\"questionnaireID\""
-	Ref             *string              "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags            []string             "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AssessmentType enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
+	CreatedAt      *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime    time.Time            "json:\"historyTime\" graphql:\"historyTime\""
+	ID             string               "json:\"id\" graphql:\"id\""
+	Name           string               "json:\"name\" graphql:\"name\""
+	Operation      history.OpType       "json:\"operation\" graphql:\"operation\""
+	OwnerID        *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref            *string              "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags           []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID     string               "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt      *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetAssessmentType() *enums.AssessmentType {
@@ -9488,12 +9330,6 @@ func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetOwnerID() 
 	}
 	return t.OwnerID
 }
-func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetQuestionnaireID() *string {
-	if t == nil {
-		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
-	}
-	return t.QuestionnaireID
-}
 func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetRef() *string {
 	if t == nil {
 		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
@@ -9505,6 +9341,12 @@ func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetTags() []s
 		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
 	}
 	return t.Tags
+}
+func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetTemplateID() string {
+	if t == nil {
+		t = &GetAllAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.TemplateID
 }
 func (t *GetAllAssessmentHistories_AssessmentHistories_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -9588,19 +9430,19 @@ func (t *GetAssessmentHistories_AssessmentHistories_PageInfo) GetStartCursor() *
 }
 
 type GetAssessmentHistories_AssessmentHistories_Edges_Node struct {
-	AssessmentType  enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
-	CreatedAt       *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	HistoryTime     time.Time            "json:\"historyTime\" graphql:\"historyTime\""
-	ID              string               "json:\"id\" graphql:\"id\""
-	Name            string               "json:\"name\" graphql:\"name\""
-	Operation       history.OpType       "json:\"operation\" graphql:\"operation\""
-	OwnerID         *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	QuestionnaireID *string              "json:\"questionnaireID,omitempty\" graphql:\"questionnaireID\""
-	Ref             *string              "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags            []string             "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AssessmentType enums.AssessmentType "json:\"assessmentType\" graphql:\"assessmentType\""
+	CreatedAt      *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime    time.Time            "json:\"historyTime\" graphql:\"historyTime\""
+	ID             string               "json:\"id\" graphql:\"id\""
+	Name           string               "json:\"name\" graphql:\"name\""
+	Operation      history.OpType       "json:\"operation\" graphql:\"operation\""
+	OwnerID        *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref            *string              "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags           []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID     string               "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt      *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetAssessmentType() *enums.AssessmentType {
@@ -9651,12 +9493,6 @@ func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetOwnerID() *st
 	}
 	return t.OwnerID
 }
-func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetQuestionnaireID() *string {
-	if t == nil {
-		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
-	}
-	return t.QuestionnaireID
-}
 func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetRef() *string {
 	if t == nil {
 		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
@@ -9668,6 +9504,12 @@ func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetTags() []stri
 		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
 	}
 	return t.Tags
+}
+func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetTemplateID() string {
+	if t == nil {
+		t = &GetAssessmentHistories_AssessmentHistories_Edges_Node{}
+	}
+	return t.TemplateID
 }
 func (t *GetAssessmentHistories_AssessmentHistories_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -9726,7 +9568,7 @@ type CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentR
 	CreatedBy    *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DueDate      *time.Time                     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	ID           string                         "json:\"id\" graphql:\"id\""
-	StartedAt    *time.Time                     "json:\"startedAt,omitempty\" graphql:\"startedAt\""
+	StartedAt    time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
 	Status       enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
 	Tags         []string                       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -9780,7 +9622,7 @@ func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_Assessm
 	if t == nil {
 		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
 	}
-	return t.StartedAt
+	return &t.StartedAt
 }
 func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetStatus() *enums.AssessmentResponseStatus {
 	if t == nil {
@@ -9832,7 +9674,7 @@ type CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentRespons
 	CreatedBy    *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DueDate      *time.Time                     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	ID           string                         "json:\"id\" graphql:\"id\""
-	StartedAt    *time.Time                     "json:\"startedAt,omitempty\" graphql:\"startedAt\""
+	StartedAt    time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
 	Status       enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
 	Tags         []string                       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -9886,7 +9728,7 @@ func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentRes
 	if t == nil {
 		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
 	}
-	return t.StartedAt
+	return &t.StartedAt
 }
 func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetStatus() *enums.AssessmentResponseStatus {
 	if t == nil {
@@ -9938,7 +9780,7 @@ type CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse struct
 	CreatedBy    *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DueDate      *time.Time                     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	ID           string                         "json:\"id\" graphql:\"id\""
-	StartedAt    *time.Time                     "json:\"startedAt,omitempty\" graphql:\"startedAt\""
+	StartedAt    time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
 	Status       enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
 	Tags         []string                       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -9992,7 +9834,7 @@ func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) G
 	if t == nil {
 		t = &CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse{}
 	}
-	return t.StartedAt
+	return &t.StartedAt
 }
 func (t *CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse) GetStatus() *enums.AssessmentResponseStatus {
 	if t == nil {
@@ -10087,7 +9929,7 @@ type GetAllAssessmentResponses_AssessmentResponses_Edges_Node struct {
 	CreatedBy    *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DueDate      *time.Time                     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	ID           string                         "json:\"id\" graphql:\"id\""
-	StartedAt    *time.Time                     "json:\"startedAt,omitempty\" graphql:\"startedAt\""
+	StartedAt    time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
 	Status       enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
 	Tags         []string                       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -10141,7 +9983,7 @@ func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetStartedAt(
 	if t == nil {
 		t = &GetAllAssessmentResponses_AssessmentResponses_Edges_Node{}
 	}
-	return t.StartedAt
+	return &t.StartedAt
 }
 func (t *GetAllAssessmentResponses_AssessmentResponses_Edges_Node) GetStatus() *enums.AssessmentResponseStatus {
 	if t == nil {
@@ -10218,7 +10060,7 @@ type GetAssessmentResponseByID_AssessmentResponse struct {
 	CreatedBy    *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DueDate      *time.Time                     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	ID           string                         "json:\"id\" graphql:\"id\""
-	StartedAt    *time.Time                     "json:\"startedAt,omitempty\" graphql:\"startedAt\""
+	StartedAt    time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
 	Status       enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
 	Tags         []string                       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -10272,7 +10114,7 @@ func (t *GetAssessmentResponseByID_AssessmentResponse) GetStartedAt() *time.Time
 	if t == nil {
 		t = &GetAssessmentResponseByID_AssessmentResponse{}
 	}
-	return t.StartedAt
+	return &t.StartedAt
 }
 func (t *GetAssessmentResponseByID_AssessmentResponse) GetStatus() *enums.AssessmentResponseStatus {
 	if t == nil {
@@ -10345,7 +10187,7 @@ type GetAssessmentResponses_AssessmentResponses_Edges_Node struct {
 	CreatedBy    *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DueDate      *time.Time                     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	ID           string                         "json:\"id\" graphql:\"id\""
-	StartedAt    *time.Time                     "json:\"startedAt,omitempty\" graphql:\"startedAt\""
+	StartedAt    time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
 	Status       enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
 	Tags         []string                       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -10399,7 +10241,7 @@ func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetStartedAt() *
 	if t == nil {
 		t = &GetAssessmentResponses_AssessmentResponses_Edges_Node{}
 	}
-	return t.StartedAt
+	return &t.StartedAt
 }
 func (t *GetAssessmentResponses_AssessmentResponses_Edges_Node) GetStatus() *enums.AssessmentResponseStatus {
 	if t == nil {
@@ -10476,7 +10318,7 @@ type UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse struct
 	CreatedBy    *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DueDate      *time.Time                     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	ID           string                         "json:\"id\" graphql:\"id\""
-	StartedAt    *time.Time                     "json:\"startedAt,omitempty\" graphql:\"startedAt\""
+	StartedAt    time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
 	Status       enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
 	Tags         []string                       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -10530,7 +10372,7 @@ func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) G
 	if t == nil {
 		t = &UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse{}
 	}
-	return t.StartedAt
+	return &t.StartedAt
 }
 func (t *UpdateAssessmentResponse_UpdateAssessmentResponse_AssessmentResponse) GetStatus() *enums.AssessmentResponseStatus {
 	if t == nil {
@@ -10617,7 +10459,7 @@ type GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node st
 	ID           string                         "json:\"id\" graphql:\"id\""
 	Operation    history.OpType                 "json:\"operation\" graphql:\"operation\""
 	Ref          *string                        "json:\"ref,omitempty\" graphql:\"ref\""
-	StartedAt    *time.Time                     "json:\"startedAt,omitempty\" graphql:\"startedAt\""
+	StartedAt    time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
 	Status       enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
 	Tags         []string                       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -10689,7 +10531,7 @@ func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Nod
 	if t == nil {
 		t = &GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
 	}
-	return t.StartedAt
+	return &t.StartedAt
 }
 func (t *GetAllAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetStatus() *enums.AssessmentResponseStatus {
 	if t == nil {
@@ -10801,7 +10643,7 @@ type GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node struc
 	ID           string                         "json:\"id\" graphql:\"id\""
 	Operation    history.OpType                 "json:\"operation\" graphql:\"operation\""
 	Ref          *string                        "json:\"ref,omitempty\" graphql:\"ref\""
-	StartedAt    *time.Time                     "json:\"startedAt,omitempty\" graphql:\"startedAt\""
+	StartedAt    time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
 	Status       enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
 	Tags         []string                       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt    *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -10873,7 +10715,7 @@ func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) 
 	if t == nil {
 		t = &GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node{}
 	}
-	return t.StartedAt
+	return &t.StartedAt
 }
 func (t *GetAssessmentResponseHistories_AssessmentResponseHistories_Edges_Node) GetStatus() *enums.AssessmentResponseStatus {
 	if t == nil {
@@ -86264,28 +86106,6 @@ func (t *UpdateAPIToken) GetUpdateAPIToken() *UpdateAPIToken_UpdateAPIToken {
 	return &t.UpdateAPIToken
 }
 
-type CreateBulkCSVAssessment struct {
-	CreateBulkCSVAssessment CreateBulkCSVAssessment_CreateBulkCSVAssessment "json:\"createBulkCSVAssessment\" graphql:\"createBulkCSVAssessment\""
-}
-
-func (t *CreateBulkCSVAssessment) GetCreateBulkCSVAssessment() *CreateBulkCSVAssessment_CreateBulkCSVAssessment {
-	if t == nil {
-		t = &CreateBulkCSVAssessment{}
-	}
-	return &t.CreateBulkCSVAssessment
-}
-
-type CreateBulkAssessment struct {
-	CreateBulkAssessment CreateBulkAssessment_CreateBulkAssessment "json:\"createBulkAssessment\" graphql:\"createBulkAssessment\""
-}
-
-func (t *CreateBulkAssessment) GetCreateBulkAssessment() *CreateBulkAssessment_CreateBulkAssessment {
-	if t == nil {
-		t = &CreateBulkAssessment{}
-	}
-	return &t.CreateBulkAssessment
-}
-
 type CreateAssessment struct {
 	CreateAssessment CreateAssessment_CreateAssessment "json:\"createAssessment\" graphql:\"createAssessment\""
 }
@@ -91757,7 +91577,8 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					tags
 					ownerID
 					name
-					questionnaireID
+					templateID
+					assessmentOwnerID
 				}
 			}
 		}
@@ -91775,6 +91596,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					tags
 					assessmentID
 					userID
+					responseDataID
 				}
 			}
 		}
@@ -92912,76 +92734,6 @@ func (c *Client) UpdateAPIToken(ctx context.Context, updateAPITokenID string, in
 	return &res, nil
 }
 
-const CreateBulkCSVAssessmentDocument = `mutation CreateBulkCSVAssessment ($input: Upload!) {
-	createBulkCSVAssessment(input: $input) {
-		assessments {
-			assessmentType
-			createdAt
-			createdBy
-			id
-			name
-			ownerID
-			questionnaireID
-			tags
-			updatedAt
-			updatedBy
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkCSVAssessment(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVAssessment, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkCSVAssessment
-	if err := c.Client.Post(ctx, "CreateBulkCSVAssessment", CreateBulkCSVAssessmentDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const CreateBulkAssessmentDocument = `mutation CreateBulkAssessment ($input: [CreateAssessmentInput!]) {
-	createBulkAssessment(input: $input) {
-		assessments {
-			assessmentType
-			createdAt
-			createdBy
-			id
-			name
-			ownerID
-			questionnaireID
-			tags
-			updatedAt
-			updatedBy
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkAssessment(ctx context.Context, input []*CreateAssessmentInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkAssessment, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkAssessment
-	if err := c.Client.Post(ctx, "CreateBulkAssessment", CreateBulkAssessmentDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const CreateAssessmentDocument = `mutation CreateAssessment ($input: CreateAssessmentInput!) {
 	createAssessment(input: $input) {
 		assessment {
@@ -92991,8 +92743,8 @@ const CreateAssessmentDocument = `mutation CreateAssessment ($input: CreateAsses
 			id
 			name
 			ownerID
-			questionnaireID
 			tags
+			templateID
 			updatedAt
 			updatedBy
 		}
@@ -93058,8 +92810,8 @@ const GetAllAssessmentsDocument = `query GetAllAssessments {
 				id
 				name
 				ownerID
-				questionnaireID
 				tags
+				templateID
 				updatedAt
 				updatedBy
 			}
@@ -93091,8 +92843,8 @@ const GetAssessmentByIDDocument = `query GetAssessmentByID ($assessmentId: ID!) 
 		id
 		name
 		ownerID
-		questionnaireID
 		tags
+		templateID
 		updatedAt
 		updatedBy
 	}
@@ -93133,8 +92885,8 @@ const GetAssessmentsDocument = `query GetAssessments ($first: Int, $last: Int, $
 				id
 				name
 				ownerID
-				questionnaireID
 				tags
+				templateID
 				updatedAt
 				updatedBy
 			}
@@ -93171,8 +92923,8 @@ const UpdateAssessmentDocument = `mutation UpdateAssessment ($updateAssessmentId
 			id
 			name
 			ownerID
-			questionnaireID
 			tags
+			templateID
 			updatedAt
 			updatedBy
 		}
@@ -93217,9 +92969,9 @@ const GetAllAssessmentHistoriesDocument = `query GetAllAssessmentHistories {
 				name
 				operation
 				ownerID
-				questionnaireID
 				ref
 				tags
+				templateID
 				updatedAt
 				updatedBy
 			}
@@ -93262,9 +93014,9 @@ const GetAssessmentHistoriesDocument = `query GetAssessmentHistories ($first: In
 				name
 				operation
 				ownerID
-				questionnaireID
 				ref
 				tags
+				templateID
 				updatedAt
 				updatedBy
 			}
@@ -115012,8 +114764,6 @@ var DocumentOperationNames = map[string]string{
 	GetAPITokenByIDDocument:                      "GetAPITokenByID",
 	GetAPITokensDocument:                         "GetAPITokens",
 	UpdateAPITokenDocument:                       "UpdateAPIToken",
-	CreateBulkCSVAssessmentDocument:              "CreateBulkCSVAssessment",
-	CreateBulkAssessmentDocument:                 "CreateBulkAssessment",
 	CreateAssessmentDocument:                     "CreateAssessment",
 	DeleteAssessmentDocument:                     "DeleteAssessment",
 	GetAllAssessmentsDocument:                    "GetAllAssessments",

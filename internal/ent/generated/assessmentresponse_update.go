@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
@@ -201,12 +202,6 @@ func (aru *AssessmentResponseUpdate) SetNillableStartedAt(t *time.Time) *Assessm
 	return aru
 }
 
-// ClearStartedAt clears the value of the "started_at" field.
-func (aru *AssessmentResponseUpdate) ClearStartedAt() *AssessmentResponseUpdate {
-	aru.mutation.ClearStartedAt()
-	return aru
-}
-
 // SetCompletedAt sets the "completed_at" field.
 func (aru *AssessmentResponseUpdate) SetCompletedAt(t time.Time) *AssessmentResponseUpdate {
 	aru.mutation.SetCompletedAt(t)
@@ -247,6 +242,26 @@ func (aru *AssessmentResponseUpdate) ClearDueDate() *AssessmentResponseUpdate {
 	return aru
 }
 
+// SetResponseDataID sets the "response_data_id" field.
+func (aru *AssessmentResponseUpdate) SetResponseDataID(s string) *AssessmentResponseUpdate {
+	aru.mutation.SetResponseDataID(s)
+	return aru
+}
+
+// SetNillableResponseDataID sets the "response_data_id" field if the given value is not nil.
+func (aru *AssessmentResponseUpdate) SetNillableResponseDataID(s *string) *AssessmentResponseUpdate {
+	if s != nil {
+		aru.SetResponseDataID(*s)
+	}
+	return aru
+}
+
+// ClearResponseDataID clears the value of the "response_data_id" field.
+func (aru *AssessmentResponseUpdate) ClearResponseDataID() *AssessmentResponseUpdate {
+	aru.mutation.ClearResponseDataID()
+	return aru
+}
+
 // SetAssessment sets the "assessment" edge to the Assessment entity.
 func (aru *AssessmentResponseUpdate) SetAssessment(a *Assessment) *AssessmentResponseUpdate {
 	return aru.SetAssessmentID(a.ID)
@@ -255,6 +270,25 @@ func (aru *AssessmentResponseUpdate) SetAssessment(a *Assessment) *AssessmentRes
 // SetUser sets the "user" edge to the User entity.
 func (aru *AssessmentResponseUpdate) SetUser(u *User) *AssessmentResponseUpdate {
 	return aru.SetUserID(u.ID)
+}
+
+// SetDocumentID sets the "document" edge to the DocumentData entity by ID.
+func (aru *AssessmentResponseUpdate) SetDocumentID(id string) *AssessmentResponseUpdate {
+	aru.mutation.SetDocumentID(id)
+	return aru
+}
+
+// SetNillableDocumentID sets the "document" edge to the DocumentData entity by ID if the given value is not nil.
+func (aru *AssessmentResponseUpdate) SetNillableDocumentID(id *string) *AssessmentResponseUpdate {
+	if id != nil {
+		aru = aru.SetDocumentID(*id)
+	}
+	return aru
+}
+
+// SetDocument sets the "document" edge to the DocumentData entity.
+func (aru *AssessmentResponseUpdate) SetDocument(d *DocumentData) *AssessmentResponseUpdate {
+	return aru.SetDocumentID(d.ID)
 }
 
 // Mutation returns the AssessmentResponseMutation object of the builder.
@@ -271,6 +305,12 @@ func (aru *AssessmentResponseUpdate) ClearAssessment() *AssessmentResponseUpdate
 // ClearUser clears the "user" edge to the User entity.
 func (aru *AssessmentResponseUpdate) ClearUser() *AssessmentResponseUpdate {
 	aru.mutation.ClearUser()
+	return aru
+}
+
+// ClearDocument clears the "document" edge to the DocumentData entity.
+func (aru *AssessmentResponseUpdate) ClearDocument() *AssessmentResponseUpdate {
+	aru.mutation.ClearDocument()
 	return aru
 }
 
@@ -413,9 +453,6 @@ func (aru *AssessmentResponseUpdate) sqlSave(ctx context.Context) (n int, err er
 	if value, ok := aru.mutation.StartedAt(); ok {
 		_spec.SetField(assessmentresponse.FieldStartedAt, field.TypeTime, value)
 	}
-	if aru.mutation.StartedAtCleared() {
-		_spec.ClearField(assessmentresponse.FieldStartedAt, field.TypeTime)
-	}
 	if value, ok := aru.mutation.CompletedAt(); ok {
 		_spec.SetField(assessmentresponse.FieldCompletedAt, field.TypeTime, value)
 	}
@@ -482,6 +519,37 @@ func (aru *AssessmentResponseUpdate) sqlSave(ctx context.Context) (n int, err er
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = aru.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if aru.mutation.DocumentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   assessmentresponse.DocumentTable,
+			Columns: []string{assessmentresponse.DocumentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = aru.schemaConfig.AssessmentResponse
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := aru.mutation.DocumentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   assessmentresponse.DocumentTable,
+			Columns: []string{assessmentresponse.DocumentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = aru.schemaConfig.AssessmentResponse
@@ -680,12 +748,6 @@ func (aruo *AssessmentResponseUpdateOne) SetNillableStartedAt(t *time.Time) *Ass
 	return aruo
 }
 
-// ClearStartedAt clears the value of the "started_at" field.
-func (aruo *AssessmentResponseUpdateOne) ClearStartedAt() *AssessmentResponseUpdateOne {
-	aruo.mutation.ClearStartedAt()
-	return aruo
-}
-
 // SetCompletedAt sets the "completed_at" field.
 func (aruo *AssessmentResponseUpdateOne) SetCompletedAt(t time.Time) *AssessmentResponseUpdateOne {
 	aruo.mutation.SetCompletedAt(t)
@@ -726,6 +788,26 @@ func (aruo *AssessmentResponseUpdateOne) ClearDueDate() *AssessmentResponseUpdat
 	return aruo
 }
 
+// SetResponseDataID sets the "response_data_id" field.
+func (aruo *AssessmentResponseUpdateOne) SetResponseDataID(s string) *AssessmentResponseUpdateOne {
+	aruo.mutation.SetResponseDataID(s)
+	return aruo
+}
+
+// SetNillableResponseDataID sets the "response_data_id" field if the given value is not nil.
+func (aruo *AssessmentResponseUpdateOne) SetNillableResponseDataID(s *string) *AssessmentResponseUpdateOne {
+	if s != nil {
+		aruo.SetResponseDataID(*s)
+	}
+	return aruo
+}
+
+// ClearResponseDataID clears the value of the "response_data_id" field.
+func (aruo *AssessmentResponseUpdateOne) ClearResponseDataID() *AssessmentResponseUpdateOne {
+	aruo.mutation.ClearResponseDataID()
+	return aruo
+}
+
 // SetAssessment sets the "assessment" edge to the Assessment entity.
 func (aruo *AssessmentResponseUpdateOne) SetAssessment(a *Assessment) *AssessmentResponseUpdateOne {
 	return aruo.SetAssessmentID(a.ID)
@@ -734,6 +816,25 @@ func (aruo *AssessmentResponseUpdateOne) SetAssessment(a *Assessment) *Assessmen
 // SetUser sets the "user" edge to the User entity.
 func (aruo *AssessmentResponseUpdateOne) SetUser(u *User) *AssessmentResponseUpdateOne {
 	return aruo.SetUserID(u.ID)
+}
+
+// SetDocumentID sets the "document" edge to the DocumentData entity by ID.
+func (aruo *AssessmentResponseUpdateOne) SetDocumentID(id string) *AssessmentResponseUpdateOne {
+	aruo.mutation.SetDocumentID(id)
+	return aruo
+}
+
+// SetNillableDocumentID sets the "document" edge to the DocumentData entity by ID if the given value is not nil.
+func (aruo *AssessmentResponseUpdateOne) SetNillableDocumentID(id *string) *AssessmentResponseUpdateOne {
+	if id != nil {
+		aruo = aruo.SetDocumentID(*id)
+	}
+	return aruo
+}
+
+// SetDocument sets the "document" edge to the DocumentData entity.
+func (aruo *AssessmentResponseUpdateOne) SetDocument(d *DocumentData) *AssessmentResponseUpdateOne {
+	return aruo.SetDocumentID(d.ID)
 }
 
 // Mutation returns the AssessmentResponseMutation object of the builder.
@@ -750,6 +851,12 @@ func (aruo *AssessmentResponseUpdateOne) ClearAssessment() *AssessmentResponseUp
 // ClearUser clears the "user" edge to the User entity.
 func (aruo *AssessmentResponseUpdateOne) ClearUser() *AssessmentResponseUpdateOne {
 	aruo.mutation.ClearUser()
+	return aruo
+}
+
+// ClearDocument clears the "document" edge to the DocumentData entity.
+func (aruo *AssessmentResponseUpdateOne) ClearDocument() *AssessmentResponseUpdateOne {
+	aruo.mutation.ClearDocument()
 	return aruo
 }
 
@@ -922,9 +1029,6 @@ func (aruo *AssessmentResponseUpdateOne) sqlSave(ctx context.Context) (_node *As
 	if value, ok := aruo.mutation.StartedAt(); ok {
 		_spec.SetField(assessmentresponse.FieldStartedAt, field.TypeTime, value)
 	}
-	if aruo.mutation.StartedAtCleared() {
-		_spec.ClearField(assessmentresponse.FieldStartedAt, field.TypeTime)
-	}
 	if value, ok := aruo.mutation.CompletedAt(); ok {
 		_spec.SetField(assessmentresponse.FieldCompletedAt, field.TypeTime, value)
 	}
@@ -991,6 +1095,37 @@ func (aruo *AssessmentResponseUpdateOne) sqlSave(ctx context.Context) (_node *As
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = aruo.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if aruo.mutation.DocumentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   assessmentresponse.DocumentTable,
+			Columns: []string{assessmentresponse.DocumentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = aruo.schemaConfig.AssessmentResponse
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := aruo.mutation.DocumentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   assessmentresponse.DocumentTable,
+			Columns: []string{assessmentresponse.DocumentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = aruo.schemaConfig.AssessmentResponse

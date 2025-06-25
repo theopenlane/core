@@ -200,9 +200,10 @@ func adminSearchAssessments(ctx context.Context, query string, after *entgql.Cur
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
-				assessment.OwnerIDContainsFold(query),         // search by OwnerID
-				assessment.NameContainsFold(query),            // search by Name
-				assessment.QuestionnaireIDContainsFold(query), // search by QuestionnaireID
+				assessment.OwnerIDContainsFold(query),           // search by OwnerID
+				assessment.NameContainsFold(query),              // search by Name
+				assessment.TemplateIDContainsFold(query),        // search by TemplateID
+				assessment.AssessmentOwnerIDContainsFold(query), // search by AssessmentOwnerID
 			),
 		)
 
@@ -235,8 +236,9 @@ func adminSearchAssessmentResponses(ctx context.Context, query string, after *en
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
-				assessmentresponse.AssessmentIDContainsFold(query), // search by AssessmentID
-				assessmentresponse.UserIDContainsFold(query),       // search by UserID
+				assessmentresponse.AssessmentIDContainsFold(query),   // search by AssessmentID
+				assessmentresponse.UserIDContainsFold(query),         // search by UserID
+				assessmentresponse.ResponseDataIDContainsFold(query), // search by ResponseDataID
 			),
 		)
 

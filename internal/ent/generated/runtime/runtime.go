@@ -382,16 +382,28 @@ func init() {
 	assessmentMixinHooks0 := assessmentMixin[0].Hooks()
 	assessmentMixinHooks1 := assessmentMixin[1].Hooks()
 	assessmentMixinHooks5 := assessmentMixin[5].Hooks()
+	assessmentMixinHooks6 := assessmentMixin[6].Hooks()
+	assessmentHooks := schema.Assessment{}.Hooks()
 
 	assessment.Hooks[1] = assessmentMixinHooks0[0]
 
 	assessment.Hooks[2] = assessmentMixinHooks1[0]
 
 	assessment.Hooks[3] = assessmentMixinHooks5[0]
+
+	assessment.Hooks[4] = assessmentMixinHooks6[0]
+
+	assessment.Hooks[5] = assessmentMixinHooks6[1]
+
+	assessment.Hooks[6] = assessmentMixinHooks6[2]
+
+	assessment.Hooks[7] = assessmentHooks[0]
 	assessmentMixinInters1 := assessmentMixin[1].Interceptors()
 	assessmentMixinInters5 := assessmentMixin[5].Interceptors()
+	assessmentInters := schema.Assessment{}.Interceptors()
 	assessment.Interceptors[0] = assessmentMixinInters1[0]
 	assessment.Interceptors[1] = assessmentMixinInters5[0]
+	assessment.Interceptors[2] = assessmentInters[0]
 	assessmentMixinFields0 := assessmentMixin[0].Fields()
 	_ = assessmentMixinFields0
 	assessmentMixinFields2 := assessmentMixin[2].Fields()
@@ -471,7 +483,9 @@ func init() {
 
 	assessmentresponse.Hooks[2] = assessmentresponseMixinHooks1[0]
 	assessmentresponseMixinInters1 := assessmentresponseMixin[1].Interceptors()
+	assessmentresponseInters := schema.AssessmentResponse{}.Interceptors()
 	assessmentresponse.Interceptors[0] = assessmentresponseMixinInters1[0]
+	assessmentresponse.Interceptors[1] = assessmentresponseInters[0]
 	assessmentresponseMixinFields0 := assessmentresponseMixin[0].Fields()
 	_ = assessmentresponseMixinFields0
 	assessmentresponseMixinFields2 := assessmentresponseMixin[2].Fields()
@@ -502,6 +516,10 @@ func init() {
 	assessmentresponseDescUserID := assessmentresponseFields[1].Descriptor()
 	// assessmentresponse.UserIDValidator is a validator for the "user_id" field. It is called by the builders before save.
 	assessmentresponse.UserIDValidator = assessmentresponseDescUserID.Validators[0].(func(string) error)
+	// assessmentresponseDescStartedAt is the schema descriptor for started_at field.
+	assessmentresponseDescStartedAt := assessmentresponseFields[4].Descriptor()
+	// assessmentresponse.DefaultStartedAt holds the default value on creation for the started_at field.
+	assessmentresponse.DefaultStartedAt = assessmentresponseDescStartedAt.Default.(time.Time)
 	// assessmentresponseDescID is the schema descriptor for id field.
 	assessmentresponseDescID := assessmentresponseMixinFields2[0].Descriptor()
 	// assessmentresponse.DefaultID holds the default value on creation for the id field.
@@ -528,6 +546,10 @@ func init() {
 	assessmentresponsehistoryDescTags := assessmentresponsehistoryFields[10].Descriptor()
 	// assessmentresponsehistory.DefaultTags holds the default value on creation for the tags field.
 	assessmentresponsehistory.DefaultTags = assessmentresponsehistoryDescTags.Default.([]string)
+	// assessmentresponsehistoryDescStartedAt is the schema descriptor for started_at field.
+	assessmentresponsehistoryDescStartedAt := assessmentresponsehistoryFields[15].Descriptor()
+	// assessmentresponsehistory.DefaultStartedAt holds the default value on creation for the started_at field.
+	assessmentresponsehistory.DefaultStartedAt = assessmentresponsehistoryDescStartedAt.Default.(time.Time)
 	// assessmentresponsehistoryDescID is the schema descriptor for id field.
 	assessmentresponsehistoryDescID := assessmentresponsehistoryFields[9].Descriptor()
 	// assessmentresponsehistory.DefaultID holds the default value on creation for the id field.

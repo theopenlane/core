@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -195,6 +196,20 @@ func (arc *AssessmentResponseCreate) SetNillableDueDate(t *time.Time) *Assessmen
 	return arc
 }
 
+// SetResponseDataID sets the "response_data_id" field.
+func (arc *AssessmentResponseCreate) SetResponseDataID(s string) *AssessmentResponseCreate {
+	arc.mutation.SetResponseDataID(s)
+	return arc
+}
+
+// SetNillableResponseDataID sets the "response_data_id" field if the given value is not nil.
+func (arc *AssessmentResponseCreate) SetNillableResponseDataID(s *string) *AssessmentResponseCreate {
+	if s != nil {
+		arc.SetResponseDataID(*s)
+	}
+	return arc
+}
+
 // SetID sets the "id" field.
 func (arc *AssessmentResponseCreate) SetID(s string) *AssessmentResponseCreate {
 	arc.mutation.SetID(s)
@@ -217,6 +232,25 @@ func (arc *AssessmentResponseCreate) SetAssessment(a *Assessment) *AssessmentRes
 // SetUser sets the "user" edge to the User entity.
 func (arc *AssessmentResponseCreate) SetUser(u *User) *AssessmentResponseCreate {
 	return arc.SetUserID(u.ID)
+}
+
+// SetDocumentID sets the "document" edge to the DocumentData entity by ID.
+func (arc *AssessmentResponseCreate) SetDocumentID(id string) *AssessmentResponseCreate {
+	arc.mutation.SetDocumentID(id)
+	return arc
+}
+
+// SetNillableDocumentID sets the "document" edge to the DocumentData entity by ID if the given value is not nil.
+func (arc *AssessmentResponseCreate) SetNillableDocumentID(id *string) *AssessmentResponseCreate {
+	if id != nil {
+		arc = arc.SetDocumentID(*id)
+	}
+	return arc
+}
+
+// SetDocument sets the "document" edge to the DocumentData entity.
+func (arc *AssessmentResponseCreate) SetDocument(d *DocumentData) *AssessmentResponseCreate {
+	return arc.SetDocumentID(d.ID)
 }
 
 // Mutation returns the AssessmentResponseMutation object of the builder.
@@ -278,6 +312,10 @@ func (arc *AssessmentResponseCreate) defaults() error {
 		v := assessmentresponse.DefaultStatus
 		arc.mutation.SetStatus(v)
 	}
+	if _, ok := arc.mutation.StartedAt(); !ok {
+		v := assessmentresponse.DefaultStartedAt
+		arc.mutation.SetStartedAt(v)
+	}
 	if _, ok := arc.mutation.ID(); !ok {
 		if assessmentresponse.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized assessmentresponse.DefaultID (forgotten import generated/runtime?)")
@@ -313,6 +351,9 @@ func (arc *AssessmentResponseCreate) check() error {
 		if err := assessmentresponse.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "AssessmentResponse.status": %w`, err)}
 		}
+	}
+	if _, ok := arc.mutation.StartedAt(); !ok {
+		return &ValidationError{Name: "started_at", err: errors.New(`generated: missing required field "AssessmentResponse.started_at"`)}
 	}
 	if len(arc.mutation.AssessmentIDs()) == 0 {
 		return &ValidationError{Name: "assessment", err: errors.New(`generated: missing required edge "AssessmentResponse.assessment"`)}
@@ -438,6 +479,24 @@ func (arc *AssessmentResponseCreate) createSpec() (*AssessmentResponse, *sqlgrap
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.UserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := arc.mutation.DocumentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   assessmentresponse.DocumentTable,
+			Columns: []string{assessmentresponse.DocumentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = arc.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ResponseDataID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

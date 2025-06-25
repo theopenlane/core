@@ -1782,8 +1782,12 @@ func (p *assessmentPager) applyOrder(query *AssessmentQuery) *AssessmentQuery {
 		if o.Field.column == DefaultAssessmentOrder.Field.column {
 			defaultOrdered = true
 		}
-		if len(query.ctx.Fields) > 0 {
-			query.ctx.AppendFieldOnce(o.Field.column)
+		switch o.Field.column {
+		case AssessmentOrderFieldAssessmentOwnerName.column:
+		default:
+			if len(query.ctx.Fields) > 0 {
+				query.ctx.AppendFieldOnce(o.Field.column)
+			}
 		}
 	}
 	if !defaultOrdered {
@@ -1797,9 +1801,18 @@ func (p *assessmentPager) applyOrder(query *AssessmentQuery) *AssessmentQuery {
 }
 
 func (p *assessmentPager) orderExpr(query *AssessmentQuery) sql.Querier {
-	if len(query.ctx.Fields) > 0 {
-		for _, o := range p.order {
-			query.ctx.AppendFieldOnce(o.Field.column)
+	for _, o := range p.order {
+		switch o.Field.column {
+		case AssessmentOrderFieldAssessmentOwnerName.column:
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		default:
+			if len(query.ctx.Fields) > 0 {
+				query.ctx.AppendFieldOnce(o.Field.column)
+			}
 		}
 	}
 	return sql.ExprFunc(func(b *sql.Builder) {
@@ -1929,6 +1942,26 @@ var (
 			}
 		},
 	}
+	// AssessmentOrderFieldAssessmentOwnerName orders by ASSESSMENT_OWNER_name.
+	AssessmentOrderFieldAssessmentOwnerName = &AssessmentOrderField{
+		Value: func(a *Assessment) (ent.Value, error) {
+			return a.Value("assessment_owner_name")
+		},
+		column: "assessment_owner_name",
+		toTerm: func(opts ...sql.OrderTermOption) assessment.OrderOption {
+			return assessment.ByAssessmentOwnerField(
+				group.FieldName,
+				append(opts, sql.OrderSelectAs("assessment_owner_name"))...,
+			)
+		},
+		toCursor: func(a *Assessment) Cursor {
+			cv, _ := a.Value("assessment_owner_name")
+			return Cursor{
+				ID:    a.ID,
+				Value: cv,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -1943,6 +1976,8 @@ func (f AssessmentOrderField) String() string {
 		str = "name"
 	case AssessmentOrderFieldAssessmentType.column:
 		str = "assessment_type"
+	case AssessmentOrderFieldAssessmentOwnerName.column:
+		str = "ASSESSMENT_OWNER_name"
 	}
 	return str
 }
@@ -1967,6 +2002,8 @@ func (f *AssessmentOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssessmentOrderFieldName
 	case "assessment_type":
 		*f = *AssessmentOrderFieldAssessmentType
+	case "ASSESSMENT_OWNER_name":
+		*f = *AssessmentOrderFieldAssessmentOwnerName
 	default:
 		return fmt.Errorf("%s is not a valid AssessmentOrderField", str)
 	}

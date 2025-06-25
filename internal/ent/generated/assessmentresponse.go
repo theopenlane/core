@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -49,6 +50,8 @@ type AssessmentResponse struct {
 	CompletedAt time.Time `json:"completed_at,omitempty"`
 	// when the assessment is due
 	DueDate time.Time `json:"due_date,omitempty"`
+	// the document containing the user's response data
+	ResponseDataID string `json:"response_data_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the AssessmentResponseQuery when eager-loading is set.
 	Edges        AssessmentResponseEdges `json:"edges"`
@@ -61,11 +64,13 @@ type AssessmentResponseEdges struct {
 	Assessment *Assessment `json:"assessment,omitempty"`
 	// User holds the value of the user edge.
 	User *User `json:"user,omitempty"`
+	// the document containing the user's response data
+	Document *DocumentData `json:"document,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [3]map[string]int
 }
 
 // AssessmentOrErr returns the Assessment value or an error if the edge
@@ -90,6 +95,17 @@ func (e AssessmentResponseEdges) UserOrErr() (*User, error) {
 	return nil, &NotLoadedError{edge: "user"}
 }
 
+// DocumentOrErr returns the Document value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e AssessmentResponseEdges) DocumentOrErr() (*DocumentData, error) {
+	if e.Document != nil {
+		return e.Document, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: documentdata.Label}
+	}
+	return nil, &NotLoadedError{edge: "document"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*AssessmentResponse) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -97,7 +113,7 @@ func (*AssessmentResponse) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case assessmentresponse.FieldTags:
 			values[i] = new([]byte)
-		case assessmentresponse.FieldID, assessmentresponse.FieldCreatedBy, assessmentresponse.FieldUpdatedBy, assessmentresponse.FieldDeletedBy, assessmentresponse.FieldAssessmentID, assessmentresponse.FieldUserID, assessmentresponse.FieldStatus:
+		case assessmentresponse.FieldID, assessmentresponse.FieldCreatedBy, assessmentresponse.FieldUpdatedBy, assessmentresponse.FieldDeletedBy, assessmentresponse.FieldAssessmentID, assessmentresponse.FieldUserID, assessmentresponse.FieldStatus, assessmentresponse.FieldResponseDataID:
 			values[i] = new(sql.NullString)
 		case assessmentresponse.FieldCreatedAt, assessmentresponse.FieldUpdatedAt, assessmentresponse.FieldDeletedAt, assessmentresponse.FieldAssignedAt, assessmentresponse.FieldStartedAt, assessmentresponse.FieldCompletedAt, assessmentresponse.FieldDueDate:
 			values[i] = new(sql.NullTime)
@@ -208,6 +224,12 @@ func (ar *AssessmentResponse) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				ar.DueDate = value.Time
 			}
+		case assessmentresponse.FieldResponseDataID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field response_data_id", values[i])
+			} else if value.Valid {
+				ar.ResponseDataID = value.String
+			}
 		default:
 			ar.selectValues.Set(columns[i], values[i])
 		}
@@ -229,6 +251,11 @@ func (ar *AssessmentResponse) QueryAssessment() *AssessmentQuery {
 // QueryUser queries the "user" edge of the AssessmentResponse entity.
 func (ar *AssessmentResponse) QueryUser() *UserQuery {
 	return NewAssessmentResponseClient(ar.config).QueryUser(ar)
+}
+
+// QueryDocument queries the "document" edge of the AssessmentResponse entity.
+func (ar *AssessmentResponse) QueryDocument() *DocumentDataQuery {
+	return NewAssessmentResponseClient(ar.config).QueryDocument(ar)
 }
 
 // Update returns a builder for updating this AssessmentResponse.
@@ -295,6 +322,9 @@ func (ar *AssessmentResponse) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("due_date=")
 	builder.WriteString(ar.DueDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("response_data_id=")
+	builder.WriteString(ar.ResponseDataID)
 	builder.WriteByte(')')
 	return builder.String()
 }

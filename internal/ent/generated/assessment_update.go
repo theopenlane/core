@@ -14,8 +14,10 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 
@@ -174,29 +176,93 @@ func (au *AssessmentUpdate) SetNillableAssessmentType(et *enums.AssessmentType) 
 	return au
 }
 
-// SetQuestionnaireID sets the "questionnaire_id" field.
-func (au *AssessmentUpdate) SetQuestionnaireID(s string) *AssessmentUpdate {
-	au.mutation.SetQuestionnaireID(s)
+// SetTemplateID sets the "template_id" field.
+func (au *AssessmentUpdate) SetTemplateID(s string) *AssessmentUpdate {
+	au.mutation.SetTemplateID(s)
 	return au
 }
 
-// SetNillableQuestionnaireID sets the "questionnaire_id" field if the given value is not nil.
-func (au *AssessmentUpdate) SetNillableQuestionnaireID(s *string) *AssessmentUpdate {
+// SetNillableTemplateID sets the "template_id" field if the given value is not nil.
+func (au *AssessmentUpdate) SetNillableTemplateID(s *string) *AssessmentUpdate {
 	if s != nil {
-		au.SetQuestionnaireID(*s)
+		au.SetTemplateID(*s)
 	}
 	return au
 }
 
-// ClearQuestionnaireID clears the value of the "questionnaire_id" field.
-func (au *AssessmentUpdate) ClearQuestionnaireID() *AssessmentUpdate {
-	au.mutation.ClearQuestionnaireID()
+// SetAssessmentOwnerID sets the "assessment_owner_id" field.
+func (au *AssessmentUpdate) SetAssessmentOwnerID(s string) *AssessmentUpdate {
+	au.mutation.SetAssessmentOwnerID(s)
+	return au
+}
+
+// SetNillableAssessmentOwnerID sets the "assessment_owner_id" field if the given value is not nil.
+func (au *AssessmentUpdate) SetNillableAssessmentOwnerID(s *string) *AssessmentUpdate {
+	if s != nil {
+		au.SetAssessmentOwnerID(*s)
+	}
+	return au
+}
+
+// ClearAssessmentOwnerID clears the value of the "assessment_owner_id" field.
+func (au *AssessmentUpdate) ClearAssessmentOwnerID() *AssessmentUpdate {
+	au.mutation.ClearAssessmentOwnerID()
 	return au
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
 func (au *AssessmentUpdate) SetOwner(o *Organization) *AssessmentUpdate {
 	return au.SetOwnerID(o.ID)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (au *AssessmentUpdate) AddBlockedGroupIDs(ids ...string) *AssessmentUpdate {
+	au.mutation.AddBlockedGroupIDs(ids...)
+	return au
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (au *AssessmentUpdate) AddBlockedGroups(g ...*Group) *AssessmentUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return au.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (au *AssessmentUpdate) AddEditorIDs(ids ...string) *AssessmentUpdate {
+	au.mutation.AddEditorIDs(ids...)
+	return au
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (au *AssessmentUpdate) AddEditors(g ...*Group) *AssessmentUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return au.AddEditorIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (au *AssessmentUpdate) AddViewerIDs(ids ...string) *AssessmentUpdate {
+	au.mutation.AddViewerIDs(ids...)
+	return au
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (au *AssessmentUpdate) AddViewers(g ...*Group) *AssessmentUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return au.AddViewerIDs(ids...)
+}
+
+// SetTemplate sets the "template" edge to the Template entity.
+func (au *AssessmentUpdate) SetTemplate(t *Template) *AssessmentUpdate {
+	return au.SetTemplateID(t.ID)
 }
 
 // AddUserIDs adds the "users" edge to the User entity by IDs.
@@ -229,6 +295,11 @@ func (au *AssessmentUpdate) AddAssessmentResponses(a ...*AssessmentResponse) *As
 	return au.AddAssessmentResponseIDs(ids...)
 }
 
+// SetAssessmentOwner sets the "assessment_owner" edge to the Group entity.
+func (au *AssessmentUpdate) SetAssessmentOwner(g *Group) *AssessmentUpdate {
+	return au.SetAssessmentOwnerID(g.ID)
+}
+
 // Mutation returns the AssessmentMutation object of the builder.
 func (au *AssessmentUpdate) Mutation() *AssessmentMutation {
 	return au.mutation
@@ -237,6 +308,75 @@ func (au *AssessmentUpdate) Mutation() *AssessmentMutation {
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (au *AssessmentUpdate) ClearOwner() *AssessmentUpdate {
 	au.mutation.ClearOwner()
+	return au
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (au *AssessmentUpdate) ClearBlockedGroups() *AssessmentUpdate {
+	au.mutation.ClearBlockedGroups()
+	return au
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (au *AssessmentUpdate) RemoveBlockedGroupIDs(ids ...string) *AssessmentUpdate {
+	au.mutation.RemoveBlockedGroupIDs(ids...)
+	return au
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (au *AssessmentUpdate) RemoveBlockedGroups(g ...*Group) *AssessmentUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return au.RemoveBlockedGroupIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (au *AssessmentUpdate) ClearEditors() *AssessmentUpdate {
+	au.mutation.ClearEditors()
+	return au
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (au *AssessmentUpdate) RemoveEditorIDs(ids ...string) *AssessmentUpdate {
+	au.mutation.RemoveEditorIDs(ids...)
+	return au
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (au *AssessmentUpdate) RemoveEditors(g ...*Group) *AssessmentUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return au.RemoveEditorIDs(ids...)
+}
+
+// ClearViewers clears all "viewers" edges to the Group entity.
+func (au *AssessmentUpdate) ClearViewers() *AssessmentUpdate {
+	au.mutation.ClearViewers()
+	return au
+}
+
+// RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
+func (au *AssessmentUpdate) RemoveViewerIDs(ids ...string) *AssessmentUpdate {
+	au.mutation.RemoveViewerIDs(ids...)
+	return au
+}
+
+// RemoveViewers removes "viewers" edges to Group entities.
+func (au *AssessmentUpdate) RemoveViewers(g ...*Group) *AssessmentUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return au.RemoveViewerIDs(ids...)
+}
+
+// ClearTemplate clears the "template" edge to the Template entity.
+func (au *AssessmentUpdate) ClearTemplate() *AssessmentUpdate {
+	au.mutation.ClearTemplate()
 	return au
 }
 
@@ -280,6 +420,12 @@ func (au *AssessmentUpdate) RemoveAssessmentResponses(a ...*AssessmentResponse) 
 		ids[i] = a[i].ID
 	}
 	return au.RemoveAssessmentResponseIDs(ids...)
+}
+
+// ClearAssessmentOwner clears the "assessment_owner" edge to the Group entity.
+func (au *AssessmentUpdate) ClearAssessmentOwner() *AssessmentUpdate {
+	au.mutation.ClearAssessmentOwner()
+	return au
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -340,6 +486,9 @@ func (au *AssessmentUpdate) check() error {
 		if err := assessment.AssessmentTypeValidator(v); err != nil {
 			return &ValidationError{Name: "assessment_type", err: fmt.Errorf(`generated: validator failed for field "Assessment.assessment_type": %w`, err)}
 		}
+	}
+	if au.mutation.TemplateCleared() && len(au.mutation.TemplateIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "Assessment.template"`)
 	}
 	return nil
 }
@@ -409,12 +558,6 @@ func (au *AssessmentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := au.mutation.AssessmentType(); ok {
 		_spec.SetField(assessment.FieldAssessmentType, field.TypeEnum, value)
 	}
-	if value, ok := au.mutation.QuestionnaireID(); ok {
-		_spec.SetField(assessment.FieldQuestionnaireID, field.TypeString, value)
-	}
-	if au.mutation.QuestionnaireIDCleared() {
-		_spec.ClearField(assessment.FieldQuestionnaireID, field.TypeString)
-	}
 	if au.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -438,6 +581,181 @@ func (au *AssessmentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = au.schemaConfig.Assessment
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   assessment.BlockedGroupsTable,
+			Columns: assessment.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = au.schemaConfig.AssessmentBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !au.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   assessment.BlockedGroupsTable,
+			Columns: assessment.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = au.schemaConfig.AssessmentBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   assessment.BlockedGroupsTable,
+			Columns: assessment.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = au.schemaConfig.AssessmentBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   assessment.EditorsTable,
+			Columns: assessment.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = au.schemaConfig.AssessmentEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !au.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   assessment.EditorsTable,
+			Columns: assessment.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = au.schemaConfig.AssessmentEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   assessment.EditorsTable,
+			Columns: assessment.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = au.schemaConfig.AssessmentEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   assessment.ViewersTable,
+			Columns: assessment.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = au.schemaConfig.AssessmentViewers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.RemovedViewersIDs(); len(nodes) > 0 && !au.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   assessment.ViewersTable,
+			Columns: assessment.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = au.schemaConfig.AssessmentViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   assessment.ViewersTable,
+			Columns: assessment.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = au.schemaConfig.AssessmentViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.TemplateCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   assessment.TemplateTable,
+			Columns: []string{assessment.TemplateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = au.schemaConfig.Assessment
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.TemplateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   assessment.TemplateTable,
+			Columns: []string{assessment.TemplateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = au.schemaConfig.Assessment
@@ -537,6 +855,37 @@ func (au *AssessmentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = au.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.AssessmentOwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   assessment.AssessmentOwnerTable,
+			Columns: []string{assessment.AssessmentOwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = au.schemaConfig.Assessment
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.AssessmentOwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   assessment.AssessmentOwnerTable,
+			Columns: []string{assessment.AssessmentOwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = au.schemaConfig.Assessment
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -704,29 +1053,93 @@ func (auo *AssessmentUpdateOne) SetNillableAssessmentType(et *enums.AssessmentTy
 	return auo
 }
 
-// SetQuestionnaireID sets the "questionnaire_id" field.
-func (auo *AssessmentUpdateOne) SetQuestionnaireID(s string) *AssessmentUpdateOne {
-	auo.mutation.SetQuestionnaireID(s)
+// SetTemplateID sets the "template_id" field.
+func (auo *AssessmentUpdateOne) SetTemplateID(s string) *AssessmentUpdateOne {
+	auo.mutation.SetTemplateID(s)
 	return auo
 }
 
-// SetNillableQuestionnaireID sets the "questionnaire_id" field if the given value is not nil.
-func (auo *AssessmentUpdateOne) SetNillableQuestionnaireID(s *string) *AssessmentUpdateOne {
+// SetNillableTemplateID sets the "template_id" field if the given value is not nil.
+func (auo *AssessmentUpdateOne) SetNillableTemplateID(s *string) *AssessmentUpdateOne {
 	if s != nil {
-		auo.SetQuestionnaireID(*s)
+		auo.SetTemplateID(*s)
 	}
 	return auo
 }
 
-// ClearQuestionnaireID clears the value of the "questionnaire_id" field.
-func (auo *AssessmentUpdateOne) ClearQuestionnaireID() *AssessmentUpdateOne {
-	auo.mutation.ClearQuestionnaireID()
+// SetAssessmentOwnerID sets the "assessment_owner_id" field.
+func (auo *AssessmentUpdateOne) SetAssessmentOwnerID(s string) *AssessmentUpdateOne {
+	auo.mutation.SetAssessmentOwnerID(s)
+	return auo
+}
+
+// SetNillableAssessmentOwnerID sets the "assessment_owner_id" field if the given value is not nil.
+func (auo *AssessmentUpdateOne) SetNillableAssessmentOwnerID(s *string) *AssessmentUpdateOne {
+	if s != nil {
+		auo.SetAssessmentOwnerID(*s)
+	}
+	return auo
+}
+
+// ClearAssessmentOwnerID clears the value of the "assessment_owner_id" field.
+func (auo *AssessmentUpdateOne) ClearAssessmentOwnerID() *AssessmentUpdateOne {
+	auo.mutation.ClearAssessmentOwnerID()
 	return auo
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
 func (auo *AssessmentUpdateOne) SetOwner(o *Organization) *AssessmentUpdateOne {
 	return auo.SetOwnerID(o.ID)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (auo *AssessmentUpdateOne) AddBlockedGroupIDs(ids ...string) *AssessmentUpdateOne {
+	auo.mutation.AddBlockedGroupIDs(ids...)
+	return auo
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (auo *AssessmentUpdateOne) AddBlockedGroups(g ...*Group) *AssessmentUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return auo.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (auo *AssessmentUpdateOne) AddEditorIDs(ids ...string) *AssessmentUpdateOne {
+	auo.mutation.AddEditorIDs(ids...)
+	return auo
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (auo *AssessmentUpdateOne) AddEditors(g ...*Group) *AssessmentUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return auo.AddEditorIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (auo *AssessmentUpdateOne) AddViewerIDs(ids ...string) *AssessmentUpdateOne {
+	auo.mutation.AddViewerIDs(ids...)
+	return auo
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (auo *AssessmentUpdateOne) AddViewers(g ...*Group) *AssessmentUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return auo.AddViewerIDs(ids...)
+}
+
+// SetTemplate sets the "template" edge to the Template entity.
+func (auo *AssessmentUpdateOne) SetTemplate(t *Template) *AssessmentUpdateOne {
+	return auo.SetTemplateID(t.ID)
 }
 
 // AddUserIDs adds the "users" edge to the User entity by IDs.
@@ -759,6 +1172,11 @@ func (auo *AssessmentUpdateOne) AddAssessmentResponses(a ...*AssessmentResponse)
 	return auo.AddAssessmentResponseIDs(ids...)
 }
 
+// SetAssessmentOwner sets the "assessment_owner" edge to the Group entity.
+func (auo *AssessmentUpdateOne) SetAssessmentOwner(g *Group) *AssessmentUpdateOne {
+	return auo.SetAssessmentOwnerID(g.ID)
+}
+
 // Mutation returns the AssessmentMutation object of the builder.
 func (auo *AssessmentUpdateOne) Mutation() *AssessmentMutation {
 	return auo.mutation
@@ -767,6 +1185,75 @@ func (auo *AssessmentUpdateOne) Mutation() *AssessmentMutation {
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (auo *AssessmentUpdateOne) ClearOwner() *AssessmentUpdateOne {
 	auo.mutation.ClearOwner()
+	return auo
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (auo *AssessmentUpdateOne) ClearBlockedGroups() *AssessmentUpdateOne {
+	auo.mutation.ClearBlockedGroups()
+	return auo
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (auo *AssessmentUpdateOne) RemoveBlockedGroupIDs(ids ...string) *AssessmentUpdateOne {
+	auo.mutation.RemoveBlockedGroupIDs(ids...)
+	return auo
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (auo *AssessmentUpdateOne) RemoveBlockedGroups(g ...*Group) *AssessmentUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return auo.RemoveBlockedGroupIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (auo *AssessmentUpdateOne) ClearEditors() *AssessmentUpdateOne {
+	auo.mutation.ClearEditors()
+	return auo
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (auo *AssessmentUpdateOne) RemoveEditorIDs(ids ...string) *AssessmentUpdateOne {
+	auo.mutation.RemoveEditorIDs(ids...)
+	return auo
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (auo *AssessmentUpdateOne) RemoveEditors(g ...*Group) *AssessmentUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return auo.RemoveEditorIDs(ids...)
+}
+
+// ClearViewers clears all "viewers" edges to the Group entity.
+func (auo *AssessmentUpdateOne) ClearViewers() *AssessmentUpdateOne {
+	auo.mutation.ClearViewers()
+	return auo
+}
+
+// RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
+func (auo *AssessmentUpdateOne) RemoveViewerIDs(ids ...string) *AssessmentUpdateOne {
+	auo.mutation.RemoveViewerIDs(ids...)
+	return auo
+}
+
+// RemoveViewers removes "viewers" edges to Group entities.
+func (auo *AssessmentUpdateOne) RemoveViewers(g ...*Group) *AssessmentUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return auo.RemoveViewerIDs(ids...)
+}
+
+// ClearTemplate clears the "template" edge to the Template entity.
+func (auo *AssessmentUpdateOne) ClearTemplate() *AssessmentUpdateOne {
+	auo.mutation.ClearTemplate()
 	return auo
 }
 
@@ -810,6 +1297,12 @@ func (auo *AssessmentUpdateOne) RemoveAssessmentResponses(a ...*AssessmentRespon
 		ids[i] = a[i].ID
 	}
 	return auo.RemoveAssessmentResponseIDs(ids...)
+}
+
+// ClearAssessmentOwner clears the "assessment_owner" edge to the Group entity.
+func (auo *AssessmentUpdateOne) ClearAssessmentOwner() *AssessmentUpdateOne {
+	auo.mutation.ClearAssessmentOwner()
+	return auo
 }
 
 // Where appends a list predicates to the AssessmentUpdate builder.
@@ -883,6 +1376,9 @@ func (auo *AssessmentUpdateOne) check() error {
 		if err := assessment.AssessmentTypeValidator(v); err != nil {
 			return &ValidationError{Name: "assessment_type", err: fmt.Errorf(`generated: validator failed for field "Assessment.assessment_type": %w`, err)}
 		}
+	}
+	if auo.mutation.TemplateCleared() && len(auo.mutation.TemplateIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "Assessment.template"`)
 	}
 	return nil
 }
@@ -969,12 +1465,6 @@ func (auo *AssessmentUpdateOne) sqlSave(ctx context.Context) (_node *Assessment,
 	if value, ok := auo.mutation.AssessmentType(); ok {
 		_spec.SetField(assessment.FieldAssessmentType, field.TypeEnum, value)
 	}
-	if value, ok := auo.mutation.QuestionnaireID(); ok {
-		_spec.SetField(assessment.FieldQuestionnaireID, field.TypeString, value)
-	}
-	if auo.mutation.QuestionnaireIDCleared() {
-		_spec.ClearField(assessment.FieldQuestionnaireID, field.TypeString)
-	}
 	if auo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -998,6 +1488,181 @@ func (auo *AssessmentUpdateOne) sqlSave(ctx context.Context) (_node *Assessment,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = auo.schemaConfig.Assessment
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   assessment.BlockedGroupsTable,
+			Columns: assessment.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = auo.schemaConfig.AssessmentBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !auo.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   assessment.BlockedGroupsTable,
+			Columns: assessment.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = auo.schemaConfig.AssessmentBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   assessment.BlockedGroupsTable,
+			Columns: assessment.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = auo.schemaConfig.AssessmentBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   assessment.EditorsTable,
+			Columns: assessment.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = auo.schemaConfig.AssessmentEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !auo.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   assessment.EditorsTable,
+			Columns: assessment.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = auo.schemaConfig.AssessmentEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   assessment.EditorsTable,
+			Columns: assessment.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = auo.schemaConfig.AssessmentEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   assessment.ViewersTable,
+			Columns: assessment.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = auo.schemaConfig.AssessmentViewers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.RemovedViewersIDs(); len(nodes) > 0 && !auo.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   assessment.ViewersTable,
+			Columns: assessment.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = auo.schemaConfig.AssessmentViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   assessment.ViewersTable,
+			Columns: assessment.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = auo.schemaConfig.AssessmentViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.TemplateCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   assessment.TemplateTable,
+			Columns: []string{assessment.TemplateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = auo.schemaConfig.Assessment
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.TemplateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   assessment.TemplateTable,
+			Columns: []string{assessment.TemplateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = auo.schemaConfig.Assessment
@@ -1097,6 +1762,37 @@ func (auo *AssessmentUpdateOne) sqlSave(ctx context.Context) (_node *Assessment,
 			},
 		}
 		edge.Schema = auo.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.AssessmentOwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   assessment.AssessmentOwnerTable,
+			Columns: []string{assessment.AssessmentOwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = auo.schemaConfig.Assessment
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.AssessmentOwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   assessment.AssessmentOwnerTable,
+			Columns: []string{assessment.AssessmentOwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = auo.schemaConfig.Assessment
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

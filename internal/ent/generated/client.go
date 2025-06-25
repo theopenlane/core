@@ -1965,6 +1965,82 @@ func (c *AssessmentClient) QueryOwner(a *Assessment) *OrganizationQuery {
 	return query
 }
 
+// QueryBlockedGroups queries the blocked_groups edge of a Assessment.
+func (c *AssessmentClient) QueryBlockedGroups(a *Assessment) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessment.Table, assessment.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, assessment.BlockedGroupsTable, assessment.BlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := a.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.AssessmentBlockedGroups
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEditors queries the editors edge of a Assessment.
+func (c *AssessmentClient) QueryEditors(a *Assessment) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessment.Table, assessment.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, assessment.EditorsTable, assessment.EditorsPrimaryKey...),
+		)
+		schemaConfig := a.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.AssessmentEditors
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryViewers queries the viewers edge of a Assessment.
+func (c *AssessmentClient) QueryViewers(a *Assessment) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessment.Table, assessment.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, assessment.ViewersTable, assessment.ViewersPrimaryKey...),
+		)
+		schemaConfig := a.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.AssessmentViewers
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTemplate queries the template edge of a Assessment.
+func (c *AssessmentClient) QueryTemplate(a *Assessment) *TemplateQuery {
+	query := (&TemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessment.Table, assessment.FieldID, id),
+			sqlgraph.To(template.Table, template.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, assessment.TemplateTable, assessment.TemplateColumn),
+		)
+		schemaConfig := a.schemaConfig
+		step.To.Schema = schemaConfig.Template
+		step.Edge.Schema = schemaConfig.Assessment
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryUsers queries the users edge of a Assessment.
 func (c *AssessmentClient) QueryUsers(a *Assessment) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
@@ -1997,6 +2073,25 @@ func (c *AssessmentClient) QueryAssessmentResponses(a *Assessment) *AssessmentRe
 		schemaConfig := a.schemaConfig
 		step.To.Schema = schemaConfig.AssessmentResponse
 		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssessmentOwner queries the assessment_owner edge of a Assessment.
+func (c *AssessmentClient) QueryAssessmentOwner(a *Assessment) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessment.Table, assessment.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, assessment.AssessmentOwnerTable, assessment.AssessmentOwnerColumn),
+		)
+		schemaConfig := a.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Assessment
 		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2303,6 +2398,25 @@ func (c *AssessmentResponseClient) QueryUser(ar *AssessmentResponse) *UserQuery 
 		)
 		schemaConfig := ar.schemaConfig
 		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromV = sqlgraph.Neighbors(ar.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDocument queries the document edge of a AssessmentResponse.
+func (c *AssessmentResponseClient) QueryDocument(ar *AssessmentResponse) *DocumentDataQuery {
+	query := (&DocumentDataClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ar.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessmentresponse.Table, assessmentresponse.FieldID, id),
+			sqlgraph.To(documentdata.Table, documentdata.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, assessmentresponse.DocumentTable, assessmentresponse.DocumentColumn),
+		)
+		schemaConfig := ar.schemaConfig
+		step.To.Schema = schemaConfig.DocumentData
 		step.Edge.Schema = schemaConfig.AssessmentResponse
 		fromV = sqlgraph.Neighbors(ar.driver.Dialect(), step)
 		return fromV, nil
@@ -8790,6 +8904,63 @@ func (c *GroupClient) QueryScanViewers(gr *Group) *ScanQuery {
 		schemaConfig := gr.schemaConfig
 		step.To.Schema = schemaConfig.Scan
 		step.Edge.Schema = schemaConfig.ScanViewers
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssessmentEditors queries the assessment_editors edge of a Group.
+func (c *GroupClient) QueryAssessmentEditors(gr *Group) *AssessmentQuery {
+	query := (&AssessmentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(assessment.Table, assessment.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.AssessmentEditorsTable, group.AssessmentEditorsPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.AssessmentEditors
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssessmentBlockedGroups queries the assessment_blocked_groups edge of a Group.
+func (c *GroupClient) QueryAssessmentBlockedGroups(gr *Group) *AssessmentQuery {
+	query := (&AssessmentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(assessment.Table, assessment.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.AssessmentBlockedGroupsTable, group.AssessmentBlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.AssessmentBlockedGroups
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssessmentViewers queries the assessment_viewers edge of a Group.
+func (c *GroupClient) QueryAssessmentViewers(gr *Group) *AssessmentQuery {
+	query := (&AssessmentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(assessment.Table, assessment.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.AssessmentViewersTable, group.AssessmentViewersPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.AssessmentViewers
 		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
 		return fromV, nil
 	}

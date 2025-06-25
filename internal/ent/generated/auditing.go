@@ -368,8 +368,11 @@ func (ah *AssessmentHistory) changes(new *AssessmentHistory) []Change {
 	if !reflect.DeepEqual(ah.AssessmentType, new.AssessmentType) {
 		changes = append(changes, NewChange(assessmenthistory.FieldAssessmentType, ah.AssessmentType, new.AssessmentType))
 	}
-	if !reflect.DeepEqual(ah.QuestionnaireID, new.QuestionnaireID) {
-		changes = append(changes, NewChange(assessmenthistory.FieldQuestionnaireID, ah.QuestionnaireID, new.QuestionnaireID))
+	if !reflect.DeepEqual(ah.TemplateID, new.TemplateID) {
+		changes = append(changes, NewChange(assessmenthistory.FieldTemplateID, ah.TemplateID, new.TemplateID))
+	}
+	if !reflect.DeepEqual(ah.AssessmentOwnerID, new.AssessmentOwnerID) {
+		changes = append(changes, NewChange(assessmenthistory.FieldAssessmentOwnerID, ah.AssessmentOwnerID, new.AssessmentOwnerID))
 	}
 	return changes
 }
@@ -439,6 +442,9 @@ func (arh *AssessmentResponseHistory) changes(new *AssessmentResponseHistory) []
 	}
 	if !reflect.DeepEqual(arh.DueDate, new.DueDate) {
 		changes = append(changes, NewChange(assessmentresponsehistory.FieldDueDate, arh.DueDate, new.DueDate))
+	}
+	if !reflect.DeepEqual(arh.ResponseDataID, new.ResponseDataID) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldResponseDataID, arh.ResponseDataID, new.ResponseDataID))
 	}
 	return changes
 }

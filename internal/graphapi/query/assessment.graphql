@@ -1,38 +1,3 @@
-
-mutation CreateBulkCSVAssessment($input: Upload!) {
-  createBulkCSVAssessment(input: $input) {
-    assessments {
-      assessmentType
-      createdAt
-      createdBy
-      id
-      name
-      ownerID
-      questionnaireID
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
-mutation CreateBulkAssessment($input: [CreateAssessmentInput!]) {
-  createBulkAssessment(input: $input) {
-    assessments {
-      assessmentType
-      createdAt
-      createdBy
-      id
-      name
-      ownerID
-      questionnaireID
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
 mutation CreateAssessment($input: CreateAssessmentInput!) {
   createAssessment(input: $input) {
     assessment {
@@ -42,8 +7,8 @@ mutation CreateAssessment($input: CreateAssessmentInput!) {
       id
       name
       ownerID
-      questionnaireID
       tags
+      templateID
       updatedAt
       updatedBy
     }
@@ -73,8 +38,8 @@ query GetAllAssessments {
         id
         name
         ownerID
-        questionnaireID
         tags
+        templateID
         updatedAt
         updatedBy
       }
@@ -89,8 +54,8 @@ query GetAssessmentByID($assessmentId: ID!) {
     id
     name
     ownerID
-    questionnaireID
     tags
+    templateID
     updatedAt
     updatedBy
   }
@@ -113,8 +78,8 @@ query GetAssessments($first: Int, $last: Int, $where: AssessmentWhereInput) {
         id
         name
         ownerID
-        questionnaireID
         tags
+        templateID
         updatedAt
         updatedBy
       }
@@ -130,8 +95,8 @@ mutation UpdateAssessment($updateAssessmentId: ID!, $input: UpdateAssessmentInpu
       id
       name
       ownerID
-      questionnaireID
       tags
+      templateID
       updatedAt
       updatedBy
     }

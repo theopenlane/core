@@ -19,9 +19,9 @@ query GetAllAssessmentHistories {
         name
         operation
         ownerID
-        questionnaireID
         ref
         tags
+        templateID
         updatedAt
         updatedBy
       }
@@ -48,9 +48,9 @@ query GetAssessmentHistories($first: Int, $last: Int, $where: AssessmentHistoryW
         name
         operation
         ownerID
-        questionnaireID
         ref
         tags
+        templateID
         updatedAt
         updatedBy
       }

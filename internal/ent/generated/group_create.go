@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
@@ -511,6 +512,51 @@ func (gc *GroupCreate) AddScanViewers(s ...*Scan) *GroupCreate {
 		ids[i] = s[i].ID
 	}
 	return gc.AddScanViewerIDs(ids...)
+}
+
+// AddAssessmentEditorIDs adds the "assessment_editors" edge to the Assessment entity by IDs.
+func (gc *GroupCreate) AddAssessmentEditorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddAssessmentEditorIDs(ids...)
+	return gc
+}
+
+// AddAssessmentEditors adds the "assessment_editors" edges to the Assessment entity.
+func (gc *GroupCreate) AddAssessmentEditors(a ...*Assessment) *GroupCreate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return gc.AddAssessmentEditorIDs(ids...)
+}
+
+// AddAssessmentBlockedGroupIDs adds the "assessment_blocked_groups" edge to the Assessment entity by IDs.
+func (gc *GroupCreate) AddAssessmentBlockedGroupIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddAssessmentBlockedGroupIDs(ids...)
+	return gc
+}
+
+// AddAssessmentBlockedGroups adds the "assessment_blocked_groups" edges to the Assessment entity.
+func (gc *GroupCreate) AddAssessmentBlockedGroups(a ...*Assessment) *GroupCreate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return gc.AddAssessmentBlockedGroupIDs(ids...)
+}
+
+// AddAssessmentViewerIDs adds the "assessment_viewers" edge to the Assessment entity by IDs.
+func (gc *GroupCreate) AddAssessmentViewerIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddAssessmentViewerIDs(ids...)
+	return gc
+}
+
+// AddAssessmentViewers adds the "assessment_viewers" edges to the Assessment entity.
+func (gc *GroupCreate) AddAssessmentViewers(a ...*Assessment) *GroupCreate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return gc.AddAssessmentViewerIDs(ids...)
 }
 
 // AddProcedureEditorIDs adds the "procedure_editors" edge to the Procedure entity by IDs.
@@ -1267,6 +1313,57 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = gc.schemaConfig.ScanViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.AssessmentEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.AssessmentEditorsTable,
+			Columns: group.AssessmentEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.AssessmentEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.AssessmentBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.AssessmentBlockedGroupsTable,
+			Columns: group.AssessmentBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.AssessmentBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.AssessmentViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.AssessmentViewersTable,
+			Columns: group.AssessmentViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.AssessmentViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

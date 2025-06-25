@@ -29,8 +29,6 @@ type MutationResolver interface {
 	UpdateAPIToken(ctx context.Context, id string, input generated.UpdateAPITokenInput) (*model.APITokenUpdatePayload, error)
 	DeleteAPIToken(ctx context.Context, id string) (*model.APITokenDeletePayload, error)
 	CreateAssessment(ctx context.Context, input generated.CreateAssessmentInput) (*model.AssessmentCreatePayload, error)
-	CreateBulkAssessment(ctx context.Context, input []*generated.CreateAssessmentInput) (*model.AssessmentBulkCreatePayload, error)
-	CreateBulkCSVAssessment(ctx context.Context, input graphql.Upload) (*model.AssessmentBulkCreatePayload, error)
 	UpdateAssessment(ctx context.Context, id string, input generated.UpdateAssessmentInput) (*model.AssessmentUpdatePayload, error)
 	DeleteAssessment(ctx context.Context, id string) (*model.AssessmentDeletePayload, error)
 	CreateAssessmentResponse(ctx context.Context, input generated.CreateAssessmentResponseInput) (*model.AssessmentResponseCreatePayload, error)
@@ -482,34 +480,6 @@ func (ec *executionContext) field_Mutation_createBulkAssessmentResponse_argsInpu
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkAssessment_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkAssessment_argsInput(ctx, rawArgs)
-	if err != nil {
-		return nil, err
-	}
-	args["input"] = arg0
-	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkAssessment_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateAssessmentInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateAssessmentInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateAssessmentInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateAssessmentInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateAssessmentInput
-	return zeroVal, nil
-}
-
 func (ec *executionContext) field_Mutation_createBulkAsset_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -605,34 +575,6 @@ func (ec *executionContext) field_Mutation_createBulkCSVAssessmentResponse_args(
 	return args, nil
 }
 func (ec *executionContext) field_Mutation_createBulkCSVAssessmentResponse_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_createBulkCSVAssessment_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVAssessment_argsInput(ctx, rawArgs)
-	if err != nil {
-		return nil, err
-	}
-	args["input"] = arg0
-	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVAssessment_argsInput(
 	ctx context.Context,
 	rawArgs map[string]any,
 ) (graphql.Upload, error) {
@@ -9270,124 +9212,6 @@ func (ec *executionContext) fieldContext_Mutation_createAssessment(ctx context.C
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_createAssessment_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_createBulkAssessment(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_createBulkAssessment(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateBulkAssessment(rctx, fc.Args["input"].([]*generated.CreateAssessmentInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*model.AssessmentBulkCreatePayload)
-	fc.Result = res
-	return ec.marshalNAssessmentBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentBulkCreatePayload(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Mutation_createBulkAssessment(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "assessments":
-				return ec.fieldContext_AssessmentBulkCreatePayload_assessments(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type AssessmentBulkCreatePayload", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_createBulkAssessment_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_createBulkCSVAssessment(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_createBulkCSVAssessment(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateBulkCSVAssessment(rctx, fc.Args["input"].(graphql.Upload))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*model.AssessmentBulkCreatePayload)
-	fc.Result = res
-	return ec.marshalNAssessmentBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentBulkCreatePayload(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Mutation_createBulkCSVAssessment(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "assessments":
-				return ec.fieldContext_AssessmentBulkCreatePayload_assessments(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type AssessmentBulkCreatePayload", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_createBulkCSVAssessment_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -22700,20 +22524,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "createAssessment":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createAssessment(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "createBulkAssessment":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createBulkAssessment(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "createBulkCSVAssessment":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createBulkCSVAssessment(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

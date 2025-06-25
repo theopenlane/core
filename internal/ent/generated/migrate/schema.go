@@ -204,8 +204,9 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "assessment_type", Type: field.TypeEnum, Enums: []string{"INTERNAL"}, Default: "INTERNAL"},
-		{Name: "questionnaire_id", Type: field.TypeString, Nullable: true},
+		{Name: "assessment_type", Type: field.TypeEnum, Enums: []string{"INTERNAL", "EXTERNAL"}, Default: "INTERNAL"},
+		{Name: "template_id", Type: field.TypeString},
+		{Name: "assessment_owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// AssessmentsTable holds the schema information for the "assessments" table.
@@ -215,8 +216,20 @@ var (
 		PrimaryKey: []*schema.Column{AssessmentsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "assessments_organizations_assessments",
+				Symbol:     "assessments_templates_template",
+				Columns:    []*schema.Column{AssessmentsColumns[10]},
+				RefColumns: []*schema.Column{TemplatesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "assessments_groups_assessment_owner",
 				Columns:    []*schema.Column{AssessmentsColumns[11]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "assessments_organizations_assessments",
+				Columns:    []*schema.Column{AssessmentsColumns[12]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -230,7 +243,7 @@ var (
 			{
 				Name:    "assessment_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{AssessmentsColumns[11]},
+				Columns: []*schema.Column{AssessmentsColumns[12]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -238,7 +251,7 @@ var (
 			{
 				Name:    "assessment_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{AssessmentsColumns[8], AssessmentsColumns[11]},
+				Columns: []*schema.Column{AssessmentsColumns[8], AssessmentsColumns[12]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -260,8 +273,9 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "assessment_type", Type: field.TypeEnum, Enums: []string{"INTERNAL"}, Default: "INTERNAL"},
-		{Name: "questionnaire_id", Type: field.TypeString, Nullable: true},
+		{Name: "assessment_type", Type: field.TypeEnum, Enums: []string{"INTERNAL", "EXTERNAL"}, Default: "INTERNAL"},
+		{Name: "template_id", Type: field.TypeString},
+		{Name: "assessment_owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// AssessmentHistoryTable holds the schema information for the "assessment_history" table.
 	AssessmentHistoryTable = &schema.Table{
@@ -286,13 +300,14 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "IN_PROGRESS", "COMPLETED", "OVERDUE", "REVIEW_REQUIRED"}, Default: "NOT_STARTED"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "IN_PROGRESS", "COMPLETED", "OVERDUE"}, Default: "NOT_STARTED"},
 		{Name: "assigned_at", Type: field.TypeTime, Nullable: true},
-		{Name: "started_at", Type: field.TypeTime, Nullable: true},
+		{Name: "started_at", Type: field.TypeTime},
 		{Name: "completed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "due_date", Type: field.TypeTime, Nullable: true},
 		{Name: "assessment_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
+		{Name: "response_data_id", Type: field.TypeString, Nullable: true},
 	}
 	// AssessmentResponsesTable holds the schema information for the "assessment_responses" table.
 	AssessmentResponsesTable = &schema.Table{
@@ -311,6 +326,12 @@ var (
 				Columns:    []*schema.Column{AssessmentResponsesColumns[14]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "assessment_responses_document_data_document",
+				Columns:    []*schema.Column{AssessmentResponsesColumns[15]},
+				RefColumns: []*schema.Column{DocumentDataColumns[0]},
+				OnDelete:   schema.SetNull,
 			},
 		},
 		Indexes: []*schema.Index{
@@ -359,11 +380,12 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "assessment_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "IN_PROGRESS", "COMPLETED", "OVERDUE", "REVIEW_REQUIRED"}, Default: "NOT_STARTED"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "IN_PROGRESS", "COMPLETED", "OVERDUE"}, Default: "NOT_STARTED"},
 		{Name: "assigned_at", Type: field.TypeTime, Nullable: true},
-		{Name: "started_at", Type: field.TypeTime, Nullable: true},
+		{Name: "started_at", Type: field.TypeTime},
 		{Name: "completed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "due_date", Type: field.TypeTime, Nullable: true},
+		{Name: "response_data_id", Type: field.TypeString, Nullable: true},
 	}
 	// AssessmentResponseHistoryTable holds the schema information for the "assessment_response_history" table.
 	AssessmentResponseHistoryTable = &schema.Table{
@@ -5231,6 +5253,81 @@ var (
 			},
 		},
 	}
+	// AssessmentBlockedGroupsColumns holds the columns for the "assessment_blocked_groups" table.
+	AssessmentBlockedGroupsColumns = []*schema.Column{
+		{Name: "assessment_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// AssessmentBlockedGroupsTable holds the schema information for the "assessment_blocked_groups" table.
+	AssessmentBlockedGroupsTable = &schema.Table{
+		Name:       "assessment_blocked_groups",
+		Columns:    AssessmentBlockedGroupsColumns,
+		PrimaryKey: []*schema.Column{AssessmentBlockedGroupsColumns[0], AssessmentBlockedGroupsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "assessment_blocked_groups_assessment_id",
+				Columns:    []*schema.Column{AssessmentBlockedGroupsColumns[0]},
+				RefColumns: []*schema.Column{AssessmentsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "assessment_blocked_groups_group_id",
+				Columns:    []*schema.Column{AssessmentBlockedGroupsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// AssessmentEditorsColumns holds the columns for the "assessment_editors" table.
+	AssessmentEditorsColumns = []*schema.Column{
+		{Name: "assessment_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// AssessmentEditorsTable holds the schema information for the "assessment_editors" table.
+	AssessmentEditorsTable = &schema.Table{
+		Name:       "assessment_editors",
+		Columns:    AssessmentEditorsColumns,
+		PrimaryKey: []*schema.Column{AssessmentEditorsColumns[0], AssessmentEditorsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "assessment_editors_assessment_id",
+				Columns:    []*schema.Column{AssessmentEditorsColumns[0]},
+				RefColumns: []*schema.Column{AssessmentsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "assessment_editors_group_id",
+				Columns:    []*schema.Column{AssessmentEditorsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// AssessmentViewersColumns holds the columns for the "assessment_viewers" table.
+	AssessmentViewersColumns = []*schema.Column{
+		{Name: "assessment_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// AssessmentViewersTable holds the schema information for the "assessment_viewers" table.
+	AssessmentViewersTable = &schema.Table{
+		Name:       "assessment_viewers",
+		Columns:    AssessmentViewersColumns,
+		PrimaryKey: []*schema.Column{AssessmentViewersColumns[0], AssessmentViewersColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "assessment_viewers_assessment_id",
+				Columns:    []*schema.Column{AssessmentViewersColumns[0]},
+				RefColumns: []*schema.Column{AssessmentsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "assessment_viewers_group_id",
+				Columns:    []*schema.Column{AssessmentViewersColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// AssessmentUsersColumns holds the columns for the "assessment_users" table.
 	AssessmentUsersColumns = []*schema.Column{
 		{Name: "assessment_id", Type: field.TypeString},
@@ -7989,6 +8086,9 @@ var (
 		UserSettingsTable,
 		UserSettingHistoryTable,
 		WebauthnsTable,
+		AssessmentBlockedGroupsTable,
+		AssessmentEditorsTable,
+		AssessmentViewersTable,
 		AssessmentUsersTable,
 		ContactFilesTable,
 		ControlControlObjectivesTable,
@@ -8107,12 +8207,15 @@ func init() {
 	ActionPlanHistoryTable.Annotation = &entsql.Annotation{
 		Table: "action_plan_history",
 	}
-	AssessmentsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	AssessmentsTable.ForeignKeys[0].RefTable = TemplatesTable
+	AssessmentsTable.ForeignKeys[1].RefTable = GroupsTable
+	AssessmentsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	AssessmentHistoryTable.Annotation = &entsql.Annotation{
 		Table: "assessment_history",
 	}
 	AssessmentResponsesTable.ForeignKeys[0].RefTable = AssessmentsTable
 	AssessmentResponsesTable.ForeignKeys[1].RefTable = UsersTable
+	AssessmentResponsesTable.ForeignKeys[2].RefTable = DocumentDataTable
 	AssessmentResponseHistoryTable.Annotation = &entsql.Annotation{
 		Table: "assessment_response_history",
 	}
@@ -8372,6 +8475,12 @@ func init() {
 		Table: "user_setting_history",
 	}
 	WebauthnsTable.ForeignKeys[0].RefTable = UsersTable
+	AssessmentBlockedGroupsTable.ForeignKeys[0].RefTable = AssessmentsTable
+	AssessmentBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
+	AssessmentEditorsTable.ForeignKeys[0].RefTable = AssessmentsTable
+	AssessmentEditorsTable.ForeignKeys[1].RefTable = GroupsTable
+	AssessmentViewersTable.ForeignKeys[0].RefTable = AssessmentsTable
+	AssessmentViewersTable.ForeignKeys[1].RefTable = GroupsTable
 	AssessmentUsersTable.ForeignKeys[0].RefTable = AssessmentsTable
 	AssessmentUsersTable.ForeignKeys[1].RefTable = UsersTable
 	ContactFilesTable.ForeignKeys[0].RefTable = ContactsTable

@@ -52,6 +52,8 @@ const (
 	FieldCompletedAt = "completed_at"
 	// FieldDueDate holds the string denoting the due_date field in the database.
 	FieldDueDate = "due_date"
+	// FieldResponseDataID holds the string denoting the response_data_id field in the database.
+	FieldResponseDataID = "response_data_id"
 	// Table holds the table name of the assessmentresponsehistory in the database.
 	Table = "assessment_response_history"
 )
@@ -76,6 +78,7 @@ var Columns = []string{
 	FieldStartedAt,
 	FieldCompletedAt,
 	FieldDueDate,
+	FieldResponseDataID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -105,6 +108,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// DefaultStartedAt holds the default value on creation for the "started_at" field.
+	DefaultStartedAt time.Time
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -124,7 +129,7 @@ const DefaultStatus enums.AssessmentResponseStatus = "NOT_STARTED"
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.AssessmentResponseStatus) error {
 	switch s.String() {
-	case "NOT_STARTED", "IN_PROGRESS", "COMPLETED", "OVERDUE", "REVIEW_REQUIRED":
+	case "NOT_STARTED", "IN_PROGRESS", "COMPLETED", "OVERDUE":
 		return nil
 	default:
 		return fmt.Errorf("assessmentresponsehistory: invalid enum value for status field: %q", s)
@@ -217,6 +222,11 @@ func ByCompletedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByDueDate orders the results by the due_date field.
 func ByDueDate(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDueDate, opts...).ToFunc()
+}
+
+// ByResponseDataID orders the results by the response_data_id field.
+func ByResponseDataID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldResponseDataID, opts...).ToFunc()
 }
 
 var (

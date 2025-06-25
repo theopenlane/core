@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
@@ -521,6 +522,51 @@ func (gu *GroupUpdate) AddScanViewers(s ...*Scan) *GroupUpdate {
 		ids[i] = s[i].ID
 	}
 	return gu.AddScanViewerIDs(ids...)
+}
+
+// AddAssessmentEditorIDs adds the "assessment_editors" edge to the Assessment entity by IDs.
+func (gu *GroupUpdate) AddAssessmentEditorIDs(ids ...string) *GroupUpdate {
+	gu.mutation.AddAssessmentEditorIDs(ids...)
+	return gu
+}
+
+// AddAssessmentEditors adds the "assessment_editors" edges to the Assessment entity.
+func (gu *GroupUpdate) AddAssessmentEditors(a ...*Assessment) *GroupUpdate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return gu.AddAssessmentEditorIDs(ids...)
+}
+
+// AddAssessmentBlockedGroupIDs adds the "assessment_blocked_groups" edge to the Assessment entity by IDs.
+func (gu *GroupUpdate) AddAssessmentBlockedGroupIDs(ids ...string) *GroupUpdate {
+	gu.mutation.AddAssessmentBlockedGroupIDs(ids...)
+	return gu
+}
+
+// AddAssessmentBlockedGroups adds the "assessment_blocked_groups" edges to the Assessment entity.
+func (gu *GroupUpdate) AddAssessmentBlockedGroups(a ...*Assessment) *GroupUpdate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return gu.AddAssessmentBlockedGroupIDs(ids...)
+}
+
+// AddAssessmentViewerIDs adds the "assessment_viewers" edge to the Assessment entity by IDs.
+func (gu *GroupUpdate) AddAssessmentViewerIDs(ids ...string) *GroupUpdate {
+	gu.mutation.AddAssessmentViewerIDs(ids...)
+	return gu
+}
+
+// AddAssessmentViewers adds the "assessment_viewers" edges to the Assessment entity.
+func (gu *GroupUpdate) AddAssessmentViewers(a ...*Assessment) *GroupUpdate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return gu.AddAssessmentViewerIDs(ids...)
 }
 
 // AddProcedureEditorIDs adds the "procedure_editors" edge to the Procedure entity by IDs.
@@ -1139,6 +1185,69 @@ func (gu *GroupUpdate) RemoveScanViewers(s ...*Scan) *GroupUpdate {
 		ids[i] = s[i].ID
 	}
 	return gu.RemoveScanViewerIDs(ids...)
+}
+
+// ClearAssessmentEditors clears all "assessment_editors" edges to the Assessment entity.
+func (gu *GroupUpdate) ClearAssessmentEditors() *GroupUpdate {
+	gu.mutation.ClearAssessmentEditors()
+	return gu
+}
+
+// RemoveAssessmentEditorIDs removes the "assessment_editors" edge to Assessment entities by IDs.
+func (gu *GroupUpdate) RemoveAssessmentEditorIDs(ids ...string) *GroupUpdate {
+	gu.mutation.RemoveAssessmentEditorIDs(ids...)
+	return gu
+}
+
+// RemoveAssessmentEditors removes "assessment_editors" edges to Assessment entities.
+func (gu *GroupUpdate) RemoveAssessmentEditors(a ...*Assessment) *GroupUpdate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return gu.RemoveAssessmentEditorIDs(ids...)
+}
+
+// ClearAssessmentBlockedGroups clears all "assessment_blocked_groups" edges to the Assessment entity.
+func (gu *GroupUpdate) ClearAssessmentBlockedGroups() *GroupUpdate {
+	gu.mutation.ClearAssessmentBlockedGroups()
+	return gu
+}
+
+// RemoveAssessmentBlockedGroupIDs removes the "assessment_blocked_groups" edge to Assessment entities by IDs.
+func (gu *GroupUpdate) RemoveAssessmentBlockedGroupIDs(ids ...string) *GroupUpdate {
+	gu.mutation.RemoveAssessmentBlockedGroupIDs(ids...)
+	return gu
+}
+
+// RemoveAssessmentBlockedGroups removes "assessment_blocked_groups" edges to Assessment entities.
+func (gu *GroupUpdate) RemoveAssessmentBlockedGroups(a ...*Assessment) *GroupUpdate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return gu.RemoveAssessmentBlockedGroupIDs(ids...)
+}
+
+// ClearAssessmentViewers clears all "assessment_viewers" edges to the Assessment entity.
+func (gu *GroupUpdate) ClearAssessmentViewers() *GroupUpdate {
+	gu.mutation.ClearAssessmentViewers()
+	return gu
+}
+
+// RemoveAssessmentViewerIDs removes the "assessment_viewers" edge to Assessment entities by IDs.
+func (gu *GroupUpdate) RemoveAssessmentViewerIDs(ids ...string) *GroupUpdate {
+	gu.mutation.RemoveAssessmentViewerIDs(ids...)
+	return gu
+}
+
+// RemoveAssessmentViewers removes "assessment_viewers" edges to Assessment entities.
+func (gu *GroupUpdate) RemoveAssessmentViewers(a ...*Assessment) *GroupUpdate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return gu.RemoveAssessmentViewerIDs(ids...)
 }
 
 // ClearProcedureEditors clears all "procedure_editors" edges to the Procedure entity.
@@ -2494,6 +2603,150 @@ func (gu *GroupUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if gu.mutation.AssessmentEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.AssessmentEditorsTable,
+			Columns: group.AssessmentEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.AssessmentEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.RemovedAssessmentEditorsIDs(); len(nodes) > 0 && !gu.mutation.AssessmentEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.AssessmentEditorsTable,
+			Columns: group.AssessmentEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.AssessmentEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.AssessmentEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.AssessmentEditorsTable,
+			Columns: group.AssessmentEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.AssessmentEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if gu.mutation.AssessmentBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.AssessmentBlockedGroupsTable,
+			Columns: group.AssessmentBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.AssessmentBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.RemovedAssessmentBlockedGroupsIDs(); len(nodes) > 0 && !gu.mutation.AssessmentBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.AssessmentBlockedGroupsTable,
+			Columns: group.AssessmentBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.AssessmentBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.AssessmentBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.AssessmentBlockedGroupsTable,
+			Columns: group.AssessmentBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.AssessmentBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if gu.mutation.AssessmentViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.AssessmentViewersTable,
+			Columns: group.AssessmentViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.AssessmentViewers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.RemovedAssessmentViewersIDs(); len(nodes) > 0 && !gu.mutation.AssessmentViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.AssessmentViewersTable,
+			Columns: group.AssessmentViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.AssessmentViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.AssessmentViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.AssessmentViewersTable,
+			Columns: group.AssessmentViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.AssessmentViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if gu.mutation.ProcedureEditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -3715,6 +3968,51 @@ func (guo *GroupUpdateOne) AddScanViewers(s ...*Scan) *GroupUpdateOne {
 	return guo.AddScanViewerIDs(ids...)
 }
 
+// AddAssessmentEditorIDs adds the "assessment_editors" edge to the Assessment entity by IDs.
+func (guo *GroupUpdateOne) AddAssessmentEditorIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.AddAssessmentEditorIDs(ids...)
+	return guo
+}
+
+// AddAssessmentEditors adds the "assessment_editors" edges to the Assessment entity.
+func (guo *GroupUpdateOne) AddAssessmentEditors(a ...*Assessment) *GroupUpdateOne {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return guo.AddAssessmentEditorIDs(ids...)
+}
+
+// AddAssessmentBlockedGroupIDs adds the "assessment_blocked_groups" edge to the Assessment entity by IDs.
+func (guo *GroupUpdateOne) AddAssessmentBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.AddAssessmentBlockedGroupIDs(ids...)
+	return guo
+}
+
+// AddAssessmentBlockedGroups adds the "assessment_blocked_groups" edges to the Assessment entity.
+func (guo *GroupUpdateOne) AddAssessmentBlockedGroups(a ...*Assessment) *GroupUpdateOne {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return guo.AddAssessmentBlockedGroupIDs(ids...)
+}
+
+// AddAssessmentViewerIDs adds the "assessment_viewers" edge to the Assessment entity by IDs.
+func (guo *GroupUpdateOne) AddAssessmentViewerIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.AddAssessmentViewerIDs(ids...)
+	return guo
+}
+
+// AddAssessmentViewers adds the "assessment_viewers" edges to the Assessment entity.
+func (guo *GroupUpdateOne) AddAssessmentViewers(a ...*Assessment) *GroupUpdateOne {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return guo.AddAssessmentViewerIDs(ids...)
+}
+
 // AddProcedureEditorIDs adds the "procedure_editors" edge to the Procedure entity by IDs.
 func (guo *GroupUpdateOne) AddProcedureEditorIDs(ids ...string) *GroupUpdateOne {
 	guo.mutation.AddProcedureEditorIDs(ids...)
@@ -4331,6 +4629,69 @@ func (guo *GroupUpdateOne) RemoveScanViewers(s ...*Scan) *GroupUpdateOne {
 		ids[i] = s[i].ID
 	}
 	return guo.RemoveScanViewerIDs(ids...)
+}
+
+// ClearAssessmentEditors clears all "assessment_editors" edges to the Assessment entity.
+func (guo *GroupUpdateOne) ClearAssessmentEditors() *GroupUpdateOne {
+	guo.mutation.ClearAssessmentEditors()
+	return guo
+}
+
+// RemoveAssessmentEditorIDs removes the "assessment_editors" edge to Assessment entities by IDs.
+func (guo *GroupUpdateOne) RemoveAssessmentEditorIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.RemoveAssessmentEditorIDs(ids...)
+	return guo
+}
+
+// RemoveAssessmentEditors removes "assessment_editors" edges to Assessment entities.
+func (guo *GroupUpdateOne) RemoveAssessmentEditors(a ...*Assessment) *GroupUpdateOne {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return guo.RemoveAssessmentEditorIDs(ids...)
+}
+
+// ClearAssessmentBlockedGroups clears all "assessment_blocked_groups" edges to the Assessment entity.
+func (guo *GroupUpdateOne) ClearAssessmentBlockedGroups() *GroupUpdateOne {
+	guo.mutation.ClearAssessmentBlockedGroups()
+	return guo
+}
+
+// RemoveAssessmentBlockedGroupIDs removes the "assessment_blocked_groups" edge to Assessment entities by IDs.
+func (guo *GroupUpdateOne) RemoveAssessmentBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.RemoveAssessmentBlockedGroupIDs(ids...)
+	return guo
+}
+
+// RemoveAssessmentBlockedGroups removes "assessment_blocked_groups" edges to Assessment entities.
+func (guo *GroupUpdateOne) RemoveAssessmentBlockedGroups(a ...*Assessment) *GroupUpdateOne {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return guo.RemoveAssessmentBlockedGroupIDs(ids...)
+}
+
+// ClearAssessmentViewers clears all "assessment_viewers" edges to the Assessment entity.
+func (guo *GroupUpdateOne) ClearAssessmentViewers() *GroupUpdateOne {
+	guo.mutation.ClearAssessmentViewers()
+	return guo
+}
+
+// RemoveAssessmentViewerIDs removes the "assessment_viewers" edge to Assessment entities by IDs.
+func (guo *GroupUpdateOne) RemoveAssessmentViewerIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.RemoveAssessmentViewerIDs(ids...)
+	return guo
+}
+
+// RemoveAssessmentViewers removes "assessment_viewers" edges to Assessment entities.
+func (guo *GroupUpdateOne) RemoveAssessmentViewers(a ...*Assessment) *GroupUpdateOne {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return guo.RemoveAssessmentViewerIDs(ids...)
 }
 
 // ClearProcedureEditors clears all "procedure_editors" edges to the Procedure entity.
@@ -5711,6 +6072,150 @@ func (guo *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error
 			},
 		}
 		edge.Schema = guo.schemaConfig.ScanViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if guo.mutation.AssessmentEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.AssessmentEditorsTable,
+			Columns: group.AssessmentEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.AssessmentEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.RemovedAssessmentEditorsIDs(); len(nodes) > 0 && !guo.mutation.AssessmentEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.AssessmentEditorsTable,
+			Columns: group.AssessmentEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.AssessmentEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.AssessmentEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.AssessmentEditorsTable,
+			Columns: group.AssessmentEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.AssessmentEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if guo.mutation.AssessmentBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.AssessmentBlockedGroupsTable,
+			Columns: group.AssessmentBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.AssessmentBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.RemovedAssessmentBlockedGroupsIDs(); len(nodes) > 0 && !guo.mutation.AssessmentBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.AssessmentBlockedGroupsTable,
+			Columns: group.AssessmentBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.AssessmentBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.AssessmentBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.AssessmentBlockedGroupsTable,
+			Columns: group.AssessmentBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.AssessmentBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if guo.mutation.AssessmentViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.AssessmentViewersTable,
+			Columns: group.AssessmentViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.AssessmentViewers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.RemovedAssessmentViewersIDs(); len(nodes) > 0 && !guo.mutation.AssessmentViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.AssessmentViewersTable,
+			Columns: group.AssessmentViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.AssessmentViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.AssessmentViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.AssessmentViewersTable,
+			Columns: group.AssessmentViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.AssessmentViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

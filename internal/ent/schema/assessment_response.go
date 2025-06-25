@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"time"
+
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -9,8 +11,13 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx"
 )
@@ -52,7 +59,7 @@ func (AssessmentResponse) Fields() []ent.Field {
 			),
 		field.Time("started_at").
 			Comment("when the user started the assessment").
-			Optional().
+			Default(time.Now()).
 			Annotations(
 				entgql.OrderField("started_at"),
 			),
@@ -68,6 +75,9 @@ func (AssessmentResponse) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("due_date"),
 			),
+		field.String("response_data_id").
+			Comment("the document containing the user's response data").
+			Optional(),
 	}
 }
 
@@ -88,15 +98,25 @@ func (ar AssessmentResponse) Edges() []ent.Edge {
 			Required().
 			Unique().
 			Field("user_id"),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: ar,
+			edgeSchema: DocumentData{},
+			field:      "response_data_id",
+			comment:    "the document containing the user's response data",
+		}),
 	}
 }
 
 func (AssessmentResponse) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckOrgReadAccess(),
+			rule.AllowIfAssessmentResponseQueryOwner(),
+			// fga checks this already
+			privacy.AlwaysAllowRule(),
 		),
 		policy.WithMutationRules(
+			rule.AllowIfAssessmentResponseOwner(),
+			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
@@ -106,6 +126,14 @@ func (AssessmentResponse) Policy() ent.Policy {
 func (AssessmentResponse) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.Features(entx.ModuleBase),
+		entfga.SelfAccessChecks(),
+	}
+}
+
+// Interceptors of the AssessmentResponse
+func (AssessmentResponse) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.FilterQueryResults[generated.AssessmentResponse](), // Filter results based on FGA permissions
 	}
 }
 

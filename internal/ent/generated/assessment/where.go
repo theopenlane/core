@@ -108,9 +108,14 @@ func Name(v string) predicate.Assessment {
 	return predicate.Assessment(sql.FieldEQ(FieldName, v))
 }
 
-// QuestionnaireID applies equality check predicate on the "questionnaire_id" field. It's identical to QuestionnaireIDEQ.
-func QuestionnaireID(v string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldEQ(FieldQuestionnaireID, v))
+// TemplateID applies equality check predicate on the "template_id" field. It's identical to TemplateIDEQ.
+func TemplateID(v string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldEQ(FieldTemplateID, v))
+}
+
+// AssessmentOwnerID applies equality check predicate on the "assessment_owner_id" field. It's identical to AssessmentOwnerIDEQ.
+func AssessmentOwnerID(v string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldEQ(FieldAssessmentOwnerID, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -668,79 +673,144 @@ func AssessmentTypeNotIn(vs ...enums.AssessmentType) predicate.Assessment {
 	return predicate.Assessment(sql.FieldNotIn(FieldAssessmentType, v...))
 }
 
-// QuestionnaireIDEQ applies the EQ predicate on the "questionnaire_id" field.
-func QuestionnaireIDEQ(v string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldEQ(FieldQuestionnaireID, v))
+// TemplateIDEQ applies the EQ predicate on the "template_id" field.
+func TemplateIDEQ(v string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldEQ(FieldTemplateID, v))
 }
 
-// QuestionnaireIDNEQ applies the NEQ predicate on the "questionnaire_id" field.
-func QuestionnaireIDNEQ(v string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldNEQ(FieldQuestionnaireID, v))
+// TemplateIDNEQ applies the NEQ predicate on the "template_id" field.
+func TemplateIDNEQ(v string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldNEQ(FieldTemplateID, v))
 }
 
-// QuestionnaireIDIn applies the In predicate on the "questionnaire_id" field.
-func QuestionnaireIDIn(vs ...string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldIn(FieldQuestionnaireID, vs...))
+// TemplateIDIn applies the In predicate on the "template_id" field.
+func TemplateIDIn(vs ...string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldIn(FieldTemplateID, vs...))
 }
 
-// QuestionnaireIDNotIn applies the NotIn predicate on the "questionnaire_id" field.
-func QuestionnaireIDNotIn(vs ...string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldNotIn(FieldQuestionnaireID, vs...))
+// TemplateIDNotIn applies the NotIn predicate on the "template_id" field.
+func TemplateIDNotIn(vs ...string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldNotIn(FieldTemplateID, vs...))
 }
 
-// QuestionnaireIDGT applies the GT predicate on the "questionnaire_id" field.
-func QuestionnaireIDGT(v string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldGT(FieldQuestionnaireID, v))
+// TemplateIDGT applies the GT predicate on the "template_id" field.
+func TemplateIDGT(v string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldGT(FieldTemplateID, v))
 }
 
-// QuestionnaireIDGTE applies the GTE predicate on the "questionnaire_id" field.
-func QuestionnaireIDGTE(v string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldGTE(FieldQuestionnaireID, v))
+// TemplateIDGTE applies the GTE predicate on the "template_id" field.
+func TemplateIDGTE(v string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldGTE(FieldTemplateID, v))
 }
 
-// QuestionnaireIDLT applies the LT predicate on the "questionnaire_id" field.
-func QuestionnaireIDLT(v string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldLT(FieldQuestionnaireID, v))
+// TemplateIDLT applies the LT predicate on the "template_id" field.
+func TemplateIDLT(v string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldLT(FieldTemplateID, v))
 }
 
-// QuestionnaireIDLTE applies the LTE predicate on the "questionnaire_id" field.
-func QuestionnaireIDLTE(v string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldLTE(FieldQuestionnaireID, v))
+// TemplateIDLTE applies the LTE predicate on the "template_id" field.
+func TemplateIDLTE(v string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldLTE(FieldTemplateID, v))
 }
 
-// QuestionnaireIDContains applies the Contains predicate on the "questionnaire_id" field.
-func QuestionnaireIDContains(v string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldContains(FieldQuestionnaireID, v))
+// TemplateIDContains applies the Contains predicate on the "template_id" field.
+func TemplateIDContains(v string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldContains(FieldTemplateID, v))
 }
 
-// QuestionnaireIDHasPrefix applies the HasPrefix predicate on the "questionnaire_id" field.
-func QuestionnaireIDHasPrefix(v string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldHasPrefix(FieldQuestionnaireID, v))
+// TemplateIDHasPrefix applies the HasPrefix predicate on the "template_id" field.
+func TemplateIDHasPrefix(v string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldHasPrefix(FieldTemplateID, v))
 }
 
-// QuestionnaireIDHasSuffix applies the HasSuffix predicate on the "questionnaire_id" field.
-func QuestionnaireIDHasSuffix(v string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldHasSuffix(FieldQuestionnaireID, v))
+// TemplateIDHasSuffix applies the HasSuffix predicate on the "template_id" field.
+func TemplateIDHasSuffix(v string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldHasSuffix(FieldTemplateID, v))
 }
 
-// QuestionnaireIDIsNil applies the IsNil predicate on the "questionnaire_id" field.
-func QuestionnaireIDIsNil() predicate.Assessment {
-	return predicate.Assessment(sql.FieldIsNull(FieldQuestionnaireID))
+// TemplateIDEqualFold applies the EqualFold predicate on the "template_id" field.
+func TemplateIDEqualFold(v string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldEqualFold(FieldTemplateID, v))
 }
 
-// QuestionnaireIDNotNil applies the NotNil predicate on the "questionnaire_id" field.
-func QuestionnaireIDNotNil() predicate.Assessment {
-	return predicate.Assessment(sql.FieldNotNull(FieldQuestionnaireID))
+// TemplateIDContainsFold applies the ContainsFold predicate on the "template_id" field.
+func TemplateIDContainsFold(v string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldContainsFold(FieldTemplateID, v))
 }
 
-// QuestionnaireIDEqualFold applies the EqualFold predicate on the "questionnaire_id" field.
-func QuestionnaireIDEqualFold(v string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldEqualFold(FieldQuestionnaireID, v))
+// AssessmentOwnerIDEQ applies the EQ predicate on the "assessment_owner_id" field.
+func AssessmentOwnerIDEQ(v string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldEQ(FieldAssessmentOwnerID, v))
 }
 
-// QuestionnaireIDContainsFold applies the ContainsFold predicate on the "questionnaire_id" field.
-func QuestionnaireIDContainsFold(v string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldContainsFold(FieldQuestionnaireID, v))
+// AssessmentOwnerIDNEQ applies the NEQ predicate on the "assessment_owner_id" field.
+func AssessmentOwnerIDNEQ(v string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldNEQ(FieldAssessmentOwnerID, v))
+}
+
+// AssessmentOwnerIDIn applies the In predicate on the "assessment_owner_id" field.
+func AssessmentOwnerIDIn(vs ...string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldIn(FieldAssessmentOwnerID, vs...))
+}
+
+// AssessmentOwnerIDNotIn applies the NotIn predicate on the "assessment_owner_id" field.
+func AssessmentOwnerIDNotIn(vs ...string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldNotIn(FieldAssessmentOwnerID, vs...))
+}
+
+// AssessmentOwnerIDGT applies the GT predicate on the "assessment_owner_id" field.
+func AssessmentOwnerIDGT(v string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldGT(FieldAssessmentOwnerID, v))
+}
+
+// AssessmentOwnerIDGTE applies the GTE predicate on the "assessment_owner_id" field.
+func AssessmentOwnerIDGTE(v string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldGTE(FieldAssessmentOwnerID, v))
+}
+
+// AssessmentOwnerIDLT applies the LT predicate on the "assessment_owner_id" field.
+func AssessmentOwnerIDLT(v string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldLT(FieldAssessmentOwnerID, v))
+}
+
+// AssessmentOwnerIDLTE applies the LTE predicate on the "assessment_owner_id" field.
+func AssessmentOwnerIDLTE(v string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldLTE(FieldAssessmentOwnerID, v))
+}
+
+// AssessmentOwnerIDContains applies the Contains predicate on the "assessment_owner_id" field.
+func AssessmentOwnerIDContains(v string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldContains(FieldAssessmentOwnerID, v))
+}
+
+// AssessmentOwnerIDHasPrefix applies the HasPrefix predicate on the "assessment_owner_id" field.
+func AssessmentOwnerIDHasPrefix(v string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldHasPrefix(FieldAssessmentOwnerID, v))
+}
+
+// AssessmentOwnerIDHasSuffix applies the HasSuffix predicate on the "assessment_owner_id" field.
+func AssessmentOwnerIDHasSuffix(v string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldHasSuffix(FieldAssessmentOwnerID, v))
+}
+
+// AssessmentOwnerIDIsNil applies the IsNil predicate on the "assessment_owner_id" field.
+func AssessmentOwnerIDIsNil() predicate.Assessment {
+	return predicate.Assessment(sql.FieldIsNull(FieldAssessmentOwnerID))
+}
+
+// AssessmentOwnerIDNotNil applies the NotNil predicate on the "assessment_owner_id" field.
+func AssessmentOwnerIDNotNil() predicate.Assessment {
+	return predicate.Assessment(sql.FieldNotNull(FieldAssessmentOwnerID))
+}
+
+// AssessmentOwnerIDEqualFold applies the EqualFold predicate on the "assessment_owner_id" field.
+func AssessmentOwnerIDEqualFold(v string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldEqualFold(FieldAssessmentOwnerID, v))
+}
+
+// AssessmentOwnerIDContainsFold applies the ContainsFold predicate on the "assessment_owner_id" field.
+func AssessmentOwnerIDContainsFold(v string) predicate.Assessment {
+	return predicate.Assessment(sql.FieldContainsFold(FieldAssessmentOwnerID, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.
@@ -763,6 +833,122 @@ func HasOwnerWith(preds ...predicate.Organization) predicate.Assessment {
 		step := newOwnerStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Assessment
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasBlockedGroups applies the HasEdge predicate on the "blocked_groups" edge.
+func HasBlockedGroups() predicate.Assessment {
+	return predicate.Assessment(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, BlockedGroupsTable, BlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.AssessmentBlockedGroups
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasBlockedGroupsWith applies the HasEdge predicate on the "blocked_groups" edge with a given conditions (other predicates).
+func HasBlockedGroupsWith(preds ...predicate.Group) predicate.Assessment {
+	return predicate.Assessment(func(s *sql.Selector) {
+		step := newBlockedGroupsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.AssessmentBlockedGroups
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEditors applies the HasEdge predicate on the "editors" edge.
+func HasEditors() predicate.Assessment {
+	return predicate.Assessment(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, EditorsTable, EditorsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.AssessmentEditors
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEditorsWith applies the HasEdge predicate on the "editors" edge with a given conditions (other predicates).
+func HasEditorsWith(preds ...predicate.Group) predicate.Assessment {
+	return predicate.Assessment(func(s *sql.Selector) {
+		step := newEditorsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.AssessmentEditors
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasViewers applies the HasEdge predicate on the "viewers" edge.
+func HasViewers() predicate.Assessment {
+	return predicate.Assessment(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, ViewersTable, ViewersPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.AssessmentViewers
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasViewersWith applies the HasEdge predicate on the "viewers" edge with a given conditions (other predicates).
+func HasViewersWith(preds ...predicate.Group) predicate.Assessment {
+	return predicate.Assessment(func(s *sql.Selector) {
+		step := newViewersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.AssessmentViewers
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasTemplate applies the HasEdge predicate on the "template" edge.
+func HasTemplate() predicate.Assessment {
+	return predicate.Assessment(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, TemplateTable, TemplateColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Template
+		step.Edge.Schema = schemaConfig.Assessment
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTemplateWith applies the HasEdge predicate on the "template" edge with a given conditions (other predicates).
+func HasTemplateWith(preds ...predicate.Template) predicate.Assessment {
+	return predicate.Assessment(func(s *sql.Selector) {
+		step := newTemplateStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Template
 		step.Edge.Schema = schemaConfig.Assessment
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
@@ -822,6 +1008,35 @@ func HasAssessmentResponsesWith(preds ...predicate.AssessmentResponse) predicate
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.AssessmentResponse
 		step.Edge.Schema = schemaConfig.AssessmentResponse
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasAssessmentOwner applies the HasEdge predicate on the "assessment_owner" edge.
+func HasAssessmentOwner() predicate.Assessment {
+	return predicate.Assessment(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, AssessmentOwnerTable, AssessmentOwnerColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Assessment
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAssessmentOwnerWith applies the HasEdge predicate on the "assessment_owner" edge with a given conditions (other predicates).
+func HasAssessmentOwnerWith(preds ...predicate.Group) predicate.Assessment {
+	return predicate.Assessment(func(s *sql.Selector) {
+		step := newAssessmentOwnerStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Assessment
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

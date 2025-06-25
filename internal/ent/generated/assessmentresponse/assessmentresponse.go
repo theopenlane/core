@@ -46,10 +46,14 @@ const (
 	FieldCompletedAt = "completed_at"
 	// FieldDueDate holds the string denoting the due_date field in the database.
 	FieldDueDate = "due_date"
+	// FieldResponseDataID holds the string denoting the response_data_id field in the database.
+	FieldResponseDataID = "response_data_id"
 	// EdgeAssessment holds the string denoting the assessment edge name in mutations.
 	EdgeAssessment = "assessment"
 	// EdgeUser holds the string denoting the user edge name in mutations.
 	EdgeUser = "user"
+	// EdgeDocument holds the string denoting the document edge name in mutations.
+	EdgeDocument = "document"
 	// Table holds the table name of the assessmentresponse in the database.
 	Table = "assessment_responses"
 	// AssessmentTable is the table that holds the assessment relation/edge.
@@ -66,6 +70,13 @@ const (
 	UserInverseTable = "users"
 	// UserColumn is the table column denoting the user relation/edge.
 	UserColumn = "user_id"
+	// DocumentTable is the table that holds the document relation/edge.
+	DocumentTable = "assessment_responses"
+	// DocumentInverseTable is the table name for the DocumentData entity.
+	// It exists in this package in order to avoid circular dependency with the "documentdata" package.
+	DocumentInverseTable = "document_data"
+	// DocumentColumn is the table column denoting the document relation/edge.
+	DocumentColumn = "response_data_id"
 )
 
 // Columns holds all SQL columns for assessmentresponse fields.
@@ -85,6 +96,7 @@ var Columns = []string{
 	FieldStartedAt,
 	FieldCompletedAt,
 	FieldDueDate,
+	FieldResponseDataID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -104,7 +116,7 @@ func ValidColumn(column string) bool {
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
 	Hooks        [3]ent.Hook
-	Interceptors [1]ent.Interceptor
+	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -118,6 +130,8 @@ var (
 	AssessmentIDValidator func(string) error
 	// UserIDValidator is a validator for the "user_id" field. It is called by the builders before save.
 	UserIDValidator func(string) error
+	// DefaultStartedAt holds the default value on creation for the "started_at" field.
+	DefaultStartedAt time.Time
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -127,7 +141,7 @@ const DefaultStatus enums.AssessmentResponseStatus = "NOT_STARTED"
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.AssessmentResponseStatus) error {
 	switch s.String() {
-	case "NOT_STARTED", "IN_PROGRESS", "COMPLETED", "OVERDUE", "REVIEW_REQUIRED":
+	case "NOT_STARTED", "IN_PROGRESS", "COMPLETED", "OVERDUE":
 		return nil
 	default:
 		return fmt.Errorf("assessmentresponse: invalid enum value for status field: %q", s)
@@ -207,6 +221,11 @@ func ByDueDate(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDueDate, opts...).ToFunc()
 }
 
+// ByResponseDataID orders the results by the response_data_id field.
+func ByResponseDataID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldResponseDataID, opts...).ToFunc()
+}
+
 // ByAssessmentField orders the results by assessment field.
 func ByAssessmentField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -218,6 +237,13 @@ func ByAssessmentField(field string, opts ...sql.OrderTermOption) OrderOption {
 func ByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByDocumentField orders the results by document field.
+func ByDocumentField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDocumentStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newAssessmentStep() *sqlgraph.Step {
@@ -232,6 +258,13 @@ func newUserStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(UserInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, UserTable, UserColumn),
+	)
+}
+func newDocumentStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DocumentInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, DocumentTable, DocumentColumn),
 	)
 }
 

@@ -83,14 +83,26 @@ func (ec *executionContext) fieldContext_AssessmentBulkCreatePayload_assessments
 				return ec.fieldContext_Assessment_name(ctx, field)
 			case "assessmentType":
 				return ec.fieldContext_Assessment_assessmentType(ctx, field)
-			case "questionnaireID":
-				return ec.fieldContext_Assessment_questionnaireID(ctx, field)
+			case "templateID":
+				return ec.fieldContext_Assessment_templateID(ctx, field)
+			case "assessmentOwnerID":
+				return ec.fieldContext_Assessment_assessmentOwnerID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Assessment_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Assessment_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Assessment_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Assessment_viewers(ctx, field)
+			case "template":
+				return ec.fieldContext_Assessment_template(ctx, field)
 			case "users":
 				return ec.fieldContext_Assessment_users(ctx, field)
 			case "assessmentResponses":
 				return ec.fieldContext_Assessment_assessmentResponses(ctx, field)
+			case "assessmentOwner":
+				return ec.fieldContext_Assessment_assessmentOwner(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Assessment", field.Name)
 		},
@@ -155,14 +167,26 @@ func (ec *executionContext) fieldContext_AssessmentCreatePayload_assessment(_ co
 				return ec.fieldContext_Assessment_name(ctx, field)
 			case "assessmentType":
 				return ec.fieldContext_Assessment_assessmentType(ctx, field)
-			case "questionnaireID":
-				return ec.fieldContext_Assessment_questionnaireID(ctx, field)
+			case "templateID":
+				return ec.fieldContext_Assessment_templateID(ctx, field)
+			case "assessmentOwnerID":
+				return ec.fieldContext_Assessment_assessmentOwnerID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Assessment_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Assessment_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Assessment_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Assessment_viewers(ctx, field)
+			case "template":
+				return ec.fieldContext_Assessment_template(ctx, field)
 			case "users":
 				return ec.fieldContext_Assessment_users(ctx, field)
 			case "assessmentResponses":
 				return ec.fieldContext_Assessment_assessmentResponses(ctx, field)
+			case "assessmentOwner":
+				return ec.fieldContext_Assessment_assessmentOwner(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Assessment", field.Name)
 		},
@@ -271,14 +295,26 @@ func (ec *executionContext) fieldContext_AssessmentUpdatePayload_assessment(_ co
 				return ec.fieldContext_Assessment_name(ctx, field)
 			case "assessmentType":
 				return ec.fieldContext_Assessment_assessmentType(ctx, field)
-			case "questionnaireID":
-				return ec.fieldContext_Assessment_questionnaireID(ctx, field)
+			case "templateID":
+				return ec.fieldContext_Assessment_templateID(ctx, field)
+			case "assessmentOwnerID":
+				return ec.fieldContext_Assessment_assessmentOwnerID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Assessment_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Assessment_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Assessment_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Assessment_viewers(ctx, field)
+			case "template":
+				return ec.fieldContext_Assessment_template(ctx, field)
 			case "users":
 				return ec.fieldContext_Assessment_users(ctx, field)
 			case "assessmentResponses":
 				return ec.fieldContext_Assessment_assessmentResponses(ctx, field)
+			case "assessmentOwner":
+				return ec.fieldContext_Assessment_assessmentOwner(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Assessment", field.Name)
 		},
@@ -454,20 +490,6 @@ func (ec *executionContext) _AssessmentUpdatePayload(ctx context.Context, sel as
 // endregion **************************** object.gotpl ****************************
 
 // region    ***************************** type.gotpl *****************************
-
-func (ec *executionContext) marshalNAssessmentBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.AssessmentBulkCreatePayload) graphql.Marshaler {
-	return ec._AssessmentBulkCreatePayload(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNAssessmentBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssessmentBulkCreatePayload) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._AssessmentBulkCreatePayload(ctx, sel, v)
-}
 
 func (ec *executionContext) marshalNAssessmentCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.AssessmentCreatePayload) graphql.Marshaler {
 	return ec._AssessmentCreatePayload(ctx, sel, &v)

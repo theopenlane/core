@@ -91,10 +91,14 @@ func (ec *executionContext) fieldContext_AssessmentResponseBulkCreatePayload_ass
 				return ec.fieldContext_AssessmentResponse_completedAt(ctx, field)
 			case "dueDate":
 				return ec.fieldContext_AssessmentResponse_dueDate(ctx, field)
+			case "responseDataID":
+				return ec.fieldContext_AssessmentResponse_responseDataID(ctx, field)
 			case "assessment":
 				return ec.fieldContext_AssessmentResponse_assessment(ctx, field)
 			case "user":
 				return ec.fieldContext_AssessmentResponse_user(ctx, field)
+			case "document":
+				return ec.fieldContext_AssessmentResponse_document(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AssessmentResponse", field.Name)
 		},
@@ -167,10 +171,14 @@ func (ec *executionContext) fieldContext_AssessmentResponseCreatePayload_assessm
 				return ec.fieldContext_AssessmentResponse_completedAt(ctx, field)
 			case "dueDate":
 				return ec.fieldContext_AssessmentResponse_dueDate(ctx, field)
+			case "responseDataID":
+				return ec.fieldContext_AssessmentResponse_responseDataID(ctx, field)
 			case "assessment":
 				return ec.fieldContext_AssessmentResponse_assessment(ctx, field)
 			case "user":
 				return ec.fieldContext_AssessmentResponse_user(ctx, field)
+			case "document":
+				return ec.fieldContext_AssessmentResponse_document(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AssessmentResponse", field.Name)
 		},
@@ -287,10 +295,14 @@ func (ec *executionContext) fieldContext_AssessmentResponseUpdatePayload_assessm
 				return ec.fieldContext_AssessmentResponse_completedAt(ctx, field)
 			case "dueDate":
 				return ec.fieldContext_AssessmentResponse_dueDate(ctx, field)
+			case "responseDataID":
+				return ec.fieldContext_AssessmentResponse_responseDataID(ctx, field)
 			case "assessment":
 				return ec.fieldContext_AssessmentResponse_assessment(ctx, field)
 			case "user":
 				return ec.fieldContext_AssessmentResponse_user(ctx, field)
+			case "document":
+				return ec.fieldContext_AssessmentResponse_document(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AssessmentResponse", field.Name)
 		},

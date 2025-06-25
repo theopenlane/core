@@ -11,7 +11,9 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -40,8 +42,10 @@ type Assessment struct {
 	Name string `json:"name,omitempty"`
 	// AssessmentType holds the value of the "assessment_type" field.
 	AssessmentType enums.AssessmentType `json:"assessment_type,omitempty"`
-	// the questionnaire template id associated with the assessment
-	QuestionnaireID string `json:"questionnaire_id,omitempty"`
+	// the template id associated with the assessment
+	TemplateID string `json:"template_id,omitempty"`
+	// the id of the group that owns the assessment
+	AssessmentOwnerID string `json:"assessment_owner_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the AssessmentQuery when eager-loading is set.
 	Edges        AssessmentEdges `json:"edges"`
@@ -52,16 +56,29 @@ type Assessment struct {
 type AssessmentEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
+	// provides view access to the risk to members of the group
+	Viewers []*Group `json:"viewers,omitempty"`
+	// Template holds the value of the template edge.
+	Template *Template `json:"template,omitempty"`
 	// Users holds the value of the users edge.
 	Users []*User `json:"users,omitempty"`
 	// AssessmentResponses holds the value of the assessment_responses edge.
 	AssessmentResponses []*AssessmentResponse `json:"assessment_responses,omitempty"`
+	// the group of users who are responsible for the assessment, will be assigned tasks, approval, etc.
+	AssessmentOwner *Group `json:"assessment_owner,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [8]map[string]int
 
+	namedBlockedGroups       map[string][]*Group
+	namedEditors             map[string][]*Group
+	namedViewers             map[string][]*Group
 	namedUsers               map[string][]*User
 	namedAssessmentResponses map[string][]*AssessmentResponse
 }
@@ -77,10 +94,48 @@ func (e AssessmentEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e AssessmentEdges) BlockedGroupsOrErr() ([]*Group, error) {
+	if e.loadedTypes[1] {
+		return e.BlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e AssessmentEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[2] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
+}
+
+// ViewersOrErr returns the Viewers value or an error if the edge
+// was not loaded in eager-loading.
+func (e AssessmentEdges) ViewersOrErr() ([]*Group, error) {
+	if e.loadedTypes[3] {
+		return e.Viewers, nil
+	}
+	return nil, &NotLoadedError{edge: "viewers"}
+}
+
+// TemplateOrErr returns the Template value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e AssessmentEdges) TemplateOrErr() (*Template, error) {
+	if e.Template != nil {
+		return e.Template, nil
+	} else if e.loadedTypes[4] {
+		return nil, &NotFoundError{label: template.Label}
+	}
+	return nil, &NotLoadedError{edge: "template"}
+}
+
 // UsersOrErr returns the Users value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssessmentEdges) UsersOrErr() ([]*User, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[5] {
 		return e.Users, nil
 	}
 	return nil, &NotLoadedError{edge: "users"}
@@ -89,10 +144,21 @@ func (e AssessmentEdges) UsersOrErr() ([]*User, error) {
 // AssessmentResponsesOrErr returns the AssessmentResponses value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssessmentEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[6] {
 		return e.AssessmentResponses, nil
 	}
 	return nil, &NotLoadedError{edge: "assessment_responses"}
+}
+
+// AssessmentOwnerOrErr returns the AssessmentOwner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e AssessmentEdges) AssessmentOwnerOrErr() (*Group, error) {
+	if e.AssessmentOwner != nil {
+		return e.AssessmentOwner, nil
+	} else if e.loadedTypes[7] {
+		return nil, &NotFoundError{label: group.Label}
+	}
+	return nil, &NotLoadedError{edge: "assessment_owner"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -102,7 +168,7 @@ func (*Assessment) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case assessment.FieldTags:
 			values[i] = new([]byte)
-		case assessment.FieldID, assessment.FieldCreatedBy, assessment.FieldUpdatedBy, assessment.FieldDeletedBy, assessment.FieldOwnerID, assessment.FieldName, assessment.FieldAssessmentType, assessment.FieldQuestionnaireID:
+		case assessment.FieldID, assessment.FieldCreatedBy, assessment.FieldUpdatedBy, assessment.FieldDeletedBy, assessment.FieldOwnerID, assessment.FieldName, assessment.FieldAssessmentType, assessment.FieldTemplateID, assessment.FieldAssessmentOwnerID:
 			values[i] = new(sql.NullString)
 		case assessment.FieldCreatedAt, assessment.FieldUpdatedAt, assessment.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -189,11 +255,17 @@ func (a *Assessment) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				a.AssessmentType = enums.AssessmentType(value.String)
 			}
-		case assessment.FieldQuestionnaireID:
+		case assessment.FieldTemplateID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field questionnaire_id", values[i])
+				return fmt.Errorf("unexpected type %T for field template_id", values[i])
 			} else if value.Valid {
-				a.QuestionnaireID = value.String
+				a.TemplateID = value.String
+			}
+		case assessment.FieldAssessmentOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field assessment_owner_id", values[i])
+			} else if value.Valid {
+				a.AssessmentOwnerID = value.String
 			}
 		default:
 			a.selectValues.Set(columns[i], values[i])
@@ -213,6 +285,26 @@ func (a *Assessment) QueryOwner() *OrganizationQuery {
 	return NewAssessmentClient(a.config).QueryOwner(a)
 }
 
+// QueryBlockedGroups queries the "blocked_groups" edge of the Assessment entity.
+func (a *Assessment) QueryBlockedGroups() *GroupQuery {
+	return NewAssessmentClient(a.config).QueryBlockedGroups(a)
+}
+
+// QueryEditors queries the "editors" edge of the Assessment entity.
+func (a *Assessment) QueryEditors() *GroupQuery {
+	return NewAssessmentClient(a.config).QueryEditors(a)
+}
+
+// QueryViewers queries the "viewers" edge of the Assessment entity.
+func (a *Assessment) QueryViewers() *GroupQuery {
+	return NewAssessmentClient(a.config).QueryViewers(a)
+}
+
+// QueryTemplate queries the "template" edge of the Assessment entity.
+func (a *Assessment) QueryTemplate() *TemplateQuery {
+	return NewAssessmentClient(a.config).QueryTemplate(a)
+}
+
 // QueryUsers queries the "users" edge of the Assessment entity.
 func (a *Assessment) QueryUsers() *UserQuery {
 	return NewAssessmentClient(a.config).QueryUsers(a)
@@ -221,6 +313,11 @@ func (a *Assessment) QueryUsers() *UserQuery {
 // QueryAssessmentResponses queries the "assessment_responses" edge of the Assessment entity.
 func (a *Assessment) QueryAssessmentResponses() *AssessmentResponseQuery {
 	return NewAssessmentClient(a.config).QueryAssessmentResponses(a)
+}
+
+// QueryAssessmentOwner queries the "assessment_owner" edge of the Assessment entity.
+func (a *Assessment) QueryAssessmentOwner() *GroupQuery {
+	return NewAssessmentClient(a.config).QueryAssessmentOwner(a)
 }
 
 // Update returns a builder for updating this Assessment.
@@ -276,10 +373,85 @@ func (a *Assessment) String() string {
 	builder.WriteString("assessment_type=")
 	builder.WriteString(fmt.Sprintf("%v", a.AssessmentType))
 	builder.WriteString(", ")
-	builder.WriteString("questionnaire_id=")
-	builder.WriteString(a.QuestionnaireID)
+	builder.WriteString("template_id=")
+	builder.WriteString(a.TemplateID)
+	builder.WriteString(", ")
+	builder.WriteString("assessment_owner_id=")
+	builder.WriteString(a.AssessmentOwnerID)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (a *Assessment) NamedBlockedGroups(name string) ([]*Group, error) {
+	if a.Edges.namedBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := a.Edges.namedBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (a *Assessment) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if a.Edges.namedBlockedGroups == nil {
+		a.Edges.namedBlockedGroups = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		a.Edges.namedBlockedGroups[name] = []*Group{}
+	} else {
+		a.Edges.namedBlockedGroups[name] = append(a.Edges.namedBlockedGroups[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (a *Assessment) NamedEditors(name string) ([]*Group, error) {
+	if a.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := a.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (a *Assessment) appendNamedEditors(name string, edges ...*Group) {
+	if a.Edges.namedEditors == nil {
+		a.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		a.Edges.namedEditors[name] = []*Group{}
+	} else {
+		a.Edges.namedEditors[name] = append(a.Edges.namedEditors[name], edges...)
+	}
+}
+
+// NamedViewers returns the Viewers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (a *Assessment) NamedViewers(name string) ([]*Group, error) {
+	if a.Edges.namedViewers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := a.Edges.namedViewers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (a *Assessment) appendNamedViewers(name string, edges ...*Group) {
+	if a.Edges.namedViewers == nil {
+		a.Edges.namedViewers = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		a.Edges.namedViewers[name] = []*Group{}
+	} else {
+		a.Edges.namedViewers[name] = append(a.Edges.namedViewers[name], edges...)
+	}
 }
 
 // NamedUsers returns the Users named value or an error if the edge was not
