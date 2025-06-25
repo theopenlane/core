@@ -3,7 +3,6 @@ package entitlements
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"time"
 
@@ -69,7 +68,7 @@ func NewTupleChecker(opts ...TupleCheckerOption) *TupleChecker {
 // CheckFeatureTuple checks if a tuple exists, using Redis cache first, then FGA.
 func (tc *TupleChecker) CheckFeatureTuple(ctx context.Context, tuple FeatureTuple) (bool, error) {
 	if tc.redisClient == nil || tc.fgaChecker == nil {
-		return false, errors.New("TupleChecker not properly configured")
+		return false, fmt.Errorf("%w", ErrTupleCheckerNotConfigured)
 	}
 
 	key := tc.cacheKey(tuple)
@@ -95,37 +94,45 @@ func (tc *TupleChecker) CheckFeatureTuple(ctx context.Context, tuple FeatureTupl
 
 	// this suppresses the error if the set fails, as we don't want to fail the check if caching fails, because FGA is the source of truth
 	_ = tc.redisClient.Set(ctx, key, cacheVal, tc.cacheTTL).Err()
+
 	return ok, nil
 }
 
 // CreateFeatureTuple creates a tuple in FGA and updates the cache.
 func (tc *TupleChecker) CreateFeatureTuple(ctx context.Context, tuple FeatureTuple) error {
 	if tc.redisClient == nil || tc.fgaChecker == nil {
-		return errors.New("TupleChecker not properly configured")
+		return fmt.Errorf("%w", ErrTupleCheckerNotConfigured)
 	}
+
 	if err := tc.fgaChecker.CreateTuple(ctx, tuple); err != nil {
 		return err
 	}
+
 	key := tc.cacheKey(tuple)
+
 	return tc.redisClient.Set(ctx, key, "1", tc.cacheTTL).Err()
 }
 
 // DeleteFeatureTuple deletes a tuple in FGA and removes it from the cache.
 func (tc *TupleChecker) DeleteFeatureTuple(ctx context.Context, tuple FeatureTuple) error {
 	if tc.redisClient == nil || tc.fgaChecker == nil {
-		return errors.New("TupleChecker not properly configured")
+		return fmt.Errorf("%w", ErrTupleCheckerNotConfigured)
 	}
+
 	if err := tc.fgaChecker.DeleteTuple(ctx, tuple); err != nil {
 		return err
 	}
+
 	key := tc.cacheKey(tuple)
 	if err := tc.redisClient.Del(ctx, key).Err(); err != nil {
 		return err
 	}
+
 	return nil
 }
 
 func (tc *TupleChecker) cacheKey(tuple FeatureTuple) string {
 	ctxBytes, _ := json.Marshal(tuple.Context)
+
 	return fmt.Sprintf("feature:%s:user:%s:ctx:%s", tuple.Feature, tuple.UserID, string(ctxBytes))
 }

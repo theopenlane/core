@@ -2,35 +2,35 @@ package entitlements
 
 import "github.com/stripe/stripe-go/v82"
 
-// EntitlementsFeatureCreateOption allows customizing EntitlementsFeatureCreateParams
-type EntitlementsFeatureCreateOption func(params *stripe.EntitlementsFeatureCreateParams)
+// FeatureCreateOption allows customizing EntitlementsFeatureCreateParams
+type FeatureCreateOption func(params *stripe.EntitlementsFeatureCreateParams)
 
 // WithFeatureName allows setting the name of the feature
-func WithFeatureName(name string) EntitlementsFeatureCreateOption {
+func WithFeatureName(name string) FeatureCreateOption {
 	return func(params *stripe.EntitlementsFeatureCreateParams) {
 		params.Name = stripe.String(name)
 	}
 }
 
 // WithFeatureLookupKey allows setting the lookup key for a feature
-func WithFeatureLookupKey(lookupKey string) EntitlementsFeatureCreateOption {
+func WithFeatureLookupKey(lookupKey string) FeatureCreateOption {
 	return func(params *stripe.EntitlementsFeatureCreateParams) {
 		params.LookupKey = stripe.String(lookupKey)
 	}
 }
 
 // EntitlementsFeatureCreateWithOptions creates create params with functional options
-type EntitlementsFeatureUpdateOption func(params *stripe.EntitlementsFeatureUpdateParams)
+type FeatureUpdateOption func(params *stripe.EntitlementsFeatureUpdateParams)
 
 // WithUpdateFeatureName allows setting the name of the feature in update params
-func WithUpdateFeatureName(name string) EntitlementsFeatureUpdateOption {
+func WithUpdateFeatureName(name string) FeatureUpdateOption {
 	return func(params *stripe.EntitlementsFeatureUpdateParams) {
 		params.Name = stripe.String(name)
 	}
 }
 
 // UpdateFeatureWithOptions creates update params with functional options
-func (sc *StripeClient) UpdateFeatureWithOptions(baseParams *stripe.EntitlementsFeatureUpdateParams, opts ...EntitlementsFeatureUpdateOption) *stripe.EntitlementsFeatureUpdateParams {
+func (sc *StripeClient) UpdateFeatureWithOptions(baseParams *stripe.EntitlementsFeatureUpdateParams, opts ...FeatureUpdateOption) *stripe.EntitlementsFeatureUpdateParams {
 	params := baseParams
 
 	for _, opt := range opts {

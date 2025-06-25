@@ -358,5 +358,5 @@ func (c *Catalog) SaveCatalog(path string) error {
 		return err
 	}
 
-	return os.WriteFile(path, finalData, 0o644) // nolint:mnd
+	return os.WriteFile(path, finalData, 0o644) //nolint:mnd
 }

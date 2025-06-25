@@ -142,9 +142,9 @@ func (sc *StripeClient) FindPriceForProduct(ctx context.Context, productID strin
 		if lookupKey != "" {
 			if p.LookupKey == lookupKey {
 				return p, nil
-			} else {
-				continue
 			}
+
+			continue
 		}
 
 		if nickname != "" && p.Nickname != nickname {

@@ -7,7 +7,7 @@ import (
 )
 
 // CreateProductFeatureWithOptions creates a product feature using functional options
-func (sc *StripeClient) CreateProductFeatureWithOptions(ctx context.Context, baseParams *stripe.EntitlementsFeatureCreateParams, opts ...EntitlementsFeatureCreateOption) (*stripe.EntitlementsFeature, error) {
+func (sc *StripeClient) CreateProductFeatureWithOptions(ctx context.Context, baseParams *stripe.EntitlementsFeatureCreateParams, opts ...FeatureCreateOption) (*stripe.EntitlementsFeature, error) {
 	params := baseParams
 
 	for _, opt := range opts {
@@ -39,7 +39,7 @@ func (sc *StripeClient) ListProductFeatures(ctx context.Context, productID strin
 }
 
 // UpdateProductFeatureWithOptions updates a product feature using functional options
-func (sc *StripeClient) UpdateProductFeatureWithOptions(ctx context.Context, featureID string, baseParams *stripe.EntitlementsFeatureUpdateParams, opts ...EntitlementsFeatureUpdateOption) (*stripe.EntitlementsFeature, error) {
+func (sc *StripeClient) UpdateProductFeatureWithOptions(ctx context.Context, featureID string, baseParams *stripe.EntitlementsFeatureUpdateParams, opts ...FeatureUpdateOption) (*stripe.EntitlementsFeature, error) {
 	params := baseParams
 
 	for _, opt := range opts {

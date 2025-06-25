@@ -63,7 +63,7 @@ func main() {
 				return fmt.Errorf("stripe client: %w", err)
 			}
 
-			ctx := context.Background()
+			ctx := c.Context
 
 			// Pull all existing products from Stripe to build a lookup by name.
 			prodMap, err := buildProductMap(ctx, sc)
@@ -75,7 +75,11 @@ func main() {
 			// need metadata takeovers.
 			mods, missMods := processFeatureSet(ctx, sc, prodMap, "module", cat.Modules)
 			adds, missAdds := processFeatureSet(ctx, sc, prodMap, "addon", cat.Addons)
-			takeovers := append(mods, adds...)
+
+			var takeovers []takeoverInfo
+
+			takeovers = append(mods, adds...)
+
 			missing := missMods || missAdds
 
 			// Offer to take over unmanaged prices if any were found.
@@ -86,7 +90,7 @@ func main() {
 			// Prompt to create missing products or prices if needed.
 			if missing {
 				if err := promptAndCreateMissing(ctx, cat, sc); err != nil {
-					fmt.Fprintln(os.Stderr, "create prices:", err)
+					return fmt.Errorf("create prices: %w", err)
 				}
 			}
 
@@ -95,6 +99,7 @@ func main() {
 				if err := cat.SaveCatalog(catalogFile); err != nil {
 					return fmt.Errorf("save catalog: %w", err)
 				}
+				fmt.Printf("Catalog successfully written to %s\n", catalogFile)
 			}
 
 			return nil
