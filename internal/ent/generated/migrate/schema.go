@@ -3278,7 +3278,7 @@ var (
 		{Name: "identity_provider_entity_id", Type: field.TypeString, Nullable: true},
 		{Name: "oidc_discovery_endpoint", Type: field.TypeString, Nullable: true},
 		{Name: "identity_provider_login_enforced", Type: field.TypeBool, Default: false},
-		{Name: "compliance_webhook_token", Type: field.TypeString, Unique: true},
+		{Name: "compliance_webhook_token", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "organization_id", Type: field.TypeString, Unique: true, Nullable: true},
 	}
 	// OrganizationSettingsTable holds the schema information for the "organization_settings" table.
@@ -3332,7 +3332,7 @@ var (
 		{Name: "identity_provider_entity_id", Type: field.TypeString, Nullable: true},
 		{Name: "oidc_discovery_endpoint", Type: field.TypeString, Nullable: true},
 		{Name: "identity_provider_login_enforced", Type: field.TypeBool, Default: false},
-		{Name: "compliance_webhook_token", Type: field.TypeString},
+		{Name: "compliance_webhook_token", Type: field.TypeString, Nullable: true},
 	}
 	// OrganizationSettingHistoryTable holds the schema information for the "organization_setting_history" table.
 	OrganizationSettingHistoryTable = &schema.Table{

@@ -61253,7 +61253,7 @@ type OrganizationSetting implements Node {
   """
   unique token used to receive compliance webhook events
   """
-  complianceWebhookToken: String!
+  complianceWebhookToken: String
   organization: Organization
   files(
     """
@@ -61393,7 +61393,7 @@ type OrganizationSettingHistory implements Node {
   """
   unique token used to receive compliance webhook events
   """
-  complianceWebhookToken: String!
+  complianceWebhookToken: String
 }
 """
 A connection to a list of items.
@@ -61778,6 +61778,8 @@ input OrganizationSettingHistoryWhereInput {
   complianceWebhookTokenContains: String
   complianceWebhookTokenHasPrefix: String
   complianceWebhookTokenHasSuffix: String
+  complianceWebhookTokenIsNil: Boolean
+  complianceWebhookTokenNotNil: Boolean
   complianceWebhookTokenEqualFold: String
   complianceWebhookTokenContainsFold: String
 }
@@ -62089,6 +62091,8 @@ input OrganizationSettingWhereInput {
   complianceWebhookTokenContains: String
   complianceWebhookTokenHasPrefix: String
   complianceWebhookTokenHasSuffix: String
+  complianceWebhookTokenIsNil: Boolean
+  complianceWebhookTokenNotNil: Boolean
   complianceWebhookTokenEqualFold: String
   complianceWebhookTokenContainsFold: String
   """
@@ -79755,6 +79759,7 @@ input UpdateOrganizationSettingInput {
   unique token used to receive compliance webhook events
   """
   complianceWebhookToken: String
+  clearComplianceWebhookToken: Boolean
   organizationID: ID
   clearOrganization: Boolean
   addFileIDs: [ID!]

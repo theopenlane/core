@@ -123,7 +123,7 @@ func (OrganizationSetting) Fields() []ent.Field {
 		field.String("compliance_webhook_token").
 			Comment("unique token used to receive compliance webhook events").
 			Unique().
-			Nillable().
+			Optional().
 			DefaultFunc(func() string {
 				token := keygen.PrefixedSecret("tola_wsec")
 				return token

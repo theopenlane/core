@@ -5270,7 +5270,7 @@ type AdminSearch_AdminSearch_OrganizationSettings_Edges_Node struct {
 	BillingContact                   *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
 	BillingEmail                     *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
 	BillingPhone                     *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	ComplianceWebhookToken           string          "json:\"complianceWebhookToken\" graphql:\"complianceWebhookToken\""
+	ComplianceWebhookToken           *string         "json:\"complianceWebhookToken,omitempty\" graphql:\"complianceWebhookToken\""
 	Domains                          []string        "json:\"domains,omitempty\" graphql:\"domains\""
 	ID                               string          "json:\"id\" graphql:\"id\""
 	IdentityProviderEntityID         *string         "json:\"identityProviderEntityID,omitempty\" graphql:\"identityProviderEntityID\""
@@ -5311,7 +5311,7 @@ func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetBillingPhon
 	}
 	return t.BillingPhone
 }
-func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetComplianceWebhookToken() string {
+func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetComplianceWebhookToken() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
 	}
