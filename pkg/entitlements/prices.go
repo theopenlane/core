@@ -121,15 +121,31 @@ func (sc *StripeClient) GetPriceByLookupKey(ctx context.Context, lookupKey strin
 	return nil, nil
 }
 
-// FindPriceForProduct searches existing prices for a matching interval, amount and optional metadata.
-func (sc *StripeClient) FindPriceForProduct(ctx context.Context, productID string, unitAmount int64, currency, interval, nickname, lookupKey string, metadata map[string]string) (*stripe.Price, error) {
+// FindPriceForProduct searches existing prices for a matching interval, amount
+// and optional metadata. It prefers locating by price ID or lookup key before
+// falling back to attribute matching within the specified product.
+func (sc *StripeClient) FindPriceForProduct(ctx context.Context, productID, priceID string, unitAmount int64, currency, interval, nickname, lookupKey string, metadata map[string]string) (*stripe.Price, error) {
+	if priceID != "" {
+		price, err := sc.GetPrice(ctx, priceID)
+		if err != nil {
+			return nil, err
+		}
+		if price != nil {
+			if productID == "" || (price.Product != nil && price.Product.ID == productID) {
+				return price, nil
+			}
+		}
+	}
+
 	if lookupKey != "" {
 		price, err := sc.GetPriceByLookupKey(ctx, lookupKey)
 		if err != nil {
 			return nil, err
 		}
 		if price != nil {
-			return price, nil
+			if productID == "" || (price.Product != nil && price.Product.ID == productID) {
+				return price, nil
+			}
 		}
 	}
 

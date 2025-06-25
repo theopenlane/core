@@ -98,9 +98,11 @@ func TestBuildProductMap(t *testing.T) {
 
 	m, err := buildProductMap(context.Background(), sc)
 	require.NoError(t, err)
-	require.Len(t, m, 2)
+	require.Len(t, m, 4)
 	assert.Equal(t, p1, m["Basic"])
 	assert.Equal(t, p2, m["Pro"])
+	assert.Equal(t, p1, m[p1.ID])
+	assert.Equal(t, p2, m[p2.ID])
 }
 
 func TestBuildProductMapError(t *testing.T) {

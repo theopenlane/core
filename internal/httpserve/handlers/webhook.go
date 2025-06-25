@@ -514,7 +514,7 @@ func (h *Handler) ensureFeatureTuples(ctx context.Context, orgID string, feats [
 		pipe := h.RedisClient.TxPipeline()
 		pipe.Del(ctx, key)
 		pipe.SAdd(ctx, key, feats)
-		pipe.Expire(ctx, key, 5*time.Minute)
+		pipe.Expire(ctx, key, 5*time.Minute) // nolint:mnd
 		_, _ = pipe.Exec(ctx)
 	}
 

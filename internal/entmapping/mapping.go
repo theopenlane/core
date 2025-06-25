@@ -24,7 +24,7 @@ func StripePriceToOrgPrice(p *stripe.Price) *ent.OrgPrice {
 	currency := string(p.Currency)
 
 	price := models.Price{
-		Amount:   float64(p.UnitAmount) / 100.0,
+		Amount:   float64(p.UnitAmount) / 100.0, //nolint:mnd
 		Interval: interval,
 		Currency: currency,
 	}
@@ -102,7 +102,7 @@ func StripeSubscriptionToOrgSubscription(sub *stripe.Subscription, cust *entitle
 			}
 
 			price = models.Price{
-				Amount:   float64(item.Price.UnitAmount) / 100.0,
+				Amount:   float64(item.Price.UnitAmount) / 100.0, //nolint:mnd
 				Interval: interval,
 				Currency: string(item.Price.Currency),
 			}
@@ -144,7 +144,7 @@ func StripeSubscriptionItemToOrgModule(item *stripe.SubscriptionItem) *ent.OrgMo
 	}
 
 	price := models.Price{
-		Amount:   float64(item.Price.UnitAmount) / 100.0,
+		Amount:   float64(item.Price.UnitAmount) / 100.0, //nolint:mnd
 		Interval: interval,
 		Currency: string(item.Price.Currency),
 	}

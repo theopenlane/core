@@ -174,13 +174,18 @@ func (c *Catalog) ValidatePrices(ctx context.Context, sc *entitlements.StripeCli
 	prodMap := map[string]*stripe.Product{}
 
 	for _, p := range products {
-		prodMap[p.Name] = p
+		if p.ID != "" {
+			prodMap[p.ID] = p
+		}
+		if p.Name != "" {
+			prodMap[p.Name] = p
+		}
 	}
 
 	check := func(fs FeatureSet) error {
 		for name, f := range fs {
-			prod, ok := prodMap[f.DisplayName]
-			if !ok {
+			prod, _ := resolveProduct(ctx, sc, prodMap, f)
+			if prod == nil {
 				return ErrProductMissingFeature
 			}
 
@@ -189,7 +194,7 @@ func (c *Catalog) ValidatePrices(ctx context.Context, sc *entitlements.StripeCli
 
 				maps.Copy(md, p.Metadata)
 
-				price, err := sc.FindPriceForProduct(ctx, prod.ID, p.UnitAmount, "", p.Interval, p.Nickname, p.LookupKey, md)
+				price, err := sc.FindPriceForProduct(ctx, prod.ID, p.PriceID, p.UnitAmount, "", p.Interval, p.Nickname, p.LookupKey, md)
 				if err != nil {
 					return err
 				}
@@ -231,13 +236,18 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 
 	prodMap := map[string]*stripe.Product{}
 	for _, p := range products {
-		prodMap[p.Name] = p
+		if p.ID != "" {
+			prodMap[p.ID] = p
+		}
+		if p.Name != "" {
+			prodMap[p.Name] = p
+		}
 	}
 
 	create := func(name string, f Feature) (Feature, error) {
-		prod, ok := prodMap[f.DisplayName]
+		prod, _ := resolveProduct(ctx, sc, prodMap, f)
 		var err error
-		if !ok {
+		if prod == nil {
 			prod, err = sc.CreateProduct(ctx, name, f.DisplayName, f.Description, map[string]string{ManagedByKey: ManagedByValue})
 			if err != nil {
 				return f, ErrFailedToCreateProduct
@@ -270,7 +280,7 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 
 			maps.Copy(md, p.Metadata)
 
-			price, err := sc.FindPriceForProduct(ctx, prod.ID, p.UnitAmount, currency, p.Interval, p.Nickname, p.LookupKey, md)
+			price, err := sc.FindPriceForProduct(ctx, prod.ID, p.PriceID, p.UnitAmount, currency, p.Interval, p.Nickname, p.LookupKey, md)
 			if err != nil {
 				return f, err
 			}
@@ -366,7 +376,7 @@ func (c *Catalog) SaveCatalog(path string) (string, error) {
 			B:        difflib.SplitLines(string(newData)),
 			FromFile: "catalog(old)",
 			ToFile:   "catalog(new)",
-			Context:  3,
+			Context:  3, //nolint:mnd
 		}
 
 		diff, _ = difflib.GetUnifiedDiffString(u)
@@ -377,4 +387,33 @@ func (c *Catalog) SaveCatalog(path string) (string, error) {
 	}
 
 	return diff, nil
+}
+
+// resolveProduct attempts to locate the Stripe product for a feature using the
+// most specific information available. It tries any referenced price IDs first,
+// then lookup keys, and finally falls back to the feature display name.
+func resolveProduct(ctx context.Context, sc *entitlements.StripeClient, prodMap map[string]*stripe.Product, feat Feature) (*stripe.Product, error) {
+	for _, p := range feat.Billing.Prices {
+		if p.PriceID != "" {
+			pr, err := sc.GetPrice(ctx, p.PriceID)
+			if err == nil && pr != nil && pr.Product != nil {
+				return sc.GetProductByID(ctx, pr.Product.ID)
+			}
+		}
+	}
+
+	for _, p := range feat.Billing.Prices {
+		if p.LookupKey != "" {
+			pr, err := sc.GetPriceByLookupKey(ctx, p.LookupKey)
+			if err == nil && pr != nil && pr.Product != nil {
+				return sc.GetProductByID(ctx, pr.Product.ID)
+			}
+		}
+	}
+
+	if prod, ok := prodMap[feat.DisplayName]; ok {
+		return prod, nil
+	}
+
+	return nil, nil
 }

@@ -3,6 +3,7 @@ package entitlements
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"time"
 
@@ -57,7 +58,7 @@ func WithFGAClient(client FGAClient) TupleCheckerOption {
 // NewTupleChecker creates a new TupleChecker with options.
 func NewTupleChecker(opts ...TupleCheckerOption) *TupleChecker {
 	tc := &TupleChecker{
-		cacheTTL: 5 * time.Minute,
+		cacheTTL: 5 * time.Minute, // nolint:mnd
 	}
 	for _, opt := range opts {
 		opt(tc)
@@ -78,7 +79,7 @@ func (tc *TupleChecker) CheckFeatureTuple(ctx context.Context, tuple FeatureTupl
 		return val == "1", nil
 	}
 
-	if err != redis.Nil {
+	if !errors.Is(err, redis.Nil) {
 		return false, err
 	}
 	// Not in cache, check FGA

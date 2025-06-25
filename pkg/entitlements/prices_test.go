@@ -33,7 +33,7 @@ func TestFindPriceForProductByLookupKey(t *testing.T) {
 	price := &stripe.Price{ID: "price_1", LookupKey: "basic", Product: &stripe.Product{ID: "prod_1"}}
 	sc, _ := setupPriceClient([]*stripe.Price{price}, nil)
 
-	found, err := sc.FindPriceForProduct(ctx, "prod_1", 0, "", "", "", "basic", nil)
+	found, err := sc.FindPriceForProduct(ctx, "prod_1", "", 0, "", "", "", "basic", nil)
 	require.NoError(t, err)
 	assert.Equal(t, price, found)
 }
@@ -52,7 +52,7 @@ func TestFindPriceForProductByAttributes(t *testing.T) {
 	}
 	sc, _ := setupPriceClient([]*stripe.Price{price}, nil)
 
-	found, err := sc.FindPriceForProduct(ctx, "prod_1", 1000, "usd", "month", "basic", "", map[string]string{"managed_by": "openlane"})
+	found, err := sc.FindPriceForProduct(ctx, "prod_1", "", 1000, "usd", "month", "basic", "", map[string]string{"managed_by": "openlane"})
 	require.NoError(t, err)
 	assert.Equal(t, price, found)
 }
@@ -62,14 +62,14 @@ func TestFindPriceForProductNoMatch(t *testing.T) {
 	price := &stripe.Price{ID: "price_1", LookupKey: "basic", Product: &stripe.Product{ID: "prod_1"}}
 	sc, _ := setupPriceClient([]*stripe.Price{price}, nil)
 
-	found, err := sc.FindPriceForProduct(ctx, "prod_1", 2000, "usd", "month", "", "", nil)
+	found, err := sc.FindPriceForProduct(ctx, "prod_1", "", 2000, "usd", "month", "", "", nil)
 	require.NoError(t, err)
 	assert.Nil(t, found)
 }
 
 func TestFindPriceForProductListError(t *testing.T) {
 	sc, _ := setupPriceClient(nil, assert.AnError)
-	found, err := sc.FindPriceForProduct(context.Background(), "prod_1", 0, "", "", "", "", nil)
+	found, err := sc.FindPriceForProduct(context.Background(), "prod_1", "", 0, "", "", "", "", nil)
 	assert.Error(t, err)
 	assert.Nil(t, found)
 }

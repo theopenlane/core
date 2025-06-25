@@ -91,12 +91,14 @@ func catalogApp() *cli.App {
 				return fmt.Errorf("list products: %w", err)
 			}
 
+			var featuresreports []featureReport
+
 			mods, missMods, modReports := processFeatureSet(ctx, sc, prodMap, "module", cat.Modules)
 			adds, missAdds, addReports := processFeatureSet(ctx, sc, prodMap, "addon", cat.Addons)
 
-			reports := append(modReports, addReports...)
+			featuresreports = append(modReports, addReports...)
 
-			printFeatureReports(reports)
+			printFeatureReports(featuresreports)
 
 			var takeovers []takeoverInfo
 
@@ -135,7 +137,8 @@ func catalogApp() *cli.App {
 	return app
 }
 
-// buildProductMap fetches all existing Stripe products and indexes them by name.
+// buildProductMap fetches all existing Stripe products and indexes them by ID
+// and name so lookups can prefer unique identifiers when available.
 func buildProductMap(ctx context.Context, sc *entitlements.StripeClient) (map[string]*stripe.Product, error) {
 	products, err := sc.ListProducts(ctx)
 	if err != nil {
@@ -144,10 +147,52 @@ func buildProductMap(ctx context.Context, sc *entitlements.StripeClient) (map[st
 
 	prodMap := map[string]*stripe.Product{}
 	for _, p := range products {
-		prodMap[p.Name] = p
+		if p.ID != "" {
+			prodMap[p.ID] = p
+		}
+
+		if p.Name != "" {
+			prodMap[p.Name] = p
+		}
 	}
 
 	return prodMap, nil
+}
+
+// resolveProduct attempts to find the Stripe product for a feature using
+// progressively less unique attributes. It tries price IDs first, then price
+// lookup keys, and finally falls back to the feature display name.
+func resolveProduct(ctx context.Context, sc *entitlements.StripeClient, prodMap map[string]*stripe.Product, feat catalog.Feature) (*stripe.Product, error) {
+	// try to discover product via price IDs
+	for _, p := range feat.Billing.Prices {
+		if p.PriceID == "" {
+			continue
+		}
+
+		pr, err := sc.GetPrice(ctx, p.PriceID)
+		if err == nil && pr != nil && pr.Product != nil {
+			return sc.GetProductByID(ctx, pr.Product.ID)
+		}
+	}
+
+	// next try lookup keys
+	for _, p := range feat.Billing.Prices {
+		if p.LookupKey == "" {
+			continue
+		}
+
+		pr, err := sc.GetPriceByLookupKey(ctx, p.LookupKey)
+		if err == nil && pr != nil && pr.Product != nil {
+			return sc.GetProductByID(ctx, pr.Product.ID)
+		}
+	}
+
+	// finally fall back to display name lookup in the provided product map
+	if prod, ok := prodMap[feat.DisplayName]; ok {
+		return prod, nil
+	}
+
+	return nil, nil
 }
 
 // updateFeaturePrices ensures each price in a feature has its price ID set and
@@ -174,7 +219,7 @@ func updateFeaturePrices(ctx context.Context, sc *entitlements.StripeClient, pro
 				fmt.Fprintf(os.Stderr, "[WARN] price %s for feature %s does not match catalog; to modify an existing price create a new one and update subscriptions\n", p.PriceID, name)
 			}
 		} else {
-			price, err = sc.FindPriceForProduct(ctx, prod.ID, p.UnitAmount, "", p.Interval, p.Nickname, p.LookupKey, md)
+			price, err = sc.FindPriceForProduct(ctx, prod.ID, "", p.UnitAmount, "", p.Interval, p.Nickname, p.LookupKey, md)
 			if err != nil || price == nil {
 				missingPrices++
 				continue
@@ -198,11 +243,11 @@ func processFeatureSet(ctx context.Context, sc *entitlements.StripeClient, prodM
 	var reports []featureReport
 
 	for name, feat := range fs {
-		prod, ok := prodMap[feat.DisplayName]
-		prodExists := ok
+		prod, _ := resolveProduct(ctx, sc, prodMap, feat)
+		prodExists := prod != nil
 		missingPrices := 0
 
-		if ok {
+		if prodExists {
 			var t []takeoverInfo
 			feat, t, missingPrices = updateFeaturePrices(ctx, sc, prod, name, feat)
 			takeovers = append(takeovers, t...)
