@@ -41,17 +41,13 @@ type Billing struct {
 	Prices []Price `json:"prices" yaml:"prices" jsonschema:"description=List of price options for this feature"`
 }
 
-type Product struct {
-	ID string `json:"id" yaml:"id" jsonschema:"description=Unique identifier for the product,example=prod_12345"`
-}
-
 // Feature defines a purchasable module or addon feature
 type Feature struct {
 	DisplayName string  `json:"display_name" yaml:"display_name" jsonschema:"description=Human-readable name for the feature,example=Advanced Reporting"`
 	Description string  `json:"description" yaml:"description,omitempty" jsonschema:"description=Optional description of the feature,example=Provides advanced analytics and reporting capabilities"`
 	Billing     Billing `json:"billing" yaml:"billing" jsonschema:"description=Billing information for the feature"`
 	Audience    string  `json:"audience" yaml:"audience" jsonschema:"enum=public,enum=private,enum=beta,description=Intended audience for the feature,example=public"`
-	Usage       *Usage  `json:"usage,omitempty" yaml:"usage" jsonschema:"description=Usage limits granted by the feature"`
+	Usage       *Usage  `json:"usage" yaml:"usage" jsonschema:"description=Usage limits granted by the feature"`
 }
 
 // Usage defines usage limits granted by a feature.
