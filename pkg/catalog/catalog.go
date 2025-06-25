@@ -382,7 +382,7 @@ func (c *Catalog) SaveCatalog(path string) (string, error) {
 		diff, _ = difflib.GetUnifiedDiffString(u)
 	}
 
-	if err := os.WriteFile(path, newData, 0o644); err != nil { //nolint:mnd
+	if err := os.WriteFile(path, newData, 0o644); err != nil { //nolint:gosec,mnd
 		return "", err
 	}
 

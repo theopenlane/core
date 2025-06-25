@@ -206,7 +206,7 @@ func ApplyStripePrice[T OrgPriceSetter[T]](b T, p *stripe.Price) T {
 	}
 
 	price := models.Price{
-		Amount:   float64(p.UnitAmount) / 100.0,
+		Amount:   float64(p.UnitAmount) / 100.0, // nolint:mnd
 		Interval: interval,
 		Currency: string(p.Currency),
 	}
@@ -308,7 +308,7 @@ func ApplyStripeSubscription[T OrgSubscriptionSetter[T]](b T, sub *stripe.Subscr
 			}
 
 			price = models.Price{
-				Amount:   float64(item.Price.UnitAmount) / 100.0,
+				Amount:   float64(item.Price.UnitAmount) / 100.0, // nolint:mnd
 				Interval: interval,
 				Currency: string(item.Price.Currency),
 			}
@@ -360,7 +360,7 @@ func ApplyStripeSubscriptionItem[T OrgModuleSetter[T]](b T, item *stripe.Subscri
 	}
 
 	price := models.Price{
-		Amount:   float64(item.Price.UnitAmount) / 100.0,
+		Amount:   float64(item.Price.UnitAmount) / 100.0, // nolint:mnd
 		Interval: interval,
 		Currency: string(item.Price.Currency),
 	}

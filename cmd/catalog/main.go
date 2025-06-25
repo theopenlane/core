@@ -91,19 +91,15 @@ func catalogApp() *cli.App {
 				return fmt.Errorf("list products: %w", err)
 			}
 
-			var featuresreports []featureReport
-
 			mods, missMods, modReports := processFeatureSet(ctx, sc, prodMap, "module", cat.Modules)
 			adds, missAdds, addReports := processFeatureSet(ctx, sc, prodMap, "addon", cat.Addons)
 
-			featuresreports = append(modReports, addReports...)
-
+			featuresreports := append([]featureReport{}, modReports...)
+			featuresreports = append(featuresreports, addReports...)
 			printFeatureReports(featuresreports)
 
-			var takeovers []takeoverInfo
-
-			takeovers = append(mods, adds...)
-
+			takeovers := append([]takeoverInfo{}, mods...)
+			takeovers = append(takeovers, adds...)
 			missing := missMods || missAdds
 
 			// Offer to take over unmanaged prices if any were found.
