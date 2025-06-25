@@ -92,6 +92,21 @@ If you didn't have price ID's already inside, you should see something like this
 +    audience: public
 ```
 
+### Modifying existing files
+
+If you've modified the price defined in a catalog which already exists in stripe, you cannot modify the existing price (especially if it's been used in a subscription). You have to create a new price and migrate customers over to it. You'll see warnings within the terminal output to this effect:
+
+```bash
+module base                 product:true missing_prices:0
+[WARN] price price_1RbjHUR7q8Ny5Jw09vtTo1rQ for feature compliance does not match catalog; to modify an existing price create a new one and update subscriptions
+module compliance           product:true missing_prices:0
+[WARN] price price_1RaiEgR7q8Ny5Jw0bGDA8we8 for feature trust_center does not match catalog; to modify an existing price create a new one and update subscriptions
+[WARN] price price_1RaiFmR7q8Ny5Jw0PvAVtiGX for feature trust_center does not match catalog; to modify an existing price create a new one and update subscriptions
+module trust_center         product:true missing_prices:0
+[WARN] price price_1RddewR7q8Ny5Jw0MQVf1GOp for feature domain_scanning does not match catalog; to modify an existing price create a new one and update subscriptions
+addon domain_scanning      product:true missing_prices:0
+```
+
 ## Creating webhook endpoints
 
 Use `CreateWebhookEndpoint` to programmatically register a webhook URL with Stripe. Provide the URL and the events you want delivered. The call returns the created endpoint including the signing secret that should be used to verify incoming requests.

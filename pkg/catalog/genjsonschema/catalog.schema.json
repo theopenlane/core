@@ -126,6 +126,7 @@
         },
         "lookup_key": {
           "type": "string",
+          "pattern": "^[a-z0-9_]+$",
           "description": "Optional lookup key for referencing the price",
           "examples": [
             "price_compliance_monthly"

@@ -6,8 +6,6 @@ import (
 	"io/fs"
 	"maps"
 	"os"
-	"regexp"
-	"strings"
 
 	"github.com/goccy/go-yaml"
 	"github.com/rs/zerolog/log"
@@ -32,7 +30,7 @@ type Price struct {
 	Interval   string            `json:"interval" yaml:"interval" jsonschema:"enum=year,enum=month,description=Billing interval for the price,example=month"`
 	UnitAmount int64             `json:"unit_amount" yaml:"unit_amount" jsonschema:"description=Amount to be charged per interval,example=1000"`
 	Nickname   string            `json:"nickname,omitempty" yaml:"nickname,omitempty" jsonschema:"description=Optional nickname for the price,example=price_compliance_monthly"`
-	LookupKey  string            `json:"lookup_key,omitempty" yaml:"lookup_key,omitempty" jsonschema:"description=Optional lookup key for referencing the price,example=price_compliance_monthly"`
+	LookupKey  string            `json:"lookup_key,omitempty" yaml:"lookup_key,omitempty" jsonschema:"description=Optional lookup key for referencing the price,example=price_compliance_monthly,pattern=^[a-z0-9_]+$"`
 	Metadata   map[string]string `json:"metadata,omitempty" yaml:"metadata,omitempty" jsonschema:"description=Additional metadata for the price,example={\"tier\":\"premium\"}"`
 	PriceID    string            `json:"price_id,omitempty" yaml:"price_id,omitempty" jsonschema:"description=Stripe price ID,example=price_1N2Yw2A1b2c3d4e5"`
 }
@@ -190,16 +188,6 @@ func (c *Catalog) ValidatePrices(ctx context.Context, sc *entitlements.StripeCli
 	return check(c.Addons)
 }
 
-// makeLookupKey converts a feature or product name into a lookup key.
-// It lowercases the string, replaces spaces with underscores, and
-// removes characters that are not letters, digits or underscores.
-func makeLookupKey(name string) string {
-	key := strings.ToLower(name)
-	key = strings.ReplaceAll(key, " ", "_")
-	re := regexp.MustCompile(`[^a-z0-9_]+`)
-	return re.ReplaceAllString(key, "")
-}
-
 // EnsurePrices verifies prices exist in Stripe and creates them when missing.
 // New products are created using the feature display name and description.
 // Matching is performed by unit amount, interval, nickname, lookup key and
@@ -231,7 +219,7 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 
 			prodMap[f.DisplayName] = prod
 
-			lookup := makeLookupKey(f.DisplayName)
+			lookup := name
 			feature, ferr := sc.CreateProductFeatureWithOptions(ctx,
 				&stripe.EntitlementsFeatureCreateParams{},
 				entitlements.WithFeatureName(f.DisplayName),
