@@ -154,5 +154,5 @@ var DefaultCatalog = catalog.Catalog{
 		},
 	},
 	SHA:     "ae5bcf31543244e0bc0b0a14a4374ae2f199eebe805de0ad58f20d36b5d5649b",
-	Version: "v0.0.1",
+	Version: "v0.0.2",
 }
