@@ -70,7 +70,7 @@ type OrganizationSetting struct {
 	// enforce SSO authentication for organization members
 	IdentityProviderLoginEnforced bool `json:"identity_provider_login_enforced,omitempty"`
 	// unique token used to receive compliance webhook events
-	ComplianceWebhookToken *string `json:"compliance_webhook_token,omitempty"`
+	ComplianceWebhookToken string `json:"compliance_webhook_token,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrganizationSettingQuery when eager-loading is set.
 	Edges        OrganizationSettingEdges `json:"edges"`
@@ -304,8 +304,7 @@ func (os *OrganizationSetting) assignValues(columns []string, values []any) erro
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field compliance_webhook_token", values[i])
 			} else if value.Valid {
-				os.ComplianceWebhookToken = new(string)
-				*os.ComplianceWebhookToken = value.String
+				os.ComplianceWebhookToken = value.String
 			}
 		default:
 			os.selectValues.Set(columns[i], values[i])
@@ -423,10 +422,8 @@ func (os *OrganizationSetting) String() string {
 	builder.WriteString("identity_provider_login_enforced=")
 	builder.WriteString(fmt.Sprintf("%v", os.IdentityProviderLoginEnforced))
 	builder.WriteString(", ")
-	if v := os.ComplianceWebhookToken; v != nil {
-		builder.WriteString("compliance_webhook_token=")
-		builder.WriteString(*v)
-	}
+	builder.WriteString("compliance_webhook_token=")
+	builder.WriteString(os.ComplianceWebhookToken)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -462,6 +462,12 @@ func (oshu *OrganizationSettingHistoryUpdate) SetNillableComplianceWebhookToken(
 	return oshu
 }
 
+// ClearComplianceWebhookToken clears the value of the "compliance_webhook_token" field.
+func (oshu *OrganizationSettingHistoryUpdate) ClearComplianceWebhookToken() *OrganizationSettingHistoryUpdate {
+	oshu.mutation.ClearComplianceWebhookToken()
+	return oshu
+}
+
 // Mutation returns the OrganizationSettingHistoryMutation object of the builder.
 func (oshu *OrganizationSettingHistoryUpdate) Mutation() *OrganizationSettingHistoryMutation {
 	return oshu.mutation
@@ -688,6 +694,9 @@ func (oshu *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (n in
 	}
 	if value, ok := oshu.mutation.ComplianceWebhookToken(); ok {
 		_spec.SetField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString, value)
+	}
+	if oshu.mutation.ComplianceWebhookTokenCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString)
 	}
 	_spec.Node.Schema = oshu.schemaConfig.OrganizationSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, oshu.schemaConfig)
@@ -1141,6 +1150,12 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) SetNillableComplianceWebhookTo
 	return oshuo
 }
 
+// ClearComplianceWebhookToken clears the value of the "compliance_webhook_token" field.
+func (oshuo *OrganizationSettingHistoryUpdateOne) ClearComplianceWebhookToken() *OrganizationSettingHistoryUpdateOne {
+	oshuo.mutation.ClearComplianceWebhookToken()
+	return oshuo
+}
+
 // Mutation returns the OrganizationSettingHistoryMutation object of the builder.
 func (oshuo *OrganizationSettingHistoryUpdateOne) Mutation() *OrganizationSettingHistoryMutation {
 	return oshuo.mutation
@@ -1397,6 +1412,9 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (
 	}
 	if value, ok := oshuo.mutation.ComplianceWebhookToken(); ok {
 		_spec.SetField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString, value)
+	}
+	if oshuo.mutation.ComplianceWebhookTokenCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString)
 	}
 	_spec.Node.Schema = oshuo.schemaConfig.OrganizationSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, oshuo.schemaConfig)

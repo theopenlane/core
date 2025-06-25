@@ -76,7 +76,7 @@ type OrganizationSettingHistory struct {
 	// enforce SSO authentication for organization members
 	IdentityProviderLoginEnforced bool `json:"identity_provider_login_enforced,omitempty"`
 	// unique token used to receive compliance webhook events
-	ComplianceWebhookToken *string `json:"compliance_webhook_token,omitempty"`
+	ComplianceWebhookToken string `json:"compliance_webhook_token,omitempty"`
 	selectValues           sql.SelectValues
 }
 
@@ -292,8 +292,7 @@ func (osh *OrganizationSettingHistory) assignValues(columns []string, values []a
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field compliance_webhook_token", values[i])
 			} else if value.Valid {
-				osh.ComplianceWebhookToken = new(string)
-				*osh.ComplianceWebhookToken = value.String
+				osh.ComplianceWebhookToken = value.String
 			}
 		default:
 			osh.selectValues.Set(columns[i], values[i])
@@ -410,10 +409,8 @@ func (osh *OrganizationSettingHistory) String() string {
 	builder.WriteString("identity_provider_login_enforced=")
 	builder.WriteString(fmt.Sprintf("%v", osh.IdentityProviderLoginEnforced))
 	builder.WriteString(", ")
-	if v := osh.ComplianceWebhookToken; v != nil {
-		builder.WriteString("compliance_webhook_token=")
-		builder.WriteString(*v)
-	}
+	builder.WriteString("compliance_webhook_token=")
+	builder.WriteString(osh.ComplianceWebhookToken)
 	builder.WriteByte(')')
 	return builder.String()
 }
