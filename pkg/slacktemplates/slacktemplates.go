@@ -3,8 +3,11 @@ package slacktemplates
 import "embed"
 
 const (
-	SubscriberTemplateName = "new_subscriber.tmpl"
-	UserTemplateName       = "new_user.tmpl"
+	// Embed paths are relative to the directory containing this file. When
+	// parsing templates using the embedded filesystem the full path must be
+	// provided, so include the templates directory prefix here.
+	SubscriberTemplateName = "templates/new_subscriber.tmpl"
+	UserTemplateName       = "templates/new_user.tmpl"
 )
 
 // Templates holds embedded Slack notification templates.
