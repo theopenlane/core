@@ -270,3 +270,47 @@ func IsSubscriptionActive(status stripe.SubscriptionStatus) bool {
 		return false
 	}
 }
+
+// ListSubscriptions retrieves all subscriptions for the given customer without creating new ones
+func (sc *StripeClient) ListSubscriptions(ctx context.Context, customerID string) ([]*stripe.Subscription, error) {
+	params := &stripe.SubscriptionListParams{Customer: stripe.String(customerID)}
+
+	var subs []*stripe.Subscription
+
+	it := sc.Client.V1Subscriptions.List(ctx, params)
+	for s, err := range it {
+		if err != nil {
+			return nil, err
+		}
+
+		subs = append(subs, s)
+	}
+
+	return subs, nil
+}
+
+// MigrateSubscriptionPrice replaces occurrences of oldPriceID with newPriceID on the subscription
+// Don't run unless you know what you're doing!
+func (sc *StripeClient) MigrateSubscriptionPrice(ctx context.Context, sub *stripe.Subscription, oldPriceID, newPriceID string) (*stripe.Subscription, error) {
+	if sub == nil {
+		return nil, nil
+	}
+
+	var updateItems []*stripe.SubscriptionUpdateItemParams
+	for _, item := range sub.Items.Data {
+		if item.Price != nil && item.Price.ID == oldPriceID {
+			updateItems = append(updateItems, &stripe.SubscriptionUpdateItemParams{
+				ID:    stripe.String(item.ID),
+				Price: stripe.String(newPriceID),
+			})
+		}
+	}
+
+	if len(updateItems) == 0 {
+		return sub, nil
+	}
+
+	params := &stripe.SubscriptionUpdateParams{Items: updateItems}
+
+	return sc.UpdateSubscription(ctx, sub.ID, params)
+}

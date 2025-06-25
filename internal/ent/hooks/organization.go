@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
+	"github.com/theopenlane/core/pkg/catalog/features"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects"
 )
@@ -304,6 +305,13 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 		return err
 	}
 
+	// create default feature tuples for base functionality
+	if err := createFeatureTuples(ctx, m.Authz, orgCreated.ID, []string{"base", "compliance"}); err != nil {
+		zerolog.Ctx(ctx).Error().Err(err).Msg("error creating default feature tuples")
+
+		return err
+	}
+
 	// reset the original org id in the auth context if it was previously set
 	if originalOrg != "" {
 		if err := auth.SetOrganizationIDInAuthContext(ctx, originalOrg); err != nil {
@@ -557,6 +565,31 @@ func updateDefaultOrgIfPersonal(ctx context.Context, userID, orgID string, clien
 			Exec(ctx); err != nil {
 			return err
 		}
+	}
+
+	return nil
+}
+
+// createFeatureTuples writes default feature tuples to FGA and inserts them into
+// the feature cache if available.
+func createFeatureTuples(ctx context.Context, authz fgax.Client, orgID string, feats []string) error {
+	tuples := make([]fgax.TupleKey, 0, len(feats))
+	for _, f := range feats {
+		tuples = append(tuples, fgax.GetTupleKey(fgax.TupleRequest{
+			SubjectID:   orgID,
+			SubjectType: generated.TypeOrganization,
+			ObjectID:    f,
+			ObjectType:  "feature",
+			Relation:    "enabled",
+		}))
+	}
+
+	if _, err := authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
+		return err
+	}
+
+	if cache, ok := features.CacheFromContext(ctx); ok {
+		return cache.Set(ctx, orgID, feats)
 	}
 
 	return nil

@@ -18,7 +18,7 @@ func main() {
 		panic(err)
 	}
 
-	if err := os.WriteFile("./pkg/catalog/genjsonschema/catalog.schema.json", data, 0600); err != nil { // nolint: mnd
+	if err := os.WriteFile("genjsonschema/catalog.schema.json", data, 0600); err != nil { // nolint: mnd
 		panic(err)
 	}
 }

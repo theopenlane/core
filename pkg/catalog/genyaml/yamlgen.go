@@ -19,8 +19,8 @@ import (
 func main() {
 	var input string
 	var output string
-	flag.StringVar(&input, "in", "pkg/catalog/catalog.yaml", "path to catalog yaml")
-	flag.StringVar(&output, "out", "pkg/catalog/gencatalog/gencatalog.go", "output go file (stdout if empty)")
+	flag.StringVar(&input, "in", "catalog.yaml", "path to catalog yaml")
+	flag.StringVar(&output, "out", "./gencatalog/gencatalog.go", "output go file (stdout if empty)")
 	flag.Parse()
 
 	data, err := os.ReadFile(input)
@@ -65,6 +65,8 @@ func main() {
 
 func catalogLit(c catalog.Catalog) *jen.Statement {
 	return jen.Qual("github.com/theopenlane/core/pkg/catalog", "Catalog").Values(jen.Dict{
+		jen.Id("Version"): jen.Lit(c.Version),
+		jen.Id("SHA"):     jen.Lit(c.SHA),
 		jen.Id("Modules"): featureSetLit(c.Modules),
 		jen.Id("Addons"):  featureSetLit(c.Addons),
 	})

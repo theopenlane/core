@@ -23,6 +23,14 @@ type takeoverInfo struct {
 	stripe  *stripe.Price
 }
 
+// featureReport represents the reconciliation status for a feature.
+type featureReport struct {
+	kind          string
+	name          string
+	product       bool
+	missingPrices int
+}
+
 func main() {
 	app := &cli.App{
 		Name:  "catalog",
@@ -58,6 +66,11 @@ func main() {
 				return fmt.Errorf("load catalog: %w", err)
 			}
 
+			if cat.IsCurrent() {
+				fmt.Printf("Catalog version %s already processed, skipping reconciliation\n", cat.Version)
+				return nil
+			}
+
 			sc, err := entitlements.NewStripeClient(entitlements.WithAPIKey(apiKey))
 			if err != nil {
 				return fmt.Errorf("stripe client: %w", err)
@@ -71,10 +84,12 @@ func main() {
 				return fmt.Errorf("list products: %w", err)
 			}
 
-			// Reconcile modules and addons against Stripe and gather any prices that
-			// need metadata takeovers.
-			mods, missMods := processFeatureSet(ctx, sc, prodMap, "module", cat.Modules)
-			adds, missAdds := processFeatureSet(ctx, sc, prodMap, "addon", cat.Addons)
+			mods, missMods, modReports := processFeatureSet(ctx, sc, prodMap, "module", cat.Modules)
+			adds, missAdds, addReports := processFeatureSet(ctx, sc, prodMap, "addon", cat.Addons)
+
+			reports := append(modReports, addReports...)
+
+			printFeatureReports(reports)
 
 			var takeovers []takeoverInfo
 
@@ -96,10 +111,14 @@ func main() {
 
 			// Optionally write updated price IDs back to disk.
 			if write {
-				if err := cat.SaveCatalog(catalogFile); err != nil {
+				diff, err := cat.SaveCatalog(catalogFile)
+				if err != nil {
 					return fmt.Errorf("save catalog: %w", err)
 				}
 				fmt.Printf("Catalog successfully written to %s\n", catalogFile)
+				if diff != "" {
+					fmt.Println("Catalog changes:\n" + diff)
+				}
 			}
 
 			return nil
@@ -169,9 +188,10 @@ func updateFeaturePrices(ctx context.Context, sc *entitlements.StripeClient, pro
 
 // processFeatureSet reconciles a set of features with Stripe products and prices.
 // It returns a slice of unmanaged prices and whether any products or prices are missing.
-func processFeatureSet(ctx context.Context, sc *entitlements.StripeClient, prodMap map[string]*stripe.Product, kind string, fs catalog.FeatureSet) ([]takeoverInfo, bool) {
+func processFeatureSet(ctx context.Context, sc *entitlements.StripeClient, prodMap map[string]*stripe.Product, kind string, fs catalog.FeatureSet) ([]takeoverInfo, bool, []featureReport) {
 	var takeovers []takeoverInfo
 	missing := false
+	var reports []featureReport
 
 	for name, feat := range fs {
 		prod, ok := prodMap[feat.DisplayName]
@@ -191,10 +211,10 @@ func processFeatureSet(ctx context.Context, sc *entitlements.StripeClient, prodM
 		}
 
 		fs[name] = feat
-		fmt.Printf("%s %-20s product:%v missing_prices:%d\n", kind, name, prodExists, missingPrices)
+		reports = append(reports, featureReport{kind: kind, name: name, product: prodExists, missingPrices: missingPrices})
 	}
 
-	return takeovers, missing
+	return takeovers, missing, reports
 }
 
 // handleTakeovers optionally updates Stripe prices with management metadata.
@@ -290,4 +310,18 @@ func priceMatchesStripe(p *stripe.Price, cp catalog.Price, prodID string) bool {
 	}
 
 	return true
+}
+
+// printFeatureReports renders a table summarizing missing products and prices.
+func printFeatureReports(reports []featureReport) {
+	if len(reports) == 0 {
+		return
+	}
+
+	writer := tables.NewTableWriter(os.Stdout, "Type", "Feature", "Product", "MissingPrices")
+	for _, r := range reports {
+		_ = writer.AddRow(r.kind, r.name, r.product, r.missingPrices)
+	}
+
+	_ = writer.Render()
 }

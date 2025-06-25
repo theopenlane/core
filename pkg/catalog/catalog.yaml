@@ -1,3 +1,5 @@
+version: v0.0.2
+sha: ae5bcf31543244e0bc0b0a14a4374ae2f199eebe805de0ad58f20d36b5d5649b
 modules:
   base:
     display_name: Base Module
@@ -50,61 +52,64 @@ modules:
     audience: beta
   entity-management:
     display_name: Vendor Management
-    Description: Vendor Risk Management
+    description: Vendor Risk Management
     billing:
       prices:
         - interval: month
-          Unit_amount: 200
-          Nickname: price_vendor_monthly
-          Lookup_key: price_vendor_monthly
+          unit_amount: 200
+          nickname: price_vendor_monthly
+          lookup_key: price_vendor_monthly
         - interval: year
-          Unit_amount: 2000
-          Nickname: price_vendor_annual
-          Lookup_key: Price_vendor_annual
+          unit_amount: 2000
+          nickname: price_vendor_annual
+          lookup_key: price_vendor_annual
     audience: private
   vulnerability-management:
     display_name: Vulnerability Management
-    Description: vulnerability management
+    description: vulnerability management
     billing:
       prices:
         - interval: month
-          Unit_amount: 100
-          Nickname: price_vulnerability_monthly
-          Lookup_key: price_vulnerability_monthly
+          unit_amount: 100
+          nickname: price_vulnerability_monthly
+          lookup_key: price_vulnerability_monthly
         - interval: year
-          Unit_amount: 1000
-          Nickname: price_vulnerability_annual
-          Lookup_key: price_vulnerability_annual
+          unit_amount: 1000
+          nickname: price_vulnerability_annual
+          lookup_key: price_vulnerability_annual
     audience: private
 addons:
   policy-management:
-    display_name: Policy & Process Management
+    display_name: Policy & Procedure Management
+    description: Policy and Procedure Management
     billing:
       prices:
         - interval: month
-          Unit_amount: 10
-          Nickname: price_policy_monthly
-          Lookup_key: price_policy_monthly
+          unit_amount: 10
+          nickname: price_policy_monthly
+          lookup_key: price_policy_monthly
         - interval: month
-          Unit_amount: 100
-          Nickname: price_policy_annual
-          Lookup_key: price_policy_annual
+          unit_amount: 100
+          nickname: price_policy_annual
+          lookup_key: price_policy_annual
     audience: beta
   risk-management:
     display_name: Risk Management
+    description: Risk Management
     billing:
       prices:
         - interval: month
-          Unit_amount: 10
-          Nickname: price_risk_monthly
-          Lookup_key: price_risk_monthly
+          unit_amount: 10
+          nickname: price_risk_monthly
+          lookup_key: price_risk_monthly
         - interval: year
-          Unit_amount: 100
-          Nickname: Price_risk_annual
-          Lookup_key: price_risk_annual
+          unit_amount: 100
+          nickname: price_risk_annual
+          lookup_key: price_risk_annual
     audience: beta
   domain_scanning:
-    display_name: Domain Scanning
+    display_name: Scanning
+    description: Domain and Vulnerability Scanning
     billing:
       prices:
         - interval: month
@@ -118,6 +123,7 @@ addons:
     audience: private
   extra_evidence_storage:
     display_name: Additional Evidence Storage (100GB)
+    description: Additional evidence storage for compliance
     billing:
       prices:
         - interval: month

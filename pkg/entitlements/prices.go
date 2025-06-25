@@ -180,3 +180,12 @@ func (sc *StripeClient) FindPriceForProduct(ctx context.Context, productID strin
 
 	return nil, nil
 }
+
+// TagPriceMigration annotates a price in preparation for migration to a new price
+func (sc *StripeClient) TagPriceMigration(ctx context.Context, fromPriceID, toPriceID string) error {
+	md := map[string]string{"migrate_to": toPriceID}
+
+	_, err := sc.UpdatePriceMetadata(ctx, fromPriceID, md)
+
+	return err
+}

@@ -1,5 +1,9 @@
 # Entitlements Catalog
 
+## Overview
+
+## JSONSchema generation
+
 `go run pkg/catalog/genjsonschema/catalog_schema.go` -> generates a jsonschema from the structs inside of catalog.go.
 
 This jsonschema is how we validate that the yaml input is indeed valid and coforms to the specification. The `LoadCatalog` function will fail if the yaml input does not conform to the schema specification, offering some guardrails in the event of misconfiguration / bad yaml / missing fields, etc.
@@ -110,3 +114,30 @@ addon domain_scanning      product:true missing_prices:0
 ## Creating webhook endpoints
 
 Use `CreateWebhookEndpoint` to programmatically register a webhook URL with Stripe. Provide the URL and the events you want delivered. The call returns the created endpoint including the signing secret that should be used to verify incoming requests.
+
+## Catalog Validation
+
+```bash
+{"level":"debug","time":"2025-06-25T13:04:20-05:00","message":"Catalog validation failed - ensure you have generated the latest schema file if you have modified the catalog structs"}
+{"level":"debug","time":"2025-06-25T13:04:20-05:00","message":"Validation error: (root): version is required"}
+{"level":"debug","time":"2025-06-25T13:04:20-05:00","message":"Validation error: modules.entity-management: description is required"}
+{"level":"debug","time":"2025-06-25T13:04:20-05:00","message":"Validation error: modules.entity-management: Additional property Description is not allowed"}
+{"level":"debug","time":"2025-06-25T13:04:20-05:00","message":"Validation error: modules.entity-management.billing.prices.0: unit_amount is required"}
+{"level":"debug","time":"2025-06-25T13:04:20-05:00","message":"Validation error: modules.entity-management.billing.prices.0: Additional property Unit_amount is not allowed"}
+{"level":"debug","time":"2025-06-25T13:04:20-05:00","message":"Validation error: modules.entity-management.billing.prices.0: Additional property Nickname is not allowed"}
+{"level":"debug","time":"2025-06-25T13:04:20-05:00","message":"Validation error: modules.entity-management.billing.prices.0: Additional property Lookup_key is not allowed"}
+{"level":"debug","time":"2025-06-25T13:04:20-05:00","message":"Validation error: modules.entity-management.billing.prices.1: unit_amount is required"}
+
+load catalog: catalog validation failed
+exit status 1
+```
+
+## Catalog Versioning
+
+The `SaveCatalog` method is responsible for saving a `Catalog` struct to disk in YAML format, while also managing versioning and integrity via a SHA hash. The function first checks if the receiver (`c`) is `nil`, in which case it returns immediately with no error. It then attempts to read the existing catalog file from the provided path. If the file does not exist, that's acceptable, but any other read error is returned.
+
+If the file exists and contains data, it is unmarshaled from YAML into a temporary `Catalog` struct called `orig`. This allows the function to compare the current catalog with the previous version. If the current catalog's version is unset but the original has one, the version is carried over. Similarly, if the SHA is missing, it is computed based on the version string.
+
+The catalog is then marshaled into YAML. If the new YAML differs from the original file's contents, the function attempts to bump the patch version (using semantic versioning) and recomputes the SHA. The catalog is re-marshaled to reflect these changes. A unified diff is generated between the old and new YAML representations, providing a summary of what changed.
+
+Finally, the new YAML data is written to disk with standard permissions. The function returns the diff string, which can be used for logging or review. This approach ensures that the catalog file is always up-to-date, versioned, and its integrity can be verified via the SHA. A subtle point is that the version is only bumped if the contents have changed, helping to avoid unnecessary version increments.

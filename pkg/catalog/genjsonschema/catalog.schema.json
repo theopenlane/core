@@ -28,6 +28,10 @@
             "1.0.0"
           ]
         },
+        "sha": {
+          "type": "string",
+          "description": "SHA of the catalog version"
+        },
         "modules": {
           "$ref": "#/$defs/FeatureSet",
           "description": "Set of modules available in the catalog"
@@ -41,6 +45,7 @@
       "type": "object",
       "required": [
         "version",
+        "sha",
         "modules",
         "addons"
       ]

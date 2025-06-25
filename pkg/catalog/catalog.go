@@ -1,19 +1,24 @@
 package catalog
 
 import (
+	"bytes"
 	"context"
+	"crypto/sha256"
 	_ "embed"
+	"encoding/hex"
 	"io/fs"
 	"maps"
 	"os"
 
 	"github.com/goccy/go-yaml"
+	"github.com/pmezard/go-difflib/difflib"
 	"github.com/rs/zerolog/log"
 
 	"github.com/stripe/stripe-go/v82"
 	"github.com/xeipuuv/gojsonschema"
 
 	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 //go:embed genjsonschema/catalog.schema.json
@@ -61,8 +66,24 @@ type FeatureSet map[string]Feature
 // Catalog contains all modules and addons offered by Openlane
 type Catalog struct {
 	Version string     `json:"version" yaml:"version" jsonschema:"description=Catalog version,example=1.0.0"`
+	SHA     string     `json:"sha" yaml:"sha" jsonschema:"description=SHA of the catalog version"`
 	Modules FeatureSet `json:"modules" yaml:"modules" jsonschema:"description=Set of modules available in the catalog"`
 	Addons  FeatureSet `json:"addons" yaml:"addons" jsonschema:"description=Set of addons available in the catalog"`
+}
+
+// computeSHA returns the hex encoded SHA256 of the provided version string.
+func computeSHA(ver string) string {
+	sum := sha256.Sum256([]byte(ver))
+	return hex.EncodeToString(sum[:])
+}
+
+// IsCurrent reports whether the catalog SHA matches its version.
+func (c *Catalog) IsCurrent() bool {
+	if c == nil {
+		return true
+	}
+
+	return c.SHA == computeSHA(c.Version)
 }
 
 // Visible returns modules and addons filtered by audience
@@ -121,6 +142,11 @@ func LoadCatalog(path string) (*Catalog, error) {
 
 	if !res.Valid() {
 		log.Debug().Msg("Catalog validation failed - ensure you have generated the latest schema file if you have modified the catalog structs")
+		res.Errors()
+		for _, e := range res.Errors() {
+			log.Debug().Msgf("Validation error: %s", e)
+		}
+
 		return nil, ErrCatalogValidationFailed
 	}
 
@@ -285,24 +311,70 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 	return ensure(c.Addons)
 }
 
-// SaveCatalog writes the catalog to disk in YAML format,
-// preserving fields that were omitted in the original file.
-func (c *Catalog) SaveCatalog(path string) error {
+// SaveCatalog writes the catalog to disk in YAML format, as well as computing and updating the SHA
+func (c *Catalog) SaveCatalog(path string) (string, error) {
 	if c == nil {
-		return nil
+		return "", nil
 	}
 
-	// Read the original YAML to preserve omitted fields
 	origData, err := os.ReadFile(path)
 	if err != nil && !os.IsNotExist(err) {
-		return err
+		return "", err
 	}
 
-	// Marshal pruned map back to YAML
-	finalData, err := yaml.Marshal(origData)
+	var orig Catalog
+	if len(origData) > 0 {
+		if err := yaml.Unmarshal(origData, &orig); err != nil {
+			return "", err
+		}
+	}
+
+	// carry over version if not set and ensure SHA present
+	if c.Version == "" && orig.Version != "" {
+		c.Version = orig.Version
+	}
+
+	if c.SHA == "" {
+		c.SHA = computeSHA(c.Version)
+	}
+
+	newData, err := yaml.Marshal(c)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	return os.WriteFile(path, finalData, 0o644) //nolint:mnd
+	diff := ""
+
+	if !bytes.Equal(origData, newData) {
+		ver := c.Version
+		if ver == "" {
+			ver = models.DefaultRevision
+		}
+
+		if bumped, berr := models.BumpPatch(ver); berr == nil {
+			c.Version = bumped
+
+			c.SHA = computeSHA(c.Version)
+
+			if newData, err = yaml.Marshal(c); err != nil {
+				return "", err
+			}
+		}
+
+		u := difflib.UnifiedDiff{
+			A:        difflib.SplitLines(string(origData)),
+			B:        difflib.SplitLines(string(newData)),
+			FromFile: "catalog(old)",
+			ToFile:   "catalog(new)",
+			Context:  3,
+		}
+
+		diff, _ = difflib.GetUnifiedDiffString(u)
+	}
+
+	if err := os.WriteFile(path, newData, 0o644); err != nil { //nolint:mnd
+		return "", err
+	}
+
+	return diff, nil
 }
