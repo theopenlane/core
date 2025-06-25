@@ -9,6 +9,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -82,6 +83,30 @@ func ActionPlanEdgeCleanup(ctx context.Context, id string) error {
 
 func ActionPlanHistoryEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup actionplanhistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func AssessmentEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup assessment edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func AssessmentHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup assessmenthistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func AssessmentResponseEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup assessmentresponse edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func AssessmentResponseHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup assessmentresponsehistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -801,6 +826,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).Scan.Query().Where((scan.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if scanCount, err := FromContext(ctx).Scan.Delete().Where(scan.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", scanCount).Msg("deleting scan")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Assessment.Query().Where((assessment.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if assessmentCount, err := FromContext(ctx).Assessment.Delete().Where(assessment.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", assessmentCount).Msg("deleting assessment")
 			return err
 		}
 	}

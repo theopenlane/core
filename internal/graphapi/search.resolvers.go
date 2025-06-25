@@ -24,6 +24,8 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		errors                            []error
 		apitokenResults                   *generated.APITokenConnection
 		actionplanResults                 *generated.ActionPlanConnection
+		assessmentResults                 *generated.AssessmentConnection
+		assessmentresponseResults         *generated.AssessmentResponseConnection
 		assetResults                      *generated.AssetConnection
 		contactResults                    *generated.ContactConnection
 		controlResults                    *generated.ControlConnection
@@ -78,6 +80,20 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		func() {
 			var err error
 			actionplanResults, err = searchActionPlans(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			assessmentResults, err = searchAssessments(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			assessmentresponseResults, err = searchAssessmentResponses(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
@@ -390,6 +406,16 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 		res.TotalCount += actionplanResults.TotalCount
 	}
+	if assessmentResults != nil && len(assessmentResults.Edges) > 0 {
+		res.Assessments = assessmentResults
+
+		res.TotalCount += assessmentResults.TotalCount
+	}
+	if assessmentresponseResults != nil && len(assessmentresponseResults.Edges) > 0 {
+		res.AssessmentResponses = assessmentresponseResults
+
+		res.TotalCount += assessmentresponseResults.TotalCount
+	}
 	if assetResults != nil && len(assetResults.Edges) > 0 {
 		res.Assets = assetResults
 
@@ -617,6 +643,26 @@ func (r *queryResolver) ActionPlanSearch(ctx context.Context, query string, afte
 
 	// return the results
 	return actionplanResults, nil
+}
+func (r *queryResolver) AssessmentSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.AssessmentConnection, error) {
+	assessmentResults, err := searchAssessments(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return assessmentResults, nil
+}
+func (r *queryResolver) AssessmentResponseSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.AssessmentResponseConnection, error) {
+	assessmentresponseResults, err := searchAssessmentResponses(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return assessmentresponseResults, nil
 }
 func (r *queryResolver) AssetSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.AssetConnection, error) {
 	assetResults, err := searchAssets(ctx, query, after, first, before, last)

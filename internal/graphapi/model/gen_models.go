@@ -67,6 +67,54 @@ type AddProgramMembershipInput struct {
 	UserID string      `json:"userID"`
 }
 
+// Return response for createBulkAssessment mutation
+type AssessmentBulkCreatePayload struct {
+	// Created assessments
+	Assessments []*generated.Assessment `json:"assessments,omitempty"`
+}
+
+// Return response for createAssessment mutation
+type AssessmentCreatePayload struct {
+	// Created assessment
+	Assessment *generated.Assessment `json:"assessment"`
+}
+
+// Return response for deleteAssessment mutation
+type AssessmentDeletePayload struct {
+	// Deleted assessment ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for createBulkAssessmentResponse mutation
+type AssessmentResponseBulkCreatePayload struct {
+	// Created assessmentResponses
+	AssessmentResponses []*generated.AssessmentResponse `json:"assessmentResponses,omitempty"`
+}
+
+// Return response for createAssessmentResponse mutation
+type AssessmentResponseCreatePayload struct {
+	// Created assessmentResponse
+	AssessmentResponse *generated.AssessmentResponse `json:"assessmentResponse"`
+}
+
+// Return response for deleteAssessmentResponse mutation
+type AssessmentResponseDeletePayload struct {
+	// Deleted assessmentResponse ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateAssessmentResponse mutation
+type AssessmentResponseUpdatePayload struct {
+	// Updated assessmentResponse
+	AssessmentResponse *generated.AssessmentResponse `json:"assessmentResponse"`
+}
+
+// Return response for updateAssessment mutation
+type AssessmentUpdatePayload struct {
+	// Updated assessment
+	Assessment *generated.Assessment `json:"assessment"`
+}
+
 // Return response for createBulkAsset mutation
 type AssetBulkCreatePayload struct {
 	// Created assets
@@ -1076,6 +1124,8 @@ type SearchResults struct {
 	TotalCount                  int                                             `json:"totalCount"`
 	APITokens                   *generated.APITokenConnection                   `json:"apiTokens,omitempty"`
 	ActionPlans                 *generated.ActionPlanConnection                 `json:"actionPlans,omitempty"`
+	Assessments                 *generated.AssessmentConnection                 `json:"assessments,omitempty"`
+	AssessmentResponses         *generated.AssessmentResponseConnection         `json:"assessmentResponses,omitempty"`
 	Assets                      *generated.AssetConnection                      `json:"assets,omitempty"`
 	Contacts                    *generated.ContactConnection                    `json:"contacts,omitempty"`
 	Controls                    *generated.ControlConnection                    `json:"controls,omitempty"`

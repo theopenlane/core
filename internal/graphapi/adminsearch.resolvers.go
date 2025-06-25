@@ -30,6 +30,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		errors                            []error
 		apitokenResults                   *generated.APITokenConnection
 		actionplanResults                 *generated.ActionPlanConnection
+		assessmentResults                 *generated.AssessmentConnection
+		assessmentresponseResults         *generated.AssessmentResponseConnection
 		assetResults                      *generated.AssetConnection
 		contactResults                    *generated.ContactConnection
 		controlResults                    *generated.ControlConnection
@@ -84,6 +86,20 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		func() {
 			var err error
 			actionplanResults, err = searchActionPlans(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			assessmentResults, err = searchAssessments(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			assessmentresponseResults, err = searchAssessmentResponses(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
@@ -396,6 +412,16 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 
 		res.TotalCount += actionplanResults.TotalCount
 	}
+	if assessmentResults != nil && len(assessmentResults.Edges) > 0 {
+		res.Assessments = assessmentResults
+
+		res.TotalCount += assessmentResults.TotalCount
+	}
+	if assessmentresponseResults != nil && len(assessmentresponseResults.Edges) > 0 {
+		res.AssessmentResponses = assessmentresponseResults
+
+		res.TotalCount += assessmentresponseResults.TotalCount
+	}
 	if assetResults != nil && len(assetResults.Edges) > 0 {
 		res.Assets = assetResults
 
@@ -639,6 +665,42 @@ func (r *queryResolver) AdminActionPlanSearch(ctx context.Context, query string,
 
 	// return the results
 	return actionplanResults, nil
+}
+func (r *queryResolver) AdminAssessmentSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.AssessmentConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	assessmentResults, err := adminSearchAssessments(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return assessmentResults, nil
+}
+func (r *queryResolver) AdminAssessmentResponseSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.AssessmentResponseConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	assessmentresponseResults, err := adminSearchAssessmentResponses(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return assessmentresponseResults, nil
 }
 func (r *queryResolver) AdminAssetSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.AssetConnection, error) {
 	// ensure the user is a system admin

@@ -9,6 +9,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/internal/ent/generated/assessmenthistory"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponsehistory"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/assethistory"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
@@ -365,6 +369,169 @@ func init() {
 	actionplanhistoryDescID := actionplanhistoryFields[9].Descriptor()
 	// actionplanhistory.DefaultID holds the default value on creation for the id field.
 	actionplanhistory.DefaultID = actionplanhistoryDescID.Default.(func() string)
+	assessmentMixin := schema.Assessment{}.Mixin()
+	assessment.Policy = privacy.NewPolicies(schema.Assessment{})
+	assessment.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := assessment.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	assessmentMixinHooks0 := assessmentMixin[0].Hooks()
+	assessmentMixinHooks1 := assessmentMixin[1].Hooks()
+	assessmentMixinHooks5 := assessmentMixin[5].Hooks()
+
+	assessment.Hooks[1] = assessmentMixinHooks0[0]
+
+	assessment.Hooks[2] = assessmentMixinHooks1[0]
+
+	assessment.Hooks[3] = assessmentMixinHooks5[0]
+	assessmentMixinInters1 := assessmentMixin[1].Interceptors()
+	assessmentMixinInters5 := assessmentMixin[5].Interceptors()
+	assessment.Interceptors[0] = assessmentMixinInters1[0]
+	assessment.Interceptors[1] = assessmentMixinInters5[0]
+	assessmentMixinFields0 := assessmentMixin[0].Fields()
+	_ = assessmentMixinFields0
+	assessmentMixinFields2 := assessmentMixin[2].Fields()
+	_ = assessmentMixinFields2
+	assessmentMixinFields3 := assessmentMixin[3].Fields()
+	_ = assessmentMixinFields3
+	assessmentMixinFields5 := assessmentMixin[5].Fields()
+	_ = assessmentMixinFields5
+	assessmentFields := schema.Assessment{}.Fields()
+	_ = assessmentFields
+	// assessmentDescCreatedAt is the schema descriptor for created_at field.
+	assessmentDescCreatedAt := assessmentMixinFields0[0].Descriptor()
+	// assessment.DefaultCreatedAt holds the default value on creation for the created_at field.
+	assessment.DefaultCreatedAt = assessmentDescCreatedAt.Default.(func() time.Time)
+	// assessmentDescUpdatedAt is the schema descriptor for updated_at field.
+	assessmentDescUpdatedAt := assessmentMixinFields0[1].Descriptor()
+	// assessment.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	assessment.DefaultUpdatedAt = assessmentDescUpdatedAt.Default.(func() time.Time)
+	// assessment.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	assessment.UpdateDefaultUpdatedAt = assessmentDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// assessmentDescTags is the schema descriptor for tags field.
+	assessmentDescTags := assessmentMixinFields3[0].Descriptor()
+	// assessment.DefaultTags holds the default value on creation for the tags field.
+	assessment.DefaultTags = assessmentDescTags.Default.([]string)
+	// assessmentDescOwnerID is the schema descriptor for owner_id field.
+	assessmentDescOwnerID := assessmentMixinFields5[0].Descriptor()
+	// assessment.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	assessment.OwnerIDValidator = assessmentDescOwnerID.Validators[0].(func(string) error)
+	// assessmentDescName is the schema descriptor for name field.
+	assessmentDescName := assessmentFields[0].Descriptor()
+	// assessment.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	assessment.NameValidator = assessmentDescName.Validators[0].(func(string) error)
+	// assessmentDescID is the schema descriptor for id field.
+	assessmentDescID := assessmentMixinFields2[0].Descriptor()
+	// assessment.DefaultID holds the default value on creation for the id field.
+	assessment.DefaultID = assessmentDescID.Default.(func() string)
+	assessmenthistoryInters := schema.AssessmentHistory{}.Interceptors()
+	assessmenthistory.Interceptors[0] = assessmenthistoryInters[0]
+	assessmenthistoryFields := schema.AssessmentHistory{}.Fields()
+	_ = assessmenthistoryFields
+	// assessmenthistoryDescHistoryTime is the schema descriptor for history_time field.
+	assessmenthistoryDescHistoryTime := assessmenthistoryFields[0].Descriptor()
+	// assessmenthistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	assessmenthistory.DefaultHistoryTime = assessmenthistoryDescHistoryTime.Default.(func() time.Time)
+	// assessmenthistoryDescCreatedAt is the schema descriptor for created_at field.
+	assessmenthistoryDescCreatedAt := assessmenthistoryFields[3].Descriptor()
+	// assessmenthistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	assessmenthistory.DefaultCreatedAt = assessmenthistoryDescCreatedAt.Default.(func() time.Time)
+	// assessmenthistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	assessmenthistoryDescUpdatedAt := assessmenthistoryFields[4].Descriptor()
+	// assessmenthistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	assessmenthistory.DefaultUpdatedAt = assessmenthistoryDescUpdatedAt.Default.(func() time.Time)
+	// assessmenthistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	assessmenthistory.UpdateDefaultUpdatedAt = assessmenthistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// assessmenthistoryDescTags is the schema descriptor for tags field.
+	assessmenthistoryDescTags := assessmenthistoryFields[10].Descriptor()
+	// assessmenthistory.DefaultTags holds the default value on creation for the tags field.
+	assessmenthistory.DefaultTags = assessmenthistoryDescTags.Default.([]string)
+	// assessmenthistoryDescID is the schema descriptor for id field.
+	assessmenthistoryDescID := assessmenthistoryFields[9].Descriptor()
+	// assessmenthistory.DefaultID holds the default value on creation for the id field.
+	assessmenthistory.DefaultID = assessmenthistoryDescID.Default.(func() string)
+	assessmentresponseMixin := schema.AssessmentResponse{}.Mixin()
+	assessmentresponse.Policy = privacy.NewPolicies(schema.AssessmentResponse{})
+	assessmentresponse.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := assessmentresponse.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	assessmentresponseMixinHooks0 := assessmentresponseMixin[0].Hooks()
+	assessmentresponseMixinHooks1 := assessmentresponseMixin[1].Hooks()
+
+	assessmentresponse.Hooks[1] = assessmentresponseMixinHooks0[0]
+
+	assessmentresponse.Hooks[2] = assessmentresponseMixinHooks1[0]
+	assessmentresponseMixinInters1 := assessmentresponseMixin[1].Interceptors()
+	assessmentresponse.Interceptors[0] = assessmentresponseMixinInters1[0]
+	assessmentresponseMixinFields0 := assessmentresponseMixin[0].Fields()
+	_ = assessmentresponseMixinFields0
+	assessmentresponseMixinFields2 := assessmentresponseMixin[2].Fields()
+	_ = assessmentresponseMixinFields2
+	assessmentresponseMixinFields3 := assessmentresponseMixin[3].Fields()
+	_ = assessmentresponseMixinFields3
+	assessmentresponseFields := schema.AssessmentResponse{}.Fields()
+	_ = assessmentresponseFields
+	// assessmentresponseDescCreatedAt is the schema descriptor for created_at field.
+	assessmentresponseDescCreatedAt := assessmentresponseMixinFields0[0].Descriptor()
+	// assessmentresponse.DefaultCreatedAt holds the default value on creation for the created_at field.
+	assessmentresponse.DefaultCreatedAt = assessmentresponseDescCreatedAt.Default.(func() time.Time)
+	// assessmentresponseDescUpdatedAt is the schema descriptor for updated_at field.
+	assessmentresponseDescUpdatedAt := assessmentresponseMixinFields0[1].Descriptor()
+	// assessmentresponse.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	assessmentresponse.DefaultUpdatedAt = assessmentresponseDescUpdatedAt.Default.(func() time.Time)
+	// assessmentresponse.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	assessmentresponse.UpdateDefaultUpdatedAt = assessmentresponseDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// assessmentresponseDescTags is the schema descriptor for tags field.
+	assessmentresponseDescTags := assessmentresponseMixinFields3[0].Descriptor()
+	// assessmentresponse.DefaultTags holds the default value on creation for the tags field.
+	assessmentresponse.DefaultTags = assessmentresponseDescTags.Default.([]string)
+	// assessmentresponseDescAssessmentID is the schema descriptor for assessment_id field.
+	assessmentresponseDescAssessmentID := assessmentresponseFields[0].Descriptor()
+	// assessmentresponse.AssessmentIDValidator is a validator for the "assessment_id" field. It is called by the builders before save.
+	assessmentresponse.AssessmentIDValidator = assessmentresponseDescAssessmentID.Validators[0].(func(string) error)
+	// assessmentresponseDescUserID is the schema descriptor for user_id field.
+	assessmentresponseDescUserID := assessmentresponseFields[1].Descriptor()
+	// assessmentresponse.UserIDValidator is a validator for the "user_id" field. It is called by the builders before save.
+	assessmentresponse.UserIDValidator = assessmentresponseDescUserID.Validators[0].(func(string) error)
+	// assessmentresponseDescID is the schema descriptor for id field.
+	assessmentresponseDescID := assessmentresponseMixinFields2[0].Descriptor()
+	// assessmentresponse.DefaultID holds the default value on creation for the id field.
+	assessmentresponse.DefaultID = assessmentresponseDescID.Default.(func() string)
+	assessmentresponsehistoryInters := schema.AssessmentResponseHistory{}.Interceptors()
+	assessmentresponsehistory.Interceptors[0] = assessmentresponsehistoryInters[0]
+	assessmentresponsehistoryFields := schema.AssessmentResponseHistory{}.Fields()
+	_ = assessmentresponsehistoryFields
+	// assessmentresponsehistoryDescHistoryTime is the schema descriptor for history_time field.
+	assessmentresponsehistoryDescHistoryTime := assessmentresponsehistoryFields[0].Descriptor()
+	// assessmentresponsehistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	assessmentresponsehistory.DefaultHistoryTime = assessmentresponsehistoryDescHistoryTime.Default.(func() time.Time)
+	// assessmentresponsehistoryDescCreatedAt is the schema descriptor for created_at field.
+	assessmentresponsehistoryDescCreatedAt := assessmentresponsehistoryFields[3].Descriptor()
+	// assessmentresponsehistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	assessmentresponsehistory.DefaultCreatedAt = assessmentresponsehistoryDescCreatedAt.Default.(func() time.Time)
+	// assessmentresponsehistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	assessmentresponsehistoryDescUpdatedAt := assessmentresponsehistoryFields[4].Descriptor()
+	// assessmentresponsehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	assessmentresponsehistory.DefaultUpdatedAt = assessmentresponsehistoryDescUpdatedAt.Default.(func() time.Time)
+	// assessmentresponsehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	assessmentresponsehistory.UpdateDefaultUpdatedAt = assessmentresponsehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// assessmentresponsehistoryDescTags is the schema descriptor for tags field.
+	assessmentresponsehistoryDescTags := assessmentresponsehistoryFields[10].Descriptor()
+	// assessmentresponsehistory.DefaultTags holds the default value on creation for the tags field.
+	assessmentresponsehistory.DefaultTags = assessmentresponsehistoryDescTags.Default.([]string)
+	// assessmentresponsehistoryDescID is the schema descriptor for id field.
+	assessmentresponsehistoryDescID := assessmentresponsehistoryFields[9].Descriptor()
+	// assessmentresponsehistory.DefaultID holds the default value on creation for the id field.
+	assessmentresponsehistory.DefaultID = assessmentresponsehistoryDescID.Default.(func() string)
 	assetMixin := schema.Asset{}.Mixin()
 	asset.Policy = privacy.NewPolicies(schema.Asset{})
 	asset.Hooks[0] = func(next ent.Mutator) ent.Mutator {

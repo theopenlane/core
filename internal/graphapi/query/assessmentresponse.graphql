@@ -1,0 +1,160 @@
+
+mutation CreateBulkCSVAssessmentResponse($input: Upload!) {
+  createBulkCSVAssessmentResponse(input: $input) {
+    assessmentResponses {
+      assessmentID
+      assignedAt
+      completedAt
+      createdAt
+      createdBy
+      dueDate
+      id
+      startedAt
+      status
+      tags
+      updatedAt
+      updatedBy
+      userID
+    }
+  }
+}
+
+mutation CreateBulkAssessmentResponse($input: [CreateAssessmentResponseInput!]) {
+  createBulkAssessmentResponse(input: $input) {
+    assessmentResponses {
+      assessmentID
+      assignedAt
+      completedAt
+      createdAt
+      createdBy
+      dueDate
+      id
+      startedAt
+      status
+      tags
+      updatedAt
+      updatedBy
+      userID
+    }
+  }
+}
+
+mutation CreateAssessmentResponse($input: CreateAssessmentResponseInput!) {
+  createAssessmentResponse(input: $input) {
+    assessmentResponse {
+      assessmentID
+      assignedAt
+      completedAt
+      createdAt
+      createdBy
+      dueDate
+      id
+      startedAt
+      status
+      tags
+      updatedAt
+      updatedBy
+      userID
+    }
+  }
+}
+
+mutation DeleteAssessmentResponse($deleteAssessmentResponseId: ID!) {
+  deleteAssessmentResponse(id: $deleteAssessmentResponseId) {
+    deletedID
+  }
+}
+
+query GetAllAssessmentResponses {
+  assessmentResponses {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assessmentID
+        assignedAt
+        completedAt
+        createdAt
+        createdBy
+        dueDate
+        id
+        startedAt
+        status
+        tags
+        updatedAt
+        updatedBy
+        userID
+      }
+    }
+  }
+}
+query GetAssessmentResponseByID($assessmentResponseId: ID!) {
+  assessmentResponse(id: $assessmentResponseId) {
+    assessmentID
+    assignedAt
+    completedAt
+    createdAt
+    createdBy
+    dueDate
+    id
+    startedAt
+    status
+    tags
+    updatedAt
+    updatedBy
+    userID
+  }
+}
+
+query GetAssessmentResponses($first: Int, $last: Int, $where: AssessmentResponseWhereInput) {
+  assessmentResponses(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assessmentID
+        assignedAt
+        completedAt
+        createdAt
+        createdBy
+        dueDate
+        id
+        startedAt
+        status
+        tags
+        updatedAt
+        updatedBy
+        userID
+      }
+    }
+  }
+}
+mutation UpdateAssessmentResponse($updateAssessmentResponseId: ID!, $input: UpdateAssessmentResponseInput!) {
+  updateAssessmentResponse(id: $updateAssessmentResponseId, input: $input) {
+    assessmentResponse {
+      assessmentID
+      assignedAt
+      completedAt
+      createdAt
+      createdBy
+      dueDate
+      id
+      startedAt
+      status
+      tags
+      updatedAt
+      updatedBy
+      userID
+    }
+  }
+}

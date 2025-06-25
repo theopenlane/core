@@ -1030,3 +1030,273 @@ tests:
           can_view: false
           can_edit: false
           can_delete: false
+  - name: assessment
+    description: test assessment relationships - assessments are owned by users with delegated access and can be blocked from users
+    tuple_file: tuples/assessments.yaml
+    check:
+      # assessment owner has full permissions
+      - user: user:ulid-assessment-owner-1
+        object: assessment:assessment-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      # assessment editor has edit but not delete permissions
+      - user: user:ulid-assessment-editor-1
+        object: assessment:assessment-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true  # editors can delete in this model
+      # assessment viewer has view-only permissions
+      - user: user:ulid-assessment-viewer-1
+        object: assessment:assessment-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      # assessment delegate has edit but not delete permissions
+      - user: user:ulid-assessment-delegate-1
+        object: assessment:assessment-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+      # blocked user has no access
+      - user: user:ulid-assessment-blocked-user
+        object: assessment:assessment-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      # organization admin inherits editor permissions
+      - user: user:ulid-org-admin
+        object: assessment:assessment-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      # organization owner inherits editor permissions
+      - user: user:ulid-org-owner
+        object: assessment:assessment-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      # user with no specific access has no permissions
+      - user: user:ulid-no-access-user
+        object: assessment:assessment-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      # user from different org cannot access assessment
+      - user: user:ulid-assessment-different-org-owner
+        object: assessment:assessment-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      # cross-check: owner of assessment-2 cannot access assessment-1
+      - user: user:ulid-assessment-owner-2
+        object: assessment:assessment-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+    list_objects:
+      - user: user:ulid-assessment-owner-1
+        type: assessment
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view:
+            - assessment:assessment-1
+          can_edit:
+            - assessment:assessment-1
+          can_delete:
+            - assessment:assessment-1
+      - user: user:ulid-assessment-editor-1
+        type: assessment
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view:
+            - assessment:assessment-1
+          can_edit:
+            - assessment:assessment-1
+          can_delete:
+            - assessment:assessment-1
+      - user: user:ulid-assessment-viewer-1
+        type: assessment
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view:
+            - assessment:assessment-1
+          can_edit:
+          can_delete:
+      - user: user:ulid-assessment-delegate-1
+        type: assessment
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view:
+            - assessment:assessment-1
+          can_edit:
+            - assessment:assessment-1
+          can_delete:
+      - user: user:ulid-org-admin
+        type: assessment
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view:
+            - assessment:assessment-1
+            - assessment:assessment-2
+            - assessment:assessment-3
+          can_edit:
+            - assessment:assessment-1
+            - assessment:assessment-2
+            - assessment:assessment-3
+          can_delete:
+            - assessment:assessment-1
+            - assessment:assessment-2
+            - assessment:assessment-3
+      - user: user:ulid-org-owner
+        type: assessment
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view:
+            - assessment:assessment-1
+            - assessment:assessment-2
+            - assessment:assessment-3
+          can_edit:
+            - assessment:assessment-1
+            - assessment:assessment-2
+            - assessment:assessment-3
+          can_delete:
+            - assessment:assessment-1
+            - assessment:assessment-2
+            - assessment:assessment-3
+      - user: user:ulid-no-access-user
+        type: assessment
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view:
+          can_edit:
+          can_delete:
+  - name: assessment_response
+    description: test assessment response relationships - responses can only be viewed/edited by response owner and viewed by org admins/owners
+    tuple_file: tuples/assessment_responses.yaml
+    check:
+      # response owner can view and edit their own response
+      - user: user:ulid-response-owner-1
+        object: assessment_response:response-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+      # response owner cannot view other users' responses
+      - user: user:ulid-response-owner-1
+        object: assessment_response:response-2
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      # organization admin can view all responses but not edit them
+      - user: user:ulid-org-admin
+        object: assessment_response:response-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: true
+      - user: user:ulid-org-admin
+        object: assessment_response:response-2
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: true
+      # organization owner can view all responses but not edit them
+      - user: user:ulid-org-owner
+        object: assessment_response:response-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: true
+      - user: user:ulid-org-owner
+        object: assessment_response:response-3
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: true
+      # regular organization member has no access to responses
+      - user: user:ulid-org-member
+        object: assessment_response:response-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      # user with no access has no permissions
+      - user: user:ulid-no-access-user
+        object: assessment_response:response-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      # direct viewer can only view
+      - user: user:ulid-direct-viewer
+        object: assessment_response:response-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      # blocked user has no access
+      - user: user:ulid-blocked-user
+        object: assessment_response:response-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false

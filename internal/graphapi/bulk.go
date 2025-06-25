@@ -47,6 +47,44 @@ func (r *mutationResolver) bulkCreateAPIToken(ctx context.Context, input []*gene
 	}, nil
 }
 
+// bulkCreateAssessment uses the CreateBulk function to create multiple Assessment entities
+func (r *mutationResolver) bulkCreateAssessment(ctx context.Context, input []*generated.CreateAssessmentInput) (*model.AssessmentBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.AssessmentCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Assessment.Create().SetInput(*data)
+	}
+
+	res, err := c.Assessment.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "assessment"})
+	}
+
+	// return response
+	return &model.AssessmentBulkCreatePayload{
+		Assessments: res,
+	}, nil
+}
+
+// bulkCreateAssessmentResponse uses the CreateBulk function to create multiple AssessmentResponse entities
+func (r *mutationResolver) bulkCreateAssessmentResponse(ctx context.Context, input []*generated.CreateAssessmentResponseInput) (*model.AssessmentResponseBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.AssessmentResponseCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.AssessmentResponse.Create().SetInput(*data)
+	}
+
+	res, err := c.AssessmentResponse.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "assessmentresponse"})
+	}
+
+	// return response
+	return &model.AssessmentResponseBulkCreatePayload{
+		AssessmentResponses: res,
+	}, nil
+}
+
 // bulkCreateAsset uses the CreateBulk function to create multiple Asset entities
 func (r *mutationResolver) bulkCreateAsset(ctx context.Context, input []*generated.CreateAssetInput) (*model.AssetBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

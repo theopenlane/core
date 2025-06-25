@@ -33,6 +33,37 @@ query GlobalSearch($query: String!) {
         }
       }
     }
+    assessments {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          name
+          tags
+        }
+      }
+    }
+    assessmentResponses {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+        }
+      }
+    }
     assets {
       totalCount
       pageInfo {

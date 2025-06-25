@@ -1,0 +1,65 @@
+
+
+query GetAllAssessmentResponseHistories {
+  assessmentResponseHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assessmentID
+        assignedAt
+        completedAt
+        createdAt
+        createdBy
+        dueDate
+        historyTime
+        id
+        operation
+        ref
+        startedAt
+        status
+        tags
+        updatedAt
+        updatedBy
+        userID
+      }
+    }
+  }
+}
+
+query GetAssessmentResponseHistories($first: Int, $last: Int, $where: AssessmentResponseHistoryWhereInput) {
+  assessmentResponseHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assessmentID
+        assignedAt
+        completedAt
+        createdAt
+        createdBy
+        dueDate
+        historyTime
+        id
+        operation
+        ref
+        startedAt
+        status
+        tags
+        updatedAt
+        updatedBy
+        userID
+      }
+    }
+  }
+}

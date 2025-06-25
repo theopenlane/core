@@ -22,6 +22,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/internal/ent/generated/assessmenthistory"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponsehistory"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/assethistory"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
@@ -149,6 +153,14 @@ type Client struct {
 	ActionPlan *ActionPlanClient
 	// ActionPlanHistory is the client for interacting with the ActionPlanHistory builders.
 	ActionPlanHistory *ActionPlanHistoryClient
+	// Assessment is the client for interacting with the Assessment builders.
+	Assessment *AssessmentClient
+	// AssessmentHistory is the client for interacting with the AssessmentHistory builders.
+	AssessmentHistory *AssessmentHistoryClient
+	// AssessmentResponse is the client for interacting with the AssessmentResponse builders.
+	AssessmentResponse *AssessmentResponseClient
+	// AssessmentResponseHistory is the client for interacting with the AssessmentResponseHistory builders.
+	AssessmentResponseHistory *AssessmentResponseHistoryClient
 	// Asset is the client for interacting with the Asset builders.
 	Asset *AssetClient
 	// AssetHistory is the client for interacting with the AssetHistory builders.
@@ -370,6 +382,10 @@ func (c *Client) init() {
 	c.APIToken = NewAPITokenClient(c.config)
 	c.ActionPlan = NewActionPlanClient(c.config)
 	c.ActionPlanHistory = NewActionPlanHistoryClient(c.config)
+	c.Assessment = NewAssessmentClient(c.config)
+	c.AssessmentHistory = NewAssessmentHistoryClient(c.config)
+	c.AssessmentResponse = NewAssessmentResponseClient(c.config)
+	c.AssessmentResponseHistory = NewAssessmentResponseHistoryClient(c.config)
 	c.Asset = NewAssetClient(c.config)
 	c.AssetHistory = NewAssetHistoryClient(c.config)
 	c.Contact = NewContactClient(c.config)
@@ -649,6 +665,10 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		APIToken:                     NewAPITokenClient(cfg),
 		ActionPlan:                   NewActionPlanClient(cfg),
 		ActionPlanHistory:            NewActionPlanHistoryClient(cfg),
+		Assessment:                   NewAssessmentClient(cfg),
+		AssessmentHistory:            NewAssessmentHistoryClient(cfg),
+		AssessmentResponse:           NewAssessmentResponseClient(cfg),
+		AssessmentResponseHistory:    NewAssessmentResponseHistoryClient(cfg),
 		Asset:                        NewAssetClient(cfg),
 		AssetHistory:                 NewAssetHistoryClient(cfg),
 		Contact:                      NewContactClient(cfg),
@@ -770,6 +790,10 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		APIToken:                     NewAPITokenClient(cfg),
 		ActionPlan:                   NewActionPlanClient(cfg),
 		ActionPlanHistory:            NewActionPlanHistoryClient(cfg),
+		Assessment:                   NewAssessmentClient(cfg),
+		AssessmentHistory:            NewAssessmentHistoryClient(cfg),
+		AssessmentResponse:           NewAssessmentResponseClient(cfg),
+		AssessmentResponseHistory:    NewAssessmentResponseHistoryClient(cfg),
 		Asset:                        NewAssetClient(cfg),
 		AssetHistory:                 NewAssetHistoryClient(cfg),
 		Contact:                      NewContactClient(cfg),
@@ -898,15 +922,16 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.APIToken, c.ActionPlan, c.ActionPlanHistory, c.Asset, c.AssetHistory,
-		c.Contact, c.ContactHistory, c.Control, c.ControlHistory,
-		c.ControlImplementation, c.ControlImplementationHistory, c.ControlObjective,
-		c.ControlObjectiveHistory, c.ControlScheduledJob, c.ControlScheduledJobHistory,
-		c.CustomDomain, c.CustomDomainHistory, c.DNSVerification,
-		c.DNSVerificationHistory, c.DocumentData, c.DocumentDataHistory,
-		c.EmailVerificationToken, c.Entity, c.EntityHistory, c.EntityType,
-		c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory, c.File,
-		c.FileHistory, c.Group, c.GroupHistory, c.GroupMembership,
+		c.APIToken, c.ActionPlan, c.ActionPlanHistory, c.Assessment,
+		c.AssessmentHistory, c.AssessmentResponse, c.AssessmentResponseHistory,
+		c.Asset, c.AssetHistory, c.Contact, c.ContactHistory, c.Control,
+		c.ControlHistory, c.ControlImplementation, c.ControlImplementationHistory,
+		c.ControlObjective, c.ControlObjectiveHistory, c.ControlScheduledJob,
+		c.ControlScheduledJobHistory, c.CustomDomain, c.CustomDomainHistory,
+		c.DNSVerification, c.DNSVerificationHistory, c.DocumentData,
+		c.DocumentDataHistory, c.EmailVerificationToken, c.Entity, c.EntityHistory,
+		c.EntityType, c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory,
+		c.File, c.FileHistory, c.Group, c.GroupHistory, c.GroupMembership,
 		c.GroupMembershipHistory, c.GroupSetting, c.GroupSettingHistory, c.Hush,
 		c.HushHistory, c.Integration, c.IntegrationHistory, c.InternalPolicy,
 		c.InternalPolicyHistory, c.Invite, c.JobResult, c.JobRunner,
@@ -933,15 +958,16 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.APIToken, c.ActionPlan, c.ActionPlanHistory, c.Asset, c.AssetHistory,
-		c.Contact, c.ContactHistory, c.Control, c.ControlHistory,
-		c.ControlImplementation, c.ControlImplementationHistory, c.ControlObjective,
-		c.ControlObjectiveHistory, c.ControlScheduledJob, c.ControlScheduledJobHistory,
-		c.CustomDomain, c.CustomDomainHistory, c.DNSVerification,
-		c.DNSVerificationHistory, c.DocumentData, c.DocumentDataHistory,
-		c.EmailVerificationToken, c.Entity, c.EntityHistory, c.EntityType,
-		c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory, c.File,
-		c.FileHistory, c.Group, c.GroupHistory, c.GroupMembership,
+		c.APIToken, c.ActionPlan, c.ActionPlanHistory, c.Assessment,
+		c.AssessmentHistory, c.AssessmentResponse, c.AssessmentResponseHistory,
+		c.Asset, c.AssetHistory, c.Contact, c.ContactHistory, c.Control,
+		c.ControlHistory, c.ControlImplementation, c.ControlImplementationHistory,
+		c.ControlObjective, c.ControlObjectiveHistory, c.ControlScheduledJob,
+		c.ControlScheduledJobHistory, c.CustomDomain, c.CustomDomainHistory,
+		c.DNSVerification, c.DNSVerificationHistory, c.DocumentData,
+		c.DocumentDataHistory, c.EmailVerificationToken, c.Entity, c.EntityHistory,
+		c.EntityType, c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory,
+		c.File, c.FileHistory, c.Group, c.GroupHistory, c.GroupMembership,
 		c.GroupMembershipHistory, c.GroupSetting, c.GroupSettingHistory, c.Hush,
 		c.HushHistory, c.Integration, c.IntegrationHistory, c.InternalPolicy,
 		c.InternalPolicyHistory, c.Invite, c.JobResult, c.JobRunner,
@@ -1045,6 +1071,14 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.ActionPlan.mutate(ctx, m)
 	case *ActionPlanHistoryMutation:
 		return c.ActionPlanHistory.mutate(ctx, m)
+	case *AssessmentMutation:
+		return c.Assessment.mutate(ctx, m)
+	case *AssessmentHistoryMutation:
+		return c.AssessmentHistory.mutate(ctx, m)
+	case *AssessmentResponseMutation:
+		return c.AssessmentResponse.mutate(ctx, m)
+	case *AssessmentResponseHistoryMutation:
+		return c.AssessmentResponseHistory.mutate(ctx, m)
 	case *AssetMutation:
 		return c.Asset.mutate(ctx, m)
 	case *AssetHistoryMutation:
@@ -1801,6 +1835,639 @@ func (c *ActionPlanHistoryClient) mutate(ctx context.Context, m *ActionPlanHisto
 		return (&ActionPlanHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown ActionPlanHistory mutation op: %q", m.Op())
+	}
+}
+
+// AssessmentClient is a client for the Assessment schema.
+type AssessmentClient struct {
+	config
+}
+
+// NewAssessmentClient returns a client for the Assessment from the given config.
+func NewAssessmentClient(c config) *AssessmentClient {
+	return &AssessmentClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `assessment.Hooks(f(g(h())))`.
+func (c *AssessmentClient) Use(hooks ...Hook) {
+	c.hooks.Assessment = append(c.hooks.Assessment, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `assessment.Intercept(f(g(h())))`.
+func (c *AssessmentClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Assessment = append(c.inters.Assessment, interceptors...)
+}
+
+// Create returns a builder for creating a Assessment entity.
+func (c *AssessmentClient) Create() *AssessmentCreate {
+	mutation := newAssessmentMutation(c.config, OpCreate)
+	return &AssessmentCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Assessment entities.
+func (c *AssessmentClient) CreateBulk(builders ...*AssessmentCreate) *AssessmentCreateBulk {
+	return &AssessmentCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *AssessmentClient) MapCreateBulk(slice any, setFunc func(*AssessmentCreate, int)) *AssessmentCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &AssessmentCreateBulk{err: fmt.Errorf("calling to AssessmentClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*AssessmentCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &AssessmentCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Assessment.
+func (c *AssessmentClient) Update() *AssessmentUpdate {
+	mutation := newAssessmentMutation(c.config, OpUpdate)
+	return &AssessmentUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *AssessmentClient) UpdateOne(a *Assessment) *AssessmentUpdateOne {
+	mutation := newAssessmentMutation(c.config, OpUpdateOne, withAssessment(a))
+	return &AssessmentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *AssessmentClient) UpdateOneID(id string) *AssessmentUpdateOne {
+	mutation := newAssessmentMutation(c.config, OpUpdateOne, withAssessmentID(id))
+	return &AssessmentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Assessment.
+func (c *AssessmentClient) Delete() *AssessmentDelete {
+	mutation := newAssessmentMutation(c.config, OpDelete)
+	return &AssessmentDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *AssessmentClient) DeleteOne(a *Assessment) *AssessmentDeleteOne {
+	return c.DeleteOneID(a.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *AssessmentClient) DeleteOneID(id string) *AssessmentDeleteOne {
+	builder := c.Delete().Where(assessment.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &AssessmentDeleteOne{builder}
+}
+
+// Query returns a query builder for Assessment.
+func (c *AssessmentClient) Query() *AssessmentQuery {
+	return &AssessmentQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeAssessment},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Assessment entity by its id.
+func (c *AssessmentClient) Get(ctx context.Context, id string) (*Assessment, error) {
+	return c.Query().Where(assessment.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *AssessmentClient) GetX(ctx context.Context, id string) *Assessment {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a Assessment.
+func (c *AssessmentClient) QueryOwner(a *Assessment) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessment.Table, assessment.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, assessment.OwnerTable, assessment.OwnerColumn),
+		)
+		schemaConfig := a.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Assessment
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUsers queries the users edge of a Assessment.
+func (c *AssessmentClient) QueryUsers(a *Assessment) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessment.Table, assessment.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, assessment.UsersTable, assessment.UsersPrimaryKey...),
+		)
+		schemaConfig := a.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.AssessmentUsers
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssessmentResponses queries the assessment_responses edge of a Assessment.
+func (c *AssessmentClient) QueryAssessmentResponses(a *Assessment) *AssessmentResponseQuery {
+	query := (&AssessmentResponseClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessment.Table, assessment.FieldID, id),
+			sqlgraph.To(assessmentresponse.Table, assessmentresponse.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, assessment.AssessmentResponsesTable, assessment.AssessmentResponsesColumn),
+		)
+		schemaConfig := a.schemaConfig
+		step.To.Schema = schemaConfig.AssessmentResponse
+		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *AssessmentClient) Hooks() []Hook {
+	hooks := c.hooks.Assessment
+	return append(hooks[:len(hooks):len(hooks)], assessment.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *AssessmentClient) Interceptors() []Interceptor {
+	inters := c.inters.Assessment
+	return append(inters[:len(inters):len(inters)], assessment.Interceptors[:]...)
+}
+
+func (c *AssessmentClient) mutate(ctx context.Context, m *AssessmentMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&AssessmentCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&AssessmentUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&AssessmentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&AssessmentDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown Assessment mutation op: %q", m.Op())
+	}
+}
+
+// AssessmentHistoryClient is a client for the AssessmentHistory schema.
+type AssessmentHistoryClient struct {
+	config
+}
+
+// NewAssessmentHistoryClient returns a client for the AssessmentHistory from the given config.
+func NewAssessmentHistoryClient(c config) *AssessmentHistoryClient {
+	return &AssessmentHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `assessmenthistory.Hooks(f(g(h())))`.
+func (c *AssessmentHistoryClient) Use(hooks ...Hook) {
+	c.hooks.AssessmentHistory = append(c.hooks.AssessmentHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `assessmenthistory.Intercept(f(g(h())))`.
+func (c *AssessmentHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.AssessmentHistory = append(c.inters.AssessmentHistory, interceptors...)
+}
+
+// Create returns a builder for creating a AssessmentHistory entity.
+func (c *AssessmentHistoryClient) Create() *AssessmentHistoryCreate {
+	mutation := newAssessmentHistoryMutation(c.config, OpCreate)
+	return &AssessmentHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of AssessmentHistory entities.
+func (c *AssessmentHistoryClient) CreateBulk(builders ...*AssessmentHistoryCreate) *AssessmentHistoryCreateBulk {
+	return &AssessmentHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *AssessmentHistoryClient) MapCreateBulk(slice any, setFunc func(*AssessmentHistoryCreate, int)) *AssessmentHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &AssessmentHistoryCreateBulk{err: fmt.Errorf("calling to AssessmentHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*AssessmentHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &AssessmentHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for AssessmentHistory.
+func (c *AssessmentHistoryClient) Update() *AssessmentHistoryUpdate {
+	mutation := newAssessmentHistoryMutation(c.config, OpUpdate)
+	return &AssessmentHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *AssessmentHistoryClient) UpdateOne(ah *AssessmentHistory) *AssessmentHistoryUpdateOne {
+	mutation := newAssessmentHistoryMutation(c.config, OpUpdateOne, withAssessmentHistory(ah))
+	return &AssessmentHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *AssessmentHistoryClient) UpdateOneID(id string) *AssessmentHistoryUpdateOne {
+	mutation := newAssessmentHistoryMutation(c.config, OpUpdateOne, withAssessmentHistoryID(id))
+	return &AssessmentHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for AssessmentHistory.
+func (c *AssessmentHistoryClient) Delete() *AssessmentHistoryDelete {
+	mutation := newAssessmentHistoryMutation(c.config, OpDelete)
+	return &AssessmentHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *AssessmentHistoryClient) DeleteOne(ah *AssessmentHistory) *AssessmentHistoryDeleteOne {
+	return c.DeleteOneID(ah.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *AssessmentHistoryClient) DeleteOneID(id string) *AssessmentHistoryDeleteOne {
+	builder := c.Delete().Where(assessmenthistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &AssessmentHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for AssessmentHistory.
+func (c *AssessmentHistoryClient) Query() *AssessmentHistoryQuery {
+	return &AssessmentHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeAssessmentHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a AssessmentHistory entity by its id.
+func (c *AssessmentHistoryClient) Get(ctx context.Context, id string) (*AssessmentHistory, error) {
+	return c.Query().Where(assessmenthistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *AssessmentHistoryClient) GetX(ctx context.Context, id string) *AssessmentHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *AssessmentHistoryClient) Hooks() []Hook {
+	return c.hooks.AssessmentHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *AssessmentHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.AssessmentHistory
+	return append(inters[:len(inters):len(inters)], assessmenthistory.Interceptors[:]...)
+}
+
+func (c *AssessmentHistoryClient) mutate(ctx context.Context, m *AssessmentHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&AssessmentHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&AssessmentHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&AssessmentHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&AssessmentHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown AssessmentHistory mutation op: %q", m.Op())
+	}
+}
+
+// AssessmentResponseClient is a client for the AssessmentResponse schema.
+type AssessmentResponseClient struct {
+	config
+}
+
+// NewAssessmentResponseClient returns a client for the AssessmentResponse from the given config.
+func NewAssessmentResponseClient(c config) *AssessmentResponseClient {
+	return &AssessmentResponseClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `assessmentresponse.Hooks(f(g(h())))`.
+func (c *AssessmentResponseClient) Use(hooks ...Hook) {
+	c.hooks.AssessmentResponse = append(c.hooks.AssessmentResponse, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `assessmentresponse.Intercept(f(g(h())))`.
+func (c *AssessmentResponseClient) Intercept(interceptors ...Interceptor) {
+	c.inters.AssessmentResponse = append(c.inters.AssessmentResponse, interceptors...)
+}
+
+// Create returns a builder for creating a AssessmentResponse entity.
+func (c *AssessmentResponseClient) Create() *AssessmentResponseCreate {
+	mutation := newAssessmentResponseMutation(c.config, OpCreate)
+	return &AssessmentResponseCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of AssessmentResponse entities.
+func (c *AssessmentResponseClient) CreateBulk(builders ...*AssessmentResponseCreate) *AssessmentResponseCreateBulk {
+	return &AssessmentResponseCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *AssessmentResponseClient) MapCreateBulk(slice any, setFunc func(*AssessmentResponseCreate, int)) *AssessmentResponseCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &AssessmentResponseCreateBulk{err: fmt.Errorf("calling to AssessmentResponseClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*AssessmentResponseCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &AssessmentResponseCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for AssessmentResponse.
+func (c *AssessmentResponseClient) Update() *AssessmentResponseUpdate {
+	mutation := newAssessmentResponseMutation(c.config, OpUpdate)
+	return &AssessmentResponseUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *AssessmentResponseClient) UpdateOne(ar *AssessmentResponse) *AssessmentResponseUpdateOne {
+	mutation := newAssessmentResponseMutation(c.config, OpUpdateOne, withAssessmentResponse(ar))
+	return &AssessmentResponseUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *AssessmentResponseClient) UpdateOneID(id string) *AssessmentResponseUpdateOne {
+	mutation := newAssessmentResponseMutation(c.config, OpUpdateOne, withAssessmentResponseID(id))
+	return &AssessmentResponseUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for AssessmentResponse.
+func (c *AssessmentResponseClient) Delete() *AssessmentResponseDelete {
+	mutation := newAssessmentResponseMutation(c.config, OpDelete)
+	return &AssessmentResponseDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *AssessmentResponseClient) DeleteOne(ar *AssessmentResponse) *AssessmentResponseDeleteOne {
+	return c.DeleteOneID(ar.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *AssessmentResponseClient) DeleteOneID(id string) *AssessmentResponseDeleteOne {
+	builder := c.Delete().Where(assessmentresponse.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &AssessmentResponseDeleteOne{builder}
+}
+
+// Query returns a query builder for AssessmentResponse.
+func (c *AssessmentResponseClient) Query() *AssessmentResponseQuery {
+	return &AssessmentResponseQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeAssessmentResponse},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a AssessmentResponse entity by its id.
+func (c *AssessmentResponseClient) Get(ctx context.Context, id string) (*AssessmentResponse, error) {
+	return c.Query().Where(assessmentresponse.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *AssessmentResponseClient) GetX(ctx context.Context, id string) *AssessmentResponse {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryAssessment queries the assessment edge of a AssessmentResponse.
+func (c *AssessmentResponseClient) QueryAssessment(ar *AssessmentResponse) *AssessmentQuery {
+	query := (&AssessmentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ar.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessmentresponse.Table, assessmentresponse.FieldID, id),
+			sqlgraph.To(assessment.Table, assessment.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, assessmentresponse.AssessmentTable, assessmentresponse.AssessmentColumn),
+		)
+		schemaConfig := ar.schemaConfig
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromV = sqlgraph.Neighbors(ar.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUser queries the user edge of a AssessmentResponse.
+func (c *AssessmentResponseClient) QueryUser(ar *AssessmentResponse) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ar.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessmentresponse.Table, assessmentresponse.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, assessmentresponse.UserTable, assessmentresponse.UserColumn),
+		)
+		schemaConfig := ar.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromV = sqlgraph.Neighbors(ar.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *AssessmentResponseClient) Hooks() []Hook {
+	hooks := c.hooks.AssessmentResponse
+	return append(hooks[:len(hooks):len(hooks)], assessmentresponse.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *AssessmentResponseClient) Interceptors() []Interceptor {
+	inters := c.inters.AssessmentResponse
+	return append(inters[:len(inters):len(inters)], assessmentresponse.Interceptors[:]...)
+}
+
+func (c *AssessmentResponseClient) mutate(ctx context.Context, m *AssessmentResponseMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&AssessmentResponseCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&AssessmentResponseUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&AssessmentResponseUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&AssessmentResponseDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown AssessmentResponse mutation op: %q", m.Op())
+	}
+}
+
+// AssessmentResponseHistoryClient is a client for the AssessmentResponseHistory schema.
+type AssessmentResponseHistoryClient struct {
+	config
+}
+
+// NewAssessmentResponseHistoryClient returns a client for the AssessmentResponseHistory from the given config.
+func NewAssessmentResponseHistoryClient(c config) *AssessmentResponseHistoryClient {
+	return &AssessmentResponseHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `assessmentresponsehistory.Hooks(f(g(h())))`.
+func (c *AssessmentResponseHistoryClient) Use(hooks ...Hook) {
+	c.hooks.AssessmentResponseHistory = append(c.hooks.AssessmentResponseHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `assessmentresponsehistory.Intercept(f(g(h())))`.
+func (c *AssessmentResponseHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.AssessmentResponseHistory = append(c.inters.AssessmentResponseHistory, interceptors...)
+}
+
+// Create returns a builder for creating a AssessmentResponseHistory entity.
+func (c *AssessmentResponseHistoryClient) Create() *AssessmentResponseHistoryCreate {
+	mutation := newAssessmentResponseHistoryMutation(c.config, OpCreate)
+	return &AssessmentResponseHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of AssessmentResponseHistory entities.
+func (c *AssessmentResponseHistoryClient) CreateBulk(builders ...*AssessmentResponseHistoryCreate) *AssessmentResponseHistoryCreateBulk {
+	return &AssessmentResponseHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *AssessmentResponseHistoryClient) MapCreateBulk(slice any, setFunc func(*AssessmentResponseHistoryCreate, int)) *AssessmentResponseHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &AssessmentResponseHistoryCreateBulk{err: fmt.Errorf("calling to AssessmentResponseHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*AssessmentResponseHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &AssessmentResponseHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for AssessmentResponseHistory.
+func (c *AssessmentResponseHistoryClient) Update() *AssessmentResponseHistoryUpdate {
+	mutation := newAssessmentResponseHistoryMutation(c.config, OpUpdate)
+	return &AssessmentResponseHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *AssessmentResponseHistoryClient) UpdateOne(arh *AssessmentResponseHistory) *AssessmentResponseHistoryUpdateOne {
+	mutation := newAssessmentResponseHistoryMutation(c.config, OpUpdateOne, withAssessmentResponseHistory(arh))
+	return &AssessmentResponseHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *AssessmentResponseHistoryClient) UpdateOneID(id string) *AssessmentResponseHistoryUpdateOne {
+	mutation := newAssessmentResponseHistoryMutation(c.config, OpUpdateOne, withAssessmentResponseHistoryID(id))
+	return &AssessmentResponseHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for AssessmentResponseHistory.
+func (c *AssessmentResponseHistoryClient) Delete() *AssessmentResponseHistoryDelete {
+	mutation := newAssessmentResponseHistoryMutation(c.config, OpDelete)
+	return &AssessmentResponseHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *AssessmentResponseHistoryClient) DeleteOne(arh *AssessmentResponseHistory) *AssessmentResponseHistoryDeleteOne {
+	return c.DeleteOneID(arh.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *AssessmentResponseHistoryClient) DeleteOneID(id string) *AssessmentResponseHistoryDeleteOne {
+	builder := c.Delete().Where(assessmentresponsehistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &AssessmentResponseHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for AssessmentResponseHistory.
+func (c *AssessmentResponseHistoryClient) Query() *AssessmentResponseHistoryQuery {
+	return &AssessmentResponseHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeAssessmentResponseHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a AssessmentResponseHistory entity by its id.
+func (c *AssessmentResponseHistoryClient) Get(ctx context.Context, id string) (*AssessmentResponseHistory, error) {
+	return c.Query().Where(assessmentresponsehistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *AssessmentResponseHistoryClient) GetX(ctx context.Context, id string) *AssessmentResponseHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *AssessmentResponseHistoryClient) Hooks() []Hook {
+	return c.hooks.AssessmentResponseHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *AssessmentResponseHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.AssessmentResponseHistory
+	return append(inters[:len(inters):len(inters)], assessmentresponsehistory.Interceptors[:]...)
+}
+
+func (c *AssessmentResponseHistoryClient) mutate(ctx context.Context, m *AssessmentResponseHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&AssessmentResponseHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&AssessmentResponseHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&AssessmentResponseHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&AssessmentResponseHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown AssessmentResponseHistory mutation op: %q", m.Op())
 	}
 }
 
@@ -15496,6 +16163,25 @@ func (c *OrganizationClient) QueryScans(o *Organization) *ScanQuery {
 	return query
 }
 
+// QueryAssessments queries the assessments edge of a Organization.
+func (c *OrganizationClient) QueryAssessments(o *Organization) *AssessmentQuery {
+	query := (&AssessmentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(assessment.Table, assessment.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.AssessmentsTable, organization.AssessmentsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.Assessment
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(o *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -22274,6 +22960,25 @@ func (c *UserClient) QueryPrograms(u *User) *ProgramQuery {
 	return query
 }
 
+// QueryAssessments queries the assessments edge of a User.
+func (c *UserClient) QueryAssessments(u *User) *AssessmentQuery {
+	query := (&AssessmentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := u.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(assessment.Table, assessment.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, user.AssessmentsTable, user.AssessmentsPrimaryKey...),
+		)
+		schemaConfig := u.schemaConfig
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.AssessmentUsers
+		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryGroupMemberships queries the group_memberships edge of a User.
 func (c *UserClient) QueryGroupMemberships(u *User) *GroupMembershipQuery {
 	query := (&GroupMembershipClient{config: c.config}).Query()
@@ -22975,7 +23680,8 @@ func (c *WebauthnClient) mutate(ctx context.Context, m *WebauthnMutation) (Value
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		APIToken, ActionPlan, ActionPlanHistory, Asset, AssetHistory, Contact,
+		APIToken, ActionPlan, ActionPlanHistory, Assessment, AssessmentHistory,
+		AssessmentResponse, AssessmentResponseHistory, Asset, AssetHistory, Contact,
 		ContactHistory, Control, ControlHistory, ControlImplementation,
 		ControlImplementationHistory, ControlObjective, ControlObjectiveHistory,
 		ControlScheduledJob, ControlScheduledJobHistory, CustomDomain,
@@ -23000,7 +23706,8 @@ type (
 		Webauthn []ent.Hook
 	}
 	inters struct {
-		APIToken, ActionPlan, ActionPlanHistory, Asset, AssetHistory, Contact,
+		APIToken, ActionPlan, ActionPlanHistory, Assessment, AssessmentHistory,
+		AssessmentResponse, AssessmentResponseHistory, Asset, AssetHistory, Contact,
 		ContactHistory, Control, ControlHistory, ControlImplementation,
 		ControlImplementationHistory, ControlObjective, ControlObjectiveHistory,
 		ControlScheduledJob, ControlScheduledJobHistory, CustomDomain,

@@ -541,6 +541,244 @@ func (c *ActionPlanUpdateOne) SetInput(i UpdateActionPlanInput) *ActionPlanUpdat
 	return c
 }
 
+// CreateAssessmentInput represents a mutation input for creating assessments.
+type CreateAssessmentInput struct {
+	Tags                  []string
+	Name                  string
+	AssessmentType        *enums.AssessmentType
+	QuestionnaireID       *string
+	OwnerID               *string
+	UserIDs               []string
+	AssessmentResponseIDs []string
+}
+
+// Mutate applies the CreateAssessmentInput on the AssessmentMutation builder.
+func (i *CreateAssessmentInput) Mutate(m *AssessmentMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetName(i.Name)
+	if v := i.AssessmentType; v != nil {
+		m.SetAssessmentType(*v)
+	}
+	if v := i.QuestionnaireID; v != nil {
+		m.SetQuestionnaireID(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.UserIDs; len(v) > 0 {
+		m.AddUserIDs(v...)
+	}
+	if v := i.AssessmentResponseIDs; len(v) > 0 {
+		m.AddAssessmentResponseIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateAssessmentInput on the AssessmentCreate builder.
+func (c *AssessmentCreate) SetInput(i CreateAssessmentInput) *AssessmentCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateAssessmentInput represents a mutation input for updating assessments.
+type UpdateAssessmentInput struct {
+	ClearTags                   bool
+	Tags                        []string
+	AppendTags                  []string
+	Name                        *string
+	AssessmentType              *enums.AssessmentType
+	ClearQuestionnaireID        bool
+	QuestionnaireID             *string
+	ClearOwner                  bool
+	OwnerID                     *string
+	ClearUsers                  bool
+	AddUserIDs                  []string
+	RemoveUserIDs               []string
+	ClearAssessmentResponses    bool
+	AddAssessmentResponseIDs    []string
+	RemoveAssessmentResponseIDs []string
+}
+
+// Mutate applies the UpdateAssessmentInput on the AssessmentMutation builder.
+func (i *UpdateAssessmentInput) Mutate(m *AssessmentMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if v := i.AssessmentType; v != nil {
+		m.SetAssessmentType(*v)
+	}
+	if i.ClearQuestionnaireID {
+		m.ClearQuestionnaireID()
+	}
+	if v := i.QuestionnaireID; v != nil {
+		m.SetQuestionnaireID(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearUsers {
+		m.ClearUsers()
+	}
+	if v := i.AddUserIDs; len(v) > 0 {
+		m.AddUserIDs(v...)
+	}
+	if v := i.RemoveUserIDs; len(v) > 0 {
+		m.RemoveUserIDs(v...)
+	}
+	if i.ClearAssessmentResponses {
+		m.ClearAssessmentResponses()
+	}
+	if v := i.AddAssessmentResponseIDs; len(v) > 0 {
+		m.AddAssessmentResponseIDs(v...)
+	}
+	if v := i.RemoveAssessmentResponseIDs; len(v) > 0 {
+		m.RemoveAssessmentResponseIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateAssessmentInput on the AssessmentUpdate builder.
+func (c *AssessmentUpdate) SetInput(i UpdateAssessmentInput) *AssessmentUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateAssessmentInput on the AssessmentUpdateOne builder.
+func (c *AssessmentUpdateOne) SetInput(i UpdateAssessmentInput) *AssessmentUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateAssessmentResponseInput represents a mutation input for creating assessmentresponses.
+type CreateAssessmentResponseInput struct {
+	Tags         []string
+	Status       *enums.AssessmentResponseStatus
+	AssignedAt   *time.Time
+	StartedAt    *time.Time
+	CompletedAt  *time.Time
+	DueDate      *time.Time
+	AssessmentID string
+	UserID       string
+}
+
+// Mutate applies the CreateAssessmentResponseInput on the AssessmentResponseMutation builder.
+func (i *CreateAssessmentResponseInput) Mutate(m *AssessmentResponseMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.AssignedAt; v != nil {
+		m.SetAssignedAt(*v)
+	}
+	if v := i.StartedAt; v != nil {
+		m.SetStartedAt(*v)
+	}
+	if v := i.CompletedAt; v != nil {
+		m.SetCompletedAt(*v)
+	}
+	if v := i.DueDate; v != nil {
+		m.SetDueDate(*v)
+	}
+	m.SetAssessmentID(i.AssessmentID)
+	m.SetUserID(i.UserID)
+}
+
+// SetInput applies the change-set in the CreateAssessmentResponseInput on the AssessmentResponseCreate builder.
+func (c *AssessmentResponseCreate) SetInput(i CreateAssessmentResponseInput) *AssessmentResponseCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateAssessmentResponseInput represents a mutation input for updating assessmentresponses.
+type UpdateAssessmentResponseInput struct {
+	ClearTags        bool
+	Tags             []string
+	AppendTags       []string
+	Status           *enums.AssessmentResponseStatus
+	ClearAssignedAt  bool
+	AssignedAt       *time.Time
+	ClearStartedAt   bool
+	StartedAt        *time.Time
+	ClearCompletedAt bool
+	CompletedAt      *time.Time
+	ClearDueDate     bool
+	DueDate          *time.Time
+	AssessmentID     *string
+	UserID           *string
+}
+
+// Mutate applies the UpdateAssessmentResponseInput on the AssessmentResponseMutation builder.
+func (i *UpdateAssessmentResponseInput) Mutate(m *AssessmentResponseMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearAssignedAt {
+		m.ClearAssignedAt()
+	}
+	if v := i.AssignedAt; v != nil {
+		m.SetAssignedAt(*v)
+	}
+	if i.ClearStartedAt {
+		m.ClearStartedAt()
+	}
+	if v := i.StartedAt; v != nil {
+		m.SetStartedAt(*v)
+	}
+	if i.ClearCompletedAt {
+		m.ClearCompletedAt()
+	}
+	if v := i.CompletedAt; v != nil {
+		m.SetCompletedAt(*v)
+	}
+	if i.ClearDueDate {
+		m.ClearDueDate()
+	}
+	if v := i.DueDate; v != nil {
+		m.SetDueDate(*v)
+	}
+	if v := i.AssessmentID; v != nil {
+		m.SetAssessmentID(*v)
+	}
+	if v := i.UserID; v != nil {
+		m.SetUserID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateAssessmentResponseInput on the AssessmentResponseUpdate builder.
+func (c *AssessmentResponseUpdate) SetInput(i UpdateAssessmentResponseInput) *AssessmentResponseUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateAssessmentResponseInput on the AssessmentResponseUpdateOne builder.
+func (c *AssessmentResponseUpdateOne) SetInput(i UpdateAssessmentResponseInput) *AssessmentResponseUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateAssetInput represents a mutation input for creating assets.
 type CreateAssetInput struct {
 	Tags            []string
@@ -6360,6 +6598,7 @@ type CreateOrganizationInput struct {
 	TrustCenterIDs                  []string
 	AssetIDs                        []string
 	ScanIDs                         []string
+	AssessmentIDs                   []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -6563,6 +6802,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.ScanIDs; len(v) > 0 {
 		m.AddScanIDs(v...)
 	}
+	if v := i.AssessmentIDs; len(v) > 0 {
+		m.AddAssessmentIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -6756,6 +6998,9 @@ type UpdateOrganizationInput struct {
 	ClearScans                            bool
 	AddScanIDs                            []string
 	RemoveScanIDs                         []string
+	ClearAssessments                      bool
+	AddAssessmentIDs                      []string
+	RemoveAssessmentIDs                   []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -7308,6 +7553,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveScanIDs; len(v) > 0 {
 		m.RemoveScanIDs(v...)
+	}
+	if i.ClearAssessments {
+		m.ClearAssessments()
+	}
+	if v := i.AddAssessmentIDs; len(v) > 0 {
+		m.AddAssessmentIDs(v...)
+	}
+	if v := i.RemoveAssessmentIDs; len(v) > 0 {
+		m.RemoveAssessmentIDs(v...)
 	}
 }
 
@@ -10920,6 +11174,7 @@ type CreateUserInput struct {
 	AssignerTaskIDs        []string
 	AssigneeTaskIDs        []string
 	ProgramIDs             []string
+	AssessmentIDs          []string
 }
 
 // Mutate applies the CreateUserInput on the UserMutation builder.
@@ -10999,6 +11254,9 @@ func (i *CreateUserInput) Mutate(m *UserMutation) {
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
 	}
+	if v := i.AssessmentIDs; len(v) > 0 {
+		m.AddAssessmentIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateUserInput on the UserCreate builder.
@@ -11072,6 +11330,9 @@ type UpdateUserInput struct {
 	ClearPrograms                bool
 	AddProgramIDs                []string
 	RemoveProgramIDs             []string
+	ClearAssessments             bool
+	AddAssessmentIDs             []string
+	RemoveAssessmentIDs          []string
 }
 
 // Mutate applies the UpdateUserInput on the UserMutation builder.
@@ -11264,6 +11525,15 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	}
 	if v := i.RemoveProgramIDs; len(v) > 0 {
 		m.RemoveProgramIDs(v...)
+	}
+	if i.ClearAssessments {
+		m.ClearAssessments()
+	}
+	if v := i.AddAssessmentIDs; len(v) > 0 {
+		m.AddAssessmentIDs(v...)
+	}
+	if v := i.RemoveAssessmentIDs; len(v) > 0 {
+		m.RemoveAssessmentIDs(v...)
 	}
 }
 

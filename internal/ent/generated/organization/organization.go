@@ -175,6 +175,8 @@ const (
 	EdgeAssets = "assets"
 	// EdgeScans holds the string denoting the scans edge name in mutations.
 	EdgeScans = "scans"
+	// EdgeAssessments holds the string denoting the assessments edge name in mutations.
+	EdgeAssessments = "assessments"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -613,6 +615,13 @@ const (
 	ScansInverseTable = "scans"
 	// ScansColumn is the table column denoting the scans relation/edge.
 	ScansColumn = "owner_id"
+	// AssessmentsTable is the table that holds the assessments relation/edge.
+	AssessmentsTable = "assessments"
+	// AssessmentsInverseTable is the table name for the Assessment entity.
+	// It exists in this package in order to avoid circular dependency with the "assessment" package.
+	AssessmentsInverseTable = "assessments"
+	// AssessmentsColumn is the table column denoting the assessments relation/edge.
+	AssessmentsColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -1663,6 +1672,20 @@ func ByScans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByAssessmentsCount orders the results by assessments count.
+func ByAssessmentsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAssessmentsStep(), opts...)
+	}
+}
+
+// ByAssessments orders the results by assessments terms.
+func ByAssessments(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssessmentsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -2122,6 +2145,13 @@ func newScansStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ScansInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ScansTable, ScansColumn),
+	)
+}
+func newAssessmentsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssessmentsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AssessmentsTable, AssessmentsColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

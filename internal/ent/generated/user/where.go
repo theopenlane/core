@@ -1857,6 +1857,35 @@ func HasProgramsWith(preds ...predicate.Program) predicate.User {
 	})
 }
 
+// HasAssessments applies the HasEdge predicate on the "assessments" edge.
+func HasAssessments() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, AssessmentsTable, AssessmentsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.AssessmentUsers
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAssessmentsWith applies the HasEdge predicate on the "assessments" edge with a given conditions (other predicates).
+func HasAssessmentsWith(preds ...predicate.Assessment) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newAssessmentsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.AssessmentUsers
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasGroupMemberships applies the HasEdge predicate on the "group_memberships" edge.
 func HasGroupMemberships() predicate.User {
 	return predicate.User(func(s *sql.Selector) {

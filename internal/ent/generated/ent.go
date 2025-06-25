@@ -15,6 +15,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/internal/ent/generated/assessmenthistory"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponsehistory"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/assethistory"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
@@ -177,6 +181,10 @@ func checkColumn(table, column string) error {
 			apitoken.Table:                     apitoken.ValidColumn,
 			actionplan.Table:                   actionplan.ValidColumn,
 			actionplanhistory.Table:            actionplanhistory.ValidColumn,
+			assessment.Table:                   assessment.ValidColumn,
+			assessmenthistory.Table:            assessmenthistory.ValidColumn,
+			assessmentresponse.Table:           assessmentresponse.ValidColumn,
+			assessmentresponsehistory.Table:    assessmentresponsehistory.ValidColumn,
 			asset.Table:                        asset.ValidColumn,
 			assethistory.Table:                 assethistory.ValidColumn,
 			contact.Table:                      contact.ValidColumn,

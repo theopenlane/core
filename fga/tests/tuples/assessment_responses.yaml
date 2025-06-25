@@ -1,0 +1,77 @@
+############################################
+# Tuples for testing the FGA implementation
+############################################
+
+# organization parent relation
+- user: organization:openlane
+  relation: parent
+  object: assessment_response:response-1
+
+- user: organization:openlane
+  relation: parent
+  object: assessment_response:response-2
+
+- user: organization:openlane
+  relation: parent
+  object: assessment_response:response-3
+
+# response owner (user who filled out the assessment)
+# this user can view and edit their own response
+- user: user:ulid-response-owner-1
+  relation: response_owner
+  object: assessment_response:response-1
+
+- user: user:ulid-response-owner-2
+  relation: response_owner
+  object: assessment_response:response-2
+
+- user: user:ulid-response-owner-3
+  relation: response_owner
+  object: assessment_response:response-3
+
+# organization admin (can view all responses but not edit them)
+- user: user:ulid-org-admin
+  relation: admin
+  object: organization:openlane
+
+# organization owner (can view all responses but not edit them)
+- user: user:ulid-org-owner
+  relation: owner
+  object: organization:openlane
+
+# organization member (no special access to responses)
+- user: user:ulid-org-member
+  relation: member
+  object: organization:openlane
+
+# additional test user without any specific permissions
+- user: user:ulid-no-access-user
+  relation: member
+  object: organization:openlane
+
+# direct access users for edge case testing
+- user: user:ulid-direct-viewer
+  relation: can_view
+  object: assessment_response:response-1
+
+# audit log viewer access on organization for inheritance
+- user: user:ulid-response-owner-1
+  relation: audit_log_viewer
+  object: organization:openlane
+
+- user: user:ulid-org-admin
+  relation: audit_log_viewer
+  object: organization:openlane
+
+- user: user:ulid-org-owner
+  relation: audit_log_viewer
+  object: organization:openlane
+
+- user: user:ulid-direct-viewer
+  relation: audit_log_viewer
+  object: organization:openlane
+
+# test blocked user scenario 
+- user: user:ulid-blocked-user
+  relation: member
+  object: organization:openlane 

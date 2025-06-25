@@ -112,6 +112,8 @@ type organization
     define evidence_creator: [group#member]
     define can_create_evidence: can_edit or evidence_creator
 
+    define can_create_assessment: can_edit
+
 
     # additional relations
     define user_in_context: [user]
@@ -435,6 +437,36 @@ type evidence
     define viewer: [group#member] or editor
     define editor: [group#member, organization#owner]
     define blocked: [user, group#member]
+# assessments are associated with an organization but do not inherit access from the organization
+# the assessment creator will be made the admin of the assessment and all other access will be assigned directly to users
+# assessments are only meant to be filled by users, so no service or group relations are included
+type assessment
+  relations
+    define can_view: [user] or can_edit or (viewer but not blocked)
+    define can_edit: [user] or owner or delegate or (editor but not blocked)
+    define can_delete: [user] or owner or (editor but not blocked)
+    define parent: [organization]
+    # allow users to be assigned edit/view permissions directly
+    define editor: [user] or admin from parent or owner from parent
+    define viewer: [user] or editor
+    # allow users to be blocked from view + edit access
+    define blocked: [user]
+    # owner is the user that is responsible for the assessment, they will have full access to the assessment
+    define owner: [user]
+    # delegate is a user that is given temporary access to the assessment, they will have edit but not delete access
+    define delegate: [user]
+# assessment_response tracks individual user responses to assessments with restricted access
+# only the responding user can view/edit their own response, plus org admins/owners for oversight
+type assessment_response
+  relations
+    define can_view: [user] or response_owner or admin_viewer
+    define can_edit: [user] or response_owner
+    define can_delete: admin_viewer
+    define parent: [organization]
+    # the user who filled out the assessment response - only they can view/edit their own response
+    define response_owner: [user]
+    # org admins and owners can view all responses for oversight/management
+    define admin_viewer: admin from parent or owner from parent
 type standard
   relations
     #  user:* is used for system-owned public standards that are available to all users

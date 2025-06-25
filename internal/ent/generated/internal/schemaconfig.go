@@ -10,6 +10,11 @@ type SchemaConfig struct {
 	APIToken                           string // APIToken table.
 	ActionPlan                         string // ActionPlan table.
 	ActionPlanHistory                  string // ActionPlanHistory table.
+	Assessment                         string // Assessment table.
+	AssessmentUsers                    string // Assessment-users->User table.
+	AssessmentHistory                  string // AssessmentHistory table.
+	AssessmentResponse                 string // AssessmentResponse table.
+	AssessmentResponseHistory          string // AssessmentResponseHistory table.
 	Asset                              string // Asset table.
 	AssetHistory                       string // AssetHistory table.
 	Contact                            string // Contact table.

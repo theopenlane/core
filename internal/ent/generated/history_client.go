@@ -11,6 +11,12 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*ActionPlanMutation]() {
 		c.ActionPlan.Use(hook)
 	}
+	for _, hook := range history.Hooks[*AssessmentMutation]() {
+		c.Assessment.Use(hook)
+	}
+	for _, hook := range history.Hooks[*AssessmentResponseMutation]() {
+		c.AssessmentResponse.Use(hook)
+	}
 	for _, hook := range history.Hooks[*AssetMutation]() {
 		c.Asset.Use(hook)
 	}
