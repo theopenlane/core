@@ -32,6 +32,13 @@ type featureReport struct {
 }
 
 func main() {
+	if err := catalogApp().Run(os.Args); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+}
+
+func catalogApp() *cli.App {
 	app := &cli.App{
 		Name:  "catalog",
 		Usage: "reconcile catalog with Stripe",
@@ -125,10 +132,7 @@ func main() {
 		},
 	}
 
-	if err := app.Run(os.Args); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
-	}
+	return app
 }
 
 // buildProductMap fetches all existing Stripe products and indexes them by name.

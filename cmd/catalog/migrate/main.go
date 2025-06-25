@@ -1,15 +1,33 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"io"
 	"os"
 
+	"github.com/stripe/stripe-go/v82"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/utils/cli/tables"
 	"github.com/urfave/cli/v2"
 )
 
-func main() {
+// stripeClient defines the methods used by this CLI. It matches
+// entitlements.StripeClient so tests can substitute a fake implementation.
+type stripeClient interface {
+	TagPriceMigration(ctx context.Context, fromPriceID, toPriceID string) error
+	ListSubscriptions(ctx context.Context, customerID string) ([]*stripe.Subscription, error)
+	MigrateSubscriptionPrice(ctx context.Context, sub *stripe.Subscription, oldPriceID, newPriceID string) (*stripe.Subscription, error)
+}
+
+var (
+	newClient = func(opts ...entitlements.StripeOptions) (stripeClient, error) {
+		return entitlements.NewStripeClient(opts...)
+	}
+	outWriter io.Writer = os.Stdout
+)
+
+func migrationApp() *cli.App {
 	app := &cli.App{
 		Name:  "pricemigrate",
 		Usage: "tag and optionally migrate subscriptions to a new price",
@@ -31,7 +49,7 @@ func main() {
 			skip := c.Bool("no-migrate")
 			dryRun := c.Bool("dry-run")
 
-			sc, err := entitlements.NewStripeClient(entitlements.WithAPIKey(apiKey))
+			sc, err := newClient(entitlements.WithAPIKey(apiKey))
 			if err != nil {
 				return fmt.Errorf("stripe client: %w", err)
 			}
@@ -46,7 +64,7 @@ func main() {
 				return nil
 			}
 
-			writer := tables.NewTableWriter(os.Stdout, "Customer", "Subscription", "From", "To")
+			writer := tables.NewTableWriter(outWriter, "Customer", "Subscription", "From", "To")
 
 			for _, cid := range customers {
 				subs, err := sc.ListSubscriptions(ctx, cid)
@@ -90,7 +108,11 @@ func main() {
 		},
 	}
 
-	if err := app.Run(os.Args); err != nil {
+	return app
+}
+
+func main() {
+	if err := migrationApp().Run(os.Args); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
