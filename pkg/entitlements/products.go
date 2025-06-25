@@ -12,26 +12,12 @@ func (sc *StripeClient) GetProductByID(ctx context.Context, id string) (*stripe.
 }
 
 // CreateProduct creates a new product in Stripe
-func (sc *StripeClient) CreateProduct(ctx context.Context, id, name, description string, metadata map[string]string) (*stripe.Product, error) {
+func (sc *StripeClient) CreateProduct(ctx context.Context, name, description string) (*stripe.Product, error) {
 	params := &stripe.ProductCreateParams{
-		ID:          stripe.String(id),
 		Name:        stripe.String(name),
 		Description: stripe.String(description),
 	}
 
-	if description != "" {
-		params.Description = stripe.String(description)
-	}
-
-	if len(metadata) > 0 {
-		params.Metadata = metadata
-	}
-
-	return sc.Client.V1Products.Create(ctx, params)
-}
-
-// CreateProductWithParams creates a product in Stripe with the given parameters
-func (sc *StripeClient) CreateProductWithParams(ctx context.Context, params *stripe.ProductCreateParams) (*stripe.Product, error) {
 	return sc.Client.V1Products.Create(ctx, params)
 }
 
@@ -67,11 +53,6 @@ func (sc *StripeClient) UpdateProduct(ctx context.Context, productID, name, desc
 		Description: stripe.String(description),
 	}
 
-	return sc.Client.V1Products.Update(ctx, productID, params)
-}
-
-// UpdateProductWithParams updates a product in Stripe with the given parameters
-func (sc *StripeClient) UpdateProductWithParams(ctx context.Context, productID string, params *stripe.ProductUpdateParams) (*stripe.Product, error) {
 	return sc.Client.V1Products.Update(ctx, productID, params)
 }
 

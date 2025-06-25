@@ -29,10 +29,6 @@ type system
   relations
     define system_admin: [user, service]
 
-type feature
-  relations
-    define enabled: [organization]
-
 # organization is the highest object access
 # objects can inherit access from the organization
 # or define their own specific access

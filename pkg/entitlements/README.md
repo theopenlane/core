@@ -56,15 +56,3 @@ https://stripe.com/docs/billing/subscriptions/overview#subscription-status
 
 - after exhausting all payment retry attempts, the subscription will become canceled or unpaid
 - subscription moves into cancelled if we set cancel_at_period_end: true and the period end passes
-
-## Redis cache
-
-The CheckFeatureTuple function is responsible for determining whether a specific feature tuple exists, using a two-step approach: it first checks a Redis cache, and if the tuple is not found there, it queries an external FGA (Fine-Grained Authorization) system. This method is part of the TupleChecker struct, which holds references to a Redis client, an FGA client, and a cache time-to-live (TTL) duration.
-
-The function begins by validating that both the Redis client and the FGA client are properly configured. If either is missing, it returns an error immediately, preventing further execution. Next, it generates a cache key based on the tuple's contents using the cacheKey method, which ensures that each tuple maps to a unique Redis key.
-
-It then attempts to retrieve the tuple's existence status from Redis. If the key is found (err == nil), it returns true if the cached value is "1", or false otherwise. If the error is anything other than a cache miss (redis.Nil), it returns the error, as this indicates a problem with the Redis operation.
-
-If the tuple is not present in the cache, the function queries the FGA system by calling CheckTuple. If this check fails, it returns the error. Otherwise, it caches the result in Redis for future requests, storing "1" for a positive result and "0" for a negative one, using the configured TTL. Finally, it returns the result of the FGA check.
-
-This approach optimizes performance by reducing the number of expensive FGA checks, relying on Redis as a fast, in-memory cache. It also ensures that the cache is kept up-to-date with the latest results, improving efficiency for repeated queries. One subtlety is that the function does not handle errors from the Redis Set operation, which could be a point of improvement if cache consistency is critical.

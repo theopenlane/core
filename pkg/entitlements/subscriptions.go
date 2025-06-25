@@ -137,8 +137,13 @@ func (sc *StripeClient) CreateTrialSubscription(ctx context.Context, cust *strip
 		subsMetadata["organization_id"] = cust.ID
 	}
 
-	baseParams := &stripe.SubscriptionCreateParams{
-		Customer:        stripe.String(cust.ID),
+	params := &stripe.SubscriptionCreateParams{
+		Customer: stripe.String(cust.ID),
+		Items: []*stripe.SubscriptionCreateItemParams{
+			{
+				Price: &sc.Config.TrialSubscriptionPriceID,
+			},
+		},
 		TrialPeriodDays: stripe.Int64(trialdays),
 		PaymentSettings: &stripe.SubscriptionCreatePaymentSettingsParams{
 			SaveDefaultPaymentMethod: stripe.String(string(stripe.SubscriptionPaymentSettingsSaveDefaultPaymentMethodOnSubscription)),
@@ -152,9 +157,7 @@ func (sc *StripeClient) CreateTrialSubscription(ctx context.Context, cust *strip
 		},
 	}
 
-	item := &stripe.SubscriptionCreateItemParams{Price: &sc.Config.TrialSubscriptionPriceID}
-
-	subs, err := sc.CreateSubscriptionWithOptions(ctx, baseParams, WithSubscriptionItems(item))
+	subs, err := sc.CreateSubscription(ctx, params)
 	if err != nil {
 		log.Err(err).Msg("Failed to create trial subscription")
 		return nil, err
@@ -169,14 +172,17 @@ func (sc *StripeClient) CreateTrialSubscription(ctx context.Context, cust *strip
 
 // CreatePersonalOrgFreeTierSubs creates a subscription with the configured $0 price used for personal organizations only
 func (sc *StripeClient) CreatePersonalOrgFreeTierSubs(ctx context.Context, customerID string) (*Subscription, error) {
-	baseParams := &stripe.SubscriptionCreateParams{
-		Customer:         stripe.String(customerID),
+	params := &stripe.SubscriptionCreateParams{
+		Customer: stripe.String(customerID),
+		Items: []*stripe.SubscriptionCreateItemParams{
+			{
+				Price: &sc.Config.PersonalOrgSubscriptionPriceID,
+			},
+		},
 		CollectionMethod: stripe.String(string(stripe.SubscriptionCollectionMethodChargeAutomatically)),
 	}
 
-	item := &stripe.SubscriptionCreateItemParams{Price: &sc.Config.PersonalOrgSubscriptionPriceID}
-
-	subs, err := sc.CreateSubscriptionWithOptions(ctx, baseParams, WithSubscriptionItems(item))
+	subs, err := sc.CreateSubscription(ctx, params)
 	if err != nil {
 		log.Err(err).Msg("Failed to create trial subscription")
 		return nil, err

@@ -36,14 +36,13 @@ const (
 )
 
 // supportedEventTypes is a map of supported stripe event types that the webhook receiver can handle
-var supportedEventTypes = func() map[stripe.EventType]bool {
-	m := make(map[stripe.EventType]bool)
-	for _, evt := range entitlements.SupportedEventTypes {
-		m[evt] = true
-	}
-
-	return m
-}()
+var supportedEventTypes = map[stripe.EventType]bool{
+	stripe.EventTypeCustomerSubscriptionUpdated:      true,
+	stripe.EventTypeCustomerSubscriptionDeleted:      true,
+	stripe.EventTypeCustomerSubscriptionPaused:       true,
+	stripe.EventTypeCustomerSubscriptionTrialWillEnd: true,
+	stripe.EventTypePaymentMethodAttached:            true,
+}
 
 var (
 	webhookReceivedCounter = prometheus.NewCounterVec(
