@@ -1626,6 +1626,16 @@ func ComplianceWebhookTokenHasSuffix(v string) predicate.OrganizationSettingHist
 	return predicate.OrganizationSettingHistory(sql.FieldHasSuffix(FieldComplianceWebhookToken, v))
 }
 
+// ComplianceWebhookTokenIsNil applies the IsNil predicate on the "compliance_webhook_token" field.
+func ComplianceWebhookTokenIsNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIsNull(FieldComplianceWebhookToken))
+}
+
+// ComplianceWebhookTokenNotNil applies the NotNil predicate on the "compliance_webhook_token" field.
+func ComplianceWebhookTokenNotNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldComplianceWebhookToken))
+}
+
 // ComplianceWebhookTokenEqualFold applies the EqualFold predicate on the "compliance_webhook_token" field.
 func ComplianceWebhookTokenEqualFold(v string) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEqualFold(FieldComplianceWebhookToken, v))

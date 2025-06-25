@@ -50477,6 +50477,8 @@ type OrganizationSettingWhereInput struct {
 	ComplianceWebhookTokenContains     *string  `json:"complianceWebhookTokenContains,omitempty"`
 	ComplianceWebhookTokenHasPrefix    *string  `json:"complianceWebhookTokenHasPrefix,omitempty"`
 	ComplianceWebhookTokenHasSuffix    *string  `json:"complianceWebhookTokenHasSuffix,omitempty"`
+	ComplianceWebhookTokenIsNil        bool     `json:"complianceWebhookTokenIsNil,omitempty"`
+	ComplianceWebhookTokenNotNil       bool     `json:"complianceWebhookTokenNotNil,omitempty"`
 	ComplianceWebhookTokenEqualFold    *string  `json:"complianceWebhookTokenEqualFold,omitempty"`
 	ComplianceWebhookTokenContainsFold *string  `json:"complianceWebhookTokenContainsFold,omitempty"`
 
@@ -51271,6 +51273,12 @@ func (i *OrganizationSettingWhereInput) P() (predicate.OrganizationSetting, erro
 	if i.ComplianceWebhookTokenHasSuffix != nil {
 		predicates = append(predicates, organizationsetting.ComplianceWebhookTokenHasSuffix(*i.ComplianceWebhookTokenHasSuffix))
 	}
+	if i.ComplianceWebhookTokenIsNil {
+		predicates = append(predicates, organizationsetting.ComplianceWebhookTokenIsNil())
+	}
+	if i.ComplianceWebhookTokenNotNil {
+		predicates = append(predicates, organizationsetting.ComplianceWebhookTokenNotNil())
+	}
 	if i.ComplianceWebhookTokenEqualFold != nil {
 		predicates = append(predicates, organizationsetting.ComplianceWebhookTokenEqualFold(*i.ComplianceWebhookTokenEqualFold))
 	}
@@ -51640,6 +51648,8 @@ type OrganizationSettingHistoryWhereInput struct {
 	ComplianceWebhookTokenContains     *string  `json:"complianceWebhookTokenContains,omitempty"`
 	ComplianceWebhookTokenHasPrefix    *string  `json:"complianceWebhookTokenHasPrefix,omitempty"`
 	ComplianceWebhookTokenHasSuffix    *string  `json:"complianceWebhookTokenHasSuffix,omitempty"`
+	ComplianceWebhookTokenIsNil        bool     `json:"complianceWebhookTokenIsNil,omitempty"`
+	ComplianceWebhookTokenNotNil       bool     `json:"complianceWebhookTokenNotNil,omitempty"`
 	ComplianceWebhookTokenEqualFold    *string  `json:"complianceWebhookTokenEqualFold,omitempty"`
 	ComplianceWebhookTokenContainsFold *string  `json:"complianceWebhookTokenContainsFold,omitempty"`
 }
@@ -52506,6 +52516,12 @@ func (i *OrganizationSettingHistoryWhereInput) P() (predicate.OrganizationSettin
 	}
 	if i.ComplianceWebhookTokenHasSuffix != nil {
 		predicates = append(predicates, organizationsettinghistory.ComplianceWebhookTokenHasSuffix(*i.ComplianceWebhookTokenHasSuffix))
+	}
+	if i.ComplianceWebhookTokenIsNil {
+		predicates = append(predicates, organizationsettinghistory.ComplianceWebhookTokenIsNil())
+	}
+	if i.ComplianceWebhookTokenNotNil {
+		predicates = append(predicates, organizationsettinghistory.ComplianceWebhookTokenNotNil())
 	}
 	if i.ComplianceWebhookTokenEqualFold != nil {
 		predicates = append(predicates, organizationsettinghistory.ComplianceWebhookTokenEqualFold(*i.ComplianceWebhookTokenEqualFold))

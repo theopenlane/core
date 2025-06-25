@@ -503,9 +503,6 @@ func (oshc *OrganizationSettingHistoryCreate) check() error {
 	if _, ok := oshc.mutation.IdentityProviderLoginEnforced(); !ok {
 		return &ValidationError{Name: "identity_provider_login_enforced", err: errors.New(`generated: missing required field "OrganizationSettingHistory.identity_provider_login_enforced"`)}
 	}
-	if _, ok := oshc.mutation.ComplianceWebhookToken(); !ok {
-		return &ValidationError{Name: "compliance_webhook_token", err: errors.New(`generated: missing required field "OrganizationSettingHistory.compliance_webhook_token"`)}
-	}
 	return nil
 }
 
@@ -652,7 +649,7 @@ func (oshc *OrganizationSettingHistoryCreate) createSpec() (*OrganizationSetting
 	}
 	if value, ok := oshc.mutation.ComplianceWebhookToken(); ok {
 		_spec.SetField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString, value)
-		_node.ComplianceWebhookToken = &value
+		_node.ComplianceWebhookToken = value
 	}
 	return _node, _spec
 }
