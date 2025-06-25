@@ -16,26 +16,23 @@ func GetUpdatedFields(props map[string]any, orgCustomer *OrganizationCustomer) (
 
 	// if its in the properties, it has been updated
 	// use the current value from orgCustomer
-	_, exists := props["billing_email"]
-	if exists {
-		params.Email = &orgCustomer.Email
+	if _, exists := props["billing_email"]; exists {
+		WithUpdateCustomerEmail(orgCustomer.Email)(params)
 	}
 
-	_, exists = props["billing_phone"]
-	if exists {
-		params.Phone = &orgCustomer.Phone
+	if _, exists := props["billing_phone"]; exists {
+		WithUpdateCustomerPhone(orgCustomer.Phone)(params)
 	}
 
-	_, exists = props["billing_address"]
-	if exists {
-		params.Address = &stripe.AddressParams{
+	if _, exists := props["billing_address"]; exists {
+		WithUpdateCustomerAddress(&stripe.AddressParams{
 			Line1:      orgCustomer.Line1,
 			Line2:      orgCustomer.Line2,
 			City:       orgCustomer.City,
 			State:      orgCustomer.State,
 			PostalCode: orgCustomer.PostalCode,
 			Country:    orgCustomer.Country,
-		}
+		})(params)
 	}
 
 	return params

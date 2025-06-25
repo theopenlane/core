@@ -26,6 +26,20 @@ func WithCustomerMetadata(metadata map[string]string) CustomerCreateOption {
 	}
 }
 
+// WithCustomerPhone sets the phone for the customer
+func WithCustomerPhone(phone string) CustomerCreateOption {
+	return func(params *stripe.CustomerCreateParams) {
+		params.Phone = stripe.String(phone)
+	}
+}
+
+// WithCustomerAddress sets the address for the customer
+func WithCustomerAddress(addr *stripe.AddressParams) CustomerCreateOption {
+	return func(params *stripe.CustomerCreateParams) {
+		params.Address = addr
+	}
+}
+
 // CreateCustomerWithOptions creates a customer with functional options
 func (sc *StripeClient) CreateCustomerWithOptions(baseParams *stripe.CustomerCreateParams, opts ...CustomerCreateOption) *stripe.CustomerCreateParams {
 	params := baseParams
@@ -51,6 +65,20 @@ func WithUpdateCustomerEmail(email string) CustomerUpdateOption {
 func WithUpdateCustomerMetadata(metadata map[string]string) CustomerUpdateOption {
 	return func(params *stripe.CustomerUpdateParams) {
 		params.Metadata = metadata
+	}
+}
+
+// WithUpdateCustomerPhone sets the phone for the customer update
+func WithUpdateCustomerPhone(phone string) CustomerUpdateOption {
+	return func(params *stripe.CustomerUpdateParams) {
+		params.Phone = stripe.String(phone)
+	}
+}
+
+// WithUpdateCustomerAddress sets the address for the customer update
+func WithUpdateCustomerAddress(addr *stripe.AddressParams) CustomerUpdateOption {
+	return func(params *stripe.CustomerUpdateParams) {
+		params.Address = addr
 	}
 }
 

@@ -514,7 +514,38 @@ func TestCreateWebhookEndpoint(t *testing.T) {
 		Client: mockStripeClient,
 	}
 
-	webhook, err := service.CreateWebhookEndpoint(context.Background(), "https://example.com/webhook", []string{"invoice.paid"})
+	webhook, err := service.CreateWebhookEndpoint(context.Background(), "https://example.com/webhook", entitlements.SupportedEventTypeStrings())
+	c.NoError(err)
+	c.Equal(expectedWebhook, webhook)
+}
+
+func TestCreateWebhookEndpointDefaultEvents(t *testing.T) {
+	c := require.New(t)
+
+	expectedWebhook := &stripe.WebhookEndpoint{
+		ID:     "we_123",
+		Secret: "whsec_test",
+	}
+
+	stripeBackendMock := new(mocks.MockStripeBackend)
+	stripeTestBackends := &stripe.Backends{
+		API:     stripeBackendMock,
+		Connect: stripeBackendMock,
+		Uploads: stripeBackendMock,
+	}
+
+	stripeBackendMock.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Run(func(args mock.Arguments) {
+		result := args.Get(4).(*stripe.WebhookEndpoint)
+		*result = *expectedWebhook
+	}).Return(nil)
+
+	mockStripeClient := stripe.NewClient("sk_test", stripe.WithBackends(stripeTestBackends))
+
+	service := entitlements.StripeClient{
+		Client: mockStripeClient,
+	}
+
+	webhook, err := service.CreateWebhookEndpoint(context.Background(), "https://example.com/webhook", nil)
 	c.NoError(err)
 	c.Equal(expectedWebhook, webhook)
 }
