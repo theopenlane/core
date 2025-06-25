@@ -19,6 +19,8 @@ type Config struct {
 	StripeBillingPortalSuccessURL string `json:"stripeBillingPortalSuccessURL" koanf:"stripeBillingPortalSuccessURL" default:"https://console.openlane.com/billing"`
 	// StripeCancellationReturnURL is the URL for the stripe cancellation return
 	StripeCancellationReturnURL string `json:"stripeCancellationReturnURL" koanf:"stripeCancellationReturnURL" default:"https://console.theopenlane.io/organization-settings/billing/subscription_canceled"`
+	// StripeWebhookEvents is the list of events to register when creating a webhook endpoint
+	StripeWebhookEvents []string `json:"stripeWebhookEvents" koanf:"stripeWebhookEvents"`
 }
 
 type ConfigOpts func(*Config)
@@ -83,6 +85,13 @@ func WithPersonalOrgSubscriptionPriceID(personalOrgSubscriptionPriceID string) C
 func WithStripeCancellationReturnURL(stripeCancellationReturnURL string) ConfigOpts {
 	return func(c *Config) {
 		c.StripeCancellationReturnURL = stripeCancellationReturnURL
+	}
+}
+
+// WithStripeWebhookEvents sets the stripe webhook events
+func WithStripeWebhookEvents(events []string) ConfigOpts {
+	return func(c *Config) {
+		c.StripeWebhookEvents = events
 	}
 }
 

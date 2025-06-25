@@ -91,3 +91,7 @@ If you didn't have price ID's already inside, you should see something like this
 +        price_id: price_1RdciXR7q8Ny5Jw0hfaLuSef
 +    audience: public
 ```
+
+## Creating webhook endpoints
+
+Use `CreateWebhookEndpoint` to programmatically register a webhook URL with Stripe. Provide the URL and the events you want delivered. The call returns the created endpoint including the signing secret that should be used to verify incoming requests.

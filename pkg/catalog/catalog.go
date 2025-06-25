@@ -6,6 +6,8 @@ import (
 	"io/fs"
 	"maps"
 	"os"
+	"regexp"
+	"strings"
 
 	"github.com/goccy/go-yaml"
 
@@ -189,6 +191,16 @@ func (c *Catalog) ValidatePrices(ctx context.Context, sc *entitlements.StripeCli
 	return check(c.Addons)
 }
 
+// makeLookupKey converts a feature or product name into a lookup key.
+// It lowercases the string, replaces spaces with underscores, and
+// removes characters that are not letters, digits or underscores.
+func makeLookupKey(name string) string {
+	key := strings.ToLower(name)
+	key = strings.ReplaceAll(key, " ", "_")
+	re := regexp.MustCompile(`[^a-z0-9_]+`)
+	return re.ReplaceAllString(key, "")
+}
+
 // EnsurePrices verifies prices exist in Stripe and creates them when missing.
 // New products are created using the feature display name and description.
 // Matching is performed by unit amount, interval, nickname, lookup key and
@@ -217,6 +229,25 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 				return f, ErrFailedToCreateProduct
 			}
 			prodMap[f.DisplayName] = prod
+
+			lookup := makeLookupKey(f.DisplayName)
+			feature, ferr := sc.CreateProductFeatureWithOptions(ctx,
+				&stripe.EntitlementsFeatureCreateParams{},
+				entitlements.WithFeatureName(f.DisplayName),
+				entitlements.WithFeatureLookupKey(lookup),
+			)
+
+			if ferr == nil {
+				_, ferr = sc.AttachFeatureToProductWithOptions(ctx,
+					&stripe.ProductFeatureCreateParams{},
+					entitlements.WithProductFeatureProductID(prod.ID),
+					entitlements.WithProductFeatureEntitlementFeatureID(feature.ID),
+				)
+			}
+
+			if ferr != nil {
+				return f, ferr
+			}
 		}
 
 		for i, p := range f.Billing.Prices {

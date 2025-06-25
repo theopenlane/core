@@ -66,6 +66,7 @@ func TestNewConfig(t *testing.T) {
 				entitlements.WithStripeWebhookURL("https://custom.webhook.url"),
 				entitlements.WithStripeBillingPortalSuccessURL("https://custom.billing.success.url"),
 				entitlements.WithStripeCancellationReturnURL("https://custom.cancellation.return.url"),
+				entitlements.WithStripeWebhookEvents([]string{"invoice.paid"}),
 			},
 			want: &entitlements.Config{
 				Enabled:                        true,
@@ -77,6 +78,7 @@ func TestNewConfig(t *testing.T) {
 				StripeWebhookURL:               "https://custom.webhook.url",
 				StripeBillingPortalSuccessURL:  "https://custom.billing.success.url",
 				StripeCancellationReturnURL:    "https://custom.cancellation.return.url",
+				StripeWebhookEvents:            []string{"invoice.paid"},
 			},
 		},
 	}
@@ -484,4 +486,35 @@ func TestUpdateSubscriptionWithOptions_AddNewItemsIfNotExist(t *testing.T) {
 	updatedSub, err := service.UpdateSubscriptionWithOptions(context.Background(), "sub_update", updateParams, entitlements.WithUpdateSubscriptionItems(updateParams.Items...))
 	c.NoError(err)
 	c.Equal(expectedSubscription, updatedSub)
+}
+
+func TestCreateWebhookEndpoint(t *testing.T) {
+	c := require.New(t)
+
+	expectedWebhook := &stripe.WebhookEndpoint{
+		ID:     "we_123",
+		Secret: "whsec_test",
+	}
+
+	stripeBackendMock := new(mocks.MockStripeBackend)
+	stripeTestBackends := &stripe.Backends{
+		API:     stripeBackendMock,
+		Connect: stripeBackendMock,
+		Uploads: stripeBackendMock,
+	}
+
+	stripeBackendMock.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Run(func(args mock.Arguments) {
+		result := args.Get(4).(*stripe.WebhookEndpoint)
+		*result = *expectedWebhook
+	}).Return(nil)
+
+	mockStripeClient := stripe.NewClient("sk_test", stripe.WithBackends(stripeTestBackends))
+
+	service := entitlements.StripeClient{
+		Client: mockStripeClient,
+	}
+
+	webhook, err := service.CreateWebhookEndpoint(context.Background(), "https://example.com/webhook", []string{"invoice.paid"})
+	c.NoError(err)
+	c.Equal(expectedWebhook, webhook)
 }

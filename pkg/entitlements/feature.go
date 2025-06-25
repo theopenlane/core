@@ -49,20 +49,13 @@ func (sc *StripeClient) UpdateProductFeatureWithOptions(ctx context.Context, fea
 	return sc.Client.V1EntitlementsFeatures.Update(ctx, featureID, params)
 }
 
-// TODO: Implement AttachFeatureToProductWithOptions when/if the relevant types are available.
+// AttachFeatureToProductWithOptions attaches an existing entitlements feature to a product using functional options.
+func (sc *StripeClient) AttachFeatureToProductWithOptions(ctx context.Context, baseParams *stripe.ProductFeatureCreateParams, opts ...ProductFeatureCreateOption) (*stripe.ProductFeature, error) {
+	params := baseParams
 
-//import (
-//	"github.com/stripe/stripe-go/v82"
-//)
+	for _, opt := range opts {
+		opt(params)
+	}
 
-//func (sc *StripeClient) CreateProductFeature(params *stripe.EntitlementsFeatureParams) (*stripe.EntitlementsFeature, error) {
-//	params := &stripe.EntitlementsFeatureParams{
-//		Name:      stripe.String("My super awesome feature"),
-//		LookupKey: stripe.String("my-super-awesome-feature"),
-//	}
-//	result, err := sc.CreateProductFeature(params)
-//
-//	return nil, nil
-//}
-
-// https://docs.stripe.com/api/product-feature/attach
+	return sc.Client.V1ProductFeatures.Create(ctx, params)
+}
