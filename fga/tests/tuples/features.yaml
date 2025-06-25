@@ -1,0 +1,9 @@
+############################################
+# Tuples for feature entitlements
+############################################
+- user: organization:openlane
+  relation: enabled
+  object: feature:feature1
+- user: organization:openlane
+  relation: enabled
+  object: feature:feature2

@@ -66,6 +66,7 @@ func TestNewConfig(t *testing.T) {
 				entitlements.WithStripeWebhookURL("https://custom.webhook.url"),
 				entitlements.WithStripeBillingPortalSuccessURL("https://custom.billing.success.url"),
 				entitlements.WithStripeCancellationReturnURL("https://custom.cancellation.return.url"),
+				entitlements.WithStripeWebhookEvents([]string{"invoice.paid"}),
 			},
 			want: &entitlements.Config{
 				Enabled:                        true,
@@ -77,6 +78,7 @@ func TestNewConfig(t *testing.T) {
 				StripeWebhookURL:               "https://custom.webhook.url",
 				StripeBillingPortalSuccessURL:  "https://custom.billing.success.url",
 				StripeCancellationReturnURL:    "https://custom.cancellation.return.url",
+				StripeWebhookEvents:            []string{"invoice.paid"},
 			},
 		},
 	}
@@ -404,4 +406,146 @@ func TestMapStripeSubscription(t *testing.T) {
 
 	subscription := service.MapStripeSubscription(context.Background(), stripeSubscription)
 	c.Equal(expectedSubscription, subscription)
+}
+
+func TestCreateSubscriptionWithOptions_MultipleItems(t *testing.T) {
+	c := require.New(t)
+
+	expectedSubscription := &stripe.Subscription{
+		ID: "sub_multi",
+	}
+
+	subscriptionParams := &stripe.SubscriptionCreateParams{
+		Customer: stripe.String("cus_multi"),
+	}
+	items := []*stripe.SubscriptionCreateItemParams{
+		{Price: stripe.String("price_1")},
+		{Price: stripe.String("price_2")},
+	}
+
+	stripeBackendMock := new(mocks.MockStripeBackend)
+	stripeTestBackends := &stripe.Backends{
+		API:     stripeBackendMock,
+		Connect: stripeBackendMock,
+		Uploads: stripeBackendMock,
+	}
+
+	stripeBackendMock.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Run(func(args mock.Arguments) {
+		mockSubscriptionResult := args.Get(4).(*stripe.Subscription)
+		*mockSubscriptionResult = *expectedSubscription
+	}).Return(nil)
+
+	mockStripeClient := stripe.NewClient("sk_test", stripe.WithBackends(stripeTestBackends))
+
+	service := entitlements.StripeClient{
+		Client: mockStripeClient,
+	}
+
+	subscription, err := service.CreateSubscriptionWithOptions(context.Background(), subscriptionParams, entitlements.WithSubscriptionItems(items...))
+	c.NoError(err)
+	c.Equal(expectedSubscription, subscription)
+}
+
+func TestUpdateSubscriptionWithOptions_AddNewItemsIfNotExist(t *testing.T) {
+	c := require.New(t)
+
+	existingItems := []*stripe.SubscriptionItem{
+		{ID: "item_1", Price: &stripe.Price{ID: "price_1"}},
+	}
+	newItems := []*stripe.SubscriptionUpdateItemParams{
+		{Price: stripe.String("price_2")}, // new
+		{Price: stripe.String("price_1")}, // already exists
+	}
+
+	updateParams := &stripe.SubscriptionUpdateParams{}
+	entitlements.AddNewItemsIfNotExist(existingItems, updateParams, newItems...)
+
+	// Only price_2 should be added
+	c.Len(updateParams.Items, 1)
+	c.Equal("price_2", *updateParams.Items[0].Price)
+
+	expectedSubscription := &stripe.Subscription{ID: "sub_update"}
+
+	stripeBackendMock := new(mocks.MockStripeBackend)
+	stripeTestBackends := &stripe.Backends{
+		API:     stripeBackendMock,
+		Connect: stripeBackendMock,
+		Uploads: stripeBackendMock,
+	}
+	stripeBackendMock.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Run(func(args mock.Arguments) {
+		mockSubscriptionResult := args.Get(4).(*stripe.Subscription)
+		*mockSubscriptionResult = *expectedSubscription
+	}).Return(nil)
+
+	mockStripeClient := stripe.NewClient("sk_test", stripe.WithBackends(stripeTestBackends))
+
+	service := entitlements.StripeClient{
+		Client: mockStripeClient,
+	}
+
+	updatedSub, err := service.UpdateSubscriptionWithOptions(context.Background(), "sub_update", updateParams, entitlements.WithUpdateSubscriptionItems(updateParams.Items...))
+	c.NoError(err)
+	c.Equal(expectedSubscription, updatedSub)
+}
+
+func TestCreateWebhookEndpoint(t *testing.T) {
+	c := require.New(t)
+
+	expectedWebhook := &stripe.WebhookEndpoint{
+		ID:     "we_123",
+		Secret: "whsec_test",
+	}
+
+	stripeBackendMock := new(mocks.MockStripeBackend)
+	stripeTestBackends := &stripe.Backends{
+		API:     stripeBackendMock,
+		Connect: stripeBackendMock,
+		Uploads: stripeBackendMock,
+	}
+
+	stripeBackendMock.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Run(func(args mock.Arguments) {
+		result := args.Get(4).(*stripe.WebhookEndpoint)
+		*result = *expectedWebhook
+	}).Return(nil)
+
+	mockStripeClient := stripe.NewClient("sk_test", stripe.WithBackends(stripeTestBackends))
+
+	service := entitlements.StripeClient{
+		Client: mockStripeClient,
+	}
+
+	webhook, err := service.CreateWebhookEndpoint(context.Background(), "https://example.com/webhook", entitlements.SupportedEventTypeStrings())
+	c.NoError(err)
+	c.Equal(expectedWebhook, webhook)
+}
+
+func TestCreateWebhookEndpointDefaultEvents(t *testing.T) {
+	c := require.New(t)
+
+	expectedWebhook := &stripe.WebhookEndpoint{
+		ID:     "we_123",
+		Secret: "whsec_test",
+	}
+
+	stripeBackendMock := new(mocks.MockStripeBackend)
+	stripeTestBackends := &stripe.Backends{
+		API:     stripeBackendMock,
+		Connect: stripeBackendMock,
+		Uploads: stripeBackendMock,
+	}
+
+	stripeBackendMock.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Run(func(args mock.Arguments) {
+		result := args.Get(4).(*stripe.WebhookEndpoint)
+		*result = *expectedWebhook
+	}).Return(nil)
+
+	mockStripeClient := stripe.NewClient("sk_test", stripe.WithBackends(stripeTestBackends))
+
+	service := entitlements.StripeClient{
+		Client: mockStripeClient,
+	}
+
+	webhook, err := service.CreateWebhookEndpoint(context.Background(), "https://example.com/webhook", nil)
+	c.NoError(err)
+	c.Equal(expectedWebhook, webhook)
 }
