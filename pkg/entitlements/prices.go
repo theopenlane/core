@@ -121,64 +121,10 @@ func (sc *StripeClient) GetPriceByLookupKey(ctx context.Context, lookupKey strin
 	return nil, nil
 }
 
-// FindPriceOption defines a functional option for FindPriceForProduct
-type FindPriceOption func(*findPriceOptions)
-
-type findPriceOptions struct {
-	productID  string
-	priceID    string
-	unitAmount int64
-	currency   string
-	interval   string
-	nickname   string
-	lookupKey  string
-	metadata   map[string]string
-}
-
-// Option functions
-func WithProductID(id string) FindPriceOption {
-	return func(o *findPriceOptions) { o.productID = id }
-}
-func WithPriceID(id string) FindPriceOption {
-	return func(o *findPriceOptions) { o.priceID = id }
-}
-func WithUnitAmount(amount int64) FindPriceOption {
-	return func(o *findPriceOptions) { o.unitAmount = amount }
-}
-func WithCurrency(currency string) FindPriceOption {
-	return func(o *findPriceOptions) { o.currency = currency }
-}
-func WithInterval(interval string) FindPriceOption {
-	return func(o *findPriceOptions) { o.interval = interval }
-}
-func WithNickname(nickname string) FindPriceOption {
-	return func(o *findPriceOptions) { o.nickname = nickname }
-}
-func WithLookupKey(lookupKey string) FindPriceOption {
-	return func(o *findPriceOptions) { o.lookupKey = lookupKey }
-}
-func WithMetadata(metadata map[string]string) FindPriceOption {
-	return func(o *findPriceOptions) { o.metadata = metadata }
-}
-
 // FindPriceForProduct searches existing prices for a matching interval, amount
 // and optional metadata. It prefers locating by price ID or lookup key before
 // falling back to attribute matching within the specified product.
-func (sc *StripeClient) FindPriceForProduct(ctx context.Context, opts ...FindPriceOption) (*stripe.Price, error) {
-	options := &findPriceOptions{}
-	for _, o := range opts {
-		o(options)
-	}
-
-	productID := options.productID
-	priceID := options.priceID
-	unitAmount := options.unitAmount
-	currency := options.currency
-	interval := options.interval
-	nickname := options.nickname
-	lookupKey := options.lookupKey
-	metadata := options.metadata
-
+func (sc *StripeClient) FindPriceForProduct(ctx context.Context, productID, priceID string, unitAmount int64, currency, interval, nickname, lookupKey string, metadata map[string]string) (*stripe.Price, error) {
 	if priceID != "" {
 		price, err := sc.GetPrice(ctx, priceID)
 		if err != nil {
@@ -213,22 +159,28 @@ func (sc *StripeClient) FindPriceForProduct(ctx context.Context, opts ...FindPri
 			if p.LookupKey == lookupKey {
 				return p, nil
 			}
+
 			continue
 		}
+
 		if nickname != "" && p.Nickname != nickname {
 			continue
 		}
+
 		if interval != "" {
 			if p.Recurring == nil || string(p.Recurring.Interval) != interval {
 				continue
 			}
 		}
+
 		if unitAmount != 0 && p.UnitAmount != unitAmount {
 			continue
 		}
+
 		if currency != "" && string(p.Currency) != currency {
 			continue
 		}
+
 		match := true
 		for k, v := range metadata {
 			if p.Metadata == nil || p.Metadata[k] != v {
@@ -236,6 +188,7 @@ func (sc *StripeClient) FindPriceForProduct(ctx context.Context, opts ...FindPri
 				break
 			}
 		}
+
 		if match {
 			return p, nil
 		}

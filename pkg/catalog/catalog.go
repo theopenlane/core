@@ -196,15 +196,7 @@ func (c *Catalog) ValidatePrices(ctx context.Context, sc *entitlements.StripeCli
 
 				maps.Copy(md, p.Metadata)
 
-				price, err := sc.FindPriceForProduct(ctx,
-					entitlements.WithProductID(prod.ID),
-					entitlements.WithPriceID(p.PriceID),
-					entitlements.WithUnitAmount(p.UnitAmount),
-					entitlements.WithInterval(p.Interval),
-					entitlements.WithNickname(p.Nickname),
-					entitlements.WithLookupKey(p.LookupKey),
-					entitlements.WithMetadata(md),
-				)
+				price, err := sc.FindPriceForProduct(ctx, prod.ID, p.PriceID, p.UnitAmount, "", p.Interval, p.Nickname, p.LookupKey, md)
 				if err != nil {
 					return err
 				}
@@ -290,16 +282,7 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 
 			maps.Copy(md, p.Metadata)
 
-			price, err := sc.FindPriceForProduct(ctx,
-				entitlements.WithProductID(prod.ID),
-				entitlements.WithPriceID(p.PriceID),
-				entitlements.WithUnitAmount(p.UnitAmount),
-				entitlements.WithCurrency(currency),
-				entitlements.WithInterval(p.Interval),
-				entitlements.WithNickname(p.Nickname),
-				entitlements.WithLookupKey(p.LookupKey),
-				entitlements.WithMetadata(md),
-			)
+			price, err := sc.FindPriceForProduct(ctx, prod.ID, p.PriceID, p.UnitAmount, currency, p.Interval, p.Nickname, p.LookupKey, md)
 			if err != nil {
 				return f, err
 			}

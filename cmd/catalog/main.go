@@ -36,7 +36,7 @@ type featureReport struct {
 type stripeClient interface {
 	ListProducts(ctx context.Context) ([]*stripe.Product, error)
 	GetPrice(ctx context.Context, id string) (*stripe.Price, error)
-	FindPriceForProduct(ctx context.Context, opts ...entitlements.FindPriceOption) (*stripe.Price, error)
+	FindPriceForProduct(ctx context.Context, productID string, currency string, unitAmount int64, interval, nickname, lookupKey, metadata string, meta map[string]string) (*stripe.Price, error)
 	UpdatePriceMetadata(ctx context.Context, priceID string, metadata map[string]string) (*stripe.Price, error)
 }
 
@@ -238,14 +238,7 @@ func updateFeaturePrices(ctx context.Context, sc stripeClient, prod *stripe.Prod
 				fmt.Fprintf(os.Stderr, "[WARN] price %s for feature %s does not match catalog; to modify an existing price create a new one and update subscriptions\n", p.PriceID, name)
 			}
 		} else {
-			price, err = sc.FindPriceForProduct(ctx,
-				entitlements.WithProductID(prod.ID),
-				entitlements.WithUnitAmount(p.UnitAmount),
-				entitlements.WithInterval(p.Interval),
-				entitlements.WithNickname(p.Nickname),
-				entitlements.WithLookupKey(p.LookupKey),
-				entitlements.WithMetadata(md),
-			)
+			price, err = sc.FindPriceForProduct(ctx, prod.ID, "", p.UnitAmount, "", p.Interval, p.Nickname, p.LookupKey, md)
 			if err != nil || price == nil {
 				missingPrices++
 				continue
