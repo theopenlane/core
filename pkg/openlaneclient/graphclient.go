@@ -39057,8 +39057,42 @@ func (t *CreateInvite_CreateInvite_Invite_Owner) GetID() string {
 	return t.ID
 }
 
+type CreateInvite_CreateInvite_Invite_Groups_Edges_Node struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateInvite_CreateInvite_Invite_Groups_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateInvite_CreateInvite_Invite_Groups_Edges_Node{}
+	}
+	return t.ID
+}
+
+type CreateInvite_CreateInvite_Invite_Groups_Edges struct {
+	Node *CreateInvite_CreateInvite_Invite_Groups_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateInvite_CreateInvite_Invite_Groups_Edges) GetNode() *CreateInvite_CreateInvite_Invite_Groups_Edges_Node {
+	if t == nil {
+		t = &CreateInvite_CreateInvite_Invite_Groups_Edges{}
+	}
+	return t.Node
+}
+
+type CreateInvite_CreateInvite_Invite_Groups struct {
+	Edges []*CreateInvite_CreateInvite_Invite_Groups_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateInvite_CreateInvite_Invite_Groups) GetEdges() []*CreateInvite_CreateInvite_Invite_Groups_Edges {
+	if t == nil {
+		t = &CreateInvite_CreateInvite_Invite_Groups{}
+	}
+	return t.Edges
+}
+
 type CreateInvite_CreateInvite_Invite struct {
 	Expires      *time.Time                              "json:\"expires,omitempty\" graphql:\"expires\""
+	Groups       CreateInvite_CreateInvite_Invite_Groups "json:\"groups\" graphql:\"groups\""
 	ID           string                                  "json:\"id\" graphql:\"id\""
 	Owner        *CreateInvite_CreateInvite_Invite_Owner "json:\"owner,omitempty\" graphql:\"owner\""
 	Recipient    string                                  "json:\"recipient\" graphql:\"recipient\""
@@ -39073,6 +39107,12 @@ func (t *CreateInvite_CreateInvite_Invite) GetExpires() *time.Time {
 		t = &CreateInvite_CreateInvite_Invite{}
 	}
 	return t.Expires
+}
+func (t *CreateInvite_CreateInvite_Invite) GetGroups() *CreateInvite_CreateInvite_Invite_Groups {
+	if t == nil {
+		t = &CreateInvite_CreateInvite_Invite{}
+	}
+	return &t.Groups
 }
 func (t *CreateInvite_CreateInvite_Invite) GetID() string {
 	if t == nil {
@@ -39139,13 +39179,53 @@ func (t *DeleteInvite_DeleteInvite) GetDeletedID() string {
 	return t.DeletedID
 }
 
-type GetAllInvites_Invites_Edges_Node struct {
-	ID        string             "json:\"id\" graphql:\"id\""
-	Recipient string             "json:\"recipient\" graphql:\"recipient\""
-	Role      enums.Role         "json:\"role\" graphql:\"role\""
-	Status    enums.InviteStatus "json:\"status\" graphql:\"status\""
+type GetAllInvites_Invites_Edges_Node_Groups_Edges_Node struct {
+	ID string "json:\"id\" graphql:\"id\""
 }
 
+func (t *GetAllInvites_Invites_Edges_Node_Groups_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllInvites_Invites_Edges_Node_Groups_Edges_Node{}
+	}
+	return t.ID
+}
+
+type GetAllInvites_Invites_Edges_Node_Groups_Edges struct {
+	Node *GetAllInvites_Invites_Edges_Node_Groups_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllInvites_Invites_Edges_Node_Groups_Edges) GetNode() *GetAllInvites_Invites_Edges_Node_Groups_Edges_Node {
+	if t == nil {
+		t = &GetAllInvites_Invites_Edges_Node_Groups_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllInvites_Invites_Edges_Node_Groups struct {
+	Edges []*GetAllInvites_Invites_Edges_Node_Groups_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllInvites_Invites_Edges_Node_Groups) GetEdges() []*GetAllInvites_Invites_Edges_Node_Groups_Edges {
+	if t == nil {
+		t = &GetAllInvites_Invites_Edges_Node_Groups{}
+	}
+	return t.Edges
+}
+
+type GetAllInvites_Invites_Edges_Node struct {
+	Groups    GetAllInvites_Invites_Edges_Node_Groups "json:\"groups\" graphql:\"groups\""
+	ID        string                                  "json:\"id\" graphql:\"id\""
+	Recipient string                                  "json:\"recipient\" graphql:\"recipient\""
+	Role      enums.Role                              "json:\"role\" graphql:\"role\""
+	Status    enums.InviteStatus                      "json:\"status\" graphql:\"status\""
+}
+
+func (t *GetAllInvites_Invites_Edges_Node) GetGroups() *GetAllInvites_Invites_Edges_Node_Groups {
+	if t == nil {
+		t = &GetAllInvites_Invites_Edges_Node{}
+	}
+	return &t.Groups
+}
 func (t *GetAllInvites_Invites_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetAllInvites_Invites_Edges_Node{}
@@ -103806,6 +103886,13 @@ const CreateInviteDocument = `mutation CreateInvite ($input: CreateInviteInput!)
 			owner {
 				id
 			}
+			groups {
+				edges {
+					node {
+						id
+					}
+				}
+			}
 		}
 	}
 }
@@ -103860,6 +103947,13 @@ const GetAllInvitesDocument = `query GetAllInvites {
 				recipient
 				role
 				status
+				groups {
+					edges {
+						node {
+							id
+						}
+					}
+				}
 			}
 		}
 	}

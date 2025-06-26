@@ -98,10 +98,15 @@ func TestMutationCreateInvite(t *testing.T) {
 
 	user1Context := auth.NewTestContextWithOrgID(testUserCreator.ID, testUserCreator.OrganizationID)
 
+	// create a group to add to the invite
+	meows := (&GroupBuilder{client: suite.client, Name: "meows"}).MustNew(user1Context, t)
+	anotherMeows := (&GroupBuilder{client: suite.client, Name: "another-meows"}).MustNew(testUser1.UserCtx, t)
+
 	testCases := []struct {
 		name             string
 		recipient        string
 		orgID            string
+		groupID          *string
 		role             enums.Role
 		client           *openlaneclient.OpenlaneClient
 		ctx              context.Context
@@ -111,15 +116,39 @@ func TestMutationCreateInvite(t *testing.T) {
 		expectedErr      string
 	}{
 		{
-			name:             "happy path, new user as member",
+			name:             "happy path, new user as member with a group set",
 			recipient:        "meow@theopenlane.io",
 			orgID:            testUserCreator.OrganizationID,
+			groupID:          &meows.ID,
 			role:             enums.RoleMember,
 			client:           suite.client.api,
 			ctx:              user1Context,
 			requestorID:      testUserCreator.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 1,
+		},
+		{
+			name:             "happy path, another new user as member with a group set",
+			recipient:        "meowmeow@theopenlane.io",
+			orgID:            testUserCreator.OrganizationID,
+			groupID:          &meows.ID,
+			role:             enums.RoleMember,
+			client:           suite.client.api,
+			ctx:              user1Context,
+			requestorID:      testUserCreator.ID,
+			expectedStatus:   enums.InvitationSent,
+			expectedAttempts: 1,
+		},
+		{
+			name:        "new user as member, with invalid group",
+			recipient:   "meow-another@theopenlane.io",
+			orgID:       testUserCreator.OrganizationID,
+			groupID:     &anotherMeows.ID,
+			role:        enums.RoleMember,
+			client:      suite.client.api,
+			ctx:         user1Context,
+			requestorID: testUserCreator.ID,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:             "happy path, new user as member in restricted domain org",
@@ -247,6 +276,10 @@ func TestMutationCreateInvite(t *testing.T) {
 				Role:      &role,
 			}
 
+			if tc.groupID != nil {
+				input.GroupIDs = []string{*tc.groupID}
+			}
+
 			resp, err := tc.client.CreateInvite(tc.ctx, input)
 
 			if tc.expectedErr != "" {
@@ -266,6 +299,12 @@ func TestMutationCreateInvite(t *testing.T) {
 			assert.Check(t, is.Equal(tc.expectedStatus, resp.CreateInvite.Invite.Status))
 			assert.Check(t, is.Equal(tc.expectedAttempts, resp.CreateInvite.Invite.SendAttempts))
 
+			if tc.groupID != nil {
+				assert.Check(t, is.Len(resp.CreateInvite.Invite.Groups.Edges, 1))
+			} else {
+				assert.Check(t, is.Len(resp.CreateInvite.Invite.Groups.Edges, 0))
+			}
+
 			assert.Assert(t, resp.CreateInvite.Invite.Expires != nil)
 			diff := resp.CreateInvite.Invite.Expires.Sub(time.Now().UTC().AddDate(0, 0, 14))
 			assert.Check(t, diff >= -2*time.Minute && diff <= 2*time.Minute, "time difference is not within 2 minutes")
@@ -276,6 +315,9 @@ func TestMutationCreateInvite(t *testing.T) {
 	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: orgWithRestrictions.ID}).MustDelete(orgWithRestrictionsCtx, t)
 	// delete org member created
 	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, ID: om.ID}).MustDelete(testUser1.UserCtx, t)
+	// delete group created
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: meows.ID}).MustDelete(user1Context, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: anotherMeows.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationCreateBulkInvite(t *testing.T) {

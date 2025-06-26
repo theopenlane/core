@@ -5209,6 +5209,7 @@ type CreateInviteInput struct {
 	RequestorID *string  `json:"requestorID,omitempty"`
 	OwnerID     *string  `json:"ownerID,omitempty"`
 	EventIDs    []string `json:"eventIDs,omitempty"`
+	GroupIDs    []string `json:"groupIDs,omitempty"`
 }
 
 // CreateJobResultInput is used for create JobResult object.
@@ -13045,6 +13046,7 @@ type Invite struct {
 	RequestorID *string          `json:"requestorID,omitempty"`
 	Owner       *Organization    `json:"owner,omitempty"`
 	Events      *EventConnection `json:"events"`
+	Groups      *GroupConnection `json:"groups"`
 }
 
 func (Invite) IsNode() {}
@@ -13252,6 +13254,9 @@ type InviteWhereInput struct {
 	// events edge predicates
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
+	// groups edge predicates
+	HasGroups     *bool              `json:"hasGroups,omitempty"`
+	HasGroupsWith []*GroupWhereInput `json:"hasGroupsWith,omitempty"`
 }
 
 type JobResult struct {
@@ -28589,6 +28594,9 @@ type UpdateInviteInput struct {
 	AddEventIDs    []string `json:"addEventIDs,omitempty"`
 	RemoveEventIDs []string `json:"removeEventIDs,omitempty"`
 	ClearEvents    *bool    `json:"clearEvents,omitempty"`
+	AddGroupIDs    []string `json:"addGroupIDs,omitempty"`
+	RemoveGroupIDs []string `json:"removeGroupIDs,omitempty"`
+	ClearGroups    *bool    `json:"clearGroups,omitempty"`
 }
 
 // UpdateJobResultInput is used for update JobResult object.

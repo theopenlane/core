@@ -99,6 +99,7 @@ type SchemaConfig struct {
 	InternalPolicyHistory              string // InternalPolicyHistory table.
 	Invite                             string // Invite table.
 	InviteEvents                       string // Invite-events->Event table.
+	InviteGroups                       string // Invite-groups->Group table.
 	JobResult                          string // JobResult table.
 	JobRunner                          string // JobRunner table.
 	JobRunnerJobRunnerTokens           string // JobRunner-job_runner_tokens->JobRunnerToken table.

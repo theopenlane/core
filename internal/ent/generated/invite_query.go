@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -30,9 +31,11 @@ type InviteQuery struct {
 	predicates      []predicate.Invite
 	withOwner       *OrganizationQuery
 	withEvents      *EventQuery
+	withGroups      *GroupQuery
 	loadTotal       []func(context.Context, []*Invite) error
 	modifiers       []func(*sql.Selector)
 	withNamedEvents map[string]*EventQuery
+	withNamedGroups map[string]*GroupQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -113,6 +116,31 @@ func (iq *InviteQuery) QueryEvents() *EventQuery {
 		schemaConfig := iq.schemaConfig
 		step.To.Schema = schemaConfig.Event
 		step.Edge.Schema = schemaConfig.InviteEvents
+		fromU = sqlgraph.SetNeighbors(iq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryGroups chains the current query on the "groups" edge.
+func (iq *InviteQuery) QueryGroups() *GroupQuery {
+	query := (&GroupClient{config: iq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := iq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := iq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(invite.Table, invite.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, invite.GroupsTable, invite.GroupsPrimaryKey...),
+		)
+		schemaConfig := iq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.InviteGroups
 		fromU = sqlgraph.SetNeighbors(iq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -313,6 +341,7 @@ func (iq *InviteQuery) Clone() *InviteQuery {
 		predicates: append([]predicate.Invite{}, iq.predicates...),
 		withOwner:  iq.withOwner.Clone(),
 		withEvents: iq.withEvents.Clone(),
+		withGroups: iq.withGroups.Clone(),
 		// clone intermediate query.
 		sql:       iq.sql.Clone(),
 		path:      iq.path,
@@ -339,6 +368,17 @@ func (iq *InviteQuery) WithEvents(opts ...func(*EventQuery)) *InviteQuery {
 		opt(query)
 	}
 	iq.withEvents = query
+	return iq
+}
+
+// WithGroups tells the query-builder to eager-load the nodes that are connected to
+// the "groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (iq *InviteQuery) WithGroups(opts ...func(*GroupQuery)) *InviteQuery {
+	query := (&GroupClient{config: iq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	iq.withGroups = query
 	return iq
 }
 
@@ -426,9 +466,10 @@ func (iq *InviteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Invit
 	var (
 		nodes       = []*Invite{}
 		_spec       = iq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [3]bool{
 			iq.withOwner != nil,
 			iq.withEvents != nil,
+			iq.withGroups != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -467,10 +508,24 @@ func (iq *InviteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Invit
 			return nil, err
 		}
 	}
+	if query := iq.withGroups; query != nil {
+		if err := iq.loadGroups(ctx, query, nodes,
+			func(n *Invite) { n.Edges.Groups = []*Group{} },
+			func(n *Invite, e *Group) { n.Edges.Groups = append(n.Edges.Groups, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range iq.withNamedEvents {
 		if err := iq.loadEvents(ctx, query, nodes,
 			func(n *Invite) { n.appendNamedEvents(name) },
 			func(n *Invite, e *Event) { n.appendNamedEvents(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range iq.withNamedGroups {
+		if err := iq.loadGroups(ctx, query, nodes,
+			func(n *Invite) { n.appendNamedGroups(name) },
+			func(n *Invite, e *Group) { n.appendNamedGroups(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -566,6 +621,68 @@ func (iq *InviteQuery) loadEvents(ctx context.Context, query *EventQuery, nodes 
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "events" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (iq *InviteQuery) loadGroups(ctx context.Context, query *GroupQuery, nodes []*Invite, init func(*Invite), assign func(*Invite, *Group)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Invite)
+	nids := make(map[string]map[*Invite]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(invite.GroupsTable)
+		joinT.Schema(iq.schemaConfig.InviteGroups)
+		s.Join(joinT).On(s.C(group.FieldID), joinT.C(invite.GroupsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(invite.GroupsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(invite.GroupsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Invite]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "groups" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -686,6 +803,20 @@ func (iq *InviteQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *
 		iq.withNamedEvents = make(map[string]*EventQuery)
 	}
 	iq.withNamedEvents[name] = query
+	return iq
+}
+
+// WithNamedGroups tells the query-builder to eager-load the nodes that are connected to the "groups"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (iq *InviteQuery) WithNamedGroups(name string, opts ...func(*GroupQuery)) *InviteQuery {
+	query := (&GroupClient{config: iq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if iq.withNamedGroups == nil {
+		iq.withNamedGroups = make(map[string]*GroupQuery)
+	}
+	iq.withNamedGroups[name] = query
 	return iq
 }
 

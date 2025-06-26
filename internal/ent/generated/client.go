@@ -8710,6 +8710,25 @@ func (c *GroupClient) QueryTasks(gr *Group) *TaskQuery {
 	return query
 }
 
+// QueryInvites queries the invites edge of a Group.
+func (c *GroupClient) QueryInvites(gr *Group) *InviteQuery {
+	query := (&InviteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(invite.Table, invite.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.InvitesTable, group.InvitesPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.Invite
+		step.Edge.Schema = schemaConfig.InviteGroups
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Group.
 func (c *GroupClient) QueryMembers(gr *Group) *GroupMembershipQuery {
 	query := (&GroupMembershipClient{config: c.config}).Query()
@@ -10835,6 +10854,25 @@ func (c *InviteClient) QueryEvents(i *Invite) *EventQuery {
 		schemaConfig := i.schemaConfig
 		step.To.Schema = schemaConfig.Event
 		step.Edge.Schema = schemaConfig.InviteEvents
+		fromV = sqlgraph.Neighbors(i.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryGroups queries the groups edge of a Invite.
+func (c *InviteClient) QueryGroups(i *Invite) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := i.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(invite.Table, invite.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, invite.GroupsTable, invite.GroupsPrimaryKey...),
+		)
+		schemaConfig := i.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.InviteGroups
 		fromV = sqlgraph.Neighbors(i.driver.Dialect(), step)
 		return fromV, nil
 	}

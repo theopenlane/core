@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/utils/ulids"
 
@@ -40,6 +41,38 @@ func HookInvite() ent.Hook {
 				zerolog.Ctx(ctx).Info().Err(err).Msg("unable to add user to specified organization")
 
 				return nil, err
+			}
+
+			// ensure user has access to any group IDs set
+			groupIDs := m.GroupsIDs()
+			if len(groupIDs) > 0 {
+				// get the user ID from the context
+				userID, err := auth.GetSubjectIDFromContext(ctx)
+				if err != nil {
+					zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get user ID from context")
+					return nil, err
+				}
+
+				// check if the user has access to the groups
+				for _, groupID := range groupIDs {
+					// check if the user has access to the group
+					ok, err := m.Authz.CheckGroupAccess(ctx, fgax.AccessCheck{
+						SubjectID:   userID,
+						SubjectType: auth.GetAuthzSubjectType(ctx),
+						Relation:    fgax.CanEdit,
+						ObjectID:    groupID,
+					})
+					if err != nil {
+						zerolog.Ctx(ctx).Error().Err(err).Msg("unable to check group access")
+
+						return nil, err
+					} else if !ok {
+						// user does not have access to the group, return an error
+						zerolog.Ctx(ctx).Info().Msgf("user %s does not have access to group %s", userID, groupID)
+
+						return nil, generated.ErrPermissionDenied
+					}
+				}
 			}
 
 			// generate token based on recipient + target org ID
@@ -98,13 +131,14 @@ func HookInviteAccepted() ent.Hook {
 			ownerID, ownerOK := m.OwnerID()
 			role, roleOK := m.Role()
 			recipient, recipientOK := m.Recipient()
+			groupIDs := m.GroupsIDs()
 
 			// if we are missing any, get them from the db
 			// this should happen on an update mutation
 			if !ownerOK || !roleOK || !recipientOK {
 				id, _ := m.ID()
 
-				invite, err := m.Client().Invite.Get(ctx, id)
+				invite, err := m.Client().Invite.Query().WithGroups().Where(invite.ID(id)).Only(ctx)
 				if err != nil {
 					zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get existing invite")
 
@@ -114,6 +148,12 @@ func HookInviteAccepted() ent.Hook {
 				ownerID = invite.OwnerID
 				role = invite.Role
 				recipient = invite.Recipient
+
+				// get the group IDs from the invite edges
+				groups := invite.Edges.Groups
+				for _, group := range groups {
+					groupIDs = append(groupIDs, group.ID)
+				}
 			}
 
 			// user must be authenticated to accept an invite, get their id from the context
@@ -136,6 +176,21 @@ func HookInviteAccepted() ent.Hook {
 				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to add user to organization")
 
 				return nil, err
+			}
+
+			// add the user to the group as member if any were specified
+			for _, groupID := range groupIDs {
+				input := generated.CreateGroupMembershipInput{
+					UserID:  userID,
+					GroupID: groupID,
+				}
+
+				// add user to the group, allow the context to bypass privacy checks
+				if _, err := m.Client().GroupMembership.Create().SetInput(input).Save(allowCtx); err != nil {
+					zerolog.Ctx(ctx).Error().Err(err).Msg("unable to add user to group")
+
+					return nil, err
+				}
 			}
 
 			// finish the mutation

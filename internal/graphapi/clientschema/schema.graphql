@@ -8743,6 +8743,7 @@ input CreateInviteInput {
 	requestorID: String
 	ownerID: ID
 	eventIDs: [ID!]
+	groupIDs: [ID!]
 }
 """
 CreateJobResultInput is used for create JobResult object.
@@ -22101,6 +22102,37 @@ type Invite implements Node {
 		"""
 		where: EventWhereInput
 	): EventConnection!
+	groups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
 }
 """
 Return response for createBulkInvite mutation
@@ -22390,6 +22422,11 @@ input InviteWhereInput {
 	"""
 	hasEvents: Boolean
 	hasEventsWith: [EventWhereInput!]
+	"""
+	groups edge predicates
+	"""
+	hasGroups: Boolean
+	hasGroupsWith: [GroupWhereInput!]
 }
 """
 A valid JSON string.
@@ -56794,6 +56831,9 @@ input UpdateInviteInput {
 	addEventIDs: [ID!]
 	removeEventIDs: [ID!]
 	clearEvents: Boolean
+	addGroupIDs: [ID!]
+	removeGroupIDs: [ID!]
+	clearGroups: Boolean
 }
 """
 UpdateJobResultInput is used for update JobResult object.

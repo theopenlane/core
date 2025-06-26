@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -737,6 +738,21 @@ func (gu *GroupUpdate) AddTasks(t ...*Task) *GroupUpdate {
 	return gu.AddTaskIDs(ids...)
 }
 
+// AddInviteIDs adds the "invites" edge to the Invite entity by IDs.
+func (gu *GroupUpdate) AddInviteIDs(ids ...string) *GroupUpdate {
+	gu.mutation.AddInviteIDs(ids...)
+	return gu
+}
+
+// AddInvites adds the "invites" edges to the Invite entity.
+func (gu *GroupUpdate) AddInvites(i ...*Invite) *GroupUpdate {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return gu.AddInviteIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the GroupMembership entity by IDs.
 func (gu *GroupUpdate) AddMemberIDs(ids ...string) *GroupUpdate {
 	gu.mutation.AddMemberIDs(ids...)
@@ -1418,6 +1434,27 @@ func (gu *GroupUpdate) RemoveTasks(t ...*Task) *GroupUpdate {
 		ids[i] = t[i].ID
 	}
 	return gu.RemoveTaskIDs(ids...)
+}
+
+// ClearInvites clears all "invites" edges to the Invite entity.
+func (gu *GroupUpdate) ClearInvites() *GroupUpdate {
+	gu.mutation.ClearInvites()
+	return gu
+}
+
+// RemoveInviteIDs removes the "invites" edge to Invite entities by IDs.
+func (gu *GroupUpdate) RemoveInviteIDs(ids ...string) *GroupUpdate {
+	gu.mutation.RemoveInviteIDs(ids...)
+	return gu
+}
+
+// RemoveInvites removes "invites" edges to Invite entities.
+func (gu *GroupUpdate) RemoveInvites(i ...*Invite) *GroupUpdate {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return gu.RemoveInviteIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the GroupMembership entity.
@@ -3170,6 +3207,54 @@ func (gu *GroupUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if gu.mutation.InvitesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InvitesTable,
+			Columns: group.InvitesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.InviteGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.RemovedInvitesIDs(); len(nodes) > 0 && !gu.mutation.InvitesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InvitesTable,
+			Columns: group.InvitesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.InviteGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.InvitesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InvitesTable,
+			Columns: group.InvitesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.InviteGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if gu.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -3929,6 +4014,21 @@ func (guo *GroupUpdateOne) AddTasks(t ...*Task) *GroupUpdateOne {
 	return guo.AddTaskIDs(ids...)
 }
 
+// AddInviteIDs adds the "invites" edge to the Invite entity by IDs.
+func (guo *GroupUpdateOne) AddInviteIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.AddInviteIDs(ids...)
+	return guo
+}
+
+// AddInvites adds the "invites" edges to the Invite entity.
+func (guo *GroupUpdateOne) AddInvites(i ...*Invite) *GroupUpdateOne {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return guo.AddInviteIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the GroupMembership entity by IDs.
 func (guo *GroupUpdateOne) AddMemberIDs(ids ...string) *GroupUpdateOne {
 	guo.mutation.AddMemberIDs(ids...)
@@ -4610,6 +4710,27 @@ func (guo *GroupUpdateOne) RemoveTasks(t ...*Task) *GroupUpdateOne {
 		ids[i] = t[i].ID
 	}
 	return guo.RemoveTaskIDs(ids...)
+}
+
+// ClearInvites clears all "invites" edges to the Invite entity.
+func (guo *GroupUpdateOne) ClearInvites() *GroupUpdateOne {
+	guo.mutation.ClearInvites()
+	return guo
+}
+
+// RemoveInviteIDs removes the "invites" edge to Invite entities by IDs.
+func (guo *GroupUpdateOne) RemoveInviteIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.RemoveInviteIDs(ids...)
+	return guo
+}
+
+// RemoveInvites removes "invites" edges to Invite entities.
+func (guo *GroupUpdateOne) RemoveInvites(i ...*Invite) *GroupUpdateOne {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return guo.RemoveInviteIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the GroupMembership entity.
@@ -6387,6 +6508,54 @@ func (guo *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error
 			},
 		}
 		edge.Schema = guo.schemaConfig.GroupTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if guo.mutation.InvitesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InvitesTable,
+			Columns: group.InvitesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.InviteGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.RemovedInvitesIDs(); len(nodes) > 0 && !guo.mutation.InvitesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InvitesTable,
+			Columns: group.InvitesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.InviteGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.InvitesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InvitesTable,
+			Columns: group.InvitesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.InviteGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
