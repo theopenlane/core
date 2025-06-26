@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 
+	"github.com/rs/zerolog"
 	"github.com/stripe/stripe-go/v82"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
@@ -34,14 +35,21 @@ func syncSubscriptionItemsWithStripe(ctx context.Context, sub *stripe.Subscripti
 			return err
 		}
 
+		zerolog.Ctx(ctx).Info().Str("product_id", prod.StripeProductID).Msg("org product created")
+
 		price, err := upsertOrgPrice(ctx, orgSub, prod, item.Price)
 		if err != nil {
 			return err
 		}
 
-		if _, err = upsertOrgModule(ctx, orgSub, prod, price, item); err != nil {
+		zerolog.Ctx(ctx).Info().Str("price_subscription_ID", price.SubscriptionID).Msg("org price created for subscription")
+
+		mod, err := upsertOrgModule(ctx, orgSub, prod, price, item)
+		if err != nil {
 			return err
 		}
+
+		zerolog.Ctx(ctx).Info().Str("module_name", mod.Module).Msg("org module created")
 	}
 
 	return nil

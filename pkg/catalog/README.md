@@ -87,3 +87,20 @@ if err != nil {
 }
 fmt.Println(diff)
 ```
+
+## Features Subpackage
+
+The [`features`](features) directory contains helpers for caching enabled
+features for an organization. `Cache` is a small wrapper around Redis that
+stores a set of feature names keyed by organization ID. Entries expire
+independently from session data and can be fetched with `Get` or written with
+`Set`.
+
+```go
+c := features.NewCache(redisClient, time.Minute)
+_ = c.Set(ctx, "org1", []string{"evidence", "search"})
+feats, _ := c.Get(ctx, "org1")
+```
+
+Use `features.WithCache` and `features.CacheFromContext` to make the cache
+available throughout a request lifecycle.

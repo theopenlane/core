@@ -275,6 +275,8 @@ func processFeatureSet(ctx context.Context, sc stripeClient, prodMap map[string]
 
 		if entSc, ok := sc.(*entitlements.StripeClient); ok {
 			prod, _ = resolveProduct(ctx, entSc, prodMap, feat)
+		} else if p, ok := prodMap[feat.DisplayName]; ok {
+			prod = p
 		}
 
 		prodExists := prod != nil

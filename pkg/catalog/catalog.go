@@ -306,7 +306,6 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 
 	ensure := func(fs FeatureSet) error {
 		for name, feat := range fs {
-
 			var err error
 
 			feat, err = create(name, feat)
