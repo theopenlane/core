@@ -48374,6 +48374,100 @@ func (t *UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions) Ge
 	return t.StripeSubscriptionStatus
 }
 
+type UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node struct {
+	DisplayID string "json:\"displayID\" graphql:\"displayID\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node) GetName() string {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node{}
+	}
+	return t.Name
+}
+
+type UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges struct {
+	Node *UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges) GetNode() *UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateOrganization_UpdateOrganization_Organization_ProgramCreators struct {
+	Edges []*UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateOrganization_UpdateOrganization_Organization_ProgramCreators) GetEdges() []*UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization_ProgramCreators{}
+	}
+	return t.Edges
+}
+
+type UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node struct {
+	DisplayID string "json:\"displayID\" graphql:\"displayID\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node) GetName() string {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node{}
+	}
+	return t.Name
+}
+
+type UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges struct {
+	Node *UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges) GetNode() *UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators struct {
+	Edges []*UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators) GetEdges() []*UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators{}
+	}
+	return t.Edges
+}
+
 type UpdateOrganization_UpdateOrganization_Organization struct {
 	AvatarFile        *UpdateOrganization_UpdateOrganization_Organization_AvatarFile         "json:\"avatarFile,omitempty\" graphql:\"avatarFile\""
 	AvatarLocalFileID *string                                                                "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
@@ -48385,6 +48479,8 @@ type UpdateOrganization_UpdateOrganization_Organization struct {
 	Name              string                                                                 "json:\"name\" graphql:\"name\""
 	OrgSubscriptions  []*UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions "json:\"orgSubscriptions,omitempty\" graphql:\"orgSubscriptions\""
 	PersonalOrg       *bool                                                                  "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
+	ProcedureCreators UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators   "json:\"procedureCreators\" graphql:\"procedureCreators\""
+	ProgramCreators   UpdateOrganization_UpdateOrganization_Organization_ProgramCreators     "json:\"programCreators\" graphql:\"programCreators\""
 	Setting           *UpdateOrganization_UpdateOrganization_Organization_Setting            "json:\"setting,omitempty\" graphql:\"setting\""
 	Tags              []string                                                               "json:\"tags,omitempty\" graphql:\"tags\""
 }
@@ -48448,6 +48544,18 @@ func (t *UpdateOrganization_UpdateOrganization_Organization) GetPersonalOrg() *b
 		t = &UpdateOrganization_UpdateOrganization_Organization{}
 	}
 	return t.PersonalOrg
+}
+func (t *UpdateOrganization_UpdateOrganization_Organization) GetProcedureCreators() *UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization{}
+	}
+	return &t.ProcedureCreators
+}
+func (t *UpdateOrganization_UpdateOrganization_Organization) GetProgramCreators() *UpdateOrganization_UpdateOrganization_Organization_ProgramCreators {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization{}
+	}
+	return &t.ProgramCreators
 }
 func (t *UpdateOrganization_UpdateOrganization_Organization) GetSetting() *UpdateOrganization_UpdateOrganization_Organization_Setting {
 	if t == nil {
@@ -100743,6 +100851,24 @@ const UpdateOrganizationDocument = `mutation UpdateOrganization ($updateOrganiza
 				productTier
 				features
 				id
+			}
+			programCreators {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+			procedureCreators {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
 			}
 		}
 	}

@@ -506,6 +506,24 @@ mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizati
         features
         id
       }
+      programCreators {
+        edges {
+          node {
+            id
+            displayID
+            name
+          }
+        }
+      }
+      procedureCreators {
+        edges {
+          node {
+            id
+            displayID
+            name
+          }
+        }
+      }
     }
   }
 }
