@@ -7,12 +7,9 @@ package graphapi
 import (
 	"context"
 
-	"github.com/99designs/gqlgen/graphql"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/utils/rout"
 )
 
 // CreateAssessmentResponse is the resolver for the createAssessmentResponse field.
@@ -25,31 +22,6 @@ func (r *mutationResolver) CreateAssessmentResponse(ctx context.Context, input g
 	return &model.AssessmentResponseCreatePayload{
 		AssessmentResponse: res,
 	}, nil
-}
-
-// CreateBulkAssessmentResponse is the resolver for the createBulkAssessmentResponse field.
-func (r *mutationResolver) CreateBulkAssessmentResponse(ctx context.Context, input []*generated.CreateAssessmentResponseInput) (*model.AssessmentResponseBulkCreatePayload, error) {
-	if len(input) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	return r.bulkCreateAssessmentResponse(ctx, input)
-}
-
-// CreateBulkCSVAssessmentResponse is the resolver for the createBulkCSVAssessmentResponse field.
-func (r *mutationResolver) CreateBulkCSVAssessmentResponse(ctx context.Context, input graphql.Upload) (*model.AssessmentResponseBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateAssessmentResponseInput](input)
-	if err != nil {
-		log.Error().Err(err).Msg("failed to unmarshal bulk data")
-
-		return nil, err
-	}
-
-	if len(data) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	return r.bulkCreateAssessmentResponse(ctx, data)
 }
 
 // UpdateAssessmentResponse is the resolver for the updateAssessmentResponse field.
@@ -72,21 +44,6 @@ func (r *mutationResolver) UpdateAssessmentResponse(ctx context.Context, id stri
 	}, nil
 }
 
-// DeleteAssessmentResponse is the resolver for the deleteAssessmentResponse field.
-func (r *mutationResolver) DeleteAssessmentResponse(ctx context.Context, id string) (*model.AssessmentResponseDeletePayload, error) {
-	if err := withTransactionalMutation(ctx).AssessmentResponse.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "assessmentresponse"})
-	}
-
-	if err := generated.AssessmentResponseEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
-	}
-
-	return &model.AssessmentResponseDeletePayload{
-		DeletedID: id,
-	}, nil
-}
-
 // AssessmentResponse is the resolver for the assessmentResponse field.
 func (r *queryResolver) AssessmentResponse(ctx context.Context, id string) (*generated.AssessmentResponse, error) {
 	query, err := withTransactionalMutation(ctx).AssessmentResponse.Query().Where(assessmentresponse.ID(id)).CollectFields(ctx)
@@ -101,3 +58,46 @@ func (r *queryResolver) AssessmentResponse(ctx context.Context, id string) (*gen
 
 	return res, nil
 }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//    it when you're done.
+//  - You have helper methods in this file. Move them out to keep these resolver files clean.
+/*
+	func (r *mutationResolver) CreateBulkAssessmentResponse(ctx context.Context, input []*generated.CreateAssessmentResponseInput) (*model.AssessmentResponseBulkCreatePayload, error) {
+	if len(input) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	return r.bulkCreateAssessmentResponse(ctx, input)
+}
+func (r *mutationResolver) CreateBulkCSVAssessmentResponse(ctx context.Context, input graphql.Upload) (*model.AssessmentResponseBulkCreatePayload, error) {
+	data, err := unmarshalBulkData[generated.CreateAssessmentResponseInput](input)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, err
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	return r.bulkCreateAssessmentResponse(ctx, data)
+}
+func (r *mutationResolver) DeleteAssessmentResponse(ctx context.Context, id string) (*model.AssessmentResponseDeletePayload, error) {
+	if err := withTransactionalMutation(ctx).AssessmentResponse.DeleteOneID(id).Exec(ctx); err != nil {
+		return nil, parseRequestError(err, action{action: ActionDelete, object: "assessmentresponse"})
+	}
+
+	if err := generated.AssessmentResponseEdgeCleanup(ctx, id); err != nil {
+		return nil, newCascadeDeleteError(err)
+	}
+
+	return &model.AssessmentResponseDeletePayload{
+		DeletedID: id,
+	}, nil
+}
+*/

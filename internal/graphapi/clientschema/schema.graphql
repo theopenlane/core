@@ -26174,24 +26174,6 @@ type Mutation {
 		input: CreateAssessmentResponseInput!
 	): AssessmentResponseCreatePayload!
 	"""
-	Create multiple new assessmentResponses
-	"""
-	createBulkAssessmentResponse(
-		"""
-		values of the assessmentResponse
-		"""
-		input: [CreateAssessmentResponseInput!]
-	): AssessmentResponseBulkCreatePayload!
-	"""
-	Create multiple new assessmentResponses via file upload
-	"""
-	createBulkCSVAssessmentResponse(
-		"""
-		csv file containing values of the assessmentResponse
-		"""
-		input: Upload!
-	): AssessmentResponseBulkCreatePayload!
-	"""
 	Update an existing assessmentResponse
 	"""
 	updateAssessmentResponse(
@@ -26205,15 +26187,6 @@ type Mutation {
 		"""
 		input: UpdateAssessmentResponseInput!
 	): AssessmentResponseUpdatePayload!
-	"""
-	Delete an existing assessmentResponse
-	"""
-	deleteAssessmentResponse(
-		"""
-		ID of the assessmentResponse
-		"""
-		id: ID!
-	): AssessmentResponseDeletePayload!
 	"""
 	Create a new asset
 	"""

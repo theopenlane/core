@@ -39,10 +39,7 @@ type OpenlaneGraphClient interface {
 	UpdateAssessment(ctx context.Context, updateAssessmentID string, input UpdateAssessmentInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAssessment, error)
 	GetAllAssessmentHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssessmentHistories, error)
 	GetAssessmentHistories(ctx context.Context, first *int64, last *int64, where *AssessmentHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentHistories, error)
-	CreateBulkCSVAssessmentResponse(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVAssessmentResponse, error)
-	CreateBulkAssessmentResponse(ctx context.Context, input []*CreateAssessmentResponseInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkAssessmentResponse, error)
 	CreateAssessmentResponse(ctx context.Context, input CreateAssessmentResponseInput, interceptors ...clientv2.RequestInterceptor) (*CreateAssessmentResponse, error)
-	DeleteAssessmentResponse(ctx context.Context, deleteAssessmentResponseID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAssessmentResponse, error)
 	GetAllAssessmentResponses(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssessmentResponses, error)
 	GetAssessmentResponseByID(ctx context.Context, assessmentResponseID string, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentResponseByID, error)
 	GetAssessmentResponses(ctx context.Context, first *int64, last *int64, where *AssessmentResponseWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAssessmentResponses, error)
@@ -9560,218 +9557,6 @@ func (t *GetAssessmentHistories_AssessmentHistories) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
-type CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses struct {
-	AssessmentID string                         "json:\"assessmentID\" graphql:\"assessmentID\""
-	AssignedAt   *time.Time                     "json:\"assignedAt,omitempty\" graphql:\"assignedAt\""
-	CompletedAt  *time.Time                     "json:\"completedAt,omitempty\" graphql:\"completedAt\""
-	CreatedAt    *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DueDate      *time.Time                     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
-	ID           string                         "json:\"id\" graphql:\"id\""
-	StartedAt    time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
-	Status       enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
-	Tags         []string                       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt    *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UserID       string                         "json:\"userID\" graphql:\"userID\""
-}
-
-func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetAssessmentID() string {
-	if t == nil {
-		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
-	}
-	return t.AssessmentID
-}
-func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetAssignedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
-	}
-	return t.AssignedAt
-}
-func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetCompletedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
-	}
-	return t.CompletedAt
-}
-func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
-	}
-	return t.CreatedAt
-}
-func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetCreatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
-	}
-	return t.CreatedBy
-}
-func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetDueDate() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
-	}
-	return t.DueDate
-}
-func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
-	}
-	return t.ID
-}
-func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetStartedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
-	}
-	return &t.StartedAt
-}
-func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetStatus() *enums.AssessmentResponseStatus {
-	if t == nil {
-		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
-	}
-	return &t.Status
-}
-func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetTags() []string {
-	if t == nil {
-		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
-	}
-	return t.Tags
-}
-func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
-	}
-	return t.UpdatedAt
-}
-func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
-	}
-	return t.UpdatedBy
-}
-func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses) GetUserID() string {
-	if t == nil {
-		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses{}
-	}
-	return t.UserID
-}
-
-type CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse struct {
-	AssessmentResponses []*CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses "json:\"assessmentResponses,omitempty\" graphql:\"assessmentResponses\""
-}
-
-func (t *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse) GetAssessmentResponses() []*CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse_AssessmentResponses {
-	if t == nil {
-		t = &CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse{}
-	}
-	return t.AssessmentResponses
-}
-
-type CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses struct {
-	AssessmentID string                         "json:\"assessmentID\" graphql:\"assessmentID\""
-	AssignedAt   *time.Time                     "json:\"assignedAt,omitempty\" graphql:\"assignedAt\""
-	CompletedAt  *time.Time                     "json:\"completedAt,omitempty\" graphql:\"completedAt\""
-	CreatedAt    *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DueDate      *time.Time                     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
-	ID           string                         "json:\"id\" graphql:\"id\""
-	StartedAt    time.Time                      "json:\"startedAt\" graphql:\"startedAt\""
-	Status       enums.AssessmentResponseStatus "json:\"status\" graphql:\"status\""
-	Tags         []string                       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt    *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UserID       string                         "json:\"userID\" graphql:\"userID\""
-}
-
-func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetAssessmentID() string {
-	if t == nil {
-		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
-	}
-	return t.AssessmentID
-}
-func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetAssignedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
-	}
-	return t.AssignedAt
-}
-func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetCompletedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
-	}
-	return t.CompletedAt
-}
-func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
-	}
-	return t.CreatedAt
-}
-func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetCreatedBy() *string {
-	if t == nil {
-		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
-	}
-	return t.CreatedBy
-}
-func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetDueDate() *time.Time {
-	if t == nil {
-		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
-	}
-	return t.DueDate
-}
-func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetID() string {
-	if t == nil {
-		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
-	}
-	return t.ID
-}
-func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetStartedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
-	}
-	return &t.StartedAt
-}
-func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetStatus() *enums.AssessmentResponseStatus {
-	if t == nil {
-		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
-	}
-	return &t.Status
-}
-func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetTags() []string {
-	if t == nil {
-		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
-	}
-	return t.Tags
-}
-func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
-	}
-	return t.UpdatedAt
-}
-func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
-	}
-	return t.UpdatedBy
-}
-func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses) GetUserID() string {
-	if t == nil {
-		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses{}
-	}
-	return t.UserID
-}
-
-type CreateBulkAssessmentResponse_CreateBulkAssessmentResponse struct {
-	AssessmentResponses []*CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses "json:\"assessmentResponses,omitempty\" graphql:\"assessmentResponses\""
-}
-
-func (t *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse) GetAssessmentResponses() []*CreateBulkAssessmentResponse_CreateBulkAssessmentResponse_AssessmentResponses {
-	if t == nil {
-		t = &CreateBulkAssessmentResponse_CreateBulkAssessmentResponse{}
-	}
-	return t.AssessmentResponses
-}
-
 type CreateAssessmentResponse_CreateAssessmentResponse_AssessmentResponse struct {
 	AssessmentID string                         "json:\"assessmentID\" graphql:\"assessmentID\""
 	AssignedAt   *time.Time                     "json:\"assignedAt,omitempty\" graphql:\"assignedAt\""
@@ -9876,17 +9661,6 @@ func (t *CreateAssessmentResponse_CreateAssessmentResponse) GetAssessmentRespons
 		t = &CreateAssessmentResponse_CreateAssessmentResponse{}
 	}
 	return &t.AssessmentResponse
-}
-
-type DeleteAssessmentResponse_DeleteAssessmentResponse struct {
-	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
-}
-
-func (t *DeleteAssessmentResponse_DeleteAssessmentResponse) GetDeletedID() string {
-	if t == nil {
-		t = &DeleteAssessmentResponse_DeleteAssessmentResponse{}
-	}
-	return t.DeletedID
 }
 
 type GetAllAssessmentResponses_AssessmentResponses_PageInfo struct {
@@ -86194,28 +85968,6 @@ func (t *GetAssessmentHistories) GetAssessmentHistories() *GetAssessmentHistorie
 	return &t.AssessmentHistories
 }
 
-type CreateBulkCSVAssessmentResponse struct {
-	CreateBulkCSVAssessmentResponse CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse "json:\"createBulkCSVAssessmentResponse\" graphql:\"createBulkCSVAssessmentResponse\""
-}
-
-func (t *CreateBulkCSVAssessmentResponse) GetCreateBulkCSVAssessmentResponse() *CreateBulkCSVAssessmentResponse_CreateBulkCSVAssessmentResponse {
-	if t == nil {
-		t = &CreateBulkCSVAssessmentResponse{}
-	}
-	return &t.CreateBulkCSVAssessmentResponse
-}
-
-type CreateBulkAssessmentResponse struct {
-	CreateBulkAssessmentResponse CreateBulkAssessmentResponse_CreateBulkAssessmentResponse "json:\"createBulkAssessmentResponse\" graphql:\"createBulkAssessmentResponse\""
-}
-
-func (t *CreateBulkAssessmentResponse) GetCreateBulkAssessmentResponse() *CreateBulkAssessmentResponse_CreateBulkAssessmentResponse {
-	if t == nil {
-		t = &CreateBulkAssessmentResponse{}
-	}
-	return &t.CreateBulkAssessmentResponse
-}
-
 type CreateAssessmentResponse struct {
 	CreateAssessmentResponse CreateAssessmentResponse_CreateAssessmentResponse "json:\"createAssessmentResponse\" graphql:\"createAssessmentResponse\""
 }
@@ -86225,17 +85977,6 @@ func (t *CreateAssessmentResponse) GetCreateAssessmentResponse() *CreateAssessme
 		t = &CreateAssessmentResponse{}
 	}
 	return &t.CreateAssessmentResponse
-}
-
-type DeleteAssessmentResponse struct {
-	DeleteAssessmentResponse DeleteAssessmentResponse_DeleteAssessmentResponse "json:\"deleteAssessmentResponse\" graphql:\"deleteAssessmentResponse\""
-}
-
-func (t *DeleteAssessmentResponse) GetDeleteAssessmentResponse() *DeleteAssessmentResponse_DeleteAssessmentResponse {
-	if t == nil {
-		t = &DeleteAssessmentResponse{}
-	}
-	return &t.DeleteAssessmentResponse
 }
 
 type GetAllAssessmentResponses struct {
@@ -93044,82 +92785,6 @@ func (c *Client) GetAssessmentHistories(ctx context.Context, first *int64, last 
 	return &res, nil
 }
 
-const CreateBulkCSVAssessmentResponseDocument = `mutation CreateBulkCSVAssessmentResponse ($input: Upload!) {
-	createBulkCSVAssessmentResponse(input: $input) {
-		assessmentResponses {
-			assessmentID
-			assignedAt
-			completedAt
-			createdAt
-			createdBy
-			dueDate
-			id
-			startedAt
-			status
-			tags
-			updatedAt
-			updatedBy
-			userID
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkCSVAssessmentResponse(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVAssessmentResponse, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkCSVAssessmentResponse
-	if err := c.Client.Post(ctx, "CreateBulkCSVAssessmentResponse", CreateBulkCSVAssessmentResponseDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const CreateBulkAssessmentResponseDocument = `mutation CreateBulkAssessmentResponse ($input: [CreateAssessmentResponseInput!]) {
-	createBulkAssessmentResponse(input: $input) {
-		assessmentResponses {
-			assessmentID
-			assignedAt
-			completedAt
-			createdAt
-			createdBy
-			dueDate
-			id
-			startedAt
-			status
-			tags
-			updatedAt
-			updatedBy
-			userID
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkAssessmentResponse(ctx context.Context, input []*CreateAssessmentResponseInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkAssessmentResponse, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkAssessmentResponse
-	if err := c.Client.Post(ctx, "CreateBulkAssessmentResponse", CreateBulkAssessmentResponseDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const CreateAssessmentResponseDocument = `mutation CreateAssessmentResponse ($input: CreateAssessmentResponseInput!) {
 	createAssessmentResponse(input: $input) {
 		assessmentResponse {
@@ -93148,30 +92813,6 @@ func (c *Client) CreateAssessmentResponse(ctx context.Context, input CreateAsses
 
 	var res CreateAssessmentResponse
 	if err := c.Client.Post(ctx, "CreateAssessmentResponse", CreateAssessmentResponseDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const DeleteAssessmentResponseDocument = `mutation DeleteAssessmentResponse ($deleteAssessmentResponseId: ID!) {
-	deleteAssessmentResponse(id: $deleteAssessmentResponseId) {
-		deletedID
-	}
-}
-`
-
-func (c *Client) DeleteAssessmentResponse(ctx context.Context, deleteAssessmentResponseID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAssessmentResponse, error) {
-	vars := map[string]any{
-		"deleteAssessmentResponseId": deleteAssessmentResponseID,
-	}
-
-	var res DeleteAssessmentResponse
-	if err := c.Client.Post(ctx, "DeleteAssessmentResponse", DeleteAssessmentResponseDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -114772,10 +114413,7 @@ var DocumentOperationNames = map[string]string{
 	UpdateAssessmentDocument:                     "UpdateAssessment",
 	GetAllAssessmentHistoriesDocument:            "GetAllAssessmentHistories",
 	GetAssessmentHistoriesDocument:               "GetAssessmentHistories",
-	CreateBulkCSVAssessmentResponseDocument:      "CreateBulkCSVAssessmentResponse",
-	CreateBulkAssessmentResponseDocument:         "CreateBulkAssessmentResponse",
 	CreateAssessmentResponseDocument:             "CreateAssessmentResponse",
-	DeleteAssessmentResponseDocument:             "DeleteAssessmentResponse",
 	GetAllAssessmentResponsesDocument:            "GetAllAssessmentResponses",
 	GetAssessmentResponseByIDDocument:            "GetAssessmentResponseByID",
 	GetAssessmentResponsesDocument:               "GetAssessmentResponses",

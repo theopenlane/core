@@ -2370,11 +2370,9 @@ type ComplexityRoot struct {
 		CreateAsset                        func(childComplexity int, input generated.CreateAssetInput) int
 		CreateBulkAPIToken                 func(childComplexity int, input []*generated.CreateAPITokenInput) int
 		CreateBulkActionPlan               func(childComplexity int, input []*generated.CreateActionPlanInput) int
-		CreateBulkAssessmentResponse       func(childComplexity int, input []*generated.CreateAssessmentResponseInput) int
 		CreateBulkAsset                    func(childComplexity int, input []*generated.CreateAssetInput) int
 		CreateBulkCSVAPIToken              func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVActionPlan            func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVAssessmentResponse    func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVAsset                 func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVContact               func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVControl               func(childComplexity int, input graphql.Upload) int
@@ -2499,7 +2497,6 @@ type ComplexityRoot struct {
 		DeleteAPIToken                     func(childComplexity int, id string) int
 		DeleteActionPlan                   func(childComplexity int, id string) int
 		DeleteAssessment                   func(childComplexity int, id string) int
-		DeleteAssessmentResponse           func(childComplexity int, id string) int
 		DeleteAsset                        func(childComplexity int, id string) int
 		DeleteContact                      func(childComplexity int, id string) int
 		DeleteControl                      func(childComplexity int, id string) int
@@ -15805,18 +15802,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkActionPlan(childComplexity, args["input"].([]*generated.CreateActionPlanInput)), true
 
-	case "Mutation.createBulkAssessmentResponse":
-		if e.complexity.Mutation.CreateBulkAssessmentResponse == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkAssessmentResponse_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkAssessmentResponse(childComplexity, args["input"].([]*generated.CreateAssessmentResponseInput)), true
-
 	case "Mutation.createBulkAsset":
 		if e.complexity.Mutation.CreateBulkAsset == nil {
 			break
@@ -15852,18 +15837,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkCSVActionPlan(childComplexity, args["input"].(graphql.Upload)), true
-
-	case "Mutation.createBulkCSVAssessmentResponse":
-		if e.complexity.Mutation.CreateBulkCSVAssessmentResponse == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkCSVAssessmentResponse_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkCSVAssessmentResponse(childComplexity, args["input"].(graphql.Upload)), true
 
 	case "Mutation.createBulkCSVAsset":
 		if e.complexity.Mutation.CreateBulkCSVAsset == nil {
@@ -17352,18 +17325,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.DeleteAssessment(childComplexity, args["id"].(string)), true
-
-	case "Mutation.deleteAssessmentResponse":
-		if e.complexity.Mutation.DeleteAssessmentResponse == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteAssessmentResponse_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.DeleteAssessmentResponse(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteAsset":
 		if e.complexity.Mutation.DeleteAsset == nil {
@@ -33434,24 +33395,6 @@ extend type Mutation{
         input: CreateAssessmentResponseInput!
     ): AssessmentResponseCreatePayload!
     """
-    Create multiple new assessmentResponses
-    """
-    createBulkAssessmentResponse(
-        """
-        values of the assessmentResponse
-        """
-        input: [CreateAssessmentResponseInput!]
-    ): AssessmentResponseBulkCreatePayload!
-    """
-    Create multiple new assessmentResponses via file upload
-    """
-    createBulkCSVAssessmentResponse(
-        """
-        csv file containing values of the assessmentResponse
-        """
-        input: Upload!
-    ): AssessmentResponseBulkCreatePayload!
-    """
     Update an existing assessmentResponse
     """
     updateAssessmentResponse(
@@ -33464,15 +33407,6 @@ extend type Mutation{
         """
         input: UpdateAssessmentResponseInput!
     ): AssessmentResponseUpdatePayload!
-    """
-    Delete an existing assessmentResponse
-    """
-    deleteAssessmentResponse(
-        """
-        ID of the assessmentResponse
-        """
-        id: ID!
-    ): AssessmentResponseDeletePayload!
 }
 
 """
@@ -33513,7 +33447,8 @@ type AssessmentResponseBulkCreatePayload {
     Created assessmentResponses
     """
     assessmentResponses: [AssessmentResponse!]
-}`, BuiltIn: false},
+}
+`, BuiltIn: false},
 	{Name: "../schema/asset.graphql", Input: `extend type Query {
     """
     Look up asset by ID
