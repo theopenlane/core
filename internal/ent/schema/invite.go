@@ -131,6 +131,7 @@ func (Invite) Indexes() []ent.Index {
 func (i Invite) Edges() []ent.Edge {
 	return []ent.Edge{
 		defaultEdgeToWithPagination(i, Event{}),
+		defaultEdgeToWithPagination(i, Group{}),
 	}
 }
 

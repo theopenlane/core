@@ -61,13 +61,16 @@ type InviteEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// Events holds the value of the events edge.
 	Events []*Event `json:"events,omitempty"`
+	// Groups holds the value of the groups edge.
+	Groups []*Group `json:"groups,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [3]map[string]int
 
 	namedEvents map[string][]*Event
+	namedGroups map[string][]*Group
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -88,6 +91,15 @@ func (e InviteEdges) EventsOrErr() ([]*Event, error) {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
+}
+
+// GroupsOrErr returns the Groups value or an error if the edge
+// was not loaded in eager-loading.
+func (e InviteEdges) GroupsOrErr() ([]*Group, error) {
+	if e.loadedTypes[2] {
+		return e.Groups, nil
+	}
+	return nil, &NotLoadedError{edge: "groups"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -237,6 +249,11 @@ func (i *Invite) QueryEvents() *EventQuery {
 	return NewInviteClient(i.config).QueryEvents(i)
 }
 
+// QueryGroups queries the "groups" edge of the Invite entity.
+func (i *Invite) QueryGroups() *GroupQuery {
+	return NewInviteClient(i.config).QueryGroups(i)
+}
+
 // Update returns a builder for updating this Invite.
 // Note that you need to call Invite.Unwrap() before calling this method if this Invite
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -327,6 +344,30 @@ func (i *Invite) appendNamedEvents(name string, edges ...*Event) {
 		i.Edges.namedEvents[name] = []*Event{}
 	} else {
 		i.Edges.namedEvents[name] = append(i.Edges.namedEvents[name], edges...)
+	}
+}
+
+// NamedGroups returns the Groups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (i *Invite) NamedGroups(name string) ([]*Group, error) {
+	if i.Edges.namedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := i.Edges.namedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (i *Invite) appendNamedGroups(name string, edges ...*Group) {
+	if i.Edges.namedGroups == nil {
+		i.Edges.namedGroups = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		i.Edges.namedGroups[name] = []*Group{}
+	} else {
+		i.Edges.namedGroups[name] = append(i.Edges.namedGroups[name], edges...)
 	}
 }
 

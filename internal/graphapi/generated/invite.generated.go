@@ -93,6 +93,8 @@ func (ec *executionContext) fieldContext_InviteBulkCreatePayload_invites(_ conte
 				return ec.fieldContext_Invite_owner(ctx, field)
 			case "events":
 				return ec.fieldContext_Invite_events(ctx, field)
+			case "groups":
+				return ec.fieldContext_Invite_groups(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Invite", field.Name)
 		},
@@ -167,6 +169,8 @@ func (ec *executionContext) fieldContext_InviteCreatePayload_invite(_ context.Co
 				return ec.fieldContext_Invite_owner(ctx, field)
 			case "events":
 				return ec.fieldContext_Invite_events(ctx, field)
+			case "groups":
+				return ec.fieldContext_Invite_groups(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Invite", field.Name)
 		},
@@ -285,6 +289,8 @@ func (ec *executionContext) fieldContext_InviteUpdatePayload_invite(_ context.Co
 				return ec.fieldContext_Invite_owner(ctx, field)
 			case "events":
 				return ec.fieldContext_Invite_events(ctx, field)
+			case "groups":
+				return ec.fieldContext_Invite_groups(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Invite", field.Name)
 		},

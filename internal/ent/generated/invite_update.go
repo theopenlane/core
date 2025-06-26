@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -235,6 +236,21 @@ func (iu *InviteUpdate) AddEvents(e ...*Event) *InviteUpdate {
 	return iu.AddEventIDs(ids...)
 }
 
+// AddGroupIDs adds the "groups" edge to the Group entity by IDs.
+func (iu *InviteUpdate) AddGroupIDs(ids ...string) *InviteUpdate {
+	iu.mutation.AddGroupIDs(ids...)
+	return iu
+}
+
+// AddGroups adds the "groups" edges to the Group entity.
+func (iu *InviteUpdate) AddGroups(g ...*Group) *InviteUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return iu.AddGroupIDs(ids...)
+}
+
 // Mutation returns the InviteMutation object of the builder.
 func (iu *InviteUpdate) Mutation() *InviteMutation {
 	return iu.mutation
@@ -265,6 +281,27 @@ func (iu *InviteUpdate) RemoveEvents(e ...*Event) *InviteUpdate {
 		ids[i] = e[i].ID
 	}
 	return iu.RemoveEventIDs(ids...)
+}
+
+// ClearGroups clears all "groups" edges to the Group entity.
+func (iu *InviteUpdate) ClearGroups() *InviteUpdate {
+	iu.mutation.ClearGroups()
+	return iu
+}
+
+// RemoveGroupIDs removes the "groups" edge to Group entities by IDs.
+func (iu *InviteUpdate) RemoveGroupIDs(ids ...string) *InviteUpdate {
+	iu.mutation.RemoveGroupIDs(ids...)
+	return iu
+}
+
+// RemoveGroups removes "groups" edges to Group entities.
+func (iu *InviteUpdate) RemoveGroups(g ...*Group) *InviteUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return iu.RemoveGroupIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -488,6 +525,54 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = iu.schemaConfig.InviteEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if iu.mutation.GroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   invite.GroupsTable,
+			Columns: invite.GroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = iu.schemaConfig.InviteGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := iu.mutation.RemovedGroupsIDs(); len(nodes) > 0 && !iu.mutation.GroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   invite.GroupsTable,
+			Columns: invite.GroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = iu.schemaConfig.InviteGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := iu.mutation.GroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   invite.GroupsTable,
+			Columns: invite.GroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = iu.schemaConfig.InviteGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -718,6 +803,21 @@ func (iuo *InviteUpdateOne) AddEvents(e ...*Event) *InviteUpdateOne {
 	return iuo.AddEventIDs(ids...)
 }
 
+// AddGroupIDs adds the "groups" edge to the Group entity by IDs.
+func (iuo *InviteUpdateOne) AddGroupIDs(ids ...string) *InviteUpdateOne {
+	iuo.mutation.AddGroupIDs(ids...)
+	return iuo
+}
+
+// AddGroups adds the "groups" edges to the Group entity.
+func (iuo *InviteUpdateOne) AddGroups(g ...*Group) *InviteUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return iuo.AddGroupIDs(ids...)
+}
+
 // Mutation returns the InviteMutation object of the builder.
 func (iuo *InviteUpdateOne) Mutation() *InviteMutation {
 	return iuo.mutation
@@ -748,6 +848,27 @@ func (iuo *InviteUpdateOne) RemoveEvents(e ...*Event) *InviteUpdateOne {
 		ids[i] = e[i].ID
 	}
 	return iuo.RemoveEventIDs(ids...)
+}
+
+// ClearGroups clears all "groups" edges to the Group entity.
+func (iuo *InviteUpdateOne) ClearGroups() *InviteUpdateOne {
+	iuo.mutation.ClearGroups()
+	return iuo
+}
+
+// RemoveGroupIDs removes the "groups" edge to Group entities by IDs.
+func (iuo *InviteUpdateOne) RemoveGroupIDs(ids ...string) *InviteUpdateOne {
+	iuo.mutation.RemoveGroupIDs(ids...)
+	return iuo
+}
+
+// RemoveGroups removes "groups" edges to Group entities.
+func (iuo *InviteUpdateOne) RemoveGroups(g ...*Group) *InviteUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return iuo.RemoveGroupIDs(ids...)
 }
 
 // Where appends a list predicates to the InviteUpdate builder.
@@ -1001,6 +1122,54 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 			},
 		}
 		edge.Schema = iuo.schemaConfig.InviteEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if iuo.mutation.GroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   invite.GroupsTable,
+			Columns: invite.GroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = iuo.schemaConfig.InviteGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := iuo.mutation.RemovedGroupsIDs(); len(nodes) > 0 && !iuo.mutation.GroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   invite.GroupsTable,
+			Columns: invite.GroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = iuo.schemaConfig.InviteGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := iuo.mutation.GroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   invite.GroupsTable,
+			Columns: invite.GroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = iuo.schemaConfig.InviteGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

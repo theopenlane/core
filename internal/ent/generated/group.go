@@ -144,11 +144,13 @@ type GroupEdges struct {
 	Files []*File `json:"files,omitempty"`
 	// Tasks holds the value of the tasks edge.
 	Tasks []*Task `json:"tasks,omitempty"`
+	// Invites holds the value of the invites edge.
+	Invites []*Invite `json:"invites,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*GroupMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [34]bool
+	loadedTypes [35]bool
 	// totalCount holds the count of the edges above.
 	totalCount [34]map[string]int
 
@@ -183,6 +185,7 @@ type GroupEdges struct {
 	namedIntegrations                       map[string][]*Integration
 	namedFiles                              map[string][]*File
 	namedTasks                              map[string][]*Task
+	namedInvites                            map[string][]*Invite
 	namedMembers                            map[string][]*GroupMembership
 }
 
@@ -487,10 +490,19 @@ func (e GroupEdges) TasksOrErr() ([]*Task, error) {
 	return nil, &NotLoadedError{edge: "tasks"}
 }
 
+// InvitesOrErr returns the Invites value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) InvitesOrErr() ([]*Invite, error) {
+	if e.loadedTypes[33] {
+		return e.Invites, nil
+	}
+	return nil, &NotLoadedError{edge: "invites"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) MembersOrErr() ([]*GroupMembership, error) {
-	if e.loadedTypes[33] {
+	if e.loadedTypes[34] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -978,6 +990,11 @@ func (gr *Group) QueryFiles() *FileQuery {
 // QueryTasks queries the "tasks" edge of the Group entity.
 func (gr *Group) QueryTasks() *TaskQuery {
 	return NewGroupClient(gr.config).QueryTasks(gr)
+}
+
+// QueryInvites queries the "invites" edge of the Group entity.
+func (gr *Group) QueryInvites() *InviteQuery {
+	return NewGroupClient(gr.config).QueryInvites(gr)
 }
 
 // QueryMembers queries the "members" edge of the Group entity.
@@ -1797,6 +1814,30 @@ func (gr *Group) appendNamedTasks(name string, edges ...*Task) {
 		gr.Edges.namedTasks[name] = []*Task{}
 	} else {
 		gr.Edges.namedTasks[name] = append(gr.Edges.namedTasks[name], edges...)
+	}
+}
+
+// NamedInvites returns the Invites named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (gr *Group) NamedInvites(name string) ([]*Invite, error) {
+	if gr.Edges.namedInvites == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := gr.Edges.namedInvites[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (gr *Group) appendNamedInvites(name string, edges ...*Invite) {
+	if gr.Edges.namedInvites == nil {
+		gr.Edges.namedInvites = make(map[string][]*Invite)
+	}
+	if len(edges) == 0 {
+		gr.Edges.namedInvites[name] = []*Invite{}
+	} else {
+		gr.Edges.namedInvites[name] = append(gr.Edges.namedInvites[name], edges...)
 	}
 }
 

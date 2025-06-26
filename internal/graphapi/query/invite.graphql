@@ -39,6 +39,13 @@ mutation CreateInvite($input: CreateInviteInput!) {
       owner {
         id
       }
+      groups {
+        edges {
+          node {
+            id
+          }
+        }
+      }
     }
   }
 }
@@ -57,6 +64,13 @@ query GetAllInvites {
         recipient
         role
         status
+        groups {
+          edges {
+            node {
+              id
+            }
+          }
+        }
       }
     }
   }

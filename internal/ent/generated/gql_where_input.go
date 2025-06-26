@@ -35855,6 +35855,10 @@ type InviteWhereInput struct {
 	// "events" edge predicates.
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
+
+	// "groups" edge predicates.
+	HasGroups     *bool              `json:"hasGroups,omitempty"`
+	HasGroupsWith []*GroupWhereInput `json:"hasGroupsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -36351,6 +36355,24 @@ func (i *InviteWhereInput) P() (predicate.Invite, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, invite.HasEventsWith(with...))
+	}
+	if i.HasGroups != nil {
+		p := invite.HasGroups()
+		if !*i.HasGroups {
+			p = invite.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasGroupsWith))
+		for _, w := range i.HasGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, invite.HasGroupsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

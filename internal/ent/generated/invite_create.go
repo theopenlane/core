@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/pkg/enums"
@@ -241,6 +242,21 @@ func (ic *InviteCreate) AddEvents(e ...*Event) *InviteCreate {
 		ids[i] = e[i].ID
 	}
 	return ic.AddEventIDs(ids...)
+}
+
+// AddGroupIDs adds the "groups" edge to the Group entity by IDs.
+func (ic *InviteCreate) AddGroupIDs(ids ...string) *InviteCreate {
+	ic.mutation.AddGroupIDs(ids...)
+	return ic
+}
+
+// AddGroups adds the "groups" edges to the Group entity.
+func (ic *InviteCreate) AddGroups(g ...*Group) *InviteCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ic.AddGroupIDs(ids...)
 }
 
 // Mutation returns the InviteMutation object of the builder.
@@ -500,6 +516,23 @@ func (ic *InviteCreate) createSpec() (*Invite, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = ic.schemaConfig.InviteEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ic.mutation.GroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   invite.GroupsTable,
+			Columns: invite.GroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ic.schemaConfig.InviteGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
