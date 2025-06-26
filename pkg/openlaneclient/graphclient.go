@@ -45478,7 +45478,6 @@ type CreateOrganization_CreateOrganization_Organization_Setting struct {
 	CreatedAt           *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy           *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Domains             []string        "json:\"domains,omitempty\" graphql:\"domains\""
-	GeoLocation         *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID                  string          "json:\"id\" graphql:\"id\""
 	Tags                []string        "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier       *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
@@ -45533,12 +45532,6 @@ func (t *CreateOrganization_CreateOrganization_Organization_Setting) GetDomains(
 		t = &CreateOrganization_CreateOrganization_Organization_Setting{}
 	}
 	return t.Domains
-}
-func (t *CreateOrganization_CreateOrganization_Organization_Setting) GetGeoLocation() *enums.Region {
-	if t == nil {
-		t = &CreateOrganization_CreateOrganization_Organization_Setting{}
-	}
-	return t.GeoLocation
 }
 func (t *CreateOrganization_CreateOrganization_Organization_Setting) GetID() string {
 	if t == nil {
@@ -47884,35 +47877,10 @@ func (t *GetOrganizations_Organizations_Edges_Node_Children) GetEdges() []*GetOr
 	return t.Edges
 }
 
-type GetOrganizations_Organizations_Edges_Node_Members_Edges_Node_User struct {
-	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID        string  "json:\"id\" graphql:\"id\""
-	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_Members_Edges_Node_User) GetFirstName() *string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_Members_Edges_Node_User{}
-	}
-	return t.FirstName
-}
-func (t *GetOrganizations_Organizations_Edges_Node_Members_Edges_Node_User) GetID() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_Members_Edges_Node_User{}
-	}
-	return t.ID
-}
-func (t *GetOrganizations_Organizations_Edges_Node_Members_Edges_Node_User) GetLastName() *string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_Members_Edges_Node_User{}
-	}
-	return t.LastName
-}
-
 type GetOrganizations_Organizations_Edges_Node_Members_Edges_Node struct {
-	ID   string                                                            "json:\"id\" graphql:\"id\""
-	Role enums.Role                                                        "json:\"role\" graphql:\"role\""
-	User GetOrganizations_Organizations_Edges_Node_Members_Edges_Node_User "json:\"user\" graphql:\"user\""
+	ID     string     "json:\"id\" graphql:\"id\""
+	Role   enums.Role "json:\"role\" graphql:\"role\""
+	UserID string     "json:\"userID\" graphql:\"userID\""
 }
 
 func (t *GetOrganizations_Organizations_Edges_Node_Members_Edges_Node) GetID() string {
@@ -47927,11 +47895,11 @@ func (t *GetOrganizations_Organizations_Edges_Node_Members_Edges_Node) GetRole()
 	}
 	return &t.Role
 }
-func (t *GetOrganizations_Organizations_Edges_Node_Members_Edges_Node) GetUser() *GetOrganizations_Organizations_Edges_Node_Members_Edges_Node_User {
+func (t *GetOrganizations_Organizations_Edges_Node_Members_Edges_Node) GetUserID() string {
 	if t == nil {
 		t = &GetOrganizations_Organizations_Edges_Node_Members_Edges_Node{}
 	}
-	return &t.User
+	return t.UserID
 }
 
 type GetOrganizations_Organizations_Edges_Node_Members_Edges struct {
@@ -47969,15 +47937,10 @@ type GetOrganizations_Organizations_Edges_Node_Setting struct {
 	BillingContact      *string         "json:\"billingContact,omitempty\" graphql:\"billingContact\""
 	BillingEmail        *string         "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
 	BillingPhone        *string         "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	CreatedAt           *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy           *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Domains             []string        "json:\"domains,omitempty\" graphql:\"domains\""
-	GeoLocation         *enums.Region   "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
 	ID                  string          "json:\"id\" graphql:\"id\""
 	Tags                []string        "json:\"tags,omitempty\" graphql:\"tags\""
 	TaxIdentifier       *string         "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
-	UpdatedAt           *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy           *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetOrganizations_Organizations_Edges_Node_Setting) GetAllowedEmailDomains() []string {
@@ -48010,29 +47973,11 @@ func (t *GetOrganizations_Organizations_Edges_Node_Setting) GetBillingPhone() *s
 	}
 	return t.BillingPhone
 }
-func (t *GetOrganizations_Organizations_Edges_Node_Setting) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_Setting{}
-	}
-	return t.CreatedAt
-}
-func (t *GetOrganizations_Organizations_Edges_Node_Setting) GetCreatedBy() *string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_Setting{}
-	}
-	return t.CreatedBy
-}
 func (t *GetOrganizations_Organizations_Edges_Node_Setting) GetDomains() []string {
 	if t == nil {
 		t = &GetOrganizations_Organizations_Edges_Node_Setting{}
 	}
 	return t.Domains
-}
-func (t *GetOrganizations_Organizations_Edges_Node_Setting) GetGeoLocation() *enums.Region {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_Setting{}
-	}
-	return t.GeoLocation
 }
 func (t *GetOrganizations_Organizations_Edges_Node_Setting) GetID() string {
 	if t == nil {
@@ -48051,18 +47996,6 @@ func (t *GetOrganizations_Organizations_Edges_Node_Setting) GetTaxIdentifier() *
 		t = &GetOrganizations_Organizations_Edges_Node_Setting{}
 	}
 	return t.TaxIdentifier
-}
-func (t *GetOrganizations_Organizations_Edges_Node_Setting) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_Setting{}
-	}
-	return t.UpdatedAt
-}
-func (t *GetOrganizations_Organizations_Edges_Node_Setting) GetUpdatedBy() *string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_Setting{}
-	}
-	return t.UpdatedBy
 }
 
 type GetOrganizations_Organizations_Edges_Node_OrgSubscriptions struct {
@@ -48111,460 +48044,20 @@ func (t *GetOrganizations_Organizations_Edges_Node_OrgSubscriptions) GetStripeSu
 	return t.StripeSubscriptionStatus
 }
 
-type GetOrganizations_Organizations_Edges_Node_ControlCreators_Edges_Node struct {
-	DisplayID   string "json:\"displayID\" graphql:\"displayID\""
-	DisplayName string "json:\"displayName\" graphql:\"displayName\""
-	ID          string "json:\"id\" graphql:\"id\""
-	Name        string "json:\"name\" graphql:\"name\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_ControlCreators_Edges_Node) GetDisplayID() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_ControlCreators_Edges_Node{}
-	}
-	return t.DisplayID
-}
-func (t *GetOrganizations_Organizations_Edges_Node_ControlCreators_Edges_Node) GetDisplayName() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_ControlCreators_Edges_Node{}
-	}
-	return t.DisplayName
-}
-func (t *GetOrganizations_Organizations_Edges_Node_ControlCreators_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_ControlCreators_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *GetOrganizations_Organizations_Edges_Node_ControlCreators_Edges_Node) GetName() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_ControlCreators_Edges_Node{}
-	}
-	return t.Name
-}
-
-type GetOrganizations_Organizations_Edges_Node_ControlCreators_Edges struct {
-	Node *GetOrganizations_Organizations_Edges_Node_ControlCreators_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_ControlCreators_Edges) GetNode() *GetOrganizations_Organizations_Edges_Node_ControlCreators_Edges_Node {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_ControlCreators_Edges{}
-	}
-	return t.Node
-}
-
-type GetOrganizations_Organizations_Edges_Node_ControlCreators struct {
-	Edges []*GetOrganizations_Organizations_Edges_Node_ControlCreators_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_ControlCreators) GetEdges() []*GetOrganizations_Organizations_Edges_Node_ControlCreators_Edges {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_ControlCreators{}
-	}
-	return t.Edges
-}
-
-type GetOrganizations_Organizations_Edges_Node_ProgramCreators_Edges_Node struct {
-	DisplayID   string "json:\"displayID\" graphql:\"displayID\""
-	DisplayName string "json:\"displayName\" graphql:\"displayName\""
-	ID          string "json:\"id\" graphql:\"id\""
-	Name        string "json:\"name\" graphql:\"name\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_ProgramCreators_Edges_Node) GetDisplayID() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_ProgramCreators_Edges_Node{}
-	}
-	return t.DisplayID
-}
-func (t *GetOrganizations_Organizations_Edges_Node_ProgramCreators_Edges_Node) GetDisplayName() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_ProgramCreators_Edges_Node{}
-	}
-	return t.DisplayName
-}
-func (t *GetOrganizations_Organizations_Edges_Node_ProgramCreators_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_ProgramCreators_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *GetOrganizations_Organizations_Edges_Node_ProgramCreators_Edges_Node) GetName() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_ProgramCreators_Edges_Node{}
-	}
-	return t.Name
-}
-
-type GetOrganizations_Organizations_Edges_Node_ProgramCreators_Edges struct {
-	Node *GetOrganizations_Organizations_Edges_Node_ProgramCreators_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_ProgramCreators_Edges) GetNode() *GetOrganizations_Organizations_Edges_Node_ProgramCreators_Edges_Node {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_ProgramCreators_Edges{}
-	}
-	return t.Node
-}
-
-type GetOrganizations_Organizations_Edges_Node_ProgramCreators struct {
-	Edges []*GetOrganizations_Organizations_Edges_Node_ProgramCreators_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_ProgramCreators) GetEdges() []*GetOrganizations_Organizations_Edges_Node_ProgramCreators_Edges {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_ProgramCreators{}
-	}
-	return t.Edges
-}
-
-type GetOrganizations_Organizations_Edges_Node_ProcedureCreators_Edges_Node struct {
-	DisplayID   string "json:\"displayID\" graphql:\"displayID\""
-	DisplayName string "json:\"displayName\" graphql:\"displayName\""
-	ID          string "json:\"id\" graphql:\"id\""
-	Name        string "json:\"name\" graphql:\"name\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_ProcedureCreators_Edges_Node) GetDisplayID() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_ProcedureCreators_Edges_Node{}
-	}
-	return t.DisplayID
-}
-func (t *GetOrganizations_Organizations_Edges_Node_ProcedureCreators_Edges_Node) GetDisplayName() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_ProcedureCreators_Edges_Node{}
-	}
-	return t.DisplayName
-}
-func (t *GetOrganizations_Organizations_Edges_Node_ProcedureCreators_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_ProcedureCreators_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *GetOrganizations_Organizations_Edges_Node_ProcedureCreators_Edges_Node) GetName() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_ProcedureCreators_Edges_Node{}
-	}
-	return t.Name
-}
-
-type GetOrganizations_Organizations_Edges_Node_ProcedureCreators_Edges struct {
-	Node *GetOrganizations_Organizations_Edges_Node_ProcedureCreators_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_ProcedureCreators_Edges) GetNode() *GetOrganizations_Organizations_Edges_Node_ProcedureCreators_Edges_Node {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_ProcedureCreators_Edges{}
-	}
-	return t.Node
-}
-
-type GetOrganizations_Organizations_Edges_Node_ProcedureCreators struct {
-	Edges []*GetOrganizations_Organizations_Edges_Node_ProcedureCreators_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_ProcedureCreators) GetEdges() []*GetOrganizations_Organizations_Edges_Node_ProcedureCreators_Edges {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_ProcedureCreators{}
-	}
-	return t.Edges
-}
-
-type GetOrganizations_Organizations_Edges_Node_InternalPolicyCreators_Edges_Node struct {
-	DisplayID   string "json:\"displayID\" graphql:\"displayID\""
-	DisplayName string "json:\"displayName\" graphql:\"displayName\""
-	ID          string "json:\"id\" graphql:\"id\""
-	Name        string "json:\"name\" graphql:\"name\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_InternalPolicyCreators_Edges_Node) GetDisplayID() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_InternalPolicyCreators_Edges_Node{}
-	}
-	return t.DisplayID
-}
-func (t *GetOrganizations_Organizations_Edges_Node_InternalPolicyCreators_Edges_Node) GetDisplayName() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_InternalPolicyCreators_Edges_Node{}
-	}
-	return t.DisplayName
-}
-func (t *GetOrganizations_Organizations_Edges_Node_InternalPolicyCreators_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_InternalPolicyCreators_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *GetOrganizations_Organizations_Edges_Node_InternalPolicyCreators_Edges_Node) GetName() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_InternalPolicyCreators_Edges_Node{}
-	}
-	return t.Name
-}
-
-type GetOrganizations_Organizations_Edges_Node_InternalPolicyCreators_Edges struct {
-	Node *GetOrganizations_Organizations_Edges_Node_InternalPolicyCreators_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_InternalPolicyCreators_Edges) GetNode() *GetOrganizations_Organizations_Edges_Node_InternalPolicyCreators_Edges_Node {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_InternalPolicyCreators_Edges{}
-	}
-	return t.Node
-}
-
-type GetOrganizations_Organizations_Edges_Node_InternalPolicyCreators struct {
-	Edges []*GetOrganizations_Organizations_Edges_Node_InternalPolicyCreators_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_InternalPolicyCreators) GetEdges() []*GetOrganizations_Organizations_Edges_Node_InternalPolicyCreators_Edges {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_InternalPolicyCreators{}
-	}
-	return t.Edges
-}
-
-type GetOrganizations_Organizations_Edges_Node_ControlObjectiveCreators_Edges_Node struct {
-	DisplayID   string "json:\"displayID\" graphql:\"displayID\""
-	DisplayName string "json:\"displayName\" graphql:\"displayName\""
-	ID          string "json:\"id\" graphql:\"id\""
-	Name        string "json:\"name\" graphql:\"name\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_ControlObjectiveCreators_Edges_Node) GetDisplayID() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_ControlObjectiveCreators_Edges_Node{}
-	}
-	return t.DisplayID
-}
-func (t *GetOrganizations_Organizations_Edges_Node_ControlObjectiveCreators_Edges_Node) GetDisplayName() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_ControlObjectiveCreators_Edges_Node{}
-	}
-	return t.DisplayName
-}
-func (t *GetOrganizations_Organizations_Edges_Node_ControlObjectiveCreators_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_ControlObjectiveCreators_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *GetOrganizations_Organizations_Edges_Node_ControlObjectiveCreators_Edges_Node) GetName() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_ControlObjectiveCreators_Edges_Node{}
-	}
-	return t.Name
-}
-
-type GetOrganizations_Organizations_Edges_Node_ControlObjectiveCreators_Edges struct {
-	Node *GetOrganizations_Organizations_Edges_Node_ControlObjectiveCreators_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_ControlObjectiveCreators_Edges) GetNode() *GetOrganizations_Organizations_Edges_Node_ControlObjectiveCreators_Edges_Node {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_ControlObjectiveCreators_Edges{}
-	}
-	return t.Node
-}
-
-type GetOrganizations_Organizations_Edges_Node_ControlObjectiveCreators struct {
-	Edges []*GetOrganizations_Organizations_Edges_Node_ControlObjectiveCreators_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_ControlObjectiveCreators) GetEdges() []*GetOrganizations_Organizations_Edges_Node_ControlObjectiveCreators_Edges {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_ControlObjectiveCreators{}
-	}
-	return t.Edges
-}
-
-type GetOrganizations_Organizations_Edges_Node_NarrativeCreators_Edges_Node struct {
-	DisplayID   string "json:\"displayID\" graphql:\"displayID\""
-	DisplayName string "json:\"displayName\" graphql:\"displayName\""
-	ID          string "json:\"id\" graphql:\"id\""
-	Name        string "json:\"name\" graphql:\"name\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_NarrativeCreators_Edges_Node) GetDisplayID() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_NarrativeCreators_Edges_Node{}
-	}
-	return t.DisplayID
-}
-func (t *GetOrganizations_Organizations_Edges_Node_NarrativeCreators_Edges_Node) GetDisplayName() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_NarrativeCreators_Edges_Node{}
-	}
-	return t.DisplayName
-}
-func (t *GetOrganizations_Organizations_Edges_Node_NarrativeCreators_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_NarrativeCreators_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *GetOrganizations_Organizations_Edges_Node_NarrativeCreators_Edges_Node) GetName() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_NarrativeCreators_Edges_Node{}
-	}
-	return t.Name
-}
-
-type GetOrganizations_Organizations_Edges_Node_NarrativeCreators_Edges struct {
-	Node *GetOrganizations_Organizations_Edges_Node_NarrativeCreators_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_NarrativeCreators_Edges) GetNode() *GetOrganizations_Organizations_Edges_Node_NarrativeCreators_Edges_Node {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_NarrativeCreators_Edges{}
-	}
-	return t.Node
-}
-
-type GetOrganizations_Organizations_Edges_Node_NarrativeCreators struct {
-	Edges []*GetOrganizations_Organizations_Edges_Node_NarrativeCreators_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_NarrativeCreators) GetEdges() []*GetOrganizations_Organizations_Edges_Node_NarrativeCreators_Edges {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_NarrativeCreators{}
-	}
-	return t.Edges
-}
-
-type GetOrganizations_Organizations_Edges_Node_RiskCreators_Edges_Node struct {
-	DisplayID   string "json:\"displayID\" graphql:\"displayID\""
-	DisplayName string "json:\"displayName\" graphql:\"displayName\""
-	ID          string "json:\"id\" graphql:\"id\""
-	Name        string "json:\"name\" graphql:\"name\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_RiskCreators_Edges_Node) GetDisplayID() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_RiskCreators_Edges_Node{}
-	}
-	return t.DisplayID
-}
-func (t *GetOrganizations_Organizations_Edges_Node_RiskCreators_Edges_Node) GetDisplayName() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_RiskCreators_Edges_Node{}
-	}
-	return t.DisplayName
-}
-func (t *GetOrganizations_Organizations_Edges_Node_RiskCreators_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_RiskCreators_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *GetOrganizations_Organizations_Edges_Node_RiskCreators_Edges_Node) GetName() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_RiskCreators_Edges_Node{}
-	}
-	return t.Name
-}
-
-type GetOrganizations_Organizations_Edges_Node_RiskCreators_Edges struct {
-	Node *GetOrganizations_Organizations_Edges_Node_RiskCreators_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_RiskCreators_Edges) GetNode() *GetOrganizations_Organizations_Edges_Node_RiskCreators_Edges_Node {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_RiskCreators_Edges{}
-	}
-	return t.Node
-}
-
-type GetOrganizations_Organizations_Edges_Node_RiskCreators struct {
-	Edges []*GetOrganizations_Organizations_Edges_Node_RiskCreators_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_RiskCreators) GetEdges() []*GetOrganizations_Organizations_Edges_Node_RiskCreators_Edges {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_RiskCreators{}
-	}
-	return t.Edges
-}
-
-type GetOrganizations_Organizations_Edges_Node_TemplateCreators_Edges_Node struct {
-	DisplayID   string "json:\"displayID\" graphql:\"displayID\""
-	DisplayName string "json:\"displayName\" graphql:\"displayName\""
-	ID          string "json:\"id\" graphql:\"id\""
-	Name        string "json:\"name\" graphql:\"name\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_TemplateCreators_Edges_Node) GetDisplayID() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_TemplateCreators_Edges_Node{}
-	}
-	return t.DisplayID
-}
-func (t *GetOrganizations_Organizations_Edges_Node_TemplateCreators_Edges_Node) GetDisplayName() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_TemplateCreators_Edges_Node{}
-	}
-	return t.DisplayName
-}
-func (t *GetOrganizations_Organizations_Edges_Node_TemplateCreators_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_TemplateCreators_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *GetOrganizations_Organizations_Edges_Node_TemplateCreators_Edges_Node) GetName() string {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_TemplateCreators_Edges_Node{}
-	}
-	return t.Name
-}
-
-type GetOrganizations_Organizations_Edges_Node_TemplateCreators_Edges struct {
-	Node *GetOrganizations_Organizations_Edges_Node_TemplateCreators_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_TemplateCreators_Edges) GetNode() *GetOrganizations_Organizations_Edges_Node_TemplateCreators_Edges_Node {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_TemplateCreators_Edges{}
-	}
-	return t.Node
-}
-
-type GetOrganizations_Organizations_Edges_Node_TemplateCreators struct {
-	Edges []*GetOrganizations_Organizations_Edges_Node_TemplateCreators_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetOrganizations_Organizations_Edges_Node_TemplateCreators) GetEdges() []*GetOrganizations_Organizations_Edges_Node_TemplateCreators_Edges {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node_TemplateCreators{}
-	}
-	return t.Edges
-}
-
 type GetOrganizations_Organizations_Edges_Node struct {
-	Children                 GetOrganizations_Organizations_Edges_Node_Children                 "json:\"children\" graphql:\"children\""
-	ControlCreators          GetOrganizations_Organizations_Edges_Node_ControlCreators          "json:\"controlCreators\" graphql:\"controlCreators\""
-	ControlObjectiveCreators GetOrganizations_Organizations_Edges_Node_ControlObjectiveCreators "json:\"controlObjectiveCreators\" graphql:\"controlObjectiveCreators\""
-	CreatedAt                *time.Time                                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	Description              *string                                                            "json:\"description,omitempty\" graphql:\"description\""
-	DisplayName              string                                                             "json:\"displayName\" graphql:\"displayName\""
-	ID                       string                                                             "json:\"id\" graphql:\"id\""
-	InternalPolicyCreators   GetOrganizations_Organizations_Edges_Node_InternalPolicyCreators   "json:\"internalPolicyCreators\" graphql:\"internalPolicyCreators\""
-	Members                  GetOrganizations_Organizations_Edges_Node_Members                  "json:\"members\" graphql:\"members\""
-	Name                     string                                                             "json:\"name\" graphql:\"name\""
-	NarrativeCreators        GetOrganizations_Organizations_Edges_Node_NarrativeCreators        "json:\"narrativeCreators\" graphql:\"narrativeCreators\""
-	OrgSubscriptions         []*GetOrganizations_Organizations_Edges_Node_OrgSubscriptions      "json:\"orgSubscriptions,omitempty\" graphql:\"orgSubscriptions\""
-	Parent                   *GetOrganizations_Organizations_Edges_Node_Parent                  "json:\"parent,omitempty\" graphql:\"parent\""
-	PersonalOrg              *bool                                                              "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
-	ProcedureCreators        GetOrganizations_Organizations_Edges_Node_ProcedureCreators        "json:\"procedureCreators\" graphql:\"procedureCreators\""
-	ProgramCreators          GetOrganizations_Organizations_Edges_Node_ProgramCreators          "json:\"programCreators\" graphql:\"programCreators\""
-	RiskCreators             GetOrganizations_Organizations_Edges_Node_RiskCreators             "json:\"riskCreators\" graphql:\"riskCreators\""
-	Setting                  *GetOrganizations_Organizations_Edges_Node_Setting                 "json:\"setting,omitempty\" graphql:\"setting\""
-	Tags                     []string                                                           "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateCreators         GetOrganizations_Organizations_Edges_Node_TemplateCreators         "json:\"templateCreators\" graphql:\"templateCreators\""
-	UpdatedAt                *time.Time                                                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	Children         GetOrganizations_Organizations_Edges_Node_Children            "json:\"children\" graphql:\"children\""
+	CreatedAt        *time.Time                                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	Description      *string                                                       "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName      string                                                        "json:\"displayName\" graphql:\"displayName\""
+	ID               string                                                        "json:\"id\" graphql:\"id\""
+	Members          GetOrganizations_Organizations_Edges_Node_Members             "json:\"members\" graphql:\"members\""
+	Name             string                                                        "json:\"name\" graphql:\"name\""
+	OrgSubscriptions []*GetOrganizations_Organizations_Edges_Node_OrgSubscriptions "json:\"orgSubscriptions,omitempty\" graphql:\"orgSubscriptions\""
+	Parent           *GetOrganizations_Organizations_Edges_Node_Parent             "json:\"parent,omitempty\" graphql:\"parent\""
+	PersonalOrg      *bool                                                         "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
+	Setting          *GetOrganizations_Organizations_Edges_Node_Setting            "json:\"setting,omitempty\" graphql:\"setting\""
+	Tags             []string                                                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time                                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 }
 
 func (t *GetOrganizations_Organizations_Edges_Node) GetChildren() *GetOrganizations_Organizations_Edges_Node_Children {
@@ -48572,18 +48065,6 @@ func (t *GetOrganizations_Organizations_Edges_Node) GetChildren() *GetOrganizati
 		t = &GetOrganizations_Organizations_Edges_Node{}
 	}
 	return &t.Children
-}
-func (t *GetOrganizations_Organizations_Edges_Node) GetControlCreators() *GetOrganizations_Organizations_Edges_Node_ControlCreators {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node{}
-	}
-	return &t.ControlCreators
-}
-func (t *GetOrganizations_Organizations_Edges_Node) GetControlObjectiveCreators() *GetOrganizations_Organizations_Edges_Node_ControlObjectiveCreators {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node{}
-	}
-	return &t.ControlObjectiveCreators
 }
 func (t *GetOrganizations_Organizations_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -48609,12 +48090,6 @@ func (t *GetOrganizations_Organizations_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetOrganizations_Organizations_Edges_Node) GetInternalPolicyCreators() *GetOrganizations_Organizations_Edges_Node_InternalPolicyCreators {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node{}
-	}
-	return &t.InternalPolicyCreators
-}
 func (t *GetOrganizations_Organizations_Edges_Node) GetMembers() *GetOrganizations_Organizations_Edges_Node_Members {
 	if t == nil {
 		t = &GetOrganizations_Organizations_Edges_Node{}
@@ -48626,12 +48101,6 @@ func (t *GetOrganizations_Organizations_Edges_Node) GetName() string {
 		t = &GetOrganizations_Organizations_Edges_Node{}
 	}
 	return t.Name
-}
-func (t *GetOrganizations_Organizations_Edges_Node) GetNarrativeCreators() *GetOrganizations_Organizations_Edges_Node_NarrativeCreators {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node{}
-	}
-	return &t.NarrativeCreators
 }
 func (t *GetOrganizations_Organizations_Edges_Node) GetOrgSubscriptions() []*GetOrganizations_Organizations_Edges_Node_OrgSubscriptions {
 	if t == nil {
@@ -48651,24 +48120,6 @@ func (t *GetOrganizations_Organizations_Edges_Node) GetPersonalOrg() *bool {
 	}
 	return t.PersonalOrg
 }
-func (t *GetOrganizations_Organizations_Edges_Node) GetProcedureCreators() *GetOrganizations_Organizations_Edges_Node_ProcedureCreators {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node{}
-	}
-	return &t.ProcedureCreators
-}
-func (t *GetOrganizations_Organizations_Edges_Node) GetProgramCreators() *GetOrganizations_Organizations_Edges_Node_ProgramCreators {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node{}
-	}
-	return &t.ProgramCreators
-}
-func (t *GetOrganizations_Organizations_Edges_Node) GetRiskCreators() *GetOrganizations_Organizations_Edges_Node_RiskCreators {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node{}
-	}
-	return &t.RiskCreators
-}
 func (t *GetOrganizations_Organizations_Edges_Node) GetSetting() *GetOrganizations_Organizations_Edges_Node_Setting {
 	if t == nil {
 		t = &GetOrganizations_Organizations_Edges_Node{}
@@ -48680,12 +48131,6 @@ func (t *GetOrganizations_Organizations_Edges_Node) GetTags() []string {
 		t = &GetOrganizations_Organizations_Edges_Node{}
 	}
 	return t.Tags
-}
-func (t *GetOrganizations_Organizations_Edges_Node) GetTemplateCreators() *GetOrganizations_Organizations_Edges_Node_TemplateCreators {
-	if t == nil {
-		t = &GetOrganizations_Organizations_Edges_Node{}
-	}
-	return &t.TemplateCreators
 }
 func (t *GetOrganizations_Organizations_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -48929,459 +48374,19 @@ func (t *UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions) Ge
 	return t.StripeSubscriptionStatus
 }
 
-type UpdateOrganization_UpdateOrganization_Organization_ControlCreators_Edges_Node struct {
-	DisplayID   string "json:\"displayID\" graphql:\"displayID\""
-	DisplayName string "json:\"displayName\" graphql:\"displayName\""
-	ID          string "json:\"id\" graphql:\"id\""
-	Name        string "json:\"name\" graphql:\"name\""
-}
-
-func (t *UpdateOrganization_UpdateOrganization_Organization_ControlCreators_Edges_Node) GetDisplayID() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_ControlCreators_Edges_Node{}
-	}
-	return t.DisplayID
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_ControlCreators_Edges_Node) GetDisplayName() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_ControlCreators_Edges_Node{}
-	}
-	return t.DisplayName
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_ControlCreators_Edges_Node) GetID() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_ControlCreators_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_ControlCreators_Edges_Node) GetName() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_ControlCreators_Edges_Node{}
-	}
-	return t.Name
-}
-
-type UpdateOrganization_UpdateOrganization_Organization_ControlCreators_Edges struct {
-	Node *UpdateOrganization_UpdateOrganization_Organization_ControlCreators_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *UpdateOrganization_UpdateOrganization_Organization_ControlCreators_Edges) GetNode() *UpdateOrganization_UpdateOrganization_Organization_ControlCreators_Edges_Node {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_ControlCreators_Edges{}
-	}
-	return t.Node
-}
-
-type UpdateOrganization_UpdateOrganization_Organization_ControlCreators struct {
-	Edges []*UpdateOrganization_UpdateOrganization_Organization_ControlCreators_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *UpdateOrganization_UpdateOrganization_Organization_ControlCreators) GetEdges() []*UpdateOrganization_UpdateOrganization_Organization_ControlCreators_Edges {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_ControlCreators{}
-	}
-	return t.Edges
-}
-
-type UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node struct {
-	DisplayID   string "json:\"displayID\" graphql:\"displayID\""
-	DisplayName string "json:\"displayName\" graphql:\"displayName\""
-	ID          string "json:\"id\" graphql:\"id\""
-	Name        string "json:\"name\" graphql:\"name\""
-}
-
-func (t *UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node) GetDisplayID() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node{}
-	}
-	return t.DisplayID
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node) GetDisplayName() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node{}
-	}
-	return t.DisplayName
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node) GetID() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node) GetName() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node{}
-	}
-	return t.Name
-}
-
-type UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges struct {
-	Node *UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges) GetNode() *UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges{}
-	}
-	return t.Node
-}
-
-type UpdateOrganization_UpdateOrganization_Organization_ProgramCreators struct {
-	Edges []*UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *UpdateOrganization_UpdateOrganization_Organization_ProgramCreators) GetEdges() []*UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_ProgramCreators{}
-	}
-	return t.Edges
-}
-
-type UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node struct {
-	DisplayID   string "json:\"displayID\" graphql:\"displayID\""
-	DisplayName string "json:\"displayName\" graphql:\"displayName\""
-	ID          string "json:\"id\" graphql:\"id\""
-	Name        string "json:\"name\" graphql:\"name\""
-}
-
-func (t *UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node) GetDisplayID() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node{}
-	}
-	return t.DisplayID
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node) GetDisplayName() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node{}
-	}
-	return t.DisplayName
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node) GetID() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node) GetName() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node{}
-	}
-	return t.Name
-}
-
-type UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges struct {
-	Node *UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges) GetNode() *UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges{}
-	}
-	return t.Node
-}
-
-type UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators struct {
-	Edges []*UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators) GetEdges() []*UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators{}
-	}
-	return t.Edges
-}
-
-type UpdateOrganization_UpdateOrganization_Organization_InternalPolicyCreators_Edges_Node struct {
-	DisplayID   string "json:\"displayID\" graphql:\"displayID\""
-	DisplayName string "json:\"displayName\" graphql:\"displayName\""
-	ID          string "json:\"id\" graphql:\"id\""
-	Name        string "json:\"name\" graphql:\"name\""
-}
-
-func (t *UpdateOrganization_UpdateOrganization_Organization_InternalPolicyCreators_Edges_Node) GetDisplayID() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_InternalPolicyCreators_Edges_Node{}
-	}
-	return t.DisplayID
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_InternalPolicyCreators_Edges_Node) GetDisplayName() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_InternalPolicyCreators_Edges_Node{}
-	}
-	return t.DisplayName
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_InternalPolicyCreators_Edges_Node) GetID() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_InternalPolicyCreators_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_InternalPolicyCreators_Edges_Node) GetName() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_InternalPolicyCreators_Edges_Node{}
-	}
-	return t.Name
-}
-
-type UpdateOrganization_UpdateOrganization_Organization_InternalPolicyCreators_Edges struct {
-	Node *UpdateOrganization_UpdateOrganization_Organization_InternalPolicyCreators_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *UpdateOrganization_UpdateOrganization_Organization_InternalPolicyCreators_Edges) GetNode() *UpdateOrganization_UpdateOrganization_Organization_InternalPolicyCreators_Edges_Node {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_InternalPolicyCreators_Edges{}
-	}
-	return t.Node
-}
-
-type UpdateOrganization_UpdateOrganization_Organization_InternalPolicyCreators struct {
-	Edges []*UpdateOrganization_UpdateOrganization_Organization_InternalPolicyCreators_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *UpdateOrganization_UpdateOrganization_Organization_InternalPolicyCreators) GetEdges() []*UpdateOrganization_UpdateOrganization_Organization_InternalPolicyCreators_Edges {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_InternalPolicyCreators{}
-	}
-	return t.Edges
-}
-
-type UpdateOrganization_UpdateOrganization_Organization_ControlObjectiveCreators_Edges_Node struct {
-	DisplayID   string "json:\"displayID\" graphql:\"displayID\""
-	DisplayName string "json:\"displayName\" graphql:\"displayName\""
-	ID          string "json:\"id\" graphql:\"id\""
-	Name        string "json:\"name\" graphql:\"name\""
-}
-
-func (t *UpdateOrganization_UpdateOrganization_Organization_ControlObjectiveCreators_Edges_Node) GetDisplayID() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_ControlObjectiveCreators_Edges_Node{}
-	}
-	return t.DisplayID
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_ControlObjectiveCreators_Edges_Node) GetDisplayName() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_ControlObjectiveCreators_Edges_Node{}
-	}
-	return t.DisplayName
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_ControlObjectiveCreators_Edges_Node) GetID() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_ControlObjectiveCreators_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_ControlObjectiveCreators_Edges_Node) GetName() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_ControlObjectiveCreators_Edges_Node{}
-	}
-	return t.Name
-}
-
-type UpdateOrganization_UpdateOrganization_Organization_ControlObjectiveCreators_Edges struct {
-	Node *UpdateOrganization_UpdateOrganization_Organization_ControlObjectiveCreators_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *UpdateOrganization_UpdateOrganization_Organization_ControlObjectiveCreators_Edges) GetNode() *UpdateOrganization_UpdateOrganization_Organization_ControlObjectiveCreators_Edges_Node {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_ControlObjectiveCreators_Edges{}
-	}
-	return t.Node
-}
-
-type UpdateOrganization_UpdateOrganization_Organization_ControlObjectiveCreators struct {
-	Edges []*UpdateOrganization_UpdateOrganization_Organization_ControlObjectiveCreators_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *UpdateOrganization_UpdateOrganization_Organization_ControlObjectiveCreators) GetEdges() []*UpdateOrganization_UpdateOrganization_Organization_ControlObjectiveCreators_Edges {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_ControlObjectiveCreators{}
-	}
-	return t.Edges
-}
-
-type UpdateOrganization_UpdateOrganization_Organization_NarrativeCreators_Edges_Node struct {
-	DisplayID   string "json:\"displayID\" graphql:\"displayID\""
-	DisplayName string "json:\"displayName\" graphql:\"displayName\""
-	ID          string "json:\"id\" graphql:\"id\""
-	Name        string "json:\"name\" graphql:\"name\""
-}
-
-func (t *UpdateOrganization_UpdateOrganization_Organization_NarrativeCreators_Edges_Node) GetDisplayID() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_NarrativeCreators_Edges_Node{}
-	}
-	return t.DisplayID
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_NarrativeCreators_Edges_Node) GetDisplayName() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_NarrativeCreators_Edges_Node{}
-	}
-	return t.DisplayName
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_NarrativeCreators_Edges_Node) GetID() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_NarrativeCreators_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_NarrativeCreators_Edges_Node) GetName() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_NarrativeCreators_Edges_Node{}
-	}
-	return t.Name
-}
-
-type UpdateOrganization_UpdateOrganization_Organization_NarrativeCreators_Edges struct {
-	Node *UpdateOrganization_UpdateOrganization_Organization_NarrativeCreators_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *UpdateOrganization_UpdateOrganization_Organization_NarrativeCreators_Edges) GetNode() *UpdateOrganization_UpdateOrganization_Organization_NarrativeCreators_Edges_Node {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_NarrativeCreators_Edges{}
-	}
-	return t.Node
-}
-
-type UpdateOrganization_UpdateOrganization_Organization_NarrativeCreators struct {
-	Edges []*UpdateOrganization_UpdateOrganization_Organization_NarrativeCreators_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *UpdateOrganization_UpdateOrganization_Organization_NarrativeCreators) GetEdges() []*UpdateOrganization_UpdateOrganization_Organization_NarrativeCreators_Edges {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_NarrativeCreators{}
-	}
-	return t.Edges
-}
-
-type UpdateOrganization_UpdateOrganization_Organization_RiskCreators_Edges_Node struct {
-	DisplayID   string "json:\"displayID\" graphql:\"displayID\""
-	DisplayName string "json:\"displayName\" graphql:\"displayName\""
-	ID          string "json:\"id\" graphql:\"id\""
-	Name        string "json:\"name\" graphql:\"name\""
-}
-
-func (t *UpdateOrganization_UpdateOrganization_Organization_RiskCreators_Edges_Node) GetDisplayID() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_RiskCreators_Edges_Node{}
-	}
-	return t.DisplayID
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_RiskCreators_Edges_Node) GetDisplayName() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_RiskCreators_Edges_Node{}
-	}
-	return t.DisplayName
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_RiskCreators_Edges_Node) GetID() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_RiskCreators_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_RiskCreators_Edges_Node) GetName() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_RiskCreators_Edges_Node{}
-	}
-	return t.Name
-}
-
-type UpdateOrganization_UpdateOrganization_Organization_RiskCreators_Edges struct {
-	Node *UpdateOrganization_UpdateOrganization_Organization_RiskCreators_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *UpdateOrganization_UpdateOrganization_Organization_RiskCreators_Edges) GetNode() *UpdateOrganization_UpdateOrganization_Organization_RiskCreators_Edges_Node {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_RiskCreators_Edges{}
-	}
-	return t.Node
-}
-
-type UpdateOrganization_UpdateOrganization_Organization_RiskCreators struct {
-	Edges []*UpdateOrganization_UpdateOrganization_Organization_RiskCreators_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *UpdateOrganization_UpdateOrganization_Organization_RiskCreators) GetEdges() []*UpdateOrganization_UpdateOrganization_Organization_RiskCreators_Edges {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_RiskCreators{}
-	}
-	return t.Edges
-}
-
-type UpdateOrganization_UpdateOrganization_Organization_TemplateCreators_Edges_Node struct {
-	DisplayID   string "json:\"displayID\" graphql:\"displayID\""
-	DisplayName string "json:\"displayName\" graphql:\"displayName\""
-	ID          string "json:\"id\" graphql:\"id\""
-	Name        string "json:\"name\" graphql:\"name\""
-}
-
-func (t *UpdateOrganization_UpdateOrganization_Organization_TemplateCreators_Edges_Node) GetDisplayID() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_TemplateCreators_Edges_Node{}
-	}
-	return t.DisplayID
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_TemplateCreators_Edges_Node) GetDisplayName() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_TemplateCreators_Edges_Node{}
-	}
-	return t.DisplayName
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_TemplateCreators_Edges_Node) GetID() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_TemplateCreators_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization_TemplateCreators_Edges_Node) GetName() string {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_TemplateCreators_Edges_Node{}
-	}
-	return t.Name
-}
-
-type UpdateOrganization_UpdateOrganization_Organization_TemplateCreators_Edges struct {
-	Node *UpdateOrganization_UpdateOrganization_Organization_TemplateCreators_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *UpdateOrganization_UpdateOrganization_Organization_TemplateCreators_Edges) GetNode() *UpdateOrganization_UpdateOrganization_Organization_TemplateCreators_Edges_Node {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_TemplateCreators_Edges{}
-	}
-	return t.Node
-}
-
-type UpdateOrganization_UpdateOrganization_Organization_TemplateCreators struct {
-	Edges []*UpdateOrganization_UpdateOrganization_Organization_TemplateCreators_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *UpdateOrganization_UpdateOrganization_Organization_TemplateCreators) GetEdges() []*UpdateOrganization_UpdateOrganization_Organization_TemplateCreators_Edges {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization_TemplateCreators{}
-	}
-	return t.Edges
-}
-
 type UpdateOrganization_UpdateOrganization_Organization struct {
-	AvatarFile               *UpdateOrganization_UpdateOrganization_Organization_AvatarFile              "json:\"avatarFile,omitempty\" graphql:\"avatarFile\""
-	AvatarLocalFileID        *string                                                                     "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
-	AvatarRemoteURL          *string                                                                     "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
-	ControlCreators          UpdateOrganization_UpdateOrganization_Organization_ControlCreators          "json:\"controlCreators\" graphql:\"controlCreators\""
-	ControlObjectiveCreators UpdateOrganization_UpdateOrganization_Organization_ControlObjectiveCreators "json:\"controlObjectiveCreators\" graphql:\"controlObjectiveCreators\""
-	Description              *string                                                                     "json:\"description,omitempty\" graphql:\"description\""
-	DisplayName              string                                                                      "json:\"displayName\" graphql:\"displayName\""
-	ID                       string                                                                      "json:\"id\" graphql:\"id\""
-	InternalPolicyCreators   UpdateOrganization_UpdateOrganization_Organization_InternalPolicyCreators   "json:\"internalPolicyCreators\" graphql:\"internalPolicyCreators\""
-	Members                  UpdateOrganization_UpdateOrganization_Organization_Members                  "json:\"members\" graphql:\"members\""
-	Name                     string                                                                      "json:\"name\" graphql:\"name\""
-	NarrativeCreators        UpdateOrganization_UpdateOrganization_Organization_NarrativeCreators        "json:\"narrativeCreators\" graphql:\"narrativeCreators\""
-	OrgSubscriptions         []*UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions      "json:\"orgSubscriptions,omitempty\" graphql:\"orgSubscriptions\""
-	PersonalOrg              *bool                                                                       "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
-	ProcedureCreators        UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators        "json:\"procedureCreators\" graphql:\"procedureCreators\""
-	ProgramCreators          UpdateOrganization_UpdateOrganization_Organization_ProgramCreators          "json:\"programCreators\" graphql:\"programCreators\""
-	RiskCreators             UpdateOrganization_UpdateOrganization_Organization_RiskCreators             "json:\"riskCreators\" graphql:\"riskCreators\""
-	Setting                  *UpdateOrganization_UpdateOrganization_Organization_Setting                 "json:\"setting,omitempty\" graphql:\"setting\""
-	Tags                     []string                                                                    "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateCreators         UpdateOrganization_UpdateOrganization_Organization_TemplateCreators         "json:\"templateCreators\" graphql:\"templateCreators\""
+	AvatarFile        *UpdateOrganization_UpdateOrganization_Organization_AvatarFile         "json:\"avatarFile,omitempty\" graphql:\"avatarFile\""
+	AvatarLocalFileID *string                                                                "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
+	AvatarRemoteURL   *string                                                                "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
+	Description       *string                                                                "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName       string                                                                 "json:\"displayName\" graphql:\"displayName\""
+	ID                string                                                                 "json:\"id\" graphql:\"id\""
+	Members           UpdateOrganization_UpdateOrganization_Organization_Members             "json:\"members\" graphql:\"members\""
+	Name              string                                                                 "json:\"name\" graphql:\"name\""
+	OrgSubscriptions  []*UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions "json:\"orgSubscriptions,omitempty\" graphql:\"orgSubscriptions\""
+	PersonalOrg       *bool                                                                  "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
+	Setting           *UpdateOrganization_UpdateOrganization_Organization_Setting            "json:\"setting,omitempty\" graphql:\"setting\""
+	Tags              []string                                                               "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *UpdateOrganization_UpdateOrganization_Organization) GetAvatarFile() *UpdateOrganization_UpdateOrganization_Organization_AvatarFile {
@@ -49402,18 +48407,6 @@ func (t *UpdateOrganization_UpdateOrganization_Organization) GetAvatarRemoteURL(
 	}
 	return t.AvatarRemoteURL
 }
-func (t *UpdateOrganization_UpdateOrganization_Organization) GetControlCreators() *UpdateOrganization_UpdateOrganization_Organization_ControlCreators {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization{}
-	}
-	return &t.ControlCreators
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization) GetControlObjectiveCreators() *UpdateOrganization_UpdateOrganization_Organization_ControlObjectiveCreators {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization{}
-	}
-	return &t.ControlObjectiveCreators
-}
 func (t *UpdateOrganization_UpdateOrganization_Organization) GetDescription() *string {
 	if t == nil {
 		t = &UpdateOrganization_UpdateOrganization_Organization{}
@@ -49432,12 +48425,6 @@ func (t *UpdateOrganization_UpdateOrganization_Organization) GetID() string {
 	}
 	return t.ID
 }
-func (t *UpdateOrganization_UpdateOrganization_Organization) GetInternalPolicyCreators() *UpdateOrganization_UpdateOrganization_Organization_InternalPolicyCreators {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization{}
-	}
-	return &t.InternalPolicyCreators
-}
 func (t *UpdateOrganization_UpdateOrganization_Organization) GetMembers() *UpdateOrganization_UpdateOrganization_Organization_Members {
 	if t == nil {
 		t = &UpdateOrganization_UpdateOrganization_Organization{}
@@ -49449,12 +48436,6 @@ func (t *UpdateOrganization_UpdateOrganization_Organization) GetName() string {
 		t = &UpdateOrganization_UpdateOrganization_Organization{}
 	}
 	return t.Name
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization) GetNarrativeCreators() *UpdateOrganization_UpdateOrganization_Organization_NarrativeCreators {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization{}
-	}
-	return &t.NarrativeCreators
 }
 func (t *UpdateOrganization_UpdateOrganization_Organization) GetOrgSubscriptions() []*UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions {
 	if t == nil {
@@ -49468,24 +48449,6 @@ func (t *UpdateOrganization_UpdateOrganization_Organization) GetPersonalOrg() *b
 	}
 	return t.PersonalOrg
 }
-func (t *UpdateOrganization_UpdateOrganization_Organization) GetProcedureCreators() *UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization{}
-	}
-	return &t.ProcedureCreators
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization) GetProgramCreators() *UpdateOrganization_UpdateOrganization_Organization_ProgramCreators {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization{}
-	}
-	return &t.ProgramCreators
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization) GetRiskCreators() *UpdateOrganization_UpdateOrganization_Organization_RiskCreators {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization{}
-	}
-	return &t.RiskCreators
-}
 func (t *UpdateOrganization_UpdateOrganization_Organization) GetSetting() *UpdateOrganization_UpdateOrganization_Organization_Setting {
 	if t == nil {
 		t = &UpdateOrganization_UpdateOrganization_Organization{}
@@ -49497,12 +48460,6 @@ func (t *UpdateOrganization_UpdateOrganization_Organization) GetTags() []string 
 		t = &UpdateOrganization_UpdateOrganization_Organization{}
 	}
 	return t.Tags
-}
-func (t *UpdateOrganization_UpdateOrganization_Organization) GetTemplateCreators() *UpdateOrganization_UpdateOrganization_Organization_TemplateCreators {
-	if t == nil {
-		t = &UpdateOrganization_UpdateOrganization_Organization{}
-	}
-	return &t.TemplateCreators
 }
 
 type UpdateOrganization_UpdateOrganization struct {
@@ -101207,7 +100164,6 @@ const CreateOrganizationDocument = `mutation CreateOrganization ($input: CreateO
 				billingPhone
 				billingAddress
 				taxIdentifier
-				geoLocation
 				tags
 			}
 			parent {
@@ -101692,28 +100648,19 @@ const GetOrganizationsDocument = `query GetOrganizations ($where: OrganizationWh
 						node {
 							id
 							role
-							user {
-								id
-								firstName
-								lastName
-							}
+							userID
 						}
 					}
 				}
 				setting {
 					id
 					allowedEmailDomains
-					createdAt
-					updatedAt
-					createdBy
-					updatedBy
 					domains
 					billingContact
 					billingEmail
 					billingPhone
 					billingAddress
 					taxIdentifier
-					geoLocation
 					tags
 				}
 				orgSubscriptions {
@@ -101723,86 +100670,6 @@ const GetOrganizationsDocument = `query GetOrganizations ($where: OrganizationWh
 					productTier
 					features
 					id
-				}
-				controlCreators {
-					edges {
-						node {
-							id
-							displayID
-							name
-							displayName
-						}
-					}
-				}
-				programCreators {
-					edges {
-						node {
-							id
-							displayID
-							name
-							displayName
-						}
-					}
-				}
-				procedureCreators {
-					edges {
-						node {
-							id
-							displayID
-							name
-							displayName
-						}
-					}
-				}
-				internalPolicyCreators {
-					edges {
-						node {
-							id
-							displayID
-							name
-							displayName
-						}
-					}
-				}
-				controlObjectiveCreators {
-					edges {
-						node {
-							id
-							displayID
-							name
-							displayName
-						}
-					}
-				}
-				narrativeCreators {
-					edges {
-						node {
-							id
-							displayID
-							name
-							displayName
-						}
-					}
-				}
-				riskCreators {
-					edges {
-						node {
-							id
-							displayID
-							name
-							displayName
-						}
-					}
-				}
-				templateCreators {
-					edges {
-						node {
-							id
-							displayID
-							name
-							displayName
-						}
-					}
 				}
 				createdAt
 				updatedAt
@@ -101876,86 +100743,6 @@ const UpdateOrganizationDocument = `mutation UpdateOrganization ($updateOrganiza
 				productTier
 				features
 				id
-			}
-			controlCreators {
-				edges {
-					node {
-						id
-						displayID
-						name
-						displayName
-					}
-				}
-			}
-			programCreators {
-				edges {
-					node {
-						id
-						displayID
-						name
-						displayName
-					}
-				}
-			}
-			procedureCreators {
-				edges {
-					node {
-						id
-						displayID
-						name
-						displayName
-					}
-				}
-			}
-			internalPolicyCreators {
-				edges {
-					node {
-						id
-						displayID
-						name
-						displayName
-					}
-				}
-			}
-			controlObjectiveCreators {
-				edges {
-					node {
-						id
-						displayID
-						name
-						displayName
-					}
-				}
-			}
-			narrativeCreators {
-				edges {
-					node {
-						id
-						displayID
-						name
-						displayName
-					}
-				}
-			}
-			riskCreators {
-				edges {
-					node {
-						id
-						displayID
-						name
-						displayName
-					}
-				}
-			}
-			templateCreators {
-				edges {
-					node {
-						id
-						displayID
-						name
-						displayName
-					}
-				}
 			}
 		}
 	}
