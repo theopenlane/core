@@ -22,6 +22,8 @@ func main() {
 	}
 }
 
+var repoPath = "github.com/theopenlane/core/pkg/catalog"
+
 // genyamlApp creates a CLI application for generating Go source files
 // from a catalog YAML file - the thought process behind this is that
 // it's generally easier to work with Go code than YAML, especially at
@@ -93,7 +95,7 @@ func genyamlApp() *cli.App {
 
 // catalogLit generates the main block for catalog.Catalog
 func catalogLit(c catalog.Catalog) *jen.Statement {
-	return jen.Qual("github.com/theopenlane/core/pkg/catalog", "Catalog").Values(jen.Dict{
+	return jen.Qual(repoPath, "Catalog").Values(jen.Dict{
 		jen.Id("Version"): jen.Lit(c.Version),
 		jen.Id("SHA"):     jen.Lit(c.SHA),
 		jen.Id("Modules"): featureSetLit(c.Modules),
@@ -118,7 +120,7 @@ func featureSetLit(fs catalog.FeatureSet) *jen.Statement {
 		dict[jen.Lit(k)] = featureLit(fs[k])
 	}
 
-	return jen.Map(jen.String()).Qual("github.com/theopenlane/core/pkg/catalog", "Feature").Values(dict)
+	return jen.Map(jen.String()).Qual(repoPath, "Feature").Values(dict)
 }
 
 // featureLit generates the main structure for a catalog.Feature
@@ -138,7 +140,7 @@ func featureLit(f catalog.Feature) *jen.Statement {
 		dict[jen.Id("Usage")] = jen.Op("&").Add(usageLit(*f.Usage))
 	}
 
-	return jen.Qual("github.com/theopenlane/core/pkg/catalog", "Feature").Values(dict)
+	return jen.Qual(repoPath, "Feature").Values(dict)
 }
 
 // isBillingEmpty checks if all fields in Billing are zero values
@@ -158,15 +160,15 @@ func billingLit(b catalog.Billing) *jen.Statement {
 		items[i] = priceLit(p)
 	}
 
-	return jen.Qual("github.com/theopenlane/core/pkg/catalog", "Billing").Values(jen.Dict{
-		jen.Id("Prices"): jen.Index().Qual("github.com/theopenlane/core/pkg/catalog", "Price").Values(items...)})
+	return jen.Qual(repoPath, "Billing").Values(jen.Dict{
+		jen.Id("Prices"): jen.Index().Qual(repoPath, "Price").Values(items...)})
 }
 
 // usageLit generates a block for catalog.Usage, currently only
 // containing EvidenceStorageGB, but can be extended in the future
 // if more fields are added to catalog.Usage
 func usageLit(u catalog.Usage) *jen.Statement {
-	return jen.Qual("github.com/theopenlane/core/pkg/catalog", "Usage").Values(jen.Dict{
+	return jen.Qual(repoPath, "Usage").Values(jen.Dict{
 		jen.Id("EvidenceStorageGB"): jen.Lit(u.EvidenceStorageGB),
 	})
 }
@@ -207,5 +209,5 @@ func priceLit(p catalog.Price) *jen.Statement {
 		dict[jen.Id("Metadata")] = jen.Map(jen.String()).String().Values(mdict)
 	}
 
-	return jen.Qual("github.com/theopenlane/core/pkg/catalog", "Price").Values(dict)
+	return jen.Qual(repoPath, "Price").Values(dict)
 }

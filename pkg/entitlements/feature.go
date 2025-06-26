@@ -3,6 +3,7 @@ package entitlements
 import (
 	"context"
 
+	"github.com/rs/zerolog/log"
 	"github.com/stripe/stripe-go/v82"
 )
 
@@ -29,6 +30,7 @@ func (sc *StripeClient) ListProductFeatures(ctx context.Context, productID strin
 
 	for feature, err := range result {
 		if err != nil {
+			log.Error().Err(err).Msg("failed to list product features")
 			continue
 		}
 

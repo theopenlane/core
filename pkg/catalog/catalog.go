@@ -163,25 +163,9 @@ func LoadCatalog(path string) (*Catalog, error) {
 // ValidatePrices ensures every feature's price attributes match a Stripe price.
 // Matching considers unit amount, interval, nickname, lookup key and metadata.
 func (c *Catalog) ValidatePrices(ctx context.Context, sc *entitlements.StripeClient) error {
-	if c == nil || sc == nil {
-		return nil
-	}
-
-	products, err := sc.ListProducts(ctx)
+	prodMap, err := c.getProductMap(ctx, sc)
 	if err != nil {
 		return err
-	}
-
-	prodMap := map[string]*stripe.Product{}
-
-	for _, p := range products {
-		if p.ID != "" {
-			prodMap[p.ID] = p
-		}
-
-		if p.Name != "" {
-			prodMap[p.Name] = p
-		}
 	}
 
 	check := func(fs FeatureSet) error {
@@ -221,19 +205,14 @@ func (c *Catalog) ValidatePrices(ctx context.Context, sc *entitlements.StripeCli
 	return check(c.Addons)
 }
 
-// EnsurePrices verifies prices exist in Stripe and creates them when missing.
-// New products are created using the feature display name and description.
-// Matching is performed by unit amount, interval, nickname, lookup key and
-// metadata instead of a fixed price ID. The discovered Stripe price ID is stored back in the catalog
-// struct but not persisted to disk.
-func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClient, currency string) error {
+func (c *Catalog) getProductMap(ctx context.Context, sc *entitlements.StripeClient) (map[string]*stripe.Product, error) {
 	if c == nil || sc == nil {
-		return nil
+		return nil, ErrContextandClientRequired
 	}
 
 	products, err := sc.ListProducts(ctx)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	prodMap := map[string]*stripe.Product{}
@@ -246,6 +225,20 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 		if p.Name != "" {
 			prodMap[p.Name] = p
 		}
+	}
+
+	return prodMap, nil
+}
+
+// EnsurePrices verifies prices exist in Stripe and creates them when missing.
+// New products are created using the feature display name and description.
+// Matching is performed by unit amount, interval, nickname, lookup key and
+// metadata instead of a fixed price ID. The discovered Stripe price ID is stored back in the catalog
+// struct but not persisted to disk.
+func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClient, currency string) error {
+	prodMap, err := c.getProductMap(ctx, sc)
+	if err != nil {
+		return err
 	}
 
 	create := func(name string, f Feature) (Feature, error) {
@@ -405,9 +398,7 @@ func resolveProduct(ctx context.Context, sc *entitlements.StripeClient, prodMap 
 				return sc.GetProductByID(ctx, pr.Product.ID)
 			}
 		}
-	}
 
-	for _, p := range feat.Billing.Prices {
 		if p.LookupKey != "" {
 			pr, err := sc.GetPriceByLookupKey(ctx, p.LookupKey)
 			if err == nil && pr != nil && pr.Product != nil {

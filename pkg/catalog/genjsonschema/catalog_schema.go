@@ -4,6 +4,7 @@ package main
 
 import (
 	"encoding/json"
+	"log"
 	"os"
 
 	"github.com/invopop/jsonschema"
@@ -16,10 +17,10 @@ func main() {
 	r := jsonschema.Reflect(&catalog.Catalog{})
 	data, err := json.MarshalIndent(r, "", "  ")
 	if err != nil {
-		panic(err)
+		log.Fatal("failed to marshal catalog schema:", err)
 	}
 
 	if err := os.WriteFile("genjsonschema/catalog.schema.json", data, 0600); err != nil { // nolint: mnd
-		panic(err)
+		log.Fatal("failed to write catalog schema:", err)
 	}
 }

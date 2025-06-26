@@ -8,6 +8,7 @@ import (
 )
 
 func TestComputeSHA(t *testing.T) {
+	t.Parallel()
 	v := "v0.0.1"
 	sum := sha256.Sum256([]byte(v))
 	want := hex.EncodeToString(sum[:])
@@ -17,6 +18,7 @@ func TestComputeSHA(t *testing.T) {
 }
 
 func TestIsCurrent(t *testing.T) {
+	t.Parallel()
 	if (*Catalog)(nil).IsCurrent() != true {
 		t.Fatal("nil catalog should be current")
 	}
@@ -32,6 +34,7 @@ func TestIsCurrent(t *testing.T) {
 }
 
 func TestSaveCatalogVersionBump(t *testing.T) {
+	t.Parallel()
 	c := &Catalog{Version: "v0.0.1", Modules: FeatureSet{"m1": {Billing: Billing{Prices: []Price{{Interval: "month", UnitAmount: 1}}}}}}
 	dir := t.TempDir()
 	path := filepath.Join(dir, "catalog.yaml")

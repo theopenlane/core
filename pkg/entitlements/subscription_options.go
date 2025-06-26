@@ -48,7 +48,7 @@ func (sc *StripeClient) UpdateSubscriptionWithOptions(ctx context.Context, id st
 	return sc.UpdateSubscription(ctx, id, params)
 }
 
-// Helper to add new items to update params if they don't already exist
+// AddNewItemsIfNotExist is a helper to add new items to update params if they don't already exist
 func AddNewItemsIfNotExist(existing []*stripe.SubscriptionItem, params *stripe.SubscriptionUpdateParams, newItems ...*stripe.SubscriptionUpdateItemParams) {
 	existingPrices := make(map[string]struct{})
 

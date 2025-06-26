@@ -15,4 +15,6 @@ var (
 	ErrFailedToCreateProduct = errors.New("failed to create product in Stripe")
 	// ErrFailedToCreatePrice = errors.New("failed to create price in Stripe")
 	ErrFailedToCreatePrice = errors.New("failed to create price in Stripe")
+	// ErrContextandClientRequired = errors.New("context and client are required for catalog operations"
+	ErrContextandClientRequired = errors.New("context and client are required for catalog operations")
 )

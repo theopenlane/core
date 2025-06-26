@@ -5,30 +5,35 @@ import "github.com/stripe/stripe-go/v82"
 // PriceCreateOption allows customizing PriceCreateParams
 type PriceCreateOption func(params *stripe.PriceCreateParams)
 
+// WithPriceProduct sets the product ID for the price
 func WithPriceProduct(productID string) PriceCreateOption {
 	return func(params *stripe.PriceCreateParams) {
 		params.Product = stripe.String(productID)
 	}
 }
 
+// WithPriceAmount sets the unit amount for the price
 func WithPriceAmount(amount int64) PriceCreateOption {
 	return func(params *stripe.PriceCreateParams) {
 		params.UnitAmount = stripe.Int64(amount)
 	}
 }
 
+// WithPriceCurrency sets the currency for the price
 func WithPriceCurrency(currency string) PriceCreateOption {
 	return func(params *stripe.PriceCreateParams) {
 		params.Currency = stripe.String(currency)
 	}
 }
 
+// WithPriceRecurring sets the recurring interval for the price
 func WithPriceRecurring(interval string) PriceCreateOption {
 	return func(params *stripe.PriceCreateParams) {
 		params.Recurring = &stripe.PriceCreateRecurringParams{Interval: stripe.String(interval)}
 	}
 }
 
+// WithPriceMetadata sets metadata for the price
 func WithPriceMetadata(metadata map[string]string) PriceCreateOption {
 	return func(params *stripe.PriceCreateParams) {
 		params.Metadata = metadata
@@ -48,6 +53,7 @@ func (sc *StripeClient) CreatePriceWithOptions(baseParams *stripe.PriceCreatePar
 // PriceUpdateOption allows customizing PriceUpdateParams
 type PriceUpdateOption func(params *stripe.PriceUpdateParams)
 
+// WithUpdatePriceMetadata sets metadata for the price update
 func WithUpdatePriceMetadata(metadata map[string]string) PriceUpdateOption {
 	return func(params *stripe.PriceUpdateParams) {
 		params.Metadata = metadata
