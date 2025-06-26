@@ -84,6 +84,7 @@ func (f *fakeClient) GetPrice(ctx context.Context, id string) (*stripe.Price, er
 func (f *fakeClient) FindPriceForProduct(ctx context.Context, productID string, currency string, unitAmount int64, interval, nickname, lookupKey, metadata string, meta map[string]string) (*stripe.Price, error) {
 	return nil, nil
 }
+
 func (f *fakeClient) UpdatePriceMetadata(ctx context.Context, id string, md map[string]string) (*stripe.Price, error) {
 	f.updated = append(f.updated, id)
 	p := f.prices[id]

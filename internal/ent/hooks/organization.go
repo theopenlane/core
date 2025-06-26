@@ -305,11 +305,13 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 		return err
 	}
 
-	// create default feature tuples for base functionality
-	if err := createFeatureTuples(ctx, m.Authz, orgCreated.ID, []string{"base", "compliance"}); err != nil {
-		zerolog.Ctx(ctx).Error().Err(err).Msg("error creating default feature tuples")
+	// create default feature tuples for base functionality when entitlements are enabled
+	if m.Client().EntitlementManager != nil {
+		if err := createFeatureTuples(ctx, m.Authz, orgCreated.ID, []string{"base", "compliance"}); err != nil {
+			zerolog.Ctx(ctx).Error().Err(err).Msg("error creating default feature tuples")
 
-		return err
+			return err
+		}
 	}
 
 	// reset the original org id in the auth context if it was previously set

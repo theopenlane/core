@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/catalog/features"
+	"github.com/theopenlane/core/pkg/middleware/transaction"
 )
 
 // HasFeature reports whether the current organization has the given feature enabled
@@ -32,6 +33,17 @@ func HasFeature(ctx context.Context, feature string) (bool, error) {
 
 // orgFeatures returns the enabled features for the authenticated organization
 func orgFeatures(ctx context.Context) ([]string, error) {
+	// if the entitlements service is disabled skip feature checks
+	if client := generated.FromContext(ctx); client != nil {
+		if client.EntitlementManager == nil {
+			return nil, nil
+		}
+	} else if tx := transaction.FromContext(ctx); tx != nil {
+		if txClient := tx.Client(); txClient != nil && txClient.EntitlementManager == nil {
+			return nil, nil
+		}
+	}
+
 	au, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil || au.OrganizationID == "" {
 		return nil, nil
