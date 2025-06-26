@@ -313,7 +313,7 @@ func handleSubscriberCreate(event soiree.Event) error {
 			return err
 		}
 	} else {
-		t, err = template.New("slack").ParseFS(slacktemplates.Templates, slacktemplates.SubscriberTemplateName)
+		t, err = template.ParseFS(slacktemplates.Templates, slacktemplates.SubscriberTemplateName)
 		if err != nil {
 			zerolog.Ctx(event.Context()).Debug().Msg("failed to parse embedded slack template")
 
@@ -368,7 +368,7 @@ func handleUserCreate(event soiree.Event) error {
 			return err
 		}
 	} else {
-		t, err = template.New("slack").ParseFS(slacktemplates.Templates, slacktemplates.UserTemplateName)
+		t, err = template.ParseFS(slacktemplates.Templates, slacktemplates.UserTemplateName)
 		if err != nil {
 			zerolog.Ctx(event.Context()).Debug().Msg("failed to parse embedded slack template")
 

@@ -16,7 +16,7 @@ require (
 	github.com/alitto/pond/v2 v2.4.0
 	github.com/aws/aws-sdk-go-v2/config v1.29.17
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.70
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.81.0
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.82.0
 	github.com/barkimedes/go-deepcopy v0.0.0-20220514131651-17c30cfc62df
 	github.com/brianvoe/gofakeit/v7 v7.2.1
 	github.com/cloudflare/cloudflare-go/v4 v4.5.1
@@ -63,7 +63,7 @@ require (
 	github.com/projectdiscovery/utils v0.4.21
 	github.com/prometheus/client_golang v1.22.0
 	github.com/ravilushqa/otelgqlgen v0.18.0
-	github.com/redis/go-redis/v9 v9.10.0
+	github.com/redis/go-redis/v9 v9.11.0
 	github.com/riverqueue/river v0.23.1
 	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.23.1
 	github.com/rs/zerolog v1.34.0
@@ -86,7 +86,7 @@ require (
 	github.com/theopenlane/utils v0.4.7
 	github.com/tmc/langchaingo v0.1.13
 	github.com/vektah/gqlparser/v2 v2.5.28
-	github.com/vektra/mockery/v3 v3.4.0
+	github.com/vektra/mockery/v3 v3.5.0
 	github.com/wk8/go-ordered-map/v2 v2.1.8
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	github.com/xeipuuv/gojsonschema v1.2.0
@@ -477,7 +477,7 @@ require (
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/aws/aws-sdk-go-v2 v1.36.5
-	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.17.81
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.17.82
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
@@ -627,7 +627,7 @@ require (
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/time v0.12.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
-	google.golang.org/api v0.238.0
+	google.golang.org/api v0.239.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20250603155806-513f23925822 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250603155806-513f23925822 // indirect
 	google.golang.org/grpc v1.73.0 // indirect
