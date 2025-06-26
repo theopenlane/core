@@ -27,7 +27,6 @@ mutation CreateOrganization($input: CreateOrganizationInput!, $avatarFile: Uploa
         billingPhone
         billingAddress
         taxIdentifier
-        geoLocation
         tags
       }
       parent {
@@ -425,28 +424,19 @@ query GetOrganizations($where: OrganizationWhereInput) {
             node {
               id
               role
-              user {
-                id
-                firstName
-                lastName
-              }
+              userID
             }
           }
         }
         setting {
           id
           allowedEmailDomains
-          createdAt
-          updatedAt
-          createdBy
-          updatedBy
           domains
           billingContact
           billingEmail
           billingPhone
           billingAddress
           taxIdentifier
-          geoLocation
           tags
         }
         orgSubscriptions {
@@ -456,86 +446,6 @@ query GetOrganizations($where: OrganizationWhereInput) {
           productTier
           features
           id
-        }
-        controlCreators {
-          edges {
-            node {
-              id
-              displayID
-              name
-              displayName
-            }
-          }
-        }
-        programCreators {
-          edges {
-            node {
-              id
-              displayID
-              name
-              displayName
-            }
-          }
-        }
-        procedureCreators {
-          edges {
-            node {
-              id
-              displayID
-              name
-              displayName
-            }
-          }
-        }
-        internalPolicyCreators {
-          edges {
-            node {
-              id
-              displayID
-              name
-              displayName
-            }
-          }
-        }
-        controlObjectiveCreators {
-          edges {
-            node {
-              id
-              displayID
-              name
-              displayName
-            }
-          }
-        }
-        narrativeCreators {
-          edges {
-            node {
-              id
-              displayID
-              name
-              displayName
-            }
-          }
-        }
-        riskCreators {
-          edges {
-            node {
-              id
-              displayID
-              name
-              displayName
-            }
-          }
-        }
-        templateCreators {
-          edges {
-            node {
-              id
-              displayID
-              name
-              displayName
-            }
-          }
         }
         createdAt
         updatedAt
@@ -596,16 +506,6 @@ mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizati
         features
         id
       }
-      controlCreators {
-        edges {
-          node {
-            id
-            displayID
-            name
-            displayName
-          }
-        }
-      }
       programCreators {
         edges {
           node {
@@ -617,56 +517,6 @@ mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizati
         }
       }
       procedureCreators {
-        edges {
-          node {
-            id
-            displayID
-            name
-            displayName
-          }
-        }
-      }
-      internalPolicyCreators {
-        edges {
-          node {
-            id
-            displayID
-            name
-            displayName
-          }
-        }
-      }
-      controlObjectiveCreators {
-        edges {
-          node {
-            id
-            displayID
-            name
-            displayName
-          }
-        }
-      }
-      narrativeCreators {
-        edges {
-          node {
-            id
-            displayID
-            name
-            displayName
-          }
-        }
-      }
-      riskCreators {
-        edges {
-          node {
-            id
-            displayID
-            name
-            displayName
-          }
-        }
-      }
-      templateCreators {
         edges {
           node {
             id
