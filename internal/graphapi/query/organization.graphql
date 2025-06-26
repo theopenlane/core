@@ -512,6 +512,7 @@ mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizati
             id
             displayID
             name
+            displayName
           }
         }
       }
@@ -521,6 +522,7 @@ mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizati
             id
             displayID
             name
+            displayName
           }
         }
       }

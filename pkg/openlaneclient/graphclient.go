@@ -48375,9 +48375,10 @@ func (t *UpdateOrganization_UpdateOrganization_Organization_OrgSubscriptions) Ge
 }
 
 type UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node struct {
-	DisplayID string "json:\"displayID\" graphql:\"displayID\""
-	ID        string "json:\"id\" graphql:\"id\""
-	Name      string "json:\"name\" graphql:\"name\""
+	DisplayID   string "json:\"displayID\" graphql:\"displayID\""
+	DisplayName string "json:\"displayName\" graphql:\"displayName\""
+	ID          string "json:\"id\" graphql:\"id\""
+	Name        string "json:\"name\" graphql:\"name\""
 }
 
 func (t *UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node) GetDisplayID() string {
@@ -48385,6 +48386,12 @@ func (t *UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edge
 		t = &UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node{}
 	}
 	return t.DisplayID
+}
+func (t *UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node) GetDisplayName() string {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node{}
+	}
+	return t.DisplayName
 }
 func (t *UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges_Node) GetID() string {
 	if t == nil {
@@ -48422,9 +48429,10 @@ func (t *UpdateOrganization_UpdateOrganization_Organization_ProgramCreators) Get
 }
 
 type UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node struct {
-	DisplayID string "json:\"displayID\" graphql:\"displayID\""
-	ID        string "json:\"id\" graphql:\"id\""
-	Name      string "json:\"name\" graphql:\"name\""
+	DisplayID   string "json:\"displayID\" graphql:\"displayID\""
+	DisplayName string "json:\"displayName\" graphql:\"displayName\""
+	ID          string "json:\"id\" graphql:\"id\""
+	Name        string "json:\"name\" graphql:\"name\""
 }
 
 func (t *UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node) GetDisplayID() string {
@@ -48432,6 +48440,12 @@ func (t *UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Ed
 		t = &UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node{}
 	}
 	return t.DisplayID
+}
+func (t *UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node) GetDisplayName() string {
+	if t == nil {
+		t = &UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node{}
+	}
+	return t.DisplayName
 }
 func (t *UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges_Node) GetID() string {
 	if t == nil {
@@ -100858,6 +100872,7 @@ const UpdateOrganizationDocument = `mutation UpdateOrganization ($updateOrganiza
 						id
 						displayID
 						name
+						displayName
 					}
 				}
 			}
@@ -100867,6 +100882,7 @@ const UpdateOrganizationDocument = `mutation UpdateOrganization ($updateOrganiza
 						id
 						displayID
 						name
+						displayName
 					}
 				}
 			}
