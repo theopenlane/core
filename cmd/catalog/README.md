@@ -2,11 +2,15 @@
 
 This directory contains two small command line utilities used for working with the
 billing catalog stored in [`pkg/catalog/catalog.yaml`](../../pkg/catalog/catalog.yaml)
-and Stripe.
+and Stripe. This is a USE AT YOUR OWN RISK type of tool; we use it for ourselves at Openlane,
+but it's not created with the intent of being a generic integration utility. Use of this tool
+requires interactions with the `pkg/catalog` and `pkg/entitlements` packages in this repo.
 
-- `catalog` – reconciles the local catalog file with your Stripe account.
-- `pricemigrate` – tags a replacement price and optionally migrates active
-  subscriptions from one price ID to another.
+High level:
+
+- `catalog` – reconciles the local catalog file with your Stripe account
+- `migrate` – tags a replacement price and optionally migrates active
+  subscriptions from one price ID to another
 
 Both binaries rely on a Stripe API key which can be supplied via the
 `--stripe-key` flag or the `STRIPE_API_KEY` environment variable.
