@@ -74,7 +74,7 @@ tasks:
       - go run main.go pat create -n development -o {{.ORG_ID}}
     vars:
       ORG_ID:
-        sh: go run main.go org get  -z json  | jq -r '.organizations.edges.[0].node.id'
+        sh: go run main.go org get -z json  | jq -r '.organizations.edges.[0].node.id'
 
   program:create:
     desc: creates an program against a running local instance of the server
