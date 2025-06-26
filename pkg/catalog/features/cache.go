@@ -57,5 +57,6 @@ func (c *Cache) Set(ctx context.Context, orgID string, feats []string) error {
 	}
 
 	_, err := pipe.Exec(ctx)
+
 	return err
 }

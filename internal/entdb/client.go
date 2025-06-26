@@ -110,6 +110,7 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts .
 	}
 
 	drvPrimary = blockDriver(drvPrimary)
+
 	if drvSecondary != nil {
 		drvSecondary = blockDriver(drvSecondary)
 	}

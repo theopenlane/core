@@ -19,6 +19,7 @@ func SyncTuples(ctx context.Context, client *fgax.Client, subjectID, subjectType
 	for _, item := range newItems {
 		addMap[item] = struct{}{}
 	}
+
 	for _, item := range oldItems {
 		delete(addMap, item)
 	}
@@ -27,6 +28,7 @@ func SyncTuples(ctx context.Context, client *fgax.Client, subjectID, subjectType
 	for _, item := range oldItems {
 		delMap[item] = struct{}{}
 	}
+
 	for _, item := range newItems {
 		delete(delMap, item)
 	}
@@ -58,5 +60,6 @@ func SyncTuples(ctx context.Context, client *fgax.Client, subjectID, subjectType
 	}
 
 	_, err := client.WriteTupleKeys(ctx, adds, dels)
+
 	return err
 }

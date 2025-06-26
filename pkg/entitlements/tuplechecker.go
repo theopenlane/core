@@ -63,6 +63,7 @@ func NewTupleChecker(opts ...TupleCheckerOption) *TupleChecker {
 	for _, opt := range opts {
 		opt(tc)
 	}
+
 	return tc
 }
 

@@ -101,6 +101,7 @@ func (sc *StripeClient) createCustomerAndSubscription(ctx context.Context, o *Or
 	} else {
 		subscription, err = sc.CreateTrialSubscription(ctx, customer)
 	}
+
 	if err != nil {
 		return err
 	}

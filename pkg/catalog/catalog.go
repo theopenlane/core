@@ -6,7 +6,6 @@ import (
 	"crypto/sha256"
 	_ "embed"
 	"encoding/hex"
-	"fmt"
 	"io/fs"
 	"maps"
 	"os"
@@ -165,7 +164,7 @@ func LoadCatalog(path string) (*Catalog, error) {
 // Matching considers unit amount, interval, nickname, lookup key and metadata.
 func (c *Catalog) ValidatePrices(ctx context.Context, sc *entitlements.StripeClient) error {
 	if c == nil || sc == nil {
-		return fmt.Errorf("catalog or stripe client is nil and both are required")
+		return nil
 	}
 
 	products, err := sc.ListProducts(ctx)
@@ -179,6 +178,7 @@ func (c *Catalog) ValidatePrices(ctx context.Context, sc *entitlements.StripeCli
 		if p.ID != "" {
 			prodMap[p.ID] = p
 		}
+
 		if p.Name != "" {
 			prodMap[p.Name] = p
 		}
@@ -237,10 +237,12 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 	}
 
 	prodMap := map[string]*stripe.Product{}
+
 	for _, p := range products {
 		if p.ID != "" {
 			prodMap[p.ID] = p
 		}
+
 		if p.Name != "" {
 			prodMap[p.Name] = p
 		}
@@ -248,7 +250,9 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 
 	create := func(name string, f Feature) (Feature, error) {
 		prod, _ := resolveProduct(ctx, sc, prodMap, f)
+
 		var err error
+
 		if prod == nil {
 			prod, err = sc.CreateProduct(ctx, name, f.DisplayName, f.Description, map[string]string{ManagedByKey: ManagedByValue})
 			if err != nil {

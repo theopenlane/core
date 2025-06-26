@@ -31,6 +31,7 @@ func (sc *StripeClient) UpdateProductWithOptions(baseParams *stripe.ProductUpdat
 	for _, opt := range opts {
 		opt(params)
 	}
+
 	return params
 }
 

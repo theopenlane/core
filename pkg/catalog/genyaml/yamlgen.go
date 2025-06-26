@@ -111,6 +111,7 @@ func featureSetLit(fs catalog.FeatureSet) *jen.Statement {
 	}
 
 	sort.Strings(keys)
+
 	dict := jen.Dict{}
 
 	for _, k := range keys {
@@ -196,6 +197,7 @@ func priceLit(p catalog.Price) *jen.Statement {
 		}
 
 		sort.Strings(mkeys)
+
 		mdict := jen.Dict{}
 
 		for _, k := range mkeys {

@@ -49,6 +49,8 @@ func (a *AssetType) UnmarshalGQL(v interface{}) error {
 	if !ok {
 		return fmt.Errorf("wrong type for AssetType, got: %T", v) //nolint:err113
 	}
+
 	*a = AssetType(str)
+
 	return nil
 }

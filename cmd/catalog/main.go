@@ -133,7 +133,7 @@ func catalogApp() *cli.App {
 						return fmt.Errorf("create prices: %w", err)
 					}
 				} else {
-					return fmt.Errorf("create prices: %w", fmt.Errorf("unexpected client type"))
+					return fmt.Errorf("create prices: %w", ErrExpectedClient)
 				}
 			}
 
@@ -156,6 +156,8 @@ func catalogApp() *cli.App {
 	return app
 }
 
+var ErrExpectedClient = fmt.Errorf("expected stripeClient type")
+
 // buildProductMap fetches all existing Stripe products and indexes them by ID
 // and name so lookups can prefer unique identifiers when available
 func buildProductMap(ctx context.Context, sc stripeClient) (map[string]*stripe.Product, error) {
@@ -165,6 +167,7 @@ func buildProductMap(ctx context.Context, sc stripeClient) (map[string]*stripe.P
 	}
 
 	prodMap := map[string]*stripe.Product{}
+
 	for _, p := range products {
 		if p.ID != "" {
 			prodMap[p.ID] = p
@@ -218,6 +221,7 @@ func resolveProduct(ctx context.Context, sc *entitlements.StripeClient, prodMap 
 // returns any prices that are missing management metadata.
 func updateFeaturePrices(ctx context.Context, sc stripeClient, prod *stripe.Product, name string, feat catalog.Feature) (catalog.Feature, []takeoverInfo, int) {
 	missingPrices := 0
+
 	var takeovers []takeoverInfo
 
 	for i, p := range feat.Billing.Prices {
@@ -225,6 +229,7 @@ func updateFeaturePrices(ctx context.Context, sc stripeClient, prod *stripe.Prod
 		maps.Copy(md, p.Metadata)
 
 		var price *stripe.Price
+
 		var err error
 
 		if p.PriceID != "" {
@@ -246,6 +251,7 @@ func updateFeaturePrices(ctx context.Context, sc stripeClient, prod *stripe.Prod
 		}
 
 		feat.Billing.Prices[i].PriceID = price.ID
+
 		if price.Metadata[catalog.ManagedByKey] != catalog.ManagedByValue {
 			takeovers = append(takeovers, takeoverInfo{feature: name, price: p, stripe: price})
 		}
@@ -259,7 +265,9 @@ func updateFeaturePrices(ctx context.Context, sc stripeClient, prod *stripe.Prod
 // It returns a slice of unmanaged prices and whether any products or prices are missing.
 func processFeatureSet(ctx context.Context, sc stripeClient, prodMap map[string]*stripe.Product, kind string, fs catalog.FeatureSet) ([]takeoverInfo, bool, []featureReport) {
 	var takeovers []takeoverInfo
+
 	missing := false
+
 	var reports []featureReport
 
 	for name, feat := range fs {
@@ -315,6 +323,7 @@ func handleTakeovers(ctx context.Context, sc stripeClient, takeovers []takeoverI
 
 	if !*takeover {
 		fmt.Print("Take over these prices by adding metadata? (y/N): ")
+
 		r := bufio.NewReader(os.Stdin)
 
 		answer, err := r.ReadString('\n')
@@ -348,6 +357,7 @@ func handleTakeovers(ctx context.Context, sc stripeClient, takeovers []takeoverI
 // promptAndCreateMissing asks the user whether to create any missing products or prices
 func promptAndCreateMissing(ctx context.Context, cat *catalog.Catalog, sc *entitlements.StripeClient) error {
 	fmt.Print("Create missing products and prices? (y/N): ")
+
 	r := bufio.NewReader(os.Stdin)
 
 	answer, err := r.ReadString('\n')

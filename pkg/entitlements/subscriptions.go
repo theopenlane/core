@@ -297,6 +297,7 @@ func (sc *StripeClient) MigrateSubscriptionPrice(ctx context.Context, sub *strip
 	}
 
 	var updateItems []*stripe.SubscriptionUpdateItemParams
+
 	for _, item := range sub.Items.Data {
 		if item.Price != nil && item.Price.ID == oldPriceID {
 			updateItems = append(updateItems, &stripe.SubscriptionUpdateItemParams{

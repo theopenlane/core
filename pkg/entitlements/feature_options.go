@@ -66,5 +66,6 @@ func CreateProductFeatureAssociationWithOptions(baseParams *stripe.ProductFeatur
 	for _, opt := range opts {
 		opt(params)
 	}
+
 	return params
 }

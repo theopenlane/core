@@ -94,34 +94,6 @@ func (f *fakeClient) UpdatePriceMetadata(ctx context.Context, id string, md map[
 	return p, nil
 }
 
-func (f *fakeClient) CreatePrice(ctx context.Context, productID string, unitAmount int64, currency, interval, nickname, lookupKey string, metadata map[string]string) (*stripe.Price, error) {
-	// For test, just return a new price or existing one if present
-	for _, p := range f.prices {
-		if p.Product != nil && p.Product.ID == productID &&
-			p.UnitAmount == unitAmount &&
-			string(p.Currency) == currency &&
-			p.Recurring != nil && string(p.Recurring.Interval) == interval &&
-			p.Nickname == nickname &&
-			p.LookupKey == lookupKey {
-			return p, nil
-		}
-	}
-	// Simulate creation
-	price := &stripe.Price{
-		ID:         "created_price",
-		Product:    &stripe.Product{ID: productID},
-		UnitAmount: unitAmount,
-		Currency:   stripe.Currency(currency),
-		Recurring:  &stripe.PriceRecurring{Interval: stripe.PriceRecurringInterval(interval)},
-		Nickname:   nickname,
-		LookupKey:  lookupKey,
-		Metadata:   metadata,
-	}
-
-	f.prices[price.ID] = price
-	return price, nil
-}
-
 func TestPriceMatchesStripe(t *testing.T) {
 	prod := &stripe.Product{ID: "prod_1"}
 	sp := &stripe.Price{

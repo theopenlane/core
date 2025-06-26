@@ -60,6 +60,7 @@ func (sc *StripeClient) UpdatePriceWithOptions(baseParams *stripe.PriceUpdatePar
 	for _, opt := range opts {
 		opt(params)
 	}
+
 	return params
 }
 

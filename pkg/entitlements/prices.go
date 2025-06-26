@@ -115,6 +115,7 @@ func (sc *StripeClient) GetPriceByLookupKey(ctx context.Context, lookupKey strin
 		if err != nil {
 			return nil, err
 		}
+
 		return price, nil
 	}
 
@@ -130,6 +131,7 @@ func (sc *StripeClient) FindPriceForProduct(ctx context.Context, productID, pric
 		if err != nil {
 			return nil, err
 		}
+
 		if price != nil {
 			if productID == "" || (price.Product != nil && price.Product.ID == productID) {
 				return price, nil
@@ -142,6 +144,7 @@ func (sc *StripeClient) FindPriceForProduct(ctx context.Context, productID, pric
 		if err != nil {
 			return nil, err
 		}
+
 		if price != nil {
 			if productID == "" || (price.Product != nil && price.Product.ID == productID) {
 				return price, nil
@@ -182,6 +185,7 @@ func (sc *StripeClient) FindPriceForProduct(ctx context.Context, productID, pric
 		}
 
 		match := true
+
 		for k, v := range metadata {
 			if p.Metadata == nil || p.Metadata[k] != v {
 				match = false

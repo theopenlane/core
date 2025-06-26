@@ -87,6 +87,7 @@ func StripeSubscriptionToOrgSubscription(sub *stripe.Subscription, cust *entitle
 	}
 
 	var productName, productID string
+
 	var price models.Price
 
 	if sub.Items != nil && len(sub.Items.Data) > 0 {
@@ -293,6 +294,7 @@ func ApplyStripeSubscription[T OrgSubscriptionSetter[T]](b T, sub *stripe.Subscr
 	}
 
 	var productName, productID string
+
 	var price models.Price
 
 	if sub.Items != nil && len(sub.Items.Data) > 0 {
@@ -321,9 +323,11 @@ func ApplyStripeSubscription[T OrgSubscriptionSetter[T]](b T, sub *stripe.Subscr
 	b.SetStripeSubscriptionID(sub.ID)
 	b.SetStripeSubscriptionStatus(status)
 	b.SetActive(entitlements.IsSubscriptionActive(sub.Status))
+
 	if sub.Customer != nil {
 		b.SetStripeCustomerID(sub.Customer.ID)
 	}
+
 	b.SetProductTier(productName)
 	b.SetStripeProductTierID(productID)
 	b.SetProductPrice(price)
