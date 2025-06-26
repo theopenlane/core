@@ -48,7 +48,7 @@ graph TD
    keeping it as the source of truth.
 
 You can verify your configuration without modifying Stripe by running
-`go run ./cmd/catalogdryrun`. This CLI loads the catalog and reports which
+`go run ./cmd/catalog`. This CLI loads the catalog and reports which
 products and prices already exist.  The catalog format itself is described by
 `jsonschema/catalog.schema.json` so you can lint changes with any JSON Schema
 validator.

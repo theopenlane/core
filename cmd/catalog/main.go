@@ -17,14 +17,14 @@ import (
 	"github.com/theopenlane/utils/cli/tables"
 )
 
-// takeoverInfo stores details about a price we may want to manage via metadata.
+// takeoverInfo stores details about a price we may want to manage via metadata
 type takeoverInfo struct {
 	feature string
 	price   catalog.Price
 	stripe  *stripe.Price
 }
 
-// featureReport represents the reconciliation status for a feature.
+// featureReport represents the reconciliation status for a feature
 type featureReport struct {
 	kind          string
 	name          string
@@ -32,21 +32,23 @@ type featureReport struct {
 	missingPrices int
 }
 
-// stripeClient defines the subset of entitlements.StripeClient used by this CLI.
+// stripeClient defines the subset of entitlements.StripeClient used by this CLI
 type stripeClient interface {
 	ListProducts(ctx context.Context) ([]*stripe.Product, error)
 	GetPrice(ctx context.Context, id string) (*stripe.Price, error)
-	FindPriceForProduct(ctx context.Context, productID string, currency string, unitAmount int64, interval, nickname, lookupKey, metadata string, meta map[string]string) (*stripe.Price, error)
+	FindPriceForProduct(ctx context.Context, opts ...entitlements.FindPriceOption) (*stripe.Price, error)
 	UpdatePriceMetadata(ctx context.Context, priceID string, metadata map[string]string) (*stripe.Price, error)
 }
 
-var (
-	newClient = func(opts ...entitlements.StripeOptions) (stripeClient, error) {
-		return entitlements.NewStripeClient(opts...)
-	}
-	outWriter io.Writer = os.Stdout
-)
+// newClient is a function that creates a new stripe client. It can be replaced in tests for mocking purposes
+var newClient = func(opts ...entitlements.StripeOptions) (stripeClient, error) {
+	return entitlements.NewStripeClient(opts...)
+}
 
+// outWriter is the output writer for the CLI; it can be replaced in tests for fun and profit
+var outWriter io.Writer = os.Stdout
+
+// main is the entry point for the catalog CLI application
 func main() {
 	if err := catalogApp().Run(os.Args); err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -54,6 +56,7 @@ func main() {
 	}
 }
 
+// catalogApp creates a CLI application for reconciling a catalog with Stripe
 func catalogApp() *cli.App {
 	app := &cli.App{
 		Name:  "catalog",
@@ -154,7 +157,7 @@ func catalogApp() *cli.App {
 }
 
 // buildProductMap fetches all existing Stripe products and indexes them by ID
-// and name so lookups can prefer unique identifiers when available.
+// and name so lookups can prefer unique identifiers when available
 func buildProductMap(ctx context.Context, sc stripeClient) (map[string]*stripe.Product, error) {
 	products, err := sc.ListProducts(ctx)
 	if err != nil {
@@ -177,7 +180,7 @@ func buildProductMap(ctx context.Context, sc stripeClient) (map[string]*stripe.P
 
 // resolveProduct attempts to find the Stripe product for a feature using
 // progressively less unique attributes. It tries price IDs first, then price
-// lookup keys, and finally falls back to the feature display name.
+// lookup keys, and finally falls back to the feature display name
 func resolveProduct(ctx context.Context, sc *entitlements.StripeClient, prodMap map[string]*stripe.Product, feat catalog.Feature) (*stripe.Product, error) {
 	// try to discover product via price IDs
 	for _, p := range feat.Billing.Prices {
@@ -235,7 +238,14 @@ func updateFeaturePrices(ctx context.Context, sc stripeClient, prod *stripe.Prod
 				fmt.Fprintf(os.Stderr, "[WARN] price %s for feature %s does not match catalog; to modify an existing price create a new one and update subscriptions\n", p.PriceID, name)
 			}
 		} else {
-			price, err = sc.FindPriceForProduct(ctx, prod.ID, "", p.UnitAmount, "", p.Interval, p.Nickname, p.LookupKey, md)
+			price, err = sc.FindPriceForProduct(ctx,
+				entitlements.WithProductID(prod.ID),
+				entitlements.WithUnitAmount(p.UnitAmount),
+				entitlements.WithInterval(p.Interval),
+				entitlements.WithNickname(p.Nickname),
+				entitlements.WithLookupKey(p.LookupKey),
+				entitlements.WithMetadata(md),
+			)
 			if err != nil || price == nil {
 				missingPrices++
 				continue
@@ -298,6 +308,7 @@ func handleTakeovers(ctx context.Context, sc stripeClient, takeovers []takeoverI
 	}
 
 	writer := tables.NewTableWriter(outWriter, "Feature", "LookupKey", "PriceID", "Managed")
+
 	for _, t := range takeovers {
 		managed := t.stripe.Metadata[catalog.ManagedByKey]
 		if err := writer.AddRow(t.feature, t.price.LookupKey, t.stripe.ID, managed); err != nil {
@@ -359,6 +370,8 @@ func promptAndCreateMissing(ctx context.Context, cat *catalog.Catalog, sc *entit
 	return nil
 }
 
+// priceMatchesStripe is what's performing the check on the key required
+// non-changing fields to determine if the catalog price has drifted from the Stripe price
 func priceMatchesStripe(p *stripe.Price, cp catalog.Price, prodID string) bool {
 	if p == nil {
 		return false

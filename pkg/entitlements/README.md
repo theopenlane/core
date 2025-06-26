@@ -1,43 +1,105 @@
-# Stripe integration
+# Entitlements
 
+The `entitlements` package wraps Stripe billing APIs and OpenFGA feature
+authorization. It manages organization subscriptions, available modules, and
+runtime feature checks. This package centralizes the logic for creating and
+updating Stripe resources while keeping feature state in OpenFGA with a Redis
+cache for _ideally_ faster lookup (not yet benchmarked but a decently safe assumption).
 
+## Purpose
 
-## Redis cache
+- Provide a Go client for Stripe that exposes helper functions to create
+  customers, prices, products and subscriptions
+- Process Stripe webhooks to keep feature tuples in sync with purchases
+- Offer the `TupleChecker` utility for feature gating via OpenFGA with optional
+  Redis caching
 
-The CheckFeatureTuple function is responsible for determining whether a specific feature tuple exists, using a two-step approach: it first checks a Redis cache, and if the tuple is not found there, it queries an external FGA (Fine-Grained Authorization) system. This method is part of the TupleChecker struct, which holds references to a Redis client, an FGA client, and a cache time-to-live (TTL) duration.
+A more in‑depth discussion of how modules and entitlements flow through the
+system can be found in [`docs/entitlements.md`](../../docs/entitlements.md).
 
-The function begins by validating that both the Redis client and the FGA client are properly configured. If either is missing, it returns an error immediately, preventing further execution. Next, it generates a cache key based on the tuple's contents using the cacheKey method, which ensures that each tuple maps to a unique Redis key.
+## Approach
 
-It then attempts to retrieve the tuple's existence status from Redis. If the key is found (err == nil), it returns true if the cached value is "1", or false otherwise. If the error is anything other than a cache miss (redis.Nil), it returns the error, as this indicates a problem with the Redis operation.
+The package relies on the official [`stripe-go`](https://github.com/stripe/stripe-go)
+client. Helper functions use functional options so callers can supply only the
+fields they need. When webhooks are received the handler translates Stripe events
+into updates to OpenFGA tuples and refreshes the cached feature list. Feature
+checks first consult Redis and fall back to OpenFGA if no cache entry exists.
 
-If the tuple is not present in the cache, the function queries the FGA system by calling CheckTuple. If this check fails, it returns the error. Otherwise, it caches the result in Redis for future requests, storing "1" for a positive result and "0" for a negative one, using the configured TTL. Finally, it returns the result of the FGA check.
+Key types include:
 
-This approach optimizes performance by reducing the number of expensive FGA checks, relying on Redis as a fast, in-memory cache. It also ensures that the cache is kept up-to-date with the latest results, improving efficiency for repeated queries. One subtlety is that the function does not handle errors from the Redis Set operation, which could be a point of improvement if cache consistency is critical.
+- `StripeClient` – thin wrapper around `stripe.Client` with higher level helpers
+- `OrganizationCustomer` and `Subscription` – internal representations of Stripe
+  customers/subscriptions
+- `TupleChecker` – verifies feature tuples and creates/deletes them in OpenFGA
+  while caching results in Redis
 
-## Webhook
+## Integration
 
-To test webhooks locally:
+Application configuration embeds `entitlements.Config` in the global
+[`config.Config`](../../config/config.go) struct. When the HTTP server starts it
+constructs a `StripeClient` using that config and stores it on the handler:
 
-`brew install stripe/stripe-cli/stripe`
+```go
+h := &handlers.Handler{
+    Entitlements: stripeClient,
+}
+```
 
-`stripe login` and then use your associated credentials
+The webhook receiver in
+[`internal/httpserve/handlers/webhook.go`](../../internal/httpserve/handlers/webhook.go)
+uses this client to update subscriptions and feature tuples when events arrive.
+Ent hooks in [`internal/ent/hooks/organization.go`](../../internal/ent/hooks/organization.go)
+create default feature tuples for new organizations.
 
-`stripe listen --forward-to localhost:17608/v1/stripe/webhook`
+## Examples
 
-`stripe trigger payment_intent.succeeded`
+### Creating a client and customer
 
-### Unprocessed
+```go
+sc, err := entitlements.NewStripeClient(
+    entitlements.WithAPIKey("sk_test_..."),
+)
+if err != nil {
+    log.Fatal(err)
+}
 
-If your webhook endpoint temporarily can’t process events, Stripe automatically resends the undelivered events to your endpoint for up to three days, increasing the time for your webhook endpoint to eventually receive and process all events.
+cust, err := sc.CreateCustomer(context.Background(), &entitlements.OrganizationCustomer{
+    OrganizationID: "org_123",
+    Email:          "billing@example.com",
+})
+```
 
-stripe fixtures ./fixtures.json
+### Feature checks with `TupleChecker`
 
-stripe trigger payment_intent.succeeded --override payment_intent:amount=5000 --override payment_intent:currency=usd --add payment_intent:customer=cus_xxx
+```go
+redisClient := redis.NewClient(&redis.Options{Addr: "localhost:6379"})
+tc := entitlements.NewTupleChecker(
+    entitlements.WithRedisClient(redisClient),
+    entitlements.WithFGAClient(myFGAClient),
+)
 
-https://github.com/stripe/stripe-cli/tree/master/pkg/fixtures/triggers
+allowed, err := tc.CheckFeatureTuple(ctx, entitlements.FeatureTuple{
+    UserID:  "user1",
+    Feature: "compliance-module",
+    Context: map[string]any{"org": "org_123"},
+})
+```
 
-### Subscription status
+### Local webhook testing
 
-Basic information pulled up out of stripe's docs indicating the various scenarios in which a subscription can be in a given status
+Install the [Stripe CLI](https://github.com/stripe/stripe-cli) and forward events
+to your server:
 
-https://stripe.com/docs/billing/subscriptions/overview#subscription-status
+```bash
+stripe login
+stripe listen --forward-to localhost:17608/v1/stripe/webhook
+```
+
+You can then trigger events, for example:
+
+```bash
+stripe trigger payment_intent.succeeded
+```
+
+This mirrors the flow described in the "End‑to‑End Flow" section of the
+[`docs/entitlements.md`](../../docs/entitlements.md) document.

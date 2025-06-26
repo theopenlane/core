@@ -12,6 +12,7 @@ import (
 )
 
 func main() {
+	// nothing fancy here, just reflect the Catalog struct
 	r := jsonschema.Reflect(&catalog.Catalog{})
 	data, err := json.MarshalIndent(r, "", "  ")
 	if err != nil {

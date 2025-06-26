@@ -6,6 +6,7 @@ import (
 	"crypto/sha256"
 	_ "embed"
 	"encoding/hex"
+	"fmt"
 	"io/fs"
 	"maps"
 	"os"
@@ -142,7 +143,8 @@ func LoadCatalog(path string) (*Catalog, error) {
 
 	if !res.Valid() {
 		log.Debug().Msg("Catalog validation failed - ensure you have generated the latest schema file if you have modified the catalog structs")
-		res.Errors()
+
+		// if there are errors with many fields its easiest to see them this way
 		for _, e := range res.Errors() {
 			log.Debug().Msgf("Validation error: %s", e)
 		}
@@ -163,7 +165,7 @@ func LoadCatalog(path string) (*Catalog, error) {
 // Matching considers unit amount, interval, nickname, lookup key and metadata.
 func (c *Catalog) ValidatePrices(ctx context.Context, sc *entitlements.StripeClient) error {
 	if c == nil || sc == nil {
-		return nil
+		return fmt.Errorf("catalog or stripe client is nil and both are required")
 	}
 
 	products, err := sc.ListProducts(ctx)
@@ -194,7 +196,15 @@ func (c *Catalog) ValidatePrices(ctx context.Context, sc *entitlements.StripeCli
 
 				maps.Copy(md, p.Metadata)
 
-				price, err := sc.FindPriceForProduct(ctx, prod.ID, p.PriceID, p.UnitAmount, "", p.Interval, p.Nickname, p.LookupKey, md)
+				price, err := sc.FindPriceForProduct(ctx,
+					entitlements.WithProductID(prod.ID),
+					entitlements.WithPriceID(p.PriceID),
+					entitlements.WithUnitAmount(p.UnitAmount),
+					entitlements.WithInterval(p.Interval),
+					entitlements.WithNickname(p.Nickname),
+					entitlements.WithLookupKey(p.LookupKey),
+					entitlements.WithMetadata(md),
+				)
 				if err != nil {
 					return err
 				}
@@ -280,7 +290,16 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 
 			maps.Copy(md, p.Metadata)
 
-			price, err := sc.FindPriceForProduct(ctx, prod.ID, p.PriceID, p.UnitAmount, currency, p.Interval, p.Nickname, p.LookupKey, md)
+			price, err := sc.FindPriceForProduct(ctx,
+				entitlements.WithProductID(prod.ID),
+				entitlements.WithPriceID(p.PriceID),
+				entitlements.WithUnitAmount(p.UnitAmount),
+				entitlements.WithCurrency(currency),
+				entitlements.WithInterval(p.Interval),
+				entitlements.WithNickname(p.Nickname),
+				entitlements.WithLookupKey(p.LookupKey),
+				entitlements.WithMetadata(md),
+			)
 			if err != nil {
 				return f, err
 			}

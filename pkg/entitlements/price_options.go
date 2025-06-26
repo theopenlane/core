@@ -41,6 +41,7 @@ func (sc *StripeClient) CreatePriceWithOptions(baseParams *stripe.PriceCreatePar
 	for _, opt := range opts {
 		opt(params)
 	}
+
 	return params
 }
 

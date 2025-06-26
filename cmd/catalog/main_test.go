@@ -81,7 +81,7 @@ func (f *fakeClient) GetPrice(ctx context.Context, id string) (*stripe.Price, er
 	return f.prices[id], nil
 }
 
-func (f *fakeClient) FindPriceForProduct(ctx context.Context, productID string, currency string, unitAmount int64, interval, nickname, lookupKey, metadata string, meta map[string]string) (*stripe.Price, error) {
+func (f *fakeClient) FindPriceForProduct(ctx context.Context, opts ...entitlements.FindPriceOption) (*stripe.Price, error) {
 	return nil, nil
 }
 
@@ -92,6 +92,34 @@ func (f *fakeClient) UpdatePriceMetadata(ctx context.Context, id string, md map[
 		p.Metadata = md
 	}
 	return p, nil
+}
+
+func (f *fakeClient) CreatePrice(ctx context.Context, productID string, unitAmount int64, currency, interval, nickname, lookupKey string, metadata map[string]string) (*stripe.Price, error) {
+	// For test, just return a new price or existing one if present
+	for _, p := range f.prices {
+		if p.Product != nil && p.Product.ID == productID &&
+			p.UnitAmount == unitAmount &&
+			string(p.Currency) == currency &&
+			p.Recurring != nil && string(p.Recurring.Interval) == interval &&
+			p.Nickname == nickname &&
+			p.LookupKey == lookupKey {
+			return p, nil
+		}
+	}
+	// Simulate creation
+	price := &stripe.Price{
+		ID:         "created_price",
+		Product:    &stripe.Product{ID: productID},
+		UnitAmount: unitAmount,
+		Currency:   stripe.Currency(currency),
+		Recurring:  &stripe.PriceRecurring{Interval: stripe.PriceRecurringInterval(interval)},
+		Nickname:   nickname,
+		LookupKey:  lookupKey,
+		Metadata:   metadata,
+	}
+
+	f.prices[price.ID] = price
+	return price, nil
 }
 
 func TestPriceMatchesStripe(t *testing.T) {
