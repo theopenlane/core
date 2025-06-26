@@ -22,3 +22,13 @@ func TestPriceUpdateOptions(t *testing.T) {
 	params = (&StripeClient{}).UpdatePriceWithOptions(params, WithUpdatePriceMetadata(map[string]string{"baz": "qux"}))
 	require.Equal(t, "qux", params.Metadata["baz"])
 }
+
+func TestSeq2IsEmpty(t *testing.T) {
+	empty := stripe.Seq2[string, error](func(yield func(string, error) bool) {})
+	require.True(t, seq2IsEmpty(empty))
+
+	nonEmpty := stripe.Seq2[string, error](func(yield func(string, error) bool) {
+		yield("v", nil)
+	})
+	require.True(t, seq2IsEmpty(nonEmpty))
+}

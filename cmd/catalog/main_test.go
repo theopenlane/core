@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"io"
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -56,13 +58,40 @@ func setupPriceClient(price *stripe.Price, list []*stripe.Price) (*entitlements.
 
 func captureOutput(f func()) string {
 	r, w, _ := os.Pipe()
-	old := os.Stdout
-	os.Stdout = w
+	oldOut := outWriter
+	outWriter = w
 	f()
 	w.Close()
-	os.Stdout = old
+	outWriter = oldOut
 	out, _ := io.ReadAll(r)
 	return string(out)
+}
+
+type fakeClient struct {
+	products []*stripe.Product
+	prices   map[string]*stripe.Price
+	updated  []string
+}
+
+func (f *fakeClient) ListProducts(ctx context.Context) ([]*stripe.Product, error) {
+	return f.products, nil
+}
+
+func (f *fakeClient) GetPrice(ctx context.Context, id string) (*stripe.Price, error) {
+	return f.prices[id], nil
+}
+
+func (f *fakeClient) FindPriceForProduct(ctx context.Context, productID string, currency string, unitAmount int64, interval, nickname, lookupKey, metadata string, meta map[string]string) (*stripe.Price, error) {
+	return nil, nil
+}
+
+func (f *fakeClient) UpdatePriceMetadata(ctx context.Context, id string, md map[string]string) (*stripe.Price, error) {
+	f.updated = append(f.updated, id)
+	p := f.prices[id]
+	if p != nil {
+		p.Metadata = md
+	}
+	return p, nil
 }
 
 func TestPriceMatchesStripe(t *testing.T) {
@@ -212,4 +241,92 @@ func TestPromptAndCreateMissing(t *testing.T) {
 
 	err := promptAndCreateMissing(context.Background(), cat, sc)
 	require.NoError(t, err)
+}
+
+func writeTempCatalogFile(t *testing.T, data string) string {
+	t.Helper()
+	dir := t.TempDir()
+	p := filepath.Join(dir, "catalog.yaml")
+	require.NoError(t, os.WriteFile(p, []byte(data), 0o644))
+	return p
+}
+
+func TestCatalogAppNoop(t *testing.T) {
+	catYAML := `version: v1
+sha: bad
+modules:
+  mod1:
+    display_name: Prod1
+    description: D
+    audience: public
+    billing:
+      prices:
+        - interval: month
+          unit_amount: 100
+          nickname: p1_month
+          lookup_key: p1_month
+          price_id: price_1
+addons: {}`
+
+	path := writeTempCatalogFile(t, catYAML)
+
+	prod := &stripe.Product{ID: "prod1", Name: "Prod1"}
+	price := &stripe.Price{ID: "price_1", UnitAmount: 100, Recurring: &stripe.PriceRecurring{Interval: "month"}, LookupKey: "p1_month", Product: prod, Metadata: map[string]string{catalog.ManagedByKey: catalog.ManagedByValue}}
+
+	client := &fakeClient{products: []*stripe.Product{prod}, prices: map[string]*stripe.Price{"price_1": price}}
+	newClient = func(opts ...entitlements.StripeOptions) (stripeClient, error) { return client, nil }
+	defer func() {
+		newClient = func(opts ...entitlements.StripeOptions) (stripeClient, error) {
+			return entitlements.NewStripeClient(opts...)
+		}
+	}()
+
+	buf := &bytes.Buffer{}
+	outWriter = buf
+	defer func() { outWriter = os.Stdout }()
+
+	app := catalogApp()
+	err := app.Run([]string{"catalog", "--catalog", path, "--stripe-key", "sk", "--takeover"})
+	require.NoError(t, err)
+	require.Empty(t, client.updated)
+}
+
+func TestCatalogAppTakeover(t *testing.T) {
+	catYAML := `version: v1
+sha: bad
+modules:
+  mod1:
+    display_name: Prod1
+    description: D
+    audience: public
+    billing:
+      prices:
+        - interval: month
+          unit_amount: 100
+          nickname: p1_month
+          lookup_key: p1_month
+          price_id: price_1
+addons: {}`
+
+	path := writeTempCatalogFile(t, catYAML)
+
+	prod := &stripe.Product{ID: "prod1", Name: "Prod1"}
+	price := &stripe.Price{ID: "price_1", UnitAmount: 100, Recurring: &stripe.PriceRecurring{Interval: "month"}, LookupKey: "p1_month", Product: prod, Metadata: map[string]string{}}
+
+	client := &fakeClient{products: []*stripe.Product{prod}, prices: map[string]*stripe.Price{"price_1": price}}
+	newClient = func(opts ...entitlements.StripeOptions) (stripeClient, error) { return client, nil }
+	defer func() {
+		newClient = func(opts ...entitlements.StripeOptions) (stripeClient, error) {
+			return entitlements.NewStripeClient(opts...)
+		}
+	}()
+
+	buf := &bytes.Buffer{}
+	outWriter = buf
+	defer func() { outWriter = os.Stdout }()
+
+	app := catalogApp()
+	err := app.Run([]string{"catalog", "--catalog", path, "--stripe-key", "sk", "--takeover"})
+	require.NoError(t, err)
+	require.Equal(t, []string{"price_1"}, client.updated)
 }

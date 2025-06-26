@@ -5,12 +5,13 @@ import (
 	"time"
 
 	"github.com/stripe/stripe-go/v82"
+
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/models"
 )
 
-// StripePriceToOrgPrice converts a stripe.Price to an OrgPrice.
+// StripePriceToOrgPrice converts a stripe.Price to an OrgPrice
 func StripePriceToOrgPrice(p *stripe.Price) *ent.OrgPrice {
 	if p == nil {
 		return nil
@@ -48,7 +49,7 @@ func StripePriceToOrgPrice(p *stripe.Price) *ent.OrgPrice {
 	}
 }
 
-// StripeProductToOrgProduct converts a stripe.Product to an OrgProduct.
+// StripeProductToOrgProduct converts a stripe.Product to an OrgProduct
 func StripeProductToOrgProduct(p *stripe.Product) *ent.OrgProduct {
 	if p == nil {
 		return nil
@@ -132,7 +133,7 @@ func StripeSubscriptionToOrgSubscription(sub *stripe.Subscription, cust *entitle
 	return orgSub
 }
 
-// StripeSubscriptionItemToOrgModule converts a stripe.SubscriptionItem to an OrgModule.
+// StripeSubscriptionItemToOrgModule converts a stripe.SubscriptionItem to an OrgModule
 func StripeSubscriptionItemToOrgModule(item *stripe.SubscriptionItem) *ent.OrgModule {
 	if item == nil || item.Price == nil {
 		return nil
@@ -194,7 +195,7 @@ type OrgPriceSetter[T any] interface {
 	SetProductID(string) T
 }
 
-// ApplyStripePrice sets fields on the provided ent builder from the stripe.Price.
+// ApplyStripePrice sets fields on the provided ent builder from the stripe.Price
 func ApplyStripePrice[T OrgPriceSetter[T]](b T, p *stripe.Price) T {
 	if p == nil {
 		return b
@@ -230,7 +231,7 @@ func ApplyStripePrice[T OrgPriceSetter[T]](b T, p *stripe.Price) T {
 	return b
 }
 
-// OrgProductSetter defines the methods needed to set OrgProduct fields on ent builders.
+// OrgProductSetter defines the methods needed to set OrgProduct fields on ent builders
 type OrgProductSetter[T any] interface {
 	SetModule(string) T
 	SetStripeProductID(string) T
@@ -239,7 +240,7 @@ type OrgProductSetter[T any] interface {
 	SetPriceID(string) T
 }
 
-// ApplyStripeProduct sets fields on the provided ent builder from the stripe.Product.
+// ApplyStripeProduct sets fields on the provided ent builder from the stripe.Product
 func ApplyStripeProduct[T OrgProductSetter[T]](b T, p *stripe.Product) T {
 	if p == nil {
 		return b
@@ -269,7 +270,7 @@ func ApplyStripeProduct[T OrgProductSetter[T]](b T, p *stripe.Product) T {
 	return b
 }
 
-// OrgSubscriptionSetter defines the methods needed to set OrgSubscription fields on ent builders.
+// OrgSubscriptionSetter defines the methods needed to set OrgSubscription fields on ent builders
 type OrgSubscriptionSetter[T any] interface {
 	SetStripeSubscriptionID(string) T
 	SetStripeSubscriptionStatus(string) T
@@ -285,7 +286,7 @@ type OrgSubscriptionSetter[T any] interface {
 	SetPaymentMethodAdded(bool) T
 }
 
-// ApplyStripeSubscription sets fields on the ent builder from the stripe.Subscription and customer info.
+// ApplyStripeSubscription sets fields on the ent builder from the stripe.Subscription and customer info
 func ApplyStripeSubscription[T OrgSubscriptionSetter[T]](b T, sub *stripe.Subscription, cust *entitlements.OrganizationCustomer) T {
 	if sub == nil {
 		return b
@@ -338,7 +339,7 @@ func ApplyStripeSubscription[T OrgSubscriptionSetter[T]](b T, sub *stripe.Subscr
 	return b
 }
 
-// OrgModuleSetter defines the methods needed to set OrgModule fields on ent builders.
+// OrgModuleSetter defines the methods needed to set OrgModule fields on ent builders
 type OrgModuleSetter[T any] interface {
 	SetModule(string) T
 	SetPrice(models.Price) T
@@ -348,7 +349,7 @@ type OrgModuleSetter[T any] interface {
 	SetModuleLookupKey(string) T
 }
 
-// ApplyStripeSubscriptionItem sets fields on the ent builder from the stripe.SubscriptionItem.
+// ApplyStripeSubscriptionItem sets fields on the ent builder from the stripe.SubscriptionItem
 func ApplyStripeSubscriptionItem[T OrgModuleSetter[T]](b T, item *stripe.SubscriptionItem) T {
 	if item == nil || item.Price == nil {
 		return b

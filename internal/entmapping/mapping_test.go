@@ -6,11 +6,13 @@ import (
 
 	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v82"
+
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/models"
 )
 
+// priceBuilder defines the methods needed to set OrgPrice fields on ent builders
 type priceBuilder struct {
 	stripePriceID string
 	price         models.Price
@@ -25,6 +27,7 @@ func (b *priceBuilder) SetStatus(s string) *priceBuilder         { b.status = s;
 func (b *priceBuilder) SetActive(a bool) *priceBuilder           { b.active = a; return b }
 func (b *priceBuilder) SetProductID(id string) *priceBuilder     { b.productID = id; return b }
 
+// productBuilder defines the methods needed to set OrgProduct fields on ent builders
 type productBuilder struct {
 	module          string
 	stripeProductID string
@@ -42,6 +45,7 @@ func (b *productBuilder) SetStatus(s string) *productBuilder   { b.status = s; r
 func (b *productBuilder) SetActive(a bool) *productBuilder     { b.active = a; return b }
 func (b *productBuilder) SetPriceID(id string) *productBuilder { b.priceID = id; return b }
 
+// subscriptionBuilder defines the methods needed to set OrgSubscription fields on ent builders
 type subscriptionBuilder struct {
 	stripeSubscriptionID     string
 	stripeSubscriptionStatus string
@@ -100,6 +104,7 @@ func (b *subscriptionBuilder) SetPaymentMethodAdded(bm bool) *subscriptionBuilde
 	return b
 }
 
+// moduleBuilder defines the methods needed to set OrgModule fields on ent builders
 type moduleBuilder struct {
 	module          string
 	price           models.Price

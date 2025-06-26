@@ -7,26 +7,32 @@ import (
 	"os"
 
 	"github.com/stripe/stripe-go/v82"
-	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/utils/cli/tables"
 	"github.com/urfave/cli/v2"
+
+	"github.com/theopenlane/core/pkg/entitlements"
 )
 
-// stripeClient defines the methods used by this CLI. It matches
-// entitlements.StripeClient so tests can substitute a fake implementation.
+// stripeClient defines the methods used by this CLI. It matches entitlements.StripeClient so tests can substitute a fake implementation
 type stripeClient interface {
 	TagPriceMigration(ctx context.Context, fromPriceID, toPriceID string) error
 	ListSubscriptions(ctx context.Context, customerID string) ([]*stripe.Subscription, error)
 	MigrateSubscriptionPrice(ctx context.Context, sub *stripe.Subscription, oldPriceID, newPriceID string) (*stripe.Subscription, error)
 }
 
-var (
-	newClient = func(opts ...entitlements.StripeOptions) (stripeClient, error) {
-		return entitlements.NewStripeClient(opts...)
-	}
-	outWriter io.Writer = os.Stdout
-)
+// newClient is a function that creates a new stripe client. It can be replaced in tests for mocking purposes
+var newClient = func(opts ...entitlements.StripeOptions) (stripeClient, error) {
+	return entitlements.NewStripeClient(opts...)
+}
 
+// outWriter is the output writer for the CLI. It can be replaced in tests for fun and profit
+var outWriter io.Writer = os.Stdout
+
+// migrationApp creates a new CLI application for migrating prices in Stripe
+// It allows tagging a price migration and optionally migrating subscriptions from an old price to a new one
+// It supports dry-run mode to list what would be migrated without making changes
+// It requires the old and new price IDs, and optionally customer IDs to migrate
+// The Stripe API key can be provided via a flag or environment variable
 func migrationApp() *cli.App {
 	app := &cli.App{
 		Name:  "pricemigrate",

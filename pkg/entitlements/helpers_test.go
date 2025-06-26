@@ -1,9 +1,12 @@
 package entitlements_test
 
 import (
+	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v82"
 	"github.com/theopenlane/core/pkg/entitlements"
 )
@@ -64,4 +67,18 @@ func TestGetUpdatedFields(t *testing.T) {
 			assert.Equal(t, tt.expectedParams, params)
 		})
 	}
+}
+
+func TestWriteYAMLHelpers(t *testing.T) {
+	plans := []entitlements.Product{{Name: "Test"}}
+
+	dir := t.TempDir()
+	plansFile := filepath.Join(dir, "plans.yaml")
+
+	assert.NoError(t, entitlements.WritePlansToYAML(plans, plansFile))
+
+	pData, err := os.ReadFile(plansFile)
+	require.NoError(t, err)
+	assert.Contains(t, string(pData), "Test")
+
 }
