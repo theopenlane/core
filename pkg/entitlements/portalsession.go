@@ -77,3 +77,30 @@ func (sc *StripeClient) CancellationBillingPortalSession(ctx context.Context, su
 		Cancellation: billingPortalSession.URL,
 	}, nil
 }
+
+// CreateBillingPortalAddModuleSession generates a billing portal session that allows
+// a customer to add a module to their subscription. The module is identified by the provided price ID
+func (sc *StripeClient) CreateBillingPortalAddModuleSession(ctx context.Context, subsID, custID, priceID string) (*BillingPortalSession, error) {
+	params := &stripe.BillingPortalSessionCreateParams{
+		Customer:  &custID,
+		ReturnURL: &sc.Config.StripeBillingPortalSuccessURL,
+		FlowData: &stripe.BillingPortalSessionCreateFlowDataParams{
+			Type: stripe.String(string(stripe.BillingPortalSessionFlowTypeSubscriptionUpdateConfirm)),
+			SubscriptionUpdateConfirm: &stripe.BillingPortalSessionCreateFlowDataSubscriptionUpdateConfirmParams{
+				Subscription: &subsID,
+				Items: []*stripe.BillingPortalSessionCreateFlowDataSubscriptionUpdateConfirmItemParams{
+					{
+						Price: &priceID,
+					},
+				},
+			},
+		},
+	}
+
+	sess, err := sc.Client.V1BillingPortalSessions.Create(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+
+	return &BillingPortalSession{ManageSubscription: sess.URL}, nil
+}

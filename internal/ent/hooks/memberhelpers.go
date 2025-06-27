@@ -124,7 +124,6 @@ func updateMembershipCheck(ctx context.Context, m MutationMember, table string, 
 		}
 
 		if userID == actorID {
-
 			zerolog.Ctx(ctx).Error().Msg("user cannot update their own membership")
 
 			return generated.ErrPermissionDenied

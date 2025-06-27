@@ -185,6 +185,7 @@ func (s *GCSStore) ListBuckets() ([]string, error) {
 	ctx := context.Background()
 
 	it := s.Client.Buckets(ctx, s.Opts.ProjectID)
+
 	var buckets []string
 
 	for {

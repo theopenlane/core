@@ -15,6 +15,7 @@ import (
 	"github.com/stripe/stripe-go/v82/webhook"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -36,13 +37,14 @@ const (
 )
 
 // supportedEventTypes is a map of supported stripe event types that the webhook receiver can handle
-var supportedEventTypes = map[stripe.EventType]bool{
-	stripe.EventTypeCustomerSubscriptionUpdated:      true,
-	stripe.EventTypeCustomerSubscriptionDeleted:      true,
-	stripe.EventTypeCustomerSubscriptionPaused:       true,
-	stripe.EventTypeCustomerSubscriptionTrialWillEnd: true,
-	stripe.EventTypePaymentMethodAttached:            true,
-}
+var supportedEventTypes = func() map[stripe.EventType]bool {
+	m := make(map[stripe.EventType]bool)
+	for _, evt := range entitlements.SupportedEventTypes {
+		m[evt] = true
+	}
+
+	return m
+}()
 
 var (
 	webhookReceivedCounter = prometheus.NewCounterVec(
@@ -248,8 +250,12 @@ func (h *Handler) handleSubscriptionPaused(ctx context.Context, s *stripe.Subscr
 		return err
 	}
 
-	ownerID, err := syncOrgSubscriptionWithStripe(ctx, s, customer)
+	ownerID, err := h.syncOrgSubscriptionWithStripe(ctx, s, customer)
 	if err != nil {
+		return
+	}
+
+	if err = syncSubscriptionItemsWithStripe(ctx, s); err != nil {
 		return
 	}
 
@@ -274,12 +280,12 @@ func (h *Handler) handleSubscriptionUpdated(ctx context.Context, s *stripe.Subsc
 		return err
 	}
 
-	_, err = syncOrgSubscriptionWithStripe(ctx, s, customer)
+	_, err = h.syncOrgSubscriptionWithStripe(ctx, s, customer)
 	if err != nil {
 		return err
 	}
 
-	return nil
+	return syncSubscriptionItemsWithStripe(ctx, s)
 }
 
 // handleTrialWillEnd handles trial will end events, currently just calls handleSubscriptionUpdated
@@ -317,7 +323,7 @@ func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) 
 
 // syncOrgSubscriptionWithStripe updates the internal OrgSubscription record with data from Stripe and
 // returns the owner (organization) ID of the OrgSubscription to be used for further operations if needed
-func syncOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Subscription, customer *stripe.Customer) (*string, error) {
+func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Subscription, customer *stripe.Customer) (*string, error) {
 	orgSubscription, err := getOrgSubscription(ctx, subscription)
 	if err != nil {
 		return nil, err
@@ -430,6 +436,10 @@ func syncOrgSubscriptionWithStripe(ctx context.Context, subscription *stripe.Sub
 		}
 
 		log.Debug().Str("subscription_id", orgSubscription.ID).Msg("OrgSubscription updated successfully")
+
+		if err := h.ensureFeatureTuples(ctx, orgSubscription.OwnerID, stripeOrgSubscription.FeatureLookupKeys); err != nil {
+			log.Error().Err(err).Msg("failed to ensure feature tuples")
+		}
 	}
 
 	return &orgSubscription.OwnerID, nil
@@ -479,4 +489,34 @@ func int64ToStringPtr(i int64) *string {
 // timePtr returns a pointer to the given time.Time value
 func timePtr(t time.Time) *time.Time {
 	return &t
+}
+
+// ensureFeatureTuples checks that feature tuples exist for the organization and creates
+// them in FGA and the feature cache when missing.
+func (h *Handler) ensureFeatureTuples(ctx context.Context, orgID string, feats []string) error {
+	tuples := make([]fgax.TupleKey, 0, len(feats))
+	for _, f := range feats {
+		tuples = append(tuples, fgax.GetTupleKey(fgax.TupleRequest{
+			SubjectID:   orgID,
+			SubjectType: ent.TypeOrganization,
+			ObjectID:    f,
+			ObjectType:  "feature",
+			Relation:    "enabled",
+		}))
+	}
+
+	if _, err := h.DBClient.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
+		return err
+	}
+
+	if h.RedisClient != nil {
+		key := "features:" + orgID
+		pipe := h.RedisClient.TxPipeline()
+		pipe.Del(ctx, key)
+		pipe.SAdd(ctx, key, feats)
+		pipe.Expire(ctx, key, 5*time.Minute) // nolint:mnd
+		_, _ = pipe.Exec(ctx)
+	}
+
+	return nil
 }

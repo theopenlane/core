@@ -887,20 +887,15 @@ Config is the configuration for the object store
 |**stripeWebhookURL**|`string`|||
 |**stripeBillingPortalSuccessURL**|`string`|||
 |**stripeCancellationReturnURL**|`string`|||
-|[**saasPricingTiers**](#subscriptionsaaspricingtiers)|`array`|||
-|[**features**](#subscriptionfeatures)|`array`|||
+|[**stripeWebhookEvents**](#subscriptionstripewebhookevents)|`string[]`|||
 
 **Additional Properties:** not allowed  
-<a name="subscriptionsaaspricingtiers"></a>
-### subscription\.saasPricingTiers: array
+<a name="subscriptionstripewebhookevents"></a>
+### subscription\.stripeWebhookEvents: array
 
 **Items**
 
-<a name="subscriptionfeatures"></a>
-### subscription\.features: array
-
-**Items**
-
+**Item Type:** `string`  
 <a name="keywatcher"></a>
 ## keywatcher: object
 

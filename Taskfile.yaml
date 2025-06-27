@@ -17,6 +17,9 @@ includes:
     aliases: [atlas]
   config:
     taskfile: ./jsonschema/Taskfile.yaml
+  catalog:
+    taskfile: ./pkg/catalog/Taskfile.yaml
+    dir: ./pkg/catalog
 
 env:
   ATLAS_POSTGRES_DB_URI: "postgres:17-alpine"

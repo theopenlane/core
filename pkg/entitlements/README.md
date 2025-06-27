@@ -1,58 +1,105 @@
-# Stripe integration
+# Entitlements
 
-To test webhooks locally:
+The `entitlements` package wraps Stripe billing APIs and OpenFGA feature
+authorization. It manages organization subscriptions, available modules, and
+runtime feature checks. This package centralizes the logic for creating and
+updating Stripe resources while keeping feature state in OpenFGA with a Redis
+cache for _ideally_ faster lookup (not yet benchmarked but a decently safe assumption).
 
-`brew install stripe/stripe-cli/stripe`
+## Purpose
 
-`stripe login` and then use your associated credentials
+- Provide a Go client for Stripe that exposes helper functions to create
+  customers, prices, products and subscriptions
+- Process Stripe webhooks to keep feature tuples in sync with purchases
+- Offer the `TupleChecker` utility for feature gating via OpenFGA with optional
+  Redis caching
 
-`stripe listen --forward-to localhost:17608/v1/stripe/webhook`
+A more in‑depth discussion of how modules and entitlements flow through the
+system can be found in [`docs/entitlements.md`](../../docs/entitlements.md).
 
-`stripe trigger payment_intent.succeeded`
+## Approach
 
-## Unprocessed
+The package relies on the official [`stripe-go`](https://github.com/stripe/stripe-go)
+client. Helper functions use functional options so callers can supply only the
+fields they need. When webhooks are received the handler translates Stripe events
+into updates to OpenFGA tuples and refreshes the cached feature list. Feature
+checks first consult Redis and fall back to OpenFGA if no cache entry exists.
 
-If your webhook endpoint temporarily can’t process events, Stripe automatically resends the undelivered events to your endpoint for up to three days, increasing the time for your webhook endpoint to eventually receive and process all events.
+Key types include:
 
-stripe fixtures ./fixtures.json
+- `StripeClient` – thin wrapper around `stripe.Client` with higher level helpers
+- `OrganizationCustomer` and `Subscription` – internal representations of Stripe
+  customers/subscriptions
+- `TupleChecker` – verifies feature tuples and creates/deletes them in OpenFGA
+  while caching results in Redis
 
-stripe trigger payment_intent.succeeded --override payment_intent:amount=5000 --override payment_intent:currency=usd --add payment_intent:customer=cus_xxx
+## Integration
 
-https://github.com/stripe/stripe-cli/tree/master/pkg/fixtures/triggers
+Application configuration embeds `entitlements.Config` in the global
+[`config.Config`](../../config/config.go) struct. When the HTTP server starts it
+constructs a `StripeClient` using that config and stores it on the handler:
 
-## Subscription status
+```go
+h := &handlers.Handler{
+    Entitlements: stripeClient,
+}
+```
 
-Basic information pulled up out of stripe's docs indicating the various scenarios in which a subscription can be in a given status
+The webhook receiver in
+[`internal/httpserve/handlers/webhook.go`](../../internal/httpserve/handlers/webhook.go)
+uses this client to update subscriptions and feature tuples when events arrive.
+Ent hooks in [`internal/ent/hooks/organization.go`](../../internal/ent/hooks/organization.go)
+create default feature tuples for new organizations.
 
-https://stripe.com/docs/billing/subscriptions/overview#subscription-status
+## Examples
 
-### Active
+### Creating a client and customer
 
-- subscription moves into active status when trial ends and a payment method has been added
-- if initial payment attempt fails, and moves into incomplete, but then the payment is successful, it moves into active
-- if trial ends and no payment method has been added, subs moves into paused status; if payment method is added + processed, it moves back to active
+```go
+sc, err := entitlements.NewStripeClient(
+    entitlements.WithAPIKey("sk_test_..."),
+)
+if err != nil {
+    log.Fatal(err)
+}
 
-### Incomplete
+cust, err := sc.CreateCustomer(context.Background(), &entitlements.OrganizationCustomer{
+    OrganizationID: "org_123",
+    Email:          "billing@example.com",
+})
+```
 
-- a subscription moves into incomplete if the initial payment attempt fails
+### Feature checks with `TupleChecker`
 
-### IncompleteExpired
+```go
+redisClient := redis.NewClient(&redis.Options{Addr: "localhost:6379"})
+tc := entitlements.NewTupleChecker(
+    entitlements.WithRedisClient(redisClient),
+    entitlements.WithFGAClient(myFGAClient),
+)
 
-- if the first invoice is not paid within 23 hours, the subscription transitions to incomplete_expired
+allowed, err := tc.CheckFeatureTuple(ctx, entitlements.FeatureTuple{
+    UserID:  "user1",
+    Feature: "compliance-module",
+    Context: map[string]any{"org": "org_123"},
+})
+```
 
-### PastDue
+### Local webhook testing
 
-- when collection_method=charge_automatically, subs becomes past_due when payment is required but cannot be paid (due to failed payment or awaiting additional user actions)
+Install the [Stripe CLI](https://github.com/stripe/stripe-cli) and forward events
+to your server:
 
-### Paused
+```bash
+stripe login
+stripe listen --forward-to localhost:17608/v1/stripe/webhook
+```
 
-- A subscription can only enter a paused status when a trial ends without a payment method
+You can then trigger events, for example:
 
-### Trialing
+```bash
+stripe trigger payment_intent.succeeded
+```
 
-- subscription status is in trailing if we create the initial subscription with a trial period
-
-### Canceled or Unpaid
-
-- after exhausting all payment retry attempts, the subscription will become canceled or unpaid
-- subscription moves into cancelled if we set cancel_at_period_end: true and the period end passes
+This mirrors the flow described in the "End‑to‑End Flow" section of the
+[`docs/entitlements.md`](../../docs/entitlements.md) document.

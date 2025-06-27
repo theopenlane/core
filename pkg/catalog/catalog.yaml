@@ -1,0 +1,137 @@
+version: v0.0.2
+sha: ae5bcf31543244e0bc0b0a14a4374ae2f199eebe805de0ad58f20d36b5d5649b
+modules:
+  base:
+    display_name: Base Module
+    description: Core system access
+    billing:
+      prices:
+        - interval: year
+          unit_amount: 0
+          nickname: base_free
+          lookup_key: base_free
+          price_id: price_1RdciXR7q8Ny5Jw059Kw4ChM
+    audience: public
+  compliance:
+    display_name: Compliance Module
+    description: Core compliance automation
+    billing:
+      prices:
+        - interval: month
+          unit_amount: 450
+          nickname: price_compliance_month
+          lookup_key: price_compliance_month
+          metadata:
+            tier: base
+          price_id: price_1RbjHUR7q8Ny5Jw09vtTo1rQ
+        - interval: year
+          unit_amount: 5000
+          nickname: price_compliance_annual
+          lookup_key: price_compliance_annual
+          metadata:
+            tier: base
+          price_id: price_1RdciXR7q8Ny5Jw0hfaLuSef
+    audience: public
+    usage:
+      evidence_storage_gb: 250
+  trust_center:
+    display_name: Trust Center
+    description: Public security portal
+    billing:
+      prices:
+        - interval: month
+          unit_amount: 300
+          nickname: price_trust_center_monthly
+          lookup_key: price_trust_center_monthly
+          price_id: price_1RaiEgR7q8Ny5Jw0bGDA8we8
+        - interval: year
+          unit_amount: 3000
+          nickname: price_trust_center_annual
+          lookup_key: price_trust_center_annual
+          price_id: price_1RaiFmR7q8Ny5Jw0PvAVtiGX
+    audience: beta
+  entity-management:
+    display_name: Vendor Management
+    description: Vendor Risk Management
+    billing:
+      prices:
+        - interval: month
+          unit_amount: 200
+          nickname: price_vendor_monthly
+          lookup_key: price_vendor_monthly
+        - interval: year
+          unit_amount: 2000
+          nickname: price_vendor_annual
+          lookup_key: price_vendor_annual
+    audience: private
+  vulnerability-management:
+    display_name: Vulnerability Management
+    description: vulnerability management
+    billing:
+      prices:
+        - interval: month
+          unit_amount: 100
+          nickname: price_vulnerability_monthly
+          lookup_key: price_vulnerability_monthly
+        - interval: year
+          unit_amount: 1000
+          nickname: price_vulnerability_annual
+          lookup_key: price_vulnerability_annual
+    audience: private
+addons:
+  policy-management:
+    display_name: Policy & Procedure Management
+    description: Policy and Procedure Management
+    billing:
+      prices:
+        - interval: month
+          unit_amount: 10
+          nickname: price_policy_monthly
+          lookup_key: price_policy_monthly
+        - interval: month
+          unit_amount: 100
+          nickname: price_policy_annual
+          lookup_key: price_policy_annual
+    audience: beta
+  risk-management:
+    display_name: Risk Management
+    description: Risk Management
+    billing:
+      prices:
+        - interval: month
+          unit_amount: 10
+          nickname: price_risk_monthly
+          lookup_key: price_risk_monthly
+        - interval: year
+          unit_amount: 100
+          nickname: price_risk_annual
+          lookup_key: price_risk_annual
+    audience: beta
+  domain_scanning:
+    display_name: Scanning
+    description: Domain and Vulnerability Scanning
+    billing:
+      prices:
+        - interval: month
+          unit_amount: 100
+          nickname: domain_scan_month
+          lookup_key: domain_scan_month
+        - interval: year
+          unit_amount: 1000
+          nickname: domain_scan_annual
+          lookup_key: domain_scan_annual
+    audience: private
+  extra_evidence_storage:
+    display_name: Additional Evidence Storage (100GB)
+    description: Additional evidence storage for compliance
+    billing:
+      prices:
+        - interval: month
+          unit_amount: 10
+          nickname: evidence_storage_100gb
+          lookup_key: evidence_storage_100gb
+          metadata:
+            increment_gb: "100"
+    usage:
+      evidence_storage_gb: 100
+    audience: public
