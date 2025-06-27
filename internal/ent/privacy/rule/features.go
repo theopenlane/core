@@ -9,7 +9,6 @@ import (
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
@@ -83,7 +82,7 @@ func orgFeatures(ctx context.Context) ([]string, error) {
 	} else {
 		req := fgax.ListRequest{
 			SubjectID:   au.OrganizationID,
-			SubjectType: organization.Table,
+			SubjectType: generated.TypeOrganization,
 			ObjectType:  "feature",
 			Relation:    "enabled",
 		}

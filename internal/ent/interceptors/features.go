@@ -32,17 +32,3 @@ func InterceptorRequireAnyFeature(features ...string) ent.Interceptor {
 		return nil
 	})
 }
-
-// InterceptorRequireFeatureProgram ensures the organization has the given feature
-// enabled before executing a Program query. Deprecated: use
-// InterceptorRequireFeature instead.
-func InterceptorRequireFeatureProgram(feature string) ent.Interceptor {
-	return InterceptorRequireAnyFeature(feature)
-}
-
-// InterceptorRequireAnyFeatureProgram ensures the organization has at least one
-// of the provided features enabled before executing a Program query. Deprecated:
-// use InterceptorRequireAnyFeature instead.
-func InterceptorRequireAnyFeatureProgram(features ...string) ent.Interceptor {
-	return InterceptorRequireAnyFeature(features...)
-}

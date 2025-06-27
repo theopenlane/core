@@ -20,42 +20,45 @@ type TupleChecker struct {
 	cacheTTL    time.Duration
 }
 
-// FGAClient is an interface for FGA tuple checking/creation/deletion.
+// FGAClient is an interface for FGA tuple checking/creation/deletion
 type FGAClient interface {
 	CheckTuple(ctx context.Context, tuple FeatureTuple) (bool, error)
 	CreateTuple(ctx context.Context, tuple FeatureTuple) error
 	DeleteTuple(ctx context.Context, tuple FeatureTuple) error
 }
 
-// FeatureTuple represents a generic tuple for feature checks.
+// FeatureTuple represents a generic tuple for feature checks
 type FeatureTuple struct {
-	UserID  string
+	// UserID is the identifier for the user or entity being checked
+	UserID string
+	// Feature is the name of the feature being checked - can be any feature
 	Feature string
+	// Context is a map of additional context for the tuple, can be used for feature flags or other metadata
 	Context map[string]any
 }
 
-// WithCacheTTL sets the cache TTL for TupleChecker.
+// WithCacheTTL sets the cache TTL for TupleChecker
 func WithCacheTTL(ttl time.Duration) TupleCheckerOption {
 	return func(tc *TupleChecker) {
 		tc.cacheTTL = ttl
 	}
 }
 
-// WithRedisClient sets a custom Redis client.
+// WithRedisClient sets a custom Redis client
 func WithRedisClient(client *redis.Client) TupleCheckerOption {
 	return func(tc *TupleChecker) {
 		tc.redisClient = client
 	}
 }
 
-// WithFGAClient sets a custom FGA client.
+// WithFGAClient sets a custom FGA client
 func WithFGAClient(client FGAClient) TupleCheckerOption {
 	return func(tc *TupleChecker) {
 		tc.fgaChecker = client
 	}
 }
 
-// NewTupleChecker creates a new TupleChecker with options.
+// NewTupleChecker creates a new TupleChecker with options
 func NewTupleChecker(opts ...TupleCheckerOption) *TupleChecker {
 	tc := &TupleChecker{
 		cacheTTL: 5 * time.Minute, // nolint:mnd
@@ -67,7 +70,7 @@ func NewTupleChecker(opts ...TupleCheckerOption) *TupleChecker {
 	return tc
 }
 
-// CheckFeatureTuple checks if a tuple exists, using Redis cache first, then FGA.
+// CheckFeatureTuple checks if a tuple exists, using Redis cache first, then FGA
 func (tc *TupleChecker) CheckFeatureTuple(ctx context.Context, tuple FeatureTuple) (bool, error) {
 	if tc.redisClient == nil || tc.fgaChecker == nil {
 		return false, fmt.Errorf("%w", ErrTupleCheckerNotConfigured)
@@ -100,10 +103,10 @@ func (tc *TupleChecker) CheckFeatureTuple(ctx context.Context, tuple FeatureTupl
 	return ok, nil
 }
 
-// CreateFeatureTuple creates a tuple in FGA and updates the cache.
+// CreateFeatureTuple creates a tuple in FGA and updates the cache
 func (tc *TupleChecker) CreateFeatureTuple(ctx context.Context, tuple FeatureTuple) error {
 	if tc.redisClient == nil || tc.fgaChecker == nil {
-		return fmt.Errorf("%w", ErrTupleCheckerNotConfigured)
+		return ErrTupleCheckerNotConfigured
 	}
 
 	if err := tc.fgaChecker.CreateTuple(ctx, tuple); err != nil {
@@ -115,10 +118,10 @@ func (tc *TupleChecker) CreateFeatureTuple(ctx context.Context, tuple FeatureTup
 	return tc.redisClient.Set(ctx, key, "1", tc.cacheTTL).Err()
 }
 
-// DeleteFeatureTuple deletes a tuple in FGA and removes it from the cache.
+// DeleteFeatureTuple deletes a tuple in FGA and removes it from the cache
 func (tc *TupleChecker) DeleteFeatureTuple(ctx context.Context, tuple FeatureTuple) error {
 	if tc.redisClient == nil || tc.fgaChecker == nil {
-		return fmt.Errorf("%w", ErrTupleCheckerNotConfigured)
+		return ErrTupleCheckerNotConfigured
 	}
 
 	if err := tc.fgaChecker.DeleteTuple(ctx, tuple); err != nil {

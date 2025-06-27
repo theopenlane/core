@@ -116,7 +116,7 @@ func upsertOrgPrice(ctx context.Context, orgSub *ent.OrgSubscription, prod *ent.
 }
 
 // upsertOrgModule creates or updates an OrgModule based on the Stripe subscription item data
-func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, _ *ent.OrgProduct, price *ent.OrgPrice, item *stripe.SubscriptionItem) (*ent.OrgModule, error) {
+func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *ent.OrgPrice, item *stripe.SubscriptionItem) (*ent.OrgModule, error) {
 	if item.Price == nil {
 		return nil, nil
 	}

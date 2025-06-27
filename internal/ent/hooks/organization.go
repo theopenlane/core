@@ -10,6 +10,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/stripe/stripe-go/v82"
 
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
@@ -307,7 +308,7 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 
 	// create default feature tuples for base functionality when entitlements are enabled
 	if m.Client().EntitlementManager != nil {
-		if err := createFeatureTuples(ctx, m.Authz, orgCreated.ID, []string{"base", "compliance"}); err != nil {
+		if err := createFeatureTuples(ctx, m.Authz, orgCreated.ID, []string{string(entx.ModuleBase), string(entx.ModuleCompliance)}); err != nil {
 			zerolog.Ctx(ctx).Error().Err(err).Msg("error creating default feature tuples")
 
 			return err
