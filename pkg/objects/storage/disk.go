@@ -82,7 +82,7 @@ func (d *Disk) GetScheme() *string {
 func (d *Disk) ManagerUpload(_ context.Context, files [][]byte) error {
 	for i, data := range files {
 		name := fmt.Sprintf("file%d", i)
-		if err := os.WriteFile(filepath.Join(d.Opts.Bucket, name), data, 0o644); err != nil {
+		if err := os.WriteFile(filepath.Join(d.Opts.Bucket, name), data, 0o644); err != nil { // nolint:mnd
 			return err
 		}
 	}
@@ -107,7 +107,7 @@ func (d *Disk) Download(_ context.Context, opts *objects.DownloadFileOptions) (*
 // TODO: Implement this method
 func (d *Disk) GetPresignedURL(key string, _ time.Duration) (string, error) {
 	if d.Opts.LocalURL == "" {
-		return "", fmt.Errorf("local URL not configured")
+		return "", ErrMissingLocalURL
 	}
 
 	base := strings.TrimRight(d.Opts.LocalURL, "/")
