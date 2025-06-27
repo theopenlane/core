@@ -18,7 +18,6 @@ import (
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -499,7 +498,7 @@ func (h *Handler) ensureFeatureTuples(ctx context.Context, orgID string, feats [
 	for _, f := range feats {
 		tuples = append(tuples, fgax.GetTupleKey(fgax.TupleRequest{
 			SubjectID:   orgID,
-			SubjectType: generated.TypeOrganization,
+			SubjectType: ent.TypeOrganization,
 			ObjectID:    f,
 			ObjectType:  "feature",
 			Relation:    "enabled",
