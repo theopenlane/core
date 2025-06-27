@@ -1030,3 +1030,23 @@ tests:
           can_view: false
           can_edit: false
           can_delete: false
+  - name: features
+    description: organization feature entitlements
+    tuple_file: tuples/features.yaml
+    check:
+      - user: organization:openlane
+        object: feature:feature1
+        assertions:
+          enabled: true
+      - user: organization:openlane
+        object: feature:feature2
+        assertions:
+          enabled: true
+      - user: organization:foobar
+        object: feature:feature1
+        assertions:
+          enabled: false
+      - user: organization:foobar
+        object: feature:feature2
+        assertions:
+          enabled: false

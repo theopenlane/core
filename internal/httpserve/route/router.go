@@ -196,7 +196,6 @@ func RegisterRoutes(router *Router) error {
 		registerAccountRolesOrganizationHandler,
 		registerAccountFeaturesHandler,
 		registerAppleMerchantHandler,
-		registerWebhookHandler,
 		register2faHandler,
 		registerExampleCSVHandler,
 		registerWebAuthnWellKnownHandler,
@@ -207,6 +206,12 @@ func RegisterRoutes(router *Router) error {
 		// TODO(adelowo): at some point in the future, maybe we should extract these into
 		// it's own service/binary
 		registerJobRunnerRegistrationHandler,
+	}
+	// Register the Stripe webhook endpoint only when the entitlements
+	// client has been configured. This ensures the server can run without
+	// requiring Stripe credentials or webhook support
+	if router.Handler != nil && router.Handler.Entitlements != nil {
+		routeHandlers = append(routeHandlers, registerWebhookHandler)
 	}
 
 	if router.LocalFilePath != "" {

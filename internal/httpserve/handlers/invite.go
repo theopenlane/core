@@ -97,7 +97,6 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 func (h *Handler) processInvitation(
 	ctx echo.Context, invitationToken, userEmail string,
 ) (context.Context, *generated.User, *generated.Invite, error) {
-
 	inv := &Invite{
 		Token: invitationToken,
 	}
@@ -120,6 +119,7 @@ func (h *Handler) processInvitation(
 		}
 
 		log.Error().Err(err).Msg("error retrieving invite token")
+
 		return nil, nil, nil, err
 	}
 

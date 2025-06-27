@@ -44,6 +44,7 @@ func ConfigureEcho(c LogConfig) *echo.Echo {
 	e.Use(middleware.Recover())
 
 	var logger *logx.Logger
+
 	setters := []logx.ConfigSetter{
 		logx.WithLevel(c.LogLevel),
 		logx.WithTimestamp(),

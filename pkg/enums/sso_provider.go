@@ -23,6 +23,7 @@ func (SSOProvider) Values() (kinds []string) {
 	for _, s := range []SSOProvider{SSOProviderOkta, SSOProviderOneLogin, SSOProviderGoogleWorkspace, SSOProviderSlack, SSOProviderGithub, SSOProviderNone} {
 		kinds = append(kinds, string(s))
 	}
+
 	return
 }
 
@@ -54,6 +55,8 @@ func (p *SSOProvider) UnmarshalGQL(v interface{}) error {
 	if !ok {
 		return fmt.Errorf("wrong type for SSOProvider, got: %T", v) //nolint:err113
 	}
+
 	*p = SSOProvider(str)
+
 	return nil
 }

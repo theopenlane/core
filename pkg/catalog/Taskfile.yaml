@@ -1,0 +1,17 @@
+version: "3"
+
+tasks:
+  default:
+    silent: true
+    cmds:
+      - task --list
+
+  genjsonschema:
+    desc: generates the jsonschema for the catalog
+    cmds:
+      - go run genjsonschema/catalog_schema.go
+
+  genyaml:
+    desc: generates the go code output from the catalog yaml
+    cmds:
+      - go run genyaml/yamlgen.go

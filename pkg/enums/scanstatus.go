@@ -20,6 +20,7 @@ func (ScanStatus) Values() (kinds []string) {
 	for _, s := range []ScanStatus{ScanStatusPending, ScanStatusProcessing, ScanStatusCompleted, ScanStatusFailed} {
 		kinds = append(kinds, string(s))
 	}
+
 	return
 }
 
@@ -47,6 +48,8 @@ func (s *ScanStatus) UnmarshalGQL(v interface{}) error {
 	if !ok {
 		return fmt.Errorf("wrong type for ScanStatus, got: %T", v) //nolint:err113
 	}
+
 	*s = ScanStatus(str)
+
 	return nil
 }

@@ -63,6 +63,7 @@ func HookTrustCenter() ent.Hook {
 			if err != nil {
 				return nil, err
 			}
+
 			trustCenter.Edges.Setting = setting
 
 			return trustCenter, nil

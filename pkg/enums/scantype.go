@@ -49,6 +49,7 @@ func (s *ScanType) UnmarshalGQL(v interface{}) error {
 	if !ok {
 		return fmt.Errorf("wrong type for ScanType, got: %T", v) //nolint:err113
 	}
+
 	*s = ScanType(str)
 
 	return nil
