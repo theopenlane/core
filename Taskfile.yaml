@@ -248,6 +248,7 @@ tasks:
       - task: compose:redis
       - task: compose:fga
       - task: compose:riverboat
+      - task: compose:oidc
       - task: compose:metrics
       - task: run-api
 

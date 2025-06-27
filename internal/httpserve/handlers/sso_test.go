@@ -1,7 +1,6 @@
 package handlers_test
 
 import (
-	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -10,6 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -22,8 +22,8 @@ func (suite *HandlerTestSuite) TestWebfingerHandler() {
 
 	suite.e.GET(".well-known/webfinger", suite.h.WebfingerHandler)
 
-	ctx := context.Background()
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	ctx = ent.NewContext(ctx, suite.db)
 
 	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
 		IdentityProviderLoginEnforced: ptr(true),

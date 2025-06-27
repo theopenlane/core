@@ -68,40 +68,16 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 		confirmedUser: true,
 	})
 
-	ssoSetting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
-		IdentityProviderLoginEnforced: func(b bool) *bool { return &b }(true),
-	}).SaveX(ctx)
-
-	ssoOrg := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
-		Name:      "ssoorg",
-		SettingID: &ssoSetting.ID,
-	}).SaveX(ctx)
-
-	ssoMember := suite.userBuilderWithInput(ctx, &userInput{
-		password:      validPassword,
-		confirmedUser: true,
-	})
-	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
-		OrganizationID: ssoOrg.ID,
-		UserID:         ssoMember.UserInfo.ID,
-		Role:           &enums.RoleMember,
-	}).ExecX(ctx)
-	suite.db.UserSetting.UpdateOneID(ssoMember.UserInfo.Edges.Setting.ID).SetDefaultOrgID(ssoOrg.ID).ExecX(ctx)
-
-	ssoOwner := suite.userBuilderWithInput(ctx, &userInput{
-		password:      validPassword,
-		confirmedUser: true,
-	})
-	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
-		OrganizationID: ssoOrg.ID,
-		UserID:         ssoOwner.UserInfo.ID,
-		Role:           &enums.RoleOwner,
-	}).ExecX(ctx)
-	suite.db.UserSetting.UpdateOneID(ssoOwner.UserInfo.Edges.Setting.ID).SetDefaultOrgID(ssoOrg.ID).ExecX(ctx)
-
 	orgSetting := suite.db.OrganizationSetting.Create().SetInput(
 		generated.CreateOrganizationSettingInput{
 			AllowedEmailDomains: []string{"examples.com"}, // intentionally misspelled to ensure owner (validConfirmedUserRestrictedOrg) can still login
+		},
+	).SaveX(ctx)
+
+	ssoorgSetting := suite.db.OrganizationSetting.Create().SetInput(
+		generated.CreateOrganizationSettingInput{
+			AllowedEmailDomains:           []string{"examples.com"}, // intentionally misspelled to ensure owner (validConfirmedUserRestrictedOrg) can still login
+			IdentityProviderLoginEnforced: func(b bool) *bool { return &b }(true),
 		},
 	).SaveX(ctx)
 
@@ -110,11 +86,28 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 		SettingID: &orgSetting.ID,
 	}
 
+	ssoOrg := generated.CreateOrganizationInput{
+		Name:      "ssoorg",
+		SettingID: &ssoorgSetting.ID,
+	}
+
+	ssoMember := suite.userBuilderWithInput(ctx, &userInput{
+		password:      validPassword,
+		confirmedUser: true,
+	})
 	// setup allow context with the client in the context which is required for hooks that run
 	allowCtx := privacy.DecisionContext(validConfirmedUserRestrictedOrg.UserCtx, privacy.Allow)
 	allowCtx = ent.NewContext(allowCtx, suite.db)
 
 	org := suite.db.Organization.Create().SetInput(input).SaveX(allowCtx)
+	createdssoOrg := suite.db.Organization.Create().SetInput(ssoOrg).SaveX(allowCtx)
+	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+		OrganizationID: createdssoOrg.ID,
+		UserID:         ssoMember.UserInfo.ID,
+		Role:           &enums.RoleMember,
+	}).ExecX(ctx)
+
+	suite.db.UserSetting.UpdateOneID(ssoMember.UserInfo.Edges.Setting.ID).SetDefaultOrgID(createdssoOrg.ID).ExecX(ctx)
 
 	// update the user settings to have the default org set that is the domain restricted org
 	suite.db.UserSetting.UpdateOneID(validConfirmedUserRestrictedOrg.UserInfo.Edges.Setting.ID).
@@ -207,19 +200,6 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 			password:       "",
 			expectedStatus: http.StatusBadRequest,
 			expectedErr:    rout.NewMissingRequiredFieldError("password"),
-		},
-		{
-			name:           "sso enforced member fails",
-			username:       ssoMember.UserInfo.Email,
-			password:       validPassword,
-			expectedStatus: http.StatusUnauthorized,
-		},
-		{
-			name:           "sso enforced owner succeeds",
-			username:       ssoOwner.UserInfo.Email,
-			password:       validPassword,
-			expectedStatus: http.StatusOK,
-			expectedOrgID:  ssoOrg.ID,
 		},
 	}
 

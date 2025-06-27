@@ -1,6 +1,3 @@
-include:
-  - docker-compose-fga.yml
-
 services:
   api:
     image: core:dev
