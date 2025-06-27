@@ -131,6 +131,12 @@ func (ec *executionContext) fieldContext_GroupBulkCreatePayload_groups(_ context
 				return ec.fieldContext_Group_scanBlockedGroups(ctx, field)
 			case "scanViewers":
 				return ec.fieldContext_Group_scanViewers(ctx, field)
+			case "assessmentEditors":
+				return ec.fieldContext_Group_assessmentEditors(ctx, field)
+			case "assessmentBlockedGroups":
+				return ec.fieldContext_Group_assessmentBlockedGroups(ctx, field)
+			case "assessmentViewers":
+				return ec.fieldContext_Group_assessmentViewers(ctx, field)
 			case "procedureEditors":
 				return ec.fieldContext_Group_procedureEditors(ctx, field)
 			case "procedureBlockedGroups":
@@ -275,6 +281,12 @@ func (ec *executionContext) fieldContext_GroupCreatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_scanBlockedGroups(ctx, field)
 			case "scanViewers":
 				return ec.fieldContext_Group_scanViewers(ctx, field)
+			case "assessmentEditors":
+				return ec.fieldContext_Group_assessmentEditors(ctx, field)
+			case "assessmentBlockedGroups":
+				return ec.fieldContext_Group_assessmentBlockedGroups(ctx, field)
+			case "assessmentViewers":
+				return ec.fieldContext_Group_assessmentViewers(ctx, field)
 			case "procedureEditors":
 				return ec.fieldContext_Group_procedureEditors(ctx, field)
 			case "procedureBlockedGroups":
@@ -463,6 +475,12 @@ func (ec *executionContext) fieldContext_GroupUpdatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_scanBlockedGroups(ctx, field)
 			case "scanViewers":
 				return ec.fieldContext_Group_scanViewers(ctx, field)
+			case "assessmentEditors":
+				return ec.fieldContext_Group_assessmentEditors(ctx, field)
+			case "assessmentBlockedGroups":
+				return ec.fieldContext_Group_assessmentBlockedGroups(ctx, field)
+			case "assessmentViewers":
+				return ec.fieldContext_Group_assessmentViewers(ctx, field)
 			case "procedureEditors":
 				return ec.fieldContext_Group_procedureEditors(ctx, field)
 			case "procedureBlockedGroups":

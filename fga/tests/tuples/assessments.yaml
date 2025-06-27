@@ -1,0 +1,146 @@
+############################################
+# Tuples for testing the FGA implementation
+# This file is specific to assessments
+############################################
+
+# organization parent relations
+- user: organization:openlane
+  relation: parent
+  object: assessment:assessment-1
+
+- user: organization:openlane
+  relation: parent
+  object: assessment:assessment-2
+
+- user: organization:openlane
+  relation: parent
+  object: assessment:assessment-3
+
+- user: organization:foobar
+  relation: parent
+  object: assessment:assessment-different-org
+
+# assessment ownership
+- user: user:ulid-assessment-owner-1
+  relation: owner
+  object: assessment:assessment-1
+
+- user: user:ulid-assessment-owner-2
+  relation: owner
+  object: assessment:assessment-2
+
+- user: user:ulid-assessment-owner-3
+  relation: owner
+  object: assessment:assessment-3
+
+- user: user:ulid-assessment-different-org-owner
+  relation: owner
+  object: assessment:assessment-different-org
+
+# assessment editors (direct assignment)
+- user: user:ulid-assessment-editor-1
+  relation: editor
+  object: assessment:assessment-1
+
+- user: user:ulid-assessment-editor-2
+  relation: editor
+  object: assessment:assessment-2
+
+# assessment viewers (direct assignment)
+- user: user:ulid-assessment-viewer-1
+  relation: viewer
+  object: assessment:assessment-1
+
+- user: user:ulid-assessment-viewer-2
+  relation: viewer
+  object: assessment:assessment-2
+
+# assessment delegates (temporary access)
+- user: user:ulid-assessment-delegate-1
+  relation: delegate
+  object: assessment:assessment-1
+
+# blocked users
+- user: user:ulid-assessment-blocked-user
+  relation: blocked
+  object: assessment:assessment-1
+
+# organization membership for users
+- user: user:ulid-assessment-owner-1
+  relation: member
+  object: organization:openlane
+
+- user: user:ulid-assessment-owner-2
+  relation: member
+  object: organization:openlane
+
+- user: user:ulid-assessment-owner-3
+  relation: member
+  object: organization:openlane
+
+- user: user:ulid-assessment-editor-1
+  relation: member
+  object: organization:openlane
+
+- user: user:ulid-assessment-editor-2
+  relation: member
+  object: organization:openlane
+
+- user: user:ulid-assessment-viewer-1
+  relation: member
+  object: organization:openlane
+
+- user: user:ulid-assessment-viewer-2
+  relation: member
+  object: organization:openlane
+
+- user: user:ulid-assessment-delegate-1
+  relation: member
+  object: organization:openlane
+
+- user: user:ulid-assessment-blocked-user
+  relation: member
+  object: organization:openlane
+
+- user: user:ulid-assessment-different-org-owner
+  relation: member
+  object: organization:foobar
+
+# organization admin/owner for permissions inheritance
+- user: user:ulid-org-admin
+  relation: admin
+  object: organization:openlane
+
+- user: user:ulid-org-owner
+  relation: owner
+  object: organization:openlane
+
+# audit log viewer access on organization for inheritance
+- user: user:ulid-assessment-owner-1
+  relation: audit_log_viewer
+  object: organization:openlane
+
+- user: user:ulid-assessment-editor-1
+  relation: audit_log_viewer
+  object: organization:openlane
+
+- user: user:ulid-assessment-viewer-1
+  relation: audit_log_viewer
+  object: organization:openlane
+
+- user: user:ulid-assessment-delegate-1
+  relation: audit_log_viewer
+  object: organization:openlane
+
+- user: user:ulid-org-admin
+  relation: audit_log_viewer
+  object: organization:openlane
+
+- user: user:ulid-org-owner
+  relation: audit_log_viewer
+  object: organization:openlane
+
+# test user with no specific access
+- user: user:ulid-no-access-user
+  relation: member
+  object: organization:openlane 

@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -552,6 +553,21 @@ func (uc *UserCreate) AddPrograms(p ...*Program) *UserCreate {
 		ids[i] = p[i].ID
 	}
 	return uc.AddProgramIDs(ids...)
+}
+
+// AddAssessmentIDs adds the "assessments" edge to the Assessment entity by IDs.
+func (uc *UserCreate) AddAssessmentIDs(ids ...string) *UserCreate {
+	uc.mutation.AddAssessmentIDs(ids...)
+	return uc
+}
+
+// AddAssessments adds the "assessments" edges to the Assessment entity.
+func (uc *UserCreate) AddAssessments(a ...*Assessment) *UserCreate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return uc.AddAssessmentIDs(ids...)
 }
 
 // AddGroupMembershipIDs adds the "group_memberships" edge to the GroupMembership entity by IDs.
@@ -1148,6 +1164,23 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		edge.Target.Fields = specE.Fields
 		if specE.ID.Value != nil {
 			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := uc.mutation.AssessmentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   user.AssessmentsTable,
+			Columns: user.AssessmentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uc.schemaConfig.AssessmentUsers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}

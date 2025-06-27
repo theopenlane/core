@@ -226,6 +226,104 @@ func (ec *executionContext) fieldContext_SearchResults_actionPlans(_ context.Con
 	return fc, nil
 }
 
+func (ec *executionContext) _SearchResults_assessments(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SearchResults_assessments(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Assessments, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*generated.AssessmentConnection)
+	fc.Result = res
+	return ec.marshalOAssessmentConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssessmentConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SearchResults_assessments(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_AssessmentConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_AssessmentConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_AssessmentConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AssessmentConnection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SearchResults_assessmentResponses(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SearchResults_assessmentResponses(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AssessmentResponses, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*generated.AssessmentResponseConnection)
+	fc.Result = res
+	return ec.marshalOAssessmentResponseConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssessmentResponseConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SearchResults_assessmentResponses(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_AssessmentResponseConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_AssessmentResponseConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_AssessmentResponseConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type AssessmentResponseConnection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SearchResults_assets(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_SearchResults_assets(ctx, field)
 	if err != nil {
@@ -2272,6 +2370,10 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			out.Values[i] = ec._SearchResults_apiTokens(ctx, field, obj)
 		case "actionPlans":
 			out.Values[i] = ec._SearchResults_actionPlans(ctx, field, obj)
+		case "assessments":
+			out.Values[i] = ec._SearchResults_assessments(ctx, field, obj)
+		case "assessmentResponses":
+			out.Values[i] = ec._SearchResults_assessmentResponses(ctx, field, obj)
 		case "assets":
 			out.Values[i] = ec._SearchResults_assets(ctx, field, obj)
 		case "contacts":

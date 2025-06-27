@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -606,6 +607,21 @@ func (uu *UserUpdate) AddPrograms(p ...*Program) *UserUpdate {
 	return uu.AddProgramIDs(ids...)
 }
 
+// AddAssessmentIDs adds the "assessments" edge to the Assessment entity by IDs.
+func (uu *UserUpdate) AddAssessmentIDs(ids ...string) *UserUpdate {
+	uu.mutation.AddAssessmentIDs(ids...)
+	return uu
+}
+
+// AddAssessments adds the "assessments" edges to the Assessment entity.
+func (uu *UserUpdate) AddAssessments(a ...*Assessment) *UserUpdate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return uu.AddAssessmentIDs(ids...)
+}
+
 // AddGroupMembershipIDs adds the "group_memberships" edge to the GroupMembership entity by IDs.
 func (uu *UserUpdate) AddGroupMembershipIDs(ids ...string) *UserUpdate {
 	uu.mutation.AddGroupMembershipIDs(ids...)
@@ -960,6 +976,27 @@ func (uu *UserUpdate) RemovePrograms(p ...*Program) *UserUpdate {
 		ids[i] = p[i].ID
 	}
 	return uu.RemoveProgramIDs(ids...)
+}
+
+// ClearAssessments clears all "assessments" edges to the Assessment entity.
+func (uu *UserUpdate) ClearAssessments() *UserUpdate {
+	uu.mutation.ClearAssessments()
+	return uu
+}
+
+// RemoveAssessmentIDs removes the "assessments" edge to Assessment entities by IDs.
+func (uu *UserUpdate) RemoveAssessmentIDs(ids ...string) *UserUpdate {
+	uu.mutation.RemoveAssessmentIDs(ids...)
+	return uu
+}
+
+// RemoveAssessments removes "assessments" edges to Assessment entities.
+func (uu *UserUpdate) RemoveAssessments(a ...*Assessment) *UserUpdate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return uu.RemoveAssessmentIDs(ids...)
 }
 
 // ClearGroupMemberships clears all "group_memberships" edges to the GroupMembership entity.
@@ -2048,6 +2085,54 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if uu.mutation.AssessmentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   user.AssessmentsTable,
+			Columns: user.AssessmentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uu.schemaConfig.AssessmentUsers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RemovedAssessmentsIDs(); len(nodes) > 0 && !uu.mutation.AssessmentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   user.AssessmentsTable,
+			Columns: user.AssessmentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uu.schemaConfig.AssessmentUsers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.AssessmentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   user.AssessmentsTable,
+			Columns: user.AssessmentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uu.schemaConfig.AssessmentUsers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if uu.mutation.GroupMembershipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -2772,6 +2857,21 @@ func (uuo *UserUpdateOne) AddPrograms(p ...*Program) *UserUpdateOne {
 	return uuo.AddProgramIDs(ids...)
 }
 
+// AddAssessmentIDs adds the "assessments" edge to the Assessment entity by IDs.
+func (uuo *UserUpdateOne) AddAssessmentIDs(ids ...string) *UserUpdateOne {
+	uuo.mutation.AddAssessmentIDs(ids...)
+	return uuo
+}
+
+// AddAssessments adds the "assessments" edges to the Assessment entity.
+func (uuo *UserUpdateOne) AddAssessments(a ...*Assessment) *UserUpdateOne {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return uuo.AddAssessmentIDs(ids...)
+}
+
 // AddGroupMembershipIDs adds the "group_memberships" edge to the GroupMembership entity by IDs.
 func (uuo *UserUpdateOne) AddGroupMembershipIDs(ids ...string) *UserUpdateOne {
 	uuo.mutation.AddGroupMembershipIDs(ids...)
@@ -3126,6 +3226,27 @@ func (uuo *UserUpdateOne) RemovePrograms(p ...*Program) *UserUpdateOne {
 		ids[i] = p[i].ID
 	}
 	return uuo.RemoveProgramIDs(ids...)
+}
+
+// ClearAssessments clears all "assessments" edges to the Assessment entity.
+func (uuo *UserUpdateOne) ClearAssessments() *UserUpdateOne {
+	uuo.mutation.ClearAssessments()
+	return uuo
+}
+
+// RemoveAssessmentIDs removes the "assessments" edge to Assessment entities by IDs.
+func (uuo *UserUpdateOne) RemoveAssessmentIDs(ids ...string) *UserUpdateOne {
+	uuo.mutation.RemoveAssessmentIDs(ids...)
+	return uuo
+}
+
+// RemoveAssessments removes "assessments" edges to Assessment entities.
+func (uuo *UserUpdateOne) RemoveAssessments(a ...*Assessment) *UserUpdateOne {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return uuo.RemoveAssessmentIDs(ids...)
 }
 
 // ClearGroupMemberships clears all "group_memberships" edges to the GroupMembership entity.
@@ -4241,6 +4362,54 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		edge.Target.Fields = specE.Fields
 		if specE.ID.Value != nil {
 			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uuo.mutation.AssessmentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   user.AssessmentsTable,
+			Columns: user.AssessmentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uuo.schemaConfig.AssessmentUsers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RemovedAssessmentsIDs(); len(nodes) > 0 && !uuo.mutation.AssessmentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   user.AssessmentsTable,
+			Columns: user.AssessmentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uuo.schemaConfig.AssessmentUsers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.AssessmentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   user.AssessmentsTable,
+			Columns: user.AssessmentsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uuo.schemaConfig.AssessmentUsers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}

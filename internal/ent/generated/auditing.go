@@ -20,6 +20,8 @@ import (
 	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
+	"github.com/theopenlane/core/internal/ent/generated/assessmenthistory"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponsehistory"
 	"github.com/theopenlane/core/internal/ent/generated/assethistory"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
@@ -332,6 +334,141 @@ func (aph *ActionPlanHistory) Diff(history *ActionPlanHistory) (*HistoryDiff[Act
 			Old:     history,
 			New:     aph,
 			Changes: history.changes(aph),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
+func (ah *AssessmentHistory) changes(new *AssessmentHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(ah.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(assessmenthistory.FieldCreatedAt, ah.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(ah.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(assessmenthistory.FieldUpdatedAt, ah.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(ah.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(assessmenthistory.FieldCreatedBy, ah.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(ah.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(assessmenthistory.FieldDeletedAt, ah.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(ah.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(assessmenthistory.FieldDeletedBy, ah.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(ah.Tags, new.Tags) {
+		changes = append(changes, NewChange(assessmenthistory.FieldTags, ah.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(ah.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(assessmenthistory.FieldOwnerID, ah.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(ah.Name, new.Name) {
+		changes = append(changes, NewChange(assessmenthistory.FieldName, ah.Name, new.Name))
+	}
+	if !reflect.DeepEqual(ah.AssessmentType, new.AssessmentType) {
+		changes = append(changes, NewChange(assessmenthistory.FieldAssessmentType, ah.AssessmentType, new.AssessmentType))
+	}
+	if !reflect.DeepEqual(ah.TemplateID, new.TemplateID) {
+		changes = append(changes, NewChange(assessmenthistory.FieldTemplateID, ah.TemplateID, new.TemplateID))
+	}
+	if !reflect.DeepEqual(ah.AssessmentOwnerID, new.AssessmentOwnerID) {
+		changes = append(changes, NewChange(assessmenthistory.FieldAssessmentOwnerID, ah.AssessmentOwnerID, new.AssessmentOwnerID))
+	}
+	return changes
+}
+
+func (ah *AssessmentHistory) Diff(history *AssessmentHistory) (*HistoryDiff[AssessmentHistory], error) {
+	if ah.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	ahUnix, historyUnix := ah.HistoryTime.Unix(), history.HistoryTime.Unix()
+	ahOlder := ahUnix < historyUnix || (ahUnix == historyUnix && ah.ID < history.ID)
+	historyOlder := ahUnix > historyUnix || (ahUnix == historyUnix && ah.ID > history.ID)
+
+	if ahOlder {
+		return &HistoryDiff[AssessmentHistory]{
+			Old:     ah,
+			New:     history,
+			Changes: ah.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[AssessmentHistory]{
+			Old:     history,
+			New:     ah,
+			Changes: history.changes(ah),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
+func (arh *AssessmentResponseHistory) changes(new *AssessmentResponseHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(arh.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldCreatedAt, arh.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(arh.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldUpdatedAt, arh.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(arh.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldCreatedBy, arh.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(arh.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldDeletedAt, arh.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(arh.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldDeletedBy, arh.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(arh.Tags, new.Tags) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldTags, arh.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(arh.AssessmentID, new.AssessmentID) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldAssessmentID, arh.AssessmentID, new.AssessmentID))
+	}
+	if !reflect.DeepEqual(arh.UserID, new.UserID) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldUserID, arh.UserID, new.UserID))
+	}
+	if !reflect.DeepEqual(arh.Status, new.Status) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldStatus, arh.Status, new.Status))
+	}
+	if !reflect.DeepEqual(arh.AssignedAt, new.AssignedAt) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldAssignedAt, arh.AssignedAt, new.AssignedAt))
+	}
+	if !reflect.DeepEqual(arh.StartedAt, new.StartedAt) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldStartedAt, arh.StartedAt, new.StartedAt))
+	}
+	if !reflect.DeepEqual(arh.CompletedAt, new.CompletedAt) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldCompletedAt, arh.CompletedAt, new.CompletedAt))
+	}
+	if !reflect.DeepEqual(arh.DueDate, new.DueDate) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldDueDate, arh.DueDate, new.DueDate))
+	}
+	if !reflect.DeepEqual(arh.ResponseDataID, new.ResponseDataID) {
+		changes = append(changes, NewChange(assessmentresponsehistory.FieldResponseDataID, arh.ResponseDataID, new.ResponseDataID))
+	}
+	return changes
+}
+
+func (arh *AssessmentResponseHistory) Diff(history *AssessmentResponseHistory) (*HistoryDiff[AssessmentResponseHistory], error) {
+	if arh.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	arhUnix, historyUnix := arh.HistoryTime.Unix(), history.HistoryTime.Unix()
+	arhOlder := arhUnix < historyUnix || (arhUnix == historyUnix && arh.ID < history.ID)
+	historyOlder := arhUnix > historyUnix || (arhUnix == historyUnix && arh.ID > history.ID)
+
+	if arhOlder {
+		return &HistoryDiff[AssessmentResponseHistory]{
+			Old:     arh,
+			New:     history,
+			Changes: arh.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[AssessmentResponseHistory]{
+			Old:     history,
+			New:     arh,
+			Changes: history.changes(arh),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
@@ -3402,6 +3539,18 @@ func (c *Client) Audit(ctx context.Context, after *Cursor, first *int, before *C
 	}
 	result.Edges = append(result.Edges, record.Edges...)
 
+	record, err = auditAssessmentHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
+	record, err = auditAssessmentResponseHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
 	record, err = auditAssetHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
@@ -3687,6 +3836,88 @@ func (c *Client) AuditWithFilter(ctx context.Context, after *Cursor, first *int,
 		}
 
 		result, err = auditActionPlanHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
+	if where.Table == strings.TrimSuffix("AssessmentHistory", "History") {
+		// map AuditLogWhereInput to AssessmentHistoryWhereInput
+		whereInput := &AssessmentHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to AssessmentHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &AssessmentHistoryOrder{
+			Field:     AssessmentHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditAssessmentHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
+	if where.Table == strings.TrimSuffix("AssessmentResponseHistory", "History") {
+		// map AuditLogWhereInput to AssessmentResponseHistoryWhereInput
+		whereInput := &AssessmentResponseHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to AssessmentResponseHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &AssessmentResponseHistoryOrder{
+			Field:     AssessmentResponseHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditAssessmentResponseHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
@@ -5451,6 +5682,152 @@ func auditActionPlanHistory(ctx context.Context, config config, after *Cursor, f
 			// but just in case, we will handle it gracefully
 			if len(prev) == 0 {
 				prev = append(prev, &ActionPlanHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type assessmenthistoryref struct {
+	Ref string
+}
+
+func auditAssessmentHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *AssessmentHistoryOrder, where *AssessmentHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []AssessmentHistoryPaginateOption{
+		WithAssessmentHistoryOrder(orderBy),
+		WithAssessmentHistoryFilter(where.Filter),
+	}
+
+	client := NewAssessmentHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "AssessmentHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&AssessmentHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&AssessmentHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					assessmenthistory.Ref(curr.Node.Ref),
+					assessmenthistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(assessmenthistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &AssessmentHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type assessmentresponsehistoryref struct {
+	Ref string
+}
+
+func auditAssessmentResponseHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *AssessmentResponseHistoryOrder, where *AssessmentResponseHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []AssessmentResponseHistoryPaginateOption{
+		WithAssessmentResponseHistoryOrder(orderBy),
+		WithAssessmentResponseHistoryFilter(where.Filter),
+	}
+
+	client := NewAssessmentResponseHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "AssessmentResponseHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&AssessmentResponseHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&AssessmentResponseHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					assessmentresponsehistory.Ref(curr.Node.Ref),
+					assessmentresponsehistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(assessmentresponsehistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &AssessmentResponseHistory{})
 			}
 
 			record.Changes = prev[0].changes(curr.Node)

@@ -12,6 +12,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/internal/ent/generated/assessmenthistory"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponsehistory"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/assethistory"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
@@ -127,6 +131,26 @@ var actionplanhistoryImplementors = []string{"ActionPlanHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*ActionPlanHistory) IsNode() {}
+
+var assessmentImplementors = []string{"Assessment", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Assessment) IsNode() {}
+
+var assessmenthistoryImplementors = []string{"AssessmentHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*AssessmentHistory) IsNode() {}
+
+var assessmentresponseImplementors = []string{"AssessmentResponse", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*AssessmentResponse) IsNode() {}
+
+var assessmentresponsehistoryImplementors = []string{"AssessmentResponseHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*AssessmentResponseHistory) IsNode() {}
 
 var assetImplementors = []string{"Asset", "Node"}
 
@@ -679,6 +703,42 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(actionplanhistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, actionplanhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case assessment.Table:
+		query := c.Assessment.Query().
+			Where(assessment.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, assessmentImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case assessmenthistory.Table:
+		query := c.AssessmentHistory.Query().
+			Where(assessmenthistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, assessmenthistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case assessmentresponse.Table:
+		query := c.AssessmentResponse.Query().
+			Where(assessmentresponse.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, assessmentresponseImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case assessmentresponsehistory.Table:
+		query := c.AssessmentResponseHistory.Query().
+			Where(assessmentresponsehistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, assessmentresponsehistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1638,6 +1698,70 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.ActionPlanHistory.Query().
 			Where(actionplanhistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, actionplanhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case assessment.Table:
+		query := c.Assessment.Query().
+			Where(assessment.IDIn(ids...))
+		query, err := query.CollectFields(ctx, assessmentImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case assessmenthistory.Table:
+		query := c.AssessmentHistory.Query().
+			Where(assessmenthistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, assessmenthistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case assessmentresponse.Table:
+		query := c.AssessmentResponse.Query().
+			Where(assessmentresponse.IDIn(ids...))
+		query, err := query.CollectFields(ctx, assessmentresponseImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case assessmentresponsehistory.Table:
+		query := c.AssessmentResponseHistory.Query().
+			Where(assessmentresponsehistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, assessmentresponsehistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

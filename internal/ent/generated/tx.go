@@ -18,6 +18,14 @@ type Tx struct {
 	ActionPlan *ActionPlanClient
 	// ActionPlanHistory is the client for interacting with the ActionPlanHistory builders.
 	ActionPlanHistory *ActionPlanHistoryClient
+	// Assessment is the client for interacting with the Assessment builders.
+	Assessment *AssessmentClient
+	// AssessmentHistory is the client for interacting with the AssessmentHistory builders.
+	AssessmentHistory *AssessmentHistoryClient
+	// AssessmentResponse is the client for interacting with the AssessmentResponse builders.
+	AssessmentResponse *AssessmentResponseClient
+	// AssessmentResponseHistory is the client for interacting with the AssessmentResponseHistory builders.
+	AssessmentResponseHistory *AssessmentResponseHistoryClient
 	// Asset is the client for interacting with the Asset builders.
 	Asset *AssetClient
 	// AssetHistory is the client for interacting with the AssetHistory builders.
@@ -350,6 +358,10 @@ func (tx *Tx) init() {
 	tx.APIToken = NewAPITokenClient(tx.config)
 	tx.ActionPlan = NewActionPlanClient(tx.config)
 	tx.ActionPlanHistory = NewActionPlanHistoryClient(tx.config)
+	tx.Assessment = NewAssessmentClient(tx.config)
+	tx.AssessmentHistory = NewAssessmentHistoryClient(tx.config)
+	tx.AssessmentResponse = NewAssessmentResponseClient(tx.config)
+	tx.AssessmentResponseHistory = NewAssessmentResponseHistoryClient(tx.config)
 	tx.Asset = NewAssetClient(tx.config)
 	tx.AssetHistory = NewAssetHistoryClient(tx.config)
 	tx.Contact = NewContactClient(tx.config)

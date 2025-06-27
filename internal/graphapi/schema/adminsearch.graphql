@@ -50,6 +50,56 @@ extend type Query{
         last: Int
     ): ActionPlanConnection
     """
+    Search across Assessment objects
+    """
+    adminAssessmentSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): AssessmentConnection
+    """
+    Search across AssessmentResponse objects
+    """
+    adminAssessmentResponseSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): AssessmentResponseConnection
+    """
     Search across Asset objects
     """
     adminAssetSearch(

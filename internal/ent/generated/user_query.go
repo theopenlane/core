@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -59,6 +60,7 @@ type UserQuery struct {
 	withAssignerTasks                *TaskQuery
 	withAssigneeTasks                *TaskQuery
 	withPrograms                     *ProgramQuery
+	withAssessments                  *AssessmentQuery
 	withGroupMemberships             *GroupMembershipQuery
 	withOrgMemberships               *OrgMembershipQuery
 	withProgramMemberships           *ProgramMembershipQuery
@@ -78,6 +80,7 @@ type UserQuery struct {
 	withNamedAssignerTasks           map[string]*TaskQuery
 	withNamedAssigneeTasks           map[string]*TaskQuery
 	withNamedPrograms                map[string]*ProgramQuery
+	withNamedAssessments             map[string]*AssessmentQuery
 	withNamedGroupMemberships        map[string]*GroupMembershipQuery
 	withNamedOrgMemberships          map[string]*OrgMembershipQuery
 	withNamedProgramMemberships      map[string]*ProgramMembershipQuery
@@ -517,6 +520,31 @@ func (uq *UserQuery) QueryPrograms() *ProgramQuery {
 	return query
 }
 
+// QueryAssessments chains the current query on the "assessments" edge.
+func (uq *UserQuery) QueryAssessments() *AssessmentQuery {
+	query := (&AssessmentClient{config: uq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := uq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := uq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(assessment.Table, assessment.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, user.AssessmentsTable, user.AssessmentsPrimaryKey...),
+		)
+		schemaConfig := uq.schemaConfig
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.AssessmentUsers
+		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryGroupMemberships chains the current query on the "group_memberships" edge.
 func (uq *UserQuery) QueryGroupMemberships() *GroupMembershipQuery {
 	query := (&GroupMembershipClient{config: uq.config}).Query()
@@ -800,6 +828,7 @@ func (uq *UserQuery) Clone() *UserQuery {
 		withAssignerTasks:           uq.withAssignerTasks.Clone(),
 		withAssigneeTasks:           uq.withAssigneeTasks.Clone(),
 		withPrograms:                uq.withPrograms.Clone(),
+		withAssessments:             uq.withAssessments.Clone(),
 		withGroupMemberships:        uq.withGroupMemberships.Clone(),
 		withOrgMemberships:          uq.withOrgMemberships.Clone(),
 		withProgramMemberships:      uq.withProgramMemberships.Clone(),
@@ -986,6 +1015,17 @@ func (uq *UserQuery) WithPrograms(opts ...func(*ProgramQuery)) *UserQuery {
 	return uq
 }
 
+// WithAssessments tells the query-builder to eager-load the nodes that are connected to
+// the "assessments" edge. The optional arguments are used to configure the query builder of the edge.
+func (uq *UserQuery) WithAssessments(opts ...func(*AssessmentQuery)) *UserQuery {
+	query := (&AssessmentClient{config: uq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	uq.withAssessments = query
+	return uq
+}
+
 // WithGroupMemberships tells the query-builder to eager-load the nodes that are connected to
 // the "group_memberships" edge. The optional arguments are used to configure the query builder of the edge.
 func (uq *UserQuery) WithGroupMemberships(opts ...func(*GroupMembershipQuery)) *UserQuery {
@@ -1103,7 +1143,7 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	var (
 		nodes       = []*User{}
 		_spec       = uq.querySpec()
-		loadedTypes = [19]bool{
+		loadedTypes = [20]bool{
 			uq.withPersonalAccessTokens != nil,
 			uq.withTfaSettings != nil,
 			uq.withSetting != nil,
@@ -1120,6 +1160,7 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			uq.withAssignerTasks != nil,
 			uq.withAssigneeTasks != nil,
 			uq.withPrograms != nil,
+			uq.withAssessments != nil,
 			uq.withGroupMemberships != nil,
 			uq.withOrgMemberships != nil,
 			uq.withProgramMemberships != nil,
@@ -1264,6 +1305,13 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			return nil, err
 		}
 	}
+	if query := uq.withAssessments; query != nil {
+		if err := uq.loadAssessments(ctx, query, nodes,
+			func(n *User) { n.Edges.Assessments = []*Assessment{} },
+			func(n *User, e *Assessment) { n.Edges.Assessments = append(n.Edges.Assessments, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := uq.withGroupMemberships; query != nil {
 		if err := uq.loadGroupMemberships(ctx, query, nodes,
 			func(n *User) { n.Edges.GroupMemberships = []*GroupMembership{} },
@@ -1382,6 +1430,13 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		if err := uq.loadPrograms(ctx, query, nodes,
 			func(n *User) { n.appendNamedPrograms(name) },
 			func(n *User, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range uq.withNamedAssessments {
+		if err := uq.loadAssessments(ctx, query, nodes,
+			func(n *User) { n.appendNamedAssessments(name) },
+			func(n *User, e *Assessment) { n.appendNamedAssessments(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2087,6 +2142,68 @@ func (uq *UserQuery) loadPrograms(ctx context.Context, query *ProgramQuery, node
 	}
 	return nil
 }
+func (uq *UserQuery) loadAssessments(ctx context.Context, query *AssessmentQuery, nodes []*User, init func(*User), assign func(*User, *Assessment)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*User)
+	nids := make(map[string]map[*User]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(user.AssessmentsTable)
+		joinT.Schema(uq.schemaConfig.AssessmentUsers)
+		s.Join(joinT).On(s.C(assessment.FieldID), joinT.C(user.AssessmentsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(user.AssessmentsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(user.AssessmentsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*User]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Assessment](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "assessments" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (uq *UserQuery) loadGroupMemberships(ctx context.Context, query *GroupMembershipQuery, nodes []*User, init func(*User), assign func(*User, *GroupMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*User)
@@ -2474,6 +2591,20 @@ func (uq *UserQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery))
 		uq.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
 	uq.withNamedPrograms[name] = query
+	return uq
+}
+
+// WithNamedAssessments tells the query-builder to eager-load the nodes that are connected to the "assessments"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (uq *UserQuery) WithNamedAssessments(name string, opts ...func(*AssessmentQuery)) *UserQuery {
+	query := (&AssessmentClient{config: uq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if uq.withNamedAssessments == nil {
+		uq.withNamedAssessments = make(map[string]*AssessmentQuery)
+	}
+	uq.withNamedAssessments[name] = query
 	return uq
 }
 

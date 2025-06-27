@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -1260,6 +1261,21 @@ func (oc *OrganizationCreate) AddScans(s ...*Scan) *OrganizationCreate {
 		ids[i] = s[i].ID
 	}
 	return oc.AddScanIDs(ids...)
+}
+
+// AddAssessmentIDs adds the "assessments" edge to the Assessment entity by IDs.
+func (oc *OrganizationCreate) AddAssessmentIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddAssessmentIDs(ids...)
+	return oc
+}
+
+// AddAssessments adds the "assessments" edges to the Assessment entity.
+func (oc *OrganizationCreate) AddAssessments(a ...*Assessment) *OrganizationCreate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return oc.AddAssessmentIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -2571,6 +2587,23 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = oc.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.AssessmentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssessmentsTable,
+			Columns: []string{organization.AssessmentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.Assessment
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -50,6 +50,43 @@ query AdminSearch($query: String!) {
         }
       }
     }
+    assessments {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+          ownerID
+          name
+          templateID
+          assessmentOwnerID
+        }
+      }
+    }
+    assessmentResponses {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+          assessmentID
+          userID
+          responseDataID
+        }
+      }
+    }
     assets {
       totalCount
       pageInfo {

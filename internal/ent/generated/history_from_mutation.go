@@ -424,6 +424,475 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 	return nil
 }
 
+func (m *AssessmentMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.AssessmentHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
+	if assessmentType, exists := m.AssessmentType(); exists {
+		create = create.SetAssessmentType(assessmentType)
+	}
+
+	if templateID, exists := m.TemplateID(); exists {
+		create = create.SetTemplateID(templateID)
+	}
+
+	if assessmentOwnerID, exists := m.AssessmentOwnerID(); exists {
+		create = create.SetAssessmentOwnerID(assessmentOwnerID)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *AssessmentMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		assessment, err := client.Assessment.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.AssessmentHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(assessment.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(assessment.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(assessment.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(assessment.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(assessment.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(assessment.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(assessment.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(assessment.OwnerID)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(assessment.Name)
+		}
+
+		if assessmentType, exists := m.AssessmentType(); exists {
+			create = create.SetAssessmentType(assessmentType)
+		} else {
+			create = create.SetAssessmentType(assessment.AssessmentType)
+		}
+
+		if templateID, exists := m.TemplateID(); exists {
+			create = create.SetTemplateID(templateID)
+		} else {
+			create = create.SetTemplateID(assessment.TemplateID)
+		}
+
+		if assessmentOwnerID, exists := m.AssessmentOwnerID(); exists {
+			create = create.SetAssessmentOwnerID(assessmentOwnerID)
+		} else {
+			create = create.SetAssessmentOwnerID(assessment.AssessmentOwnerID)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *AssessmentMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		assessment, err := client.Assessment.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.AssessmentHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(assessment.CreatedAt).
+			SetUpdatedAt(assessment.UpdatedAt).
+			SetCreatedBy(assessment.CreatedBy).
+			SetUpdatedBy(assessment.UpdatedBy).
+			SetDeletedAt(assessment.DeletedAt).
+			SetDeletedBy(assessment.DeletedBy).
+			SetTags(assessment.Tags).
+			SetOwnerID(assessment.OwnerID).
+			SetName(assessment.Name).
+			SetAssessmentType(assessment.AssessmentType).
+			SetTemplateID(assessment.TemplateID).
+			SetAssessmentOwnerID(assessment.AssessmentOwnerID).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *AssessmentResponseMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.AssessmentResponseHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if assessmentID, exists := m.AssessmentID(); exists {
+		create = create.SetAssessmentID(assessmentID)
+	}
+
+	if userID, exists := m.UserID(); exists {
+		create = create.SetUserID(userID)
+	}
+
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
+	if assignedAt, exists := m.AssignedAt(); exists {
+		create = create.SetAssignedAt(assignedAt)
+	}
+
+	if startedAt, exists := m.StartedAt(); exists {
+		create = create.SetStartedAt(startedAt)
+	}
+
+	if completedAt, exists := m.CompletedAt(); exists {
+		create = create.SetCompletedAt(completedAt)
+	}
+
+	if dueDate, exists := m.DueDate(); exists {
+		create = create.SetDueDate(dueDate)
+	}
+
+	if responseDataID, exists := m.ResponseDataID(); exists {
+		create = create.SetResponseDataID(responseDataID)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *AssessmentResponseMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		assessmentresponse, err := client.AssessmentResponse.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.AssessmentResponseHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(assessmentresponse.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(assessmentresponse.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(assessmentresponse.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(assessmentresponse.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(assessmentresponse.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(assessmentresponse.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(assessmentresponse.Tags)
+		}
+
+		if assessmentID, exists := m.AssessmentID(); exists {
+			create = create.SetAssessmentID(assessmentID)
+		} else {
+			create = create.SetAssessmentID(assessmentresponse.AssessmentID)
+		}
+
+		if userID, exists := m.UserID(); exists {
+			create = create.SetUserID(userID)
+		} else {
+			create = create.SetUserID(assessmentresponse.UserID)
+		}
+
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(assessmentresponse.Status)
+		}
+
+		if assignedAt, exists := m.AssignedAt(); exists {
+			create = create.SetAssignedAt(assignedAt)
+		} else {
+			create = create.SetAssignedAt(assessmentresponse.AssignedAt)
+		}
+
+		if startedAt, exists := m.StartedAt(); exists {
+			create = create.SetStartedAt(startedAt)
+		} else {
+			create = create.SetStartedAt(assessmentresponse.StartedAt)
+		}
+
+		if completedAt, exists := m.CompletedAt(); exists {
+			create = create.SetCompletedAt(completedAt)
+		} else {
+			create = create.SetCompletedAt(assessmentresponse.CompletedAt)
+		}
+
+		if dueDate, exists := m.DueDate(); exists {
+			create = create.SetDueDate(dueDate)
+		} else {
+			create = create.SetDueDate(assessmentresponse.DueDate)
+		}
+
+		if responseDataID, exists := m.ResponseDataID(); exists {
+			create = create.SetResponseDataID(responseDataID)
+		} else {
+			create = create.SetResponseDataID(assessmentresponse.ResponseDataID)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *AssessmentResponseMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		assessmentresponse, err := client.AssessmentResponse.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.AssessmentResponseHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(assessmentresponse.CreatedAt).
+			SetUpdatedAt(assessmentresponse.UpdatedAt).
+			SetCreatedBy(assessmentresponse.CreatedBy).
+			SetUpdatedBy(assessmentresponse.UpdatedBy).
+			SetDeletedAt(assessmentresponse.DeletedAt).
+			SetDeletedBy(assessmentresponse.DeletedBy).
+			SetTags(assessmentresponse.Tags).
+			SetAssessmentID(assessmentresponse.AssessmentID).
+			SetUserID(assessmentresponse.UserID).
+			SetStatus(assessmentresponse.Status).
+			SetAssignedAt(assessmentresponse.AssignedAt).
+			SetStartedAt(assessmentresponse.StartedAt).
+			SetCompletedAt(assessmentresponse.CompletedAt).
+			SetDueDate(assessmentresponse.DueDate).
+			SetResponseDataID(assessmentresponse.ResponseDataID).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *AssetMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
