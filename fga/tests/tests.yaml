@@ -1042,3 +1042,11 @@ tests:
         object: feature:feature2
         assertions:
           enabled: true
+      - user: organization:foobar
+        object: feature:feature1
+        assertions:
+          enabled: false
+      - user: organization:foobar
+        object: feature:feature2
+        assertions:
+          enabled: false
