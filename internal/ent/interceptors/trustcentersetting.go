@@ -31,6 +31,13 @@ func InterceptorTrustCenterSetting() ent.Interceptor {
 			return nil
 		}
 
+		if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
+			if anon.TrustCenterID != "" && anon.OrganizationID != "" {
+				q.WhereP(trustcentersetting.HasTrustCenterWith(trustcenter.IDEQ(anon.TrustCenterID)))
+				return nil
+			}
+		}
+
 		orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
 		if err != nil {
 			return err

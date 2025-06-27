@@ -175,6 +175,11 @@ func serve(ctx context.Context) error {
 	so.Config.Settings.Server.Debug = k.Bool("debug")
 	so.Config.Settings.Server.Pretty = k.Bool("pretty")
 
+	// add default trust center domain
+	so.AddServerOptions(
+		serveropts.WithDefaultTrustCenterDomain(),
+	)
+
 	// add ready checks
 	so.AddServerOptions(
 		serveropts.WithReadyChecks(dbClient.Config, fgaClient, redisClient, dbClient.Job),
