@@ -28,6 +28,9 @@ func TokenAuth(ctx context.Context, k *koanf.Koanf) (*openlaneclient.OpenlaneCli
 	token := k.String("token")
 	if token == "" {
 		token = k.String("pat")
+		if token == "" {
+			token = k.String("jwt")
+		}
 	}
 
 	if token == "" {

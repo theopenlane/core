@@ -213,6 +213,7 @@ server:
         header: X-CSRF-Token
         sameSite: Lax
         secure: true
+    defaultTrustCenterDomain: ""
     dev: false
     enableGraphExtensions: true
     graphPool:

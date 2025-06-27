@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
@@ -67,7 +68,7 @@ func (TrustCenter) Fields() []ent.Field {
 func (t TrustCenter) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(t),
+			newOrgOwnedMixin(t, withAllowAnonymousTrustCenterAccess(true)),
 		},
 	}.getMixins()
 }
@@ -127,5 +128,12 @@ func (TrustCenter) Indexes() []ent.Index {
 func (TrustCenter) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
+	}
+}
+
+// Interceptors of the TrustCenter
+func (TrustCenter) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorTrustCenter(),
 	}
 }

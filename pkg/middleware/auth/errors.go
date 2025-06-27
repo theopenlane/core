@@ -34,4 +34,7 @@ var (
 
 	// ErrPasswordTooWeak is returned when the password is too weak
 	ErrPasswordTooWeak = errors.New("password is too weak: use a combination of upper and lower case letters, numbers, and special characters")
+
+	// ErrAnonymousAccessNotAllowed is returned when anonymous access is not allowed
+	ErrAnonymousAccessNotAllowed = errors.New("anonymous access not allowed")
 )

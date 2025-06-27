@@ -58,6 +58,8 @@ type Handler struct {
 	Entitlements *entitlements.StripeClient
 	// Summarizer contains the summarizing client
 	Summarizer *summarizer.Client
+	// DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set
+	DefaultTrustCenterDomain string
 }
 
 // setAuthenticatedContext is a wrapper that will set the minimal context for an authenticated user
