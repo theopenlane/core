@@ -101,8 +101,8 @@ func (r *groupResolver) Permissions(ctx context.Context, obj *generated.Group, a
 		perms = append(perms, getGroupPermissions(r.Node.Edges.ProcedureBlockedGroups, generated.TypeProcedure, enums.Blocked)...)
 
 		perms = append(perms, getGroupPermissions(r.Node.Edges.NarrativeViewers, generated.TypeNarrative, enums.Viewer)...)
-		perms = append(perms, getGroupPermissions(r.Node.Edges.NarrativeEditors, generated.TypeProcedure, enums.Editor)...)
-		perms = append(perms, getGroupPermissions(r.Node.Edges.NarrativeBlockedGroups, generated.TypeProcedure, enums.Blocked)...)
+		perms = append(perms, getGroupPermissions(r.Node.Edges.NarrativeEditors, generated.TypeNarrative, enums.Editor)...)
+		perms = append(perms, getGroupPermissions(r.Node.Edges.NarrativeBlockedGroups, generated.TypeNarrative, enums.Blocked)...)
 	}
 
 	return &model.GroupPermissionConnection{
