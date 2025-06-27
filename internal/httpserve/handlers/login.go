@@ -13,8 +13,10 @@ import (
 
 	"github.com/theopenlane/utils/passwd"
 
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/metrics"
+	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -44,6 +46,21 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 	if user.Edges.Setting.Status != enums.UserStatusActive {
 		metrics.Logins.WithLabelValues("false").Inc()
 		return h.BadRequest(ctx, auth.ErrNoAuthUser)
+	}
+
+	orgID, err := h.getUserDefaultOrgID(reqCtx, user.ID)
+	if err == nil {
+		status, err := h.fetchSSOStatus(reqCtx, orgID)
+		if err == nil && status.Enforced {
+			member, mErr := transaction.FromContext(reqCtx).OrgMembership.Query().Where(
+				orgmembership.UserID(user.ID),
+				orgmembership.OrganizationID(orgID),
+			).Only(reqCtx)
+			if mErr == nil && member.Role != enums.RoleOwner {
+				metrics.Logins.WithLabelValues("false").Inc()
+				return h.Unauthorized(ctx, ErrUnauthorized)
+			}
+		}
 	}
 
 	if user.Password == nil {

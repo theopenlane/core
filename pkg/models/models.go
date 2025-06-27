@@ -979,3 +979,33 @@ var ExampleJobRunnerRegistrationResponse = JobRunnerRegistrationReply{
 type AcmeSolverRequest struct {
 	Path string `param:"path" description:"The path to the acme challenge" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
+
+// =========
+// SSO
+// =========
+
+// SSOStatusRequest is the request to check if SSO login is enforced for an organization
+type SSOStatusRequest struct {
+	OrganizationID string `json:"organization_id" query:"organization_id" description:"organization ID to check" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
+}
+
+// SSOStatusReply is the response for SSOStatusRequest
+type SSOStatusReply struct {
+	rout.Reply
+	Enforced     bool              `json:"enforced"`
+	Provider     enums.SSOProvider `json:"provider,omitempty"`
+	DiscoveryURL string            `json:"discovery_url,omitempty"`
+}
+
+// ExampleSSOStatusRequest is an example request for OpenAPI documentation
+var ExampleSSOStatusRequest = SSOStatusRequest{
+	OrganizationID: ulids.New().String(),
+}
+
+// ExampleSSOStatusReply is an example response for OpenAPI documentation
+var ExampleSSOStatusReply = SSOStatusReply{
+	Reply:        rout.Reply{Success: true},
+	Enforced:     true,
+	Provider:     enums.SSOProviderOkta,
+	DiscoveryURL: "https://id.example.com/.well-known/openid-configuration",
+}

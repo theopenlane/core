@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSO Webfinger Test</title>
+    <link href="../webauthn/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="bg-light p-5 rounded w-50">
+            <h1 class="mb-4 text-center">SSO Webfinger</h1>
+            <div class="mb-3">
+                <input type="text" class="form-control" id="org" placeholder="organization id">
+            </div>
+            <div class="d-grid gap-2">
+                <button class="btn btn-primary" id="checkButton">Check Enforcement</button>
+            </div>
+            <div class="mt-3" id="output"></div>
+        </div>
+    </div>
+<script>
+document.getElementById('checkButton').addEventListener('click', function() {
+    const org = document.getElementById('org').value;
+    fetch('/.well-known/webfinger?resource=org:' + org)
+        .then(r => r.json())
+        .then(d => { document.getElementById('output').innerText = JSON.stringify(d); })
+        .catch(err => { document.getElementById('output').innerText = err; });
+});
+</script>
+</body>
+</html>
