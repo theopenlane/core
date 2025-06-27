@@ -15,6 +15,7 @@ import (
 
 var (
 	testUser1     testUserDetails
+	testUser2     testUserDetails
 	dummyFeatures = []string{"feature1", "feature2"}
 )
 
@@ -130,6 +131,13 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 	// setup user context with the org (and not the personal org)
 	testUser.UserCtx = auth.NewTestContextWithOrgID(testUser.ID, testUser.OrganizationID)
 
+	// set privacy allow in order to allow the creation of the users without
+	// authentication in the tests seeds
+	testUser.UserCtx = privacy.DecisionContext(testUser.UserCtx, privacy.Allow)
+
+	// add client to context, required for hooks that expect the client to be in the context
+	testUser.UserCtx = ent.NewContext(testUser.UserCtx, suite.db)
+
 	return testUser
 }
 
@@ -137,4 +145,5 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 func (suite *HandlerTestSuite) setupTestData(ctx context.Context) {
 	// create test users
 	testUser1 = suite.userBuilder(ctx)
+	testUser2 = suite.userBuilder(ctx)
 }

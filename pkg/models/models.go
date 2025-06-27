@@ -979,3 +979,7 @@ var ExampleJobRunnerRegistrationResponse = JobRunnerRegistrationReply{
 type AcmeSolverRequest struct {
 	Path string `param:"path" description:"The path to the acme challenge" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
+
+type CreateTrustCenterAnonymousJWTResponse struct {
+	AuthData
+}
