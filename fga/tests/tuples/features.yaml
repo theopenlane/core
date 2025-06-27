@@ -2,18 +2,8 @@
 # Tuples for feature entitlements
 ############################################
 - user: organization:openlane
+  relation: enabled
   object: feature:feature1
-  assertions:
-    enabled: true
 - user: organization:openlane
+  relation: enabled
   object: feature:feature2
-  assertions:
-    enabled: true
-- user: organization:foobar
-  object: feature:feature1
-  assertions:
-    enabled: false
-- user: organization:foobar
-  object: feature:feature2
-  assertions:
-    enabled: false
