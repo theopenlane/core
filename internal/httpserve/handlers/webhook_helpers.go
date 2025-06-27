@@ -44,7 +44,7 @@ func syncSubscriptionItemsWithStripe(ctx context.Context, sub *stripe.Subscripti
 
 		zerolog.Ctx(ctx).Info().Str("price_subscription_ID", price.SubscriptionID).Msg("org price created for subscription")
 
-		mod, err := upsertOrgModule(ctx, orgSub, prod, price, item)
+		mod, err := upsertOrgModule(ctx, orgSub, price, item)
 		if err != nil {
 			return err
 		}
