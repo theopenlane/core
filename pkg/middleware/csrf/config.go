@@ -23,7 +23,7 @@ type Config struct {
 	// values are "Lax", "Strict", "None" and "Default".
 	SameSite string `json:"sameSite" koanf:"sameSite" default:"Lax"`
 	// CookieHTTPOnly indicates whether the CSRF cookie is HTTP only.
-	CookieHTTPOnly bool `json:"cookieHttpOnly" koanf:"cookieHttpOnly" default:"true"`
+	CookieHTTPOnly bool `json:"cookieHttpOnly" koanf:"cookieHttpOnly" default:"false"`
 }
 
 // NewConfig returns a Config populated with default values.

@@ -54,7 +54,7 @@ data:
   CORE_SERVER_CSRFPROTECTION_COOKIE: {{ .Values.core.server.csrfProtection.cookie | default "ol.csrf-token" }}
   CORE_SERVER_CSRFPROTECTION_SECURE: {{ .Values.core.server.csrfProtection.secure | default true }}
   CORE_SERVER_CSRFPROTECTION_SAMESITE: {{ .Values.core.server.csrfProtection.sameSite | default "Lax" }}
-  CORE_SERVER_CSRFPROTECTION_COOKIEHTTPONLY: {{ .Values.core.server.csrfProtection.cookieHttpOnly | default true }}
+  CORE_SERVER_CSRFPROTECTION_COOKIEHTTPONLY: {{ .Values.core.server.csrfProtection.cookieHttpOnly | default false }}
   CORE_SERVER_SECRETMANAGER: {{ .Values.core.server.secretManager }}
   CORE_ENTCONFIG_ENTITYTYPES: {{ .Values.core.entConfig.entityTypes }}
   CORE_ENTCONFIG_SUMMARIZER_TYPE: {{ .Values.core.entConfig.summarizer.type | default "lexrank" }}
