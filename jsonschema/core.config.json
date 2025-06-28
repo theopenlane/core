@@ -329,6 +329,10 @@
         "sameSite": {
           "type": "string",
           "description": "SameSite configures the SameSite attribute on the CSRF cookie. Valid\nvalues are \"Lax\", \"Strict\", \"None\" and \"Default\"."
+        },
+        "cookieHttpOnly": {
+          "type": "boolean",
+          "description": "CookieHTTPOnly indicates whether the CSRF cookie is HTTP only."
         }
       },
       "additionalProperties": false,
