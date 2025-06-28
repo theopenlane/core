@@ -229,6 +229,7 @@ Config defines configuration for the CSRF middleware wrapper.
 |**cookie**|`string`|Cookie specifies the cookie name used to store the CSRF token.<br/>||
 |**secure**|`boolean`|Secure sets the Secure flag on the CSRF cookie.<br/>||
 |**sameSite**|`string`|SameSite configures the SameSite attribute on the CSRF cookie. Valid<br/>values are "Lax", "Strict", "None" and "Default".<br/>||
+|**cookieHttpOnly**|`boolean`|CookieHTTPOnly indicates whether the CSRF cookie is HTTP only.<br/>||
 
 **Additional Properties:** not allowed  
 <a name="entconfig"></a>
