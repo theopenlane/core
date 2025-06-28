@@ -104,7 +104,6 @@ func (d *Disk) Download(_ context.Context, opts *objects.DownloadFileOptions) (*
 }
 
 // GetPresignedURL is used to get a presigned URL for a file in the storage backend
-// TODO: Implement this method
 func (d *Disk) GetPresignedURL(key string, _ time.Duration) (string, error) {
 	if d.Opts.LocalURL == "" {
 		return "", ErrMissingLocalURL
