@@ -5370,6 +5370,8 @@ func init() {
 	trustcenter.Hooks[3] = trustcenterMixinHooks5[0]
 
 	trustcenter.Hooks[4] = trustcenterHooks[0]
+
+	trustcenter.Hooks[5] = trustcenterHooks[1]
 	trustcenterMixinInters1 := trustcenterMixin[1].Interceptors()
 	trustcenterMixinInters5 := trustcenterMixin[5].Interceptors()
 	trustcenter.Interceptors[0] = trustcenterMixinInters1[0]

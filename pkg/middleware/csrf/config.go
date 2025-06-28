@@ -22,16 +22,19 @@ type Config struct {
 	// SameSite configures the SameSite attribute on the CSRF cookie. Valid
 	// values are "Lax", "Strict", "None" and "Default".
 	SameSite string `json:"sameSite" koanf:"sameSite" default:"Lax"`
+	// CookieHTTPOnly indicates whether the CSRF cookie is HTTP only.
+	CookieHTTPOnly bool `json:"cookieHttpOnly" koanf:"cookieHttpOnly" default:"true"`
 }
 
 // NewConfig returns a Config populated with default values.
 func NewConfig() *Config {
 	return &Config{
-		Enabled:  false,
-		Header:   "X-CSRF-Token",
-		Cookie:   "ol.csrf-token",
-		Secure:   true,
-		SameSite: "Lax",
+		Enabled:        false,
+		Header:         "X-CSRF-Token",
+		Cookie:         "ol.csrf-token",
+		Secure:         true,
+		SameSite:       "Lax",
+		CookieHTTPOnly: true,
 	}
 }
 
@@ -60,6 +63,7 @@ func Middleware(conf *Config) echo.MiddlewareFunc {
 		CookieSecure:   conf.Secure,
 		CookieSameSite: parseSameSite(conf.SameSite),
 		Skipper:        csrfSkipperFunc,
+		CookieHTTPOnly: conf.CookieHTTPOnly,
 	}
 
 	return middleware.CSRFWithConfig(csrfConf)
