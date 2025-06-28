@@ -207,6 +207,7 @@ server:
         prefixes: null
     csrfProtection:
         cookie: ol.csrf-token
+        cookieHttpOnly: true
         enabled: false
         header: X-CSRF-Token
         sameSite: Lax
