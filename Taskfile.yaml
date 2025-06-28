@@ -394,3 +394,14 @@ tasks:
     cmds:
       - rover install --plugin supergraph@v2.8.2
       - rover install --plugin router@v1.50.0
+
+  run-dev:sso:
+    dotenv: ["{{.ENV}}/.env-dev"]
+    desc: runs the core server with a local OIDC provider for SSO testing
+    cmds:
+      - task: compose:redis
+      - task: compose:fga
+      - task: compose:riverboat
+      - task: compose:metrics
+      - task: compose:localoidc
+      - task: run-api

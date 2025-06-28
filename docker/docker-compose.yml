@@ -1,8 +1,6 @@
 services:
   api:
     image: core:dev
-    depends_on:
-      - openfga
     command:
       - serve
       - --debug
@@ -20,13 +18,13 @@ services:
       - CORE_AUTHZ_HOST_URL=openfga:8080
     networks:
       - default
+
   localoidc:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
-      target: dev
+    image: core:dev
     command:
       - localoidc
+    environment:
+      - OIDC_REDIRECT_URL=http://api:17608/v1/sso/callback
     ports:
       - "9998:9998"
     networks:
@@ -42,10 +40,7 @@ services:
       - default
 
   cli:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
-      target: dev
+    image: core:dev
     entrypoint: ["/bin/core"]
     command: ["cli"]
     stdin_open: true

@@ -284,6 +284,10 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforced() {
 		SettingID: &setting.ID,
 	}).SaveX(ownerCtx)
 
+	suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+		SetOrganizationID(org.ID).
+		ExecX(ownerCtx)
+
 	// Create a non-owner user
 	testUser := suite.userBuilderWithInput(ctx, &userInput{
 		password:      "$uper$ecretP@ssword",
@@ -307,5 +311,6 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforced() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusUnauthorized, rec.Code)
+	require.Equal(t, http.StatusFound, rec.Code)
+	assert.Equal(t, "/v1/sso/login?organization_id="+org.ID, rec.Header().Get("Location"))
 }

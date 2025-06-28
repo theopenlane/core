@@ -121,3 +121,9 @@ tasks:
     desc: brings up the compose environment for openfga development
     cmds:
       - "docker compose -f ./docker/docker-compose-oidc.yml up -d"
+
+  localoidc:
+    dir: ..
+    desc: launches the local OIDC server and test UI for SSO development
+    cmds:
+      - "docker compose -f ./docker/docker-compose.yml up -d localoidc sso-ui"

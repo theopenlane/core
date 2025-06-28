@@ -6,6 +6,8 @@ services:
       target: dev
     command:
       - localoidc
+    environment:
+      - OIDC_REDIRECT_URL=http://api:17608/v1/sso/callback
     ports:
       - "9998:9998"
     networks:
