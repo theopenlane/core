@@ -213,6 +213,10 @@ func (c *OpenlaneClient) ClearAuthTokens() {
 				cookie.MaxAge = -1
 			}
 		}
+
+		// update the cookie jar with the expired cookies
+		u := c.Config().BaseURL.ResolveReference(&url.URL{Path: "/"})
+		c.HTTPSlingRequester().CookieJar().SetCookies(u, cookies)
 	}
 }
 
