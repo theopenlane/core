@@ -82,7 +82,7 @@ func (d *Disk) GetScheme() *string {
 func (d *Disk) ManagerUpload(_ context.Context, files [][]byte) error {
 	for i, data := range files {
 		name := fmt.Sprintf("file%d", i)
-		if err := os.WriteFile(filepath.Join(d.Opts.Bucket, name), data, 0o644); err != nil { // nolint:mnd
+		if err := os.WriteFile(filepath.Join(d.Opts.Bucket, name), data, 0600); err != nil { // nolint:mnd
 			return err
 		}
 	}
