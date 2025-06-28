@@ -7,6 +7,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/brianvoe/gofakeit/v7"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -82,16 +83,17 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 	).SaveX(ctx)
 
 	input := generated.CreateOrganizationInput{
-		Name:      "restricted",
+		Name:      gofakeit.AdjectiveDescriptive() + " " + gofakeit.Noun(),
 		SettingID: &orgSetting.ID,
 	}
 
 	ssoOrg := generated.CreateOrganizationInput{
-		Name:      "ssoorg",
+		Name:      gofakeit.AdjectiveDescriptive() + " " + gofakeit.Noun(),
 		SettingID: &ssoorgSetting.ID,
 	}
 
 	ssoMember := suite.userBuilderWithInput(ctx, &userInput{
+		email:         gofakeit.Username() + "@examples.com", // ensure the email is allowed by the org setting
 		password:      validPassword,
 		confirmedUser: true,
 	})
@@ -105,9 +107,9 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 		OrganizationID: createdssoOrg.ID,
 		UserID:         ssoMember.UserInfo.ID,
 		Role:           &enums.RoleMember,
-	}).ExecX(ctx)
+	}).ExecX(allowCtx)
 
-	suite.db.UserSetting.UpdateOneID(ssoMember.UserInfo.Edges.Setting.ID).SetDefaultOrgID(createdssoOrg.ID).ExecX(ctx)
+	suite.db.UserSetting.UpdateOneID(ssoMember.UserInfo.Edges.Setting.ID).SetDefaultOrgID(createdssoOrg.ID).ExecX(allowCtx)
 
 	// update the user settings to have the default org set that is the domain restricted org
 	suite.db.UserSetting.UpdateOneID(validConfirmedUserRestrictedOrg.UserInfo.Edges.Setting.ID).

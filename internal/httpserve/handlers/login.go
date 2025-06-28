@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/getkin/kin-openapi/openapi3"
@@ -58,7 +59,7 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 			).Only(reqCtx)
 			if mErr == nil && member.Role != enums.RoleOwner {
 				metrics.Logins.WithLabelValues("false").Inc()
-				return h.Unauthorized(ctx, ErrUnauthorized)
+				return ctx.Redirect(http.StatusFound, fmt.Sprintf("/v1/sso/login?organization_id=%s", orgID))
 			}
 		}
 	}

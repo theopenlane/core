@@ -31,6 +31,10 @@ func TestToAuthProvider(t *testing.T) {
 			expected: enums.AuthProviderWebauthn,
 		},
 		{
+			input:    "oidc",
+			expected: enums.AuthProviderOIDC,
+		},
+		{
 			input:    "UNKNOWN",
 			expected: enums.AuthProviderInvalid,
 		},

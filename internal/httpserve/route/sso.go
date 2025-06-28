@@ -30,3 +30,49 @@ func registerWebfingerHandler(router *Router) (err error) {
 
 	return nil
 }
+
+// registerSSOLoginHandler starts the OIDC login flow.
+func registerSSOLoginHandler(router *Router) (err error) {
+	path := "/sso/login"
+	method := http.MethodGet
+	name := "SSOLogin"
+
+	route := echo.Route{
+		Name:        name,
+		Method:      method,
+		Path:        path,
+		Middlewares: mw,
+		Handler: func(c echo.Context) error {
+			return router.Handler.SSOLoginHandler(c)
+		},
+	}
+
+	if err := router.AddV1Route(path, method, nil, route); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// registerSSOCallbackHandler completes the OIDC login flow.
+func registerSSOCallbackHandler(router *Router) (err error) {
+	path := "/sso/callback"
+	method := http.MethodGet
+	name := "SSOCallback"
+
+	route := echo.Route{
+		Name:        name,
+		Method:      method,
+		Path:        path,
+		Middlewares: mw,
+		Handler: func(c echo.Context) error {
+			return router.Handler.SSOCallbackHandler(c)
+		},
+	}
+
+	if err := router.AddV1Route(path, method, nil, route); err != nil {
+		return err
+	}
+
+	return nil
+}

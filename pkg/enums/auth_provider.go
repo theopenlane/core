@@ -17,6 +17,8 @@ var (
 	AuthProviderGitHub AuthProvider = "GITHUB"
 	// Webauthn passkey provider for authentication
 	AuthProviderWebauthn AuthProvider = "WEBAUTHN"
+	// OIDC provider for authentication
+	AuthProviderOIDC AuthProvider = "OIDC"
 	// AuthProviderInvalid is the default value for the AuthProvider enum
 	AuthProviderInvalid AuthProvider = "INVALID"
 )
@@ -47,6 +49,8 @@ func ToAuthProvider(r string) *AuthProvider {
 		return &AuthProviderGitHub
 	case AuthProviderWebauthn.String():
 		return &AuthProviderWebauthn
+	case AuthProviderOIDC.String():
+		return &AuthProviderOIDC
 	default:
 		return &AuthProviderInvalid
 	}
