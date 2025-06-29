@@ -41,6 +41,7 @@ func TestQueryOrganization(t *testing.T) {
 
 	// add org members
 	om := (&OrgMemberBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
+	anonymousContext := createAnonymousTrustCenterContext("abc123", orgUser.OrganizationID)
 
 	testCases := []struct {
 		name               string
@@ -77,6 +78,13 @@ func TestQueryOrganization(t *testing.T) {
 			client:   suite.client.api,
 			ctx:      orgUser.UserCtx,
 			errorMsg: notFoundErrorMsg,
+		},
+		{
+			name:     "no access, anonymous user",
+			client:   suite.client.api,
+			ctx:      anonymousContext,
+			queryID:  orgUser.OrganizationID,
+			errorMsg: "id not found",
 		},
 	}
 
