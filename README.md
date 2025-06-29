@@ -32,37 +32,7 @@ We have our sights set on additional features such as:
 - Source code scanning
 - Internal training programs and tracking mechanisms
 
-## Features
-
-At it's core, this repo is a collection of services built on top of an entity
-framework which allows us to:
-
-- Model database schemas as graph structures
-- Define schemas as programmatic go code
-- Execute complex database queries and graph traversals easily
-- Extend and customize using templates and code generation utilities
-- Type-safe resolvers and GraphQL schema stitching
-- Code generated audit / history tables for defined schemas
-
-On top of this powerful core we also have an incredible amount of pluggable,
-extensible services:
-
-- Authentication: we today support password, OAuth2 / Social login providers
-  (Github, Google), Passkeys as well as standard OIDC Discovery flows (NOTE: you will need to create your own github or google client secrets and leverage them to take advantage of this capability)
-- Multi-factor: built-in 2FA mechanisms, TOTP
-- Authorization: extensible and flexible permissions constructs via openFGA
-  based on Google Zanzibar
-- Session Management: built-in session management with JWKS key validation,
-  encrypted cookies and sessions
-- Robust Middleware: cache control, CORS, Rate Limiting, transaction rollbacks,
-  and more
-- Queuing and Scheduling: Task management and scheduling with
-  [riverqueue](https://github.com/riverqueue/river)
-- External Storage Providers: store data in AWS S3, Google GCS, or locally
-- External Database Providers: Leverage NeonDB, or other PostgreSQL compatible
-  vendors and libraries
-- Data Isolation and Management: Hierarchal organizations and granular
-  permissions controls
+For more information or to learn about how to use the system, visit our [docs page](https://docs.theopenlane.io)
 
 ## Development
 
@@ -218,7 +188,7 @@ integration also creates comments with any issues related to the schema changes
 ## Deploying
 
 The only "supported" method of deploying today is locally, but we have a WIP
-Helm chart which can be found [here](https://github.com/theopenlane/helm-charts)
+Helm chart which can be found [here](https://github.com/theopenlane/openlane-infra/charts/openlane)
 
 ## Contributing
 
@@ -226,7 +196,39 @@ See the [contributing](.github/CONTRIBUTING.md) guide for more information.
 
 ## UI
 
-We have additionally open-sourced the [Openlane UI](https://github.com/theopenlane/openlane-ui) and you can run / use this technology locally (or host it on your own servers) but we have not undergone efforts to ensure things such as links to our Terms of Service or Privacy policy, or other prioritiary branding or assets owned by theopenlane, Inc., are fully configurable or removable.
+We have additionally open-sourced the [Openlane UI](https://github.com/theopenlane/openlane-ui) and you can run / use this technology locally (or host it on your own servers) but we have not undergone efforts to ensure things such as links to our Terms of Service or Privacy policy, or other proprietary branding or assets owned by theopenlane, Inc., are fully configurable or removable.
+
+## Features
+
+At it's core, this repo is a collection of services built on top of an entity
+framework which allows us to:
+
+- Model database schemas as graph structures
+- Define schemas as programmatic go code
+- Execute complex database queries and graph traversals easily
+- Extend and customize using templates and code generation utilities
+- Type-safe resolvers and GraphQL schema stitching
+- Code generated audit / history tables for defined schemas
+
+On top of this powerful core we also have an incredible amount of pluggable,
+extensible services:
+
+- Authentication: we today support password, OAuth2 / Social login providers
+  (Github, Google), Passkeys as well as standard OIDC Discovery flows (NOTE: you will need to create your own github or google client secrets and leverage them to take advantage of this capability)
+- Multi-factor: built-in 2FA mechanisms, TOTP
+- Authorization: extensible and flexible permissions constructs via openFGA
+  based on Google Zanzibar
+- Session Management: built-in session management with JWKS key validation,
+  encrypted cookies and sessions
+- Robust Middleware: cache control, CORS, Rate Limiting, transaction rollbacks,
+  and more
+- Queuing and Scheduling: Task management and scheduling with
+  [riverqueue](https://github.com/riverqueue/river)
+- External Storage Providers: store data in AWS S3, Google GCS, or locally
+- External Database Providers: Leverage NeonDB, or other PostgreSQL compatible
+  vendors and libraries
+- Data Isolation and Management: Hierarchal organizations and granular
+  permissions controls
 
 ## Sponsoring
 
