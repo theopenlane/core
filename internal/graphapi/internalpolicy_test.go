@@ -26,6 +26,7 @@ func TestQueryInternalPolicy(t *testing.T) {
 	(&GroupMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID, GroupID: blockedGroup.ID}).MustNew(testUser1.UserCtx, t)
 
 	internalPolicy2 := (&InternalPolicyBuilder{client: suite.client, BlockedGroupIDs: []string{blockedGroup.ID}}).MustNew(testUser1.UserCtx, t)
+	anonymousContext := createAnonymousTrustCenterContext("abc123", testUser1.OrganizationID)
 
 	// add test cases for querying the internal policy
 	testCases := []struct {
@@ -81,6 +82,13 @@ func TestQueryInternalPolicy(t *testing.T) {
 			client:   suite.client.api,
 			ctx:      testUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
+		},
+		{
+			name:     "no access, anonymous user",
+			client:   suite.client.api,
+			ctx:      anonymousContext,
+			queryID:  internalPolicy.ID,
+			errorMsg: couldNotFindUser,
 		},
 	}
 

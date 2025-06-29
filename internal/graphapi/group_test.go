@@ -27,6 +27,7 @@ func TestQueryGroup(t *testing.T) {
 		Visibility: &enums.VisibilityPrivate,
 	})
 	assert.NilError(t, err)
+	anonymousContext := createAnonymousTrustCenterContext("abc123", testUser1.OrganizationID)
 
 	testCases := []struct {
 		name     string
@@ -67,6 +68,13 @@ func TestQueryGroup(t *testing.T) {
 			ctx:      testUser2.UserCtx,
 			queryID:  group1.ID,
 			errorMsg: notFoundErrorMsg,
+		},
+		{
+			name:     "no access, anonymous user",
+			client:   suite.client.api,
+			ctx:      anonymousContext,
+			queryID:  group1.ID,
+			errorMsg: couldNotFindUser,
 		},
 	}
 
