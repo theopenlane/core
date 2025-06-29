@@ -9,4 +9,6 @@ var (
 	ErrInvalidFolderPath = errors.New("invalid folder path provided")
 	// ErrMissingRequiredAWSParams is returned when required AWS parameters are missing
 	ErrMissingRequiredAWSParams = errors.New("missing required AWS parameters")
+	// ErrMissingLocalURL = errors.New("missing local URL in disk storage options"
+	ErrMissingLocalURL = errors.New("missing local URL in disk storage options")
 )
