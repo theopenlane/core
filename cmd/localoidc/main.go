@@ -40,7 +40,7 @@ func WithRedirectURL(u string) Option {
 func New(opts ...Option) *Server {
 	s := &Server{
 		port:        "9998",
-		redirectURL: "http://api:17608/v1/sso/callback",
+		redirectURL: "http://localhost:17608/v1/sso/callback",
 	}
 	for _, opt := range opts {
 		opt(s)

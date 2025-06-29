@@ -9,6 +9,10 @@ tasks:
         vars:
           GOOS: 'GOOS=linux'
           GOARCH: 'GOARCH=amd64'
+      - task: :go:build-localoidc
+        vars:
+          GOOS: 'GOOS=linux'
+          GOARCH: 'GOARCH=amd64'
       - "docker build -f docker/Dockerfile . -t core:dev"
 
   build:aio:

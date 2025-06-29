@@ -405,3 +405,8 @@ tasks:
       - task: compose:metrics
       - task: compose:localoidc
       - task: run-api
+
+  go:build-localoidc:
+    desc: Builds the local OIDC test server
+    cmds:
+      - "{{ .GOOS }} {{ .GOARCH }} go build -mod=mod -o localoidc ./cmd/localoidc"

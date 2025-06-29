@@ -5,6 +5,7 @@ USER 65532:65532
 
 # Copy the binary that was built
 COPY core /bin/core
+COPY localoidc /bin/localoidc
 
 # Copy default model into image
 COPY fga/model/model.fga fga/model/model.fga

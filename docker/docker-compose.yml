@@ -1,6 +1,9 @@
 services:
   api:
-    image: core:dev
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: core:dev
     command:
       - serve
       - --debug
@@ -20,6 +23,8 @@ services:
       - default
 
   localoidc:
+    depends_on:
+      - api
     image: core:dev
     command:
       - localoidc

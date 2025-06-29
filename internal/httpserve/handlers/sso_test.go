@@ -2,9 +2,11 @@ package handlers_test
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 
+	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -44,5 +46,6 @@ func (suite *HandlerTestSuite) TestWebfingerHandler() {
 	require.Equal(t, http.StatusOK, rec.Code)
 	var out models.SSOStatusReply
 	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
+	log.Error().Err(errors.New("output")).Interface("out", out).Msg("WebfingerHandler output")
 	assert.True(t, out.Enforced)
 }
