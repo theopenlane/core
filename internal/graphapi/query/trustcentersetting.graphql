@@ -10,6 +10,11 @@ mutation CreateTrustCenterSetting($input: CreateTrustCenterSettingInput!) {
       trustCenterID
       updatedAt
       updatedBy
+      logoFile {
+        presignedURL
+      }
+      logoRemoteURL
+      logoLocalFileID
     }
   }
 }
@@ -40,6 +45,11 @@ query GetAllTrustCenterSettings {
         trustCenterID
         updatedAt
         updatedBy
+        logoFile {
+          presignedURL
+        }
+        logoRemoteURL
+        logoLocalFileID
       }
     }
   }
@@ -55,6 +65,11 @@ query GetTrustCenterSettingByID($trustCenterSettingId: ID!) {
     trustCenterID
     updatedAt
     updatedBy
+    logoFile {
+      presignedURL
+    }
+    logoRemoteURL
+    logoLocalFileID
   }
 }
 
@@ -78,12 +93,17 @@ query GetTrustCenterSettings($first: Int, $last: Int, $where: TrustCenterSetting
         trustCenterID
         updatedAt
         updatedBy
+        logoFile {
+          presignedURL
+        }
+        logoRemoteURL
+        logoLocalFileID
       }
     }
   }
 }
-mutation UpdateTrustCenterSetting($updateTrustCenterSettingId: ID!, $input: UpdateTrustCenterSettingInput!) {
-  updateTrustCenterSetting(id: $updateTrustCenterSettingId, input: $input) {
+mutation UpdateTrustCenterSetting($updateTrustCenterSettingId: ID!, $input: UpdateTrustCenterSettingInput!, $logoFile: Upload) {
+  updateTrustCenterSetting(id: $updateTrustCenterSettingId, input: $input, logoFile: $logoFile) {
     trustCenterSetting {
       createdAt
       createdBy
@@ -94,6 +114,11 @@ mutation UpdateTrustCenterSetting($updateTrustCenterSettingId: ID!, $input: Upda
       trustCenterID
       updatedAt
       updatedBy
+      logoFile {
+        presignedURL
+      }
+      logoRemoteURL
+      logoLocalFileID
     }
   }
 }

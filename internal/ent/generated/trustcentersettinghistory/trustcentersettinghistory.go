@@ -43,6 +43,10 @@ const (
 	FieldOverview = "overview"
 	// FieldPrimaryColor holds the string denoting the primary_color field in the database.
 	FieldPrimaryColor = "primary_color"
+	// FieldLogoRemoteURL holds the string denoting the logo_remote_url field in the database.
+	FieldLogoRemoteURL = "logo_remote_url"
+	// FieldLogoLocalFileID holds the string denoting the logo_local_file_id field in the database.
+	FieldLogoLocalFileID = "logo_local_file_id"
 	// Table holds the table name of the trustcentersettinghistory in the database.
 	Table = "trust_center_setting_history"
 )
@@ -63,6 +67,8 @@ var Columns = []string{
 	FieldTitle,
 	FieldOverview,
 	FieldPrimaryColor,
+	FieldLogoRemoteURL,
+	FieldLogoLocalFileID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -175,6 +181,16 @@ func ByOverview(opts ...sql.OrderTermOption) OrderOption {
 // ByPrimaryColor orders the results by the primary_color field.
 func ByPrimaryColor(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPrimaryColor, opts...).ToFunc()
+}
+
+// ByLogoRemoteURL orders the results by the logo_remote_url field.
+func ByLogoRemoteURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLogoRemoteURL, opts...).ToFunc()
+}
+
+// ByLogoLocalFileID orders the results by the logo_local_file_id field.
+func ByLogoLocalFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLogoLocalFileID, opts...).ToFunc()
 }
 
 var (

@@ -183,6 +183,46 @@ func (tcshu *TrustCenterSettingHistoryUpdate) ClearPrimaryColor() *TrustCenterSe
 	return tcshu
 }
 
+// SetLogoRemoteURL sets the "logo_remote_url" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetLogoRemoteURL(s string) *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.SetLogoRemoteURL(s)
+	return tcshu
+}
+
+// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetNillableLogoRemoteURL(s *string) *TrustCenterSettingHistoryUpdate {
+	if s != nil {
+		tcshu.SetLogoRemoteURL(*s)
+	}
+	return tcshu
+}
+
+// ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) ClearLogoRemoteURL() *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.ClearLogoRemoteURL()
+	return tcshu
+}
+
+// SetLogoLocalFileID sets the "logo_local_file_id" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetLogoLocalFileID(s string) *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.SetLogoLocalFileID(s)
+	return tcshu
+}
+
+// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetNillableLogoLocalFileID(s *string) *TrustCenterSettingHistoryUpdate {
+	if s != nil {
+		tcshu.SetLogoLocalFileID(*s)
+	}
+	return tcshu
+}
+
+// ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) ClearLogoLocalFileID() *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.ClearLogoLocalFileID()
+	return tcshu
+}
+
 // Mutation returns the TrustCenterSettingHistoryMutation object of the builder.
 func (tcshu *TrustCenterSettingHistoryUpdate) Mutation() *TrustCenterSettingHistoryMutation {
 	return tcshu.mutation
@@ -295,6 +335,18 @@ func (tcshu *TrustCenterSettingHistoryUpdate) sqlSave(ctx context.Context) (n in
 	}
 	if tcshu.mutation.PrimaryColorCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldPrimaryColor, field.TypeString)
+	}
+	if value, ok := tcshu.mutation.LogoRemoteURL(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldLogoRemoteURL, field.TypeString, value)
+	}
+	if tcshu.mutation.LogoRemoteURLCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldLogoRemoteURL, field.TypeString)
+	}
+	if value, ok := tcshu.mutation.LogoLocalFileID(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldLogoLocalFileID, field.TypeString, value)
+	}
+	if tcshu.mutation.LogoLocalFileIDCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldLogoLocalFileID, field.TypeString)
 	}
 	_spec.Node.Schema = tcshu.schemaConfig.TrustCenterSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, tcshu.schemaConfig)
@@ -472,6 +524,46 @@ func (tcshuo *TrustCenterSettingHistoryUpdateOne) ClearPrimaryColor() *TrustCent
 	return tcshuo
 }
 
+// SetLogoRemoteURL sets the "logo_remote_url" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetLogoRemoteURL(s string) *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.SetLogoRemoteURL(s)
+	return tcshuo
+}
+
+// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetNillableLogoRemoteURL(s *string) *TrustCenterSettingHistoryUpdateOne {
+	if s != nil {
+		tcshuo.SetLogoRemoteURL(*s)
+	}
+	return tcshuo
+}
+
+// ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) ClearLogoRemoteURL() *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.ClearLogoRemoteURL()
+	return tcshuo
+}
+
+// SetLogoLocalFileID sets the "logo_local_file_id" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetLogoLocalFileID(s string) *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.SetLogoLocalFileID(s)
+	return tcshuo
+}
+
+// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetNillableLogoLocalFileID(s *string) *TrustCenterSettingHistoryUpdateOne {
+	if s != nil {
+		tcshuo.SetLogoLocalFileID(*s)
+	}
+	return tcshuo
+}
+
+// ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) ClearLogoLocalFileID() *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.ClearLogoLocalFileID()
+	return tcshuo
+}
+
 // Mutation returns the TrustCenterSettingHistoryMutation object of the builder.
 func (tcshuo *TrustCenterSettingHistoryUpdateOne) Mutation() *TrustCenterSettingHistoryMutation {
 	return tcshuo.mutation
@@ -614,6 +706,18 @@ func (tcshuo *TrustCenterSettingHistoryUpdateOne) sqlSave(ctx context.Context) (
 	}
 	if tcshuo.mutation.PrimaryColorCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldPrimaryColor, field.TypeString)
+	}
+	if value, ok := tcshuo.mutation.LogoRemoteURL(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldLogoRemoteURL, field.TypeString, value)
+	}
+	if tcshuo.mutation.LogoRemoteURLCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldLogoRemoteURL, field.TypeString)
+	}
+	if value, ok := tcshuo.mutation.LogoLocalFileID(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldLogoLocalFileID, field.TypeString, value)
+	}
+	if tcshuo.mutation.LogoLocalFileIDCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldLogoLocalFileID, field.TypeString)
 	}
 	_spec.Node.Schema = tcshuo.schemaConfig.TrustCenterSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, tcshuo.schemaConfig)

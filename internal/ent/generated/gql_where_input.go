@@ -24433,6 +24433,10 @@ type FileWhereInput struct {
 	// "events" edge predicates.
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
+
+	// "trust_center_setting" edge predicates.
+	HasTrustCenterSetting     *bool                           `json:"hasTrustCenterSetting,omitempty"`
+	HasTrustCenterSettingWith []*TrustCenterSettingWhereInput `json:"hasTrustCenterSettingWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -25439,6 +25443,24 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, file.HasEventsWith(with...))
+	}
+	if i.HasTrustCenterSetting != nil {
+		p := file.HasTrustCenterSetting()
+		if !*i.HasTrustCenterSetting {
+			p = file.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTrustCenterSettingWith) > 0 {
+		with := make([]predicate.TrustCenterSetting, 0, len(i.HasTrustCenterSettingWith))
+		for _, w := range i.HasTrustCenterSettingWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTrustCenterSettingWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, file.HasTrustCenterSettingWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -75851,9 +75873,51 @@ type TrustCenterSettingWhereInput struct {
 	PrimaryColorEqualFold    *string  `json:"primaryColorEqualFold,omitempty"`
 	PrimaryColorContainsFold *string  `json:"primaryColorContainsFold,omitempty"`
 
+	// "logo_remote_url" field predicates.
+	LogoRemoteURL             *string  `json:"logoRemoteURL,omitempty"`
+	LogoRemoteURLNEQ          *string  `json:"logoRemoteURLNEQ,omitempty"`
+	LogoRemoteURLIn           []string `json:"logoRemoteURLIn,omitempty"`
+	LogoRemoteURLNotIn        []string `json:"logoRemoteURLNotIn,omitempty"`
+	LogoRemoteURLGT           *string  `json:"logoRemoteURLGT,omitempty"`
+	LogoRemoteURLGTE          *string  `json:"logoRemoteURLGTE,omitempty"`
+	LogoRemoteURLLT           *string  `json:"logoRemoteURLLT,omitempty"`
+	LogoRemoteURLLTE          *string  `json:"logoRemoteURLLTE,omitempty"`
+	LogoRemoteURLContains     *string  `json:"logoRemoteURLContains,omitempty"`
+	LogoRemoteURLHasPrefix    *string  `json:"logoRemoteURLHasPrefix,omitempty"`
+	LogoRemoteURLHasSuffix    *string  `json:"logoRemoteURLHasSuffix,omitempty"`
+	LogoRemoteURLIsNil        bool     `json:"logoRemoteURLIsNil,omitempty"`
+	LogoRemoteURLNotNil       bool     `json:"logoRemoteURLNotNil,omitempty"`
+	LogoRemoteURLEqualFold    *string  `json:"logoRemoteURLEqualFold,omitempty"`
+	LogoRemoteURLContainsFold *string  `json:"logoRemoteURLContainsFold,omitempty"`
+
+	// "logo_local_file_id" field predicates.
+	LogoLocalFileID             *string  `json:"logoLocalFileID,omitempty"`
+	LogoLocalFileIDNEQ          *string  `json:"logoLocalFileIDNEQ,omitempty"`
+	LogoLocalFileIDIn           []string `json:"logoLocalFileIDIn,omitempty"`
+	LogoLocalFileIDNotIn        []string `json:"logoLocalFileIDNotIn,omitempty"`
+	LogoLocalFileIDGT           *string  `json:"logoLocalFileIDGT,omitempty"`
+	LogoLocalFileIDGTE          *string  `json:"logoLocalFileIDGTE,omitempty"`
+	LogoLocalFileIDLT           *string  `json:"logoLocalFileIDLT,omitempty"`
+	LogoLocalFileIDLTE          *string  `json:"logoLocalFileIDLTE,omitempty"`
+	LogoLocalFileIDContains     *string  `json:"logoLocalFileIDContains,omitempty"`
+	LogoLocalFileIDHasPrefix    *string  `json:"logoLocalFileIDHasPrefix,omitempty"`
+	LogoLocalFileIDHasSuffix    *string  `json:"logoLocalFileIDHasSuffix,omitempty"`
+	LogoLocalFileIDIsNil        bool     `json:"logoLocalFileIDIsNil,omitempty"`
+	LogoLocalFileIDNotNil       bool     `json:"logoLocalFileIDNotNil,omitempty"`
+	LogoLocalFileIDEqualFold    *string  `json:"logoLocalFileIDEqualFold,omitempty"`
+	LogoLocalFileIDContainsFold *string  `json:"logoLocalFileIDContainsFold,omitempty"`
+
 	// "trust_center" edge predicates.
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
 	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
+
+	// "files" edge predicates.
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+
+	// "logo_file" edge predicates.
+	HasLogoFile     *bool             `json:"hasLogoFile,omitempty"`
+	HasLogoFileWith []*FileWhereInput `json:"hasLogoFileWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -76287,6 +76351,96 @@ func (i *TrustCenterSettingWhereInput) P() (predicate.TrustCenterSetting, error)
 	if i.PrimaryColorContainsFold != nil {
 		predicates = append(predicates, trustcentersetting.PrimaryColorContainsFold(*i.PrimaryColorContainsFold))
 	}
+	if i.LogoRemoteURL != nil {
+		predicates = append(predicates, trustcentersetting.LogoRemoteURLEQ(*i.LogoRemoteURL))
+	}
+	if i.LogoRemoteURLNEQ != nil {
+		predicates = append(predicates, trustcentersetting.LogoRemoteURLNEQ(*i.LogoRemoteURLNEQ))
+	}
+	if len(i.LogoRemoteURLIn) > 0 {
+		predicates = append(predicates, trustcentersetting.LogoRemoteURLIn(i.LogoRemoteURLIn...))
+	}
+	if len(i.LogoRemoteURLNotIn) > 0 {
+		predicates = append(predicates, trustcentersetting.LogoRemoteURLNotIn(i.LogoRemoteURLNotIn...))
+	}
+	if i.LogoRemoteURLGT != nil {
+		predicates = append(predicates, trustcentersetting.LogoRemoteURLGT(*i.LogoRemoteURLGT))
+	}
+	if i.LogoRemoteURLGTE != nil {
+		predicates = append(predicates, trustcentersetting.LogoRemoteURLGTE(*i.LogoRemoteURLGTE))
+	}
+	if i.LogoRemoteURLLT != nil {
+		predicates = append(predicates, trustcentersetting.LogoRemoteURLLT(*i.LogoRemoteURLLT))
+	}
+	if i.LogoRemoteURLLTE != nil {
+		predicates = append(predicates, trustcentersetting.LogoRemoteURLLTE(*i.LogoRemoteURLLTE))
+	}
+	if i.LogoRemoteURLContains != nil {
+		predicates = append(predicates, trustcentersetting.LogoRemoteURLContains(*i.LogoRemoteURLContains))
+	}
+	if i.LogoRemoteURLHasPrefix != nil {
+		predicates = append(predicates, trustcentersetting.LogoRemoteURLHasPrefix(*i.LogoRemoteURLHasPrefix))
+	}
+	if i.LogoRemoteURLHasSuffix != nil {
+		predicates = append(predicates, trustcentersetting.LogoRemoteURLHasSuffix(*i.LogoRemoteURLHasSuffix))
+	}
+	if i.LogoRemoteURLIsNil {
+		predicates = append(predicates, trustcentersetting.LogoRemoteURLIsNil())
+	}
+	if i.LogoRemoteURLNotNil {
+		predicates = append(predicates, trustcentersetting.LogoRemoteURLNotNil())
+	}
+	if i.LogoRemoteURLEqualFold != nil {
+		predicates = append(predicates, trustcentersetting.LogoRemoteURLEqualFold(*i.LogoRemoteURLEqualFold))
+	}
+	if i.LogoRemoteURLContainsFold != nil {
+		predicates = append(predicates, trustcentersetting.LogoRemoteURLContainsFold(*i.LogoRemoteURLContainsFold))
+	}
+	if i.LogoLocalFileID != nil {
+		predicates = append(predicates, trustcentersetting.LogoLocalFileIDEQ(*i.LogoLocalFileID))
+	}
+	if i.LogoLocalFileIDNEQ != nil {
+		predicates = append(predicates, trustcentersetting.LogoLocalFileIDNEQ(*i.LogoLocalFileIDNEQ))
+	}
+	if len(i.LogoLocalFileIDIn) > 0 {
+		predicates = append(predicates, trustcentersetting.LogoLocalFileIDIn(i.LogoLocalFileIDIn...))
+	}
+	if len(i.LogoLocalFileIDNotIn) > 0 {
+		predicates = append(predicates, trustcentersetting.LogoLocalFileIDNotIn(i.LogoLocalFileIDNotIn...))
+	}
+	if i.LogoLocalFileIDGT != nil {
+		predicates = append(predicates, trustcentersetting.LogoLocalFileIDGT(*i.LogoLocalFileIDGT))
+	}
+	if i.LogoLocalFileIDGTE != nil {
+		predicates = append(predicates, trustcentersetting.LogoLocalFileIDGTE(*i.LogoLocalFileIDGTE))
+	}
+	if i.LogoLocalFileIDLT != nil {
+		predicates = append(predicates, trustcentersetting.LogoLocalFileIDLT(*i.LogoLocalFileIDLT))
+	}
+	if i.LogoLocalFileIDLTE != nil {
+		predicates = append(predicates, trustcentersetting.LogoLocalFileIDLTE(*i.LogoLocalFileIDLTE))
+	}
+	if i.LogoLocalFileIDContains != nil {
+		predicates = append(predicates, trustcentersetting.LogoLocalFileIDContains(*i.LogoLocalFileIDContains))
+	}
+	if i.LogoLocalFileIDHasPrefix != nil {
+		predicates = append(predicates, trustcentersetting.LogoLocalFileIDHasPrefix(*i.LogoLocalFileIDHasPrefix))
+	}
+	if i.LogoLocalFileIDHasSuffix != nil {
+		predicates = append(predicates, trustcentersetting.LogoLocalFileIDHasSuffix(*i.LogoLocalFileIDHasSuffix))
+	}
+	if i.LogoLocalFileIDIsNil {
+		predicates = append(predicates, trustcentersetting.LogoLocalFileIDIsNil())
+	}
+	if i.LogoLocalFileIDNotNil {
+		predicates = append(predicates, trustcentersetting.LogoLocalFileIDNotNil())
+	}
+	if i.LogoLocalFileIDEqualFold != nil {
+		predicates = append(predicates, trustcentersetting.LogoLocalFileIDEqualFold(*i.LogoLocalFileIDEqualFold))
+	}
+	if i.LogoLocalFileIDContainsFold != nil {
+		predicates = append(predicates, trustcentersetting.LogoLocalFileIDContainsFold(*i.LogoLocalFileIDContainsFold))
+	}
 
 	if i.HasTrustCenter != nil {
 		p := trustcentersetting.HasTrustCenter()
@@ -76305,6 +76459,42 @@ func (i *TrustCenterSettingWhereInput) P() (predicate.TrustCenterSetting, error)
 			with = append(with, p)
 		}
 		predicates = append(predicates, trustcentersetting.HasTrustCenterWith(with...))
+	}
+	if i.HasFiles != nil {
+		p := trustcentersetting.HasFiles()
+		if !*i.HasFiles {
+			p = trustcentersetting.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFilesWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		for _, w := range i.HasFilesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFilesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcentersetting.HasFilesWith(with...))
+	}
+	if i.HasLogoFile != nil {
+		p := trustcentersetting.HasLogoFile()
+		if !*i.HasLogoFile {
+			p = trustcentersetting.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasLogoFileWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasLogoFileWith))
+		for _, w := range i.HasLogoFileWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasLogoFileWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcentersetting.HasLogoFileWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -76493,6 +76683,40 @@ type TrustCenterSettingHistoryWhereInput struct {
 	PrimaryColorNotNil       bool     `json:"primaryColorNotNil,omitempty"`
 	PrimaryColorEqualFold    *string  `json:"primaryColorEqualFold,omitempty"`
 	PrimaryColorContainsFold *string  `json:"primaryColorContainsFold,omitempty"`
+
+	// "logo_remote_url" field predicates.
+	LogoRemoteURL             *string  `json:"logoRemoteURL,omitempty"`
+	LogoRemoteURLNEQ          *string  `json:"logoRemoteURLNEQ,omitempty"`
+	LogoRemoteURLIn           []string `json:"logoRemoteURLIn,omitempty"`
+	LogoRemoteURLNotIn        []string `json:"logoRemoteURLNotIn,omitempty"`
+	LogoRemoteURLGT           *string  `json:"logoRemoteURLGT,omitempty"`
+	LogoRemoteURLGTE          *string  `json:"logoRemoteURLGTE,omitempty"`
+	LogoRemoteURLLT           *string  `json:"logoRemoteURLLT,omitempty"`
+	LogoRemoteURLLTE          *string  `json:"logoRemoteURLLTE,omitempty"`
+	LogoRemoteURLContains     *string  `json:"logoRemoteURLContains,omitempty"`
+	LogoRemoteURLHasPrefix    *string  `json:"logoRemoteURLHasPrefix,omitempty"`
+	LogoRemoteURLHasSuffix    *string  `json:"logoRemoteURLHasSuffix,omitempty"`
+	LogoRemoteURLIsNil        bool     `json:"logoRemoteURLIsNil,omitempty"`
+	LogoRemoteURLNotNil       bool     `json:"logoRemoteURLNotNil,omitempty"`
+	LogoRemoteURLEqualFold    *string  `json:"logoRemoteURLEqualFold,omitempty"`
+	LogoRemoteURLContainsFold *string  `json:"logoRemoteURLContainsFold,omitempty"`
+
+	// "logo_local_file_id" field predicates.
+	LogoLocalFileID             *string  `json:"logoLocalFileID,omitempty"`
+	LogoLocalFileIDNEQ          *string  `json:"logoLocalFileIDNEQ,omitempty"`
+	LogoLocalFileIDIn           []string `json:"logoLocalFileIDIn,omitempty"`
+	LogoLocalFileIDNotIn        []string `json:"logoLocalFileIDNotIn,omitempty"`
+	LogoLocalFileIDGT           *string  `json:"logoLocalFileIDGT,omitempty"`
+	LogoLocalFileIDGTE          *string  `json:"logoLocalFileIDGTE,omitempty"`
+	LogoLocalFileIDLT           *string  `json:"logoLocalFileIDLT,omitempty"`
+	LogoLocalFileIDLTE          *string  `json:"logoLocalFileIDLTE,omitempty"`
+	LogoLocalFileIDContains     *string  `json:"logoLocalFileIDContains,omitempty"`
+	LogoLocalFileIDHasPrefix    *string  `json:"logoLocalFileIDHasPrefix,omitempty"`
+	LogoLocalFileIDHasSuffix    *string  `json:"logoLocalFileIDHasSuffix,omitempty"`
+	LogoLocalFileIDIsNil        bool     `json:"logoLocalFileIDIsNil,omitempty"`
+	LogoLocalFileIDNotNil       bool     `json:"logoLocalFileIDNotNil,omitempty"`
+	LogoLocalFileIDEqualFold    *string  `json:"logoLocalFileIDEqualFold,omitempty"`
+	LogoLocalFileIDContainsFold *string  `json:"logoLocalFileIDContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -77006,6 +77230,96 @@ func (i *TrustCenterSettingHistoryWhereInput) P() (predicate.TrustCenterSettingH
 	}
 	if i.PrimaryColorContainsFold != nil {
 		predicates = append(predicates, trustcentersettinghistory.PrimaryColorContainsFold(*i.PrimaryColorContainsFold))
+	}
+	if i.LogoRemoteURL != nil {
+		predicates = append(predicates, trustcentersettinghistory.LogoRemoteURLEQ(*i.LogoRemoteURL))
+	}
+	if i.LogoRemoteURLNEQ != nil {
+		predicates = append(predicates, trustcentersettinghistory.LogoRemoteURLNEQ(*i.LogoRemoteURLNEQ))
+	}
+	if len(i.LogoRemoteURLIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.LogoRemoteURLIn(i.LogoRemoteURLIn...))
+	}
+	if len(i.LogoRemoteURLNotIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.LogoRemoteURLNotIn(i.LogoRemoteURLNotIn...))
+	}
+	if i.LogoRemoteURLGT != nil {
+		predicates = append(predicates, trustcentersettinghistory.LogoRemoteURLGT(*i.LogoRemoteURLGT))
+	}
+	if i.LogoRemoteURLGTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.LogoRemoteURLGTE(*i.LogoRemoteURLGTE))
+	}
+	if i.LogoRemoteURLLT != nil {
+		predicates = append(predicates, trustcentersettinghistory.LogoRemoteURLLT(*i.LogoRemoteURLLT))
+	}
+	if i.LogoRemoteURLLTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.LogoRemoteURLLTE(*i.LogoRemoteURLLTE))
+	}
+	if i.LogoRemoteURLContains != nil {
+		predicates = append(predicates, trustcentersettinghistory.LogoRemoteURLContains(*i.LogoRemoteURLContains))
+	}
+	if i.LogoRemoteURLHasPrefix != nil {
+		predicates = append(predicates, trustcentersettinghistory.LogoRemoteURLHasPrefix(*i.LogoRemoteURLHasPrefix))
+	}
+	if i.LogoRemoteURLHasSuffix != nil {
+		predicates = append(predicates, trustcentersettinghistory.LogoRemoteURLHasSuffix(*i.LogoRemoteURLHasSuffix))
+	}
+	if i.LogoRemoteURLIsNil {
+		predicates = append(predicates, trustcentersettinghistory.LogoRemoteURLIsNil())
+	}
+	if i.LogoRemoteURLNotNil {
+		predicates = append(predicates, trustcentersettinghistory.LogoRemoteURLNotNil())
+	}
+	if i.LogoRemoteURLEqualFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.LogoRemoteURLEqualFold(*i.LogoRemoteURLEqualFold))
+	}
+	if i.LogoRemoteURLContainsFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.LogoRemoteURLContainsFold(*i.LogoRemoteURLContainsFold))
+	}
+	if i.LogoLocalFileID != nil {
+		predicates = append(predicates, trustcentersettinghistory.LogoLocalFileIDEQ(*i.LogoLocalFileID))
+	}
+	if i.LogoLocalFileIDNEQ != nil {
+		predicates = append(predicates, trustcentersettinghistory.LogoLocalFileIDNEQ(*i.LogoLocalFileIDNEQ))
+	}
+	if len(i.LogoLocalFileIDIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.LogoLocalFileIDIn(i.LogoLocalFileIDIn...))
+	}
+	if len(i.LogoLocalFileIDNotIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.LogoLocalFileIDNotIn(i.LogoLocalFileIDNotIn...))
+	}
+	if i.LogoLocalFileIDGT != nil {
+		predicates = append(predicates, trustcentersettinghistory.LogoLocalFileIDGT(*i.LogoLocalFileIDGT))
+	}
+	if i.LogoLocalFileIDGTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.LogoLocalFileIDGTE(*i.LogoLocalFileIDGTE))
+	}
+	if i.LogoLocalFileIDLT != nil {
+		predicates = append(predicates, trustcentersettinghistory.LogoLocalFileIDLT(*i.LogoLocalFileIDLT))
+	}
+	if i.LogoLocalFileIDLTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.LogoLocalFileIDLTE(*i.LogoLocalFileIDLTE))
+	}
+	if i.LogoLocalFileIDContains != nil {
+		predicates = append(predicates, trustcentersettinghistory.LogoLocalFileIDContains(*i.LogoLocalFileIDContains))
+	}
+	if i.LogoLocalFileIDHasPrefix != nil {
+		predicates = append(predicates, trustcentersettinghistory.LogoLocalFileIDHasPrefix(*i.LogoLocalFileIDHasPrefix))
+	}
+	if i.LogoLocalFileIDHasSuffix != nil {
+		predicates = append(predicates, trustcentersettinghistory.LogoLocalFileIDHasSuffix(*i.LogoLocalFileIDHasSuffix))
+	}
+	if i.LogoLocalFileIDIsNil {
+		predicates = append(predicates, trustcentersettinghistory.LogoLocalFileIDIsNil())
+	}
+	if i.LogoLocalFileIDNotNil {
+		predicates = append(predicates, trustcentersettinghistory.LogoLocalFileIDNotNil())
+	}
+	if i.LogoLocalFileIDEqualFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.LogoLocalFileIDEqualFold(*i.LogoLocalFileIDEqualFold))
+	}
+	if i.LogoLocalFileIDContainsFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.LogoLocalFileIDContainsFold(*i.LogoLocalFileIDContainsFold))
 	}
 
 	switch len(predicates) {

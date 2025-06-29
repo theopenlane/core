@@ -447,7 +447,7 @@ type OpenlaneGraphClient interface {
 	GetAllTrustCenterSettings(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterSettings, error)
 	GetTrustCenterSettingByID(ctx context.Context, trustCenterSettingID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterSettingByID, error)
 	GetTrustCenterSettings(ctx context.Context, first *int64, last *int64, where *TrustCenterSettingWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterSettings, error)
-	UpdateTrustCenterSetting(ctx context.Context, updateTrustCenterSettingID string, input UpdateTrustCenterSettingInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterSetting, error)
+	UpdateTrustCenterSetting(ctx context.Context, updateTrustCenterSettingID string, input UpdateTrustCenterSettingInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterSetting, error)
 	GetAllTrustCenterSettingHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterSettingHistories, error)
 	GetTrustCenterSettingHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterSettingHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterSettingHistories, error)
 	CreateUser(ctx context.Context, input CreateUserInput, avatarFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateUser, error)
@@ -77606,11 +77606,25 @@ func (t *UpdateTFASetting_UpdateTFASetting) GetTfaSetting() *UpdateTFASetting_Up
 	return &t.TfaSetting
 }
 
+type CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
 type CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting struct {
-	ID           string  "json:\"id\" graphql:\"id\""
-	Overview     *string "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor *string "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	Title        *string "json:\"title,omitempty\" graphql:\"title\""
+	ID              string                                                            "json:\"id\" graphql:\"id\""
+	LogoFile        *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                           "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                           "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview        *string                                                           "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor    *string                                                           "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	Title           *string                                                           "json:\"title,omitempty\" graphql:\"title\""
 }
 
 func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetID() string {
@@ -77618,6 +77632,24 @@ func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetID() string
 		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
 	}
 	return t.ID
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetLogoFile() *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting_LogoFile {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.LogoFile
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.LogoRemoteURL
 }
 func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetOverview() *string {
 	if t == nil {
@@ -77766,11 +77798,25 @@ func (t *GetAllTrustCenters_TrustCenters_PageInfo) GetStartCursor() *string {
 	return t.StartCursor
 }
 
+type GetAllTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
 type GetAllTrustCenters_TrustCenters_Edges_Node_Setting struct {
-	ID           string  "json:\"id\" graphql:\"id\""
-	Overview     *string "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor *string "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	Title        *string "json:\"title,omitempty\" graphql:\"title\""
+	ID              string                                                       "json:\"id\" graphql:\"id\""
+	LogoFile        *GetAllTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                      "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                      "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview        *string                                                      "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor    *string                                                      "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	Title           *string                                                      "json:\"title,omitempty\" graphql:\"title\""
 }
 
 func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetID() string {
@@ -77778,6 +77824,24 @@ func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetID() string {
 		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
 	}
 	return t.ID
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetLogoFile() *GetAllTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.LogoFile
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.LogoRemoteURL
 }
 func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetOverview() *string {
 	if t == nil {
@@ -77908,11 +77972,25 @@ func (t *GetAllTrustCenters_TrustCenters) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type GetTrustCenterByID_TrustCenter_Setting_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetTrustCenterByID_TrustCenter_Setting_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter_Setting_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
 type GetTrustCenterByID_TrustCenter_Setting struct {
-	ID           string  "json:\"id\" graphql:\"id\""
-	Overview     *string "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor *string "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	Title        *string "json:\"title,omitempty\" graphql:\"title\""
+	ID              string                                           "json:\"id\" graphql:\"id\""
+	LogoFile        *GetTrustCenterByID_TrustCenter_Setting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                          "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                          "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview        *string                                          "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor    *string                                          "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	Title           *string                                          "json:\"title,omitempty\" graphql:\"title\""
 }
 
 func (t *GetTrustCenterByID_TrustCenter_Setting) GetID() string {
@@ -77920,6 +77998,24 @@ func (t *GetTrustCenterByID_TrustCenter_Setting) GetID() string {
 		t = &GetTrustCenterByID_TrustCenter_Setting{}
 	}
 	return t.ID
+}
+func (t *GetTrustCenterByID_TrustCenter_Setting) GetLogoFile() *GetTrustCenterByID_TrustCenter_Setting_LogoFile {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter_Setting{}
+	}
+	return t.LogoFile
+}
+func (t *GetTrustCenterByID_TrustCenter_Setting) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter_Setting{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *GetTrustCenterByID_TrustCenter_Setting) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter_Setting{}
+	}
+	return t.LogoRemoteURL
 }
 func (t *GetTrustCenterByID_TrustCenter_Setting) GetOverview() *string {
 	if t == nil {
@@ -78046,11 +78142,25 @@ func (t *GetTrustCenters_TrustCenters_PageInfo) GetStartCursor() *string {
 	return t.StartCursor
 }
 
+type GetTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
 type GetTrustCenters_TrustCenters_Edges_Node_Setting struct {
-	ID           string  "json:\"id\" graphql:\"id\""
-	Overview     *string "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor *string "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	Title        *string "json:\"title,omitempty\" graphql:\"title\""
+	ID              string                                                    "json:\"id\" graphql:\"id\""
+	LogoFile        *GetTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                   "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                   "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview        *string                                                   "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor    *string                                                   "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	Title           *string                                                   "json:\"title,omitempty\" graphql:\"title\""
 }
 
 func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetID() string {
@@ -78058,6 +78168,24 @@ func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetID() string {
 		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
 	}
 	return t.ID
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetLogoFile() *GetTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.LogoFile
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.LogoRemoteURL
 }
 func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetOverview() *string {
 	if t == nil {
@@ -78188,11 +78316,25 @@ func (t *GetTrustCenters_TrustCenters) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
 type UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting struct {
-	ID           string  "json:\"id\" graphql:\"id\""
-	Overview     *string "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor *string "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	Title        *string "json:\"title,omitempty\" graphql:\"title\""
+	ID              string                                                            "json:\"id\" graphql:\"id\""
+	LogoFile        *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                           "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                           "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview        *string                                                           "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor    *string                                                           "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	Title           *string                                                           "json:\"title,omitempty\" graphql:\"title\""
 }
 
 func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetID() string {
@@ -78200,6 +78342,24 @@ func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetID() string
 		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
 	}
 	return t.ID
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetLogoFile() *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting_LogoFile {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.LogoFile
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.LogoRemoteURL
 }
 func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetOverview() *string {
 	if t == nil {
@@ -78617,16 +78777,30 @@ func (t *GetTrustCenterHistories_TrustCenterHistories) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
 type CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting struct {
-	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID            string     "json:\"id\" graphql:\"id\""
-	Overview      *string    "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor  *string    "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	Title         *string    "json:\"title,omitempty\" graphql:\"title\""
-	TrustCenterID *string    "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
-	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt       *time.Time                                                                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                                                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID              string                                                                         "json:\"id\" graphql:\"id\""
+	LogoFile        *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                                        "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                                        "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview        *string                                                                        "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor    *string                                                                        "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	Title           *string                                                                        "json:\"title,omitempty\" graphql:\"title\""
+	TrustCenterID   *string                                                                        "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt       *time.Time                                                                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                                                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting) GetCreatedAt() *time.Time {
@@ -78646,6 +78820,24 @@ func (t *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting) G
 		t = &CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting{}
 	}
 	return t.ID
+}
+func (t *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting) GetLogoFile() *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting_LogoFile {
+	if t == nil {
+		t = &CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.LogoFile
+}
+func (t *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.LogoRemoteURL
 }
 func (t *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting) GetOverview() *string {
 	if t == nil {
@@ -78738,16 +78930,30 @@ func (t *GetAllTrustCenterSettings_TrustCenterSettings_PageInfo) GetStartCursor(
 	return t.StartCursor
 }
 
+type GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
 type GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node struct {
-	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID            string     "json:\"id\" graphql:\"id\""
-	Overview      *string    "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor  *string    "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	Title         *string    "json:\"title,omitempty\" graphql:\"title\""
-	TrustCenterID *string    "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
-	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt       *time.Time                                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID              string                                                             "json:\"id\" graphql:\"id\""
+	LogoFile        *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                            "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                            "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview        *string                                                            "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor    *string                                                            "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	Title           *string                                                            "json:\"title,omitempty\" graphql:\"title\""
+	TrustCenterID   *string                                                            "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt       *time.Time                                                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                                            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetCreatedAt() *time.Time {
@@ -78767,6 +78973,24 @@ func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetID() strin
 		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetLogoFile() *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile {
+	if t == nil {
+		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.LogoFile
+}
+func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.LogoRemoteURL
 }
 func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetOverview() *string {
 	if t == nil {
@@ -78841,16 +79065,30 @@ func (t *GetAllTrustCenterSettings_TrustCenterSettings) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type GetTrustCenterSettingByID_TrustCenterSetting_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetTrustCenterSettingByID_TrustCenterSetting_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
 type GetTrustCenterSettingByID_TrustCenterSetting struct {
-	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID            string     "json:\"id\" graphql:\"id\""
-	Overview      *string    "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor  *string    "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	Title         *string    "json:\"title,omitempty\" graphql:\"title\""
-	TrustCenterID *string    "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
-	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt       *time.Time                                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID              string                                                 "json:\"id\" graphql:\"id\""
+	LogoFile        *GetTrustCenterSettingByID_TrustCenterSetting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview        *string                                                "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor    *string                                                "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	Title           *string                                                "json:\"title,omitempty\" graphql:\"title\""
+	TrustCenterID   *string                                                "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt       *time.Time                                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetCreatedAt() *time.Time {
@@ -78870,6 +79108,24 @@ func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetID() string {
 		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
 	}
 	return t.ID
+}
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetLogoFile() *GetTrustCenterSettingByID_TrustCenterSetting_LogoFile {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.LogoFile
+}
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.LogoRemoteURL
 }
 func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetOverview() *string {
 	if t == nil {
@@ -78940,16 +79196,30 @@ func (t *GetTrustCenterSettings_TrustCenterSettings_PageInfo) GetStartCursor() *
 	return t.StartCursor
 }
 
+type GetTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
 type GetTrustCenterSettings_TrustCenterSettings_Edges_Node struct {
-	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID            string     "json:\"id\" graphql:\"id\""
-	Overview      *string    "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor  *string    "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	Title         *string    "json:\"title,omitempty\" graphql:\"title\""
-	TrustCenterID *string    "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
-	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt       *time.Time                                                      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                                         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID              string                                                          "json:\"id\" graphql:\"id\""
+	LogoFile        *GetTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                         "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                         "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview        *string                                                         "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor    *string                                                         "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	Title           *string                                                         "json:\"title,omitempty\" graphql:\"title\""
+	TrustCenterID   *string                                                         "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt       *time.Time                                                      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                                         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetCreatedAt() *time.Time {
@@ -78969,6 +79239,24 @@ func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetID() string {
 		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetLogoFile() *GetTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile {
+	if t == nil {
+		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.LogoFile
+}
+func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.LogoRemoteURL
 }
 func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetOverview() *string {
 	if t == nil {
@@ -79043,16 +79331,30 @@ func (t *GetTrustCenterSettings_TrustCenterSettings) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
 type UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting struct {
-	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID            string     "json:\"id\" graphql:\"id\""
-	Overview      *string    "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor  *string    "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	Title         *string    "json:\"title,omitempty\" graphql:\"title\""
-	TrustCenterID *string    "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
-	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt       *time.Time                                                                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                                                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID              string                                                                         "json:\"id\" graphql:\"id\""
+	LogoFile        *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                                        "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                                        "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview        *string                                                                        "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor    *string                                                                        "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	Title           *string                                                                        "json:\"title,omitempty\" graphql:\"title\""
+	TrustCenterID   *string                                                                        "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt       *time.Time                                                                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                                                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetCreatedAt() *time.Time {
@@ -79072,6 +79374,24 @@ func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) G
 		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting{}
 	}
 	return t.ID
+}
+func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetLogoFile() *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting_LogoFile {
+	if t == nil {
+		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.LogoFile
+}
+func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.LogoRemoteURL
 }
 func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetOverview() *string {
 	if t == nil {
@@ -108704,6 +109024,11 @@ const CreateTrustCenterDocument = `mutation CreateTrustCenter ($input: CreateTru
 				overview
 				title
 				primaryColor
+				logoRemoteURL
+				logoLocalFileID
+				logoFile {
+					presignedURL
+				}
 			}
 		}
 	}
@@ -108776,6 +109101,11 @@ const GetAllTrustCentersDocument = `query GetAllTrustCenters {
 					overview
 					title
 					primaryColor
+					logoRemoteURL
+					logoLocalFileID
+					logoFile {
+						presignedURL
+					}
 				}
 			}
 		}
@@ -108814,6 +109144,11 @@ const GetTrustCenterByIDDocument = `query GetTrustCenterByID ($trustCenterId: ID
 			overview
 			title
 			primaryColor
+			logoRemoteURL
+			logoLocalFileID
+			logoFile {
+				presignedURL
+			}
 		}
 	}
 }
@@ -108861,6 +109196,11 @@ const GetTrustCentersDocument = `query GetTrustCenters ($first: Int, $last: Int,
 					overview
 					title
 					primaryColor
+					logoRemoteURL
+					logoLocalFileID
+					logoFile {
+						presignedURL
+					}
 				}
 			}
 		}
@@ -108904,6 +109244,11 @@ const UpdateTrustCenterDocument = `mutation UpdateTrustCenter ($updateTrustCente
 				overview
 				title
 				primaryColor
+				logoRemoteURL
+				logoLocalFileID
+				logoFile {
+					presignedURL
+				}
 			}
 		}
 	}
@@ -109032,6 +109377,11 @@ const CreateTrustCenterSettingDocument = `mutation CreateTrustCenterSetting ($in
 			trustCenterID
 			updatedAt
 			updatedBy
+			logoFile {
+				presignedURL
+			}
+			logoRemoteURL
+			logoLocalFileID
 		}
 	}
 }
@@ -109098,6 +109448,11 @@ const GetAllTrustCenterSettingsDocument = `query GetAllTrustCenterSettings {
 				trustCenterID
 				updatedAt
 				updatedBy
+				logoFile {
+					presignedURL
+				}
+				logoRemoteURL
+				logoLocalFileID
 			}
 		}
 	}
@@ -109130,6 +109485,11 @@ const GetTrustCenterSettingByIDDocument = `query GetTrustCenterSettingByID ($tru
 		trustCenterID
 		updatedAt
 		updatedBy
+		logoFile {
+			presignedURL
+		}
+		logoRemoteURL
+		logoLocalFileID
 	}
 }
 `
@@ -109171,6 +109531,11 @@ const GetTrustCenterSettingsDocument = `query GetTrustCenterSettings ($first: In
 				trustCenterID
 				updatedAt
 				updatedBy
+				logoFile {
+					presignedURL
+				}
+				logoRemoteURL
+				logoLocalFileID
 			}
 		}
 	}
@@ -109196,8 +109561,8 @@ func (c *Client) GetTrustCenterSettings(ctx context.Context, first *int64, last 
 	return &res, nil
 }
 
-const UpdateTrustCenterSettingDocument = `mutation UpdateTrustCenterSetting ($updateTrustCenterSettingId: ID!, $input: UpdateTrustCenterSettingInput!) {
-	updateTrustCenterSetting(id: $updateTrustCenterSettingId, input: $input) {
+const UpdateTrustCenterSettingDocument = `mutation UpdateTrustCenterSetting ($updateTrustCenterSettingId: ID!, $input: UpdateTrustCenterSettingInput!, $logoFile: Upload) {
+	updateTrustCenterSetting(id: $updateTrustCenterSettingId, input: $input, logoFile: $logoFile) {
 		trustCenterSetting {
 			createdAt
 			createdBy
@@ -109208,15 +109573,21 @@ const UpdateTrustCenterSettingDocument = `mutation UpdateTrustCenterSetting ($up
 			trustCenterID
 			updatedAt
 			updatedBy
+			logoFile {
+				presignedURL
+			}
+			logoRemoteURL
+			logoLocalFileID
 		}
 	}
 }
 `
 
-func (c *Client) UpdateTrustCenterSetting(ctx context.Context, updateTrustCenterSettingID string, input UpdateTrustCenterSettingInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterSetting, error) {
+func (c *Client) UpdateTrustCenterSetting(ctx context.Context, updateTrustCenterSettingID string, input UpdateTrustCenterSettingInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterSetting, error) {
 	vars := map[string]any{
 		"updateTrustCenterSettingId": updateTrustCenterSettingID,
 		"input":                      input,
+		"logoFile":                   logoFile,
 	}
 
 	var res UpdateTrustCenterSetting

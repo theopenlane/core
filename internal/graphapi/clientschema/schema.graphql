@@ -8448,6 +8448,7 @@ input CreateFileInput {
 	programIDs: [ID!]
 	evidenceIDs: [ID!]
 	eventIDs: [ID!]
+	trustCenterSettingIDs: [ID!]
 }
 input CreateFullProgramInput {
 	program: CreateProgramInput!
@@ -9775,7 +9776,13 @@ input CreateTrustCenterSettingInput {
 	primary color for the trust center
 	"""
 	primaryColor: String
+	"""
+	URL of the logo
+	"""
+	logoRemoteURL: String
 	trustCenterID: ID
+	fileIDs: [ID!]
+	logoFileID: ID
 }
 """
 CreateUserInput is used for create User object.
@@ -15186,6 +15193,7 @@ type File implements Node {
 		"""
 		where: EventWhereInput
 	): EventConnection!
+	trustCenterSetting: [TrustCenterSetting!]
 	presignedURL: String
 }
 """
@@ -16068,6 +16076,11 @@ input FileWhereInput {
 	"""
 	hasEvents: Boolean
 	hasEventsWith: [EventWhereInput!]
+	"""
+	trust_center_setting edge predicates
+	"""
+	hasTrustCenterSetting: Boolean
+	hasTrustCenterSettingWith: [TrustCenterSettingWhereInput!]
 }
 type Group implements Node {
 	id: ID!
@@ -26561,7 +26574,7 @@ type Mutation {
 		values of the trustCenterSetting
 		"""
 		input: CreateTrustCenterSettingInput!
-	): TrustCenterSettingCreatePayload!
+	logoFile: Upload): TrustCenterSettingCreatePayload!
 	"""
 	Update an existing trustCenterSetting
 	"""
@@ -26575,7 +26588,7 @@ type Mutation {
 		New values for the trustCenterSetting
 		"""
 		input: UpdateTrustCenterSettingInput!
-	): TrustCenterSettingUpdatePayload!
+	logoFile: Upload): TrustCenterSettingUpdatePayload!
 	"""
 	Delete an existing trustCenterSetting
 	"""
@@ -51367,7 +51380,47 @@ type TrustCenterSetting implements Node {
 	primary color for the trust center
 	"""
 	primaryColor: String
+	"""
+	URL of the logo
+	"""
+	logoRemoteURL: String
+	"""
+	The local logo file id, takes precedence over the logo remote URL
+	"""
+	logoLocalFileID: ID
 	trustCenter: TrustCenter
+	files(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Files returned from the connection.
+		"""
+		orderBy: [FileOrder!]
+
+		"""
+		Filtering options for Files returned from the connection.
+		"""
+		where: FileWhereInput
+	): FileConnection!
+	logoFile: File
 }
 """
 Return response for createBulkTrustCenterSetting mutation
@@ -51451,6 +51504,14 @@ type TrustCenterSettingHistory implements Node {
 	primary color for the trust center
 	"""
 	primaryColor: String
+	"""
+	URL of the logo
+	"""
+	logoRemoteURL: String
+	"""
+	The local logo file id, takes precedence over the logo remote URL
+	"""
+	logoLocalFileID: String
 }
 """
 A connection to a list of items.
@@ -51702,6 +51763,42 @@ input TrustCenterSettingHistoryWhereInput {
 	primaryColorNotNil: Boolean
 	primaryColorEqualFold: String
 	primaryColorContainsFold: String
+	"""
+	logo_remote_url field predicates
+	"""
+	logoRemoteURL: String
+	logoRemoteURLNEQ: String
+	logoRemoteURLIn: [String!]
+	logoRemoteURLNotIn: [String!]
+	logoRemoteURLGT: String
+	logoRemoteURLGTE: String
+	logoRemoteURLLT: String
+	logoRemoteURLLTE: String
+	logoRemoteURLContains: String
+	logoRemoteURLHasPrefix: String
+	logoRemoteURLHasSuffix: String
+	logoRemoteURLIsNil: Boolean
+	logoRemoteURLNotNil: Boolean
+	logoRemoteURLEqualFold: String
+	logoRemoteURLContainsFold: String
+	"""
+	logo_local_file_id field predicates
+	"""
+	logoLocalFileID: String
+	logoLocalFileIDNEQ: String
+	logoLocalFileIDIn: [String!]
+	logoLocalFileIDNotIn: [String!]
+	logoLocalFileIDGT: String
+	logoLocalFileIDGTE: String
+	logoLocalFileIDLT: String
+	logoLocalFileIDLTE: String
+	logoLocalFileIDContains: String
+	logoLocalFileIDHasPrefix: String
+	logoLocalFileIDHasSuffix: String
+	logoLocalFileIDIsNil: Boolean
+	logoLocalFileIDNotNil: Boolean
+	logoLocalFileIDEqualFold: String
+	logoLocalFileIDContainsFold: String
 }
 """
 Ordering options for TrustCenterSetting connections
@@ -51888,10 +51985,56 @@ input TrustCenterSettingWhereInput {
 	primaryColorEqualFold: String
 	primaryColorContainsFold: String
 	"""
+	logo_remote_url field predicates
+	"""
+	logoRemoteURL: String
+	logoRemoteURLNEQ: String
+	logoRemoteURLIn: [String!]
+	logoRemoteURLNotIn: [String!]
+	logoRemoteURLGT: String
+	logoRemoteURLGTE: String
+	logoRemoteURLLT: String
+	logoRemoteURLLTE: String
+	logoRemoteURLContains: String
+	logoRemoteURLHasPrefix: String
+	logoRemoteURLHasSuffix: String
+	logoRemoteURLIsNil: Boolean
+	logoRemoteURLNotNil: Boolean
+	logoRemoteURLEqualFold: String
+	logoRemoteURLContainsFold: String
+	"""
+	logo_local_file_id field predicates
+	"""
+	logoLocalFileID: ID
+	logoLocalFileIDNEQ: ID
+	logoLocalFileIDIn: [ID!]
+	logoLocalFileIDNotIn: [ID!]
+	logoLocalFileIDGT: ID
+	logoLocalFileIDGTE: ID
+	logoLocalFileIDLT: ID
+	logoLocalFileIDLTE: ID
+	logoLocalFileIDContains: ID
+	logoLocalFileIDHasPrefix: ID
+	logoLocalFileIDHasSuffix: ID
+	logoLocalFileIDIsNil: Boolean
+	logoLocalFileIDNotNil: Boolean
+	logoLocalFileIDEqualFold: ID
+	logoLocalFileIDContainsFold: ID
+	"""
 	trust_center edge predicates
 	"""
 	hasTrustCenter: Boolean
 	hasTrustCenterWith: [TrustCenterWhereInput!]
+	"""
+	files edge predicates
+	"""
+	hasFiles: Boolean
+	hasFilesWith: [FileWhereInput!]
+	"""
+	logo_file edge predicates
+	"""
+	hasLogoFile: Boolean
+	hasLogoFileWith: [FileWhereInput!]
 }
 """
 Return response for updateTrustCenter mutation
@@ -53079,6 +53222,9 @@ input UpdateFileInput {
 	addEventIDs: [ID!]
 	removeEventIDs: [ID!]
 	clearEvents: Boolean
+	addTrustCenterSettingIDs: [ID!]
+	removeTrustCenterSettingIDs: [ID!]
+	clearTrustCenterSetting: Boolean
 }
 """
 UpdateGroupInput is used for update Group object.
@@ -54926,8 +55072,18 @@ input UpdateTrustCenterSettingInput {
 	"""
 	primaryColor: String
 	clearPrimaryColor: Boolean
+	"""
+	URL of the logo
+	"""
+	logoRemoteURL: String
+	clearLogoRemoteURL: Boolean
 	trustCenterID: ID
 	clearTrustCenter: Boolean
+	addFileIDs: [ID!]
+	removeFileIDs: [ID!]
+	clearFiles: Boolean
+	logoFileID: ID
+	clearLogoFile: Boolean
 }
 """
 UpdateUserInput is used for update User object.

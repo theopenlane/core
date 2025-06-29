@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 )
@@ -160,6 +161,34 @@ func (tcsc *TrustCenterSettingCreate) SetNillablePrimaryColor(s *string) *TrustC
 	return tcsc
 }
 
+// SetLogoRemoteURL sets the "logo_remote_url" field.
+func (tcsc *TrustCenterSettingCreate) SetLogoRemoteURL(s string) *TrustCenterSettingCreate {
+	tcsc.mutation.SetLogoRemoteURL(s)
+	return tcsc
+}
+
+// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
+func (tcsc *TrustCenterSettingCreate) SetNillableLogoRemoteURL(s *string) *TrustCenterSettingCreate {
+	if s != nil {
+		tcsc.SetLogoRemoteURL(*s)
+	}
+	return tcsc
+}
+
+// SetLogoLocalFileID sets the "logo_local_file_id" field.
+func (tcsc *TrustCenterSettingCreate) SetLogoLocalFileID(s string) *TrustCenterSettingCreate {
+	tcsc.mutation.SetLogoLocalFileID(s)
+	return tcsc
+}
+
+// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
+func (tcsc *TrustCenterSettingCreate) SetNillableLogoLocalFileID(s *string) *TrustCenterSettingCreate {
+	if s != nil {
+		tcsc.SetLogoLocalFileID(*s)
+	}
+	return tcsc
+}
+
 // SetID sets the "id" field.
 func (tcsc *TrustCenterSettingCreate) SetID(s string) *TrustCenterSettingCreate {
 	tcsc.mutation.SetID(s)
@@ -177,6 +206,40 @@ func (tcsc *TrustCenterSettingCreate) SetNillableID(s *string) *TrustCenterSetti
 // SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
 func (tcsc *TrustCenterSettingCreate) SetTrustCenter(t *TrustCenter) *TrustCenterSettingCreate {
 	return tcsc.SetTrustCenterID(t.ID)
+}
+
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (tcsc *TrustCenterSettingCreate) AddFileIDs(ids ...string) *TrustCenterSettingCreate {
+	tcsc.mutation.AddFileIDs(ids...)
+	return tcsc
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (tcsc *TrustCenterSettingCreate) AddFiles(f ...*File) *TrustCenterSettingCreate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return tcsc.AddFileIDs(ids...)
+}
+
+// SetLogoFileID sets the "logo_file" edge to the File entity by ID.
+func (tcsc *TrustCenterSettingCreate) SetLogoFileID(id string) *TrustCenterSettingCreate {
+	tcsc.mutation.SetLogoFileID(id)
+	return tcsc
+}
+
+// SetNillableLogoFileID sets the "logo_file" edge to the File entity by ID if the given value is not nil.
+func (tcsc *TrustCenterSettingCreate) SetNillableLogoFileID(id *string) *TrustCenterSettingCreate {
+	if id != nil {
+		tcsc = tcsc.SetLogoFileID(*id)
+	}
+	return tcsc
+}
+
+// SetLogoFile sets the "logo_file" edge to the File entity.
+func (tcsc *TrustCenterSettingCreate) SetLogoFile(f *File) *TrustCenterSettingCreate {
+	return tcsc.SetLogoFileID(f.ID)
 }
 
 // Mutation returns the TrustCenterSettingMutation object of the builder.
@@ -257,6 +320,11 @@ func (tcsc *TrustCenterSettingCreate) check() error {
 			return &ValidationError{Name: "overview", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.overview": %w`, err)}
 		}
 	}
+	if v, ok := tcsc.mutation.LogoRemoteURL(); ok {
+		if err := trustcentersetting.LogoRemoteURLValidator(v); err != nil {
+			return &ValidationError{Name: "logo_remote_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.logo_remote_url": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -329,6 +397,10 @@ func (tcsc *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgra
 		_spec.SetField(trustcentersetting.FieldPrimaryColor, field.TypeString, value)
 		_node.PrimaryColor = value
 	}
+	if value, ok := tcsc.mutation.LogoRemoteURL(); ok {
+		_spec.SetField(trustcentersetting.FieldLogoRemoteURL, field.TypeString, value)
+		_node.LogoRemoteURL = &value
+	}
 	if nodes := tcsc.mutation.TrustCenterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
@@ -345,6 +417,41 @@ func (tcsc *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgra
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.TrustCenterID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tcsc.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   trustcentersetting.FilesTable,
+			Columns: trustcentersetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsc.schemaConfig.TrustCenterSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tcsc.mutation.LogoFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.LogoFileTable,
+			Columns: []string{trustcentersetting.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsc.schemaConfig.TrustCenterSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.LogoLocalFileID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

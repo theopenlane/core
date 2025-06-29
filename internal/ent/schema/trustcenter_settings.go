@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
@@ -9,8 +10,10 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/iam/entfga"
 )
 
@@ -49,19 +52,23 @@ func (TrustCenterSetting) Fields() []ent.Field {
 			Comment("overview of the trust center").
 			MaxLen(trustCenterDescriptionMaxLen).
 			Optional(),
-		// field.String("logo_url").
-		// 	Comment("logo url for the trust center").
-		// 	MaxLen(trustCenterURLMaxLen).
-		// 	Validate(validator.ValidateURL()).
-		// 	Optional(),
-		// field.String("favicon_url").
-		// 	Comment("favicon url for the trust center").
-		// 	MaxLen(trustCenterURLMaxLen).
-		// 	Validate(validator.ValidateURL()).
-		// 	Optional(),
 		field.String("primary_color").
 			Comment("primary color for the trust center").
 			Optional(),
+		field.String("logo_remote_url").
+			Comment("URL of the logo").
+			MaxLen(urlMaxLen).
+			Validate(validator.ValidateURL()).
+			Optional().
+			Nillable(),
+		field.String("logo_local_file_id").
+			Comment("The local logo file id, takes precedence over the logo remote URL").
+			Optional().
+			Annotations(
+				// this field is not exposed to the graphql schema, it is set by the file upload handler
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			).
+			Nillable(),
 	}
 }
 
@@ -81,6 +88,13 @@ func (t TrustCenterSetting) Edges() []ent.Edge {
 			field:      "trust_center_id",
 			ref:        "setting",
 		}),
+		defaultEdgeToWithPagination(t, File{}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: t,
+			name:       "logo_file",
+			t:          File.Type,
+			field:      "logo_local_file_id",
+		}),
 	}
 }
 
@@ -93,7 +107,9 @@ func (TrustCenterSetting) Interceptors() []ent.Interceptor {
 
 // Hooks of the TrustCenterSetting
 func (TrustCenterSetting) Hooks() []ent.Hook {
-	return []ent.Hook{}
+	return []ent.Hook{
+		hooks.HookTrustCenterSetting(),
+	}
 }
 
 func (TrustCenterSetting) Policy() ent.Policy {

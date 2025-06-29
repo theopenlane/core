@@ -15,6 +15,11 @@ mutation CreateTrustCenter($input: CreateTrustCenterInput!) {
         overview
         title
         primaryColor
+        logoRemoteURL
+        logoLocalFileID
+        logoFile {
+          presignedURL
+        }
       }
     }
   }
@@ -51,6 +56,11 @@ query GetAllTrustCenters {
           overview
           title
           primaryColor
+          logoRemoteURL
+          logoLocalFileID
+          logoFile {
+            presignedURL
+          }
         }
       }
     }
@@ -72,6 +82,11 @@ query GetTrustCenterByID($trustCenterId: ID!) {
       overview
       title
       primaryColor
+      logoRemoteURL
+      logoLocalFileID
+      logoFile {
+        presignedURL
+      }
     }
   }
 }
@@ -101,6 +116,11 @@ query GetTrustCenters($first: Int, $last: Int, $where: TrustCenterWhereInput) {
           overview
           title
           primaryColor
+          logoRemoteURL
+          logoLocalFileID
+          logoFile {
+            presignedURL
+          }
         }
       }
     }
@@ -123,6 +143,11 @@ mutation UpdateTrustCenter($updateTrustCenterId: ID!, $input: UpdateTrustCenterI
         overview
         title
         primaryColor
+        logoRemoteURL
+        logoLocalFileID
+        logoFile {
+          presignedURL
+        }
       }
     }
   }

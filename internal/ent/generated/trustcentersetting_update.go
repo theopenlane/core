@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
@@ -184,9 +185,83 @@ func (tcsu *TrustCenterSettingUpdate) ClearPrimaryColor() *TrustCenterSettingUpd
 	return tcsu
 }
 
+// SetLogoRemoteURL sets the "logo_remote_url" field.
+func (tcsu *TrustCenterSettingUpdate) SetLogoRemoteURL(s string) *TrustCenterSettingUpdate {
+	tcsu.mutation.SetLogoRemoteURL(s)
+	return tcsu
+}
+
+// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
+func (tcsu *TrustCenterSettingUpdate) SetNillableLogoRemoteURL(s *string) *TrustCenterSettingUpdate {
+	if s != nil {
+		tcsu.SetLogoRemoteURL(*s)
+	}
+	return tcsu
+}
+
+// ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
+func (tcsu *TrustCenterSettingUpdate) ClearLogoRemoteURL() *TrustCenterSettingUpdate {
+	tcsu.mutation.ClearLogoRemoteURL()
+	return tcsu
+}
+
+// SetLogoLocalFileID sets the "logo_local_file_id" field.
+func (tcsu *TrustCenterSettingUpdate) SetLogoLocalFileID(s string) *TrustCenterSettingUpdate {
+	tcsu.mutation.SetLogoLocalFileID(s)
+	return tcsu
+}
+
+// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
+func (tcsu *TrustCenterSettingUpdate) SetNillableLogoLocalFileID(s *string) *TrustCenterSettingUpdate {
+	if s != nil {
+		tcsu.SetLogoLocalFileID(*s)
+	}
+	return tcsu
+}
+
+// ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
+func (tcsu *TrustCenterSettingUpdate) ClearLogoLocalFileID() *TrustCenterSettingUpdate {
+	tcsu.mutation.ClearLogoLocalFileID()
+	return tcsu
+}
+
 // SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
 func (tcsu *TrustCenterSettingUpdate) SetTrustCenter(t *TrustCenter) *TrustCenterSettingUpdate {
 	return tcsu.SetTrustCenterID(t.ID)
+}
+
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (tcsu *TrustCenterSettingUpdate) AddFileIDs(ids ...string) *TrustCenterSettingUpdate {
+	tcsu.mutation.AddFileIDs(ids...)
+	return tcsu
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (tcsu *TrustCenterSettingUpdate) AddFiles(f ...*File) *TrustCenterSettingUpdate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return tcsu.AddFileIDs(ids...)
+}
+
+// SetLogoFileID sets the "logo_file" edge to the File entity by ID.
+func (tcsu *TrustCenterSettingUpdate) SetLogoFileID(id string) *TrustCenterSettingUpdate {
+	tcsu.mutation.SetLogoFileID(id)
+	return tcsu
+}
+
+// SetNillableLogoFileID sets the "logo_file" edge to the File entity by ID if the given value is not nil.
+func (tcsu *TrustCenterSettingUpdate) SetNillableLogoFileID(id *string) *TrustCenterSettingUpdate {
+	if id != nil {
+		tcsu = tcsu.SetLogoFileID(*id)
+	}
+	return tcsu
+}
+
+// SetLogoFile sets the "logo_file" edge to the File entity.
+func (tcsu *TrustCenterSettingUpdate) SetLogoFile(f *File) *TrustCenterSettingUpdate {
+	return tcsu.SetLogoFileID(f.ID)
 }
 
 // Mutation returns the TrustCenterSettingMutation object of the builder.
@@ -197,6 +272,33 @@ func (tcsu *TrustCenterSettingUpdate) Mutation() *TrustCenterSettingMutation {
 // ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
 func (tcsu *TrustCenterSettingUpdate) ClearTrustCenter() *TrustCenterSettingUpdate {
 	tcsu.mutation.ClearTrustCenter()
+	return tcsu
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (tcsu *TrustCenterSettingUpdate) ClearFiles() *TrustCenterSettingUpdate {
+	tcsu.mutation.ClearFiles()
+	return tcsu
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (tcsu *TrustCenterSettingUpdate) RemoveFileIDs(ids ...string) *TrustCenterSettingUpdate {
+	tcsu.mutation.RemoveFileIDs(ids...)
+	return tcsu
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (tcsu *TrustCenterSettingUpdate) RemoveFiles(f ...*File) *TrustCenterSettingUpdate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return tcsu.RemoveFileIDs(ids...)
+}
+
+// ClearLogoFile clears the "logo_file" edge to the File entity.
+func (tcsu *TrustCenterSettingUpdate) ClearLogoFile() *TrustCenterSettingUpdate {
+	tcsu.mutation.ClearLogoFile()
 	return tcsu
 }
 
@@ -257,6 +359,11 @@ func (tcsu *TrustCenterSettingUpdate) check() error {
 	if v, ok := tcsu.mutation.Overview(); ok {
 		if err := trustcentersetting.OverviewValidator(v); err != nil {
 			return &ValidationError{Name: "overview", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.overview": %w`, err)}
+		}
+	}
+	if v, ok := tcsu.mutation.LogoRemoteURL(); ok {
+		if err := trustcentersetting.LogoRemoteURLValidator(v); err != nil {
+			return &ValidationError{Name: "logo_remote_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.logo_remote_url": %w`, err)}
 		}
 	}
 	return nil
@@ -328,6 +435,12 @@ func (tcsu *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 	if tcsu.mutation.PrimaryColorCleared() {
 		_spec.ClearField(trustcentersetting.FieldPrimaryColor, field.TypeString)
 	}
+	if value, ok := tcsu.mutation.LogoRemoteURL(); ok {
+		_spec.SetField(trustcentersetting.FieldLogoRemoteURL, field.TypeString, value)
+	}
+	if tcsu.mutation.LogoRemoteURLCleared() {
+		_spec.ClearField(trustcentersetting.FieldLogoRemoteURL, field.TypeString)
+	}
 	if tcsu.mutation.TrustCenterCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
@@ -351,6 +464,85 @@ func (tcsu *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsu.schemaConfig.TrustCenterSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tcsu.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   trustcentersetting.FilesTable,
+			Columns: trustcentersetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsu.schemaConfig.TrustCenterSettingFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tcsu.mutation.RemovedFilesIDs(); len(nodes) > 0 && !tcsu.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   trustcentersetting.FilesTable,
+			Columns: trustcentersetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsu.schemaConfig.TrustCenterSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tcsu.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   trustcentersetting.FilesTable,
+			Columns: trustcentersetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsu.schemaConfig.TrustCenterSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tcsu.mutation.LogoFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.LogoFileTable,
+			Columns: []string{trustcentersetting.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsu.schemaConfig.TrustCenterSetting
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tcsu.mutation.LogoFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.LogoFileTable,
+			Columns: []string{trustcentersetting.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tcsu.schemaConfig.TrustCenterSetting
@@ -535,9 +727,83 @@ func (tcsuo *TrustCenterSettingUpdateOne) ClearPrimaryColor() *TrustCenterSettin
 	return tcsuo
 }
 
+// SetLogoRemoteURL sets the "logo_remote_url" field.
+func (tcsuo *TrustCenterSettingUpdateOne) SetLogoRemoteURL(s string) *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.SetLogoRemoteURL(s)
+	return tcsuo
+}
+
+// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
+func (tcsuo *TrustCenterSettingUpdateOne) SetNillableLogoRemoteURL(s *string) *TrustCenterSettingUpdateOne {
+	if s != nil {
+		tcsuo.SetLogoRemoteURL(*s)
+	}
+	return tcsuo
+}
+
+// ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
+func (tcsuo *TrustCenterSettingUpdateOne) ClearLogoRemoteURL() *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.ClearLogoRemoteURL()
+	return tcsuo
+}
+
+// SetLogoLocalFileID sets the "logo_local_file_id" field.
+func (tcsuo *TrustCenterSettingUpdateOne) SetLogoLocalFileID(s string) *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.SetLogoLocalFileID(s)
+	return tcsuo
+}
+
+// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
+func (tcsuo *TrustCenterSettingUpdateOne) SetNillableLogoLocalFileID(s *string) *TrustCenterSettingUpdateOne {
+	if s != nil {
+		tcsuo.SetLogoLocalFileID(*s)
+	}
+	return tcsuo
+}
+
+// ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
+func (tcsuo *TrustCenterSettingUpdateOne) ClearLogoLocalFileID() *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.ClearLogoLocalFileID()
+	return tcsuo
+}
+
 // SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
 func (tcsuo *TrustCenterSettingUpdateOne) SetTrustCenter(t *TrustCenter) *TrustCenterSettingUpdateOne {
 	return tcsuo.SetTrustCenterID(t.ID)
+}
+
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (tcsuo *TrustCenterSettingUpdateOne) AddFileIDs(ids ...string) *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.AddFileIDs(ids...)
+	return tcsuo
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (tcsuo *TrustCenterSettingUpdateOne) AddFiles(f ...*File) *TrustCenterSettingUpdateOne {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return tcsuo.AddFileIDs(ids...)
+}
+
+// SetLogoFileID sets the "logo_file" edge to the File entity by ID.
+func (tcsuo *TrustCenterSettingUpdateOne) SetLogoFileID(id string) *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.SetLogoFileID(id)
+	return tcsuo
+}
+
+// SetNillableLogoFileID sets the "logo_file" edge to the File entity by ID if the given value is not nil.
+func (tcsuo *TrustCenterSettingUpdateOne) SetNillableLogoFileID(id *string) *TrustCenterSettingUpdateOne {
+	if id != nil {
+		tcsuo = tcsuo.SetLogoFileID(*id)
+	}
+	return tcsuo
+}
+
+// SetLogoFile sets the "logo_file" edge to the File entity.
+func (tcsuo *TrustCenterSettingUpdateOne) SetLogoFile(f *File) *TrustCenterSettingUpdateOne {
+	return tcsuo.SetLogoFileID(f.ID)
 }
 
 // Mutation returns the TrustCenterSettingMutation object of the builder.
@@ -548,6 +814,33 @@ func (tcsuo *TrustCenterSettingUpdateOne) Mutation() *TrustCenterSettingMutation
 // ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
 func (tcsuo *TrustCenterSettingUpdateOne) ClearTrustCenter() *TrustCenterSettingUpdateOne {
 	tcsuo.mutation.ClearTrustCenter()
+	return tcsuo
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (tcsuo *TrustCenterSettingUpdateOne) ClearFiles() *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.ClearFiles()
+	return tcsuo
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (tcsuo *TrustCenterSettingUpdateOne) RemoveFileIDs(ids ...string) *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.RemoveFileIDs(ids...)
+	return tcsuo
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (tcsuo *TrustCenterSettingUpdateOne) RemoveFiles(f ...*File) *TrustCenterSettingUpdateOne {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return tcsuo.RemoveFileIDs(ids...)
+}
+
+// ClearLogoFile clears the "logo_file" edge to the File entity.
+func (tcsuo *TrustCenterSettingUpdateOne) ClearLogoFile() *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.ClearLogoFile()
 	return tcsuo
 }
 
@@ -621,6 +914,11 @@ func (tcsuo *TrustCenterSettingUpdateOne) check() error {
 	if v, ok := tcsuo.mutation.Overview(); ok {
 		if err := trustcentersetting.OverviewValidator(v); err != nil {
 			return &ValidationError{Name: "overview", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.overview": %w`, err)}
+		}
+	}
+	if v, ok := tcsuo.mutation.LogoRemoteURL(); ok {
+		if err := trustcentersetting.LogoRemoteURLValidator(v); err != nil {
+			return &ValidationError{Name: "logo_remote_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.logo_remote_url": %w`, err)}
 		}
 	}
 	return nil
@@ -709,6 +1007,12 @@ func (tcsuo *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *T
 	if tcsuo.mutation.PrimaryColorCleared() {
 		_spec.ClearField(trustcentersetting.FieldPrimaryColor, field.TypeString)
 	}
+	if value, ok := tcsuo.mutation.LogoRemoteURL(); ok {
+		_spec.SetField(trustcentersetting.FieldLogoRemoteURL, field.TypeString, value)
+	}
+	if tcsuo.mutation.LogoRemoteURLCleared() {
+		_spec.ClearField(trustcentersetting.FieldLogoRemoteURL, field.TypeString)
+	}
 	if tcsuo.mutation.TrustCenterCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
@@ -732,6 +1036,85 @@ func (tcsuo *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *T
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsuo.schemaConfig.TrustCenterSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tcsuo.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   trustcentersetting.FilesTable,
+			Columns: trustcentersetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsuo.schemaConfig.TrustCenterSettingFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tcsuo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !tcsuo.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   trustcentersetting.FilesTable,
+			Columns: trustcentersetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsuo.schemaConfig.TrustCenterSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tcsuo.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   trustcentersetting.FilesTable,
+			Columns: trustcentersetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsuo.schemaConfig.TrustCenterSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tcsuo.mutation.LogoFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.LogoFileTable,
+			Columns: []string{trustcentersetting.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsuo.schemaConfig.TrustCenterSetting
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tcsuo.mutation.LogoFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.LogoFileTable,
+			Columns: []string{trustcentersetting.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tcsuo.schemaConfig.TrustCenterSetting
