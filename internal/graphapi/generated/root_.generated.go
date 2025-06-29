@@ -1303,6 +1303,7 @@ type ComplexityRoot struct {
 		StoreKey              func(childComplexity int) int
 		Tags                  func(childComplexity int) int
 		Template              func(childComplexity int) int
+		TrustCenterSetting    func(childComplexity int) int
 		URI                   func(childComplexity int) int
 		UpdatedAt             func(childComplexity int) int
 		UpdatedBy             func(childComplexity int) int
@@ -2331,7 +2332,7 @@ type ComplexityRoot struct {
 		CreateTask                         func(childComplexity int, input generated.CreateTaskInput) int
 		CreateTemplate                     func(childComplexity int, input generated.CreateTemplateInput) int
 		CreateTrustCenter                  func(childComplexity int, input generated.CreateTrustCenterInput) int
-		CreateTrustCenterSetting           func(childComplexity int, input generated.CreateTrustCenterSettingInput) int
+		CreateTrustCenterSetting           func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload) int
 		CreateUser                         func(childComplexity int, input generated.CreateUserInput, avatarFile *graphql.Upload) int
 		CreateUserSetting                  func(childComplexity int, input generated.CreateUserSettingInput) int
 		DeleteAPIToken                     func(childComplexity int, id string) int
@@ -2426,7 +2427,7 @@ type ComplexityRoot struct {
 		UpdateTaskComment                  func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateTemplate                     func(childComplexity int, id string, input generated.UpdateTemplateInput) int
 		UpdateTrustCenter                  func(childComplexity int, id string, input generated.UpdateTrustCenterInput) int
-		UpdateTrustCenterSetting           func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput) int
+		UpdateTrustCenterSetting           func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload) int
 		UpdateUser                         func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) int
 		UpdateUserSetting                  func(childComplexity int, id string, input generated.UpdateUserSettingInput) int
 	}
@@ -4382,16 +4383,20 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterSetting struct {
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Overview      func(childComplexity int) int
-		PrimaryColor  func(childComplexity int) int
-		Title         func(childComplexity int) int
-		TrustCenter   func(childComplexity int) int
-		TrustCenterID func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		CreatedAt       func(childComplexity int) int
+		CreatedBy       func(childComplexity int) int
+		Files           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		ID              func(childComplexity int) int
+		LogoFile        func(childComplexity int) int
+		LogoLocalFileID func(childComplexity int) int
+		LogoRemoteURL   func(childComplexity int) int
+		Overview        func(childComplexity int) int
+		PrimaryColor    func(childComplexity int) int
+		Title           func(childComplexity int) int
+		TrustCenter     func(childComplexity int) int
+		TrustCenterID   func(childComplexity int) int
+		UpdatedAt       func(childComplexity int) int
+		UpdatedBy       func(childComplexity int) int
 	}
 
 	TrustCenterSettingBulkCreatePayload struct {
@@ -4418,18 +4423,20 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterSettingHistory struct {
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		HistoryTime   func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Operation     func(childComplexity int) int
-		Overview      func(childComplexity int) int
-		PrimaryColor  func(childComplexity int) int
-		Ref           func(childComplexity int) int
-		Title         func(childComplexity int) int
-		TrustCenterID func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		CreatedAt       func(childComplexity int) int
+		CreatedBy       func(childComplexity int) int
+		HistoryTime     func(childComplexity int) int
+		ID              func(childComplexity int) int
+		LogoLocalFileID func(childComplexity int) int
+		LogoRemoteURL   func(childComplexity int) int
+		Operation       func(childComplexity int) int
+		Overview        func(childComplexity int) int
+		PrimaryColor    func(childComplexity int) int
+		Ref             func(childComplexity int) int
+		Title           func(childComplexity int) int
+		TrustCenterID   func(childComplexity int) int
+		UpdatedAt       func(childComplexity int) int
+		UpdatedBy       func(childComplexity int) int
 	}
 
 	TrustCenterSettingHistoryConnection struct {
@@ -10668,6 +10675,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.File.Template(childComplexity), true
 
+	case "File.trustCenterSetting":
+		if e.complexity.File.TrustCenterSetting == nil {
+			break
+		}
+
+		return e.complexity.File.TrustCenterSetting(childComplexity), true
+
 	case "File.uri":
 		if e.complexity.File.URI == nil {
 			break
@@ -16337,7 +16351,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateTrustCenterSetting(childComplexity, args["input"].(generated.CreateTrustCenterSettingInput)), true
+		return e.complexity.Mutation.CreateTrustCenterSetting(childComplexity, args["input"].(generated.CreateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload)), true
 
 	case "Mutation.createUser":
 		if e.complexity.Mutation.CreateUser == nil {
@@ -17477,7 +17491,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateTrustCenterSetting(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterSettingInput)), true
+		return e.complexity.Mutation.UpdateTrustCenterSetting(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload)), true
 
 	case "Mutation.updateUser":
 		if e.complexity.Mutation.UpdateUser == nil {
@@ -29135,12 +29149,45 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterSetting.CreatedBy(childComplexity), true
 
+	case "TrustCenterSetting.files":
+		if e.complexity.TrustCenterSetting.Files == nil {
+			break
+		}
+
+		args, err := ec.field_TrustCenterSetting_files_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.TrustCenterSetting.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
+
 	case "TrustCenterSetting.id":
 		if e.complexity.TrustCenterSetting.ID == nil {
 			break
 		}
 
 		return e.complexity.TrustCenterSetting.ID(childComplexity), true
+
+	case "TrustCenterSetting.logoFile":
+		if e.complexity.TrustCenterSetting.LogoFile == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSetting.LogoFile(childComplexity), true
+
+	case "TrustCenterSetting.logoLocalFileID":
+		if e.complexity.TrustCenterSetting.LogoLocalFileID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSetting.LogoLocalFileID(childComplexity), true
+
+	case "TrustCenterSetting.logoRemoteURL":
+		if e.complexity.TrustCenterSetting.LogoRemoteURL == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSetting.LogoRemoteURL(childComplexity), true
 
 	case "TrustCenterSetting.overview":
 		if e.complexity.TrustCenterSetting.Overview == nil {
@@ -29274,6 +29321,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterSettingHistory.ID(childComplexity), true
+
+	case "TrustCenterSettingHistory.logoLocalFileID":
+		if e.complexity.TrustCenterSettingHistory.LogoLocalFileID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSettingHistory.LogoLocalFileID(childComplexity), true
+
+	case "TrustCenterSettingHistory.logoRemoteURL":
+		if e.complexity.TrustCenterSettingHistory.LogoRemoteURL == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSettingHistory.LogoRemoteURL(childComplexity), true
 
 	case "TrustCenterSettingHistory.operation":
 		if e.complexity.TrustCenterSettingHistory.Operation == nil {
@@ -41216,6 +41277,7 @@ input CreateFileInput {
   programIDs: [ID!]
   evidenceIDs: [ID!]
   eventIDs: [ID!]
+  trustCenterSettingIDs: [ID!]
 }
 """
 CreateGroupInput is used for create Group object.
@@ -42522,7 +42584,13 @@ input CreateTrustCenterSettingInput {
   primary color for the trust center
   """
   primaryColor: String
+  """
+  URL of the logo
+  """
+  logoRemoteURL: String
   trustCenterID: ID
+  fileIDs: [ID!]
+  logoFileID: ID
 }
 """
 CreateUserInput is used for create User object.
@@ -47673,6 +47741,7 @@ type File implements Node {
     """
     where: EventWhereInput
   ): EventConnection!
+  trustCenterSetting: [TrustCenterSetting!]
 }
 """
 A connection to a list of items.
@@ -48545,6 +48614,11 @@ input FileWhereInput {
   """
   hasEvents: Boolean
   hasEventsWith: [EventWhereInput!]
+  """
+  trust_center_setting edge predicates
+  """
+  hasTrustCenterSetting: Boolean
+  hasTrustCenterSettingWith: [TrustCenterSettingWhereInput!]
 }
 type Group implements Node {
   id: ID!
@@ -77195,7 +77269,47 @@ type TrustCenterSetting implements Node {
   primary color for the trust center
   """
   primaryColor: String
+  """
+  URL of the logo
+  """
+  logoRemoteURL: String
+  """
+  The local logo file id, takes precedence over the logo remote URL
+  """
+  logoLocalFileID: ID
   trustCenter: TrustCenter
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+  logoFile: File
 }
 """
 A connection to a list of items.
@@ -77252,6 +77366,14 @@ type TrustCenterSettingHistory implements Node {
   primary color for the trust center
   """
   primaryColor: String
+  """
+  URL of the logo
+  """
+  logoRemoteURL: String
+  """
+  The local logo file id, takes precedence over the logo remote URL
+  """
+  logoLocalFileID: String
 }
 """
 A connection to a list of items.
@@ -77503,6 +77625,42 @@ input TrustCenterSettingHistoryWhereInput {
   primaryColorNotNil: Boolean
   primaryColorEqualFold: String
   primaryColorContainsFold: String
+  """
+  logo_remote_url field predicates
+  """
+  logoRemoteURL: String
+  logoRemoteURLNEQ: String
+  logoRemoteURLIn: [String!]
+  logoRemoteURLNotIn: [String!]
+  logoRemoteURLGT: String
+  logoRemoteURLGTE: String
+  logoRemoteURLLT: String
+  logoRemoteURLLTE: String
+  logoRemoteURLContains: String
+  logoRemoteURLHasPrefix: String
+  logoRemoteURLHasSuffix: String
+  logoRemoteURLIsNil: Boolean
+  logoRemoteURLNotNil: Boolean
+  logoRemoteURLEqualFold: String
+  logoRemoteURLContainsFold: String
+  """
+  logo_local_file_id field predicates
+  """
+  logoLocalFileID: String
+  logoLocalFileIDNEQ: String
+  logoLocalFileIDIn: [String!]
+  logoLocalFileIDNotIn: [String!]
+  logoLocalFileIDGT: String
+  logoLocalFileIDGTE: String
+  logoLocalFileIDLT: String
+  logoLocalFileIDLTE: String
+  logoLocalFileIDContains: String
+  logoLocalFileIDHasPrefix: String
+  logoLocalFileIDHasSuffix: String
+  logoLocalFileIDIsNil: Boolean
+  logoLocalFileIDNotNil: Boolean
+  logoLocalFileIDEqualFold: String
+  logoLocalFileIDContainsFold: String
 }
 """
 Ordering options for TrustCenterSetting connections
@@ -77680,10 +77838,56 @@ input TrustCenterSettingWhereInput {
   primaryColorEqualFold: String
   primaryColorContainsFold: String
   """
+  logo_remote_url field predicates
+  """
+  logoRemoteURL: String
+  logoRemoteURLNEQ: String
+  logoRemoteURLIn: [String!]
+  logoRemoteURLNotIn: [String!]
+  logoRemoteURLGT: String
+  logoRemoteURLGTE: String
+  logoRemoteURLLT: String
+  logoRemoteURLLTE: String
+  logoRemoteURLContains: String
+  logoRemoteURLHasPrefix: String
+  logoRemoteURLHasSuffix: String
+  logoRemoteURLIsNil: Boolean
+  logoRemoteURLNotNil: Boolean
+  logoRemoteURLEqualFold: String
+  logoRemoteURLContainsFold: String
+  """
+  logo_local_file_id field predicates
+  """
+  logoLocalFileID: ID
+  logoLocalFileIDNEQ: ID
+  logoLocalFileIDIn: [ID!]
+  logoLocalFileIDNotIn: [ID!]
+  logoLocalFileIDGT: ID
+  logoLocalFileIDGTE: ID
+  logoLocalFileIDLT: ID
+  logoLocalFileIDLTE: ID
+  logoLocalFileIDContains: ID
+  logoLocalFileIDHasPrefix: ID
+  logoLocalFileIDHasSuffix: ID
+  logoLocalFileIDIsNil: Boolean
+  logoLocalFileIDNotNil: Boolean
+  logoLocalFileIDEqualFold: ID
+  logoLocalFileIDContainsFold: ID
+  """
   trust_center edge predicates
   """
   hasTrustCenter: Boolean
   hasTrustCenterWith: [TrustCenterWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
+  """
+  logo_file edge predicates
+  """
+  hasLogoFile: Boolean
+  hasLogoFileWith: [FileWhereInput!]
 }
 """
 TrustCenterWhereInput is used for filtering TrustCenter objects.
@@ -78859,6 +79063,9 @@ input UpdateFileInput {
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean
+  addTrustCenterSettingIDs: [ID!]
+  removeTrustCenterSettingIDs: [ID!]
+  clearTrustCenterSetting: Boolean
 }
 """
 UpdateGroupInput is used for update Group object.
@@ -80683,8 +80890,18 @@ input UpdateTrustCenterSettingInput {
   """
   primaryColor: String
   clearPrimaryColor: Boolean
+  """
+  URL of the logo
+  """
+  logoRemoteURL: String
+  clearLogoRemoteURL: Boolean
   trustCenterID: ID
   clearTrustCenter: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
+  logoFileID: ID
+  clearLogoFile: Boolean
 }
 """
 UpdateUserInput is used for update User object.
@@ -88061,6 +88278,7 @@ extend type Mutation{
         values of the trustCenterSetting
         """
         input: CreateTrustCenterSettingInput!
+        logoFile: Upload
     ): TrustCenterSettingCreatePayload!
     """
     Update an existing trustCenterSetting
@@ -88074,6 +88292,7 @@ extend type Mutation{
         New values for the trustCenterSetting
         """
         input: UpdateTrustCenterSettingInput!
+        logoFile: Upload
     ): TrustCenterSettingUpdatePayload!
     """
     Delete an existing trustCenterSetting

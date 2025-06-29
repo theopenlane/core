@@ -195,6 +195,34 @@ func (tcshc *TrustCenterSettingHistoryCreate) SetNillablePrimaryColor(s *string)
 	return tcshc
 }
 
+// SetLogoRemoteURL sets the "logo_remote_url" field.
+func (tcshc *TrustCenterSettingHistoryCreate) SetLogoRemoteURL(s string) *TrustCenterSettingHistoryCreate {
+	tcshc.mutation.SetLogoRemoteURL(s)
+	return tcshc
+}
+
+// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
+func (tcshc *TrustCenterSettingHistoryCreate) SetNillableLogoRemoteURL(s *string) *TrustCenterSettingHistoryCreate {
+	if s != nil {
+		tcshc.SetLogoRemoteURL(*s)
+	}
+	return tcshc
+}
+
+// SetLogoLocalFileID sets the "logo_local_file_id" field.
+func (tcshc *TrustCenterSettingHistoryCreate) SetLogoLocalFileID(s string) *TrustCenterSettingHistoryCreate {
+	tcshc.mutation.SetLogoLocalFileID(s)
+	return tcshc
+}
+
+// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
+func (tcshc *TrustCenterSettingHistoryCreate) SetNillableLogoLocalFileID(s *string) *TrustCenterSettingHistoryCreate {
+	if s != nil {
+		tcshc.SetLogoLocalFileID(*s)
+	}
+	return tcshc
+}
+
 // SetID sets the "id" field.
 func (tcshc *TrustCenterSettingHistoryCreate) SetID(s string) *TrustCenterSettingHistoryCreate {
 	tcshc.mutation.SetID(s)
@@ -362,6 +390,14 @@ func (tcshc *TrustCenterSettingHistoryCreate) createSpec() (*TrustCenterSettingH
 	if value, ok := tcshc.mutation.PrimaryColor(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldPrimaryColor, field.TypeString, value)
 		_node.PrimaryColor = value
+	}
+	if value, ok := tcshc.mutation.LogoRemoteURL(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldLogoRemoteURL, field.TypeString, value)
+		_node.LogoRemoteURL = &value
+	}
+	if value, ok := tcshc.mutation.LogoLocalFileID(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldLogoLocalFileID, field.TypeString, value)
+		_node.LogoLocalFileID = &value
 	}
 	return _node, _spec
 }

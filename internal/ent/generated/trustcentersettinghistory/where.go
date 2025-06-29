@@ -125,6 +125,16 @@ func PrimaryColor(v string) predicate.TrustCenterSettingHistory {
 	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldPrimaryColor, v))
 }
 
+// LogoRemoteURL applies equality check predicate on the "logo_remote_url" field. It's identical to LogoRemoteURLEQ.
+func LogoRemoteURL(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldLogoRemoteURL, v))
+}
+
+// LogoLocalFileID applies equality check predicate on the "logo_local_file_id" field. It's identical to LogoLocalFileIDEQ.
+func LogoLocalFileID(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldLogoLocalFileID, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.TrustCenterSettingHistory {
 	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -933,6 +943,156 @@ func PrimaryColorEqualFold(v string) predicate.TrustCenterSettingHistory {
 // PrimaryColorContainsFold applies the ContainsFold predicate on the "primary_color" field.
 func PrimaryColorContainsFold(v string) predicate.TrustCenterSettingHistory {
 	return predicate.TrustCenterSettingHistory(sql.FieldContainsFold(FieldPrimaryColor, v))
+}
+
+// LogoRemoteURLEQ applies the EQ predicate on the "logo_remote_url" field.
+func LogoRemoteURLEQ(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLNEQ applies the NEQ predicate on the "logo_remote_url" field.
+func LogoRemoteURLNEQ(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNEQ(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLIn applies the In predicate on the "logo_remote_url" field.
+func LogoRemoteURLIn(vs ...string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldIn(FieldLogoRemoteURL, vs...))
+}
+
+// LogoRemoteURLNotIn applies the NotIn predicate on the "logo_remote_url" field.
+func LogoRemoteURLNotIn(vs ...string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNotIn(FieldLogoRemoteURL, vs...))
+}
+
+// LogoRemoteURLGT applies the GT predicate on the "logo_remote_url" field.
+func LogoRemoteURLGT(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldGT(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLGTE applies the GTE predicate on the "logo_remote_url" field.
+func LogoRemoteURLGTE(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldGTE(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLLT applies the LT predicate on the "logo_remote_url" field.
+func LogoRemoteURLLT(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldLT(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLLTE applies the LTE predicate on the "logo_remote_url" field.
+func LogoRemoteURLLTE(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldLTE(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLContains applies the Contains predicate on the "logo_remote_url" field.
+func LogoRemoteURLContains(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldContains(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLHasPrefix applies the HasPrefix predicate on the "logo_remote_url" field.
+func LogoRemoteURLHasPrefix(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldHasPrefix(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLHasSuffix applies the HasSuffix predicate on the "logo_remote_url" field.
+func LogoRemoteURLHasSuffix(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldHasSuffix(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLIsNil applies the IsNil predicate on the "logo_remote_url" field.
+func LogoRemoteURLIsNil() predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldIsNull(FieldLogoRemoteURL))
+}
+
+// LogoRemoteURLNotNil applies the NotNil predicate on the "logo_remote_url" field.
+func LogoRemoteURLNotNil() predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNotNull(FieldLogoRemoteURL))
+}
+
+// LogoRemoteURLEqualFold applies the EqualFold predicate on the "logo_remote_url" field.
+func LogoRemoteURLEqualFold(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEqualFold(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLContainsFold applies the ContainsFold predicate on the "logo_remote_url" field.
+func LogoRemoteURLContainsFold(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldContainsFold(FieldLogoRemoteURL, v))
+}
+
+// LogoLocalFileIDEQ applies the EQ predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDEQ(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDNEQ applies the NEQ predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDNEQ(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNEQ(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDIn applies the In predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDIn(vs ...string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldIn(FieldLogoLocalFileID, vs...))
+}
+
+// LogoLocalFileIDNotIn applies the NotIn predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDNotIn(vs ...string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNotIn(FieldLogoLocalFileID, vs...))
+}
+
+// LogoLocalFileIDGT applies the GT predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDGT(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldGT(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDGTE applies the GTE predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDGTE(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldGTE(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDLT applies the LT predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDLT(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldLT(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDLTE applies the LTE predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDLTE(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldLTE(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDContains applies the Contains predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDContains(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldContains(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDHasPrefix applies the HasPrefix predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDHasPrefix(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldHasPrefix(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDHasSuffix applies the HasSuffix predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDHasSuffix(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldHasSuffix(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDIsNil applies the IsNil predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDIsNil() predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldIsNull(FieldLogoLocalFileID))
+}
+
+// LogoLocalFileIDNotNil applies the NotNil predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDNotNil() predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNotNull(FieldLogoLocalFileID))
+}
+
+// LogoLocalFileIDEqualFold applies the EqualFold predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDEqualFold(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEqualFold(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDContainsFold applies the ContainsFold predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDContainsFold(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldContainsFold(FieldLogoLocalFileID, v))
 }
 
 // And groups predicates with the AND operator between them.
