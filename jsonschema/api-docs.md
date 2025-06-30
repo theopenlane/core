@@ -809,6 +809,9 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**encryptionKey**|`string`|||
 |**domain**|`string`|||
 |**maxAge**|`integer`|||
+|**secure**|`boolean`|||
+|**httpOnly**|`boolean`|||
+|**sameSite**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="totp"></a>

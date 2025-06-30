@@ -101,6 +101,9 @@ authz:
 sessions:
   encryptionKey: encryptionsecret
   signingKey: my-signing-secret
+  httpOnly: true
+  sameSite: 'Lax'
+  secure: false # set to true in production
 
 # email settings
 email:

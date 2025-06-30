@@ -1235,6 +1235,15 @@
         },
         "maxAge": {
           "type": "integer"
+        },
+        "secure": {
+          "type": "boolean"
+        },
+        "httpOnly": {
+          "type": "boolean"
+        },
+        "sameSite": {
+          "type": "string"
         }
       },
       "additionalProperties": false,
