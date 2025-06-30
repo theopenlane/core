@@ -3714,6 +3714,7 @@ type ComplexityRoot struct {
 		Cron          func(childComplexity int) int
 		Description   func(childComplexity int) int
 		DisplayID     func(childComplexity int) int
+		DownloadURL   func(childComplexity int) int
 		ID            func(childComplexity int) int
 		JobType       func(childComplexity int) int
 		Owner         func(childComplexity int) int
@@ -3757,6 +3758,7 @@ type ComplexityRoot struct {
 		Cron          func(childComplexity int) int
 		Description   func(childComplexity int) int
 		DisplayID     func(childComplexity int) int
+		DownloadURL   func(childComplexity int) int
 		HistoryTime   func(childComplexity int) int
 		ID            func(childComplexity int) int
 		JobType       func(childComplexity int) int
@@ -25879,6 +25881,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJob.DisplayID(childComplexity), true
 
+	case "ScheduledJob.downloadURL":
+		if e.complexity.ScheduledJob.DownloadURL == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.DownloadURL(childComplexity), true
+
 	case "ScheduledJob.id":
 		if e.complexity.ScheduledJob.ID == nil {
 			break
@@ -26053,6 +26062,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScheduledJobHistory.DisplayID(childComplexity), true
+
+	case "ScheduledJobHistory.downloadURL":
+		if e.complexity.ScheduledJobHistory.DownloadURL == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.DownloadURL(childComplexity), true
 
 	case "ScheduledJobHistory.historyTime":
 		if e.complexity.ScheduledJobHistory.HistoryTime == nil {
@@ -42185,6 +42201,10 @@ input CreateScheduledJobInput {
   the script to run
   """
   script: String
+  """
+  the url from where to download the script from
+  """
+  downloadURL: String!
   """
   the configuration to run this job
   """
@@ -71299,6 +71319,10 @@ type ScheduledJob implements Node {
   """
   script: String
   """
+  the url from where to download the script from
+  """
+  downloadURL: String!
+  """
   the configuration to run this job
   """
   configuration: JobConfiguration!
@@ -71383,6 +71407,10 @@ type ScheduledJobHistory implements Node {
   the script to run
   """
   script: String
+  """
+  the url from where to download the script from
+  """
+  downloadURL: String!
   """
   the configuration to run this job
   """
@@ -80227,6 +80255,10 @@ input UpdateScheduledJobInput {
   """
   script: String
   clearScript: Boolean
+  """
+  the url from where to download the script from
+  """
+  downloadURL: String
   """
   the configuration to run this job
   """

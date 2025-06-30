@@ -213,6 +213,20 @@ func (sju *ScheduledJobUpdate) ClearScript() *ScheduledJobUpdate {
 	return sju
 }
 
+// SetDownloadURL sets the "download_url" field.
+func (sju *ScheduledJobUpdate) SetDownloadURL(s string) *ScheduledJobUpdate {
+	sju.mutation.SetDownloadURL(s)
+	return sju
+}
+
+// SetNillableDownloadURL sets the "download_url" field if the given value is not nil.
+func (sju *ScheduledJobUpdate) SetNillableDownloadURL(s *string) *ScheduledJobUpdate {
+	if s != nil {
+		sju.SetDownloadURL(*s)
+	}
+	return sju
+}
+
 // SetConfiguration sets the "configuration" field.
 func (sju *ScheduledJobUpdate) SetConfiguration(mc models.JobConfiguration) *ScheduledJobUpdate {
 	sju.mutation.SetConfiguration(mc)
@@ -429,6 +443,9 @@ func (sju *ScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if sju.mutation.ScriptCleared() {
 		_spec.ClearField(scheduledjob.FieldScript, field.TypeString)
+	}
+	if value, ok := sju.mutation.DownloadURL(); ok {
+		_spec.SetField(scheduledjob.FieldDownloadURL, field.TypeString, value)
 	}
 	if value, ok := sju.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjob.FieldConfiguration, field.TypeJSON, value)
@@ -678,6 +695,20 @@ func (sjuo *ScheduledJobUpdateOne) ClearScript() *ScheduledJobUpdateOne {
 	return sjuo
 }
 
+// SetDownloadURL sets the "download_url" field.
+func (sjuo *ScheduledJobUpdateOne) SetDownloadURL(s string) *ScheduledJobUpdateOne {
+	sjuo.mutation.SetDownloadURL(s)
+	return sjuo
+}
+
+// SetNillableDownloadURL sets the "download_url" field if the given value is not nil.
+func (sjuo *ScheduledJobUpdateOne) SetNillableDownloadURL(s *string) *ScheduledJobUpdateOne {
+	if s != nil {
+		sjuo.SetDownloadURL(*s)
+	}
+	return sjuo
+}
+
 // SetConfiguration sets the "configuration" field.
 func (sjuo *ScheduledJobUpdateOne) SetConfiguration(mc models.JobConfiguration) *ScheduledJobUpdateOne {
 	sjuo.mutation.SetConfiguration(mc)
@@ -924,6 +955,9 @@ func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *Schedule
 	}
 	if sjuo.mutation.ScriptCleared() {
 		_spec.ClearField(scheduledjob.FieldScript, field.TypeString)
+	}
+	if value, ok := sjuo.mutation.DownloadURL(); ok {
+		_spec.SetField(scheduledjob.FieldDownloadURL, field.TypeString, value)
 	}
 	if value, ok := sjuo.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjob.FieldConfiguration, field.TypeJSON, value)

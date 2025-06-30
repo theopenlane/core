@@ -5673,6 +5673,8 @@ type CreateScheduledJobInput struct {
 	JobType *enums.JobType `json:"jobType,omitempty"`
 	// the script to run
 	Script *string `json:"script,omitempty"`
+	// the url from where to download the script from
+	DownloadURL string `json:"downloadURL"`
 	// the configuration to run this job
 	Configuration models.JobConfiguration `json:"configuration"`
 	// the schedule to run this job
@@ -21083,6 +21085,8 @@ type ScheduledJob struct {
 	JobType enums.JobType `json:"jobType"`
 	// the script to run
 	Script *string `json:"script,omitempty"`
+	// the url from where to download the script from
+	DownloadURL string `json:"downloadURL"`
 	// the configuration to run this job
 	Configuration models.JobConfiguration `json:"configuration"`
 	// the schedule to run this job
@@ -21155,6 +21159,8 @@ type ScheduledJobHistory struct {
 	JobType enums.JobType `json:"jobType"`
 	// the script to run
 	Script *string `json:"script,omitempty"`
+	// the url from where to download the script from
+	DownloadURL string `json:"downloadURL"`
 	// the configuration to run this job
 	Configuration models.JobConfiguration `json:"configuration"`
 	// the schedule to run this job
@@ -27502,6 +27508,8 @@ type UpdateScheduledJobInput struct {
 	// the script to run
 	Script      *string `json:"script,omitempty"`
 	ClearScript *bool   `json:"clearScript,omitempty"`
+	// the url from where to download the script from
+	DownloadURL *string `json:"downloadURL,omitempty"`
 	// the configuration to run this job
 	Configuration *models.JobConfiguration `json:"configuration,omitempty"`
 	// the schedule to run this job

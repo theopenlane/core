@@ -3980,6 +3980,7 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "job_type", Type: field.TypeEnum, Enums: []string{"SSL"}, Default: "SSL"},
 		{Name: "script", Type: field.TypeString, Nullable: true},
+		{Name: "download_url", Type: field.TypeString},
 		{Name: "configuration", Type: field.TypeJSON},
 		{Name: "cadence", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
@@ -3993,7 +3994,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "scheduled_jobs_organizations_jobs",
-				Columns:    []*schema.Column{ScheduledJobsColumns[17]},
+				Columns:    []*schema.Column{ScheduledJobsColumns[18]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -4007,12 +4008,12 @@ var (
 			{
 				Name:    "scheduledjob_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ScheduledJobsColumns[7], ScheduledJobsColumns[17]},
+				Columns: []*schema.Column{ScheduledJobsColumns[7], ScheduledJobsColumns[18]},
 			},
 			{
 				Name:    "scheduledjob_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduledJobsColumns[17]},
+				Columns: []*schema.Column{ScheduledJobsColumns[18]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4039,6 +4040,7 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "job_type", Type: field.TypeEnum, Enums: []string{"SSL"}, Default: "SSL"},
 		{Name: "script", Type: field.TypeString, Nullable: true},
+		{Name: "download_url", Type: field.TypeString},
 		{Name: "configuration", Type: field.TypeJSON},
 		{Name: "cadence", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},

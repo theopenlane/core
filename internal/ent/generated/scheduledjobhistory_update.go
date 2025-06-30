@@ -212,6 +212,20 @@ func (sjhu *ScheduledJobHistoryUpdate) ClearScript() *ScheduledJobHistoryUpdate 
 	return sjhu
 }
 
+// SetDownloadURL sets the "download_url" field.
+func (sjhu *ScheduledJobHistoryUpdate) SetDownloadURL(s string) *ScheduledJobHistoryUpdate {
+	sjhu.mutation.SetDownloadURL(s)
+	return sjhu
+}
+
+// SetNillableDownloadURL sets the "download_url" field if the given value is not nil.
+func (sjhu *ScheduledJobHistoryUpdate) SetNillableDownloadURL(s *string) *ScheduledJobHistoryUpdate {
+	if s != nil {
+		sjhu.SetDownloadURL(*s)
+	}
+	return sjhu
+}
+
 // SetConfiguration sets the "configuration" field.
 func (sjhu *ScheduledJobHistoryUpdate) SetConfiguration(mc models.JobConfiguration) *ScheduledJobHistoryUpdate {
 	sjhu.mutation.SetConfiguration(mc)
@@ -415,6 +429,9 @@ func (sjhu *ScheduledJobHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	}
 	if sjhu.mutation.ScriptCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldScript, field.TypeString)
+	}
+	if value, ok := sjhu.mutation.DownloadURL(); ok {
+		_spec.SetField(scheduledjobhistory.FieldDownloadURL, field.TypeString, value)
 	}
 	if value, ok := sjhu.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjobhistory.FieldConfiguration, field.TypeJSON, value)
@@ -630,6 +647,20 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) SetNillableScript(s *string) *Schedul
 // ClearScript clears the value of the "script" field.
 func (sjhuo *ScheduledJobHistoryUpdateOne) ClearScript() *ScheduledJobHistoryUpdateOne {
 	sjhuo.mutation.ClearScript()
+	return sjhuo
+}
+
+// SetDownloadURL sets the "download_url" field.
+func (sjhuo *ScheduledJobHistoryUpdateOne) SetDownloadURL(s string) *ScheduledJobHistoryUpdateOne {
+	sjhuo.mutation.SetDownloadURL(s)
+	return sjhuo
+}
+
+// SetNillableDownloadURL sets the "download_url" field if the given value is not nil.
+func (sjhuo *ScheduledJobHistoryUpdateOne) SetNillableDownloadURL(s *string) *ScheduledJobHistoryUpdateOne {
+	if s != nil {
+		sjhuo.SetDownloadURL(*s)
+	}
 	return sjhuo
 }
 
@@ -866,6 +897,9 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	if sjhuo.mutation.ScriptCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldScript, field.TypeString)
+	}
+	if value, ok := sjhuo.mutation.DownloadURL(); ok {
+		_spec.SetField(scheduledjobhistory.FieldDownloadURL, field.TypeString, value)
 	}
 	if value, ok := sjhuo.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjobhistory.FieldConfiguration, field.TypeJSON, value)

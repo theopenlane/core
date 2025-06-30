@@ -8560,6 +8560,10 @@ func (m *ScheduledJobMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetScript(script)
 	}
 
+	if downloadURL, exists := m.DownloadURL(); exists {
+		create = create.SetDownloadURL(downloadURL)
+	}
+
 	if configuration, exists := m.Configuration(); exists {
 		create = create.SetConfiguration(configuration)
 	}
@@ -8686,6 +8690,12 @@ func (m *ScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetScript(scheduledjob.Script)
 		}
 
+		if downloadURL, exists := m.DownloadURL(); exists {
+			create = create.SetDownloadURL(downloadURL)
+		} else {
+			create = create.SetDownloadURL(scheduledjob.DownloadURL)
+		}
+
 		if configuration, exists := m.Configuration(); exists {
 			create = create.SetConfiguration(configuration)
 		} else {
@@ -8750,6 +8760,7 @@ func (m *ScheduledJobMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetDescription(scheduledjob.Description).
 			SetJobType(scheduledjob.JobType).
 			SetScript(scheduledjob.Script).
+			SetDownloadURL(scheduledjob.DownloadURL).
 			SetConfiguration(scheduledjob.Configuration).
 			SetCadence(scheduledjob.Cadence).
 			SetNillableCron(scheduledjob.Cron).

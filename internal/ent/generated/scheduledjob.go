@@ -49,6 +49,8 @@ type ScheduledJob struct {
 	JobType enums.JobType `json:"job_type,omitempty"`
 	// the script to run
 	Script string `json:"script,omitempty"`
+	// the url from where to download the script from
+	DownloadURL string `json:"download_url,omitempty"`
 	// the configuration to run this job
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
 	// the schedule to run this job
@@ -94,7 +96,7 @@ func (*ScheduledJob) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case scheduledjob.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case scheduledjob.FieldID, scheduledjob.FieldCreatedBy, scheduledjob.FieldUpdatedBy, scheduledjob.FieldDeletedBy, scheduledjob.FieldDisplayID, scheduledjob.FieldOwnerID, scheduledjob.FieldTitle, scheduledjob.FieldDescription, scheduledjob.FieldJobType, scheduledjob.FieldScript:
+		case scheduledjob.FieldID, scheduledjob.FieldCreatedBy, scheduledjob.FieldUpdatedBy, scheduledjob.FieldDeletedBy, scheduledjob.FieldDisplayID, scheduledjob.FieldOwnerID, scheduledjob.FieldTitle, scheduledjob.FieldDescription, scheduledjob.FieldJobType, scheduledjob.FieldScript, scheduledjob.FieldDownloadURL:
 			values[i] = new(sql.NullString)
 		case scheduledjob.FieldCreatedAt, scheduledjob.FieldUpdatedAt, scheduledjob.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -205,6 +207,12 @@ func (sj *ScheduledJob) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				sj.Script = value.String
 			}
+		case scheduledjob.FieldDownloadURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field download_url", values[i])
+			} else if value.Valid {
+				sj.DownloadURL = value.String
+			}
 		case scheduledjob.FieldConfiguration:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field configuration", values[i])
@@ -310,6 +318,9 @@ func (sj *ScheduledJob) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("script=")
 	builder.WriteString(sj.Script)
+	builder.WriteString(", ")
+	builder.WriteString("download_url=")
+	builder.WriteString(sj.DownloadURL)
 	builder.WriteString(", ")
 	builder.WriteString("configuration=")
 	builder.WriteString(fmt.Sprintf("%v", sj.Configuration))

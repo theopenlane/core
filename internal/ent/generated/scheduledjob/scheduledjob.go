@@ -46,6 +46,8 @@ const (
 	FieldJobType = "job_type"
 	// FieldScript holds the string denoting the script field in the database.
 	FieldScript = "script"
+	// FieldDownloadURL holds the string denoting the download_url field in the database.
+	FieldDownloadURL = "download_url"
 	// FieldConfiguration holds the string denoting the configuration field in the database.
 	FieldConfiguration = "configuration"
 	// FieldCadence holds the string denoting the cadence field in the database.
@@ -82,6 +84,7 @@ var Columns = []string{
 	FieldDescription,
 	FieldJobType,
 	FieldScript,
+	FieldDownloadURL,
 	FieldConfiguration,
 	FieldCadence,
 	FieldCron,
@@ -207,6 +210,11 @@ func ByJobType(opts ...sql.OrderTermOption) OrderOption {
 // ByScript orders the results by the script field.
 func ByScript(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScript, opts...).ToFunc()
+}
+
+// ByDownloadURL orders the results by the download_url field.
+func ByDownloadURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDownloadURL, opts...).ToFunc()
 }
 
 // ByCron orders the results by the cron field.

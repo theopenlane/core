@@ -1,2 +1,2 @@
-Tags,Title,Description,JobType,Script,Configuration,Cadence,Cron,OwnerId
-example_tags,example_title,example_description,example_jobtype,example_script,example_configuration,example_cadence,example_cron,example_ownerid
+Tags,Title,Description,JobType,Script,DownloadUrl,Configuration,Cadence,Cron,OwnerId
+example_tags,example_title,example_description,example_jobtype,example_script,example_downloadurl,example_configuration,example_cadence,example_cron,example_ownerid

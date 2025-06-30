@@ -72,6 +72,15 @@ func (ScheduledJob) Fields() []ent.Field {
 			Optional().
 			Comment("the script to run"),
 
+		field.String("download_url").
+			Annotations(
+				entgql.Skip(
+					entgql.SkipOrderField |
+						entgql.SkipWhereInput,
+				),
+			).
+			Comment("the url from where to download the script from"),
+
 		// Default config values
 		field.JSON("configuration", models.JobConfiguration{}).
 			Comment("the configuration to run this job"),

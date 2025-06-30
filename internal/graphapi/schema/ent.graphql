@@ -8989,6 +8989,10 @@ input CreateScheduledJobInput {
   """
   script: String
   """
+  the url from where to download the script from
+  """
+  downloadURL: String!
+  """
   the configuration to run this job
   """
   configuration: JobConfiguration!
@@ -38102,6 +38106,10 @@ type ScheduledJob implements Node {
   """
   script: String
   """
+  the url from where to download the script from
+  """
+  downloadURL: String!
+  """
   the configuration to run this job
   """
   configuration: JobConfiguration!
@@ -38186,6 +38194,10 @@ type ScheduledJobHistory implements Node {
   the script to run
   """
   script: String
+  """
+  the url from where to download the script from
+  """
+  downloadURL: String!
   """
   the configuration to run this job
   """
@@ -47030,6 +47042,10 @@ input UpdateScheduledJobInput {
   """
   script: String
   clearScript: Boolean
+  """
+  the url from where to download the script from
+  """
+  downloadURL: String
   """
   the configuration to run this job
   """

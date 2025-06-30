@@ -137,6 +137,11 @@ func Script(v string) predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldScript, v))
 }
 
+// DownloadURL applies equality check predicate on the "download_url" field. It's identical to DownloadURLEQ.
+func DownloadURL(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldDownloadURL, v))
+}
+
 // Cron applies equality check predicate on the "cron" field. It's identical to CronEQ.
 func Cron(v models.Cron) predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldCron, v))
@@ -1065,6 +1070,71 @@ func ScriptEqualFold(v string) predicate.ScheduledJobHistory {
 // ScriptContainsFold applies the ContainsFold predicate on the "script" field.
 func ScriptContainsFold(v string) predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldContainsFold(FieldScript, v))
+}
+
+// DownloadURLEQ applies the EQ predicate on the "download_url" field.
+func DownloadURLEQ(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldDownloadURL, v))
+}
+
+// DownloadURLNEQ applies the NEQ predicate on the "download_url" field.
+func DownloadURLNEQ(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldNEQ(FieldDownloadURL, v))
+}
+
+// DownloadURLIn applies the In predicate on the "download_url" field.
+func DownloadURLIn(vs ...string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldIn(FieldDownloadURL, vs...))
+}
+
+// DownloadURLNotIn applies the NotIn predicate on the "download_url" field.
+func DownloadURLNotIn(vs ...string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldNotIn(FieldDownloadURL, vs...))
+}
+
+// DownloadURLGT applies the GT predicate on the "download_url" field.
+func DownloadURLGT(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldGT(FieldDownloadURL, v))
+}
+
+// DownloadURLGTE applies the GTE predicate on the "download_url" field.
+func DownloadURLGTE(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldGTE(FieldDownloadURL, v))
+}
+
+// DownloadURLLT applies the LT predicate on the "download_url" field.
+func DownloadURLLT(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldLT(FieldDownloadURL, v))
+}
+
+// DownloadURLLTE applies the LTE predicate on the "download_url" field.
+func DownloadURLLTE(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldLTE(FieldDownloadURL, v))
+}
+
+// DownloadURLContains applies the Contains predicate on the "download_url" field.
+func DownloadURLContains(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldContains(FieldDownloadURL, v))
+}
+
+// DownloadURLHasPrefix applies the HasPrefix predicate on the "download_url" field.
+func DownloadURLHasPrefix(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldHasPrefix(FieldDownloadURL, v))
+}
+
+// DownloadURLHasSuffix applies the HasSuffix predicate on the "download_url" field.
+func DownloadURLHasSuffix(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldHasSuffix(FieldDownloadURL, v))
+}
+
+// DownloadURLEqualFold applies the EqualFold predicate on the "download_url" field.
+func DownloadURLEqualFold(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldEqualFold(FieldDownloadURL, v))
+}
+
+// DownloadURLContainsFold applies the ContainsFold predicate on the "download_url" field.
+func DownloadURLContainsFold(v string) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldContainsFold(FieldDownloadURL, v))
 }
 
 // CadenceIsNil applies the IsNil predicate on the "cadence" field.

@@ -195,6 +195,12 @@ func (sjc *ScheduledJobCreate) SetNillableScript(s *string) *ScheduledJobCreate 
 	return sjc
 }
 
+// SetDownloadURL sets the "download_url" field.
+func (sjc *ScheduledJobCreate) SetDownloadURL(s string) *ScheduledJobCreate {
+	sjc.mutation.SetDownloadURL(s)
+	return sjc
+}
+
 // SetConfiguration sets the "configuration" field.
 func (sjc *ScheduledJobCreate) SetConfiguration(mc models.JobConfiguration) *ScheduledJobCreate {
 	sjc.mutation.SetConfiguration(mc)
@@ -347,6 +353,9 @@ func (sjc *ScheduledJobCreate) check() error {
 			return &ValidationError{Name: "job_type", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.job_type": %w`, err)}
 		}
 	}
+	if _, ok := sjc.mutation.DownloadURL(); !ok {
+		return &ValidationError{Name: "download_url", err: errors.New(`generated: missing required field "ScheduledJob.download_url"`)}
+	}
 	if _, ok := sjc.mutation.Configuration(); !ok {
 		return &ValidationError{Name: "configuration", err: errors.New(`generated: missing required field "ScheduledJob.configuration"`)}
 	}
@@ -447,6 +456,10 @@ func (sjc *ScheduledJobCreate) createSpec() (*ScheduledJob, *sqlgraph.CreateSpec
 	if value, ok := sjc.mutation.Script(); ok {
 		_spec.SetField(scheduledjob.FieldScript, field.TypeString, value)
 		_node.Script = value
+	}
+	if value, ok := sjc.mutation.DownloadURL(); ok {
+		_spec.SetField(scheduledjob.FieldDownloadURL, field.TypeString, value)
+		_node.DownloadURL = value
 	}
 	if value, ok := sjc.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjob.FieldConfiguration, field.TypeJSON, value)
