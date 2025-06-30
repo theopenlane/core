@@ -252,7 +252,10 @@ server:
 sessions:
     domain: ""
     encryptionKey: encryptionsecret
+    httpOnly: true
     maxAge: 3600
+    sameSite: Strict
+    secure: true
     signingKey: my-signing-secret
 slack:
     newSubscriberMessageFile: ""
