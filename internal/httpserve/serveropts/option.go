@@ -7,8 +7,10 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
+	"net/http"
 	"os"
 	"slices"
+	"strings"
 
 	"google.golang.org/api/option"
 
@@ -277,6 +279,22 @@ func WithSessionManager(rc *redis.Client) ServerOption {
 
 		if s.Config.Settings.Sessions.Domain != "" {
 			cc.Domain = s.Config.Settings.Sessions.Domain
+		}
+
+		cc.HTTPOnly = s.Config.Settings.Sessions.HTTPOnly
+		cc.Secure = s.Config.Settings.Sessions.Secure
+
+		if s.Config.Settings.Sessions.SameSite != "" {
+			switch strings.ToLower(s.Config.Settings.Sessions.SameSite) {
+			case "lax":
+				cc.SameSite = http.SameSiteLaxMode
+			case "strict":
+				cc.SameSite = http.SameSiteStrictMode
+			case "none":
+				cc.SameSite = http.SameSiteNoneMode
+			default:
+				cc.SameSite = http.SameSiteDefaultMode
+			}
 		}
 
 		sm := sessions.NewCookieStore[map[string]any](cc,
