@@ -3,7 +3,7 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-      target: core:dev
+    image: core:dev
     command:
       - serve
       - --debug
@@ -23,8 +23,9 @@ services:
       - default
 
   localoidc:
-    depends_on:
-      - api
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
     image: core:dev
     command:
       - localoidc
@@ -40,11 +41,14 @@ services:
     volumes:
       - ../pkg/testutils/login/sso:/usr/share/nginx/html:ro
     ports:
-      - "3000:80"
+      - "3001:80"
     networks:
       - default
 
   cli:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
     image: core:dev
     entrypoint: ["/bin/core"]
     command: ["cli"]

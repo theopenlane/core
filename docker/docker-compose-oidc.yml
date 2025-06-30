@@ -3,7 +3,6 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-      target: dev
     command:
       - localoidc
     environment:
@@ -26,7 +25,6 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-      target: dev
     entrypoint: ["/bin/core"]
     command: ["cli"]
     stdin_open: true

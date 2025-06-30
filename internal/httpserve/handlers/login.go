@@ -51,9 +51,10 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, auth.ErrNoAuthUser)
 	}
 
-	orgID, err := h.getUserDefaultOrgID(reqCtx, user.ID)
+	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
+
+	orgID, err := h.getUserDefaultOrgID(allowCtx, user.ID)
 	if err == nil {
-		allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
 		status, err := h.fetchSSOStatus(allowCtx, orgID)
 		if err == nil && status.Enforced {
 			member, mErr := transaction.FromContext(allowCtx).OrgMembership.Query().Where(

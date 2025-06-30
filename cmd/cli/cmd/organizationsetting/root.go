@@ -107,7 +107,13 @@ func tableOutput(out []openlaneclient.OrganizationSetting) {
 			*i.TaxIdentifier,
 			strings.Join(i.Tags, ", "),
 			strings.Join(i.Domains, ", "),
-			strings.Join(i.AllowedEmailDomains, ", "))
+			strings.Join(i.AllowedEmailDomains, ", "),
+			*i.IdentityProvider,
+			*i.IdentityProviderEntityID,
+			i.IdentityProviderLoginEnforced,
+			*i.OidcDiscoveryEndpoint,
+		)
+
 	}
 
 	writer.Render()
