@@ -73,7 +73,7 @@ func (h *Handler) oidcConfig(ctx context.Context, orgID string) (rp.RelyingParty
 	}
 
 	if setting.OidcDiscoveryEndpoint == "" || setting.IdentityProviderClientID == nil || setting.IdentityProviderClientSecret == nil {
-		return nil, fmt.Errorf("missing oidc config")
+		return nil, ErrMissingOIDCConfig
 	}
 
 	issuer := strings.TrimSuffix(setting.OidcDiscoveryEndpoint, "/.well-known/openid-configuration")
@@ -129,11 +129,11 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 
 	stateCookie, err := ctx.Request().Cookie("state")
 	if err != nil || ctx.QueryParam("state") != stateCookie.Value {
-		return h.BadRequest(ctx, fmt.Errorf("state mismatch"))
+		return h.BadRequest(ctx, ErrStateMismatch)
 	}
 	nonceCookie, err := ctx.Request().Cookie("nonce")
 	if err != nil {
-		return h.BadRequest(ctx, fmt.Errorf("nonce missing"))
+		return h.BadRequest(ctx, ErrNonceMissing)
 	}
 
 	nonceCtx := context.WithValue(ctx.Request().Context(), nonceKey{}, nonceCookie.Value)

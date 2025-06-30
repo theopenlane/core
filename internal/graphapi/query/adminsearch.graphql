@@ -589,6 +589,8 @@ query AdminSearch($query: String!) {
           taxIdentifier
           organizationID
           allowedEmailDomains
+          identityProviderClientID
+          identityProviderClientSecret
           identityProviderMetadataEndpoint
           identityProviderEntityID
           oidcDiscoveryEndpoint

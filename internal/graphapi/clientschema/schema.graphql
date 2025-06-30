@@ -31745,6 +31745,14 @@ type OrganizationSetting implements Node {
 	"""
 	identityProvider: OrganizationSettingSSOProvider
 	"""
+	client ID for SSO integration
+	"""
+	identityProviderClientID: String
+	"""
+	client secret for SSO integration
+	"""
+	identityProviderClientSecret: String
+	"""
 	metadata URL for the SSO provider
 	"""
 	identityProviderMetadataEndpoint: String
@@ -31911,6 +31919,14 @@ type OrganizationSettingHistory implements Node {
 	SSO provider type for the organization
 	"""
 	identityProvider: OrganizationSettingHistorySSOProvider
+	"""
+	client ID for SSO integration
+	"""
+	identityProviderClientID: String
+	"""
+	client secret for SSO integration
+	"""
+	identityProviderClientSecret: String
 	"""
 	metadata URL for the SSO provider
 	"""
@@ -32243,6 +32259,42 @@ input OrganizationSettingHistoryWhereInput {
 	identityProviderIsNil: Boolean
 	identityProviderNotNil: Boolean
 	"""
+	identity_provider_client_id field predicates
+	"""
+	identityProviderClientID: String
+	identityProviderClientIDNEQ: String
+	identityProviderClientIDIn: [String!]
+	identityProviderClientIDNotIn: [String!]
+	identityProviderClientIDGT: String
+	identityProviderClientIDGTE: String
+	identityProviderClientIDLT: String
+	identityProviderClientIDLTE: String
+	identityProviderClientIDContains: String
+	identityProviderClientIDHasPrefix: String
+	identityProviderClientIDHasSuffix: String
+	identityProviderClientIDIsNil: Boolean
+	identityProviderClientIDNotNil: Boolean
+	identityProviderClientIDEqualFold: String
+	identityProviderClientIDContainsFold: String
+	"""
+	identity_provider_client_secret field predicates
+	"""
+	identityProviderClientSecret: String
+	identityProviderClientSecretNEQ: String
+	identityProviderClientSecretIn: [String!]
+	identityProviderClientSecretNotIn: [String!]
+	identityProviderClientSecretGT: String
+	identityProviderClientSecretGTE: String
+	identityProviderClientSecretLT: String
+	identityProviderClientSecretLTE: String
+	identityProviderClientSecretContains: String
+	identityProviderClientSecretHasPrefix: String
+	identityProviderClientSecretHasSuffix: String
+	identityProviderClientSecretIsNil: Boolean
+	identityProviderClientSecretNotNil: Boolean
+	identityProviderClientSecretEqualFold: String
+	identityProviderClientSecretContainsFold: String
+	"""
 	identity_provider_metadata_endpoint field predicates
 	"""
 	identityProviderMetadataEndpoint: String
@@ -32564,6 +32616,42 @@ input OrganizationSettingWhereInput {
 	identityProviderNotIn: [OrganizationSettingSSOProvider!]
 	identityProviderIsNil: Boolean
 	identityProviderNotNil: Boolean
+	"""
+	identity_provider_client_id field predicates
+	"""
+	identityProviderClientID: String
+	identityProviderClientIDNEQ: String
+	identityProviderClientIDIn: [String!]
+	identityProviderClientIDNotIn: [String!]
+	identityProviderClientIDGT: String
+	identityProviderClientIDGTE: String
+	identityProviderClientIDLT: String
+	identityProviderClientIDLTE: String
+	identityProviderClientIDContains: String
+	identityProviderClientIDHasPrefix: String
+	identityProviderClientIDHasSuffix: String
+	identityProviderClientIDIsNil: Boolean
+	identityProviderClientIDNotNil: Boolean
+	identityProviderClientIDEqualFold: String
+	identityProviderClientIDContainsFold: String
+	"""
+	identity_provider_client_secret field predicates
+	"""
+	identityProviderClientSecret: String
+	identityProviderClientSecretNEQ: String
+	identityProviderClientSecretIn: [String!]
+	identityProviderClientSecretNotIn: [String!]
+	identityProviderClientSecretGT: String
+	identityProviderClientSecretGTE: String
+	identityProviderClientSecretLT: String
+	identityProviderClientSecretLTE: String
+	identityProviderClientSecretContains: String
+	identityProviderClientSecretHasPrefix: String
+	identityProviderClientSecretHasSuffix: String
+	identityProviderClientSecretIsNil: Boolean
+	identityProviderClientSecretNotNil: Boolean
+	identityProviderClientSecretEqualFold: String
+	identityProviderClientSecretContainsFold: String
 	"""
 	identity_provider_metadata_endpoint field predicates
 	"""

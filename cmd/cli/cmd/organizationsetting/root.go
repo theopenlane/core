@@ -95,25 +95,85 @@ func tableOutput(out []openlaneclient.OrganizationSetting) {
 		"Tags",
 		"Domains",
 		"AllowedEmailDomains",
+		"IdentityProvider",
+		"IdentityProviderEntityID",
+		"IdentityProviderLoginEnforced",
+		"OidcDiscoveryEndpoint",
+		"ComplianceWebhookToken",
+		"IdentityProviderClientSecret",
+		"IdentityProviderClientID",
+		"IdentityProviderMetadataEndpoint",
 	)
+
 	for _, i := range out {
+		var billingContact, billingEmail, billingPhone, geoLocation, taxIdentifier, identityProvider, identityProviderEntityID, oidcDiscoveryEndpoint, complianceWebhookToken, identityProviderClientSecret, identityProviderClientID, identityProviderMetadataEndpoint string
+		if i.BillingContact != nil {
+			billingContact = *i.BillingContact
+		}
+		if i.BillingEmail != nil {
+			billingEmail = *i.BillingEmail
+		}
+		if i.BillingPhone != nil {
+			billingPhone = *i.BillingPhone
+		}
+		if i.GeoLocation != nil {
+			geoLocation = i.GeoLocation.String()
+		}
+		if i.TaxIdentifier != nil {
+			taxIdentifier = *i.TaxIdentifier
+		}
+		if i.IdentityProvider != nil {
+			identityProvider = i.IdentityProvider.String()
+		}
+		if i.IdentityProviderEntityID != nil {
+			identityProviderEntityID = *i.IdentityProviderEntityID
+		}
+		if i.OidcDiscoveryEndpoint != nil {
+			oidcDiscoveryEndpoint = *i.OidcDiscoveryEndpoint
+		}
+		if i.ComplianceWebhookToken != nil {
+			complianceWebhookToken = *i.ComplianceWebhookToken
+		}
+		if i.IdentityProviderClientSecret != nil {
+			identityProviderClientSecret = *i.IdentityProviderClientSecret
+		}
+		if i.IdentityProviderClientID != nil {
+			identityProviderClientID = *i.IdentityProviderClientID
+		}
+		if i.IdentityProviderMetadataEndpoint != nil {
+			identityProviderMetadataEndpoint = *i.IdentityProviderMetadataEndpoint
+		}
+
+		var billingAddress string
+		if i.BillingAddress != nil {
+			billingAddress = i.BillingAddress.String()
+		}
+
+		var orgName string
+		if i.Organization != nil {
+			orgName = i.Organization.DisplayName
+		}
+
 		writer.AddRow(i.ID,
-			i.Organization.DisplayName,
-			*i.BillingContact,
-			i.BillingAddress.String(),
-			*i.BillingEmail,
-			*i.BillingPhone,
-			*i.GeoLocation,
-			*i.TaxIdentifier,
+			orgName,
+			billingContact,
+			billingAddress,
+			billingEmail,
+			billingPhone,
+			geoLocation,
+			taxIdentifier,
 			strings.Join(i.Tags, ", "),
 			strings.Join(i.Domains, ", "),
 			strings.Join(i.AllowedEmailDomains, ", "),
-			*i.IdentityProvider,
-			*i.IdentityProviderEntityID,
+			identityProvider,
+			identityProviderEntityID,
 			i.IdentityProviderLoginEnforced,
-			*i.OidcDiscoveryEndpoint,
+			oidcDiscoveryEndpoint,
+			complianceWebhookToken,
+			identityProviderClientSecret,
+			identityProviderClientID,
+			identityProviderMetadataEndpoint,
 		)
-
 	}
 
 	writer.Render()

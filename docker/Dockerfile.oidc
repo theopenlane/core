@@ -1,0 +1,10 @@
+FROM gcr.io/distroless/static:nonroot
+
+# `nonroot` coming from distroless
+USER 65532:65532
+
+COPY localoidc /bin/localoidc
+
+# Run the web service on container startup.
+ENTRYPOINT [ "/bin/localoidc" ]
+CMD ["serve"]

@@ -2,9 +2,9 @@ services:
   localoidc:
     build:
       context: ..
-      dockerfile: docker/Dockerfile
-    command:
-      - localoidc
+      dockerfile: docker/Dockerfile.oidc
+    entrypoint: ["/bin/localoidc"]
+    command: ["serve"]
     environment:
       - OIDC_REDIRECT_URL=http://localhost:17608/v1/sso/callback
     ports:
@@ -17,7 +17,7 @@ services:
     volumes:
       - ../pkg/testutils/login/sso:/usr/share/nginx/html:ro
     ports:
-      - "3000:80"
+      - "3001:80"
     networks:
       - default
 
@@ -29,7 +29,5 @@ services:
     command: ["cli"]
     stdin_open: true
     tty: true
-    depends_on:
-      - api
     networks:
       - default

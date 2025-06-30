@@ -16850,6 +16850,10 @@ type OrganizationSetting struct {
 	AllowedEmailDomains []string `json:"allowedEmailDomains,omitempty"`
 	// SSO provider type for the organization
 	IdentityProvider *enums.SSOProvider `json:"identityProvider,omitempty"`
+	// client ID for SSO integration
+	IdentityProviderClientID *string `json:"identityProviderClientID,omitempty"`
+	// client secret for SSO integration
+	IdentityProviderClientSecret *string `json:"identityProviderClientSecret,omitempty"`
 	// metadata URL for the SSO provider
 	IdentityProviderMetadataEndpoint *string `json:"identityProviderMetadataEndpoint,omitempty"`
 	// SAML entity ID for the SSO provider
@@ -16935,6 +16939,10 @@ type OrganizationSettingHistory struct {
 	AllowedEmailDomains []string `json:"allowedEmailDomains,omitempty"`
 	// SSO provider type for the organization
 	IdentityProvider *enums.SSOProvider `json:"identityProvider,omitempty"`
+	// client ID for SSO integration
+	IdentityProviderClientID *string `json:"identityProviderClientID,omitempty"`
+	// client secret for SSO integration
+	IdentityProviderClientSecret *string `json:"identityProviderClientSecret,omitempty"`
 	// metadata URL for the SSO provider
 	IdentityProviderMetadataEndpoint *string `json:"identityProviderMetadataEndpoint,omitempty"`
 	// SAML entity ID for the SSO provider
@@ -17173,6 +17181,38 @@ type OrganizationSettingHistoryWhereInput struct {
 	IdentityProviderNotIn  []enums.SSOProvider `json:"identityProviderNotIn,omitempty"`
 	IdentityProviderIsNil  *bool               `json:"identityProviderIsNil,omitempty"`
 	IdentityProviderNotNil *bool               `json:"identityProviderNotNil,omitempty"`
+	// identity_provider_client_id field predicates
+	IdentityProviderClientID             *string  `json:"identityProviderClientID,omitempty"`
+	IdentityProviderClientIdneq          *string  `json:"identityProviderClientIDNEQ,omitempty"`
+	IdentityProviderClientIDIn           []string `json:"identityProviderClientIDIn,omitempty"`
+	IdentityProviderClientIDNotIn        []string `json:"identityProviderClientIDNotIn,omitempty"`
+	IdentityProviderClientIdgt           *string  `json:"identityProviderClientIDGT,omitempty"`
+	IdentityProviderClientIdgte          *string  `json:"identityProviderClientIDGTE,omitempty"`
+	IdentityProviderClientIdlt           *string  `json:"identityProviderClientIDLT,omitempty"`
+	IdentityProviderClientIdlte          *string  `json:"identityProviderClientIDLTE,omitempty"`
+	IdentityProviderClientIDContains     *string  `json:"identityProviderClientIDContains,omitempty"`
+	IdentityProviderClientIDHasPrefix    *string  `json:"identityProviderClientIDHasPrefix,omitempty"`
+	IdentityProviderClientIDHasSuffix    *string  `json:"identityProviderClientIDHasSuffix,omitempty"`
+	IdentityProviderClientIDIsNil        *bool    `json:"identityProviderClientIDIsNil,omitempty"`
+	IdentityProviderClientIDNotNil       *bool    `json:"identityProviderClientIDNotNil,omitempty"`
+	IdentityProviderClientIDEqualFold    *string  `json:"identityProviderClientIDEqualFold,omitempty"`
+	IdentityProviderClientIDContainsFold *string  `json:"identityProviderClientIDContainsFold,omitempty"`
+	// identity_provider_client_secret field predicates
+	IdentityProviderClientSecret             *string  `json:"identityProviderClientSecret,omitempty"`
+	IdentityProviderClientSecretNeq          *string  `json:"identityProviderClientSecretNEQ,omitempty"`
+	IdentityProviderClientSecretIn           []string `json:"identityProviderClientSecretIn,omitempty"`
+	IdentityProviderClientSecretNotIn        []string `json:"identityProviderClientSecretNotIn,omitempty"`
+	IdentityProviderClientSecretGt           *string  `json:"identityProviderClientSecretGT,omitempty"`
+	IdentityProviderClientSecretGte          *string  `json:"identityProviderClientSecretGTE,omitempty"`
+	IdentityProviderClientSecretLt           *string  `json:"identityProviderClientSecretLT,omitempty"`
+	IdentityProviderClientSecretLte          *string  `json:"identityProviderClientSecretLTE,omitempty"`
+	IdentityProviderClientSecretContains     *string  `json:"identityProviderClientSecretContains,omitempty"`
+	IdentityProviderClientSecretHasPrefix    *string  `json:"identityProviderClientSecretHasPrefix,omitempty"`
+	IdentityProviderClientSecretHasSuffix    *string  `json:"identityProviderClientSecretHasSuffix,omitempty"`
+	IdentityProviderClientSecretIsNil        *bool    `json:"identityProviderClientSecretIsNil,omitempty"`
+	IdentityProviderClientSecretNotNil       *bool    `json:"identityProviderClientSecretNotNil,omitempty"`
+	IdentityProviderClientSecretEqualFold    *string  `json:"identityProviderClientSecretEqualFold,omitempty"`
+	IdentityProviderClientSecretContainsFold *string  `json:"identityProviderClientSecretContainsFold,omitempty"`
 	// identity_provider_metadata_endpoint field predicates
 	IdentityProviderMetadataEndpoint             *string  `json:"identityProviderMetadataEndpoint,omitempty"`
 	IdentityProviderMetadataEndpointNeq          *string  `json:"identityProviderMetadataEndpointNEQ,omitempty"`
@@ -17424,6 +17464,38 @@ type OrganizationSettingWhereInput struct {
 	IdentityProviderNotIn  []enums.SSOProvider `json:"identityProviderNotIn,omitempty"`
 	IdentityProviderIsNil  *bool               `json:"identityProviderIsNil,omitempty"`
 	IdentityProviderNotNil *bool               `json:"identityProviderNotNil,omitempty"`
+	// identity_provider_client_id field predicates
+	IdentityProviderClientID             *string  `json:"identityProviderClientID,omitempty"`
+	IdentityProviderClientIdneq          *string  `json:"identityProviderClientIDNEQ,omitempty"`
+	IdentityProviderClientIDIn           []string `json:"identityProviderClientIDIn,omitempty"`
+	IdentityProviderClientIDNotIn        []string `json:"identityProviderClientIDNotIn,omitempty"`
+	IdentityProviderClientIdgt           *string  `json:"identityProviderClientIDGT,omitempty"`
+	IdentityProviderClientIdgte          *string  `json:"identityProviderClientIDGTE,omitempty"`
+	IdentityProviderClientIdlt           *string  `json:"identityProviderClientIDLT,omitempty"`
+	IdentityProviderClientIdlte          *string  `json:"identityProviderClientIDLTE,omitempty"`
+	IdentityProviderClientIDContains     *string  `json:"identityProviderClientIDContains,omitempty"`
+	IdentityProviderClientIDHasPrefix    *string  `json:"identityProviderClientIDHasPrefix,omitempty"`
+	IdentityProviderClientIDHasSuffix    *string  `json:"identityProviderClientIDHasSuffix,omitempty"`
+	IdentityProviderClientIDIsNil        *bool    `json:"identityProviderClientIDIsNil,omitempty"`
+	IdentityProviderClientIDNotNil       *bool    `json:"identityProviderClientIDNotNil,omitempty"`
+	IdentityProviderClientIDEqualFold    *string  `json:"identityProviderClientIDEqualFold,omitempty"`
+	IdentityProviderClientIDContainsFold *string  `json:"identityProviderClientIDContainsFold,omitempty"`
+	// identity_provider_client_secret field predicates
+	IdentityProviderClientSecret             *string  `json:"identityProviderClientSecret,omitempty"`
+	IdentityProviderClientSecretNeq          *string  `json:"identityProviderClientSecretNEQ,omitempty"`
+	IdentityProviderClientSecretIn           []string `json:"identityProviderClientSecretIn,omitempty"`
+	IdentityProviderClientSecretNotIn        []string `json:"identityProviderClientSecretNotIn,omitempty"`
+	IdentityProviderClientSecretGt           *string  `json:"identityProviderClientSecretGT,omitempty"`
+	IdentityProviderClientSecretGte          *string  `json:"identityProviderClientSecretGTE,omitempty"`
+	IdentityProviderClientSecretLt           *string  `json:"identityProviderClientSecretLT,omitempty"`
+	IdentityProviderClientSecretLte          *string  `json:"identityProviderClientSecretLTE,omitempty"`
+	IdentityProviderClientSecretContains     *string  `json:"identityProviderClientSecretContains,omitempty"`
+	IdentityProviderClientSecretHasPrefix    *string  `json:"identityProviderClientSecretHasPrefix,omitempty"`
+	IdentityProviderClientSecretHasSuffix    *string  `json:"identityProviderClientSecretHasSuffix,omitempty"`
+	IdentityProviderClientSecretIsNil        *bool    `json:"identityProviderClientSecretIsNil,omitempty"`
+	IdentityProviderClientSecretNotNil       *bool    `json:"identityProviderClientSecretNotNil,omitempty"`
+	IdentityProviderClientSecretEqualFold    *string  `json:"identityProviderClientSecretEqualFold,omitempty"`
+	IdentityProviderClientSecretContainsFold *string  `json:"identityProviderClientSecretContainsFold,omitempty"`
 	// identity_provider_metadata_endpoint field predicates
 	IdentityProviderMetadataEndpoint             *string  `json:"identityProviderMetadataEndpoint,omitempty"`
 	IdentityProviderMetadataEndpointNeq          *string  `json:"identityProviderMetadataEndpointNEQ,omitempty"`

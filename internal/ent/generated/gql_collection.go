@@ -29706,6 +29706,16 @@ func (os *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, organizationsetting.FieldIdentityProvider)
 				fieldSeen[organizationsetting.FieldIdentityProvider] = struct{}{}
 			}
+		case "identityProviderClientID":
+			if _, ok := fieldSeen[organizationsetting.FieldIdentityProviderClientID]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldIdentityProviderClientID)
+				fieldSeen[organizationsetting.FieldIdentityProviderClientID] = struct{}{}
+			}
+		case "identityProviderClientSecret":
+			if _, ok := fieldSeen[organizationsetting.FieldIdentityProviderClientSecret]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldIdentityProviderClientSecret)
+				fieldSeen[organizationsetting.FieldIdentityProviderClientSecret] = struct{}{}
+			}
 		case "identityProviderMetadataEndpoint":
 			if _, ok := fieldSeen[organizationsetting.FieldIdentityProviderMetadataEndpoint]; !ok {
 				selectedFields = append(selectedFields, organizationsetting.FieldIdentityProviderMetadataEndpoint)
@@ -29915,6 +29925,16 @@ func (osh *OrganizationSettingHistoryQuery) collectField(ctx context.Context, on
 			if _, ok := fieldSeen[organizationsettinghistory.FieldIdentityProvider]; !ok {
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldIdentityProvider)
 				fieldSeen[organizationsettinghistory.FieldIdentityProvider] = struct{}{}
+			}
+		case "identityProviderClientID":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldIdentityProviderClientID]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldIdentityProviderClientID)
+				fieldSeen[organizationsettinghistory.FieldIdentityProviderClientID] = struct{}{}
+			}
+		case "identityProviderClientSecret":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldIdentityProviderClientSecret]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldIdentityProviderClientSecret)
+				fieldSeen[organizationsettinghistory.FieldIdentityProviderClientSecret] = struct{}{}
 			}
 		case "identityProviderMetadataEndpoint":
 			if _, ok := fieldSeen[organizationsettinghistory.FieldIdentityProviderMetadataEndpoint]; !ok {

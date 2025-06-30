@@ -1246,6 +1246,8 @@ func adminSearchOrganizationSettings(ctx context.Context, query string, after *e
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(allowed_email_domains)::text LIKE $10", likeQuery)) // search by AllowedEmailDomains
 				},
+				organizationsetting.IdentityProviderClientIDContainsFold(query),         // search by IdentityProviderClientID
+				organizationsetting.IdentityProviderClientSecretContainsFold(query),     // search by IdentityProviderClientSecret
 				organizationsetting.IdentityProviderMetadataEndpointContainsFold(query), // search by IdentityProviderMetadataEndpoint
 				organizationsetting.IdentityProviderEntityIDContainsFold(query),         // search by IdentityProviderEntityID
 				organizationsetting.OidcDiscoveryEndpointContainsFold(query),            // search by OidcDiscoveryEndpoint

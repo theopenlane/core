@@ -2863,6 +2863,8 @@ type ComplexityRoot struct {
 		GeoLocation                      func(childComplexity int) int
 		ID                               func(childComplexity int) int
 		IdentityProvider                 func(childComplexity int) int
+		IdentityProviderClientID         func(childComplexity int) int
+		IdentityProviderClientSecret     func(childComplexity int) int
 		IdentityProviderEntityID         func(childComplexity int) int
 		IdentityProviderLoginEnforced    func(childComplexity int) int
 		IdentityProviderMetadataEndpoint func(childComplexity int) int
@@ -2913,6 +2915,8 @@ type ComplexityRoot struct {
 		HistoryTime                      func(childComplexity int) int
 		ID                               func(childComplexity int) int
 		IdentityProvider                 func(childComplexity int) int
+		IdentityProviderClientID         func(childComplexity int) int
+		IdentityProviderClientSecret     func(childComplexity int) int
 		IdentityProviderEntityID         func(childComplexity int) int
 		IdentityProviderLoginEnforced    func(childComplexity int) int
 		IdentityProviderMetadataEndpoint func(childComplexity int) int
@@ -19962,6 +19966,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrganizationSetting.IdentityProvider(childComplexity), true
 
+	case "OrganizationSetting.identityProviderClientID":
+		if e.complexity.OrganizationSetting.IdentityProviderClientID == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.IdentityProviderClientID(childComplexity), true
+
+	case "OrganizationSetting.identityProviderClientSecret":
+		if e.complexity.OrganizationSetting.IdentityProviderClientSecret == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.IdentityProviderClientSecret(childComplexity), true
+
 	case "OrganizationSetting.identityProviderEntityID":
 		if e.complexity.OrganizationSetting.IdentityProviderEntityID == nil {
 			break
@@ -20185,6 +20203,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrganizationSettingHistory.IdentityProvider(childComplexity), true
+
+	case "OrganizationSettingHistory.identityProviderClientID":
+		if e.complexity.OrganizationSettingHistory.IdentityProviderClientID == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.IdentityProviderClientID(childComplexity), true
+
+	case "OrganizationSettingHistory.identityProviderClientSecret":
+		if e.complexity.OrganizationSettingHistory.IdentityProviderClientSecret == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.IdentityProviderClientSecret(childComplexity), true
 
 	case "OrganizationSettingHistory.identityProviderEntityID":
 		if e.complexity.OrganizationSettingHistory.IdentityProviderEntityID == nil {
@@ -61235,6 +61267,14 @@ type OrganizationSetting implements Node {
   """
   identityProvider: OrganizationSettingSSOProvider
   """
+  client ID for SSO integration
+  """
+  identityProviderClientID: String
+  """
+  client secret for SSO integration
+  """
+  identityProviderClientSecret: String
+  """
   metadata URL for the SSO provider
   """
   identityProviderMetadataEndpoint: String
@@ -61374,6 +61414,14 @@ type OrganizationSettingHistory implements Node {
   SSO provider type for the organization
   """
   identityProvider: OrganizationSettingHistorySSOProvider
+  """
+  client ID for SSO integration
+  """
+  identityProviderClientID: String
+  """
+  client secret for SSO integration
+  """
+  identityProviderClientSecret: String
   """
   metadata URL for the SSO provider
   """
@@ -61706,6 +61754,42 @@ input OrganizationSettingHistoryWhereInput {
   identityProviderIsNil: Boolean
   identityProviderNotNil: Boolean
   """
+  identity_provider_client_id field predicates
+  """
+  identityProviderClientID: String
+  identityProviderClientIDNEQ: String
+  identityProviderClientIDIn: [String!]
+  identityProviderClientIDNotIn: [String!]
+  identityProviderClientIDGT: String
+  identityProviderClientIDGTE: String
+  identityProviderClientIDLT: String
+  identityProviderClientIDLTE: String
+  identityProviderClientIDContains: String
+  identityProviderClientIDHasPrefix: String
+  identityProviderClientIDHasSuffix: String
+  identityProviderClientIDIsNil: Boolean
+  identityProviderClientIDNotNil: Boolean
+  identityProviderClientIDEqualFold: String
+  identityProviderClientIDContainsFold: String
+  """
+  identity_provider_client_secret field predicates
+  """
+  identityProviderClientSecret: String
+  identityProviderClientSecretNEQ: String
+  identityProviderClientSecretIn: [String!]
+  identityProviderClientSecretNotIn: [String!]
+  identityProviderClientSecretGT: String
+  identityProviderClientSecretGTE: String
+  identityProviderClientSecretLT: String
+  identityProviderClientSecretLTE: String
+  identityProviderClientSecretContains: String
+  identityProviderClientSecretHasPrefix: String
+  identityProviderClientSecretHasSuffix: String
+  identityProviderClientSecretIsNil: Boolean
+  identityProviderClientSecretNotNil: Boolean
+  identityProviderClientSecretEqualFold: String
+  identityProviderClientSecretContainsFold: String
+  """
   identity_provider_metadata_endpoint field predicates
   """
   identityProviderMetadataEndpoint: String
@@ -62018,6 +62102,42 @@ input OrganizationSettingWhereInput {
   identityProviderNotIn: [OrganizationSettingSSOProvider!]
   identityProviderIsNil: Boolean
   identityProviderNotNil: Boolean
+  """
+  identity_provider_client_id field predicates
+  """
+  identityProviderClientID: String
+  identityProviderClientIDNEQ: String
+  identityProviderClientIDIn: [String!]
+  identityProviderClientIDNotIn: [String!]
+  identityProviderClientIDGT: String
+  identityProviderClientIDGTE: String
+  identityProviderClientIDLT: String
+  identityProviderClientIDLTE: String
+  identityProviderClientIDContains: String
+  identityProviderClientIDHasPrefix: String
+  identityProviderClientIDHasSuffix: String
+  identityProviderClientIDIsNil: Boolean
+  identityProviderClientIDNotNil: Boolean
+  identityProviderClientIDEqualFold: String
+  identityProviderClientIDContainsFold: String
+  """
+  identity_provider_client_secret field predicates
+  """
+  identityProviderClientSecret: String
+  identityProviderClientSecretNEQ: String
+  identityProviderClientSecretIn: [String!]
+  identityProviderClientSecretNotIn: [String!]
+  identityProviderClientSecretGT: String
+  identityProviderClientSecretGTE: String
+  identityProviderClientSecretLT: String
+  identityProviderClientSecretLTE: String
+  identityProviderClientSecretContains: String
+  identityProviderClientSecretHasPrefix: String
+  identityProviderClientSecretHasSuffix: String
+  identityProviderClientSecretIsNil: Boolean
+  identityProviderClientSecretNotNil: Boolean
+  identityProviderClientSecretEqualFold: String
+  identityProviderClientSecretContainsFold: String
   """
   identity_provider_metadata_endpoint field predicates
   """

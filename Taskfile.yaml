@@ -248,7 +248,6 @@ tasks:
       - task: compose:redis
       - task: compose:fga
       - task: compose:riverboat
-      - task: compose:oidc
       - task: compose:metrics
       - task: run-api
 
@@ -408,5 +407,12 @@ tasks:
 
   go:build-localoidc:
     desc: Builds the local OIDC test server
+    aliases: [buildlocaloidc]
     cmds:
       - "{{ .GOOS }} {{ .GOARCH }} go build -mod=mod -o localoidc ./cmd/localoidc"
+
+  go:build-localoidc-linux:
+    desc: Builds the local OIDC test server for Linux/amd64 (for Docker)
+    aliases: [buildlinuxoidc]
+    cmds:
+      - GOOS=linux GOARCH=amd64 go build -mod=mod -o localoidc ./cmd/localoidc

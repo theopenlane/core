@@ -75,6 +75,12 @@ var (
 	ErrJobRunnerRegistrationTokenExpired = errors.New("job runner registration token expired")
 	// ErrJobRunnerAlreadyRegistered is returned when we hit the ip address unique constraint
 	ErrJobRunnerAlreadyRegistered = errors.New("this job runner node exists and cannot be registered twice")
+	// ErrMissingOIDCConfig is returned when the OIDC configuration is missing
+	ErrMissingOIDCConfig = errors.New("missing OIDC configuration, please contact support")
+	// ErrStateMismatch is returned when the state parameter does not match the expected value
+	ErrStateMismatch = errors.New("state parameter does not match, possible CSRF attack or session expired")
+	// ErrMissingSSOConfig is returned when the SSO configuration is missing
+	ErrNonceMissing = errors.New("missing nonce cookie, possible CSRF attack or session expired")
 )
 
 var (
