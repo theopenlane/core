@@ -333,6 +333,10 @@
         "cookieHttpOnly": {
           "type": "boolean",
           "description": "CookieHTTPOnly indicates whether the CSRF cookie is HTTP only."
+        },
+        "cookieDomain": {
+          "type": "string",
+          "description": "CookieDomain specifies the domain for the CSRF cookie, default to no domain"
         }
       },
       "additionalProperties": false,
