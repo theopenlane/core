@@ -4,10 +4,11 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"net/url"
 	"strings"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/ulids"
 	"github.com/zitadel/oidc/pkg/client/rp"
@@ -126,16 +127,16 @@ func (h *Handler) oidcConfig(ctx context.Context, orgID string) (rp.RelyingParty
 func (h *Handler) SSOLoginHandler(ctx echo.Context) error {
 	orgID := ctx.QueryParam("organization_id")
 	if orgID == "" {
-		if c, err := ctx.Request().Cookie("organization_id"); err == nil {
+		if c, err := sessions.GetCookie(ctx.Request(), "organization_id"); err == nil {
 			orgID = c.Value
 		}
 	}
 
 	if ret := ctx.QueryParam("return"); ret != "" {
-		http.SetCookie(ctx.Response(), &http.Cookie{Name: "return", Value: ret, Path: "/", HttpOnly: true, SameSite: http.SameSiteLaxMode})
+		sessions.SetCookie(ctx.Response().Writer, ret, "return", sessions.CookieConfig{Path: "/", HTTPOnly: true, SameSite: http.SameSiteLaxMode})
 	}
 
-	http.SetCookie(ctx.Response(), &http.Cookie{Name: "organization_id", Value: orgID, Path: "/", HttpOnly: true, SameSite: http.SameSiteLaxMode})
+	sessions.SetCookie(ctx.Response().Writer, orgID, "organization_id", sessions.CookieConfig{Path: "/", HTTPOnly: true, SameSite: http.SameSiteLaxMode})
 
 	rpCfg, err := h.oidcConfig(ctx.Request().Context(), orgID)
 	if err != nil {
@@ -145,8 +146,8 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context) error {
 	state := ulids.New().String()
 	nonce := ulids.New().String()
 
-	http.SetCookie(ctx.Response(), &http.Cookie{Name: "state", Value: state, Path: "/", HttpOnly: true, SameSite: http.SameSiteLaxMode})
-	http.SetCookie(ctx.Response(), &http.Cookie{Name: "nonce", Value: nonce, Path: "/", HttpOnly: true, SameSite: http.SameSiteLaxMode})
+	sessions.SetCookie(ctx.Response().Writer, state, "state", sessions.CookieConfig{Path: "/", HTTPOnly: true, SameSite: http.SameSiteLaxMode})
+	sessions.SetCookie(ctx.Response().Writer, nonce, "nonce", sessions.CookieConfig{Path: "/", HTTPOnly: true, SameSite: http.SameSiteLaxMode})
 
 	authURL := rpCfg.OAuthConfig().AuthCodeURL(state, oauth2.SetAuthURLParam("nonce", nonce))
 
@@ -158,7 +159,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 	reqCtx := ctx.Request().Context()
 	orgID := ctx.QueryParam("organization_id")
 	if orgID == "" {
-		if c, err := ctx.Request().Cookie("organization_id"); err == nil {
+		if c, err := sessions.GetCookie(ctx.Request(), "organization_id"); err == nil {
 			orgID = c.Value
 		}
 	}
@@ -172,11 +173,12 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	stateCookie, err := ctx.Request().Cookie("state")
+	stateCookie, err := sessions.GetCookie(ctx.Request(), "state")
 	if err != nil || ctx.QueryParam("state") != stateCookie.Value {
 		return h.BadRequest(ctx, ErrStateMismatch)
 	}
-	nonceCookie, err := ctx.Request().Cookie("nonce")
+
+	nonceCookie, err := sessions.GetCookie(ctx.Request(), "nonce")
 	if err != nil {
 		return h.BadRequest(ctx, ErrNonceMissing)
 	}
@@ -213,16 +215,14 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 		AuthData:   *authData,
 	}
 
-	if ret, err := ctx.Request().Cookie("return"); err == nil && ret.Value != "" {
-		http.SetCookie(ctx.Response(), &http.Cookie{Name: "return", Value: "", MaxAge: -1, Path: "/"})
-		http.SetCookie(ctx.Response(), &http.Cookie{Name: "organization_id", Value: "", MaxAge: -1, Path: "/"})
-		q := url.Values{}
-		q.Set("email", tokens.IDTokenClaims.GetEmail())
-		redirectURL := fmt.Sprintf("%s?%s", ret.Value, q.Encode())
-		return ctx.Redirect(http.StatusFound, redirectURL)
+	if ret, err := sessions.GetCookie(ctx.Request(), "return"); err == nil && ret.Value != "" {
+		sessions.RemoveCookie(ctx.Response().Writer, "return", sessions.CookieConfig{Path: "/"})
+		sessions.RemoveCookie(ctx.Response().Writer, "organization_id", sessions.CookieConfig{Path: "/"})
+		req, _ := httpsling.Request(httpsling.Get(ret.Value), httpsling.QueryParam("email", tokens.IDTokenClaims.GetEmail()))
+		return ctx.Redirect(http.StatusFound, req.URL.String())
 	}
 
-	http.SetCookie(ctx.Response(), &http.Cookie{Name: "organization_id", Value: "", MaxAge: -1, Path: "/"})
+	sessions.RemoveCookie(ctx.Response().Writer, "organization_id", sessions.CookieConfig{Path: "/"})
 
 	return h.Success(ctx, out)
 }

@@ -24,7 +24,7 @@ func registerWebfingerHandler(router *Router) (err error) {
 
 	op := router.Handler.BindWebfingerHandler()
 
-	if err := router.AddV1Route(path, method, op, route); err != nil {
+	if err := router.AddUnversionedRoute(path, method, op, route); err != nil {
 		return err
 	}
 

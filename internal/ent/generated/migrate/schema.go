@@ -4844,10 +4844,10 @@ var (
 		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "avatar_updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "last_seen", Type: field.TypeTime, Nullable: true},
-		{Name: "last_login_provider", Type: field.TypeEnum, Nullable: true, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN"}},
+		{Name: "last_login_provider", Type: field.TypeEnum, Nullable: true, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN", "OIDC"}},
 		{Name: "password", Type: field.TypeString, Nullable: true},
 		{Name: "sub", Type: field.TypeString, Unique: true, Nullable: true},
-		{Name: "auth_provider", Type: field.TypeEnum, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN"}, Default: "CREDENTIALS"},
+		{Name: "auth_provider", Type: field.TypeEnum, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN", "OIDC"}, Default: "CREDENTIALS"},
 		{Name: "role", Type: field.TypeEnum, Nullable: true, Enums: []string{"ADMIN", "MEMBER", "USER"}, Default: "USER"},
 		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
 	}
@@ -4902,10 +4902,10 @@ var (
 		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "avatar_updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "last_seen", Type: field.TypeTime, Nullable: true},
-		{Name: "last_login_provider", Type: field.TypeEnum, Nullable: true, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN"}},
+		{Name: "last_login_provider", Type: field.TypeEnum, Nullable: true, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN", "OIDC"}},
 		{Name: "password", Type: field.TypeString, Nullable: true},
 		{Name: "sub", Type: field.TypeString, Nullable: true},
-		{Name: "auth_provider", Type: field.TypeEnum, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN"}, Default: "CREDENTIALS"},
+		{Name: "auth_provider", Type: field.TypeEnum, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN", "OIDC"}, Default: "CREDENTIALS"},
 		{Name: "role", Type: field.TypeEnum, Nullable: true, Enums: []string{"ADMIN", "MEMBER", "USER"}, Default: "USER"},
 	}
 	// UserHistoryTable holds the schema information for the "user_history" table.

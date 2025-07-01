@@ -35,6 +35,7 @@ func TestUnauthorizedRedirectToSSO(t *testing.T) {
 
 	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
 	_, err = client.OrganizationSetting.Create().
+		SetOrganizationID("org1").
 		SetIdentityProviderLoginEnforced(true).
 		Save(ctx)
 	require.NoError(t, err)
@@ -99,6 +100,6 @@ func TestUnauthorizedNoSSORedirect(t *testing.T) {
 	c := e.NewContext(req, rec)
 
 	err = unauthorized(c, errors.New("invalid"), &conf, validator)
-	require.Error(t, err)
+	require.NoError(t, err)
 	require.Equal(t, http.StatusUnauthorized, rec.Code)
 }

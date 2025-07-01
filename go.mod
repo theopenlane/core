@@ -357,7 +357,6 @@ require (
 	github.com/refraction-networking/utls v1.7.0 // indirect
 	github.com/remeh/sizedwaitgroup v1.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
-	github.com/rs/cors v1.11.1 // indirect
 	github.com/rs/xid v1.6.0 // indirect
 	github.com/ryancurrah/gomodguard v1.4.1 // indirect
 	github.com/ryanrolds/sqlclosecheck v0.5.1 // indirect
@@ -425,7 +424,6 @@ require (
 	github.com/zclconf/go-cty-yaml v1.1.0 // indirect
 	github.com/zeebo/errs v1.4.0 // indirect
 	github.com/zeebo/xxh3 v1.0.2 // indirect
-	github.com/zitadel/logging v0.3.4 // indirect
 	github.com/zmap/rc2 v0.0.0-20190804163417-abaa70531248 // indirect
 	github.com/zmap/zcrypto v0.0.0-20250129210703-03c45d0bae98 // indirect
 	gitlab.com/bosi/decorder v0.4.2 // indirect

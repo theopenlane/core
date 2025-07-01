@@ -81480,6 +81480,7 @@ enum UserAuthProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.Aut
   GOOGLE
   GITHUB
   WEBAUTHN
+  OIDC
 }
 """
 A connection to a list of items.
@@ -81576,6 +81577,7 @@ enum UserHistoryAuthProvider @goModel(model: "github.com/theopenlane/core/pkg/en
   GOOGLE
   GITHUB
   WEBAUTHN
+  OIDC
 }
 """
 A connection to a list of items.

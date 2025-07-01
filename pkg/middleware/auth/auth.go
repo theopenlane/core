@@ -17,13 +17,13 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	api "github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/sso"
 )
 
 // SessionSkipperFunc is the function that determines if the session check should be skipped
@@ -318,22 +318,26 @@ func getSubjectName(user *ent.User) string {
 	return subjectName
 }
 
-// unauthorized returns a 401 Unauthorized response with the error message.
+// unauthorized returns a 401 Unauthorized response with the error message
 func unauthorized(c echo.Context, err error, conf *Options, v tokens.Validator) error {
 	if v != nil && conf != nil && conf.DBClient != nil {
 		if orgID := orgIDFromToken(c, v); orgID != "" {
 			enforced, dbErr := isSSOEnforced(c.Request().Context(), conf.DBClient, orgID)
 			if dbErr == nil && enforced {
-				return c.Redirect(http.StatusFound, sso.SSOLogin(c.Echo(), orgID))
+				if redirErr := c.Redirect(http.StatusFound, fmt.Sprintf("/v1/sso/login?organization_id=%s", orgID)); redirErr != nil {
+					return redirErr
+				}
+
+				return nil
 			}
 		}
 	}
 
-	if err := c.JSON(http.StatusUnauthorized, rout.ErrorResponse(err)); err != nil {
-		return err
+	if jsonErr := c.JSON(http.StatusUnauthorized, rout.ErrorResponse(err)); jsonErr != nil {
+		return jsonErr
 	}
 
-	return err
+	return nil
 }
 
 func orgIDFromToken(c echo.Context, v tokens.Validator) string {
@@ -354,11 +358,15 @@ func orgIDFromToken(c echo.Context, v tokens.Validator) string {
 	return ""
 }
 
-func isSSOEnforced(ctx context.Context, db *ent.Client, orgID string) (bool, error) {
+func isSSOEnforced(ctx context.Context, db *generated.Client, orgID string) (bool, error) {
 	setting, err := db.OrganizationSetting.Query().
 		Where(organizationsetting.OrganizationID(orgID)).
 		Only(privacy.DecisionContext(ctx, privacy.Allow))
 	if err != nil {
+		if generated.IsNotFound(err) {
+			return false, nil
+		}
+
 		return false, err
 	}
 
