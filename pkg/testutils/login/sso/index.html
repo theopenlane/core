@@ -53,9 +53,11 @@
                 const ret = encodeURIComponent(
                   window.location.origin + window.location.pathname,
                 );
+                const loginPath = "/v1/sso/login";
                 window.location =
                   apiBase +
-                  "/v1/sso/login?organization_id=" +
+                  loginPath +
+                  "?organization_id=" +
                   d.organization_id +
                   "&return=" +
                   ret;

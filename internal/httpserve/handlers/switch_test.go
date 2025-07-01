@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/pkg/sso"
 )
 
 func (suite *HandlerTestSuite) TestSwitchHandlerSSOEnforced() {
@@ -71,5 +72,5 @@ func (suite *HandlerTestSuite) TestSwitchHandlerSSOEnforced() {
 	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
 	require.Equal(t, http.StatusFound, rec.Code)
-	assert.Equal(t, "/v1/sso/login?organization_id="+org.ID, rec.Header().Get("Location"))
+	assert.Equal(t, sso.SSOLogin(suite.e, org.ID), rec.Header().Get("Location"))
 }

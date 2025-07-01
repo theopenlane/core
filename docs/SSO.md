@@ -70,6 +70,10 @@ mutation UpdateOrg {
 
 When the update is saved, users will be redirected to Google Workspace for sign-in.
 
+Organization owners can still log in with their username and password even when
+`identityProviderLoginEnforced` is enabled. Non-owner members will be redirected
+to the configured IdP.
+
 ## 3. Verifying the Configuration
 
 After updating the organization settings, log out of Openlane and attempt to log in again. You should be redirected to the configured identity provider. If the login process succeeds, your Openlane session will start normally.

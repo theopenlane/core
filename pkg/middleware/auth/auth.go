@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	api "github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/pkg/sso"
 )
 
 // SessionSkipperFunc is the function that determines if the session check should be skipped
@@ -323,7 +324,7 @@ func unauthorized(c echo.Context, err error, conf *Options, v tokens.Validator) 
 		if orgID := orgIDFromToken(c, v); orgID != "" {
 			enforced, dbErr := isSSOEnforced(c.Request().Context(), conf.DBClient, orgID)
 			if dbErr == nil && enforced {
-				return c.Redirect(http.StatusFound, fmt.Sprintf("/v1/sso/login?organization_id=%s", orgID))
+				return c.Redirect(http.StatusFound, sso.SSOLogin(c.Echo(), orgID))
 			}
 		}
 	}

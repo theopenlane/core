@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/getkin/kin-openapi/openapi3"
@@ -17,6 +16,7 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/pkg/sso"
 )
 
 // SwitchHandler is responsible for handling requests to the `/switch` endpoint, and changing the user's logged in organization context
@@ -62,7 +62,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 			orgmembership.OrganizationID(in.TargetOrganizationID),
 		).Only(allowCtx)
 		if mErr == nil && member.Role != enums.RoleOwner {
-			loginURL := fmt.Sprintf("/v1/sso/login?organization_id=%s", in.TargetOrganizationID)
+			loginURL := sso.SSOLogin(ctx.Echo(), in.TargetOrganizationID)
 			return ctx.Redirect(http.StatusFound, loginURL)
 		}
 	}

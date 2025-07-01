@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 
 	"ariga.io/entcache"
@@ -19,6 +18,7 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/pkg/sso"
 )
 
 // LoginHandler validates the user credentials and returns a valid cookie
@@ -53,7 +53,7 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 
 	if orgID, ok := h.ssoOrgForUser(allowCtx, in.Username); ok {
 		metrics.Logins.WithLabelValues("false").Inc()
-		return ctx.Redirect(http.StatusFound, fmt.Sprintf("/v1/sso/login?organization_id=%s", orgID))
+		return ctx.Redirect(http.StatusFound, sso.SSOLogin(ctx.Echo(), orgID))
 	}
 
 	if user.Password == nil {

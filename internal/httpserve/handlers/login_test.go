@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/pkg/sso"
 )
 
 func (suite *HandlerTestSuite) TestLoginHandler() {
@@ -313,7 +314,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforced() {
 	suite.e.ServeHTTP(rec, req)
 
 	require.Equal(t, http.StatusFound, rec.Code)
-	assert.Equal(t, "/v1/sso/login?organization_id="+org.ID, rec.Header().Get("Location"))
+	assert.Equal(t, sso.SSOLogin(suite.e, org.ID), rec.Header().Get("Location"))
 }
 
 func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforcedOwnerBypass() {
@@ -325,7 +326,6 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforcedOwnerBypass() {
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	ownerUser := suite.userBuilderWithInput(ctx, &userInput{
-		email:         ulids.New().String() + "@theopenlane.io",
 		password:      "0wn3rP@ssw0rd",
 		confirmedUser: true,
 	})
@@ -344,12 +344,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforcedOwnerBypass() {
 	suite.db.OrganizationSetting.UpdateOneID(setting.ID).
 		SetOrganizationID(org.ID).
 		ExecX(ownerCtx)
-
-	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
-		OrganizationID: org.ID,
-		UserID:         ownerUser.UserInfo.ID,
-		Role:           &enums.RoleOwner,
-	}).ExecX(ownerCtx)
+	// OrganizationCreate hook automatically adds the creating user as the organization owner
 
 	suite.db.UserSetting.UpdateOneID(ownerUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(ownerCtx)
 

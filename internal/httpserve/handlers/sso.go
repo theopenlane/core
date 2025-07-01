@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/ulids"
 	"github.com/zitadel/oidc/pkg/client/rp"
 	"github.com/zitadel/oidc/pkg/oidc"
@@ -25,7 +26,7 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 )
 
-type nonceKey struct{}
+type nonce string
 
 // fetchSSOStatus returns the SSO status for a given organization
 func (h *Handler) fetchSSOStatus(ctx context.Context, orgID string) (models.SSOStatusReply, error) {
@@ -52,6 +53,7 @@ func (h *Handler) fetchSSOStatus(ctx context.Context, orgID string) (models.SSOS
 
 // WebfingerHandler returns if SSO login is enforced for an organization via a webfinger query
 func (h *Handler) WebfingerHandler(ctx echo.Context) error {
+	reqCtx := ctx.Request().Context()
 	resource := ctx.QueryParam("resource")
 	if resource == "" {
 		return h.BadRequest(ctx, ErrMissingField)
@@ -63,7 +65,7 @@ func (h *Handler) WebfingerHandler(ctx echo.Context) error {
 		orgID = strings.TrimPrefix(resource, "org:")
 	case strings.HasPrefix(resource, "acct:"):
 		email := strings.TrimPrefix(resource, "acct:")
-		allowCtx := privacy.DecisionContext(ctx.Request().Context(), privacy.Allow)
+		allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
 		user, err := h.getUserByEmail(allowCtx, email)
 		if err != nil {
 			return h.BadRequest(ctx, err)
@@ -80,7 +82,7 @@ func (h *Handler) WebfingerHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrMissingField)
 	}
 
-	out, err := h.fetchSSOStatus(ctx.Request().Context(), orgID)
+	out, err := h.fetchSSOStatus(reqCtx, orgID)
 	if err != nil {
 		return h.BadRequest(ctx, err)
 	}
@@ -106,7 +108,12 @@ func (h *Handler) oidcConfig(ctx context.Context, orgID string) (rp.RelyingParty
 		*setting.IdentityProviderClientSecret,
 		h.ssoCallbackURL(),
 		[]string{oidc.ScopeOpenID, oidc.ScopeProfile, oidc.ScopeEmail},
-		rp.WithCustomDiscoveryUrl(setting.OidcDiscoveryEndpoint),
+		rp.WithVerifierOpts(rp.WithNonce(func(ctx context.Context) string {
+			if n, ok := contextx.From[nonce](ctx); ok {
+				return string(n)
+			}
+			return ""
+		})),
 	)
 	if err != nil {
 		return nil, err
@@ -148,12 +155,19 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context) error {
 
 // SSOCallbackHandler completes the OIDC flow and issues a session for the user.
 func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
+	reqCtx := ctx.Request().Context()
 	orgID := ctx.QueryParam("organization_id")
+	if orgID == "" {
+		if c, err := ctx.Request().Cookie("organization_id"); err == nil {
+			orgID = c.Value
+		}
+	}
+
 	if orgID == "" {
 		return h.BadRequest(ctx, ErrMissingField)
 	}
 
-	rpCfg, err := h.oidcConfig(ctx.Request().Context(), orgID)
+	rpCfg, err := h.oidcConfig(reqCtx, orgID)
 	if err != nil {
 		return h.BadRequest(ctx, err)
 	}
@@ -167,13 +181,13 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrNonceMissing)
 	}
 
-	nonceCtx := context.WithValue(ctx.Request().Context(), nonceKey{}, nonceCookie.Value)
+	nonceCtx := contextx.With(reqCtx, nonce(nonceCookie.Value))
 	tokens, err := rp.CodeExchange(nonceCtx, ctx.QueryParam("code"), rpCfg)
 	if err != nil {
 		return h.BadRequest(ctx, err)
 	}
 
-	ctxWithToken := token.NewContextWithOauthTooToken(ctx.Request().Context(), tokens.IDTokenClaims.GetEmail())
+	ctxWithToken := token.NewContextWithOauthTooToken(reqCtx, tokens.IDTokenClaims.GetEmail())
 
 	entUser, err := h.CheckAndCreateUser(ctxWithToken, tokens.IDTokenClaims.GetName(), tokens.IDTokenClaims.GetEmail(), enums.AuthProviderOIDC, tokens.IDTokenClaims.GetPicture())
 	if err != nil {
