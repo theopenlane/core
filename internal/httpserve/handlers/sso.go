@@ -14,6 +14,7 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/utils/rout"
@@ -31,8 +32,9 @@ func (h *Handler) fetchSSOStatus(ctx context.Context, orgID string) (models.SSOS
 	}
 
 	out := models.SSOStatusReply{
-		Reply:    rout.Reply{Success: true},
-		Enforced: setting.IdentityProviderLoginEnforced,
+		Reply:          rout.Reply{Success: true},
+		Enforced:       setting.IdentityProviderLoginEnforced,
+		OrganizationID: orgID,
 	}
 
 	if setting.IdentityProvider != enums.SSOProvider("") {
@@ -52,7 +54,25 @@ func (h *Handler) WebfingerHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrMissingField)
 	}
 
-	orgID := strings.TrimPrefix(resource, "org:")
+	var orgID string
+	switch {
+	case strings.HasPrefix(resource, "org:"):
+		orgID = strings.TrimPrefix(resource, "org:")
+	case strings.HasPrefix(resource, "acct:"):
+		email := strings.TrimPrefix(resource, "acct:")
+		allowCtx := privacy.DecisionContext(ctx.Request().Context(), privacy.Allow)
+		user, err := h.getUserByEmail(allowCtx, email)
+		if err != nil {
+			return h.BadRequest(ctx, err)
+		}
+		orgID, err = h.getUserDefaultOrgID(allowCtx, user.ID)
+		if err != nil {
+			return h.BadRequest(ctx, err)
+		}
+	default:
+		return h.BadRequest(ctx, ErrMissingField)
+	}
+
 	if orgID == "" {
 		return h.BadRequest(ctx, ErrMissingField)
 	}

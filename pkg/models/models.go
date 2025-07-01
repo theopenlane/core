@@ -992,9 +992,10 @@ type SSOStatusRequest struct {
 // SSOStatusReply is the response for SSOStatusRequest
 type SSOStatusReply struct {
 	rout.Reply
-	Enforced     bool              `json:"enforced"`
-	Provider     enums.SSOProvider `json:"provider,omitempty"`
-	DiscoveryURL string            `json:"discovery_url,omitempty"`
+	Enforced       bool              `json:"enforced"`
+	Provider       enums.SSOProvider `json:"provider,omitempty"`
+	DiscoveryURL   string            `json:"discovery_url,omitempty"`
+	OrganizationID string            `json:"organization_id,omitempty"`
 }
 
 // ExampleSSOStatusRequest is an example request for OpenAPI documentation
@@ -1004,8 +1005,9 @@ var ExampleSSOStatusRequest = SSOStatusRequest{
 
 // ExampleSSOStatusReply is an example response for OpenAPI documentation
 var ExampleSSOStatusReply = SSOStatusReply{
-	Reply:        rout.Reply{Success: true},
-	Enforced:     true,
-	Provider:     enums.SSOProviderOkta,
-	DiscoveryURL: "https://id.example.com/.well-known/openid-configuration",
+	Reply:          rout.Reply{Success: true},
+	Enforced:       true,
+	Provider:       enums.SSOProviderOkta,
+	DiscoveryURL:   "https://id.example.com/.well-known/openid-configuration",
+	OrganizationID: ulids.New().String(),
 }

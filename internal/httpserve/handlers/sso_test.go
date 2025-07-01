@@ -48,4 +48,14 @@ func (suite *HandlerTestSuite) TestWebfingerHandler() {
 	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
 	log.Error().Err(errors.New("output")).Interface("out", out).Msg("WebfingerHandler output")
 	assert.True(t, out.Enforced)
+	assert.Equal(t, org.ID, out.OrganizationID)
+
+	emailReq := httptest.NewRequest(http.MethodGet, "/.well-known/webfinger?resource=acct:"+testUser1.UserInfo.Email, nil)
+	emailRec := httptest.NewRecorder()
+	suite.e.ServeHTTP(emailRec, emailReq)
+	require.Equal(t, http.StatusOK, emailRec.Code)
+	var emailOut models.SSOStatusReply
+	require.NoError(t, json.NewDecoder(emailRec.Body).Decode(&emailOut))
+	assert.True(t, emailOut.Enforced)
+	assert.Equal(t, org.ID, emailOut.OrganizationID)
 }

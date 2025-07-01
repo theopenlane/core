@@ -3,30 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSO Login</title>
+    <title>SSO Webfinger Test</title>
     <link href="../webauthn/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<div class="container d-flex justify-content-center align-items-center vh-100">
-    <div class="bg-light p-5 rounded w-50 text-center">
-        <h1 class="mb-4">SSO Login</h1>
-        <a class="btn btn-primary" id="loginButton" href="#">Login</a>
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="bg-light p-5 rounded w-50">
+            <h1 class="mb-4 text-center">SSO Webfinger</h1>
+            <div class="mb-3">
+                <input type="email" class="form-control" id="username" placeholder="email">
+            </div>
+            <div class="d-grid gap-2">
+                <button class="btn btn-primary" id="checkButton">Check Enforcement</button>
+            </div>
+            <div class="mt-3" id="output"></div>
+        </div>
     </div>
-</div>
 <script>
-(async function() {
-    try {
-        const res = await fetch('http://localhost:9998/client');
-        const info = await res.json();
-        const base = info.discovery_url.replace('/.well-known/openid-configuration','');
-        const url = base + '/auth?client_id=' + info.client_id +
-            '&redirect_uri=' + encodeURIComponent('http://localhost:17608/v1/sso/callback') +
-            '&response_type=code&scope=openid';
-        document.getElementById('loginButton').href = url;
-    } catch (err) {
-        console.error(err);
-    }
-})();
+const apiBase = 'http://localhost:17608';
+document.getElementById('checkButton').addEventListener('click', function() {
+    const email = document.getElementById('username').value;
+    fetch(apiBase + '/v1/.well-known/webfinger?resource=acct:' + encodeURIComponent(email))
+        .then(r => r.json())
+        .then(d => {
+            document.getElementById('output').innerText = JSON.stringify(d);
+            if (d.enforced && d.organization_id) {
+                window.location = apiBase + '/v1/sso/login?organization_id=' + d.organization_id;
+            }
+        })
+        .catch(err => { document.getElementById('output').innerText = err; });
+});
 </script>
 </body>
 </html>
