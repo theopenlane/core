@@ -7093,11 +7093,6 @@ func (csj *ControlScheduledJobQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, controlscheduledjob.FieldConfiguration)
 				fieldSeen[controlscheduledjob.FieldConfiguration] = struct{}{}
 			}
-		case "cadence":
-			if _, ok := fieldSeen[controlscheduledjob.FieldCadence]; !ok {
-				selectedFields = append(selectedFields, controlscheduledjob.FieldCadence)
-				fieldSeen[controlscheduledjob.FieldCadence] = struct{}{}
-			}
 		case "cron":
 			if _, ok := fieldSeen[controlscheduledjob.FieldCron]; !ok {
 				selectedFields = append(selectedFields, controlscheduledjob.FieldCron)
@@ -7247,11 +7242,6 @@ func (csjh *ControlScheduledJobHistoryQuery) collectField(ctx context.Context, o
 			if _, ok := fieldSeen[controlscheduledjobhistory.FieldConfiguration]; !ok {
 				selectedFields = append(selectedFields, controlscheduledjobhistory.FieldConfiguration)
 				fieldSeen[controlscheduledjobhistory.FieldConfiguration] = struct{}{}
-			}
-		case "cadence":
-			if _, ok := fieldSeen[controlscheduledjobhistory.FieldCadence]; !ok {
-				selectedFields = append(selectedFields, controlscheduledjobhistory.FieldCadence)
-				fieldSeen[controlscheduledjobhistory.FieldCadence] = struct{}{}
 			}
 		case "cron":
 			if _, ok := fieldSeen[controlscheduledjobhistory.FieldCron]; !ok {

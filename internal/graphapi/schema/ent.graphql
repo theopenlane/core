@@ -6321,10 +6321,6 @@ type ControlScheduledJob implements Node {
   """
   configuration: JobConfiguration!
   """
-  the schedule to run this job. If not provided, it would inherit the cadence of the parent job
-  """
-  cadence: JobCadence
-  """
   cron syntax. If not provided, it would inherit the cron of the parent job
   """
   cron: String
@@ -6449,10 +6445,6 @@ type ControlScheduledJobHistory implements Node {
   the configuration to run this job
   """
   configuration: JobConfiguration!
-  """
-  the schedule to run this job. If not provided, it would inherit the cadence of the parent job
-  """
-  cadence: JobCadence
   """
   cron syntax. If not provided, it would inherit the cron of the parent job
   """
@@ -7722,10 +7714,6 @@ input CreateControlScheduledJobInput {
   the configuration to run this job
   """
   configuration: JobConfiguration!
-  """
-  the schedule to run this job. If not provided, it would inherit the cadence of the parent job
-  """
-  cadence: JobCadence
   """
   cron syntax. If not provided, it would inherit the cron of the parent job
   """
@@ -45250,11 +45238,7 @@ input UpdateControlScheduledJobInput {
   the configuration to run this job
   """
   configuration: JobConfiguration
-  """
-  the schedule to run this job. If not provided, it would inherit the cadence of the parent job
-  """
-  cadence: JobCadence
-  clearCadence: Boolean
+  appendConfiguration: JobConfiguration
   """
   cron syntax. If not provided, it would inherit the cron of the parent job
   """
@@ -47058,6 +47042,7 @@ input UpdateScheduledJobInput {
   the configuration to run this job
   """
   configuration: JobConfiguration
+  appendConfiguration: JobConfiguration
   """
   the schedule to run this job
   """

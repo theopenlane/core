@@ -48,13 +48,6 @@ func (ControlScheduledJob) Fields() []ent.Field {
 			).
 			Comment("the configuration to run this job"),
 
-		field.JSON("cadence", models.JobCadence{}).
-			Comment("the schedule to run this job. If not provided, it would inherit the cadence of the parent job").
-			Annotations(
-				entgql.Skip(entgql.SkipWhereInput | entgql.SkipOrderField),
-			).
-			Optional(),
-
 		field.String("cron").
 			GoType(models.Cron("")).
 			Comment("cron syntax. If not provided, it would inherit the cron of the parent job").

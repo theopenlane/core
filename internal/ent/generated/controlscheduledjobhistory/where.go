@@ -776,16 +776,6 @@ func JobIDContainsFold(v string) predicate.ControlScheduledJobHistory {
 	return predicate.ControlScheduledJobHistory(sql.FieldContainsFold(FieldJobID, v))
 }
 
-// CadenceIsNil applies the IsNil predicate on the "cadence" field.
-func CadenceIsNil() predicate.ControlScheduledJobHistory {
-	return predicate.ControlScheduledJobHistory(sql.FieldIsNull(FieldCadence))
-}
-
-// CadenceNotNil applies the NotNil predicate on the "cadence" field.
-func CadenceNotNil() predicate.ControlScheduledJobHistory {
-	return predicate.ControlScheduledJobHistory(sql.FieldNotNull(FieldCadence))
-}
-
 // CronEQ applies the EQ predicate on the "cron" field.
 func CronEQ(v models.Cron) predicate.ControlScheduledJobHistory {
 	return predicate.ControlScheduledJobHistory(sql.FieldEQ(FieldCron, v))

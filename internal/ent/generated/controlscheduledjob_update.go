@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
@@ -149,31 +150,9 @@ func (csju *ControlScheduledJobUpdate) SetConfiguration(mc models.JobConfigurati
 	return csju
 }
 
-// SetNillableConfiguration sets the "configuration" field if the given value is not nil.
-func (csju *ControlScheduledJobUpdate) SetNillableConfiguration(mc *models.JobConfiguration) *ControlScheduledJobUpdate {
-	if mc != nil {
-		csju.SetConfiguration(*mc)
-	}
-	return csju
-}
-
-// SetCadence sets the "cadence" field.
-func (csju *ControlScheduledJobUpdate) SetCadence(mc models.JobCadence) *ControlScheduledJobUpdate {
-	csju.mutation.SetCadence(mc)
-	return csju
-}
-
-// SetNillableCadence sets the "cadence" field if the given value is not nil.
-func (csju *ControlScheduledJobUpdate) SetNillableCadence(mc *models.JobCadence) *ControlScheduledJobUpdate {
-	if mc != nil {
-		csju.SetCadence(*mc)
-	}
-	return csju
-}
-
-// ClearCadence clears the value of the "cadence" field.
-func (csju *ControlScheduledJobUpdate) ClearCadence() *ControlScheduledJobUpdate {
-	csju.mutation.ClearCadence()
+// AppendConfiguration appends mc to the "configuration" field.
+func (csju *ControlScheduledJobUpdate) AppendConfiguration(mc models.JobConfiguration) *ControlScheduledJobUpdate {
+	csju.mutation.AppendConfiguration(mc)
 	return csju
 }
 
@@ -376,11 +355,6 @@ func (csju *ControlScheduledJobUpdate) check() error {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJob.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := csju.mutation.Cadence(); ok {
-		if err := v.Validate(); err != nil {
-			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJob.cadence": %w`, err)}
-		}
-	}
 	if v, ok := csju.mutation.Cron(); ok {
 		if err := v.Validate(); err != nil {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJob.cron": %w`, err)}
@@ -443,11 +417,10 @@ func (csju *ControlScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err 
 	if value, ok := csju.mutation.Configuration(); ok {
 		_spec.SetField(controlscheduledjob.FieldConfiguration, field.TypeJSON, value)
 	}
-	if value, ok := csju.mutation.Cadence(); ok {
-		_spec.SetField(controlscheduledjob.FieldCadence, field.TypeJSON, value)
-	}
-	if csju.mutation.CadenceCleared() {
-		_spec.ClearField(controlscheduledjob.FieldCadence, field.TypeJSON)
+	if value, ok := csju.mutation.AppendedConfiguration(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, controlscheduledjob.FieldConfiguration, value)
+		})
 	}
 	if value, ok := csju.mutation.Cron(); ok {
 		_spec.SetField(controlscheduledjob.FieldCron, field.TypeString, value)
@@ -780,31 +753,9 @@ func (csjuo *ControlScheduledJobUpdateOne) SetConfiguration(mc models.JobConfigu
 	return csjuo
 }
 
-// SetNillableConfiguration sets the "configuration" field if the given value is not nil.
-func (csjuo *ControlScheduledJobUpdateOne) SetNillableConfiguration(mc *models.JobConfiguration) *ControlScheduledJobUpdateOne {
-	if mc != nil {
-		csjuo.SetConfiguration(*mc)
-	}
-	return csjuo
-}
-
-// SetCadence sets the "cadence" field.
-func (csjuo *ControlScheduledJobUpdateOne) SetCadence(mc models.JobCadence) *ControlScheduledJobUpdateOne {
-	csjuo.mutation.SetCadence(mc)
-	return csjuo
-}
-
-// SetNillableCadence sets the "cadence" field if the given value is not nil.
-func (csjuo *ControlScheduledJobUpdateOne) SetNillableCadence(mc *models.JobCadence) *ControlScheduledJobUpdateOne {
-	if mc != nil {
-		csjuo.SetCadence(*mc)
-	}
-	return csjuo
-}
-
-// ClearCadence clears the value of the "cadence" field.
-func (csjuo *ControlScheduledJobUpdateOne) ClearCadence() *ControlScheduledJobUpdateOne {
-	csjuo.mutation.ClearCadence()
+// AppendConfiguration appends mc to the "configuration" field.
+func (csjuo *ControlScheduledJobUpdateOne) AppendConfiguration(mc models.JobConfiguration) *ControlScheduledJobUpdateOne {
+	csjuo.mutation.AppendConfiguration(mc)
 	return csjuo
 }
 
@@ -1020,11 +971,6 @@ func (csjuo *ControlScheduledJobUpdateOne) check() error {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJob.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := csjuo.mutation.Cadence(); ok {
-		if err := v.Validate(); err != nil {
-			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJob.cadence": %w`, err)}
-		}
-	}
 	if v, ok := csjuo.mutation.Cron(); ok {
 		if err := v.Validate(); err != nil {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJob.cron": %w`, err)}
@@ -1104,11 +1050,10 @@ func (csjuo *ControlScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *
 	if value, ok := csjuo.mutation.Configuration(); ok {
 		_spec.SetField(controlscheduledjob.FieldConfiguration, field.TypeJSON, value)
 	}
-	if value, ok := csjuo.mutation.Cadence(); ok {
-		_spec.SetField(controlscheduledjob.FieldCadence, field.TypeJSON, value)
-	}
-	if csjuo.mutation.CadenceCleared() {
-		_spec.ClearField(controlscheduledjob.FieldCadence, field.TypeJSON)
+	if value, ok := csjuo.mutation.AppendedConfiguration(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, controlscheduledjob.FieldConfiguration, value)
+		})
 	}
 	if value, ok := csjuo.mutation.Cron(); ok {
 		_spec.SetField(controlscheduledjob.FieldCron, field.TypeString, value)

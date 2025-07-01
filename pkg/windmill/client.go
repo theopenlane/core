@@ -31,9 +31,12 @@ func (wrt *windmillRoundTripper) RoundTrip(req *http.Request) (*http.Response, e
 
 // Client is a simple SDK for creating and managing Windmill flows
 type Client struct {
-	baseURL    string
-	workspace  string
-	httpClient *http.Client
+	baseURL         string
+	workspace       string
+	httpClient      *http.Client
+	timezone        string
+	onFailureScript string
+	onSuccessScript string
 }
 
 // NewWindmill creates a new Windmill client based on the provided configuration
@@ -61,8 +64,11 @@ func NewWindmill(cfg entconfig.Config) (*Client, error) {
 	}
 
 	return &Client{
-		baseURL:   cfg.Windmill.BaseURL,
-		workspace: cfg.Windmill.Workspace,
+		baseURL:         cfg.Windmill.BaseURL,
+		workspace:       cfg.Windmill.Workspace,
+		timezone:        cfg.Windmill.Timezone,
+		onFailureScript: cfg.Windmill.OnFailureScript,
+		onSuccessScript: cfg.Windmill.OnSuccessScript,
 		httpClient: &http.Client{
 			Timeout:   timeout,
 			Transport: transport,
@@ -77,16 +83,25 @@ func (c *Client) CreateFlow(ctx context.Context, req CreateFlowRequest) (*Create
 
 	modules := appendWindmillModule(req.Value)
 
-	apiReq := map[string]any{
-		"path":    req.Path,
-		"summary": req.Summary,
-		"value": map[string]any{
-			"modules": modules,
+	apiReq := struct {
+		Path    string `json:"path"`
+		Summary string `json:"summary"`
+		Value   struct {
+			Modules []any `json:"modules"`
+		} `json:"value"`
+		Schema any `json:"schema,omitempty"`
+	}{
+		Path:    req.Path,
+		Summary: req.Summary,
+		Value: struct {
+			Modules []any `json:"modules"`
+		}{
+			Modules: modules,
 		},
 	}
 
 	if req.Schema != nil {
-		apiReq["schema"] = req.Schema
+		apiReq.Schema = req.Schema
 	}
 
 	jsonData, err := json.Marshal(apiReq)
@@ -133,19 +148,37 @@ func (c *Client) UpdateFlow(ctx context.Context, path string, req UpdateFlowRequ
 
 	modules := appendWindmillModule(req.Value)
 
-	apiReq := map[string]any{
-		"summary": req.Summary,
-		"value": map[string]any{
-			"path":    path,
-			"summary": req.Summary,
-			"value": map[string]any{
-				"modules": modules,
+	apiReq := struct {
+		Summary string `json:"summary"`
+		Value   struct {
+			Path    string `json:"path"`
+			Summary string `json:"summary"`
+			Value   struct {
+				Modules []any `json:"modules"`
+			} `json:"value"`
+		} `json:"value"`
+		Schema any `json:"schema,omitempty"`
+	}{
+		Summary: req.Summary,
+		Value: struct {
+			Path    string `json:"path"`
+			Summary string `json:"summary"`
+			Value   struct {
+				Modules []any `json:"modules"`
+			} `json:"value"`
+		}{
+			Path:    path,
+			Summary: req.Summary,
+			Value: struct {
+				Modules []any `json:"modules"`
+			}{
+				Modules: modules,
 			},
 		},
 	}
 
 	if req.Schema != nil {
-		apiReq["schema"] = req.Schema
+		apiReq.Schema = req.Schema
 	}
 
 	jsonData, err := json.Marshal(apiReq)
@@ -198,12 +231,143 @@ func (c *Client) GetFlow(ctx context.Context, path string) (*Flow, error) {
 	return &flow, nil
 }
 
+// CreateScheduledJob creates a new scheduled job in Windmill
+func (c *Client) CreateScheduledJob(ctx context.Context, req CreateScheduledJobRequest) (*CreateScheduledJobResponse, error) {
+	url := fmt.Sprintf("%s/api/w/%s/schedules/create", c.baseURL, c.workspace)
+
+	apiReq := struct {
+		Path       string `json:"path"`
+		Schedule   string `json:"schedule"`
+		ScriptPath string `json:"script_path"`
+		Enabled    bool   `json:"enabled"`
+		Timezone   string `json:"timezone,omitempty"`
+		OnFailure  *struct {
+			ScriptPath string `json:"script_path"`
+			Args       any    `json:"args,omitempty"`
+		} `json:"on_failure,omitempty"`
+		OnSuccess *struct {
+			ScriptPath string `json:"script_path"`
+			Args       any    `json:"args,omitempty"`
+		} `json:"on_success,omitempty"`
+		Args    any    `json:"args,omitempty"`
+		Summary string `json:"summary,omitempty"`
+	}{
+		Path:       req.Path,
+		Schedule:   req.Schedule,
+		ScriptPath: req.FlowPath,
+		Enabled:    true,
+		Timezone:   c.timezone,
+	}
+
+	if c.onFailureScript != "" {
+		apiReq.OnFailure = &struct {
+			ScriptPath string `json:"script_path"`
+			Args       any    `json:"args,omitempty"`
+		}{
+			ScriptPath: c.onFailureScript,
+			Args:       req.Args,
+		}
+	}
+
+	if c.onSuccessScript != "" {
+		apiReq.OnSuccess = &struct {
+			ScriptPath string `json:"script_path"`
+			Args       any    `json:"args,omitempty"`
+		}{
+			ScriptPath: c.onSuccessScript,
+			Args:       req.Args,
+		}
+	}
+
+	if req.Args != nil {
+		apiReq.Args = req.Args
+	}
+
+	if req.Summary != "" {
+		apiReq.Summary = req.Summary
+	}
+
+	jsonData, err := json.Marshal(apiReq)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request: %w", err)
+	}
+
+	httpReq, err := http.NewRequestWithContext(ctx, "POST", url, bytes.NewBuffer(jsonData))
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %w", err)
+	}
+
+	resp, err := c.httpClient.Do(httpReq)
+	if err != nil {
+		return nil, fmt.Errorf("failed to execute request: %w", err)
+	}
+	defer resp.Body.Close()
+
+	respBody, readErr := io.ReadAll(resp.Body)
+	if readErr != nil {
+		return nil, fmt.Errorf("failed to read response body: %w", readErr)
+	}
+
+	if resp.StatusCode != http.StatusCreated && resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("unexpected status code: %d, URL: %s, response body: %s", resp.StatusCode, url, string(respBody))
+	}
+
+	// The response is plain text containing the schedule path, not JSON
+	schedulePath := string(respBody)
+	if schedulePath == "" {
+		return nil, fmt.Errorf("empty response body")
+	}
+
+	response := &CreateScheduledJobResponse{
+		Path: schedulePath,
+	}
+
+	return response, nil
+}
+
 // appendWindmillModule appends the standard Windmill Go module to the modules array
 func appendWindmillModule(modules []any) []any {
-	windmillModule := map[string]any{
-		"id": generateRandomID(),
-		"value": map[string]any{
-			"lock": `module mymod
+	windmillModule := struct {
+		ID    string `json:"id"`
+		Value struct {
+			Lock            string `json:"lock"`
+			Type            string `json:"type"`
+			Content         string `json:"content"`
+			Language        string `json:"language"`
+			InputTransforms struct {
+				X struct {
+					Type  string `json:"type"`
+					Value string `json:"value"`
+				} `json:"x"`
+				Nested struct {
+					Type  string `json:"type"`
+					Value struct {
+						Foo string `json:"foo"`
+					} `json:"value"`
+				} `json:"nested"`
+			} `json:"input_transforms"`
+		} `json:"value"`
+	}{
+		ID: generateRandomID(),
+		Value: struct {
+			Lock            string `json:"lock"`
+			Type            string `json:"type"`
+			Content         string `json:"content"`
+			Language        string `json:"language"`
+			InputTransforms struct {
+				X struct {
+					Type  string `json:"type"`
+					Value string `json:"value"`
+				} `json:"x"`
+				Nested struct {
+					Type  string `json:"type"`
+					Value struct {
+						Foo string `json:"foo"`
+					} `json:"value"`
+				} `json:"nested"`
+			} `json:"input_transforms"`
+		}{
+			Lock: `module mymod
 
 go 1.22.5
 
@@ -240,8 +404,8 @@ github.com/windmill-labs/windmill-go-client v1.501.4 h1:uwaWmLgZ0JXNusbp/j8r0DQf
 github.com/windmill-labs/windmill-go-client v1.501.4/go.mod h1:RjnzKr3lc7/Gr72zXDmmqtnUm6PzU+UVHhd3alNKxoM=
 gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
 gopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=`,
-			"type": "rawscript",
-			"content": `package inner
+			Type: "rawscript",
+			Content: `package inner
 
 import (
 	"fmt"
@@ -262,7 +426,13 @@ func main(x string, nested struct {
 	}
 	fmt.Println("Fetched variable:", v)
 
-	payload := map[string]string{"status": "success", "token" : v}
+	payload := struct {
+		Status string ` + "`json:\"status\"`" + `
+		Token  string ` + "`json:\"token\"`" + `
+	}{
+		Status: "success",
+		Token:  v,
+	}
 	jsonData, err := json.Marshal(payload)
 	if err != nil {
 		return nil, err
@@ -280,16 +450,37 @@ func main(x string, nested struct {
 
 	return x, nil
 }`,
-			"language": "go",
-			"input_transforms": map[string]any{
-				"x": map[string]any{
-					"type":  "static",
-					"value": "",
+			Language: "go",
+			InputTransforms: struct {
+				X struct {
+					Type  string `json:"type"`
+					Value string `json:"value"`
+				} `json:"x"`
+				Nested struct {
+					Type  string `json:"type"`
+					Value struct {
+						Foo string `json:"foo"`
+					} `json:"value"`
+				} `json:"nested"`
+			}{
+				X: struct {
+					Type  string `json:"type"`
+					Value string `json:"value"`
+				}{
+					Type:  "static",
+					Value: "",
 				},
-				"nested": map[string]any{
-					"type": "static",
-					"value": map[string]any{
-						"foo": "",
+				Nested: struct {
+					Type  string `json:"type"`
+					Value struct {
+						Foo string `json:"foo"`
+					} `json:"value"`
+				}{
+					Type: "static",
+					Value: struct {
+						Foo string `json:"foo"`
+					}{
+						Foo: "",
 					},
 				},
 			},

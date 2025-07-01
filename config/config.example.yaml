@@ -127,6 +127,9 @@ entConfig:
         workspace: ""
         token: ""
         defaultTimeout: "30s"
+        timezone: "UTC"
+        onFailureScript: ""
+        onSuccessScript: ""
 jobQueue:
     connectionURI: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
     riverConf:

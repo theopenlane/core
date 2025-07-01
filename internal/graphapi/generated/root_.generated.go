@@ -689,7 +689,6 @@ type ComplexityRoot struct {
 	}
 
 	ControlScheduledJob struct {
-		Cadence       func(childComplexity int) int
 		Configuration func(childComplexity int) int
 		Controls      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt     func(childComplexity int) int
@@ -731,7 +730,6 @@ type ComplexityRoot struct {
 	}
 
 	ControlScheduledJobHistory struct {
-		Cadence       func(childComplexity int) int
 		Configuration func(childComplexity int) int
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
@@ -7837,13 +7835,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlObjectiveUpdatePayload.ControlObjective(childComplexity), true
 
-	case "ControlScheduledJob.cadence":
-		if e.complexity.ControlScheduledJob.Cadence == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJob.Cadence(childComplexity), true
-
 	case "ControlScheduledJob.configuration":
 		if e.complexity.ControlScheduledJob.Configuration == nil {
 			break
@@ -8014,13 +8005,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlScheduledJobEdge.Node(childComplexity), true
-
-	case "ControlScheduledJobHistory.cadence":
-		if e.complexity.ControlScheduledJobHistory.Cadence == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobHistory.Cadence(childComplexity), true
 
 	case "ControlScheduledJobHistory.configuration":
 		if e.complexity.ControlScheduledJobHistory.Configuration == nil {
@@ -39550,10 +39534,6 @@ type ControlScheduledJob implements Node {
   """
   configuration: JobConfiguration!
   """
-  the schedule to run this job. If not provided, it would inherit the cadence of the parent job
-  """
-  cadence: JobCadence
-  """
   cron syntax. If not provided, it would inherit the cron of the parent job
   """
   cron: String
@@ -39678,10 +39658,6 @@ type ControlScheduledJobHistory implements Node {
   the configuration to run this job
   """
   configuration: JobConfiguration!
-  """
-  the schedule to run this job. If not provided, it would inherit the cadence of the parent job
-  """
-  cadence: JobCadence
   """
   cron syntax. If not provided, it would inherit the cron of the parent job
   """
@@ -40951,10 +40927,6 @@ input CreateControlScheduledJobInput {
   the configuration to run this job
   """
   configuration: JobConfiguration!
-  """
-  the schedule to run this job. If not provided, it would inherit the cadence of the parent job
-  """
-  cadence: JobCadence
   """
   cron syntax. If not provided, it would inherit the cron of the parent job
   """
@@ -78479,11 +78451,7 @@ input UpdateControlScheduledJobInput {
   the configuration to run this job
   """
   configuration: JobConfiguration
-  """
-  the schedule to run this job. If not provided, it would inherit the cadence of the parent job
-  """
-  cadence: JobCadence
-  clearCadence: Boolean
+  appendConfiguration: JobConfiguration
   """
   cron syntax. If not provided, it would inherit the cron of the parent job
   """
@@ -80287,6 +80255,7 @@ input UpdateScheduledJobInput {
   the configuration to run this job
   """
   configuration: JobConfiguration
+  appendConfiguration: JobConfiguration
   """
   the schedule to run this job
   """

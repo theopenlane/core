@@ -768,9 +768,6 @@ func (csjh *ControlScheduledJobHistory) changes(new *ControlScheduledJobHistory)
 	if !reflect.DeepEqual(csjh.Configuration, new.Configuration) {
 		changes = append(changes, NewChange(controlscheduledjobhistory.FieldConfiguration, csjh.Configuration, new.Configuration))
 	}
-	if !reflect.DeepEqual(csjh.Cadence, new.Cadence) {
-		changes = append(changes, NewChange(controlscheduledjobhistory.FieldCadence, csjh.Cadence, new.Cadence))
-	}
 	if !reflect.DeepEqual(csjh.Cron, new.Cron) {
 		changes = append(changes, NewChange(controlscheduledjobhistory.FieldCron, csjh.Cron, new.Cron))
 	}

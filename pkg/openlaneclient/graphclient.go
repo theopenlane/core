@@ -19015,7 +19015,6 @@ func (t *GetControlObjectiveHistories_ControlObjectiveHistories) GetEdges() []*G
 }
 
 type CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
 	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -19028,12 +19027,6 @@ type CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlSc
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs{}
-	}
-	return t.Cadence
-}
 func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs{}
@@ -19107,7 +19100,6 @@ func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob) GetC
 }
 
 type CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
 	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -19120,12 +19112,6 @@ type CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlSchedule
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs{}
-	}
-	return t.Cadence
-}
 func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs{}
@@ -19199,7 +19185,6 @@ func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob) GetControl
 }
 
 type CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
 	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -19212,12 +19197,6 @@ type CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob str
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob{}
-	}
-	return t.Cadence
-}
 func (t *CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob{}
@@ -19334,7 +19313,6 @@ func (t *GetAllControlScheduledJobs_ControlScheduledJobs_PageInfo) GetStartCurso
 }
 
 type GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
 	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -19347,12 +19325,6 @@ type GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node struct {
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
-	}
-	return t.Cadence
-}
 func (t *GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
@@ -19451,7 +19423,6 @@ func (t *GetAllControlScheduledJobs_ControlScheduledJobs) GetTotalCount() int64 
 }
 
 type GetControlScheduledJobByID_ControlScheduledJob struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
 	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -19464,12 +19435,6 @@ type GetControlScheduledJobByID_ControlScheduledJob struct {
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetControlScheduledJobByID_ControlScheduledJob) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &GetControlScheduledJobByID_ControlScheduledJob{}
-	}
-	return t.Cadence
-}
 func (t *GetControlScheduledJobByID_ControlScheduledJob) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &GetControlScheduledJobByID_ControlScheduledJob{}
@@ -19564,7 +19529,6 @@ func (t *GetControlScheduledJobs_ControlScheduledJobs_PageInfo) GetStartCursor()
 }
 
 type GetControlScheduledJobs_ControlScheduledJobs_Edges_Node struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
 	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -19577,12 +19541,6 @@ type GetControlScheduledJobs_ControlScheduledJobs_Edges_Node struct {
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &GetControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
-	}
-	return t.Cadence
-}
 func (t *GetControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &GetControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
@@ -19681,7 +19639,6 @@ func (t *GetControlScheduledJobs_ControlScheduledJobs) GetTotalCount() int64 {
 }
 
 type UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
 	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -19694,12 +19651,6 @@ type UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob str
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob{}
-	}
-	return t.Cadence
-}
 func (t *UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob{}
@@ -19805,7 +19756,6 @@ func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_PageInf
 }
 
 type GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
 	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -19821,12 +19771,6 @@ type GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node 
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
-	}
-	return t.Cadence
-}
 func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
@@ -19975,7 +19919,6 @@ func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo) 
 }
 
 type GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
 	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -19991,12 +19934,6 @@ type GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node str
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
-	}
-	return t.Cadence
-}
 func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
@@ -91391,7 +91328,6 @@ func (c *Client) GetControlObjectiveHistories(ctx context.Context, where *Contro
 const CreateBulkCSVControlScheduledJobDocument = `mutation CreateBulkCSVControlScheduledJob ($input: Upload!) {
 	createBulkCSVControlScheduledJob(input: $input) {
 		controlScheduledJobs {
-			cadence
 			configuration
 			createdAt
 			createdBy
@@ -91427,7 +91363,6 @@ func (c *Client) CreateBulkCSVControlScheduledJob(ctx context.Context, input gra
 const CreateBulkControlScheduledJobDocument = `mutation CreateBulkControlScheduledJob ($input: [CreateControlScheduledJobInput!]) {
 	createBulkControlScheduledJob(input: $input) {
 		controlScheduledJobs {
-			cadence
 			configuration
 			createdAt
 			createdBy
@@ -91463,7 +91398,6 @@ func (c *Client) CreateBulkControlScheduledJob(ctx context.Context, input []*Cre
 const CreateControlScheduledJobDocument = `mutation CreateControlScheduledJob ($input: CreateControlScheduledJobInput!) {
 	createControlScheduledJob(input: $input) {
 		controlScheduledJob {
-			cadence
 			configuration
 			createdAt
 			createdBy
@@ -91531,7 +91465,6 @@ const GetAllControlScheduledJobsDocument = `query GetAllControlScheduledJobs {
 		}
 		edges {
 			node {
-				cadence
 				configuration
 				createdAt
 				createdBy
@@ -91565,7 +91498,6 @@ func (c *Client) GetAllControlScheduledJobs(ctx context.Context, interceptors ..
 
 const GetControlScheduledJobByIDDocument = `query GetControlScheduledJobByID ($controlScheduledJobId: ID!) {
 	controlScheduledJob(id: $controlScheduledJobId) {
-		cadence
 		configuration
 		createdAt
 		createdBy
@@ -91608,7 +91540,6 @@ const GetControlScheduledJobsDocument = `query GetControlScheduledJobs ($first: 
 		}
 		edges {
 			node {
-				cadence
 				configuration
 				createdAt
 				createdBy
@@ -91647,7 +91578,6 @@ func (c *Client) GetControlScheduledJobs(ctx context.Context, first *int64, last
 const UpdateControlScheduledJobDocument = `mutation UpdateControlScheduledJob ($updateControlScheduledJobId: ID!, $input: UpdateControlScheduledJobInput!) {
 	updateControlScheduledJob(id: $updateControlScheduledJobId, input: $input) {
 		controlScheduledJob {
-			cadence
 			configuration
 			createdAt
 			createdBy
@@ -91692,7 +91622,6 @@ const GetAllControlScheduledJobHistoriesDocument = `query GetAllControlScheduled
 		}
 		edges {
 			node {
-				cadence
 				configuration
 				createdAt
 				createdBy
@@ -91738,7 +91667,6 @@ const GetControlScheduledJobHistoriesDocument = `query GetControlScheduledJobHis
 		}
 		edges {
 			node {
-				cadence
 				configuration
 				createdAt
 				createdBy

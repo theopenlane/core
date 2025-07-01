@@ -20,7 +20,7 @@ import (
 )
 
 // HookScheduledJobCreate verifies a scheduled job has
-// a cadence set or a cron and the configuration matches what is expected
+// a cron and the configuration matches what is expected
 // It also validates the download URL and creates a Windmill flow if configured
 func HookScheduledJobCreate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
@@ -38,10 +38,9 @@ func HookScheduledJobCreate() ent.Hook {
 				}
 			}
 
-			cadence, hasCadence := mutation.Cadence()
 			cron, hasCron := mutation.Cron()
 
-			if err := validateCadenceOrCron(&cadence, hasCadence, cron, hasCron); err != nil {
+			if err := validateCron(cron, hasCron); err != nil {
 				return nil, err
 			}
 
@@ -81,7 +80,7 @@ func createWindmillFlow(ctx context.Context, mutation *generated.ScheduledJobMut
 		return err
 	}
 
-	flowPath := fmt.Sprintf("f/openlane/scheduled_job_%s", generateFlowPath(title))
+	flowPath := fmt.Sprintf("f/openlane/scheduled_job_%s", generateFlowPath())
 	summary := title
 	if description, _ := mutation.Description(); description != "" {
 		summary = fmt.Sprintf("%s - %s", title, description)
@@ -161,25 +160,31 @@ func downloadFlowDefinition(ctx context.Context, downloadURL string) ([]any, err
 }
 
 // generateFlowPath generates a unique random flow path
-func generateFlowPath(title string) string {
+func generateFlowPath() string {
 	return strings.ToLower(ulids.New().String())
 }
 
 // HookControlScheduledJobCreate verifies a job that can be attached to a control/subcontrol has
-// a cadence set or a cron and the configuration matches what is expected
+// a cron and the configuration matches what is expected
 func HookControlScheduledJobCreate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.ControlScheduledJobFunc(func(ctx context.Context,
 			mutation *generated.ControlScheduledJobMutation) (generated.Value, error) {
-			cadence, hasCadence := mutation.Cadence()
 			cron, hasCron := mutation.Cron()
 
 			if entx.CheckIsSoftDelete(ctx) {
 				return next.Mutate(ctx, mutation)
 			}
 
-			if err := validateCadenceOrCron(&cadence, hasCadence, cron, hasCron); err != nil {
+			if err := validateCron(cron, hasCron); err != nil {
 				return nil, err
+			}
+
+			// Create Windmill scheduled job if client is available and we're creating a new job
+			if mutation.Op() == ent.OpCreate && hasCron && cron != "" {
+				if err := createWindmillScheduledJob(ctx, mutation); err != nil {
+					return nil, fmt.Errorf("failed to create windmill scheduled job: %w", err)
+				}
 			}
 
 			return next.Mutate(ctx, mutation)
@@ -187,24 +192,59 @@ func HookControlScheduledJobCreate() ent.Hook {
 	}, ent.OpUpdate|ent.OpUpdateOne|ent.OpCreate)
 }
 
-func validateCadenceOrCron(cadence *models.JobCadence, hasCadence bool, cron models.Cron, hasCron bool) error {
-	if !hasCadence && (!hasCron || cron == "") {
+func validateCron(cron models.Cron, hasCron bool) error {
+	// Only validate cron now, cadence is no longer supported
+	if !hasCron || cron == "" {
 		return nil
 	}
 
-	if hasCadence && hasCron {
-		return ErrEitherCadenceOrCron
+	return cron.Validate()
+}
+
+// createWindmillScheduledJob creates a Windmill scheduled job for the control scheduled job
+func createWindmillScheduledJob(ctx context.Context, mutation *generated.ControlScheduledJobMutation) error {
+	windmillClient := mutation.Client().Windmill
+	if windmillClient == nil {
+		return nil
 	}
 
-	if hasCadence {
-		if err := cadence.Validate(); err != nil {
-			return fmt.Errorf("cadence: %w", err) // nolint:err113
-		}
+	// Get job details
+	jobID, hasJobID := mutation.JobID()
+	if !hasJobID {
+		return errors.New("job_id is required for windmill scheduled job creation") // nolint:err113
 	}
 
-	if hasCron {
-		return cron.Validate()
+	cron, hasCron := mutation.Cron()
+	if !hasCron || cron == "" {
+		return errors.New("cron is required for windmill scheduled job creation") // nolint:err113
 	}
+
+	// Get config for timezone, on_failure, on_success from ent configuration
+	entConfig := mutation.Client().EntConfig
+	if entConfig == nil {
+		return errors.New("ent config is required") // nolint:err113
+	}
+
+	scheduledJobPath := fmt.Sprintf("s/openlane/control_scheduled_job_%s", generateFlowPath())
+
+	// Create the scheduled job request
+	enabled := true
+	scheduleReq := windmill.CreateScheduledJobRequest{
+		Path:     scheduledJobPath,
+		Schedule: string(cron),
+		FlowPath: "", // This would need to be set based on the job configuration
+		Enabled:  &enabled,
+		Summary:  fmt.Sprintf("Control scheduled job %s", jobID),
+	}
+
+	resp, err := windmillClient.CreateScheduledJob(ctx, scheduleReq)
+	if err != nil {
+		return err
+	}
+
+	// Store the scheduled job path back to the mutation if needed
+	// Note: ControlScheduledJob might need a windmill_schedule_path field
+	_ = resp.Path
 
 	return nil
 }

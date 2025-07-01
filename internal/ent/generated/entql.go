@@ -577,7 +577,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlscheduledjob.FieldOwnerID:       {Type: field.TypeString, Column: controlscheduledjob.FieldOwnerID},
 			controlscheduledjob.FieldJobID:         {Type: field.TypeString, Column: controlscheduledjob.FieldJobID},
 			controlscheduledjob.FieldConfiguration: {Type: field.TypeJSON, Column: controlscheduledjob.FieldConfiguration},
-			controlscheduledjob.FieldCadence:       {Type: field.TypeJSON, Column: controlscheduledjob.FieldCadence},
 			controlscheduledjob.FieldCron:          {Type: field.TypeString, Column: controlscheduledjob.FieldCron},
 			controlscheduledjob.FieldJobRunnerID:   {Type: field.TypeString, Column: controlscheduledjob.FieldJobRunnerID},
 		},
@@ -605,7 +604,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlscheduledjobhistory.FieldOwnerID:       {Type: field.TypeString, Column: controlscheduledjobhistory.FieldOwnerID},
 			controlscheduledjobhistory.FieldJobID:         {Type: field.TypeString, Column: controlscheduledjobhistory.FieldJobID},
 			controlscheduledjobhistory.FieldConfiguration: {Type: field.TypeJSON, Column: controlscheduledjobhistory.FieldConfiguration},
-			controlscheduledjobhistory.FieldCadence:       {Type: field.TypeJSON, Column: controlscheduledjobhistory.FieldCadence},
 			controlscheduledjobhistory.FieldCron:          {Type: field.TypeString, Column: controlscheduledjobhistory.FieldCron},
 			controlscheduledjobhistory.FieldJobRunnerID:   {Type: field.TypeString, Column: controlscheduledjobhistory.FieldJobRunnerID},
 		},
@@ -11007,11 +11005,6 @@ func (f *ControlScheduledJobFilter) WhereConfiguration(p entql.BytesP) {
 	f.Where(p.Field(controlscheduledjob.FieldConfiguration))
 }
 
-// WhereCadence applies the entql json.RawMessage predicate on the cadence field.
-func (f *ControlScheduledJobFilter) WhereCadence(p entql.BytesP) {
-	f.Where(p.Field(controlscheduledjob.FieldCadence))
-}
-
 // WhereCron applies the entql string predicate on the cron field.
 func (f *ControlScheduledJobFilter) WhereCron(p entql.StringP) {
 	f.Where(p.Field(controlscheduledjob.FieldCron))
@@ -11190,11 +11183,6 @@ func (f *ControlScheduledJobHistoryFilter) WhereJobID(p entql.StringP) {
 // WhereConfiguration applies the entql json.RawMessage predicate on the configuration field.
 func (f *ControlScheduledJobHistoryFilter) WhereConfiguration(p entql.BytesP) {
 	f.Where(p.Field(controlscheduledjobhistory.FieldConfiguration))
-}
-
-// WhereCadence applies the entql json.RawMessage predicate on the cadence field.
-func (f *ControlScheduledJobHistoryFilter) WhereCadence(p entql.BytesP) {
-	f.Where(p.Field(controlscheduledjobhistory.FieldCadence))
 }
 
 // WhereCron applies the entql string predicate on the cron field.

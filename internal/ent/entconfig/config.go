@@ -157,4 +157,13 @@ type Windmill struct {
 
 	// DefaultTimeout is the default timeout for API requests
 	DefaultTimeout string `json:"defaultTimeout" koanf:"defaultTimeout" default:"30s"`
+
+	// Timezone for scheduled jobs
+	Timezone string `json:"timezone" koanf:"timezone" default:"UTC"`
+
+	// OnFailureScript script to run when a scheduled job fails
+	OnFailureScript string `json:"onFailureScript" koanf:"onFailureScript"`
+
+	// OnSuccessScript script to run when a scheduled job succeeds
+	OnSuccessScript string `json:"onSuccessScript" koanf:"onSuccessScript"`
 }

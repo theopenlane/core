@@ -166,20 +166,6 @@ func (csjhc *ControlScheduledJobHistoryCreate) SetConfiguration(mc models.JobCon
 	return csjhc
 }
 
-// SetCadence sets the "cadence" field.
-func (csjhc *ControlScheduledJobHistoryCreate) SetCadence(mc models.JobCadence) *ControlScheduledJobHistoryCreate {
-	csjhc.mutation.SetCadence(mc)
-	return csjhc
-}
-
-// SetNillableCadence sets the "cadence" field if the given value is not nil.
-func (csjhc *ControlScheduledJobHistoryCreate) SetNillableCadence(mc *models.JobCadence) *ControlScheduledJobHistoryCreate {
-	if mc != nil {
-		csjhc.SetCadence(*mc)
-	}
-	return csjhc
-}
-
 // SetCron sets the "cron" field.
 func (csjhc *ControlScheduledJobHistoryCreate) SetCron(m models.Cron) *ControlScheduledJobHistoryCreate {
 	csjhc.mutation.SetCron(m)
@@ -294,11 +280,6 @@ func (csjhc *ControlScheduledJobHistoryCreate) check() error {
 	if _, ok := csjhc.mutation.Configuration(); !ok {
 		return &ValidationError{Name: "configuration", err: errors.New(`generated: missing required field "ControlScheduledJobHistory.configuration"`)}
 	}
-	if v, ok := csjhc.mutation.Cadence(); ok {
-		if err := v.Validate(); err != nil {
-			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJobHistory.cadence": %w`, err)}
-		}
-	}
 	if v, ok := csjhc.mutation.Cron(); ok {
 		if err := v.Validate(); err != nil {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJobHistory.cron": %w`, err)}
@@ -387,10 +368,6 @@ func (csjhc *ControlScheduledJobHistoryCreate) createSpec() (*ControlScheduledJo
 	if value, ok := csjhc.mutation.Configuration(); ok {
 		_spec.SetField(controlscheduledjobhistory.FieldConfiguration, field.TypeJSON, value)
 		_node.Configuration = value
-	}
-	if value, ok := csjhc.mutation.Cadence(); ok {
-		_spec.SetField(controlscheduledjobhistory.FieldCadence, field.TypeJSON, value)
-		_node.Cadence = value
 	}
 	if value, ok := csjhc.mutation.Cron(); ok {
 		_spec.SetField(controlscheduledjobhistory.FieldCron, field.TypeString, value)

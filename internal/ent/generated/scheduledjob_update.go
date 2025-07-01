@@ -247,11 +247,9 @@ func (sju *ScheduledJobUpdate) SetConfiguration(mc models.JobConfiguration) *Sch
 	return sju
 }
 
-// SetNillableConfiguration sets the "configuration" field if the given value is not nil.
-func (sju *ScheduledJobUpdate) SetNillableConfiguration(mc *models.JobConfiguration) *ScheduledJobUpdate {
-	if mc != nil {
-		sju.SetConfiguration(*mc)
-	}
+// AppendConfiguration appends mc to the "configuration" field.
+func (sju *ScheduledJobUpdate) AppendConfiguration(mc models.JobConfiguration) *ScheduledJobUpdate {
+	sju.mutation.AppendConfiguration(mc)
 	return sju
 }
 
@@ -466,6 +464,11 @@ func (sju *ScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := sju.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjob.FieldConfiguration, field.TypeJSON, value)
+	}
+	if value, ok := sju.mutation.AppendedConfiguration(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, scheduledjob.FieldConfiguration, value)
+		})
 	}
 	if value, ok := sju.mutation.Cadence(); ok {
 		_spec.SetField(scheduledjob.FieldCadence, field.TypeJSON, value)
@@ -746,11 +749,9 @@ func (sjuo *ScheduledJobUpdateOne) SetConfiguration(mc models.JobConfiguration) 
 	return sjuo
 }
 
-// SetNillableConfiguration sets the "configuration" field if the given value is not nil.
-func (sjuo *ScheduledJobUpdateOne) SetNillableConfiguration(mc *models.JobConfiguration) *ScheduledJobUpdateOne {
-	if mc != nil {
-		sjuo.SetConfiguration(*mc)
-	}
+// AppendConfiguration appends mc to the "configuration" field.
+func (sjuo *ScheduledJobUpdateOne) AppendConfiguration(mc models.JobConfiguration) *ScheduledJobUpdateOne {
+	sjuo.mutation.AppendConfiguration(mc)
 	return sjuo
 }
 
@@ -995,6 +996,11 @@ func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *Schedule
 	}
 	if value, ok := sjuo.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjob.FieldConfiguration, field.TypeJSON, value)
+	}
+	if value, ok := sjuo.mutation.AppendedConfiguration(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, scheduledjob.FieldConfiguration, value)
+		})
 	}
 	if value, ok := sjuo.mutation.Cadence(); ok {
 		_spec.SetField(scheduledjob.FieldCadence, field.TypeJSON, value)

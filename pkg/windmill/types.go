@@ -31,3 +31,30 @@ type Flow struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"edited_at"`
 }
+
+// CreateScheduledJobRequest represents the request structure for creating a scheduled job
+type CreateScheduledJobRequest struct {
+	Path     string `json:"path"`
+	Schedule string `json:"schedule"`          // Cron expression
+	FlowPath string `json:"script_path"`       // Path to the flow to execute
+	Args     any    `json:"args,omitempty"`    // Arguments to pass to the flow
+	Summary  string `json:"summary,omitempty"` // Description of the scheduled job
+	Enabled  *bool  `json:"enabled,omitempty"` // Whether the scheduled job is enabled
+}
+
+// CreateScheduledJobResponse represents the response after creating a scheduled job
+type CreateScheduledJobResponse struct {
+	Path string `json:"path"`
+}
+
+// ScheduledJob represents a scheduled job in Windmill
+type ScheduledJob struct {
+	Path      string    `json:"path"`
+	Schedule  string    `json:"schedule"`
+	FlowPath  string    `json:"script_path"`
+	Args      any       `json:"args,omitempty"`
+	Summary   string    `json:"summary,omitempty"`
+	Enabled   bool      `json:"enabled"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"edited_at"`
+}

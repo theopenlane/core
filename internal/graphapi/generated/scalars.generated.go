@@ -129,6 +129,12 @@ func (ec *executionContext) unmarshalNJobConfiguration2githubᚗcomᚋtheopenlan
 }
 
 func (ec *executionContext) marshalNJobConfiguration2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐJobConfiguration(ctx context.Context, sel ast.SelectionSet, v models.JobConfiguration) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
 	return v
 }
 
@@ -464,16 +470,16 @@ func (ec *executionContext) marshalOJobCadence2ᚖgithubᚗcomᚋtheopenlaneᚋc
 	return v
 }
 
-func (ec *executionContext) unmarshalOJobConfiguration2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐJobConfiguration(ctx context.Context, v any) (*models.JobConfiguration, error) {
+func (ec *executionContext) unmarshalOJobConfiguration2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐJobConfiguration(ctx context.Context, v any) (models.JobConfiguration, error) {
 	if v == nil {
 		return nil, nil
 	}
-	var res = new(models.JobConfiguration)
+	var res models.JobConfiguration
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOJobConfiguration2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐJobConfiguration(ctx context.Context, sel ast.SelectionSet, v *models.JobConfiguration) graphql.Marshaler {
+func (ec *executionContext) marshalOJobConfiguration2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐJobConfiguration(ctx context.Context, sel ast.SelectionSet, v models.JobConfiguration) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

@@ -1895,10 +1895,6 @@ func (m *ControlScheduledJobMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetConfiguration(configuration)
 	}
 
-	if cadence, exists := m.Cadence(); exists {
-		create = create.SetCadence(cadence)
-	}
-
 	if cron, exists := m.Cron(); exists {
 		create = create.SetNillableCron(&cron)
 	}
@@ -1991,12 +1987,6 @@ func (m *ControlScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetConfiguration(controlscheduledjob.Configuration)
 		}
 
-		if cadence, exists := m.Cadence(); exists {
-			create = create.SetCadence(cadence)
-		} else {
-			create = create.SetCadence(controlscheduledjob.Cadence)
-		}
-
 		if cron, exists := m.Cron(); exists {
 			create = create.SetNillableCron(&cron)
 		} else {
@@ -2050,7 +2040,6 @@ func (m *ControlScheduledJobMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetOwnerID(controlscheduledjob.OwnerID).
 			SetJobID(controlscheduledjob.JobID).
 			SetConfiguration(controlscheduledjob.Configuration).
-			SetCadence(controlscheduledjob.Cadence).
 			SetNillableCron(controlscheduledjob.Cron).
 			SetJobRunnerID(controlscheduledjob.JobRunnerID).
 			Save(ctx)

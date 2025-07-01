@@ -246,11 +246,9 @@ func (sjhu *ScheduledJobHistoryUpdate) SetConfiguration(mc models.JobConfigurati
 	return sjhu
 }
 
-// SetNillableConfiguration sets the "configuration" field if the given value is not nil.
-func (sjhu *ScheduledJobHistoryUpdate) SetNillableConfiguration(mc *models.JobConfiguration) *ScheduledJobHistoryUpdate {
-	if mc != nil {
-		sjhu.SetConfiguration(*mc)
-	}
+// AppendConfiguration appends mc to the "configuration" field.
+func (sjhu *ScheduledJobHistoryUpdate) AppendConfiguration(mc models.JobConfiguration) *ScheduledJobHistoryUpdate {
+	sjhu.mutation.AppendConfiguration(mc)
 	return sjhu
 }
 
@@ -452,6 +450,11 @@ func (sjhu *ScheduledJobHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	}
 	if value, ok := sjhu.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjobhistory.FieldConfiguration, field.TypeJSON, value)
+	}
+	if value, ok := sjhu.mutation.AppendedConfiguration(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, scheduledjobhistory.FieldConfiguration, value)
+		})
 	}
 	if value, ok := sjhu.mutation.Cadence(); ok {
 		_spec.SetField(scheduledjobhistory.FieldCadence, field.TypeJSON, value)
@@ -701,11 +704,9 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) SetConfiguration(mc models.JobConfigu
 	return sjhuo
 }
 
-// SetNillableConfiguration sets the "configuration" field if the given value is not nil.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetNillableConfiguration(mc *models.JobConfiguration) *ScheduledJobHistoryUpdateOne {
-	if mc != nil {
-		sjhuo.SetConfiguration(*mc)
-	}
+// AppendConfiguration appends mc to the "configuration" field.
+func (sjhuo *ScheduledJobHistoryUpdateOne) AppendConfiguration(mc models.JobConfiguration) *ScheduledJobHistoryUpdateOne {
+	sjhuo.mutation.AppendConfiguration(mc)
 	return sjhuo
 }
 
@@ -937,6 +938,11 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	if value, ok := sjhuo.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjobhistory.FieldConfiguration, field.TypeJSON, value)
+	}
+	if value, ok := sjhuo.mutation.AppendedConfiguration(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, scheduledjobhistory.FieldConfiguration, value)
+		})
 	}
 	if value, ok := sjhuo.mutation.Cadence(); ok {
 		_spec.SetField(scheduledjobhistory.FieldCadence, field.TypeJSON, value)
