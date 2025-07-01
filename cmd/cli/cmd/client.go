@@ -25,9 +25,12 @@ const (
 // TokenAuth uses the token or personal access token to authenticate the client
 // if the token is not provided, it will fall back to JWT and session auth
 func TokenAuth(ctx context.Context, k *koanf.Koanf) (*openlaneclient.OpenlaneClient, error) {
-	token := k.String("token")
-	if token == "" {
-		token = k.String("pat")
+	var token string
+	for _, key := range []string{"token", "pat", "jwt"} {
+		token = k.String(key)
+		if token != "" {
+			break
+		}
 	}
 
 	if token == "" {

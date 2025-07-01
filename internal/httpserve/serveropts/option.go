@@ -176,6 +176,7 @@ func WithAuth() ServerOption {
 			authmw.WithJWKSEndpoint(s.Config.Settings.Auth.Token.JWKSEndpoint),
 			authmw.WithDBClient(s.Config.Handler.DBClient),
 			authmw.WithCookieConfig(s.Config.SessionConfig.CookieConfig),
+			authmw.WithAllowAnonymous(true),
 		)
 
 		s.Config.Handler.WebAuthn = webauthn.NewWithConfig(s.Config.Settings.Auth.Providers.Webauthn)
@@ -256,6 +257,13 @@ func WithMiddleware() ServerOption {
 func WithEmailConfig() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		s.Config.Handler.Emailer = s.Config.Settings.Email
+	})
+}
+
+// WithDefaultTrustCenterDomain sets up the default trust center domain for the server
+func WithDefaultTrustCenterDomain() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		s.Config.Handler.DefaultTrustCenterDomain = s.Config.Settings.Server.DefaultTrustCenterDomain
 	})
 }
 

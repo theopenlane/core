@@ -30,6 +30,7 @@ func TestQueryStandard(t *testing.T) {
 
 	orgStandardName := "org-owned-standard"
 	orgOwnedStandard := (&StandardBuilder{client: suite.client, Name: orgStandardName}).MustNew(testUser1.UserCtx, t)
+	anonymousContext := createAnonymousTrustCenterContext("abc123", testUser1.OrganizationID)
 
 	// add test cases for querying the Standard
 	testCases := []struct {
@@ -111,6 +112,13 @@ func TestQueryStandard(t *testing.T) {
 			queryID: notPublicStandard.ID,
 			client:  suite.client.api,
 			ctx:     systemAdminUser.UserCtx,
+		},
+		{
+			name:     "no access, anonymous user",
+			client:   suite.client.api,
+			ctx:      anonymousContext,
+			queryID:  orgOwnedStandard.ID,
+			errorMsg: couldNotFindUser,
 		},
 	}
 

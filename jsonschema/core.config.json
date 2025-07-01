@@ -234,6 +234,10 @@
         "secretManager": {
           "type": "string",
           "description": "SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key"
+        },
+        "defaultTrustCenterDomain": {
+          "type": "string",
+          "description": "DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set"
         }
       },
       "additionalProperties": false,
