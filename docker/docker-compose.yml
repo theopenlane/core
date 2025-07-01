@@ -36,6 +36,16 @@ services:
     networks:
       - default
 
+  dex:
+    image: ghcr.io/dexidp/dex:v2.38.0
+    volumes:
+      - ./docker/files/dex.yaml:/etc/dex/config.yaml:ro
+    command: ["dex", "serve", "/etc/dex/config.yaml"]
+    ports:
+      - "5556:5556"
+    networks:
+      - default
+
   sso-ui:
     image: nginx:alpine
     volumes:

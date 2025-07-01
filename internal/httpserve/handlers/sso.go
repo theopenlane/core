@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/getkin/kin-openapi/openapi3"
@@ -101,7 +102,7 @@ func (h *Handler) oidcConfig(ctx context.Context, orgID string) (rp.RelyingParty
 		issuer,
 		*setting.IdentityProviderClientID,
 		*setting.IdentityProviderClientSecret,
-		fmt.Sprintf("%s/v1/sso/callback", h.OauthProvider.RedirectURL),
+		h.ssoCallbackURL(),
 		[]string{oidc.ScopeOpenID, oidc.ScopeProfile, oidc.ScopeEmail},
 		rp.WithCustomDiscoveryUrl(setting.OidcDiscoveryEndpoint),
 	)
@@ -116,8 +117,16 @@ func (h *Handler) oidcConfig(ctx context.Context, orgID string) (rp.RelyingParty
 func (h *Handler) SSOLoginHandler(ctx echo.Context) error {
 	orgID := ctx.QueryParam("organization_id")
 	if orgID == "" {
-		return h.BadRequest(ctx, ErrMissingField)
+		if c, err := ctx.Request().Cookie("organization_id"); err == nil {
+			orgID = c.Value
+		}
 	}
+
+	if ret := ctx.QueryParam("return"); ret != "" {
+		http.SetCookie(ctx.Response(), &http.Cookie{Name: "return", Value: ret, Path: "/", HttpOnly: true, SameSite: http.SameSiteLaxMode})
+	}
+
+	http.SetCookie(ctx.Response(), &http.Cookie{Name: "organization_id", Value: orgID, Path: "/", HttpOnly: true, SameSite: http.SameSiteLaxMode})
 
 	rpCfg, err := h.oidcConfig(ctx.Request().Context(), orgID)
 	if err != nil {
@@ -188,6 +197,17 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 		AuthData:   *authData,
 	}
 
+	if ret, err := ctx.Request().Cookie("return"); err == nil && ret.Value != "" {
+		http.SetCookie(ctx.Response(), &http.Cookie{Name: "return", Value: "", MaxAge: -1, Path: "/"})
+		http.SetCookie(ctx.Response(), &http.Cookie{Name: "organization_id", Value: "", MaxAge: -1, Path: "/"})
+		q := url.Values{}
+		q.Set("email", tokens.IDTokenClaims.GetEmail())
+		redirectURL := fmt.Sprintf("%s?%s", ret.Value, q.Encode())
+		return ctx.Redirect(http.StatusFound, redirectURL)
+	}
+
+	http.SetCookie(ctx.Response(), &http.Cookie{Name: "organization_id", Value: "", MaxAge: -1, Path: "/"})
+
 	return h.Success(ctx, out)
 }
 
@@ -204,4 +224,11 @@ func (h *Handler) BindWebfingerHandler() *openapi3.Operation {
 	op.AddResponse(http.StatusInternalServerError, internalServerError())
 
 	return op
+}
+
+// ssoCallbackURL builds the callback URL for OIDC flows, ensuring there
+// is only a single path segment appended to the configured RedirectURL.
+func (h *Handler) ssoCallbackURL() string {
+	base := strings.TrimSuffix(h.OauthProvider.RedirectURL, "/")
+	return fmt.Sprintf("%s/v1/sso/callback", base)
 }

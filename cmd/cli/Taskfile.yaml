@@ -173,12 +173,9 @@ tasks:
   orgsetting:enforce-sso:
     desc: update the default organization to enforce SSO using the local OIDC server
     vars:
-      CLIENT_ID:
-        sh: curl -s http://localhost:9998/client | jq -r '.client_id'
-      CLIENT_SECRET:
-        sh: curl -s http://localhost:9998/client | jq -r '.client_secret'
-      DISCOVERY_URL:
-        sh: curl -s http://localhost:9998/client | jq -r '.discovery_url'
+      CLIENT_ID: local-client
+      CLIENT_SECRET: local-client-secret
+      DISCOVERY_URL: http://localhost:5556/dex/.well-known/openid-configuration
       SETTING_ID:
         sh: go run main.go organization-setting get -z json | jq -r '.organizationSettings.edges[0].node.id'
     cmds:
