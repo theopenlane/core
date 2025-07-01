@@ -59,7 +59,7 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context) error {
 		trustCenter, err = h.DBClient.TrustCenter.Query().
 			Where(trustcenter.SlugEQ(slug)).
 			Where(trustcenter.Not(trustcenter.HasCustomDomain())).
-			First(allowCtx)
+			Only(allowCtx)
 		if err != nil {
 			if generated.IsNotFound(err) {
 				return h.Unauthorized(ctx, ErrTrustCenterNotFound)
@@ -73,7 +73,7 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context) error {
 			Where(trustcenter.HasCustomDomainWith(
 				customdomain.CnameRecordEQ(hostname),
 			)).
-			First(allowCtx)
+			Only(allowCtx)
 		if err != nil {
 			if generated.IsNotFound(err) {
 				return h.Unauthorized(ctx, ErrTrustCenterNotFound)

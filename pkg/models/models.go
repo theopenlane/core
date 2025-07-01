@@ -980,6 +980,7 @@ type AcmeSolverRequest struct {
 	Path string `param:"path" description:"The path to the acme challenge" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
+// CreateTrustCenterAnonymousJWTResponse is the response to a request to create a trust center anonymous JWT
 type CreateTrustCenterAnonymousJWTResponse struct {
 	AuthData
 }

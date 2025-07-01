@@ -13,9 +13,10 @@ func registerTrustCenterAnonymousJWTHandler(router *Router) (err error) {
 	name := "TrustCenterAnonymousJWT"
 
 	route := echo.Route{
-		Name:   name,
-		Method: method,
-		Path:   path,
+		Name:        name,
+		Method:      method,
+		Path:        path,
+		Middlewares: mw,
 		Handler: func(c echo.Context) error {
 			return router.Handler.CreateTrustCenterAnonymousJWT(c)
 		},

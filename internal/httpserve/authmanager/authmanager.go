@@ -85,6 +85,7 @@ func (a *Client) GenerateUserAuthSession(ctx context.Context, w http.ResponseWri
 	return a.GenerateUserAuthSessionWithOrg(ctx, w, user, "")
 }
 
+// GenerateAnonymousTrustCenterSession creates a new auth session for the anonymous trust center user
 func (a *Client) GenerateAnonymousTrustCenterSession(ctx context.Context, w http.ResponseWriter, targetOrgID string, targetTrustCenterID string) (*models.AuthData, error) {
 	anonUserID := fmt.Sprintf("anon:%s", uuid.New().String())
 
