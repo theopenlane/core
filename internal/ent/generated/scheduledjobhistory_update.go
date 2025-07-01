@@ -212,6 +212,20 @@ func (sjhu *ScheduledJobHistoryUpdate) ClearScript() *ScheduledJobHistoryUpdate 
 	return sjhu
 }
 
+// SetWindmillPath sets the "windmill_path" field.
+func (sjhu *ScheduledJobHistoryUpdate) SetWindmillPath(s string) *ScheduledJobHistoryUpdate {
+	sjhu.mutation.SetWindmillPath(s)
+	return sjhu
+}
+
+// SetNillableWindmillPath sets the "windmill_path" field if the given value is not nil.
+func (sjhu *ScheduledJobHistoryUpdate) SetNillableWindmillPath(s *string) *ScheduledJobHistoryUpdate {
+	if s != nil {
+		sjhu.SetWindmillPath(*s)
+	}
+	return sjhu
+}
+
 // SetDownloadURL sets the "download_url" field.
 func (sjhu *ScheduledJobHistoryUpdate) SetDownloadURL(s string) *ScheduledJobHistoryUpdate {
 	sjhu.mutation.SetDownloadURL(s)
@@ -430,6 +444,9 @@ func (sjhu *ScheduledJobHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	if sjhu.mutation.ScriptCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldScript, field.TypeString)
 	}
+	if value, ok := sjhu.mutation.WindmillPath(); ok {
+		_spec.SetField(scheduledjobhistory.FieldWindmillPath, field.TypeString, value)
+	}
 	if value, ok := sjhu.mutation.DownloadURL(); ok {
 		_spec.SetField(scheduledjobhistory.FieldDownloadURL, field.TypeString, value)
 	}
@@ -647,6 +664,20 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) SetNillableScript(s *string) *Schedul
 // ClearScript clears the value of the "script" field.
 func (sjhuo *ScheduledJobHistoryUpdateOne) ClearScript() *ScheduledJobHistoryUpdateOne {
 	sjhuo.mutation.ClearScript()
+	return sjhuo
+}
+
+// SetWindmillPath sets the "windmill_path" field.
+func (sjhuo *ScheduledJobHistoryUpdateOne) SetWindmillPath(s string) *ScheduledJobHistoryUpdateOne {
+	sjhuo.mutation.SetWindmillPath(s)
+	return sjhuo
+}
+
+// SetNillableWindmillPath sets the "windmill_path" field if the given value is not nil.
+func (sjhuo *ScheduledJobHistoryUpdateOne) SetNillableWindmillPath(s *string) *ScheduledJobHistoryUpdateOne {
+	if s != nil {
+		sjhuo.SetWindmillPath(*s)
+	}
 	return sjhuo
 }
 
@@ -897,6 +928,9 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	if sjhuo.mutation.ScriptCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldScript, field.TypeString)
+	}
+	if value, ok := sjhuo.mutation.WindmillPath(); ok {
+		_spec.SetField(scheduledjobhistory.FieldWindmillPath, field.TypeString, value)
 	}
 	if value, ok := sjhuo.mutation.DownloadURL(); ok {
 		_spec.SetField(scheduledjobhistory.FieldDownloadURL, field.TypeString, value)

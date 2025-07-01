@@ -21085,6 +21085,8 @@ type ScheduledJob struct {
 	JobType enums.JobType `json:"jobType"`
 	// the script to run
 	Script *string `json:"script,omitempty"`
+	// Windmill path
+	WindmillPath string `json:"windmillPath"`
 	// the url from where to download the script from
 	DownloadURL string `json:"downloadURL"`
 	// the configuration to run this job
@@ -21159,6 +21161,8 @@ type ScheduledJobHistory struct {
 	JobType enums.JobType `json:"jobType"`
 	// the script to run
 	Script *string `json:"script,omitempty"`
+	// Windmill path
+	WindmillPath string `json:"windmillPath"`
 	// the url from where to download the script from
 	DownloadURL string `json:"downloadURL"`
 	// the configuration to run this job

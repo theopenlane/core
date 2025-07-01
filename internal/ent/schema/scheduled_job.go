@@ -72,6 +72,17 @@ func (ScheduledJob) Fields() []ent.Field {
 			Optional().
 			Comment("the script to run"),
 
+		field.String("windmill_path").
+			Annotations(
+				entgql.Skip(
+					entgql.SkipOrderField |
+						entgql.SkipWhereInput |
+						entgql.SkipMutationCreateInput |
+						entgql.SkipMutationUpdateInput,
+				),
+			).
+			Comment("Windmill path"),
+
 		field.String("download_url").
 			Annotations(
 				entgql.Skip(

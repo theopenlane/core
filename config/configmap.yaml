@@ -74,6 +74,11 @@ data:
   CORE_ENTCONFIG_SUMMARIZER_LLM_OPENAI_URL: {{ .Values.core.entConfig.summarizer.llm.openai.url }}
   CORE_ENTCONFIG_SUMMARIZER_LLM_OPENAI_ORGANIZATIONID: {{ .Values.core.entConfig.summarizer.llm.openai.organizationID }}
   CORE_ENTCONFIG_SUMMARIZER_MAXIMUMSENTENCES: {{ .Values.core.entConfig.summarizer.maximumSentences | default 60 }}
+  CORE_ENTCONFIG_WINDMILL_ENABLED: {{ .Values.core.entConfig.windmill.enabled | default false }}
+  CORE_ENTCONFIG_WINDMILL_BASEURL: {{ .Values.core.entConfig.windmill.baseURL | default "https://app.windmill.dev" }}
+  CORE_ENTCONFIG_WINDMILL_WORKSPACE: {{ .Values.core.entConfig.windmill.workspace }}
+  CORE_ENTCONFIG_WINDMILL_TOKEN: {{ .Values.core.entConfig.windmill.token }}
+  CORE_ENTCONFIG_WINDMILL_DEFAULTTIMEOUT: {{ .Values.core.entConfig.windmill.defaultTimeout | default "30s" }}
   CORE_AUTH_ENABLED: {{ .Values.core.auth.enabled | default true }}
   CORE_AUTH_TOKEN_KID: {{ .Values.core.auth.token.kid }}
   CORE_AUTH_TOKEN_AUDIENCE: {{ .Values.core.auth.token.audience | default "https://theopenlane.io" }}

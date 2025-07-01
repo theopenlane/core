@@ -195,6 +195,12 @@ func (sjc *ScheduledJobCreate) SetNillableScript(s *string) *ScheduledJobCreate 
 	return sjc
 }
 
+// SetWindmillPath sets the "windmill_path" field.
+func (sjc *ScheduledJobCreate) SetWindmillPath(s string) *ScheduledJobCreate {
+	sjc.mutation.SetWindmillPath(s)
+	return sjc
+}
+
 // SetDownloadURL sets the "download_url" field.
 func (sjc *ScheduledJobCreate) SetDownloadURL(s string) *ScheduledJobCreate {
 	sjc.mutation.SetDownloadURL(s)
@@ -353,6 +359,9 @@ func (sjc *ScheduledJobCreate) check() error {
 			return &ValidationError{Name: "job_type", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.job_type": %w`, err)}
 		}
 	}
+	if _, ok := sjc.mutation.WindmillPath(); !ok {
+		return &ValidationError{Name: "windmill_path", err: errors.New(`generated: missing required field "ScheduledJob.windmill_path"`)}
+	}
 	if _, ok := sjc.mutation.DownloadURL(); !ok {
 		return &ValidationError{Name: "download_url", err: errors.New(`generated: missing required field "ScheduledJob.download_url"`)}
 	}
@@ -456,6 +465,10 @@ func (sjc *ScheduledJobCreate) createSpec() (*ScheduledJob, *sqlgraph.CreateSpec
 	if value, ok := sjc.mutation.Script(); ok {
 		_spec.SetField(scheduledjob.FieldScript, field.TypeString, value)
 		_node.Script = value
+	}
+	if value, ok := sjc.mutation.WindmillPath(); ok {
+		_spec.SetField(scheduledjob.FieldWindmillPath, field.TypeString, value)
+		_node.WindmillPath = value
 	}
 	if value, ok := sjc.mutation.DownloadURL(); ok {
 		_spec.SetField(scheduledjob.FieldDownloadURL, field.TypeString, value)

@@ -121,6 +121,12 @@ entConfig:
             provider: ""
         maximumSentences: 60
         type: lexrank
+    windmill:
+        enabled: false
+        baseURL: "https://app.windmill.dev"
+        workspace: ""
+        token: ""
+        defaultTimeout: "30s"
 jobQueue:
     connectionURI: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
     riverConf:

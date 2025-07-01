@@ -3725,6 +3725,7 @@ type ComplexityRoot struct {
 		Title         func(childComplexity int) int
 		UpdatedAt     func(childComplexity int) int
 		UpdatedBy     func(childComplexity int) int
+		WindmillPath  func(childComplexity int) int
 	}
 
 	ScheduledJobBulkCreatePayload struct {
@@ -3771,6 +3772,7 @@ type ComplexityRoot struct {
 		Title         func(childComplexity int) int
 		UpdatedAt     func(childComplexity int) int
 		UpdatedBy     func(childComplexity int) int
+		WindmillPath  func(childComplexity int) int
 	}
 
 	ScheduledJobHistoryConnection struct {
@@ -25958,6 +25960,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJob.UpdatedBy(childComplexity), true
 
+	case "ScheduledJob.windmillPath":
+		if e.complexity.ScheduledJob.WindmillPath == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.WindmillPath(childComplexity), true
+
 	case "ScheduledJobBulkCreatePayload.scheduledJobs":
 		if e.complexity.ScheduledJobBulkCreatePayload.ScheduledJobs == nil {
 			break
@@ -26153,6 +26162,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScheduledJobHistory.UpdatedBy(childComplexity), true
+
+	case "ScheduledJobHistory.windmillPath":
+		if e.complexity.ScheduledJobHistory.WindmillPath == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.WindmillPath(childComplexity), true
 
 	case "ScheduledJobHistoryConnection.edges":
 		if e.complexity.ScheduledJobHistoryConnection.Edges == nil {
@@ -71319,6 +71335,10 @@ type ScheduledJob implements Node {
   """
   script: String
   """
+  Windmill path
+  """
+  windmillPath: String!
+  """
   the url from where to download the script from
   """
   downloadURL: String!
@@ -71407,6 +71427,10 @@ type ScheduledJobHistory implements Node {
   the script to run
   """
   script: String
+  """
+  Windmill path
+  """
+  windmillPath: String!
   """
   the url from where to download the script from
   """

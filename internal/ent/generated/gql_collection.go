@@ -36425,6 +36425,11 @@ func (sj *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, scheduledjob.FieldScript)
 				fieldSeen[scheduledjob.FieldScript] = struct{}{}
 			}
+		case "windmillPath":
+			if _, ok := fieldSeen[scheduledjob.FieldWindmillPath]; !ok {
+				selectedFields = append(selectedFields, scheduledjob.FieldWindmillPath)
+				fieldSeen[scheduledjob.FieldWindmillPath] = struct{}{}
+			}
 		case "downloadURL":
 			if _, ok := fieldSeen[scheduledjob.FieldDownloadURL]; !ok {
 				selectedFields = append(selectedFields, scheduledjob.FieldDownloadURL)
@@ -36609,6 +36614,11 @@ func (sjh *ScheduledJobHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[scheduledjobhistory.FieldScript]; !ok {
 				selectedFields = append(selectedFields, scheduledjobhistory.FieldScript)
 				fieldSeen[scheduledjobhistory.FieldScript] = struct{}{}
+			}
+		case "windmillPath":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldWindmillPath]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldWindmillPath)
+				fieldSeen[scheduledjobhistory.FieldWindmillPath] = struct{}{}
 			}
 		case "downloadURL":
 			if _, ok := fieldSeen[scheduledjobhistory.FieldDownloadURL]; !ok {

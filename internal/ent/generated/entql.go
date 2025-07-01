@@ -2490,6 +2490,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scheduledjob.FieldDescription:   {Type: field.TypeString, Column: scheduledjob.FieldDescription},
 			scheduledjob.FieldJobType:       {Type: field.TypeEnum, Column: scheduledjob.FieldJobType},
 			scheduledjob.FieldScript:        {Type: field.TypeString, Column: scheduledjob.FieldScript},
+			scheduledjob.FieldWindmillPath:  {Type: field.TypeString, Column: scheduledjob.FieldWindmillPath},
 			scheduledjob.FieldDownloadURL:   {Type: field.TypeString, Column: scheduledjob.FieldDownloadURL},
 			scheduledjob.FieldConfiguration: {Type: field.TypeJSON, Column: scheduledjob.FieldConfiguration},
 			scheduledjob.FieldCadence:       {Type: field.TypeJSON, Column: scheduledjob.FieldCadence},
@@ -2524,6 +2525,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scheduledjobhistory.FieldDescription:   {Type: field.TypeString, Column: scheduledjobhistory.FieldDescription},
 			scheduledjobhistory.FieldJobType:       {Type: field.TypeEnum, Column: scheduledjobhistory.FieldJobType},
 			scheduledjobhistory.FieldScript:        {Type: field.TypeString, Column: scheduledjobhistory.FieldScript},
+			scheduledjobhistory.FieldWindmillPath:  {Type: field.TypeString, Column: scheduledjobhistory.FieldWindmillPath},
 			scheduledjobhistory.FieldDownloadURL:   {Type: field.TypeString, Column: scheduledjobhistory.FieldDownloadURL},
 			scheduledjobhistory.FieldConfiguration: {Type: field.TypeJSON, Column: scheduledjobhistory.FieldConfiguration},
 			scheduledjobhistory.FieldCadence:       {Type: field.TypeJSON, Column: scheduledjobhistory.FieldCadence},
@@ -23011,6 +23013,11 @@ func (f *ScheduledJobFilter) WhereScript(p entql.StringP) {
 	f.Where(p.Field(scheduledjob.FieldScript))
 }
 
+// WhereWindmillPath applies the entql string predicate on the windmill_path field.
+func (f *ScheduledJobFilter) WhereWindmillPath(p entql.StringP) {
+	f.Where(p.Field(scheduledjob.FieldWindmillPath))
+}
+
 // WhereDownloadURL applies the entql string predicate on the download_url field.
 func (f *ScheduledJobFilter) WhereDownloadURL(p entql.StringP) {
 	f.Where(p.Field(scheduledjob.FieldDownloadURL))
@@ -23168,6 +23175,11 @@ func (f *ScheduledJobHistoryFilter) WhereJobType(p entql.StringP) {
 // WhereScript applies the entql string predicate on the script field.
 func (f *ScheduledJobHistoryFilter) WhereScript(p entql.StringP) {
 	f.Where(p.Field(scheduledjobhistory.FieldScript))
+}
+
+// WhereWindmillPath applies the entql string predicate on the windmill_path field.
+func (f *ScheduledJobHistoryFilter) WhereWindmillPath(p entql.StringP) {
+	f.Where(p.Field(scheduledjobhistory.FieldWindmillPath))
 }
 
 // WhereDownloadURL applies the entql string predicate on the download_url field.

@@ -46,6 +46,8 @@ const (
 	FieldJobType = "job_type"
 	// FieldScript holds the string denoting the script field in the database.
 	FieldScript = "script"
+	// FieldWindmillPath holds the string denoting the windmill_path field in the database.
+	FieldWindmillPath = "windmill_path"
 	// FieldDownloadURL holds the string denoting the download_url field in the database.
 	FieldDownloadURL = "download_url"
 	// FieldConfiguration holds the string denoting the configuration field in the database.
@@ -84,6 +86,7 @@ var Columns = []string{
 	FieldDescription,
 	FieldJobType,
 	FieldScript,
+	FieldWindmillPath,
 	FieldDownloadURL,
 	FieldConfiguration,
 	FieldCadence,
@@ -210,6 +213,11 @@ func ByJobType(opts ...sql.OrderTermOption) OrderOption {
 // ByScript orders the results by the script field.
 func ByScript(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScript, opts...).ToFunc()
+}
+
+// ByWindmillPath orders the results by the windmill_path field.
+func ByWindmillPath(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWindmillPath, opts...).ToFunc()
 }
 
 // ByDownloadURL orders the results by the download_url field.

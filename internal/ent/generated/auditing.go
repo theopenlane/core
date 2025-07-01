@@ -2691,6 +2691,9 @@ func (sjh *ScheduledJobHistory) changes(new *ScheduledJobHistory) []Change {
 	if !reflect.DeepEqual(sjh.Script, new.Script) {
 		changes = append(changes, NewChange(scheduledjobhistory.FieldScript, sjh.Script, new.Script))
 	}
+	if !reflect.DeepEqual(sjh.WindmillPath, new.WindmillPath) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldWindmillPath, sjh.WindmillPath, new.WindmillPath))
+	}
 	if !reflect.DeepEqual(sjh.DownloadURL, new.DownloadURL) {
 		changes = append(changes, NewChange(scheduledjobhistory.FieldDownloadURL, sjh.DownloadURL, new.DownloadURL))
 	}

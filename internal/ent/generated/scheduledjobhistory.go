@@ -55,6 +55,8 @@ type ScheduledJobHistory struct {
 	JobType enums.JobType `json:"job_type,omitempty"`
 	// the script to run
 	Script string `json:"script,omitempty"`
+	// Windmill path
+	WindmillPath string `json:"windmill_path,omitempty"`
 	// the url from where to download the script from
 	DownloadURL string `json:"download_url,omitempty"`
 	// the configuration to run this job
@@ -79,7 +81,7 @@ func (*ScheduledJobHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case scheduledjobhistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case scheduledjobhistory.FieldID, scheduledjobhistory.FieldRef, scheduledjobhistory.FieldCreatedBy, scheduledjobhistory.FieldUpdatedBy, scheduledjobhistory.FieldDeletedBy, scheduledjobhistory.FieldDisplayID, scheduledjobhistory.FieldOwnerID, scheduledjobhistory.FieldTitle, scheduledjobhistory.FieldDescription, scheduledjobhistory.FieldJobType, scheduledjobhistory.FieldScript, scheduledjobhistory.FieldDownloadURL:
+		case scheduledjobhistory.FieldID, scheduledjobhistory.FieldRef, scheduledjobhistory.FieldCreatedBy, scheduledjobhistory.FieldUpdatedBy, scheduledjobhistory.FieldDeletedBy, scheduledjobhistory.FieldDisplayID, scheduledjobhistory.FieldOwnerID, scheduledjobhistory.FieldTitle, scheduledjobhistory.FieldDescription, scheduledjobhistory.FieldJobType, scheduledjobhistory.FieldScript, scheduledjobhistory.FieldWindmillPath, scheduledjobhistory.FieldDownloadURL:
 			values[i] = new(sql.NullString)
 		case scheduledjobhistory.FieldHistoryTime, scheduledjobhistory.FieldCreatedAt, scheduledjobhistory.FieldUpdatedAt, scheduledjobhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -208,6 +210,12 @@ func (sjh *ScheduledJobHistory) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				sjh.Script = value.String
 			}
+		case scheduledjobhistory.FieldWindmillPath:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field windmill_path", values[i])
+			} else if value.Valid {
+				sjh.WindmillPath = value.String
+			}
 		case scheduledjobhistory.FieldDownloadURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field download_url", values[i])
@@ -323,6 +331,9 @@ func (sjh *ScheduledJobHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("script=")
 	builder.WriteString(sjh.Script)
+	builder.WriteString(", ")
+	builder.WriteString("windmill_path=")
+	builder.WriteString(sjh.WindmillPath)
 	builder.WriteString(", ")
 	builder.WriteString("download_url=")
 	builder.WriteString(sjh.DownloadURL)

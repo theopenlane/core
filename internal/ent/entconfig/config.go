@@ -7,6 +7,9 @@ type Config struct {
 
 	// Summarizer contains configuration for text summarization
 	Summarizer Summarizer `json:"summarizer" koanf:"summarizer"`
+
+	// Windmill contains configuration for Windmill workflow automation
+	Windmill Windmill `json:"windmill" koanf:"windmill"`
 }
 
 // Summarizer holds configuration for the text summarization functionality
@@ -136,4 +139,22 @@ type OpenAIConfig struct {
 
 	// OrganizationID specifies the OpenAI organization ID
 	OrganizationID string `json:"organizationID" koanf:"organizationID"`
+}
+
+// Windmill holds configuration for the Windmill workflow automation platform
+type Windmill struct {
+	// Enabled specifies whether Windmill integration is enabled
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
+
+	// BaseURL is the base URL of the Windmill instance
+	BaseURL string `json:"baseURL" koanf:"baseURL" default:"https://app.windmill.dev"`
+
+	// Workspace is the Windmill workspace to use
+	Workspace string `json:"workspace" koanf:"workspace"`
+
+	// Token is the API token for authentication with Windmill
+	Token string `json:"token" koanf:"token"`
+
+	// DefaultTimeout is the default timeout for API requests
+	DefaultTimeout string `json:"defaultTimeout" koanf:"defaultTimeout" default:"30s"`
 }

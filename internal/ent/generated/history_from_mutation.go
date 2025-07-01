@@ -8560,6 +8560,10 @@ func (m *ScheduledJobMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetScript(script)
 	}
 
+	if windmillPath, exists := m.WindmillPath(); exists {
+		create = create.SetWindmillPath(windmillPath)
+	}
+
 	if downloadURL, exists := m.DownloadURL(); exists {
 		create = create.SetDownloadURL(downloadURL)
 	}
@@ -8690,6 +8694,12 @@ func (m *ScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetScript(scheduledjob.Script)
 		}
 
+		if windmillPath, exists := m.WindmillPath(); exists {
+			create = create.SetWindmillPath(windmillPath)
+		} else {
+			create = create.SetWindmillPath(scheduledjob.WindmillPath)
+		}
+
 		if downloadURL, exists := m.DownloadURL(); exists {
 			create = create.SetDownloadURL(downloadURL)
 		} else {
@@ -8760,6 +8770,7 @@ func (m *ScheduledJobMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetDescription(scheduledjob.Description).
 			SetJobType(scheduledjob.JobType).
 			SetScript(scheduledjob.Script).
+			SetWindmillPath(scheduledjob.WindmillPath).
 			SetDownloadURL(scheduledjob.DownloadURL).
 			SetConfiguration(scheduledjob.Configuration).
 			SetCadence(scheduledjob.Cadence).

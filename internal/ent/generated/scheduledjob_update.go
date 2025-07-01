@@ -213,6 +213,20 @@ func (sju *ScheduledJobUpdate) ClearScript() *ScheduledJobUpdate {
 	return sju
 }
 
+// SetWindmillPath sets the "windmill_path" field.
+func (sju *ScheduledJobUpdate) SetWindmillPath(s string) *ScheduledJobUpdate {
+	sju.mutation.SetWindmillPath(s)
+	return sju
+}
+
+// SetNillableWindmillPath sets the "windmill_path" field if the given value is not nil.
+func (sju *ScheduledJobUpdate) SetNillableWindmillPath(s *string) *ScheduledJobUpdate {
+	if s != nil {
+		sju.SetWindmillPath(*s)
+	}
+	return sju
+}
+
 // SetDownloadURL sets the "download_url" field.
 func (sju *ScheduledJobUpdate) SetDownloadURL(s string) *ScheduledJobUpdate {
 	sju.mutation.SetDownloadURL(s)
@@ -443,6 +457,9 @@ func (sju *ScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if sju.mutation.ScriptCleared() {
 		_spec.ClearField(scheduledjob.FieldScript, field.TypeString)
+	}
+	if value, ok := sju.mutation.WindmillPath(); ok {
+		_spec.SetField(scheduledjob.FieldWindmillPath, field.TypeString, value)
 	}
 	if value, ok := sju.mutation.DownloadURL(); ok {
 		_spec.SetField(scheduledjob.FieldDownloadURL, field.TypeString, value)
@@ -692,6 +709,20 @@ func (sjuo *ScheduledJobUpdateOne) SetNillableScript(s *string) *ScheduledJobUpd
 // ClearScript clears the value of the "script" field.
 func (sjuo *ScheduledJobUpdateOne) ClearScript() *ScheduledJobUpdateOne {
 	sjuo.mutation.ClearScript()
+	return sjuo
+}
+
+// SetWindmillPath sets the "windmill_path" field.
+func (sjuo *ScheduledJobUpdateOne) SetWindmillPath(s string) *ScheduledJobUpdateOne {
+	sjuo.mutation.SetWindmillPath(s)
+	return sjuo
+}
+
+// SetNillableWindmillPath sets the "windmill_path" field if the given value is not nil.
+func (sjuo *ScheduledJobUpdateOne) SetNillableWindmillPath(s *string) *ScheduledJobUpdateOne {
+	if s != nil {
+		sjuo.SetWindmillPath(*s)
+	}
 	return sjuo
 }
 
@@ -955,6 +986,9 @@ func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *Schedule
 	}
 	if sjuo.mutation.ScriptCleared() {
 		_spec.ClearField(scheduledjob.FieldScript, field.TypeString)
+	}
+	if value, ok := sjuo.mutation.WindmillPath(); ok {
+		_spec.SetField(scheduledjob.FieldWindmillPath, field.TypeString, value)
 	}
 	if value, ok := sjuo.mutation.DownloadURL(); ok {
 		_spec.SetField(scheduledjob.FieldDownloadURL, field.TypeString, value)
