@@ -13,6 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/utils/rout"
+	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
@@ -313,4 +314,53 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforced() {
 
 	require.Equal(t, http.StatusFound, rec.Code)
 	assert.Equal(t, "/v1/sso/login?organization_id="+org.ID, rec.Header().Get("Location"))
+}
+
+func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforcedOwnerBypass() {
+	t := suite.T()
+
+	suite.e.POST("login", suite.h.LoginHandler)
+
+	ctx := echocontext.NewTestEchoContext().Request().Context()
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	ownerUser := suite.userBuilderWithInput(ctx, &userInput{
+		email:         ulids.New().String() + "@theopenlane.io",
+		password:      "0wn3rP@ssw0rd",
+		confirmedUser: true,
+	})
+	ownerCtx := privacy.DecisionContext(ownerUser.UserCtx, privacy.Allow)
+	ownerCtx = ent.NewContext(ownerCtx, suite.db)
+
+	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
+		IdentityProviderLoginEnforced: func(b bool) *bool { return &b }(true),
+	}).SaveX(ownerCtx)
+
+	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+		Name:      ulids.New().String(),
+		SettingID: &setting.ID,
+	}).SaveX(ownerCtx)
+
+	suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+		SetOrganizationID(org.ID).
+		ExecX(ownerCtx)
+
+	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+		OrganizationID: org.ID,
+		UserID:         ownerUser.UserInfo.ID,
+		Role:           &enums.RoleOwner,
+	}).ExecX(ownerCtx)
+
+	suite.db.UserSetting.UpdateOneID(ownerUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(ownerCtx)
+
+	body, _ := json.Marshal(models.LoginRequest{Username: ownerUser.UserInfo.Email, Password: "0wn3rP@ssw0rd"})
+	req := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader(string(body)))
+	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req)
+
+	require.Equal(t, http.StatusOK, rec.Code)
+	var out models.LoginReply
+	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.True(t, out.Success)
 }

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/getkin/kin-openapi/openapi3"
@@ -11,6 +12,10 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -45,6 +50,21 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 		log.Error().Err(err).Msg("unable to get user by subject")
 
 		return h.BadRequest(ctx, err)
+	}
+
+	// Check if SSO is enforced for the target organization. If so, redirect
+	// the user through the SSO login flow unless they are an owner.
+	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
+	status, err := h.fetchSSOStatus(allowCtx, in.TargetOrganizationID)
+	if err == nil && status.Enforced {
+		member, mErr := transaction.FromContext(allowCtx).OrgMembership.Query().Where(
+			orgmembership.UserID(user.ID),
+			orgmembership.OrganizationID(in.TargetOrganizationID),
+		).Only(allowCtx)
+		if mErr == nil && member.Role != enums.RoleOwner {
+			loginURL := fmt.Sprintf("/v1/sso/login?organization_id=%s", in.TargetOrganizationID)
+			return ctx.Redirect(http.StatusFound, loginURL)
+		}
 	}
 
 	// create new claims for the user

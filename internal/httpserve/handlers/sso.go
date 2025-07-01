@@ -15,9 +15,11 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/pkg/models"
@@ -231,4 +233,37 @@ func (h *Handler) BindWebfingerHandler() *openapi3.Operation {
 func (h *Handler) ssoCallbackURL() string {
 	base := strings.TrimSuffix(h.OauthProvider.RedirectURL, "/")
 	return fmt.Sprintf("%s/v1/sso/callback", base)
+}
+
+// ssoOrgForUser checks if the user's default organization requires SSO login.
+// It returns the organization ID when SSO enforcement is active and the user
+// is not an owner of that organization.
+func (h *Handler) ssoOrgForUser(ctx context.Context, email string) (string, bool) {
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	user, err := h.getUserByEmail(allowCtx, email)
+	if err != nil {
+		return "", false
+	}
+
+	orgID, err := h.getUserDefaultOrgID(allowCtx, user.ID)
+	if err != nil {
+		return "", false
+	}
+
+	status, err := h.fetchSSOStatus(allowCtx, orgID)
+	if err != nil || !status.Enforced {
+		return "", false
+	}
+
+	member, mErr := transaction.FromContext(allowCtx).OrgMembership.Query().
+		Where(
+			orgmembership.UserID(user.ID),
+			orgmembership.OrganizationID(orgID),
+		).Only(allowCtx)
+	if mErr != nil || member.Role == enums.RoleOwner {
+		return "", false
+	}
+
+	return orgID, true
 }

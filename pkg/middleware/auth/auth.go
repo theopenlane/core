@@ -19,6 +19,7 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	api "github.com/theopenlane/core/pkg/models"
@@ -46,7 +47,7 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 
 			validator, err := conf.Validator()
 			if err != nil {
-				return unauthorized(c, err)
+				return unauthorized(c, err, conf, validator)
 			}
 
 			// Create a reauthenticator function to handle refresh tokens if they are provided.
@@ -59,10 +60,10 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 				switch {
 				case errors.Is(err, ErrNoAuthorization):
 					if bearerToken, err = reauthenticate(c); err != nil {
-						return unauthorized(c, err)
+						return unauthorized(c, err, conf, validator)
 					}
 				default:
-					return unauthorized(c, err)
+					return unauthorized(c, err, conf, validator)
 				}
 			}
 
@@ -77,19 +78,19 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 			case auth.PATAuthentication, auth.APITokenAuthentication:
 				au, id, err = checkToken(reqCtx, conf, bearerToken)
 				if err != nil {
-					return unauthorized(c, err)
+					return unauthorized(c, err, conf, validator)
 				}
 
 			default:
 				claims, err := validator.Verify(bearerToken)
 				if err != nil {
-					return unauthorized(c, err)
+					return unauthorized(c, err, conf, validator)
 				}
 
 				// Add claims to context for use in downstream processing and continue handlers
 				au, err = createAuthenticatedUserFromClaims(reqCtx, conf.DBClient, claims, auth.JWTAuthentication)
 				if err != nil {
-					return unauthorized(c, err)
+					return unauthorized(c, err, conf, validator)
 				}
 
 				auth.SetRefreshToken(c, bearerToken)
@@ -104,7 +105,7 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 			})
 
 			if err := updateLastUsed(c.Request().Context(), conf.DBClient, au, id); err != nil {
-				return unauthorized(c, err)
+				return unauthorized(c, err, conf, validator)
 			}
 
 			return next(c)
@@ -317,10 +318,48 @@ func getSubjectName(user *ent.User) string {
 }
 
 // unauthorized returns a 401 Unauthorized response with the error message.
-func unauthorized(c echo.Context, err error) error {
+func unauthorized(c echo.Context, err error, conf *Options, v tokens.Validator) error {
+	if v != nil && conf != nil && conf.DBClient != nil {
+		if orgID := orgIDFromToken(c, v); orgID != "" {
+			enforced, dbErr := isSSOEnforced(c.Request().Context(), conf.DBClient, orgID)
+			if dbErr == nil && enforced {
+				return c.Redirect(http.StatusFound, fmt.Sprintf("/v1/sso/login?organization_id=%s", orgID))
+			}
+		}
+	}
+
 	if err := c.JSON(http.StatusUnauthorized, rout.ErrorResponse(err)); err != nil {
 		return err
 	}
 
 	return err
+}
+
+func orgIDFromToken(c echo.Context, v tokens.Validator) string {
+	token, _ := auth.GetBearerToken(c)
+	if token != "" {
+		if claims, parseErr := v.Parse(token); parseErr == nil {
+			return claims.OrgID
+		}
+	}
+
+	refresh, _ := auth.GetRefreshToken(c)
+	if refresh != "" {
+		if claims, parseErr := v.Parse(refresh); parseErr == nil {
+			return claims.OrgID
+		}
+	}
+
+	return ""
+}
+
+func isSSOEnforced(ctx context.Context, db *ent.Client, orgID string) (bool, error) {
+	setting, err := db.OrganizationSetting.Query().
+		Where(organizationsetting.OrganizationID(orgID)).
+		Only(privacy.DecisionContext(ctx, privacy.Allow))
+	if err != nil {
+		return false, err
+	}
+
+	return setting.IdentityProviderLoginEnforced, nil
 }

@@ -15,11 +15,9 @@ import (
 
 	"github.com/theopenlane/utils/passwd"
 
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/metrics"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -53,19 +51,9 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 
 	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
 
-	orgID, err := h.getUserDefaultOrgID(allowCtx, user.ID)
-	if err == nil {
-		status, err := h.fetchSSOStatus(allowCtx, orgID)
-		if err == nil && status.Enforced {
-			member, mErr := transaction.FromContext(allowCtx).OrgMembership.Query().Where(
-				orgmembership.UserID(user.ID),
-				orgmembership.OrganizationID(orgID),
-			).Only(allowCtx)
-			if mErr == nil && member.Role != enums.RoleOwner {
-				metrics.Logins.WithLabelValues("false").Inc()
-				return ctx.Redirect(http.StatusFound, fmt.Sprintf("/v1/sso/login?organization_id=%s", orgID))
-			}
-		}
+	if orgID, ok := h.ssoOrgForUser(allowCtx, in.Username); ok {
+		metrics.Logins.WithLabelValues("false").Inc()
+		return ctx.Redirect(http.StatusFound, fmt.Sprintf("/v1/sso/login?organization_id=%s", orgID))
 	}
 
 	if user.Password == nil {
