@@ -321,7 +321,8 @@ func getSubjectName(user *ent.User) string {
 // unauthorized returns a 401 Unauthorized response with the error message
 func unauthorized(c echo.Context, err error, conf *Options, v tokens.Validator) error {
 	if v != nil && conf != nil && conf.DBClient != nil {
-		if orgID := orgIDFromToken(c, v); orgID != "" {
+		orgID := orgIDFromToken(c, v)
+		if orgID != "" {
 			enforced, dbErr := isSSOEnforced(c.Request().Context(), conf.DBClient, orgID)
 			if dbErr == nil && enforced {
 				if redirErr := c.Redirect(http.StatusFound, fmt.Sprintf("/v1/sso/login?organization_id=%s", orgID)); redirErr != nil {
@@ -334,6 +335,7 @@ func unauthorized(c echo.Context, err error, conf *Options, v tokens.Validator) 
 	}
 
 	if jsonErr := c.JSON(http.StatusUnauthorized, rout.ErrorResponse(err)); jsonErr != nil {
+		log.Error().Err(jsonErr).Msg("failed to write unauthorized JSON response")
 		return jsonErr
 	}
 
@@ -341,15 +343,19 @@ func unauthorized(c echo.Context, err error, conf *Options, v tokens.Validator) 
 }
 
 func orgIDFromToken(c echo.Context, v tokens.Validator) string {
-	token, _ := auth.GetBearerToken(c)
-	if token != "" {
-		if claims, parseErr := v.Parse(token); parseErr == nil {
-			return claims.OrgID
+	authHeader := c.Request().Header.Get("Authorization")
+	if authHeader != "" {
+		token, _ := auth.GetBearerToken(c)
+		if token != "" {
+			if claims, parseErr := v.Parse(token); parseErr == nil {
+				return claims.OrgID
+			}
 		}
 	}
 
-	refresh, _ := auth.GetRefreshToken(c)
-	if refresh != "" {
+	cookie, err := c.Cookie("refresh_token")
+	if err == nil && cookie != nil && cookie.Value != "" {
+		refresh := cookie.Value
 		if claims, parseErr := v.Parse(refresh); parseErr == nil {
 			return claims.OrgID
 		}

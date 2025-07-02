@@ -10,6 +10,7 @@ import (
 // SSOLogin returns the path for the SSO login route with the organization ID query parameter
 func SSOLogin(e *echo.Echo, orgID string) string {
 	path := "/v1/sso/login"
+
 	if e != nil {
 		if p, err := e.Router().Routes().Reverse("SSOLogin"); err == nil {
 			path = p
@@ -22,6 +23,7 @@ func SSOLogin(e *echo.Echo, orgID string) string {
 
 	q := url.Values{}
 	q.Set("organization_id", orgID)
+
 	return fmt.Sprintf("%s?%s", path, q.Encode())
 }
 
@@ -32,5 +34,6 @@ func SSOCallback(e *echo.Echo) string {
 			return p
 		}
 	}
+
 	return "/v1/sso/callback"
 }

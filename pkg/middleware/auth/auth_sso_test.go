@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"context"
 	"errors"
 	"net/http"
 	"net/http/httptest"
@@ -12,28 +11,49 @@ import (
 	"github.com/theopenlane/echox"
 	iamauth "github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
+	"github.com/theopenlane/utils/ulids"
 
+	generated "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	rule "github.com/theopenlane/core/internal/ent/privacy/rule"
 	dbtest "github.com/theopenlane/core/pkg/testutils/fga"
 )
 
 func TestUnauthorizedRedirectToSSO(t *testing.T) {
 	client := dbtest.NewPostgresClient(t)
 
-	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	userID := ulids.New().String()
+	baseCtx := iamauth.NewTestContextWithValidUser(userID)
+	ctx := rule.WithInternalContext(baseCtx)
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = generated.NewContext(ctx, client)
 
-	setting, err := client.OrganizationSetting.Create().
+	var err error
+
+	userSetting, err := client.UserSetting.Create().Save(ctx)
+	require.NoError(t, err)
+
+	_, err = client.User.Create().
+		SetEmail("user1@example.com").
+		SetDisplayName("user1").
+		SetPassword("p@$$w0rd!").
+		SetSettingID(userSetting.ID).
+		Save(ctx)
+	require.NoError(t, err)
+
+	orgSetting, err := client.OrganizationSetting.Create().
 		SetBillingEmail("org1@example.com").
 		Save(ctx)
 	require.NoError(t, err)
 
-	_, err = client.Organization.Create().
+	org, err := client.Organization.Create().
 		SetName("org1").
-		SetSettingID(setting.ID).
+		SetSettingID(orgSetting.ID).
 		Save(ctx)
 	require.NoError(t, err)
 
-	_, err = setting.Update().
+	_, err = orgSetting.Update().
+		SetOrganizationID(org.ID).
 		SetIdentityProviderLoginEnforced(true).
 		Save(ctx)
 	require.NoError(t, err)
@@ -64,20 +84,38 @@ func TestUnauthorizedRedirectToSSO(t *testing.T) {
 func TestUnauthorizedNoSSORedirect(t *testing.T) {
 	client := dbtest.NewPostgresClient(t)
 
-	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	userID := ulids.New().String()
+	baseCtx := iamauth.NewTestContextWithValidUser(userID)
+	ctx := rule.WithInternalContext(baseCtx)
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx = generated.NewContext(ctx, client)
 
-	setting, err := client.OrganizationSetting.Create().
+	var err error
+
+	userSetting, err := client.UserSetting.Create().Save(ctx)
+	require.NoError(t, err)
+
+	_, err = client.User.Create().
+		SetEmail("user2@example.com").
+		SetDisplayName("user2").
+		SetPassword("p@$$w0rd!").
+		SetSettingID(userSetting.ID).
+		Save(ctx)
+	require.NoError(t, err)
+
+	orgSetting, err := client.OrganizationSetting.Create().
 		SetBillingEmail("org2@example.com").
 		Save(ctx)
 	require.NoError(t, err)
 
-	_, err = client.Organization.Create().
+	org, err := client.Organization.Create().
 		SetName("org2").
-		SetSettingID(setting.ID).
+		SetSettingID(orgSetting.ID).
 		Save(ctx)
 	require.NoError(t, err)
 
-	_, err = setting.Update().
+	_, err = orgSetting.Update().
+		SetOrganizationID(org.ID).
 		SetIdentityProviderLoginEnforced(false).
 		Save(ctx)
 	require.NoError(t, err)

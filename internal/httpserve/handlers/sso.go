@@ -46,6 +46,7 @@ func (h *Handler) fetchSSOStatus(ctx context.Context, orgID string) (models.SSOS
 	if setting.IdentityProvider != enums.SSOProvider("") {
 		out.Provider = setting.IdentityProvider
 	}
+
 	if setting.OidcDiscoveryEndpoint != "" {
 		out.DiscoveryURL = setting.OidcDiscoveryEndpoint
 	}
@@ -57,6 +58,7 @@ func (h *Handler) fetchSSOStatus(ctx context.Context, orgID string) (models.SSOS
 // It parses the resource query param, resolves the org, and returns SSO status
 func (h *Handler) WebfingerHandler(ctx echo.Context) error {
 	reqCtx := ctx.Request().Context()
+
 	resource := ctx.QueryParam("resource")
 	if resource == "" {
 		return h.BadRequest(ctx, ErrMissingField)
@@ -126,6 +128,7 @@ func (h *Handler) oidcConfig(ctx context.Context, orgID string) (rp.RelyingParty
 			if n, ok := contextx.From[nonce](ctx); ok {
 				return string(n)
 			}
+
 			return ""
 		})),
 	)
@@ -181,6 +184,7 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context) error {
 // It validates state/nonce, exchanges the code for tokens, provisions the user if needed, and issues a session
 func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 	reqCtx := ctx.Request().Context()
+
 	orgID := ctx.QueryParam("organization_id")
 	if orgID == "" {
 		// if no org ID in query, try to get it from cookie
@@ -256,7 +260,9 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 	if ret, err := sessions.GetCookie(ctx.Request(), "return"); err == nil && ret.Value != "" {
 		sessions.RemoveCookie(ctx.Response().Writer, "return", sessions.CookieConfig{Path: "/"})
 		sessions.RemoveCookie(ctx.Response().Writer, "organization_id", sessions.CookieConfig{Path: "/"})
+
 		req, _ := httpsling.Request(httpsling.Get(ret.Value), httpsling.QueryParam("email", tokens.IDTokenClaims.GetEmail()))
+
 		return ctx.Redirect(http.StatusFound, req.URL.String())
 	}
 

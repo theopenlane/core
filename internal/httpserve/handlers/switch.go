@@ -56,6 +56,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 	// the user through the SSO login flow unless they are an owner.
 	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
 	status, err := h.fetchSSOStatus(allowCtx, in.TargetOrganizationID)
+
 	if err == nil && status.Enforced {
 		member, mErr := transaction.FromContext(allowCtx).OrgMembership.Query().Where(
 			orgmembership.UserID(user.ID),

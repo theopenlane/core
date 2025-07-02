@@ -3,6 +3,8 @@ run:
   modules-download-mode: readonly
   tests: false
   allow-parallel-runners: true
+issues:
+  fix: true
 linters:
   enable:
     - bodyclose
@@ -14,6 +16,8 @@ linters:
     - mnd
     - noctx
     - revive
+    - wsl
+    - whitespace
   exclusions:
     generated: lax
     warn-unused: true

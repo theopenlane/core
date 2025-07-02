@@ -395,17 +395,20 @@ func (h *Handler) HasValidSSOSession(ctx echo.Context, userID string) bool {
 	}
 
 	sessionID := h.SessionConfig.SessionManager.GetSessionIDFromCookie(sess)
+
 	storedUser, err := h.SessionConfig.RedisStore.GetSession(ctx.Request().Context(), sessionID)
 	if err != nil || storedUser != userID {
 		return false
 	}
 
 	data := h.SessionConfig.SessionManager.GetSessionDataFromCookie(sess)
+
 	m, ok := data.(map[string]any)
 	if !ok {
 		return false
 	}
 
 	userType, ok := m[sessions.UserTypeKey].(string)
+
 	return ok && userType == enums.AuthProviderOIDC.String()
 }
