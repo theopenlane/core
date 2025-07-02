@@ -3,9 +3,11 @@ package trustcenter
 import (
 	"context"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -27,13 +29,14 @@ func init() {
 	updateCmd.Flags().StringP("custom-domain-id", "d", "", "custom domain id for the trustcenter")
 	updateCmd.Flags().StringSliceP("tags", "t", []string{}, "tags associated with the trustcenter")
 	updateCmd.Flags().StringSliceP("append-tags", "a", []string{}, "append tags to the trustcenter")
+	updateCmd.Flags().StringP("logo-file", "l", "", "local of logo file to upload")
 }
 
 // updateValidation validates the required fields for the command
-func updateValidation() (id string, input openlaneclient.UpdateTrustCenterInput, err error) {
+func updateValidation() (id string, input openlaneclient.UpdateTrustCenterInput, logoFile *graphql.Upload, err error) {
 	id = cmd.Config.String("id")
 	if id == "" {
-		return id, input, cmd.NewRequiredFieldMissingError("id")
+		return id, input, nil, cmd.NewRequiredFieldMissingError("id")
 	}
 
 	customDomainID := cmd.Config.String("custom-domain-id")
@@ -51,7 +54,22 @@ func updateValidation() (id string, input openlaneclient.UpdateTrustCenterInput,
 		input.AppendTags = appendTags
 	}
 
-	return id, input, nil
+	logoFileLoc := cmd.Config.String("logo-file")
+	if logoFileLoc != "" {
+		file, err := objects.NewUploadFile(logoFileLoc)
+		if err != nil {
+			return id, input, nil, err
+		}
+
+		logoFile = &graphql.Upload{
+			File:        file.File,
+			Filename:    file.Filename,
+			Size:        file.Size,
+			ContentType: file.ContentType,
+		}
+	}
+
+	return id, input, logoFile, nil
 }
 
 // update an existing trustcenter in the platform
@@ -65,10 +83,10 @@ func update(ctx context.Context) error {
 		defer cmd.StoreSessionCookies(client)
 	}
 
-	id, input, err := updateValidation()
+	id, input, logoFile, err := updateValidation()
 	cobra.CheckErr(err)
 
-	o, err := client.UpdateTrustCenter(ctx, id, input)
+	o, err := client.UpdateTrustCenter(ctx, id, input, logoFile)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

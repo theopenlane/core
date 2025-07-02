@@ -26556,7 +26556,7 @@ type Mutation {
 		New values for the trustCenter
 		"""
 		input: UpdateTrustCenterInput!
-	): TrustCenterUpdatePayload!
+	logoFile: Upload): TrustCenterUpdatePayload!
 	"""
 	Delete an existing trustCenter
 	"""

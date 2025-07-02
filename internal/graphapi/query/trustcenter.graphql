@@ -126,8 +126,8 @@ query GetTrustCenters($first: Int, $last: Int, $where: TrustCenterWhereInput) {
     }
   }
 }
-mutation UpdateTrustCenter($updateTrustCenterId: ID!, $input: UpdateTrustCenterInput!) {
-  updateTrustCenter(id: $updateTrustCenterId, input: $input) {
+mutation UpdateTrustCenter($updateTrustCenterId: ID!, $input: UpdateTrustCenterInput!, $logoFile: Upload) {
+  updateTrustCenter(id: $updateTrustCenterId, input: $input, logoFile: $logoFile) {
     trustCenter {
       createdAt
       createdBy

@@ -7,6 +7,7 @@ package graphapi
 import (
 	"context"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
@@ -34,7 +35,7 @@ func (r *mutationResolver) CreateTrustCenter(ctx context.Context, input generate
 }
 
 // UpdateTrustCenter is the resolver for the updateTrustCenter field.
-func (r *mutationResolver) UpdateTrustCenter(ctx context.Context, id string, input generated.UpdateTrustCenterInput) (*model.TrustCenterUpdatePayload, error) {
+func (r *mutationResolver) UpdateTrustCenter(ctx context.Context, id string, input generated.UpdateTrustCenterInput, logoFile *graphql.Upload) (*model.TrustCenterUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).TrustCenter.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "trustcenter"})

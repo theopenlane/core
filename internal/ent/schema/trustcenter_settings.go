@@ -109,6 +109,7 @@ func (TrustCenterSetting) Interceptors() []ent.Interceptor {
 func (TrustCenterSetting) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookTrustCenterSetting(),
+		hooks.HookTrustCenterSettingAuthz(),
 	}
 }
 
@@ -133,5 +134,6 @@ func (TrustCenterSetting) Indexes() []ent.Index {
 func (TrustCenterSetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SettingsChecks("trust_center"),
+		entfga.SelfAccessChecks(),
 	}
 }
