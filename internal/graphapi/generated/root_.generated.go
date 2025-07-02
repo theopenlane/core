@@ -63,24 +63,25 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	APIToken struct {
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		ExpiresAt     func(childComplexity int) int
-		ID            func(childComplexity int) int
-		IsActive      func(childComplexity int) int
-		LastUsedAt    func(childComplexity int) int
-		Name          func(childComplexity int) int
-		Owner         func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
-		RevokedAt     func(childComplexity int) int
-		RevokedBy     func(childComplexity int) int
-		RevokedReason func(childComplexity int) int
-		Scopes        func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		Token         func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		CreatedAt         func(childComplexity int) int
+		CreatedBy         func(childComplexity int) int
+		Description       func(childComplexity int) int
+		ExpiresAt         func(childComplexity int) int
+		ID                func(childComplexity int) int
+		IsActive          func(childComplexity int) int
+		LastUsedAt        func(childComplexity int) int
+		Name              func(childComplexity int) int
+		Owner             func(childComplexity int) int
+		OwnerID           func(childComplexity int) int
+		RevokedAt         func(childComplexity int) int
+		RevokedBy         func(childComplexity int) int
+		RevokedReason     func(childComplexity int) int
+		SSOAuthorizations func(childComplexity int) int
+		Scopes            func(childComplexity int) int
+		Tags              func(childComplexity int) int
+		Token             func(childComplexity int) int
+		UpdatedAt         func(childComplexity int) int
+		UpdatedBy         func(childComplexity int) int
 	}
 
 	APITokenBulkCreatePayload struct {
@@ -2957,25 +2958,26 @@ type ComplexityRoot struct {
 	}
 
 	PersonalAccessToken struct {
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		Events        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
-		ExpiresAt     func(childComplexity int) int
-		ID            func(childComplexity int) int
-		IsActive      func(childComplexity int) int
-		LastUsedAt    func(childComplexity int) int
-		Name          func(childComplexity int) int
-		Organizations func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
-		Owner         func(childComplexity int) int
-		RevokedAt     func(childComplexity int) int
-		RevokedBy     func(childComplexity int) int
-		RevokedReason func(childComplexity int) int
-		Scopes        func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		Token         func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		CreatedAt         func(childComplexity int) int
+		CreatedBy         func(childComplexity int) int
+		Description       func(childComplexity int) int
+		Events            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		ExpiresAt         func(childComplexity int) int
+		ID                func(childComplexity int) int
+		IsActive          func(childComplexity int) int
+		LastUsedAt        func(childComplexity int) int
+		Name              func(childComplexity int) int
+		Organizations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
+		Owner             func(childComplexity int) int
+		RevokedAt         func(childComplexity int) int
+		RevokedBy         func(childComplexity int) int
+		RevokedReason     func(childComplexity int) int
+		SSOAuthorizations func(childComplexity int) int
+		Scopes            func(childComplexity int) int
+		Tags              func(childComplexity int) int
+		Token             func(childComplexity int) int
+		UpdatedAt         func(childComplexity int) int
+		UpdatedBy         func(childComplexity int) int
 	}
 
 	PersonalAccessTokenBulkCreatePayload struct {
@@ -4769,6 +4771,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.APIToken.RevokedReason(childComplexity), true
+
+	case "APIToken.ssoAuthorizations":
+		if e.complexity.APIToken.SSOAuthorizations == nil {
+			break
+		}
+
+		return e.complexity.APIToken.SSOAuthorizations(childComplexity), true
 
 	case "APIToken.scopes":
 		if e.complexity.APIToken.Scopes == nil {
@@ -20480,6 +20489,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.PersonalAccessToken.RevokedReason(childComplexity), true
 
+	case "PersonalAccessToken.ssoAuthorizations":
+		if e.complexity.PersonalAccessToken.SSOAuthorizations == nil {
+			break
+		}
+
+		return e.complexity.PersonalAccessToken.SSOAuthorizations(childComplexity), true
+
 	case "PersonalAccessToken.scopes":
 		if e.complexity.PersonalAccessToken.Scopes == nil {
 			break
@@ -33274,6 +33290,10 @@ type APIToken implements Node {
   when the token was revoked
   """
   revokedAt: Time
+  """
+  SSO verification time for the owning organization
+  """
+  ssoAuthorizations: SSOAuthorizationMap
   owner: Organization
 }
 """
@@ -40583,6 +40603,10 @@ input CreateAPITokenInput {
   when the token was revoked
   """
   revokedAt: Time
+  """
+  SSO verification time for the owning organization
+  """
+  ssoAuthorizations: SSOAuthorizationMap
   ownerID: ID
 }
 """
@@ -41921,6 +41945,10 @@ input CreatePersonalAccessTokenInput {
   """
   description: String
   scopes: [String!]
+  """
+  SSO authorization timestamps by organization id
+  """
+  ssoAuthorizations: SSOAuthorizationMap
   lastUsedAt: Time
   """
   whether the token is active
@@ -62756,6 +62784,10 @@ type PersonalAccessToken implements Node {
   """
   description: String
   scopes: [String!]
+  """
+  SSO authorization timestamps by organization id
+  """
+  ssoAuthorizations: SSOAuthorizationMap
   lastUsedAt: Time
   """
   whether the token is active
@@ -78003,6 +78035,11 @@ input UpdateAPITokenInput {
   """
   revokedAt: Time
   clearRevokedAt: Boolean
+  """
+  SSO verification time for the owning organization
+  """
+  ssoAuthorizations: SSOAuthorizationMap
+  clearSSOAuthorizations: Boolean
   ownerID: ID
   clearOwner: Boolean
 }
@@ -79909,6 +79946,11 @@ input UpdatePersonalAccessTokenInput {
   scopes: [String!]
   appendScopes: [String!]
   clearScopes: Boolean
+  """
+  SSO authorization timestamps by organization id
+  """
+  ssoAuthorizations: SSOAuthorizationMap
+  clearSSOAuthorizations: Boolean
   lastUsedAt: Time
   clearLastUsedAt: Boolean
   """
@@ -86101,6 +86143,11 @@ Change is a difference between two updates to an object used by
 the audit history resolvers
 """
 scalar Change
+"""
+SSOAuthorizationMap is a map of organization IDs to SSO verification timestamps.
+This scalar is used to track SSO verification times for organizations in the context of token authorization.
+"""
+scalar SSOAuthorizationMap
 `, BuiltIn: false},
 	{Name: "../schema/scan.graphql", Input: `extend type Query {
     """

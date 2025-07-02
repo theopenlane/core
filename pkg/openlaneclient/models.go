@@ -40,8 +40,10 @@ type APIToken struct {
 	// the user who revoked the token
 	RevokedBy *string `json:"revokedBy,omitempty"`
 	// when the token was revoked
-	RevokedAt *time.Time    `json:"revokedAt,omitempty"`
-	Owner     *Organization `json:"owner,omitempty"`
+	RevokedAt *time.Time `json:"revokedAt,omitempty"`
+	// SSO verification time for the owning organization
+	SsoAuthorizations *string       `json:"ssoAuthorizations,omitempty"`
+	Owner             *Organization `json:"owner,omitempty"`
 }
 
 func (APIToken) IsNode() {}
@@ -4579,7 +4581,9 @@ type CreateAPITokenInput struct {
 	RevokedBy *string `json:"revokedBy,omitempty"`
 	// when the token was revoked
 	RevokedAt *time.Time `json:"revokedAt,omitempty"`
-	OwnerID   *string    `json:"ownerID,omitempty"`
+	// SSO verification time for the owning organization
+	SsoAuthorizations *string `json:"ssoAuthorizations,omitempty"`
+	OwnerID           *string `json:"ownerID,omitempty"`
 }
 
 // CreateActionPlanInput is used for create ActionPlan object.
@@ -5477,9 +5481,11 @@ type CreatePersonalAccessTokenInput struct {
 	// when the token expires
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// a description of the token's purpose
-	Description *string    `json:"description,omitempty"`
-	Scopes      []string   `json:"scopes,omitempty"`
-	LastUsedAt  *time.Time `json:"lastUsedAt,omitempty"`
+	Description *string  `json:"description,omitempty"`
+	Scopes      []string `json:"scopes,omitempty"`
+	// SSO authorization timestamps by organization id
+	SsoAuthorizations *string    `json:"ssoAuthorizations,omitempty"`
+	LastUsedAt        *time.Time `json:"lastUsedAt,omitempty"`
 	// whether the token is active
 	IsActive        *bool    `json:"isActive,omitempty"`
 	OrganizationIDs []string `json:"organizationIDs,omitempty"`
@@ -17941,9 +17947,11 @@ type PersonalAccessToken struct {
 	// when the token expires
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// a description of the token's purpose
-	Description *string    `json:"description,omitempty"`
-	Scopes      []string   `json:"scopes,omitempty"`
-	LastUsedAt  *time.Time `json:"lastUsedAt,omitempty"`
+	Description *string  `json:"description,omitempty"`
+	Scopes      []string `json:"scopes,omitempty"`
+	// SSO authorization timestamps by organization id
+	SsoAuthorizations *string    `json:"ssoAuthorizations,omitempty"`
+	LastUsedAt        *time.Time `json:"lastUsedAt,omitempty"`
 	// whether the token is active
 	IsActive *bool `json:"isActive,omitempty"`
 	// the reason the token was revoked
@@ -25742,8 +25750,11 @@ type UpdateAPITokenInput struct {
 	// when the token was revoked
 	RevokedAt      *time.Time `json:"revokedAt,omitempty"`
 	ClearRevokedAt *bool      `json:"clearRevokedAt,omitempty"`
-	OwnerID        *string    `json:"ownerID,omitempty"`
-	ClearOwner     *bool      `json:"clearOwner,omitempty"`
+	// SSO verification time for the owning organization
+	SsoAuthorizations      *string `json:"ssoAuthorizations,omitempty"`
+	ClearSSOAuthorizations *bool   `json:"clearSSOAuthorizations,omitempty"`
+	OwnerID                *string `json:"ownerID,omitempty"`
+	ClearOwner             *bool   `json:"clearOwner,omitempty"`
 }
 
 // UpdateActionPlanInput is used for update ActionPlan object.
@@ -27236,13 +27247,16 @@ type UpdatePersonalAccessTokenInput struct {
 	// the name associated with the token
 	Name *string `json:"name,omitempty"`
 	// a description of the token's purpose
-	Description      *string    `json:"description,omitempty"`
-	ClearDescription *bool      `json:"clearDescription,omitempty"`
-	Scopes           []string   `json:"scopes,omitempty"`
-	AppendScopes     []string   `json:"appendScopes,omitempty"`
-	ClearScopes      *bool      `json:"clearScopes,omitempty"`
-	LastUsedAt       *time.Time `json:"lastUsedAt,omitempty"`
-	ClearLastUsedAt  *bool      `json:"clearLastUsedAt,omitempty"`
+	Description      *string  `json:"description,omitempty"`
+	ClearDescription *bool    `json:"clearDescription,omitempty"`
+	Scopes           []string `json:"scopes,omitempty"`
+	AppendScopes     []string `json:"appendScopes,omitempty"`
+	ClearScopes      *bool    `json:"clearScopes,omitempty"`
+	// SSO authorization timestamps by organization id
+	SsoAuthorizations      *string    `json:"ssoAuthorizations,omitempty"`
+	ClearSSOAuthorizations *bool      `json:"clearSSOAuthorizations,omitempty"`
+	LastUsedAt             *time.Time `json:"lastUsedAt,omitempty"`
+	ClearLastUsedAt        *bool      `json:"clearLastUsedAt,omitempty"`
 	// whether the token is active
 	IsActive              *bool    `json:"isActive,omitempty"`
 	ClearIsActive         *bool    `json:"clearIsActive,omitempty"`

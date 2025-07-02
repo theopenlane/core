@@ -225,6 +225,11 @@ func (at *APITokenQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				selectedFields = append(selectedFields, apitoken.FieldRevokedAt)
 				fieldSeen[apitoken.FieldRevokedAt] = struct{}{}
 			}
+		case "ssoAuthorizations":
+			if _, ok := fieldSeen[apitoken.FieldSSOAuthorizations]; !ok {
+				selectedFields = append(selectedFields, apitoken.FieldSSOAuthorizations)
+				fieldSeen[apitoken.FieldSSOAuthorizations] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -30295,6 +30300,11 @@ func (pat *PersonalAccessTokenQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[personalaccesstoken.FieldScopes]; !ok {
 				selectedFields = append(selectedFields, personalaccesstoken.FieldScopes)
 				fieldSeen[personalaccesstoken.FieldScopes] = struct{}{}
+			}
+		case "ssoAuthorizations":
+			if _, ok := fieldSeen[personalaccesstoken.FieldSSOAuthorizations]; !ok {
+				selectedFields = append(selectedFields, personalaccesstoken.FieldSSOAuthorizations)
+				fieldSeen[personalaccesstoken.FieldSSOAuthorizations] = struct{}{}
 			}
 		case "lastUsedAt":
 			if _, ok := fieldSeen[personalaccesstoken.FieldLastUsedAt]; !ok {

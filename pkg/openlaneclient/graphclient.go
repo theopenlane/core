@@ -1802,13 +1802,14 @@ func (t *AdminSearch_AdminSearch_APITokens_PageInfo) GetStartCursor() *string {
 }
 
 type AdminSearch_AdminSearch_APITokens_Edges_Node struct {
-	ID            string   "json:\"id\" graphql:\"id\""
-	Name          string   "json:\"name\" graphql:\"name\""
-	OwnerID       *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RevokedBy     *string  "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
-	RevokedReason *string  "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
-	Scopes        []string "json:\"scopes,omitempty\" graphql:\"scopes\""
-	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
+	ID                string   "json:\"id\" graphql:\"id\""
+	Name              string   "json:\"name\" graphql:\"name\""
+	OwnerID           *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevokedBy         *string  "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason     *string  "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes            []string "json:\"scopes,omitempty\" graphql:\"scopes\""
+	SsoAuthorizations *string  "json:\"ssoAuthorizations,omitempty\" graphql:\"ssoAuthorizations\""
+	Tags              []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *AdminSearch_AdminSearch_APITokens_Edges_Node) GetID() string {
@@ -1846,6 +1847,12 @@ func (t *AdminSearch_AdminSearch_APITokens_Edges_Node) GetScopes() []string {
 		t = &AdminSearch_AdminSearch_APITokens_Edges_Node{}
 	}
 	return t.Scopes
+}
+func (t *AdminSearch_AdminSearch_APITokens_Edges_Node) GetSsoAuthorizations() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_APITokens_Edges_Node{}
+	}
+	return t.SsoAuthorizations
 }
 func (t *AdminSearch_AdminSearch_APITokens_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -5449,12 +5456,13 @@ func (t *AdminSearch_AdminSearch_PersonalAccessTokens_PageInfo) GetStartCursor()
 }
 
 type AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node struct {
-	ID            string   "json:\"id\" graphql:\"id\""
-	Name          string   "json:\"name\" graphql:\"name\""
-	RevokedBy     *string  "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
-	RevokedReason *string  "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
-	Scopes        []string "json:\"scopes,omitempty\" graphql:\"scopes\""
-	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
+	ID                string   "json:\"id\" graphql:\"id\""
+	Name              string   "json:\"name\" graphql:\"name\""
+	RevokedBy         *string  "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason     *string  "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes            []string "json:\"scopes,omitempty\" graphql:\"scopes\""
+	SsoAuthorizations *string  "json:\"ssoAuthorizations,omitempty\" graphql:\"ssoAuthorizations\""
+	Tags              []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node) GetID() string {
@@ -5486,6 +5494,12 @@ func (t *AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node) GetScopes() []
 		t = &AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node{}
 	}
 	return t.Scopes
+}
+func (t *AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node) GetSsoAuthorizations() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.SsoAuthorizations
 }
 func (t *AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -88087,6 +88101,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					scopes
 					revokedReason
 					revokedBy
+					ssoAuthorizations
 				}
 			}
 		}
@@ -88681,6 +88696,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					tags
 					name
 					scopes
+					ssoAuthorizations
 					revokedReason
 					revokedBy
 				}

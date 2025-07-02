@@ -3981,7 +3981,7 @@ func init() {
 	// personalaccesstoken.DefaultToken holds the default value on creation for the token field.
 	personalaccesstoken.DefaultToken = personalaccesstokenDescToken.Default.(func() string)
 	// personalaccesstokenDescIsActive is the schema descriptor for is_active field.
-	personalaccesstokenDescIsActive := personalaccesstokenFields[6].Descriptor()
+	personalaccesstokenDescIsActive := personalaccesstokenFields[7].Descriptor()
 	// personalaccesstoken.DefaultIsActive holds the default value on creation for the is_active field.
 	personalaccesstoken.DefaultIsActive = personalaccesstokenDescIsActive.Default.(bool)
 	// personalaccesstokenDescID is the schema descriptor for id field.

@@ -99,6 +99,8 @@ func (ec *executionContext) fieldContext_APITokenBulkCreatePayload_apiTokens(_ c
 				return ec.fieldContext_APIToken_revokedBy(ctx, field)
 			case "revokedAt":
 				return ec.fieldContext_APIToken_revokedAt(ctx, field)
+			case "ssoAuthorizations":
+				return ec.fieldContext_APIToken_ssoAuthorizations(ctx, field)
 			case "owner":
 				return ec.fieldContext_APIToken_owner(ctx, field)
 			}
@@ -181,6 +183,8 @@ func (ec *executionContext) fieldContext_APITokenCreatePayload_apiToken(_ contex
 				return ec.fieldContext_APIToken_revokedBy(ctx, field)
 			case "revokedAt":
 				return ec.fieldContext_APIToken_revokedAt(ctx, field)
+			case "ssoAuthorizations":
+				return ec.fieldContext_APIToken_ssoAuthorizations(ctx, field)
 			case "owner":
 				return ec.fieldContext_APIToken_owner(ctx, field)
 			}
@@ -307,6 +311,8 @@ func (ec *executionContext) fieldContext_APITokenUpdatePayload_apiToken(_ contex
 				return ec.fieldContext_APIToken_revokedBy(ctx, field)
 			case "revokedAt":
 				return ec.fieldContext_APIToken_revokedAt(ctx, field)
+			case "ssoAuthorizations":
+				return ec.fieldContext_APIToken_ssoAuthorizations(ctx, field)
 			case "owner":
 				return ec.fieldContext_APIToken_owner(ctx, field)
 			}

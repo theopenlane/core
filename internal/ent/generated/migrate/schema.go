@@ -29,6 +29,7 @@ var (
 		{Name: "revoked_reason", Type: field.TypeString, Nullable: true},
 		{Name: "revoked_by", Type: field.TypeString, Nullable: true},
 		{Name: "revoked_at", Type: field.TypeTime, Nullable: true},
+		{Name: "sso_authorizations", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// APITokensTable holds the schema information for the "api_tokens" table.
@@ -39,7 +40,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "api_tokens_organizations_api_tokens",
-				Columns:    []*schema.Column{APITokensColumns[18]},
+				Columns:    []*schema.Column{APITokensColumns[19]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -53,7 +54,7 @@ var (
 			{
 				Name:    "apitoken_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{APITokensColumns[18]},
+				Columns: []*schema.Column{APITokensColumns[19]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3406,6 +3407,7 @@ var (
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "scopes", Type: field.TypeJSON, Nullable: true},
+		{Name: "sso_authorizations", Type: field.TypeJSON, Nullable: true},
 		{Name: "last_used_at", Type: field.TypeTime, Nullable: true},
 		{Name: "is_active", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "revoked_reason", Type: field.TypeString, Nullable: true},
@@ -3421,7 +3423,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "personal_access_tokens_users_personal_access_tokens",
-				Columns:    []*schema.Column{PersonalAccessTokensColumns[18]},
+				Columns:    []*schema.Column{PersonalAccessTokensColumns[19]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},

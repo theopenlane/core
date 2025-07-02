@@ -45,6 +45,10 @@ type APIToken implements Node {
   when the token was revoked
   """
   revokedAt: Time
+  """
+  SSO verification time for the owning organization
+  """
+  ssoAuthorizations: SSOAuthorizationMap
   owner: Organization
 }
 """
@@ -7354,6 +7358,10 @@ input CreateAPITokenInput {
   when the token was revoked
   """
   revokedAt: Time
+  """
+  SSO verification time for the owning organization
+  """
+  ssoAuthorizations: SSOAuthorizationMap
   ownerID: ID
 }
 """
@@ -8692,6 +8700,10 @@ input CreatePersonalAccessTokenInput {
   """
   description: String
   scopes: [String!]
+  """
+  SSO authorization timestamps by organization id
+  """
+  ssoAuthorizations: SSOAuthorizationMap
   lastUsedAt: Time
   """
   whether the token is active
@@ -29527,6 +29539,10 @@ type PersonalAccessToken implements Node {
   """
   description: String
   scopes: [String!]
+  """
+  SSO authorization timestamps by organization id
+  """
+  ssoAuthorizations: SSOAuthorizationMap
   lastUsedAt: Time
   """
   whether the token is active
@@ -44774,6 +44790,11 @@ input UpdateAPITokenInput {
   """
   revokedAt: Time
   clearRevokedAt: Boolean
+  """
+  SSO verification time for the owning organization
+  """
+  ssoAuthorizations: SSOAuthorizationMap
+  clearSSOAuthorizations: Boolean
   ownerID: ID
   clearOwner: Boolean
 }
@@ -46680,6 +46701,11 @@ input UpdatePersonalAccessTokenInput {
   scopes: [String!]
   appendScopes: [String!]
   clearScopes: Boolean
+  """
+  SSO authorization timestamps by organization id
+  """
+  ssoAuthorizations: SSOAuthorizationMap
+  clearSSOAuthorizations: Boolean
   lastUsedAt: Time
   clearLastUsedAt: Boolean
   """

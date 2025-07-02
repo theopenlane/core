@@ -2,7 +2,6 @@ package hooks
 
 import (
 	"context"
-	"fmt"
 
 	"entgo.io/ent"
 
@@ -26,13 +25,17 @@ func HookValidateIdentityProviderConfig() ent.Hook {
 	))
 }
 
-// ValidateIdentityProviderConfig validates that SSO fields are set when login enforcement is enabled
+// ValidateIdentityProviderConfig checks if the identity provider configuration is valid
+// the intent of the function is to ensure all necessary identity provider configuration fields are present and
+// valid when SSO enforcement is being set to active, while also supporting partial updates by falling back
+// to existing values when appropriate
 func ValidateIdentityProviderConfig(ctx context.Context, m *generated.OrganizationSettingMutation) error {
 	enforced, ok := m.IdentityProviderLoginEnforced()
 	if !ok || !enforced {
 		return nil
 	}
 
+	// identity provider
 	provider, providerOK := m.IdentityProvider()
 	if !providerOK && m.Op() != ent.OpCreate {
 		if old, err := m.OldIdentityProvider(ctx); err == nil {
@@ -41,33 +44,92 @@ func ValidateIdentityProviderConfig(ctx context.Context, m *generated.Organizati
 		}
 	}
 
-	id, idOK := m.IdentityProviderClientID()
-	if !idOK && m.Op() != ent.OpCreate {
-		if old, err := m.OldIdentityProviderClientID(ctx); err == nil && old != nil {
-			id = *old
-			idOK = true
-		}
+	if missingProvider(providerOK, provider) {
+		return ErrInvalidInput
 	}
 
-	secret, secretOK := m.IdentityProviderClientSecret()
-	if !secretOK && m.Op() != ent.OpCreate {
-		if old, err := m.OldIdentityProviderClientSecret(ctx); err == nil && old != nil {
-			secret = *old
-			secretOK = true
-		}
+	// Client ID
+	id, idOK := fallbackString(
+		m.IdentityProviderClientID,
+		func() (*string, error) { return m.OldIdentityProviderClientID(ctx) },
+		m.Op() != ent.OpCreate,
+	)
+
+	if missingClientID(idOK, id) {
+		return ErrInvalidInput
 	}
 
-	endpoint, endpointOK := m.OidcDiscoveryEndpoint()
-	if !endpointOK && m.Op() != ent.OpCreate {
-		if old, err := m.OldOidcDiscoveryEndpoint(ctx); err == nil && old != "" {
-			endpoint = old
-			endpointOK = true
-		}
-	}
+	// Client Secret
+	secret, secretOK := fallbackString(
+		m.IdentityProviderClientSecret,
+		func() (*string, error) { return m.OldIdentityProviderClientSecret(ctx) },
+		m.Op() != ent.OpCreate,
+	)
 
-	if !providerOK || provider == enums.SSOProviderNone || !idOK || id == "" || !secretOK || secret == "" || !endpointOK || endpoint == "" {
-		return fmt.Errorf("%w: identity provider configuration missing", ErrInvalidInput)
+	if missingClientSecret(secretOK, secret) {
+		return ErrInvalidInput
+	}
+	// OIDC Discovery Endpoint
+	endpoint, endpointOK := fallbackString(
+		m.OidcDiscoveryEndpoint,
+		func() (*string, error) { return stringPtrFromOld(ctx, m.OldOidcDiscoveryEndpoint) },
+		m.Op() != ent.OpCreate,
+	)
+
+	if missingDiscoveryEndpoint(endpointOK, endpoint) {
+		return ErrInvalidInput
 	}
 
 	return nil
+}
+
+// stringPtrFromOld converts a function that returns a string and an error into a pointer to a string
+// This is used to handle the case where the old value might not be set, returning nil if there's an error
+// or if the value is empty
+func stringPtrFromOld(ctx context.Context, old func(ctx context.Context) (string, error)) (*string, error) {
+	val, err := old(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return &val, nil
+}
+
+// missingProvider checks if the SSO provider is missing or set to None
+func missingProvider(ok bool, provider enums.SSOProvider) bool {
+	return !ok || provider == enums.SSOProviderNone
+}
+
+// missingClientID checks if the OIDC client ID is missing or empty
+func missingClientID(ok bool, id string) bool {
+	return !ok || id == ""
+}
+
+// missingClientSecret checks if the OIDC client secret is missing or empty
+func missingClientSecret(ok bool, secret string) bool {
+	return !ok || secret == ""
+}
+
+// missingDiscoveryEndpoint checks if the OIDC discovery endpoint is missing or empty
+func missingDiscoveryEndpoint(ok bool, endpoint string) bool {
+	return !ok || endpoint == ""
+}
+
+// fallbackString attempts to get a value from the primary function, and if it fails, it tries the fallback function
+// the pattern is intended to ensure that when updating a record, the system can use the existing Client ID if a new one isn't
+// provided, but when creating a new record, the value must be explicitly set
+func fallbackString(primary func() (string, bool), fallback func() (*string, error), allowFallback bool) (string, bool) {
+	val, ok := primary()
+
+	if ok {
+		return val, true
+	}
+
+	if allowFallback {
+		if old, err := fallback(); err == nil && old != nil {
+			return *old, true
+		}
+	}
+
+	return "", false
 }

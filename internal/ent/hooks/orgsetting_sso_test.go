@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/iam/auth"
@@ -16,6 +17,7 @@ func (suite *HookTestSuite) TestValidateIdentityProviderConfig() {
 	user := suite.seedUser()
 	ctx := auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].ID)
 	ctx = generated.NewContext(ctx, suite.client)
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	t.Run("create missing fields", func(t *testing.T) {
 		m := suite.client.OrganizationSetting.Create().

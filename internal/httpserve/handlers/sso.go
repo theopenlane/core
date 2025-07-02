@@ -62,12 +62,14 @@ func (h *Handler) fetchSSOStatus(ctx context.Context, orgID string) (models.SSOS
 // confirmed that response codes should not always be 201 or similar, but 404, 200, etc., regular status codes should be used
 func (h *Handler) WebfingerHandler(ctx echo.Context) error {
 	reqCtx := ctx.Request().Context()
+
 	resource := ctx.QueryParam("resource")
 	if resource == "" {
 		return h.BadRequest(ctx, ErrMissingField)
 	}
 
 	var orgID string
+
 	var out models.SSOStatusReply
 
 	switch {

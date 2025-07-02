@@ -18,6 +18,7 @@ query AdminSearch($query: String!) {
           scopes
           revokedReason
           revokedBy
+          ssoAuthorizations
         }
       }
     }
@@ -612,6 +613,7 @@ query AdminSearch($query: String!) {
           tags
           name
           scopes
+          ssoAuthorizations
           revokedReason
           revokedBy
         }

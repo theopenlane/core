@@ -41,6 +41,7 @@ func SSOCallback(e *echo.Echo) string {
 // SSOTokenAuthorize returns the path for the SSO token authorization route with token and org parameters
 func SSOTokenAuthorize(e *echo.Echo, orgID, tokenID, tokenType string) string {
 	path := "/v1/sso/token/authorize"
+
 	if e != nil {
 		if p, err := e.Router().Routes().Reverse("SSOTokenAuthorize"); err == nil {
 			path = p
