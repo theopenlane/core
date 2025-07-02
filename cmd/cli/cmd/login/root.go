@@ -45,10 +45,12 @@ func login(ctx context.Context) (*oauth2.Token, error) {
 		if err != nil {
 			return nil, err
 		}
+
 		fmt.Println("\nAuthentication Successful!")
 		if err := cmd.StoreToken(tokens); err == nil {
 			fmt.Println("auth tokens successfully stored in keychain")
 		}
+
 		return tokens, nil
 	}
 

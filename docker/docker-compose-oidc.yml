@@ -1,17 +1,4 @@
 services:
-  localoidc:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile.oidc
-    entrypoint: ["/bin/localoidc"]
-    command: ["serve"]
-    environment:
-      - OIDC_REDIRECT_URL=http://localhost:17608/v1/sso/callback
-    ports:
-      - "9998:9998"
-    networks:
-      - default
-
   dex:
     image: ghcr.io/dexidp/dex:v2.38.0
     volumes:
@@ -37,16 +24,5 @@ services:
       - ../pkg/testutils/tokensso:/usr/share/nginx/html:ro
     ports:
       - "3002:80"
-    networks:
-      - default
-
-  cli:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
-    entrypoint: ["/bin/core"]
-    command: ["cli"]
-    stdin_open: true
-    tty: true
     networks:
       - default

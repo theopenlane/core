@@ -9,10 +9,6 @@ tasks:
         vars:
           GOOS: 'GOOS=linux'
           GOARCH: 'GOARCH=amd64'
-      - task: :go:build-localoidc
-        vars:
-          GOOS: 'GOOS=linux'
-          GOARCH: 'GOARCH=amd64'
       - "docker build -f docker/Dockerfile . -t core:dev"
 
   build:aio:
@@ -119,18 +115,6 @@ tasks:
     desc: brings up the compose environment for redis
     cmds:
       - "docker compose -f ./docker/docker-compose-prometheus.yml up -d"
-
-  oidc:
-    dir: ..
-    desc: brings up the compose environment for openfga development
-    cmds:
-      - "docker compose -f ./docker/docker-compose-oidc.yml up -d"
-
-  localoidc:
-    dir: ..
-    desc: launches the local OIDC server and test UI for SSO development
-    cmds:
-      - "docker compose -f ./docker/docker-compose.yml up -d localoidc sso-ui"
 
   dex:
     dir: ..
