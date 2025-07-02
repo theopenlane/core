@@ -229,7 +229,7 @@ type MutationResolver interface {
 	CreateTFASetting(ctx context.Context, input generated.CreateTFASettingInput) (*model.TFASettingCreatePayload, error)
 	UpdateTFASetting(ctx context.Context, input generated.UpdateTFASettingInput) (*model.TFASettingUpdatePayload, error)
 	CreateTrustCenter(ctx context.Context, input generated.CreateTrustCenterInput) (*model.TrustCenterCreatePayload, error)
-	UpdateTrustCenter(ctx context.Context, id string, input generated.UpdateTrustCenterInput) (*model.TrustCenterUpdatePayload, error)
+	UpdateTrustCenter(ctx context.Context, id string, input generated.UpdateTrustCenterInput, logoFile *graphql.Upload) (*model.TrustCenterUpdatePayload, error)
 	DeleteTrustCenter(ctx context.Context, id string) (*model.TrustCenterDeletePayload, error)
 	CreateTrustCenterSetting(ctx context.Context, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload) (*model.TrustCenterSettingCreatePayload, error)
 	UpdateTrustCenterSetting(ctx context.Context, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload) (*model.TrustCenterSettingUpdatePayload, error)
@@ -7783,6 +7783,11 @@ func (ec *executionContext) field_Mutation_updateTrustCenter_args(ctx context.Co
 		return nil, err
 	}
 	args["input"] = arg1
+	arg2, err := ec.field_Mutation_updateTrustCenter_argsLogoFile(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["logoFile"] = arg2
 	return args, nil
 }
 func (ec *executionContext) field_Mutation_updateTrustCenter_argsID(
@@ -7818,6 +7823,24 @@ func (ec *executionContext) field_Mutation_updateTrustCenter_argsInput(
 	}
 
 	var zeroVal generated.UpdateTrustCenterInput
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_updateTrustCenter_argsLogoFile(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (*graphql.Upload, error) {
+	if _, ok := rawArgs["logoFile"]; !ok {
+		var zeroVal *graphql.Upload
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("logoFile"))
+	if tmp, ok := rawArgs["logoFile"]; ok {
+		return ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
+	}
+
+	var zeroVal *graphql.Upload
 	return zeroVal, nil
 }
 
@@ -20810,7 +20833,7 @@ func (ec *executionContext) _Mutation_updateTrustCenter(ctx context.Context, fie
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateTrustCenter(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterInput))
+		return ec.resolvers.Mutation().UpdateTrustCenter(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterInput), fc.Args["logoFile"].(*graphql.Upload))
 	})
 	if err != nil {
 		ec.Error(ctx, err)

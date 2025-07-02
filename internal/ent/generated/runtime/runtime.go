@@ -5372,6 +5372,8 @@ func init() {
 	trustcenter.Hooks[4] = trustcenterHooks[0]
 
 	trustcenter.Hooks[5] = trustcenterHooks[1]
+
+	trustcenter.Hooks[6] = trustcenterHooks[2]
 	trustcenterMixinInters1 := trustcenterMixin[1].Interceptors()
 	trustcenterMixinInters5 := trustcenterMixin[5].Interceptors()
 	trustcenterInters := schema.TrustCenter{}.Interceptors()
@@ -5459,6 +5461,8 @@ func init() {
 	trustcentersetting.Hooks[2] = trustcentersettingMixinHooks1[0]
 
 	trustcentersetting.Hooks[3] = trustcentersettingHooks[0]
+
+	trustcentersetting.Hooks[4] = trustcentersettingHooks[1]
 	trustcentersettingMixinInters1 := trustcentersettingMixin[1].Interceptors()
 	trustcentersettingInters := schema.TrustCenterSetting{}.Interceptors()
 	trustcentersetting.Interceptors[0] = trustcentersettingMixinInters1[0]

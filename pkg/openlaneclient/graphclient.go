@@ -439,7 +439,7 @@ type OpenlaneGraphClient interface {
 	GetAllTrustCenters(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenters, error)
 	GetTrustCenterByID(ctx context.Context, trustCenterID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterByID, error)
 	GetTrustCenters(ctx context.Context, first *int64, last *int64, where *TrustCenterWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenters, error)
-	UpdateTrustCenter(ctx context.Context, updateTrustCenterID string, input UpdateTrustCenterInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenter, error)
+	UpdateTrustCenter(ctx context.Context, updateTrustCenterID string, input UpdateTrustCenterInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenter, error)
 	GetAllTrustCenterHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterHistories, error)
 	GetTrustCenterHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterHistories, error)
 	CreateTrustCenterSetting(ctx context.Context, input CreateTrustCenterSettingInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterSetting, error)
@@ -108659,8 +108659,8 @@ func (c *Client) GetTrustCenters(ctx context.Context, first *int64, last *int64,
 	return &res, nil
 }
 
-const UpdateTrustCenterDocument = `mutation UpdateTrustCenter ($updateTrustCenterId: ID!, $input: UpdateTrustCenterInput!) {
-	updateTrustCenter(id: $updateTrustCenterId, input: $input) {
+const UpdateTrustCenterDocument = `mutation UpdateTrustCenter ($updateTrustCenterId: ID!, $input: UpdateTrustCenterInput!, $logoFile: Upload) {
+	updateTrustCenter(id: $updateTrustCenterId, input: $input, logoFile: $logoFile) {
 		trustCenter {
 			createdAt
 			createdBy
@@ -108687,10 +108687,11 @@ const UpdateTrustCenterDocument = `mutation UpdateTrustCenter ($updateTrustCente
 }
 `
 
-func (c *Client) UpdateTrustCenter(ctx context.Context, updateTrustCenterID string, input UpdateTrustCenterInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenter, error) {
+func (c *Client) UpdateTrustCenter(ctx context.Context, updateTrustCenterID string, input UpdateTrustCenterInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenter, error) {
 	vars := map[string]any{
 		"updateTrustCenterId": updateTrustCenterID,
 		"input":               input,
+		"logoFile":            logoFile,
 	}
 
 	var res UpdateTrustCenter
