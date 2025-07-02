@@ -136,4 +136,4 @@ tasks:
     dir: ..
     desc: launches the Dex IdP and test UI for SSO development
     cmds:
-      - "docker compose -f ./docker/docker-compose-oidc.yml up -d dex sso-ui"
+      - "docker compose -f ./docker/docker-compose-oidc.yml up -d dex sso-ui tokens-ui"

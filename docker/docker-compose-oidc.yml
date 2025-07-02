@@ -31,6 +31,15 @@ services:
     networks:
       - default
 
+  tokens-ui:
+    image: nginx:alpine
+    volumes:
+      - ../pkg/testutils/tokensso:/usr/share/nginx/html:ro
+    ports:
+      - "3002:80"
+    networks:
+      - default
+
   cli:
     build:
       context: ..

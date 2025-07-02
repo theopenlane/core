@@ -271,6 +271,20 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient ent.Client, token 
 	}
 
 	for _, org := range orgs {
+		enforced, err := isSSOEnforced(ctx, &dbClient, org.ID)
+		if err != nil {
+			return nil, "", err
+		}
+		if enforced {
+			authorized, err := isPATSSOAuthorized(ctx, &dbClient, pat.ID, org.ID)
+			if err != nil {
+				return nil, "", err
+			}
+			if !authorized {
+				return nil, "", ErrTokenSSORequired
+			}
+		}
+
 		orgIDs = append(orgIDs, org.ID)
 	}
 
@@ -295,6 +309,17 @@ func isValidAPIToken(ctx context.Context, dbClient ent.Client, token string) (*a
 	// check if the token has expired
 	if t.ExpiresAt != nil && t.ExpiresAt.Before(time.Now()) {
 		return nil, "", rout.ErrExpiredCredentials
+	}
+
+	enforced, err := isSSOEnforced(ctx, &dbClient, t.OwnerID)
+	if err != nil {
+		return nil, "", err
+	}
+
+	if enforced {
+		if t.SSOAuthorizations == nil || t.SSOAuthorizations[t.OwnerID].IsZero() {
+			return nil, "", ErrTokenSSORequired
+		}
 	}
 
 	return &auth.AuthenticatedUser{
@@ -329,10 +354,12 @@ func unauthorized(c echo.Context, err error, conf *Options, v tokens.Validator) 
 			userID := userIDFromToken(c, v)
 			if userID != "" {
 				enforced, dbErr := isSSOEnforced(c.Request().Context(), conf.DBClient, orgID)
+
 				if dbErr == nil && enforced {
 					member, mErr := conf.DBClient.OrgMembership.Query().
 						Where(orgmembership.UserID(userID), orgmembership.OrganizationID(orgID)).
 						Only(privacy.DecisionContext(c.Request().Context(), privacy.Allow))
+
 					if mErr == nil && member.Role != enums.RoleOwner {
 						if redirErr := c.Redirect(http.StatusFound, sso.SSOLogin(c.Echo(), orgID)); redirErr != nil {
 							return redirErr
@@ -353,10 +380,17 @@ func unauthorized(c echo.Context, err error, conf *Options, v tokens.Validator) 
 	return nil
 }
 
+// orgIDFromToken extracts the organization ID from the token in the request context
 func orgIDFromToken(c echo.Context, v tokens.Validator) string {
 	authHeader := c.Request().Header.Get("Authorization")
+
 	if authHeader != "" {
-		token, _ := auth.GetBearerToken(c)
+		token, err := auth.GetBearerToken(c)
+		if err != nil {
+			log.Error().Err(err).Msg("failed to get bearer token from context")
+			return ""
+		}
+
 		if token != "" {
 			if claims, parseErr := v.Parse(token); parseErr == nil {
 				return claims.OrgID
@@ -367,6 +401,7 @@ func orgIDFromToken(c echo.Context, v tokens.Validator) string {
 	cookie, err := c.Cookie("refresh_token")
 	if err == nil && cookie != nil && cookie.Value != "" {
 		refresh := cookie.Value
+
 		if claims, parseErr := v.Parse(refresh); parseErr == nil {
 			return claims.OrgID
 		}
@@ -375,9 +410,9 @@ func orgIDFromToken(c echo.Context, v tokens.Validator) string {
 	return ""
 }
 
+// isSSOEnforced checks if SSO is enforced for the given organization ID
 func isSSOEnforced(ctx context.Context, db *generated.Client, orgID string) (bool, error) {
-	setting, err := db.OrganizationSetting.Query().
-		Where(organizationsetting.OrganizationID(orgID)).
+	setting, err := db.OrganizationSetting.Query().Where(organizationsetting.OrganizationID(orgID)).
 		Only(privacy.DecisionContext(ctx, privacy.Allow))
 	if err != nil {
 		if generated.IsNotFound(err) {
@@ -390,6 +425,7 @@ func isSSOEnforced(ctx context.Context, db *generated.Client, orgID string) (boo
 	return setting.IdentityProviderLoginEnforced, nil
 }
 
+// userIDFromToken extracts the user ID from the token in the request context
 func userIDFromToken(c echo.Context, v tokens.Validator) string {
 	authHeader := c.Request().Header.Get("Authorization")
 	if authHeader != "" {
@@ -410,4 +446,26 @@ func userIDFromToken(c echo.Context, v tokens.Validator) string {
 	}
 
 	return ""
+}
+
+// isPATSSOAuthorized checks if the personal access token is authorized for SSO with the given organization ID
+func isPATSSOAuthorized(ctx context.Context, db *generated.Client, tokenID, orgID string) (bool, error) {
+	pat, err := db.PersonalAccessToken.Get(ctx, tokenID)
+	if err != nil {
+		if generated.IsNotFound(err) {
+			return false, nil
+		}
+
+		return false, err
+	}
+
+	ctx = api.WithSSOAuthorizations(ctx, &pat.SSOAuthorizations)
+	auths, ok := api.SSOAuthorizationsFromContext(ctx)
+	if !ok || auths == nil {
+		return false, nil
+	}
+
+	_, ok = (*auths)[orgID]
+
+	return ok, nil
 }

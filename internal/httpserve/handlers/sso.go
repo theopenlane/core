@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog/log"
@@ -265,6 +266,17 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 		return h.InternalServerError(ctx, err)
 	}
 
+	if tokenID, tErr := sessions.GetCookie(ctx.Request(), "token_id"); tErr == nil {
+		tokenType, _ := sessions.GetCookie(ctx.Request(), "token_type")
+		orgCookie, _ := sessions.GetCookie(ctx.Request(), "organization_id")
+		aErr := h.authorizeTokenSSO(privacy.DecisionContext(reqCtx, privacy.Allow), tokenType.Value, tokenID.Value, orgCookie.Value)
+		if aErr != nil {
+			log.Error().Err(aErr).Msg("unable to authorize token for SSO")
+		}
+		sessions.RemoveCookie(ctx.Response().Writer, "token_id", sessions.CookieConfig{Path: "/"})
+		sessions.RemoveCookie(ctx.Response().Writer, "token_type", sessions.CookieConfig{Path: "/"})
+	}
+
 	out := models.LoginReply{
 		Reply:      rout.Reply{Success: true},
 		TFAEnabled: entUser.Edges.Setting.IsTfaEnabled,
@@ -371,4 +383,44 @@ func (h *Handler) BindSSOCallbackHandler() *openapi3.Operation {
 	op.AddResponse(http.StatusInternalServerError, internalServerError())
 
 	return op
+}
+
+func (h *Handler) authorizeTokenSSO(ctx context.Context, tokenType, tokenID, orgID string) error {
+	switch tokenType {
+	case "api":
+		apiToken, err := h.DBClient.APIToken.Get(ctx, tokenID)
+		if err != nil {
+			return err
+		}
+
+		auths := apiToken.SSOAuthorizations
+		if auths == nil {
+			auths = models.SSOAuthorizationMap{}
+		}
+
+		auths[orgID] = time.Now()
+
+		return h.DBClient.APIToken.UpdateOneID(tokenID).
+			SetSSOAuthorizations(auths).
+			Exec(ctx)
+	case "personal":
+		pat, err := h.DBClient.PersonalAccessToken.Get(ctx, tokenID)
+		if err != nil {
+			return err
+		}
+
+		auths := pat.SSOAuthorizations
+		if auths == nil {
+			auths = models.SSOAuthorizationMap{}
+		}
+
+		auths[orgID] = time.Now()
+
+		return h.DBClient.PersonalAccessToken.UpdateOneID(tokenID).
+			SetSSOAuthorizations(auths).
+			Exec(ctx)
+
+	}
+
+	return errInvalidTokenType
 }
