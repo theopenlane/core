@@ -2,7 +2,6 @@ package auth
 
 import (
 	"context"
-	"database/sql"
 	"errors"
 	"net/http"
 	"net/http/httptest"
@@ -14,28 +13,27 @@ import (
 	iamauth "github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 
-	"entgo.io/ent/dialect"
-	"github.com/theopenlane/core/internal/ent/generated/enttest"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/entdb"
-	"github.com/theopenlane/utils/testutils"
+	dbtest "github.com/theopenlane/core/pkg/testutils/fga"
 )
 
 func TestUnauthorizedRedirectToSSO(t *testing.T) {
-	tf := entdb.NewTestFixture()
-	defer testutils.TeardownFixture(tf)
-
-	db, err := sql.Open("postgres", tf.URI)
-	require.NoError(t, err)
-	t.Cleanup(func() { require.NoError(t, db.Close()) })
-
-	client := enttest.Open(t, dialect.Postgres, tf.URI,
-		enttest.WithMigrateOptions(entdb.EnablePostgresOption(db)))
-	t.Cleanup(func() { require.NoError(t, client.Close()) })
+	client := dbtest.NewPostgresClient(t)
 
 	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
-	_, err = client.OrganizationSetting.Create().
-		SetOrganizationID("org1").
+
+	setting, err := client.OrganizationSetting.Create().
+		SetBillingEmail("org1@example.com").
+		Save(ctx)
+	require.NoError(t, err)
+
+	_, err = client.Organization.Create().
+		SetName("org1").
+		SetSettingID(setting.ID).
+		Save(ctx)
+	require.NoError(t, err)
+
+	_, err = setting.Update().
 		SetIdentityProviderLoginEnforced(true).
 		Save(ctx)
 	require.NoError(t, err)
@@ -64,20 +62,22 @@ func TestUnauthorizedRedirectToSSO(t *testing.T) {
 }
 
 func TestUnauthorizedNoSSORedirect(t *testing.T) {
-	tf := entdb.NewTestFixture()
-	defer testutils.TeardownFixture(tf)
-
-	db, err := sql.Open("postgres", tf.URI)
-	require.NoError(t, err)
-	t.Cleanup(func() { require.NoError(t, db.Close()) })
-
-	client := enttest.Open(t, dialect.Postgres, tf.URI,
-		enttest.WithMigrateOptions(entdb.EnablePostgresOption(db)))
-	t.Cleanup(func() { require.NoError(t, client.Close()) })
+	client := dbtest.NewPostgresClient(t)
 
 	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
-	_, err = client.OrganizationSetting.Create().
-		SetOrganizationID("org2").
+
+	setting, err := client.OrganizationSetting.Create().
+		SetBillingEmail("org2@example.com").
+		Save(ctx)
+	require.NoError(t, err)
+
+	_, err = client.Organization.Create().
+		SetName("org2").
+		SetSettingID(setting.ID).
+		Save(ctx)
+	require.NoError(t, err)
+
+	_, err = setting.Update().
 		SetIdentityProviderLoginEnforced(false).
 		Save(ctx)
 	require.NoError(t, err)

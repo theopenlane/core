@@ -35,6 +35,32 @@
       if (params.get("email")) {
         document.getElementById("output").innerText =
           "Logged in as " + params.get("email");
+
+        const headers = { "Content-Type": "application/json" };
+        const sessionToken = params.get("session");
+        if (sessionToken) {
+          headers["Authorization"] = `Bearer ${sessionToken}`;
+        }
+
+        // fetch user details via GraphQL self query
+        fetch(apiBase + "/query", {
+          method: "POST",
+          headers,
+          credentials: "include",
+          body: JSON.stringify({ query: "{ self { id name email } }" }),
+        })
+          .then((r) => r.json())
+          .then((d) => {
+            const p = document.createElement("pre");
+            p.textContent = JSON.stringify(d, null, 2);
+            document.getElementById("output").appendChild(p);
+          })
+          .catch((err) => {
+            const p = document.createElement("div");
+            p.style.color = "red";
+            p.textContent = err;
+            document.getElementById("output").appendChild(p);
+          });
       }
 
       document
