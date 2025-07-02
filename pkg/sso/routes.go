@@ -68,3 +68,14 @@ func SSOTokenAuthorize(e *echo.Echo, orgID, tokenID, tokenType string) string {
 
 	return fmt.Sprintf("%s?%s", path, q.Encode())
 }
+
+// SSOTokenCallback returns the path for the SSO token callback route
+func SSOTokenCallback(e *echo.Echo) string {
+	if e != nil {
+		if p, err := e.Router().Routes().Reverse("SSOTokenCallback"); err == nil {
+			return p
+		}
+	}
+
+	return "/v1/sso/token/callback"
+}

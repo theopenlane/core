@@ -204,6 +204,8 @@ func RegisterRoutes(router *Router) error {
 		registerWebfingerHandler,
 		registerSSOLoginHandler,
 		registerSSOCallbackHandler,
+		registerSSOTokenAuthorizeHandler,
+		registerSSOTokenCallbackHandler,
 
 		// JOB Runners
 		// TODO(adelowo): at some point in the future, maybe we should extract these into

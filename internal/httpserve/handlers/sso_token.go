@@ -3,13 +3,17 @@ package handlers
 import (
 	"errors"
 	"net/http"
+	"time"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	echo "github.com/theopenlane/echox"
+	"github.com/zitadel/oidc/pkg/client/rp"
 
 	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/iam/sessions"
+	"github.com/theopenlane/utils/contextx"
+	"github.com/theopenlane/utils/rout"
 	"github.com/theopenlane/utils/ulids"
 	"golang.org/x/oauth2"
 
@@ -82,3 +86,117 @@ func (h *Handler) BindSSOTokenAuthorizeHandler() *openapi3.Operation {
 }
 
 var errInvalidTokenType = errors.New("invalid token type")
+
+// SSOTokenCallbackHandler completes the SSO authorization flow for a token.
+// It validates the state and nonce, exchanges the code if required and updates
+// the token's SSO authorizations for the organization.
+func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context) error {
+	reqCtx := ctx.Request().Context()
+
+	// read cookies set during the authorize step
+	tokenIDCookie, err := sessions.GetCookie(ctx.Request(), "token_id")
+	if err != nil {
+		return h.BadRequest(ctx, ErrMissingField)
+	}
+
+	tokenTypeCookie, err := sessions.GetCookie(ctx.Request(), "token_type")
+	if err != nil {
+		return h.BadRequest(ctx, ErrMissingField)
+	}
+
+	orgCookie, err := sessions.GetCookie(ctx.Request(), "organization_id")
+	if err != nil {
+		return h.BadRequest(ctx, ErrMissingField)
+	}
+
+	stateCookie, err := sessions.GetCookie(ctx.Request(), "state")
+	if err != nil || ctx.QueryParam("state") != stateCookie.Value {
+		return h.BadRequest(ctx, ErrStateMismatch)
+	}
+
+	nonceCookie, err := sessions.GetCookie(ctx.Request(), "nonce")
+	if err != nil {
+		return h.BadRequest(ctx, ErrNonceMissing)
+	}
+
+	rpCfg, err := h.oidcConfig(reqCtx, orgCookie.Value)
+	if err != nil {
+		return h.BadRequest(ctx, err)
+	}
+
+	nonceCtx := contextx.With(reqCtx, nonce(nonceCookie.Value))
+	if _, err = rp.CodeExchange(nonceCtx, ctx.QueryParam("code"), rpCfg); err != nil {
+		return h.BadRequest(ctx, err)
+	}
+
+	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
+	now := time.Now()
+
+	switch tokenTypeCookie.Value {
+	case "api":
+		tkn, err := h.DBClient.APIToken.Get(allowCtx, tokenIDCookie.Value)
+		if err != nil {
+			return h.BadRequest(ctx, err)
+		}
+
+		if tkn.SSOAuthorizations == nil {
+			tkn.SSOAuthorizations = models.SSOAuthorizationMap{}
+		}
+
+		tkn.SSOAuthorizations[orgCookie.Value] = now
+
+		_, err = h.DBClient.APIToken.UpdateOne(tkn).SetSSOAuthorizations(tkn.SSOAuthorizations).Save(allowCtx)
+		if err != nil {
+			return h.InternalServerError(ctx, err)
+		}
+	case "personal":
+		tkn, err := h.DBClient.PersonalAccessToken.Get(allowCtx, tokenIDCookie.Value)
+		if err != nil {
+			return h.BadRequest(ctx, err)
+		}
+
+		if tkn.SSOAuthorizations == nil {
+			tkn.SSOAuthorizations = models.SSOAuthorizationMap{}
+		}
+
+		tkn.SSOAuthorizations[orgCookie.Value] = now
+
+		_, err = h.DBClient.PersonalAccessToken.UpdateOne(tkn).SetSSOAuthorizations(tkn.SSOAuthorizations).Save(allowCtx)
+		if err != nil {
+			return h.InternalServerError(ctx, err)
+		}
+	default:
+		return h.BadRequest(ctx, errInvalidTokenType)
+	}
+
+	// cleanup cookies
+	for _, name := range []string{"token_id", "token_type", "organization_id", "state", "nonce"} {
+		sessions.RemoveCookie(ctx.Response().Writer, name, sessions.CookieConfig{Path: "/"})
+	}
+
+	out := models.SSOTokenAuthorizeReply{
+		Reply:          rout.Reply{Success: true},
+		OrganizationID: orgCookie.Value,
+		TokenID:        tokenIDCookie.Value,
+		Message:        "authorized",
+	}
+
+	return h.Success(ctx, out)
+}
+
+// BindSSOTokenCallbackHandler binds the SSO token callback endpoint to the OpenAPI schema.
+func (h *Handler) BindSSOTokenCallbackHandler() *openapi3.Operation {
+	op := openapi3.NewOperation()
+	op.Description = "Complete token SSO authorization"
+	op.OperationID = "SSOTokenCallback"
+	op.Tags = []string{"authentication"}
+	op.Security = &openapi3.SecurityRequirements{}
+
+	h.AddQueryParameter("code", op)
+	h.AddQueryParameter("state", op)
+	h.AddResponse("SSOTokenAuthorizeReply", "success", models.ExampleSSOTokenAuthorizeReply, op, http.StatusOK)
+	op.AddResponse(http.StatusBadRequest, badRequest())
+	op.AddResponse(http.StatusInternalServerError, internalServerError())
+
+	return op
+}
