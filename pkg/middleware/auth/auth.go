@@ -21,9 +21,12 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/pkg/enums"
 	api "github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/pkg/sso"
 )
 
 // SessionSkipperFunc is the function that determines if the session check should be skipped
@@ -323,13 +326,21 @@ func unauthorized(c echo.Context, err error, conf *Options, v tokens.Validator) 
 	if v != nil && conf != nil && conf.DBClient != nil {
 		orgID := orgIDFromToken(c, v)
 		if orgID != "" {
-			enforced, dbErr := isSSOEnforced(c.Request().Context(), conf.DBClient, orgID)
-			if dbErr == nil && enforced {
-				if redirErr := c.Redirect(http.StatusFound, fmt.Sprintf("/v1/sso/login?organization_id=%s", orgID)); redirErr != nil {
-					return redirErr
-				}
+			userID := userIDFromToken(c, v)
+			if userID != "" {
+				enforced, dbErr := isSSOEnforced(c.Request().Context(), conf.DBClient, orgID)
+				if dbErr == nil && enforced {
+					member, mErr := conf.DBClient.OrgMembership.Query().
+						Where(orgmembership.UserID(userID), orgmembership.OrganizationID(orgID)).
+						Only(privacy.DecisionContext(c.Request().Context(), privacy.Allow))
+					if mErr == nil && member.Role != enums.RoleOwner {
+						if redirErr := c.Redirect(http.StatusFound, sso.SSOLogin(c.Echo(), orgID)); redirErr != nil {
+							return redirErr
+						}
 
-				return nil
+						return nil
+					}
+				}
 			}
 		}
 	}
@@ -377,4 +388,26 @@ func isSSOEnforced(ctx context.Context, db *generated.Client, orgID string) (boo
 	}
 
 	return setting.IdentityProviderLoginEnforced, nil
+}
+
+func userIDFromToken(c echo.Context, v tokens.Validator) string {
+	authHeader := c.Request().Header.Get("Authorization")
+	if authHeader != "" {
+		token, _ := auth.GetBearerToken(c)
+		if token != "" {
+			if claims, parseErr := v.Parse(token); parseErr == nil {
+				return claims.UserID
+			}
+		}
+	}
+
+	cookie, err := c.Cookie("refresh_token")
+	if err == nil && cookie != nil && cookie.Value != "" {
+		refresh := cookie.Value
+		if claims, parseErr := v.Parse(refresh); parseErr == nil {
+			return claims.UserID
+		}
+	}
+
+	return ""
 }

@@ -1011,3 +1011,49 @@ var ExampleSSOStatusReply = SSOStatusReply{
 	DiscoveryURL:   "https://id.example.com/.well-known/openid-configuration",
 	OrganizationID: ulids.New().String(),
 }
+
+// SSOTokenAuthorizeRequest is the request for authorizing a token for SSO use
+// with an organization.
+type SSOTokenAuthorizeRequest struct {
+	OrganizationID string `json:"organization_id" query:"organization_id" description:"organization id" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
+	TokenID        string `json:"token_id" query:"token_id" description:"token id to authorize" example:"01JJFVMGENQS9ZG3GVA50QVX5E"`
+	TokenType      string `json:"token_type" query:"token_type" description:"token type: api or personal" example:"api"`
+}
+
+// Validate ensures required fields are set on the SSOTokenAuthorizeRequest.
+func (r *SSOTokenAuthorizeRequest) Validate() error {
+	switch {
+	case r.OrganizationID == "":
+		return rout.NewMissingRequiredFieldError("organization_id")
+	case r.TokenID == "":
+		return rout.NewMissingRequiredFieldError("token_id")
+	case r.TokenType == "":
+		return rout.NewMissingRequiredFieldError("token_type")
+	}
+
+	return nil
+}
+
+// SSOTokenAuthorizeReply is returned when a token has been successfully
+// authorized for SSO.
+type SSOTokenAuthorizeReply struct {
+	rout.Reply
+	OrganizationID string `json:"organization_id"`
+	TokenID        string `json:"token_id"`
+	Message        string `json:"message,omitempty"`
+}
+
+// ExampleSSOTokenAuthorizeRequest is an example request for OpenAPI documentation.
+var ExampleSSOTokenAuthorizeRequest = SSOTokenAuthorizeRequest{
+	OrganizationID: ulids.New().String(),
+	TokenID:        ulids.New().String(),
+	TokenType:      "api",
+}
+
+// ExampleSSOTokenAuthorizeReply is an example response for OpenAPI documentation.
+var ExampleSSOTokenAuthorizeReply = SSOTokenAuthorizeReply{
+	Reply:          rout.Reply{Success: true},
+	OrganizationID: ulids.New().String(),
+	TokenID:        ulids.New().String(),
+	Message:        "success",
+}

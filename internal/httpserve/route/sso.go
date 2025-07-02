@@ -24,6 +24,7 @@ func registerWebfingerHandler(router *Router) (err error) {
 
 	op := router.Handler.BindWebfingerHandler()
 
+	// unversioned because .well-known
 	if err := router.AddUnversionedRoute(path, method, op, route); err != nil {
 		return err
 	}
@@ -47,7 +48,9 @@ func registerSSOLoginHandler(router *Router) (err error) {
 		},
 	}
 
-	if err := router.AddV1Route(path, method, nil, route); err != nil {
+	op := router.Handler.BindSSOLoginHandler()
+
+	if err := router.AddV1Route(path, method, op, route); err != nil {
 		return err
 	}
 
@@ -70,7 +73,9 @@ func registerSSOCallbackHandler(router *Router) (err error) {
 		},
 	}
 
-	if err := router.AddV1Route(path, method, nil, route); err != nil {
+	op := router.Handler.BindSSOCallbackHandler()
+
+	if err := router.AddV1Route(path, method, op, route); err != nil {
 		return err
 	}
 

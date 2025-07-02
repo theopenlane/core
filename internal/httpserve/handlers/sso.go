@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/utils/contextx"
@@ -17,6 +18,7 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
+	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
@@ -56,15 +58,17 @@ func (h *Handler) fetchSSOStatus(ctx context.Context, orgID string) (models.SSOS
 
 // WebfingerHandler determines if SSO login is enforced for an organization or user via a webfinger query
 // It parses the resource query param, resolves the org, and returns SSO status
+// https://datatracker.ietf.org/doc/html/rfc7033
+// confirmed that response codes should not always be 201 or similar, but 404, 200, etc., regular status codes should be used
 func (h *Handler) WebfingerHandler(ctx echo.Context) error {
 	reqCtx := ctx.Request().Context()
-
 	resource := ctx.QueryParam("resource")
 	if resource == "" {
 		return h.BadRequest(ctx, ErrMissingField)
 	}
 
 	var orgID string
+	var out models.SSOStatusReply
 
 	switch {
 	case strings.HasPrefix(resource, "org:"):
@@ -76,12 +80,16 @@ func (h *Handler) WebfingerHandler(ctx echo.Context) error {
 
 		user, err := h.getUserByEmail(allowCtx, email)
 		if err != nil {
-			return h.BadRequest(ctx, err)
+			log.Debug().Err(err).Msg("webfinger user lookup failed")
+
+			return h.NotFound(ctx, ErrNotFound)
 		}
 
 		orgID, err = h.getUserDefaultOrgID(allowCtx, user.ID)
 		if err != nil {
-			return h.BadRequest(ctx, err)
+			log.Debug().Err(err).Msg("webfinger org lookup failed")
+
+			return h.NotFound(ctx, ErrNotFound)
 		}
 	default:
 		return h.BadRequest(ctx, ErrMissingField)
@@ -93,7 +101,13 @@ func (h *Handler) WebfingerHandler(ctx echo.Context) error {
 
 	out, err := h.fetchSSOStatus(reqCtx, orgID)
 	if err != nil {
-		return h.BadRequest(ctx, err)
+		if ent.IsNotFound(err) {
+			log.Debug().Err(err).Msg("webfinger org setting not found")
+
+			return h.NotFound(ctx, ErrNotFound)
+		}
+
+		return h.InternalServerError(ctx, err)
 	}
 
 	return h.Success(ctx, out)
@@ -281,6 +295,7 @@ func (h *Handler) BindWebfingerHandler() *openapi3.Operation {
 
 	h.AddQueryParameter("resource", op)
 	h.AddResponse("SSOStatusReply", "success", models.ExampleSSOStatusReply, op, http.StatusOK)
+	op.AddResponse(http.StatusNotFound, notFound())
 	op.AddResponse(http.StatusBadRequest, badRequest())
 	op.AddResponse(http.StatusInternalServerError, internalServerError())
 
@@ -320,4 +335,38 @@ func (h *Handler) ssoOrgForUser(ctx context.Context, email string) (string, bool
 	}
 
 	return orgID, true
+}
+
+// BindSSOLoginHandler binds the SSO login handler to the OpenAPI schema
+func (h *Handler) BindSSOLoginHandler() *openapi3.Operation {
+	op := openapi3.NewOperation()
+	op.Description = "Initiate the SSO login flow"
+	op.OperationID = "SSOLoginHandler"
+	op.Tags = []string{"authentication"}
+	op.Security = &openapi3.SecurityRequirements{}
+
+	h.AddQueryParameter("organization_id", op)
+	op.AddResponse(http.StatusFound, openapi3.NewResponse().WithDescription("Redirect to IdP"))
+	op.AddResponse(http.StatusBadRequest, badRequest())
+
+	return op
+}
+
+// BindSSOCallbackHandler binds the SSO callback handler to the OpenAPI schema
+func (h *Handler) BindSSOCallbackHandler() *openapi3.Operation {
+	op := openapi3.NewOperation()
+	op.Description = "Complete the OIDC login flow"
+	op.OperationID = "SSOCallbackHandler"
+	op.Tags = []string{"authentication"}
+	op.Security = &openapi3.SecurityRequirements{}
+
+	h.AddQueryParameter("code", op)
+	h.AddQueryParameter("state", op)
+	h.AddQueryParameter("organization_id", op)
+	h.AddResponse("LoginReply", "success", models.ExampleLoginSuccessResponse, op, http.StatusOK)
+	op.AddResponse(http.StatusFound, openapi3.NewResponse().WithDescription("Redirect to return URL"))
+	op.AddResponse(http.StatusBadRequest, badRequest())
+	op.AddResponse(http.StatusInternalServerError, internalServerError())
+
+	return op
 }
