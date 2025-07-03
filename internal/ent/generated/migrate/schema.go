@@ -4765,7 +4765,9 @@ var (
 		{Name: "title", Type: field.TypeString, Nullable: true, Size: 160},
 		{Name: "overview", Type: field.TypeString, Nullable: true, Size: 1024},
 		{Name: "primary_color", Type: field.TypeString, Nullable: true},
+		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "trust_center_id", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterSettingsTable holds the schema information for the "trust_center_settings" table.
 	TrustCenterSettingsTable = &schema.Table{
@@ -4775,8 +4777,14 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "trust_center_settings_trust_centers_setting",
-				Columns:    []*schema.Column{TrustCenterSettingsColumns[10]},
+				Columns:    []*schema.Column{TrustCenterSettingsColumns[11]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_settings_files_logo_file",
+				Columns:    []*schema.Column{TrustCenterSettingsColumns[12]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -4789,7 +4797,7 @@ var (
 			{
 				Name:    "trustcentersetting_trust_center_id",
 				Unique:  true,
-				Columns: []*schema.Column{TrustCenterSettingsColumns[10]},
+				Columns: []*schema.Column{TrustCenterSettingsColumns[11]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4812,6 +4820,8 @@ var (
 		{Name: "title", Type: field.TypeString, Nullable: true, Size: 160},
 		{Name: "overview", Type: field.TypeString, Nullable: true, Size: 1024},
 		{Name: "primary_color", Type: field.TypeString, Nullable: true},
+		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterSettingHistoryTable holds the schema information for the "trust_center_setting_history" table.
 	TrustCenterSettingHistoryTable = &schema.Table{
@@ -7571,6 +7581,31 @@ var (
 			},
 		},
 	}
+	// TrustCenterSettingFilesColumns holds the columns for the "trust_center_setting_files" table.
+	TrustCenterSettingFilesColumns = []*schema.Column{
+		{Name: "trust_center_setting_id", Type: field.TypeString},
+		{Name: "file_id", Type: field.TypeString},
+	}
+	// TrustCenterSettingFilesTable holds the schema information for the "trust_center_setting_files" table.
+	TrustCenterSettingFilesTable = &schema.Table{
+		Name:       "trust_center_setting_files",
+		Columns:    TrustCenterSettingFilesColumns,
+		PrimaryKey: []*schema.Column{TrustCenterSettingFilesColumns[0], TrustCenterSettingFilesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "trust_center_setting_files_trust_center_setting_id",
+				Columns:    []*schema.Column{TrustCenterSettingFilesColumns[0]},
+				RefColumns: []*schema.Column{TrustCenterSettingsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "trust_center_setting_files_file_id",
+				Columns:    []*schema.Column{TrustCenterSettingFilesColumns[1]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// UserFilesColumns holds the columns for the "user_files" table.
 	UserFilesColumns = []*schema.Column{
 		{Name: "user_id", Type: field.TypeString},
@@ -7876,6 +7911,7 @@ var (
 		SubscriberEventsTable,
 		TaskEvidenceTable,
 		TemplateFilesTable,
+		TrustCenterSettingFilesTable,
 		UserFilesTable,
 		UserEventsTable,
 		UserActionPlansTable,
@@ -8135,6 +8171,7 @@ func init() {
 		Table: "trust_center_history",
 	}
 	TrustCenterSettingsTable.ForeignKeys[0].RefTable = TrustCentersTable
+	TrustCenterSettingsTable.ForeignKeys[1].RefTable = FilesTable
 	TrustCenterSettingHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_setting_history",
 	}
@@ -8350,6 +8387,8 @@ func init() {
 	TaskEvidenceTable.ForeignKeys[1].RefTable = EvidencesTable
 	TemplateFilesTable.ForeignKeys[0].RefTable = TemplatesTable
 	TemplateFilesTable.ForeignKeys[1].RefTable = FilesTable
+	TrustCenterSettingFilesTable.ForeignKeys[0].RefTable = TrustCenterSettingsTable
+	TrustCenterSettingFilesTable.ForeignKeys[1].RefTable = FilesTable
 	UserFilesTable.ForeignKeys[0].RefTable = UsersTable
 	UserFilesTable.ForeignKeys[1].RefTable = FilesTable
 	UserEventsTable.ForeignKeys[0].RefTable = UsersTable

@@ -19,6 +19,7 @@ extend type Mutation{
         values of the trustCenterSetting
         """
         input: CreateTrustCenterSettingInput!
+        logoFile: Upload
     ): TrustCenterSettingCreatePayload!
     """
     Update an existing trustCenterSetting
@@ -32,6 +33,7 @@ extend type Mutation{
         New values for the trustCenterSetting
         """
         input: UpdateTrustCenterSettingInput!
+        logoFile: Upload
     ): TrustCenterSettingUpdatePayload!
     """
     Delete an existing trustCenterSetting

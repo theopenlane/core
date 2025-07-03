@@ -35,8 +35,16 @@ const (
 	FieldOverview = "overview"
 	// FieldPrimaryColor holds the string denoting the primary_color field in the database.
 	FieldPrimaryColor = "primary_color"
+	// FieldLogoRemoteURL holds the string denoting the logo_remote_url field in the database.
+	FieldLogoRemoteURL = "logo_remote_url"
+	// FieldLogoLocalFileID holds the string denoting the logo_local_file_id field in the database.
+	FieldLogoLocalFileID = "logo_local_file_id"
 	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
 	EdgeTrustCenter = "trust_center"
+	// EdgeFiles holds the string denoting the files edge name in mutations.
+	EdgeFiles = "files"
+	// EdgeLogoFile holds the string denoting the logo_file edge name in mutations.
+	EdgeLogoFile = "logo_file"
 	// Table holds the table name of the trustcentersetting in the database.
 	Table = "trust_center_settings"
 	// TrustCenterTable is the table that holds the trust_center relation/edge.
@@ -46,6 +54,18 @@ const (
 	TrustCenterInverseTable = "trust_centers"
 	// TrustCenterColumn is the table column denoting the trust_center relation/edge.
 	TrustCenterColumn = "trust_center_id"
+	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
+	FilesTable = "trust_center_setting_files"
+	// FilesInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	FilesInverseTable = "files"
+	// LogoFileTable is the table that holds the logo_file relation/edge.
+	LogoFileTable = "trust_center_settings"
+	// LogoFileInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	LogoFileInverseTable = "files"
+	// LogoFileColumn is the table column denoting the logo_file relation/edge.
+	LogoFileColumn = "logo_local_file_id"
 )
 
 // Columns holds all SQL columns for trustcentersetting fields.
@@ -61,7 +81,15 @@ var Columns = []string{
 	FieldTitle,
 	FieldOverview,
 	FieldPrimaryColor,
+	FieldLogoRemoteURL,
+	FieldLogoLocalFileID,
 }
+
+var (
+	// FilesPrimaryKey and FilesColumn2 are the table columns denoting the
+	// primary key for the files relation (M2M).
+	FilesPrimaryKey = []string{"trust_center_setting_id", "file_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -79,7 +107,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [3]ent.Hook
+	Hooks        [5]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -94,6 +122,8 @@ var (
 	TitleValidator func(string) error
 	// OverviewValidator is a validator for the "overview" field. It is called by the builders before save.
 	OverviewValidator func(string) error
+	// LogoRemoteURLValidator is a validator for the "logo_remote_url" field. It is called by the builders before save.
+	LogoRemoteURLValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -156,10 +186,41 @@ func ByPrimaryColor(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPrimaryColor, opts...).ToFunc()
 }
 
+// ByLogoRemoteURL orders the results by the logo_remote_url field.
+func ByLogoRemoteURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLogoRemoteURL, opts...).ToFunc()
+}
+
+// ByLogoLocalFileID orders the results by the logo_local_file_id field.
+func ByLogoLocalFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLogoLocalFileID, opts...).ToFunc()
+}
+
 // ByTrustCenterField orders the results by trust_center field.
 func ByTrustCenterField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newTrustCenterStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByFilesCount orders the results by files count.
+func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFilesStep(), opts...)
+	}
+}
+
+// ByFiles orders the results by files terms.
+func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFilesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByLogoFileField orders the results by logo_file field.
+func ByLogoFileField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newLogoFileStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newTrustCenterStep() *sqlgraph.Step {
@@ -167,5 +228,19 @@ func newTrustCenterStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TrustCenterInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2O, true, TrustCenterTable, TrustCenterColumn),
+	)
+}
+func newFilesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FilesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
+	)
+}
+func newLogoFileStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(LogoFileInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, LogoFileTable, LogoFileColumn),
 	)
 }

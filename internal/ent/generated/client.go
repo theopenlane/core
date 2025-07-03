@@ -7499,6 +7499,25 @@ func (c *FileClient) QueryEvents(f *File) *EventQuery {
 	return query
 }
 
+// QueryTrustCenterSetting queries the trust_center_setting edge of a File.
+func (c *FileClient) QueryTrustCenterSetting(f *File) *TrustCenterSettingQuery {
+	query := (&TrustCenterSettingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(trustcentersetting.Table, trustcentersetting.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.TrustCenterSettingTable, file.TrustCenterSettingPrimaryKey...),
+		)
+		schemaConfig := f.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterSetting
+		step.Edge.Schema = schemaConfig.TrustCenterSettingFiles
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *FileClient) Hooks() []Hook {
 	hooks := c.hooks.File
@@ -21694,6 +21713,44 @@ func (c *TrustCenterSettingClient) QueryTrustCenter(tcs *TrustCenterSetting) *Tr
 		)
 		schemaConfig := tcs.schemaConfig
 		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.TrustCenterSetting
+		fromV = sqlgraph.Neighbors(tcs.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFiles queries the files edge of a TrustCenterSetting.
+func (c *TrustCenterSettingClient) QueryFiles(tcs *TrustCenterSetting) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := tcs.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentersetting.Table, trustcentersetting.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, trustcentersetting.FilesTable, trustcentersetting.FilesPrimaryKey...),
+		)
+		schemaConfig := tcs.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterSettingFiles
+		fromV = sqlgraph.Neighbors(tcs.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryLogoFile queries the logo_file edge of a TrustCenterSetting.
+func (c *TrustCenterSettingClient) QueryLogoFile(tcs *TrustCenterSetting) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := tcs.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentersetting.Table, trustcentersetting.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcentersetting.LogoFileTable, trustcentersetting.LogoFileColumn),
+		)
+		schemaConfig := tcs.schemaConfig
+		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.TrustCenterSetting
 		fromV = sqlgraph.Neighbors(tcs.driver.Dialect(), step)
 		return fromV, nil

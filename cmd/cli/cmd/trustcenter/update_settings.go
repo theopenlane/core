@@ -5,11 +5,13 @@ import (
 	"encoding/json"
 	"strings"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/utils/cli/tables"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -32,15 +34,16 @@ func init() {
 	updateSettingsCmd.Flags().StringP("title", "t", "", "title of the trust center")
 	updateSettingsCmd.Flags().StringP("overview", "o", "", "overview of the trust center")
 	updateSettingsCmd.Flags().StringP("primary-color", "p", "", "primary color for the trust center (hex color)")
+	updateSettingsCmd.Flags().StringP("logo-file", "l", "", "local of logo file to upload")
 }
 
 // updateSettingsValidation validates the required fields for the command
-func updateSettingsValidation() (id string, input openlaneclient.UpdateTrustCenterSettingInput, err error) {
+func updateSettingsValidation() (id string, input openlaneclient.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, err error) {
 	id = cmd.Config.String("id")
 	trustCenterID := cmd.Config.String("trust-center-id")
 
 	if id == "" && trustCenterID == "" {
-		return id, input, cmd.NewRequiredFieldMissingError("id or trust-center-id")
+		return id, input, nil, cmd.NewRequiredFieldMissingError("id or trust-center-id")
 	}
 
 	// Build the input based on flags
@@ -58,8 +61,22 @@ func updateSettingsValidation() (id string, input openlaneclient.UpdateTrustCent
 	if primaryColor != "" {
 		input.PrimaryColor = &primaryColor
 	}
+	logoFileLoc := cmd.Config.String("logo-file")
+	if logoFileLoc != "" {
+		file, err := objects.NewUploadFile(logoFileLoc)
+		if err != nil {
+			return id, input, nil, err
+		}
 
-	return id, input, nil
+		logoFile = &graphql.Upload{
+			File:        file.File,
+			Filename:    file.Filename,
+			Size:        file.Size,
+			ContentType: file.ContentType,
+		}
+	}
+
+	return id, input, logoFile, nil
 }
 
 // findSettingIDByTrustCenter finds the setting ID for a given trust center ID
@@ -88,7 +105,7 @@ func updateSettings(ctx context.Context) error {
 		defer cmd.StoreSessionCookies(client)
 	}
 
-	id, input, err := updateSettingsValidation()
+	id, input, logoFile, err := updateSettingsValidation()
 	cobra.CheckErr(err)
 
 	// If we have a trust center ID instead of setting ID, find the setting ID
@@ -98,7 +115,7 @@ func updateSettings(ctx context.Context) error {
 		cobra.CheckErr(err)
 	}
 
-	o, err := client.UpdateTrustCenterSetting(ctx, id, input)
+	o, err := client.UpdateTrustCenterSetting(ctx, id, input, logoFile)
 	cobra.CheckErr(err)
 
 	return consoleSettingsOutput(o)

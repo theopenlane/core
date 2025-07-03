@@ -7,10 +7,12 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/iam/auth"
 	"gotest.tools/v3/assert"
@@ -745,6 +747,143 @@ func TestQueryTrustCentersAsAnonymousUser(t *testing.T) {
 				returnedTrustCenter := resp.TrustCenters.Edges[0].Node
 				assert.Check(t, is.Equal(tc.trustCenterID, returnedTrustCenter.ID))
 				assert.Check(t, is.Equal(tc.organizationID, *returnedTrustCenter.OwnerID))
+			}
+		})
+	}
+
+	// Clean up
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
+}
+
+func TestMutationUpdateTrustCenterSettingLogo(t *testing.T) {
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+
+	testCases := []struct {
+		name        string
+		settingID   string
+		logoPath    string
+		invalidFile bool
+		updateInput openlaneclient.UpdateTrustCenterSettingInput
+		client      *openlaneclient.OpenlaneClient
+		ctx         context.Context
+		expectedErr string
+	}{
+		{
+			name:        "happy path - update logo",
+			settingID:   trustCenter.Edges.Setting.ID,
+			logoPath:    "testdata/uploads/logo.png",
+			updateInput: openlaneclient.UpdateTrustCenterSettingInput{},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+		},
+		{
+			name:      "happy path - update logo with other fields",
+			settingID: trustCenter.Edges.Setting.ID,
+			logoPath:  "testdata/uploads/logo.png",
+			updateInput: openlaneclient.UpdateTrustCenterSettingInput{
+				Title:        lo.ToPtr("Updated Title with Logo"),
+				PrimaryColor: lo.ToPtr("#FF5733"),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+
+		{
+			name:        "invalid file type - text file instead of image",
+			settingID:   trustCenter.Edges.Setting.ID,
+			logoPath:    "testdata/uploads/hello.txt",
+			invalidFile: true,
+			updateInput: openlaneclient.UpdateTrustCenterSettingInput{},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "unsupported mime type uploaded: text/plain",
+		},
+		{
+			name:        "not authorized - view only user",
+			settingID:   trustCenter.Edges.Setting.ID,
+			updateInput: openlaneclient.UpdateTrustCenterSettingInput{},
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name:        "not authorized - different organization user",
+			settingID:   trustCenter.Edges.Setting.ID,
+			updateInput: openlaneclient.UpdateTrustCenterSettingInput{},
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name:        "trust center setting not found",
+			settingID:   "non-existent-setting-id",
+			updateInput: openlaneclient.UpdateTrustCenterSettingInput{},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: notFoundErrorMsg,
+		},
+		{
+			name:      "update without logo file - should work",
+			settingID: trustCenter.Edges.Setting.ID,
+			logoPath:  "", // No logo file
+			updateInput: openlaneclient.UpdateTrustCenterSettingInput{
+				Title:        lo.ToPtr("Updated Title Only"),
+				Overview:     lo.ToPtr("Updated Overview"),
+				PrimaryColor: lo.ToPtr("#00FF00"),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Update "+tc.name, func(t *testing.T) {
+			var logoFile *graphql.Upload
+
+			// Create file upload if logoPath is provided
+			if tc.logoPath != "" {
+				uploadFile, err := objects.NewUploadFile(tc.logoPath)
+				assert.NilError(t, err)
+
+				logoFile = &graphql.Upload{
+					File:        uploadFile.File,
+					Filename:    uploadFile.Filename,
+					Size:        uploadFile.Size,
+					ContentType: uploadFile.ContentType,
+				}
+
+				// Set up mock expectations based on whether we expect an error
+				if tc.expectedErr == "" {
+					expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{*logoFile})
+				} else {
+					expectUploadCheckOnly(t, suite.client.objectStore.Storage)
+				}
+			}
+
+			resp, err := tc.client.UpdateTrustCenterSetting(tc.ctx, tc.settingID, tc.updateInput, logoFile)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				assert.Check(t, is.Nil(resp))
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.settingID, resp.UpdateTrustCenterSetting.TrustCenterSetting.ID))
+
+			// Check updated fields
+			if tc.updateInput.Title != nil {
+				assert.Check(t, is.Equal(*tc.updateInput.Title, *resp.UpdateTrustCenterSetting.TrustCenterSetting.Title))
+			}
+
+			if tc.updateInput.Overview != nil {
+				assert.Check(t, is.Equal(*tc.updateInput.Overview, *resp.UpdateTrustCenterSetting.TrustCenterSetting.Overview))
+			}
+
+			if tc.updateInput.PrimaryColor != nil {
+				assert.Check(t, is.Equal(*tc.updateInput.PrimaryColor, *resp.UpdateTrustCenterSetting.TrustCenterSetting.PrimaryColor))
 			}
 		})
 	}
