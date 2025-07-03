@@ -27,6 +27,7 @@ var sharedMimeTypes = []string{
 // add the key and the valid mime types to the map
 var validMimeTypes = map[string][]string{
 	"avatarFile":    {"image/jpeg", "image/png"},
+	"logoFile":      {"image/jpeg", "image/png"},
 	"evidenceFiles": sharedMimeTypes,
 	"noteFiles":     sharedMimeTypes,
 }

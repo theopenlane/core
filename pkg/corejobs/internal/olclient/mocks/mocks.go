@@ -37179,12 +37179,12 @@ func (_c *MockOpenlaneGraphClient_UpdateTemplate_Call) RunAndReturn(run func(ctx
 }
 
 // UpdateTrustCenter provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) UpdateTrustCenter(ctx context.Context, updateTrustCenterID string, input openlaneclient.UpdateTrustCenterInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustCenter, error) {
+func (_mock *MockOpenlaneGraphClient) UpdateTrustCenter(ctx context.Context, updateTrustCenterID string, input openlaneclient.UpdateTrustCenterInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustCenter, error) {
 	var tmpRet mock.Arguments
 	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, updateTrustCenterID, input, logoFile, interceptors)
+		tmpRet = _mock.Called(ctx, updateTrustCenterID, input, interceptors)
 	} else {
-		tmpRet = _mock.Called(ctx, updateTrustCenterID, input, logoFile)
+		tmpRet = _mock.Called(ctx, updateTrustCenterID, input)
 	}
 	ret := tmpRet
 
@@ -37194,18 +37194,18 @@ func (_mock *MockOpenlaneGraphClient) UpdateTrustCenter(ctx context.Context, upd
 
 	var r0 *openlaneclient.UpdateTrustCenter
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateTrustCenterInput, *graphql.Upload, ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustCenter, error)); ok {
-		return returnFunc(ctx, updateTrustCenterID, input, logoFile, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateTrustCenterInput, ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustCenter, error)); ok {
+		return returnFunc(ctx, updateTrustCenterID, input, interceptors...)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateTrustCenterInput, *graphql.Upload, ...clientv2.RequestInterceptor) *openlaneclient.UpdateTrustCenter); ok {
-		r0 = returnFunc(ctx, updateTrustCenterID, input, logoFile, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateTrustCenterInput, ...clientv2.RequestInterceptor) *openlaneclient.UpdateTrustCenter); ok {
+		r0 = returnFunc(ctx, updateTrustCenterID, input, interceptors...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*openlaneclient.UpdateTrustCenter)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, string, openlaneclient.UpdateTrustCenterInput, *graphql.Upload, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, updateTrustCenterID, input, logoFile, interceptors...)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, openlaneclient.UpdateTrustCenterInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, updateTrustCenterID, input, interceptors...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -37221,14 +37221,13 @@ type MockOpenlaneGraphClient_UpdateTrustCenter_Call struct {
 //   - ctx context.Context
 //   - updateTrustCenterID string
 //   - input openlaneclient.UpdateTrustCenterInput
-//   - logoFile *graphql.Upload
 //   - interceptors ...clientv2.RequestInterceptor
-func (_e *MockOpenlaneGraphClient_Expecter) UpdateTrustCenter(ctx interface{}, updateTrustCenterID interface{}, input interface{}, logoFile interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateTrustCenter_Call {
+func (_e *MockOpenlaneGraphClient_Expecter) UpdateTrustCenter(ctx interface{}, updateTrustCenterID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateTrustCenter_Call {
 	return &MockOpenlaneGraphClient_UpdateTrustCenter_Call{Call: _e.mock.On("UpdateTrustCenter",
-		append([]interface{}{ctx, updateTrustCenterID, input, logoFile}, interceptors...)...)}
+		append([]interface{}{ctx, updateTrustCenterID, input}, interceptors...)...)}
 }
 
-func (_c *MockOpenlaneGraphClient_UpdateTrustCenter_Call) Run(run func(ctx context.Context, updateTrustCenterID string, input openlaneclient.UpdateTrustCenterInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateTrustCenter_Call {
+func (_c *MockOpenlaneGraphClient_UpdateTrustCenter_Call) Run(run func(ctx context.Context, updateTrustCenterID string, input openlaneclient.UpdateTrustCenterInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateTrustCenter_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -37242,22 +37241,17 @@ func (_c *MockOpenlaneGraphClient_UpdateTrustCenter_Call) Run(run func(ctx conte
 		if args[2] != nil {
 			arg2 = args[2].(openlaneclient.UpdateTrustCenterInput)
 		}
-		var arg3 *graphql.Upload
-		if args[3] != nil {
-			arg3 = args[3].(*graphql.Upload)
-		}
-		var arg4 []clientv2.RequestInterceptor
+		var arg3 []clientv2.RequestInterceptor
 		var variadicArgs []clientv2.RequestInterceptor
-		if len(args) > 4 {
-			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
 		}
-		arg4 = variadicArgs
+		arg3 = variadicArgs
 		run(
 			arg0,
 			arg1,
 			arg2,
-			arg3,
-			arg4...,
+			arg3...,
 		)
 	})
 	return _c
@@ -37268,7 +37262,7 @@ func (_c *MockOpenlaneGraphClient_UpdateTrustCenter_Call) Return(updateTrustCent
 	return _c
 }
 
-func (_c *MockOpenlaneGraphClient_UpdateTrustCenter_Call) RunAndReturn(run func(ctx context.Context, updateTrustCenterID string, input openlaneclient.UpdateTrustCenterInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustCenter, error)) *MockOpenlaneGraphClient_UpdateTrustCenter_Call {
+func (_c *MockOpenlaneGraphClient_UpdateTrustCenter_Call) RunAndReturn(run func(ctx context.Context, updateTrustCenterID string, input openlaneclient.UpdateTrustCenterInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustCenter, error)) *MockOpenlaneGraphClient_UpdateTrustCenter_Call {
 	_c.Call.Return(run)
 	return _c
 }

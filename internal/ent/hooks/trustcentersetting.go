@@ -58,7 +58,7 @@ func checkLogoFile(ctx context.Context, m *generated.TrustCenterSettingMutation)
 		m.SetLogoLocalFileID(file[0].ID)
 
 		file[0].Parent.ID, _ = m.ID()
-		file[0].Parent.Type = m.Type()
+		file[0].Parent.Type = "trust_center_setting"
 
 		ctx = objects.UpdateFileInContextByKey(ctx, key, file[0])
 	}
@@ -99,7 +99,7 @@ func trustCenterSettingCreateHook(ctx context.Context, m *generated.TrustCenterS
 	if exists && tcExists {
 		req := fgax.TupleRequest{
 			SubjectID:   tcID,
-			SubjectType: generated.TypeTrustCenter,
+			SubjectType: "trust_center",
 			ObjectID:    objID,
 			ObjectType:  GetObjectTypeFromEntMutation(m),
 		}
@@ -111,6 +111,7 @@ func trustCenterSettingCreateHook(ctx context.Context, m *generated.TrustCenterS
 		if err != nil {
 			return err
 		}
+		zerolog.Ctx(ctx).Info().Msg(fmt.Sprintf("org tuple: %+v, request: %+v", orgTuple, req))
 
 		if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{orgTuple}, nil); err != nil {
 			zerolog.Ctx(ctx).Error().Err(err).Msg("failed to create relationship tuple")

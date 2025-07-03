@@ -73,27 +73,6 @@ func HookTrustCenter() ent.Hook {
 	}, ent.OpCreate)
 }
 
-func HookTrustCenterUpdate() ent.Hook {
-	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.TrustCenterFunc(func(ctx context.Context, m *generated.TrustCenterMutation) (generated.Value, error) {
-			// check for uploaded files (e.g. logo image)
-			zerolog.Ctx(ctx).Info().Msg("trust center setting hook")
-			// fileIDs := objects.GetFileIDsFromContext(ctx)
-			// if len(fileIDs) > 0 {
-			// 	var err error
-
-			// 	ctx, err = checkLogoFile(ctx, m)
-			// 	if err != nil {
-			// 		return nil, err
-			// 	}
-
-			// 	m.AddFileIDs(fileIDs...)
-			// }
-			return next.Mutate(ctx, m)
-		})
-	}, ent.OpUpdateOne)
-}
-
 const defaultOverview = `
 # Welcome to your Trust Center
 

@@ -2426,7 +2426,7 @@ type ComplexityRoot struct {
 		UpdateTask                         func(childComplexity int, id string, input generated.UpdateTaskInput) int
 		UpdateTaskComment                  func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateTemplate                     func(childComplexity int, id string, input generated.UpdateTemplateInput) int
-		UpdateTrustCenter                  func(childComplexity int, id string, input generated.UpdateTrustCenterInput, logoFile *graphql.Upload) int
+		UpdateTrustCenter                  func(childComplexity int, id string, input generated.UpdateTrustCenterInput) int
 		UpdateTrustCenterSetting           func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload) int
 		UpdateUser                         func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) int
 		UpdateUserSetting                  func(childComplexity int, id string, input generated.UpdateUserSettingInput) int
@@ -17479,7 +17479,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateTrustCenter(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterInput), args["logoFile"].(*graphql.Upload)), true
+		return e.complexity.Mutation.UpdateTrustCenter(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterInput)), true
 
 	case "Mutation.updateTrustCenterSetting":
 		if e.complexity.Mutation.UpdateTrustCenterSetting == nil {
@@ -88207,7 +88207,6 @@ extend type Mutation{
         New values for the trustCenter
         """
         input: UpdateTrustCenterInput!
-        logoFile: Upload
     ): TrustCenterUpdatePayload!
     """
     Delete an existing trustCenter
