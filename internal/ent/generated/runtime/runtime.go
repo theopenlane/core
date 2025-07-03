@@ -35,6 +35,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
+	"github.com/theopenlane/core/internal/ent/generated/export"
+	"github.com/theopenlane/core/internal/ent/generated/exporthistory"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -1770,6 +1772,88 @@ func init() {
 	evidencehistoryDescID := evidencehistoryFields[9].Descriptor()
 	// evidencehistory.DefaultID holds the default value on creation for the id field.
 	evidencehistory.DefaultID = evidencehistoryDescID.Default.(func() string)
+	exportMixin := schema.Export{}.Mixin()
+	export.Policy = privacy.NewPolicies(schema.Export{})
+	export.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := export.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	exportMixinHooks0 := exportMixin[0].Hooks()
+	exportMixinHooks1 := exportMixin[1].Hooks()
+	exportMixinHooks4 := exportMixin[4].Hooks()
+	exportHooks := schema.Export{}.Hooks()
+
+	export.Hooks[1] = exportMixinHooks0[0]
+
+	export.Hooks[2] = exportMixinHooks1[0]
+
+	export.Hooks[3] = exportMixinHooks4[0]
+
+	export.Hooks[4] = exportHooks[0]
+	exportMixinInters1 := exportMixin[1].Interceptors()
+	exportMixinInters4 := exportMixin[4].Interceptors()
+	export.Interceptors[0] = exportMixinInters1[0]
+	export.Interceptors[1] = exportMixinInters4[0]
+	exportMixinFields0 := exportMixin[0].Fields()
+	_ = exportMixinFields0
+	exportMixinFields2 := exportMixin[2].Fields()
+	_ = exportMixinFields2
+	exportMixinFields4 := exportMixin[4].Fields()
+	_ = exportMixinFields4
+	exportFields := schema.Export{}.Fields()
+	_ = exportFields
+	// exportDescCreatedAt is the schema descriptor for created_at field.
+	exportDescCreatedAt := exportMixinFields0[0].Descriptor()
+	// export.DefaultCreatedAt holds the default value on creation for the created_at field.
+	export.DefaultCreatedAt = exportDescCreatedAt.Default.(func() time.Time)
+	// exportDescUpdatedAt is the schema descriptor for updated_at field.
+	exportDescUpdatedAt := exportMixinFields0[1].Descriptor()
+	// export.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	export.DefaultUpdatedAt = exportDescUpdatedAt.Default.(func() time.Time)
+	// export.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	export.UpdateDefaultUpdatedAt = exportDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// exportDescOwnerID is the schema descriptor for owner_id field.
+	exportDescOwnerID := exportMixinFields4[0].Descriptor()
+	// export.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	export.OwnerIDValidator = exportDescOwnerID.Validators[0].(func(string) error)
+	// exportDescItemID is the schema descriptor for item_id field.
+	exportDescItemID := exportFields[1].Descriptor()
+	// export.ItemIDValidator is a validator for the "item_id" field. It is called by the builders before save.
+	export.ItemIDValidator = exportDescItemID.Validators[0].(func(string) error)
+	// exportDescRequestorID is the schema descriptor for requestor_id field.
+	exportDescRequestorID := exportFields[3].Descriptor()
+	// export.RequestorIDValidator is a validator for the "requestor_id" field. It is called by the builders before save.
+	export.RequestorIDValidator = exportDescRequestorID.Validators[0].(func(string) error)
+	// exportDescID is the schema descriptor for id field.
+	exportDescID := exportMixinFields2[0].Descriptor()
+	// export.DefaultID holds the default value on creation for the id field.
+	export.DefaultID = exportDescID.Default.(func() string)
+	exporthistoryInters := schema.ExportHistory{}.Interceptors()
+	exporthistory.Interceptors[0] = exporthistoryInters[0]
+	exporthistoryFields := schema.ExportHistory{}.Fields()
+	_ = exporthistoryFields
+	// exporthistoryDescHistoryTime is the schema descriptor for history_time field.
+	exporthistoryDescHistoryTime := exporthistoryFields[0].Descriptor()
+	// exporthistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	exporthistory.DefaultHistoryTime = exporthistoryDescHistoryTime.Default.(func() time.Time)
+	// exporthistoryDescCreatedAt is the schema descriptor for created_at field.
+	exporthistoryDescCreatedAt := exporthistoryFields[3].Descriptor()
+	// exporthistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	exporthistory.DefaultCreatedAt = exporthistoryDescCreatedAt.Default.(func() time.Time)
+	// exporthistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	exporthistoryDescUpdatedAt := exporthistoryFields[4].Descriptor()
+	// exporthistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	exporthistory.DefaultUpdatedAt = exporthistoryDescUpdatedAt.Default.(func() time.Time)
+	// exporthistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	exporthistory.UpdateDefaultUpdatedAt = exporthistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// exporthistoryDescID is the schema descriptor for id field.
+	exporthistoryDescID := exporthistoryFields[9].Descriptor()
+	// exporthistory.DefaultID holds the default value on creation for the id field.
+	exporthistory.DefaultID = exporthistoryDescID.Default.(func() string)
 	fileMixin := schema.File{}.Mixin()
 	file.Policy = privacy.NewPolicies(schema.File{})
 	file.Hooks[0] = func(next ent.Mutator) ent.Mutator {

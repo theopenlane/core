@@ -1874,6 +1874,35 @@ func HasTrustCenterSettingWith(preds ...predicate.TrustCenterSetting) predicate.
 	})
 }
 
+// HasExport applies the HasEdge predicate on the "export" edge.
+func HasExport() predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ExportTable, ExportPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Export
+		step.Edge.Schema = schemaConfig.ExportFiles
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasExportWith applies the HasEdge predicate on the "export" edge with a given conditions (other predicates).
+func HasExportWith(preds ...predicate.Export) predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := newExportStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Export
+		step.Edge.Schema = schemaConfig.ExportFiles
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.File) predicate.File {
 	return predicate.File(sql.AndPredicates(predicates...))

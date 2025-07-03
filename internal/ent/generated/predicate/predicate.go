@@ -93,6 +93,12 @@ type Evidence func(*sql.Selector)
 // EvidenceHistory is the predicate function for evidencehistory builders.
 type EvidenceHistory func(*sql.Selector)
 
+// Export is the predicate function for export builders.
+type Export func(*sql.Selector)
+
+// ExportHistory is the predicate function for exporthistory builders.
+type ExportHistory func(*sql.Selector)
+
 // File is the predicate function for file builders.
 type File func(*sql.Selector)
 

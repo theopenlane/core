@@ -65,6 +65,9 @@ type SchemaConfig struct {
 	EvidenceSubcontrols                string // Evidence-subcontrols->Subcontrol table.
 	EvidenceFiles                      string // Evidence-files->File table.
 	EvidenceHistory                    string // EvidenceHistory table.
+	Export                             string // Export table.
+	ExportFiles                        string // Export-files->File table.
+	ExportHistory                      string // ExportHistory table.
 	File                               string // File table.
 	FileEvents                         string // File-events->Event table.
 	FileHistory                        string // FileHistory table.

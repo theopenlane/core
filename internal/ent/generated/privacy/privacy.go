@@ -807,6 +807,54 @@ func (f EvidenceHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m gen
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.EvidenceHistoryMutation", m)
 }
 
+// The ExportQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type ExportQueryRuleFunc func(context.Context, *generated.ExportQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f ExportQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ExportQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.ExportQuery", q)
+}
+
+// The ExportMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type ExportMutationRuleFunc func(context.Context, *generated.ExportMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f ExportMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.ExportMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ExportMutation", m)
+}
+
+// The ExportHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type ExportHistoryQueryRuleFunc func(context.Context, *generated.ExportHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f ExportHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ExportHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.ExportHistoryQuery", q)
+}
+
+// The ExportHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type ExportHistoryMutationRuleFunc func(context.Context, *generated.ExportHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f ExportHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.ExportHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ExportHistoryMutation", m)
+}
+
 // The FileQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type FileQueryRuleFunc func(context.Context, *generated.FileQuery) error
@@ -2652,6 +2700,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.EvidenceHistoryQuery:
 		return q.Filter(), nil
+	case *generated.ExportQuery:
+		return q.Filter(), nil
+	case *generated.ExportHistoryQuery:
+		return q.Filter(), nil
 	case *generated.FileQuery:
 		return q.Filter(), nil
 	case *generated.FileHistoryQuery:
@@ -2862,6 +2914,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.EvidenceMutation:
 		return m.Filter(), nil
 	case *generated.EvidenceHistoryMutation:
+		return m.Filter(), nil
+	case *generated.ExportMutation:
+		return m.Filter(), nil
+	case *generated.ExportHistoryMutation:
 		return m.Filter(), nil
 	case *generated.FileMutation:
 		return m.Filter(), nil

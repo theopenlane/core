@@ -47,6 +47,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*EvidenceMutation]() {
 		c.Evidence.Use(hook)
 	}
+	for _, hook := range history.Hooks[*ExportMutation]() {
+		c.Export.Use(hook)
+	}
 	for _, hook := range history.Hooks[*FileMutation]() {
 		c.File.Use(hook)
 	}

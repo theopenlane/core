@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -52,6 +53,7 @@ type FileQuery struct {
 	withEvidence                 *EvidenceQuery
 	withEvents                   *EventQuery
 	withTrustCenterSetting       *TrustCenterSettingQuery
+	withExport                   *ExportQuery
 	withFKs                      bool
 	loadTotal                    []func(context.Context, []*File) error
 	modifiers                    []func(*sql.Selector)
@@ -68,6 +70,7 @@ type FileQuery struct {
 	withNamedEvidence            map[string]*EvidenceQuery
 	withNamedEvents              map[string]*EventQuery
 	withNamedTrustCenterSetting  map[string]*TrustCenterSettingQuery
+	withNamedExport              map[string]*ExportQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -429,6 +432,31 @@ func (fq *FileQuery) QueryTrustCenterSetting() *TrustCenterSettingQuery {
 	return query
 }
 
+// QueryExport chains the current query on the "export" edge.
+func (fq *FileQuery) QueryExport() *ExportQuery {
+	query := (&ExportClient{config: fq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := fq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := fq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, selector),
+			sqlgraph.To(export.Table, export.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.ExportTable, file.ExportPrimaryKey...),
+		)
+		schemaConfig := fq.schemaConfig
+		step.To.Schema = schemaConfig.Export
+		step.Edge.Schema = schemaConfig.ExportFiles
+		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first File entity from the query.
 // Returns a *NotFoundError when no File was found.
 func (fq *FileQuery) First(ctx context.Context) (*File, error) {
@@ -634,6 +662,7 @@ func (fq *FileQuery) Clone() *FileQuery {
 		withEvidence:            fq.withEvidence.Clone(),
 		withEvents:              fq.withEvents.Clone(),
 		withTrustCenterSetting:  fq.withTrustCenterSetting.Clone(),
+		withExport:              fq.withExport.Clone(),
 		// clone intermediate query.
 		sql:       fq.sql.Clone(),
 		path:      fq.path,
@@ -784,6 +813,17 @@ func (fq *FileQuery) WithTrustCenterSetting(opts ...func(*TrustCenterSettingQuer
 	return fq
 }
 
+// WithExport tells the query-builder to eager-load the nodes that are connected to
+// the "export" edge. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithExport(opts ...func(*ExportQuery)) *FileQuery {
+	query := (&ExportClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	fq.withExport = query
+	return fq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -869,7 +909,7 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 		nodes       = []*File{}
 		withFKs     = fq.withFKs
 		_spec       = fq.querySpec()
-		loadedTypes = [13]bool{
+		loadedTypes = [14]bool{
 			fq.withUser != nil,
 			fq.withOrganization != nil,
 			fq.withGroups != nil,
@@ -883,6 +923,7 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			fq.withEvidence != nil,
 			fq.withEvents != nil,
 			fq.withTrustCenterSetting != nil,
+			fq.withExport != nil,
 		}
 	)
 	if withFKs {
@@ -1006,6 +1047,13 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			return nil, err
 		}
 	}
+	if query := fq.withExport; query != nil {
+		if err := fq.loadExport(ctx, query, nodes,
+			func(n *File) { n.Edges.Export = []*Export{} },
+			func(n *File, e *Export) { n.Edges.Export = append(n.Edges.Export, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range fq.withNamedUser {
 		if err := fq.loadUser(ctx, query, nodes,
 			func(n *File) { n.appendNamedUser(name) },
@@ -1094,6 +1142,13 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 		if err := fq.loadTrustCenterSetting(ctx, query, nodes,
 			func(n *File) { n.appendNamedTrustCenterSetting(name) },
 			func(n *File, e *TrustCenterSetting) { n.appendNamedTrustCenterSetting(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range fq.withNamedExport {
+		if err := fq.loadExport(ctx, query, nodes,
+			func(n *File) { n.appendNamedExport(name) },
+			func(n *File, e *Export) { n.appendNamedExport(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1911,6 +1966,68 @@ func (fq *FileQuery) loadTrustCenterSetting(ctx context.Context, query *TrustCen
 	}
 	return nil
 }
+func (fq *FileQuery) loadExport(ctx context.Context, query *ExportQuery, nodes []*File, init func(*File), assign func(*File, *Export)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*File)
+	nids := make(map[string]map[*File]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(file.ExportTable)
+		joinT.Schema(fq.schemaConfig.ExportFiles)
+		s.Join(joinT).On(s.C(export.FieldID), joinT.C(file.ExportPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(file.ExportPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(file.ExportPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*File]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Export](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "export" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (fq *FileQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := fq.querySpec()
@@ -2189,6 +2306,20 @@ func (fq *FileQuery) WithNamedTrustCenterSetting(name string, opts ...func(*Trus
 		fq.withNamedTrustCenterSetting = make(map[string]*TrustCenterSettingQuery)
 	}
 	fq.withNamedTrustCenterSetting[name] = query
+	return fq
+}
+
+// WithNamedExport tells the query-builder to eager-load the nodes that are connected to the "export"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithNamedExport(name string, opts ...func(*ExportQuery)) *FileQuery {
+	query := (&ExportClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if fq.withNamedExport == nil {
+		fq.withNamedExport = make(map[string]*ExportQuery)
+	}
+	fq.withNamedExport[name] = query
 	return fq
 }
 

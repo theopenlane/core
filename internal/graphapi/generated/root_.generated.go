@@ -1275,6 +1275,79 @@ type ComplexityRoot struct {
 		Evidence func(childComplexity int) int
 	}
 
+	Export struct {
+		CreatedAt   func(childComplexity int) int
+		CreatedBy   func(childComplexity int) int
+		Events      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		ExportType  func(childComplexity int) int
+		File        func(childComplexity int) int
+		FileID      func(childComplexity int) int
+		Files       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		ID          func(childComplexity int) int
+		ItemID      func(childComplexity int) int
+		Owner       func(childComplexity int) int
+		OwnerID     func(childComplexity int) int
+		RequestorID func(childComplexity int) int
+		Status      func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
+		UpdatedBy   func(childComplexity int) int
+	}
+
+	ExportBulkCreatePayload struct {
+		Exports func(childComplexity int) int
+	}
+
+	ExportConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	ExportCreatePayload struct {
+		Export func(childComplexity int) int
+	}
+
+	ExportDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	ExportEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	ExportHistory struct {
+		CreatedAt   func(childComplexity int) int
+		CreatedBy   func(childComplexity int) int
+		ExportType  func(childComplexity int) int
+		FileID      func(childComplexity int) int
+		HistoryTime func(childComplexity int) int
+		ID          func(childComplexity int) int
+		ItemID      func(childComplexity int) int
+		Operation   func(childComplexity int) int
+		OwnerID     func(childComplexity int) int
+		Ref         func(childComplexity int) int
+		RequestorID func(childComplexity int) int
+		Status      func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
+		UpdatedBy   func(childComplexity int) int
+	}
+
+	ExportHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	ExportHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	ExportUpdatePayload struct {
+		Export func(childComplexity int) int
+	}
+
 	File struct {
 		CategoryType          func(childComplexity int) int
 		Contact               func(childComplexity int) int
@@ -1286,6 +1359,7 @@ type ComplexityRoot struct {
 		Entity                func(childComplexity int) int
 		Events                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		Evidence              func(childComplexity int) int
+		Export                func(childComplexity int) int
 		Groups                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                    func(childComplexity int) int
 		Md5Hash               func(childComplexity int) int
@@ -2297,6 +2371,7 @@ type ComplexityRoot struct {
 		CreateEntityType                   func(childComplexity int, input generated.CreateEntityTypeInput) int
 		CreateEvent                        func(childComplexity int, input generated.CreateEventInput) int
 		CreateEvidence                     func(childComplexity int, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload) int
+		CreateExport                       func(childComplexity int, input generated.CreateExportInput) int
 		CreateFullProgram                  func(childComplexity int, input model.CreateFullProgramInput) int
 		CreateGroup                        func(childComplexity int, input generated.CreateGroupInput) int
 		CreateGroupByClone                 func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput, inheritGroupPermissions *string, cloneGroupMembers *string) int
@@ -2398,6 +2473,7 @@ type ComplexityRoot struct {
 		UpdateEntityType                   func(childComplexity int, id string, input generated.UpdateEntityTypeInput) int
 		UpdateEvent                        func(childComplexity int, id string, input generated.UpdateEventInput) int
 		UpdateEvidence                     func(childComplexity int, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload) int
+		UpdateExport                       func(childComplexity int, id string, input generated.UpdateExportInput, exportFiles []*graphql.Upload) int
 		UpdateGroup                        func(childComplexity int, id string, input generated.UpdateGroupInput) int
 		UpdateGroupMembership              func(childComplexity int, id string, input generated.UpdateGroupMembershipInput) int
 		UpdateGroupSetting                 func(childComplexity int, id string, input generated.UpdateGroupSettingInput) int
@@ -2745,6 +2821,7 @@ type ComplexityRoot struct {
 		Events                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		Evidence                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		EvidenceCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Exports                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ExportOrder, where *generated.ExportWhereInput) int
 		Files                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		GroupCreators                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Groups                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -3388,6 +3465,9 @@ type ComplexityRoot struct {
 		EvidenceHistories                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EvidenceHistoryOrder, where *generated.EvidenceHistoryWhereInput) int
 		EvidenceSearch                        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Evidences                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
+		Export                                func(childComplexity int, id string) int
+		ExportHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ExportHistoryOrder, where *generated.ExportHistoryWhereInput) int
+		Exports                               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ExportOrder, where *generated.ExportWhereInput) int
 		File                                  func(childComplexity int, id string) int
 		FileHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.FileHistoryOrder, where *generated.FileHistoryWhereInput) int
 		FileSearch                            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -10476,6 +10556,317 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EvidenceUpdatePayload.Evidence(childComplexity), true
 
+	case "Export.createdAt":
+		if e.complexity.Export.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Export.CreatedAt(childComplexity), true
+
+	case "Export.createdBy":
+		if e.complexity.Export.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.Export.CreatedBy(childComplexity), true
+
+	case "Export.events":
+		if e.complexity.Export.Events == nil {
+			break
+		}
+
+		args, err := ec.field_Export_events_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Export.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EventOrder), args["where"].(*generated.EventWhereInput)), true
+
+	case "Export.exportType":
+		if e.complexity.Export.ExportType == nil {
+			break
+		}
+
+		return e.complexity.Export.ExportType(childComplexity), true
+
+	case "Export.file":
+		if e.complexity.Export.File == nil {
+			break
+		}
+
+		return e.complexity.Export.File(childComplexity), true
+
+	case "Export.fileID":
+		if e.complexity.Export.FileID == nil {
+			break
+		}
+
+		return e.complexity.Export.FileID(childComplexity), true
+
+	case "Export.files":
+		if e.complexity.Export.Files == nil {
+			break
+		}
+
+		args, err := ec.field_Export_files_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Export.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
+
+	case "Export.id":
+		if e.complexity.Export.ID == nil {
+			break
+		}
+
+		return e.complexity.Export.ID(childComplexity), true
+
+	case "Export.itemID":
+		if e.complexity.Export.ItemID == nil {
+			break
+		}
+
+		return e.complexity.Export.ItemID(childComplexity), true
+
+	case "Export.owner":
+		if e.complexity.Export.Owner == nil {
+			break
+		}
+
+		return e.complexity.Export.Owner(childComplexity), true
+
+	case "Export.ownerID":
+		if e.complexity.Export.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.Export.OwnerID(childComplexity), true
+
+	case "Export.requestorID":
+		if e.complexity.Export.RequestorID == nil {
+			break
+		}
+
+		return e.complexity.Export.RequestorID(childComplexity), true
+
+	case "Export.status":
+		if e.complexity.Export.Status == nil {
+			break
+		}
+
+		return e.complexity.Export.Status(childComplexity), true
+
+	case "Export.updatedAt":
+		if e.complexity.Export.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Export.UpdatedAt(childComplexity), true
+
+	case "Export.updatedBy":
+		if e.complexity.Export.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.Export.UpdatedBy(childComplexity), true
+
+	case "ExportBulkCreatePayload.exports":
+		if e.complexity.ExportBulkCreatePayload.Exports == nil {
+			break
+		}
+
+		return e.complexity.ExportBulkCreatePayload.Exports(childComplexity), true
+
+	case "ExportConnection.edges":
+		if e.complexity.ExportConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.ExportConnection.Edges(childComplexity), true
+
+	case "ExportConnection.pageInfo":
+		if e.complexity.ExportConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.ExportConnection.PageInfo(childComplexity), true
+
+	case "ExportConnection.totalCount":
+		if e.complexity.ExportConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.ExportConnection.TotalCount(childComplexity), true
+
+	case "ExportCreatePayload.export":
+		if e.complexity.ExportCreatePayload.Export == nil {
+			break
+		}
+
+		return e.complexity.ExportCreatePayload.Export(childComplexity), true
+
+	case "ExportDeletePayload.deletedID":
+		if e.complexity.ExportDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.ExportDeletePayload.DeletedID(childComplexity), true
+
+	case "ExportEdge.cursor":
+		if e.complexity.ExportEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.ExportEdge.Cursor(childComplexity), true
+
+	case "ExportEdge.node":
+		if e.complexity.ExportEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.ExportEdge.Node(childComplexity), true
+
+	case "ExportHistory.createdAt":
+		if e.complexity.ExportHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.ExportHistory.CreatedAt(childComplexity), true
+
+	case "ExportHistory.createdBy":
+		if e.complexity.ExportHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.ExportHistory.CreatedBy(childComplexity), true
+
+	case "ExportHistory.exportType":
+		if e.complexity.ExportHistory.ExportType == nil {
+			break
+		}
+
+		return e.complexity.ExportHistory.ExportType(childComplexity), true
+
+	case "ExportHistory.fileID":
+		if e.complexity.ExportHistory.FileID == nil {
+			break
+		}
+
+		return e.complexity.ExportHistory.FileID(childComplexity), true
+
+	case "ExportHistory.historyTime":
+		if e.complexity.ExportHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.ExportHistory.HistoryTime(childComplexity), true
+
+	case "ExportHistory.id":
+		if e.complexity.ExportHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.ExportHistory.ID(childComplexity), true
+
+	case "ExportHistory.itemID":
+		if e.complexity.ExportHistory.ItemID == nil {
+			break
+		}
+
+		return e.complexity.ExportHistory.ItemID(childComplexity), true
+
+	case "ExportHistory.operation":
+		if e.complexity.ExportHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.ExportHistory.Operation(childComplexity), true
+
+	case "ExportHistory.ownerID":
+		if e.complexity.ExportHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.ExportHistory.OwnerID(childComplexity), true
+
+	case "ExportHistory.ref":
+		if e.complexity.ExportHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.ExportHistory.Ref(childComplexity), true
+
+	case "ExportHistory.requestorID":
+		if e.complexity.ExportHistory.RequestorID == nil {
+			break
+		}
+
+		return e.complexity.ExportHistory.RequestorID(childComplexity), true
+
+	case "ExportHistory.status":
+		if e.complexity.ExportHistory.Status == nil {
+			break
+		}
+
+		return e.complexity.ExportHistory.Status(childComplexity), true
+
+	case "ExportHistory.updatedAt":
+		if e.complexity.ExportHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.ExportHistory.UpdatedAt(childComplexity), true
+
+	case "ExportHistory.updatedBy":
+		if e.complexity.ExportHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.ExportHistory.UpdatedBy(childComplexity), true
+
+	case "ExportHistoryConnection.edges":
+		if e.complexity.ExportHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.ExportHistoryConnection.Edges(childComplexity), true
+
+	case "ExportHistoryConnection.pageInfo":
+		if e.complexity.ExportHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.ExportHistoryConnection.PageInfo(childComplexity), true
+
+	case "ExportHistoryConnection.totalCount":
+		if e.complexity.ExportHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.ExportHistoryConnection.TotalCount(childComplexity), true
+
+	case "ExportHistoryEdge.cursor":
+		if e.complexity.ExportHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.ExportHistoryEdge.Cursor(childComplexity), true
+
+	case "ExportHistoryEdge.node":
+		if e.complexity.ExportHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.ExportHistoryEdge.Node(childComplexity), true
+
+	case "ExportUpdatePayload.export":
+		if e.complexity.ExportUpdatePayload.Export == nil {
+			break
+		}
+
+		return e.complexity.ExportUpdatePayload.Export(childComplexity), true
+
 	case "File.categoryType":
 		if e.complexity.File.CategoryType == nil {
 			break
@@ -10550,6 +10941,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.File.Evidence(childComplexity), true
+
+	case "File.export":
+		if e.complexity.File.Export == nil {
+			break
+		}
+
+		return e.complexity.File.Export(childComplexity), true
 
 	case "File.groups":
 		if e.complexity.File.Groups == nil {
@@ -15921,6 +16319,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateEvidence(childComplexity, args["input"].(generated.CreateEvidenceInput), args["evidenceFiles"].([]*graphql.Upload)), true
 
+	case "Mutation.createExport":
+		if e.complexity.Mutation.CreateExport == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createExport_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateExport(childComplexity, args["input"].(generated.CreateExportInput)), true
+
 	case "Mutation.createFullProgram":
 		if e.complexity.Mutation.CreateFullProgram == nil {
 			break
@@ -17132,6 +17542,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateEvidence(childComplexity, args["id"].(string), args["input"].(generated.UpdateEvidenceInput), args["evidenceFiles"].([]*graphql.Upload)), true
+
+	case "Mutation.updateExport":
+		if e.complexity.Mutation.UpdateExport == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateExport_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateExport(childComplexity, args["id"].(string), args["input"].(generated.UpdateExportInput), args["exportFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.updateGroup":
 		if e.complexity.Mutation.UpdateGroup == nil {
@@ -19131,6 +19553,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.EvidenceCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Organization.exports":
+		if e.complexity.Organization.Exports == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_exports_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Exports(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ExportOrder), args["where"].(*generated.ExportWhereInput)), true
 
 	case "Organization.files":
 		if e.complexity.Organization.Files == nil {
@@ -23264,6 +23698,42 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.Evidences(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EvidenceOrder), args["where"].(*generated.EvidenceWhereInput)), true
+
+	case "Query.export":
+		if e.complexity.Query.Export == nil {
+			break
+		}
+
+		args, err := ec.field_Query_export_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Export(childComplexity, args["id"].(string)), true
+
+	case "Query.exportHistories":
+		if e.complexity.Query.ExportHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_exportHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ExportHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.ExportHistoryOrder), args["where"].(*generated.ExportHistoryWhereInput)), true
+
+	case "Query.exports":
+		if e.complexity.Query.Exports == nil {
+			break
+		}
+
+		args, err := ec.field_Query_exports_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Exports(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ExportOrder), args["where"].(*generated.ExportWhereInput)), true
 
 	case "Query.file":
 		if e.complexity.Query.File == nil {
@@ -30524,6 +30994,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateEntityTypeInput,
 		ec.unmarshalInputCreateEventInput,
 		ec.unmarshalInputCreateEvidenceInput,
+		ec.unmarshalInputCreateExportInput,
 		ec.unmarshalInputCreateFileInput,
 		ec.unmarshalInputCreateFullProgramInput,
 		ec.unmarshalInputCreateGroupInput,
@@ -30591,6 +31062,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputEvidenceHistoryWhereInput,
 		ec.unmarshalInputEvidenceOrder,
 		ec.unmarshalInputEvidenceWhereInput,
+		ec.unmarshalInputExportHistoryOrder,
+		ec.unmarshalInputExportHistoryWhereInput,
+		ec.unmarshalInputExportOrder,
+		ec.unmarshalInputExportWhereInput,
 		ec.unmarshalInputFileHistoryOrder,
 		ec.unmarshalInputFileHistoryWhereInput,
 		ec.unmarshalInputFileOrder,
@@ -30737,6 +31212,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateEntityTypeInput,
 		ec.unmarshalInputUpdateEventInput,
 		ec.unmarshalInputUpdateEvidenceInput,
+		ec.unmarshalInputUpdateExportInput,
 		ec.unmarshalInputUpdateFileInput,
 		ec.unmarshalInputUpdateGroupInput,
 		ec.unmarshalInputUpdateGroupMembershipInput,
@@ -41208,6 +41684,24 @@ input CreateEvidenceInput {
   taskIDs: [ID!]
 }
 """
+CreateExportInput is used for create Export object.
+Input was generated by ent.
+"""
+input CreateExportInput {
+  """
+  the type of export, e.g., control, policy, etc.
+  """
+  exportType: ExportExportType!
+  """
+  the id of the item to be exported. this could be a control, policy, etc.
+  """
+  itemID: String!
+  ownerID: ID
+  eventIDs: [ID!]
+  fileIDs: [ID!]
+  fileID: ID
+}
+"""
 CreateFileInput is used for create File object.
 Input was generated by ent.
 """
@@ -41278,6 +41772,7 @@ input CreateFileInput {
   evidenceIDs: [ID!]
   eventIDs: [ID!]
   trustCenterSettingIDs: [ID!]
+  exportIDs: [ID!]
 }
 """
 CreateGroupInput is used for create Group object.
@@ -41848,6 +42343,7 @@ input CreateOrganizationInput {
   trustCenterIDs: [ID!]
   assetIDs: [ID!]
   scanIDs: [ID!]
+  exportIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -47610,6 +48106,668 @@ input EvidenceWhereInput {
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
 }
+type Export implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  the type of export, e.g., control, policy, etc.
+  """
+  exportType: ExportExportType!
+  """
+  the id of the item to be exported. this could be a control, policy, etc.
+  """
+  itemID: String!
+  """
+  the status of the export, e.g., pending, ready, failed
+  """
+  status: ExportExportStatus!
+  """
+  the user who initiated the export
+  """
+  requestorID: String
+  """
+  the id of the generated file
+  """
+  fileID: ID
+  owner: Organization
+  events(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Events returned from the connection.
+    """
+    orderBy: [EventOrder!]
+
+    """
+    Filtering options for Events returned from the connection.
+    """
+    where: EventWhereInput
+  ): EventConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+  file: File
+}
+"""
+A connection to a list of items.
+"""
+type ExportConnection {
+  """
+  A list of edges.
+  """
+  edges: [ExportEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ExportEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Export
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+ExportExportStatus is enum for the field status
+"""
+enum ExportExportStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ExportStatus") {
+  PENDING
+  READY
+  FAILED
+}
+"""
+ExportExportType is enum for the field export_type
+"""
+enum ExportExportType @goModel(model: "github.com/theopenlane/core/pkg/enums.ExportType") {
+  CONTROL
+}
+type ExportHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: ExportHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  the type of export, e.g., control, policy, etc.
+  """
+  exportType: ExportHistoryExportType!
+  """
+  the id of the item to be exported. this could be a control, policy, etc.
+  """
+  itemID: String!
+  """
+  the status of the export, e.g., pending, ready, failed
+  """
+  status: ExportHistoryExportStatus!
+  """
+  the user who initiated the export
+  """
+  requestorID: String
+  """
+  the id of the generated file
+  """
+  fileID: String
+}
+"""
+A connection to a list of items.
+"""
+type ExportHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [ExportHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ExportHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: ExportHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+ExportHistoryExportStatus is enum for the field status
+"""
+enum ExportHistoryExportStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ExportStatus") {
+  PENDING
+  READY
+  FAILED
+}
+"""
+ExportHistoryExportType is enum for the field export_type
+"""
+enum ExportHistoryExportType @goModel(model: "github.com/theopenlane/core/pkg/enums.ExportType") {
+  CONTROL
+}
+"""
+ExportHistoryOpType is enum for the field operation
+"""
+enum ExportHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for ExportHistory connections
+"""
+input ExportHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ExportHistories.
+  """
+  field: ExportHistoryOrderField!
+}
+"""
+Properties by which ExportHistory connections can be ordered.
+"""
+enum ExportHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  export_type
+  status
+}
+"""
+ExportHistoryWhereInput is used for filtering ExportHistory objects.
+Input was generated by ent.
+"""
+input ExportHistoryWhereInput {
+  not: ExportHistoryWhereInput
+  and: [ExportHistoryWhereInput!]
+  or: [ExportHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: ExportHistoryOpType
+  operationNEQ: ExportHistoryOpType
+  operationIn: [ExportHistoryOpType!]
+  operationNotIn: [ExportHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  export_type field predicates
+  """
+  exportType: ExportHistoryExportType
+  exportTypeNEQ: ExportHistoryExportType
+  exportTypeIn: [ExportHistoryExportType!]
+  exportTypeNotIn: [ExportHistoryExportType!]
+  """
+  item_id field predicates
+  """
+  itemID: String
+  itemIDNEQ: String
+  itemIDIn: [String!]
+  itemIDNotIn: [String!]
+  itemIDGT: String
+  itemIDGTE: String
+  itemIDLT: String
+  itemIDLTE: String
+  itemIDContains: String
+  itemIDHasPrefix: String
+  itemIDHasSuffix: String
+  itemIDEqualFold: String
+  itemIDContainsFold: String
+  """
+  status field predicates
+  """
+  status: ExportHistoryExportStatus
+  statusNEQ: ExportHistoryExportStatus
+  statusIn: [ExportHistoryExportStatus!]
+  statusNotIn: [ExportHistoryExportStatus!]
+  """
+  requestor_id field predicates
+  """
+  requestorID: String
+  requestorIDNEQ: String
+  requestorIDIn: [String!]
+  requestorIDNotIn: [String!]
+  requestorIDGT: String
+  requestorIDGTE: String
+  requestorIDLT: String
+  requestorIDLTE: String
+  requestorIDContains: String
+  requestorIDHasPrefix: String
+  requestorIDHasSuffix: String
+  requestorIDIsNil: Boolean
+  requestorIDNotNil: Boolean
+  requestorIDEqualFold: String
+  requestorIDContainsFold: String
+  """
+  file_id field predicates
+  """
+  fileID: String
+  fileIDNEQ: String
+  fileIDIn: [String!]
+  fileIDNotIn: [String!]
+  fileIDGT: String
+  fileIDGTE: String
+  fileIDLT: String
+  fileIDLTE: String
+  fileIDContains: String
+  fileIDHasPrefix: String
+  fileIDHasSuffix: String
+  fileIDIsNil: Boolean
+  fileIDNotNil: Boolean
+  fileIDEqualFold: String
+  fileIDContainsFold: String
+}
+"""
+Ordering options for Export connections
+"""
+input ExportOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Exports.
+  """
+  field: ExportOrderField!
+}
+"""
+Properties by which Export connections can be ordered.
+"""
+enum ExportOrderField {
+  created_at
+  updated_at
+  export_type
+  status
+}
+"""
+ExportWhereInput is used for filtering Export objects.
+Input was generated by ent.
+"""
+input ExportWhereInput {
+  not: ExportWhereInput
+  and: [ExportWhereInput!]
+  or: [ExportWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  export_type field predicates
+  """
+  exportType: ExportExportType
+  exportTypeNEQ: ExportExportType
+  exportTypeIn: [ExportExportType!]
+  exportTypeNotIn: [ExportExportType!]
+  """
+  item_id field predicates
+  """
+  itemID: String
+  itemIDNEQ: String
+  itemIDIn: [String!]
+  itemIDNotIn: [String!]
+  itemIDGT: String
+  itemIDGTE: String
+  itemIDLT: String
+  itemIDLTE: String
+  itemIDContains: String
+  itemIDHasPrefix: String
+  itemIDHasSuffix: String
+  itemIDEqualFold: String
+  itemIDContainsFold: String
+  """
+  status field predicates
+  """
+  status: ExportExportStatus
+  statusNEQ: ExportExportStatus
+  statusIn: [ExportExportStatus!]
+  statusNotIn: [ExportExportStatus!]
+  """
+  requestor_id field predicates
+  """
+  requestorID: String
+  requestorIDNEQ: String
+  requestorIDIn: [String!]
+  requestorIDNotIn: [String!]
+  requestorIDGT: String
+  requestorIDGTE: String
+  requestorIDLT: String
+  requestorIDLTE: String
+  requestorIDContains: String
+  requestorIDHasPrefix: String
+  requestorIDHasSuffix: String
+  requestorIDIsNil: Boolean
+  requestorIDNotNil: Boolean
+  requestorIDEqualFold: String
+  requestorIDContainsFold: String
+  """
+  file_id field predicates
+  """
+  fileID: ID
+  fileIDNEQ: ID
+  fileIDIn: [ID!]
+  fileIDNotIn: [ID!]
+  fileIDGT: ID
+  fileIDGTE: ID
+  fileIDLT: ID
+  fileIDLTE: ID
+  fileIDContains: ID
+  fileIDHasPrefix: ID
+  fileIDHasSuffix: ID
+  fileIDIsNil: Boolean
+  fileIDNotNil: Boolean
+  fileIDEqualFold: ID
+  fileIDContainsFold: ID
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  events edge predicates
+  """
+  hasEvents: Boolean
+  hasEventsWith: [EventWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
+  """
+  file edge predicates
+  """
+  hasFile: Boolean
+  hasFileWith: [FileWhereInput!]
+}
 type File implements Node {
   id: ID!
   createdAt: Time
@@ -47742,6 +48900,7 @@ type File implements Node {
     where: EventWhereInput
   ): EventConnection!
   trustCenterSetting: [TrustCenterSetting!]
+  export: [Export!]
 }
 """
 A connection to a list of items.
@@ -48619,6 +49778,11 @@ input FileWhereInput {
   """
   hasTrustCenterSetting: Boolean
   hasTrustCenterSettingWith: [TrustCenterSettingWhereInput!]
+  """
+  export edge predicates
+  """
+  hasExport: Boolean
+  hasExportWith: [ExportWhereInput!]
 }
 type Group implements Node {
   id: ID!
@@ -60853,6 +62017,37 @@ type Organization implements Node {
     """
     where: ScanWhereInput
   ): ScanConnection!
+  exports(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Exports returned from the connection.
+    """
+    orderBy: [ExportOrder!]
+
+    """
+    Filtering options for Exports returned from the connection.
+    """
+    where: ExportWhereInput
+  ): ExportConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -62658,6 +63853,11 @@ input OrganizationWhereInput {
   """
   hasScans: Boolean
   hasScansWith: [ScanWhereInput!]
+  """
+  exports edge predicates
+  """
+  hasExports: Boolean
+  hasExportsWith: [ExportWhereInput!]
   """
   members edge predicates
   """
@@ -67081,6 +68281,68 @@ type Query {
     """
     where: EvidenceHistoryWhereInput
   ): EvidenceHistoryConnection!
+  exports(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Exports returned from the connection.
+    """
+    orderBy: [ExportOrder!]
+
+    """
+    Filtering options for Exports returned from the connection.
+    """
+    where: ExportWhereInput
+  ): ExportConnection!
+  exportHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ExportHistories returned from the connection.
+    """
+    orderBy: ExportHistoryOrder
+
+    """
+    Filtering options for ExportHistories returned from the connection.
+    """
+    where: ExportHistoryWhereInput
+  ): ExportHistoryConnection!
   files(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -78958,6 +80220,30 @@ input UpdateEvidenceInput {
   clearTasks: Boolean
 }
 """
+UpdateExportInput is used for update Export object.
+Input was generated by ent.
+"""
+input UpdateExportInput {
+  """
+  the type of export, e.g., control, policy, etc.
+  """
+  exportType: ExportExportType
+  """
+  the status of the export, e.g., pending, ready, failed
+  """
+  status: ExportExportStatus
+  ownerID: ID
+  clearOwner: Boolean
+  addEventIDs: [ID!]
+  removeEventIDs: [ID!]
+  clearEvents: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
+  fileID: ID
+  clearFile: Boolean
+}
+"""
 UpdateFileInput is used for update File object.
 Input was generated by ent.
 """
@@ -79066,6 +80352,9 @@ input UpdateFileInput {
   addTrustCenterSettingIDs: [ID!]
   removeTrustCenterSettingIDs: [ID!]
   clearTrustCenterSetting: Boolean
+  addExportIDs: [ID!]
+  removeExportIDs: [ID!]
+  clearExport: Boolean
 }
 """
 UpdateGroupInput is used for update Group object.
@@ -79870,6 +81159,9 @@ input UpdateOrganizationInput {
   addScanIDs: [ID!]
   removeScanIDs: [ID!]
   clearScans: Boolean
+  addExportIDs: [ID!]
+  removeExportIDs: [ID!]
+  clearExports: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -83613,6 +84905,87 @@ type EvidenceBulkCreatePayload {
     """
     evidences: [Evidence!]
 }`, BuiltIn: false},
+	{Name: "../schema/export.graphql", Input: `extend type Query {
+    """
+    Look up export by ID
+    """
+     export(
+        """
+        ID of the export
+        """
+        id: ID!
+    ):  Export!
+}
+
+extend type Mutation{
+    """
+    Create a new export
+    """
+    createExport(
+        """
+        values of the export
+        """
+        input: CreateExportInput!
+    ): ExportCreatePayload!
+    """
+    Update an existing export
+    """
+    updateExport(
+        """
+        ID of the export
+        """
+        id: ID!
+        """
+        New values for the export
+        """
+        input: UpdateExportInput!
+        """
+        Files to attach to the export
+        """
+        exportFiles: [Upload!]
+    ): ExportUpdatePayload!
+}
+
+"""
+Return response for createExport mutation
+"""
+type ExportCreatePayload {
+    """
+    Created export
+    """
+    export: Export!
+}
+
+"""
+Return response for updateExport mutation
+"""
+type ExportUpdatePayload {
+    """
+    Updated export
+    """
+    export: Export!
+}
+
+"""
+Return response for deleteExport mutation
+"""
+type ExportDeletePayload {
+    """
+    Deleted export ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkExport mutation
+"""
+type ExportBulkCreatePayload {
+    """
+    Created exports
+    """
+    exports: [Export!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/file.graphql", Input: `extend type Query {
     """
     Look up file by ID

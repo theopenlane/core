@@ -1328,12 +1328,21 @@ var (
 		{Name: "correlation_id", Type: field.TypeString, Nullable: true},
 		{Name: "event_type", Type: field.TypeString},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "export_events", Type: field.TypeString, Nullable: true},
 	}
 	// EventsTable holds the schema information for the "events" table.
 	EventsTable = &schema.Table{
 		Name:       "events",
 		Columns:    EventsColumns,
 		PrimaryKey: []*schema.Column{EventsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "events_exports_events",
+				Columns:    []*schema.Column{EventsColumns[10]},
+				RefColumns: []*schema.Column{ExportsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 		Indexes: []*schema.Index{
 			{
 				Name:    "event_id",
@@ -1433,6 +1442,89 @@ var (
 				Name:    "evidencehistory_history_time",
 				Unique:  false,
 				Columns: []*schema.Column{EvidenceHistoryColumns[1]},
+			},
+		},
+	}
+	// ExportsColumns holds the columns for the "exports" table.
+	ExportsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "export_type", Type: field.TypeEnum, Enums: []string{"CONTROL"}},
+		{Name: "item_id", Type: field.TypeString},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "READY", "FAILED"}, Default: "PENDING"},
+		{Name: "requestor_id", Type: field.TypeString, Nullable: true},
+		{Name: "file_id", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// ExportsTable holds the schema information for the "exports" table.
+	ExportsTable = &schema.Table{
+		Name:       "exports",
+		Columns:    ExportsColumns,
+		PrimaryKey: []*schema.Column{ExportsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "exports_files_file",
+				Columns:    []*schema.Column{ExportsColumns[11]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "exports_organizations_exports",
+				Columns:    []*schema.Column{ExportsColumns[12]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "export_id",
+				Unique:  true,
+				Columns: []*schema.Column{ExportsColumns[0]},
+			},
+			{
+				Name:    "export_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{ExportsColumns[12]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
+	// ExportHistoryColumns holds the columns for the "export_history" table.
+	ExportHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "export_type", Type: field.TypeEnum, Enums: []string{"CONTROL"}},
+		{Name: "item_id", Type: field.TypeString},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "READY", "FAILED"}, Default: "PENDING"},
+		{Name: "requestor_id", Type: field.TypeString, Nullable: true},
+		{Name: "file_id", Type: field.TypeString, Nullable: true},
+	}
+	// ExportHistoryTable holds the schema information for the "export_history" table.
+	ExportHistoryTable = &schema.Table{
+		Name:       "export_history",
+		Columns:    ExportHistoryColumns,
+		PrimaryKey: []*schema.Column{ExportHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "exporthistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{ExportHistoryColumns[1]},
 			},
 		},
 	}
@@ -5781,6 +5873,31 @@ var (
 			},
 		},
 	}
+	// ExportFilesColumns holds the columns for the "export_files" table.
+	ExportFilesColumns = []*schema.Column{
+		{Name: "export_id", Type: field.TypeString},
+		{Name: "file_id", Type: field.TypeString},
+	}
+	// ExportFilesTable holds the schema information for the "export_files" table.
+	ExportFilesTable = &schema.Table{
+		Name:       "export_files",
+		Columns:    ExportFilesColumns,
+		PrimaryKey: []*schema.Column{ExportFilesColumns[0], ExportFilesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "export_files_export_id",
+				Columns:    []*schema.Column{ExportFilesColumns[0]},
+				RefColumns: []*schema.Column{ExportsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "export_files_file_id",
+				Columns:    []*schema.Column{ExportFilesColumns[1]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// FileEventsColumns holds the columns for the "file_events" table.
 	FileEventsColumns = []*schema.Column{
 		{Name: "file_id", Type: field.TypeString},
@@ -7737,6 +7854,8 @@ var (
 		EventsTable,
 		EvidencesTable,
 		EvidenceHistoryTable,
+		ExportsTable,
+		ExportHistoryTable,
 		FilesTable,
 		FileHistoryTable,
 		GroupsTable,
@@ -7839,6 +7958,7 @@ var (
 		EvidenceControlsTable,
 		EvidenceSubcontrolsTable,
 		EvidenceFilesTable,
+		ExportFilesTable,
 		FileEventsTable,
 		GroupEventsTable,
 		GroupFilesTable,
@@ -7988,9 +8108,15 @@ func init() {
 	EntityTypeHistoryTable.Annotation = &entsql.Annotation{
 		Table: "entity_type_history",
 	}
+	EventsTable.ForeignKeys[0].RefTable = ExportsTable
 	EvidencesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	EvidenceHistoryTable.Annotation = &entsql.Annotation{
 		Table: "evidence_history",
+	}
+	ExportsTable.ForeignKeys[0].RefTable = FilesTable
+	ExportsTable.ForeignKeys[1].RefTable = OrganizationsTable
+	ExportHistoryTable.Annotation = &entsql.Annotation{
+		Table: "export_history",
 	}
 	FilesTable.ForeignKeys[0].RefTable = NotesTable
 	FileHistoryTable.Annotation = &entsql.Annotation{
@@ -8243,6 +8369,8 @@ func init() {
 	EvidenceSubcontrolsTable.ForeignKeys[1].RefTable = SubcontrolsTable
 	EvidenceFilesTable.ForeignKeys[0].RefTable = EvidencesTable
 	EvidenceFilesTable.ForeignKeys[1].RefTable = FilesTable
+	ExportFilesTable.ForeignKeys[0].RefTable = ExportsTable
+	ExportFilesTable.ForeignKeys[1].RefTable = FilesTable
 	FileEventsTable.ForeignKeys[0].RefTable = FilesTable
 	FileEventsTable.ForeignKeys[1].RefTable = EventsTable
 	GroupEventsTable.ForeignKeys[0].RefTable = GroupsTable

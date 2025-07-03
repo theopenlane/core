@@ -70,6 +70,10 @@ type Tx struct {
 	Evidence *EvidenceClient
 	// EvidenceHistory is the client for interacting with the EvidenceHistory builders.
 	EvidenceHistory *EvidenceHistoryClient
+	// Export is the client for interacting with the Export builders.
+	Export *ExportClient
+	// ExportHistory is the client for interacting with the ExportHistory builders.
+	ExportHistory *ExportHistoryClient
 	// File is the client for interacting with the File builders.
 	File *FileClient
 	// FileHistory is the client for interacting with the FileHistory builders.
@@ -376,6 +380,8 @@ func (tx *Tx) init() {
 	tx.Event = NewEventClient(tx.config)
 	tx.Evidence = NewEvidenceClient(tx.config)
 	tx.EvidenceHistory = NewEvidenceHistoryClient(tx.config)
+	tx.Export = NewExportClient(tx.config)
+	tx.ExportHistory = NewExportHistoryClient(tx.config)
 	tx.File = NewFileClient(tx.config)
 	tx.FileHistory = NewFileHistoryClient(tx.config)
 	tx.Group = NewGroupClient(tx.config)

@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -598,6 +599,21 @@ func (fu *FileUpdate) AddTrustCenterSetting(t ...*TrustCenterSetting) *FileUpdat
 	return fu.AddTrustCenterSettingIDs(ids...)
 }
 
+// AddExportIDs adds the "export" edge to the Export entity by IDs.
+func (fu *FileUpdate) AddExportIDs(ids ...string) *FileUpdate {
+	fu.mutation.AddExportIDs(ids...)
+	return fu
+}
+
+// AddExport adds the "export" edges to the Export entity.
+func (fu *FileUpdate) AddExport(e ...*Export) *FileUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fu.AddExportIDs(ids...)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (fu *FileUpdate) Mutation() *FileMutation {
 	return fu.mutation
@@ -874,6 +890,27 @@ func (fu *FileUpdate) RemoveTrustCenterSetting(t ...*TrustCenterSetting) *FileUp
 		ids[i] = t[i].ID
 	}
 	return fu.RemoveTrustCenterSettingIDs(ids...)
+}
+
+// ClearExport clears all "export" edges to the Export entity.
+func (fu *FileUpdate) ClearExport() *FileUpdate {
+	fu.mutation.ClearExport()
+	return fu
+}
+
+// RemoveExportIDs removes the "export" edge to Export entities by IDs.
+func (fu *FileUpdate) RemoveExportIDs(ids ...string) *FileUpdate {
+	fu.mutation.RemoveExportIDs(ids...)
+	return fu
+}
+
+// RemoveExport removes "export" edges to Export entities.
+func (fu *FileUpdate) RemoveExport(e ...*Export) *FileUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fu.RemoveExportIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1697,6 +1734,54 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if fu.mutation.ExportCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ExportTable,
+			Columns: file.ExportPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.ExportFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.RemovedExportIDs(); len(nodes) > 0 && !fu.mutation.ExportCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ExportTable,
+			Columns: file.ExportPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.ExportFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.ExportIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ExportTable,
+			Columns: file.ExportPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.ExportFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = fu.schemaConfig.File
 	ctx = internal.NewSchemaConfigContext(ctx, fu.schemaConfig)
 	_spec.AddModifiers(fu.modifiers...)
@@ -2274,6 +2359,21 @@ func (fuo *FileUpdateOne) AddTrustCenterSetting(t ...*TrustCenterSetting) *FileU
 	return fuo.AddTrustCenterSettingIDs(ids...)
 }
 
+// AddExportIDs adds the "export" edge to the Export entity by IDs.
+func (fuo *FileUpdateOne) AddExportIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.AddExportIDs(ids...)
+	return fuo
+}
+
+// AddExport adds the "export" edges to the Export entity.
+func (fuo *FileUpdateOne) AddExport(e ...*Export) *FileUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fuo.AddExportIDs(ids...)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (fuo *FileUpdateOne) Mutation() *FileMutation {
 	return fuo.mutation
@@ -2550,6 +2650,27 @@ func (fuo *FileUpdateOne) RemoveTrustCenterSetting(t ...*TrustCenterSetting) *Fi
 		ids[i] = t[i].ID
 	}
 	return fuo.RemoveTrustCenterSettingIDs(ids...)
+}
+
+// ClearExport clears all "export" edges to the Export entity.
+func (fuo *FileUpdateOne) ClearExport() *FileUpdateOne {
+	fuo.mutation.ClearExport()
+	return fuo
+}
+
+// RemoveExportIDs removes the "export" edge to Export entities by IDs.
+func (fuo *FileUpdateOne) RemoveExportIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.RemoveExportIDs(ids...)
+	return fuo
+}
+
+// RemoveExport removes "export" edges to Export entities.
+func (fuo *FileUpdateOne) RemoveExport(e ...*Export) *FileUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fuo.RemoveExportIDs(ids...)
 }
 
 // Where appends a list predicates to the FileUpdate builder.
@@ -3398,6 +3519,54 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 			},
 		}
 		edge.Schema = fuo.schemaConfig.TrustCenterSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fuo.mutation.ExportCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ExportTable,
+			Columns: file.ExportPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.ExportFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.RemovedExportIDs(); len(nodes) > 0 && !fuo.mutation.ExportCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ExportTable,
+			Columns: file.ExportPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.ExportFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.ExportIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ExportTable,
+			Columns: file.ExportPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.ExportFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

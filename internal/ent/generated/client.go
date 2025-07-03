@@ -48,6 +48,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
+	"github.com/theopenlane/core/internal/ent/generated/export"
+	"github.com/theopenlane/core/internal/ent/generated/exporthistory"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -201,6 +203,10 @@ type Client struct {
 	Evidence *EvidenceClient
 	// EvidenceHistory is the client for interacting with the EvidenceHistory builders.
 	EvidenceHistory *EvidenceHistoryClient
+	// Export is the client for interacting with the Export builders.
+	Export *ExportClient
+	// ExportHistory is the client for interacting with the ExportHistory builders.
+	ExportHistory *ExportHistoryClient
 	// File is the client for interacting with the File builders.
 	File *FileClient
 	// FileHistory is the client for interacting with the FileHistory builders.
@@ -396,6 +402,8 @@ func (c *Client) init() {
 	c.Event = NewEventClient(c.config)
 	c.Evidence = NewEvidenceClient(c.config)
 	c.EvidenceHistory = NewEvidenceHistoryClient(c.config)
+	c.Export = NewExportClient(c.config)
+	c.ExportHistory = NewExportHistoryClient(c.config)
 	c.File = NewFileClient(c.config)
 	c.FileHistory = NewFileHistoryClient(c.config)
 	c.Group = NewGroupClient(c.config)
@@ -675,6 +683,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Event:                        NewEventClient(cfg),
 		Evidence:                     NewEvidenceClient(cfg),
 		EvidenceHistory:              NewEvidenceHistoryClient(cfg),
+		Export:                       NewExportClient(cfg),
+		ExportHistory:                NewExportHistoryClient(cfg),
 		File:                         NewFileClient(cfg),
 		FileHistory:                  NewFileHistoryClient(cfg),
 		Group:                        NewGroupClient(cfg),
@@ -796,6 +806,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Event:                        NewEventClient(cfg),
 		Evidence:                     NewEvidenceClient(cfg),
 		EvidenceHistory:              NewEvidenceHistoryClient(cfg),
+		Export:                       NewExportClient(cfg),
+		ExportHistory:                NewExportHistoryClient(cfg),
 		File:                         NewFileClient(cfg),
 		FileHistory:                  NewFileHistoryClient(cfg),
 		Group:                        NewGroupClient(cfg),
@@ -905,16 +917,16 @@ func (c *Client) Use(hooks ...Hook) {
 		c.CustomDomain, c.CustomDomainHistory, c.DNSVerification,
 		c.DNSVerificationHistory, c.DocumentData, c.DocumentDataHistory,
 		c.EmailVerificationToken, c.Entity, c.EntityHistory, c.EntityType,
-		c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory, c.File,
-		c.FileHistory, c.Group, c.GroupHistory, c.GroupMembership,
-		c.GroupMembershipHistory, c.GroupSetting, c.GroupSettingHistory, c.Hush,
-		c.HushHistory, c.Integration, c.IntegrationHistory, c.InternalPolicy,
-		c.InternalPolicyHistory, c.Invite, c.JobResult, c.JobRunner,
-		c.JobRunnerRegistrationToken, c.JobRunnerToken, c.MappableDomain,
-		c.MappableDomainHistory, c.MappedControl, c.MappedControlHistory, c.Narrative,
-		c.NarrativeHistory, c.Note, c.NoteHistory, c.Onboarding, c.OrgMembership,
-		c.OrgMembershipHistory, c.OrgModule, c.OrgPrice, c.OrgProduct,
-		c.OrgSubscription, c.OrgSubscriptionHistory, c.Organization,
+		c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory, c.Export,
+		c.ExportHistory, c.File, c.FileHistory, c.Group, c.GroupHistory,
+		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
+		c.GroupSettingHistory, c.Hush, c.HushHistory, c.Integration,
+		c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory, c.Invite,
+		c.JobResult, c.JobRunner, c.JobRunnerRegistrationToken, c.JobRunnerToken,
+		c.MappableDomain, c.MappableDomainHistory, c.MappedControl,
+		c.MappedControlHistory, c.Narrative, c.NarrativeHistory, c.Note, c.NoteHistory,
+		c.Onboarding, c.OrgMembership, c.OrgMembershipHistory, c.OrgModule, c.OrgPrice,
+		c.OrgProduct, c.OrgSubscription, c.OrgSubscriptionHistory, c.Organization,
 		c.OrganizationHistory, c.OrganizationSetting, c.OrganizationSettingHistory,
 		c.PasswordResetToken, c.PersonalAccessToken, c.Procedure, c.ProcedureHistory,
 		c.Program, c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory,
@@ -940,16 +952,16 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.CustomDomain, c.CustomDomainHistory, c.DNSVerification,
 		c.DNSVerificationHistory, c.DocumentData, c.DocumentDataHistory,
 		c.EmailVerificationToken, c.Entity, c.EntityHistory, c.EntityType,
-		c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory, c.File,
-		c.FileHistory, c.Group, c.GroupHistory, c.GroupMembership,
-		c.GroupMembershipHistory, c.GroupSetting, c.GroupSettingHistory, c.Hush,
-		c.HushHistory, c.Integration, c.IntegrationHistory, c.InternalPolicy,
-		c.InternalPolicyHistory, c.Invite, c.JobResult, c.JobRunner,
-		c.JobRunnerRegistrationToken, c.JobRunnerToken, c.MappableDomain,
-		c.MappableDomainHistory, c.MappedControl, c.MappedControlHistory, c.Narrative,
-		c.NarrativeHistory, c.Note, c.NoteHistory, c.Onboarding, c.OrgMembership,
-		c.OrgMembershipHistory, c.OrgModule, c.OrgPrice, c.OrgProduct,
-		c.OrgSubscription, c.OrgSubscriptionHistory, c.Organization,
+		c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory, c.Export,
+		c.ExportHistory, c.File, c.FileHistory, c.Group, c.GroupHistory,
+		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
+		c.GroupSettingHistory, c.Hush, c.HushHistory, c.Integration,
+		c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory, c.Invite,
+		c.JobResult, c.JobRunner, c.JobRunnerRegistrationToken, c.JobRunnerToken,
+		c.MappableDomain, c.MappableDomainHistory, c.MappedControl,
+		c.MappedControlHistory, c.Narrative, c.NarrativeHistory, c.Note, c.NoteHistory,
+		c.Onboarding, c.OrgMembership, c.OrgMembershipHistory, c.OrgModule, c.OrgPrice,
+		c.OrgProduct, c.OrgSubscription, c.OrgSubscriptionHistory, c.Organization,
 		c.OrganizationHistory, c.OrganizationSetting, c.OrganizationSettingHistory,
 		c.PasswordResetToken, c.PersonalAccessToken, c.Procedure, c.ProcedureHistory,
 		c.Program, c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory,
@@ -1097,6 +1109,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Evidence.mutate(ctx, m)
 	case *EvidenceHistoryMutation:
 		return c.EvidenceHistory.mutate(ctx, m)
+	case *ExportMutation:
+		return c.Export.mutate(ctx, m)
+	case *ExportHistoryMutation:
+		return c.ExportHistory.mutate(ctx, m)
 	case *FileMutation:
 		return c.File.mutate(ctx, m)
 	case *FileHistoryMutation:
@@ -7163,6 +7179,351 @@ func (c *EvidenceHistoryClient) mutate(ctx context.Context, m *EvidenceHistoryMu
 	}
 }
 
+// ExportClient is a client for the Export schema.
+type ExportClient struct {
+	config
+}
+
+// NewExportClient returns a client for the Export from the given config.
+func NewExportClient(c config) *ExportClient {
+	return &ExportClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `export.Hooks(f(g(h())))`.
+func (c *ExportClient) Use(hooks ...Hook) {
+	c.hooks.Export = append(c.hooks.Export, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `export.Intercept(f(g(h())))`.
+func (c *ExportClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Export = append(c.inters.Export, interceptors...)
+}
+
+// Create returns a builder for creating a Export entity.
+func (c *ExportClient) Create() *ExportCreate {
+	mutation := newExportMutation(c.config, OpCreate)
+	return &ExportCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Export entities.
+func (c *ExportClient) CreateBulk(builders ...*ExportCreate) *ExportCreateBulk {
+	return &ExportCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ExportClient) MapCreateBulk(slice any, setFunc func(*ExportCreate, int)) *ExportCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ExportCreateBulk{err: fmt.Errorf("calling to ExportClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ExportCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ExportCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Export.
+func (c *ExportClient) Update() *ExportUpdate {
+	mutation := newExportMutation(c.config, OpUpdate)
+	return &ExportUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ExportClient) UpdateOne(e *Export) *ExportUpdateOne {
+	mutation := newExportMutation(c.config, OpUpdateOne, withExport(e))
+	return &ExportUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ExportClient) UpdateOneID(id string) *ExportUpdateOne {
+	mutation := newExportMutation(c.config, OpUpdateOne, withExportID(id))
+	return &ExportUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Export.
+func (c *ExportClient) Delete() *ExportDelete {
+	mutation := newExportMutation(c.config, OpDelete)
+	return &ExportDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ExportClient) DeleteOne(e *Export) *ExportDeleteOne {
+	return c.DeleteOneID(e.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ExportClient) DeleteOneID(id string) *ExportDeleteOne {
+	builder := c.Delete().Where(export.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ExportDeleteOne{builder}
+}
+
+// Query returns a query builder for Export.
+func (c *ExportClient) Query() *ExportQuery {
+	return &ExportQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeExport},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Export entity by its id.
+func (c *ExportClient) Get(ctx context.Context, id string) (*Export, error) {
+	return c.Query().Where(export.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ExportClient) GetX(ctx context.Context, id string) *Export {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a Export.
+func (c *ExportClient) QueryOwner(e *Export) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(export.Table, export.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, export.OwnerTable, export.OwnerColumn),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Export
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvents queries the events edge of a Export.
+func (c *ExportClient) QueryEvents(e *Export) *EventQuery {
+	query := (&EventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(export.Table, export.FieldID, id),
+			sqlgraph.To(event.Table, event.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, export.EventsTable, export.EventsColumn),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.Event
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFiles queries the files edge of a Export.
+func (c *ExportClient) QueryFiles(e *Export) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(export.Table, export.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, export.FilesTable, export.FilesPrimaryKey...),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.ExportFiles
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFile queries the file edge of a Export.
+func (c *ExportClient) QueryFile(e *Export) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(export.Table, export.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, export.FileTable, export.FileColumn),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.Export
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ExportClient) Hooks() []Hook {
+	hooks := c.hooks.Export
+	return append(hooks[:len(hooks):len(hooks)], export.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *ExportClient) Interceptors() []Interceptor {
+	inters := c.inters.Export
+	return append(inters[:len(inters):len(inters)], export.Interceptors[:]...)
+}
+
+func (c *ExportClient) mutate(ctx context.Context, m *ExportMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ExportCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ExportUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ExportUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ExportDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown Export mutation op: %q", m.Op())
+	}
+}
+
+// ExportHistoryClient is a client for the ExportHistory schema.
+type ExportHistoryClient struct {
+	config
+}
+
+// NewExportHistoryClient returns a client for the ExportHistory from the given config.
+func NewExportHistoryClient(c config) *ExportHistoryClient {
+	return &ExportHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `exporthistory.Hooks(f(g(h())))`.
+func (c *ExportHistoryClient) Use(hooks ...Hook) {
+	c.hooks.ExportHistory = append(c.hooks.ExportHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `exporthistory.Intercept(f(g(h())))`.
+func (c *ExportHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ExportHistory = append(c.inters.ExportHistory, interceptors...)
+}
+
+// Create returns a builder for creating a ExportHistory entity.
+func (c *ExportHistoryClient) Create() *ExportHistoryCreate {
+	mutation := newExportHistoryMutation(c.config, OpCreate)
+	return &ExportHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ExportHistory entities.
+func (c *ExportHistoryClient) CreateBulk(builders ...*ExportHistoryCreate) *ExportHistoryCreateBulk {
+	return &ExportHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ExportHistoryClient) MapCreateBulk(slice any, setFunc func(*ExportHistoryCreate, int)) *ExportHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ExportHistoryCreateBulk{err: fmt.Errorf("calling to ExportHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ExportHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ExportHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ExportHistory.
+func (c *ExportHistoryClient) Update() *ExportHistoryUpdate {
+	mutation := newExportHistoryMutation(c.config, OpUpdate)
+	return &ExportHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ExportHistoryClient) UpdateOne(eh *ExportHistory) *ExportHistoryUpdateOne {
+	mutation := newExportHistoryMutation(c.config, OpUpdateOne, withExportHistory(eh))
+	return &ExportHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ExportHistoryClient) UpdateOneID(id string) *ExportHistoryUpdateOne {
+	mutation := newExportHistoryMutation(c.config, OpUpdateOne, withExportHistoryID(id))
+	return &ExportHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ExportHistory.
+func (c *ExportHistoryClient) Delete() *ExportHistoryDelete {
+	mutation := newExportHistoryMutation(c.config, OpDelete)
+	return &ExportHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ExportHistoryClient) DeleteOne(eh *ExportHistory) *ExportHistoryDeleteOne {
+	return c.DeleteOneID(eh.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ExportHistoryClient) DeleteOneID(id string) *ExportHistoryDeleteOne {
+	builder := c.Delete().Where(exporthistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ExportHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for ExportHistory.
+func (c *ExportHistoryClient) Query() *ExportHistoryQuery {
+	return &ExportHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeExportHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ExportHistory entity by its id.
+func (c *ExportHistoryClient) Get(ctx context.Context, id string) (*ExportHistory, error) {
+	return c.Query().Where(exporthistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ExportHistoryClient) GetX(ctx context.Context, id string) *ExportHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ExportHistoryClient) Hooks() []Hook {
+	return c.hooks.ExportHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *ExportHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.ExportHistory
+	return append(inters[:len(inters):len(inters)], exporthistory.Interceptors[:]...)
+}
+
+func (c *ExportHistoryClient) mutate(ctx context.Context, m *ExportHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ExportHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ExportHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ExportHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ExportHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown ExportHistory mutation op: %q", m.Op())
+	}
+}
+
 // FileClient is a client for the File schema.
 type FileClient struct {
 	config
@@ -7512,6 +7873,25 @@ func (c *FileClient) QueryTrustCenterSetting(f *File) *TrustCenterSettingQuery {
 		schemaConfig := f.schemaConfig
 		step.To.Schema = schemaConfig.TrustCenterSetting
 		step.Edge.Schema = schemaConfig.TrustCenterSettingFiles
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryExport queries the export edge of a File.
+func (c *FileClient) QueryExport(f *File) *ExportQuery {
+	query := (&ExportClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(export.Table, export.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.ExportTable, file.ExportPrimaryKey...),
+		)
+		schemaConfig := f.schemaConfig
+		step.To.Schema = schemaConfig.Export
+		step.Edge.Schema = schemaConfig.ExportFiles
 		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -15515,6 +15895,25 @@ func (c *OrganizationClient) QueryScans(o *Organization) *ScanQuery {
 	return query
 }
 
+// QueryExports queries the exports edge of a Organization.
+func (c *OrganizationClient) QueryExports(o *Organization) *ExportQuery {
+	query := (&ExportClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(export.Table, export.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ExportsTable, organization.ExportsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Export
+		step.Edge.Schema = schemaConfig.Export
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(o *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -23038,13 +23437,13 @@ type (
 		ControlScheduledJob, ControlScheduledJobHistory, CustomDomain,
 		CustomDomainHistory, DNSVerification, DNSVerificationHistory, DocumentData,
 		DocumentDataHistory, EmailVerificationToken, Entity, EntityHistory, EntityType,
-		EntityTypeHistory, Event, Evidence, EvidenceHistory, File, FileHistory, Group,
-		GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
-		GroupSettingHistory, Hush, HushHistory, Integration, IntegrationHistory,
-		InternalPolicy, InternalPolicyHistory, Invite, JobResult, JobRunner,
-		JobRunnerRegistrationToken, JobRunnerToken, MappableDomain,
-		MappableDomainHistory, MappedControl, MappedControlHistory, Narrative,
-		NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
+		EntityTypeHistory, Event, Evidence, EvidenceHistory, Export, ExportHistory,
+		File, FileHistory, Group, GroupHistory, GroupMembership,
+		GroupMembershipHistory, GroupSetting, GroupSettingHistory, Hush, HushHistory,
+		Integration, IntegrationHistory, InternalPolicy, InternalPolicyHistory, Invite,
+		JobResult, JobRunner, JobRunnerRegistrationToken, JobRunnerToken,
+		MappableDomain, MappableDomainHistory, MappedControl, MappedControlHistory,
+		Narrative, NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
 		OrgMembershipHistory, OrgModule, OrgPrice, OrgProduct, OrgSubscription,
 		OrgSubscriptionHistory, Organization, OrganizationHistory, OrganizationSetting,
 		OrganizationSettingHistory, PasswordResetToken, PersonalAccessToken, Procedure,
@@ -23063,13 +23462,13 @@ type (
 		ControlScheduledJob, ControlScheduledJobHistory, CustomDomain,
 		CustomDomainHistory, DNSVerification, DNSVerificationHistory, DocumentData,
 		DocumentDataHistory, EmailVerificationToken, Entity, EntityHistory, EntityType,
-		EntityTypeHistory, Event, Evidence, EvidenceHistory, File, FileHistory, Group,
-		GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
-		GroupSettingHistory, Hush, HushHistory, Integration, IntegrationHistory,
-		InternalPolicy, InternalPolicyHistory, Invite, JobResult, JobRunner,
-		JobRunnerRegistrationToken, JobRunnerToken, MappableDomain,
-		MappableDomainHistory, MappedControl, MappedControlHistory, Narrative,
-		NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
+		EntityTypeHistory, Event, Evidence, EvidenceHistory, Export, ExportHistory,
+		File, FileHistory, Group, GroupHistory, GroupMembership,
+		GroupMembershipHistory, GroupSetting, GroupSettingHistory, Hush, HushHistory,
+		Integration, IntegrationHistory, InternalPolicy, InternalPolicyHistory, Invite,
+		JobResult, JobRunner, JobRunnerRegistrationToken, JobRunnerToken,
+		MappableDomain, MappableDomainHistory, MappedControl, MappedControlHistory,
+		Narrative, NarrativeHistory, Note, NoteHistory, Onboarding, OrgMembership,
 		OrgMembershipHistory, OrgModule, OrgPrice, OrgProduct, OrgSubscription,
 		OrgSubscriptionHistory, Organization, OrganizationHistory, OrganizationSetting,
 		OrganizationSettingHistory, PasswordResetToken, PersonalAccessToken, Procedure,
