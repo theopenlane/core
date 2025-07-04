@@ -57,7 +57,7 @@ func HookSubcontrolCreate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.SubcontrolFunc(func(ctx context.Context, m *generated.SubcontrolMutation) (generated.Value, error) {
 			// check if the subcontrol has an owner assigned
-			if _, ok := m.ControlOwnerID(); !ok {
+			if _, ok := m.OwnerID(); !ok {
 				// subcontrols should always have a control ID but we will let the regular validation
 				// handle this
 				controlID, ok := m.ControlID()
@@ -67,23 +67,15 @@ func HookSubcontrolCreate() ent.Hook {
 
 				// set reference framework and control Owner if it is not set
 				referenceFramework, rOk := m.ReferenceFramework()
-				controlOwnerID, cOK := m.ControlOwnerID()
 
-				if !rOk || !cOK || referenceFramework == "" || controlOwnerID == "" {
+				if !rOk || referenceFramework == "" {
 					// if the reference framework is set, we will use it
 					c, err := m.Client().Control.Query().
 						Where(control.ID(controlID)).
-						Select(control.FieldControlOwnerID, control.FieldReferenceFramework).
+						Select(control.FieldReferenceFramework).
 						Only(ctx)
 					if err != nil {
 						return nil, err
-					}
-
-					if m.Op().Is(ent.OpCreate) {
-						// if the control has an owner, assign it to the subcontrol
-						if c.ControlOwnerID != "" {
-							m.SetControlOwnerID(c.ControlOwnerID)
-						}
 					}
 
 					if c.ReferenceFramework != nil {

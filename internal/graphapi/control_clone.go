@@ -361,7 +361,7 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, subcontrolsToCr
 			if !exists {
 				// add the subcontrol to the list of subcontrols to clone
 				toCloneSubcontrol.ControlID = c.NewControlID
-				toCloneSubcontrol.ControlOwnerID = c.RefControl.ControlOwnerID
+
 				if c.RefControl.Edges.Standard != nil {
 					toCloneSubcontrol.ReferenceFramework = &c.RefControl.Edges.Standard.ShortName
 				}
@@ -392,7 +392,6 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, subcontrolsToCr
 			References:             subcontrol.References,
 			Status:                 &enums.ControlStatusNotImplemented,
 			OwnerID:                &subcontrol.OwnerID,
-			ControlOwnerID:         &subcontrol.ControlOwnerID,
 			ReferenceFramework:     subcontrol.ReferenceFramework,
 		}
 	}
