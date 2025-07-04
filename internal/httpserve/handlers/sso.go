@@ -234,19 +234,52 @@ func (h *Handler) OldoidcConfig(ctx context.Context, orgID string) (rp.RelyingPa
 	return rpCfg, nil
 }
 
+type rpConfig struct {
+	discovery string
+	options   []rp.Option
+}
+
+type rpConfigOption func(*rpConfig)
+
+func withDiscovery(url string) rpConfigOption {
+	return func(cfg *rpConfig) { cfg.discovery = url }
+}
+
+func withRPOptions(opts ...rp.Option) rpConfigOption {
+	return func(cfg *rpConfig) { cfg.options = append(cfg.options, opts...) }
+}
+
+func newRelyingParty(issuer, clientID, clientSecret, cb string, opts ...rpConfigOption) (rp.RelyingParty, error) {
+	cfg := rpConfig{}
+	for _, o := range opts {
+		o(&cfg)
+	}
+
+	rpOpts := cfg.options
+	if cfg.discovery != "" {
+		rpOpts = append(rpOpts, rp.WithCustomDiscoveryUrl(cfg.discovery))
+	}
+
+	return rp.NewRelyingPartyOIDC(
+		issuer,
+		clientID,
+		clientSecret,
+		cb,
+		[]string{oidc.ScopeOpenID, oidc.ScopeProfile, oidc.ScopeEmail},
+		rpOpts...,
+	)
+}
+
 func (h *Handler) oidcConfig(ctx context.Context, orgID string) (rp.RelyingParty, error) {
-	// Fetch the organization's OIDC settings from the database
 	setting, err := h.getOrganizationSettingByOrgID(ctx, orgID)
 	if err != nil {
 		return nil, err
 	}
 
-	// Ensure all required OIDC config fields are present
 	if setting.OidcDiscoveryEndpoint == "" || setting.IdentityProviderClientID == nil || setting.IdentityProviderClientSecret == nil {
 		return nil, ErrMissingOIDCConfig
 	}
 
-	// Remove the well-known suffix to get the issuer URL
 	issuer := strings.TrimSuffix(setting.OidcDiscoveryEndpoint, "/.well-known/openid-configuration")
 
 	verifierOpt := rp.WithVerifierOpts(rp.WithNonce(func(ctx context.Context) string {
@@ -257,75 +290,18 @@ func (h *Handler) oidcConfig(ctx context.Context, orgID string) (rp.RelyingParty
 		return ""
 	}))
 
-	type oauthCfgOption func(*oauth2.Config)
-
-	newOauthCfg := func(opts ...oauthCfgOption) *oauth2.Config {
-		cfg := &oauth2.Config{}
-		for _, o := range opts {
-			o(cfg)
-		}
-
-		return cfg
-	}
-
-	withClient := func(id, secret string) oauthCfgOption {
-		return func(c *oauth2.Config) {
-			c.ClientID = id
-			c.ClientSecret = secret
-		}
-	}
-
-	withRedirect := func(url string) oauthCfgOption {
-		return func(c *oauth2.Config) {
-			c.RedirectURL = url
-		}
-	}
-
-	withScopes := func(scopes ...string) oauthCfgOption {
-		return func(c *oauth2.Config) {
-			c.Scopes = scopes
-		}
-	}
-
-	withEndpoint := func(authURL, tokenURL string) oauthCfgOption {
-		return func(c *oauth2.Config) {
-			c.Endpoint = oauth2.Endpoint{AuthURL: authURL, TokenURL: tokenURL}
-		}
-	}
-
-	// In test mode we construct the RP using static OAuth endpoints to avoid
-	// network calls during discovery
+	opts := []rpConfigOption{withRPOptions(verifierOpt)}
 	if h.IsTest {
-		cfg := newOauthCfg(
-			withClient(*setting.IdentityProviderClientID, *setting.IdentityProviderClientSecret),
-			withRedirect(h.ssoCallbackURL()),
-			withScopes(oidc.ScopeOpenID, oidc.ScopeProfile, oidc.ScopeEmail),
-			withEndpoint(issuer+"/auth", issuer+"/token"),
-		)
-
-		rpCfg, err := rp.NewRelyingPartyOAuth(cfg, verifierOpt)
-		if err != nil {
-			return nil, err
-		}
-
-		return rpCfg, nil
+		opts = append(opts, withDiscovery(setting.OidcDiscoveryEndpoint))
 	}
 
-	// Construct the OIDC relying party configuration using discovery
-	rpCfg, err := rp.NewRelyingPartyOIDC(
+	return newRelyingParty(
 		issuer,
 		*setting.IdentityProviderClientID,
 		*setting.IdentityProviderClientSecret,
 		h.ssoCallbackURL(),
-		[]string{oidc.ScopeOpenID, oidc.ScopeProfile, oidc.ScopeEmail},
-		verifierOpt,
+		opts...,
 	)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return rpCfg, nil
 }
 
 // ssoCallbackURL builds the callback URL for OIDC flows, ensuring a single path segment is appended

@@ -3,7 +3,6 @@ package handlers
 import (
 	"net/http"
 
-	"ariga.io/entcache"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
@@ -35,7 +34,7 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 		return h.InvalidInput(ctx, err)
 	}
 
-	reqCtx := entcache.NewContext(ctx.Request().Context())
+	reqCtx := ctx.Request().Context()
 
 	// check user in the database, username == email and ensure only one record is returned
 	user, err := h.getUserByEmail(reqCtx, in.Username)
