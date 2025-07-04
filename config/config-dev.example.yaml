@@ -4,7 +4,6 @@ server:
   pretty: true
   dev: true
   graphPool:
-    maxCapacity: 100
     maxWorkers: 10
   csrfProtection:
     enabled: false
