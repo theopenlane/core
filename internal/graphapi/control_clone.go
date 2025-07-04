@@ -151,7 +151,8 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 
 		// delete any controls that were created before the error occurred
 		if len(createdControlIDs) > 0 {
-			log.Warn().Msgf("deleting %d controls that were created before the error occurred", len(createdControlIDs))
+			log.Warn().Msgf("error cloning controls, deleting %d controls that were created before the error occurred", len(createdControlIDs))
+
 			// delete any controls that were created before the error occurred
 			// this should also cascade delete any subcontrols that were created
 			if _, err := withTransactionalMutation(ctx).Control.Delete().
@@ -262,8 +263,7 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, c *generated.Co
 		refCodes = append(refCodes, s.RefCode)
 	}
 
-	// Check if we can find the subcontrol based on refCode and controlID
-	// ignore errors here, if we get an error we assume it doesn't exist
+	// check if we can find the subcontrol based on refCode and controlID
 	existingSubcontrols, err := r.db.Subcontrol.Query().
 		Where(
 			subcontrol.RefCodeIn(refCodes...),

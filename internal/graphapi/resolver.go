@@ -261,7 +261,7 @@ func (r *Resolver) WithPool(maxWorkers int, includeMetrics bool, options ...pond
 	// create the pool
 	r.pool = soiree.NewPondPool(
 		soiree.WithMaxWorkers(maxWorkers),
-		soiree.WithName("GraphAPIWorkerPool"),
+		soiree.WithName("graphapi-worker-pool"),
 		soiree.WithOptions(options...))
 
 	if includeMetrics {
