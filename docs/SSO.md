@@ -232,3 +232,31 @@ The endpoint returns an `SSOStatusReply` structure:
 ## Why WebFinger?
 
 Using WebFinger provides a lightweight way for the UI to discover if SSO is enforced before the user authenticates. When the email entered on the login form maps to an organization that enforces SSO, the browser can immediately redirect to the configured identity provider without any additional API calls or user interaction.
+
+
+## OIDC handler flows
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant App as Openlane
+    participant IdP as Identity Provider
+
+    User->>App: Initiate SSO login
+    App->>App: Prepare cookies, OIDC config, state/nonce
+    App->>User: Redirect to IdP
+
+    User->>IdP: OIDC Auth Request
+    IdP-->>User: Redirect to /sso/callback
+    User->>App: Callback with code/state
+
+    App->>App: Validate cookies, exchange code, provision user, session
+    alt Token cookies present
+        App->>App: Authorize token, clean up
+    end
+    alt Return URL present
+        App->>User: Redirect to return URL
+    else
+        App->>User: Return success response
+    end
+```

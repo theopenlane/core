@@ -21,12 +21,13 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 )
 
-// SSOTokenAuthorizeHandler marks a token as authorized for SSO for an organization.
+// SSOTokenAuthorizeHandler marks a token as authorized for SSO for an organization
 func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context) error {
 	var in models.SSOTokenAuthorizeRequest
 	if err := ctx.Bind(&in); err != nil {
 		return h.InvalidInput(ctx, err)
 	}
+
 	if err := in.Validate(); err != nil {
 		return h.InvalidInput(ctx, err)
 	}
@@ -37,11 +38,13 @@ func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context) error {
 	case "api":
 		if _, err := h.DBClient.APIToken.Get(reqCtx, in.TokenID); err != nil {
 			log.Error().Err(err).Msg("unable to find api token for SSO")
+
 			return h.BadRequest(ctx, err)
 		}
 	case "personal":
 		if _, err := h.DBClient.PersonalAccessToken.Get(reqCtx, in.TokenID); err != nil {
 			log.Error().Err(err).Msg("unable to find personal access token")
+
 			return h.BadRequest(ctx, err)
 		}
 	default:
@@ -55,66 +58,63 @@ func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context) error {
 
 	state := ulids.New().String()
 	nonce := ulids.New().String()
+	writer := ctx.Response().Writer
+	cc := sessions.CookieConfig{
+		Path:     "/",
+		HTTPOnly: true,
+		SameSite: http.SameSiteLaxMode,
+		Secure:   true,
+	}
 
-	sessions.SetCookie(ctx.Response().Writer, in.TokenID, "token_id", sessions.CookieConfig{Path: "/", HTTPOnly: true, SameSite: http.SameSiteLaxMode})
-	sessions.SetCookie(ctx.Response().Writer, in.TokenType, "token_type", sessions.CookieConfig{Path: "/", HTTPOnly: true, SameSite: http.SameSiteLaxMode})
-	sessions.SetCookie(ctx.Response().Writer, in.OrganizationID, "organization_id", sessions.CookieConfig{Path: "/", HTTPOnly: true, SameSite: http.SameSiteLaxMode})
-	sessions.SetCookie(ctx.Response().Writer, state, "state", sessions.CookieConfig{Path: "/", HTTPOnly: true, SameSite: http.SameSiteLaxMode})
-	sessions.SetCookie(ctx.Response().Writer, nonce, "nonce", sessions.CookieConfig{Path: "/", HTTPOnly: true, SameSite: http.SameSiteLaxMode})
+	sessions.SetCookie(writer, in.TokenID, "token_id", cc)
+	sessions.SetCookie(writer, in.TokenType, "token_type", cc)
+	sessions.SetCookie(writer, in.OrganizationID, "organization_id", cc)
+	sessions.SetCookie(writer, state, "state", cc)
+	sessions.SetCookie(writer, nonce, "nonce", cc)
 
 	authURL := rpCfg.OAuthConfig().AuthCodeURL(state, oauth2.SetAuthURLParam("nonce", nonce))
 
 	return ctx.Redirect(http.StatusFound, authURL)
 }
 
-// BindSSOTokenAuthorizeHandler binds the SSO token authorization endpoint to the OpenAPI schema.
-func (h *Handler) BindSSOTokenAuthorizeHandler() *openapi3.Operation {
-	op := openapi3.NewOperation()
-	op.Description = "Authorize a token for SSO with an organization"
-	op.OperationID = "SSOTokenAuthorize"
-	op.Tags = []string{"authentication"}
-	op.Security = &openapi3.SecurityRequirements{}
-
-	h.AddQueryParameter("organization_id", op)
-	h.AddQueryParameter("token_id", op)
-	h.AddQueryParameter("token_type", op)
-	op.AddResponse(http.StatusFound, openapi3.NewResponse().WithDescription("Redirect"))
-	op.AddResponse(http.StatusBadRequest, badRequest())
-	op.AddResponse(http.StatusInternalServerError, internalServerError())
-
-	return op
-}
-
-var errInvalidTokenType = errors.New("invalid token type")
-
 // SSOTokenCallbackHandler completes the SSO authorization flow for a token.
 // It validates the state and nonce, exchanges the code if required and updates
 // the token's SSO authorizations for the organization.
 func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context) error {
+	var in models.SSOTokenCallbackRequest
+	if err := ctx.Bind(&in); err != nil {
+		return h.InvalidInput(ctx, err)
+	}
+
+	if err := in.Validate(); err != nil {
+		return h.BadRequest(ctx, err)
+	}
+
+	req := ctx.Request()
 	reqCtx := ctx.Request().Context()
 
 	// read cookies set during the authorize step
-	tokenIDCookie, err := sessions.GetCookie(ctx.Request(), "token_id")
+	tokenIDCookie, err := sessions.GetCookie(req, "token_id")
 	if err != nil {
 		return h.BadRequest(ctx, ErrMissingField)
 	}
 
-	tokenTypeCookie, err := sessions.GetCookie(ctx.Request(), "token_type")
+	tokenTypeCookie, err := sessions.GetCookie(req, "token_type")
 	if err != nil {
 		return h.BadRequest(ctx, ErrMissingField)
 	}
 
-	orgCookie, err := sessions.GetCookie(ctx.Request(), "organization_id")
+	orgCookie, err := sessions.GetCookie(req, "organization_id")
 	if err != nil {
 		return h.BadRequest(ctx, ErrMissingField)
 	}
 
-	stateCookie, err := sessions.GetCookie(ctx.Request(), "state")
-	if err != nil || ctx.QueryParam("state") != stateCookie.Value {
+	stateCookie, err := sessions.GetCookie(req, "state")
+	if err != nil || in.State != stateCookie.Value {
 		return h.BadRequest(ctx, ErrStateMismatch)
 	}
 
-	nonceCookie, err := sessions.GetCookie(ctx.Request(), "nonce")
+	nonceCookie, err := sessions.GetCookie(req, "nonce")
 	if err != nil {
 		return h.BadRequest(ctx, ErrNonceMissing)
 	}
@@ -125,7 +125,7 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context) error {
 	}
 
 	nonceCtx := contextx.With(reqCtx, nonce(nonceCookie.Value))
-	if _, err = rp.CodeExchange(nonceCtx, ctx.QueryParam("code"), rpCfg); err != nil {
+	if _, err = rp.CodeExchange(nonceCtx, in.Code, rpCfg); err != nil {
 		return h.BadRequest(ctx, err)
 	}
 
@@ -200,3 +200,23 @@ func (h *Handler) BindSSOTokenCallbackHandler() *openapi3.Operation {
 
 	return op
 }
+
+// BindSSOTokenAuthorizeHandler binds the SSO token authorization endpoint to the OpenAPI schema.
+func (h *Handler) BindSSOTokenAuthorizeHandler() *openapi3.Operation {
+	op := openapi3.NewOperation()
+	op.Description = "Authorize a token for SSO with an organization"
+	op.OperationID = "SSOTokenAuthorize"
+	op.Tags = []string{"authentication"}
+	op.Security = &openapi3.SecurityRequirements{}
+
+	h.AddQueryParameter("organization_id", op)
+	h.AddQueryParameter("token_id", op)
+	h.AddQueryParameter("token_type", op)
+	op.AddResponse(http.StatusFound, openapi3.NewResponse().WithDescription("Redirect"))
+	op.AddResponse(http.StatusBadRequest, badRequest())
+	op.AddResponse(http.StatusInternalServerError, internalServerError())
+
+	return op
+}
+
+var errInvalidTokenType = errors.New("invalid token type")

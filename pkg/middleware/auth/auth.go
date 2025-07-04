@@ -131,6 +131,36 @@ func getTokenType(bearerToken string) auth.AuthenticationType {
 	return auth.JWTAuthentication
 }
 
+// function variables allow tests to override SSO checks without a database
+var (
+	isSSOEnforcedFunc = isSSOEnforced
+	orgRoleFunc       = func(ctx context.Context, db *generated.Client, userID, orgID string) (enums.Role, error) {
+		member, err := db.OrgMembership.Query().
+			Where(orgmembership.UserID(userID), orgmembership.OrganizationID(orgID)).
+			Only(privacy.DecisionContext(ctx, privacy.Allow))
+		if err != nil {
+			return "", err
+		}
+
+		return member.Role, nil
+	}
+
+	fetchPATFunc = func(ctx context.Context, db *generated.Client, token string) (*generated.PersonalAccessToken, error) {
+		return db.PersonalAccessToken.Query().Where(personalaccesstoken.Token(token)).
+			WithOwner().
+			WithOrganizations().
+			Only(ctx)
+	}
+
+	fetchAPITokenFunc = func(ctx context.Context, db *generated.Client, token string) (*generated.APIToken, error) {
+		return db.APIToken.Query().Where(apitoken.Token(token)).Only(ctx)
+	}
+
+	isPATSSOAuthorizedFunc = isPATSSOAuthorized
+
+	updateLastUsedFunc = updateLastUsed
+)
+
 // updateLastUsed updates the last used time for the token depending on the authentication type
 func updateLastUsed(ctx context.Context, dbClient *ent.Client, au *auth.AuthenticatedUser, tokenID string) error {
 	switch au.AuthenticationType {
@@ -348,19 +378,19 @@ func getSubjectName(user *ent.User) string {
 
 // unauthorized returns a 401 Unauthorized response with the error message
 func unauthorized(c echo.Context, err error, conf *Options, v tokens.Validator) error {
+	reqCtx := c.Request().Context()
+
 	if v != nil && conf != nil && conf.DBClient != nil {
 		orgID := orgIDFromToken(c, v)
 		if orgID != "" {
 			userID := userIDFromToken(c, v)
 			if userID != "" {
-				enforced, dbErr := isSSOEnforced(c.Request().Context(), conf.DBClient, orgID)
+				enforced, dbErr := isSSOEnforcedFunc(reqCtx, conf.DBClient, orgID)
 
 				if dbErr == nil && enforced {
-					member, mErr := conf.DBClient.OrgMembership.Query().
-						Where(orgmembership.UserID(userID), orgmembership.OrganizationID(orgID)).
-						Only(privacy.DecisionContext(c.Request().Context(), privacy.Allow))
+					role, mErr := orgRoleFunc(reqCtx, conf.DBClient, userID, orgID)
 
-					if mErr == nil && member.Role != enums.RoleOwner {
+					if mErr == nil && role != enums.RoleOwner {
 						if redirErr := c.Redirect(http.StatusFound, sso.SSOLogin(c.Echo(), orgID)); redirErr != nil {
 							return redirErr
 						}

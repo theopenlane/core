@@ -19,7 +19,6 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
@@ -30,137 +29,27 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 )
 
-type nonce string
-
-// fetchSSOStatus returns the SSO enforcement status for a given organization
-// it checks the organization's settings and returns whether SSO is enforced, the provider, and discovery URL
-func (h *Handler) fetchSSOStatus(ctx context.Context, orgID string) (models.SSOStatusReply, error) {
-	setting, err := h.getOrganizationSettingByOrgID(ctx, orgID)
-	if err != nil {
-		return models.SSOStatusReply{}, err
-	}
-
-	out := models.SSOStatusReply{
-		Reply:          rout.Reply{Success: true},
-		Enforced:       setting.IdentityProviderLoginEnforced,
-		OrganizationID: orgID,
-	}
-
-	if setting.IdentityProvider != enums.SSOProvider("") {
-		out.Provider = setting.IdentityProvider
-	}
-
-	if setting.OidcDiscoveryEndpoint != "" {
-		out.DiscoveryURL = setting.OidcDiscoveryEndpoint
-	}
-
-	return out, nil
+var cookieConfig = sessions.CookieConfig{
+	Path:     "/",
+	HTTPOnly: true,
+	SameSite: http.SameSiteLaxMode,
+	Secure:   true,
 }
 
-// WebfingerHandler determines if SSO login is enforced for an organization or user via a webfinger query
-// It parses the resource query param, resolves the org, and returns SSO status
-// https://datatracker.ietf.org/doc/html/rfc7033
-// confirmed that response codes should not always be 201 or similar, but 404, 200, etc., regular status codes should be used
-func (h *Handler) WebfingerHandler(ctx echo.Context) error {
-	reqCtx := ctx.Request().Context()
-
-	resource := ctx.QueryParam("resource")
-	if resource == "" {
-		return h.BadRequest(ctx, ErrMissingField)
-	}
-
-	var orgID string
-
-	var out models.SSOStatusReply
-
-	switch {
-	case strings.HasPrefix(resource, "org:"):
-		orgID = strings.TrimPrefix(resource, "org:")
-	case strings.HasPrefix(resource, "acct:"):
-		email := strings.TrimPrefix(resource, "acct:")
-
-		allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
-
-		user, err := h.getUserByEmail(allowCtx, email)
-		if err != nil {
-			log.Debug().Err(err).Msg("webfinger user lookup failed")
-
-			return h.NotFound(ctx, ErrNotFound)
-		}
-
-		orgID, err = h.getUserDefaultOrgID(allowCtx, user.ID)
-		if err != nil {
-			log.Debug().Err(err).Msg("webfinger org lookup failed")
-
-			return h.NotFound(ctx, ErrNotFound)
-		}
-	default:
-		return h.BadRequest(ctx, ErrMissingField)
-	}
-
-	if orgID == "" {
-		return h.BadRequest(ctx, ErrMissingField)
-	}
-
-	out, err := h.fetchSSOStatus(reqCtx, orgID)
-	if err != nil {
-		if ent.IsNotFound(err) {
-			log.Debug().Err(err).Msg("webfinger org setting not found")
-
-			return h.NotFound(ctx, ErrNotFound)
-		}
-
-		return h.InternalServerError(ctx, err)
-	}
-
-	return h.Success(ctx, out)
-}
-
-// oidcConfig builds an OIDC relying party config for the given org.
-// It loads the org's OIDC settings and constructs the OIDC client config for authentication.
-func (h *Handler) oidcConfig(ctx context.Context, orgID string) (rp.RelyingParty, error) {
-	// Fetch the organization's OIDC settings from the database
-	setting, err := h.getOrganizationSettingByOrgID(ctx, orgID)
-	if err != nil {
-		return nil, err
-	}
-
-	// Ensure all required OIDC config fields are present
-	if setting.OidcDiscoveryEndpoint == "" || setting.IdentityProviderClientID == nil || setting.IdentityProviderClientSecret == nil {
-		return nil, ErrMissingOIDCConfig
-	}
-
-	// Remove the well-known suffix to get the issuer URL
-	issuer := strings.TrimSuffix(setting.OidcDiscoveryEndpoint, "/.well-known/openid-configuration")
-
-	// Construct the OIDC relying party configuration
-	rpCfg, err := rp.NewRelyingPartyOIDC(
-		issuer,                                // OIDC issuer URL
-		*setting.IdentityProviderClientID,     // Client ID for the org's IdP
-		*setting.IdentityProviderClientSecret, // Client secret for the org's IdP
-		h.ssoCallbackURL(),                    // Redirect/callback URL for OIDC flow
-		[]string{oidc.ScopeOpenID, oidc.ScopeProfile, oidc.ScopeEmail}, // OIDC scopes
-		// Configure the nonce verifier to pull the nonce from the context using contextx
-		rp.WithVerifierOpts(rp.WithNonce(func(ctx context.Context) string {
-			if n, ok := contextx.From[nonce](ctx); ok {
-				return string(n)
-			}
-
-			return ""
-		})),
-	)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return rpCfg, nil
-}
-
-// SSOLoginHandler redirects the user to the organization's configured IdP for authentication.
-// It sets state and nonce cookies, builds the OIDC auth URL, and issues a redirect.
+// SSOLoginHandler redirects the user to the organization's configured IdP for authentication
+// It sets state and nonce cookies, builds the OIDC auth URL, and issues a redirect
+// see docs/SSO.md for more details on the SSO flow
 func (h *Handler) SSOLoginHandler(ctx echo.Context) error {
-	orgID := ctx.QueryParam("organization_id")
+	var in models.SSOLoginRequest
+	if err := ctx.Bind(&in); err != nil {
+		return h.InvalidInput(ctx, err)
+	}
+
+	if err := in.Validate(); err != nil {
+		return h.BadRequest(ctx, err)
+	}
+
+	orgID := in.OrganizationID
 	if orgID == "" {
 		// if no org ID in query, try to get it from cookie
 		if c, err := sessions.GetCookie(ctx.Request(), "organization_id"); err == nil {
@@ -169,12 +58,12 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context) error {
 	}
 
 	// if a return URL is provided, set it as a cookie for redirect after login
-	if ret := ctx.QueryParam("return"); ret != "" {
-		sessions.SetCookie(ctx.Response().Writer, ret, "return", sessions.CookieConfig{Path: "/", HTTPOnly: true, SameSite: http.SameSiteLaxMode})
+	if in.ReturnURL != "" {
+		sessions.SetCookie(ctx.Response().Writer, in.ReturnURL, "return", cookieConfig)
 	}
 
 	// always set the org ID as a cookie for the OIDC flow
-	sessions.SetCookie(ctx.Response().Writer, orgID, "organization_id", sessions.CookieConfig{Path: "/", HTTPOnly: true, SameSite: http.SameSiteLaxMode})
+	sessions.SetCookie(ctx.Response().Writer, orgID, "organization_id", cookieConfig)
 
 	// build the OIDC config for the org
 	rpCfg, err := h.oidcConfig(ctx.Request().Context(), orgID)
@@ -182,13 +71,13 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	// generate state and nonce for OIDC security
 	state := ulids.New().String()
 	nonce := ulids.New().String()
 
-	// set state and nonce as cookies for later validation
-	sessions.SetCookie(ctx.Response().Writer, state, "state", sessions.CookieConfig{Path: "/", HTTPOnly: true, SameSite: http.SameSiteLaxMode})
-	sessions.SetCookie(ctx.Response().Writer, nonce, "nonce", sessions.CookieConfig{Path: "/", HTTPOnly: true, SameSite: http.SameSiteLaxMode})
+	// The state cookie is used to protect against (CSRF) attacks. When the authentication flow is initiated, a unique state value is generated and stored in a cookie. Later, when the user returns from the identity provider (IdP), the application checks that the state value in the callback matches the one stored in the cookie
+	sessions.SetCookie(ctx.Response().Writer, state, "state", cookieConfig)
+	// The nonce cookie is used to prevent replay attacks and to bind the authentication request to the issued ID token. The nonce value is sent to the IdP as part of the authentication request, and the IdP includes it in the ID token. When the application receives the ID token, it verifies that the nonce matches the one stored in the cookie, ensuring the token was issued in response to this specific authentication flow
+	sessions.SetCookie(ctx.Response().Writer, nonce, "nonce", cookieConfig)
 
 	// build the OIDC auth URL with state and nonce
 	authURL := rpCfg.OAuthConfig().AuthCodeURL(state, oauth2.SetAuthURLParam("nonce", nonce))
@@ -202,27 +91,28 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context) error {
 func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 	reqCtx := ctx.Request().Context()
 
-	orgID := ctx.QueryParam("organization_id")
-	if orgID == "" {
-		// if no org ID in query, try to get it from cookie
-		if c, err := sessions.GetCookie(ctx.Request(), "organization_id"); err == nil {
-			orgID = c.Value
-		}
+	var in models.SSOCallbackRequest
+	if err := ctx.Bind(&in); err != nil {
+		return h.InvalidInput(ctx, err)
 	}
 
-	if orgID == "" {
+	if err := in.Validate(); err != nil {
+		return h.BadRequest(ctx, err)
+	}
+
+	if in.OrganizationID == "" {
 		return h.BadRequest(ctx, ErrMissingField)
 	}
 
 	// Build the OIDC config for the org
-	rpCfg, err := h.oidcConfig(reqCtx, orgID)
+	rpCfg, err := h.oidcConfig(reqCtx, in.OrganizationID)
 	if err != nil {
 		return h.BadRequest(ctx, err)
 	}
 
 	// Validate state matches what was set in the cookie
 	stateCookie, err := sessions.GetCookie(ctx.Request(), "state")
-	if err != nil || ctx.QueryParam("state") != stateCookie.Value {
+	if err != nil || in.State != stateCookie.Value {
 		return h.BadRequest(ctx, ErrStateMismatch)
 	}
 
@@ -235,7 +125,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 	// attach nonce to context for OIDC token validation
 	nonceCtx := contextx.With(reqCtx, nonce(nonceCookie.Value))
 	// exchange the code for OIDC tokens
-	tokens, err := rp.CodeExchange(nonceCtx, ctx.QueryParam("code"), rpCfg)
+	tokens, err := rp.CodeExchange(nonceCtx, in.Code, rpCfg)
 	if err != nil {
 		return h.BadRequest(ctx, err)
 	}
@@ -300,30 +190,152 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 	return h.Success(ctx, out)
 }
 
-// BindWebfingerHandler documents the webfinger SSO status endpoint for OpenAPI.
-func (h *Handler) BindWebfingerHandler() *openapi3.Operation {
-	op := openapi3.NewOperation()
-	op.Description = "Returns SSO enforcement status for an organization"
-	op.OperationID = "WebfingerHandler"
-	op.Tags = []string{"authentication"}
+// oidcConfig builds an OIDC relying party config for the given org.
+// to construct the OIDC configuration, the function removes the standard /.well-known/openid-configuration
+// suffix from the discovery endpoint to obtain the issuer URL. It then calls rp.NewRelyingPartyOIDC
+// to create the relying party instance, passing in the issuer URL, client credentials, the callback URL for the OIDC flow,
+// and a set of standard OIDC scopes (openid, profile, email).
+func (h *Handler) OldoidcConfig(ctx context.Context, orgID string) (rp.RelyingParty, error) {
+	// Fetch the organization's OIDC settings from the database
+	setting, err := h.getOrganizationSettingByOrgID(ctx, orgID)
+	if err != nil {
+		return nil, err
+	}
 
-	h.AddQueryParameter("resource", op)
-	h.AddResponse("SSOStatusReply", "success", models.ExampleSSOStatusReply, op, http.StatusOK)
-	op.AddResponse(http.StatusNotFound, notFound())
-	op.AddResponse(http.StatusBadRequest, badRequest())
-	op.AddResponse(http.StatusInternalServerError, internalServerError())
+	// Ensure all required OIDC config fields are present
+	if setting.OidcDiscoveryEndpoint == "" || setting.IdentityProviderClientID == nil || setting.IdentityProviderClientSecret == nil {
+		return nil, ErrMissingOIDCConfig
+	}
 
-	return op
+	// Remove the well-known suffix to get the issuer URL
+	issuer := strings.TrimSuffix(setting.OidcDiscoveryEndpoint, "/.well-known/openid-configuration")
+
+	// Construct the OIDC relying party configuration
+	rpCfg, err := rp.NewRelyingPartyOIDC(
+		issuer,                                // OIDC issuer URL
+		*setting.IdentityProviderClientID,     // Client ID for the org's IdP
+		*setting.IdentityProviderClientSecret, // Client secret for the org's IdP
+		h.ssoCallbackURL(),                    // Redirect/callback URL for OIDC flow
+		[]string{oidc.ScopeOpenID, oidc.ScopeProfile, oidc.ScopeEmail}, // OIDC scopes
+		// Configure the nonce verifier to pull the nonce from the context using contextx
+		rp.WithVerifierOpts(rp.WithNonce(func(ctx context.Context) string {
+			if n, ok := contextx.From[nonce](ctx); ok {
+				return string(n)
+			}
+
+			return ""
+		})),
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return rpCfg, nil
 }
 
-// ssoCallbackURL builds the callback URL for OIDC flows, ensuring a single path segment is appended.
+func (h *Handler) oidcConfig(ctx context.Context, orgID string) (rp.RelyingParty, error) {
+	// Fetch the organization's OIDC settings from the database
+	setting, err := h.getOrganizationSettingByOrgID(ctx, orgID)
+	if err != nil {
+		return nil, err
+	}
+
+	// Ensure all required OIDC config fields are present
+	if setting.OidcDiscoveryEndpoint == "" || setting.IdentityProviderClientID == nil || setting.IdentityProviderClientSecret == nil {
+		return nil, ErrMissingOIDCConfig
+	}
+
+	// Remove the well-known suffix to get the issuer URL
+	issuer := strings.TrimSuffix(setting.OidcDiscoveryEndpoint, "/.well-known/openid-configuration")
+
+	verifierOpt := rp.WithVerifierOpts(rp.WithNonce(func(ctx context.Context) string {
+		if n, ok := contextx.From[nonce](ctx); ok {
+			return string(n)
+		}
+
+		return ""
+	}))
+
+	type oauthCfgOption func(*oauth2.Config)
+
+	newOauthCfg := func(opts ...oauthCfgOption) *oauth2.Config {
+		cfg := &oauth2.Config{}
+		for _, o := range opts {
+			o(cfg)
+		}
+
+		return cfg
+	}
+
+	withClient := func(id, secret string) oauthCfgOption {
+		return func(c *oauth2.Config) {
+			c.ClientID = id
+			c.ClientSecret = secret
+		}
+	}
+
+	withRedirect := func(url string) oauthCfgOption {
+		return func(c *oauth2.Config) {
+			c.RedirectURL = url
+		}
+	}
+
+	withScopes := func(scopes ...string) oauthCfgOption {
+		return func(c *oauth2.Config) {
+			c.Scopes = scopes
+		}
+	}
+
+	withEndpoint := func(authURL, tokenURL string) oauthCfgOption {
+		return func(c *oauth2.Config) {
+			c.Endpoint = oauth2.Endpoint{AuthURL: authURL, TokenURL: tokenURL}
+		}
+	}
+
+	// In test mode we construct the RP using static OAuth endpoints to avoid
+	// network calls during discovery
+	if h.IsTest {
+		cfg := newOauthCfg(
+			withClient(*setting.IdentityProviderClientID, *setting.IdentityProviderClientSecret),
+			withRedirect(h.ssoCallbackURL()),
+			withScopes(oidc.ScopeOpenID, oidc.ScopeProfile, oidc.ScopeEmail),
+			withEndpoint(issuer+"/auth", issuer+"/token"),
+		)
+
+		rpCfg, err := rp.NewRelyingPartyOAuth(cfg, verifierOpt)
+		if err != nil {
+			return nil, err
+		}
+
+		return rpCfg, nil
+	}
+
+	// Construct the OIDC relying party configuration using discovery
+	rpCfg, err := rp.NewRelyingPartyOIDC(
+		issuer,
+		*setting.IdentityProviderClientID,
+		*setting.IdentityProviderClientSecret,
+		h.ssoCallbackURL(),
+		[]string{oidc.ScopeOpenID, oidc.ScopeProfile, oidc.ScopeEmail},
+		verifierOpt,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return rpCfg, nil
+}
+
+// ssoCallbackURL builds the callback URL for OIDC flows, ensuring a single path segment is appended
 func (h *Handler) ssoCallbackURL() string {
 	base := strings.TrimSuffix(h.OauthProvider.RedirectURL, "/")
 	return fmt.Sprintf("%s/v1/sso/callback", base)
 }
 
-// ssoOrgForUser checks if the user's default org requires SSO login and the user is not an owner.
-// Returns the org ID and true if SSO is enforced and the user must use SSO, otherwise false.
+// ssoOrgForUser checks if the user's default org requires SSO login and the user is not an owner
+// Returns the org ID and true if SSO is enforced and the user must use SSO, otherwise false
 func (h *Handler) ssoOrgForUser(ctx context.Context, email string) (string, bool) {
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
@@ -351,40 +363,7 @@ func (h *Handler) ssoOrgForUser(ctx context.Context, email string) (string, bool
 	return orgID, true
 }
 
-// BindSSOLoginHandler binds the SSO login handler to the OpenAPI schema
-func (h *Handler) BindSSOLoginHandler() *openapi3.Operation {
-	op := openapi3.NewOperation()
-	op.Description = "Initiate the SSO login flow"
-	op.OperationID = "SSOLoginHandler"
-	op.Tags = []string{"authentication"}
-	op.Security = &openapi3.SecurityRequirements{}
-
-	h.AddQueryParameter("organization_id", op)
-	op.AddResponse(http.StatusFound, openapi3.NewResponse().WithDescription("Redirect to IdP"))
-	op.AddResponse(http.StatusBadRequest, badRequest())
-
-	return op
-}
-
-// BindSSOCallbackHandler binds the SSO callback handler to the OpenAPI schema
-func (h *Handler) BindSSOCallbackHandler() *openapi3.Operation {
-	op := openapi3.NewOperation()
-	op.Description = "Complete the OIDC login flow"
-	op.OperationID = "SSOCallbackHandler"
-	op.Tags = []string{"authentication"}
-	op.Security = &openapi3.SecurityRequirements{}
-
-	h.AddQueryParameter("code", op)
-	h.AddQueryParameter("state", op)
-	h.AddQueryParameter("organization_id", op)
-	h.AddResponse("LoginReply", "success", models.ExampleLoginSuccessResponse, op, http.StatusOK)
-	op.AddResponse(http.StatusFound, openapi3.NewResponse().WithDescription("Redirect to return URL"))
-	op.AddResponse(http.StatusBadRequest, badRequest())
-	op.AddResponse(http.StatusInternalServerError, internalServerError())
-
-	return op
-}
-
+// authorizeTokenSSO updates the SSO authorization timestamp for a token type (API or Personal Access Token)
 func (h *Handler) authorizeTokenSSO(ctx context.Context, tokenType, tokenID, orgID string) error {
 	switch tokenType {
 	case "api":
@@ -423,4 +402,55 @@ func (h *Handler) authorizeTokenSSO(ctx context.Context, tokenType, tokenID, org
 	}
 
 	return errInvalidTokenType
+}
+
+// BindWebfingerHandler documents the webfinger SSO status endpoint for OpenAPI.
+func (h *Handler) BindWebfingerHandler() *openapi3.Operation {
+	op := openapi3.NewOperation()
+	op.Description = "Returns SSO enforcement status for an organization"
+	op.OperationID = "WebfingerHandler"
+	op.Tags = []string{"authentication"}
+
+	h.AddQueryParameter("resource", op)
+	h.AddResponse("SSOStatusReply", "success", models.ExampleSSOStatusReply, op, http.StatusOK)
+	op.AddResponse(http.StatusNotFound, notFound())
+	op.AddResponse(http.StatusBadRequest, badRequest())
+	op.AddResponse(http.StatusInternalServerError, internalServerError())
+
+	return op
+}
+
+// BindSSOCallbackHandler binds the SSO callback handler to the OpenAPI schema
+func (h *Handler) BindSSOCallbackHandler() *openapi3.Operation {
+	op := openapi3.NewOperation()
+	op.Description = "Complete the OIDC login flow"
+	op.OperationID = "SSOCallbackHandler"
+	op.Tags = []string{"authentication"}
+	op.Security = &openapi3.SecurityRequirements{}
+
+	h.AddQueryParameter("code", op)
+	h.AddQueryParameter("state", op)
+	h.AddQueryParameter("organization_id", op)
+	h.AddResponse("LoginReply", "success", models.ExampleLoginSuccessResponse, op, http.StatusOK)
+	op.AddResponse(http.StatusFound, openapi3.NewResponse().WithDescription("Redirect to return URL"))
+	op.AddResponse(http.StatusBadRequest, badRequest())
+	op.AddResponse(http.StatusInternalServerError, internalServerError())
+
+	return op
+}
+
+// BindSSOLoginHandler binds the SSO login handler to the OpenAPI schema
+func (h *Handler) BindSSOLoginHandler() *openapi3.Operation {
+	op := openapi3.NewOperation()
+	op.Description = "Initiate the SSO login flow"
+	op.OperationID = "SSOLoginHandler"
+	op.Tags = []string{"authentication"}
+	op.Security = &openapi3.SecurityRequirements{}
+
+	h.AddQueryParameter("organization_id", op)
+	h.AddQueryParameter("return", op)
+	op.AddResponse(http.StatusFound, openapi3.NewResponse().WithDescription("Redirect to IdP"))
+	op.AddResponse(http.StatusBadRequest, badRequest())
+
+	return op
 }
