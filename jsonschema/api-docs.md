@@ -578,6 +578,8 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**runMigrations**|`boolean`|run migrations on startup<br/>|no|
 |**migrationProvider**|`string`|migration provider to use for running migrations<br/>|no|
 |**enableHistory**|`boolean`|enable history data to be logged to the database<br/>|no|
+|**maxConnections**|`integer`|maximum number of connections to the database<br/>|no|
+|**maxIdleConnections**|`integer`|maximum number of idle connections to the database<br/>|no|
 
 **Additional Properties:** not allowed  
 <a name="jobqueue"></a>

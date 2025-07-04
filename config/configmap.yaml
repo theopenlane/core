@@ -131,6 +131,8 @@ data:
   CORE_DB_RUNMIGRATIONS: {{ .Values.core.db.runMigrations | default true }}
   CORE_DB_MIGRATIONPROVIDER: {{ .Values.core.db.migrationProvider | default "atlas" }}
   CORE_DB_ENABLEHISTORY: {{ .Values.core.db.enableHistory | default false }}
+  CORE_DB_MAXCONNECTIONS: {{ .Values.core.db.maxConnections | default 0 }}
+  CORE_DB_MAXIDLECONNECTIONS: {{ .Values.core.db.maxIdleConnections | default 0 }}
   CORE_JOBQUEUE_CONNECTIONURI: {{ .Values.core.jobQueue.connectionURI | default "postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable" }}
   CORE_JOBQUEUE_RUNMIGRATIONS: {{ .Values.core.jobQueue.runMigrations | default false }}
   CORE_REDIS_ENABLED: {{ .Values.core.redis.enabled | default true }}

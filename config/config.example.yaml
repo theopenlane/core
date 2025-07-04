@@ -58,6 +58,8 @@ db:
     debug: false
     driverName: pgx
     enableHistory: false
+    maxConnections: 0
+    maxIdleConnections: 0
     migrationProvider: atlas
     multiWrite: false
     primaryDbSource: file:openlane.db
