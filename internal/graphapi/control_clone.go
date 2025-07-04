@@ -327,25 +327,22 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, c *generated.Co
 		}
 	}
 
-	_, err = r.bulkCreateSubcontrolNoTransaction(ctx, subcontrols)
-
-	return err
+	return r.bulkCreateSubcontrolNoTransaction(ctx, subcontrols)
 }
 
 // bulkCreateSubcontrolNoTransaction creates multiple subcontrols in a single request without a transaction to allow it to be run in parallel
-func (r *mutationResolver) bulkCreateSubcontrolNoTransaction(ctx context.Context, input []*generated.CreateSubcontrolInput) (*model.SubcontrolBulkCreatePayload, error) {
+func (r *mutationResolver) bulkCreateSubcontrolNoTransaction(ctx context.Context, input []*generated.CreateSubcontrolInput) error {
 	builders := make([]*generated.SubcontrolCreate, len(input))
 	for i, data := range input {
 		builders[i] = r.db.Subcontrol.Create().SetInput(*data)
 	}
 
-	res, err := r.db.Subcontrol.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "subcontrol"})
+	if err := r.db.Subcontrol.CreateBulk(builders...).Exec(ctx); err != nil {
+
+		log.Error().Err(err).Msg("error creating subcontrols in bulk")
+		return parseRequestError(err, action{action: ActionCreate, object: "subcontrol"})
 	}
 
 	// return response
-	return &model.SubcontrolBulkCreatePayload{
-		Subcontrols: res,
-	}, nil
+	return nil
 }
