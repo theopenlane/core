@@ -4318,6 +4318,14 @@ var (
 					Where: "deleted_at is NULL",
 				},
 			},
+			{
+				Name:    "subcontrol_control_id_ref_code_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{SubcontrolsColumns[27], SubcontrolsColumns[26], SubcontrolsColumns[28]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
 		},
 	}
 	// SubcontrolHistoryColumns holds the columns for the "subcontrol_history" table.

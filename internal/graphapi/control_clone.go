@@ -7,6 +7,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/enums"
@@ -86,13 +87,17 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 
 			var newControlID string
 
+			// skip the access checks for the controls, we are already filtering on organization id
+			// and controls are visible to users in the organization
+			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 			existingControl, err := r.db.Control.Query().
 				Where(
 					control.RefCode(c.RefCode),
 					control.StandardID(standardID),
+					control.DeletedAtIsNil(),
 					control.OwnerID(orgID),
 				).
-				Only(ctx)
+				Only(allowCtx)
 
 			switch {
 			case err == nil:
@@ -264,13 +269,18 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, c *generated.Co
 	}
 
 	// check if we can find the subcontrol based on refCode and controlID
+	// allow the query to check for subcontrols that already exist in the organization
+	// skip the interceptor batch checks here
+
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	existingSubcontrols, err := r.db.Subcontrol.Query().
 		Where(
 			subcontrol.RefCodeIn(refCodes...),
 			subcontrol.ControlID(newControlID),
+			subcontrol.DeletedAtIsNil(),
 			subcontrol.OwnerID(orgID),
 		).
-		All(ctx)
+		All(allowCtx)
 	if err != nil {
 		log.Error().Err(err).Msg("error checking for existing subcontrols")
 
