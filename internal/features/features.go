@@ -33,6 +33,8 @@ var FeatureOfType = map[string][]entx.FeatureModule{
     "Event": {"base"},
     "Evidence": {"compliance","continuous-compliance-automation"},
     "EvidenceHistory": {"audit-log"},
+    "Export": {"base"},
+    "ExportHistory": {"audit-log"},
     "File": {"compliance","policy-management","risk-management","asset-management","entity-management","continuous-compliance-automation"},
     "FileHistory": {"audit-log"},
     "Group": {"base"},

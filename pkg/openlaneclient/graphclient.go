@@ -157,6 +157,13 @@ type OpenlaneGraphClient interface {
 	UpdateEvidence(ctx context.Context, updateEvidenceID string, input UpdateEvidenceInput, evidenceFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateEvidence, error)
 	GetAllEvidenceHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllEvidenceHistories, error)
 	GetEvidenceHistories(ctx context.Context, where *EvidenceHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetEvidenceHistories, error)
+	CreateExport(ctx context.Context, input CreateExportInput, interceptors ...clientv2.RequestInterceptor) (*CreateExport, error)
+	GetAllExports(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllExports, error)
+	GetExportByID(ctx context.Context, exportID string, interceptors ...clientv2.RequestInterceptor) (*GetExportByID, error)
+	GetExports(ctx context.Context, first *int64, last *int64, where *ExportWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetExports, error)
+	UpdateExport(ctx context.Context, updateExportID string, input UpdateExportInput, exportFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateExport, error)
+	GetAllExportHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllExportHistories, error)
+	GetExportHistories(ctx context.Context, first *int64, last *int64, where *ExportHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetExportHistories, error)
 	DeleteFile(ctx context.Context, deleteFileID string, interceptors ...clientv2.RequestInterceptor) (*DeleteFile, error)
 	GetAllFiles(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllFiles, error)
 	GetFileByID(ctx context.Context, fileID string, interceptors ...clientv2.RequestInterceptor) (*GetFileByID, error)
@@ -28590,6 +28597,1109 @@ func (t *GetEvidenceHistories_EvidenceHistories) GetEdges() []*GetEvidenceHistor
 		t = &GetEvidenceHistories_EvidenceHistories{}
 	}
 	return t.Edges
+}
+
+type CreateExport_CreateExport_Export struct {
+	CreatedAt   *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExportType  enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
+	FileID      *string            "json:\"fileID,omitempty\" graphql:\"fileID\""
+	ID          string             "json:\"id\" graphql:\"id\""
+	ItemID      string             "json:\"itemID\" graphql:\"itemID\""
+	OwnerID     *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RequestorID *string            "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status      enums.ExportStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt   *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateExport_CreateExport_Export) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateExport_CreateExport_Export) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateExport_CreateExport_Export) GetExportType() *enums.ExportType {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return &t.ExportType
+}
+func (t *CreateExport_CreateExport_Export) GetFileID() *string {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return t.FileID
+}
+func (t *CreateExport_CreateExport_Export) GetID() string {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return t.ID
+}
+func (t *CreateExport_CreateExport_Export) GetItemID() string {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return t.ItemID
+}
+func (t *CreateExport_CreateExport_Export) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return t.OwnerID
+}
+func (t *CreateExport_CreateExport_Export) GetRequestorID() *string {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return t.RequestorID
+}
+func (t *CreateExport_CreateExport_Export) GetStatus() *enums.ExportStatus {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return &t.Status
+}
+func (t *CreateExport_CreateExport_Export) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateExport_CreateExport_Export) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateExport_CreateExport struct {
+	Export CreateExport_CreateExport_Export "json:\"export\" graphql:\"export\""
+}
+
+func (t *CreateExport_CreateExport) GetExport() *CreateExport_CreateExport_Export {
+	if t == nil {
+		t = &CreateExport_CreateExport{}
+	}
+	return &t.Export
+}
+
+type GetAllExports_Exports_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllExports_Exports_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllExports_Exports_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllExports_Exports_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllExports_Exports_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllExports_Exports_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllExports_Exports_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllExports_Exports_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllExports_Exports_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllExports_Exports_Edges_Node struct {
+	CreatedAt   *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExportType  enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
+	FileID      *string            "json:\"fileID,omitempty\" graphql:\"fileID\""
+	ID          string             "json:\"id\" graphql:\"id\""
+	ItemID      string             "json:\"itemID\" graphql:\"itemID\""
+	OwnerID     *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RequestorID *string            "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status      enums.ExportStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt   *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllExports_Exports_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllExports_Exports_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllExports_Exports_Edges_Node) GetExportType() *enums.ExportType {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return &t.ExportType
+}
+func (t *GetAllExports_Exports_Edges_Node) GetFileID() *string {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return t.FileID
+}
+func (t *GetAllExports_Exports_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllExports_Exports_Edges_Node) GetItemID() string {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return t.ItemID
+}
+func (t *GetAllExports_Exports_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllExports_Exports_Edges_Node) GetRequestorID() *string {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return t.RequestorID
+}
+func (t *GetAllExports_Exports_Edges_Node) GetStatus() *enums.ExportStatus {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAllExports_Exports_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllExports_Exports_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllExports_Exports_Edges struct {
+	Node *GetAllExports_Exports_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllExports_Exports_Edges) GetNode() *GetAllExports_Exports_Edges_Node {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllExports_Exports struct {
+	Edges      []*GetAllExports_Exports_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllExports_Exports_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                          "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllExports_Exports) GetEdges() []*GetAllExports_Exports_Edges {
+	if t == nil {
+		t = &GetAllExports_Exports{}
+	}
+	return t.Edges
+}
+func (t *GetAllExports_Exports) GetPageInfo() *GetAllExports_Exports_PageInfo {
+	if t == nil {
+		t = &GetAllExports_Exports{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllExports_Exports) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllExports_Exports{}
+	}
+	return t.TotalCount
+}
+
+type GetExportByID_Export_Files_Edges_Node struct {
+	ID            string  "json:\"id\" graphql:\"id\""
+	StoragePath   *string "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageScheme *string "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume *string "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+}
+
+func (t *GetExportByID_Export_Files_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetExportByID_Export_Files_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetExportByID_Export_Files_Edges_Node) GetStoragePath() *string {
+	if t == nil {
+		t = &GetExportByID_Export_Files_Edges_Node{}
+	}
+	return t.StoragePath
+}
+func (t *GetExportByID_Export_Files_Edges_Node) GetStorageScheme() *string {
+	if t == nil {
+		t = &GetExportByID_Export_Files_Edges_Node{}
+	}
+	return t.StorageScheme
+}
+func (t *GetExportByID_Export_Files_Edges_Node) GetStorageVolume() *string {
+	if t == nil {
+		t = &GetExportByID_Export_Files_Edges_Node{}
+	}
+	return t.StorageVolume
+}
+
+type GetExportByID_Export_Files_Edges struct {
+	Node *GetExportByID_Export_Files_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetExportByID_Export_Files_Edges) GetNode() *GetExportByID_Export_Files_Edges_Node {
+	if t == nil {
+		t = &GetExportByID_Export_Files_Edges{}
+	}
+	return t.Node
+}
+
+type GetExportByID_Export_Files struct {
+	Edges []*GetExportByID_Export_Files_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetExportByID_Export_Files) GetEdges() []*GetExportByID_Export_Files_Edges {
+	if t == nil {
+		t = &GetExportByID_Export_Files{}
+	}
+	return t.Edges
+}
+
+type GetExportByID_Export_File struct {
+	ID            string  "json:\"id\" graphql:\"id\""
+	StoragePath   *string "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageScheme *string "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume *string "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+}
+
+func (t *GetExportByID_Export_File) GetID() string {
+	if t == nil {
+		t = &GetExportByID_Export_File{}
+	}
+	return t.ID
+}
+func (t *GetExportByID_Export_File) GetStoragePath() *string {
+	if t == nil {
+		t = &GetExportByID_Export_File{}
+	}
+	return t.StoragePath
+}
+func (t *GetExportByID_Export_File) GetStorageScheme() *string {
+	if t == nil {
+		t = &GetExportByID_Export_File{}
+	}
+	return t.StorageScheme
+}
+func (t *GetExportByID_Export_File) GetStorageVolume() *string {
+	if t == nil {
+		t = &GetExportByID_Export_File{}
+	}
+	return t.StorageVolume
+}
+
+type GetExportByID_Export struct {
+	CreatedAt   *time.Time                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExportType  enums.ExportType           "json:\"exportType\" graphql:\"exportType\""
+	File        *GetExportByID_Export_File "json:\"file,omitempty\" graphql:\"file\""
+	FileID      *string                    "json:\"fileID,omitempty\" graphql:\"fileID\""
+	Files       GetExportByID_Export_Files "json:\"files\" graphql:\"files\""
+	ID          string                     "json:\"id\" graphql:\"id\""
+	ItemID      string                     "json:\"itemID\" graphql:\"itemID\""
+	OwnerID     *string                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RequestorID *string                    "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status      enums.ExportStatus         "json:\"status\" graphql:\"status\""
+	UpdatedAt   *time.Time                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetExportByID_Export) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return t.CreatedAt
+}
+func (t *GetExportByID_Export) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return t.CreatedBy
+}
+func (t *GetExportByID_Export) GetExportType() *enums.ExportType {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return &t.ExportType
+}
+func (t *GetExportByID_Export) GetFile() *GetExportByID_Export_File {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return t.File
+}
+func (t *GetExportByID_Export) GetFileID() *string {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return t.FileID
+}
+func (t *GetExportByID_Export) GetFiles() *GetExportByID_Export_Files {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return &t.Files
+}
+func (t *GetExportByID_Export) GetID() string {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return t.ID
+}
+func (t *GetExportByID_Export) GetItemID() string {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return t.ItemID
+}
+func (t *GetExportByID_Export) GetOwnerID() *string {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return t.OwnerID
+}
+func (t *GetExportByID_Export) GetRequestorID() *string {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return t.RequestorID
+}
+func (t *GetExportByID_Export) GetStatus() *enums.ExportStatus {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return &t.Status
+}
+func (t *GetExportByID_Export) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetExportByID_Export) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return t.UpdatedBy
+}
+
+type GetExports_Exports_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetExports_Exports_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetExports_Exports_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetExports_Exports_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetExports_Exports_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetExports_Exports_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetExports_Exports_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetExports_Exports_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetExports_Exports_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetExports_Exports_Edges_Node struct {
+	CreatedAt   *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExportType  enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
+	FileID      *string            "json:\"fileID,omitempty\" graphql:\"fileID\""
+	ID          string             "json:\"id\" graphql:\"id\""
+	ItemID      string             "json:\"itemID\" graphql:\"itemID\""
+	OwnerID     *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RequestorID *string            "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status      enums.ExportStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt   *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetExports_Exports_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetExports_Exports_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetExports_Exports_Edges_Node) GetExportType() *enums.ExportType {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return &t.ExportType
+}
+func (t *GetExports_Exports_Edges_Node) GetFileID() *string {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return t.FileID
+}
+func (t *GetExports_Exports_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetExports_Exports_Edges_Node) GetItemID() string {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return t.ItemID
+}
+func (t *GetExports_Exports_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetExports_Exports_Edges_Node) GetRequestorID() *string {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return t.RequestorID
+}
+func (t *GetExports_Exports_Edges_Node) GetStatus() *enums.ExportStatus {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetExports_Exports_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetExports_Exports_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetExports_Exports_Edges struct {
+	Node *GetExports_Exports_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetExports_Exports_Edges) GetNode() *GetExports_Exports_Edges_Node {
+	if t == nil {
+		t = &GetExports_Exports_Edges{}
+	}
+	return t.Node
+}
+
+type GetExports_Exports struct {
+	Edges      []*GetExports_Exports_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetExports_Exports_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                       "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetExports_Exports) GetEdges() []*GetExports_Exports_Edges {
+	if t == nil {
+		t = &GetExports_Exports{}
+	}
+	return t.Edges
+}
+func (t *GetExports_Exports) GetPageInfo() *GetExports_Exports_PageInfo {
+	if t == nil {
+		t = &GetExports_Exports{}
+	}
+	return &t.PageInfo
+}
+func (t *GetExports_Exports) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetExports_Exports{}
+	}
+	return t.TotalCount
+}
+
+type UpdateExport_UpdateExport_Export_Files_Edges_Node struct {
+	ID            string  "json:\"id\" graphql:\"id\""
+	StoragePath   *string "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageScheme *string "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume *string "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+}
+
+func (t *UpdateExport_UpdateExport_Export_Files_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export_Files_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateExport_UpdateExport_Export_Files_Edges_Node) GetStoragePath() *string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export_Files_Edges_Node{}
+	}
+	return t.StoragePath
+}
+func (t *UpdateExport_UpdateExport_Export_Files_Edges_Node) GetStorageScheme() *string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export_Files_Edges_Node{}
+	}
+	return t.StorageScheme
+}
+func (t *UpdateExport_UpdateExport_Export_Files_Edges_Node) GetStorageVolume() *string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export_Files_Edges_Node{}
+	}
+	return t.StorageVolume
+}
+
+type UpdateExport_UpdateExport_Export_Files_Edges struct {
+	Node *UpdateExport_UpdateExport_Export_Files_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateExport_UpdateExport_Export_Files_Edges) GetNode() *UpdateExport_UpdateExport_Export_Files_Edges_Node {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export_Files_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateExport_UpdateExport_Export_Files struct {
+	Edges []*UpdateExport_UpdateExport_Export_Files_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateExport_UpdateExport_Export_Files) GetEdges() []*UpdateExport_UpdateExport_Export_Files_Edges {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export_Files{}
+	}
+	return t.Edges
+}
+
+type UpdateExport_UpdateExport_Export_File struct {
+	ID            string  "json:\"id\" graphql:\"id\""
+	StoragePath   *string "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageScheme *string "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume *string "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+}
+
+func (t *UpdateExport_UpdateExport_Export_File) GetID() string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export_File{}
+	}
+	return t.ID
+}
+func (t *UpdateExport_UpdateExport_Export_File) GetStoragePath() *string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export_File{}
+	}
+	return t.StoragePath
+}
+func (t *UpdateExport_UpdateExport_Export_File) GetStorageScheme() *string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export_File{}
+	}
+	return t.StorageScheme
+}
+func (t *UpdateExport_UpdateExport_Export_File) GetStorageVolume() *string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export_File{}
+	}
+	return t.StorageVolume
+}
+
+type UpdateExport_UpdateExport_Export struct {
+	CreatedAt   *time.Time                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExportType  enums.ExportType                       "json:\"exportType\" graphql:\"exportType\""
+	File        *UpdateExport_UpdateExport_Export_File "json:\"file,omitempty\" graphql:\"file\""
+	FileID      *string                                "json:\"fileID,omitempty\" graphql:\"fileID\""
+	Files       UpdateExport_UpdateExport_Export_Files "json:\"files\" graphql:\"files\""
+	ID          string                                 "json:\"id\" graphql:\"id\""
+	ItemID      string                                 "json:\"itemID\" graphql:\"itemID\""
+	OwnerID     *string                                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RequestorID *string                                "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status      enums.ExportStatus                     "json:\"status\" graphql:\"status\""
+	UpdatedAt   *time.Time                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateExport_UpdateExport_Export) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateExport_UpdateExport_Export) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateExport_UpdateExport_Export) GetExportType() *enums.ExportType {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return &t.ExportType
+}
+func (t *UpdateExport_UpdateExport_Export) GetFile() *UpdateExport_UpdateExport_Export_File {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return t.File
+}
+func (t *UpdateExport_UpdateExport_Export) GetFileID() *string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return t.FileID
+}
+func (t *UpdateExport_UpdateExport_Export) GetFiles() *UpdateExport_UpdateExport_Export_Files {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return &t.Files
+}
+func (t *UpdateExport_UpdateExport_Export) GetID() string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return t.ID
+}
+func (t *UpdateExport_UpdateExport_Export) GetItemID() string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return t.ItemID
+}
+func (t *UpdateExport_UpdateExport_Export) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateExport_UpdateExport_Export) GetRequestorID() *string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return t.RequestorID
+}
+func (t *UpdateExport_UpdateExport_Export) GetStatus() *enums.ExportStatus {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return &t.Status
+}
+func (t *UpdateExport_UpdateExport_Export) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateExport_UpdateExport_Export) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateExport_UpdateExport struct {
+	Export UpdateExport_UpdateExport_Export "json:\"export\" graphql:\"export\""
+}
+
+func (t *UpdateExport_UpdateExport) GetExport() *UpdateExport_UpdateExport_Export {
+	if t == nil {
+		t = &UpdateExport_UpdateExport{}
+	}
+	return &t.Export
+}
+
+type GetAllExportHistories_ExportHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllExportHistories_ExportHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllExportHistories_ExportHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllExportHistories_ExportHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllExportHistories_ExportHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllExportHistories_ExportHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllExportHistories_ExportHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllExportHistories_ExportHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllExportHistories_ExportHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllExportHistories_ExportHistories_Edges_Node struct {
+	CreatedAt   *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExportType  enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
+	FileID      *string            "json:\"fileID,omitempty\" graphql:\"fileID\""
+	HistoryTime time.Time          "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string             "json:\"id\" graphql:\"id\""
+	ItemID      string             "json:\"itemID\" graphql:\"itemID\""
+	Operation   history.OpType     "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref         *string            "json:\"ref,omitempty\" graphql:\"ref\""
+	RequestorID *string            "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status      enums.ExportStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt   *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllExportHistories_ExportHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllExportHistories_ExportHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllExportHistories_ExportHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllExportHistories_ExportHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllExportHistories_ExportHistories_Edges_Node) GetExportType() *enums.ExportType {
+	if t == nil {
+		t = &GetAllExportHistories_ExportHistories_Edges_Node{}
+	}
+	return &t.ExportType
+}
+func (t *GetAllExportHistories_ExportHistories_Edges_Node) GetFileID() *string {
+	if t == nil {
+		t = &GetAllExportHistories_ExportHistories_Edges_Node{}
+	}
+	return t.FileID
+}
+func (t *GetAllExportHistories_ExportHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllExportHistories_ExportHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllExportHistories_ExportHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllExportHistories_ExportHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllExportHistories_ExportHistories_Edges_Node) GetItemID() string {
+	if t == nil {
+		t = &GetAllExportHistories_ExportHistories_Edges_Node{}
+	}
+	return t.ItemID
+}
+func (t *GetAllExportHistories_ExportHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllExportHistories_ExportHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllExportHistories_ExportHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllExportHistories_ExportHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllExportHistories_ExportHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllExportHistories_ExportHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllExportHistories_ExportHistories_Edges_Node) GetRequestorID() *string {
+	if t == nil {
+		t = &GetAllExportHistories_ExportHistories_Edges_Node{}
+	}
+	return t.RequestorID
+}
+func (t *GetAllExportHistories_ExportHistories_Edges_Node) GetStatus() *enums.ExportStatus {
+	if t == nil {
+		t = &GetAllExportHistories_ExportHistories_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAllExportHistories_ExportHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllExportHistories_ExportHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllExportHistories_ExportHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllExportHistories_ExportHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllExportHistories_ExportHistories_Edges struct {
+	Node *GetAllExportHistories_ExportHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllExportHistories_ExportHistories_Edges) GetNode() *GetAllExportHistories_ExportHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllExportHistories_ExportHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllExportHistories_ExportHistories struct {
+	Edges      []*GetAllExportHistories_ExportHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllExportHistories_ExportHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                          "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllExportHistories_ExportHistories) GetEdges() []*GetAllExportHistories_ExportHistories_Edges {
+	if t == nil {
+		t = &GetAllExportHistories_ExportHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAllExportHistories_ExportHistories) GetPageInfo() *GetAllExportHistories_ExportHistories_PageInfo {
+	if t == nil {
+		t = &GetAllExportHistories_ExportHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllExportHistories_ExportHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllExportHistories_ExportHistories{}
+	}
+	return t.TotalCount
+}
+
+type GetExportHistories_ExportHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetExportHistories_ExportHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetExportHistories_ExportHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetExportHistories_ExportHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetExportHistories_ExportHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetExportHistories_ExportHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetExportHistories_ExportHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetExportHistories_ExportHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetExportHistories_ExportHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetExportHistories_ExportHistories_Edges_Node struct {
+	CreatedAt   *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExportType  enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
+	FileID      *string            "json:\"fileID,omitempty\" graphql:\"fileID\""
+	HistoryTime time.Time          "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string             "json:\"id\" graphql:\"id\""
+	ItemID      string             "json:\"itemID\" graphql:\"itemID\""
+	Operation   history.OpType     "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref         *string            "json:\"ref,omitempty\" graphql:\"ref\""
+	RequestorID *string            "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status      enums.ExportStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt   *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetExportHistories_ExportHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetExportHistories_ExportHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetExportHistories_ExportHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetExportHistories_ExportHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetExportHistories_ExportHistories_Edges_Node) GetExportType() *enums.ExportType {
+	if t == nil {
+		t = &GetExportHistories_ExportHistories_Edges_Node{}
+	}
+	return &t.ExportType
+}
+func (t *GetExportHistories_ExportHistories_Edges_Node) GetFileID() *string {
+	if t == nil {
+		t = &GetExportHistories_ExportHistories_Edges_Node{}
+	}
+	return t.FileID
+}
+func (t *GetExportHistories_ExportHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetExportHistories_ExportHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetExportHistories_ExportHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetExportHistories_ExportHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetExportHistories_ExportHistories_Edges_Node) GetItemID() string {
+	if t == nil {
+		t = &GetExportHistories_ExportHistories_Edges_Node{}
+	}
+	return t.ItemID
+}
+func (t *GetExportHistories_ExportHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetExportHistories_ExportHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetExportHistories_ExportHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetExportHistories_ExportHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetExportHistories_ExportHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetExportHistories_ExportHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetExportHistories_ExportHistories_Edges_Node) GetRequestorID() *string {
+	if t == nil {
+		t = &GetExportHistories_ExportHistories_Edges_Node{}
+	}
+	return t.RequestorID
+}
+func (t *GetExportHistories_ExportHistories_Edges_Node) GetStatus() *enums.ExportStatus {
+	if t == nil {
+		t = &GetExportHistories_ExportHistories_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetExportHistories_ExportHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetExportHistories_ExportHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetExportHistories_ExportHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetExportHistories_ExportHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetExportHistories_ExportHistories_Edges struct {
+	Node *GetExportHistories_ExportHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetExportHistories_ExportHistories_Edges) GetNode() *GetExportHistories_ExportHistories_Edges_Node {
+	if t == nil {
+		t = &GetExportHistories_ExportHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetExportHistories_ExportHistories struct {
+	Edges      []*GetExportHistories_ExportHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetExportHistories_ExportHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                       "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetExportHistories_ExportHistories) GetEdges() []*GetExportHistories_ExportHistories_Edges {
+	if t == nil {
+		t = &GetExportHistories_ExportHistories{}
+	}
+	return t.Edges
+}
+func (t *GetExportHistories_ExportHistories) GetPageInfo() *GetExportHistories_ExportHistories_PageInfo {
+	if t == nil {
+		t = &GetExportHistories_ExportHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetExportHistories_ExportHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetExportHistories_ExportHistories{}
+	}
+	return t.TotalCount
 }
 
 type DeleteFile_DeleteFile struct {
@@ -83868,6 +84978,83 @@ func (t *GetEvidenceHistories) GetEvidenceHistories() *GetEvidenceHistories_Evid
 	return &t.EvidenceHistories
 }
 
+type CreateExport struct {
+	CreateExport CreateExport_CreateExport "json:\"createExport\" graphql:\"createExport\""
+}
+
+func (t *CreateExport) GetCreateExport() *CreateExport_CreateExport {
+	if t == nil {
+		t = &CreateExport{}
+	}
+	return &t.CreateExport
+}
+
+type GetAllExports struct {
+	Exports GetAllExports_Exports "json:\"exports\" graphql:\"exports\""
+}
+
+func (t *GetAllExports) GetExports() *GetAllExports_Exports {
+	if t == nil {
+		t = &GetAllExports{}
+	}
+	return &t.Exports
+}
+
+type GetExportByID struct {
+	Export GetExportByID_Export "json:\"export\" graphql:\"export\""
+}
+
+func (t *GetExportByID) GetExport() *GetExportByID_Export {
+	if t == nil {
+		t = &GetExportByID{}
+	}
+	return &t.Export
+}
+
+type GetExports struct {
+	Exports GetExports_Exports "json:\"exports\" graphql:\"exports\""
+}
+
+func (t *GetExports) GetExports() *GetExports_Exports {
+	if t == nil {
+		t = &GetExports{}
+	}
+	return &t.Exports
+}
+
+type UpdateExport struct {
+	UpdateExport UpdateExport_UpdateExport "json:\"updateExport\" graphql:\"updateExport\""
+}
+
+func (t *UpdateExport) GetUpdateExport() *UpdateExport_UpdateExport {
+	if t == nil {
+		t = &UpdateExport{}
+	}
+	return &t.UpdateExport
+}
+
+type GetAllExportHistories struct {
+	ExportHistories GetAllExportHistories_ExportHistories "json:\"exportHistories\" graphql:\"exportHistories\""
+}
+
+func (t *GetAllExportHistories) GetExportHistories() *GetAllExportHistories_ExportHistories {
+	if t == nil {
+		t = &GetAllExportHistories{}
+	}
+	return &t.ExportHistories
+}
+
+type GetExportHistories struct {
+	ExportHistories GetExportHistories_ExportHistories "json:\"exportHistories\" graphql:\"exportHistories\""
+}
+
+func (t *GetExportHistories) GetExportHistories() *GetExportHistories_ExportHistories {
+	if t == nil {
+		t = &GetExportHistories{}
+	}
+	return &t.ExportHistories
+}
+
 type DeleteFile struct {
 	DeleteFile DeleteFile_DeleteFile "json:\"deleteFile\" graphql:\"deleteFile\""
 }
@@ -94771,6 +95958,332 @@ func (c *Client) GetEvidenceHistories(ctx context.Context, where *EvidenceHistor
 
 	var res GetEvidenceHistories
 	if err := c.Client.Post(ctx, "GetEvidenceHistories", GetEvidenceHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateExportDocument = `mutation CreateExport ($input: CreateExportInput!) {
+	createExport(input: $input) {
+		export {
+			createdAt
+			createdBy
+			exportType
+			fileID
+			id
+			ownerID
+			itemID
+			requestorID
+			status
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateExport(ctx context.Context, input CreateExportInput, interceptors ...clientv2.RequestInterceptor) (*CreateExport, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateExport
+	if err := c.Client.Post(ctx, "CreateExport", CreateExportDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllExportsDocument = `query GetAllExports {
+	exports {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				exportType
+				fileID
+				id
+				ownerID
+				requestorID
+				itemID
+				status
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllExports(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllExports, error) {
+	vars := map[string]any{}
+
+	var res GetAllExports
+	if err := c.Client.Post(ctx, "GetAllExports", GetAllExportsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetExportByIDDocument = `query GetExportByID ($exportId: ID!) {
+	export(id: $exportId) {
+		createdAt
+		createdBy
+		exportType
+		fileID
+		id
+		ownerID
+		requestorID
+		status
+		itemID
+		updatedAt
+		updatedBy
+		files {
+			edges {
+				node {
+					id
+					storagePath
+					storageScheme
+					storageVolume
+				}
+			}
+		}
+		file {
+			id
+			storagePath
+			storageScheme
+			storageVolume
+		}
+	}
+}
+`
+
+func (c *Client) GetExportByID(ctx context.Context, exportID string, interceptors ...clientv2.RequestInterceptor) (*GetExportByID, error) {
+	vars := map[string]any{
+		"exportId": exportID,
+	}
+
+	var res GetExportByID
+	if err := c.Client.Post(ctx, "GetExportByID", GetExportByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetExportsDocument = `query GetExports ($first: Int, $last: Int, $where: ExportWhereInput) {
+	exports(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				exportType
+				fileID
+				id
+				itemID
+				ownerID
+				requestorID
+				status
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetExports(ctx context.Context, first *int64, last *int64, where *ExportWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetExports, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetExports
+	if err := c.Client.Post(ctx, "GetExports", GetExportsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateExportDocument = `mutation UpdateExport ($updateExportId: ID!, $input: UpdateExportInput!, $exportFiles: [Upload!]) {
+	updateExport(id: $updateExportId, input: $input, exportFiles: $exportFiles) {
+		export {
+			createdAt
+			createdBy
+			exportType
+			fileID
+			id
+			itemID
+			ownerID
+			requestorID
+			status
+			updatedAt
+			updatedBy
+			files {
+				edges {
+					node {
+						id
+						storagePath
+						storageScheme
+						storageVolume
+					}
+				}
+			}
+			file {
+				id
+				storagePath
+				storageScheme
+				storageVolume
+			}
+		}
+	}
+}
+`
+
+func (c *Client) UpdateExport(ctx context.Context, updateExportID string, input UpdateExportInput, exportFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateExport, error) {
+	vars := map[string]any{
+		"updateExportId": updateExportID,
+		"input":          input,
+		"exportFiles":    exportFiles,
+	}
+
+	var res UpdateExport
+	if err := c.Client.Post(ctx, "UpdateExport", UpdateExportDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllExportHistoriesDocument = `query GetAllExportHistories {
+	exportHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				exportType
+				fileID
+				historyTime
+				id
+				itemID
+				operation
+				ownerID
+				ref
+				requestorID
+				status
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllExportHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllExportHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllExportHistories
+	if err := c.Client.Post(ctx, "GetAllExportHistories", GetAllExportHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetExportHistoriesDocument = `query GetExportHistories ($first: Int, $last: Int, $where: ExportHistoryWhereInput) {
+	exportHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				exportType
+				fileID
+				historyTime
+				id
+				operation
+				ownerID
+				itemID
+				ref
+				requestorID
+				status
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetExportHistories(ctx context.Context, first *int64, last *int64, where *ExportHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetExportHistories, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetExportHistories
+	if err := c.Client.Post(ctx, "GetExportHistories", GetExportHistoriesDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -110104,6 +111617,13 @@ var DocumentOperationNames = map[string]string{
 	UpdateEvidenceDocument:                       "UpdateEvidence",
 	GetAllEvidenceHistoriesDocument:              "GetAllEvidenceHistories",
 	GetEvidenceHistoriesDocument:                 "GetEvidenceHistories",
+	CreateExportDocument:                         "CreateExport",
+	GetAllExportsDocument:                        "GetAllExports",
+	GetExportByIDDocument:                        "GetExportByID",
+	GetExportsDocument:                           "GetExports",
+	UpdateExportDocument:                         "UpdateExport",
+	GetAllExportHistoriesDocument:                "GetAllExportHistories",
+	GetExportHistoriesDocument:                   "GetExportHistories",
 	DeleteFileDocument:                           "DeleteFile",
 	GetAllFilesDocument:                          "GetAllFiles",
 	GetFileByIDDocument:                          "GetFileByID",

@@ -418,6 +418,30 @@ type EvidenceUpdatePayload struct {
 	Evidence *generated.Evidence `json:"evidence"`
 }
 
+// Return response for createBulkExport mutation
+type ExportBulkCreatePayload struct {
+	// Created exports
+	Exports []*generated.Export `json:"exports,omitempty"`
+}
+
+// Return response for createExport mutation
+type ExportCreatePayload struct {
+	// Created export
+	Export *generated.Export `json:"export"`
+}
+
+// Return response for deleteExport mutation
+type ExportDeletePayload struct {
+	// Deleted export ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateExport mutation
+type ExportUpdatePayload struct {
+	// Updated export
+	Export *generated.Export `json:"export"`
+}
+
 // Return response for deleteFile mutation
 type FileDeletePayload struct {
 	// Deleted file ID

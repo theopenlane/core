@@ -98,11 +98,13 @@ type FileEdges struct {
 	Events []*Event `json:"events,omitempty"`
 	// TrustCenterSetting holds the value of the trust_center_setting edge.
 	TrustCenterSetting []*TrustCenterSetting `json:"trust_center_setting,omitempty"`
+	// Export holds the value of the export edge.
+	Export []*Export `json:"export,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [13]bool
+	loadedTypes [14]bool
 	// totalCount holds the count of the edges above.
-	totalCount [13]map[string]int
+	totalCount [14]map[string]int
 
 	namedUser                map[string][]*User
 	namedOrganization        map[string][]*Organization
@@ -117,6 +119,7 @@ type FileEdges struct {
 	namedEvidence            map[string][]*Evidence
 	namedEvents              map[string][]*Event
 	namedTrustCenterSetting  map[string][]*TrustCenterSetting
+	namedExport              map[string][]*Export
 }
 
 // UserOrErr returns the User value or an error if the edge
@@ -234,6 +237,15 @@ func (e FileEdges) TrustCenterSettingOrErr() ([]*TrustCenterSetting, error) {
 		return e.TrustCenterSetting, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_setting"}
+}
+
+// ExportOrErr returns the Export value or an error if the edge
+// was not loaded in eager-loading.
+func (e FileEdges) ExportOrErr() ([]*Export, error) {
+	if e.loadedTypes[13] {
+		return e.Export, nil
+	}
+	return nil, &NotLoadedError{edge: "export"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -483,6 +495,11 @@ func (f *File) QueryEvents() *EventQuery {
 // QueryTrustCenterSetting queries the "trust_center_setting" edge of the File entity.
 func (f *File) QueryTrustCenterSetting() *TrustCenterSettingQuery {
 	return NewFileClient(f.config).QueryTrustCenterSetting(f)
+}
+
+// QueryExport queries the "export" edge of the File entity.
+func (f *File) QueryExport() *ExportQuery {
+	return NewFileClient(f.config).QueryExport(f)
 }
 
 // Update returns a builder for updating this File.
@@ -883,6 +900,30 @@ func (f *File) appendNamedTrustCenterSetting(name string, edges ...*TrustCenterS
 		f.Edges.namedTrustCenterSetting[name] = []*TrustCenterSetting{}
 	} else {
 		f.Edges.namedTrustCenterSetting[name] = append(f.Edges.namedTrustCenterSetting[name], edges...)
+	}
+}
+
+// NamedExport returns the Export named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (f *File) NamedExport(name string) ([]*Export, error) {
+	if f.Edges.namedExport == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := f.Edges.namedExport[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (f *File) appendNamedExport(name string, edges ...*Export) {
+	if f.Edges.namedExport == nil {
+		f.Edges.namedExport = make(map[string][]*Export)
+	}
+	if len(edges) == 0 {
+		f.Edges.namedExport[name] = []*Export{}
+	} else {
+		f.Edges.namedExport[name] = append(f.Edges.namedExport[name], edges...)
 	}
 }
 

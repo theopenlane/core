@@ -357,6 +357,30 @@ func (f EvidenceHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.EvidenceHistoryMutation", m)
 }
 
+// The ExportFunc type is an adapter to allow the use of ordinary
+// function as Export mutator.
+type ExportFunc func(context.Context, *generated.ExportMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ExportFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ExportMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ExportMutation", m)
+}
+
+// The ExportHistoryFunc type is an adapter to allow the use of ordinary
+// function as ExportHistory mutator.
+type ExportHistoryFunc func(context.Context, *generated.ExportHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ExportHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ExportHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ExportHistoryMutation", m)
+}
+
 // The FileFunc type is an adapter to allow the use of ordinary
 // function as File mutator.
 type FileFunc func(context.Context, *generated.FileMutation) (generated.Value, error)

@@ -1,0 +1,59 @@
+query GetAllExportHistories {
+  exportHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        exportType
+        fileID
+        historyTime
+        id
+        itemID
+        operation
+        ownerID
+        ref
+        requestorID
+        status
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetExportHistories($first: Int, $last: Int, $where: ExportHistoryWhereInput) {
+  exportHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        exportType
+        fileID
+        historyTime
+        id
+        operation
+        ownerID
+        itemID
+        ref
+        requestorID
+        status
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

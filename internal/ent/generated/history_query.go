@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
+	"github.com/theopenlane/core/internal/ent/generated/exporthistory"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/grouphistory"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembershiphistory"
@@ -647,6 +648,52 @@ func (ehq *EvidenceHistoryQuery) AsOf(ctx context.Context, time time.Time) (*Evi
 	return ehq.
 		Where(evidencehistory.HistoryTimeLTE(time)).
 		Order(evidencehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (e *Export) History() *ExportHistoryQuery {
+	historyClient := NewExportHistoryClient(e.config)
+	return historyClient.Query().Where(exporthistory.Ref(e.ID))
+}
+
+func (eh *ExportHistory) Next(ctx context.Context) (*ExportHistory, error) {
+	client := NewExportHistoryClient(eh.config)
+	return client.Query().
+		Where(
+			exporthistory.Ref(eh.Ref),
+			exporthistory.HistoryTimeGT(eh.HistoryTime),
+		).
+		Order(exporthistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (eh *ExportHistory) Prev(ctx context.Context) (*ExportHistory, error) {
+	client := NewExportHistoryClient(eh.config)
+	return client.Query().
+		Where(
+			exporthistory.Ref(eh.Ref),
+			exporthistory.HistoryTimeLT(eh.HistoryTime),
+		).
+		Order(exporthistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (ehq *ExportHistoryQuery) Earliest(ctx context.Context) (*ExportHistory, error) {
+	return ehq.
+		Order(exporthistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (ehq *ExportHistoryQuery) Latest(ctx context.Context) (*ExportHistory, error) {
+	return ehq.
+		Order(exporthistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (ehq *ExportHistoryQuery) AsOf(ctx context.Context, time time.Time) (*ExportHistory, error) {
+	return ehq.
+		Where(exporthistory.HistoryTimeLTE(time)).
+		Order(exporthistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

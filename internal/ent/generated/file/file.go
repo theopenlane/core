@@ -83,6 +83,8 @@ const (
 	EdgeEvents = "events"
 	// EdgeTrustCenterSetting holds the string denoting the trust_center_setting edge name in mutations.
 	EdgeTrustCenterSetting = "trust_center_setting"
+	// EdgeExport holds the string denoting the export edge name in mutations.
+	EdgeExport = "export"
 	// Table holds the table name of the file in the database.
 	Table = "files"
 	// UserTable is the table that holds the user relation/edge. The primary key declared below.
@@ -150,6 +152,11 @@ const (
 	// TrustCenterSettingInverseTable is the table name for the TrustCenterSetting entity.
 	// It exists in this package in order to avoid circular dependency with the "trustcentersetting" package.
 	TrustCenterSettingInverseTable = "trust_center_settings"
+	// ExportTable is the table that holds the export relation/edge. The primary key declared below.
+	ExportTable = "export_files"
+	// ExportInverseTable is the table name for the Export entity.
+	// It exists in this package in order to avoid circular dependency with the "export" package.
+	ExportInverseTable = "exports"
 )
 
 // Columns holds all SQL columns for file fields.
@@ -224,6 +231,9 @@ var (
 	// TrustCenterSettingPrimaryKey and TrustCenterSettingColumn2 are the table columns denoting the
 	// primary key for the trust_center_setting relation (M2M).
 	TrustCenterSettingPrimaryKey = []string{"trust_center_setting_id", "file_id"}
+	// ExportPrimaryKey and ExportColumn2 are the table columns denoting the
+	// primary key for the export relation (M2M).
+	ExportPrimaryKey = []string{"export_id", "file_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -550,6 +560,20 @@ func ByTrustCenterSetting(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOptio
 		sqlgraph.OrderByNeighborTerms(s, newTrustCenterSettingStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByExportCount orders the results by export count.
+func ByExportCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newExportStep(), opts...)
+	}
+}
+
+// ByExport orders the results by export terms.
+func ByExport(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newExportStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newUserStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -639,5 +663,12 @@ func newTrustCenterSettingStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TrustCenterSettingInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, TrustCenterSettingTable, TrustCenterSettingPrimaryKey...),
+	)
+}
+func newExportStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ExportInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ExportTable, ExportPrimaryKey...),
 	)
 }

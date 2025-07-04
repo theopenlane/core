@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -496,6 +497,21 @@ func (fc *FileCreate) AddTrustCenterSetting(t ...*TrustCenterSetting) *FileCreat
 	return fc.AddTrustCenterSettingIDs(ids...)
 }
 
+// AddExportIDs adds the "export" edge to the Export entity by IDs.
+func (fc *FileCreate) AddExportIDs(ids ...string) *FileCreate {
+	fc.mutation.AddExportIDs(ids...)
+	return fc
+}
+
+// AddExport adds the "export" edges to the Export entity.
+func (fc *FileCreate) AddExport(e ...*Export) *FileCreate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fc.AddExportIDs(ids...)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (fc *FileCreate) Mutation() *FileMutation {
 	return fc.mutation
@@ -918,6 +934,23 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = fc.schemaConfig.TrustCenterSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := fc.mutation.ExportIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ExportTable,
+			Columns: file.ExportPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fc.schemaConfig.ExportFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

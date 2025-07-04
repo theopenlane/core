@@ -32,6 +32,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
+	"github.com/theopenlane/core/internal/ent/generated/exporthistory"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/grouphistory"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembershiphistory"
@@ -1196,6 +1197,69 @@ func (eh *EvidenceHistory) Diff(history *EvidenceHistory) (*HistoryDiff[Evidence
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[EvidenceHistory]{
+			Old:     history,
+			New:     eh,
+			Changes: history.changes(eh),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
+func (eh *ExportHistory) changes(new *ExportHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(eh.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(exporthistory.FieldCreatedAt, eh.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(eh.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(exporthistory.FieldUpdatedAt, eh.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(eh.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(exporthistory.FieldCreatedBy, eh.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(eh.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(exporthistory.FieldDeletedAt, eh.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(eh.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(exporthistory.FieldDeletedBy, eh.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(eh.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(exporthistory.FieldOwnerID, eh.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(eh.ExportType, new.ExportType) {
+		changes = append(changes, NewChange(exporthistory.FieldExportType, eh.ExportType, new.ExportType))
+	}
+	if !reflect.DeepEqual(eh.ItemID, new.ItemID) {
+		changes = append(changes, NewChange(exporthistory.FieldItemID, eh.ItemID, new.ItemID))
+	}
+	if !reflect.DeepEqual(eh.Status, new.Status) {
+		changes = append(changes, NewChange(exporthistory.FieldStatus, eh.Status, new.Status))
+	}
+	if !reflect.DeepEqual(eh.RequestorID, new.RequestorID) {
+		changes = append(changes, NewChange(exporthistory.FieldRequestorID, eh.RequestorID, new.RequestorID))
+	}
+	if !reflect.DeepEqual(eh.FileID, new.FileID) {
+		changes = append(changes, NewChange(exporthistory.FieldFileID, eh.FileID, new.FileID))
+	}
+	return changes
+}
+
+func (eh *ExportHistory) Diff(history *ExportHistory) (*HistoryDiff[ExportHistory], error) {
+	if eh.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	ehUnix, historyUnix := eh.HistoryTime.Unix(), history.HistoryTime.Unix()
+	ehOlder := ehUnix < historyUnix || (ehUnix == historyUnix && eh.ID < history.ID)
+	historyOlder := ehUnix > historyUnix || (ehUnix == historyUnix && eh.ID > history.ID)
+
+	if ehOlder {
+		return &HistoryDiff[ExportHistory]{
+			Old:     eh,
+			New:     history,
+			Changes: eh.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[ExportHistory]{
 			Old:     history,
 			New:     eh,
 			Changes: history.changes(eh),
@@ -3480,6 +3544,12 @@ func (c *Client) Audit(ctx context.Context, after *Cursor, first *int, before *C
 	}
 	result.Edges = append(result.Edges, record.Edges...)
 
+	record, err = auditExportHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
 	record, err = auditFileHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
@@ -4185,6 +4255,47 @@ func (c *Client) AuditWithFilter(ctx context.Context, after *Cursor, first *int,
 		}
 
 		result, err = auditEvidenceHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
+	if where.Table == strings.TrimSuffix("ExportHistory", "History") {
+		// map AuditLogWhereInput to ExportHistoryWhereInput
+		whereInput := &ExportHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to ExportHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &ExportHistoryOrder{
+			Field:     ExportHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditExportHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
@@ -6333,6 +6444,79 @@ func auditEvidenceHistory(ctx context.Context, config config, after *Cursor, fir
 			// but just in case, we will handle it gracefully
 			if len(prev) == 0 {
 				prev = append(prev, &EvidenceHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type exporthistoryref struct {
+	Ref string
+}
+
+func auditExportHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *ExportHistoryOrder, where *ExportHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []ExportHistoryPaginateOption{
+		WithExportHistoryOrder(orderBy),
+		WithExportHistoryFilter(where.Filter),
+	}
+
+	client := NewExportHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "ExportHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&ExportHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&ExportHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					exporthistory.Ref(curr.Node.Ref),
+					exporthistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(exporthistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &ExportHistory{})
 			}
 
 			record.Changes = prev[0].changes(curr.Node)

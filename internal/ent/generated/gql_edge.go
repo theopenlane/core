@@ -1846,6 +1846,64 @@ func (e *Evidence) Tasks(
 	return e.QueryTasks().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (e *Export) Owner(ctx context.Context) (*Organization, error) {
+	result, err := e.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = e.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (e *Export) Events(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*EventOrder, where *EventWhereInput,
+) (*EventConnection, error) {
+	opts := []EventPaginateOption{
+		WithEventOrder(orderBy),
+		WithEventFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := e.Edges.totalCount[1][alias]
+	if nodes, err := e.NamedEvents(alias); err == nil || hasTotalCount {
+		pager, err := newEventPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &EventConnection{Edges: []*EventEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return e.QueryEvents().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (e *Export) Files(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FileOrder, where *FileWhereInput,
+) (*FileConnection, error) {
+	opts := []FilePaginateOption{
+		WithFileOrder(orderBy),
+		WithFileFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := e.Edges.totalCount[2][alias]
+	if nodes, err := e.NamedFiles(alias); err == nil || hasTotalCount {
+		pager, err := newFilePager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &FileConnection{Edges: []*FileEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return e.QueryFiles().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (e *Export) File(ctx context.Context) (*File, error) {
+	result, err := e.Edges.FileOrErr()
+	if IsNotLoaded(err) {
+		result, err = e.QueryFile().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (f *File) User(ctx context.Context) (result []*User, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = f.NamedUser(graphql.GetFieldContext(ctx).Field.Alias)
@@ -2016,6 +2074,18 @@ func (f *File) TrustCenterSetting(ctx context.Context) (result []*TrustCenterSet
 	}
 	if IsNotLoaded(err) {
 		result, err = f.QueryTrustCenterSetting().All(ctx)
+	}
+	return result, err
+}
+
+func (f *File) Export(ctx context.Context) (result []*Export, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = f.NamedExport(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = f.Edges.ExportOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = f.QueryExport().All(ctx)
 	}
 	return result, err
 }
@@ -4868,6 +4938,27 @@ func (o *Organization) Scans(
 	return o.QueryScans().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (o *Organization) Exports(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ExportOrder, where *ExportWhereInput,
+) (*ExportConnection, error) {
+	opts := []ExportPaginateOption{
+		WithExportOrder(orderBy),
+		WithExportFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := o.Edges.totalCount[61][alias]
+	if nodes, err := o.NamedExports(alias); err == nil || hasTotalCount {
+		pager, err := newExportPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &ExportConnection{Edges: []*ExportEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return o.QueryExports().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (o *Organization) Members(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*OrgMembershipOrder, where *OrgMembershipWhereInput,
 ) (*OrgMembershipConnection, error) {
@@ -4876,7 +4967,7 @@ func (o *Organization) Members(
 		WithOrgMembershipFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[61][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[62][alias]
 	if nodes, err := o.NamedMembers(alias); err == nil || hasTotalCount {
 		pager, err := newOrgMembershipPager(opts, last != nil)
 		if err != nil {

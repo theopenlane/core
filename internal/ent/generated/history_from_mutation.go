@@ -3447,6 +3447,224 @@ func (m *EvidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *ExportMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.ExportHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if exportType, exists := m.ExportType(); exists {
+		create = create.SetExportType(exportType)
+	}
+
+	if itemID, exists := m.ItemID(); exists {
+		create = create.SetItemID(itemID)
+	}
+
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
+	if requestorID, exists := m.RequestorID(); exists {
+		create = create.SetRequestorID(requestorID)
+	}
+
+	if fileID, exists := m.FileID(); exists {
+		create = create.SetFileID(fileID)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *ExportMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		export, err := client.Export.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.ExportHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(export.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(export.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(export.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(export.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(export.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(export.DeletedBy)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(export.OwnerID)
+		}
+
+		if exportType, exists := m.ExportType(); exists {
+			create = create.SetExportType(exportType)
+		} else {
+			create = create.SetExportType(export.ExportType)
+		}
+
+		if itemID, exists := m.ItemID(); exists {
+			create = create.SetItemID(itemID)
+		} else {
+			create = create.SetItemID(export.ItemID)
+		}
+
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(export.Status)
+		}
+
+		if requestorID, exists := m.RequestorID(); exists {
+			create = create.SetRequestorID(requestorID)
+		} else {
+			create = create.SetRequestorID(export.RequestorID)
+		}
+
+		if fileID, exists := m.FileID(); exists {
+			create = create.SetFileID(fileID)
+		} else {
+			create = create.SetFileID(export.FileID)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ExportMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		export, err := client.Export.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.ExportHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(export.CreatedAt).
+			SetUpdatedAt(export.UpdatedAt).
+			SetCreatedBy(export.CreatedBy).
+			SetUpdatedBy(export.UpdatedBy).
+			SetDeletedAt(export.DeletedAt).
+			SetDeletedBy(export.DeletedBy).
+			SetOwnerID(export.OwnerID).
+			SetExportType(export.ExportType).
+			SetItemID(export.ItemID).
+			SetStatus(export.Status).
+			SetRequestorID(export.RequestorID).
+			SetFileID(export.FileID).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
