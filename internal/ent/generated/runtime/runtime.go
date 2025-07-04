@@ -599,13 +599,11 @@ func init() {
 
 	control.Hooks[7] = controlMixinHooks6[1]
 
-	control.Hooks[8] = controlMixinHooks6[2]
+	control.Hooks[8] = controlMixinHooks7[0]
 
-	control.Hooks[9] = controlMixinHooks7[0]
+	control.Hooks[9] = controlMixinHooks7[1]
 
-	control.Hooks[10] = controlMixinHooks7[1]
-
-	control.Hooks[11] = controlHooks[0]
+	control.Hooks[10] = controlHooks[0]
 	controlMixinInters1 := controlMixin[1].Interceptors()
 	controlMixinInters6 := controlMixin[6].Interceptors()
 	control.Interceptors[0] = controlMixinInters1[0]
@@ -703,15 +701,13 @@ func init() {
 
 	controlimplementation.Hooks[4] = controlimplementationMixinHooks5[1]
 
-	controlimplementation.Hooks[5] = controlimplementationMixinHooks5[2]
+	controlimplementation.Hooks[5] = controlimplementationMixinHooks6[0]
 
-	controlimplementation.Hooks[6] = controlimplementationMixinHooks6[0]
+	controlimplementation.Hooks[6] = controlimplementationMixinHooks6[1]
 
-	controlimplementation.Hooks[7] = controlimplementationMixinHooks6[1]
+	controlimplementation.Hooks[7] = controlimplementationMixinHooks6[2]
 
-	controlimplementation.Hooks[8] = controlimplementationMixinHooks6[2]
-
-	controlimplementation.Hooks[9] = controlimplementationHooks[0]
+	controlimplementation.Hooks[8] = controlimplementationHooks[0]
 	controlimplementationMixinInters1 := controlimplementationMixin[1].Interceptors()
 	controlimplementationMixinInters5 := controlimplementationMixin[5].Interceptors()
 	controlimplementation.Interceptors[0] = controlimplementationMixinInters1[0]
@@ -804,13 +800,11 @@ func init() {
 
 	controlobjective.Hooks[6] = controlobjectiveMixinHooks6[1]
 
-	controlobjective.Hooks[7] = controlobjectiveMixinHooks6[2]
+	controlobjective.Hooks[7] = controlobjectiveMixinHooks7[0]
 
-	controlobjective.Hooks[8] = controlobjectiveMixinHooks7[0]
+	controlobjective.Hooks[8] = controlobjectiveMixinHooks7[1]
 
-	controlobjective.Hooks[9] = controlobjectiveMixinHooks7[1]
-
-	controlobjective.Hooks[10] = controlobjectiveMixinHooks7[2]
+	controlobjective.Hooks[9] = controlobjectiveMixinHooks7[2]
 	controlobjectiveMixinInters1 := controlobjectiveMixin[1].Interceptors()
 	controlobjectiveMixinInters6 := controlobjectiveMixin[6].Interceptors()
 	controlobjective.Interceptors[0] = controlobjectiveMixinInters1[0]
@@ -1237,8 +1231,6 @@ func init() {
 	documentdata.Hooks[3] = documentdataMixinHooks5[0]
 
 	documentdata.Hooks[4] = documentdataMixinHooks5[1]
-
-	documentdata.Hooks[5] = documentdataMixinHooks5[2]
 	documentdataMixinInters1 := documentdataMixin[1].Interceptors()
 	documentdataMixinInters5 := documentdataMixin[5].Interceptors()
 	documentdata.Interceptors[0] = documentdataMixinInters1[0]
@@ -1668,9 +1660,7 @@ func init() {
 
 	evidence.Hooks[5] = evidenceMixinHooks5[1]
 
-	evidence.Hooks[6] = evidenceMixinHooks5[2]
-
-	evidence.Hooks[7] = evidenceHooks[0]
+	evidence.Hooks[6] = evidenceHooks[0]
 	evidenceMixinInters1 := evidenceMixin[1].Interceptors()
 	evidenceMixinInters5 := evidenceMixin[5].Interceptors()
 	evidence.Interceptors[0] = evidenceMixinInters1[0]
@@ -3067,13 +3057,11 @@ func init() {
 
 	narrative.Hooks[5] = narrativeMixinHooks5[1]
 
-	narrative.Hooks[6] = narrativeMixinHooks5[2]
+	narrative.Hooks[6] = narrativeMixinHooks6[0]
 
-	narrative.Hooks[7] = narrativeMixinHooks6[0]
+	narrative.Hooks[7] = narrativeMixinHooks6[1]
 
-	narrative.Hooks[8] = narrativeMixinHooks6[1]
-
-	narrative.Hooks[9] = narrativeMixinHooks6[2]
+	narrative.Hooks[8] = narrativeMixinHooks6[2]
 	narrativeMixinInters1 := narrativeMixin[1].Interceptors()
 	narrativeMixinInters5 := narrativeMixin[5].Interceptors()
 	narrative.Interceptors[0] = narrativeMixinInters1[0]
@@ -3171,9 +3159,7 @@ func init() {
 
 	note.Hooks[5] = noteMixinHooks4[1]
 
-	note.Hooks[6] = noteMixinHooks4[2]
-
-	note.Hooks[7] = noteHooks[0]
+	note.Hooks[6] = noteHooks[0]
 	noteMixinInters1 := noteMixin[1].Interceptors()
 	noteMixinInters4 := noteMixin[4].Interceptors()
 	note.Interceptors[0] = noteMixinInters1[0]
@@ -4399,17 +4385,15 @@ func init() {
 
 	risk.Hooks[5] = riskMixinHooks5[1]
 
-	risk.Hooks[6] = riskMixinHooks5[2]
+	risk.Hooks[6] = riskMixinHooks6[0]
 
-	risk.Hooks[7] = riskMixinHooks6[0]
+	risk.Hooks[7] = riskMixinHooks6[1]
 
-	risk.Hooks[8] = riskMixinHooks6[1]
+	risk.Hooks[8] = riskMixinHooks6[2]
 
-	risk.Hooks[9] = riskMixinHooks6[2]
+	risk.Hooks[9] = riskHooks[0]
 
-	risk.Hooks[10] = riskHooks[0]
-
-	risk.Hooks[11] = riskHooks[1]
+	risk.Hooks[10] = riskHooks[1]
 	riskMixinInters1 := riskMixin[1].Interceptors()
 	riskMixinInters5 := riskMixin[5].Interceptors()
 	risk.Interceptors[0] = riskMixinInters1[0]
@@ -4921,11 +4905,9 @@ func init() {
 
 	subcontrol.Hooks[7] = subcontrolMixinHooks6[1]
 
-	subcontrol.Hooks[8] = subcontrolMixinHooks6[2]
+	subcontrol.Hooks[8] = subcontrolHooks[0]
 
-	subcontrol.Hooks[9] = subcontrolHooks[0]
-
-	subcontrol.Hooks[10] = subcontrolHooks[1]
+	subcontrol.Hooks[9] = subcontrolHooks[1]
 	subcontrolMixinInters1 := subcontrolMixin[1].Interceptors()
 	subcontrolMixinInters6 := subcontrolMixin[6].Interceptors()
 	subcontrol.Interceptors[0] = subcontrolMixinInters1[0]
@@ -5187,11 +5169,9 @@ func init() {
 
 	task.Hooks[5] = taskMixinHooks5[1]
 
-	task.Hooks[6] = taskMixinHooks5[2]
+	task.Hooks[6] = taskHooks[0]
 
-	task.Hooks[7] = taskHooks[0]
-
-	task.Hooks[8] = taskHooks[1]
+	task.Hooks[7] = taskHooks[1]
 	taskMixinInters1 := taskMixin[1].Interceptors()
 	taskMixinInters5 := taskMixin[5].Interceptors()
 	task.Interceptors[0] = taskMixinInters1[0]
