@@ -384,13 +384,6 @@ steps:
               push: true
               build-args:
                 - NAME=${APP_NAME}
-      - trigger: "core-deploy"
-        depends_on: "docker-build-and-tag"
-        label: ":rocket: trigger core-deploy"
-        if: build.tag != null
-        build:
-          env:
-            CORE_TAG: "${BUILDKITE_TAG}"
   - group: ":rocket: Publish"
     key: "publish"
     steps:
