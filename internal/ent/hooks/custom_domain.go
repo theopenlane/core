@@ -7,7 +7,10 @@ import (
 	"entgo.io/ent"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/pkg/corejobs"
 )
 
@@ -51,17 +54,25 @@ func HookDeleteCustomDomain() ent.Hook {
 					return nil, fmt.Errorf("%w: %s", ErrInvalidInput, "id is required")
 				}
 
-				cd, err := m.Client().CustomDomain.Get(ctx, id)
+				cd, err := m.Client().CustomDomain.Query().Where(customdomain.ID(id)).
+					Select(customdomain.FieldDNSVerificationID, customdomain.FieldMappableDomainID, customdomain.FieldDNSVerificationID).
+					Only(ctx)
 				if err != nil || cd.DNSVerificationID == "" {
 					return next.Mutate(ctx, m)
 				}
 
-				mappableDomain, err := m.Client().MappableDomain.Get(ctx, cd.MappableDomainID)
+				mappableDomain, err := m.Client().MappableDomain.Query().
+					Where(mappabledomain.ID(cd.MappableDomainID)).
+					Select(mappabledomain.FieldZoneID).
+					Only(ctx)
 				if err != nil {
 					return nil, err
 				}
 
-				dnsVerification, err := m.Client().DNSVerification.Get(ctx, cd.DNSVerificationID)
+				dnsVerification, err := m.Client().DNSVerification.Query().
+					Where(dnsverification.ID(cd.DNSVerificationID)).
+					Select(dnsverification.FieldCloudflareHostnameID).
+					Only(ctx)
 				if err != nil {
 					return nil, err
 				}

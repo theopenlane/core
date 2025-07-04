@@ -6793,6 +6793,89 @@ func (_c *MockOpenlaneGraphClient_CreateControlsByClone_Call) RunAndReturn(run f
 	return _c
 }
 
+// CreateControlsByCloneReturnID provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CreateControlsByCloneReturnID(ctx context.Context, input openlaneclient.CloneControlInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateControlsByCloneReturnID, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateControlsByCloneReturnID")
+	}
+
+	var r0 *openlaneclient.CreateControlsByCloneReturnID
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CloneControlInput, ...clientv2.RequestInterceptor) (*openlaneclient.CreateControlsByCloneReturnID, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CloneControlInput, ...clientv2.RequestInterceptor) *openlaneclient.CreateControlsByCloneReturnID); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CreateControlsByCloneReturnID)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, openlaneclient.CloneControlInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CreateControlsByCloneReturnID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateControlsByCloneReturnID'
+type MockOpenlaneGraphClient_CreateControlsByCloneReturnID_Call struct {
+	*mock.Call
+}
+
+// CreateControlsByCloneReturnID is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input openlaneclient.CloneControlInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CreateControlsByCloneReturnID(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateControlsByCloneReturnID_Call {
+	return &MockOpenlaneGraphClient_CreateControlsByCloneReturnID_Call{Call: _e.mock.On("CreateControlsByCloneReturnID",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CreateControlsByCloneReturnID_Call) Run(run func(ctx context.Context, input openlaneclient.CloneControlInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateControlsByCloneReturnID_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CloneControlInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CloneControlInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateControlsByCloneReturnID_Call) Return(createControlsByCloneReturnID *openlaneclient.CreateControlsByCloneReturnID, err error) *MockOpenlaneGraphClient_CreateControlsByCloneReturnID_Call {
+	_c.Call.Return(createControlsByCloneReturnID, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateControlsByCloneReturnID_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.CloneControlInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateControlsByCloneReturnID, error)) *MockOpenlaneGraphClient_CreateControlsByCloneReturnID_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // CreateCustomDomain provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) CreateCustomDomain(ctx context.Context, input openlaneclient.CreateCustomDomainInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateCustomDomain, error) {
 	var tmpRet mock.Arguments
@@ -7459,6 +7542,89 @@ func (_c *MockOpenlaneGraphClient_CreateFullProgram_Call) Return(createFullProgr
 }
 
 func (_c *MockOpenlaneGraphClient_CreateFullProgram_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.CreateFullProgramInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateFullProgram, error)) *MockOpenlaneGraphClient_CreateFullProgram_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// CreateFullProgramReturnIDs provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CreateFullProgramReturnIDs(ctx context.Context, input openlaneclient.CreateFullProgramInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateFullProgramReturnIDs, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateFullProgramReturnIDs")
+	}
+
+	var r0 *openlaneclient.CreateFullProgramReturnIDs
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateFullProgramInput, ...clientv2.RequestInterceptor) (*openlaneclient.CreateFullProgramReturnIDs, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateFullProgramInput, ...clientv2.RequestInterceptor) *openlaneclient.CreateFullProgramReturnIDs); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CreateFullProgramReturnIDs)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, openlaneclient.CreateFullProgramInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CreateFullProgramReturnIDs_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateFullProgramReturnIDs'
+type MockOpenlaneGraphClient_CreateFullProgramReturnIDs_Call struct {
+	*mock.Call
+}
+
+// CreateFullProgramReturnIDs is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input openlaneclient.CreateFullProgramInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CreateFullProgramReturnIDs(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateFullProgramReturnIDs_Call {
+	return &MockOpenlaneGraphClient_CreateFullProgramReturnIDs_Call{Call: _e.mock.On("CreateFullProgramReturnIDs",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CreateFullProgramReturnIDs_Call) Run(run func(ctx context.Context, input openlaneclient.CreateFullProgramInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateFullProgramReturnIDs_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateFullProgramInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateFullProgramInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateFullProgramReturnIDs_Call) Return(createFullProgramReturnIDs *openlaneclient.CreateFullProgramReturnIDs, err error) *MockOpenlaneGraphClient_CreateFullProgramReturnIDs_Call {
+	_c.Call.Return(createFullProgramReturnIDs, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateFullProgramReturnIDs_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.CreateFullProgramInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateFullProgramReturnIDs, error)) *MockOpenlaneGraphClient_CreateFullProgramReturnIDs_Call {
 	_c.Call.Return(run)
 	return _c
 }

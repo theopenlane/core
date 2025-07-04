@@ -13,6 +13,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 )
 
@@ -153,13 +154,10 @@ func constructTOTPUser(ctx context.Context, m *generated.TFASettingMutation) (*t
 	}
 
 	// get the user object
-	user, err := m.Client().User.Get(ctx, userID)
-	if err != nil {
-		return nil, err
-	}
-
-	// get the full setting object
-	setting, err := user.Setting(ctx)
+	userDetails, err := m.Client().User.Query().
+		WithSetting().
+		Where(user.ID(userID)).
+		Only(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -170,14 +168,14 @@ func constructTOTPUser(ctx context.Context, m *generated.TFASettingMutation) (*t
 	u.IsTOTPAllowed, _ = m.TotpAllowed()
 
 	// setup account name fields
-	isValid := user.Email != ""
+	isValid := userDetails.Email != ""
 
 	u.Email = sql.NullString{
-		String: user.Email,
+		String: userDetails.Email,
 		Valid:  isValid,
 	}
 
-	phoneNumber := setting.PhoneNumber
+	phoneNumber := userDetails.Edges.Setting.PhoneNumber
 
 	isValid = true
 	if phoneNumber == nil {
@@ -186,7 +184,7 @@ func constructTOTPUser(ctx context.Context, m *generated.TFASettingMutation) (*t
 
 	if phoneNumber != nil {
 		u.Phone = sql.NullString{
-			String: *setting.PhoneNumber,
+			String: *phoneNumber,
 			Valid:  isValid,
 		}
 	}

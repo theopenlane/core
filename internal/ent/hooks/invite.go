@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -252,7 +253,10 @@ func createInviteToSend(ctx context.Context, m *generated.InviteMutation) error 
 	emailAddress, _ := m.Recipient()
 	role, _ := m.Role()
 
-	org, err := m.Client().Organization.Get(ctx, orgID)
+	org, err := m.Client().Organization.Query().
+		Where(organization.ID(orgID)).
+		Select(organization.FieldDisplayName).
+		Only(ctx)
 	if err != nil {
 		return err
 	}
@@ -263,7 +267,10 @@ func createInviteToSend(ctx context.Context, m *generated.InviteMutation) error 
 
 	switch authType {
 	case auth.UserSubjectType:
-		requestor, err := m.Client().User.Get(ctx, reqID)
+		requestor, err := m.Client().User.Query().
+			Where(user.ID(reqID)).
+			Select(user.FieldFirstName).
+			Only(ctx)
 		if err != nil {
 			return err
 		}

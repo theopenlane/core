@@ -130,7 +130,7 @@ var controlFields = []ent.Field{
 		Comment("the reference framework for the control if it came from a standard, empty if not associated with a standard").
 		Nillable().
 		Annotations(
-			entgql.Skip(entgql.SkipMutationCreateInput|entgql.SkipMutationUpdateInput),
+			entgql.Skip(entgql.SkipMutationUpdateInput),
 			entgql.OrderField("REFERENCE_FRAMEWORK"),
 		).
 		Optional(),

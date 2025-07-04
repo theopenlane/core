@@ -953,6 +953,7 @@ type CreateControlInput struct {
 	AuditorReferenceID       *string
 	Status                   *enums.ControlStatus
 	Source                   *enums.ControlSource
+	ReferenceFramework       *string
 	ControlType              *enums.ControlType
 	Category                 *string
 	CategoryID               *string
@@ -1006,6 +1007,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if v := i.ReferenceFramework; v != nil {
+		m.SetReferenceFramework(*v)
 	}
 	if v := i.ControlType; v != nil {
 		m.SetControlType(*v)
@@ -9687,6 +9691,7 @@ type CreateSubcontrolInput struct {
 	AuditorReferenceID       *string
 	Status                   *enums.ControlStatus
 	Source                   *enums.ControlSource
+	ReferenceFramework       *string
 	ControlType              *enums.ControlType
 	Category                 *string
 	CategoryID               *string
@@ -9734,6 +9739,9 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if v := i.ReferenceFramework; v != nil {
+		m.SetReferenceFramework(*v)
 	}
 	if v := i.ControlType; v != nil {
 		m.SetControlType(*v)

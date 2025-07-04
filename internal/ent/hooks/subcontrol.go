@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 )
@@ -64,20 +65,30 @@ func HookSubcontrolCreate() ent.Hook {
 					return next.Mutate(ctx, m)
 				}
 
-				control, err := m.Client().Control.Get(ctx, controlID)
-				if err != nil {
-					return nil, err
-				}
+				// set reference framework and control Owner if it is not set
+				referenceFramework, rOk := m.ReferenceFramework()
+				controlOwnerID, cOK := m.ControlOwnerID()
 
-				if m.Op().Is(ent.OpCreate) {
-					// if the control has an owner, assign it to the subcontrol
-					if control.ControlOwnerID != "" {
-						m.SetControlOwnerID(control.ControlOwnerID)
+				if !rOk || !cOK || referenceFramework == "" || controlOwnerID == "" {
+					// if the reference framework is set, we will use it
+					c, err := m.Client().Control.Query().
+						Where(control.ID(controlID)).
+						Select(control.FieldControlOwnerID, control.FieldReferenceFramework).
+						Only(ctx)
+					if err != nil {
+						return nil, err
 					}
-				}
 
-				if control.ReferenceFramework != nil {
-					m.SetReferenceFramework(*control.ReferenceFramework)
+					if m.Op().Is(ent.OpCreate) {
+						// if the control has an owner, assign it to the subcontrol
+						if c.ControlOwnerID != "" {
+							m.SetControlOwnerID(c.ControlOwnerID)
+						}
+					}
+
+					if c.ReferenceFramework != nil {
+						m.SetReferenceFramework(*c.ReferenceFramework)
+					}
 				}
 			}
 

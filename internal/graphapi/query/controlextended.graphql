@@ -47,6 +47,14 @@ mutation CreateControlsByClone($input: CloneControlInput!) {
   }
 }
 
+mutation CreateControlsByCloneReturnID($input: CloneControlInput!) {
+  createControlsByClone(input: $input) {
+    controls {
+      id
+    }
+  }
+}
+
 query GetControlCategories {
   controlCategories
 }
