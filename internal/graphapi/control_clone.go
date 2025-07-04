@@ -68,6 +68,15 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 		mu     sync.Mutex
 	)
 
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	// create a function for each control to clone
+	// this will allow us to run the cloning in parallel
+	// we will use a mutex to protect the createdControlIDs and existingControlIDs slices
+	// and the errors slice
 	for i, c := range controlsToClone {
 		c := c // capture loop variable
 		funcs[i] = func() {
@@ -76,12 +85,6 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 			controlInput, standardID := createCloneControlInput(c, programID)
 
 			var newControlID string
-
-			orgID, err := auth.GetOrganizationIDFromContext(ctx)
-			if err != nil {
-				errors = append(errors, rout.NewMissingRequiredFieldError("owner_id"))
-				return
-			}
 
 			existingControl, err := r.db.Control.Query().
 				Where(
@@ -93,21 +96,34 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 
 			switch {
 			case err == nil:
+				// control already exists, we will not clone it again
 				newControlID = existingControl.ID
+
+				mu.Lock()
 				existingControlIDs = append(existingControlIDs, newControlID)
+				mu.Unlock()
 			case generated.IsNotFound(err):
 				// do outside a transaction because you cannot use a transaction across go-routines
+				// if we get an error, we will deleted all controls that were created before the error occurred
 				res, err := r.db.Control.Create().
 					SetInput(controlInput).Save(ctx)
 				if err != nil {
+					mu.Lock()
 					errors = append(errors, err)
+					mu.Unlock()
+
 					return
 				}
+
 				newControlID = res.ID
 			default:
 				log.Error().Err(err).Str("ref_code", c.RefCode).Str("standard_id", c.StandardID).
 					Msg("error checking for existing control")
+
+				mu.Lock()
 				errors = append(errors, err)
+				mu.Unlock()
+
 				return
 			}
 
@@ -137,9 +153,11 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 		if len(createdControlIDs) > 0 {
 			log.Warn().Msgf("deleting %d controls that were created before the error occurred", len(createdControlIDs))
 			// delete any controls that were created before the error occurred
+			// this should also cascade delete any subcontrols that were created
 			if _, err := withTransactionalMutation(ctx).Control.Delete().
 				Where(control.IDIn(createdControlIDs...)).
 				Exec(ctx); err != nil {
+
 				log.Error().Err(err).Msg("error deleting controls that were created before the error occurred")
 			}
 		}
@@ -156,6 +174,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 				control.IDIn(existingControlIDs...)).
 			AddProgramIDs(*programID).
 			Exec(ctx); err != nil {
+
 			return nil, err
 		}
 	}
@@ -238,18 +257,40 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, c *generated.Co
 	// we only want to clone subcontrols that do not already exist in the control
 	subcontrolsToClone := []*generated.Subcontrol{}
 
+	refCodes := []string{}
 	for _, s := range c.Edges.Subcontrols {
-		// Check if we can find the subcontrol based on refCode and controlID
-		// ignore errors here, if we get an error we assume it doesn't exist
-		exists, _ := r.db.Subcontrol.Query().
-			Where(
-				subcontrol.RefCode(s.RefCode),
-				subcontrol.ControlID(newControlID),
-				subcontrol.OwnerID(orgID),
-			).
-			Exist(ctx)
+		refCodes = append(refCodes, s.RefCode)
+	}
+
+	// Check if we can find the subcontrol based on refCode and controlID
+	// ignore errors here, if we get an error we assume it doesn't exist
+	existingSubcontrols, err := r.db.Subcontrol.Query().
+		Where(
+			subcontrol.RefCodeIn(refCodes...),
+			subcontrol.ControlID(newControlID),
+			subcontrol.OwnerID(orgID),
+		).
+		All(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("error checking for existing subcontrols")
+
+		return err
+	}
+
+	// get the subcontrols we actually need to clone
+	for _, subcontrol := range c.Edges.Subcontrols {
+		// check if the subcontrol already exists in the organization
+		exists := false
+		for _, existingSubcontrol := range existingSubcontrols {
+			if existingSubcontrol.RefCode == subcontrol.RefCode && existingSubcontrol.ControlID == newControlID {
+				exists = true
+				break
+			}
+		}
+
 		if !exists {
-			subcontrolsToClone = append(subcontrolsToClone, s)
+			// if it does not exist, we need to clone it
+			subcontrolsToClone = append(subcontrolsToClone, subcontrol)
 		}
 	}
 
@@ -281,6 +322,7 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, c *generated.Co
 	return err
 }
 
+// bulkCreateSubcontrolNoTransaction creates multiple subcontrols in a single request without a transaction to allow it to be run in parallel
 func (r *mutationResolver) bulkCreateSubcontrolNoTransaction(ctx context.Context, input []*generated.CreateSubcontrolInput) (*model.SubcontrolBulkCreatePayload, error) {
 	builders := make([]*generated.SubcontrolCreate, len(input))
 	for i, data := range input {
