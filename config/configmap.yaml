@@ -54,7 +54,10 @@ data:
   CORE_SERVER_CSRFPROTECTION_COOKIE: {{ .Values.core.server.csrfProtection.cookie | default "ol.csrf-token" }}
   CORE_SERVER_CSRFPROTECTION_SECURE: {{ .Values.core.server.csrfProtection.secure | default true }}
   CORE_SERVER_CSRFPROTECTION_SAMESITE: {{ .Values.core.server.csrfProtection.sameSite | default "Lax" }}
+  CORE_SERVER_CSRFPROTECTION_COOKIEHTTPONLY: {{ .Values.core.server.csrfProtection.cookieHttpOnly | default false }}
+  CORE_SERVER_CSRFPROTECTION_COOKIEDOMAIN: {{ .Values.core.server.csrfProtection.cookieDomain }}
   CORE_SERVER_SECRETMANAGER: {{ .Values.core.server.secretManager }}
+  CORE_SERVER_DEFAULTTRUSTCENTERDOMAIN: {{ .Values.core.server.defaultTrustCenterDomain }}
   CORE_ENTCONFIG_ENTITYTYPES: {{ .Values.core.entConfig.entityTypes }}
   CORE_ENTCONFIG_SUMMARIZER_TYPE: {{ .Values.core.entConfig.summarizer.type | default "lexrank" }}
   CORE_ENTCONFIG_SUMMARIZER_LLM_PROVIDER: {{ .Values.core.entConfig.summarizer.llm.provider }}
@@ -174,6 +177,9 @@ data:
   CORE_SESSIONS_ENCRYPTIONKEY: {{ .Values.core.sessions.encryptionKey | default "encryptionsecret" }}
   CORE_SESSIONS_DOMAIN: {{ .Values.core.sessions.domain }}
   CORE_SESSIONS_MAXAGE: {{ .Values.core.sessions.maxAge | default 3600 }}
+  CORE_SESSIONS_SECURE: {{ .Values.core.sessions.secure | default true }}
+  CORE_SESSIONS_HTTPONLY: {{ .Values.core.sessions.httpOnly | default true }}
+  CORE_SESSIONS_SAMESITE: {{ .Values.core.sessions.sameSite | default "Strict" }}
   CORE_TOTP_ENABLED: {{ .Values.core.totp.enabled | default true }}
   CORE_TOTP_CODELENGTH: {{ .Values.core.totp.codeLength | default 6 }}
   CORE_TOTP_ISSUER: {{ .Values.core.totp.issuer }}

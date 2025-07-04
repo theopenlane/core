@@ -257,11 +257,17 @@ func WithSkipCache(h *handler.Server) {
 }
 
 // WithPool adds a worker pool to the resolver for parallel processing
-func (r *Resolver) WithPool(maxWorkers int, options ...pond.Option) {
+func (r *Resolver) WithPool(maxWorkers int, includeMetrics bool, options ...pond.Option) {
 	// create the pool
-	r.pool = soiree.NewPondPool(soiree.WithMaxWorkers(maxWorkers), soiree.WithOptions(options...))
-	// add metrics
-	r.pool.NewStatsCollector()
+	r.pool = soiree.NewPondPool(
+		soiree.WithMaxWorkers(maxWorkers),
+		soiree.WithName("graphapi-worker-pool"),
+		soiree.WithOptions(options...))
+
+	if includeMetrics {
+		// add metrics
+		r.pool.NewStatsCollector()
+	}
 }
 
 // Handler returns the http.HandlerFunc for the GraphAPI

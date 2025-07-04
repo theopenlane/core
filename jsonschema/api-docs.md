@@ -56,6 +56,7 @@ Server settings for the echo server
 |**maxResultLimit**|`integer`|MaxResultLimit sets the maximum number of results allowed for a query<br/>|no|
 |[**csrfProtection**](#servercsrfprotection)|`object`|Config defines configuration for the CSRF middleware wrapper.<br/>|no|
 |**secretManager**|`string`|SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key<br/>|no|
+|**defaultTrustCenterDomain**|`string`|DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set<br/>|no|
 
 **Additional Properties:** not allowed  
 <a name="servertls"></a>
@@ -229,6 +230,8 @@ Config defines configuration for the CSRF middleware wrapper.
 |**cookie**|`string`|Cookie specifies the cookie name used to store the CSRF token.<br/>||
 |**secure**|`boolean`|Secure sets the Secure flag on the CSRF cookie.<br/>||
 |**sameSite**|`string`|SameSite configures the SameSite attribute on the CSRF cookie. Valid<br/>values are "Lax", "Strict", "None" and "Default".<br/>||
+|**cookieHttpOnly**|`boolean`|CookieHTTPOnly indicates whether the CSRF cookie is HTTP only.<br/>||
+|**cookieDomain**|`string`|CookieDomain specifies the domain for the CSRF cookie, default to no domain<br/>||
 
 **Additional Properties:** not allowed  
 <a name="entconfig"></a>
@@ -808,6 +811,9 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**encryptionKey**|`string`|||
 |**domain**|`string`|||
 |**maxAge**|`integer`|||
+|**secure**|`boolean`|||
+|**httpOnly**|`boolean`|||
+|**sameSite**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="totp"></a>

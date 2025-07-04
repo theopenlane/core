@@ -18,8 +18,8 @@ var sharedMimeTypes = []string{
 	"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // xlsx
 	"application/x-vnd.oasis.opendocument.spreadsheet",                  // open document spreadsheet
 	"text/csv",
-	"application/x-yaml", "application/x-yaml charset=utf-8", "text/yaml",
-	"application/json", "application/json charset=utf-8",
+	"application/x-yaml", "application/x-yaml; charset=utf-8", "text/yaml",
+	"application/json", "application/json; charset=utf-8",
 }
 
 // validMimeTypes is a map of valid mime types for the given key
@@ -27,6 +27,7 @@ var sharedMimeTypes = []string{
 // add the key and the valid mime types to the map
 var validMimeTypes = map[string][]string{
 	"avatarFile":    {"image/jpeg", "image/png"},
+	"logoFile":      {"image/jpeg", "image/png"},
 	"evidenceFiles": sharedMimeTypes,
 	"noteFiles":     sharedMimeTypes,
 }

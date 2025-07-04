@@ -83,8 +83,16 @@ func (ec *executionContext) fieldContext_TrustCenterSettingBulkCreatePayload_tru
 				return ec.fieldContext_TrustCenterSetting_overview(ctx, field)
 			case "primaryColor":
 				return ec.fieldContext_TrustCenterSetting_primaryColor(ctx, field)
+			case "logoRemoteURL":
+				return ec.fieldContext_TrustCenterSetting_logoRemoteURL(ctx, field)
+			case "logoLocalFileID":
+				return ec.fieldContext_TrustCenterSetting_logoLocalFileID(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterSetting_trustCenter(ctx, field)
+			case "files":
+				return ec.fieldContext_TrustCenterSetting_files(ctx, field)
+			case "logoFile":
+				return ec.fieldContext_TrustCenterSetting_logoFile(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterSetting", field.Name)
 		},
@@ -149,8 +157,16 @@ func (ec *executionContext) fieldContext_TrustCenterSettingCreatePayload_trustCe
 				return ec.fieldContext_TrustCenterSetting_overview(ctx, field)
 			case "primaryColor":
 				return ec.fieldContext_TrustCenterSetting_primaryColor(ctx, field)
+			case "logoRemoteURL":
+				return ec.fieldContext_TrustCenterSetting_logoRemoteURL(ctx, field)
+			case "logoLocalFileID":
+				return ec.fieldContext_TrustCenterSetting_logoLocalFileID(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterSetting_trustCenter(ctx, field)
+			case "files":
+				return ec.fieldContext_TrustCenterSetting_files(ctx, field)
+			case "logoFile":
+				return ec.fieldContext_TrustCenterSetting_logoFile(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterSetting", field.Name)
 		},
@@ -259,8 +275,16 @@ func (ec *executionContext) fieldContext_TrustCenterSettingUpdatePayload_trustCe
 				return ec.fieldContext_TrustCenterSetting_overview(ctx, field)
 			case "primaryColor":
 				return ec.fieldContext_TrustCenterSetting_primaryColor(ctx, field)
+			case "logoRemoteURL":
+				return ec.fieldContext_TrustCenterSetting_logoRemoteURL(ctx, field)
+			case "logoLocalFileID":
+				return ec.fieldContext_TrustCenterSetting_logoLocalFileID(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterSetting_trustCenter(ctx, field)
+			case "files":
+				return ec.fieldContext_TrustCenterSetting_files(ctx, field)
+			case "logoFile":
+				return ec.fieldContext_TrustCenterSetting_logoFile(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterSetting", field.Name)
 		},

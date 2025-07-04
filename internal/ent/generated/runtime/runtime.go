@@ -5370,10 +5370,14 @@ func init() {
 	trustcenter.Hooks[3] = trustcenterMixinHooks5[0]
 
 	trustcenter.Hooks[4] = trustcenterHooks[0]
+
+	trustcenter.Hooks[5] = trustcenterHooks[1]
 	trustcenterMixinInters1 := trustcenterMixin[1].Interceptors()
 	trustcenterMixinInters5 := trustcenterMixin[5].Interceptors()
+	trustcenterInters := schema.TrustCenter{}.Interceptors()
 	trustcenter.Interceptors[0] = trustcenterMixinInters1[0]
 	trustcenter.Interceptors[1] = trustcenterMixinInters5[0]
+	trustcenter.Interceptors[2] = trustcenterInters[0]
 	trustcenterMixinFields0 := trustcenterMixin[0].Fields()
 	_ = trustcenterMixinFields0
 	trustcenterMixinFields2 := trustcenterMixin[2].Fields()
@@ -5448,10 +5452,15 @@ func init() {
 	}
 	trustcentersettingMixinHooks0 := trustcentersettingMixin[0].Hooks()
 	trustcentersettingMixinHooks1 := trustcentersettingMixin[1].Hooks()
+	trustcentersettingHooks := schema.TrustCenterSetting{}.Hooks()
 
 	trustcentersetting.Hooks[1] = trustcentersettingMixinHooks0[0]
 
 	trustcentersetting.Hooks[2] = trustcentersettingMixinHooks1[0]
+
+	trustcentersetting.Hooks[3] = trustcentersettingHooks[0]
+
+	trustcentersetting.Hooks[4] = trustcentersettingHooks[1]
 	trustcentersettingMixinInters1 := trustcentersettingMixin[1].Interceptors()
 	trustcentersettingInters := schema.TrustCenterSetting{}.Interceptors()
 	trustcentersetting.Interceptors[0] = trustcentersettingMixinInters1[0]
@@ -5484,6 +5493,24 @@ func init() {
 	trustcentersettingDescOverview := trustcentersettingFields[2].Descriptor()
 	// trustcentersetting.OverviewValidator is a validator for the "overview" field. It is called by the builders before save.
 	trustcentersetting.OverviewValidator = trustcentersettingDescOverview.Validators[0].(func(string) error)
+	// trustcentersettingDescLogoRemoteURL is the schema descriptor for logo_remote_url field.
+	trustcentersettingDescLogoRemoteURL := trustcentersettingFields[4].Descriptor()
+	// trustcentersetting.LogoRemoteURLValidator is a validator for the "logo_remote_url" field. It is called by the builders before save.
+	trustcentersetting.LogoRemoteURLValidator = func() func(string) error {
+		validators := trustcentersettingDescLogoRemoteURL.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(logo_remote_url string) error {
+			for _, fn := range fns {
+				if err := fn(logo_remote_url); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	// trustcentersettingDescID is the schema descriptor for id field.
 	trustcentersettingDescID := trustcentersettingMixinFields2[0].Descriptor()
 	// trustcentersetting.DefaultID holds the default value on creation for the id field.

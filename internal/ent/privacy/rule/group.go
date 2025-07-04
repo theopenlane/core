@@ -52,9 +52,6 @@ func CheckGroupBasedObjectCreationAccess() privacy.MutationRuleFunc {
 			return generated.ErrPermissionDenied
 		}
 
-		log.Debug().Interface("req", ac).Bool("access", access).
-			Msg("access check result")
-
 		if !access {
 			// deny if the user does not have access to create the object
 			return generated.ErrPermissionDenied

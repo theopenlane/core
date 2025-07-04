@@ -207,10 +207,13 @@ server:
         prefixes: null
     csrfProtection:
         cookie: ol.csrf-token
+        cookieDomain: ""
+        cookieHttpOnly: false
         enabled: false
         header: X-CSRF-Token
         sameSite: Lax
         secure: true
+    defaultTrustCenterDomain: ""
     dev: false
     enableGraphExtensions: true
     graphPool:
@@ -251,7 +254,10 @@ server:
 sessions:
     domain: ""
     encryptionKey: encryptionsecret
+    httpOnly: true
     maxAge: 3600
+    sameSite: Strict
+    secure: true
     signingKey: my-signing-secret
 slack:
     newSubscriberMessageFile: ""

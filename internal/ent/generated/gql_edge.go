@@ -2008,6 +2008,18 @@ func (f *File) Events(
 	return f.QueryEvents().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (f *File) TrustCenterSetting(ctx context.Context) (result []*TrustCenterSetting, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = f.NamedTrustCenterSetting(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = f.Edges.TrustCenterSettingOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = f.QueryTrustCenterSetting().All(ctx)
+	}
+	return result, err
+}
+
 func (gr *Group) Owner(ctx context.Context) (*Organization, error) {
 	result, err := gr.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -6612,6 +6624,35 @@ func (tcs *TrustCenterSetting) TrustCenter(ctx context.Context) (*TrustCenter, e
 	result, err := tcs.Edges.TrustCenterOrErr()
 	if IsNotLoaded(err) {
 		result, err = tcs.QueryTrustCenter().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (tcs *TrustCenterSetting) Files(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FileOrder, where *FileWhereInput,
+) (*FileConnection, error) {
+	opts := []FilePaginateOption{
+		WithFileOrder(orderBy),
+		WithFileFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := tcs.Edges.totalCount[1][alias]
+	if nodes, err := tcs.NamedFiles(alias); err == nil || hasTotalCount {
+		pager, err := newFilePager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &FileConnection{Edges: []*FileEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return tcs.QueryFiles().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (tcs *TrustCenterSetting) LogoFile(ctx context.Context) (*File, error) {
+	result, err := tcs.Edges.LogoFileOrErr()
+	if IsNotLoaded(err) {
+		result, err = tcs.QueryLogoFile().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
