@@ -232,6 +232,10 @@ func (suite *HandlerTestSuite) TestSSOLoginAndCallback() {
 		SettingID: &setting.ID,
 	}).SaveX(ctx)
 
+	suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+		SetOrganizationID(org.ID).
+		ExecX(ctx)
+
 	suite.db.UserSetting.Update().Where(usersetting.UserID(testUser1.ID)).SetDefaultOrgID(org.ID).ExecX(ctx)
 
 	req := httptest.NewRequest(http.MethodGet, "/v1/sso/login?organization_id="+org.ID, nil)

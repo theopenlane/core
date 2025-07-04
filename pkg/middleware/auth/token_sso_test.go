@@ -28,12 +28,12 @@ func TestAPITokenSSOAuthorization(t *testing.T) {
 	}
 	isSSOEnforcedFunc = func(context.Context, *generated.Client, string) (bool, error) { return true, nil }
 
-	_, _, err := isValidAPIToken(context.Background(), generated.Client{}, tok.Token)
+	_, _, err := isValidAPIToken(context.Background(), (*generated.Client)(nil), tok.Token)
 	assert.ErrorIs(t, err, ErrTokenSSORequired)
 
 	tok.SSOAuthorizations = models.SSOAuthorizationMap{"org": time.Now()}
 
-	au, id, err := isValidAPIToken(context.Background(), generated.Client{}, tok.Token)
+	au, id, err := isValidAPIToken(context.Background(), (*generated.Client)(nil), tok.Token)
 	assert.NoError(t, err)
 	assert.Equal(t, tok.ID, id)
 	assert.Equal(t, []string{tok.OwnerID}, au.OrganizationIDs)
@@ -73,12 +73,12 @@ func TestPATTokenSSOAuthorization(t *testing.T) {
 		return ok, nil
 	}
 
-	_, _, err := isValidPersonalAccessToken(context.Background(), generated.Client{}, pat.Token)
+	_, _, err := isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token)
 	assert.ErrorIs(t, err, ErrTokenSSORequired)
 
 	pat.SSOAuthorizations = models.SSOAuthorizationMap{org.ID: time.Now()}
 
-	au, id, err := isValidPersonalAccessToken(context.Background(), generated.Client{}, pat.Token)
+	au, id, err := isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token)
 	assert.NoError(t, err)
 	assert.Equal(t, pat.ID, id)
 	assert.Equal(t, user.ID, au.SubjectID)

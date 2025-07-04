@@ -108,7 +108,7 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 					Str("org_id", au.OrganizationID)
 			})
 
-			if err := updateLastUsed(c.Request().Context(), conf.DBClient, au, id); err != nil {
+			if err := updateLastUsedFunc(c.Request().Context(), conf.DBClient, au, id); err != nil {
 				return unauthorized(c, err, conf, validator)
 			}
 
@@ -130,36 +130,6 @@ func getTokenType(bearerToken string) auth.AuthenticationType {
 
 	return auth.JWTAuthentication
 }
-
-// function variables allow tests to override SSO checks without a database
-var (
-	isSSOEnforcedFunc = isSSOEnforced
-	orgRoleFunc       = func(ctx context.Context, db *generated.Client, userID, orgID string) (enums.Role, error) {
-		member, err := db.OrgMembership.Query().
-			Where(orgmembership.UserID(userID), orgmembership.OrganizationID(orgID)).
-			Only(privacy.DecisionContext(ctx, privacy.Allow))
-		if err != nil {
-			return "", err
-		}
-
-		return member.Role, nil
-	}
-
-	fetchPATFunc = func(ctx context.Context, db *generated.Client, token string) (*generated.PersonalAccessToken, error) {
-		return db.PersonalAccessToken.Query().Where(personalaccesstoken.Token(token)).
-			WithOwner().
-			WithOrganizations().
-			Only(ctx)
-	}
-
-	fetchAPITokenFunc = func(ctx context.Context, db *generated.Client, token string) (*generated.APIToken, error) {
-		return db.APIToken.Query().Where(apitoken.Token(token)).Only(ctx)
-	}
-
-	isPATSSOAuthorizedFunc = isPATSSOAuthorized
-
-	updateLastUsedFunc = updateLastUsed
-)
 
 // updateLastUsed updates the last used time for the token depending on the authentication type
 func updateLastUsed(ctx context.Context, dbClient *ent.Client, au *auth.AuthenticatedUser, tokenID string) error {
@@ -259,13 +229,13 @@ func checkToken(ctx context.Context, conf *Options, token string) (*auth.Authent
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	// check if the token is a personal access token
-	au, id, err := isValidPersonalAccessToken(ctx, *conf.DBClient, token)
+	au, id, err := isValidPersonalAccessToken(ctx, conf.DBClient, token)
 	if err == nil {
 		return au, id, nil
 	}
 
 	// check if the token is an API token
-	au, id, err = isValidAPIToken(ctx, *conf.DBClient, token)
+	au, id, err = isValidAPIToken(ctx, conf.DBClient, token)
 	if err == nil {
 		return au, id, nil
 	}
@@ -274,13 +244,8 @@ func checkToken(ctx context.Context, conf *Options, token string) (*auth.Authent
 }
 
 // isValidPersonalAccessToken checks if the provided token is a valid personal access token and returns the authenticated user
-func isValidPersonalAccessToken(ctx context.Context, dbClient ent.Client, token string) (*auth.AuthenticatedUser, string, error) {
-	// query for the token before the user is authorized
-	// allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	pat, err := dbClient.PersonalAccessToken.Query().Where(personalaccesstoken.Token(token)).
-		WithOwner().
-		WithOrganizations().
-		Only(ctx)
+func isValidPersonalAccessToken(ctx context.Context, dbClient *generated.Client, token string) (*auth.AuthenticatedUser, string, error) {
+	pat, err := fetchPATFunc(ctx, dbClient, token)
 	if err != nil {
 		return nil, "", err
 	}
@@ -301,12 +266,12 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient ent.Client, token 
 	}
 
 	for _, org := range orgs {
-		enforced, err := isSSOEnforced(ctx, &dbClient, org.ID)
+		enforced, err := isSSOEnforcedFunc(ctx, dbClient, org.ID)
 		if err != nil {
 			return nil, "", err
 		}
 		if enforced {
-			authorized, err := isPATSSOAuthorized(ctx, &dbClient, pat.ID, org.ID)
+			authorized, err := isPATSSOAuthorizedFunc(ctx, dbClient, pat.ID, org.ID)
 			if err != nil {
 				return nil, "", err
 			}
@@ -327,11 +292,8 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient ent.Client, token 
 	}, pat.ID, nil
 }
 
-func isValidAPIToken(ctx context.Context, dbClient ent.Client, token string) (*auth.AuthenticatedUser, string, error) {
-	// query for the token before the user is authorized
-	// allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	t, err := dbClient.APIToken.Query().Where(apitoken.Token(token)).
-		Only(ctx)
+func isValidAPIToken(ctx context.Context, dbClient *generated.Client, token string) (*auth.AuthenticatedUser, string, error) {
+	t, err := fetchAPITokenFunc(ctx, dbClient, token)
 	if err != nil {
 		return nil, "", err
 	}
@@ -341,7 +303,7 @@ func isValidAPIToken(ctx context.Context, dbClient ent.Client, token string) (*a
 		return nil, "", rout.ErrExpiredCredentials
 	}
 
-	enforced, err := isSSOEnforced(ctx, &dbClient, t.OwnerID)
+	enforced, err := isSSOEnforcedFunc(ctx, dbClient, t.OwnerID)
 	if err != nil {
 		return nil, "", err
 	}
@@ -499,3 +461,33 @@ func isPATSSOAuthorized(ctx context.Context, db *generated.Client, tokenID, orgI
 
 	return ok, nil
 }
+
+// function variables allow tests to override SSO checks without a database
+var (
+	isSSOEnforcedFunc = isSSOEnforced
+	orgRoleFunc       = func(ctx context.Context, db *generated.Client, userID, orgID string) (enums.Role, error) {
+		member, err := db.OrgMembership.Query().
+			Where(orgmembership.UserID(userID), orgmembership.OrganizationID(orgID)).
+			Only(privacy.DecisionContext(ctx, privacy.Allow))
+		if err != nil {
+			return "", err
+		}
+
+		return member.Role, nil
+	}
+
+	fetchPATFunc = func(ctx context.Context, db *generated.Client, token string) (*generated.PersonalAccessToken, error) {
+		return db.PersonalAccessToken.Query().Where(personalaccesstoken.Token(token)).
+			WithOwner().
+			WithOrganizations().
+			Only(ctx)
+	}
+
+	fetchAPITokenFunc = func(ctx context.Context, db *generated.Client, token string) (*generated.APIToken, error) {
+		return db.APIToken.Query().Where(apitoken.Token(token)).Only(ctx)
+	}
+
+	isPATSSOAuthorizedFunc = isPATSSOAuthorized
+
+	updateLastUsedFunc = updateLastUsed
+)
