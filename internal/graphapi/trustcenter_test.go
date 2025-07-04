@@ -558,9 +558,14 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 }
 
 func TestMutationDeleteTrustCenter(t *testing.T) {
+	t.Parallel()
+	// Create new test users
+	testUser := suite.userBuilder(context.Background(), t)
+	testUserOther := suite.userBuilder(testUser.UserCtx, t)
+
 	// create objects to be deleted
-	trustCenter1 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	trustCenter1 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUserOther.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -573,20 +578,20 @@ func TestMutationDeleteTrustCenter(t *testing.T) {
 			name:       "happy path, delete trust center",
 			idToDelete: trustCenter1.ID,
 			client:     suite.client.api,
-			ctx:        testUser1.UserCtx,
+			ctx:        testUser.UserCtx,
 		},
 		{
 			name:        "not authorized, different org user",
 			idToDelete:  trustCenter2.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         testUser.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:        "trust center not found",
 			idToDelete:  "non-existent-id",
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         testUser.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -625,11 +630,17 @@ func createAnonymousTrustCenterContext(trustCenterID, organizationID string) con
 }
 
 func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
+	t.Parallel()
+
+	// create new test users
+	testUser := suite.userBuilder(context.Background(), t)
+	testUserOther := suite.userBuilder(context.Background(), t)
+
 	// Create a trust center for testing
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
 	// Create another trust center that the anonymous user should NOT have access to
-	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUserOther.UserCtx, t)
 
 	testCases := []struct {
 		name           string
@@ -644,7 +655,7 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 			name:           "happy path - anonymous user can query their trust center by ID",
 			queryID:        trustCenter.ID,
 			trustCenterID:  trustCenter.ID,
-			organizationID: testUser1.OrganizationID,
+			organizationID: testUser.OrganizationID,
 			client:         suite.client.api,
 			shouldSucceed:  true,
 		},
@@ -652,7 +663,7 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 			name:           "anonymous user cannot query different trust center",
 			queryID:        trustCenter2.ID,
 			trustCenterID:  trustCenter.ID, // Anonymous user has access to trustCenter, not trustCenter2
-			organizationID: testUser1.OrganizationID,
+			organizationID: testUser.OrganizationID,
 			client:         suite.client.api,
 			expectedErr:    notFoundErrorMsg,
 			shouldSucceed:  false,
@@ -661,7 +672,7 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 			name:           "anonymous user cannot query non-existent trust center",
 			queryID:        "non-existent-id",
 			trustCenterID:  trustCenter.ID,
-			organizationID: testUser1.OrganizationID,
+			organizationID: testUser.OrganizationID,
 			client:         suite.client.api,
 			expectedErr:    notFoundErrorMsg,
 			shouldSucceed:  false,
@@ -697,16 +708,22 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 	}
 
 	// Clean up
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUserOther.UserCtx, t)
 }
 
 func TestQueryTrustCentersAsAnonymousUser(t *testing.T) {
+	t.Parallel()
+
+	// create new test users
+	testUser := suite.userBuilder(context.Background(), t)
+	testUserOther := suite.userBuilder(context.Background(), t)
+
 	// Create a trust center for testing
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
 	// Create another trust center that the anonymous user should NOT have access to
-	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUserOther.UserCtx, t)
 
 	testCases := []struct {
 		name           string
@@ -718,14 +735,14 @@ func TestQueryTrustCentersAsAnonymousUser(t *testing.T) {
 		{
 			name:           "anonymous user can only see their trust center in list query",
 			trustCenterID:  trustCenter.ID,
-			organizationID: testUser1.OrganizationID,
+			organizationID: testUser.OrganizationID,
 			client:         suite.client.api,
 			expectedCount:  1, // Should only see the one trust center they have access to
 		},
 		{
 			name:           "anonymous user with different trust center sees only their trust center",
 			trustCenterID:  trustCenter2.ID,
-			organizationID: testUser2.OrganizationID,
+			organizationID: testUserOther.OrganizationID,
 			client:         suite.client.api,
 			expectedCount:  1, // Should only see the one trust center they have access to
 		},
@@ -752,8 +769,8 @@ func TestQueryTrustCentersAsAnonymousUser(t *testing.T) {
 	}
 
 	// Clean up
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUserOther.UserCtx, t)
 }
 
 func TestMutationUpdateTrustCenterSettingLogo(t *testing.T) {
