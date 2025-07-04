@@ -54,136 +54,139 @@ func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, standa
 // if the controls already exist in the organization, they will not be cloned again
 // but will be updated to link to the program if needed
 func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []*generated.Control, programID *string) ([]*generated.Control, error) {
-	// keep track of the created control IDs, this includes the ids of controls that already exist in the org
-	createdControlIDs := []string{}
-	// keep track of the control IDs that already exist in the org to be updated to link to the program if needed
-	existingControlIDs := []string{}
-
-	// do this in a go-routine to allow multiple controls to be cloned in parallel, use pond for this
-	// we cannot use a transaction here because we are running multiple go-routines
-	// and transactions cannot be used across go-routines
-	funcs := make([]func(), len(controlsToClone))
-	var (
-		errors []error
-		mu     sync.Mutex
-	)
+	type controlKey struct {
+		ref, std string
+	}
 
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	// create a function for each control to clone
-	// this will allow us to run the cloning in parallel
-	// we will use a mutex to protect the createdControlIDs and existingControlIDs slices
-	// and the errors slice
+	type entry struct {
+		src        *generated.Control
+		input      generated.CreateControlInput
+		standardID string
+		newID      string
+	}
+
+	entries := make([]*entry, len(controlsToClone))
+	refCodes := make([]string, len(controlsToClone))
+
+	standardSet := map[string]struct{}{}
+
 	for i, c := range controlsToClone {
-		c := c // capture loop variable
+		in, stdID := createCloneControlInput(c, programID)
+		entries[i] = &entry{src: c, input: in, standardID: stdID}
+		refCodes[i] = c.RefCode
+		standardSet[stdID] = struct{}{}
+	}
+
+	standardIDs := make([]string, 0, len(standardSet))
+	for id := range standardSet {
+		standardIDs = append(standardIDs, id)
+	}
+
+	existingControls, err := r.db.Control.Query().
+		Where(
+			control.RefCodeIn(refCodes...),
+			control.StandardIDIn(standardIDs...),
+			control.OwnerID(orgID),
+		).
+		All(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	existingMap := map[controlKey]*generated.Control{}
+	for _, ec := range existingControls {
+		existingMap[controlKey{ref: ec.RefCode, std: ec.StandardID}] = ec
+	}
+
+	var createInputs []*generated.CreateControlInput
+	var createEntries []*entry
+	createdControlIDs := []string{}
+	existingControlIDs := []string{}
+
+	for _, e := range entries {
+		key := controlKey{ref: e.src.RefCode, std: e.standardID}
+		if ex, ok := existingMap[key]; ok {
+			e.newID = ex.ID
+			createdControlIDs = append(createdControlIDs, ex.ID)
+			existingControlIDs = append(existingControlIDs, ex.ID)
+			continue
+		}
+
+		createInputs = append(createInputs, &e.input)
+		createEntries = append(createEntries, e)
+	}
+
+	if len(createInputs) > 0 {
+		res, err := r.bulkCreateControl(ctx, createInputs)
+		if err != nil {
+			return nil, err
+		}
+
+		for i, c := range res.Controls {
+			createEntries[i].newID = c.ID
+			createdControlIDs = append(createdControlIDs, c.ID)
+		}
+	}
+
+	funcs := make([]func(), len(entries))
+	var (
+		errors []error
+		mu     sync.Mutex
+	)
+
+	for i, e := range entries {
+		e := e
 		funcs[i] = func() {
-			log.Debug().Msgf("cloning control %s with refCode %s", c.ID, c.RefCode)
-
-			controlInput, standardID := createCloneControlInput(c, programID)
-
-			var newControlID string
-
-			existingControl, err := r.db.Control.Query().
-				Where(
-					control.RefCode(c.RefCode),
-					control.StandardID(standardID),
-					control.OwnerID(orgID),
-				).
-				Only(ctx)
-
-			switch {
-			case err == nil:
-				// control already exists, we will not clone it again
-				newControlID = existingControl.ID
-
-				mu.Lock()
-				existingControlIDs = append(existingControlIDs, newControlID)
-				mu.Unlock()
-			case generated.IsNotFound(err):
-				// do outside a transaction because you cannot use a transaction across go-routines
-				// if we get an error, we will deleted all controls that were created before the error occurred
-				res, err := r.db.Control.Create().
-					SetInput(controlInput).Save(ctx)
-				if err != nil {
-					mu.Lock()
-					errors = append(errors, err)
-					mu.Unlock()
-
-					return
-				}
-
-				newControlID = res.ID
-			default:
-				log.Error().Err(err).Str("ref_code", c.RefCode).Str("standard_id", c.StandardID).
-					Msg("error checking for existing control")
-
+			if err := r.cloneSubcontrols(ctx, e.src, e.newID); err != nil {
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
-
-				return
-			}
-
-			mu.Lock()
-			createdControlIDs = append(createdControlIDs, newControlID)
-			mu.Unlock()
-
-			if err := r.cloneSubcontrols(ctx, c, newControlID); err != nil {
-				mu.Lock()
-				errors = append(errors, err)
-				mu.Unlock()
-				return
 			}
 		}
 	}
 
-	// run the cloning functions in parallel
 	r.withPool().SubmitMultipleAndWait(funcs)
 
-	// check if there were any errors during the cloning process
 	if len(errors) > 0 {
-		// return the first error encountered
 		log.Error().Errs("errors", errors).
 			Msgf("error cloning controls")
 
-		// delete any controls that were created before the error occurred
-		if len(createdControlIDs) > 0 {
-			log.Warn().Msgf("error cloning controls, deleting %d controls that were created before the error occurred", len(createdControlIDs))
+		if len(createEntries) > 0 {
+			ids := make([]string, 0, len(createEntries))
+			for _, e := range createEntries {
+				if e.newID != "" {
+					ids = append(ids, e.newID)
+				}
+			}
 
-			// delete any controls that were created before the error occurred
-			// this should also cascade delete any subcontrols that were created
-			if _, err := withTransactionalMutation(ctx).Control.Delete().
-				Where(control.IDIn(createdControlIDs...)).
-				Exec(ctx); err != nil {
+			if len(ids) > 0 {
+				log.Warn().Msgf("error cloning controls, deleting %d controls that were created before the error occurred", len(ids))
 
-				log.Error().Err(err).Msg("error deleting controls that were created before the error occurred")
+				if _, err := withTransactionalMutation(ctx).Control.Delete().
+					Where(control.IDIn(ids...)).
+					Exec(ctx); err != nil {
+					log.Error().Err(err).Msg("error deleting controls that were created before the error occurred")
+				}
 			}
 		}
 
-		// we can return the first error encountered, as the rest will be logged
 		return nil, errors[0]
 	}
 
-	// update the controls to the program if needed
 	if len(existingControlIDs) > 0 && programID != nil {
-		// if the control already exists, we just link it to the program
 		if err := withTransactionalMutation(ctx).Control.Update().
-			Where(
-				control.IDIn(existingControlIDs...)).
+			Where(control.IDIn(existingControlIDs...)).
 			AddProgramIDs(*programID).
 			Exec(ctx); err != nil {
-
 			return nil, err
 		}
 	}
 
-	// add existingControlIDs to createdControlIDs
-	createdControlIDs = append(createdControlIDs, existingControlIDs...)
-
-	// get the cloned controls to return in the response
 	query, err := withTransactionalMutation(ctx).Control.Query().Where(control.IDIn(createdControlIDs...)).
 		CollectFields(ctx)
 	if err != nil {
