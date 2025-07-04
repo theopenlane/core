@@ -713,6 +713,14 @@
         "enableHistory": {
           "type": "boolean",
           "description": "enable history data to be logged to the database"
+        },
+        "maxConnections": {
+          "type": "integer",
+          "description": "maximum number of connections to the database"
+        },
+        "maxIdleConnections": {
+          "type": "integer",
+          "description": "maximum number of idle connections to the database"
         }
       },
       "additionalProperties": false,
