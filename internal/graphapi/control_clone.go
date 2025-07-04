@@ -90,19 +90,19 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 			// skip the access checks for the controls, we are already filtering on organization id
 			// and controls are visible to users in the organization
 			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			existingControl, err := r.db.Control.Query().
+			existingControlID, err := r.db.Control.Query().
 				Where(
 					control.RefCode(c.RefCode),
 					control.StandardID(standardID),
 					control.DeletedAtIsNil(),
 					control.OwnerID(orgID),
 				).
-				Only(allowCtx)
+				OnlyID(allowCtx)
 
 			switch {
 			case err == nil:
 				// control already exists, we will not clone it again
-				newControlID = existingControl.ID
+				newControlID = existingControlID
 
 				mu.Lock()
 				existingControlIDs = append(existingControlIDs, newControlID)
