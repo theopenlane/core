@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -208,6 +209,18 @@ func (patu *PersonalAccessTokenUpdate) AppendScopes(s []string) *PersonalAccessT
 // ClearScopes clears the value of the "scopes" field.
 func (patu *PersonalAccessTokenUpdate) ClearScopes() *PersonalAccessTokenUpdate {
 	patu.mutation.ClearScopes()
+	return patu
+}
+
+// SetSSOAuthorizations sets the "sso_authorizations" field.
+func (patu *PersonalAccessTokenUpdate) SetSSOAuthorizations(mam models.SSOAuthorizationMap) *PersonalAccessTokenUpdate {
+	patu.mutation.SetSSOAuthorizations(mam)
+	return patu
+}
+
+// ClearSSOAuthorizations clears the value of the "sso_authorizations" field.
+func (patu *PersonalAccessTokenUpdate) ClearSSOAuthorizations() *PersonalAccessTokenUpdate {
+	patu.mutation.ClearSSOAuthorizations()
 	return patu
 }
 
@@ -538,6 +551,12 @@ func (patu *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (n int, err 
 	}
 	if patu.mutation.ScopesCleared() {
 		_spec.ClearField(personalaccesstoken.FieldScopes, field.TypeJSON)
+	}
+	if value, ok := patu.mutation.SSOAuthorizations(); ok {
+		_spec.SetField(personalaccesstoken.FieldSSOAuthorizations, field.TypeJSON, value)
+	}
+	if patu.mutation.SSOAuthorizationsCleared() {
+		_spec.ClearField(personalaccesstoken.FieldSSOAuthorizations, field.TypeJSON)
 	}
 	if value, ok := patu.mutation.LastUsedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldLastUsedAt, field.TypeTime, value)
@@ -893,6 +912,18 @@ func (patuo *PersonalAccessTokenUpdateOne) AppendScopes(s []string) *PersonalAcc
 // ClearScopes clears the value of the "scopes" field.
 func (patuo *PersonalAccessTokenUpdateOne) ClearScopes() *PersonalAccessTokenUpdateOne {
 	patuo.mutation.ClearScopes()
+	return patuo
+}
+
+// SetSSOAuthorizations sets the "sso_authorizations" field.
+func (patuo *PersonalAccessTokenUpdateOne) SetSSOAuthorizations(mam models.SSOAuthorizationMap) *PersonalAccessTokenUpdateOne {
+	patuo.mutation.SetSSOAuthorizations(mam)
+	return patuo
+}
+
+// ClearSSOAuthorizations clears the value of the "sso_authorizations" field.
+func (patuo *PersonalAccessTokenUpdateOne) ClearSSOAuthorizations() *PersonalAccessTokenUpdateOne {
+	patuo.mutation.ClearSSOAuthorizations()
 	return patuo
 }
 
@@ -1253,6 +1284,12 @@ func (patuo *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	if patuo.mutation.ScopesCleared() {
 		_spec.ClearField(personalaccesstoken.FieldScopes, field.TypeJSON)
+	}
+	if value, ok := patuo.mutation.SSOAuthorizations(); ok {
+		_spec.SetField(personalaccesstoken.FieldSSOAuthorizations, field.TypeJSON, value)
+	}
+	if patuo.mutation.SSOAuthorizationsCleared() {
+		_spec.ClearField(personalaccesstoken.FieldSSOAuthorizations, field.TypeJSON)
 	}
 	if value, ok := patuo.mutation.LastUsedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldLastUsedAt, field.TypeTime, value)

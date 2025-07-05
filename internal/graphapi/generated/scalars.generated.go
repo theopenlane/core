@@ -526,6 +526,22 @@ func (ec *executionContext) marshalOReference2ᚕgithubᚗcomᚋtheopenlaneᚋco
 	return ret
 }
 
+func (ec *executionContext) unmarshalOSSOAuthorizationMap2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐSSOAuthorizationMap(ctx context.Context, v any) (models.SSOAuthorizationMap, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res models.SSOAuthorizationMap
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOSSOAuthorizationMap2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐSSOAuthorizationMap(ctx context.Context, sel ast.SelectionSet, v models.SSOAuthorizationMap) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
 func (ec *executionContext) unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ(ctx context.Context, v any) ([]*graphql.Upload, error) {
 	if v == nil {
 		return nil, nil

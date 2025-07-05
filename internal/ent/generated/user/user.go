@@ -322,7 +322,7 @@ var (
 // LastLoginProviderValidator is a validator for the "last_login_provider" field enum values. It is called by the builders before save.
 func LastLoginProviderValidator(llp enums.AuthProvider) error {
 	switch llp.String() {
-	case "CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN":
+	case "CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN", "OIDC":
 		return nil
 	default:
 		return fmt.Errorf("user: invalid enum value for last_login_provider field: %q", llp)
@@ -334,7 +334,7 @@ const DefaultAuthProvider enums.AuthProvider = "CREDENTIALS"
 // AuthProviderValidator is a validator for the "auth_provider" field enum values. It is called by the builders before save.
 func AuthProviderValidator(ap enums.AuthProvider) error {
 	switch ap.String() {
-	case "CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN":
+	case "CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN", "OIDC":
 		return nil
 	default:
 		return fmt.Errorf("user: invalid enum value for auth_provider field: %q", ap)

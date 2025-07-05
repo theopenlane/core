@@ -87,6 +87,8 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenBulkCreatePayload_pe
 				return ec.fieldContext_PersonalAccessToken_description(ctx, field)
 			case "scopes":
 				return ec.fieldContext_PersonalAccessToken_scopes(ctx, field)
+			case "ssoAuthorizations":
+				return ec.fieldContext_PersonalAccessToken_ssoAuthorizations(ctx, field)
 			case "lastUsedAt":
 				return ec.fieldContext_PersonalAccessToken_lastUsedAt(ctx, field)
 			case "isActive":
@@ -171,6 +173,8 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenCreatePayload_person
 				return ec.fieldContext_PersonalAccessToken_description(ctx, field)
 			case "scopes":
 				return ec.fieldContext_PersonalAccessToken_scopes(ctx, field)
+			case "ssoAuthorizations":
+				return ec.fieldContext_PersonalAccessToken_ssoAuthorizations(ctx, field)
 			case "lastUsedAt":
 				return ec.fieldContext_PersonalAccessToken_lastUsedAt(ctx, field)
 			case "isActive":
@@ -299,6 +303,8 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenUpdatePayload_person
 				return ec.fieldContext_PersonalAccessToken_description(ctx, field)
 			case "scopes":
 				return ec.fieldContext_PersonalAccessToken_scopes(ctx, field)
+			case "ssoAuthorizations":
+				return ec.fieldContext_PersonalAccessToken_ssoAuthorizations(ctx, field)
 			case "lastUsedAt":
 				return ec.fieldContext_PersonalAccessToken_lastUsedAt(ctx, field)
 			case "isActive":

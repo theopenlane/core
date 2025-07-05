@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -315,6 +316,18 @@ func (atu *APITokenUpdate) ClearRevokedAt() *APITokenUpdate {
 	return atu
 }
 
+// SetSSOAuthorizations sets the "sso_authorizations" field.
+func (atu *APITokenUpdate) SetSSOAuthorizations(mam models.SSOAuthorizationMap) *APITokenUpdate {
+	atu.mutation.SetSSOAuthorizations(mam)
+	return atu
+}
+
+// ClearSSOAuthorizations clears the value of the "sso_authorizations" field.
+func (atu *APITokenUpdate) ClearSSOAuthorizations() *APITokenUpdate {
+	atu.mutation.ClearSSOAuthorizations()
+	return atu
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (atu *APITokenUpdate) SetOwner(o *Organization) *APITokenUpdate {
 	return atu.SetOwnerID(o.ID)
@@ -502,6 +515,12 @@ func (atu *APITokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if atu.mutation.RevokedAtCleared() {
 		_spec.ClearField(apitoken.FieldRevokedAt, field.TypeTime)
+	}
+	if value, ok := atu.mutation.SSOAuthorizations(); ok {
+		_spec.SetField(apitoken.FieldSSOAuthorizations, field.TypeJSON, value)
+	}
+	if atu.mutation.SSOAuthorizationsCleared() {
+		_spec.ClearField(apitoken.FieldSSOAuthorizations, field.TypeJSON)
 	}
 	if atu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -840,6 +859,18 @@ func (atuo *APITokenUpdateOne) ClearRevokedAt() *APITokenUpdateOne {
 	return atuo
 }
 
+// SetSSOAuthorizations sets the "sso_authorizations" field.
+func (atuo *APITokenUpdateOne) SetSSOAuthorizations(mam models.SSOAuthorizationMap) *APITokenUpdateOne {
+	atuo.mutation.SetSSOAuthorizations(mam)
+	return atuo
+}
+
+// ClearSSOAuthorizations clears the value of the "sso_authorizations" field.
+func (atuo *APITokenUpdateOne) ClearSSOAuthorizations() *APITokenUpdateOne {
+	atuo.mutation.ClearSSOAuthorizations()
+	return atuo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (atuo *APITokenUpdateOne) SetOwner(o *Organization) *APITokenUpdateOne {
 	return atuo.SetOwnerID(o.ID)
@@ -1057,6 +1088,12 @@ func (atuo *APITokenUpdateOne) sqlSave(ctx context.Context) (_node *APIToken, er
 	}
 	if atuo.mutation.RevokedAtCleared() {
 		_spec.ClearField(apitoken.FieldRevokedAt, field.TypeTime)
+	}
+	if value, ok := atuo.mutation.SSOAuthorizations(); ok {
+		_spec.SetField(apitoken.FieldSSOAuthorizations, field.TypeJSON, value)
+	}
+	if atuo.mutation.SSOAuthorizationsCleared() {
+		_spec.ClearField(apitoken.FieldSSOAuthorizations, field.TypeJSON)
 	}
 	if atuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

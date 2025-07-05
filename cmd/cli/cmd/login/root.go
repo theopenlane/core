@@ -39,6 +39,21 @@ func login(ctx context.Context) (*oauth2.Token, error) {
 		return nil, cmd.NewRequiredFieldMissingError("username")
 	}
 
+	status, err := fetchSSOStatus(ctx, client, username)
+	if err == nil && status.Enforced && status.OrganizationID != "" {
+		tokens, err := ssoAuth(ctx, client, status.OrganizationID)
+		if err != nil {
+			return nil, err
+		}
+
+		fmt.Println("\nAuthentication Successful!")
+		if err := cmd.StoreToken(tokens); err == nil {
+			fmt.Println("auth tokens successfully stored in keychain")
+		}
+
+		return tokens, nil
+	}
+
 	tokens, err := passwordAuth(ctx, client, username)
 	cobra.CheckErr(err)
 

@@ -1,0 +1,19 @@
+issuer: http://localhost:5556/dex
+storage:
+  type: memory
+web:
+  http: 0.0.0.0:5556
+staticClients:
+  - id: local-client
+    redirectURIs:
+      - http://localhost:17608/v1/sso/callback
+    name: Core Local Test
+    secret: local-client-secret
+enablePasswordDB: true
+staticPasswords:
+  - email: mitb@theopenlane.io
+    hash: $2y$10$OqNJ8CnCfcaiNoTVzJMM1uD80OSTaE6iOjTRhB4ZN02tlUs/iLAOi
+    username: user
+    userID: 8a2ebf04-9c7d-4cef-bc58-1234567890ab
+logger:
+  level: debug

@@ -862,6 +862,16 @@ func ScopesNotNil() predicate.PersonalAccessToken {
 	return predicate.PersonalAccessToken(sql.FieldNotNull(FieldScopes))
 }
 
+// SSOAuthorizationsIsNil applies the IsNil predicate on the "sso_authorizations" field.
+func SSOAuthorizationsIsNil() predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldIsNull(FieldSSOAuthorizations))
+}
+
+// SSOAuthorizationsNotNil applies the NotNil predicate on the "sso_authorizations" field.
+func SSOAuthorizationsNotNil() predicate.PersonalAccessToken {
+	return predicate.PersonalAccessToken(sql.FieldNotNull(FieldSSOAuthorizations))
+}
+
 // LastUsedAtEQ applies the EQ predicate on the "last_used_at" field.
 func LastUsedAtEQ(v time.Time) predicate.PersonalAccessToken {
 	return predicate.PersonalAccessToken(sql.FieldEQ(FieldLastUsedAt, v))

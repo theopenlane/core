@@ -1142,6 +1142,16 @@ func RevokedAtNotNil() predicate.APIToken {
 	return predicate.APIToken(sql.FieldNotNull(FieldRevokedAt))
 }
 
+// SSOAuthorizationsIsNil applies the IsNil predicate on the "sso_authorizations" field.
+func SSOAuthorizationsIsNil() predicate.APIToken {
+	return predicate.APIToken(sql.FieldIsNull(FieldSSOAuthorizations))
+}
+
+// SSOAuthorizationsNotNil applies the NotNil predicate on the "sso_authorizations" field.
+func SSOAuthorizationsNotNil() predicate.APIToken {
+	return predicate.APIToken(sql.FieldNotNull(FieldSSOAuthorizations))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.APIToken {
 	return predicate.APIToken(func(s *sql.Selector) {

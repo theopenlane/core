@@ -13,9 +13,11 @@ import (
 
 	"github.com/theopenlane/utils/passwd"
 
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/core/pkg/models"
+	sso "github.com/theopenlane/core/pkg/ssoutils"
 )
 
 // LoginHandler validates the user credentials and returns a valid cookie
@@ -44,6 +46,13 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 	if user.Edges.Setting.Status != enums.UserStatusActive {
 		metrics.Logins.WithLabelValues("false").Inc()
 		return h.BadRequest(ctx, auth.ErrNoAuthUser)
+	}
+
+	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
+
+	if orgID, ok := h.ssoOrgForUser(allowCtx, in.Username); ok {
+		metrics.Logins.WithLabelValues("false").Inc()
+		return ctx.Redirect(http.StatusFound, sso.SSOLogin(ctx.Echo(), orgID))
 	}
 
 	if user.Password == nil {

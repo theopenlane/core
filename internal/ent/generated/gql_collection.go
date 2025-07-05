@@ -225,6 +225,11 @@ func (at *APITokenQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				selectedFields = append(selectedFields, apitoken.FieldRevokedAt)
 				fieldSeen[apitoken.FieldRevokedAt] = struct{}{}
 			}
+		case "ssoAuthorizations":
+			if _, ok := fieldSeen[apitoken.FieldSSOAuthorizations]; !ok {
+				selectedFields = append(selectedFields, apitoken.FieldSSOAuthorizations)
+				fieldSeen[apitoken.FieldSSOAuthorizations] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -29719,6 +29724,16 @@ func (os *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, organizationsetting.FieldIdentityProvider)
 				fieldSeen[organizationsetting.FieldIdentityProvider] = struct{}{}
 			}
+		case "identityProviderClientID":
+			if _, ok := fieldSeen[organizationsetting.FieldIdentityProviderClientID]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldIdentityProviderClientID)
+				fieldSeen[organizationsetting.FieldIdentityProviderClientID] = struct{}{}
+			}
+		case "identityProviderClientSecret":
+			if _, ok := fieldSeen[organizationsetting.FieldIdentityProviderClientSecret]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldIdentityProviderClientSecret)
+				fieldSeen[organizationsetting.FieldIdentityProviderClientSecret] = struct{}{}
+			}
 		case "identityProviderMetadataEndpoint":
 			if _, ok := fieldSeen[organizationsetting.FieldIdentityProviderMetadataEndpoint]; !ok {
 				selectedFields = append(selectedFields, organizationsetting.FieldIdentityProviderMetadataEndpoint)
@@ -29928,6 +29943,16 @@ func (osh *OrganizationSettingHistoryQuery) collectField(ctx context.Context, on
 			if _, ok := fieldSeen[organizationsettinghistory.FieldIdentityProvider]; !ok {
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldIdentityProvider)
 				fieldSeen[organizationsettinghistory.FieldIdentityProvider] = struct{}{}
+			}
+		case "identityProviderClientID":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldIdentityProviderClientID]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldIdentityProviderClientID)
+				fieldSeen[organizationsettinghistory.FieldIdentityProviderClientID] = struct{}{}
+			}
+		case "identityProviderClientSecret":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldIdentityProviderClientSecret]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldIdentityProviderClientSecret)
+				fieldSeen[organizationsettinghistory.FieldIdentityProviderClientSecret] = struct{}{}
 			}
 		case "identityProviderMetadataEndpoint":
 			if _, ok := fieldSeen[organizationsettinghistory.FieldIdentityProviderMetadataEndpoint]; !ok {
@@ -30288,6 +30313,11 @@ func (pat *PersonalAccessTokenQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[personalaccesstoken.FieldScopes]; !ok {
 				selectedFields = append(selectedFields, personalaccesstoken.FieldScopes)
 				fieldSeen[personalaccesstoken.FieldScopes] = struct{}{}
+			}
+		case "ssoAuthorizations":
+			if _, ok := fieldSeen[personalaccesstoken.FieldSSOAuthorizations]; !ok {
+				selectedFields = append(selectedFields, personalaccesstoken.FieldSSOAuthorizations)
+				fieldSeen[personalaccesstoken.FieldSSOAuthorizations] = struct{}{}
 			}
 		case "lastUsedAt":
 			if _, ok := fieldSeen[personalaccesstoken.FieldLastUsedAt]; !ok {

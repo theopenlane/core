@@ -89,7 +89,17 @@ func (h *Handler) IsAuthenticated(req *http.Request) bool {
 func (h *Handler) GetGoogleLoginHandlers() (http.Handler, http.Handler) {
 	oauth2Config := h.getGoogleOauth2Config()
 
-	loginHandler := google.StateHandler(*h.SessionConfig.CookieConfig, google.LoginHandler(oauth2Config, nil))
+	loginHandler := http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		email := req.URL.Query().Get("email")
+		if email != "" {
+			if orgID, ok := h.ssoOrgForUser(req.Context(), email); ok {
+				http.Redirect(w, req, fmt.Sprintf("/v1/sso/login?organization_id=%s", orgID), http.StatusFound)
+				return
+			}
+		}
+
+		google.StateHandler(*h.SessionConfig.CookieConfig, google.LoginHandler(oauth2Config, nil)).ServeHTTP(w, req)
+	})
 	callbackHandler := google.StateHandler(*h.SessionConfig.CookieConfig, google.CallbackHandler(oauth2Config, h.issueGoogleSession(), nil))
 
 	return loginHandler, callbackHandler
@@ -153,7 +163,17 @@ func (h *Handler) issueGoogleSession() http.Handler {
 func (h *Handler) GetGitHubLoginHandlers() (http.Handler, http.Handler) {
 	oauth2Config := h.getGithubOauth2Config()
 
-	loginHandler := github.StateHandler(*h.SessionConfig.CookieConfig, github.LoginHandler(oauth2Config, nil))
+	loginHandler := http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		email := req.URL.Query().Get("email")
+		if email != "" {
+			if orgID, ok := h.ssoOrgForUser(req.Context(), email); ok {
+				http.Redirect(w, req, fmt.Sprintf("/v1/sso/login?organization_id=%s", orgID), http.StatusFound)
+				return
+			}
+		}
+
+		github.StateHandler(*h.SessionConfig.CookieConfig, github.LoginHandler(oauth2Config, nil)).ServeHTTP(w, req)
+	})
 	callbackHandler := github.StateHandler(*h.SessionConfig.CookieConfig, github.CallbackHandler(oauth2Config, h.issueGitHubSession(), nil))
 
 	return loginHandler, callbackHandler

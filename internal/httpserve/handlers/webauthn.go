@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
+	sso "github.com/theopenlane/core/pkg/ssoutils"
 )
 
 const (
@@ -318,6 +319,12 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context) error {
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
+	if orgID, enforced := h.ssoOrgForUser(reqCtx, entUser.Email); enforced {
+		if !h.HasValidSSOSession(ctx, entUser.ID) {
+			return ctx.Redirect(http.StatusFound, sso.SSOLogin(ctx.Echo(), orgID))
+		}
+	}
+
 	// create claims for verified user
 	auth, err := h.AuthManager.GenerateUserAuthSession(reqCtx, ctx.Response().Writer, entUser)
 	if err != nil {
@@ -379,4 +386,29 @@ func (h *Handler) userHandler(ctx context.Context) webauthn.DiscoverableUserHand
 
 		return authnUser, nil
 	}
+}
+
+func (h *Handler) HasValidSSOSession(ctx echo.Context, userID string) bool {
+	sess, err := h.SessionConfig.SessionManager.Get(ctx.Request(), h.SessionConfig.CookieConfig.Name)
+	if err != nil {
+		return false
+	}
+
+	sessionID := h.SessionConfig.SessionManager.GetSessionIDFromCookie(sess)
+
+	storedUser, err := h.SessionConfig.RedisStore.GetSession(ctx.Request().Context(), sessionID)
+	if err != nil || storedUser != userID {
+		return false
+	}
+
+	data := h.SessionConfig.SessionManager.GetSessionDataFromCookie(sess)
+
+	m, ok := data.(map[string]any)
+	if !ok {
+		return false
+	}
+
+	userType, ok := m[sessions.UserTypeKey].(string)
+
+	return ok && userType == enums.AuthProviderOIDC.String()
 }

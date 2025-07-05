@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // PersonalAccessToken is the model entity for the PersonalAccessToken schema.
@@ -45,6 +46,8 @@ type PersonalAccessToken struct {
 	Description *string `json:"description,omitempty"`
 	// Scopes holds the value of the "scopes" field.
 	Scopes []string `json:"scopes,omitempty"`
+	// SSO authorization timestamps by organization id
+	SSOAuthorizations models.SSOAuthorizationMap `json:"sso_authorizations,omitempty"`
 	// LastUsedAt holds the value of the "last_used_at" field.
 	LastUsedAt *time.Time `json:"last_used_at,omitempty"`
 	// whether the token is active
@@ -113,7 +116,7 @@ func (*PersonalAccessToken) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case personalaccesstoken.FieldTags, personalaccesstoken.FieldScopes:
+		case personalaccesstoken.FieldTags, personalaccesstoken.FieldScopes, personalaccesstoken.FieldSSOAuthorizations:
 			values[i] = new([]byte)
 		case personalaccesstoken.FieldIsActive:
 			values[i] = new(sql.NullBool)
@@ -224,6 +227,14 @@ func (pat *PersonalAccessToken) assignValues(columns []string, values []any) err
 			} else if value != nil && len(*value) > 0 {
 				if err := json.Unmarshal(*value, &pat.Scopes); err != nil {
 					return fmt.Errorf("unmarshal field scopes: %w", err)
+				}
+			}
+		case personalaccesstoken.FieldSSOAuthorizations:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field sso_authorizations", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &pat.SSOAuthorizations); err != nil {
+					return fmt.Errorf("unmarshal field sso_authorizations: %w", err)
 				}
 			}
 		case personalaccesstoken.FieldLastUsedAt:
@@ -353,6 +364,9 @@ func (pat *PersonalAccessToken) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("scopes=")
 	builder.WriteString(fmt.Sprintf("%v", pat.Scopes))
+	builder.WriteString(", ")
+	builder.WriteString("sso_authorizations=")
+	builder.WriteString(fmt.Sprintf("%v", pat.SSOAuthorizations))
 	builder.WriteString(", ")
 	if v := pat.LastUsedAt; v != nil {
 		builder.WriteString("last_used_at=")

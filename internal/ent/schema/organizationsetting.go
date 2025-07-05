@@ -100,12 +100,10 @@ func (OrganizationSetting) Fields() []ent.Field {
 			Default(string(enums.SSOProviderNone)),
 		field.String("identity_provider_client_id").
 			Comment("client ID for SSO integration").
-			Sensitive().
 			Nillable().
 			Optional(),
 		field.String("identity_provider_client_secret").
 			Comment("client secret for SSO integration").
-			Sensitive().
 			Nillable().
 			Optional(),
 		field.String("identity_provider_metadata_endpoint").

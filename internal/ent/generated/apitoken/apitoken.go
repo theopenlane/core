@@ -51,6 +51,8 @@ const (
 	FieldRevokedBy = "revoked_by"
 	// FieldRevokedAt holds the string denoting the revoked_at field in the database.
 	FieldRevokedAt = "revoked_at"
+	// FieldSSOAuthorizations holds the string denoting the sso_authorizations field in the database.
+	FieldSSOAuthorizations = "sso_authorizations"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// Table holds the table name of the apitoken in the database.
@@ -85,6 +87,7 @@ var Columns = []string{
 	FieldRevokedReason,
 	FieldRevokedBy,
 	FieldRevokedAt,
+	FieldSSOAuthorizations,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // PersonalAccessTokenCreate is the builder for creating a PersonalAccessToken entity.
@@ -170,6 +171,12 @@ func (patc *PersonalAccessTokenCreate) SetNillableDescription(s *string) *Person
 // SetScopes sets the "scopes" field.
 func (patc *PersonalAccessTokenCreate) SetScopes(s []string) *PersonalAccessTokenCreate {
 	patc.mutation.SetScopes(s)
+	return patc
+}
+
+// SetSSOAuthorizations sets the "sso_authorizations" field.
+func (patc *PersonalAccessTokenCreate) SetSSOAuthorizations(mam models.SSOAuthorizationMap) *PersonalAccessTokenCreate {
+	patc.mutation.SetSSOAuthorizations(mam)
 	return patc
 }
 
@@ -470,6 +477,10 @@ func (patc *PersonalAccessTokenCreate) createSpec() (*PersonalAccessToken, *sqlg
 	if value, ok := patc.mutation.Scopes(); ok {
 		_spec.SetField(personalaccesstoken.FieldScopes, field.TypeJSON, value)
 		_node.Scopes = value
+	}
+	if value, ok := patc.mutation.SSOAuthorizations(); ok {
+		_spec.SetField(personalaccesstoken.FieldSSOAuthorizations, field.TypeJSON, value)
+		_node.SSOAuthorizations = value
 	}
 	if value, ok := patc.mutation.LastUsedAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldLastUsedAt, field.TypeTime, value)

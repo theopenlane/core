@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	gowebauthn "github.com/go-webauthn/webauthn/webauthn"
@@ -11,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
+	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -581,4 +583,34 @@ func (h *Handler) createJobRunner(ctx context.Context, token *ent.JobRunnerRegis
 	}
 
 	return nil
+}
+
+// getOrganizationSettingByOrgID returns the organization setting for a given organization
+func (h *Handler) getOrganizationSettingByOrgID(ctx context.Context, orgID string) (*ent.OrganizationSetting, error) {
+	setting, err := transaction.FromContext(ctx).OrganizationSetting.Query().
+		Where(organizationsetting.OrganizationID(orgID)).
+		Only(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("error fetching organization settings")
+
+		return nil, err
+	}
+
+	return setting, nil
+}
+
+// getUserDefaultOrgID returns the default organization ID for a user
+func (h *Handler) getUserDefaultOrgID(ctx context.Context, userID string) (string, error) {
+	us, err := transaction.FromContext(ctx).UserSetting.Query().Where(usersetting.UserID(userID)).WithDefaultOrg().Only(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("error fetching user settings")
+
+		return "", err
+	}
+
+	if us.Edges.DefaultOrg == nil {
+		return "", fmt.Errorf("%w: default org", ErrMissingField)
+	}
+
+	return us.Edges.DefaultOrg.ID, nil
 }

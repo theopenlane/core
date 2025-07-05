@@ -29,6 +29,22 @@ type OpenlaneRestClient interface {
 	ResetPassword(context.Context, *models.ResetPasswordRequest) (*models.ResetPasswordReply, error)
 	// AcceptInvite accepts an invite to join an organization
 	AcceptInvite(context.Context, *models.InviteRequest) (*models.InviteReply, error)
+	// Webfinger retrieves SSO status information via the webfinger endpoint
+	Webfinger(context.Context, string) (*models.SSOStatusReply, error)
+	// OAuthRegister registers or logs in a user using an OAuth provider
+	OAuthRegister(context.Context, *models.OauthTokenRequest) (*models.LoginReply, error)
+	// ValidateTOTP validates a user's TOTP or recovery code
+	ValidateTOTP(context.Context, *models.TFARequest) (*models.TFAReply, error)
+	// AccountAccess checks if a subject has a specific relation to an object
+	AccountAccess(context.Context, *models.AccountAccessRequest) (*models.AccountAccessReply, error)
+	// AccountRoles lists the relations a subject has in relation to an object
+	AccountRoles(context.Context, *models.AccountRolesRequest) (*models.AccountRolesReply, error)
+	// AccountRolesOrganization lists roles a user has for an organization
+	AccountRolesOrganization(context.Context, *models.AccountRolesOrganizationRequest) (*models.AccountRolesOrganizationReply, error)
+	// AccountFeatures lists features a user has for an organization
+	AccountFeatures(context.Context, *models.AccountFeaturesRequest) (*models.AccountFeaturesReply, error)
+	// RegisterRunner registers a new job runner node with the server
+	RegisterRunner(context.Context, *models.JobRunnerRegistrationRequest) (*models.JobRunnerRegistrationReply, error)
 }
 
 // New creates a new API v1 client that implements the Openlane Client interface
@@ -237,6 +253,158 @@ func (s *APIv1) VerifySubscriberEmail(ctx context.Context, in *models.VerifySubs
 
 	if !httpsling.IsSuccess(resp) {
 		return nil, newRequestError(resp.StatusCode, out.Error)
+	}
+
+	return out, nil
+}
+
+// Webfinger retrieves SSO status information via the webfinger endpoint.
+func (s *APIv1) Webfinger(ctx context.Context, resource string) (out *models.SSOStatusReply, err error) {
+	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
+		httpsling.Get("/.well-known/webfinger"),
+		httpsling.QueryParam("resource", resource))
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	if !httpsling.IsSuccess(resp) {
+		return nil, newRequestError(resp.StatusCode, out.Error)
+	}
+
+	return out, nil
+}
+
+// OAuthRegister registers or logs in a user using an OAuth provider.
+func (s *APIv1) OAuthRegister(ctx context.Context, in *models.OauthTokenRequest) (out *models.LoginReply, err error) {
+	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
+		httpsling.Post("/oauth/register"),
+		httpsling.Body(in))
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	if !httpsling.IsSuccess(resp) {
+		return nil, newRequestError(resp.StatusCode, out.Error)
+	}
+
+	return out, nil
+}
+
+// ValidateTOTP validates a user's TOTP or recovery code.
+func (s *APIv1) ValidateTOTP(ctx context.Context, in *models.TFARequest) (out *models.TFAReply, err error) {
+	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
+		httpsling.Post(v1Path("2fa/validate")),
+		httpsling.Body(in))
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	if !httpsling.IsSuccess(resp) {
+		return nil, newRequestError(resp.StatusCode, out.Error)
+	}
+
+	return out, nil
+}
+
+// AccountAccess checks if a subject has access to an object.
+func (s *APIv1) AccountAccess(ctx context.Context, in *models.AccountAccessRequest) (out *models.AccountAccessReply, err error) {
+	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
+		httpsling.Post(v1Path("account/access")),
+		httpsling.Body(in))
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	if !httpsling.IsSuccess(resp) {
+		return nil, newRequestError(resp.StatusCode, out.Error)
+	}
+
+	return out, nil
+}
+
+// AccountRoles lists the relations a subject has in relation to an object.
+func (s *APIv1) AccountRoles(ctx context.Context, in *models.AccountRolesRequest) (out *models.AccountRolesReply, err error) {
+	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
+		httpsling.Post(v1Path("account/roles")),
+		httpsling.Body(in))
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	if !httpsling.IsSuccess(resp) {
+		return nil, newRequestError(resp.StatusCode, out.Error)
+	}
+
+	return out, nil
+}
+
+// AccountRolesOrganization lists roles a user has for an organization.
+func (s *APIv1) AccountRolesOrganization(ctx context.Context, in *models.AccountRolesOrganizationRequest) (out *models.AccountRolesOrganizationReply, err error) {
+	path := v1Path("account/roles/organization")
+	if in.ID != "" {
+		path += "/" + in.ID
+	}
+
+	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
+		httpsling.Get(path))
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	if !httpsling.IsSuccess(resp) {
+		return nil, newRequestError(resp.StatusCode, out.Error)
+	}
+
+	return out, nil
+}
+
+// AccountFeatures lists features a user has for an organization.
+func (s *APIv1) AccountFeatures(ctx context.Context, in *models.AccountFeaturesRequest) (out *models.AccountFeaturesReply, err error) {
+	path := v1Path("account/features")
+	if in.ID != "" {
+		path += "/" + in.ID
+	}
+
+	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
+		httpsling.Get(path))
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	if !httpsling.IsSuccess(resp) {
+		return nil, newRequestError(resp.StatusCode, out.Error)
+	}
+
+	return out, nil
+}
+
+// RegisterRunner registers a new job runner node with the server.
+func (s *APIv1) RegisterRunner(ctx context.Context, in *models.JobRunnerRegistrationRequest) (out *models.JobRunnerRegistrationReply, err error) {
+	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
+		httpsling.Post(v1Path("runners")),
+		httpsling.Body(in))
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	if !httpsling.IsSuccess(resp) {
+		return nil, newRequestError(resp.StatusCode, out.Reply.Error)
 	}
 
 	return out, nil

@@ -207,10 +207,13 @@ var openAPISchemas = map[string]any{
 	"AccountRolesOrganizationRequest":   &models.AccountRolesOrganizationRequest{},
 	"AccountRolesOrganizationReply":     &models.AccountRolesOrganizationReply{},
 	"AccountFeaturesReply":              &models.AccountFeaturesReply{},
+	"JobRunnerRegistrationRequest":      &models.JobRunnerRegistrationRequest{},
+	"JobRunnerRegistrationReply":        &models.JobRunnerRegistrationReply{},
+	"SSOStatusReply":                    &models.SSOStatusReply{},
 	"TFARequest":                        &models.TFARequest{},
 	"TFAReply":                          &models.TFAReply{},
 	"WebauthnRegistrationRequest":       &models.WebauthnRegistrationRequest{},
-	"WebauthnBeginRegistrationResponse": &models.WebauthnRegistrationResponse{},
+	"WebauthnBeginRegistrationResponse": &models.WebauthnBeginRegistrationResponse{},
 }
 
 // OAuth2 is a struct that represents an OAuth2 security scheme

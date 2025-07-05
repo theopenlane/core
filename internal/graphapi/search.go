@@ -99,6 +99,10 @@ func adminSearchAPITokens(ctx context.Context, query string, after *entgql.Curso
 				},
 				apitoken.RevokedReasonContainsFold(query), // search by RevokedReason
 				apitoken.RevokedByContainsFold(query),     // search by RevokedBy
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(sso_authorizations)::text LIKE $8", likeQuery)) // search by SsoAuthorizations
+				},
 			),
 		)
 
@@ -1246,6 +1250,8 @@ func adminSearchOrganizationSettings(ctx context.Context, query string, after *e
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(allowed_email_domains)::text LIKE $10", likeQuery)) // search by AllowedEmailDomains
 				},
+				organizationsetting.IdentityProviderClientIDContainsFold(query),         // search by IdentityProviderClientID
+				organizationsetting.IdentityProviderClientSecretContainsFold(query),     // search by IdentityProviderClientSecret
 				organizationsetting.IdentityProviderMetadataEndpointContainsFold(query), // search by IdentityProviderMetadataEndpoint
 				organizationsetting.IdentityProviderEntityIDContainsFold(query),         // search by IdentityProviderEntityID
 				organizationsetting.OidcDiscoveryEndpointContainsFold(query),            // search by OidcDiscoveryEndpoint
@@ -1286,6 +1292,10 @@ func adminSearchPersonalAccessTokens(ctx context.Context, query string, after *e
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(scopes)::text LIKE $4", likeQuery)) // search by Scopes
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(sso_authorizations)::text LIKE $5", likeQuery)) // search by SsoAuthorizations
 				},
 				personalaccesstoken.RevokedReasonContainsFold(query), // search by RevokedReason
 				personalaccesstoken.RevokedByContainsFold(query),     // search by RevokedBy
