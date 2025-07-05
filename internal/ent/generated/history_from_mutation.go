@@ -10278,6 +10278,14 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetNillableLogoLocalFileID(&logoLocalFileID)
 	}
 
+	if faviconRemoteURL, exists := m.FaviconRemoteURL(); exists {
+		create = create.SetNillableFaviconRemoteURL(&faviconRemoteURL)
+	}
+
+	if faviconLocalFileID, exists := m.FaviconLocalFileID(); exists {
+		create = create.SetNillableFaviconLocalFileID(&faviconLocalFileID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -10380,6 +10388,18 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetNillableLogoLocalFileID(trustcentersetting.LogoLocalFileID)
 		}
 
+		if faviconRemoteURL, exists := m.FaviconRemoteURL(); exists {
+			create = create.SetNillableFaviconRemoteURL(&faviconRemoteURL)
+		} else {
+			create = create.SetNillableFaviconRemoteURL(trustcentersetting.FaviconRemoteURL)
+		}
+
+		if faviconLocalFileID, exists := m.FaviconLocalFileID(); exists {
+			create = create.SetNillableFaviconLocalFileID(&faviconLocalFileID)
+		} else {
+			create = create.SetNillableFaviconLocalFileID(trustcentersetting.FaviconLocalFileID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -10424,6 +10444,8 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 			SetPrimaryColor(trustcentersetting.PrimaryColor).
 			SetNillableLogoRemoteURL(trustcentersetting.LogoRemoteURL).
 			SetNillableLogoLocalFileID(trustcentersetting.LogoLocalFileID).
+			SetNillableFaviconRemoteURL(trustcentersetting.FaviconRemoteURL).
+			SetNillableFaviconLocalFileID(trustcentersetting.FaviconLocalFileID).
 			Save(ctx)
 		if err != nil {
 			return err

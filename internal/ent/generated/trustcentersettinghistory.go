@@ -48,7 +48,11 @@ type TrustCenterSettingHistory struct {
 	LogoRemoteURL *string `json:"logo_remote_url,omitempty"`
 	// The local logo file id, takes precedence over the logo remote URL
 	LogoLocalFileID *string `json:"logo_local_file_id,omitempty"`
-	selectValues    sql.SelectValues
+	// URL of the favicon
+	FaviconRemoteURL *string `json:"favicon_remote_url,omitempty"`
+	// The local favicon file id, takes precedence over the favicon remote URL
+	FaviconLocalFileID *string `json:"favicon_local_file_id,omitempty"`
+	selectValues       sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -58,7 +62,7 @@ func (*TrustCenterSettingHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case trustcentersettinghistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case trustcentersettinghistory.FieldID, trustcentersettinghistory.FieldRef, trustcentersettinghistory.FieldCreatedBy, trustcentersettinghistory.FieldUpdatedBy, trustcentersettinghistory.FieldDeletedBy, trustcentersettinghistory.FieldTrustCenterID, trustcentersettinghistory.FieldTitle, trustcentersettinghistory.FieldOverview, trustcentersettinghistory.FieldPrimaryColor, trustcentersettinghistory.FieldLogoRemoteURL, trustcentersettinghistory.FieldLogoLocalFileID:
+		case trustcentersettinghistory.FieldID, trustcentersettinghistory.FieldRef, trustcentersettinghistory.FieldCreatedBy, trustcentersettinghistory.FieldUpdatedBy, trustcentersettinghistory.FieldDeletedBy, trustcentersettinghistory.FieldTrustCenterID, trustcentersettinghistory.FieldTitle, trustcentersettinghistory.FieldOverview, trustcentersettinghistory.FieldPrimaryColor, trustcentersettinghistory.FieldLogoRemoteURL, trustcentersettinghistory.FieldLogoLocalFileID, trustcentersettinghistory.FieldFaviconRemoteURL, trustcentersettinghistory.FieldFaviconLocalFileID:
 			values[i] = new(sql.NullString)
 		case trustcentersettinghistory.FieldHistoryTime, trustcentersettinghistory.FieldCreatedAt, trustcentersettinghistory.FieldUpdatedAt, trustcentersettinghistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -175,6 +179,20 @@ func (tcsh *TrustCenterSettingHistory) assignValues(columns []string, values []a
 				tcsh.LogoLocalFileID = new(string)
 				*tcsh.LogoLocalFileID = value.String
 			}
+		case trustcentersettinghistory.FieldFaviconRemoteURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field favicon_remote_url", values[i])
+			} else if value.Valid {
+				tcsh.FaviconRemoteURL = new(string)
+				*tcsh.FaviconRemoteURL = value.String
+			}
+		case trustcentersettinghistory.FieldFaviconLocalFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field favicon_local_file_id", values[i])
+			} else if value.Valid {
+				tcsh.FaviconLocalFileID = new(string)
+				*tcsh.FaviconLocalFileID = value.String
+			}
 		default:
 			tcsh.selectValues.Set(columns[i], values[i])
 		}
@@ -257,6 +275,16 @@ func (tcsh *TrustCenterSettingHistory) String() string {
 	builder.WriteString(", ")
 	if v := tcsh.LogoLocalFileID; v != nil {
 		builder.WriteString("logo_local_file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := tcsh.FaviconRemoteURL; v != nil {
+		builder.WriteString("favicon_remote_url=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := tcsh.FaviconLocalFileID; v != nil {
+		builder.WriteString("favicon_local_file_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteByte(')')

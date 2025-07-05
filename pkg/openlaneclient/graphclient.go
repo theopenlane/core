@@ -447,7 +447,7 @@ type OpenlaneGraphClient interface {
 	GetAllTrustCenterSettings(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterSettings, error)
 	GetTrustCenterSettingByID(ctx context.Context, trustCenterSettingID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterSettingByID, error)
 	GetTrustCenterSettings(ctx context.Context, first *int64, last *int64, where *TrustCenterSettingWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterSettings, error)
-	UpdateTrustCenterSetting(ctx context.Context, updateTrustCenterSettingID string, input UpdateTrustCenterSettingInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterSetting, error)
+	UpdateTrustCenterSetting(ctx context.Context, updateTrustCenterSettingID string, input UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterSetting, error)
 	GetAllTrustCenterSettingHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterSettingHistories, error)
 	GetTrustCenterSettingHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterSettingHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterSettingHistories, error)
 	CreateUser(ctx context.Context, input CreateUserInput, avatarFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateUser, error)
@@ -78453,19 +78453,33 @@ func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile) GetP
 	return t.PresignedURL
 }
 
+type GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node_FaviconFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node_FaviconFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node_FaviconFile{}
+	}
+	return t.PresignedURL
+}
+
 type GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node struct {
-	CreatedAt       *time.Time                                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID              string                                                             "json:\"id\" graphql:\"id\""
-	LogoFile        *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
-	LogoLocalFileID *string                                                            "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
-	LogoRemoteURL   *string                                                            "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
-	Overview        *string                                                            "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor    *string                                                            "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	Title           *string                                                            "json:\"title,omitempty\" graphql:\"title\""
-	TrustCenterID   *string                                                            "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
-	UpdatedAt       *time.Time                                                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                                            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt          *time.Time                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	FaviconFile        *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node_FaviconFile "json:\"faviconFile,omitempty\" graphql:\"faviconFile\""
+	FaviconLocalFileID *string                                                               "json:\"faviconLocalFileID,omitempty\" graphql:\"faviconLocalFileID\""
+	FaviconRemoteURL   *string                                                               "json:\"faviconRemoteURL,omitempty\" graphql:\"faviconRemoteURL\""
+	ID                 string                                                                "json:\"id\" graphql:\"id\""
+	LogoFile           *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile    "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID    *string                                                               "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL      *string                                                               "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview           *string                                                               "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor       *string                                                               "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	Title              *string                                                               "json:\"title,omitempty\" graphql:\"title\""
+	TrustCenterID      *string                                                               "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt          *time.Time                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetCreatedAt() *time.Time {
@@ -78479,6 +78493,24 @@ func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetCreatedBy(
 		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node{}
 	}
 	return t.CreatedBy
+}
+func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetFaviconFile() *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node_FaviconFile {
+	if t == nil {
+		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.FaviconFile
+}
+func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetFaviconLocalFileID() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.FaviconLocalFileID
+}
+func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetFaviconRemoteURL() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.FaviconRemoteURL
 }
 func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetID() string {
 	if t == nil {
@@ -78588,19 +78620,33 @@ func (t *GetTrustCenterSettingByID_TrustCenterSetting_LogoFile) GetPresignedURL(
 	return t.PresignedURL
 }
 
+type GetTrustCenterSettingByID_TrustCenterSetting_FaviconFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetTrustCenterSettingByID_TrustCenterSetting_FaviconFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting_FaviconFile{}
+	}
+	return t.PresignedURL
+}
+
 type GetTrustCenterSettingByID_TrustCenterSetting struct {
-	CreatedAt       *time.Time                                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID              string                                                 "json:\"id\" graphql:\"id\""
-	LogoFile        *GetTrustCenterSettingByID_TrustCenterSetting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
-	LogoLocalFileID *string                                                "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
-	LogoRemoteURL   *string                                                "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
-	Overview        *string                                                "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor    *string                                                "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	Title           *string                                                "json:\"title,omitempty\" graphql:\"title\""
-	TrustCenterID   *string                                                "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
-	UpdatedAt       *time.Time                                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt          *time.Time                                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string                                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	FaviconFile        *GetTrustCenterSettingByID_TrustCenterSetting_FaviconFile "json:\"faviconFile,omitempty\" graphql:\"faviconFile\""
+	FaviconLocalFileID *string                                                   "json:\"faviconLocalFileID,omitempty\" graphql:\"faviconLocalFileID\""
+	FaviconRemoteURL   *string                                                   "json:\"faviconRemoteURL,omitempty\" graphql:\"faviconRemoteURL\""
+	ID                 string                                                    "json:\"id\" graphql:\"id\""
+	LogoFile           *GetTrustCenterSettingByID_TrustCenterSetting_LogoFile    "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID    *string                                                   "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL      *string                                                   "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview           *string                                                   "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor       *string                                                   "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	Title              *string                                                   "json:\"title,omitempty\" graphql:\"title\""
+	TrustCenterID      *string                                                   "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt          *time.Time                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetCreatedAt() *time.Time {
@@ -78614,6 +78660,24 @@ func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetCreatedBy() *string {
 		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
 	}
 	return t.CreatedBy
+}
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetFaviconFile() *GetTrustCenterSettingByID_TrustCenterSetting_FaviconFile {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.FaviconFile
+}
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetFaviconLocalFileID() *string {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.FaviconLocalFileID
+}
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetFaviconRemoteURL() *string {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.FaviconRemoteURL
 }
 func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetID() string {
 	if t == nil {
@@ -78719,19 +78783,33 @@ func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile) GetPres
 	return t.PresignedURL
 }
 
+type GetTrustCenterSettings_TrustCenterSettings_Edges_Node_FaviconFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node_FaviconFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node_FaviconFile{}
+	}
+	return t.PresignedURL
+}
+
 type GetTrustCenterSettings_TrustCenterSettings_Edges_Node struct {
-	CreatedAt       *time.Time                                                      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                                         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID              string                                                          "json:\"id\" graphql:\"id\""
-	LogoFile        *GetTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
-	LogoLocalFileID *string                                                         "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
-	LogoRemoteURL   *string                                                         "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
-	Overview        *string                                                         "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor    *string                                                         "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	Title           *string                                                         "json:\"title,omitempty\" graphql:\"title\""
-	TrustCenterID   *string                                                         "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
-	UpdatedAt       *time.Time                                                      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                                         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt          *time.Time                                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string                                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	FaviconFile        *GetTrustCenterSettings_TrustCenterSettings_Edges_Node_FaviconFile "json:\"faviconFile,omitempty\" graphql:\"faviconFile\""
+	FaviconLocalFileID *string                                                            "json:\"faviconLocalFileID,omitempty\" graphql:\"faviconLocalFileID\""
+	FaviconRemoteURL   *string                                                            "json:\"faviconRemoteURL,omitempty\" graphql:\"faviconRemoteURL\""
+	ID                 string                                                             "json:\"id\" graphql:\"id\""
+	LogoFile           *GetTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile    "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID    *string                                                            "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL      *string                                                            "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview           *string                                                            "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor       *string                                                            "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	Title              *string                                                            "json:\"title,omitempty\" graphql:\"title\""
+	TrustCenterID      *string                                                            "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt          *time.Time                                                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string                                                            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetCreatedAt() *time.Time {
@@ -78745,6 +78823,24 @@ func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetCreatedBy() *
 		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node{}
 	}
 	return t.CreatedBy
+}
+func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetFaviconFile() *GetTrustCenterSettings_TrustCenterSettings_Edges_Node_FaviconFile {
+	if t == nil {
+		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.FaviconFile
+}
+func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetFaviconLocalFileID() *string {
+	if t == nil {
+		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.FaviconLocalFileID
+}
+func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetFaviconRemoteURL() *string {
+	if t == nil {
+		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.FaviconRemoteURL
 }
 func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetID() string {
 	if t == nil {
@@ -78854,19 +78950,33 @@ func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting_Lo
 	return t.PresignedURL
 }
 
+type UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting_FaviconFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting_FaviconFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting_FaviconFile{}
+	}
+	return t.PresignedURL
+}
+
 type UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting struct {
-	CreatedAt       *time.Time                                                                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                                                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID              string                                                                         "json:\"id\" graphql:\"id\""
-	LogoFile        *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
-	LogoLocalFileID *string                                                                        "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
-	LogoRemoteURL   *string                                                                        "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
-	Overview        *string                                                                        "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor    *string                                                                        "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	Title           *string                                                                        "json:\"title,omitempty\" graphql:\"title\""
-	TrustCenterID   *string                                                                        "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
-	UpdatedAt       *time.Time                                                                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                                                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt          *time.Time                                                                        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string                                                                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	FaviconFile        *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting_FaviconFile "json:\"faviconFile,omitempty\" graphql:\"faviconFile\""
+	FaviconLocalFileID *string                                                                           "json:\"faviconLocalFileID,omitempty\" graphql:\"faviconLocalFileID\""
+	FaviconRemoteURL   *string                                                                           "json:\"faviconRemoteURL,omitempty\" graphql:\"faviconRemoteURL\""
+	ID                 string                                                                            "json:\"id\" graphql:\"id\""
+	LogoFile           *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting_LogoFile    "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID    *string                                                                           "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL      *string                                                                           "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview           *string                                                                           "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor       *string                                                                           "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	Title              *string                                                                           "json:\"title,omitempty\" graphql:\"title\""
+	TrustCenterID      *string                                                                           "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt          *time.Time                                                                        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string                                                                           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetCreatedAt() *time.Time {
@@ -78880,6 +78990,24 @@ func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) G
 		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting{}
 	}
 	return t.CreatedBy
+}
+func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetFaviconFile() *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting_FaviconFile {
+	if t == nil {
+		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.FaviconFile
+}
+func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetFaviconLocalFileID() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.FaviconLocalFileID
+}
+func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetFaviconRemoteURL() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.FaviconRemoteURL
 }
 func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetID() string {
 	if t == nil {
@@ -108885,6 +109013,11 @@ const GetAllTrustCenterSettingsDocument = `query GetAllTrustCenterSettings {
 				}
 				logoRemoteURL
 				logoLocalFileID
+				faviconFile {
+					presignedURL
+				}
+				faviconRemoteURL
+				faviconLocalFileID
 			}
 		}
 	}
@@ -108922,6 +109055,11 @@ const GetTrustCenterSettingByIDDocument = `query GetTrustCenterSettingByID ($tru
 		}
 		logoRemoteURL
 		logoLocalFileID
+		faviconFile {
+			presignedURL
+		}
+		faviconRemoteURL
+		faviconLocalFileID
 	}
 }
 `
@@ -108968,6 +109106,11 @@ const GetTrustCenterSettingsDocument = `query GetTrustCenterSettings ($first: In
 				}
 				logoRemoteURL
 				logoLocalFileID
+				faviconFile {
+					presignedURL
+				}
+				faviconRemoteURL
+				faviconLocalFileID
 			}
 		}
 	}
@@ -108993,8 +109136,8 @@ func (c *Client) GetTrustCenterSettings(ctx context.Context, first *int64, last 
 	return &res, nil
 }
 
-const UpdateTrustCenterSettingDocument = `mutation UpdateTrustCenterSetting ($updateTrustCenterSettingId: ID!, $input: UpdateTrustCenterSettingInput!, $logoFile: Upload) {
-	updateTrustCenterSetting(id: $updateTrustCenterSettingId, input: $input, logoFile: $logoFile) {
+const UpdateTrustCenterSettingDocument = `mutation UpdateTrustCenterSetting ($updateTrustCenterSettingId: ID!, $input: UpdateTrustCenterSettingInput!, $logoFile: Upload, $faviconFile: Upload) {
+	updateTrustCenterSetting(id: $updateTrustCenterSettingId, input: $input, logoFile: $logoFile, faviconFile: $faviconFile) {
 		trustCenterSetting {
 			createdAt
 			createdBy
@@ -109010,16 +109153,22 @@ const UpdateTrustCenterSettingDocument = `mutation UpdateTrustCenterSetting ($up
 			}
 			logoRemoteURL
 			logoLocalFileID
+			faviconFile {
+				presignedURL
+			}
+			faviconRemoteURL
+			faviconLocalFileID
 		}
 	}
 }
 `
 
-func (c *Client) UpdateTrustCenterSetting(ctx context.Context, updateTrustCenterSettingID string, input UpdateTrustCenterSettingInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterSetting, error) {
+func (c *Client) UpdateTrustCenterSetting(ctx context.Context, updateTrustCenterSettingID string, input UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterSetting, error) {
 	vars := map[string]any{
 		"updateTrustCenterSettingId": updateTrustCenterSettingID,
 		"input":                      input,
 		"logoFile":                   logoFile,
+		"faviconFile":                faviconFile,
 	}
 
 	var res UpdateTrustCenterSetting

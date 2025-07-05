@@ -14,7 +14,7 @@ import (
 )
 
 // CreateTrustCenterSetting is the resolver for the createTrustCenterSetting field.
-func (r *mutationResolver) CreateTrustCenterSetting(ctx context.Context, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload) (*model.TrustCenterSettingCreatePayload, error) {
+func (r *mutationResolver) CreateTrustCenterSetting(ctx context.Context, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) (*model.TrustCenterSettingCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).TrustCenterSetting.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcentersetting"})
@@ -26,7 +26,7 @@ func (r *mutationResolver) CreateTrustCenterSetting(ctx context.Context, input g
 }
 
 // UpdateTrustCenterSetting is the resolver for the updateTrustCenterSetting field.
-func (r *mutationResolver) UpdateTrustCenterSetting(ctx context.Context, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload) (*model.TrustCenterSettingUpdatePayload, error) {
+func (r *mutationResolver) UpdateTrustCenterSetting(ctx context.Context, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) (*model.TrustCenterSettingUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).TrustCenterSetting.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "trustcentersetting"})

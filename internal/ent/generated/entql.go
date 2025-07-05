@@ -2952,18 +2952,20 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "TrustCenterSetting",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			trustcentersetting.FieldCreatedAt:       {Type: field.TypeTime, Column: trustcentersetting.FieldCreatedAt},
-			trustcentersetting.FieldUpdatedAt:       {Type: field.TypeTime, Column: trustcentersetting.FieldUpdatedAt},
-			trustcentersetting.FieldCreatedBy:       {Type: field.TypeString, Column: trustcentersetting.FieldCreatedBy},
-			trustcentersetting.FieldUpdatedBy:       {Type: field.TypeString, Column: trustcentersetting.FieldUpdatedBy},
-			trustcentersetting.FieldDeletedAt:       {Type: field.TypeTime, Column: trustcentersetting.FieldDeletedAt},
-			trustcentersetting.FieldDeletedBy:       {Type: field.TypeString, Column: trustcentersetting.FieldDeletedBy},
-			trustcentersetting.FieldTrustCenterID:   {Type: field.TypeString, Column: trustcentersetting.FieldTrustCenterID},
-			trustcentersetting.FieldTitle:           {Type: field.TypeString, Column: trustcentersetting.FieldTitle},
-			trustcentersetting.FieldOverview:        {Type: field.TypeString, Column: trustcentersetting.FieldOverview},
-			trustcentersetting.FieldPrimaryColor:    {Type: field.TypeString, Column: trustcentersetting.FieldPrimaryColor},
-			trustcentersetting.FieldLogoRemoteURL:   {Type: field.TypeString, Column: trustcentersetting.FieldLogoRemoteURL},
-			trustcentersetting.FieldLogoLocalFileID: {Type: field.TypeString, Column: trustcentersetting.FieldLogoLocalFileID},
+			trustcentersetting.FieldCreatedAt:          {Type: field.TypeTime, Column: trustcentersetting.FieldCreatedAt},
+			trustcentersetting.FieldUpdatedAt:          {Type: field.TypeTime, Column: trustcentersetting.FieldUpdatedAt},
+			trustcentersetting.FieldCreatedBy:          {Type: field.TypeString, Column: trustcentersetting.FieldCreatedBy},
+			trustcentersetting.FieldUpdatedBy:          {Type: field.TypeString, Column: trustcentersetting.FieldUpdatedBy},
+			trustcentersetting.FieldDeletedAt:          {Type: field.TypeTime, Column: trustcentersetting.FieldDeletedAt},
+			trustcentersetting.FieldDeletedBy:          {Type: field.TypeString, Column: trustcentersetting.FieldDeletedBy},
+			trustcentersetting.FieldTrustCenterID:      {Type: field.TypeString, Column: trustcentersetting.FieldTrustCenterID},
+			trustcentersetting.FieldTitle:              {Type: field.TypeString, Column: trustcentersetting.FieldTitle},
+			trustcentersetting.FieldOverview:           {Type: field.TypeString, Column: trustcentersetting.FieldOverview},
+			trustcentersetting.FieldPrimaryColor:       {Type: field.TypeString, Column: trustcentersetting.FieldPrimaryColor},
+			trustcentersetting.FieldLogoRemoteURL:      {Type: field.TypeString, Column: trustcentersetting.FieldLogoRemoteURL},
+			trustcentersetting.FieldLogoLocalFileID:    {Type: field.TypeString, Column: trustcentersetting.FieldLogoLocalFileID},
+			trustcentersetting.FieldFaviconRemoteURL:   {Type: field.TypeString, Column: trustcentersetting.FieldFaviconRemoteURL},
+			trustcentersetting.FieldFaviconLocalFileID: {Type: field.TypeString, Column: trustcentersetting.FieldFaviconLocalFileID},
 		},
 	}
 	graph.Nodes[96] = &sqlgraph.Node{
@@ -2977,21 +2979,23 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "TrustCenterSettingHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			trustcentersettinghistory.FieldHistoryTime:     {Type: field.TypeTime, Column: trustcentersettinghistory.FieldHistoryTime},
-			trustcentersettinghistory.FieldRef:             {Type: field.TypeString, Column: trustcentersettinghistory.FieldRef},
-			trustcentersettinghistory.FieldOperation:       {Type: field.TypeEnum, Column: trustcentersettinghistory.FieldOperation},
-			trustcentersettinghistory.FieldCreatedAt:       {Type: field.TypeTime, Column: trustcentersettinghistory.FieldCreatedAt},
-			trustcentersettinghistory.FieldUpdatedAt:       {Type: field.TypeTime, Column: trustcentersettinghistory.FieldUpdatedAt},
-			trustcentersettinghistory.FieldCreatedBy:       {Type: field.TypeString, Column: trustcentersettinghistory.FieldCreatedBy},
-			trustcentersettinghistory.FieldUpdatedBy:       {Type: field.TypeString, Column: trustcentersettinghistory.FieldUpdatedBy},
-			trustcentersettinghistory.FieldDeletedAt:       {Type: field.TypeTime, Column: trustcentersettinghistory.FieldDeletedAt},
-			trustcentersettinghistory.FieldDeletedBy:       {Type: field.TypeString, Column: trustcentersettinghistory.FieldDeletedBy},
-			trustcentersettinghistory.FieldTrustCenterID:   {Type: field.TypeString, Column: trustcentersettinghistory.FieldTrustCenterID},
-			trustcentersettinghistory.FieldTitle:           {Type: field.TypeString, Column: trustcentersettinghistory.FieldTitle},
-			trustcentersettinghistory.FieldOverview:        {Type: field.TypeString, Column: trustcentersettinghistory.FieldOverview},
-			trustcentersettinghistory.FieldPrimaryColor:    {Type: field.TypeString, Column: trustcentersettinghistory.FieldPrimaryColor},
-			trustcentersettinghistory.FieldLogoRemoteURL:   {Type: field.TypeString, Column: trustcentersettinghistory.FieldLogoRemoteURL},
-			trustcentersettinghistory.FieldLogoLocalFileID: {Type: field.TypeString, Column: trustcentersettinghistory.FieldLogoLocalFileID},
+			trustcentersettinghistory.FieldHistoryTime:        {Type: field.TypeTime, Column: trustcentersettinghistory.FieldHistoryTime},
+			trustcentersettinghistory.FieldRef:                {Type: field.TypeString, Column: trustcentersettinghistory.FieldRef},
+			trustcentersettinghistory.FieldOperation:          {Type: field.TypeEnum, Column: trustcentersettinghistory.FieldOperation},
+			trustcentersettinghistory.FieldCreatedAt:          {Type: field.TypeTime, Column: trustcentersettinghistory.FieldCreatedAt},
+			trustcentersettinghistory.FieldUpdatedAt:          {Type: field.TypeTime, Column: trustcentersettinghistory.FieldUpdatedAt},
+			trustcentersettinghistory.FieldCreatedBy:          {Type: field.TypeString, Column: trustcentersettinghistory.FieldCreatedBy},
+			trustcentersettinghistory.FieldUpdatedBy:          {Type: field.TypeString, Column: trustcentersettinghistory.FieldUpdatedBy},
+			trustcentersettinghistory.FieldDeletedAt:          {Type: field.TypeTime, Column: trustcentersettinghistory.FieldDeletedAt},
+			trustcentersettinghistory.FieldDeletedBy:          {Type: field.TypeString, Column: trustcentersettinghistory.FieldDeletedBy},
+			trustcentersettinghistory.FieldTrustCenterID:      {Type: field.TypeString, Column: trustcentersettinghistory.FieldTrustCenterID},
+			trustcentersettinghistory.FieldTitle:              {Type: field.TypeString, Column: trustcentersettinghistory.FieldTitle},
+			trustcentersettinghistory.FieldOverview:           {Type: field.TypeString, Column: trustcentersettinghistory.FieldOverview},
+			trustcentersettinghistory.FieldPrimaryColor:       {Type: field.TypeString, Column: trustcentersettinghistory.FieldPrimaryColor},
+			trustcentersettinghistory.FieldLogoRemoteURL:      {Type: field.TypeString, Column: trustcentersettinghistory.FieldLogoRemoteURL},
+			trustcentersettinghistory.FieldLogoLocalFileID:    {Type: field.TypeString, Column: trustcentersettinghistory.FieldLogoLocalFileID},
+			trustcentersettinghistory.FieldFaviconRemoteURL:   {Type: field.TypeString, Column: trustcentersettinghistory.FieldFaviconRemoteURL},
+			trustcentersettinghistory.FieldFaviconLocalFileID: {Type: field.TypeString, Column: trustcentersettinghistory.FieldFaviconLocalFileID},
 		},
 	}
 	graph.Nodes[97] = &sqlgraph.Node{
@@ -7962,6 +7966,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Inverse: false,
 			Table:   trustcentersetting.LogoFileTable,
 			Columns: []string{trustcentersetting.LogoFileColumn},
+			Bidi:    false,
+		},
+		"TrustCenterSetting",
+		"File",
+	)
+	graph.MustAddE(
+		"favicon_file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.FaviconFileTable,
+			Columns: []string{trustcentersetting.FaviconFileColumn},
 			Bidi:    false,
 		},
 		"TrustCenterSetting",
@@ -25674,6 +25690,16 @@ func (f *TrustCenterSettingFilter) WhereLogoLocalFileID(p entql.StringP) {
 	f.Where(p.Field(trustcentersetting.FieldLogoLocalFileID))
 }
 
+// WhereFaviconRemoteURL applies the entql string predicate on the favicon_remote_url field.
+func (f *TrustCenterSettingFilter) WhereFaviconRemoteURL(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldFaviconRemoteURL))
+}
+
+// WhereFaviconLocalFileID applies the entql string predicate on the favicon_local_file_id field.
+func (f *TrustCenterSettingFilter) WhereFaviconLocalFileID(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldFaviconLocalFileID))
+}
+
 // WhereHasTrustCenter applies a predicate to check if query has an edge trust_center.
 func (f *TrustCenterSettingFilter) WhereHasTrustCenter() {
 	f.Where(entql.HasEdge("trust_center"))
@@ -25710,6 +25736,20 @@ func (f *TrustCenterSettingFilter) WhereHasLogoFile() {
 // WhereHasLogoFileWith applies a predicate to check if query has an edge logo_file with a given conditions (other predicates).
 func (f *TrustCenterSettingFilter) WhereHasLogoFileWith(preds ...predicate.File) {
 	f.Where(entql.HasEdgeWith("logo_file", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFaviconFile applies a predicate to check if query has an edge favicon_file.
+func (f *TrustCenterSettingFilter) WhereHasFaviconFile() {
+	f.Where(entql.HasEdge("favicon_file"))
+}
+
+// WhereHasFaviconFileWith applies a predicate to check if query has an edge favicon_file with a given conditions (other predicates).
+func (f *TrustCenterSettingFilter) WhereHasFaviconFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("favicon_file", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -25829,6 +25869,16 @@ func (f *TrustCenterSettingHistoryFilter) WhereLogoRemoteURL(p entql.StringP) {
 // WhereLogoLocalFileID applies the entql string predicate on the logo_local_file_id field.
 func (f *TrustCenterSettingHistoryFilter) WhereLogoLocalFileID(p entql.StringP) {
 	f.Where(p.Field(trustcentersettinghistory.FieldLogoLocalFileID))
+}
+
+// WhereFaviconRemoteURL applies the entql string predicate on the favicon_remote_url field.
+func (f *TrustCenterSettingHistoryFilter) WhereFaviconRemoteURL(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldFaviconRemoteURL))
+}
+
+// WhereFaviconLocalFileID applies the entql string predicate on the favicon_local_file_id field.
+func (f *TrustCenterSettingHistoryFilter) WhereFaviconLocalFileID(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldFaviconLocalFileID))
 }
 
 // addPredicate implements the predicateAdder interface.
