@@ -252,12 +252,12 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 
 	// get the cloned controls to return in the response
 	query, err := withTransactionalMutation(ctx).Control.Query().Where(control.IDIn(createdControlIDs...)).
-		CollectFields(ctx)
+		CollectFields(allowCtx)
 	if err != nil {
 		return nil, err
 	}
 
-	return query.All(ctx)
+	return query.All(allowCtx)
 }
 
 // createCloneControlInput creates a CreateControlInput from the given control that is being cloned
