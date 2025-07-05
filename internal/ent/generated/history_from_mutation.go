@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
+	"github.com/rs/zerolog/log"
 )
 
 var (
@@ -927,143 +928,151 @@ func (m *ContactMutation) CreateHistoryFromDelete(ctx context.Context) error {
 }
 
 func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
-	client := m.Client()
+	funk := func() {
+		client := m.Client()
 
-	id, ok := m.ID()
-	if !ok {
-		return idNotFoundError
-	}
+		id, ok := m.ID()
+		if !ok {
+			log.Warn().Msg("control id not found, unable to create history")
+		}
 
-	create := client.ControlHistory.Create()
+		create := client.ControlHistory.Create()
 
-	create = create.
-		SetOperation(EntOpToHistoryOp(m.Op())).
-		SetHistoryTime(time.Now()).
-		SetRef(id)
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
 
-	if createdAt, exists := m.CreatedAt(); exists {
-		create = create.SetCreatedAt(createdAt)
-	}
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		}
 
-	if updatedAt, exists := m.UpdatedAt(); exists {
-		create = create.SetUpdatedAt(updatedAt)
-	}
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		}
 
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
-	}
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		}
 
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
-	}
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		}
 
-	if deletedAt, exists := m.DeletedAt(); exists {
-		create = create.SetDeletedAt(deletedAt)
-	}
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		}
 
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
-	}
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		}
 
-	if displayID, exists := m.DisplayID(); exists {
-		create = create.SetDisplayID(displayID)
-	}
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		}
 
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		}
 
-	if description, exists := m.Description(); exists {
-		create = create.SetDescription(description)
-	}
+		if description, exists := m.Description(); exists {
+			create = create.SetDescription(description)
+		}
 
-	if referenceID, exists := m.ReferenceID(); exists {
-		create = create.SetReferenceID(referenceID)
-	}
+		if referenceID, exists := m.ReferenceID(); exists {
+			create = create.SetReferenceID(referenceID)
+		}
 
-	if auditorReferenceID, exists := m.AuditorReferenceID(); exists {
-		create = create.SetAuditorReferenceID(auditorReferenceID)
-	}
+		if auditorReferenceID, exists := m.AuditorReferenceID(); exists {
+			create = create.SetAuditorReferenceID(auditorReferenceID)
+		}
 
-	if status, exists := m.Status(); exists {
-		create = create.SetStatus(status)
-	}
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		}
 
-	if source, exists := m.Source(); exists {
-		create = create.SetSource(source)
-	}
+		if source, exists := m.Source(); exists {
+			create = create.SetSource(source)
+		}
 
-	if referenceFramework, exists := m.ReferenceFramework(); exists {
-		create = create.SetNillableReferenceFramework(&referenceFramework)
-	}
+		if referenceFramework, exists := m.ReferenceFramework(); exists {
+			create = create.SetNillableReferenceFramework(&referenceFramework)
+		}
 
-	if controlType, exists := m.ControlType(); exists {
-		create = create.SetControlType(controlType)
-	}
+		if controlType, exists := m.ControlType(); exists {
+			create = create.SetControlType(controlType)
+		}
 
-	if category, exists := m.Category(); exists {
-		create = create.SetCategory(category)
-	}
+		if category, exists := m.Category(); exists {
+			create = create.SetCategory(category)
+		}
 
-	if categoryID, exists := m.CategoryID(); exists {
-		create = create.SetCategoryID(categoryID)
-	}
+		if categoryID, exists := m.CategoryID(); exists {
+			create = create.SetCategoryID(categoryID)
+		}
 
-	if subcategory, exists := m.Subcategory(); exists {
-		create = create.SetSubcategory(subcategory)
-	}
+		if subcategory, exists := m.Subcategory(); exists {
+			create = create.SetSubcategory(subcategory)
+		}
 
-	if mappedCategories, exists := m.MappedCategories(); exists {
-		create = create.SetMappedCategories(mappedCategories)
-	}
+		if mappedCategories, exists := m.MappedCategories(); exists {
+			create = create.SetMappedCategories(mappedCategories)
+		}
 
-	if assessmentObjectives, exists := m.AssessmentObjectives(); exists {
-		create = create.SetAssessmentObjectives(assessmentObjectives)
-	}
+		if assessmentObjectives, exists := m.AssessmentObjectives(); exists {
+			create = create.SetAssessmentObjectives(assessmentObjectives)
+		}
 
-	if assessmentMethods, exists := m.AssessmentMethods(); exists {
-		create = create.SetAssessmentMethods(assessmentMethods)
-	}
+		if assessmentMethods, exists := m.AssessmentMethods(); exists {
+			create = create.SetAssessmentMethods(assessmentMethods)
+		}
 
-	if controlQuestions, exists := m.ControlQuestions(); exists {
-		create = create.SetControlQuestions(controlQuestions)
-	}
+		if controlQuestions, exists := m.ControlQuestions(); exists {
+			create = create.SetControlQuestions(controlQuestions)
+		}
 
-	if implementationGuidance, exists := m.ImplementationGuidance(); exists {
-		create = create.SetImplementationGuidance(implementationGuidance)
-	}
+		if implementationGuidance, exists := m.ImplementationGuidance(); exists {
+			create = create.SetImplementationGuidance(implementationGuidance)
+		}
 
-	if exampleEvidence, exists := m.ExampleEvidence(); exists {
-		create = create.SetExampleEvidence(exampleEvidence)
-	}
+		if exampleEvidence, exists := m.ExampleEvidence(); exists {
+			create = create.SetExampleEvidence(exampleEvidence)
+		}
 
-	if references, exists := m.References(); exists {
-		create = create.SetReferences(references)
-	}
+		if references, exists := m.References(); exists {
+			create = create.SetReferences(references)
+		}
 
-	if controlOwnerID, exists := m.ControlOwnerID(); exists {
-		create = create.SetNillableControlOwnerID(&controlOwnerID)
-	}
+		if controlOwnerID, exists := m.ControlOwnerID(); exists {
+			create = create.SetNillableControlOwnerID(&controlOwnerID)
+		}
 
-	if delegateID, exists := m.DelegateID(); exists {
-		create = create.SetDelegateID(delegateID)
-	}
+		if delegateID, exists := m.DelegateID(); exists {
+			create = create.SetDelegateID(delegateID)
+		}
 
-	if ownerID, exists := m.OwnerID(); exists {
-		create = create.SetOwnerID(ownerID)
-	}
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		}
 
-	if refCode, exists := m.RefCode(); exists {
-		create = create.SetRefCode(refCode)
-	}
+		if refCode, exists := m.RefCode(); exists {
+			create = create.SetRefCode(refCode)
+		}
 
-	if standardID, exists := m.StandardID(); exists {
-		create = create.SetStandardID(standardID)
-	}
+		if standardID, exists := m.StandardID(); exists {
+			create = create.SetStandardID(standardID)
+		}
 
-	_, err := create.Save(ctx)
+		_, err := create.Save(ctx)
+		if err != nil {
+			log.Error().Err(err).Msg("unable to create history")
+			}
 
-	return err
+		}
+
+	m.PondPool.Submit(funk)
+
+	return nil
 }
 
 func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
@@ -9102,143 +9111,153 @@ func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
 }
 
 func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error {
-	client := m.Client()
+	funk := func() {
+		client := m.Client()
 
-	id, ok := m.ID()
-	if !ok {
-		return idNotFoundError
+		id, ok := m.ID()
+		if !ok {
+			log.Warn().Msg("id not found, cannot create history")
+
+			return
+		}
+
+		create := client.SubcontrolHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		}
+
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		}
+
+		if description, exists := m.Description(); exists {
+			create = create.SetDescription(description)
+		}
+
+		if referenceID, exists := m.ReferenceID(); exists {
+			create = create.SetReferenceID(referenceID)
+		}
+
+		if auditorReferenceID, exists := m.AuditorReferenceID(); exists {
+			create = create.SetAuditorReferenceID(auditorReferenceID)
+		}
+
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		}
+
+		if source, exists := m.Source(); exists {
+			create = create.SetSource(source)
+		}
+
+		if referenceFramework, exists := m.ReferenceFramework(); exists {
+			create = create.SetNillableReferenceFramework(&referenceFramework)
+		}
+
+		if controlType, exists := m.ControlType(); exists {
+			create = create.SetControlType(controlType)
+		}
+
+		if category, exists := m.Category(); exists {
+			create = create.SetCategory(category)
+		}
+
+		if categoryID, exists := m.CategoryID(); exists {
+			create = create.SetCategoryID(categoryID)
+		}
+
+		if subcategory, exists := m.Subcategory(); exists {
+			create = create.SetSubcategory(subcategory)
+		}
+
+		if mappedCategories, exists := m.MappedCategories(); exists {
+			create = create.SetMappedCategories(mappedCategories)
+		}
+
+		if assessmentObjectives, exists := m.AssessmentObjectives(); exists {
+			create = create.SetAssessmentObjectives(assessmentObjectives)
+		}
+
+		if assessmentMethods, exists := m.AssessmentMethods(); exists {
+			create = create.SetAssessmentMethods(assessmentMethods)
+		}
+
+		if controlQuestions, exists := m.ControlQuestions(); exists {
+			create = create.SetControlQuestions(controlQuestions)
+		}
+
+		if implementationGuidance, exists := m.ImplementationGuidance(); exists {
+			create = create.SetImplementationGuidance(implementationGuidance)
+		}
+
+		if exampleEvidence, exists := m.ExampleEvidence(); exists {
+			create = create.SetExampleEvidence(exampleEvidence)
+		}
+
+		if references, exists := m.References(); exists {
+			create = create.SetReferences(references)
+		}
+
+		if controlOwnerID, exists := m.ControlOwnerID(); exists {
+			create = create.SetNillableControlOwnerID(&controlOwnerID)
+		}
+
+		if delegateID, exists := m.DelegateID(); exists {
+			create = create.SetDelegateID(delegateID)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		}
+
+		if refCode, exists := m.RefCode(); exists {
+			create = create.SetRefCode(refCode)
+		}
+
+		if controlID, exists := m.ControlID(); exists {
+			create = create.SetControlID(controlID)
+		}
+
+		_, err := create.Save(ctx)
+		if err != nil {
+			log.Error().Err(err).Msg("error creating history entry")
+		}
+
 	}
 
-	create := client.SubcontrolHistory.Create()
+	m.PondPool.Submit(funk)
 
-	create = create.
-		SetOperation(EntOpToHistoryOp(m.Op())).
-		SetHistoryTime(time.Now()).
-		SetRef(id)
-
-	if createdAt, exists := m.CreatedAt(); exists {
-		create = create.SetCreatedAt(createdAt)
-	}
-
-	if updatedAt, exists := m.UpdatedAt(); exists {
-		create = create.SetUpdatedAt(updatedAt)
-	}
-
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
-	}
-
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if deletedAt, exists := m.DeletedAt(); exists {
-		create = create.SetDeletedAt(deletedAt)
-	}
-
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
-	}
-
-	if displayID, exists := m.DisplayID(); exists {
-		create = create.SetDisplayID(displayID)
-	}
-
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
-
-	if description, exists := m.Description(); exists {
-		create = create.SetDescription(description)
-	}
-
-	if referenceID, exists := m.ReferenceID(); exists {
-		create = create.SetReferenceID(referenceID)
-	}
-
-	if auditorReferenceID, exists := m.AuditorReferenceID(); exists {
-		create = create.SetAuditorReferenceID(auditorReferenceID)
-	}
-
-	if status, exists := m.Status(); exists {
-		create = create.SetStatus(status)
-	}
-
-	if source, exists := m.Source(); exists {
-		create = create.SetSource(source)
-	}
-
-	if referenceFramework, exists := m.ReferenceFramework(); exists {
-		create = create.SetNillableReferenceFramework(&referenceFramework)
-	}
-
-	if controlType, exists := m.ControlType(); exists {
-		create = create.SetControlType(controlType)
-	}
-
-	if category, exists := m.Category(); exists {
-		create = create.SetCategory(category)
-	}
-
-	if categoryID, exists := m.CategoryID(); exists {
-		create = create.SetCategoryID(categoryID)
-	}
-
-	if subcategory, exists := m.Subcategory(); exists {
-		create = create.SetSubcategory(subcategory)
-	}
-
-	if mappedCategories, exists := m.MappedCategories(); exists {
-		create = create.SetMappedCategories(mappedCategories)
-	}
-
-	if assessmentObjectives, exists := m.AssessmentObjectives(); exists {
-		create = create.SetAssessmentObjectives(assessmentObjectives)
-	}
-
-	if assessmentMethods, exists := m.AssessmentMethods(); exists {
-		create = create.SetAssessmentMethods(assessmentMethods)
-	}
-
-	if controlQuestions, exists := m.ControlQuestions(); exists {
-		create = create.SetControlQuestions(controlQuestions)
-	}
-
-	if implementationGuidance, exists := m.ImplementationGuidance(); exists {
-		create = create.SetImplementationGuidance(implementationGuidance)
-	}
-
-	if exampleEvidence, exists := m.ExampleEvidence(); exists {
-		create = create.SetExampleEvidence(exampleEvidence)
-	}
-
-	if references, exists := m.References(); exists {
-		create = create.SetReferences(references)
-	}
-
-	if controlOwnerID, exists := m.ControlOwnerID(); exists {
-		create = create.SetNillableControlOwnerID(&controlOwnerID)
-	}
-
-	if delegateID, exists := m.DelegateID(); exists {
-		create = create.SetDelegateID(delegateID)
-	}
-
-	if ownerID, exists := m.OwnerID(); exists {
-		create = create.SetOwnerID(ownerID)
-	}
-
-	if refCode, exists := m.RefCode(); exists {
-		create = create.SetRefCode(refCode)
-	}
-
-	if controlID, exists := m.ControlID(); exists {
-		create = create.SetControlID(controlID)
-	}
-
-	_, err := create.Save(ctx)
-
-	return err
+	return nil
 }
 
 func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error {

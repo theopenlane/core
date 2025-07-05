@@ -246,6 +246,7 @@ Config holds the configuration for the ent server
 |----|----|-----------|--------|
 |[**entityTypes**](#entconfigentitytypes)|`string[]`|||
 |[**summarizer**](#entconfigsummarizer)|`object`|Summarizer holds configuration for the text summarization functionality<br/>||
+|**maxPoolSize**|`integer`|MaxPoolSize is the max pond pool workers that can be used by the ent client<br/>||
 
 **Additional Properties:** not allowed  
 <a name="entconfigentitytypes"></a>
