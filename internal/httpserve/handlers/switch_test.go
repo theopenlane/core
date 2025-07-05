@@ -8,7 +8,6 @@ import (
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
@@ -71,6 +70,6 @@ func (suite *HandlerTestSuite) TestSwitchHandlerSSOEnforced() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
-	require.Equal(t, http.StatusFound, rec.Code)
+	assert.Equal(t, http.StatusFound, rec.Code)
 	assert.Equal(t, sso.SSOLogin(suite.e, org.ID), rec.Header().Get("Location"))
 }
