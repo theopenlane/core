@@ -21,6 +21,7 @@ func TestQueryNarrative(t *testing.T) {
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program.ID,
 		UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).
 		MustNew(testUser1.UserCtx, t)
+	anonymousContext := createAnonymousTrustCenterContext("abc123", testUser1.OrganizationID)
 
 	narratives := []string{}
 
@@ -65,6 +66,12 @@ func TestQueryNarrative(t *testing.T) {
 			client:   suite.client.api,
 			ctx:      testUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
+		},
+		{
+			name:     "no access, anonymous user",
+			client:   suite.client.api,
+			ctx:      anonymousContext,
+			errorMsg: couldNotFindUser,
 		},
 	}
 

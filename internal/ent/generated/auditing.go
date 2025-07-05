@@ -3171,6 +3171,12 @@ func (tcsh *TrustCenterSettingHistory) changes(new *TrustCenterSettingHistory) [
 	if !reflect.DeepEqual(tcsh.PrimaryColor, new.PrimaryColor) {
 		changes = append(changes, NewChange(trustcentersettinghistory.FieldPrimaryColor, tcsh.PrimaryColor, new.PrimaryColor))
 	}
+	if !reflect.DeepEqual(tcsh.LogoRemoteURL, new.LogoRemoteURL) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldLogoRemoteURL, tcsh.LogoRemoteURL, new.LogoRemoteURL))
+	}
+	if !reflect.DeepEqual(tcsh.LogoLocalFileID, new.LogoLocalFileID) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldLogoLocalFileID, tcsh.LogoLocalFileID, new.LogoLocalFileID))
+	}
 	return changes
 }
 

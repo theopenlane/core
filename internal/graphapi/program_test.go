@@ -18,6 +18,7 @@ func TestQueryProgram(t *testing.T) {
 	// create program1 with a linked procedure and policy
 	program1 := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(testUser1.UserCtx, t)
 	program2 := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(adminUser.UserCtx, t)
+	anonymousContext := createAnonymousTrustCenterContext("abc123", testUser1.OrganizationID)
 
 	testCases := []struct {
 		name           string
@@ -61,6 +62,13 @@ func TestQueryProgram(t *testing.T) {
 			client:   suite.client.api,
 			ctx:      testUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
+		},
+		{
+			name:     "no access, anonymous user",
+			client:   suite.client.api,
+			ctx:      anonymousContext,
+			queryID:  program1.ID,
+			errorMsg: couldNotFindUser,
 		},
 	}
 

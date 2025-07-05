@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/rs/zerolog/log"
@@ -78,8 +79,14 @@ func (d *Disk) GetScheme() *string {
 }
 
 // ManagerUpload uploads multiple files to disk
-// TODO: Implement this method
-func (d *Disk) ManagerUpload(_ context.Context, _ [][]byte) error {
+func (d *Disk) ManagerUpload(_ context.Context, files [][]byte) error {
+	for i, data := range files {
+		name := fmt.Sprintf("file%d", i)
+		if err := os.WriteFile(filepath.Join(d.Opts.Bucket, name), data, 0600); err != nil { // nolint:mnd
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -97,9 +104,14 @@ func (d *Disk) Download(_ context.Context, opts *objects.DownloadFileOptions) (*
 }
 
 // GetPresignedURL is used to get a presigned URL for a file in the storage backend
-// TODO: Implement this method
 func (d *Disk) GetPresignedURL(key string, _ time.Duration) (string, error) {
-	return d.Opts.LocalURL + key, nil
+	if d.Opts.LocalURL == "" {
+		return "", ErrMissingLocalURL
+	}
+
+	base := strings.TrimRight(d.Opts.LocalURL, "/")
+
+	return fmt.Sprintf("%s/%s", base, key), nil
 }
 
 // ListBuckets lists the local bucket if it exists

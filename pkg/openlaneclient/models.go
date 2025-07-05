@@ -5011,6 +5011,7 @@ type CreateFileInput struct {
 	ProgramIDs             []string `json:"programIDs,omitempty"`
 	EvidenceIDs            []string `json:"evidenceIDs,omitempty"`
 	EventIDs               []string `json:"eventIDs,omitempty"`
+	TrustCenterSettingIDs  []string `json:"trustCenterSettingIDs,omitempty"`
 }
 
 type CreateFullProgramInput struct {
@@ -5887,8 +5888,12 @@ type CreateTrustCenterSettingInput struct {
 	// overview of the trust center
 	Overview *string `json:"overview,omitempty"`
 	// primary color for the trust center
-	PrimaryColor  *string `json:"primaryColor,omitempty"`
-	TrustCenterID *string `json:"trustCenterID,omitempty"`
+	PrimaryColor *string `json:"primaryColor,omitempty"`
+	// URL of the logo
+	LogoRemoteURL *string  `json:"logoRemoteURL,omitempty"`
+	TrustCenterID *string  `json:"trustCenterID,omitempty"`
+	FileIDs       []string `json:"fileIDs,omitempty"`
+	LogoFileID    *string  `json:"logoFileID,omitempty"`
 }
 
 // CreateUserInput is used for create User object.
@@ -9115,6 +9120,7 @@ type File struct {
 	Program             []*Program             `json:"program,omitempty"`
 	Evidence            []*Evidence            `json:"evidence,omitempty"`
 	Events              *EventConnection       `json:"events"`
+	TrustCenterSetting  []*TrustCenterSetting  `json:"trustCenterSetting,omitempty"`
 	PresignedURL        *string                `json:"presignedURL,omitempty"`
 }
 
@@ -9812,6 +9818,9 @@ type FileWhereInput struct {
 	// events edge predicates
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
+	// trust_center_setting edge predicates
+	HasTrustCenterSetting     *bool                           `json:"hasTrustCenterSetting,omitempty"`
+	HasTrustCenterSettingWith []*TrustCenterSettingWhereInput `json:"hasTrustCenterSettingWith,omitempty"`
 }
 
 type Group struct {
@@ -25175,8 +25184,14 @@ type TrustCenterSetting struct {
 	// overview of the trust center
 	Overview *string `json:"overview,omitempty"`
 	// primary color for the trust center
-	PrimaryColor *string      `json:"primaryColor,omitempty"`
-	TrustCenter  *TrustCenter `json:"trustCenter,omitempty"`
+	PrimaryColor *string `json:"primaryColor,omitempty"`
+	// URL of the logo
+	LogoRemoteURL *string `json:"logoRemoteURL,omitempty"`
+	// The local logo file id, takes precedence over the logo remote URL
+	LogoLocalFileID *string         `json:"logoLocalFileID,omitempty"`
+	TrustCenter     *TrustCenter    `json:"trustCenter,omitempty"`
+	Files           *FileConnection `json:"files"`
+	LogoFile        *File           `json:"logoFile,omitempty"`
 }
 
 func (TrustCenterSetting) IsNode() {}
@@ -25234,6 +25249,10 @@ type TrustCenterSettingHistory struct {
 	Overview *string `json:"overview,omitempty"`
 	// primary color for the trust center
 	PrimaryColor *string `json:"primaryColor,omitempty"`
+	// URL of the logo
+	LogoRemoteURL *string `json:"logoRemoteURL,omitempty"`
+	// The local logo file id, takes precedence over the logo remote URL
+	LogoLocalFileID *string `json:"logoLocalFileID,omitempty"`
 }
 
 func (TrustCenterSettingHistory) IsNode() {}
@@ -25429,6 +25448,38 @@ type TrustCenterSettingHistoryWhereInput struct {
 	PrimaryColorNotNil       *bool    `json:"primaryColorNotNil,omitempty"`
 	PrimaryColorEqualFold    *string  `json:"primaryColorEqualFold,omitempty"`
 	PrimaryColorContainsFold *string  `json:"primaryColorContainsFold,omitempty"`
+	// logo_remote_url field predicates
+	LogoRemoteURL             *string  `json:"logoRemoteURL,omitempty"`
+	LogoRemoteURLNeq          *string  `json:"logoRemoteURLNEQ,omitempty"`
+	LogoRemoteURLIn           []string `json:"logoRemoteURLIn,omitempty"`
+	LogoRemoteURLNotIn        []string `json:"logoRemoteURLNotIn,omitempty"`
+	LogoRemoteURLGt           *string  `json:"logoRemoteURLGT,omitempty"`
+	LogoRemoteURLGte          *string  `json:"logoRemoteURLGTE,omitempty"`
+	LogoRemoteURLLt           *string  `json:"logoRemoteURLLT,omitempty"`
+	LogoRemoteURLLte          *string  `json:"logoRemoteURLLTE,omitempty"`
+	LogoRemoteURLContains     *string  `json:"logoRemoteURLContains,omitempty"`
+	LogoRemoteURLHasPrefix    *string  `json:"logoRemoteURLHasPrefix,omitempty"`
+	LogoRemoteURLHasSuffix    *string  `json:"logoRemoteURLHasSuffix,omitempty"`
+	LogoRemoteURLIsNil        *bool    `json:"logoRemoteURLIsNil,omitempty"`
+	LogoRemoteURLNotNil       *bool    `json:"logoRemoteURLNotNil,omitempty"`
+	LogoRemoteURLEqualFold    *string  `json:"logoRemoteURLEqualFold,omitempty"`
+	LogoRemoteURLContainsFold *string  `json:"logoRemoteURLContainsFold,omitempty"`
+	// logo_local_file_id field predicates
+	LogoLocalFileID             *string  `json:"logoLocalFileID,omitempty"`
+	LogoLocalFileIdneq          *string  `json:"logoLocalFileIDNEQ,omitempty"`
+	LogoLocalFileIDIn           []string `json:"logoLocalFileIDIn,omitempty"`
+	LogoLocalFileIDNotIn        []string `json:"logoLocalFileIDNotIn,omitempty"`
+	LogoLocalFileIdgt           *string  `json:"logoLocalFileIDGT,omitempty"`
+	LogoLocalFileIdgte          *string  `json:"logoLocalFileIDGTE,omitempty"`
+	LogoLocalFileIdlt           *string  `json:"logoLocalFileIDLT,omitempty"`
+	LogoLocalFileIdlte          *string  `json:"logoLocalFileIDLTE,omitempty"`
+	LogoLocalFileIDContains     *string  `json:"logoLocalFileIDContains,omitempty"`
+	LogoLocalFileIDHasPrefix    *string  `json:"logoLocalFileIDHasPrefix,omitempty"`
+	LogoLocalFileIDHasSuffix    *string  `json:"logoLocalFileIDHasSuffix,omitempty"`
+	LogoLocalFileIDIsNil        *bool    `json:"logoLocalFileIDIsNil,omitempty"`
+	LogoLocalFileIDNotNil       *bool    `json:"logoLocalFileIDNotNil,omitempty"`
+	LogoLocalFileIDEqualFold    *string  `json:"logoLocalFileIDEqualFold,omitempty"`
+	LogoLocalFileIDContainsFold *string  `json:"logoLocalFileIDContainsFold,omitempty"`
 }
 
 // Ordering options for TrustCenterSetting connections
@@ -25580,9 +25631,47 @@ type TrustCenterSettingWhereInput struct {
 	PrimaryColorNotNil       *bool    `json:"primaryColorNotNil,omitempty"`
 	PrimaryColorEqualFold    *string  `json:"primaryColorEqualFold,omitempty"`
 	PrimaryColorContainsFold *string  `json:"primaryColorContainsFold,omitempty"`
+	// logo_remote_url field predicates
+	LogoRemoteURL             *string  `json:"logoRemoteURL,omitempty"`
+	LogoRemoteURLNeq          *string  `json:"logoRemoteURLNEQ,omitempty"`
+	LogoRemoteURLIn           []string `json:"logoRemoteURLIn,omitempty"`
+	LogoRemoteURLNotIn        []string `json:"logoRemoteURLNotIn,omitempty"`
+	LogoRemoteURLGt           *string  `json:"logoRemoteURLGT,omitempty"`
+	LogoRemoteURLGte          *string  `json:"logoRemoteURLGTE,omitempty"`
+	LogoRemoteURLLt           *string  `json:"logoRemoteURLLT,omitempty"`
+	LogoRemoteURLLte          *string  `json:"logoRemoteURLLTE,omitempty"`
+	LogoRemoteURLContains     *string  `json:"logoRemoteURLContains,omitempty"`
+	LogoRemoteURLHasPrefix    *string  `json:"logoRemoteURLHasPrefix,omitempty"`
+	LogoRemoteURLHasSuffix    *string  `json:"logoRemoteURLHasSuffix,omitempty"`
+	LogoRemoteURLIsNil        *bool    `json:"logoRemoteURLIsNil,omitempty"`
+	LogoRemoteURLNotNil       *bool    `json:"logoRemoteURLNotNil,omitempty"`
+	LogoRemoteURLEqualFold    *string  `json:"logoRemoteURLEqualFold,omitempty"`
+	LogoRemoteURLContainsFold *string  `json:"logoRemoteURLContainsFold,omitempty"`
+	// logo_local_file_id field predicates
+	LogoLocalFileID             *string  `json:"logoLocalFileID,omitempty"`
+	LogoLocalFileIdneq          *string  `json:"logoLocalFileIDNEQ,omitempty"`
+	LogoLocalFileIDIn           []string `json:"logoLocalFileIDIn,omitempty"`
+	LogoLocalFileIDNotIn        []string `json:"logoLocalFileIDNotIn,omitempty"`
+	LogoLocalFileIdgt           *string  `json:"logoLocalFileIDGT,omitempty"`
+	LogoLocalFileIdgte          *string  `json:"logoLocalFileIDGTE,omitempty"`
+	LogoLocalFileIdlt           *string  `json:"logoLocalFileIDLT,omitempty"`
+	LogoLocalFileIdlte          *string  `json:"logoLocalFileIDLTE,omitempty"`
+	LogoLocalFileIDContains     *string  `json:"logoLocalFileIDContains,omitempty"`
+	LogoLocalFileIDHasPrefix    *string  `json:"logoLocalFileIDHasPrefix,omitempty"`
+	LogoLocalFileIDHasSuffix    *string  `json:"logoLocalFileIDHasSuffix,omitempty"`
+	LogoLocalFileIDIsNil        *bool    `json:"logoLocalFileIDIsNil,omitempty"`
+	LogoLocalFileIDNotNil       *bool    `json:"logoLocalFileIDNotNil,omitempty"`
+	LogoLocalFileIDEqualFold    *string  `json:"logoLocalFileIDEqualFold,omitempty"`
+	LogoLocalFileIDContainsFold *string  `json:"logoLocalFileIDContainsFold,omitempty"`
 	// trust_center edge predicates
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
 	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
+	// files edge predicates
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// logo_file edge predicates
+	HasLogoFile     *bool             `json:"hasLogoFile,omitempty"`
+	HasLogoFileWith []*FileWhereInput `json:"hasLogoFileWith,omitempty"`
 }
 
 // Return response for updateTrustCenter mutation
@@ -26491,6 +26580,9 @@ type UpdateFileInput struct {
 	AddEventIDs                  []string `json:"addEventIDs,omitempty"`
 	RemoveEventIDs               []string `json:"removeEventIDs,omitempty"`
 	ClearEvents                  *bool    `json:"clearEvents,omitempty"`
+	AddTrustCenterSettingIDs     []string `json:"addTrustCenterSettingIDs,omitempty"`
+	RemoveTrustCenterSettingIDs  []string `json:"removeTrustCenterSettingIDs,omitempty"`
+	ClearTrustCenterSetting      *bool    `json:"clearTrustCenterSetting,omitempty"`
 }
 
 // UpdateGroupInput is used for update Group object.
@@ -27921,8 +28013,16 @@ type UpdateTrustCenterSettingInput struct {
 	// primary color for the trust center
 	PrimaryColor      *string `json:"primaryColor,omitempty"`
 	ClearPrimaryColor *bool   `json:"clearPrimaryColor,omitempty"`
-	TrustCenterID     *string `json:"trustCenterID,omitempty"`
-	ClearTrustCenter  *bool   `json:"clearTrustCenter,omitempty"`
+	// URL of the logo
+	LogoRemoteURL      *string  `json:"logoRemoteURL,omitempty"`
+	ClearLogoRemoteURL *bool    `json:"clearLogoRemoteURL,omitempty"`
+	TrustCenterID      *string  `json:"trustCenterID,omitempty"`
+	ClearTrustCenter   *bool    `json:"clearTrustCenter,omitempty"`
+	AddFileIDs         []string `json:"addFileIDs,omitempty"`
+	RemoveFileIDs      []string `json:"removeFileIDs,omitempty"`
+	ClearFiles         *bool    `json:"clearFiles,omitempty"`
+	LogoFileID         *string  `json:"logoFileID,omitempty"`
+	ClearLogoFile      *bool    `json:"clearLogoFile,omitempty"`
 }
 
 // UpdateUserInput is used for update User object.

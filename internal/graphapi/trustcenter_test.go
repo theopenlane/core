@@ -7,11 +7,14 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/iam/auth"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
@@ -555,9 +558,14 @@ func TestMutationUpdateTrustCenter(t *testing.T) {
 }
 
 func TestMutationDeleteTrustCenter(t *testing.T) {
+	t.Parallel()
+	// Create new test users
+	testUser := suite.userBuilder(context.Background(), t)
+	testUserOther := suite.userBuilder(testUser.UserCtx, t)
+
 	// create objects to be deleted
-	trustCenter1 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	trustCenter1 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUserOther.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -570,20 +578,20 @@ func TestMutationDeleteTrustCenter(t *testing.T) {
 			name:       "happy path, delete trust center",
 			idToDelete: trustCenter1.ID,
 			client:     suite.client.api,
-			ctx:        testUser1.UserCtx,
+			ctx:        testUser.UserCtx,
 		},
 		{
 			name:        "not authorized, different org user",
 			idToDelete:  trustCenter2.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         testUser.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:        "trust center not found",
 			idToDelete:  "non-existent-id",
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         testUser.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -603,4 +611,301 @@ func TestMutationDeleteTrustCenter(t *testing.T) {
 			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteTrustCenter.DeletedID))
 		})
 	}
+}
+
+// createAnonymousTrustCenterContext creates a context for an anonymous trust center user
+func createAnonymousTrustCenterContext(trustCenterID, organizationID string) context.Context {
+	anonUserID := fmt.Sprintf("anon:%s", gofakeit.UUID())
+
+	anonUser := &auth.AnonymousTrustCenterUser{
+		SubjectID:          anonUserID,
+		SubjectName:        "Anonymous User",
+		OrganizationID:     organizationID,
+		AuthenticationType: auth.JWTAuthentication,
+		TrustCenterID:      trustCenterID,
+	}
+
+	ctx := context.Background()
+	return auth.WithAnonymousTrustCenterUser(ctx, anonUser)
+}
+
+func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
+	t.Parallel()
+
+	// create new test users
+	testUser := suite.userBuilder(context.Background(), t)
+	testUserOther := suite.userBuilder(context.Background(), t)
+
+	// Create a trust center for testing
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+
+	// Create another trust center that the anonymous user should NOT have access to
+	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUserOther.UserCtx, t)
+
+	testCases := []struct {
+		name           string
+		queryID        string
+		trustCenterID  string
+		organizationID string
+		client         *openlaneclient.OpenlaneClient
+		expectedErr    string
+		shouldSucceed  bool
+	}{
+		{
+			name:           "happy path - anonymous user can query their trust center by ID",
+			queryID:        trustCenter.ID,
+			trustCenterID:  trustCenter.ID,
+			organizationID: testUser.OrganizationID,
+			client:         suite.client.api,
+			shouldSucceed:  true,
+		},
+		{
+			name:           "anonymous user cannot query different trust center",
+			queryID:        trustCenter2.ID,
+			trustCenterID:  trustCenter.ID, // Anonymous user has access to trustCenter, not trustCenter2
+			organizationID: testUser.OrganizationID,
+			client:         suite.client.api,
+			expectedErr:    notFoundErrorMsg,
+			shouldSucceed:  false,
+		},
+		{
+			name:           "anonymous user cannot query non-existent trust center",
+			queryID:        "non-existent-id",
+			trustCenterID:  trustCenter.ID,
+			organizationID: testUser.OrganizationID,
+			client:         suite.client.api,
+			expectedErr:    notFoundErrorMsg,
+			shouldSucceed:  false,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			// Create anonymous trust center context
+			anonCtx := createAnonymousTrustCenterContext(tc.trustCenterID, tc.organizationID)
+
+			resp, err := tc.client.GetTrustCenterByID(anonCtx, tc.queryID)
+
+			if !tc.shouldSucceed {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				assert.Check(t, is.Nil(resp))
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.queryID, resp.TrustCenter.ID))
+			assert.Check(t, resp.TrustCenter.Slug != nil)
+			assert.Check(t, resp.TrustCenter.OwnerID != nil)
+			assert.Check(t, is.Equal(tc.organizationID, *resp.TrustCenter.OwnerID))
+
+			setting := resp.TrustCenter.GetSetting()
+			assert.Check(t, setting != nil)
+			assert.Check(t, setting.Title != nil)
+			assert.Check(t, setting.Overview != nil)
+			assert.Check(t, setting.PrimaryColor != nil)
+		})
+	}
+
+	// Clean up
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUserOther.UserCtx, t)
+}
+
+func TestQueryTrustCentersAsAnonymousUser(t *testing.T) {
+	t.Parallel()
+
+	// create new test users
+	testUser := suite.userBuilder(context.Background(), t)
+	testUserOther := suite.userBuilder(context.Background(), t)
+
+	// Create a trust center for testing
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+
+	// Create another trust center that the anonymous user should NOT have access to
+	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUserOther.UserCtx, t)
+
+	testCases := []struct {
+		name           string
+		trustCenterID  string
+		organizationID string
+		client         *openlaneclient.OpenlaneClient
+		expectedCount  int
+	}{
+		{
+			name:           "anonymous user can only see their trust center in list query",
+			trustCenterID:  trustCenter.ID,
+			organizationID: testUser.OrganizationID,
+			client:         suite.client.api,
+			expectedCount:  1, // Should only see the one trust center they have access to
+		},
+		{
+			name:           "anonymous user with different trust center sees only their trust center",
+			trustCenterID:  trustCenter2.ID,
+			organizationID: testUserOther.OrganizationID,
+			client:         suite.client.api,
+			expectedCount:  1, // Should only see the one trust center they have access to
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			// Create anonymous trust center context
+			anonCtx := createAnonymousTrustCenterContext(tc.trustCenterID, tc.organizationID)
+
+			resp, err := tc.client.GetAllTrustCenters(anonCtx)
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.expectedCount, len(resp.TrustCenters.Edges)))
+
+			if len(resp.TrustCenters.Edges) > 0 {
+				// Verify that the returned trust center is the one the anonymous user has access to
+				returnedTrustCenter := resp.TrustCenters.Edges[0].Node
+				assert.Check(t, is.Equal(tc.trustCenterID, returnedTrustCenter.ID))
+				assert.Check(t, is.Equal(tc.organizationID, *returnedTrustCenter.OwnerID))
+			}
+		})
+	}
+
+	// Clean up
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUserOther.UserCtx, t)
+}
+
+func TestMutationUpdateTrustCenterSettingLogo(t *testing.T) {
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+
+	testCases := []struct {
+		name        string
+		settingID   string
+		logoPath    string
+		invalidFile bool
+		updateInput openlaneclient.UpdateTrustCenterSettingInput
+		client      *openlaneclient.OpenlaneClient
+		ctx         context.Context
+		expectedErr string
+	}{
+		{
+			name:        "happy path - update logo",
+			settingID:   trustCenter.Edges.Setting.ID,
+			logoPath:    "testdata/uploads/logo.png",
+			updateInput: openlaneclient.UpdateTrustCenterSettingInput{},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+		},
+		{
+			name:      "happy path - update logo with other fields",
+			settingID: trustCenter.Edges.Setting.ID,
+			logoPath:  "testdata/uploads/logo.png",
+			updateInput: openlaneclient.UpdateTrustCenterSettingInput{
+				Title:        lo.ToPtr("Updated Title with Logo"),
+				PrimaryColor: lo.ToPtr("#FF5733"),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+
+		{
+			name:        "invalid file type - text file instead of image",
+			settingID:   trustCenter.Edges.Setting.ID,
+			logoPath:    "testdata/uploads/hello.txt",
+			invalidFile: true,
+			updateInput: openlaneclient.UpdateTrustCenterSettingInput{},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "unsupported mime type uploaded: text/plain",
+		},
+		{
+			name:        "not authorized - view only user",
+			settingID:   trustCenter.Edges.Setting.ID,
+			updateInput: openlaneclient.UpdateTrustCenterSettingInput{},
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name:        "not authorized - different organization user",
+			settingID:   trustCenter.Edges.Setting.ID,
+			updateInput: openlaneclient.UpdateTrustCenterSettingInput{},
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name:        "trust center setting not found",
+			settingID:   "non-existent-setting-id",
+			updateInput: openlaneclient.UpdateTrustCenterSettingInput{},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: notFoundErrorMsg,
+		},
+		{
+			name:      "update without logo file - should work",
+			settingID: trustCenter.Edges.Setting.ID,
+			logoPath:  "", // No logo file
+			updateInput: openlaneclient.UpdateTrustCenterSettingInput{
+				Title:        lo.ToPtr("Updated Title Only"),
+				Overview:     lo.ToPtr("Updated Overview"),
+				PrimaryColor: lo.ToPtr("#00FF00"),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Update "+tc.name, func(t *testing.T) {
+			var logoFile *graphql.Upload
+
+			// Create file upload if logoPath is provided
+			if tc.logoPath != "" {
+				uploadFile, err := objects.NewUploadFile(tc.logoPath)
+				assert.NilError(t, err)
+
+				logoFile = &graphql.Upload{
+					File:        uploadFile.File,
+					Filename:    uploadFile.Filename,
+					Size:        uploadFile.Size,
+					ContentType: uploadFile.ContentType,
+				}
+
+				// Set up mock expectations based on whether we expect an error
+				if tc.expectedErr == "" {
+					expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{*logoFile})
+				} else {
+					expectUploadCheckOnly(t, suite.client.objectStore.Storage)
+				}
+			}
+
+			resp, err := tc.client.UpdateTrustCenterSetting(tc.ctx, tc.settingID, tc.updateInput, logoFile)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				assert.Check(t, is.Nil(resp))
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.settingID, resp.UpdateTrustCenterSetting.TrustCenterSetting.ID))
+
+			// Check updated fields
+			if tc.updateInput.Title != nil {
+				assert.Check(t, is.Equal(*tc.updateInput.Title, *resp.UpdateTrustCenterSetting.TrustCenterSetting.Title))
+			}
+
+			if tc.updateInput.Overview != nil {
+				assert.Check(t, is.Equal(*tc.updateInput.Overview, *resp.UpdateTrustCenterSetting.TrustCenterSetting.Overview))
+			}
+
+			if tc.updateInput.PrimaryColor != nil {
+				assert.Check(t, is.Equal(*tc.updateInput.PrimaryColor, *resp.UpdateTrustCenterSetting.TrustCenterSetting.PrimaryColor))
+			}
+		})
+	}
+
+	// Clean up
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
 }

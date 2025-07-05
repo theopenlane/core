@@ -21,10 +21,11 @@ services:
       - OPENFGA_DATASTORE_ENGINE=postgres
       - OPENFGA_DATASTORE_URI=postgres://postgres:password@postgres:5432/openfga?sslmode=disable
       - OPENFGA_LOG_FORMAT=json
-      - OPENFGA_DATASTORE_MAX_OPEN_CONNS=100 #see postgres container
+      - OPENFGA_DATASTORE_MAX_OPEN_CONNS=40 #see postgres container
+      - OPENFGA_DATASTORE_MAX_IDLE_CONNS=40
       - OPENFGA_PLAYGROUND_ENABLED=true
-      - OPENFGA_LIST_USERS_MAX_RESULTS=10000
-      - OPENFGA_LIST_OBJECTS_MAX_RESULTS=10000
+      - OPENFGA_LIST_USERS_MAX_RESULTS=1000
+      - OPENFGA_LIST_OBJECTS_MAX_RESULTS=1000
     command:
       - run
       - --check-query-cache-enabled

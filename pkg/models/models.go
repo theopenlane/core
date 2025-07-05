@@ -1179,4 +1179,8 @@ var ExampleSSOTokenAuthorizeReply = SSOTokenAuthorizeReply{
 	OrganizationID: ulids.New().String(),
 	TokenID:        ulids.New().String(),
 	Message:        "success",
+ 
+// CreateTrustCenterAnonymousJWTResponse is the response to a request to create a trust center anonymous JWT
+type CreateTrustCenterAnonymousJWTResponse struct {
+	AuthData
 }

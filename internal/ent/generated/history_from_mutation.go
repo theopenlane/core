@@ -10270,6 +10270,14 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetPrimaryColor(primaryColor)
 	}
 
+	if logoRemoteURL, exists := m.LogoRemoteURL(); exists {
+		create = create.SetNillableLogoRemoteURL(&logoRemoteURL)
+	}
+
+	if logoLocalFileID, exists := m.LogoLocalFileID(); exists {
+		create = create.SetNillableLogoLocalFileID(&logoLocalFileID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -10360,6 +10368,18 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetPrimaryColor(trustcentersetting.PrimaryColor)
 		}
 
+		if logoRemoteURL, exists := m.LogoRemoteURL(); exists {
+			create = create.SetNillableLogoRemoteURL(&logoRemoteURL)
+		} else {
+			create = create.SetNillableLogoRemoteURL(trustcentersetting.LogoRemoteURL)
+		}
+
+		if logoLocalFileID, exists := m.LogoLocalFileID(); exists {
+			create = create.SetNillableLogoLocalFileID(&logoLocalFileID)
+		} else {
+			create = create.SetNillableLogoLocalFileID(trustcentersetting.LogoLocalFileID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -10402,6 +10422,8 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 			SetTitle(trustcentersetting.Title).
 			SetOverview(trustcentersetting.Overview).
 			SetPrimaryColor(trustcentersetting.PrimaryColor).
+			SetNillableLogoRemoteURL(trustcentersetting.LogoRemoteURL).
+			SetNillableLogoLocalFileID(trustcentersetting.LogoLocalFileID).
 			Save(ctx)
 		if err != nil {
 			return err

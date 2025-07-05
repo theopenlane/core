@@ -3409,6 +3409,7 @@ type CreateFileInput struct {
 	ProgramIDs             []string
 	EvidenceIDs            []string
 	EventIDs               []string
+	TrustCenterSettingIDs  []string
 }
 
 // Mutate applies the CreateFileInput on the FileMutation builder.
@@ -3485,6 +3486,9 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	if v := i.EventIDs; len(v) > 0 {
 		m.AddEventIDs(v...)
 	}
+	if v := i.TrustCenterSettingIDs; len(v) > 0 {
+		m.AddTrustCenterSettingIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateFileInput on the FileCreate builder.
@@ -3557,6 +3561,9 @@ type UpdateFileInput struct {
 	ClearEvents                  bool
 	AddEventIDs                  []string
 	RemoveEventIDs               []string
+	ClearTrustCenterSetting      bool
+	AddTrustCenterSettingIDs     []string
+	RemoveTrustCenterSettingIDs  []string
 }
 
 // Mutate applies the UpdateFileInput on the FileMutation builder.
@@ -3746,6 +3753,15 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.RemoveEventIDs; len(v) > 0 {
 		m.RemoveEventIDs(v...)
+	}
+	if i.ClearTrustCenterSetting {
+		m.ClearTrustCenterSetting()
+	}
+	if v := i.AddTrustCenterSettingIDs; len(v) > 0 {
+		m.AddTrustCenterSettingIDs(v...)
+	}
+	if v := i.RemoveTrustCenterSettingIDs; len(v) > 0 {
+		m.RemoveTrustCenterSettingIDs(v...)
 	}
 }
 
@@ -10838,7 +10854,10 @@ type CreateTrustCenterSettingInput struct {
 	Title         *string
 	Overview      *string
 	PrimaryColor  *string
+	LogoRemoteURL *string
 	TrustCenterID *string
+	FileIDs       []string
+	LogoFileID    *string
 }
 
 // Mutate applies the CreateTrustCenterSettingInput on the TrustCenterSettingMutation builder.
@@ -10852,8 +10871,17 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.PrimaryColor; v != nil {
 		m.SetPrimaryColor(*v)
 	}
+	if v := i.LogoRemoteURL; v != nil {
+		m.SetLogoRemoteURL(*v)
+	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
+	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.LogoFileID; v != nil {
+		m.SetLogoFileID(*v)
 	}
 }
 
@@ -10865,14 +10893,21 @@ func (c *TrustCenterSettingCreate) SetInput(i CreateTrustCenterSettingInput) *Tr
 
 // UpdateTrustCenterSettingInput represents a mutation input for updating trustcentersettings.
 type UpdateTrustCenterSettingInput struct {
-	ClearTitle        bool
-	Title             *string
-	ClearOverview     bool
-	Overview          *string
-	ClearPrimaryColor bool
-	PrimaryColor      *string
-	ClearTrustCenter  bool
-	TrustCenterID     *string
+	ClearTitle         bool
+	Title              *string
+	ClearOverview      bool
+	Overview           *string
+	ClearPrimaryColor  bool
+	PrimaryColor       *string
+	ClearLogoRemoteURL bool
+	LogoRemoteURL      *string
+	ClearTrustCenter   bool
+	TrustCenterID      *string
+	ClearFiles         bool
+	AddFileIDs         []string
+	RemoveFileIDs      []string
+	ClearLogoFile      bool
+	LogoFileID         *string
 }
 
 // Mutate applies the UpdateTrustCenterSettingInput on the TrustCenterSettingMutation builder.
@@ -10895,11 +10930,32 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.PrimaryColor; v != nil {
 		m.SetPrimaryColor(*v)
 	}
+	if i.ClearLogoRemoteURL {
+		m.ClearLogoRemoteURL()
+	}
+	if v := i.LogoRemoteURL; v != nil {
+		m.SetLogoRemoteURL(*v)
+	}
 	if i.ClearTrustCenter {
 		m.ClearTrustCenter()
 	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
+	}
+	if i.ClearLogoFile {
+		m.ClearLogoFile()
+	}
+	if v := i.LogoFileID; v != nil {
+		m.SetLogoFileID(*v)
 	}
 }
 

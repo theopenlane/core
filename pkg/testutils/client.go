@@ -113,11 +113,15 @@ func createAuthConfig(c *ent.Client) *auth.Options {
 
 // testGraphServer creates a new graphql server for testing the graph api
 func testGraphServer(c *ent.Client, u *objects.Objects) *handler.Server {
+	r := graphapi.NewResolver(c, u).
+		WithMaxResultLimit(MaxResultLimit)
+
+	// add the pool to the resolver without a metrics collector
+	r.WithPool(100, false) //nolint:mnd
+
 	srv := handler.New(
 		gqlgenerated.NewExecutableSchema(
-			gqlgenerated.Config{Resolvers: graphapi.NewResolver(c, u).
-				WithMaxResultLimit(MaxResultLimit),
-			},
+			gqlgenerated.Config{Resolvers: r},
 		))
 
 	// add all the transports to the server

@@ -234,6 +234,10 @@
         "secretManager": {
           "type": "string",
           "description": "SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key"
+        },
+        "defaultTrustCenterDomain": {
+          "type": "string",
+          "description": "DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set"
         }
       },
       "additionalProperties": false,
@@ -329,6 +333,14 @@
         "sameSite": {
           "type": "string",
           "description": "SameSite configures the SameSite attribute on the CSRF cookie. Valid\nvalues are \"Lax\", \"Strict\", \"None\" and \"Default\"."
+        },
+        "cookieHttpOnly": {
+          "type": "boolean",
+          "description": "CookieHTTPOnly indicates whether the CSRF cookie is HTTP only."
+        },
+        "cookieDomain": {
+          "type": "string",
+          "description": "CookieDomain specifies the domain for the CSRF cookie, default to no domain"
         }
       },
       "additionalProperties": false,
@@ -701,6 +713,14 @@
         "enableHistory": {
           "type": "boolean",
           "description": "enable history data to be logged to the database"
+        },
+        "maxConnections": {
+          "type": "integer",
+          "description": "maximum number of connections to the database"
+        },
+        "maxIdleConnections": {
+          "type": "integer",
+          "description": "maximum number of idle connections to the database"
         }
       },
       "additionalProperties": false,
@@ -1231,6 +1251,15 @@
         },
         "maxAge": {
           "type": "integer"
+        },
+        "secure": {
+          "type": "boolean"
+        },
+        "httpOnly": {
+          "type": "boolean"
+        },
+        "sameSite": {
+          "type": "string"
         }
       },
       "additionalProperties": false,

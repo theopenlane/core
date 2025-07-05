@@ -22,6 +22,7 @@ import (
 
 func TestQueryTask(t *testing.T) {
 	task := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	anonymousContext := createAnonymousTrustCenterContext("abc123", testUser1.OrganizationID)
 
 	testCases := []struct {
 		name     string
@@ -48,6 +49,13 @@ func TestQueryTask(t *testing.T) {
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
 			errorMsg: notFoundErrorMsg,
+		},
+		{
+			name:     "no access, anonymous user",
+			client:   suite.client.api,
+			ctx:      anonymousContext,
+			queryID:  task.ID,
+			errorMsg: couldNotFindUser,
 		},
 	}
 

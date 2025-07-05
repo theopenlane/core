@@ -206,6 +206,7 @@ func RegisterRoutes(router *Router) error {
 		registerSSOCallbackHandler,
 		registerSSOTokenAuthorizeHandler,
 		registerSSOTokenCallbackHandler,
+		registerTrustCenterAnonymousJWTHandler,
 
 		// JOB Runners
 		// TODO(adelowo): at some point in the future, maybe we should extract these into

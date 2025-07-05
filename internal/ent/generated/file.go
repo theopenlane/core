@@ -96,11 +96,13 @@ type FileEdges struct {
 	Evidence []*Evidence `json:"evidence,omitempty"`
 	// Events holds the value of the events edge.
 	Events []*Event `json:"events,omitempty"`
+	// TrustCenterSetting holds the value of the trust_center_setting edge.
+	TrustCenterSetting []*TrustCenterSetting `json:"trust_center_setting,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [12]bool
+	loadedTypes [13]bool
 	// totalCount holds the count of the edges above.
-	totalCount [12]map[string]int
+	totalCount [13]map[string]int
 
 	namedUser                map[string][]*User
 	namedOrganization        map[string][]*Organization
@@ -114,6 +116,7 @@ type FileEdges struct {
 	namedProgram             map[string][]*Program
 	namedEvidence            map[string][]*Evidence
 	namedEvents              map[string][]*Event
+	namedTrustCenterSetting  map[string][]*TrustCenterSetting
 }
 
 // UserOrErr returns the User value or an error if the edge
@@ -222,6 +225,15 @@ func (e FileEdges) EventsOrErr() ([]*Event, error) {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
+}
+
+// TrustCenterSettingOrErr returns the TrustCenterSetting value or an error if the edge
+// was not loaded in eager-loading.
+func (e FileEdges) TrustCenterSettingOrErr() ([]*TrustCenterSetting, error) {
+	if e.loadedTypes[12] {
+		return e.TrustCenterSetting, nil
+	}
+	return nil, &NotLoadedError{edge: "trust_center_setting"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -466,6 +478,11 @@ func (f *File) QueryEvidence() *EvidenceQuery {
 // QueryEvents queries the "events" edge of the File entity.
 func (f *File) QueryEvents() *EventQuery {
 	return NewFileClient(f.config).QueryEvents(f)
+}
+
+// QueryTrustCenterSetting queries the "trust_center_setting" edge of the File entity.
+func (f *File) QueryTrustCenterSetting() *TrustCenterSettingQuery {
+	return NewFileClient(f.config).QueryTrustCenterSetting(f)
 }
 
 // Update returns a builder for updating this File.
@@ -842,6 +859,30 @@ func (f *File) appendNamedEvents(name string, edges ...*Event) {
 		f.Edges.namedEvents[name] = []*Event{}
 	} else {
 		f.Edges.namedEvents[name] = append(f.Edges.namedEvents[name], edges...)
+	}
+}
+
+// NamedTrustCenterSetting returns the TrustCenterSetting named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (f *File) NamedTrustCenterSetting(name string) ([]*TrustCenterSetting, error) {
+	if f.Edges.namedTrustCenterSetting == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := f.Edges.namedTrustCenterSetting[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (f *File) appendNamedTrustCenterSetting(name string, edges ...*TrustCenterSetting) {
+	if f.Edges.namedTrustCenterSetting == nil {
+		f.Edges.namedTrustCenterSetting = make(map[string][]*TrustCenterSetting)
+	}
+	if len(edges) == 0 {
+		f.Edges.namedTrustCenterSetting[name] = []*TrustCenterSetting{}
+	} else {
+		f.Edges.namedTrustCenterSetting[name] = append(f.Edges.namedTrustCenterSetting[name], edges...)
 	}
 }
 

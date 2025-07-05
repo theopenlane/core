@@ -59,6 +59,7 @@ func AddFilePermissions(ctx context.Context) error {
 				})
 				tuples = append(tuples, orgReq)
 			}
+			log.Info().Interface("req", req).Msg("adding file permissions")
 
 			if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, tuples, nil); err != nil {
 				return err

@@ -2954,16 +2954,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "TrustCenterSetting",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			trustcentersetting.FieldCreatedAt:     {Type: field.TypeTime, Column: trustcentersetting.FieldCreatedAt},
-			trustcentersetting.FieldUpdatedAt:     {Type: field.TypeTime, Column: trustcentersetting.FieldUpdatedAt},
-			trustcentersetting.FieldCreatedBy:     {Type: field.TypeString, Column: trustcentersetting.FieldCreatedBy},
-			trustcentersetting.FieldUpdatedBy:     {Type: field.TypeString, Column: trustcentersetting.FieldUpdatedBy},
-			trustcentersetting.FieldDeletedAt:     {Type: field.TypeTime, Column: trustcentersetting.FieldDeletedAt},
-			trustcentersetting.FieldDeletedBy:     {Type: field.TypeString, Column: trustcentersetting.FieldDeletedBy},
-			trustcentersetting.FieldTrustCenterID: {Type: field.TypeString, Column: trustcentersetting.FieldTrustCenterID},
-			trustcentersetting.FieldTitle:         {Type: field.TypeString, Column: trustcentersetting.FieldTitle},
-			trustcentersetting.FieldOverview:      {Type: field.TypeString, Column: trustcentersetting.FieldOverview},
-			trustcentersetting.FieldPrimaryColor:  {Type: field.TypeString, Column: trustcentersetting.FieldPrimaryColor},
+			trustcentersetting.FieldCreatedAt:       {Type: field.TypeTime, Column: trustcentersetting.FieldCreatedAt},
+			trustcentersetting.FieldUpdatedAt:       {Type: field.TypeTime, Column: trustcentersetting.FieldUpdatedAt},
+			trustcentersetting.FieldCreatedBy:       {Type: field.TypeString, Column: trustcentersetting.FieldCreatedBy},
+			trustcentersetting.FieldUpdatedBy:       {Type: field.TypeString, Column: trustcentersetting.FieldUpdatedBy},
+			trustcentersetting.FieldDeletedAt:       {Type: field.TypeTime, Column: trustcentersetting.FieldDeletedAt},
+			trustcentersetting.FieldDeletedBy:       {Type: field.TypeString, Column: trustcentersetting.FieldDeletedBy},
+			trustcentersetting.FieldTrustCenterID:   {Type: field.TypeString, Column: trustcentersetting.FieldTrustCenterID},
+			trustcentersetting.FieldTitle:           {Type: field.TypeString, Column: trustcentersetting.FieldTitle},
+			trustcentersetting.FieldOverview:        {Type: field.TypeString, Column: trustcentersetting.FieldOverview},
+			trustcentersetting.FieldPrimaryColor:    {Type: field.TypeString, Column: trustcentersetting.FieldPrimaryColor},
+			trustcentersetting.FieldLogoRemoteURL:   {Type: field.TypeString, Column: trustcentersetting.FieldLogoRemoteURL},
+			trustcentersetting.FieldLogoLocalFileID: {Type: field.TypeString, Column: trustcentersetting.FieldLogoLocalFileID},
 		},
 	}
 	graph.Nodes[96] = &sqlgraph.Node{
@@ -2977,19 +2979,21 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "TrustCenterSettingHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			trustcentersettinghistory.FieldHistoryTime:   {Type: field.TypeTime, Column: trustcentersettinghistory.FieldHistoryTime},
-			trustcentersettinghistory.FieldRef:           {Type: field.TypeString, Column: trustcentersettinghistory.FieldRef},
-			trustcentersettinghistory.FieldOperation:     {Type: field.TypeEnum, Column: trustcentersettinghistory.FieldOperation},
-			trustcentersettinghistory.FieldCreatedAt:     {Type: field.TypeTime, Column: trustcentersettinghistory.FieldCreatedAt},
-			trustcentersettinghistory.FieldUpdatedAt:     {Type: field.TypeTime, Column: trustcentersettinghistory.FieldUpdatedAt},
-			trustcentersettinghistory.FieldCreatedBy:     {Type: field.TypeString, Column: trustcentersettinghistory.FieldCreatedBy},
-			trustcentersettinghistory.FieldUpdatedBy:     {Type: field.TypeString, Column: trustcentersettinghistory.FieldUpdatedBy},
-			trustcentersettinghistory.FieldDeletedAt:     {Type: field.TypeTime, Column: trustcentersettinghistory.FieldDeletedAt},
-			trustcentersettinghistory.FieldDeletedBy:     {Type: field.TypeString, Column: trustcentersettinghistory.FieldDeletedBy},
-			trustcentersettinghistory.FieldTrustCenterID: {Type: field.TypeString, Column: trustcentersettinghistory.FieldTrustCenterID},
-			trustcentersettinghistory.FieldTitle:         {Type: field.TypeString, Column: trustcentersettinghistory.FieldTitle},
-			trustcentersettinghistory.FieldOverview:      {Type: field.TypeString, Column: trustcentersettinghistory.FieldOverview},
-			trustcentersettinghistory.FieldPrimaryColor:  {Type: field.TypeString, Column: trustcentersettinghistory.FieldPrimaryColor},
+			trustcentersettinghistory.FieldHistoryTime:     {Type: field.TypeTime, Column: trustcentersettinghistory.FieldHistoryTime},
+			trustcentersettinghistory.FieldRef:             {Type: field.TypeString, Column: trustcentersettinghistory.FieldRef},
+			trustcentersettinghistory.FieldOperation:       {Type: field.TypeEnum, Column: trustcentersettinghistory.FieldOperation},
+			trustcentersettinghistory.FieldCreatedAt:       {Type: field.TypeTime, Column: trustcentersettinghistory.FieldCreatedAt},
+			trustcentersettinghistory.FieldUpdatedAt:       {Type: field.TypeTime, Column: trustcentersettinghistory.FieldUpdatedAt},
+			trustcentersettinghistory.FieldCreatedBy:       {Type: field.TypeString, Column: trustcentersettinghistory.FieldCreatedBy},
+			trustcentersettinghistory.FieldUpdatedBy:       {Type: field.TypeString, Column: trustcentersettinghistory.FieldUpdatedBy},
+			trustcentersettinghistory.FieldDeletedAt:       {Type: field.TypeTime, Column: trustcentersettinghistory.FieldDeletedAt},
+			trustcentersettinghistory.FieldDeletedBy:       {Type: field.TypeString, Column: trustcentersettinghistory.FieldDeletedBy},
+			trustcentersettinghistory.FieldTrustCenterID:   {Type: field.TypeString, Column: trustcentersettinghistory.FieldTrustCenterID},
+			trustcentersettinghistory.FieldTitle:           {Type: field.TypeString, Column: trustcentersettinghistory.FieldTitle},
+			trustcentersettinghistory.FieldOverview:        {Type: field.TypeString, Column: trustcentersettinghistory.FieldOverview},
+			trustcentersettinghistory.FieldPrimaryColor:    {Type: field.TypeString, Column: trustcentersettinghistory.FieldPrimaryColor},
+			trustcentersettinghistory.FieldLogoRemoteURL:   {Type: field.TypeString, Column: trustcentersettinghistory.FieldLogoRemoteURL},
+			trustcentersettinghistory.FieldLogoLocalFileID: {Type: field.TypeString, Column: trustcentersettinghistory.FieldLogoLocalFileID},
 		},
 	}
 	graph.Nodes[97] = &sqlgraph.Node{
@@ -4568,6 +4572,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"File",
 		"Event",
+	)
+	graph.MustAddE(
+		"trust_center_setting",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingTable,
+			Columns: file.TrustCenterSettingPrimaryKey,
+			Bidi:    false,
+		},
+		"File",
+		"TrustCenterSetting",
 	)
 	graph.MustAddE(
 		"owner",
@@ -7928,6 +7944,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"TrustCenterSetting",
 		"TrustCenter",
+	)
+	graph.MustAddE(
+		"files",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   trustcentersetting.FilesTable,
+			Columns: trustcentersetting.FilesPrimaryKey,
+			Bidi:    false,
+		},
+		"TrustCenterSetting",
+		"File",
+	)
+	graph.MustAddE(
+		"logo_file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.LogoFileTable,
+			Columns: []string{trustcentersetting.LogoFileColumn},
+			Bidi:    false,
+		},
+		"TrustCenterSetting",
+		"File",
 	)
 	graph.MustAddE(
 		"personal_access_tokens",
@@ -13645,6 +13685,20 @@ func (f *FileFilter) WhereHasEvents() {
 // WhereHasEventsWith applies a predicate to check if query has an edge events with a given conditions (other predicates).
 func (f *FileFilter) WhereHasEventsWith(preds ...predicate.Event) {
 	f.Where(entql.HasEdgeWith("events", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTrustCenterSetting applies a predicate to check if query has an edge trust_center_setting.
+func (f *FileFilter) WhereHasTrustCenterSetting() {
+	f.Where(entql.HasEdge("trust_center_setting"))
+}
+
+// WhereHasTrustCenterSettingWith applies a predicate to check if query has an edge trust_center_setting with a given conditions (other predicates).
+func (f *FileFilter) WhereHasTrustCenterSettingWith(preds ...predicate.TrustCenterSetting) {
+	f.Where(entql.HasEdgeWith("trust_center_setting", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -25622,6 +25676,16 @@ func (f *TrustCenterSettingFilter) WherePrimaryColor(p entql.StringP) {
 	f.Where(p.Field(trustcentersetting.FieldPrimaryColor))
 }
 
+// WhereLogoRemoteURL applies the entql string predicate on the logo_remote_url field.
+func (f *TrustCenterSettingFilter) WhereLogoRemoteURL(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldLogoRemoteURL))
+}
+
+// WhereLogoLocalFileID applies the entql string predicate on the logo_local_file_id field.
+func (f *TrustCenterSettingFilter) WhereLogoLocalFileID(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldLogoLocalFileID))
+}
+
 // WhereHasTrustCenter applies a predicate to check if query has an edge trust_center.
 func (f *TrustCenterSettingFilter) WhereHasTrustCenter() {
 	f.Where(entql.HasEdge("trust_center"))
@@ -25630,6 +25694,34 @@ func (f *TrustCenterSettingFilter) WhereHasTrustCenter() {
 // WhereHasTrustCenterWith applies a predicate to check if query has an edge trust_center with a given conditions (other predicates).
 func (f *TrustCenterSettingFilter) WhereHasTrustCenterWith(preds ...predicate.TrustCenter) {
 	f.Where(entql.HasEdgeWith("trust_center", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFiles applies a predicate to check if query has an edge files.
+func (f *TrustCenterSettingFilter) WhereHasFiles() {
+	f.Where(entql.HasEdge("files"))
+}
+
+// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
+func (f *TrustCenterSettingFilter) WhereHasFilesWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasLogoFile applies a predicate to check if query has an edge logo_file.
+func (f *TrustCenterSettingFilter) WhereHasLogoFile() {
+	f.Where(entql.HasEdge("logo_file"))
+}
+
+// WhereHasLogoFileWith applies a predicate to check if query has an edge logo_file with a given conditions (other predicates).
+func (f *TrustCenterSettingFilter) WhereHasLogoFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("logo_file", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -25739,6 +25831,16 @@ func (f *TrustCenterSettingHistoryFilter) WhereOverview(p entql.StringP) {
 // WherePrimaryColor applies the entql string predicate on the primary_color field.
 func (f *TrustCenterSettingHistoryFilter) WherePrimaryColor(p entql.StringP) {
 	f.Where(p.Field(trustcentersettinghistory.FieldPrimaryColor))
+}
+
+// WhereLogoRemoteURL applies the entql string predicate on the logo_remote_url field.
+func (f *TrustCenterSettingHistoryFilter) WhereLogoRemoteURL(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldLogoRemoteURL))
+}
+
+// WhereLogoLocalFileID applies the entql string predicate on the logo_local_file_id field.
+func (f *TrustCenterSettingHistoryFilter) WhereLogoLocalFileID(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldLogoLocalFileID))
 }
 
 // addPredicate implements the predicateAdder interface.

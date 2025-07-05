@@ -81,6 +81,14 @@ var (
 	ErrStateMismatch = errors.New("state parameter does not match, possible CSRF attack or session expired")
 	// ErrMissingSSOConfig is returned when the SSO configuration is missing
 	ErrNonceMissing = errors.New("missing nonce cookie, possible CSRF attack or session expired")
+	// ErrMissingReferer is returned when the referer is missing from the request
+	ErrMissingReferer = errors.New("referer is required")
+	// ErrInvalidRefererURL is returned when the referer URL is invalid
+	ErrInvalidRefererURL = errors.New("invalid referer URL")
+	// ErrMissingSlugInPath is returned when the slug is missing from the path
+	ErrMissingSlugInPath = errors.New("slug is required in the path for default trust center domain")
+	// ErrTrustCenterNotFound is returned when the trust center is not found
+	ErrTrustCenterNotFound = errors.New("trust center not found")
 )
 
 var (

@@ -129,6 +129,10 @@ func (Subcontrol) Indexes() []ent.Index {
 			Unique().Annotations(
 			entsql.IndexWhere("deleted_at is NULL"),
 		),
+		index.Fields("control_id", "ref_code", "owner_id").
+			Annotations(
+				entsql.IndexWhere("deleted_at is NULL"),
+			),
 	}
 }
 
