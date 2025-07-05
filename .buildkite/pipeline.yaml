@@ -25,7 +25,7 @@ steps:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
           location: "NYC"
-        cancel_on_build_failing: true
+        cancel_on_build_failing: false
         plugins:
           - docker#v5.12.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -40,7 +40,7 @@ steps:
                 - "GOTOOLCHAIN=auto"
       - label: ":yaml: generate config"
         key: "generate_config"
-        cancel_on_build_failing: true
+        cancel_on_build_failing: false
         plugins:
           - docker#v5.12.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -62,7 +62,7 @@ steps:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
           location: "NYC"
-        cancel_on_build_failing: true
+        cancel_on_build_failing: false
         timeout_in_minutes: 20
         key: "lint"
         plugins:
