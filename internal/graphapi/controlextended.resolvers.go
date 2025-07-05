@@ -11,7 +11,6 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/utils/rout"
@@ -25,18 +24,22 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	where := []predicate.Control{}
-
-	// if a standard ID is provided, clone all controls from that standard
-	// otherwise, clone the controls with the given IDs
+	// if a standard is provided, clone those controls
 	if input.StandardID != nil {
-		where = append(where, control.StandardID(*input.StandardID))
-	} else {
-		where = append(where, control.IDIn(input.ControlIDs...))
+		log.Warn().Str("std", *input.StandardID).Msg("cloning controls from standard")
+		res, err := r.cloneControlsFromStandard(ctx, *input.StandardID)
+		if err != nil {
+			return nil, parseRequestError(generated.ErrPermissionDenied, action{action: ActionCreate, object: "control"})
+		}
+
+		return &model.ControlBulkCreatePayload{
+			Controls: res,
+		}, nil
 	}
 
+	// otherwise get existing controls and clone
 	existingControls, err := withTransactionalMutation(ctx).Control.Query().
-		Where(where...).
+		Where(control.IDIn(input.ControlIDs...)).
 		// WithMappedControls(). // TODO(sfunk): update the clone to include mapped controls
 		WithSubcontrols().
 		WithStandard().

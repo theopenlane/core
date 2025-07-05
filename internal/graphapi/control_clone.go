@@ -222,7 +222,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 			// this should also cascade delete any subcontrols that were created
 			if _, err := withTransactionalMutation(ctx).Control.Delete().
 				Where(control.IDIn(createdControlIDs...)).
-				Exec(ctx); err != nil {
+				Exec(allowCtx); err != nil {
 
 				log.Error().Err(err).Msg("error deleting controls that were created before the error occurred")
 			}
@@ -239,7 +239,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 
 		if _, err := withTransactionalMutation(ctx).Control.Delete().
 			Where(control.IDIn(createdControlIDs...)).
-			Exec(ctx); err != nil {
+			Exec(allowCtx); err != nil {
 
 			return nil, err
 		}
@@ -254,7 +254,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 			Where(
 				control.IDIn(existingControlIDs...)).
 			AddProgramIDs(*programID).
-			Exec(ctx); err != nil {
+			Exec(ctrlCtx); err != nil {
 
 			return nil, err
 		}
