@@ -39,12 +39,18 @@ const (
 	FieldLogoRemoteURL = "logo_remote_url"
 	// FieldLogoLocalFileID holds the string denoting the logo_local_file_id field in the database.
 	FieldLogoLocalFileID = "logo_local_file_id"
+	// FieldFaviconRemoteURL holds the string denoting the favicon_remote_url field in the database.
+	FieldFaviconRemoteURL = "favicon_remote_url"
+	// FieldFaviconLocalFileID holds the string denoting the favicon_local_file_id field in the database.
+	FieldFaviconLocalFileID = "favicon_local_file_id"
 	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
 	EdgeTrustCenter = "trust_center"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
 	// EdgeLogoFile holds the string denoting the logo_file edge name in mutations.
 	EdgeLogoFile = "logo_file"
+	// EdgeFaviconFile holds the string denoting the favicon_file edge name in mutations.
+	EdgeFaviconFile = "favicon_file"
 	// Table holds the table name of the trustcentersetting in the database.
 	Table = "trust_center_settings"
 	// TrustCenterTable is the table that holds the trust_center relation/edge.
@@ -66,6 +72,13 @@ const (
 	LogoFileInverseTable = "files"
 	// LogoFileColumn is the table column denoting the logo_file relation/edge.
 	LogoFileColumn = "logo_local_file_id"
+	// FaviconFileTable is the table that holds the favicon_file relation/edge.
+	FaviconFileTable = "trust_center_settings"
+	// FaviconFileInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	FaviconFileInverseTable = "files"
+	// FaviconFileColumn is the table column denoting the favicon_file relation/edge.
+	FaviconFileColumn = "favicon_local_file_id"
 )
 
 // Columns holds all SQL columns for trustcentersetting fields.
@@ -83,6 +96,8 @@ var Columns = []string{
 	FieldPrimaryColor,
 	FieldLogoRemoteURL,
 	FieldLogoLocalFileID,
+	FieldFaviconRemoteURL,
+	FieldFaviconLocalFileID,
 }
 
 var (
@@ -124,6 +139,8 @@ var (
 	OverviewValidator func(string) error
 	// LogoRemoteURLValidator is a validator for the "logo_remote_url" field. It is called by the builders before save.
 	LogoRemoteURLValidator func(string) error
+	// FaviconRemoteURLValidator is a validator for the "favicon_remote_url" field. It is called by the builders before save.
+	FaviconRemoteURLValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -196,6 +213,16 @@ func ByLogoLocalFileID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLogoLocalFileID, opts...).ToFunc()
 }
 
+// ByFaviconRemoteURL orders the results by the favicon_remote_url field.
+func ByFaviconRemoteURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFaviconRemoteURL, opts...).ToFunc()
+}
+
+// ByFaviconLocalFileID orders the results by the favicon_local_file_id field.
+func ByFaviconLocalFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFaviconLocalFileID, opts...).ToFunc()
+}
+
 // ByTrustCenterField orders the results by trust_center field.
 func ByTrustCenterField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -223,6 +250,13 @@ func ByLogoFileField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newLogoFileStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByFaviconFileField orders the results by favicon_file field.
+func ByFaviconFileField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFaviconFileStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newTrustCenterStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -242,5 +276,12 @@ func newLogoFileStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(LogoFileInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, LogoFileTable, LogoFileColumn),
+	)
+}
+func newFaviconFileStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FaviconFileInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, FaviconFileTable, FaviconFileColumn),
 	)
 }

@@ -9330,9 +9330,14 @@ input CreateTrustCenterSettingInput {
   URL of the logo
   """
   logoRemoteURL: String
+  """
+  URL of the favicon
+  """
+  faviconRemoteURL: String
   trustCenterID: ID
   fileIDs: [ID!]
   logoFileID: ID
+  faviconFileID: ID
 }
 """
 CreateUserInput is used for create User object.
@@ -44019,6 +44024,14 @@ type TrustCenterSetting implements Node {
   The local logo file id, takes precedence over the logo remote URL
   """
   logoLocalFileID: ID
+  """
+  URL of the favicon
+  """
+  faviconRemoteURL: String
+  """
+  The local favicon file id, takes precedence over the favicon remote URL
+  """
+  faviconLocalFileID: ID
   trustCenter: TrustCenter
   files(
     """
@@ -44052,6 +44065,7 @@ type TrustCenterSetting implements Node {
     where: FileWhereInput
   ): FileConnection!
   logoFile: File
+  faviconFile: File
 }
 """
 A connection to a list of items.
@@ -44116,6 +44130,14 @@ type TrustCenterSettingHistory implements Node {
   The local logo file id, takes precedence over the logo remote URL
   """
   logoLocalFileID: String
+  """
+  URL of the favicon
+  """
+  faviconRemoteURL: String
+  """
+  The local favicon file id, takes precedence over the favicon remote URL
+  """
+  faviconLocalFileID: String
 }
 """
 A connection to a list of items.
@@ -44403,6 +44425,42 @@ input TrustCenterSettingHistoryWhereInput {
   logoLocalFileIDNotNil: Boolean
   logoLocalFileIDEqualFold: String
   logoLocalFileIDContainsFold: String
+  """
+  favicon_remote_url field predicates
+  """
+  faviconRemoteURL: String
+  faviconRemoteURLNEQ: String
+  faviconRemoteURLIn: [String!]
+  faviconRemoteURLNotIn: [String!]
+  faviconRemoteURLGT: String
+  faviconRemoteURLGTE: String
+  faviconRemoteURLLT: String
+  faviconRemoteURLLTE: String
+  faviconRemoteURLContains: String
+  faviconRemoteURLHasPrefix: String
+  faviconRemoteURLHasSuffix: String
+  faviconRemoteURLIsNil: Boolean
+  faviconRemoteURLNotNil: Boolean
+  faviconRemoteURLEqualFold: String
+  faviconRemoteURLContainsFold: String
+  """
+  favicon_local_file_id field predicates
+  """
+  faviconLocalFileID: String
+  faviconLocalFileIDNEQ: String
+  faviconLocalFileIDIn: [String!]
+  faviconLocalFileIDNotIn: [String!]
+  faviconLocalFileIDGT: String
+  faviconLocalFileIDGTE: String
+  faviconLocalFileIDLT: String
+  faviconLocalFileIDLTE: String
+  faviconLocalFileIDContains: String
+  faviconLocalFileIDHasPrefix: String
+  faviconLocalFileIDHasSuffix: String
+  faviconLocalFileIDIsNil: Boolean
+  faviconLocalFileIDNotNil: Boolean
+  faviconLocalFileIDEqualFold: String
+  faviconLocalFileIDContainsFold: String
 }
 """
 Ordering options for TrustCenterSetting connections
@@ -44616,6 +44674,42 @@ input TrustCenterSettingWhereInput {
   logoLocalFileIDEqualFold: ID
   logoLocalFileIDContainsFold: ID
   """
+  favicon_remote_url field predicates
+  """
+  faviconRemoteURL: String
+  faviconRemoteURLNEQ: String
+  faviconRemoteURLIn: [String!]
+  faviconRemoteURLNotIn: [String!]
+  faviconRemoteURLGT: String
+  faviconRemoteURLGTE: String
+  faviconRemoteURLLT: String
+  faviconRemoteURLLTE: String
+  faviconRemoteURLContains: String
+  faviconRemoteURLHasPrefix: String
+  faviconRemoteURLHasSuffix: String
+  faviconRemoteURLIsNil: Boolean
+  faviconRemoteURLNotNil: Boolean
+  faviconRemoteURLEqualFold: String
+  faviconRemoteURLContainsFold: String
+  """
+  favicon_local_file_id field predicates
+  """
+  faviconLocalFileID: ID
+  faviconLocalFileIDNEQ: ID
+  faviconLocalFileIDIn: [ID!]
+  faviconLocalFileIDNotIn: [ID!]
+  faviconLocalFileIDGT: ID
+  faviconLocalFileIDGTE: ID
+  faviconLocalFileIDLT: ID
+  faviconLocalFileIDLTE: ID
+  faviconLocalFileIDContains: ID
+  faviconLocalFileIDHasPrefix: ID
+  faviconLocalFileIDHasSuffix: ID
+  faviconLocalFileIDIsNil: Boolean
+  faviconLocalFileIDNotNil: Boolean
+  faviconLocalFileIDEqualFold: ID
+  faviconLocalFileIDContainsFold: ID
+  """
   trust_center edge predicates
   """
   hasTrustCenter: Boolean
@@ -44630,6 +44724,11 @@ input TrustCenterSettingWhereInput {
   """
   hasLogoFile: Boolean
   hasLogoFileWith: [FileWhereInput!]
+  """
+  favicon_file edge predicates
+  """
+  hasFaviconFile: Boolean
+  hasFaviconFileWith: [FileWhereInput!]
 }
 """
 TrustCenterWhereInput is used for filtering TrustCenter objects.
@@ -47637,6 +47736,11 @@ input UpdateTrustCenterSettingInput {
   """
   logoRemoteURL: String
   clearLogoRemoteURL: Boolean
+  """
+  URL of the favicon
+  """
+  faviconRemoteURL: String
+  clearFaviconRemoteURL: Boolean
   trustCenterID: ID
   clearTrustCenter: Boolean
   addFileIDs: [ID!]
@@ -47644,6 +47748,8 @@ input UpdateTrustCenterSettingInput {
   clearFiles: Boolean
   logoFileID: ID
   clearLogoFile: Boolean
+  faviconFileID: ID
+  clearFaviconFile: Boolean
 }
 """
 UpdateUserInput is used for update User object.

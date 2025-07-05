@@ -35,15 +35,16 @@ func init() {
 	updateSettingsCmd.Flags().StringP("overview", "o", "", "overview of the trust center")
 	updateSettingsCmd.Flags().StringP("primary-color", "p", "", "primary color for the trust center (hex color)")
 	updateSettingsCmd.Flags().StringP("logo-file", "l", "", "local of logo file to upload")
+	updateSettingsCmd.Flags().StringP("favicon-file", "f", "", "local of favicon file to upload")
 }
 
 // updateSettingsValidation validates the required fields for the command
-func updateSettingsValidation() (id string, input openlaneclient.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, err error) {
+func updateSettingsValidation() (id string, input openlaneclient.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, err error) {
 	id = cmd.Config.String("id")
 	trustCenterID := cmd.Config.String("trust-center-id")
 
 	if id == "" && trustCenterID == "" {
-		return id, input, nil, cmd.NewRequiredFieldMissingError("id or trust-center-id")
+		return id, input, nil, nil, cmd.NewRequiredFieldMissingError("id or trust-center-id")
 	}
 
 	// Build the input based on flags
@@ -65,7 +66,7 @@ func updateSettingsValidation() (id string, input openlaneclient.UpdateTrustCent
 	if logoFileLoc != "" {
 		file, err := objects.NewUploadFile(logoFileLoc)
 		if err != nil {
-			return id, input, nil, err
+			return id, input, nil, nil, err
 		}
 
 		logoFile = &graphql.Upload{
@@ -75,8 +76,22 @@ func updateSettingsValidation() (id string, input openlaneclient.UpdateTrustCent
 			ContentType: file.ContentType,
 		}
 	}
+	faviconFileLoc := cmd.Config.String("favicon-file")
+	if faviconFileLoc != "" {
+		file, err := objects.NewUploadFile(faviconFileLoc)
+		if err != nil {
+			return id, input, nil, nil, err
+		}
 
-	return id, input, logoFile, nil
+		faviconFile = &graphql.Upload{
+			File:        file.File,
+			Filename:    file.Filename,
+			Size:        file.Size,
+			ContentType: file.ContentType,
+		}
+	}
+
+	return id, input, logoFile, faviconFile, nil
 }
 
 // findSettingIDByTrustCenter finds the setting ID for a given trust center ID
@@ -105,7 +120,7 @@ func updateSettings(ctx context.Context) error {
 		defer cmd.StoreSessionCookies(client)
 	}
 
-	id, input, logoFile, err := updateSettingsValidation()
+	id, input, logoFile, faviconFile, err := updateSettingsValidation()
 	cobra.CheckErr(err)
 
 	// If we have a trust center ID instead of setting ID, find the setting ID
@@ -115,7 +130,7 @@ func updateSettings(ctx context.Context) error {
 		cobra.CheckErr(err)
 	}
 
-	o, err := client.UpdateTrustCenterSetting(ctx, id, input, logoFile)
+	o, err := client.UpdateTrustCenterSetting(ctx, id, input, logoFile, faviconFile)
 	cobra.CheckErr(err)
 
 	return consoleSettingsOutput(o)

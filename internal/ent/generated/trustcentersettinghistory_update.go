@@ -223,6 +223,46 @@ func (tcshu *TrustCenterSettingHistoryUpdate) ClearLogoLocalFileID() *TrustCente
 	return tcshu
 }
 
+// SetFaviconRemoteURL sets the "favicon_remote_url" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetFaviconRemoteURL(s string) *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.SetFaviconRemoteURL(s)
+	return tcshu
+}
+
+// SetNillableFaviconRemoteURL sets the "favicon_remote_url" field if the given value is not nil.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetNillableFaviconRemoteURL(s *string) *TrustCenterSettingHistoryUpdate {
+	if s != nil {
+		tcshu.SetFaviconRemoteURL(*s)
+	}
+	return tcshu
+}
+
+// ClearFaviconRemoteURL clears the value of the "favicon_remote_url" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) ClearFaviconRemoteURL() *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.ClearFaviconRemoteURL()
+	return tcshu
+}
+
+// SetFaviconLocalFileID sets the "favicon_local_file_id" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetFaviconLocalFileID(s string) *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.SetFaviconLocalFileID(s)
+	return tcshu
+}
+
+// SetNillableFaviconLocalFileID sets the "favicon_local_file_id" field if the given value is not nil.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetNillableFaviconLocalFileID(s *string) *TrustCenterSettingHistoryUpdate {
+	if s != nil {
+		tcshu.SetFaviconLocalFileID(*s)
+	}
+	return tcshu
+}
+
+// ClearFaviconLocalFileID clears the value of the "favicon_local_file_id" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) ClearFaviconLocalFileID() *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.ClearFaviconLocalFileID()
+	return tcshu
+}
+
 // Mutation returns the TrustCenterSettingHistoryMutation object of the builder.
 func (tcshu *TrustCenterSettingHistoryUpdate) Mutation() *TrustCenterSettingHistoryMutation {
 	return tcshu.mutation
@@ -347,6 +387,18 @@ func (tcshu *TrustCenterSettingHistoryUpdate) sqlSave(ctx context.Context) (n in
 	}
 	if tcshu.mutation.LogoLocalFileIDCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldLogoLocalFileID, field.TypeString)
+	}
+	if value, ok := tcshu.mutation.FaviconRemoteURL(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldFaviconRemoteURL, field.TypeString, value)
+	}
+	if tcshu.mutation.FaviconRemoteURLCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldFaviconRemoteURL, field.TypeString)
+	}
+	if value, ok := tcshu.mutation.FaviconLocalFileID(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldFaviconLocalFileID, field.TypeString, value)
+	}
+	if tcshu.mutation.FaviconLocalFileIDCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldFaviconLocalFileID, field.TypeString)
 	}
 	_spec.Node.Schema = tcshu.schemaConfig.TrustCenterSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, tcshu.schemaConfig)
@@ -564,6 +616,46 @@ func (tcshuo *TrustCenterSettingHistoryUpdateOne) ClearLogoLocalFileID() *TrustC
 	return tcshuo
 }
 
+// SetFaviconRemoteURL sets the "favicon_remote_url" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetFaviconRemoteURL(s string) *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.SetFaviconRemoteURL(s)
+	return tcshuo
+}
+
+// SetNillableFaviconRemoteURL sets the "favicon_remote_url" field if the given value is not nil.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetNillableFaviconRemoteURL(s *string) *TrustCenterSettingHistoryUpdateOne {
+	if s != nil {
+		tcshuo.SetFaviconRemoteURL(*s)
+	}
+	return tcshuo
+}
+
+// ClearFaviconRemoteURL clears the value of the "favicon_remote_url" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) ClearFaviconRemoteURL() *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.ClearFaviconRemoteURL()
+	return tcshuo
+}
+
+// SetFaviconLocalFileID sets the "favicon_local_file_id" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetFaviconLocalFileID(s string) *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.SetFaviconLocalFileID(s)
+	return tcshuo
+}
+
+// SetNillableFaviconLocalFileID sets the "favicon_local_file_id" field if the given value is not nil.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetNillableFaviconLocalFileID(s *string) *TrustCenterSettingHistoryUpdateOne {
+	if s != nil {
+		tcshuo.SetFaviconLocalFileID(*s)
+	}
+	return tcshuo
+}
+
+// ClearFaviconLocalFileID clears the value of the "favicon_local_file_id" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) ClearFaviconLocalFileID() *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.ClearFaviconLocalFileID()
+	return tcshuo
+}
+
 // Mutation returns the TrustCenterSettingHistoryMutation object of the builder.
 func (tcshuo *TrustCenterSettingHistoryUpdateOne) Mutation() *TrustCenterSettingHistoryMutation {
 	return tcshuo.mutation
@@ -718,6 +810,18 @@ func (tcshuo *TrustCenterSettingHistoryUpdateOne) sqlSave(ctx context.Context) (
 	}
 	if tcshuo.mutation.LogoLocalFileIDCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldLogoLocalFileID, field.TypeString)
+	}
+	if value, ok := tcshuo.mutation.FaviconRemoteURL(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldFaviconRemoteURL, field.TypeString, value)
+	}
+	if tcshuo.mutation.FaviconRemoteURLCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldFaviconRemoteURL, field.TypeString)
+	}
+	if value, ok := tcshuo.mutation.FaviconLocalFileID(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldFaviconLocalFileID, field.TypeString, value)
+	}
+	if tcshuo.mutation.FaviconLocalFileIDCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldFaviconLocalFileID, field.TypeString)
 	}
 	_spec.Node.Schema = tcshuo.schemaConfig.TrustCenterSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, tcshuo.schemaConfig)

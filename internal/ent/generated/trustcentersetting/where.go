@@ -127,6 +127,16 @@ func LogoLocalFileID(v string) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldEQ(FieldLogoLocalFileID, v))
 }
 
+// FaviconRemoteURL applies equality check predicate on the "favicon_remote_url" field. It's identical to FaviconRemoteURLEQ.
+func FaviconRemoteURL(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldFaviconRemoteURL, v))
+}
+
+// FaviconLocalFileID applies equality check predicate on the "favicon_local_file_id" field. It's identical to FaviconLocalFileIDEQ.
+func FaviconLocalFileID(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldFaviconLocalFileID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldEQ(FieldCreatedAt, v))
@@ -952,6 +962,156 @@ func LogoLocalFileIDContainsFold(v string) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldContainsFold(FieldLogoLocalFileID, v))
 }
 
+// FaviconRemoteURLEQ applies the EQ predicate on the "favicon_remote_url" field.
+func FaviconRemoteURLEQ(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldFaviconRemoteURL, v))
+}
+
+// FaviconRemoteURLNEQ applies the NEQ predicate on the "favicon_remote_url" field.
+func FaviconRemoteURLNEQ(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNEQ(FieldFaviconRemoteURL, v))
+}
+
+// FaviconRemoteURLIn applies the In predicate on the "favicon_remote_url" field.
+func FaviconRemoteURLIn(vs ...string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIn(FieldFaviconRemoteURL, vs...))
+}
+
+// FaviconRemoteURLNotIn applies the NotIn predicate on the "favicon_remote_url" field.
+func FaviconRemoteURLNotIn(vs ...string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotIn(FieldFaviconRemoteURL, vs...))
+}
+
+// FaviconRemoteURLGT applies the GT predicate on the "favicon_remote_url" field.
+func FaviconRemoteURLGT(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldGT(FieldFaviconRemoteURL, v))
+}
+
+// FaviconRemoteURLGTE applies the GTE predicate on the "favicon_remote_url" field.
+func FaviconRemoteURLGTE(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldGTE(FieldFaviconRemoteURL, v))
+}
+
+// FaviconRemoteURLLT applies the LT predicate on the "favicon_remote_url" field.
+func FaviconRemoteURLLT(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldLT(FieldFaviconRemoteURL, v))
+}
+
+// FaviconRemoteURLLTE applies the LTE predicate on the "favicon_remote_url" field.
+func FaviconRemoteURLLTE(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldLTE(FieldFaviconRemoteURL, v))
+}
+
+// FaviconRemoteURLContains applies the Contains predicate on the "favicon_remote_url" field.
+func FaviconRemoteURLContains(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldContains(FieldFaviconRemoteURL, v))
+}
+
+// FaviconRemoteURLHasPrefix applies the HasPrefix predicate on the "favicon_remote_url" field.
+func FaviconRemoteURLHasPrefix(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldHasPrefix(FieldFaviconRemoteURL, v))
+}
+
+// FaviconRemoteURLHasSuffix applies the HasSuffix predicate on the "favicon_remote_url" field.
+func FaviconRemoteURLHasSuffix(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldHasSuffix(FieldFaviconRemoteURL, v))
+}
+
+// FaviconRemoteURLIsNil applies the IsNil predicate on the "favicon_remote_url" field.
+func FaviconRemoteURLIsNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIsNull(FieldFaviconRemoteURL))
+}
+
+// FaviconRemoteURLNotNil applies the NotNil predicate on the "favicon_remote_url" field.
+func FaviconRemoteURLNotNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldFaviconRemoteURL))
+}
+
+// FaviconRemoteURLEqualFold applies the EqualFold predicate on the "favicon_remote_url" field.
+func FaviconRemoteURLEqualFold(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEqualFold(FieldFaviconRemoteURL, v))
+}
+
+// FaviconRemoteURLContainsFold applies the ContainsFold predicate on the "favicon_remote_url" field.
+func FaviconRemoteURLContainsFold(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldContainsFold(FieldFaviconRemoteURL, v))
+}
+
+// FaviconLocalFileIDEQ applies the EQ predicate on the "favicon_local_file_id" field.
+func FaviconLocalFileIDEQ(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldFaviconLocalFileID, v))
+}
+
+// FaviconLocalFileIDNEQ applies the NEQ predicate on the "favicon_local_file_id" field.
+func FaviconLocalFileIDNEQ(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNEQ(FieldFaviconLocalFileID, v))
+}
+
+// FaviconLocalFileIDIn applies the In predicate on the "favicon_local_file_id" field.
+func FaviconLocalFileIDIn(vs ...string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIn(FieldFaviconLocalFileID, vs...))
+}
+
+// FaviconLocalFileIDNotIn applies the NotIn predicate on the "favicon_local_file_id" field.
+func FaviconLocalFileIDNotIn(vs ...string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotIn(FieldFaviconLocalFileID, vs...))
+}
+
+// FaviconLocalFileIDGT applies the GT predicate on the "favicon_local_file_id" field.
+func FaviconLocalFileIDGT(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldGT(FieldFaviconLocalFileID, v))
+}
+
+// FaviconLocalFileIDGTE applies the GTE predicate on the "favicon_local_file_id" field.
+func FaviconLocalFileIDGTE(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldGTE(FieldFaviconLocalFileID, v))
+}
+
+// FaviconLocalFileIDLT applies the LT predicate on the "favicon_local_file_id" field.
+func FaviconLocalFileIDLT(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldLT(FieldFaviconLocalFileID, v))
+}
+
+// FaviconLocalFileIDLTE applies the LTE predicate on the "favicon_local_file_id" field.
+func FaviconLocalFileIDLTE(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldLTE(FieldFaviconLocalFileID, v))
+}
+
+// FaviconLocalFileIDContains applies the Contains predicate on the "favicon_local_file_id" field.
+func FaviconLocalFileIDContains(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldContains(FieldFaviconLocalFileID, v))
+}
+
+// FaviconLocalFileIDHasPrefix applies the HasPrefix predicate on the "favicon_local_file_id" field.
+func FaviconLocalFileIDHasPrefix(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldHasPrefix(FieldFaviconLocalFileID, v))
+}
+
+// FaviconLocalFileIDHasSuffix applies the HasSuffix predicate on the "favicon_local_file_id" field.
+func FaviconLocalFileIDHasSuffix(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldHasSuffix(FieldFaviconLocalFileID, v))
+}
+
+// FaviconLocalFileIDIsNil applies the IsNil predicate on the "favicon_local_file_id" field.
+func FaviconLocalFileIDIsNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIsNull(FieldFaviconLocalFileID))
+}
+
+// FaviconLocalFileIDNotNil applies the NotNil predicate on the "favicon_local_file_id" field.
+func FaviconLocalFileIDNotNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldFaviconLocalFileID))
+}
+
+// FaviconLocalFileIDEqualFold applies the EqualFold predicate on the "favicon_local_file_id" field.
+func FaviconLocalFileIDEqualFold(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEqualFold(FieldFaviconLocalFileID, v))
+}
+
+// FaviconLocalFileIDContainsFold applies the ContainsFold predicate on the "favicon_local_file_id" field.
+func FaviconLocalFileIDContainsFold(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldContainsFold(FieldFaviconLocalFileID, v))
+}
+
 // HasTrustCenter applies the HasEdge predicate on the "trust_center" edge.
 func HasTrustCenter() predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(func(s *sql.Selector) {
@@ -1028,6 +1188,35 @@ func HasLogoFile() predicate.TrustCenterSetting {
 func HasLogoFileWith(preds ...predicate.File) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(func(s *sql.Selector) {
 		step := newLogoFileStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterSetting
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFaviconFile applies the HasEdge predicate on the "favicon_file" edge.
+func HasFaviconFile() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, FaviconFileTable, FaviconFileColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterSetting
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFaviconFileWith applies the HasEdge predicate on the "favicon_file" edge with a given conditions (other predicates).
+func HasFaviconFileWith(preds ...predicate.File) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(func(s *sql.Selector) {
+		step := newFaviconFileStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.TrustCenterSetting
