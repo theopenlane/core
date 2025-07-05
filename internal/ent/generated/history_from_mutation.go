@@ -1042,7 +1042,7 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	}
 
 	if controlOwnerID, exists := m.ControlOwnerID(); exists {
-		create = create.SetControlOwnerID(controlOwnerID)
+		create = create.SetNillableControlOwnerID(&controlOwnerID)
 	}
 
 	if delegateID, exists := m.DelegateID(); exists {
@@ -1242,9 +1242,9 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 		}
 
 		if controlOwnerID, exists := m.ControlOwnerID(); exists {
-			create = create.SetControlOwnerID(controlOwnerID)
+			create = create.SetNillableControlOwnerID(&controlOwnerID)
 		} else {
-			create = create.SetControlOwnerID(control.ControlOwnerID)
+			create = create.SetNillableControlOwnerID(control.ControlOwnerID)
 		}
 
 		if delegateID, exists := m.DelegateID(); exists {
@@ -1328,7 +1328,7 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetImplementationGuidance(control.ImplementationGuidance).
 			SetExampleEvidence(control.ExampleEvidence).
 			SetReferences(control.References).
-			SetControlOwnerID(control.ControlOwnerID).
+			SetNillableControlOwnerID(control.ControlOwnerID).
 			SetDelegateID(control.DelegateID).
 			SetOwnerID(control.OwnerID).
 			SetRefCode(control.RefCode).
@@ -9217,7 +9217,7 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 	}
 
 	if controlOwnerID, exists := m.ControlOwnerID(); exists {
-		create = create.SetControlOwnerID(controlOwnerID)
+		create = create.SetNillableControlOwnerID(&controlOwnerID)
 	}
 
 	if delegateID, exists := m.DelegateID(); exists {
@@ -9417,9 +9417,9 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 		}
 
 		if controlOwnerID, exists := m.ControlOwnerID(); exists {
-			create = create.SetControlOwnerID(controlOwnerID)
+			create = create.SetNillableControlOwnerID(&controlOwnerID)
 		} else {
-			create = create.SetControlOwnerID(subcontrol.ControlOwnerID)
+			create = create.SetNillableControlOwnerID(subcontrol.ControlOwnerID)
 		}
 
 		if delegateID, exists := m.DelegateID(); exists {
@@ -9503,7 +9503,7 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetImplementationGuidance(subcontrol.ImplementationGuidance).
 			SetExampleEvidence(subcontrol.ExampleEvidence).
 			SetReferences(subcontrol.References).
-			SetControlOwnerID(subcontrol.ControlOwnerID).
+			SetNillableControlOwnerID(subcontrol.ControlOwnerID).
 			SetDelegateID(subcontrol.DelegateID).
 			SetOwnerID(subcontrol.OwnerID).
 			SetRefCode(subcontrol.RefCode).

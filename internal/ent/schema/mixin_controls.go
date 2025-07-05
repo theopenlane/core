@@ -185,6 +185,7 @@ var controlFields = []ent.Field{
 		Comment("references for the control"),
 	field.String("control_owner_id").
 		Optional().
+		Nillable().
 		Unique().
 		Comment("the id of the group that owns the control"),
 	field.String("delegate_id").

@@ -19,7 +19,7 @@ func HookControlReferenceFramework() ent.Hook {
 		return hook.ControlFunc(func(ctx context.Context, m *generated.ControlMutation) (generated.Value, error) {
 			shortName := ""
 
-			// if the controls is created with a reference framework, we will use it
+			// if the control is created with a reference framework, we will use it
 			if m.Op().Is(ent.OpCreate) {
 				refFramework, ok := m.ReferenceFramework()
 				if ok && refFramework != "" {

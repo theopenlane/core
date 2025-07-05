@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/rs/zerolog/log"
+	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -141,7 +142,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	for i, c := range updateControlsToClone {
 		c := c // capture loop variable
 		funcs[i] = func() {
-			controlInput, _ := createCloneControlInput(c, programID)
+			controlInput, _ := createCloneControlInput(c, programID, orgID)
 
 			res, err := r.db.Control.Create().
 				SetInput(controlInput).Save(ctx)
@@ -212,7 +213,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	}
 
 	// update the controls to the program if needed
-	if len(existingControlIDs) > 0 && programID != nil {
+	if len(existingControlIDs) > 0 && programID != nil && *programID != "" {
 		// if the control already exists, we just link it to the program
 		if err := withTransactionalMutation(ctx).Control.Update().
 			Where(
@@ -239,7 +240,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 
 // createCloneControlInput creates a CreateControlInput from the given control that is being cloned
 // and returns the input and the standard ID that was set
-func createCloneControlInput(c *generated.Control, programID *string) (generated.CreateControlInput, string) {
+func createCloneControlInput(c *generated.Control, programID *string, orgID string) (generated.CreateControlInput, string) {
 	controlInput := generated.CreateControlInput{
 		// grab fields from the existing control
 		Tags:                   c.Tags,
@@ -257,17 +258,13 @@ func createCloneControlInput(c *generated.Control, programID *string) (generated
 		ExampleEvidence:        c.ExampleEvidence,
 		References:             c.References,
 		// set default status to not implemented
-		Status: &enums.ControlStatusNotImplemented,
+		Status:  &enums.ControlStatusNotImplemented,
+		OwnerID: &orgID,
 	}
 
 	if c.Edges.Standard != nil {
 		// if the control has a standard, we will set the reference framework to the standard
 		controlInput.ReferenceFramework = &c.Edges.Standard.ShortName
-	}
-
-	// set the owner if the control has one
-	if c.OwnerID != "" {
-		controlInput.OwnerID = &c.OwnerID
 	}
 
 	// set the standard information
@@ -391,8 +388,10 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, subcontrolsToCr
 			ExampleEvidence:        subcontrol.ExampleEvidence,
 			References:             subcontrol.References,
 			Status:                 &enums.ControlStatusNotImplemented,
-			OwnerID:                &subcontrol.OwnerID,
 			ReferenceFramework:     subcontrol.ReferenceFramework,
+			OwnerID:                &orgID,
+			// set to empty string to avoid a second query, we know the control owner ID is not set
+			ControlOwnerID: lo.ToPtr(""),
 		}
 	}
 

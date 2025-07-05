@@ -659,7 +659,7 @@ func (shc *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.
 	}
 	if value, ok := shc.mutation.ControlOwnerID(); ok {
 		_spec.SetField(subcontrolhistory.FieldControlOwnerID, field.TypeString, value)
-		_node.ControlOwnerID = value
+		_node.ControlOwnerID = &value
 	}
 	if value, ok := shc.mutation.DelegateID(); ok {
 		_spec.SetField(subcontrolhistory.FieldDelegateID, field.TypeString, value)
