@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/enums"
@@ -41,11 +42,23 @@ func getStandardID[T createProgramRequest](value T) string {
 // it will include all subcontrols
 // if the controls already exist in the organization, they will not be cloned again
 func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, standardID string) ([]*generated.Control, error) {
-	controls, err := withTransactionalMutation(ctx).Control.Query().Where(
+	exists, err := withTransactionalMutation(ctx).Standard.Query().
+		Where(standard.ID(standardID)).
+		Exist(ctx)
+	if err != nil || !exists {
+		log.Error().Err(err).Msgf("error getting standard with ID %s", standardID)
+
+		return nil, err
+	}
+
+	// if we get the standard back, all controls should be accessible so we can allow context to skip checks
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	controls, err := r.db.Control.Query().Where(
 		control.StandardID(standardID)).
 		WithStandard().
 		WithSubcontrols().
-		All(ctx)
+		All(allowCtx)
 	if err != nil {
 		return nil, err
 	}
