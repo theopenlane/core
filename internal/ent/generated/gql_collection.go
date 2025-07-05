@@ -41493,6 +41493,21 @@ func (tcs *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, trustcentersetting.FieldLogoLocalFileID)
 				fieldSeen[trustcentersetting.FieldLogoLocalFileID] = struct{}{}
 			}
+
+		case "faviconFile":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: tcs.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+				return err
+			}
+			tcs.withFaviconFile = query
+			if _, ok := fieldSeen[trustcentersetting.FieldFaviconLocalFileID]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldFaviconLocalFileID)
+				fieldSeen[trustcentersetting.FieldFaviconLocalFileID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[trustcentersetting.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, trustcentersetting.FieldCreatedAt)
@@ -41542,6 +41557,16 @@ func (tcs *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[trustcentersetting.FieldLogoLocalFileID]; !ok {
 				selectedFields = append(selectedFields, trustcentersetting.FieldLogoLocalFileID)
 				fieldSeen[trustcentersetting.FieldLogoLocalFileID] = struct{}{}
+			}
+		case "faviconRemoteURL":
+			if _, ok := fieldSeen[trustcentersetting.FieldFaviconRemoteURL]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldFaviconRemoteURL)
+				fieldSeen[trustcentersetting.FieldFaviconRemoteURL] = struct{}{}
+			}
+		case "faviconLocalFileID":
+			if _, ok := fieldSeen[trustcentersetting.FieldFaviconLocalFileID]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldFaviconLocalFileID)
+				fieldSeen[trustcentersetting.FieldFaviconLocalFileID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -41697,6 +41722,16 @@ func (tcsh *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, on
 			if _, ok := fieldSeen[trustcentersettinghistory.FieldLogoLocalFileID]; !ok {
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldLogoLocalFileID)
 				fieldSeen[trustcentersettinghistory.FieldLogoLocalFileID] = struct{}{}
+			}
+		case "faviconRemoteURL":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldFaviconRemoteURL]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldFaviconRemoteURL)
+				fieldSeen[trustcentersettinghistory.FieldFaviconRemoteURL] = struct{}{}
+			}
+		case "faviconLocalFileID":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldFaviconLocalFileID]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldFaviconLocalFileID)
+				fieldSeen[trustcentersettinghistory.FieldFaviconLocalFileID] = struct{}{}
 			}
 		case "id":
 		case "__typename":

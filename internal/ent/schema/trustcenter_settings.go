@@ -69,6 +69,20 @@ func (TrustCenterSetting) Fields() []ent.Field {
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			).
 			Nillable(),
+		field.String("favicon_remote_url").
+			Comment("URL of the favicon").
+			MaxLen(urlMaxLen).
+			Validate(validator.ValidateURL()).
+			Optional().
+			Nillable(),
+		field.String("favicon_local_file_id").
+			Comment("The local favicon file id, takes precedence over the favicon remote URL").
+			Optional().
+			Annotations(
+				// this field is not exposed to the graphql schema, it is set by the file upload handler
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			).
+			Nillable(),
 	}
 }
 
@@ -94,6 +108,12 @@ func (t TrustCenterSetting) Edges() []ent.Edge {
 			name:       "logo_file",
 			t:          File.Type,
 			field:      "logo_local_file_id",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: t,
+			name:       "favicon_file",
+			t:          File.Type,
+			field:      "favicon_local_file_id",
 		}),
 	}
 }
