@@ -12,11 +12,11 @@ type Event interface {
 	// Topic returns the event's topic
 	Topic() string
 	// Payload returns the event's payload
-	Payload() interface{}
+	Payload() any
 	// Properties returns the event's properties
 	Properties() Properties
 	// SetPayload sets the event's payload
-	SetPayload(interface{})
+	SetPayload(any)
 	// SetProperties sets the event's properties
 	SetProperties(Properties)
 	// SetAborted sets the event's aborted status
@@ -28,9 +28,9 @@ type Event interface {
 	// SetContext sets the event's context
 	SetContext(context.Context)
 	// Client returns the event's client
-	Client() interface{}
+	Client() any
 	// SetClient sets the event's client
-	SetClient(interface{})
+	SetClient(any)
 }
 
 // BaseEvent serves as a basic implementation of the `Event` interface and contains fields for storing the topic,
@@ -40,16 +40,16 @@ type Event interface {
 // the struct's fields in a thread-safe manner
 type BaseEvent struct {
 	topic      string
-	payload    interface{}
+	payload    any
 	aborted    bool
 	properties Properties
 	mu         sync.RWMutex
 	ctx        context.Context
-	client     interface{}
+	client     any
 }
 
 // NewBaseEvent creates a new instance of BaseEvent with a payload
-func NewBaseEvent(topic string, payload interface{}) *BaseEvent {
+func NewBaseEvent(topic string, payload any) *BaseEvent {
 	return &BaseEvent{
 		topic:      topic,
 		payload:    payload,
@@ -63,7 +63,7 @@ func (e *BaseEvent) Topic() string {
 }
 
 // Payload returns the event's payload
-func (e *BaseEvent) Payload() interface{} {
+func (e *BaseEvent) Payload() any {
 	e.mu.RLock() // Read lock
 	defer e.mu.RUnlock()
 
@@ -71,7 +71,7 @@ func (e *BaseEvent) Payload() interface{} {
 }
 
 // SetPayload sets the event's payload
-func (e *BaseEvent) SetPayload(payload interface{}) {
+func (e *BaseEvent) SetPayload(payload any) {
 	e.mu.Lock() // Write lock
 	defer e.mu.Unlock()
 	e.payload = payload
@@ -112,7 +112,7 @@ func (e *BaseEvent) IsAborted() bool {
 }
 
 // Properties is a map of properties to set on an event
-type Properties map[string]interface{}
+type Properties map[string]any
 
 // NewProperties creates a new Properties map
 func NewProperties() Properties {
@@ -120,7 +120,7 @@ func NewProperties() Properties {
 }
 
 // Set a property on the Properties map
-func (p Properties) Set(name string, value interface{}) Properties {
+func (p Properties) Set(name string, value any) Properties {
 	if p == nil {
 		p = NewProperties()
 	}
@@ -131,7 +131,7 @@ func (p Properties) Set(name string, value interface{}) Properties {
 }
 
 // Get a property from the Properties map
-func (p Properties) GetKey(key string) interface{} {
+func (p Properties) GetKey(key string) any {
 	value := p[key]
 
 	if value == nil || value == "" {
@@ -161,7 +161,7 @@ func (e *BaseEvent) SetContext(ctx context.Context) {
 }
 
 // Client returns the event's client
-func (e *BaseEvent) Client() interface{} {
+func (e *BaseEvent) Client() any {
 	e.mu.RLock() // Read lock
 	defer e.mu.RUnlock()
 
@@ -169,7 +169,7 @@ func (e *BaseEvent) Client() interface{} {
 }
 
 // SetClient sets the event's client
-func (e *BaseEvent) SetClient(client interface{}) {
+func (e *BaseEvent) SetClient(client any) {
 	e.mu.Lock() // Write lock
 	defer e.mu.Unlock()
 

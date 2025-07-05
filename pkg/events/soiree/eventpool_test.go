@@ -78,7 +78,7 @@ type TestEvent struct {
 	*BaseEvent
 }
 
-func NewTestEvent(topic string, payload interface{}) *TestEvent {
+func NewTestEvent(topic string, payload any) *TestEvent {
 	return &TestEvent{
 		BaseEvent: NewBaseEvent(topic, payload),
 	}
@@ -268,7 +268,7 @@ func TestWildcardSubscriptionAndEmitting(t *testing.T) {
 		if topics, ok := receivedEvents.Load(eventKey); ok {
 			receivedTopics := make([]string, 0)
 
-			topics.(*sync.Map).Range(func(key, value interface{}) bool {
+			topics.(*sync.Map).Range(func(key, value any) bool {
 				receivedTopic := key.(string)
 				receivedTopics = append(receivedTopics, receivedTopic)
 
