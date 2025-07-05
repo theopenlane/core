@@ -29,11 +29,13 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 )
 
-var cookieConfig = sessions.CookieConfig{
-	Path:     "/",
-	HTTPOnly: true,
-	SameSite: http.SameSiteLaxMode,
-	Secure:   true,
+func newCookieConfig(secure bool) sessions.CookieConfig {
+	return sessions.CookieConfig{
+		Path:     "/",
+		HTTPOnly: true,
+		SameSite: http.SameSiteLaxMode,
+		Secure:   secure,
+	}
 }
 
 // SSOLoginHandler redirects the user to the organization's configured IdP for authentication
@@ -58,12 +60,14 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context) error {
 	}
 
 	// if a return URL is provided, set it as a cookie for redirect after login
+	cfg := newCookieConfig(!h.IsTest)
+
 	if in.ReturnURL != "" {
-		sessions.SetCookie(ctx.Response().Writer, in.ReturnURL, "return", cookieConfig)
+		sessions.SetCookie(ctx.Response().Writer, in.ReturnURL, "return", cfg)
 	}
 
 	// always set the org ID as a cookie for the OIDC flow
-	sessions.SetCookie(ctx.Response().Writer, orgID, "organization_id", cookieConfig)
+	sessions.SetCookie(ctx.Response().Writer, orgID, "organization_id", cfg)
 
 	// build the OIDC config for the org
 	rpCfg, err := h.oidcConfig(ctx.Request().Context(), orgID)
@@ -75,9 +79,9 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context) error {
 	nonce := ulids.New().String()
 
 	// The state cookie is used to protect against (CSRF) attacks. When the authentication flow is initiated, a unique state value is generated and stored in a cookie. Later, when the user returns from the identity provider (IdP), the application checks that the state value in the callback matches the one stored in the cookie
-	sessions.SetCookie(ctx.Response().Writer, state, "state", cookieConfig)
+	sessions.SetCookie(ctx.Response().Writer, state, "state", cfg)
 	// The nonce cookie is used to prevent replay attacks and to bind the authentication request to the issued ID token. The nonce value is sent to the IdP as part of the authentication request, and the IdP includes it in the ID token. When the application receives the ID token, it verifies that the nonce matches the one stored in the cookie, ensuring the token was issued in response to this specific authentication flow
-	sessions.SetCookie(ctx.Response().Writer, nonce, "nonce", cookieConfig)
+	sessions.SetCookie(ctx.Response().Writer, nonce, "nonce", cfg)
 
 	// build the OIDC auth URL with state and nonce
 	authURL := rpCfg.OAuthConfig().AuthCodeURL(state, oauth2.SetAuthURLParam("nonce", nonce))
@@ -290,17 +294,28 @@ func (h *Handler) oidcConfig(ctx context.Context, orgID string) (rp.RelyingParty
 		return ""
 	}))
 
-	opts := []rpConfigOption{withRPOptions(verifierOpt)}
 	if h.IsTest {
-		opts = append(opts, withDiscovery(setting.OidcDiscoveryEndpoint))
+		cfg := &oauth2.Config{
+			ClientID:     *setting.IdentityProviderClientID,
+			ClientSecret: *setting.IdentityProviderClientSecret,
+			RedirectURL:  h.ssoCallbackURL(),
+			Endpoint: oauth2.Endpoint{
+				AuthURL:  issuer + "/auth",
+				TokenURL: issuer + "/token",
+			},
+			Scopes: []string{oidc.ScopeOpenID, oidc.ScopeProfile, oidc.ScopeEmail},
+		}
+
+		return rp.NewRelyingPartyOAuth(cfg, verifierOpt)
 	}
 
+	opts := []rpConfigOption{withRPOptions(verifierOpt)}
 	return newRelyingParty(
 		issuer,
 		*setting.IdentityProviderClientID,
 		*setting.IdentityProviderClientSecret,
 		h.ssoCallbackURL(),
-		opts...,
+		append(opts, withDiscovery(setting.OidcDiscoveryEndpoint))...,
 	)
 }
 
