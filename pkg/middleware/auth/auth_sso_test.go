@@ -15,7 +15,7 @@ import (
 
 	generated "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/sso"
+	sso "github.com/theopenlane/core/pkg/ssoutils"
 )
 
 // withOverrides allows us to inject custom functions for testing

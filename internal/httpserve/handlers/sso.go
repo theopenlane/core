@@ -238,21 +238,30 @@ func (h *Handler) OldoidcConfig(ctx context.Context, orgID string) (rp.RelyingPa
 	return rpCfg, nil
 }
 
+// rpConfig holds the configuration for the relying party
 type rpConfig struct {
 	discovery string
 	options   []rp.Option
 }
 
+// rpConfigOption defines a function type that modifies the relying party configuration
 type rpConfigOption func(*rpConfig)
 
+// withDiscovery sets a custom discovery URL for the relying party configuration
 func withDiscovery(url string) rpConfigOption {
-	return func(cfg *rpConfig) { cfg.discovery = url }
+	return func(cfg *rpConfig) {
+		cfg.discovery = url
+	}
 }
 
+// withRPOptions allows adding multiple rp.Options to the relying party configuration
 func withRPOptions(opts ...rp.Option) rpConfigOption {
-	return func(cfg *rpConfig) { cfg.options = append(cfg.options, opts...) }
+	return func(cfg *rpConfig) {
+		cfg.options = append(cfg.options, opts...)
+	}
 }
 
+// newRelyingParty creates a new OIDC relying party instance with the given configuration
 func newRelyingParty(issuer, clientID, clientSecret, cb string, opts ...rpConfigOption) (rp.RelyingParty, error) {
 	cfg := rpConfig{}
 	for _, o := range opts {
@@ -274,18 +283,27 @@ func newRelyingParty(issuer, clientID, clientSecret, cb string, opts ...rpConfig
 	)
 }
 
+// oidcConfig builds an OIDC relying party config for the given org.
+// to construct the OIDC configuration, the function removes the standard /.well-known/openid-configuration
+// suffix from the discovery endpoint to obtain the issuer URL. It then calls rp.NewRelyingPartyOIDC
+// to create the relying party instance, passing in the issuer URL, client credentials, the callback URL for the OIDC flow,
+// and a set of standard OIDC scopes (openid, profile, email).
 func (h *Handler) oidcConfig(ctx context.Context, orgID string) (rp.RelyingParty, error) {
+	// Fetch the organization's OIDC settings from the database
 	setting, err := h.getOrganizationSettingByOrgID(ctx, orgID)
 	if err != nil {
 		return nil, err
 	}
 
+	// Ensure all required OIDC config fields are present
 	if setting.OidcDiscoveryEndpoint == "" || setting.IdentityProviderClientID == nil || setting.IdentityProviderClientSecret == nil {
 		return nil, ErrMissingOIDCConfig
 	}
 
+	// Remove the well-known suffix to get the issuer URL
 	issuer := strings.TrimSuffix(setting.OidcDiscoveryEndpoint, "/.well-known/openid-configuration")
 
+	// construct the oidc relying party configuration with options
 	verifierOpt := rp.WithVerifierOpts(rp.WithNonce(func(ctx context.Context) string {
 		if n, ok := contextx.From[nonce](ctx); ok {
 			return string(n)
@@ -294,22 +312,8 @@ func (h *Handler) oidcConfig(ctx context.Context, orgID string) (rp.RelyingParty
 		return ""
 	}))
 
-	if h.IsTest {
-		cfg := &oauth2.Config{
-			ClientID:     *setting.IdentityProviderClientID,
-			ClientSecret: *setting.IdentityProviderClientSecret,
-			RedirectURL:  h.ssoCallbackURL(),
-			Endpoint: oauth2.Endpoint{
-				AuthURL:  issuer + "/auth",
-				TokenURL: issuer + "/token",
-			},
-			Scopes: []string{oidc.ScopeOpenID, oidc.ScopeProfile, oidc.ScopeEmail},
-		}
-
-		return rp.NewRelyingPartyOAuth(cfg, verifierOpt)
-	}
-
 	opts := []rpConfigOption{withRPOptions(verifierOpt)}
+
 	return newRelyingParty(
 		issuer,
 		*setting.IdentityProviderClientID,

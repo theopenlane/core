@@ -16,7 +16,6 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/zitadel/oidc/pkg/client"
 	oidccrypto "github.com/zitadel/oidc/pkg/crypto"
@@ -58,9 +57,9 @@ func (suite *HandlerTestSuite) TestWebfingerHandler() {
 
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, http.StatusOK, rec.Code)
 	var out models.SSOStatusReply
-	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
 	log.Error().Err(errors.New("output")).Interface("out", out).Msg("WebfingerHandler output")
 	assert.True(t, out.Enforced)
 	assert.Equal(t, org.ID, out.OrganizationID)
@@ -68,9 +67,9 @@ func (suite *HandlerTestSuite) TestWebfingerHandler() {
 	emailReq := httptest.NewRequest(http.MethodGet, "/.well-known/webfinger?resource=acct:"+testUser1.UserInfo.Email, nil)
 	emailRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(emailRec, emailReq)
-	require.Equal(t, http.StatusOK, emailRec.Code)
+	assert.Equal(t, http.StatusOK, emailRec.Code)
 	var emailOut models.SSOStatusReply
-	require.NoError(t, json.NewDecoder(emailRec.Body).Decode(&emailOut))
+	assert.NoError(t, json.NewDecoder(emailRec.Body).Decode(&emailOut))
 	assert.True(t, emailOut.Enforced)
 	assert.Equal(t, org.ID, emailOut.OrganizationID)
 }
@@ -122,13 +121,13 @@ func newMockOIDCServer(t *testing.T, opts ...oidcServerOption) *mockOIDCServer {
 	t.Helper()
 
 	priv, err := rsa.GenerateKey(rand.Reader, 2048)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	der := x509.MarshalPKCS1PrivateKey(priv)
 	pemKey := pem.EncodeToMemory(&pem.Block{Type: "RSA PRIVATE KEY", Bytes: der})
 
 	signer, err := client.NewSignerFromPrivateKeyByte(pemKey, "test-kid")
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	m := &mockOIDCServer{
 		keyID:          "test-kid",
@@ -165,6 +164,7 @@ func newMockOIDCServer(t *testing.T, opts ...oidcServerOption) *mockOIDCServer {
 	})
 
 	mux.HandleFunc("/token", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json") // Ensure JSON content type for oauth2 client
 		_ = r.ParseForm()
 		if m.expectedCode != "" && r.Form.Get("code") != m.expectedCode {
 			http.Error(w, "invalid code", http.StatusBadRequest)
@@ -201,6 +201,14 @@ func newMockOIDCServer(t *testing.T, opts ...oidcServerOption) *mockOIDCServer {
 			clientID,
 			0,
 		)
+		// Manually set the sub claim since the constructor does not include it in the JWT
+		claimsMap := make(map[string]interface{})
+		b, _ := json.Marshal(claims)
+		_ = json.Unmarshal(b, &claimsMap)
+		claimsMap["sub"] = "1234"
+		// Inject email and email_verified claims for compatibility with callback handler
+		claimsMap["email"] = m.email
+		claimsMap["email_verified"] = true
 
 		info := oidc.NewUserInfo()
 		info.SetEmail(m.email, true)
@@ -208,8 +216,12 @@ func newMockOIDCServer(t *testing.T, opts ...oidcServerOption) *mockOIDCServer {
 		info.SetPicture(m.picture)
 		claims.SetUserinfo(info)
 
-		raw, err := oidccrypto.Sign(claims, m.signer)
-		require.NoError(t, err)
+		// Re-marshal claimsMap to JSON and sign as JWT
+		claimsBytes, _ := json.Marshal(claimsMap)
+		var claimsInterface map[string]interface{}
+		_ = json.Unmarshal(claimsBytes, &claimsInterface)
+		raw, err := oidccrypto.Sign(claimsInterface, m.signer)
+		assert.NoError(t, err)
 
 		resp := map[string]interface{}{
 			"access_token": "access-token",
@@ -267,9 +279,9 @@ func (suite *HandlerTestSuite) TestSSOLoginAndCallback() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusFound, rec.Code)
+	assert.Equal(t, http.StatusFound, rec.Code)
 	loc, err := rec.Result().Location()
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Contains(t, loc.String(), oidc.server.URL+"/auth")
 
 	cookies := rec.Result().Cookies()
@@ -283,21 +295,20 @@ func (suite *HandlerTestSuite) TestSSOLoginAndCallback() {
 		}
 	}
 
-	require.NotNil(t, state)
-	require.NotNil(t, nonce)
+	assert.NotNil(t, state)
+	assert.NotNil(t, nonce)
 
 	oidc.nonce = nonce.Value
 
+	// Set cookies as a single Cookie header instead of AddCookie
+	cookieHeader := "state=" + state.Value + "; nonce=" + nonce.Value + "; organization_id=" + org.ID
 	cbReq := httptest.NewRequest(http.MethodGet, "/v1/sso/callback?code=code123&state="+url.QueryEscape(state.Value)+"&organization_id="+org.ID, nil)
-	cbReq.AddCookie(state)
-	cbReq.AddCookie(nonce)
-	cbReq.AddCookie(&http.Cookie{Name: "organization_id", Value: org.ID})
+	cbReq.Header.Set("Cookie", cookieHeader)
 	cbRec := httptest.NewRecorder()
 
 	suite.e.ServeHTTP(cbRec, cbReq)
-
-	require.Equal(t, http.StatusOK, cbRec.Code)
+	assert.Equal(t, http.StatusOK, cbRec.Code)
 	var out models.LoginReply
-	require.NoError(t, json.NewDecoder(cbRec.Body).Decode(&out))
+	assert.NoError(t, json.NewDecoder(cbRec.Body).Decode(&out))
 	assert.True(t, out.Success)
 }

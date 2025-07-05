@@ -1,4 +1,4 @@
-package sso
+package ssoutils
 
 import (
 	"net/http"

@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
@@ -26,7 +25,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	api "github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/sso"
+	sso "github.com/theopenlane/core/pkg/ssoutils"
 )
 
 // SessionSkipperFunc is the function that determines if the session check should be skipped
@@ -244,7 +243,7 @@ func checkToken(ctx context.Context, conf *Options, token string) (*auth.Authent
 }
 
 // isValidPersonalAccessToken checks if the provided token is a valid personal access token and returns the authenticated user
-func isValidPersonalAccessToken(ctx context.Context, dbClient *generated.Client, token string) (*auth.AuthenticatedUser, string, error) {
+func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client, token string) (*auth.AuthenticatedUser, string, error) {
 	pat, err := fetchPATFunc(ctx, dbClient, token)
 	if err != nil {
 		return nil, "", err
@@ -292,7 +291,7 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient *generated.Client,
 	}, pat.ID, nil
 }
 
-func isValidAPIToken(ctx context.Context, dbClient *generated.Client, token string) (*auth.AuthenticatedUser, string, error) {
+func isValidAPIToken(ctx context.Context, dbClient *ent.Client, token string) (*auth.AuthenticatedUser, string, error) {
 	t, err := fetchAPITokenFunc(ctx, dbClient, token)
 	if err != nil {
 		return nil, "", err
@@ -403,11 +402,11 @@ func orgIDFromToken(c echo.Context, v tokens.Validator) string {
 }
 
 // isSSOEnforced checks if SSO is enforced for the given organization ID
-func isSSOEnforced(ctx context.Context, db *generated.Client, orgID string) (bool, error) {
+func isSSOEnforced(ctx context.Context, db *ent.Client, orgID string) (bool, error) {
 	setting, err := db.OrganizationSetting.Query().Where(organizationsetting.OrganizationID(orgID)).
 		Only(privacy.DecisionContext(ctx, privacy.Allow))
 	if err != nil {
-		if generated.IsNotFound(err) {
+		if ent.IsNotFound(err) {
 			return false, nil
 		}
 
@@ -441,10 +440,10 @@ func userIDFromToken(c echo.Context, v tokens.Validator) string {
 }
 
 // isPATSSOAuthorized checks if the personal access token is authorized for SSO with the given organization ID
-func isPATSSOAuthorized(ctx context.Context, db *generated.Client, tokenID, orgID string) (bool, error) {
+func isPATSSOAuthorized(ctx context.Context, db *ent.Client, tokenID, orgID string) (bool, error) {
 	pat, err := db.PersonalAccessToken.Get(ctx, tokenID)
 	if err != nil {
-		if generated.IsNotFound(err) {
+		if ent.IsNotFound(err) {
 			return false, nil
 		}
 
@@ -465,7 +464,7 @@ func isPATSSOAuthorized(ctx context.Context, db *generated.Client, tokenID, orgI
 // function variables allow tests to override SSO checks without a database
 var (
 	isSSOEnforcedFunc = isSSOEnforced
-	orgRoleFunc       = func(ctx context.Context, db *generated.Client, userID, orgID string) (enums.Role, error) {
+	orgRoleFunc       = func(ctx context.Context, db *ent.Client, userID, orgID string) (enums.Role, error) {
 		member, err := db.OrgMembership.Query().
 			Where(orgmembership.UserID(userID), orgmembership.OrganizationID(orgID)).
 			Only(privacy.DecisionContext(ctx, privacy.Allow))
@@ -476,14 +475,14 @@ var (
 		return member.Role, nil
 	}
 
-	fetchPATFunc = func(ctx context.Context, db *generated.Client, token string) (*generated.PersonalAccessToken, error) {
+	fetchPATFunc = func(ctx context.Context, db *ent.Client, token string) (*ent.PersonalAccessToken, error) {
 		return db.PersonalAccessToken.Query().Where(personalaccesstoken.Token(token)).
 			WithOwner().
 			WithOrganizations().
 			Only(ctx)
 	}
 
-	fetchAPITokenFunc = func(ctx context.Context, db *generated.Client, token string) (*generated.APIToken, error) {
+	fetchAPITokenFunc = func(ctx context.Context, db *ent.Client, token string) (*ent.APIToken, error) {
 		return db.APIToken.Query().Where(apitoken.Token(token)).Only(ctx)
 	}
 

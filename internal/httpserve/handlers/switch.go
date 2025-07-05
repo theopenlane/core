@@ -16,7 +16,7 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/sso"
+	sso "github.com/theopenlane/core/pkg/ssoutils"
 )
 
 // SwitchHandler is responsible for handling requests to the `/switch` endpoint, and changing the user's logged in organization context

@@ -96,6 +96,7 @@ require (
 	golang.org/x/term v0.32.0
 	golang.org/x/text v0.26.0
 	golang.org/x/tools v0.34.0
+	gopkg.in/square/go-jose.v2 v2.6.0
 	gotest.tools/gotestsum v1.12.3
 	gotest.tools/v3 v3.5.2
 )
@@ -448,7 +449,6 @@ require (
 	gopkg.in/mattn/go-colorable.v0 v0.1.0 // indirect
 	gopkg.in/mattn/go-isatty.v0 v0.0.4 // indirect
 	gopkg.in/mattn/go-runewidth.v0 v0.0.4 // indirect
-	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	honnef.co/go/tools v0.6.1 // indirect
 	k8s.io/api v0.32.2 // indirect
