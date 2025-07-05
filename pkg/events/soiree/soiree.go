@@ -1,5 +1,7 @@
 package soiree
 
+import "github.com/cenkalti/backoff/v4"
+
 // Soiree is an interface that defines the behavior of your get-together
 type Soiree interface {
 	// On registers a listener function to a specific topic
@@ -7,9 +9,9 @@ type Soiree interface {
 	// Off removes a listener from a specific topic using the listener's unique ID
 	Off(topicName string, listenerID string) error
 	// Emit asynchronously sends an event to all subscribers of a topic and returns a channel of errors
-	Emit(eventName string, payload interface{}) <-chan error
+	Emit(eventName string, payload any) <-chan error
 	// EmitSync sends an event synchronously to all subscribers of a topic; blocks until all listeners have been notified
-	EmitSync(eventName string, payload interface{}) []error
+	EmitSync(eventName string, payload any) []error
 	// GetTopic retrieves the Topic object associated with the given topic name
 	GetTopic(topicName string) (*Topic, error)
 	// EnsureTopic creates a new topic if it does not exist, or returns the existing one
@@ -27,7 +29,11 @@ type Soiree interface {
 	// Close gracefully shuts down the Soiree, ensuring all pending events are processed
 	Close() error
 	// SetClient sets the client for the Soiree
-	SetClient(client interface{})
+	SetClient(client any)
 	// GetClient gets the client for the Soiree
-	GetClient() interface{}
+	GetClient() any
+	// SetEventStore configures a persistence store for events and results
+	SetEventStore(EventStore)
+	// SetRetry sets retry attempts and backoff behavior for listener failures
+	SetRetry(int, func() backoff.BackOff)
 }

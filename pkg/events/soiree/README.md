@@ -21,6 +21,7 @@ Functionally, Soiree is intended to provide:
   subscriptions
 - **General Re-use**: Configure with custom handlers for errors, IDs, and panics
   panics
+- **Redis persistence**: Optionally persist and process events using Redis
 
 ### But why?
 
@@ -120,7 +121,7 @@ connect to external data stores (e.g. Turso).
                                                          │                │               │ Other future │
                                                          ▼                └──────────────▶│  ridiculous  │
                                                      ┌───────────┐                        │    ideas     │
-                                                     │   Turso   │                        └──────────────┘
+                                                     │   Rando   │                        └──────────────┘
                                                      └───────────┘
 ```
 
@@ -434,7 +435,7 @@ import (
 
 func main() {
 	// Define a panic handler that logs the occurrence
-	logPanicHandler := func(p interface{}) {
+	logPanicHandler := func(p any) {
 		log.Printf("Panic recovered: %v", p)
 		// Insert additional logic for panic recovery here
 	}
@@ -448,3 +449,42 @@ func main() {
 
 This handler ensures that panics are logged and managed without creating a
 service interruption.
+
+### Persisting Events in Redis
+
+Soiree can optionally store events and listener results in Redis. This enables
+shared persistence across service instances and supports asynchronous processing
+when used with an `EventQueue` implementation like `RedisStore`.
+
+```go
+package main
+
+import (
+        "github.com/cenkalti/backoff/v4"
+        "github.com/redis/go-redis/v9"
+        "github.com/theopenlane/core/pkg/events/soiree"
+        "time"
+)
+
+func main() {
+        client := redis.NewClient(&redis.Options{Addr: "localhost:6379"})
+
+        e := soiree.NewEventPool(
+                soiree.WithRedisStore(client),
+                soiree.WithRetry(3, func() backoff.BackOff {
+                        return backoff.NewConstantBackOff(500 * time.Millisecond)
+                }),
+        )
+
+        e.On("task.created", func(evt soiree.Event) error {
+                // process the event
+                return nil
+        })
+
+        // Events will be persisted to Redis and retried if the listener fails
+        e.Emit("task.created", "payload")
+}
+```
+
+When a `RedisStore` is provided, the event pool consumes events from the Redis
+queue and retries failed listeners using the configured backoff policy.

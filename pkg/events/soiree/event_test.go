@@ -1,6 +1,7 @@
 package soiree
 
 import (
+	"context"
 	"reflect"
 	"testing"
 )
@@ -111,5 +112,38 @@ func TestEventPropertiesSetNilMap(t *testing.T) {
 
 	if event.Properties() == nil {
 		t.Errorf("expected properties to be initialized")
+	}
+}
+func TestBaseEventContext(t *testing.T) {
+	event := NewBaseEvent("test_topic", "payload")
+	if event.Context() != nil {
+		t.Errorf("expected initial context to be nil, got %v", event.Context())
+	}
+
+	ctx := context.WithValue(context.Background(), "key", "value")
+	event.SetContext(ctx)
+	gotCtx := event.Context()
+	if gotCtx == nil {
+		t.Fatalf("expected context to be set, got nil")
+	}
+	if gotCtx.Value("key") != "value" {
+		t.Errorf("expected context value 'key' to be 'value', got '%v'", gotCtx.Value("key"))
+	}
+}
+
+func TestBaseEventClient(t *testing.T) {
+	event := NewBaseEvent("test_topic", "payload")
+	if event.Client() != nil {
+		t.Errorf("expected initial client to be nil, got %v", event.Client())
+	}
+
+	client := struct{ Name string }{"test-client"}
+	event.SetClient(client)
+	gotClient, ok := event.Client().(struct{ Name string })
+	if !ok {
+		t.Fatalf("client is not of expected type")
+	}
+	if gotClient.Name != "test-client" {
+		t.Errorf("expected client name to be 'test-client', got '%v'", gotClient.Name)
 	}
 }
