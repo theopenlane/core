@@ -1070,6 +1070,12 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 		}
 
+	if m.PondPool == nil {
+		funk()
+
+		return nil
+	}
+
 	m.PondPool.Submit(funk)
 
 	return nil
@@ -9254,6 +9260,13 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		}
 
 	}
+
+	if m.PondPool == nil {
+		funk()
+
+		return nil
+	}
+
 
 	m.PondPool.Submit(funk)
 

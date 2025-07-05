@@ -119,7 +119,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	}
 
 	// find the ones we do need to clone
-	updateControlsToClone := []*generated.Control{}
+	updatedControlsToClone := []*generated.Control{}
 	for _, c := range controlsToClone {
 		// check if the control already exists in the organization
 		exists := false
@@ -134,7 +134,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 
 		if !exists {
 			// control does not exist, we will clone it
-			updateControlsToClone = append(updateControlsToClone, c)
+			updatedControlsToClone = append(updatedControlsToClone, c)
 		}
 	}
 
@@ -161,7 +161,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	// this will allow us to run the cloning in parallel
 	// we will use a mutex to protect the createdControlIDs and existingControlIDs slices
 	// and the errors slice
-	for i, c := range updateControlsToClone {
+	for i, c := range updatedControlsToClone {
 		c := c // capture loop variable
 		funcs[i] = func() {
 			controlInput, _ := createCloneControlInput(c, programID, orgID)
@@ -422,17 +422,35 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, subcontrolsToCr
 
 // bulkCreateSubcontrolNoTransaction creates multiple subcontrols in a single request without a transaction to allow it to be run in parallel
 func (r *mutationResolver) bulkCreateSubcontrolNoTransaction(ctx context.Context, input []*generated.CreateSubcontrolInput) error {
-	builders := make([]*generated.SubcontrolCreate, len(input))
+	errors := []error{}
+	var mu sync.Mutex
+
+	funks := make([]func(), len(input))
+
 	for i, data := range input {
-		builders[i] = r.db.Subcontrol.Create().SetInput(*data)
+		c := data // capture loop variable
+		funks[i] = func() {
+
+			if err := r.db.Subcontrol.Create().
+				SetInput(*c).Exec(ctx); err != nil {
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+
+				return
+			}
+		}
 	}
 
-	if err := r.db.Subcontrol.CreateBulk(builders...).Exec(ctx); err != nil {
-		log.Error().Err(err).Msg("error creating subcontrols in bulk")
+	// run the cloning functions in parallel
+	r.withPool().SubmitMultipleAndWait(funks)
 
-		return parseRequestError(err, action{action: ActionCreate, object: "subcontrol"})
+	if len(errors) == 0 {
+		return nil
 	}
 
-	// return response
-	return nil
+	log.Error().Errs("errors", errors).Msg("errors cloning subcontrols")
+
+	// return the first error but log all
+	return errors[0]
 }

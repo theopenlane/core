@@ -114,7 +114,7 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 			// add the user and org ID to the logger context
 			zerolog.Ctx(reqCtx).UpdateContext(func(c zerolog.Context) zerolog.Context {
 				return c.Str("user_id", au.SubjectID).
-					Str("org_id", au.OrganizationID)
+					Strs("org_id", au.OrganizationIDs)
 			})
 
 			if err := updateLastUsed(c.Request().Context(), conf.DBClient, au, id); err != nil {
