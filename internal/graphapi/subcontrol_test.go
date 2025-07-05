@@ -434,7 +434,7 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 			} else if tc.request.ControlID == controlWithOwner.ID {
 				// it should inherit the owner from the parent control if it was set
 				assert.Assert(t, resp.CreateSubcontrol.Subcontrol.ControlOwner != nil)
-				assert.Check(t, is.Equal(controlWithOwner.ControlOwnerID, resp.CreateSubcontrol.Subcontrol.ControlOwner.ID))
+				assert.Check(t, is.Equal(*controlWithOwner.ControlOwnerID, resp.CreateSubcontrol.Subcontrol.ControlOwner.ID))
 			} else {
 				assert.Check(t, is.Nil(resp.CreateSubcontrol.Subcontrol.ControlOwner))
 			}

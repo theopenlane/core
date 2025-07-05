@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -78,10 +79,12 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 		mu     sync.Mutex
 	)
 
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
+	ac, err := auth.GetAuthenticatedUserFromContext(ctx)
+	if err != nil || ac.OrganizationID == "" {
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
+
+	orgID := ac.OrganizationID
 
 	wherePredicate := []predicate.Control{}
 	for _, c := range controlsToClone {
@@ -135,6 +138,25 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 		}
 	}
 
+	// check the program ID now, so controls inserts do not need to do a check to FGA on the parent
+	ctrlCtx := ctx
+	if programID != nil {
+		allow, err := r.db.Authz.CheckAccess(ctx, fgax.AccessCheck{
+			ObjectType:  generated.TypeProgram,
+			ObjectID:    *programID,
+			Relation:    fgax.CanEdit,
+			SubjectID:   ac.SubjectID,
+			SubjectType: auth.GetAuthzSubjectType(ctx),
+		})
+		if err != nil {
+			return nil, err
+		}
+
+		if allow {
+			ctrlCtx = privacy.DecisionContext(ctx, privacy.Allow)
+		}
+	}
+
 	// create a function for each control to clone
 	// this will allow us to run the cloning in parallel
 	// we will use a mutex to protect the createdControlIDs and existingControlIDs slices
@@ -145,7 +167,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 			controlInput, _ := createCloneControlInput(c, programID, orgID)
 
 			res, err := r.db.Control.Create().
-				SetInput(controlInput).Save(ctx)
+				SetInput(controlInput).Save(ctrlCtx)
 			if err != nil {
 				mu.Lock()
 				errors = append(errors, err)
