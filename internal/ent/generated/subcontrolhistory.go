@@ -78,7 +78,7 @@ type SubcontrolHistory struct {
 	// references for the control
 	References []models.Reference `json:"references,omitempty"`
 	// the id of the group that owns the control
-	ControlOwnerID string `json:"control_owner_id,omitempty"`
+	ControlOwnerID *string `json:"control_owner_id,omitempty"`
 	// the id of the group that is temporarily delegated to own the control
 	DelegateID string `json:"delegate_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -313,7 +313,8 @@ func (sh *SubcontrolHistory) assignValues(columns []string, values []any) error 
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_owner_id", values[i])
 			} else if value.Valid {
-				sh.ControlOwnerID = value.String
+				sh.ControlOwnerID = new(string)
+				*sh.ControlOwnerID = value.String
 			}
 		case subcontrolhistory.FieldDelegateID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -461,8 +462,10 @@ func (sh *SubcontrolHistory) String() string {
 	builder.WriteString("references=")
 	builder.WriteString(fmt.Sprintf("%v", sh.References))
 	builder.WriteString(", ")
-	builder.WriteString("control_owner_id=")
-	builder.WriteString(sh.ControlOwnerID)
+	if v := sh.ControlOwnerID; v != nil {
+		builder.WriteString("control_owner_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("delegate_id=")
 	builder.WriteString(sh.DelegateID)

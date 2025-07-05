@@ -74,7 +74,7 @@ type Subcontrol struct {
 	// references for the control
 	References []models.Reference `json:"references,omitempty"`
 	// the id of the group that owns the control
-	ControlOwnerID string `json:"control_owner_id,omitempty"`
+	ControlOwnerID *string `json:"control_owner_id,omitempty"`
 	// the id of the group that is temporarily delegated to own the control
 	DelegateID string `json:"delegate_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -504,7 +504,8 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_owner_id", values[i])
 			} else if value.Valid {
-				s.ControlOwnerID = value.String
+				s.ControlOwnerID = new(string)
+				*s.ControlOwnerID = value.String
 			}
 		case subcontrol.FieldDelegateID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -737,8 +738,10 @@ func (s *Subcontrol) String() string {
 	builder.WriteString("references=")
 	builder.WriteString(fmt.Sprintf("%v", s.References))
 	builder.WriteString(", ")
-	builder.WriteString("control_owner_id=")
-	builder.WriteString(s.ControlOwnerID)
+	if v := s.ControlOwnerID; v != nil {
+		builder.WriteString("control_owner_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("delegate_id=")
 	builder.WriteString(s.DelegateID)

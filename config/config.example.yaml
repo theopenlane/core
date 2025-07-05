@@ -85,6 +85,7 @@ email:
     year: 0
 entConfig:
     entityTypes: null
+    maxPoolSize: 100
     summarizer:
         llm:
             anthropic:

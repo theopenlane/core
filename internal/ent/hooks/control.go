@@ -8,6 +8,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 )
 
@@ -18,13 +19,23 @@ func HookControlReferenceFramework() ent.Hook {
 		return hook.ControlFunc(func(ctx context.Context, m *generated.ControlMutation) (generated.Value, error) {
 			shortName := ""
 
+			// if the control is created with a reference framework, we will use it
+			if m.Op().Is(ent.OpCreate) {
+				refFramework, ok := m.ReferenceFramework()
+				if ok && refFramework != "" {
+					// if the reference framework is set, we will use it
+					return next.Mutate(ctx, m)
+				}
+			}
+
 			stdCleared := m.StandardIDCleared()
 			if stdCleared {
 				m.ClearReferenceFramework()
 			} else {
 				standardID, ok := m.StandardID()
 				if ok {
-					std, err := m.Client().Standard.Get(ctx, standardID)
+					std, err := m.Client().Standard.Query().Select(standard.FieldShortName).
+						Where(standard.ID(standardID)).Only(ctx)
 					if err != nil {
 						return nil, err
 					}
