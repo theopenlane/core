@@ -88,21 +88,26 @@ func (suite *HandlerTestSuite) TestWebfingerHandlerNotFound() {
 // It exposes discovery, token and JWK endpoints. The ID tokens are signed
 // with an in-memory RSA key.
 type mockOIDCServer struct {
-	server       *httptest.Server
-	signer       jose.Signer
-	privKey      *rsa.PrivateKey
-	keyID        string
-	expectedCode string
-	nonce        string
-	email        string
-	name         string
-	picture      string
+	server         *httptest.Server
+	signer         jose.Signer
+	privKey        *rsa.PrivateKey
+	keyID          string
+	expectedCode   string
+	expectedSecret string
+	nonce          string
+	email          string
+	name           string
+	picture        string
 }
 
 type oidcServerOption func(*mockOIDCServer)
 
 func withExpectedCode(code string) oidcServerOption {
 	return func(m *mockOIDCServer) { m.expectedCode = code }
+}
+
+func withClientSecret(secret string) oidcServerOption {
+	return func(m *mockOIDCServer) { m.expectedSecret = secret }
 }
 
 func withUserInfo(email, name, picture string) oidcServerOption {
@@ -126,12 +131,13 @@ func newMockOIDCServer(t *testing.T, opts ...oidcServerOption) *mockOIDCServer {
 	require.NoError(t, err)
 
 	m := &mockOIDCServer{
-		keyID:   "test-kid",
-		signer:  signer,
-		privKey: priv,
-		email:   "sso@example.com",
-		name:    "SSO User",
-		picture: "https://example.com/avatar.png",
+		keyID:          "test-kid",
+		signer:         signer,
+		privKey:        priv,
+		email:          "sso@example.com",
+		name:           "SSO User",
+		picture:        "https://example.com/avatar.png",
+		expectedSecret: "secret",
 	}
 
 	for _, opt := range opts {
@@ -165,16 +171,34 @@ func newMockOIDCServer(t *testing.T, opts ...oidcServerOption) *mockOIDCServer {
 			return
 		}
 
+		clientID := r.Form.Get("client_id")
+		secret := r.Form.Get("client_secret")
+		if clientID == "" || secret == "" {
+			if id, pw, ok := r.BasicAuth(); ok {
+				if clientID == "" {
+					clientID = id
+				}
+				if secret == "" {
+					secret = pw
+				}
+			}
+		}
+
+		if m.expectedSecret != "" && secret != m.expectedSecret {
+			http.Error(w, "invalid client secret", http.StatusUnauthorized)
+			return
+		}
+
 		claims := oidc.NewIDTokenClaims(
 			m.server.URL,
 			"1234",
-			[]string{r.Form.Get("client_id")},
+			[]string{clientID},
 			time.Now().Add(time.Hour),
 			time.Now(),
 			m.nonce,
 			"",
 			nil,
-			r.Form.Get("client_id"),
+			clientID,
 			0,
 		)
 
@@ -211,6 +235,7 @@ func (suite *HandlerTestSuite) TestSSOLoginAndCallback() {
 
 	oidc := newMockOIDCServer(t,
 		withExpectedCode("code123"),
+		withClientSecret("secret"),
 		withUserInfo("sso@example.com", "SSO User", "https://example.com/avatar.png"),
 	)
 	defer oidc.Close()
