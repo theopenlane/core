@@ -92,11 +92,11 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 
 				if strings.HasPrefix(claims.UserID, "anon:") {
 					if !conf.AllowAnonymous {
-						return unauthorized(c, ErrAnonymousAccessNotAllowed)
+						return unauthorized(c, ErrAnonymousAccessNotAllowed, conf, validator)
 					}
 					an, err := createAnonymousTrustCenterUserFromClaims(reqCtx, conf.DBClient, claims, auth.JWTAuthentication)
 					if err != nil {
-						return unauthorized(c, err)
+						return unauthorized(c, err, conf, validator)
 					}
 
 					auth.SetAnonymousTrustCenterUserContext(c, an)
