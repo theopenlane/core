@@ -333,12 +333,14 @@ func validateOrgDeletion(ctx context.Context, m *generated.OrganizationMutation)
 	}
 
 	// do not allow deletion of personal orgs, these are deleted when the user is deleted
-	deletedOrg, err := m.Client().Organization.Get(ctx, deletedID)
-	if err != nil {
-		return err
-	}
+	exists, _ := m.Client().Organization.Query().
+		Where(
+			organization.ID(deletedID),
+			organization.PersonalOrgEQ(true),
+		).
+		Exist(ctx)
 
-	if deletedOrg.PersonalOrg {
+	if exists {
 		zerolog.Ctx(ctx).Debug().Msg("attempt to delete personal org detected")
 
 		return fmt.Errorf("%w: %s", ErrInvalidInput, "cannot delete personal organizations")

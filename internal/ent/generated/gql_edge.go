@@ -6657,6 +6657,14 @@ func (tcs *TrustCenterSetting) LogoFile(ctx context.Context) (*File, error) {
 	return result, MaskNotFound(err)
 }
 
+func (tcs *TrustCenterSetting) FaviconFile(ctx context.Context) (*File, error) {
+	result, err := tcs.Edges.FaviconFileOrErr()
+	if IsNotLoaded(err) {
+		result, err = tcs.QueryFaviconFile().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (u *User) PersonalAccessTokens(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*PersonalAccessTokenOrder, where *PersonalAccessTokenWhereInput,
 ) (*PersonalAccessTokenConnection, error) {

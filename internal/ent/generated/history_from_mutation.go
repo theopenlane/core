@@ -1042,7 +1042,7 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	}
 
 	if controlOwnerID, exists := m.ControlOwnerID(); exists {
-		create = create.SetControlOwnerID(controlOwnerID)
+		create = create.SetNillableControlOwnerID(&controlOwnerID)
 	}
 
 	if delegateID, exists := m.DelegateID(); exists {
@@ -1242,9 +1242,9 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 		}
 
 		if controlOwnerID, exists := m.ControlOwnerID(); exists {
-			create = create.SetControlOwnerID(controlOwnerID)
+			create = create.SetNillableControlOwnerID(&controlOwnerID)
 		} else {
-			create = create.SetControlOwnerID(control.ControlOwnerID)
+			create = create.SetNillableControlOwnerID(control.ControlOwnerID)
 		}
 
 		if delegateID, exists := m.DelegateID(); exists {
@@ -1328,7 +1328,7 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetImplementationGuidance(control.ImplementationGuidance).
 			SetExampleEvidence(control.ExampleEvidence).
 			SetReferences(control.References).
-			SetControlOwnerID(control.ControlOwnerID).
+			SetNillableControlOwnerID(control.ControlOwnerID).
 			SetDelegateID(control.DelegateID).
 			SetOwnerID(control.OwnerID).
 			SetRefCode(control.RefCode).
@@ -9217,7 +9217,7 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 	}
 
 	if controlOwnerID, exists := m.ControlOwnerID(); exists {
-		create = create.SetControlOwnerID(controlOwnerID)
+		create = create.SetNillableControlOwnerID(&controlOwnerID)
 	}
 
 	if delegateID, exists := m.DelegateID(); exists {
@@ -9417,9 +9417,9 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 		}
 
 		if controlOwnerID, exists := m.ControlOwnerID(); exists {
-			create = create.SetControlOwnerID(controlOwnerID)
+			create = create.SetNillableControlOwnerID(&controlOwnerID)
 		} else {
-			create = create.SetControlOwnerID(subcontrol.ControlOwnerID)
+			create = create.SetNillableControlOwnerID(subcontrol.ControlOwnerID)
 		}
 
 		if delegateID, exists := m.DelegateID(); exists {
@@ -9503,7 +9503,7 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetImplementationGuidance(subcontrol.ImplementationGuidance).
 			SetExampleEvidence(subcontrol.ExampleEvidence).
 			SetReferences(subcontrol.References).
-			SetControlOwnerID(subcontrol.ControlOwnerID).
+			SetNillableControlOwnerID(subcontrol.ControlOwnerID).
 			SetDelegateID(subcontrol.DelegateID).
 			SetOwnerID(subcontrol.OwnerID).
 			SetRefCode(subcontrol.RefCode).
@@ -10278,6 +10278,14 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetNillableLogoLocalFileID(&logoLocalFileID)
 	}
 
+	if faviconRemoteURL, exists := m.FaviconRemoteURL(); exists {
+		create = create.SetNillableFaviconRemoteURL(&faviconRemoteURL)
+	}
+
+	if faviconLocalFileID, exists := m.FaviconLocalFileID(); exists {
+		create = create.SetNillableFaviconLocalFileID(&faviconLocalFileID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -10380,6 +10388,18 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetNillableLogoLocalFileID(trustcentersetting.LogoLocalFileID)
 		}
 
+		if faviconRemoteURL, exists := m.FaviconRemoteURL(); exists {
+			create = create.SetNillableFaviconRemoteURL(&faviconRemoteURL)
+		} else {
+			create = create.SetNillableFaviconRemoteURL(trustcentersetting.FaviconRemoteURL)
+		}
+
+		if faviconLocalFileID, exists := m.FaviconLocalFileID(); exists {
+			create = create.SetNillableFaviconLocalFileID(&faviconLocalFileID)
+		} else {
+			create = create.SetNillableFaviconLocalFileID(trustcentersetting.FaviconLocalFileID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -10424,6 +10444,8 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 			SetPrimaryColor(trustcentersetting.PrimaryColor).
 			SetNillableLogoRemoteURL(trustcentersetting.LogoRemoteURL).
 			SetNillableLogoLocalFileID(trustcentersetting.LogoLocalFileID).
+			SetNillableFaviconRemoteURL(trustcentersetting.FaviconRemoteURL).
+			SetNillableFaviconLocalFileID(trustcentersetting.FaviconLocalFileID).
 			Save(ctx)
 		if err != nil {
 			return err

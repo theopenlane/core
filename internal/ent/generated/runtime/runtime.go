@@ -5491,6 +5491,24 @@ func init() {
 			return nil
 		}
 	}()
+	// trustcentersettingDescFaviconRemoteURL is the schema descriptor for favicon_remote_url field.
+	trustcentersettingDescFaviconRemoteURL := trustcentersettingFields[6].Descriptor()
+	// trustcentersetting.FaviconRemoteURLValidator is a validator for the "favicon_remote_url" field. It is called by the builders before save.
+	trustcentersetting.FaviconRemoteURLValidator = func() func(string) error {
+		validators := trustcentersettingDescFaviconRemoteURL.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(favicon_remote_url string) error {
+			for _, fn := range fns {
+				if err := fn(favicon_remote_url); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	// trustcentersettingDescID is the schema descriptor for id field.
 	trustcentersettingDescID := trustcentersettingMixinFields2[0].Descriptor()
 	// trustcentersetting.DefaultID holds the default value on creation for the id field.

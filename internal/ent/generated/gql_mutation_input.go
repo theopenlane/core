@@ -953,6 +953,7 @@ type CreateControlInput struct {
 	AuditorReferenceID       *string
 	Status                   *enums.ControlStatus
 	Source                   *enums.ControlSource
+	ReferenceFramework       *string
 	ControlType              *enums.ControlType
 	Category                 *string
 	CategoryID               *string
@@ -1006,6 +1007,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if v := i.ReferenceFramework; v != nil {
+		m.SetReferenceFramework(*v)
 	}
 	if v := i.ControlType; v != nil {
 		m.SetControlType(*v)
@@ -9687,6 +9691,7 @@ type CreateSubcontrolInput struct {
 	AuditorReferenceID       *string
 	Status                   *enums.ControlStatus
 	Source                   *enums.ControlSource
+	ReferenceFramework       *string
 	ControlType              *enums.ControlType
 	Category                 *string
 	CategoryID               *string
@@ -9734,6 +9739,9 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if v := i.ReferenceFramework; v != nil {
+		m.SetReferenceFramework(*v)
 	}
 	if v := i.ControlType; v != nil {
 		m.SetControlType(*v)
@@ -10827,13 +10835,15 @@ func (c *TrustCenterUpdateOne) SetInput(i UpdateTrustCenterInput) *TrustCenterUp
 
 // CreateTrustCenterSettingInput represents a mutation input for creating trustcentersettings.
 type CreateTrustCenterSettingInput struct {
-	Title         *string
-	Overview      *string
-	PrimaryColor  *string
-	LogoRemoteURL *string
-	TrustCenterID *string
-	FileIDs       []string
-	LogoFileID    *string
+	Title            *string
+	Overview         *string
+	PrimaryColor     *string
+	LogoRemoteURL    *string
+	FaviconRemoteURL *string
+	TrustCenterID    *string
+	FileIDs          []string
+	LogoFileID       *string
+	FaviconFileID    *string
 }
 
 // Mutate applies the CreateTrustCenterSettingInput on the TrustCenterSettingMutation builder.
@@ -10850,6 +10860,9 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.LogoRemoteURL; v != nil {
 		m.SetLogoRemoteURL(*v)
 	}
+	if v := i.FaviconRemoteURL; v != nil {
+		m.SetFaviconRemoteURL(*v)
+	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
 	}
@@ -10858,6 +10871,9 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.LogoFileID; v != nil {
 		m.SetLogoFileID(*v)
+	}
+	if v := i.FaviconFileID; v != nil {
+		m.SetFaviconFileID(*v)
 	}
 }
 
@@ -10869,21 +10885,25 @@ func (c *TrustCenterSettingCreate) SetInput(i CreateTrustCenterSettingInput) *Tr
 
 // UpdateTrustCenterSettingInput represents a mutation input for updating trustcentersettings.
 type UpdateTrustCenterSettingInput struct {
-	ClearTitle         bool
-	Title              *string
-	ClearOverview      bool
-	Overview           *string
-	ClearPrimaryColor  bool
-	PrimaryColor       *string
-	ClearLogoRemoteURL bool
-	LogoRemoteURL      *string
-	ClearTrustCenter   bool
-	TrustCenterID      *string
-	ClearFiles         bool
-	AddFileIDs         []string
-	RemoveFileIDs      []string
-	ClearLogoFile      bool
-	LogoFileID         *string
+	ClearTitle            bool
+	Title                 *string
+	ClearOverview         bool
+	Overview              *string
+	ClearPrimaryColor     bool
+	PrimaryColor          *string
+	ClearLogoRemoteURL    bool
+	LogoRemoteURL         *string
+	ClearFaviconRemoteURL bool
+	FaviconRemoteURL      *string
+	ClearTrustCenter      bool
+	TrustCenterID         *string
+	ClearFiles            bool
+	AddFileIDs            []string
+	RemoveFileIDs         []string
+	ClearLogoFile         bool
+	LogoFileID            *string
+	ClearFaviconFile      bool
+	FaviconFileID         *string
 }
 
 // Mutate applies the UpdateTrustCenterSettingInput on the TrustCenterSettingMutation builder.
@@ -10912,6 +10932,12 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.LogoRemoteURL; v != nil {
 		m.SetLogoRemoteURL(*v)
 	}
+	if i.ClearFaviconRemoteURL {
+		m.ClearFaviconRemoteURL()
+	}
+	if v := i.FaviconRemoteURL; v != nil {
+		m.SetFaviconRemoteURL(*v)
+	}
 	if i.ClearTrustCenter {
 		m.ClearTrustCenter()
 	}
@@ -10932,6 +10958,12 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.LogoFileID; v != nil {
 		m.SetLogoFileID(*v)
+	}
+	if i.ClearFaviconFile {
+		m.ClearFaviconFile()
+	}
+	if v := i.FaviconFileID; v != nil {
+		m.SetFaviconFileID(*v)
 	}
 }
 

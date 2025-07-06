@@ -122,6 +122,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/emailtemplates"
@@ -494,6 +495,7 @@ type (
 		EntitlementManager *entitlements.StripeClient
 		ObjectManager      *objects.Objects
 		Summarizer         *summarizer.Client
+		PondPool           *soiree.PondPool
 		// Job is the job client to insert jobs into the queue.
 		Job riverqueue.JobClient
 
@@ -609,6 +611,13 @@ func ObjectManager(v *objects.Objects) Option {
 func Summarizer(v *summarizer.Client) Option {
 	return func(c *config) {
 		c.Summarizer = v
+	}
+}
+
+// PondPool configures the PondPool.
+func PondPool(v *soiree.PondPool) Option {
+	return func(c *config) {
+		c.PondPool = v
 	}
 }
 
@@ -21748,6 +21757,25 @@ func (c *TrustCenterSettingClient) QueryLogoFile(tcs *TrustCenterSetting) *FileQ
 			sqlgraph.From(trustcentersetting.Table, trustcentersetting.FieldID, id),
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, trustcentersetting.LogoFileTable, trustcentersetting.LogoFileColumn),
+		)
+		schemaConfig := tcs.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterSetting
+		fromV = sqlgraph.Neighbors(tcs.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFaviconFile queries the favicon_file edge of a TrustCenterSetting.
+func (c *TrustCenterSettingClient) QueryFaviconFile(tcs *TrustCenterSetting) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := tcs.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentersetting.Table, trustcentersetting.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcentersetting.FaviconFileTable, trustcentersetting.FaviconFileColumn),
 		)
 		schemaConfig := tcs.schemaConfig
 		step.To.Schema = schemaConfig.File
