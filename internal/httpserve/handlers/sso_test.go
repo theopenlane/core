@@ -17,10 +17,10 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/zitadel/oidc/pkg/client"
-	oidccrypto "github.com/zitadel/oidc/pkg/crypto"
-	"github.com/zitadel/oidc/pkg/oidc"
-	jose "gopkg.in/square/go-jose.v2"
+	jose "github.com/go-jose/go-jose/v4"
+	"github.com/zitadel/oidc/v3/pkg/client"
+	oidccrypto "github.com/zitadel/oidc/v3/pkg/crypto"
+	"github.com/zitadel/oidc/v3/pkg/oidc"
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -210,11 +210,18 @@ func newMockOIDCServer(t *testing.T, opts ...oidcServerOption) *mockOIDCServer {
 		claimsMap["email"] = m.email
 		claimsMap["email_verified"] = true
 
-		info := oidc.NewUserInfo()
-		info.SetEmail(m.email, true)
-		info.SetName(m.name)
-		info.SetPicture(m.picture)
-		claims.SetUserinfo(info)
+		info := &oidc.UserInfo{
+			Subject: "1234",
+			UserInfoProfile: oidc.UserInfoProfile{
+				Name:    m.name,
+				Picture: m.picture,
+			},
+			UserInfoEmail: oidc.UserInfoEmail{
+				Email:         m.email,
+				EmailVerified: true,
+			},
+		}
+		claims.SetUserInfo(info)
 
 		// Re-marshal claimsMap to JSON and sign as JWT
 		claimsBytes, _ := json.Marshal(claimsMap)

@@ -7,7 +7,8 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	echo "github.com/theopenlane/echox"
-	"github.com/zitadel/oidc/pkg/client/rp"
+	"github.com/zitadel/oidc/v3/pkg/client/rp"
+	"github.com/zitadel/oidc/v3/pkg/oidc"
 
 	"github.com/rs/zerolog/log"
 
@@ -125,7 +126,7 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context) error {
 	}
 
 	nonceCtx := contextx.With(reqCtx, nonce(nonceCookie.Value))
-	if _, err = rp.CodeExchange(nonceCtx, in.Code, rpCfg); err != nil {
+	if _, err = rp.CodeExchange[*oidc.IDTokenClaims](nonceCtx, in.Code, rpCfg); err != nil {
 		return h.BadRequest(ctx, err)
 	}
 

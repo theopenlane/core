@@ -13,8 +13,8 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/ulids"
-	"github.com/zitadel/oidc/pkg/client/rp"
-	"github.com/zitadel/oidc/pkg/oidc"
+	"github.com/zitadel/oidc/v3/pkg/client/rp"
+	"github.com/zitadel/oidc/v3/pkg/oidc"
 	"golang.org/x/oauth2"
 
 	echo "github.com/theopenlane/echox"
@@ -129,16 +129,16 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 	// attach nonce to context for OIDC token validation
 	nonceCtx := contextx.With(reqCtx, nonce(nonceCookie.Value))
 	// exchange the code for OIDC tokens
-	tokens, err := rp.CodeExchange(nonceCtx, in.Code, rpCfg)
+	tokens, err := rp.CodeExchange[*oidc.IDTokenClaims](nonceCtx, in.Code, rpCfg)
 	if err != nil {
 		return h.BadRequest(ctx, err)
 	}
 
 	// attach the OIDC email to the context for user provisioning
-	ctxWithToken := token.NewContextWithOauthTooToken(reqCtx, tokens.IDTokenClaims.GetEmail())
+	ctxWithToken := token.NewContextWithOauthTooToken(reqCtx, tokens.IDTokenClaims.Email)
 
 	// provision the user if they don't exist, or update if they do
-	entUser, err := h.CheckAndCreateUser(ctxWithToken, tokens.IDTokenClaims.GetName(), tokens.IDTokenClaims.GetEmail(), enums.AuthProviderOIDC, tokens.IDTokenClaims.GetPicture())
+	entUser, err := h.CheckAndCreateUser(ctxWithToken, tokens.IDTokenClaims.Name, tokens.IDTokenClaims.Email, enums.AuthProviderOIDC, tokens.IDTokenClaims.Picture)
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
@@ -148,10 +148,10 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 
 	// build the OAuth session request
 	oauthReq := models.OauthTokenRequest{
-		Email:            tokens.IDTokenClaims.GetEmail(),
-		ExternalUserName: tokens.IDTokenClaims.GetName(),
+		Email:            tokens.IDTokenClaims.Email,
+		ExternalUserName: tokens.IDTokenClaims.Name,
 		AuthProvider:     "oidc",
-		Image:            tokens.IDTokenClaims.GetPicture(),
+		Image:            tokens.IDTokenClaims.Picture,
 	}
 
 	// generate the session and auth data for the user
@@ -183,7 +183,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 		sessions.RemoveCookie(ctx.Response().Writer, "return", sessions.CookieConfig{Path: "/"})
 		sessions.RemoveCookie(ctx.Response().Writer, "organization_id", sessions.CookieConfig{Path: "/"})
 
-		req, _ := httpsling.Request(httpsling.Get(ret.Value), httpsling.QueryParam("email", tokens.IDTokenClaims.GetEmail()))
+		req, _ := httpsling.Request(httpsling.Get(ret.Value), httpsling.QueryParam("email", tokens.IDTokenClaims.Email))
 
 		return ctx.Redirect(http.StatusFound, req.URL.String())
 	}
@@ -216,6 +216,7 @@ func (h *Handler) OldoidcConfig(ctx context.Context, orgID string) (rp.RelyingPa
 
 	// Construct the OIDC relying party configuration
 	rpCfg, err := rp.NewRelyingPartyOIDC(
+		ctx,
 		issuer,                                // OIDC issuer URL
 		*setting.IdentityProviderClientID,     // Client ID for the org's IdP
 		*setting.IdentityProviderClientSecret, // Client secret for the org's IdP
@@ -262,7 +263,7 @@ func withRPOptions(opts ...rp.Option) rpConfigOption {
 }
 
 // newRelyingParty creates a new OIDC relying party instance with the given configuration
-func newRelyingParty(issuer, clientID, clientSecret, cb string, opts ...rpConfigOption) (rp.RelyingParty, error) {
+func newRelyingParty(ctx context.Context, issuer, clientID, clientSecret, cb string, opts ...rpConfigOption) (rp.RelyingParty, error) {
 	cfg := rpConfig{}
 	for _, o := range opts {
 		o(&cfg)
@@ -274,6 +275,7 @@ func newRelyingParty(issuer, clientID, clientSecret, cb string, opts ...rpConfig
 	}
 
 	return rp.NewRelyingPartyOIDC(
+		ctx,
 		issuer,
 		clientID,
 		clientSecret,
@@ -315,6 +317,7 @@ func (h *Handler) oidcConfig(ctx context.Context, orgID string) (rp.RelyingParty
 	opts := []rpConfigOption{withRPOptions(verifierOpt)}
 
 	return newRelyingParty(
+		ctx,
 		issuer,
 		*setting.IdentityProviderClientID,
 		*setting.IdentityProviderClientSecret,
