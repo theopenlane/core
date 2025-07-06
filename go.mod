@@ -19,6 +19,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.83.0
 	github.com/barkimedes/go-deepcopy v0.0.0-20220514131651-17c30cfc62df
 	github.com/brianvoe/gofakeit/v7 v7.3.0
+	github.com/cenkalti/backoff/v4 v4.3.0
 	github.com/cloudflare/cloudflare-go/v4 v4.5.1
 	github.com/danielgtaylor/huma/v2 v2.34.1
 	github.com/dave/jennifer v1.7.1
@@ -486,7 +487,7 @@ require (
 	github.com/boombuler/barcode v1.0.2 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
 	github.com/cenkalti/backoff v2.2.1+incompatible // indirect
-	github.com/cenkalti/backoff/v4 v4.3.0
+	github.com/cenkalti/backoff/v5 v5.0.2
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/chzyer/readline v1.5.1 // indirect
 	github.com/containerd/continuity v0.4.5 // indirect
