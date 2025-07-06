@@ -568,7 +568,7 @@ require (
 	github.com/pquerna/otp v1.5.0
 	github.com/projectdiscovery/katana v1.1.3
 	github.com/projectdiscovery/subfinder/v2 v2.8.0
-	github.com/projectdiscovery/wappalyzergo v0.2.35
+	github.com/projectdiscovery/wappalyzergo v0.2.36
 	github.com/prometheus/client_model v0.6.2 // indirect
 	github.com/prometheus/common v0.63.0 // indirect
 	github.com/prometheus/procfs v0.16.1 // indirect
