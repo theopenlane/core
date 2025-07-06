@@ -61,6 +61,7 @@ type OpenlaneGraphClient interface {
 	GetControls(ctx context.Context, first *int64, last *int64, where *ControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControls, error)
 	UpdateControl(ctx context.Context, updateControlID string, input UpdateControlInput, interceptors ...clientv2.RequestInterceptor) (*UpdateControl, error)
 	CreateControlsByClone(ctx context.Context, input CloneControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateControlsByClone, error)
+	CreateControlsByCloneReturnID(ctx context.Context, input CloneControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateControlsByCloneReturnID, error)
 	GetControlCategories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetControlCategories, error)
 	GetControlSubcategories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetControlSubcategories, error)
 	GetAllControlHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllControlHistories, error)
@@ -326,6 +327,7 @@ type OpenlaneGraphClient interface {
 	CreateBulkProgram(ctx context.Context, input []*CreateProgramInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkProgram, error)
 	CreateControlWithSubcontrols(ctx context.Context, input CreateControlWithSubcontrolsInput, interceptors ...clientv2.RequestInterceptor) (*CreateControlWithSubcontrols, error)
 	CreateFullProgram(ctx context.Context, input CreateFullProgramInput, interceptors ...clientv2.RequestInterceptor) (*CreateFullProgram, error)
+	CreateFullProgramReturnIDs(ctx context.Context, input CreateFullProgramInput, interceptors ...clientv2.RequestInterceptor) (*CreateFullProgramReturnIDs, error)
 	CreateProgram(ctx context.Context, input CreateProgramInput, interceptors ...clientv2.RequestInterceptor) (*CreateProgram, error)
 	CreateProgramWithMembers(ctx context.Context, input CreateProgramWithMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateProgramWithMembers, error)
 	DeleteProgram(ctx context.Context, deleteProgramID string, interceptors ...clientv2.RequestInterceptor) (*DeleteProgram, error)
@@ -14309,6 +14311,28 @@ type CreateControlsByClone_CreateControlsByClone struct {
 func (t *CreateControlsByClone_CreateControlsByClone) GetControls() []*CreateControlsByClone_CreateControlsByClone_Controls {
 	if t == nil {
 		t = &CreateControlsByClone_CreateControlsByClone{}
+	}
+	return t.Controls
+}
+
+type CreateControlsByCloneReturnID_CreateControlsByClone_Controls struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateControlsByCloneReturnID_CreateControlsByClone_Controls) GetID() string {
+	if t == nil {
+		t = &CreateControlsByCloneReturnID_CreateControlsByClone_Controls{}
+	}
+	return t.ID
+}
+
+type CreateControlsByCloneReturnID_CreateControlsByClone struct {
+	Controls []*CreateControlsByCloneReturnID_CreateControlsByClone_Controls "json:\"controls,omitempty\" graphql:\"controls\""
+}
+
+func (t *CreateControlsByCloneReturnID_CreateControlsByClone) GetControls() []*CreateControlsByCloneReturnID_CreateControlsByClone_Controls {
+	if t == nil {
+		t = &CreateControlsByCloneReturnID_CreateControlsByClone{}
 	}
 	return t.Controls
 }
@@ -54263,6 +54287,68 @@ func (t *CreateFullProgram_CreateFullProgram) GetProgram() *CreateFullProgram_Cr
 	return &t.Program
 }
 
+type CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls_Edges_Node struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls_Edges_Node{}
+	}
+	return t.ID
+}
+
+type CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls_Edges struct {
+	Node *CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls_Edges) GetNode() *CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls_Edges_Node {
+	if t == nil {
+		t = &CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls_Edges{}
+	}
+	return t.Node
+}
+
+type CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls struct {
+	Edges []*CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls) GetEdges() []*CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls_Edges {
+	if t == nil {
+		t = &CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls{}
+	}
+	return t.Edges
+}
+
+type CreateFullProgramReturnIDs_CreateFullProgram_Program struct {
+	Controls CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls "json:\"controls\" graphql:\"controls\""
+	ID       string                                                        "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateFullProgramReturnIDs_CreateFullProgram_Program) GetControls() *CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls {
+	if t == nil {
+		t = &CreateFullProgramReturnIDs_CreateFullProgram_Program{}
+	}
+	return &t.Controls
+}
+func (t *CreateFullProgramReturnIDs_CreateFullProgram_Program) GetID() string {
+	if t == nil {
+		t = &CreateFullProgramReturnIDs_CreateFullProgram_Program{}
+	}
+	return t.ID
+}
+
+type CreateFullProgramReturnIDs_CreateFullProgram struct {
+	Program CreateFullProgramReturnIDs_CreateFullProgram_Program "json:\"program\" graphql:\"program\""
+}
+
+func (t *CreateFullProgramReturnIDs_CreateFullProgram) GetProgram() *CreateFullProgramReturnIDs_CreateFullProgram_Program {
+	if t == nil {
+		t = &CreateFullProgramReturnIDs_CreateFullProgram{}
+	}
+	return &t.Program
+}
+
 type CreateProgram_CreateProgram_Program_Procedures_Edges_Node struct {
 	CreatedAt     *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -82812,6 +82898,17 @@ func (t *CreateControlsByClone) GetCreateControlsByClone() *CreateControlsByClon
 	return &t.CreateControlsByClone
 }
 
+type CreateControlsByCloneReturnID struct {
+	CreateControlsByClone CreateControlsByCloneReturnID_CreateControlsByClone "json:\"createControlsByClone\" graphql:\"createControlsByClone\""
+}
+
+func (t *CreateControlsByCloneReturnID) GetCreateControlsByClone() *CreateControlsByCloneReturnID_CreateControlsByClone {
+	if t == nil {
+		t = &CreateControlsByCloneReturnID{}
+	}
+	return &t.CreateControlsByClone
+}
+
 type GetControlCategories struct {
 	ControlCategories []string "json:\"controlCategories,omitempty\" graphql:\"controlCategories\""
 }
@@ -85723,6 +85820,17 @@ type CreateFullProgram struct {
 func (t *CreateFullProgram) GetCreateFullProgram() *CreateFullProgram_CreateFullProgram {
 	if t == nil {
 		t = &CreateFullProgram{}
+	}
+	return &t.CreateFullProgram
+}
+
+type CreateFullProgramReturnIDs struct {
+	CreateFullProgram CreateFullProgramReturnIDs_CreateFullProgram "json:\"createFullProgram\" graphql:\"createFullProgram\""
+}
+
+func (t *CreateFullProgramReturnIDs) GetCreateFullProgram() *CreateFullProgramReturnIDs_CreateFullProgram {
+	if t == nil {
+		t = &CreateFullProgramReturnIDs{}
 	}
 	return &t.CreateFullProgram
 }
@@ -90438,6 +90546,32 @@ func (c *Client) CreateControlsByClone(ctx context.Context, input CloneControlIn
 
 	var res CreateControlsByClone
 	if err := c.Client.Post(ctx, "CreateControlsByClone", CreateControlsByCloneDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateControlsByCloneReturnIDDocument = `mutation CreateControlsByCloneReturnID ($input: CloneControlInput!) {
+	createControlsByClone(input: $input) {
+		controls {
+			id
+		}
+	}
+}
+`
+
+func (c *Client) CreateControlsByCloneReturnID(ctx context.Context, input CloneControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateControlsByCloneReturnID, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateControlsByCloneReturnID
+	if err := c.Client.Post(ctx, "CreateControlsByCloneReturnID", CreateControlsByCloneReturnIDDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -102507,6 +102641,39 @@ func (c *Client) CreateFullProgram(ctx context.Context, input CreateFullProgramI
 	return &res, nil
 }
 
+const CreateFullProgramReturnIDsDocument = `mutation CreateFullProgramReturnIDs ($input: CreateFullProgramInput!) {
+	createFullProgram(input: $input) {
+		program {
+			id
+			controls {
+				edges {
+					node {
+						id
+					}
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateFullProgramReturnIDs(ctx context.Context, input CreateFullProgramInput, interceptors ...clientv2.RequestInterceptor) (*CreateFullProgramReturnIDs, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateFullProgramReturnIDs
+	if err := c.Client.Post(ctx, "CreateFullProgramReturnIDs", CreateFullProgramReturnIDsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateProgramDocument = `mutation CreateProgram ($input: CreateProgramInput!) {
 	createProgram(input: $input) {
 		program {
@@ -110008,6 +110175,7 @@ var DocumentOperationNames = map[string]string{
 	GetControlsDocument:                          "GetControls",
 	UpdateControlDocument:                        "UpdateControl",
 	CreateControlsByCloneDocument:                "CreateControlsByClone",
+	CreateControlsByCloneReturnIDDocument:        "CreateControlsByCloneReturnID",
 	GetControlCategoriesDocument:                 "GetControlCategories",
 	GetControlSubcategoriesDocument:              "GetControlSubcategories",
 	GetAllControlHistoriesDocument:               "GetAllControlHistories",
@@ -110273,6 +110441,7 @@ var DocumentOperationNames = map[string]string{
 	CreateBulkProgramDocument:                    "CreateBulkProgram",
 	CreateControlWithSubcontrolsDocument:         "CreateControlWithSubcontrols",
 	CreateFullProgramDocument:                    "CreateFullProgram",
+	CreateFullProgramReturnIDsDocument:           "CreateFullProgramReturnIDs",
 	CreateProgramDocument:                        "CreateProgram",
 	CreateProgramWithMembersDocument:             "CreateProgramWithMembers",
 	DeleteProgramDocument:                        "DeleteProgram",

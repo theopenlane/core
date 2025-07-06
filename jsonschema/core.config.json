@@ -469,6 +469,10 @@
         "summarizer": {
           "$ref": "#/$defs/entconfig.Summarizer",
           "description": "Summarizer contains configuration for text summarization"
+        },
+        "maxPoolSize": {
+          "type": "integer",
+          "description": "MaxPoolSize is the max pond pool workers that can be used by the ent client"
         }
       },
       "additionalProperties": false,

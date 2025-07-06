@@ -168,7 +168,7 @@ tasks:
     silent: true
     aliases: ['testsum:ci']
     cmds:
-      - go run gotest.tools/gotestsum@latest --junitfile junit.xml --rerun-fails --packages "./..." --format-hide-empty-pkg --rerun-fails --format-icons hivis --hide-summary output -- -p 20 -coverprofile=coverage.out
+      - go run gotest.tools/gotestsum@latest --junitfile junit.xml --packages "./..." --format-hide-empty-pkg --rerun-fails-run-root-test --format-icons hivis --hide-summary output -- -p 20 -coverprofile=coverage.out
 
   go:testsum:ci:cover:
     desc: pushes test results to buildkite using gotestsum

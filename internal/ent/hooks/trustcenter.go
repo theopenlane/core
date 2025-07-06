@@ -12,6 +12,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/iam/fgax"
 )
 
@@ -27,7 +28,10 @@ func HookTrustCenter() ent.Hook {
 				return nil, ErrMissingOrgID
 			}
 
-			org, err := m.Client().Organization.Get(ctx, orgID)
+			org, err := m.Client().Organization.Query().
+				Where(organization.ID(orgID)).
+				Select(organization.FieldName).
+				Only(ctx)
 			if err != nil {
 				return nil, err
 			}

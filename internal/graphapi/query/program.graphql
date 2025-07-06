@@ -136,6 +136,22 @@ mutation CreateFullProgram($input: CreateFullProgramInput!) {
   }
 }
 
+mutation CreateFullProgramReturnIDs($input: CreateFullProgramInput!) {
+  createFullProgram(input: $input) {
+    program {
+      id
+      controls {
+        edges {
+          node {
+            id
+          }
+        }
+      }
+    }
+  }
+}
+
+
 mutation CreateProgram($input: CreateProgramInput!) {
   createProgram(input: $input) {
     program {

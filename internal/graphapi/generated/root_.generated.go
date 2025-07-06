@@ -40848,6 +40848,10 @@ input CreateControlInput {
   """
   source: ControlControlSource
   """
+  the reference framework for the control if it came from a standard, empty if not associated with a standard
+  """
+  referenceFramework: String
+  """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
   controlType: ControlControlType
@@ -42381,6 +42385,10 @@ input CreateSubcontrolInput {
   source of the control, e.g. framework, template, custom, etc.
   """
   source: SubcontrolControlSource
+  """
+  the reference framework for the control if it came from a standard, empty if not associated with a standard
+  """
+  referenceFramework: String
   """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
