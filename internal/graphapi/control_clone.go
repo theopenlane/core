@@ -40,7 +40,7 @@ func getStandardID[T createProgramRequest](value T) string {
 
 // cloneControlsFromStandard clones all controls from a standard into an organization
 // if the controls already exist in the organization, they will not be cloned again
-func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, standardID string) ([]*generated.Control, error) {
+func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, standardID string, programID *string) ([]*generated.Control, error) {
 	// first check if the standard exists
 	std, err := withTransactionalMutation(ctx).Standard.Query().
 		Where(standard.ID(standardID)).
@@ -83,7 +83,7 @@ func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, standa
 		return nil, err
 	}
 
-	return r.cloneControls(ctx, controls, nil)
+	return r.cloneControls(ctx, controls, programID)
 }
 
 // subcontrolToCreate is used to track which subcontrols need to be created for a given control

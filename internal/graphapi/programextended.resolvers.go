@@ -28,7 +28,7 @@ func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input m
 	createdProgram := withTransactionalMutation(ctx).Program.Create()
 
 	if standardID := getStandardID(input); standardID != "" {
-		bulkControls, err := r.cloneControlsFromStandard(ctx, standardID)
+		bulkControls, err := r.cloneControlsFromStandard(ctx, standardID, nil)
 		if err != nil {
 			return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
 		}
@@ -92,7 +92,7 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 	createdProgram := withTransactionalMutation(ctx).Program.Create()
 
 	if standardID := getStandardID(input); standardID != "" {
-		bulkControls, err := r.cloneControlsFromStandard(ctx, standardID)
+		bulkControls, err := r.cloneControlsFromStandard(ctx, standardID, nil)
 		if err != nil {
 			return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
 		}
