@@ -879,7 +879,7 @@ func TestMutationUpdateTrustCenterSettingLogo(t *testing.T) {
 				}
 			}
 
-			resp, err := tc.client.UpdateTrustCenterSetting(tc.ctx, tc.settingID, tc.updateInput, logoFile)
+			resp, err := tc.client.UpdateTrustCenterSetting(tc.ctx, tc.settingID, tc.updateInput, logoFile, nil)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 				assert.Check(t, is.Nil(resp))

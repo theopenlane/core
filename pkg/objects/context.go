@@ -23,8 +23,9 @@ func WriteFilesToContext(ctx context.Context, f Files) context.Context {
 	}
 
 	for _, v := range f {
-		// all the files should have the same form field so safe to use any index
-		fileCtx.Files[v[0].FieldName] = append(fileCtx.Files[v[0].FieldName], v...)
+		for _, fileObj := range v {
+			fileCtx.Files[fileObj.FieldName] = append(fileCtx.Files[fileObj.FieldName], fileObj)
+		}
 	}
 
 	return contextx.With(ctx, fileCtx)

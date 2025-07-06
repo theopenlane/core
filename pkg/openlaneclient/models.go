@@ -5888,10 +5888,13 @@ type CreateTrustCenterSettingInput struct {
 	// primary color for the trust center
 	PrimaryColor *string `json:"primaryColor,omitempty"`
 	// URL of the logo
-	LogoRemoteURL *string  `json:"logoRemoteURL,omitempty"`
-	TrustCenterID *string  `json:"trustCenterID,omitempty"`
-	FileIDs       []string `json:"fileIDs,omitempty"`
-	LogoFileID    *string  `json:"logoFileID,omitempty"`
+	LogoRemoteURL *string `json:"logoRemoteURL,omitempty"`
+	// URL of the favicon
+	FaviconRemoteURL *string  `json:"faviconRemoteURL,omitempty"`
+	TrustCenterID    *string  `json:"trustCenterID,omitempty"`
+	FileIDs          []string `json:"fileIDs,omitempty"`
+	LogoFileID       *string  `json:"logoFileID,omitempty"`
+	FaviconFileID    *string  `json:"faviconFileID,omitempty"`
 }
 
 // CreateUserInput is used for create User object.
@@ -25112,10 +25115,15 @@ type TrustCenterSetting struct {
 	// URL of the logo
 	LogoRemoteURL *string `json:"logoRemoteURL,omitempty"`
 	// The local logo file id, takes precedence over the logo remote URL
-	LogoLocalFileID *string         `json:"logoLocalFileID,omitempty"`
-	TrustCenter     *TrustCenter    `json:"trustCenter,omitempty"`
-	Files           *FileConnection `json:"files"`
-	LogoFile        *File           `json:"logoFile,omitempty"`
+	LogoLocalFileID *string `json:"logoLocalFileID,omitempty"`
+	// URL of the favicon
+	FaviconRemoteURL *string `json:"faviconRemoteURL,omitempty"`
+	// The local favicon file id, takes precedence over the favicon remote URL
+	FaviconLocalFileID *string         `json:"faviconLocalFileID,omitempty"`
+	TrustCenter        *TrustCenter    `json:"trustCenter,omitempty"`
+	Files              *FileConnection `json:"files"`
+	LogoFile           *File           `json:"logoFile,omitempty"`
+	FaviconFile        *File           `json:"faviconFile,omitempty"`
 }
 
 func (TrustCenterSetting) IsNode() {}
@@ -25177,6 +25185,10 @@ type TrustCenterSettingHistory struct {
 	LogoRemoteURL *string `json:"logoRemoteURL,omitempty"`
 	// The local logo file id, takes precedence over the logo remote URL
 	LogoLocalFileID *string `json:"logoLocalFileID,omitempty"`
+	// URL of the favicon
+	FaviconRemoteURL *string `json:"faviconRemoteURL,omitempty"`
+	// The local favicon file id, takes precedence over the favicon remote URL
+	FaviconLocalFileID *string `json:"faviconLocalFileID,omitempty"`
 }
 
 func (TrustCenterSettingHistory) IsNode() {}
@@ -25404,6 +25416,38 @@ type TrustCenterSettingHistoryWhereInput struct {
 	LogoLocalFileIDNotNil       *bool    `json:"logoLocalFileIDNotNil,omitempty"`
 	LogoLocalFileIDEqualFold    *string  `json:"logoLocalFileIDEqualFold,omitempty"`
 	LogoLocalFileIDContainsFold *string  `json:"logoLocalFileIDContainsFold,omitempty"`
+	// favicon_remote_url field predicates
+	FaviconRemoteURL             *string  `json:"faviconRemoteURL,omitempty"`
+	FaviconRemoteURLNeq          *string  `json:"faviconRemoteURLNEQ,omitempty"`
+	FaviconRemoteURLIn           []string `json:"faviconRemoteURLIn,omitempty"`
+	FaviconRemoteURLNotIn        []string `json:"faviconRemoteURLNotIn,omitempty"`
+	FaviconRemoteURLGt           *string  `json:"faviconRemoteURLGT,omitempty"`
+	FaviconRemoteURLGte          *string  `json:"faviconRemoteURLGTE,omitempty"`
+	FaviconRemoteURLLt           *string  `json:"faviconRemoteURLLT,omitempty"`
+	FaviconRemoteURLLte          *string  `json:"faviconRemoteURLLTE,omitempty"`
+	FaviconRemoteURLContains     *string  `json:"faviconRemoteURLContains,omitempty"`
+	FaviconRemoteURLHasPrefix    *string  `json:"faviconRemoteURLHasPrefix,omitempty"`
+	FaviconRemoteURLHasSuffix    *string  `json:"faviconRemoteURLHasSuffix,omitempty"`
+	FaviconRemoteURLIsNil        *bool    `json:"faviconRemoteURLIsNil,omitempty"`
+	FaviconRemoteURLNotNil       *bool    `json:"faviconRemoteURLNotNil,omitempty"`
+	FaviconRemoteURLEqualFold    *string  `json:"faviconRemoteURLEqualFold,omitempty"`
+	FaviconRemoteURLContainsFold *string  `json:"faviconRemoteURLContainsFold,omitempty"`
+	// favicon_local_file_id field predicates
+	FaviconLocalFileID             *string  `json:"faviconLocalFileID,omitempty"`
+	FaviconLocalFileIdneq          *string  `json:"faviconLocalFileIDNEQ,omitempty"`
+	FaviconLocalFileIDIn           []string `json:"faviconLocalFileIDIn,omitempty"`
+	FaviconLocalFileIDNotIn        []string `json:"faviconLocalFileIDNotIn,omitempty"`
+	FaviconLocalFileIdgt           *string  `json:"faviconLocalFileIDGT,omitempty"`
+	FaviconLocalFileIdgte          *string  `json:"faviconLocalFileIDGTE,omitempty"`
+	FaviconLocalFileIdlt           *string  `json:"faviconLocalFileIDLT,omitempty"`
+	FaviconLocalFileIdlte          *string  `json:"faviconLocalFileIDLTE,omitempty"`
+	FaviconLocalFileIDContains     *string  `json:"faviconLocalFileIDContains,omitempty"`
+	FaviconLocalFileIDHasPrefix    *string  `json:"faviconLocalFileIDHasPrefix,omitempty"`
+	FaviconLocalFileIDHasSuffix    *string  `json:"faviconLocalFileIDHasSuffix,omitempty"`
+	FaviconLocalFileIDIsNil        *bool    `json:"faviconLocalFileIDIsNil,omitempty"`
+	FaviconLocalFileIDNotNil       *bool    `json:"faviconLocalFileIDNotNil,omitempty"`
+	FaviconLocalFileIDEqualFold    *string  `json:"faviconLocalFileIDEqualFold,omitempty"`
+	FaviconLocalFileIDContainsFold *string  `json:"faviconLocalFileIDContainsFold,omitempty"`
 }
 
 // Ordering options for TrustCenterSetting connections
@@ -25587,6 +25631,38 @@ type TrustCenterSettingWhereInput struct {
 	LogoLocalFileIDNotNil       *bool    `json:"logoLocalFileIDNotNil,omitempty"`
 	LogoLocalFileIDEqualFold    *string  `json:"logoLocalFileIDEqualFold,omitempty"`
 	LogoLocalFileIDContainsFold *string  `json:"logoLocalFileIDContainsFold,omitempty"`
+	// favicon_remote_url field predicates
+	FaviconRemoteURL             *string  `json:"faviconRemoteURL,omitempty"`
+	FaviconRemoteURLNeq          *string  `json:"faviconRemoteURLNEQ,omitempty"`
+	FaviconRemoteURLIn           []string `json:"faviconRemoteURLIn,omitempty"`
+	FaviconRemoteURLNotIn        []string `json:"faviconRemoteURLNotIn,omitempty"`
+	FaviconRemoteURLGt           *string  `json:"faviconRemoteURLGT,omitempty"`
+	FaviconRemoteURLGte          *string  `json:"faviconRemoteURLGTE,omitempty"`
+	FaviconRemoteURLLt           *string  `json:"faviconRemoteURLLT,omitempty"`
+	FaviconRemoteURLLte          *string  `json:"faviconRemoteURLLTE,omitempty"`
+	FaviconRemoteURLContains     *string  `json:"faviconRemoteURLContains,omitempty"`
+	FaviconRemoteURLHasPrefix    *string  `json:"faviconRemoteURLHasPrefix,omitempty"`
+	FaviconRemoteURLHasSuffix    *string  `json:"faviconRemoteURLHasSuffix,omitempty"`
+	FaviconRemoteURLIsNil        *bool    `json:"faviconRemoteURLIsNil,omitempty"`
+	FaviconRemoteURLNotNil       *bool    `json:"faviconRemoteURLNotNil,omitempty"`
+	FaviconRemoteURLEqualFold    *string  `json:"faviconRemoteURLEqualFold,omitempty"`
+	FaviconRemoteURLContainsFold *string  `json:"faviconRemoteURLContainsFold,omitempty"`
+	// favicon_local_file_id field predicates
+	FaviconLocalFileID             *string  `json:"faviconLocalFileID,omitempty"`
+	FaviconLocalFileIdneq          *string  `json:"faviconLocalFileIDNEQ,omitempty"`
+	FaviconLocalFileIDIn           []string `json:"faviconLocalFileIDIn,omitempty"`
+	FaviconLocalFileIDNotIn        []string `json:"faviconLocalFileIDNotIn,omitempty"`
+	FaviconLocalFileIdgt           *string  `json:"faviconLocalFileIDGT,omitempty"`
+	FaviconLocalFileIdgte          *string  `json:"faviconLocalFileIDGTE,omitempty"`
+	FaviconLocalFileIdlt           *string  `json:"faviconLocalFileIDLT,omitempty"`
+	FaviconLocalFileIdlte          *string  `json:"faviconLocalFileIDLTE,omitempty"`
+	FaviconLocalFileIDContains     *string  `json:"faviconLocalFileIDContains,omitempty"`
+	FaviconLocalFileIDHasPrefix    *string  `json:"faviconLocalFileIDHasPrefix,omitempty"`
+	FaviconLocalFileIDHasSuffix    *string  `json:"faviconLocalFileIDHasSuffix,omitempty"`
+	FaviconLocalFileIDIsNil        *bool    `json:"faviconLocalFileIDIsNil,omitempty"`
+	FaviconLocalFileIDNotNil       *bool    `json:"faviconLocalFileIDNotNil,omitempty"`
+	FaviconLocalFileIDEqualFold    *string  `json:"faviconLocalFileIDEqualFold,omitempty"`
+	FaviconLocalFileIDContainsFold *string  `json:"faviconLocalFileIDContainsFold,omitempty"`
 	// trust_center edge predicates
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
 	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
@@ -25596,6 +25672,9 @@ type TrustCenterSettingWhereInput struct {
 	// logo_file edge predicates
 	HasLogoFile     *bool             `json:"hasLogoFile,omitempty"`
 	HasLogoFileWith []*FileWhereInput `json:"hasLogoFileWith,omitempty"`
+	// favicon_file edge predicates
+	HasFaviconFile     *bool             `json:"hasFaviconFile,omitempty"`
+	HasFaviconFileWith []*FileWhereInput `json:"hasFaviconFileWith,omitempty"`
 }
 
 // Return response for updateTrustCenter mutation
@@ -27932,15 +28011,20 @@ type UpdateTrustCenterSettingInput struct {
 	PrimaryColor      *string `json:"primaryColor,omitempty"`
 	ClearPrimaryColor *bool   `json:"clearPrimaryColor,omitempty"`
 	// URL of the logo
-	LogoRemoteURL      *string  `json:"logoRemoteURL,omitempty"`
-	ClearLogoRemoteURL *bool    `json:"clearLogoRemoteURL,omitempty"`
-	TrustCenterID      *string  `json:"trustCenterID,omitempty"`
-	ClearTrustCenter   *bool    `json:"clearTrustCenter,omitempty"`
-	AddFileIDs         []string `json:"addFileIDs,omitempty"`
-	RemoveFileIDs      []string `json:"removeFileIDs,omitempty"`
-	ClearFiles         *bool    `json:"clearFiles,omitempty"`
-	LogoFileID         *string  `json:"logoFileID,omitempty"`
-	ClearLogoFile      *bool    `json:"clearLogoFile,omitempty"`
+	LogoRemoteURL      *string `json:"logoRemoteURL,omitempty"`
+	ClearLogoRemoteURL *bool   `json:"clearLogoRemoteURL,omitempty"`
+	// URL of the favicon
+	FaviconRemoteURL      *string  `json:"faviconRemoteURL,omitempty"`
+	ClearFaviconRemoteURL *bool    `json:"clearFaviconRemoteURL,omitempty"`
+	TrustCenterID         *string  `json:"trustCenterID,omitempty"`
+	ClearTrustCenter      *bool    `json:"clearTrustCenter,omitempty"`
+	AddFileIDs            []string `json:"addFileIDs,omitempty"`
+	RemoveFileIDs         []string `json:"removeFileIDs,omitempty"`
+	ClearFiles            *bool    `json:"clearFiles,omitempty"`
+	LogoFileID            *string  `json:"logoFileID,omitempty"`
+	ClearLogoFile         *bool    `json:"clearLogoFile,omitempty"`
+	FaviconFileID         *string  `json:"faviconFileID,omitempty"`
+	ClearFaviconFile      *bool    `json:"clearFaviconFile,omitempty"`
 }
 
 // UpdateUserInput is used for update User object.

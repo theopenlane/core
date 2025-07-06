@@ -50,6 +50,11 @@ query GetAllTrustCenterSettings {
         }
         logoRemoteURL
         logoLocalFileID
+        faviconFile {
+          presignedURL
+        }
+        faviconRemoteURL
+        faviconLocalFileID
       }
     }
   }
@@ -70,6 +75,11 @@ query GetTrustCenterSettingByID($trustCenterSettingId: ID!) {
     }
     logoRemoteURL
     logoLocalFileID
+    faviconFile {
+      presignedURL
+    }
+    faviconRemoteURL
+    faviconLocalFileID
   }
 }
 
@@ -98,12 +108,17 @@ query GetTrustCenterSettings($first: Int, $last: Int, $where: TrustCenterSetting
         }
         logoRemoteURL
         logoLocalFileID
+        faviconFile {
+          presignedURL
+        }
+        faviconRemoteURL
+        faviconLocalFileID
       }
     }
   }
 }
-mutation UpdateTrustCenterSetting($updateTrustCenterSettingId: ID!, $input: UpdateTrustCenterSettingInput!, $logoFile: Upload) {
-  updateTrustCenterSetting(id: $updateTrustCenterSettingId, input: $input, logoFile: $logoFile) {
+mutation UpdateTrustCenterSetting($updateTrustCenterSettingId: ID!, $input: UpdateTrustCenterSettingInput!, $logoFile: Upload, $faviconFile: Upload) {
+  updateTrustCenterSetting(id: $updateTrustCenterSettingId, input: $input, logoFile: $logoFile, faviconFile: $faviconFile) {
     trustCenterSetting {
       createdAt
       createdBy
@@ -119,6 +134,11 @@ mutation UpdateTrustCenterSetting($updateTrustCenterSettingId: ID!, $input: Upda
       }
       logoRemoteURL
       logoLocalFileID
+      faviconFile {
+        presignedURL
+      }
+      faviconRemoteURL
+      faviconLocalFileID
     }
   }
 }

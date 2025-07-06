@@ -189,6 +189,34 @@ func (tcsc *TrustCenterSettingCreate) SetNillableLogoLocalFileID(s *string) *Tru
 	return tcsc
 }
 
+// SetFaviconRemoteURL sets the "favicon_remote_url" field.
+func (tcsc *TrustCenterSettingCreate) SetFaviconRemoteURL(s string) *TrustCenterSettingCreate {
+	tcsc.mutation.SetFaviconRemoteURL(s)
+	return tcsc
+}
+
+// SetNillableFaviconRemoteURL sets the "favicon_remote_url" field if the given value is not nil.
+func (tcsc *TrustCenterSettingCreate) SetNillableFaviconRemoteURL(s *string) *TrustCenterSettingCreate {
+	if s != nil {
+		tcsc.SetFaviconRemoteURL(*s)
+	}
+	return tcsc
+}
+
+// SetFaviconLocalFileID sets the "favicon_local_file_id" field.
+func (tcsc *TrustCenterSettingCreate) SetFaviconLocalFileID(s string) *TrustCenterSettingCreate {
+	tcsc.mutation.SetFaviconLocalFileID(s)
+	return tcsc
+}
+
+// SetNillableFaviconLocalFileID sets the "favicon_local_file_id" field if the given value is not nil.
+func (tcsc *TrustCenterSettingCreate) SetNillableFaviconLocalFileID(s *string) *TrustCenterSettingCreate {
+	if s != nil {
+		tcsc.SetFaviconLocalFileID(*s)
+	}
+	return tcsc
+}
+
 // SetID sets the "id" field.
 func (tcsc *TrustCenterSettingCreate) SetID(s string) *TrustCenterSettingCreate {
 	tcsc.mutation.SetID(s)
@@ -240,6 +268,25 @@ func (tcsc *TrustCenterSettingCreate) SetNillableLogoFileID(id *string) *TrustCe
 // SetLogoFile sets the "logo_file" edge to the File entity.
 func (tcsc *TrustCenterSettingCreate) SetLogoFile(f *File) *TrustCenterSettingCreate {
 	return tcsc.SetLogoFileID(f.ID)
+}
+
+// SetFaviconFileID sets the "favicon_file" edge to the File entity by ID.
+func (tcsc *TrustCenterSettingCreate) SetFaviconFileID(id string) *TrustCenterSettingCreate {
+	tcsc.mutation.SetFaviconFileID(id)
+	return tcsc
+}
+
+// SetNillableFaviconFileID sets the "favicon_file" edge to the File entity by ID if the given value is not nil.
+func (tcsc *TrustCenterSettingCreate) SetNillableFaviconFileID(id *string) *TrustCenterSettingCreate {
+	if id != nil {
+		tcsc = tcsc.SetFaviconFileID(*id)
+	}
+	return tcsc
+}
+
+// SetFaviconFile sets the "favicon_file" edge to the File entity.
+func (tcsc *TrustCenterSettingCreate) SetFaviconFile(f *File) *TrustCenterSettingCreate {
+	return tcsc.SetFaviconFileID(f.ID)
 }
 
 // Mutation returns the TrustCenterSettingMutation object of the builder.
@@ -325,6 +372,11 @@ func (tcsc *TrustCenterSettingCreate) check() error {
 			return &ValidationError{Name: "logo_remote_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.logo_remote_url": %w`, err)}
 		}
 	}
+	if v, ok := tcsc.mutation.FaviconRemoteURL(); ok {
+		if err := trustcentersetting.FaviconRemoteURLValidator(v); err != nil {
+			return &ValidationError{Name: "favicon_remote_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.favicon_remote_url": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -401,6 +453,10 @@ func (tcsc *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgra
 		_spec.SetField(trustcentersetting.FieldLogoRemoteURL, field.TypeString, value)
 		_node.LogoRemoteURL = &value
 	}
+	if value, ok := tcsc.mutation.FaviconRemoteURL(); ok {
+		_spec.SetField(trustcentersetting.FieldFaviconRemoteURL, field.TypeString, value)
+		_node.FaviconRemoteURL = &value
+	}
 	if nodes := tcsc.mutation.TrustCenterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
@@ -452,6 +508,24 @@ func (tcsc *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgra
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.LogoLocalFileID = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tcsc.mutation.FaviconFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.FaviconFileTable,
+			Columns: []string{trustcentersetting.FaviconFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsc.schemaConfig.TrustCenterSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.FaviconLocalFileID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

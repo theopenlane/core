@@ -21767,6 +21767,25 @@ func (c *TrustCenterSettingClient) QueryLogoFile(tcs *TrustCenterSetting) *FileQ
 	return query
 }
 
+// QueryFaviconFile queries the favicon_file edge of a TrustCenterSetting.
+func (c *TrustCenterSettingClient) QueryFaviconFile(tcs *TrustCenterSetting) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := tcs.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentersetting.Table, trustcentersetting.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcentersetting.FaviconFileTable, trustcentersetting.FaviconFileColumn),
+		)
+		schemaConfig := tcs.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterSetting
+		fromV = sqlgraph.Neighbors(tcs.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *TrustCenterSettingClient) Hooks() []Hook {
 	hooks := c.hooks.TrustCenterSetting
