@@ -3177,6 +3177,12 @@ func (tcsh *TrustCenterSettingHistory) changes(new *TrustCenterSettingHistory) [
 	if !reflect.DeepEqual(tcsh.LogoLocalFileID, new.LogoLocalFileID) {
 		changes = append(changes, NewChange(trustcentersettinghistory.FieldLogoLocalFileID, tcsh.LogoLocalFileID, new.LogoLocalFileID))
 	}
+	if !reflect.DeepEqual(tcsh.FaviconRemoteURL, new.FaviconRemoteURL) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldFaviconRemoteURL, tcsh.FaviconRemoteURL, new.FaviconRemoteURL))
+	}
+	if !reflect.DeepEqual(tcsh.FaviconLocalFileID, new.FaviconLocalFileID) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldFaviconLocalFileID, tcsh.FaviconLocalFileID, new.FaviconLocalFileID))
+	}
 	return changes
 }
 

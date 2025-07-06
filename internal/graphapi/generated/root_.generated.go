@@ -2333,7 +2333,7 @@ type ComplexityRoot struct {
 		CreateTask                         func(childComplexity int, input generated.CreateTaskInput) int
 		CreateTemplate                     func(childComplexity int, input generated.CreateTemplateInput) int
 		CreateTrustCenter                  func(childComplexity int, input generated.CreateTrustCenterInput) int
-		CreateTrustCenterSetting           func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload) int
+		CreateTrustCenterSetting           func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		CreateUser                         func(childComplexity int, input generated.CreateUserInput, avatarFile *graphql.Upload) int
 		CreateUserSetting                  func(childComplexity int, input generated.CreateUserSettingInput) int
 		DeleteAPIToken                     func(childComplexity int, id string) int
@@ -2428,7 +2428,7 @@ type ComplexityRoot struct {
 		UpdateTaskComment                  func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateTemplate                     func(childComplexity int, id string, input generated.UpdateTemplateInput) int
 		UpdateTrustCenter                  func(childComplexity int, id string, input generated.UpdateTrustCenterInput) int
-		UpdateTrustCenterSetting           func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload) int
+		UpdateTrustCenterSetting           func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		UpdateUser                         func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) int
 		UpdateUserSetting                  func(childComplexity int, id string, input generated.UpdateUserSettingInput) int
 	}
@@ -4389,20 +4389,23 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterSetting struct {
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		Files           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		ID              func(childComplexity int) int
-		LogoFile        func(childComplexity int) int
-		LogoLocalFileID func(childComplexity int) int
-		LogoRemoteURL   func(childComplexity int) int
-		Overview        func(childComplexity int) int
-		PrimaryColor    func(childComplexity int) int
-		Title           func(childComplexity int) int
-		TrustCenter     func(childComplexity int) int
-		TrustCenterID   func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedBy          func(childComplexity int) int
+		FaviconFile        func(childComplexity int) int
+		FaviconLocalFileID func(childComplexity int) int
+		FaviconRemoteURL   func(childComplexity int) int
+		Files              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		ID                 func(childComplexity int) int
+		LogoFile           func(childComplexity int) int
+		LogoLocalFileID    func(childComplexity int) int
+		LogoRemoteURL      func(childComplexity int) int
+		Overview           func(childComplexity int) int
+		PrimaryColor       func(childComplexity int) int
+		Title              func(childComplexity int) int
+		TrustCenter        func(childComplexity int) int
+		TrustCenterID      func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
 	}
 
 	TrustCenterSettingBulkCreatePayload struct {
@@ -4429,20 +4432,22 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterSettingHistory struct {
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		HistoryTime     func(childComplexity int) int
-		ID              func(childComplexity int) int
-		LogoLocalFileID func(childComplexity int) int
-		LogoRemoteURL   func(childComplexity int) int
-		Operation       func(childComplexity int) int
-		Overview        func(childComplexity int) int
-		PrimaryColor    func(childComplexity int) int
-		Ref             func(childComplexity int) int
-		Title           func(childComplexity int) int
-		TrustCenterID   func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedBy          func(childComplexity int) int
+		FaviconLocalFileID func(childComplexity int) int
+		FaviconRemoteURL   func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		LogoLocalFileID    func(childComplexity int) int
+		LogoRemoteURL      func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		Overview           func(childComplexity int) int
+		PrimaryColor       func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Title              func(childComplexity int) int
+		TrustCenterID      func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
 	}
 
 	TrustCenterSettingHistoryConnection struct {
@@ -16364,7 +16369,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateTrustCenterSetting(childComplexity, args["input"].(generated.CreateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload)), true
+		return e.complexity.Mutation.CreateTrustCenterSetting(childComplexity, args["input"].(generated.CreateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload)), true
 
 	case "Mutation.createUser":
 		if e.complexity.Mutation.CreateUser == nil {
@@ -17504,7 +17509,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateTrustCenterSetting(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload)), true
+		return e.complexity.Mutation.UpdateTrustCenterSetting(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload)), true
 
 	case "Mutation.updateUser":
 		if e.complexity.Mutation.UpdateUser == nil {
@@ -29197,6 +29202,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterSetting.CreatedBy(childComplexity), true
 
+	case "TrustCenterSetting.faviconFile":
+		if e.complexity.TrustCenterSetting.FaviconFile == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSetting.FaviconFile(childComplexity), true
+
+	case "TrustCenterSetting.faviconLocalFileID":
+		if e.complexity.TrustCenterSetting.FaviconLocalFileID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSetting.FaviconLocalFileID(childComplexity), true
+
+	case "TrustCenterSetting.faviconRemoteURL":
+		if e.complexity.TrustCenterSetting.FaviconRemoteURL == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSetting.FaviconRemoteURL(childComplexity), true
+
 	case "TrustCenterSetting.files":
 		if e.complexity.TrustCenterSetting.Files == nil {
 			break
@@ -29355,6 +29381,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterSettingHistory.CreatedBy(childComplexity), true
+
+	case "TrustCenterSettingHistory.faviconLocalFileID":
+		if e.complexity.TrustCenterSettingHistory.FaviconLocalFileID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSettingHistory.FaviconLocalFileID(childComplexity), true
+
+	case "TrustCenterSettingHistory.faviconRemoteURL":
+		if e.complexity.TrustCenterSettingHistory.FaviconRemoteURL == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSettingHistory.FaviconRemoteURL(childComplexity), true
 
 	case "TrustCenterSettingHistory.historyTime":
 		if e.complexity.TrustCenterSettingHistory.HistoryTime == nil {
@@ -40904,6 +40944,10 @@ input CreateControlInput {
   """
   source: ControlControlSource
   """
+  the reference framework for the control if it came from a standard, empty if not associated with a standard
+  """
+  referenceFramework: String
+  """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
   controlType: ControlControlType
@@ -42442,6 +42486,10 @@ input CreateSubcontrolInput {
   """
   source: SubcontrolControlSource
   """
+  the reference framework for the control if it came from a standard, empty if not associated with a standard
+  """
+  referenceFramework: String
+  """
   type of the control e.g. preventive, detective, corrective, or deterrent.
   """
   controlType: SubcontrolControlType
@@ -42648,9 +42696,14 @@ input CreateTrustCenterSettingInput {
   URL of the logo
   """
   logoRemoteURL: String
+  """
+  URL of the favicon
+  """
+  faviconRemoteURL: String
   trustCenterID: ID
   fileIDs: [ID!]
   logoFileID: ID
+  faviconFileID: ID
 }
 """
 CreateUserInput is used for create User object.
@@ -77429,6 +77482,14 @@ type TrustCenterSetting implements Node {
   The local logo file id, takes precedence over the logo remote URL
   """
   logoLocalFileID: ID
+  """
+  URL of the favicon
+  """
+  faviconRemoteURL: String
+  """
+  The local favicon file id, takes precedence over the favicon remote URL
+  """
+  faviconLocalFileID: ID
   trustCenter: TrustCenter
   files(
     """
@@ -77462,6 +77523,7 @@ type TrustCenterSetting implements Node {
     where: FileWhereInput
   ): FileConnection!
   logoFile: File
+  faviconFile: File
 }
 """
 A connection to a list of items.
@@ -77526,6 +77588,14 @@ type TrustCenterSettingHistory implements Node {
   The local logo file id, takes precedence over the logo remote URL
   """
   logoLocalFileID: String
+  """
+  URL of the favicon
+  """
+  faviconRemoteURL: String
+  """
+  The local favicon file id, takes precedence over the favicon remote URL
+  """
+  faviconLocalFileID: String
 }
 """
 A connection to a list of items.
@@ -77813,6 +77883,42 @@ input TrustCenterSettingHistoryWhereInput {
   logoLocalFileIDNotNil: Boolean
   logoLocalFileIDEqualFold: String
   logoLocalFileIDContainsFold: String
+  """
+  favicon_remote_url field predicates
+  """
+  faviconRemoteURL: String
+  faviconRemoteURLNEQ: String
+  faviconRemoteURLIn: [String!]
+  faviconRemoteURLNotIn: [String!]
+  faviconRemoteURLGT: String
+  faviconRemoteURLGTE: String
+  faviconRemoteURLLT: String
+  faviconRemoteURLLTE: String
+  faviconRemoteURLContains: String
+  faviconRemoteURLHasPrefix: String
+  faviconRemoteURLHasSuffix: String
+  faviconRemoteURLIsNil: Boolean
+  faviconRemoteURLNotNil: Boolean
+  faviconRemoteURLEqualFold: String
+  faviconRemoteURLContainsFold: String
+  """
+  favicon_local_file_id field predicates
+  """
+  faviconLocalFileID: String
+  faviconLocalFileIDNEQ: String
+  faviconLocalFileIDIn: [String!]
+  faviconLocalFileIDNotIn: [String!]
+  faviconLocalFileIDGT: String
+  faviconLocalFileIDGTE: String
+  faviconLocalFileIDLT: String
+  faviconLocalFileIDLTE: String
+  faviconLocalFileIDContains: String
+  faviconLocalFileIDHasPrefix: String
+  faviconLocalFileIDHasSuffix: String
+  faviconLocalFileIDIsNil: Boolean
+  faviconLocalFileIDNotNil: Boolean
+  faviconLocalFileIDEqualFold: String
+  faviconLocalFileIDContainsFold: String
 }
 """
 Ordering options for TrustCenterSetting connections
@@ -78026,6 +78132,42 @@ input TrustCenterSettingWhereInput {
   logoLocalFileIDEqualFold: ID
   logoLocalFileIDContainsFold: ID
   """
+  favicon_remote_url field predicates
+  """
+  faviconRemoteURL: String
+  faviconRemoteURLNEQ: String
+  faviconRemoteURLIn: [String!]
+  faviconRemoteURLNotIn: [String!]
+  faviconRemoteURLGT: String
+  faviconRemoteURLGTE: String
+  faviconRemoteURLLT: String
+  faviconRemoteURLLTE: String
+  faviconRemoteURLContains: String
+  faviconRemoteURLHasPrefix: String
+  faviconRemoteURLHasSuffix: String
+  faviconRemoteURLIsNil: Boolean
+  faviconRemoteURLNotNil: Boolean
+  faviconRemoteURLEqualFold: String
+  faviconRemoteURLContainsFold: String
+  """
+  favicon_local_file_id field predicates
+  """
+  faviconLocalFileID: ID
+  faviconLocalFileIDNEQ: ID
+  faviconLocalFileIDIn: [ID!]
+  faviconLocalFileIDNotIn: [ID!]
+  faviconLocalFileIDGT: ID
+  faviconLocalFileIDGTE: ID
+  faviconLocalFileIDLT: ID
+  faviconLocalFileIDLTE: ID
+  faviconLocalFileIDContains: ID
+  faviconLocalFileIDHasPrefix: ID
+  faviconLocalFileIDHasSuffix: ID
+  faviconLocalFileIDIsNil: Boolean
+  faviconLocalFileIDNotNil: Boolean
+  faviconLocalFileIDEqualFold: ID
+  faviconLocalFileIDContainsFold: ID
+  """
   trust_center edge predicates
   """
   hasTrustCenter: Boolean
@@ -78040,6 +78182,11 @@ input TrustCenterSettingWhereInput {
   """
   hasLogoFile: Boolean
   hasLogoFileWith: [FileWhereInput!]
+  """
+  favicon_file edge predicates
+  """
+  hasFaviconFile: Boolean
+  hasFaviconFileWith: [FileWhereInput!]
 }
 """
 TrustCenterWhereInput is used for filtering TrustCenter objects.
@@ -81057,6 +81204,11 @@ input UpdateTrustCenterSettingInput {
   """
   logoRemoteURL: String
   clearLogoRemoteURL: Boolean
+  """
+  URL of the favicon
+  """
+  faviconRemoteURL: String
+  clearFaviconRemoteURL: Boolean
   trustCenterID: ID
   clearTrustCenter: Boolean
   addFileIDs: [ID!]
@@ -81064,6 +81216,8 @@ input UpdateTrustCenterSettingInput {
   clearFiles: Boolean
   logoFileID: ID
   clearLogoFile: Boolean
+  faviconFileID: ID
+  clearFaviconFile: Boolean
 }
 """
 UpdateUserInput is used for update User object.
@@ -88448,6 +88602,7 @@ extend type Mutation{
         """
         input: CreateTrustCenterSettingInput!
         logoFile: Upload
+        faviconFile: Upload
     ): TrustCenterSettingCreatePayload!
     """
     Update an existing trustCenterSetting
@@ -88462,6 +88617,7 @@ extend type Mutation{
         """
         input: UpdateTrustCenterSettingInput!
         logoFile: Upload
+        faviconFile: Upload
     ): TrustCenterSettingUpdatePayload!
     """
     Delete an existing trustCenterSetting

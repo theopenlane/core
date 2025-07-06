@@ -3,11 +3,13 @@ package main
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
 	"testing"
 
+	"github.com/oklog/ulid/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
@@ -95,6 +97,8 @@ func (f *fakeClient) UpdatePriceMetadata(ctx context.Context, id string, md map[
 }
 
 func TestPriceMatchesStripe(t *testing.T) {
+	t.Parallel()
+
 	prod := &stripe.Product{ID: "prod_1"}
 	sp := &stripe.Price{
 		ID:         "price_1",
@@ -121,6 +125,8 @@ func TestPriceMatchesStripe(t *testing.T) {
 }
 
 func TestBuildProductMap(t *testing.T) {
+	t.Parallel()
+
 	p1 := &stripe.Product{ID: "prod_1", Name: "Basic"}
 	p2 := &stripe.Product{ID: "prod_2", Name: "Pro"}
 	sc, _ := setupProductClient([]*stripe.Product{p1, p2}, nil)
@@ -135,6 +141,8 @@ func TestBuildProductMap(t *testing.T) {
 }
 
 func TestBuildProductMapError(t *testing.T) {
+	t.Parallel()
+
 	sc, _ := setupProductClient(nil, assert.AnError)
 	m, err := buildProductMap(context.Background(), sc)
 	assert.Error(t, err)
@@ -142,6 +150,8 @@ func TestBuildProductMapError(t *testing.T) {
 }
 
 func TestUpdateFeaturePrices(t *testing.T) {
+	t.Parallel()
+
 	prod := &stripe.Product{ID: "prod_1"}
 	priceA := &stripe.Price{
 		ID:         "priceA",
@@ -176,6 +186,8 @@ func TestUpdateFeaturePrices(t *testing.T) {
 }
 
 func TestProcessFeatureSet(t *testing.T) {
+	t.Parallel()
+
 	prod := &stripe.Product{ID: "prod_1"}
 	price := &stripe.Price{
 		ID:         "price1",
@@ -201,6 +213,8 @@ func TestProcessFeatureSet(t *testing.T) {
 }
 
 func TestHandleTakeovers(t *testing.T) {
+	t.Parallel()
+
 	prod := &stripe.Product{ID: "prod"}
 	price := &stripe.Price{ID: "price1", Product: prod, Metadata: map[string]string{}}
 	sc, backend := setupPriceClient(price, nil)
@@ -222,6 +236,8 @@ func TestHandleTakeovers(t *testing.T) {
 }
 
 func TestPrintFeatureReports(t *testing.T) {
+	t.Parallel()
+
 	reports := []featureReport{{kind: "module", name: "m1", product: true, missingPrices: 0}}
 	out := captureOutput(func() { printFeatureReports(reports) })
 	assert.Contains(t, out, "module")
@@ -229,6 +245,8 @@ func TestPrintFeatureReports(t *testing.T) {
 }
 
 func TestPromptAndCreateMissing(t *testing.T) {
+	t.Parallel()
+
 	sc, _ := setupProductClient(nil, nil)
 	cat := &catalog.Catalog{}
 
@@ -246,7 +264,7 @@ func TestPromptAndCreateMissing(t *testing.T) {
 func writeTempCatalogFile(t *testing.T, data string) string {
 	t.Helper()
 	dir := t.TempDir()
-	p := filepath.Join(dir, "catalog.yaml")
+	p := filepath.Join(dir, fmt.Sprintf("catalog-%s.yaml", ulid.Make().String()))
 	require.NoError(t, os.WriteFile(p, []byte(data), 0o644))
 	return p
 }
@@ -328,5 +346,5 @@ addons: {}`
 	app := catalogApp()
 	err := app.Run([]string{"catalog", "--catalog", path, "--stripe-key", "sk", "--takeover"})
 	require.NoError(t, err)
-	require.Equal(t, []string{"price_1"}, client.updated)
+	assert.Equal(t, []string{"price_1"}, client.updated)
 }

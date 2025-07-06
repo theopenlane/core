@@ -75907,6 +75907,40 @@ type TrustCenterSettingWhereInput struct {
 	LogoLocalFileIDEqualFold    *string  `json:"logoLocalFileIDEqualFold,omitempty"`
 	LogoLocalFileIDContainsFold *string  `json:"logoLocalFileIDContainsFold,omitempty"`
 
+	// "favicon_remote_url" field predicates.
+	FaviconRemoteURL             *string  `json:"faviconRemoteURL,omitempty"`
+	FaviconRemoteURLNEQ          *string  `json:"faviconRemoteURLNEQ,omitempty"`
+	FaviconRemoteURLIn           []string `json:"faviconRemoteURLIn,omitempty"`
+	FaviconRemoteURLNotIn        []string `json:"faviconRemoteURLNotIn,omitempty"`
+	FaviconRemoteURLGT           *string  `json:"faviconRemoteURLGT,omitempty"`
+	FaviconRemoteURLGTE          *string  `json:"faviconRemoteURLGTE,omitempty"`
+	FaviconRemoteURLLT           *string  `json:"faviconRemoteURLLT,omitempty"`
+	FaviconRemoteURLLTE          *string  `json:"faviconRemoteURLLTE,omitempty"`
+	FaviconRemoteURLContains     *string  `json:"faviconRemoteURLContains,omitempty"`
+	FaviconRemoteURLHasPrefix    *string  `json:"faviconRemoteURLHasPrefix,omitempty"`
+	FaviconRemoteURLHasSuffix    *string  `json:"faviconRemoteURLHasSuffix,omitempty"`
+	FaviconRemoteURLIsNil        bool     `json:"faviconRemoteURLIsNil,omitempty"`
+	FaviconRemoteURLNotNil       bool     `json:"faviconRemoteURLNotNil,omitempty"`
+	FaviconRemoteURLEqualFold    *string  `json:"faviconRemoteURLEqualFold,omitempty"`
+	FaviconRemoteURLContainsFold *string  `json:"faviconRemoteURLContainsFold,omitempty"`
+
+	// "favicon_local_file_id" field predicates.
+	FaviconLocalFileID             *string  `json:"faviconLocalFileID,omitempty"`
+	FaviconLocalFileIDNEQ          *string  `json:"faviconLocalFileIDNEQ,omitempty"`
+	FaviconLocalFileIDIn           []string `json:"faviconLocalFileIDIn,omitempty"`
+	FaviconLocalFileIDNotIn        []string `json:"faviconLocalFileIDNotIn,omitempty"`
+	FaviconLocalFileIDGT           *string  `json:"faviconLocalFileIDGT,omitempty"`
+	FaviconLocalFileIDGTE          *string  `json:"faviconLocalFileIDGTE,omitempty"`
+	FaviconLocalFileIDLT           *string  `json:"faviconLocalFileIDLT,omitempty"`
+	FaviconLocalFileIDLTE          *string  `json:"faviconLocalFileIDLTE,omitempty"`
+	FaviconLocalFileIDContains     *string  `json:"faviconLocalFileIDContains,omitempty"`
+	FaviconLocalFileIDHasPrefix    *string  `json:"faviconLocalFileIDHasPrefix,omitempty"`
+	FaviconLocalFileIDHasSuffix    *string  `json:"faviconLocalFileIDHasSuffix,omitempty"`
+	FaviconLocalFileIDIsNil        bool     `json:"faviconLocalFileIDIsNil,omitempty"`
+	FaviconLocalFileIDNotNil       bool     `json:"faviconLocalFileIDNotNil,omitempty"`
+	FaviconLocalFileIDEqualFold    *string  `json:"faviconLocalFileIDEqualFold,omitempty"`
+	FaviconLocalFileIDContainsFold *string  `json:"faviconLocalFileIDContainsFold,omitempty"`
+
 	// "trust_center" edge predicates.
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
 	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
@@ -75918,6 +75952,10 @@ type TrustCenterSettingWhereInput struct {
 	// "logo_file" edge predicates.
 	HasLogoFile     *bool             `json:"hasLogoFile,omitempty"`
 	HasLogoFileWith []*FileWhereInput `json:"hasLogoFileWith,omitempty"`
+
+	// "favicon_file" edge predicates.
+	HasFaviconFile     *bool             `json:"hasFaviconFile,omitempty"`
+	HasFaviconFileWith []*FileWhereInput `json:"hasFaviconFileWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -76441,6 +76479,96 @@ func (i *TrustCenterSettingWhereInput) P() (predicate.TrustCenterSetting, error)
 	if i.LogoLocalFileIDContainsFold != nil {
 		predicates = append(predicates, trustcentersetting.LogoLocalFileIDContainsFold(*i.LogoLocalFileIDContainsFold))
 	}
+	if i.FaviconRemoteURL != nil {
+		predicates = append(predicates, trustcentersetting.FaviconRemoteURLEQ(*i.FaviconRemoteURL))
+	}
+	if i.FaviconRemoteURLNEQ != nil {
+		predicates = append(predicates, trustcentersetting.FaviconRemoteURLNEQ(*i.FaviconRemoteURLNEQ))
+	}
+	if len(i.FaviconRemoteURLIn) > 0 {
+		predicates = append(predicates, trustcentersetting.FaviconRemoteURLIn(i.FaviconRemoteURLIn...))
+	}
+	if len(i.FaviconRemoteURLNotIn) > 0 {
+		predicates = append(predicates, trustcentersetting.FaviconRemoteURLNotIn(i.FaviconRemoteURLNotIn...))
+	}
+	if i.FaviconRemoteURLGT != nil {
+		predicates = append(predicates, trustcentersetting.FaviconRemoteURLGT(*i.FaviconRemoteURLGT))
+	}
+	if i.FaviconRemoteURLGTE != nil {
+		predicates = append(predicates, trustcentersetting.FaviconRemoteURLGTE(*i.FaviconRemoteURLGTE))
+	}
+	if i.FaviconRemoteURLLT != nil {
+		predicates = append(predicates, trustcentersetting.FaviconRemoteURLLT(*i.FaviconRemoteURLLT))
+	}
+	if i.FaviconRemoteURLLTE != nil {
+		predicates = append(predicates, trustcentersetting.FaviconRemoteURLLTE(*i.FaviconRemoteURLLTE))
+	}
+	if i.FaviconRemoteURLContains != nil {
+		predicates = append(predicates, trustcentersetting.FaviconRemoteURLContains(*i.FaviconRemoteURLContains))
+	}
+	if i.FaviconRemoteURLHasPrefix != nil {
+		predicates = append(predicates, trustcentersetting.FaviconRemoteURLHasPrefix(*i.FaviconRemoteURLHasPrefix))
+	}
+	if i.FaviconRemoteURLHasSuffix != nil {
+		predicates = append(predicates, trustcentersetting.FaviconRemoteURLHasSuffix(*i.FaviconRemoteURLHasSuffix))
+	}
+	if i.FaviconRemoteURLIsNil {
+		predicates = append(predicates, trustcentersetting.FaviconRemoteURLIsNil())
+	}
+	if i.FaviconRemoteURLNotNil {
+		predicates = append(predicates, trustcentersetting.FaviconRemoteURLNotNil())
+	}
+	if i.FaviconRemoteURLEqualFold != nil {
+		predicates = append(predicates, trustcentersetting.FaviconRemoteURLEqualFold(*i.FaviconRemoteURLEqualFold))
+	}
+	if i.FaviconRemoteURLContainsFold != nil {
+		predicates = append(predicates, trustcentersetting.FaviconRemoteURLContainsFold(*i.FaviconRemoteURLContainsFold))
+	}
+	if i.FaviconLocalFileID != nil {
+		predicates = append(predicates, trustcentersetting.FaviconLocalFileIDEQ(*i.FaviconLocalFileID))
+	}
+	if i.FaviconLocalFileIDNEQ != nil {
+		predicates = append(predicates, trustcentersetting.FaviconLocalFileIDNEQ(*i.FaviconLocalFileIDNEQ))
+	}
+	if len(i.FaviconLocalFileIDIn) > 0 {
+		predicates = append(predicates, trustcentersetting.FaviconLocalFileIDIn(i.FaviconLocalFileIDIn...))
+	}
+	if len(i.FaviconLocalFileIDNotIn) > 0 {
+		predicates = append(predicates, trustcentersetting.FaviconLocalFileIDNotIn(i.FaviconLocalFileIDNotIn...))
+	}
+	if i.FaviconLocalFileIDGT != nil {
+		predicates = append(predicates, trustcentersetting.FaviconLocalFileIDGT(*i.FaviconLocalFileIDGT))
+	}
+	if i.FaviconLocalFileIDGTE != nil {
+		predicates = append(predicates, trustcentersetting.FaviconLocalFileIDGTE(*i.FaviconLocalFileIDGTE))
+	}
+	if i.FaviconLocalFileIDLT != nil {
+		predicates = append(predicates, trustcentersetting.FaviconLocalFileIDLT(*i.FaviconLocalFileIDLT))
+	}
+	if i.FaviconLocalFileIDLTE != nil {
+		predicates = append(predicates, trustcentersetting.FaviconLocalFileIDLTE(*i.FaviconLocalFileIDLTE))
+	}
+	if i.FaviconLocalFileIDContains != nil {
+		predicates = append(predicates, trustcentersetting.FaviconLocalFileIDContains(*i.FaviconLocalFileIDContains))
+	}
+	if i.FaviconLocalFileIDHasPrefix != nil {
+		predicates = append(predicates, trustcentersetting.FaviconLocalFileIDHasPrefix(*i.FaviconLocalFileIDHasPrefix))
+	}
+	if i.FaviconLocalFileIDHasSuffix != nil {
+		predicates = append(predicates, trustcentersetting.FaviconLocalFileIDHasSuffix(*i.FaviconLocalFileIDHasSuffix))
+	}
+	if i.FaviconLocalFileIDIsNil {
+		predicates = append(predicates, trustcentersetting.FaviconLocalFileIDIsNil())
+	}
+	if i.FaviconLocalFileIDNotNil {
+		predicates = append(predicates, trustcentersetting.FaviconLocalFileIDNotNil())
+	}
+	if i.FaviconLocalFileIDEqualFold != nil {
+		predicates = append(predicates, trustcentersetting.FaviconLocalFileIDEqualFold(*i.FaviconLocalFileIDEqualFold))
+	}
+	if i.FaviconLocalFileIDContainsFold != nil {
+		predicates = append(predicates, trustcentersetting.FaviconLocalFileIDContainsFold(*i.FaviconLocalFileIDContainsFold))
+	}
 
 	if i.HasTrustCenter != nil {
 		p := trustcentersetting.HasTrustCenter()
@@ -76495,6 +76623,24 @@ func (i *TrustCenterSettingWhereInput) P() (predicate.TrustCenterSetting, error)
 			with = append(with, p)
 		}
 		predicates = append(predicates, trustcentersetting.HasLogoFileWith(with...))
+	}
+	if i.HasFaviconFile != nil {
+		p := trustcentersetting.HasFaviconFile()
+		if !*i.HasFaviconFile {
+			p = trustcentersetting.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFaviconFileWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasFaviconFileWith))
+		for _, w := range i.HasFaviconFileWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFaviconFileWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcentersetting.HasFaviconFileWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -76717,6 +76863,40 @@ type TrustCenterSettingHistoryWhereInput struct {
 	LogoLocalFileIDNotNil       bool     `json:"logoLocalFileIDNotNil,omitempty"`
 	LogoLocalFileIDEqualFold    *string  `json:"logoLocalFileIDEqualFold,omitempty"`
 	LogoLocalFileIDContainsFold *string  `json:"logoLocalFileIDContainsFold,omitempty"`
+
+	// "favicon_remote_url" field predicates.
+	FaviconRemoteURL             *string  `json:"faviconRemoteURL,omitempty"`
+	FaviconRemoteURLNEQ          *string  `json:"faviconRemoteURLNEQ,omitempty"`
+	FaviconRemoteURLIn           []string `json:"faviconRemoteURLIn,omitempty"`
+	FaviconRemoteURLNotIn        []string `json:"faviconRemoteURLNotIn,omitempty"`
+	FaviconRemoteURLGT           *string  `json:"faviconRemoteURLGT,omitempty"`
+	FaviconRemoteURLGTE          *string  `json:"faviconRemoteURLGTE,omitempty"`
+	FaviconRemoteURLLT           *string  `json:"faviconRemoteURLLT,omitempty"`
+	FaviconRemoteURLLTE          *string  `json:"faviconRemoteURLLTE,omitempty"`
+	FaviconRemoteURLContains     *string  `json:"faviconRemoteURLContains,omitempty"`
+	FaviconRemoteURLHasPrefix    *string  `json:"faviconRemoteURLHasPrefix,omitempty"`
+	FaviconRemoteURLHasSuffix    *string  `json:"faviconRemoteURLHasSuffix,omitempty"`
+	FaviconRemoteURLIsNil        bool     `json:"faviconRemoteURLIsNil,omitempty"`
+	FaviconRemoteURLNotNil       bool     `json:"faviconRemoteURLNotNil,omitempty"`
+	FaviconRemoteURLEqualFold    *string  `json:"faviconRemoteURLEqualFold,omitempty"`
+	FaviconRemoteURLContainsFold *string  `json:"faviconRemoteURLContainsFold,omitempty"`
+
+	// "favicon_local_file_id" field predicates.
+	FaviconLocalFileID             *string  `json:"faviconLocalFileID,omitempty"`
+	FaviconLocalFileIDNEQ          *string  `json:"faviconLocalFileIDNEQ,omitempty"`
+	FaviconLocalFileIDIn           []string `json:"faviconLocalFileIDIn,omitempty"`
+	FaviconLocalFileIDNotIn        []string `json:"faviconLocalFileIDNotIn,omitempty"`
+	FaviconLocalFileIDGT           *string  `json:"faviconLocalFileIDGT,omitempty"`
+	FaviconLocalFileIDGTE          *string  `json:"faviconLocalFileIDGTE,omitempty"`
+	FaviconLocalFileIDLT           *string  `json:"faviconLocalFileIDLT,omitempty"`
+	FaviconLocalFileIDLTE          *string  `json:"faviconLocalFileIDLTE,omitempty"`
+	FaviconLocalFileIDContains     *string  `json:"faviconLocalFileIDContains,omitempty"`
+	FaviconLocalFileIDHasPrefix    *string  `json:"faviconLocalFileIDHasPrefix,omitempty"`
+	FaviconLocalFileIDHasSuffix    *string  `json:"faviconLocalFileIDHasSuffix,omitempty"`
+	FaviconLocalFileIDIsNil        bool     `json:"faviconLocalFileIDIsNil,omitempty"`
+	FaviconLocalFileIDNotNil       bool     `json:"faviconLocalFileIDNotNil,omitempty"`
+	FaviconLocalFileIDEqualFold    *string  `json:"faviconLocalFileIDEqualFold,omitempty"`
+	FaviconLocalFileIDContainsFold *string  `json:"faviconLocalFileIDContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -77320,6 +77500,96 @@ func (i *TrustCenterSettingHistoryWhereInput) P() (predicate.TrustCenterSettingH
 	}
 	if i.LogoLocalFileIDContainsFold != nil {
 		predicates = append(predicates, trustcentersettinghistory.LogoLocalFileIDContainsFold(*i.LogoLocalFileIDContainsFold))
+	}
+	if i.FaviconRemoteURL != nil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconRemoteURLEQ(*i.FaviconRemoteURL))
+	}
+	if i.FaviconRemoteURLNEQ != nil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconRemoteURLNEQ(*i.FaviconRemoteURLNEQ))
+	}
+	if len(i.FaviconRemoteURLIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.FaviconRemoteURLIn(i.FaviconRemoteURLIn...))
+	}
+	if len(i.FaviconRemoteURLNotIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.FaviconRemoteURLNotIn(i.FaviconRemoteURLNotIn...))
+	}
+	if i.FaviconRemoteURLGT != nil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconRemoteURLGT(*i.FaviconRemoteURLGT))
+	}
+	if i.FaviconRemoteURLGTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconRemoteURLGTE(*i.FaviconRemoteURLGTE))
+	}
+	if i.FaviconRemoteURLLT != nil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconRemoteURLLT(*i.FaviconRemoteURLLT))
+	}
+	if i.FaviconRemoteURLLTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconRemoteURLLTE(*i.FaviconRemoteURLLTE))
+	}
+	if i.FaviconRemoteURLContains != nil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconRemoteURLContains(*i.FaviconRemoteURLContains))
+	}
+	if i.FaviconRemoteURLHasPrefix != nil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconRemoteURLHasPrefix(*i.FaviconRemoteURLHasPrefix))
+	}
+	if i.FaviconRemoteURLHasSuffix != nil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconRemoteURLHasSuffix(*i.FaviconRemoteURLHasSuffix))
+	}
+	if i.FaviconRemoteURLIsNil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconRemoteURLIsNil())
+	}
+	if i.FaviconRemoteURLNotNil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconRemoteURLNotNil())
+	}
+	if i.FaviconRemoteURLEqualFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconRemoteURLEqualFold(*i.FaviconRemoteURLEqualFold))
+	}
+	if i.FaviconRemoteURLContainsFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconRemoteURLContainsFold(*i.FaviconRemoteURLContainsFold))
+	}
+	if i.FaviconLocalFileID != nil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconLocalFileIDEQ(*i.FaviconLocalFileID))
+	}
+	if i.FaviconLocalFileIDNEQ != nil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconLocalFileIDNEQ(*i.FaviconLocalFileIDNEQ))
+	}
+	if len(i.FaviconLocalFileIDIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.FaviconLocalFileIDIn(i.FaviconLocalFileIDIn...))
+	}
+	if len(i.FaviconLocalFileIDNotIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.FaviconLocalFileIDNotIn(i.FaviconLocalFileIDNotIn...))
+	}
+	if i.FaviconLocalFileIDGT != nil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconLocalFileIDGT(*i.FaviconLocalFileIDGT))
+	}
+	if i.FaviconLocalFileIDGTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconLocalFileIDGTE(*i.FaviconLocalFileIDGTE))
+	}
+	if i.FaviconLocalFileIDLT != nil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconLocalFileIDLT(*i.FaviconLocalFileIDLT))
+	}
+	if i.FaviconLocalFileIDLTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconLocalFileIDLTE(*i.FaviconLocalFileIDLTE))
+	}
+	if i.FaviconLocalFileIDContains != nil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconLocalFileIDContains(*i.FaviconLocalFileIDContains))
+	}
+	if i.FaviconLocalFileIDHasPrefix != nil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconLocalFileIDHasPrefix(*i.FaviconLocalFileIDHasPrefix))
+	}
+	if i.FaviconLocalFileIDHasSuffix != nil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconLocalFileIDHasSuffix(*i.FaviconLocalFileIDHasSuffix))
+	}
+	if i.FaviconLocalFileIDIsNil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconLocalFileIDIsNil())
+	}
+	if i.FaviconLocalFileIDNotNil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconLocalFileIDNotNil())
+	}
+	if i.FaviconLocalFileIDEqualFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconLocalFileIDEqualFold(*i.FaviconLocalFileIDEqualFold))
+	}
+	if i.FaviconLocalFileIDContainsFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.FaviconLocalFileIDContainsFold(*i.FaviconLocalFileIDContainsFold))
 	}
 
 	switch len(predicates) {

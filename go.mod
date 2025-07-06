@@ -28,7 +28,7 @@ require (
 	github.com/getkin/kin-openapi v0.132.0
 	github.com/go-jose/go-jose/v4 v4.0.5
 	github.com/go-viper/mapstructure/v2 v2.3.0
-	github.com/go-webauthn/webauthn v0.13.0
+	github.com/go-webauthn/webauthn v0.13.1
 	github.com/gocarina/gocsv v0.0.0-20240520201108-78e41c74b4b1
 	github.com/goccy/go-yaml v1.18.0
 	github.com/golang-jwt/jwt/v5 v5.2.2
@@ -58,7 +58,7 @@ require (
 	github.com/openfga/go-sdk v0.7.1
 	github.com/pkg/errors v0.9.1
 	github.com/pressly/goose/v3 v3.24.3
-	github.com/projectdiscovery/cdncheck v1.1.25
+	github.com/projectdiscovery/cdncheck v1.1.26
 	github.com/projectdiscovery/dnsx v1.2.2
 	github.com/projectdiscovery/goflags v0.1.74
 	github.com/projectdiscovery/utils v0.4.21
@@ -81,7 +81,7 @@ require (
 	github.com/theopenlane/entx v0.9.1
 	github.com/theopenlane/gqlgen-plugins v0.6.2
 	github.com/theopenlane/httpsling v0.2.2
-	github.com/theopenlane/iam v0.13.3
+	github.com/theopenlane/iam v0.14.0
 	github.com/theopenlane/newman v0.1.6
 	github.com/theopenlane/riverboat v0.1.6
 	github.com/theopenlane/utils v0.4.7
@@ -211,7 +211,7 @@ require (
 	github.com/distribution/reference v0.6.0 // indirect
 	github.com/ditashi/jsbeautifier-go v0.0.0-20141206144643-2520a8026a9c // indirect
 	github.com/dnephin/pflag v1.0.7 // indirect
-	github.com/docker/docker v28.3.0+incompatible // indirect
+	github.com/docker/docker v28.3.1+incompatible // indirect
 	github.com/dsnet/compress v0.0.2-0.20230904184137-39efe44ab707 // indirect
 	github.com/ebitengine/purego v0.8.3 // indirect
 	github.com/envoyproxy/go-control-plane/envoy v1.32.4 // indirect
@@ -513,7 +513,7 @@ require (
 	github.com/go-openapi/jsonpointer v0.21.0 // indirect
 	github.com/go-openapi/swag v0.23.0 // indirect
 	github.com/go-redis/redis/v8 v8.11.5 // indirect
-	github.com/go-webauthn/x v0.1.21 // indirect
+	github.com/go-webauthn/x v0.1.22 // indirect
 	github.com/goccy/go-json v0.10.5 // indirect
 	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect
 	github.com/google/cel-go v0.25.0 // indirect
@@ -526,7 +526,7 @@ require (
 	github.com/gookit/color v1.5.4 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.3 // indirect
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.1 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/hashicorp/hcl/v2 v2.23.0 // indirect
@@ -563,7 +563,7 @@ require (
 	github.com/opencontainers/runc v1.2.5 // indirect
 	github.com/openfga/api/proto v0.0.0-20250127102726-f9709139a369 // indirect
 	github.com/openfga/language/pkg/go v0.2.0-beta.2.0.20250428093642-7aeebe78bbfe // indirect
-	github.com/openfga/openfga v1.8.16 // indirect
+	github.com/openfga/openfga v1.9.0 // indirect
 	github.com/ory/dockertest v3.3.5+incompatible // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
 	github.com/perimeterx/marshmallow v1.1.5 // indirect
@@ -572,7 +572,7 @@ require (
 	github.com/pquerna/otp v1.5.0
 	github.com/projectdiscovery/katana v1.1.3
 	github.com/projectdiscovery/subfinder/v2 v2.8.0
-	github.com/projectdiscovery/wappalyzergo v0.2.35
+	github.com/projectdiscovery/wappalyzergo v0.2.36
 	github.com/prometheus/client_model v0.6.2 // indirect
 	github.com/prometheus/common v0.63.0 // indirect
 	github.com/prometheus/procfs v0.16.1 // indirect
@@ -633,7 +633,7 @@ require (
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/time v0.12.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
-	google.golang.org/api v0.239.0
+	google.golang.org/api v0.240.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20250603155806-513f23925822 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250603155806-513f23925822 // indirect
 	google.golang.org/grpc v1.73.0 // indirect

@@ -47,6 +47,10 @@ const (
 	FieldLogoRemoteURL = "logo_remote_url"
 	// FieldLogoLocalFileID holds the string denoting the logo_local_file_id field in the database.
 	FieldLogoLocalFileID = "logo_local_file_id"
+	// FieldFaviconRemoteURL holds the string denoting the favicon_remote_url field in the database.
+	FieldFaviconRemoteURL = "favicon_remote_url"
+	// FieldFaviconLocalFileID holds the string denoting the favicon_local_file_id field in the database.
+	FieldFaviconLocalFileID = "favicon_local_file_id"
 	// Table holds the table name of the trustcentersettinghistory in the database.
 	Table = "trust_center_setting_history"
 )
@@ -69,6 +73,8 @@ var Columns = []string{
 	FieldPrimaryColor,
 	FieldLogoRemoteURL,
 	FieldLogoLocalFileID,
+	FieldFaviconRemoteURL,
+	FieldFaviconLocalFileID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -191,6 +197,16 @@ func ByLogoRemoteURL(opts ...sql.OrderTermOption) OrderOption {
 // ByLogoLocalFileID orders the results by the logo_local_file_id field.
 func ByLogoLocalFileID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLogoLocalFileID, opts...).ToFunc()
+}
+
+// ByFaviconRemoteURL orders the results by the favicon_remote_url field.
+func ByFaviconRemoteURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFaviconRemoteURL, opts...).ToFunc()
+}
+
+// ByFaviconLocalFileID orders the results by the favicon_local_file_id field.
+func ByFaviconLocalFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFaviconLocalFileID, opts...).ToFunc()
 }
 
 var (
