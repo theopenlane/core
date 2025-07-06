@@ -28,7 +28,7 @@ var sharedMimeTypes = []string{
 var validMimeTypes = map[string][]string{
 	"avatarFile":    {"image/jpeg", "image/png"},
 	"logoFile":      {"image/jpeg", "image/png"},
-	"faviconFile":   {"image/jpeg", "image/png"},
+	"faviconFile":   {"image/jpeg", "image/png", "image/x-icon"},
 	"evidenceFiles": sharedMimeTypes,
 	"noteFiles":     sharedMimeTypes,
 }
