@@ -27,7 +27,7 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 
 	// if a standard is provided, clone those controls
 	if input.StandardID != nil {
-		res, err := r.cloneControlsFromStandard(ctx, *input.StandardID)
+		res, err := r.cloneControlsFromStandard(ctx, *input.StandardID, input.ProgramID)
 		if err != nil {
 			return nil, parseRequestError(generated.ErrPermissionDenied, action{action: ActionCreate, object: "control"})
 		}
