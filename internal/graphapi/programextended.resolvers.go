@@ -83,7 +83,6 @@ func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input m
 
 // CreateFullProgram is the resolver for the createFullProgram field.
 func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.CreateFullProgramInput) (*model.ProgramCreatePayload, error) {
-	log.Warn().Interface("input", input).Msg("creating full program")
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.Program.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
@@ -102,8 +101,6 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 			createdProgram.AddControlIDs(control.ID)
 		}
 	}
-
-	log.Warn().Msg("creating bulk controls from standard, now creating the rest")
 
 	// create the program
 	res, err := createdProgram.SetInput(*input.Program).Save(ctx)
