@@ -43,6 +43,10 @@ type TrustCenterSetting struct {
 	LogoRemoteURL *string `json:"logo_remote_url,omitempty"`
 	// The local logo file id, takes precedence over the logo remote URL
 	LogoLocalFileID *string `json:"logo_local_file_id,omitempty"`
+	// URL of the favicon
+	FaviconRemoteURL *string `json:"favicon_remote_url,omitempty"`
+	// The local favicon file id, takes precedence over the favicon remote URL
+	FaviconLocalFileID *string `json:"favicon_local_file_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterSettingQuery when eager-loading is set.
 	Edges        TrustCenterSettingEdges `json:"edges"`
@@ -57,11 +61,13 @@ type TrustCenterSettingEdges struct {
 	Files []*File `json:"files,omitempty"`
 	// LogoFile holds the value of the logo_file edge.
 	LogoFile *File `json:"logo_file,omitempty"`
+	// FaviconFile holds the value of the favicon_file edge.
+	FaviconFile *File `json:"favicon_file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [4]map[string]int
 
 	namedFiles map[string][]*File
 }
@@ -97,12 +103,23 @@ func (e TrustCenterSettingEdges) LogoFileOrErr() (*File, error) {
 	return nil, &NotLoadedError{edge: "logo_file"}
 }
 
+// FaviconFileOrErr returns the FaviconFile value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterSettingEdges) FaviconFileOrErr() (*File, error) {
+	if e.FaviconFile != nil {
+		return e.FaviconFile, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: file.Label}
+	}
+	return nil, &NotLoadedError{edge: "favicon_file"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*TrustCenterSetting) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case trustcentersetting.FieldID, trustcentersetting.FieldCreatedBy, trustcentersetting.FieldUpdatedBy, trustcentersetting.FieldDeletedBy, trustcentersetting.FieldTrustCenterID, trustcentersetting.FieldTitle, trustcentersetting.FieldOverview, trustcentersetting.FieldPrimaryColor, trustcentersetting.FieldLogoRemoteURL, trustcentersetting.FieldLogoLocalFileID:
+		case trustcentersetting.FieldID, trustcentersetting.FieldCreatedBy, trustcentersetting.FieldUpdatedBy, trustcentersetting.FieldDeletedBy, trustcentersetting.FieldTrustCenterID, trustcentersetting.FieldTitle, trustcentersetting.FieldOverview, trustcentersetting.FieldPrimaryColor, trustcentersetting.FieldLogoRemoteURL, trustcentersetting.FieldLogoLocalFileID, trustcentersetting.FieldFaviconRemoteURL, trustcentersetting.FieldFaviconLocalFileID:
 			values[i] = new(sql.NullString)
 		case trustcentersetting.FieldCreatedAt, trustcentersetting.FieldUpdatedAt, trustcentersetting.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -201,6 +218,20 @@ func (tcs *TrustCenterSetting) assignValues(columns []string, values []any) erro
 				tcs.LogoLocalFileID = new(string)
 				*tcs.LogoLocalFileID = value.String
 			}
+		case trustcentersetting.FieldFaviconRemoteURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field favicon_remote_url", values[i])
+			} else if value.Valid {
+				tcs.FaviconRemoteURL = new(string)
+				*tcs.FaviconRemoteURL = value.String
+			}
+		case trustcentersetting.FieldFaviconLocalFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field favicon_local_file_id", values[i])
+			} else if value.Valid {
+				tcs.FaviconLocalFileID = new(string)
+				*tcs.FaviconLocalFileID = value.String
+			}
 		default:
 			tcs.selectValues.Set(columns[i], values[i])
 		}
@@ -227,6 +258,11 @@ func (tcs *TrustCenterSetting) QueryFiles() *FileQuery {
 // QueryLogoFile queries the "logo_file" edge of the TrustCenterSetting entity.
 func (tcs *TrustCenterSetting) QueryLogoFile() *FileQuery {
 	return NewTrustCenterSettingClient(tcs.config).QueryLogoFile(tcs)
+}
+
+// QueryFaviconFile queries the "favicon_file" edge of the TrustCenterSetting entity.
+func (tcs *TrustCenterSetting) QueryFaviconFile() *FileQuery {
+	return NewTrustCenterSettingClient(tcs.config).QueryFaviconFile(tcs)
 }
 
 // Update returns a builder for updating this TrustCenterSetting.
@@ -289,6 +325,16 @@ func (tcs *TrustCenterSetting) String() string {
 	builder.WriteString(", ")
 	if v := tcs.LogoLocalFileID; v != nil {
 		builder.WriteString("logo_local_file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := tcs.FaviconRemoteURL; v != nil {
+		builder.WriteString("favicon_remote_url=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := tcs.FaviconLocalFileID; v != nil {
+		builder.WriteString("favicon_local_file_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteByte(')')

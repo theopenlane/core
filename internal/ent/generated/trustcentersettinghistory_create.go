@@ -223,6 +223,34 @@ func (tcshc *TrustCenterSettingHistoryCreate) SetNillableLogoLocalFileID(s *stri
 	return tcshc
 }
 
+// SetFaviconRemoteURL sets the "favicon_remote_url" field.
+func (tcshc *TrustCenterSettingHistoryCreate) SetFaviconRemoteURL(s string) *TrustCenterSettingHistoryCreate {
+	tcshc.mutation.SetFaviconRemoteURL(s)
+	return tcshc
+}
+
+// SetNillableFaviconRemoteURL sets the "favicon_remote_url" field if the given value is not nil.
+func (tcshc *TrustCenterSettingHistoryCreate) SetNillableFaviconRemoteURL(s *string) *TrustCenterSettingHistoryCreate {
+	if s != nil {
+		tcshc.SetFaviconRemoteURL(*s)
+	}
+	return tcshc
+}
+
+// SetFaviconLocalFileID sets the "favicon_local_file_id" field.
+func (tcshc *TrustCenterSettingHistoryCreate) SetFaviconLocalFileID(s string) *TrustCenterSettingHistoryCreate {
+	tcshc.mutation.SetFaviconLocalFileID(s)
+	return tcshc
+}
+
+// SetNillableFaviconLocalFileID sets the "favicon_local_file_id" field if the given value is not nil.
+func (tcshc *TrustCenterSettingHistoryCreate) SetNillableFaviconLocalFileID(s *string) *TrustCenterSettingHistoryCreate {
+	if s != nil {
+		tcshc.SetFaviconLocalFileID(*s)
+	}
+	return tcshc
+}
+
 // SetID sets the "id" field.
 func (tcshc *TrustCenterSettingHistoryCreate) SetID(s string) *TrustCenterSettingHistoryCreate {
 	tcshc.mutation.SetID(s)
@@ -398,6 +426,14 @@ func (tcshc *TrustCenterSettingHistoryCreate) createSpec() (*TrustCenterSettingH
 	if value, ok := tcshc.mutation.LogoLocalFileID(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldLogoLocalFileID, field.TypeString, value)
 		_node.LogoLocalFileID = &value
+	}
+	if value, ok := tcshc.mutation.FaviconRemoteURL(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldFaviconRemoteURL, field.TypeString, value)
+		_node.FaviconRemoteURL = &value
+	}
+	if value, ok := tcshc.mutation.FaviconLocalFileID(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldFaviconLocalFileID, field.TypeString, value)
+		_node.FaviconLocalFileID = &value
 	}
 	return _node, _spec
 }
