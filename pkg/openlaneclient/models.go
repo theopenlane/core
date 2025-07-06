@@ -5891,16 +5891,26 @@ type CreateTrustCenterSettingInput struct {
 	Title *string `json:"title,omitempty"`
 	// overview of the trust center
 	Overview *string `json:"overview,omitempty"`
-	// primary color for the trust center
-	PrimaryColor *string `json:"primaryColor,omitempty"`
 	// URL of the logo
 	LogoRemoteURL *string `json:"logoRemoteURL,omitempty"`
 	// URL of the favicon
-	FaviconRemoteURL *string  `json:"faviconRemoteURL,omitempty"`
-	TrustCenterID    *string  `json:"trustCenterID,omitempty"`
-	FileIDs          []string `json:"fileIDs,omitempty"`
-	LogoFileID       *string  `json:"logoFileID,omitempty"`
-	FaviconFileID    *string  `json:"faviconFileID,omitempty"`
+	FaviconRemoteURL *string `json:"faviconRemoteURL,omitempty"`
+	// Theme mode for the trust center
+	ThemeMode *enums.TrustCenterThemeMode `json:"themeMode,omitempty"`
+	// primary color for the trust center
+	PrimaryColor *string `json:"primaryColor,omitempty"`
+	// font for the trust center
+	Font *string `json:"font,omitempty"`
+	// foreground color for the trust center
+	ForegroundColor *string `json:"foregroundColor,omitempty"`
+	// background color for the trust center
+	BackgroundColor *string `json:"backgroundColor,omitempty"`
+	// accent/brand color for the trust center
+	AccentColor   *string  `json:"accentColor,omitempty"`
+	TrustCenterID *string  `json:"trustCenterID,omitempty"`
+	FileIDs       []string `json:"fileIDs,omitempty"`
+	LogoFileID    *string  `json:"logoFileID,omitempty"`
+	FaviconFileID *string  `json:"faviconFileID,omitempty"`
 }
 
 // CreateUserInput is used for create User object.
@@ -25190,8 +25200,6 @@ type TrustCenterSetting struct {
 	Title *string `json:"title,omitempty"`
 	// overview of the trust center
 	Overview *string `json:"overview,omitempty"`
-	// primary color for the trust center
-	PrimaryColor *string `json:"primaryColor,omitempty"`
 	// URL of the logo
 	LogoRemoteURL *string `json:"logoRemoteURL,omitempty"`
 	// The local logo file id, takes precedence over the logo remote URL
@@ -25199,11 +25207,23 @@ type TrustCenterSetting struct {
 	// URL of the favicon
 	FaviconRemoteURL *string `json:"faviconRemoteURL,omitempty"`
 	// The local favicon file id, takes precedence over the favicon remote URL
-	FaviconLocalFileID *string         `json:"faviconLocalFileID,omitempty"`
-	TrustCenter        *TrustCenter    `json:"trustCenter,omitempty"`
-	Files              *FileConnection `json:"files"`
-	LogoFile           *File           `json:"logoFile,omitempty"`
-	FaviconFile        *File           `json:"faviconFile,omitempty"`
+	FaviconLocalFileID *string `json:"faviconLocalFileID,omitempty"`
+	// Theme mode for the trust center
+	ThemeMode *enums.TrustCenterThemeMode `json:"themeMode,omitempty"`
+	// primary color for the trust center
+	PrimaryColor *string `json:"primaryColor,omitempty"`
+	// font for the trust center
+	Font *string `json:"font,omitempty"`
+	// foreground color for the trust center
+	ForegroundColor *string `json:"foregroundColor,omitempty"`
+	// background color for the trust center
+	BackgroundColor *string `json:"backgroundColor,omitempty"`
+	// accent/brand color for the trust center
+	AccentColor *string         `json:"accentColor,omitempty"`
+	TrustCenter *TrustCenter    `json:"trustCenter,omitempty"`
+	Files       *FileConnection `json:"files"`
+	LogoFile    *File           `json:"logoFile,omitempty"`
+	FaviconFile *File           `json:"faviconFile,omitempty"`
 }
 
 func (TrustCenterSetting) IsNode() {}
@@ -25259,8 +25279,6 @@ type TrustCenterSettingHistory struct {
 	Title *string `json:"title,omitempty"`
 	// overview of the trust center
 	Overview *string `json:"overview,omitempty"`
-	// primary color for the trust center
-	PrimaryColor *string `json:"primaryColor,omitempty"`
 	// URL of the logo
 	LogoRemoteURL *string `json:"logoRemoteURL,omitempty"`
 	// The local logo file id, takes precedence over the logo remote URL
@@ -25269,6 +25287,18 @@ type TrustCenterSettingHistory struct {
 	FaviconRemoteURL *string `json:"faviconRemoteURL,omitempty"`
 	// The local favicon file id, takes precedence over the favicon remote URL
 	FaviconLocalFileID *string `json:"faviconLocalFileID,omitempty"`
+	// Theme mode for the trust center
+	ThemeMode *enums.TrustCenterThemeMode `json:"themeMode,omitempty"`
+	// primary color for the trust center
+	PrimaryColor *string `json:"primaryColor,omitempty"`
+	// font for the trust center
+	Font *string `json:"font,omitempty"`
+	// foreground color for the trust center
+	ForegroundColor *string `json:"foregroundColor,omitempty"`
+	// background color for the trust center
+	BackgroundColor *string `json:"backgroundColor,omitempty"`
+	// accent/brand color for the trust center
+	AccentColor *string `json:"accentColor,omitempty"`
 }
 
 func (TrustCenterSettingHistory) IsNode() {}
@@ -25448,22 +25478,6 @@ type TrustCenterSettingHistoryWhereInput struct {
 	OverviewNotNil       *bool    `json:"overviewNotNil,omitempty"`
 	OverviewEqualFold    *string  `json:"overviewEqualFold,omitempty"`
 	OverviewContainsFold *string  `json:"overviewContainsFold,omitempty"`
-	// primary_color field predicates
-	PrimaryColor             *string  `json:"primaryColor,omitempty"`
-	PrimaryColorNeq          *string  `json:"primaryColorNEQ,omitempty"`
-	PrimaryColorIn           []string `json:"primaryColorIn,omitempty"`
-	PrimaryColorNotIn        []string `json:"primaryColorNotIn,omitempty"`
-	PrimaryColorGt           *string  `json:"primaryColorGT,omitempty"`
-	PrimaryColorGte          *string  `json:"primaryColorGTE,omitempty"`
-	PrimaryColorLt           *string  `json:"primaryColorLT,omitempty"`
-	PrimaryColorLte          *string  `json:"primaryColorLTE,omitempty"`
-	PrimaryColorContains     *string  `json:"primaryColorContains,omitempty"`
-	PrimaryColorHasPrefix    *string  `json:"primaryColorHasPrefix,omitempty"`
-	PrimaryColorHasSuffix    *string  `json:"primaryColorHasSuffix,omitempty"`
-	PrimaryColorIsNil        *bool    `json:"primaryColorIsNil,omitempty"`
-	PrimaryColorNotNil       *bool    `json:"primaryColorNotNil,omitempty"`
-	PrimaryColorEqualFold    *string  `json:"primaryColorEqualFold,omitempty"`
-	PrimaryColorContainsFold *string  `json:"primaryColorContainsFold,omitempty"`
 	// logo_remote_url field predicates
 	LogoRemoteURL             *string  `json:"logoRemoteURL,omitempty"`
 	LogoRemoteURLNeq          *string  `json:"logoRemoteURLNEQ,omitempty"`
@@ -25528,6 +25542,93 @@ type TrustCenterSettingHistoryWhereInput struct {
 	FaviconLocalFileIDNotNil       *bool    `json:"faviconLocalFileIDNotNil,omitempty"`
 	FaviconLocalFileIDEqualFold    *string  `json:"faviconLocalFileIDEqualFold,omitempty"`
 	FaviconLocalFileIDContainsFold *string  `json:"faviconLocalFileIDContainsFold,omitempty"`
+	// theme_mode field predicates
+	ThemeMode       *enums.TrustCenterThemeMode  `json:"themeMode,omitempty"`
+	ThemeModeNeq    *enums.TrustCenterThemeMode  `json:"themeModeNEQ,omitempty"`
+	ThemeModeIn     []enums.TrustCenterThemeMode `json:"themeModeIn,omitempty"`
+	ThemeModeNotIn  []enums.TrustCenterThemeMode `json:"themeModeNotIn,omitempty"`
+	ThemeModeIsNil  *bool                        `json:"themeModeIsNil,omitempty"`
+	ThemeModeNotNil *bool                        `json:"themeModeNotNil,omitempty"`
+	// primary_color field predicates
+	PrimaryColor             *string  `json:"primaryColor,omitempty"`
+	PrimaryColorNeq          *string  `json:"primaryColorNEQ,omitempty"`
+	PrimaryColorIn           []string `json:"primaryColorIn,omitempty"`
+	PrimaryColorNotIn        []string `json:"primaryColorNotIn,omitempty"`
+	PrimaryColorGt           *string  `json:"primaryColorGT,omitempty"`
+	PrimaryColorGte          *string  `json:"primaryColorGTE,omitempty"`
+	PrimaryColorLt           *string  `json:"primaryColorLT,omitempty"`
+	PrimaryColorLte          *string  `json:"primaryColorLTE,omitempty"`
+	PrimaryColorContains     *string  `json:"primaryColorContains,omitempty"`
+	PrimaryColorHasPrefix    *string  `json:"primaryColorHasPrefix,omitempty"`
+	PrimaryColorHasSuffix    *string  `json:"primaryColorHasSuffix,omitempty"`
+	PrimaryColorIsNil        *bool    `json:"primaryColorIsNil,omitempty"`
+	PrimaryColorNotNil       *bool    `json:"primaryColorNotNil,omitempty"`
+	PrimaryColorEqualFold    *string  `json:"primaryColorEqualFold,omitempty"`
+	PrimaryColorContainsFold *string  `json:"primaryColorContainsFold,omitempty"`
+	// font field predicates
+	Font             *string  `json:"font,omitempty"`
+	FontNeq          *string  `json:"fontNEQ,omitempty"`
+	FontIn           []string `json:"fontIn,omitempty"`
+	FontNotIn        []string `json:"fontNotIn,omitempty"`
+	FontGt           *string  `json:"fontGT,omitempty"`
+	FontGte          *string  `json:"fontGTE,omitempty"`
+	FontLt           *string  `json:"fontLT,omitempty"`
+	FontLte          *string  `json:"fontLTE,omitempty"`
+	FontContains     *string  `json:"fontContains,omitempty"`
+	FontHasPrefix    *string  `json:"fontHasPrefix,omitempty"`
+	FontHasSuffix    *string  `json:"fontHasSuffix,omitempty"`
+	FontIsNil        *bool    `json:"fontIsNil,omitempty"`
+	FontNotNil       *bool    `json:"fontNotNil,omitempty"`
+	FontEqualFold    *string  `json:"fontEqualFold,omitempty"`
+	FontContainsFold *string  `json:"fontContainsFold,omitempty"`
+	// foreground_color field predicates
+	ForegroundColor             *string  `json:"foregroundColor,omitempty"`
+	ForegroundColorNeq          *string  `json:"foregroundColorNEQ,omitempty"`
+	ForegroundColorIn           []string `json:"foregroundColorIn,omitempty"`
+	ForegroundColorNotIn        []string `json:"foregroundColorNotIn,omitempty"`
+	ForegroundColorGt           *string  `json:"foregroundColorGT,omitempty"`
+	ForegroundColorGte          *string  `json:"foregroundColorGTE,omitempty"`
+	ForegroundColorLt           *string  `json:"foregroundColorLT,omitempty"`
+	ForegroundColorLte          *string  `json:"foregroundColorLTE,omitempty"`
+	ForegroundColorContains     *string  `json:"foregroundColorContains,omitempty"`
+	ForegroundColorHasPrefix    *string  `json:"foregroundColorHasPrefix,omitempty"`
+	ForegroundColorHasSuffix    *string  `json:"foregroundColorHasSuffix,omitempty"`
+	ForegroundColorIsNil        *bool    `json:"foregroundColorIsNil,omitempty"`
+	ForegroundColorNotNil       *bool    `json:"foregroundColorNotNil,omitempty"`
+	ForegroundColorEqualFold    *string  `json:"foregroundColorEqualFold,omitempty"`
+	ForegroundColorContainsFold *string  `json:"foregroundColorContainsFold,omitempty"`
+	// background_color field predicates
+	BackgroundColor             *string  `json:"backgroundColor,omitempty"`
+	BackgroundColorNeq          *string  `json:"backgroundColorNEQ,omitempty"`
+	BackgroundColorIn           []string `json:"backgroundColorIn,omitempty"`
+	BackgroundColorNotIn        []string `json:"backgroundColorNotIn,omitempty"`
+	BackgroundColorGt           *string  `json:"backgroundColorGT,omitempty"`
+	BackgroundColorGte          *string  `json:"backgroundColorGTE,omitempty"`
+	BackgroundColorLt           *string  `json:"backgroundColorLT,omitempty"`
+	BackgroundColorLte          *string  `json:"backgroundColorLTE,omitempty"`
+	BackgroundColorContains     *string  `json:"backgroundColorContains,omitempty"`
+	BackgroundColorHasPrefix    *string  `json:"backgroundColorHasPrefix,omitempty"`
+	BackgroundColorHasSuffix    *string  `json:"backgroundColorHasSuffix,omitempty"`
+	BackgroundColorIsNil        *bool    `json:"backgroundColorIsNil,omitempty"`
+	BackgroundColorNotNil       *bool    `json:"backgroundColorNotNil,omitempty"`
+	BackgroundColorEqualFold    *string  `json:"backgroundColorEqualFold,omitempty"`
+	BackgroundColorContainsFold *string  `json:"backgroundColorContainsFold,omitempty"`
+	// accent_color field predicates
+	AccentColor             *string  `json:"accentColor,omitempty"`
+	AccentColorNeq          *string  `json:"accentColorNEQ,omitempty"`
+	AccentColorIn           []string `json:"accentColorIn,omitempty"`
+	AccentColorNotIn        []string `json:"accentColorNotIn,omitempty"`
+	AccentColorGt           *string  `json:"accentColorGT,omitempty"`
+	AccentColorGte          *string  `json:"accentColorGTE,omitempty"`
+	AccentColorLt           *string  `json:"accentColorLT,omitempty"`
+	AccentColorLte          *string  `json:"accentColorLTE,omitempty"`
+	AccentColorContains     *string  `json:"accentColorContains,omitempty"`
+	AccentColorHasPrefix    *string  `json:"accentColorHasPrefix,omitempty"`
+	AccentColorHasSuffix    *string  `json:"accentColorHasSuffix,omitempty"`
+	AccentColorIsNil        *bool    `json:"accentColorIsNil,omitempty"`
+	AccentColorNotNil       *bool    `json:"accentColorNotNil,omitempty"`
+	AccentColorEqualFold    *string  `json:"accentColorEqualFold,omitempty"`
+	AccentColorContainsFold *string  `json:"accentColorContainsFold,omitempty"`
 }
 
 // Ordering options for TrustCenterSetting connections
@@ -25663,22 +25764,6 @@ type TrustCenterSettingWhereInput struct {
 	OverviewNotNil       *bool    `json:"overviewNotNil,omitempty"`
 	OverviewEqualFold    *string  `json:"overviewEqualFold,omitempty"`
 	OverviewContainsFold *string  `json:"overviewContainsFold,omitempty"`
-	// primary_color field predicates
-	PrimaryColor             *string  `json:"primaryColor,omitempty"`
-	PrimaryColorNeq          *string  `json:"primaryColorNEQ,omitempty"`
-	PrimaryColorIn           []string `json:"primaryColorIn,omitempty"`
-	PrimaryColorNotIn        []string `json:"primaryColorNotIn,omitempty"`
-	PrimaryColorGt           *string  `json:"primaryColorGT,omitempty"`
-	PrimaryColorGte          *string  `json:"primaryColorGTE,omitempty"`
-	PrimaryColorLt           *string  `json:"primaryColorLT,omitempty"`
-	PrimaryColorLte          *string  `json:"primaryColorLTE,omitempty"`
-	PrimaryColorContains     *string  `json:"primaryColorContains,omitempty"`
-	PrimaryColorHasPrefix    *string  `json:"primaryColorHasPrefix,omitempty"`
-	PrimaryColorHasSuffix    *string  `json:"primaryColorHasSuffix,omitempty"`
-	PrimaryColorIsNil        *bool    `json:"primaryColorIsNil,omitempty"`
-	PrimaryColorNotNil       *bool    `json:"primaryColorNotNil,omitempty"`
-	PrimaryColorEqualFold    *string  `json:"primaryColorEqualFold,omitempty"`
-	PrimaryColorContainsFold *string  `json:"primaryColorContainsFold,omitempty"`
 	// logo_remote_url field predicates
 	LogoRemoteURL             *string  `json:"logoRemoteURL,omitempty"`
 	LogoRemoteURLNeq          *string  `json:"logoRemoteURLNEQ,omitempty"`
@@ -25743,6 +25828,93 @@ type TrustCenterSettingWhereInput struct {
 	FaviconLocalFileIDNotNil       *bool    `json:"faviconLocalFileIDNotNil,omitempty"`
 	FaviconLocalFileIDEqualFold    *string  `json:"faviconLocalFileIDEqualFold,omitempty"`
 	FaviconLocalFileIDContainsFold *string  `json:"faviconLocalFileIDContainsFold,omitempty"`
+	// theme_mode field predicates
+	ThemeMode       *enums.TrustCenterThemeMode  `json:"themeMode,omitempty"`
+	ThemeModeNeq    *enums.TrustCenterThemeMode  `json:"themeModeNEQ,omitempty"`
+	ThemeModeIn     []enums.TrustCenterThemeMode `json:"themeModeIn,omitempty"`
+	ThemeModeNotIn  []enums.TrustCenterThemeMode `json:"themeModeNotIn,omitempty"`
+	ThemeModeIsNil  *bool                        `json:"themeModeIsNil,omitempty"`
+	ThemeModeNotNil *bool                        `json:"themeModeNotNil,omitempty"`
+	// primary_color field predicates
+	PrimaryColor             *string  `json:"primaryColor,omitempty"`
+	PrimaryColorNeq          *string  `json:"primaryColorNEQ,omitempty"`
+	PrimaryColorIn           []string `json:"primaryColorIn,omitempty"`
+	PrimaryColorNotIn        []string `json:"primaryColorNotIn,omitempty"`
+	PrimaryColorGt           *string  `json:"primaryColorGT,omitempty"`
+	PrimaryColorGte          *string  `json:"primaryColorGTE,omitempty"`
+	PrimaryColorLt           *string  `json:"primaryColorLT,omitempty"`
+	PrimaryColorLte          *string  `json:"primaryColorLTE,omitempty"`
+	PrimaryColorContains     *string  `json:"primaryColorContains,omitempty"`
+	PrimaryColorHasPrefix    *string  `json:"primaryColorHasPrefix,omitempty"`
+	PrimaryColorHasSuffix    *string  `json:"primaryColorHasSuffix,omitempty"`
+	PrimaryColorIsNil        *bool    `json:"primaryColorIsNil,omitempty"`
+	PrimaryColorNotNil       *bool    `json:"primaryColorNotNil,omitempty"`
+	PrimaryColorEqualFold    *string  `json:"primaryColorEqualFold,omitempty"`
+	PrimaryColorContainsFold *string  `json:"primaryColorContainsFold,omitempty"`
+	// font field predicates
+	Font             *string  `json:"font,omitempty"`
+	FontNeq          *string  `json:"fontNEQ,omitempty"`
+	FontIn           []string `json:"fontIn,omitempty"`
+	FontNotIn        []string `json:"fontNotIn,omitempty"`
+	FontGt           *string  `json:"fontGT,omitempty"`
+	FontGte          *string  `json:"fontGTE,omitempty"`
+	FontLt           *string  `json:"fontLT,omitempty"`
+	FontLte          *string  `json:"fontLTE,omitempty"`
+	FontContains     *string  `json:"fontContains,omitempty"`
+	FontHasPrefix    *string  `json:"fontHasPrefix,omitempty"`
+	FontHasSuffix    *string  `json:"fontHasSuffix,omitempty"`
+	FontIsNil        *bool    `json:"fontIsNil,omitempty"`
+	FontNotNil       *bool    `json:"fontNotNil,omitempty"`
+	FontEqualFold    *string  `json:"fontEqualFold,omitempty"`
+	FontContainsFold *string  `json:"fontContainsFold,omitempty"`
+	// foreground_color field predicates
+	ForegroundColor             *string  `json:"foregroundColor,omitempty"`
+	ForegroundColorNeq          *string  `json:"foregroundColorNEQ,omitempty"`
+	ForegroundColorIn           []string `json:"foregroundColorIn,omitempty"`
+	ForegroundColorNotIn        []string `json:"foregroundColorNotIn,omitempty"`
+	ForegroundColorGt           *string  `json:"foregroundColorGT,omitempty"`
+	ForegroundColorGte          *string  `json:"foregroundColorGTE,omitempty"`
+	ForegroundColorLt           *string  `json:"foregroundColorLT,omitempty"`
+	ForegroundColorLte          *string  `json:"foregroundColorLTE,omitempty"`
+	ForegroundColorContains     *string  `json:"foregroundColorContains,omitempty"`
+	ForegroundColorHasPrefix    *string  `json:"foregroundColorHasPrefix,omitempty"`
+	ForegroundColorHasSuffix    *string  `json:"foregroundColorHasSuffix,omitempty"`
+	ForegroundColorIsNil        *bool    `json:"foregroundColorIsNil,omitempty"`
+	ForegroundColorNotNil       *bool    `json:"foregroundColorNotNil,omitempty"`
+	ForegroundColorEqualFold    *string  `json:"foregroundColorEqualFold,omitempty"`
+	ForegroundColorContainsFold *string  `json:"foregroundColorContainsFold,omitempty"`
+	// background_color field predicates
+	BackgroundColor             *string  `json:"backgroundColor,omitempty"`
+	BackgroundColorNeq          *string  `json:"backgroundColorNEQ,omitempty"`
+	BackgroundColorIn           []string `json:"backgroundColorIn,omitempty"`
+	BackgroundColorNotIn        []string `json:"backgroundColorNotIn,omitempty"`
+	BackgroundColorGt           *string  `json:"backgroundColorGT,omitempty"`
+	BackgroundColorGte          *string  `json:"backgroundColorGTE,omitempty"`
+	BackgroundColorLt           *string  `json:"backgroundColorLT,omitempty"`
+	BackgroundColorLte          *string  `json:"backgroundColorLTE,omitempty"`
+	BackgroundColorContains     *string  `json:"backgroundColorContains,omitempty"`
+	BackgroundColorHasPrefix    *string  `json:"backgroundColorHasPrefix,omitempty"`
+	BackgroundColorHasSuffix    *string  `json:"backgroundColorHasSuffix,omitempty"`
+	BackgroundColorIsNil        *bool    `json:"backgroundColorIsNil,omitempty"`
+	BackgroundColorNotNil       *bool    `json:"backgroundColorNotNil,omitempty"`
+	BackgroundColorEqualFold    *string  `json:"backgroundColorEqualFold,omitempty"`
+	BackgroundColorContainsFold *string  `json:"backgroundColorContainsFold,omitempty"`
+	// accent_color field predicates
+	AccentColor             *string  `json:"accentColor,omitempty"`
+	AccentColorNeq          *string  `json:"accentColorNEQ,omitempty"`
+	AccentColorIn           []string `json:"accentColorIn,omitempty"`
+	AccentColorNotIn        []string `json:"accentColorNotIn,omitempty"`
+	AccentColorGt           *string  `json:"accentColorGT,omitempty"`
+	AccentColorGte          *string  `json:"accentColorGTE,omitempty"`
+	AccentColorLt           *string  `json:"accentColorLT,omitempty"`
+	AccentColorLte          *string  `json:"accentColorLTE,omitempty"`
+	AccentColorContains     *string  `json:"accentColorContains,omitempty"`
+	AccentColorHasPrefix    *string  `json:"accentColorHasPrefix,omitempty"`
+	AccentColorHasSuffix    *string  `json:"accentColorHasSuffix,omitempty"`
+	AccentColorIsNil        *bool    `json:"accentColorIsNil,omitempty"`
+	AccentColorNotNil       *bool    `json:"accentColorNotNil,omitempty"`
+	AccentColorEqualFold    *string  `json:"accentColorEqualFold,omitempty"`
+	AccentColorContainsFold *string  `json:"accentColorContainsFold,omitempty"`
 	// trust_center edge predicates
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
 	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
@@ -28093,24 +28265,39 @@ type UpdateTrustCenterSettingInput struct {
 	// overview of the trust center
 	Overview      *string `json:"overview,omitempty"`
 	ClearOverview *bool   `json:"clearOverview,omitempty"`
-	// primary color for the trust center
-	PrimaryColor      *string `json:"primaryColor,omitempty"`
-	ClearPrimaryColor *bool   `json:"clearPrimaryColor,omitempty"`
 	// URL of the logo
 	LogoRemoteURL      *string `json:"logoRemoteURL,omitempty"`
 	ClearLogoRemoteURL *bool   `json:"clearLogoRemoteURL,omitempty"`
 	// URL of the favicon
-	FaviconRemoteURL      *string  `json:"faviconRemoteURL,omitempty"`
-	ClearFaviconRemoteURL *bool    `json:"clearFaviconRemoteURL,omitempty"`
-	TrustCenterID         *string  `json:"trustCenterID,omitempty"`
-	ClearTrustCenter      *bool    `json:"clearTrustCenter,omitempty"`
-	AddFileIDs            []string `json:"addFileIDs,omitempty"`
-	RemoveFileIDs         []string `json:"removeFileIDs,omitempty"`
-	ClearFiles            *bool    `json:"clearFiles,omitempty"`
-	LogoFileID            *string  `json:"logoFileID,omitempty"`
-	ClearLogoFile         *bool    `json:"clearLogoFile,omitempty"`
-	FaviconFileID         *string  `json:"faviconFileID,omitempty"`
-	ClearFaviconFile      *bool    `json:"clearFaviconFile,omitempty"`
+	FaviconRemoteURL      *string `json:"faviconRemoteURL,omitempty"`
+	ClearFaviconRemoteURL *bool   `json:"clearFaviconRemoteURL,omitempty"`
+	// Theme mode for the trust center
+	ThemeMode      *enums.TrustCenterThemeMode `json:"themeMode,omitempty"`
+	ClearThemeMode *bool                       `json:"clearThemeMode,omitempty"`
+	// primary color for the trust center
+	PrimaryColor      *string `json:"primaryColor,omitempty"`
+	ClearPrimaryColor *bool   `json:"clearPrimaryColor,omitempty"`
+	// font for the trust center
+	Font      *string `json:"font,omitempty"`
+	ClearFont *bool   `json:"clearFont,omitempty"`
+	// foreground color for the trust center
+	ForegroundColor      *string `json:"foregroundColor,omitempty"`
+	ClearForegroundColor *bool   `json:"clearForegroundColor,omitempty"`
+	// background color for the trust center
+	BackgroundColor      *string `json:"backgroundColor,omitempty"`
+	ClearBackgroundColor *bool   `json:"clearBackgroundColor,omitempty"`
+	// accent/brand color for the trust center
+	AccentColor      *string  `json:"accentColor,omitempty"`
+	ClearAccentColor *bool    `json:"clearAccentColor,omitempty"`
+	TrustCenterID    *string  `json:"trustCenterID,omitempty"`
+	ClearTrustCenter *bool    `json:"clearTrustCenter,omitempty"`
+	AddFileIDs       []string `json:"addFileIDs,omitempty"`
+	RemoveFileIDs    []string `json:"removeFileIDs,omitempty"`
+	ClearFiles       *bool    `json:"clearFiles,omitempty"`
+	LogoFileID       *string  `json:"logoFileID,omitempty"`
+	ClearLogoFile    *bool    `json:"clearLogoFile,omitempty"`
+	FaviconFileID    *string  `json:"faviconFileID,omitempty"`
+	ClearFaviconFile *bool    `json:"clearFaviconFile,omitempty"`
 }
 
 // UpdateUserInput is used for update User object.

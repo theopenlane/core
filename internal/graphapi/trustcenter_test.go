@@ -12,6 +12,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/iam/auth"
@@ -773,7 +774,7 @@ func TestQueryTrustCentersAsAnonymousUser(t *testing.T) {
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUserOther.UserCtx, t)
 }
 
-func TestMutationUpdateTrustCenterSettingLogo(t *testing.T) {
+func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
@@ -853,6 +854,74 @@ func TestMutationUpdateTrustCenterSettingLogo(t *testing.T) {
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
 		},
+		{
+			name:      "happy path - update theme mode to EASY",
+			settingID: trustCenter.Edges.Setting.ID,
+			updateInput: openlaneclient.UpdateTrustCenterSettingInput{
+				ThemeMode: lo.ToPtr(enums.TrustCenterThemeModeEasy),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name:      "happy path - update theme mode to ADVANCED",
+			settingID: trustCenter.Edges.Setting.ID,
+			updateInput: openlaneclient.UpdateTrustCenterSettingInput{
+				ThemeMode: lo.ToPtr(enums.TrustCenterThemeModeAdvanced),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name:      "happy path - update font",
+			settingID: trustCenter.Edges.Setting.ID,
+			updateInput: openlaneclient.UpdateTrustCenterSettingInput{
+				Font: lo.ToPtr("Arial, sans-serif"),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name:      "happy path - update foreground color",
+			settingID: trustCenter.Edges.Setting.ID,
+			updateInput: openlaneclient.UpdateTrustCenterSettingInput{
+				ForegroundColor: lo.ToPtr("#333333"),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name:      "happy path - update background color",
+			settingID: trustCenter.Edges.Setting.ID,
+			updateInput: openlaneclient.UpdateTrustCenterSettingInput{
+				BackgroundColor: lo.ToPtr("#FFFFFF"),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name:      "happy path - update accent color",
+			settingID: trustCenter.Edges.Setting.ID,
+			updateInput: openlaneclient.UpdateTrustCenterSettingInput{
+				AccentColor: lo.ToPtr("#007BFF"),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name:      "happy path - update all theme fields together",
+			settingID: trustCenter.Edges.Setting.ID,
+			updateInput: openlaneclient.UpdateTrustCenterSettingInput{
+				ThemeMode:       lo.ToPtr(enums.TrustCenterThemeModeAdvanced),
+				PrimaryColor:    lo.ToPtr("#FF6B35"),
+				Font:            lo.ToPtr("Roboto, sans-serif"),
+				ForegroundColor: lo.ToPtr("#2C3E50"),
+				BackgroundColor: lo.ToPtr("#F8F9FA"),
+				AccentColor:     lo.ToPtr("#28A745"),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
 	}
 
 	for _, tc := range testCases {
@@ -901,6 +970,26 @@ func TestMutationUpdateTrustCenterSettingLogo(t *testing.T) {
 
 			if tc.updateInput.PrimaryColor != nil {
 				assert.Check(t, is.Equal(*tc.updateInput.PrimaryColor, *resp.UpdateTrustCenterSetting.TrustCenterSetting.PrimaryColor))
+			}
+
+			if tc.updateInput.ThemeMode != nil {
+				assert.Check(t, is.Equal(*tc.updateInput.ThemeMode, *resp.UpdateTrustCenterSetting.TrustCenterSetting.ThemeMode))
+			}
+
+			if tc.updateInput.Font != nil {
+				assert.Check(t, is.Equal(*tc.updateInput.Font, *resp.UpdateTrustCenterSetting.TrustCenterSetting.Font))
+			}
+
+			if tc.updateInput.ForegroundColor != nil {
+				assert.Check(t, is.Equal(*tc.updateInput.ForegroundColor, *resp.UpdateTrustCenterSetting.TrustCenterSetting.ForegroundColor))
+			}
+
+			if tc.updateInput.BackgroundColor != nil {
+				assert.Check(t, is.Equal(*tc.updateInput.BackgroundColor, *resp.UpdateTrustCenterSetting.TrustCenterSetting.BackgroundColor))
+			}
+
+			if tc.updateInput.AccentColor != nil {
+				assert.Check(t, is.Equal(*tc.updateInput.AccentColor, *resp.UpdateTrustCenterSetting.TrustCenterSetting.AccentColor))
 			}
 		})
 	}

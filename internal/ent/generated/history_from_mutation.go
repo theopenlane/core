@@ -10266,10 +10266,6 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetOverview(overview)
 	}
 
-	if primaryColor, exists := m.PrimaryColor(); exists {
-		create = create.SetPrimaryColor(primaryColor)
-	}
-
 	if logoRemoteURL, exists := m.LogoRemoteURL(); exists {
 		create = create.SetNillableLogoRemoteURL(&logoRemoteURL)
 	}
@@ -10284,6 +10280,30 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 
 	if faviconLocalFileID, exists := m.FaviconLocalFileID(); exists {
 		create = create.SetNillableFaviconLocalFileID(&faviconLocalFileID)
+	}
+
+	if themeMode, exists := m.ThemeMode(); exists {
+		create = create.SetThemeMode(themeMode)
+	}
+
+	if primaryColor, exists := m.PrimaryColor(); exists {
+		create = create.SetPrimaryColor(primaryColor)
+	}
+
+	if font, exists := m.Font(); exists {
+		create = create.SetFont(font)
+	}
+
+	if foregroundColor, exists := m.ForegroundColor(); exists {
+		create = create.SetForegroundColor(foregroundColor)
+	}
+
+	if backgroundColor, exists := m.BackgroundColor(); exists {
+		create = create.SetBackgroundColor(backgroundColor)
+	}
+
+	if accentColor, exists := m.AccentColor(); exists {
+		create = create.SetAccentColor(accentColor)
 	}
 
 	_, err := create.Save(ctx)
@@ -10370,12 +10390,6 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetOverview(trustcentersetting.Overview)
 		}
 
-		if primaryColor, exists := m.PrimaryColor(); exists {
-			create = create.SetPrimaryColor(primaryColor)
-		} else {
-			create = create.SetPrimaryColor(trustcentersetting.PrimaryColor)
-		}
-
 		if logoRemoteURL, exists := m.LogoRemoteURL(); exists {
 			create = create.SetNillableLogoRemoteURL(&logoRemoteURL)
 		} else {
@@ -10398,6 +10412,42 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetNillableFaviconLocalFileID(&faviconLocalFileID)
 		} else {
 			create = create.SetNillableFaviconLocalFileID(trustcentersetting.FaviconLocalFileID)
+		}
+
+		if themeMode, exists := m.ThemeMode(); exists {
+			create = create.SetThemeMode(themeMode)
+		} else {
+			create = create.SetThemeMode(trustcentersetting.ThemeMode)
+		}
+
+		if primaryColor, exists := m.PrimaryColor(); exists {
+			create = create.SetPrimaryColor(primaryColor)
+		} else {
+			create = create.SetPrimaryColor(trustcentersetting.PrimaryColor)
+		}
+
+		if font, exists := m.Font(); exists {
+			create = create.SetFont(font)
+		} else {
+			create = create.SetFont(trustcentersetting.Font)
+		}
+
+		if foregroundColor, exists := m.ForegroundColor(); exists {
+			create = create.SetForegroundColor(foregroundColor)
+		} else {
+			create = create.SetForegroundColor(trustcentersetting.ForegroundColor)
+		}
+
+		if backgroundColor, exists := m.BackgroundColor(); exists {
+			create = create.SetBackgroundColor(backgroundColor)
+		} else {
+			create = create.SetBackgroundColor(trustcentersetting.BackgroundColor)
+		}
+
+		if accentColor, exists := m.AccentColor(); exists {
+			create = create.SetAccentColor(accentColor)
+		} else {
+			create = create.SetAccentColor(trustcentersetting.AccentColor)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -10441,11 +10491,16 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 			SetTrustCenterID(trustcentersetting.TrustCenterID).
 			SetTitle(trustcentersetting.Title).
 			SetOverview(trustcentersetting.Overview).
-			SetPrimaryColor(trustcentersetting.PrimaryColor).
 			SetNillableLogoRemoteURL(trustcentersetting.LogoRemoteURL).
 			SetNillableLogoLocalFileID(trustcentersetting.LogoLocalFileID).
 			SetNillableFaviconRemoteURL(trustcentersetting.FaviconRemoteURL).
 			SetNillableFaviconLocalFileID(trustcentersetting.FaviconLocalFileID).
+			SetThemeMode(trustcentersetting.ThemeMode).
+			SetPrimaryColor(trustcentersetting.PrimaryColor).
+			SetFont(trustcentersetting.Font).
+			SetForegroundColor(trustcentersetting.ForegroundColor).
+			SetBackgroundColor(trustcentersetting.BackgroundColor).
+			SetAccentColor(trustcentersetting.AccentColor).
 			Save(ctx)
 		if err != nil {
 			return err

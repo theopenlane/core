@@ -4389,18 +4389,23 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterSetting struct {
+		AccentColor        func(childComplexity int) int
+		BackgroundColor    func(childComplexity int) int
 		CreatedAt          func(childComplexity int) int
 		CreatedBy          func(childComplexity int) int
 		FaviconFile        func(childComplexity int) int
 		FaviconLocalFileID func(childComplexity int) int
 		FaviconRemoteURL   func(childComplexity int) int
 		Files              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Font               func(childComplexity int) int
+		ForegroundColor    func(childComplexity int) int
 		ID                 func(childComplexity int) int
 		LogoFile           func(childComplexity int) int
 		LogoLocalFileID    func(childComplexity int) int
 		LogoRemoteURL      func(childComplexity int) int
 		Overview           func(childComplexity int) int
 		PrimaryColor       func(childComplexity int) int
+		ThemeMode          func(childComplexity int) int
 		Title              func(childComplexity int) int
 		TrustCenter        func(childComplexity int) int
 		TrustCenterID      func(childComplexity int) int
@@ -4432,10 +4437,14 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterSettingHistory struct {
+		AccentColor        func(childComplexity int) int
+		BackgroundColor    func(childComplexity int) int
 		CreatedAt          func(childComplexity int) int
 		CreatedBy          func(childComplexity int) int
 		FaviconLocalFileID func(childComplexity int) int
 		FaviconRemoteURL   func(childComplexity int) int
+		Font               func(childComplexity int) int
+		ForegroundColor    func(childComplexity int) int
 		HistoryTime        func(childComplexity int) int
 		ID                 func(childComplexity int) int
 		LogoLocalFileID    func(childComplexity int) int
@@ -4444,6 +4453,7 @@ type ComplexityRoot struct {
 		Overview           func(childComplexity int) int
 		PrimaryColor       func(childComplexity int) int
 		Ref                func(childComplexity int) int
+		ThemeMode          func(childComplexity int) int
 		Title              func(childComplexity int) int
 		TrustCenterID      func(childComplexity int) int
 		UpdatedAt          func(childComplexity int) int
@@ -29188,6 +29198,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterHistoryEdge.Node(childComplexity), true
 
+	case "TrustCenterSetting.accentColor":
+		if e.complexity.TrustCenterSetting.AccentColor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSetting.AccentColor(childComplexity), true
+
+	case "TrustCenterSetting.backgroundColor":
+		if e.complexity.TrustCenterSetting.BackgroundColor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSetting.BackgroundColor(childComplexity), true
+
 	case "TrustCenterSetting.createdAt":
 		if e.complexity.TrustCenterSetting.CreatedAt == nil {
 			break
@@ -29235,6 +29259,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterSetting.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
 
+	case "TrustCenterSetting.font":
+		if e.complexity.TrustCenterSetting.Font == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSetting.Font(childComplexity), true
+
+	case "TrustCenterSetting.foregroundColor":
+		if e.complexity.TrustCenterSetting.ForegroundColor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSetting.ForegroundColor(childComplexity), true
+
 	case "TrustCenterSetting.id":
 		if e.complexity.TrustCenterSetting.ID == nil {
 			break
@@ -29276,6 +29314,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterSetting.PrimaryColor(childComplexity), true
+
+	case "TrustCenterSetting.themeMode":
+		if e.complexity.TrustCenterSetting.ThemeMode == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSetting.ThemeMode(childComplexity), true
 
 	case "TrustCenterSetting.title":
 		if e.complexity.TrustCenterSetting.Title == nil {
@@ -29368,6 +29413,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterSettingEdge.Node(childComplexity), true
 
+	case "TrustCenterSettingHistory.accentColor":
+		if e.complexity.TrustCenterSettingHistory.AccentColor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSettingHistory.AccentColor(childComplexity), true
+
+	case "TrustCenterSettingHistory.backgroundColor":
+		if e.complexity.TrustCenterSettingHistory.BackgroundColor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSettingHistory.BackgroundColor(childComplexity), true
+
 	case "TrustCenterSettingHistory.createdAt":
 		if e.complexity.TrustCenterSettingHistory.CreatedAt == nil {
 			break
@@ -29395,6 +29454,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterSettingHistory.FaviconRemoteURL(childComplexity), true
+
+	case "TrustCenterSettingHistory.font":
+		if e.complexity.TrustCenterSettingHistory.Font == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSettingHistory.Font(childComplexity), true
+
+	case "TrustCenterSettingHistory.foregroundColor":
+		if e.complexity.TrustCenterSettingHistory.ForegroundColor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSettingHistory.ForegroundColor(childComplexity), true
 
 	case "TrustCenterSettingHistory.historyTime":
 		if e.complexity.TrustCenterSettingHistory.HistoryTime == nil {
@@ -29451,6 +29524,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterSettingHistory.Ref(childComplexity), true
+
+	case "TrustCenterSettingHistory.themeMode":
+		if e.complexity.TrustCenterSettingHistory.ThemeMode == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSettingHistory.ThemeMode(childComplexity), true
 
 	case "TrustCenterSettingHistory.title":
 		if e.complexity.TrustCenterSettingHistory.Title == nil {
@@ -42689,10 +42769,6 @@ input CreateTrustCenterSettingInput {
   """
   overview: String
   """
-  primary color for the trust center
-  """
-  primaryColor: String
-  """
   URL of the logo
   """
   logoRemoteURL: String
@@ -42700,6 +42776,30 @@ input CreateTrustCenterSettingInput {
   URL of the favicon
   """
   faviconRemoteURL: String
+  """
+  Theme mode for the trust center
+  """
+  themeMode: TrustCenterSettingTrustCenterThemeMode
+  """
+  primary color for the trust center
+  """
+  primaryColor: String
+  """
+  font for the trust center
+  """
+  font: String
+  """
+  foreground color for the trust center
+  """
+  foregroundColor: String
+  """
+  background color for the trust center
+  """
+  backgroundColor: String
+  """
+  accent/brand color for the trust center
+  """
+  accentColor: String
   trustCenterID: ID
   fileIDs: [ID!]
   logoFileID: ID
@@ -77471,10 +77571,6 @@ type TrustCenterSetting implements Node {
   """
   overview: String
   """
-  primary color for the trust center
-  """
-  primaryColor: String
-  """
   URL of the logo
   """
   logoRemoteURL: String
@@ -77490,6 +77586,30 @@ type TrustCenterSetting implements Node {
   The local favicon file id, takes precedence over the favicon remote URL
   """
   faviconLocalFileID: ID
+  """
+  Theme mode for the trust center
+  """
+  themeMode: TrustCenterSettingTrustCenterThemeMode
+  """
+  primary color for the trust center
+  """
+  primaryColor: String
+  """
+  font for the trust center
+  """
+  font: String
+  """
+  foreground color for the trust center
+  """
+  foregroundColor: String
+  """
+  background color for the trust center
+  """
+  backgroundColor: String
+  """
+  accent/brand color for the trust center
+  """
+  accentColor: String
   trustCenter: TrustCenter
   files(
     """
@@ -77577,10 +77697,6 @@ type TrustCenterSettingHistory implements Node {
   """
   overview: String
   """
-  primary color for the trust center
-  """
-  primaryColor: String
-  """
   URL of the logo
   """
   logoRemoteURL: String
@@ -77596,6 +77712,30 @@ type TrustCenterSettingHistory implements Node {
   The local favicon file id, takes precedence over the favicon remote URL
   """
   faviconLocalFileID: String
+  """
+  Theme mode for the trust center
+  """
+  themeMode: TrustCenterSettingHistoryTrustCenterThemeMode
+  """
+  primary color for the trust center
+  """
+  primaryColor: String
+  """
+  font for the trust center
+  """
+  font: String
+  """
+  foreground color for the trust center
+  """
+  foregroundColor: String
+  """
+  background color for the trust center
+  """
+  backgroundColor: String
+  """
+  accent/brand color for the trust center
+  """
+  accentColor: String
 }
 """
 A connection to a list of items.
@@ -77655,6 +77795,13 @@ enum TrustCenterSettingHistoryOrderField {
   history_time
   created_at
   updated_at
+}
+"""
+TrustCenterSettingHistoryTrustCenterThemeMode is enum for the field theme_mode
+"""
+enum TrustCenterSettingHistoryTrustCenterThemeMode @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterThemeMode") {
+  EASY
+  ADVANCED
 }
 """
 TrustCenterSettingHistoryWhereInput is used for filtering TrustCenterSettingHistory objects.
@@ -77830,24 +77977,6 @@ input TrustCenterSettingHistoryWhereInput {
   overviewEqualFold: String
   overviewContainsFold: String
   """
-  primary_color field predicates
-  """
-  primaryColor: String
-  primaryColorNEQ: String
-  primaryColorIn: [String!]
-  primaryColorNotIn: [String!]
-  primaryColorGT: String
-  primaryColorGTE: String
-  primaryColorLT: String
-  primaryColorLTE: String
-  primaryColorContains: String
-  primaryColorHasPrefix: String
-  primaryColorHasSuffix: String
-  primaryColorIsNil: Boolean
-  primaryColorNotNil: Boolean
-  primaryColorEqualFold: String
-  primaryColorContainsFold: String
-  """
   logo_remote_url field predicates
   """
   logoRemoteURL: String
@@ -77919,6 +78048,105 @@ input TrustCenterSettingHistoryWhereInput {
   faviconLocalFileIDNotNil: Boolean
   faviconLocalFileIDEqualFold: String
   faviconLocalFileIDContainsFold: String
+  """
+  theme_mode field predicates
+  """
+  themeMode: TrustCenterSettingHistoryTrustCenterThemeMode
+  themeModeNEQ: TrustCenterSettingHistoryTrustCenterThemeMode
+  themeModeIn: [TrustCenterSettingHistoryTrustCenterThemeMode!]
+  themeModeNotIn: [TrustCenterSettingHistoryTrustCenterThemeMode!]
+  themeModeIsNil: Boolean
+  themeModeNotNil: Boolean
+  """
+  primary_color field predicates
+  """
+  primaryColor: String
+  primaryColorNEQ: String
+  primaryColorIn: [String!]
+  primaryColorNotIn: [String!]
+  primaryColorGT: String
+  primaryColorGTE: String
+  primaryColorLT: String
+  primaryColorLTE: String
+  primaryColorContains: String
+  primaryColorHasPrefix: String
+  primaryColorHasSuffix: String
+  primaryColorIsNil: Boolean
+  primaryColorNotNil: Boolean
+  primaryColorEqualFold: String
+  primaryColorContainsFold: String
+  """
+  font field predicates
+  """
+  font: String
+  fontNEQ: String
+  fontIn: [String!]
+  fontNotIn: [String!]
+  fontGT: String
+  fontGTE: String
+  fontLT: String
+  fontLTE: String
+  fontContains: String
+  fontHasPrefix: String
+  fontHasSuffix: String
+  fontIsNil: Boolean
+  fontNotNil: Boolean
+  fontEqualFold: String
+  fontContainsFold: String
+  """
+  foreground_color field predicates
+  """
+  foregroundColor: String
+  foregroundColorNEQ: String
+  foregroundColorIn: [String!]
+  foregroundColorNotIn: [String!]
+  foregroundColorGT: String
+  foregroundColorGTE: String
+  foregroundColorLT: String
+  foregroundColorLTE: String
+  foregroundColorContains: String
+  foregroundColorHasPrefix: String
+  foregroundColorHasSuffix: String
+  foregroundColorIsNil: Boolean
+  foregroundColorNotNil: Boolean
+  foregroundColorEqualFold: String
+  foregroundColorContainsFold: String
+  """
+  background_color field predicates
+  """
+  backgroundColor: String
+  backgroundColorNEQ: String
+  backgroundColorIn: [String!]
+  backgroundColorNotIn: [String!]
+  backgroundColorGT: String
+  backgroundColorGTE: String
+  backgroundColorLT: String
+  backgroundColorLTE: String
+  backgroundColorContains: String
+  backgroundColorHasPrefix: String
+  backgroundColorHasSuffix: String
+  backgroundColorIsNil: Boolean
+  backgroundColorNotNil: Boolean
+  backgroundColorEqualFold: String
+  backgroundColorContainsFold: String
+  """
+  accent_color field predicates
+  """
+  accentColor: String
+  accentColorNEQ: String
+  accentColorIn: [String!]
+  accentColorNotIn: [String!]
+  accentColorGT: String
+  accentColorGTE: String
+  accentColorLT: String
+  accentColorLTE: String
+  accentColorContains: String
+  accentColorHasPrefix: String
+  accentColorHasSuffix: String
+  accentColorIsNil: Boolean
+  accentColorNotNil: Boolean
+  accentColorEqualFold: String
+  accentColorContainsFold: String
 }
 """
 Ordering options for TrustCenterSetting connections
@@ -77939,6 +78167,13 @@ Properties by which TrustCenterSetting connections can be ordered.
 enum TrustCenterSettingOrderField {
   created_at
   updated_at
+}
+"""
+TrustCenterSettingTrustCenterThemeMode is enum for the field theme_mode
+"""
+enum TrustCenterSettingTrustCenterThemeMode @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterThemeMode") {
+  EASY
+  ADVANCED
 }
 """
 TrustCenterSettingWhereInput is used for filtering TrustCenterSetting objects.
@@ -78078,24 +78313,6 @@ input TrustCenterSettingWhereInput {
   overviewEqualFold: String
   overviewContainsFold: String
   """
-  primary_color field predicates
-  """
-  primaryColor: String
-  primaryColorNEQ: String
-  primaryColorIn: [String!]
-  primaryColorNotIn: [String!]
-  primaryColorGT: String
-  primaryColorGTE: String
-  primaryColorLT: String
-  primaryColorLTE: String
-  primaryColorContains: String
-  primaryColorHasPrefix: String
-  primaryColorHasSuffix: String
-  primaryColorIsNil: Boolean
-  primaryColorNotNil: Boolean
-  primaryColorEqualFold: String
-  primaryColorContainsFold: String
-  """
   logo_remote_url field predicates
   """
   logoRemoteURL: String
@@ -78167,6 +78384,105 @@ input TrustCenterSettingWhereInput {
   faviconLocalFileIDNotNil: Boolean
   faviconLocalFileIDEqualFold: ID
   faviconLocalFileIDContainsFold: ID
+  """
+  theme_mode field predicates
+  """
+  themeMode: TrustCenterSettingTrustCenterThemeMode
+  themeModeNEQ: TrustCenterSettingTrustCenterThemeMode
+  themeModeIn: [TrustCenterSettingTrustCenterThemeMode!]
+  themeModeNotIn: [TrustCenterSettingTrustCenterThemeMode!]
+  themeModeIsNil: Boolean
+  themeModeNotNil: Boolean
+  """
+  primary_color field predicates
+  """
+  primaryColor: String
+  primaryColorNEQ: String
+  primaryColorIn: [String!]
+  primaryColorNotIn: [String!]
+  primaryColorGT: String
+  primaryColorGTE: String
+  primaryColorLT: String
+  primaryColorLTE: String
+  primaryColorContains: String
+  primaryColorHasPrefix: String
+  primaryColorHasSuffix: String
+  primaryColorIsNil: Boolean
+  primaryColorNotNil: Boolean
+  primaryColorEqualFold: String
+  primaryColorContainsFold: String
+  """
+  font field predicates
+  """
+  font: String
+  fontNEQ: String
+  fontIn: [String!]
+  fontNotIn: [String!]
+  fontGT: String
+  fontGTE: String
+  fontLT: String
+  fontLTE: String
+  fontContains: String
+  fontHasPrefix: String
+  fontHasSuffix: String
+  fontIsNil: Boolean
+  fontNotNil: Boolean
+  fontEqualFold: String
+  fontContainsFold: String
+  """
+  foreground_color field predicates
+  """
+  foregroundColor: String
+  foregroundColorNEQ: String
+  foregroundColorIn: [String!]
+  foregroundColorNotIn: [String!]
+  foregroundColorGT: String
+  foregroundColorGTE: String
+  foregroundColorLT: String
+  foregroundColorLTE: String
+  foregroundColorContains: String
+  foregroundColorHasPrefix: String
+  foregroundColorHasSuffix: String
+  foregroundColorIsNil: Boolean
+  foregroundColorNotNil: Boolean
+  foregroundColorEqualFold: String
+  foregroundColorContainsFold: String
+  """
+  background_color field predicates
+  """
+  backgroundColor: String
+  backgroundColorNEQ: String
+  backgroundColorIn: [String!]
+  backgroundColorNotIn: [String!]
+  backgroundColorGT: String
+  backgroundColorGTE: String
+  backgroundColorLT: String
+  backgroundColorLTE: String
+  backgroundColorContains: String
+  backgroundColorHasPrefix: String
+  backgroundColorHasSuffix: String
+  backgroundColorIsNil: Boolean
+  backgroundColorNotNil: Boolean
+  backgroundColorEqualFold: String
+  backgroundColorContainsFold: String
+  """
+  accent_color field predicates
+  """
+  accentColor: String
+  accentColorNEQ: String
+  accentColorIn: [String!]
+  accentColorNotIn: [String!]
+  accentColorGT: String
+  accentColorGTE: String
+  accentColorLT: String
+  accentColorLTE: String
+  accentColorContains: String
+  accentColorHasPrefix: String
+  accentColorHasSuffix: String
+  accentColorIsNil: Boolean
+  accentColorNotNil: Boolean
+  accentColorEqualFold: String
+  accentColorContainsFold: String
   """
   trust_center edge predicates
   """
@@ -81195,11 +81511,6 @@ input UpdateTrustCenterSettingInput {
   overview: String
   clearOverview: Boolean
   """
-  primary color for the trust center
-  """
-  primaryColor: String
-  clearPrimaryColor: Boolean
-  """
   URL of the logo
   """
   logoRemoteURL: String
@@ -81209,6 +81520,36 @@ input UpdateTrustCenterSettingInput {
   """
   faviconRemoteURL: String
   clearFaviconRemoteURL: Boolean
+  """
+  Theme mode for the trust center
+  """
+  themeMode: TrustCenterSettingTrustCenterThemeMode
+  clearThemeMode: Boolean
+  """
+  primary color for the trust center
+  """
+  primaryColor: String
+  clearPrimaryColor: Boolean
+  """
+  font for the trust center
+  """
+  font: String
+  clearFont: Boolean
+  """
+  foreground color for the trust center
+  """
+  foregroundColor: String
+  clearForegroundColor: Boolean
+  """
+  background color for the trust center
+  """
+  backgroundColor: String
+  clearBackgroundColor: Boolean
+  """
+  accent/brand color for the trust center
+  """
+  accentColor: String
+  clearAccentColor: Boolean
   trustCenterID: ID
   clearTrustCenter: Boolean
   addFileIDs: [ID!]

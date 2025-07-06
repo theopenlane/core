@@ -3,11 +3,14 @@
 package trustcentersetting
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 const (
@@ -33,8 +36,6 @@ const (
 	FieldTitle = "title"
 	// FieldOverview holds the string denoting the overview field in the database.
 	FieldOverview = "overview"
-	// FieldPrimaryColor holds the string denoting the primary_color field in the database.
-	FieldPrimaryColor = "primary_color"
 	// FieldLogoRemoteURL holds the string denoting the logo_remote_url field in the database.
 	FieldLogoRemoteURL = "logo_remote_url"
 	// FieldLogoLocalFileID holds the string denoting the logo_local_file_id field in the database.
@@ -43,6 +44,18 @@ const (
 	FieldFaviconRemoteURL = "favicon_remote_url"
 	// FieldFaviconLocalFileID holds the string denoting the favicon_local_file_id field in the database.
 	FieldFaviconLocalFileID = "favicon_local_file_id"
+	// FieldThemeMode holds the string denoting the theme_mode field in the database.
+	FieldThemeMode = "theme_mode"
+	// FieldPrimaryColor holds the string denoting the primary_color field in the database.
+	FieldPrimaryColor = "primary_color"
+	// FieldFont holds the string denoting the font field in the database.
+	FieldFont = "font"
+	// FieldForegroundColor holds the string denoting the foreground_color field in the database.
+	FieldForegroundColor = "foreground_color"
+	// FieldBackgroundColor holds the string denoting the background_color field in the database.
+	FieldBackgroundColor = "background_color"
+	// FieldAccentColor holds the string denoting the accent_color field in the database.
+	FieldAccentColor = "accent_color"
 	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
 	EdgeTrustCenter = "trust_center"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
@@ -93,11 +106,16 @@ var Columns = []string{
 	FieldTrustCenterID,
 	FieldTitle,
 	FieldOverview,
-	FieldPrimaryColor,
 	FieldLogoRemoteURL,
 	FieldLogoLocalFileID,
 	FieldFaviconRemoteURL,
 	FieldFaviconLocalFileID,
+	FieldThemeMode,
+	FieldPrimaryColor,
+	FieldFont,
+	FieldForegroundColor,
+	FieldBackgroundColor,
+	FieldAccentColor,
 }
 
 var (
@@ -144,6 +162,18 @@ var (
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+const DefaultThemeMode enums.TrustCenterThemeMode = "EASY"
+
+// ThemeModeValidator is a validator for the "theme_mode" field enum values. It is called by the builders before save.
+func ThemeModeValidator(tm enums.TrustCenterThemeMode) error {
+	switch tm.String() {
+	case "EASY", "ADVANCED":
+		return nil
+	default:
+		return fmt.Errorf("trustcentersetting: invalid enum value for theme_mode field: %q", tm)
+	}
+}
 
 // OrderOption defines the ordering options for the TrustCenterSetting queries.
 type OrderOption func(*sql.Selector)
@@ -198,11 +228,6 @@ func ByOverview(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOverview, opts...).ToFunc()
 }
 
-// ByPrimaryColor orders the results by the primary_color field.
-func ByPrimaryColor(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPrimaryColor, opts...).ToFunc()
-}
-
 // ByLogoRemoteURL orders the results by the logo_remote_url field.
 func ByLogoRemoteURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLogoRemoteURL, opts...).ToFunc()
@@ -221,6 +246,36 @@ func ByFaviconRemoteURL(opts ...sql.OrderTermOption) OrderOption {
 // ByFaviconLocalFileID orders the results by the favicon_local_file_id field.
 func ByFaviconLocalFileID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFaviconLocalFileID, opts...).ToFunc()
+}
+
+// ByThemeMode orders the results by the theme_mode field.
+func ByThemeMode(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldThemeMode, opts...).ToFunc()
+}
+
+// ByPrimaryColor orders the results by the primary_color field.
+func ByPrimaryColor(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPrimaryColor, opts...).ToFunc()
+}
+
+// ByFont orders the results by the font field.
+func ByFont(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFont, opts...).ToFunc()
+}
+
+// ByForegroundColor orders the results by the foreground_color field.
+func ByForegroundColor(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldForegroundColor, opts...).ToFunc()
+}
+
+// ByBackgroundColor orders the results by the background_color field.
+func ByBackgroundColor(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBackgroundColor, opts...).ToFunc()
+}
+
+// ByAccentColor orders the results by the accent_color field.
+func ByAccentColor(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAccentColor, opts...).ToFunc()
 }
 
 // ByTrustCenterField orders the results by trust_center field.
@@ -285,3 +340,10 @@ func newFaviconFileStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, false, FaviconFileTable, FaviconFileColumn),
 	)
 }
+
+var (
+	// enums.TrustCenterThemeMode must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.TrustCenterThemeMode)(nil)
+	// enums.TrustCenterThemeMode must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.TrustCenterThemeMode)(nil)
+)

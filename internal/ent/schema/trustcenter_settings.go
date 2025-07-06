@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/iam/entfga"
 )
 
@@ -52,9 +53,6 @@ func (TrustCenterSetting) Fields() []ent.Field {
 			Comment("overview of the trust center").
 			MaxLen(trustCenterDescriptionMaxLen).
 			Optional(),
-		field.String("primary_color").
-			Comment("primary color for the trust center").
-			Optional(),
 		field.String("logo_remote_url").
 			Comment("URL of the logo").
 			MaxLen(urlMaxLen).
@@ -83,6 +81,29 @@ func (TrustCenterSetting) Fields() []ent.Field {
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			).
 			Nillable(),
+		// Color/font settings
+		field.Enum("theme_mode").
+			Comment("Theme mode for the trust center").
+			GoType(enums.TrustCenterThemeMode("")).
+			Default(enums.TrustCenterThemeModeEasy.String()).
+			Optional(),
+		// Easy options
+		field.String("primary_color").
+			Comment("primary color for the trust center").
+			Optional(),
+		// Advanced options
+		field.String("font").
+			Comment("font for the trust center").
+			Optional(),
+		field.String("foreground_color").
+			Comment("foreground color for the trust center").
+			Optional(),
+		field.String("background_color").
+			Comment("background color for the trust center").
+			Optional(),
+		field.String("accent_color").
+			Comment("accent/brand color for the trust center").
+			Optional(),
 	}
 }
 

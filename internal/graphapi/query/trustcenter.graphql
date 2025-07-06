@@ -20,6 +20,11 @@ mutation CreateTrustCenter($input: CreateTrustCenterInput!) {
         logoFile {
           presignedURL
         }
+        themeMode
+        font
+        foregroundColor
+        backgroundColor
+        accentColor
       }
     }
   }
@@ -61,6 +66,11 @@ query GetAllTrustCenters {
           logoFile {
             presignedURL
           }
+          themeMode
+          font
+          foregroundColor
+          backgroundColor
+          accentColor
         }
       }
     }
@@ -87,6 +97,11 @@ query GetTrustCenterByID($trustCenterId: ID!) {
       logoFile {
         presignedURL
       }
+      themeMode
+      font
+      foregroundColor
+      backgroundColor
+      accentColor
     }
   }
 }
@@ -121,6 +136,11 @@ query GetTrustCenters($first: Int, $last: Int, $where: TrustCenterWhereInput) {
           logoFile {
             presignedURL
           }
+          themeMode
+          font
+          foregroundColor
+          backgroundColor
+          accentColor
         }
       }
     }
@@ -148,6 +168,11 @@ mutation UpdateTrustCenter($updateTrustCenterId: ID!, $input: UpdateTrustCenterI
         logoFile {
           presignedURL
         }
+        themeMode
+        font
+        foregroundColor
+        backgroundColor
+        accentColor
       }
     }
   }

@@ -9343,10 +9343,6 @@ input CreateTrustCenterSettingInput {
   """
   overview: String
   """
-  primary color for the trust center
-  """
-  primaryColor: String
-  """
   URL of the logo
   """
   logoRemoteURL: String
@@ -9354,6 +9350,30 @@ input CreateTrustCenterSettingInput {
   URL of the favicon
   """
   faviconRemoteURL: String
+  """
+  Theme mode for the trust center
+  """
+  themeMode: TrustCenterSettingTrustCenterThemeMode
+  """
+  primary color for the trust center
+  """
+  primaryColor: String
+  """
+  font for the trust center
+  """
+  font: String
+  """
+  foreground color for the trust center
+  """
+  foregroundColor: String
+  """
+  background color for the trust center
+  """
+  backgroundColor: String
+  """
+  accent/brand color for the trust center
+  """
+  accentColor: String
   trustCenterID: ID
   fileIDs: [ID!]
   logoFileID: ID
@@ -44125,10 +44145,6 @@ type TrustCenterSetting implements Node {
   """
   overview: String
   """
-  primary color for the trust center
-  """
-  primaryColor: String
-  """
   URL of the logo
   """
   logoRemoteURL: String
@@ -44144,6 +44160,30 @@ type TrustCenterSetting implements Node {
   The local favicon file id, takes precedence over the favicon remote URL
   """
   faviconLocalFileID: ID
+  """
+  Theme mode for the trust center
+  """
+  themeMode: TrustCenterSettingTrustCenterThemeMode
+  """
+  primary color for the trust center
+  """
+  primaryColor: String
+  """
+  font for the trust center
+  """
+  font: String
+  """
+  foreground color for the trust center
+  """
+  foregroundColor: String
+  """
+  background color for the trust center
+  """
+  backgroundColor: String
+  """
+  accent/brand color for the trust center
+  """
+  accentColor: String
   trustCenter: TrustCenter
   files(
     """
@@ -44231,10 +44271,6 @@ type TrustCenterSettingHistory implements Node {
   """
   overview: String
   """
-  primary color for the trust center
-  """
-  primaryColor: String
-  """
   URL of the logo
   """
   logoRemoteURL: String
@@ -44250,6 +44286,30 @@ type TrustCenterSettingHistory implements Node {
   The local favicon file id, takes precedence over the favicon remote URL
   """
   faviconLocalFileID: String
+  """
+  Theme mode for the trust center
+  """
+  themeMode: TrustCenterSettingHistoryTrustCenterThemeMode
+  """
+  primary color for the trust center
+  """
+  primaryColor: String
+  """
+  font for the trust center
+  """
+  font: String
+  """
+  foreground color for the trust center
+  """
+  foregroundColor: String
+  """
+  background color for the trust center
+  """
+  backgroundColor: String
+  """
+  accent/brand color for the trust center
+  """
+  accentColor: String
 }
 """
 A connection to a list of items.
@@ -44309,6 +44369,13 @@ enum TrustCenterSettingHistoryOrderField {
   history_time
   created_at
   updated_at
+}
+"""
+TrustCenterSettingHistoryTrustCenterThemeMode is enum for the field theme_mode
+"""
+enum TrustCenterSettingHistoryTrustCenterThemeMode @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterThemeMode") {
+  EASY
+  ADVANCED
 }
 """
 TrustCenterSettingHistoryWhereInput is used for filtering TrustCenterSettingHistory objects.
@@ -44484,24 +44551,6 @@ input TrustCenterSettingHistoryWhereInput {
   overviewEqualFold: String
   overviewContainsFold: String
   """
-  primary_color field predicates
-  """
-  primaryColor: String
-  primaryColorNEQ: String
-  primaryColorIn: [String!]
-  primaryColorNotIn: [String!]
-  primaryColorGT: String
-  primaryColorGTE: String
-  primaryColorLT: String
-  primaryColorLTE: String
-  primaryColorContains: String
-  primaryColorHasPrefix: String
-  primaryColorHasSuffix: String
-  primaryColorIsNil: Boolean
-  primaryColorNotNil: Boolean
-  primaryColorEqualFold: String
-  primaryColorContainsFold: String
-  """
   logo_remote_url field predicates
   """
   logoRemoteURL: String
@@ -44573,6 +44622,105 @@ input TrustCenterSettingHistoryWhereInput {
   faviconLocalFileIDNotNil: Boolean
   faviconLocalFileIDEqualFold: String
   faviconLocalFileIDContainsFold: String
+  """
+  theme_mode field predicates
+  """
+  themeMode: TrustCenterSettingHistoryTrustCenterThemeMode
+  themeModeNEQ: TrustCenterSettingHistoryTrustCenterThemeMode
+  themeModeIn: [TrustCenterSettingHistoryTrustCenterThemeMode!]
+  themeModeNotIn: [TrustCenterSettingHistoryTrustCenterThemeMode!]
+  themeModeIsNil: Boolean
+  themeModeNotNil: Boolean
+  """
+  primary_color field predicates
+  """
+  primaryColor: String
+  primaryColorNEQ: String
+  primaryColorIn: [String!]
+  primaryColorNotIn: [String!]
+  primaryColorGT: String
+  primaryColorGTE: String
+  primaryColorLT: String
+  primaryColorLTE: String
+  primaryColorContains: String
+  primaryColorHasPrefix: String
+  primaryColorHasSuffix: String
+  primaryColorIsNil: Boolean
+  primaryColorNotNil: Boolean
+  primaryColorEqualFold: String
+  primaryColorContainsFold: String
+  """
+  font field predicates
+  """
+  font: String
+  fontNEQ: String
+  fontIn: [String!]
+  fontNotIn: [String!]
+  fontGT: String
+  fontGTE: String
+  fontLT: String
+  fontLTE: String
+  fontContains: String
+  fontHasPrefix: String
+  fontHasSuffix: String
+  fontIsNil: Boolean
+  fontNotNil: Boolean
+  fontEqualFold: String
+  fontContainsFold: String
+  """
+  foreground_color field predicates
+  """
+  foregroundColor: String
+  foregroundColorNEQ: String
+  foregroundColorIn: [String!]
+  foregroundColorNotIn: [String!]
+  foregroundColorGT: String
+  foregroundColorGTE: String
+  foregroundColorLT: String
+  foregroundColorLTE: String
+  foregroundColorContains: String
+  foregroundColorHasPrefix: String
+  foregroundColorHasSuffix: String
+  foregroundColorIsNil: Boolean
+  foregroundColorNotNil: Boolean
+  foregroundColorEqualFold: String
+  foregroundColorContainsFold: String
+  """
+  background_color field predicates
+  """
+  backgroundColor: String
+  backgroundColorNEQ: String
+  backgroundColorIn: [String!]
+  backgroundColorNotIn: [String!]
+  backgroundColorGT: String
+  backgroundColorGTE: String
+  backgroundColorLT: String
+  backgroundColorLTE: String
+  backgroundColorContains: String
+  backgroundColorHasPrefix: String
+  backgroundColorHasSuffix: String
+  backgroundColorIsNil: Boolean
+  backgroundColorNotNil: Boolean
+  backgroundColorEqualFold: String
+  backgroundColorContainsFold: String
+  """
+  accent_color field predicates
+  """
+  accentColor: String
+  accentColorNEQ: String
+  accentColorIn: [String!]
+  accentColorNotIn: [String!]
+  accentColorGT: String
+  accentColorGTE: String
+  accentColorLT: String
+  accentColorLTE: String
+  accentColorContains: String
+  accentColorHasPrefix: String
+  accentColorHasSuffix: String
+  accentColorIsNil: Boolean
+  accentColorNotNil: Boolean
+  accentColorEqualFold: String
+  accentColorContainsFold: String
 }
 """
 Ordering options for TrustCenterSetting connections
@@ -44593,6 +44741,13 @@ Properties by which TrustCenterSetting connections can be ordered.
 enum TrustCenterSettingOrderField {
   created_at
   updated_at
+}
+"""
+TrustCenterSettingTrustCenterThemeMode is enum for the field theme_mode
+"""
+enum TrustCenterSettingTrustCenterThemeMode @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterThemeMode") {
+  EASY
+  ADVANCED
 }
 """
 TrustCenterSettingWhereInput is used for filtering TrustCenterSetting objects.
@@ -44732,24 +44887,6 @@ input TrustCenterSettingWhereInput {
   overviewEqualFold: String
   overviewContainsFold: String
   """
-  primary_color field predicates
-  """
-  primaryColor: String
-  primaryColorNEQ: String
-  primaryColorIn: [String!]
-  primaryColorNotIn: [String!]
-  primaryColorGT: String
-  primaryColorGTE: String
-  primaryColorLT: String
-  primaryColorLTE: String
-  primaryColorContains: String
-  primaryColorHasPrefix: String
-  primaryColorHasSuffix: String
-  primaryColorIsNil: Boolean
-  primaryColorNotNil: Boolean
-  primaryColorEqualFold: String
-  primaryColorContainsFold: String
-  """
   logo_remote_url field predicates
   """
   logoRemoteURL: String
@@ -44821,6 +44958,105 @@ input TrustCenterSettingWhereInput {
   faviconLocalFileIDNotNil: Boolean
   faviconLocalFileIDEqualFold: ID
   faviconLocalFileIDContainsFold: ID
+  """
+  theme_mode field predicates
+  """
+  themeMode: TrustCenterSettingTrustCenterThemeMode
+  themeModeNEQ: TrustCenterSettingTrustCenterThemeMode
+  themeModeIn: [TrustCenterSettingTrustCenterThemeMode!]
+  themeModeNotIn: [TrustCenterSettingTrustCenterThemeMode!]
+  themeModeIsNil: Boolean
+  themeModeNotNil: Boolean
+  """
+  primary_color field predicates
+  """
+  primaryColor: String
+  primaryColorNEQ: String
+  primaryColorIn: [String!]
+  primaryColorNotIn: [String!]
+  primaryColorGT: String
+  primaryColorGTE: String
+  primaryColorLT: String
+  primaryColorLTE: String
+  primaryColorContains: String
+  primaryColorHasPrefix: String
+  primaryColorHasSuffix: String
+  primaryColorIsNil: Boolean
+  primaryColorNotNil: Boolean
+  primaryColorEqualFold: String
+  primaryColorContainsFold: String
+  """
+  font field predicates
+  """
+  font: String
+  fontNEQ: String
+  fontIn: [String!]
+  fontNotIn: [String!]
+  fontGT: String
+  fontGTE: String
+  fontLT: String
+  fontLTE: String
+  fontContains: String
+  fontHasPrefix: String
+  fontHasSuffix: String
+  fontIsNil: Boolean
+  fontNotNil: Boolean
+  fontEqualFold: String
+  fontContainsFold: String
+  """
+  foreground_color field predicates
+  """
+  foregroundColor: String
+  foregroundColorNEQ: String
+  foregroundColorIn: [String!]
+  foregroundColorNotIn: [String!]
+  foregroundColorGT: String
+  foregroundColorGTE: String
+  foregroundColorLT: String
+  foregroundColorLTE: String
+  foregroundColorContains: String
+  foregroundColorHasPrefix: String
+  foregroundColorHasSuffix: String
+  foregroundColorIsNil: Boolean
+  foregroundColorNotNil: Boolean
+  foregroundColorEqualFold: String
+  foregroundColorContainsFold: String
+  """
+  background_color field predicates
+  """
+  backgroundColor: String
+  backgroundColorNEQ: String
+  backgroundColorIn: [String!]
+  backgroundColorNotIn: [String!]
+  backgroundColorGT: String
+  backgroundColorGTE: String
+  backgroundColorLT: String
+  backgroundColorLTE: String
+  backgroundColorContains: String
+  backgroundColorHasPrefix: String
+  backgroundColorHasSuffix: String
+  backgroundColorIsNil: Boolean
+  backgroundColorNotNil: Boolean
+  backgroundColorEqualFold: String
+  backgroundColorContainsFold: String
+  """
+  accent_color field predicates
+  """
+  accentColor: String
+  accentColorNEQ: String
+  accentColorIn: [String!]
+  accentColorNotIn: [String!]
+  accentColorGT: String
+  accentColorGTE: String
+  accentColorLT: String
+  accentColorLTE: String
+  accentColorContains: String
+  accentColorHasPrefix: String
+  accentColorHasSuffix: String
+  accentColorIsNil: Boolean
+  accentColorNotNil: Boolean
+  accentColorEqualFold: String
+  accentColorContainsFold: String
   """
   trust_center edge predicates
   """
@@ -47849,11 +48085,6 @@ input UpdateTrustCenterSettingInput {
   overview: String
   clearOverview: Boolean
   """
-  primary color for the trust center
-  """
-  primaryColor: String
-  clearPrimaryColor: Boolean
-  """
   URL of the logo
   """
   logoRemoteURL: String
@@ -47863,6 +48094,36 @@ input UpdateTrustCenterSettingInput {
   """
   faviconRemoteURL: String
   clearFaviconRemoteURL: Boolean
+  """
+  Theme mode for the trust center
+  """
+  themeMode: TrustCenterSettingTrustCenterThemeMode
+  clearThemeMode: Boolean
+  """
+  primary color for the trust center
+  """
+  primaryColor: String
+  clearPrimaryColor: Boolean
+  """
+  font for the trust center
+  """
+  font: String
+  clearFont: Boolean
+  """
+  foreground color for the trust center
+  """
+  foregroundColor: String
+  clearForegroundColor: Boolean
+  """
+  background color for the trust center
+  """
+  backgroundColor: String
+  clearBackgroundColor: Boolean
+  """
+  accent/brand color for the trust center
+  """
+  accentColor: String
+  clearAccentColor: Boolean
   trustCenterID: ID
   clearTrustCenter: Boolean
   addFileIDs: [ID!]

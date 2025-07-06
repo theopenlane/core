@@ -41573,11 +41573,6 @@ func (tcs *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, trustcentersetting.FieldOverview)
 				fieldSeen[trustcentersetting.FieldOverview] = struct{}{}
 			}
-		case "primaryColor":
-			if _, ok := fieldSeen[trustcentersetting.FieldPrimaryColor]; !ok {
-				selectedFields = append(selectedFields, trustcentersetting.FieldPrimaryColor)
-				fieldSeen[trustcentersetting.FieldPrimaryColor] = struct{}{}
-			}
 		case "logoRemoteURL":
 			if _, ok := fieldSeen[trustcentersetting.FieldLogoRemoteURL]; !ok {
 				selectedFields = append(selectedFields, trustcentersetting.FieldLogoRemoteURL)
@@ -41597,6 +41592,36 @@ func (tcs *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[trustcentersetting.FieldFaviconLocalFileID]; !ok {
 				selectedFields = append(selectedFields, trustcentersetting.FieldFaviconLocalFileID)
 				fieldSeen[trustcentersetting.FieldFaviconLocalFileID] = struct{}{}
+			}
+		case "themeMode":
+			if _, ok := fieldSeen[trustcentersetting.FieldThemeMode]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldThemeMode)
+				fieldSeen[trustcentersetting.FieldThemeMode] = struct{}{}
+			}
+		case "primaryColor":
+			if _, ok := fieldSeen[trustcentersetting.FieldPrimaryColor]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldPrimaryColor)
+				fieldSeen[trustcentersetting.FieldPrimaryColor] = struct{}{}
+			}
+		case "font":
+			if _, ok := fieldSeen[trustcentersetting.FieldFont]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldFont)
+				fieldSeen[trustcentersetting.FieldFont] = struct{}{}
+			}
+		case "foregroundColor":
+			if _, ok := fieldSeen[trustcentersetting.FieldForegroundColor]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldForegroundColor)
+				fieldSeen[trustcentersetting.FieldForegroundColor] = struct{}{}
+			}
+		case "backgroundColor":
+			if _, ok := fieldSeen[trustcentersetting.FieldBackgroundColor]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldBackgroundColor)
+				fieldSeen[trustcentersetting.FieldBackgroundColor] = struct{}{}
+			}
+		case "accentColor":
+			if _, ok := fieldSeen[trustcentersetting.FieldAccentColor]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldAccentColor)
+				fieldSeen[trustcentersetting.FieldAccentColor] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -41738,11 +41763,6 @@ func (tcsh *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, on
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldOverview)
 				fieldSeen[trustcentersettinghistory.FieldOverview] = struct{}{}
 			}
-		case "primaryColor":
-			if _, ok := fieldSeen[trustcentersettinghistory.FieldPrimaryColor]; !ok {
-				selectedFields = append(selectedFields, trustcentersettinghistory.FieldPrimaryColor)
-				fieldSeen[trustcentersettinghistory.FieldPrimaryColor] = struct{}{}
-			}
 		case "logoRemoteURL":
 			if _, ok := fieldSeen[trustcentersettinghistory.FieldLogoRemoteURL]; !ok {
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldLogoRemoteURL)
@@ -41762,6 +41782,36 @@ func (tcsh *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, on
 			if _, ok := fieldSeen[trustcentersettinghistory.FieldFaviconLocalFileID]; !ok {
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldFaviconLocalFileID)
 				fieldSeen[trustcentersettinghistory.FieldFaviconLocalFileID] = struct{}{}
+			}
+		case "themeMode":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldThemeMode]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldThemeMode)
+				fieldSeen[trustcentersettinghistory.FieldThemeMode] = struct{}{}
+			}
+		case "primaryColor":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldPrimaryColor]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldPrimaryColor)
+				fieldSeen[trustcentersettinghistory.FieldPrimaryColor] = struct{}{}
+			}
+		case "font":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldFont]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldFont)
+				fieldSeen[trustcentersettinghistory.FieldFont] = struct{}{}
+			}
+		case "foregroundColor":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldForegroundColor]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldForegroundColor)
+				fieldSeen[trustcentersettinghistory.FieldForegroundColor] = struct{}{}
+			}
+		case "backgroundColor":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldBackgroundColor]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldBackgroundColor)
+				fieldSeen[trustcentersettinghistory.FieldBackgroundColor] = struct{}{}
+			}
+		case "accentColor":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldAccentColor]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldAccentColor)
+				fieldSeen[trustcentersettinghistory.FieldAccentColor] = struct{}{}
 			}
 		case "id":
 		case "__typename":
