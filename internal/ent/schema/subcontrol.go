@@ -151,6 +151,7 @@ func (Subcontrol) Policy() ent.Policy {
 			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
 		),
 		policy.WithMutationRules(
+			rule.AllowIfContextAllowRule(),
 			rule.CanCreateObjectsUnderParent[*generated.SubcontrolMutation](rule.ControlParent), // if mutation contains control_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.SubcontrolMutation](),

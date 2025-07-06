@@ -122,6 +122,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/emailtemplates"
@@ -494,6 +495,7 @@ type (
 		EntitlementManager *entitlements.StripeClient
 		ObjectManager      *objects.Objects
 		Summarizer         *summarizer.Client
+		PondPool           *soiree.PondPool
 		// Job is the job client to insert jobs into the queue.
 		Job riverqueue.JobClient
 
@@ -609,6 +611,13 @@ func ObjectManager(v *objects.Objects) Option {
 func Summarizer(v *summarizer.Client) Option {
 	return func(c *config) {
 		c.Summarizer = v
+	}
+}
+
+// PondPool configures the PondPool.
+func PondPool(v *soiree.PondPool) Option {
+	return func(c *config) {
+		c.PondPool = v
 	}
 }
 

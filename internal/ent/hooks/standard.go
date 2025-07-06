@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
 )
 
 // HookStandardCreate sets default values on creation, such as setting the short name to the name if it's not provided
@@ -250,14 +251,17 @@ func standardTupleOneUpdate(ctx context.Context, m *generated.StandardMutation) 
 
 		// check if the systemOwned or isPublic fields have changed
 		for _, id := range updatedIDs {
-			var standard *generated.Standard
+			var std *generated.Standard
 
-			standard, err = m.Client().Standard.Get(ctx, id)
+			std, err = m.Client().Standard.Query().
+				Select(standard.FieldIsPublic, standard.FieldSystemOwned).
+				Where(standard.ID(id)).
+				Only(ctx)
 			if err != nil {
 				return false, false, err
 			}
 
-			if standard.SystemOwned && standard.IsPublic {
+			if std.SystemOwned && std.IsPublic {
 				return true, false, nil
 			}
 		}

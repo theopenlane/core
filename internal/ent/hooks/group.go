@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/utils/gravatar"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
@@ -68,7 +69,10 @@ func HookManagedGroups() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			group, err := m.Client().Group.Get(ctx, groupID)
+			g, err := m.Client().Group.Query().
+				Where(group.ID(groupID)).
+				Select(group.FieldIsManaged).
+				Only(ctx)
 			if err != nil {
 				zerolog.Ctx(ctx).Error().Err(err).Msg("failed to get group")
 
@@ -81,7 +85,7 @@ func HookManagedGroups() ent.Hook {
 
 			// before returning the error, we need to allow for edges to be updated
 			// if they are permissions edges
-			if group.IsManaged && (!allowManagedCtx && !allowCtx) {
+			if g.IsManaged && (!allowManagedCtx && !allowCtx) {
 				if err := checkOnlyDefaultFields(m); err != nil {
 					return nil, ErrManagedGroup
 				}

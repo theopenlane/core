@@ -7,6 +7,9 @@ type Config struct {
 
 	// Summarizer contains configuration for text summarization
 	Summarizer Summarizer `json:"summarizer" koanf:"summarizer"`
+
+	// MaxPoolSize is the max pond pool workers that can be used by the ent client
+	MaxPoolSize int `json:"maxPoolSize" koanf:"maxPoolSize" default:"100"`
 }
 
 // Summarizer holds configuration for the text summarization functionality
