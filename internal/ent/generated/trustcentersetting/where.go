@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -112,11 +113,6 @@ func Overview(v string) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldEQ(FieldOverview, v))
 }
 
-// PrimaryColor applies equality check predicate on the "primary_color" field. It's identical to PrimaryColorEQ.
-func PrimaryColor(v string) predicate.TrustCenterSetting {
-	return predicate.TrustCenterSetting(sql.FieldEQ(FieldPrimaryColor, v))
-}
-
 // LogoRemoteURL applies equality check predicate on the "logo_remote_url" field. It's identical to LogoRemoteURLEQ.
 func LogoRemoteURL(v string) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldEQ(FieldLogoRemoteURL, v))
@@ -135,6 +131,31 @@ func FaviconRemoteURL(v string) predicate.TrustCenterSetting {
 // FaviconLocalFileID applies equality check predicate on the "favicon_local_file_id" field. It's identical to FaviconLocalFileIDEQ.
 func FaviconLocalFileID(v string) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldEQ(FieldFaviconLocalFileID, v))
+}
+
+// PrimaryColor applies equality check predicate on the "primary_color" field. It's identical to PrimaryColorEQ.
+func PrimaryColor(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldPrimaryColor, v))
+}
+
+// Font applies equality check predicate on the "font" field. It's identical to FontEQ.
+func Font(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldFont, v))
+}
+
+// ForegroundColor applies equality check predicate on the "foreground_color" field. It's identical to ForegroundColorEQ.
+func ForegroundColor(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldForegroundColor, v))
+}
+
+// BackgroundColor applies equality check predicate on the "background_color" field. It's identical to BackgroundColorEQ.
+func BackgroundColor(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldBackgroundColor, v))
+}
+
+// AccentColor applies equality check predicate on the "accent_color" field. It's identical to AccentColorEQ.
+func AccentColor(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldAccentColor, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -737,81 +758,6 @@ func OverviewContainsFold(v string) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldContainsFold(FieldOverview, v))
 }
 
-// PrimaryColorEQ applies the EQ predicate on the "primary_color" field.
-func PrimaryColorEQ(v string) predicate.TrustCenterSetting {
-	return predicate.TrustCenterSetting(sql.FieldEQ(FieldPrimaryColor, v))
-}
-
-// PrimaryColorNEQ applies the NEQ predicate on the "primary_color" field.
-func PrimaryColorNEQ(v string) predicate.TrustCenterSetting {
-	return predicate.TrustCenterSetting(sql.FieldNEQ(FieldPrimaryColor, v))
-}
-
-// PrimaryColorIn applies the In predicate on the "primary_color" field.
-func PrimaryColorIn(vs ...string) predicate.TrustCenterSetting {
-	return predicate.TrustCenterSetting(sql.FieldIn(FieldPrimaryColor, vs...))
-}
-
-// PrimaryColorNotIn applies the NotIn predicate on the "primary_color" field.
-func PrimaryColorNotIn(vs ...string) predicate.TrustCenterSetting {
-	return predicate.TrustCenterSetting(sql.FieldNotIn(FieldPrimaryColor, vs...))
-}
-
-// PrimaryColorGT applies the GT predicate on the "primary_color" field.
-func PrimaryColorGT(v string) predicate.TrustCenterSetting {
-	return predicate.TrustCenterSetting(sql.FieldGT(FieldPrimaryColor, v))
-}
-
-// PrimaryColorGTE applies the GTE predicate on the "primary_color" field.
-func PrimaryColorGTE(v string) predicate.TrustCenterSetting {
-	return predicate.TrustCenterSetting(sql.FieldGTE(FieldPrimaryColor, v))
-}
-
-// PrimaryColorLT applies the LT predicate on the "primary_color" field.
-func PrimaryColorLT(v string) predicate.TrustCenterSetting {
-	return predicate.TrustCenterSetting(sql.FieldLT(FieldPrimaryColor, v))
-}
-
-// PrimaryColorLTE applies the LTE predicate on the "primary_color" field.
-func PrimaryColorLTE(v string) predicate.TrustCenterSetting {
-	return predicate.TrustCenterSetting(sql.FieldLTE(FieldPrimaryColor, v))
-}
-
-// PrimaryColorContains applies the Contains predicate on the "primary_color" field.
-func PrimaryColorContains(v string) predicate.TrustCenterSetting {
-	return predicate.TrustCenterSetting(sql.FieldContains(FieldPrimaryColor, v))
-}
-
-// PrimaryColorHasPrefix applies the HasPrefix predicate on the "primary_color" field.
-func PrimaryColorHasPrefix(v string) predicate.TrustCenterSetting {
-	return predicate.TrustCenterSetting(sql.FieldHasPrefix(FieldPrimaryColor, v))
-}
-
-// PrimaryColorHasSuffix applies the HasSuffix predicate on the "primary_color" field.
-func PrimaryColorHasSuffix(v string) predicate.TrustCenterSetting {
-	return predicate.TrustCenterSetting(sql.FieldHasSuffix(FieldPrimaryColor, v))
-}
-
-// PrimaryColorIsNil applies the IsNil predicate on the "primary_color" field.
-func PrimaryColorIsNil() predicate.TrustCenterSetting {
-	return predicate.TrustCenterSetting(sql.FieldIsNull(FieldPrimaryColor))
-}
-
-// PrimaryColorNotNil applies the NotNil predicate on the "primary_color" field.
-func PrimaryColorNotNil() predicate.TrustCenterSetting {
-	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldPrimaryColor))
-}
-
-// PrimaryColorEqualFold applies the EqualFold predicate on the "primary_color" field.
-func PrimaryColorEqualFold(v string) predicate.TrustCenterSetting {
-	return predicate.TrustCenterSetting(sql.FieldEqualFold(FieldPrimaryColor, v))
-}
-
-// PrimaryColorContainsFold applies the ContainsFold predicate on the "primary_color" field.
-func PrimaryColorContainsFold(v string) predicate.TrustCenterSetting {
-	return predicate.TrustCenterSetting(sql.FieldContainsFold(FieldPrimaryColor, v))
-}
-
 // LogoRemoteURLEQ applies the EQ predicate on the "logo_remote_url" field.
 func LogoRemoteURLEQ(v string) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldEQ(FieldLogoRemoteURL, v))
@@ -1110,6 +1056,421 @@ func FaviconLocalFileIDEqualFold(v string) predicate.TrustCenterSetting {
 // FaviconLocalFileIDContainsFold applies the ContainsFold predicate on the "favicon_local_file_id" field.
 func FaviconLocalFileIDContainsFold(v string) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldContainsFold(FieldFaviconLocalFileID, v))
+}
+
+// ThemeModeEQ applies the EQ predicate on the "theme_mode" field.
+func ThemeModeEQ(v enums.TrustCenterThemeMode) predicate.TrustCenterSetting {
+	vc := v
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldThemeMode, vc))
+}
+
+// ThemeModeNEQ applies the NEQ predicate on the "theme_mode" field.
+func ThemeModeNEQ(v enums.TrustCenterThemeMode) predicate.TrustCenterSetting {
+	vc := v
+	return predicate.TrustCenterSetting(sql.FieldNEQ(FieldThemeMode, vc))
+}
+
+// ThemeModeIn applies the In predicate on the "theme_mode" field.
+func ThemeModeIn(vs ...enums.TrustCenterThemeMode) predicate.TrustCenterSetting {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.TrustCenterSetting(sql.FieldIn(FieldThemeMode, v...))
+}
+
+// ThemeModeNotIn applies the NotIn predicate on the "theme_mode" field.
+func ThemeModeNotIn(vs ...enums.TrustCenterThemeMode) predicate.TrustCenterSetting {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.TrustCenterSetting(sql.FieldNotIn(FieldThemeMode, v...))
+}
+
+// ThemeModeIsNil applies the IsNil predicate on the "theme_mode" field.
+func ThemeModeIsNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIsNull(FieldThemeMode))
+}
+
+// ThemeModeNotNil applies the NotNil predicate on the "theme_mode" field.
+func ThemeModeNotNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldThemeMode))
+}
+
+// PrimaryColorEQ applies the EQ predicate on the "primary_color" field.
+func PrimaryColorEQ(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldPrimaryColor, v))
+}
+
+// PrimaryColorNEQ applies the NEQ predicate on the "primary_color" field.
+func PrimaryColorNEQ(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNEQ(FieldPrimaryColor, v))
+}
+
+// PrimaryColorIn applies the In predicate on the "primary_color" field.
+func PrimaryColorIn(vs ...string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIn(FieldPrimaryColor, vs...))
+}
+
+// PrimaryColorNotIn applies the NotIn predicate on the "primary_color" field.
+func PrimaryColorNotIn(vs ...string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotIn(FieldPrimaryColor, vs...))
+}
+
+// PrimaryColorGT applies the GT predicate on the "primary_color" field.
+func PrimaryColorGT(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldGT(FieldPrimaryColor, v))
+}
+
+// PrimaryColorGTE applies the GTE predicate on the "primary_color" field.
+func PrimaryColorGTE(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldGTE(FieldPrimaryColor, v))
+}
+
+// PrimaryColorLT applies the LT predicate on the "primary_color" field.
+func PrimaryColorLT(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldLT(FieldPrimaryColor, v))
+}
+
+// PrimaryColorLTE applies the LTE predicate on the "primary_color" field.
+func PrimaryColorLTE(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldLTE(FieldPrimaryColor, v))
+}
+
+// PrimaryColorContains applies the Contains predicate on the "primary_color" field.
+func PrimaryColorContains(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldContains(FieldPrimaryColor, v))
+}
+
+// PrimaryColorHasPrefix applies the HasPrefix predicate on the "primary_color" field.
+func PrimaryColorHasPrefix(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldHasPrefix(FieldPrimaryColor, v))
+}
+
+// PrimaryColorHasSuffix applies the HasSuffix predicate on the "primary_color" field.
+func PrimaryColorHasSuffix(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldHasSuffix(FieldPrimaryColor, v))
+}
+
+// PrimaryColorIsNil applies the IsNil predicate on the "primary_color" field.
+func PrimaryColorIsNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIsNull(FieldPrimaryColor))
+}
+
+// PrimaryColorNotNil applies the NotNil predicate on the "primary_color" field.
+func PrimaryColorNotNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldPrimaryColor))
+}
+
+// PrimaryColorEqualFold applies the EqualFold predicate on the "primary_color" field.
+func PrimaryColorEqualFold(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEqualFold(FieldPrimaryColor, v))
+}
+
+// PrimaryColorContainsFold applies the ContainsFold predicate on the "primary_color" field.
+func PrimaryColorContainsFold(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldContainsFold(FieldPrimaryColor, v))
+}
+
+// FontEQ applies the EQ predicate on the "font" field.
+func FontEQ(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldFont, v))
+}
+
+// FontNEQ applies the NEQ predicate on the "font" field.
+func FontNEQ(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNEQ(FieldFont, v))
+}
+
+// FontIn applies the In predicate on the "font" field.
+func FontIn(vs ...string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIn(FieldFont, vs...))
+}
+
+// FontNotIn applies the NotIn predicate on the "font" field.
+func FontNotIn(vs ...string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotIn(FieldFont, vs...))
+}
+
+// FontGT applies the GT predicate on the "font" field.
+func FontGT(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldGT(FieldFont, v))
+}
+
+// FontGTE applies the GTE predicate on the "font" field.
+func FontGTE(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldGTE(FieldFont, v))
+}
+
+// FontLT applies the LT predicate on the "font" field.
+func FontLT(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldLT(FieldFont, v))
+}
+
+// FontLTE applies the LTE predicate on the "font" field.
+func FontLTE(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldLTE(FieldFont, v))
+}
+
+// FontContains applies the Contains predicate on the "font" field.
+func FontContains(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldContains(FieldFont, v))
+}
+
+// FontHasPrefix applies the HasPrefix predicate on the "font" field.
+func FontHasPrefix(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldHasPrefix(FieldFont, v))
+}
+
+// FontHasSuffix applies the HasSuffix predicate on the "font" field.
+func FontHasSuffix(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldHasSuffix(FieldFont, v))
+}
+
+// FontIsNil applies the IsNil predicate on the "font" field.
+func FontIsNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIsNull(FieldFont))
+}
+
+// FontNotNil applies the NotNil predicate on the "font" field.
+func FontNotNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldFont))
+}
+
+// FontEqualFold applies the EqualFold predicate on the "font" field.
+func FontEqualFold(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEqualFold(FieldFont, v))
+}
+
+// FontContainsFold applies the ContainsFold predicate on the "font" field.
+func FontContainsFold(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldContainsFold(FieldFont, v))
+}
+
+// ForegroundColorEQ applies the EQ predicate on the "foreground_color" field.
+func ForegroundColorEQ(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldForegroundColor, v))
+}
+
+// ForegroundColorNEQ applies the NEQ predicate on the "foreground_color" field.
+func ForegroundColorNEQ(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNEQ(FieldForegroundColor, v))
+}
+
+// ForegroundColorIn applies the In predicate on the "foreground_color" field.
+func ForegroundColorIn(vs ...string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIn(FieldForegroundColor, vs...))
+}
+
+// ForegroundColorNotIn applies the NotIn predicate on the "foreground_color" field.
+func ForegroundColorNotIn(vs ...string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotIn(FieldForegroundColor, vs...))
+}
+
+// ForegroundColorGT applies the GT predicate on the "foreground_color" field.
+func ForegroundColorGT(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldGT(FieldForegroundColor, v))
+}
+
+// ForegroundColorGTE applies the GTE predicate on the "foreground_color" field.
+func ForegroundColorGTE(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldGTE(FieldForegroundColor, v))
+}
+
+// ForegroundColorLT applies the LT predicate on the "foreground_color" field.
+func ForegroundColorLT(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldLT(FieldForegroundColor, v))
+}
+
+// ForegroundColorLTE applies the LTE predicate on the "foreground_color" field.
+func ForegroundColorLTE(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldLTE(FieldForegroundColor, v))
+}
+
+// ForegroundColorContains applies the Contains predicate on the "foreground_color" field.
+func ForegroundColorContains(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldContains(FieldForegroundColor, v))
+}
+
+// ForegroundColorHasPrefix applies the HasPrefix predicate on the "foreground_color" field.
+func ForegroundColorHasPrefix(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldHasPrefix(FieldForegroundColor, v))
+}
+
+// ForegroundColorHasSuffix applies the HasSuffix predicate on the "foreground_color" field.
+func ForegroundColorHasSuffix(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldHasSuffix(FieldForegroundColor, v))
+}
+
+// ForegroundColorIsNil applies the IsNil predicate on the "foreground_color" field.
+func ForegroundColorIsNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIsNull(FieldForegroundColor))
+}
+
+// ForegroundColorNotNil applies the NotNil predicate on the "foreground_color" field.
+func ForegroundColorNotNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldForegroundColor))
+}
+
+// ForegroundColorEqualFold applies the EqualFold predicate on the "foreground_color" field.
+func ForegroundColorEqualFold(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEqualFold(FieldForegroundColor, v))
+}
+
+// ForegroundColorContainsFold applies the ContainsFold predicate on the "foreground_color" field.
+func ForegroundColorContainsFold(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldContainsFold(FieldForegroundColor, v))
+}
+
+// BackgroundColorEQ applies the EQ predicate on the "background_color" field.
+func BackgroundColorEQ(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldBackgroundColor, v))
+}
+
+// BackgroundColorNEQ applies the NEQ predicate on the "background_color" field.
+func BackgroundColorNEQ(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNEQ(FieldBackgroundColor, v))
+}
+
+// BackgroundColorIn applies the In predicate on the "background_color" field.
+func BackgroundColorIn(vs ...string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIn(FieldBackgroundColor, vs...))
+}
+
+// BackgroundColorNotIn applies the NotIn predicate on the "background_color" field.
+func BackgroundColorNotIn(vs ...string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotIn(FieldBackgroundColor, vs...))
+}
+
+// BackgroundColorGT applies the GT predicate on the "background_color" field.
+func BackgroundColorGT(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldGT(FieldBackgroundColor, v))
+}
+
+// BackgroundColorGTE applies the GTE predicate on the "background_color" field.
+func BackgroundColorGTE(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldGTE(FieldBackgroundColor, v))
+}
+
+// BackgroundColorLT applies the LT predicate on the "background_color" field.
+func BackgroundColorLT(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldLT(FieldBackgroundColor, v))
+}
+
+// BackgroundColorLTE applies the LTE predicate on the "background_color" field.
+func BackgroundColorLTE(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldLTE(FieldBackgroundColor, v))
+}
+
+// BackgroundColorContains applies the Contains predicate on the "background_color" field.
+func BackgroundColorContains(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldContains(FieldBackgroundColor, v))
+}
+
+// BackgroundColorHasPrefix applies the HasPrefix predicate on the "background_color" field.
+func BackgroundColorHasPrefix(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldHasPrefix(FieldBackgroundColor, v))
+}
+
+// BackgroundColorHasSuffix applies the HasSuffix predicate on the "background_color" field.
+func BackgroundColorHasSuffix(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldHasSuffix(FieldBackgroundColor, v))
+}
+
+// BackgroundColorIsNil applies the IsNil predicate on the "background_color" field.
+func BackgroundColorIsNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIsNull(FieldBackgroundColor))
+}
+
+// BackgroundColorNotNil applies the NotNil predicate on the "background_color" field.
+func BackgroundColorNotNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldBackgroundColor))
+}
+
+// BackgroundColorEqualFold applies the EqualFold predicate on the "background_color" field.
+func BackgroundColorEqualFold(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEqualFold(FieldBackgroundColor, v))
+}
+
+// BackgroundColorContainsFold applies the ContainsFold predicate on the "background_color" field.
+func BackgroundColorContainsFold(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldContainsFold(FieldBackgroundColor, v))
+}
+
+// AccentColorEQ applies the EQ predicate on the "accent_color" field.
+func AccentColorEQ(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldAccentColor, v))
+}
+
+// AccentColorNEQ applies the NEQ predicate on the "accent_color" field.
+func AccentColorNEQ(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNEQ(FieldAccentColor, v))
+}
+
+// AccentColorIn applies the In predicate on the "accent_color" field.
+func AccentColorIn(vs ...string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIn(FieldAccentColor, vs...))
+}
+
+// AccentColorNotIn applies the NotIn predicate on the "accent_color" field.
+func AccentColorNotIn(vs ...string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotIn(FieldAccentColor, vs...))
+}
+
+// AccentColorGT applies the GT predicate on the "accent_color" field.
+func AccentColorGT(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldGT(FieldAccentColor, v))
+}
+
+// AccentColorGTE applies the GTE predicate on the "accent_color" field.
+func AccentColorGTE(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldGTE(FieldAccentColor, v))
+}
+
+// AccentColorLT applies the LT predicate on the "accent_color" field.
+func AccentColorLT(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldLT(FieldAccentColor, v))
+}
+
+// AccentColorLTE applies the LTE predicate on the "accent_color" field.
+func AccentColorLTE(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldLTE(FieldAccentColor, v))
+}
+
+// AccentColorContains applies the Contains predicate on the "accent_color" field.
+func AccentColorContains(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldContains(FieldAccentColor, v))
+}
+
+// AccentColorHasPrefix applies the HasPrefix predicate on the "accent_color" field.
+func AccentColorHasPrefix(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldHasPrefix(FieldAccentColor, v))
+}
+
+// AccentColorHasSuffix applies the HasSuffix predicate on the "accent_color" field.
+func AccentColorHasSuffix(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldHasSuffix(FieldAccentColor, v))
+}
+
+// AccentColorIsNil applies the IsNil predicate on the "accent_color" field.
+func AccentColorIsNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIsNull(FieldAccentColor))
+}
+
+// AccentColorNotNil applies the NotNil predicate on the "accent_color" field.
+func AccentColorNotNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldAccentColor))
+}
+
+// AccentColorEqualFold applies the EqualFold predicate on the "accent_color" field.
+func AccentColorEqualFold(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEqualFold(FieldAccentColor, v))
+}
+
+// AccentColorContainsFold applies the ContainsFold predicate on the "accent_color" field.
+func AccentColorContainsFold(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldContainsFold(FieldAccentColor, v))
 }
 
 // HasTrustCenter applies the HasEdge predicate on the "trust_center" edge.

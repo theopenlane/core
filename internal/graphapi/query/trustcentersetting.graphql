@@ -15,6 +15,11 @@ mutation CreateTrustCenterSetting($input: CreateTrustCenterSettingInput!) {
       }
       logoRemoteURL
       logoLocalFileID
+      themeMode
+      font
+      foregroundColor
+      backgroundColor
+      accentColor
     }
   }
 }
@@ -55,6 +60,11 @@ query GetAllTrustCenterSettings {
         }
         faviconRemoteURL
         faviconLocalFileID
+        themeMode
+        font
+        foregroundColor
+        backgroundColor
+        accentColor
       }
     }
   }
@@ -80,6 +90,11 @@ query GetTrustCenterSettingByID($trustCenterSettingId: ID!) {
     }
     faviconRemoteURL
     faviconLocalFileID
+    themeMode
+    font
+    foregroundColor
+    backgroundColor
+    accentColor
   }
 }
 
@@ -113,6 +128,11 @@ query GetTrustCenterSettings($first: Int, $last: Int, $where: TrustCenterSetting
         }
         faviconRemoteURL
         faviconLocalFileID
+        themeMode
+        font
+        foregroundColor
+        backgroundColor
+        accentColor
       }
     }
   }
@@ -139,6 +159,11 @@ mutation UpdateTrustCenterSetting($updateTrustCenterSettingId: ID!, $input: Upda
       }
       faviconRemoteURL
       faviconLocalFileID
+      themeMode
+      font
+      foregroundColor
+      backgroundColor
+      accentColor
     }
   }
 }

@@ -10861,9 +10861,14 @@ func (c *TrustCenterUpdateOne) SetInput(i UpdateTrustCenterInput) *TrustCenterUp
 type CreateTrustCenterSettingInput struct {
 	Title            *string
 	Overview         *string
-	PrimaryColor     *string
 	LogoRemoteURL    *string
 	FaviconRemoteURL *string
+	ThemeMode        *enums.TrustCenterThemeMode
+	PrimaryColor     *string
+	Font             *string
+	ForegroundColor  *string
+	BackgroundColor  *string
+	AccentColor      *string
 	TrustCenterID    *string
 	FileIDs          []string
 	LogoFileID       *string
@@ -10878,14 +10883,29 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.Overview; v != nil {
 		m.SetOverview(*v)
 	}
-	if v := i.PrimaryColor; v != nil {
-		m.SetPrimaryColor(*v)
-	}
 	if v := i.LogoRemoteURL; v != nil {
 		m.SetLogoRemoteURL(*v)
 	}
 	if v := i.FaviconRemoteURL; v != nil {
 		m.SetFaviconRemoteURL(*v)
+	}
+	if v := i.ThemeMode; v != nil {
+		m.SetThemeMode(*v)
+	}
+	if v := i.PrimaryColor; v != nil {
+		m.SetPrimaryColor(*v)
+	}
+	if v := i.Font; v != nil {
+		m.SetFont(*v)
+	}
+	if v := i.ForegroundColor; v != nil {
+		m.SetForegroundColor(*v)
+	}
+	if v := i.BackgroundColor; v != nil {
+		m.SetBackgroundColor(*v)
+	}
+	if v := i.AccentColor; v != nil {
+		m.SetAccentColor(*v)
 	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
@@ -10913,12 +10933,22 @@ type UpdateTrustCenterSettingInput struct {
 	Title                 *string
 	ClearOverview         bool
 	Overview              *string
-	ClearPrimaryColor     bool
-	PrimaryColor          *string
 	ClearLogoRemoteURL    bool
 	LogoRemoteURL         *string
 	ClearFaviconRemoteURL bool
 	FaviconRemoteURL      *string
+	ClearThemeMode        bool
+	ThemeMode             *enums.TrustCenterThemeMode
+	ClearPrimaryColor     bool
+	PrimaryColor          *string
+	ClearFont             bool
+	Font                  *string
+	ClearForegroundColor  bool
+	ForegroundColor       *string
+	ClearBackgroundColor  bool
+	BackgroundColor       *string
+	ClearAccentColor      bool
+	AccentColor           *string
 	ClearTrustCenter      bool
 	TrustCenterID         *string
 	ClearFiles            bool
@@ -10944,12 +10974,6 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.Overview; v != nil {
 		m.SetOverview(*v)
 	}
-	if i.ClearPrimaryColor {
-		m.ClearPrimaryColor()
-	}
-	if v := i.PrimaryColor; v != nil {
-		m.SetPrimaryColor(*v)
-	}
 	if i.ClearLogoRemoteURL {
 		m.ClearLogoRemoteURL()
 	}
@@ -10961,6 +10985,42 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.FaviconRemoteURL; v != nil {
 		m.SetFaviconRemoteURL(*v)
+	}
+	if i.ClearThemeMode {
+		m.ClearThemeMode()
+	}
+	if v := i.ThemeMode; v != nil {
+		m.SetThemeMode(*v)
+	}
+	if i.ClearPrimaryColor {
+		m.ClearPrimaryColor()
+	}
+	if v := i.PrimaryColor; v != nil {
+		m.SetPrimaryColor(*v)
+	}
+	if i.ClearFont {
+		m.ClearFont()
+	}
+	if v := i.Font; v != nil {
+		m.SetFont(*v)
+	}
+	if i.ClearForegroundColor {
+		m.ClearForegroundColor()
+	}
+	if v := i.ForegroundColor; v != nil {
+		m.SetForegroundColor(*v)
+	}
+	if i.ClearBackgroundColor {
+		m.ClearBackgroundColor()
+	}
+	if v := i.BackgroundColor; v != nil {
+		m.SetBackgroundColor(*v)
+	}
+	if i.ClearAccentColor {
+		m.ClearAccentColor()
+	}
+	if v := i.AccentColor; v != nil {
+		m.SetAccentColor(*v)
 	}
 	if i.ClearTrustCenter {
 		m.ClearTrustCenter()

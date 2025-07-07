@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // TrustCenterSettingCreate is the builder for creating a TrustCenterSetting entity.
@@ -147,20 +148,6 @@ func (tcsc *TrustCenterSettingCreate) SetNillableOverview(s *string) *TrustCente
 	return tcsc
 }
 
-// SetPrimaryColor sets the "primary_color" field.
-func (tcsc *TrustCenterSettingCreate) SetPrimaryColor(s string) *TrustCenterSettingCreate {
-	tcsc.mutation.SetPrimaryColor(s)
-	return tcsc
-}
-
-// SetNillablePrimaryColor sets the "primary_color" field if the given value is not nil.
-func (tcsc *TrustCenterSettingCreate) SetNillablePrimaryColor(s *string) *TrustCenterSettingCreate {
-	if s != nil {
-		tcsc.SetPrimaryColor(*s)
-	}
-	return tcsc
-}
-
 // SetLogoRemoteURL sets the "logo_remote_url" field.
 func (tcsc *TrustCenterSettingCreate) SetLogoRemoteURL(s string) *TrustCenterSettingCreate {
 	tcsc.mutation.SetLogoRemoteURL(s)
@@ -213,6 +200,90 @@ func (tcsc *TrustCenterSettingCreate) SetFaviconLocalFileID(s string) *TrustCent
 func (tcsc *TrustCenterSettingCreate) SetNillableFaviconLocalFileID(s *string) *TrustCenterSettingCreate {
 	if s != nil {
 		tcsc.SetFaviconLocalFileID(*s)
+	}
+	return tcsc
+}
+
+// SetThemeMode sets the "theme_mode" field.
+func (tcsc *TrustCenterSettingCreate) SetThemeMode(ectm enums.TrustCenterThemeMode) *TrustCenterSettingCreate {
+	tcsc.mutation.SetThemeMode(ectm)
+	return tcsc
+}
+
+// SetNillableThemeMode sets the "theme_mode" field if the given value is not nil.
+func (tcsc *TrustCenterSettingCreate) SetNillableThemeMode(ectm *enums.TrustCenterThemeMode) *TrustCenterSettingCreate {
+	if ectm != nil {
+		tcsc.SetThemeMode(*ectm)
+	}
+	return tcsc
+}
+
+// SetPrimaryColor sets the "primary_color" field.
+func (tcsc *TrustCenterSettingCreate) SetPrimaryColor(s string) *TrustCenterSettingCreate {
+	tcsc.mutation.SetPrimaryColor(s)
+	return tcsc
+}
+
+// SetNillablePrimaryColor sets the "primary_color" field if the given value is not nil.
+func (tcsc *TrustCenterSettingCreate) SetNillablePrimaryColor(s *string) *TrustCenterSettingCreate {
+	if s != nil {
+		tcsc.SetPrimaryColor(*s)
+	}
+	return tcsc
+}
+
+// SetFont sets the "font" field.
+func (tcsc *TrustCenterSettingCreate) SetFont(s string) *TrustCenterSettingCreate {
+	tcsc.mutation.SetFont(s)
+	return tcsc
+}
+
+// SetNillableFont sets the "font" field if the given value is not nil.
+func (tcsc *TrustCenterSettingCreate) SetNillableFont(s *string) *TrustCenterSettingCreate {
+	if s != nil {
+		tcsc.SetFont(*s)
+	}
+	return tcsc
+}
+
+// SetForegroundColor sets the "foreground_color" field.
+func (tcsc *TrustCenterSettingCreate) SetForegroundColor(s string) *TrustCenterSettingCreate {
+	tcsc.mutation.SetForegroundColor(s)
+	return tcsc
+}
+
+// SetNillableForegroundColor sets the "foreground_color" field if the given value is not nil.
+func (tcsc *TrustCenterSettingCreate) SetNillableForegroundColor(s *string) *TrustCenterSettingCreate {
+	if s != nil {
+		tcsc.SetForegroundColor(*s)
+	}
+	return tcsc
+}
+
+// SetBackgroundColor sets the "background_color" field.
+func (tcsc *TrustCenterSettingCreate) SetBackgroundColor(s string) *TrustCenterSettingCreate {
+	tcsc.mutation.SetBackgroundColor(s)
+	return tcsc
+}
+
+// SetNillableBackgroundColor sets the "background_color" field if the given value is not nil.
+func (tcsc *TrustCenterSettingCreate) SetNillableBackgroundColor(s *string) *TrustCenterSettingCreate {
+	if s != nil {
+		tcsc.SetBackgroundColor(*s)
+	}
+	return tcsc
+}
+
+// SetAccentColor sets the "accent_color" field.
+func (tcsc *TrustCenterSettingCreate) SetAccentColor(s string) *TrustCenterSettingCreate {
+	tcsc.mutation.SetAccentColor(s)
+	return tcsc
+}
+
+// SetNillableAccentColor sets the "accent_color" field if the given value is not nil.
+func (tcsc *TrustCenterSettingCreate) SetNillableAccentColor(s *string) *TrustCenterSettingCreate {
+	if s != nil {
+		tcsc.SetAccentColor(*s)
 	}
 	return tcsc
 }
@@ -340,6 +411,10 @@ func (tcsc *TrustCenterSettingCreate) defaults() error {
 		v := trustcentersetting.DefaultUpdatedAt()
 		tcsc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := tcsc.mutation.ThemeMode(); !ok {
+		v := trustcentersetting.DefaultThemeMode
+		tcsc.mutation.SetThemeMode(v)
+	}
 	if _, ok := tcsc.mutation.ID(); !ok {
 		if trustcentersetting.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized trustcentersetting.DefaultID (forgotten import generated/runtime?)")
@@ -375,6 +450,11 @@ func (tcsc *TrustCenterSettingCreate) check() error {
 	if v, ok := tcsc.mutation.FaviconRemoteURL(); ok {
 		if err := trustcentersetting.FaviconRemoteURLValidator(v); err != nil {
 			return &ValidationError{Name: "favicon_remote_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.favicon_remote_url": %w`, err)}
+		}
+	}
+	if v, ok := tcsc.mutation.ThemeMode(); ok {
+		if err := trustcentersetting.ThemeModeValidator(v); err != nil {
+			return &ValidationError{Name: "theme_mode", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.theme_mode": %w`, err)}
 		}
 	}
 	return nil
@@ -445,10 +525,6 @@ func (tcsc *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgra
 		_spec.SetField(trustcentersetting.FieldOverview, field.TypeString, value)
 		_node.Overview = value
 	}
-	if value, ok := tcsc.mutation.PrimaryColor(); ok {
-		_spec.SetField(trustcentersetting.FieldPrimaryColor, field.TypeString, value)
-		_node.PrimaryColor = value
-	}
 	if value, ok := tcsc.mutation.LogoRemoteURL(); ok {
 		_spec.SetField(trustcentersetting.FieldLogoRemoteURL, field.TypeString, value)
 		_node.LogoRemoteURL = &value
@@ -456,6 +532,30 @@ func (tcsc *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgra
 	if value, ok := tcsc.mutation.FaviconRemoteURL(); ok {
 		_spec.SetField(trustcentersetting.FieldFaviconRemoteURL, field.TypeString, value)
 		_node.FaviconRemoteURL = &value
+	}
+	if value, ok := tcsc.mutation.ThemeMode(); ok {
+		_spec.SetField(trustcentersetting.FieldThemeMode, field.TypeEnum, value)
+		_node.ThemeMode = value
+	}
+	if value, ok := tcsc.mutation.PrimaryColor(); ok {
+		_spec.SetField(trustcentersetting.FieldPrimaryColor, field.TypeString, value)
+		_node.PrimaryColor = value
+	}
+	if value, ok := tcsc.mutation.Font(); ok {
+		_spec.SetField(trustcentersetting.FieldFont, field.TypeString, value)
+		_node.Font = value
+	}
+	if value, ok := tcsc.mutation.ForegroundColor(); ok {
+		_spec.SetField(trustcentersetting.FieldForegroundColor, field.TypeString, value)
+		_node.ForegroundColor = value
+	}
+	if value, ok := tcsc.mutation.BackgroundColor(); ok {
+		_spec.SetField(trustcentersetting.FieldBackgroundColor, field.TypeString, value)
+		_node.BackgroundColor = value
+	}
+	if value, ok := tcsc.mutation.AccentColor(); ok {
+		_spec.SetField(trustcentersetting.FieldAccentColor, field.TypeString, value)
+		_node.AccentColor = value
 	}
 	if nodes := tcsc.mutation.TrustCenterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // TrustCenterSetting is the model entity for the TrustCenterSetting schema.
@@ -37,8 +38,6 @@ type TrustCenterSetting struct {
 	Title string `json:"title,omitempty"`
 	// overview of the trust center
 	Overview string `json:"overview,omitempty"`
-	// primary color for the trust center
-	PrimaryColor string `json:"primary_color,omitempty"`
 	// URL of the logo
 	LogoRemoteURL *string `json:"logo_remote_url,omitempty"`
 	// The local logo file id, takes precedence over the logo remote URL
@@ -47,6 +46,18 @@ type TrustCenterSetting struct {
 	FaviconRemoteURL *string `json:"favicon_remote_url,omitempty"`
 	// The local favicon file id, takes precedence over the favicon remote URL
 	FaviconLocalFileID *string `json:"favicon_local_file_id,omitempty"`
+	// Theme mode for the trust center
+	ThemeMode enums.TrustCenterThemeMode `json:"theme_mode,omitempty"`
+	// primary color for the trust center
+	PrimaryColor string `json:"primary_color,omitempty"`
+	// font for the trust center
+	Font string `json:"font,omitempty"`
+	// foreground color for the trust center
+	ForegroundColor string `json:"foreground_color,omitempty"`
+	// background color for the trust center
+	BackgroundColor string `json:"background_color,omitempty"`
+	// accent/brand color for the trust center
+	AccentColor string `json:"accent_color,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterSettingQuery when eager-loading is set.
 	Edges        TrustCenterSettingEdges `json:"edges"`
@@ -119,7 +130,7 @@ func (*TrustCenterSetting) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case trustcentersetting.FieldID, trustcentersetting.FieldCreatedBy, trustcentersetting.FieldUpdatedBy, trustcentersetting.FieldDeletedBy, trustcentersetting.FieldTrustCenterID, trustcentersetting.FieldTitle, trustcentersetting.FieldOverview, trustcentersetting.FieldPrimaryColor, trustcentersetting.FieldLogoRemoteURL, trustcentersetting.FieldLogoLocalFileID, trustcentersetting.FieldFaviconRemoteURL, trustcentersetting.FieldFaviconLocalFileID:
+		case trustcentersetting.FieldID, trustcentersetting.FieldCreatedBy, trustcentersetting.FieldUpdatedBy, trustcentersetting.FieldDeletedBy, trustcentersetting.FieldTrustCenterID, trustcentersetting.FieldTitle, trustcentersetting.FieldOverview, trustcentersetting.FieldLogoRemoteURL, trustcentersetting.FieldLogoLocalFileID, trustcentersetting.FieldFaviconRemoteURL, trustcentersetting.FieldFaviconLocalFileID, trustcentersetting.FieldThemeMode, trustcentersetting.FieldPrimaryColor, trustcentersetting.FieldFont, trustcentersetting.FieldForegroundColor, trustcentersetting.FieldBackgroundColor, trustcentersetting.FieldAccentColor:
 			values[i] = new(sql.NullString)
 		case trustcentersetting.FieldCreatedAt, trustcentersetting.FieldUpdatedAt, trustcentersetting.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -198,12 +209,6 @@ func (tcs *TrustCenterSetting) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				tcs.Overview = value.String
 			}
-		case trustcentersetting.FieldPrimaryColor:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field primary_color", values[i])
-			} else if value.Valid {
-				tcs.PrimaryColor = value.String
-			}
 		case trustcentersetting.FieldLogoRemoteURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field logo_remote_url", values[i])
@@ -231,6 +236,42 @@ func (tcs *TrustCenterSetting) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				tcs.FaviconLocalFileID = new(string)
 				*tcs.FaviconLocalFileID = value.String
+			}
+		case trustcentersetting.FieldThemeMode:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field theme_mode", values[i])
+			} else if value.Valid {
+				tcs.ThemeMode = enums.TrustCenterThemeMode(value.String)
+			}
+		case trustcentersetting.FieldPrimaryColor:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field primary_color", values[i])
+			} else if value.Valid {
+				tcs.PrimaryColor = value.String
+			}
+		case trustcentersetting.FieldFont:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field font", values[i])
+			} else if value.Valid {
+				tcs.Font = value.String
+			}
+		case trustcentersetting.FieldForegroundColor:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field foreground_color", values[i])
+			} else if value.Valid {
+				tcs.ForegroundColor = value.String
+			}
+		case trustcentersetting.FieldBackgroundColor:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field background_color", values[i])
+			} else if value.Valid {
+				tcs.BackgroundColor = value.String
+			}
+		case trustcentersetting.FieldAccentColor:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field accent_color", values[i])
+			} else if value.Valid {
+				tcs.AccentColor = value.String
 			}
 		default:
 			tcs.selectValues.Set(columns[i], values[i])
@@ -315,9 +356,6 @@ func (tcs *TrustCenterSetting) String() string {
 	builder.WriteString("overview=")
 	builder.WriteString(tcs.Overview)
 	builder.WriteString(", ")
-	builder.WriteString("primary_color=")
-	builder.WriteString(tcs.PrimaryColor)
-	builder.WriteString(", ")
 	if v := tcs.LogoRemoteURL; v != nil {
 		builder.WriteString("logo_remote_url=")
 		builder.WriteString(*v)
@@ -337,6 +375,24 @@ func (tcs *TrustCenterSetting) String() string {
 		builder.WriteString("favicon_local_file_id=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("theme_mode=")
+	builder.WriteString(fmt.Sprintf("%v", tcs.ThemeMode))
+	builder.WriteString(", ")
+	builder.WriteString("primary_color=")
+	builder.WriteString(tcs.PrimaryColor)
+	builder.WriteString(", ")
+	builder.WriteString("font=")
+	builder.WriteString(tcs.Font)
+	builder.WriteString(", ")
+	builder.WriteString("foreground_color=")
+	builder.WriteString(tcs.ForegroundColor)
+	builder.WriteString(", ")
+	builder.WriteString("background_color=")
+	builder.WriteString(tcs.BackgroundColor)
+	builder.WriteString(", ")
+	builder.WriteString("accent_color=")
+	builder.WriteString(tcs.AccentColor)
 	builder.WriteByte(')')
 	return builder.String()
 }

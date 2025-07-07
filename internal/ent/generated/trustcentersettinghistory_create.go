@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -181,20 +182,6 @@ func (tcshc *TrustCenterSettingHistoryCreate) SetNillableOverview(s *string) *Tr
 	return tcshc
 }
 
-// SetPrimaryColor sets the "primary_color" field.
-func (tcshc *TrustCenterSettingHistoryCreate) SetPrimaryColor(s string) *TrustCenterSettingHistoryCreate {
-	tcshc.mutation.SetPrimaryColor(s)
-	return tcshc
-}
-
-// SetNillablePrimaryColor sets the "primary_color" field if the given value is not nil.
-func (tcshc *TrustCenterSettingHistoryCreate) SetNillablePrimaryColor(s *string) *TrustCenterSettingHistoryCreate {
-	if s != nil {
-		tcshc.SetPrimaryColor(*s)
-	}
-	return tcshc
-}
-
 // SetLogoRemoteURL sets the "logo_remote_url" field.
 func (tcshc *TrustCenterSettingHistoryCreate) SetLogoRemoteURL(s string) *TrustCenterSettingHistoryCreate {
 	tcshc.mutation.SetLogoRemoteURL(s)
@@ -247,6 +234,90 @@ func (tcshc *TrustCenterSettingHistoryCreate) SetFaviconLocalFileID(s string) *T
 func (tcshc *TrustCenterSettingHistoryCreate) SetNillableFaviconLocalFileID(s *string) *TrustCenterSettingHistoryCreate {
 	if s != nil {
 		tcshc.SetFaviconLocalFileID(*s)
+	}
+	return tcshc
+}
+
+// SetThemeMode sets the "theme_mode" field.
+func (tcshc *TrustCenterSettingHistoryCreate) SetThemeMode(ectm enums.TrustCenterThemeMode) *TrustCenterSettingHistoryCreate {
+	tcshc.mutation.SetThemeMode(ectm)
+	return tcshc
+}
+
+// SetNillableThemeMode sets the "theme_mode" field if the given value is not nil.
+func (tcshc *TrustCenterSettingHistoryCreate) SetNillableThemeMode(ectm *enums.TrustCenterThemeMode) *TrustCenterSettingHistoryCreate {
+	if ectm != nil {
+		tcshc.SetThemeMode(*ectm)
+	}
+	return tcshc
+}
+
+// SetPrimaryColor sets the "primary_color" field.
+func (tcshc *TrustCenterSettingHistoryCreate) SetPrimaryColor(s string) *TrustCenterSettingHistoryCreate {
+	tcshc.mutation.SetPrimaryColor(s)
+	return tcshc
+}
+
+// SetNillablePrimaryColor sets the "primary_color" field if the given value is not nil.
+func (tcshc *TrustCenterSettingHistoryCreate) SetNillablePrimaryColor(s *string) *TrustCenterSettingHistoryCreate {
+	if s != nil {
+		tcshc.SetPrimaryColor(*s)
+	}
+	return tcshc
+}
+
+// SetFont sets the "font" field.
+func (tcshc *TrustCenterSettingHistoryCreate) SetFont(s string) *TrustCenterSettingHistoryCreate {
+	tcshc.mutation.SetFont(s)
+	return tcshc
+}
+
+// SetNillableFont sets the "font" field if the given value is not nil.
+func (tcshc *TrustCenterSettingHistoryCreate) SetNillableFont(s *string) *TrustCenterSettingHistoryCreate {
+	if s != nil {
+		tcshc.SetFont(*s)
+	}
+	return tcshc
+}
+
+// SetForegroundColor sets the "foreground_color" field.
+func (tcshc *TrustCenterSettingHistoryCreate) SetForegroundColor(s string) *TrustCenterSettingHistoryCreate {
+	tcshc.mutation.SetForegroundColor(s)
+	return tcshc
+}
+
+// SetNillableForegroundColor sets the "foreground_color" field if the given value is not nil.
+func (tcshc *TrustCenterSettingHistoryCreate) SetNillableForegroundColor(s *string) *TrustCenterSettingHistoryCreate {
+	if s != nil {
+		tcshc.SetForegroundColor(*s)
+	}
+	return tcshc
+}
+
+// SetBackgroundColor sets the "background_color" field.
+func (tcshc *TrustCenterSettingHistoryCreate) SetBackgroundColor(s string) *TrustCenterSettingHistoryCreate {
+	tcshc.mutation.SetBackgroundColor(s)
+	return tcshc
+}
+
+// SetNillableBackgroundColor sets the "background_color" field if the given value is not nil.
+func (tcshc *TrustCenterSettingHistoryCreate) SetNillableBackgroundColor(s *string) *TrustCenterSettingHistoryCreate {
+	if s != nil {
+		tcshc.SetBackgroundColor(*s)
+	}
+	return tcshc
+}
+
+// SetAccentColor sets the "accent_color" field.
+func (tcshc *TrustCenterSettingHistoryCreate) SetAccentColor(s string) *TrustCenterSettingHistoryCreate {
+	tcshc.mutation.SetAccentColor(s)
+	return tcshc
+}
+
+// SetNillableAccentColor sets the "accent_color" field if the given value is not nil.
+func (tcshc *TrustCenterSettingHistoryCreate) SetNillableAccentColor(s *string) *TrustCenterSettingHistoryCreate {
+	if s != nil {
+		tcshc.SetAccentColor(*s)
 	}
 	return tcshc
 }
@@ -312,6 +383,10 @@ func (tcshc *TrustCenterSettingHistoryCreate) defaults() {
 		v := trustcentersettinghistory.DefaultUpdatedAt()
 		tcshc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := tcshc.mutation.ThemeMode(); !ok {
+		v := trustcentersettinghistory.DefaultThemeMode
+		tcshc.mutation.SetThemeMode(v)
+	}
 	if _, ok := tcshc.mutation.ID(); !ok {
 		v := trustcentersettinghistory.DefaultID()
 		tcshc.mutation.SetID(v)
@@ -329,6 +404,11 @@ func (tcshc *TrustCenterSettingHistoryCreate) check() error {
 	if v, ok := tcshc.mutation.Operation(); ok {
 		if err := trustcentersettinghistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSettingHistory.operation": %w`, err)}
+		}
+	}
+	if v, ok := tcshc.mutation.ThemeMode(); ok {
+		if err := trustcentersettinghistory.ThemeModeValidator(v); err != nil {
+			return &ValidationError{Name: "theme_mode", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSettingHistory.theme_mode": %w`, err)}
 		}
 	}
 	return nil
@@ -415,10 +495,6 @@ func (tcshc *TrustCenterSettingHistoryCreate) createSpec() (*TrustCenterSettingH
 		_spec.SetField(trustcentersettinghistory.FieldOverview, field.TypeString, value)
 		_node.Overview = value
 	}
-	if value, ok := tcshc.mutation.PrimaryColor(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldPrimaryColor, field.TypeString, value)
-		_node.PrimaryColor = value
-	}
 	if value, ok := tcshc.mutation.LogoRemoteURL(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldLogoRemoteURL, field.TypeString, value)
 		_node.LogoRemoteURL = &value
@@ -434,6 +510,30 @@ func (tcshc *TrustCenterSettingHistoryCreate) createSpec() (*TrustCenterSettingH
 	if value, ok := tcshc.mutation.FaviconLocalFileID(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldFaviconLocalFileID, field.TypeString, value)
 		_node.FaviconLocalFileID = &value
+	}
+	if value, ok := tcshc.mutation.ThemeMode(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldThemeMode, field.TypeEnum, value)
+		_node.ThemeMode = value
+	}
+	if value, ok := tcshc.mutation.PrimaryColor(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldPrimaryColor, field.TypeString, value)
+		_node.PrimaryColor = value
+	}
+	if value, ok := tcshc.mutation.Font(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldFont, field.TypeString, value)
+		_node.Font = value
+	}
+	if value, ok := tcshc.mutation.ForegroundColor(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldForegroundColor, field.TypeString, value)
+		_node.ForegroundColor = value
+	}
+	if value, ok := tcshc.mutation.BackgroundColor(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldBackgroundColor, field.TypeString, value)
+		_node.BackgroundColor = value
+	}
+	if value, ok := tcshc.mutation.AccentColor(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldAccentColor, field.TypeString, value)
+		_node.AccentColor = value
 	}
 	return _node, _spec
 }

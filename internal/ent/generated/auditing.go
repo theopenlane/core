@@ -3168,9 +3168,6 @@ func (tcsh *TrustCenterSettingHistory) changes(new *TrustCenterSettingHistory) [
 	if !reflect.DeepEqual(tcsh.Overview, new.Overview) {
 		changes = append(changes, NewChange(trustcentersettinghistory.FieldOverview, tcsh.Overview, new.Overview))
 	}
-	if !reflect.DeepEqual(tcsh.PrimaryColor, new.PrimaryColor) {
-		changes = append(changes, NewChange(trustcentersettinghistory.FieldPrimaryColor, tcsh.PrimaryColor, new.PrimaryColor))
-	}
 	if !reflect.DeepEqual(tcsh.LogoRemoteURL, new.LogoRemoteURL) {
 		changes = append(changes, NewChange(trustcentersettinghistory.FieldLogoRemoteURL, tcsh.LogoRemoteURL, new.LogoRemoteURL))
 	}
@@ -3182,6 +3179,24 @@ func (tcsh *TrustCenterSettingHistory) changes(new *TrustCenterSettingHistory) [
 	}
 	if !reflect.DeepEqual(tcsh.FaviconLocalFileID, new.FaviconLocalFileID) {
 		changes = append(changes, NewChange(trustcentersettinghistory.FieldFaviconLocalFileID, tcsh.FaviconLocalFileID, new.FaviconLocalFileID))
+	}
+	if !reflect.DeepEqual(tcsh.ThemeMode, new.ThemeMode) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldThemeMode, tcsh.ThemeMode, new.ThemeMode))
+	}
+	if !reflect.DeepEqual(tcsh.PrimaryColor, new.PrimaryColor) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldPrimaryColor, tcsh.PrimaryColor, new.PrimaryColor))
+	}
+	if !reflect.DeepEqual(tcsh.Font, new.Font) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldFont, tcsh.Font, new.Font))
+	}
+	if !reflect.DeepEqual(tcsh.ForegroundColor, new.ForegroundColor) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldForegroundColor, tcsh.ForegroundColor, new.ForegroundColor))
+	}
+	if !reflect.DeepEqual(tcsh.BackgroundColor, new.BackgroundColor) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldBackgroundColor, tcsh.BackgroundColor, new.BackgroundColor))
+	}
+	if !reflect.DeepEqual(tcsh.AccentColor, new.AccentColor) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldAccentColor, tcsh.AccentColor, new.AccentColor))
 	}
 	return changes
 }

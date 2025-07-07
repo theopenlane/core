@@ -75856,23 +75856,6 @@ type TrustCenterSettingWhereInput struct {
 	OverviewEqualFold    *string  `json:"overviewEqualFold,omitempty"`
 	OverviewContainsFold *string  `json:"overviewContainsFold,omitempty"`
 
-	// "primary_color" field predicates.
-	PrimaryColor             *string  `json:"primaryColor,omitempty"`
-	PrimaryColorNEQ          *string  `json:"primaryColorNEQ,omitempty"`
-	PrimaryColorIn           []string `json:"primaryColorIn,omitempty"`
-	PrimaryColorNotIn        []string `json:"primaryColorNotIn,omitempty"`
-	PrimaryColorGT           *string  `json:"primaryColorGT,omitempty"`
-	PrimaryColorGTE          *string  `json:"primaryColorGTE,omitempty"`
-	PrimaryColorLT           *string  `json:"primaryColorLT,omitempty"`
-	PrimaryColorLTE          *string  `json:"primaryColorLTE,omitempty"`
-	PrimaryColorContains     *string  `json:"primaryColorContains,omitempty"`
-	PrimaryColorHasPrefix    *string  `json:"primaryColorHasPrefix,omitempty"`
-	PrimaryColorHasSuffix    *string  `json:"primaryColorHasSuffix,omitempty"`
-	PrimaryColorIsNil        bool     `json:"primaryColorIsNil,omitempty"`
-	PrimaryColorNotNil       bool     `json:"primaryColorNotNil,omitempty"`
-	PrimaryColorEqualFold    *string  `json:"primaryColorEqualFold,omitempty"`
-	PrimaryColorContainsFold *string  `json:"primaryColorContainsFold,omitempty"`
-
 	// "logo_remote_url" field predicates.
 	LogoRemoteURL             *string  `json:"logoRemoteURL,omitempty"`
 	LogoRemoteURLNEQ          *string  `json:"logoRemoteURLNEQ,omitempty"`
@@ -75940,6 +75923,99 @@ type TrustCenterSettingWhereInput struct {
 	FaviconLocalFileIDNotNil       bool     `json:"faviconLocalFileIDNotNil,omitempty"`
 	FaviconLocalFileIDEqualFold    *string  `json:"faviconLocalFileIDEqualFold,omitempty"`
 	FaviconLocalFileIDContainsFold *string  `json:"faviconLocalFileIDContainsFold,omitempty"`
+
+	// "theme_mode" field predicates.
+	ThemeMode       *enums.TrustCenterThemeMode  `json:"themeMode,omitempty"`
+	ThemeModeNEQ    *enums.TrustCenterThemeMode  `json:"themeModeNEQ,omitempty"`
+	ThemeModeIn     []enums.TrustCenterThemeMode `json:"themeModeIn,omitempty"`
+	ThemeModeNotIn  []enums.TrustCenterThemeMode `json:"themeModeNotIn,omitempty"`
+	ThemeModeIsNil  bool                         `json:"themeModeIsNil,omitempty"`
+	ThemeModeNotNil bool                         `json:"themeModeNotNil,omitempty"`
+
+	// "primary_color" field predicates.
+	PrimaryColor             *string  `json:"primaryColor,omitempty"`
+	PrimaryColorNEQ          *string  `json:"primaryColorNEQ,omitempty"`
+	PrimaryColorIn           []string `json:"primaryColorIn,omitempty"`
+	PrimaryColorNotIn        []string `json:"primaryColorNotIn,omitempty"`
+	PrimaryColorGT           *string  `json:"primaryColorGT,omitempty"`
+	PrimaryColorGTE          *string  `json:"primaryColorGTE,omitempty"`
+	PrimaryColorLT           *string  `json:"primaryColorLT,omitempty"`
+	PrimaryColorLTE          *string  `json:"primaryColorLTE,omitempty"`
+	PrimaryColorContains     *string  `json:"primaryColorContains,omitempty"`
+	PrimaryColorHasPrefix    *string  `json:"primaryColorHasPrefix,omitempty"`
+	PrimaryColorHasSuffix    *string  `json:"primaryColorHasSuffix,omitempty"`
+	PrimaryColorIsNil        bool     `json:"primaryColorIsNil,omitempty"`
+	PrimaryColorNotNil       bool     `json:"primaryColorNotNil,omitempty"`
+	PrimaryColorEqualFold    *string  `json:"primaryColorEqualFold,omitempty"`
+	PrimaryColorContainsFold *string  `json:"primaryColorContainsFold,omitempty"`
+
+	// "font" field predicates.
+	Font             *string  `json:"font,omitempty"`
+	FontNEQ          *string  `json:"fontNEQ,omitempty"`
+	FontIn           []string `json:"fontIn,omitempty"`
+	FontNotIn        []string `json:"fontNotIn,omitempty"`
+	FontGT           *string  `json:"fontGT,omitempty"`
+	FontGTE          *string  `json:"fontGTE,omitempty"`
+	FontLT           *string  `json:"fontLT,omitempty"`
+	FontLTE          *string  `json:"fontLTE,omitempty"`
+	FontContains     *string  `json:"fontContains,omitempty"`
+	FontHasPrefix    *string  `json:"fontHasPrefix,omitempty"`
+	FontHasSuffix    *string  `json:"fontHasSuffix,omitempty"`
+	FontIsNil        bool     `json:"fontIsNil,omitempty"`
+	FontNotNil       bool     `json:"fontNotNil,omitempty"`
+	FontEqualFold    *string  `json:"fontEqualFold,omitempty"`
+	FontContainsFold *string  `json:"fontContainsFold,omitempty"`
+
+	// "foreground_color" field predicates.
+	ForegroundColor             *string  `json:"foregroundColor,omitempty"`
+	ForegroundColorNEQ          *string  `json:"foregroundColorNEQ,omitempty"`
+	ForegroundColorIn           []string `json:"foregroundColorIn,omitempty"`
+	ForegroundColorNotIn        []string `json:"foregroundColorNotIn,omitempty"`
+	ForegroundColorGT           *string  `json:"foregroundColorGT,omitempty"`
+	ForegroundColorGTE          *string  `json:"foregroundColorGTE,omitempty"`
+	ForegroundColorLT           *string  `json:"foregroundColorLT,omitempty"`
+	ForegroundColorLTE          *string  `json:"foregroundColorLTE,omitempty"`
+	ForegroundColorContains     *string  `json:"foregroundColorContains,omitempty"`
+	ForegroundColorHasPrefix    *string  `json:"foregroundColorHasPrefix,omitempty"`
+	ForegroundColorHasSuffix    *string  `json:"foregroundColorHasSuffix,omitempty"`
+	ForegroundColorIsNil        bool     `json:"foregroundColorIsNil,omitempty"`
+	ForegroundColorNotNil       bool     `json:"foregroundColorNotNil,omitempty"`
+	ForegroundColorEqualFold    *string  `json:"foregroundColorEqualFold,omitempty"`
+	ForegroundColorContainsFold *string  `json:"foregroundColorContainsFold,omitempty"`
+
+	// "background_color" field predicates.
+	BackgroundColor             *string  `json:"backgroundColor,omitempty"`
+	BackgroundColorNEQ          *string  `json:"backgroundColorNEQ,omitempty"`
+	BackgroundColorIn           []string `json:"backgroundColorIn,omitempty"`
+	BackgroundColorNotIn        []string `json:"backgroundColorNotIn,omitempty"`
+	BackgroundColorGT           *string  `json:"backgroundColorGT,omitempty"`
+	BackgroundColorGTE          *string  `json:"backgroundColorGTE,omitempty"`
+	BackgroundColorLT           *string  `json:"backgroundColorLT,omitempty"`
+	BackgroundColorLTE          *string  `json:"backgroundColorLTE,omitempty"`
+	BackgroundColorContains     *string  `json:"backgroundColorContains,omitempty"`
+	BackgroundColorHasPrefix    *string  `json:"backgroundColorHasPrefix,omitempty"`
+	BackgroundColorHasSuffix    *string  `json:"backgroundColorHasSuffix,omitempty"`
+	BackgroundColorIsNil        bool     `json:"backgroundColorIsNil,omitempty"`
+	BackgroundColorNotNil       bool     `json:"backgroundColorNotNil,omitempty"`
+	BackgroundColorEqualFold    *string  `json:"backgroundColorEqualFold,omitempty"`
+	BackgroundColorContainsFold *string  `json:"backgroundColorContainsFold,omitempty"`
+
+	// "accent_color" field predicates.
+	AccentColor             *string  `json:"accentColor,omitempty"`
+	AccentColorNEQ          *string  `json:"accentColorNEQ,omitempty"`
+	AccentColorIn           []string `json:"accentColorIn,omitempty"`
+	AccentColorNotIn        []string `json:"accentColorNotIn,omitempty"`
+	AccentColorGT           *string  `json:"accentColorGT,omitempty"`
+	AccentColorGTE          *string  `json:"accentColorGTE,omitempty"`
+	AccentColorLT           *string  `json:"accentColorLT,omitempty"`
+	AccentColorLTE          *string  `json:"accentColorLTE,omitempty"`
+	AccentColorContains     *string  `json:"accentColorContains,omitempty"`
+	AccentColorHasPrefix    *string  `json:"accentColorHasPrefix,omitempty"`
+	AccentColorHasSuffix    *string  `json:"accentColorHasSuffix,omitempty"`
+	AccentColorIsNil        bool     `json:"accentColorIsNil,omitempty"`
+	AccentColorNotNil       bool     `json:"accentColorNotNil,omitempty"`
+	AccentColorEqualFold    *string  `json:"accentColorEqualFold,omitempty"`
+	AccentColorContainsFold *string  `json:"accentColorContainsFold,omitempty"`
 
 	// "trust_center" edge predicates.
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
@@ -76344,51 +76420,6 @@ func (i *TrustCenterSettingWhereInput) P() (predicate.TrustCenterSetting, error)
 	if i.OverviewContainsFold != nil {
 		predicates = append(predicates, trustcentersetting.OverviewContainsFold(*i.OverviewContainsFold))
 	}
-	if i.PrimaryColor != nil {
-		predicates = append(predicates, trustcentersetting.PrimaryColorEQ(*i.PrimaryColor))
-	}
-	if i.PrimaryColorNEQ != nil {
-		predicates = append(predicates, trustcentersetting.PrimaryColorNEQ(*i.PrimaryColorNEQ))
-	}
-	if len(i.PrimaryColorIn) > 0 {
-		predicates = append(predicates, trustcentersetting.PrimaryColorIn(i.PrimaryColorIn...))
-	}
-	if len(i.PrimaryColorNotIn) > 0 {
-		predicates = append(predicates, trustcentersetting.PrimaryColorNotIn(i.PrimaryColorNotIn...))
-	}
-	if i.PrimaryColorGT != nil {
-		predicates = append(predicates, trustcentersetting.PrimaryColorGT(*i.PrimaryColorGT))
-	}
-	if i.PrimaryColorGTE != nil {
-		predicates = append(predicates, trustcentersetting.PrimaryColorGTE(*i.PrimaryColorGTE))
-	}
-	if i.PrimaryColorLT != nil {
-		predicates = append(predicates, trustcentersetting.PrimaryColorLT(*i.PrimaryColorLT))
-	}
-	if i.PrimaryColorLTE != nil {
-		predicates = append(predicates, trustcentersetting.PrimaryColorLTE(*i.PrimaryColorLTE))
-	}
-	if i.PrimaryColorContains != nil {
-		predicates = append(predicates, trustcentersetting.PrimaryColorContains(*i.PrimaryColorContains))
-	}
-	if i.PrimaryColorHasPrefix != nil {
-		predicates = append(predicates, trustcentersetting.PrimaryColorHasPrefix(*i.PrimaryColorHasPrefix))
-	}
-	if i.PrimaryColorHasSuffix != nil {
-		predicates = append(predicates, trustcentersetting.PrimaryColorHasSuffix(*i.PrimaryColorHasSuffix))
-	}
-	if i.PrimaryColorIsNil {
-		predicates = append(predicates, trustcentersetting.PrimaryColorIsNil())
-	}
-	if i.PrimaryColorNotNil {
-		predicates = append(predicates, trustcentersetting.PrimaryColorNotNil())
-	}
-	if i.PrimaryColorEqualFold != nil {
-		predicates = append(predicates, trustcentersetting.PrimaryColorEqualFold(*i.PrimaryColorEqualFold))
-	}
-	if i.PrimaryColorContainsFold != nil {
-		predicates = append(predicates, trustcentersetting.PrimaryColorContainsFold(*i.PrimaryColorContainsFold))
-	}
 	if i.LogoRemoteURL != nil {
 		predicates = append(predicates, trustcentersetting.LogoRemoteURLEQ(*i.LogoRemoteURL))
 	}
@@ -76568,6 +76599,249 @@ func (i *TrustCenterSettingWhereInput) P() (predicate.TrustCenterSetting, error)
 	}
 	if i.FaviconLocalFileIDContainsFold != nil {
 		predicates = append(predicates, trustcentersetting.FaviconLocalFileIDContainsFold(*i.FaviconLocalFileIDContainsFold))
+	}
+	if i.ThemeMode != nil {
+		predicates = append(predicates, trustcentersetting.ThemeModeEQ(*i.ThemeMode))
+	}
+	if i.ThemeModeNEQ != nil {
+		predicates = append(predicates, trustcentersetting.ThemeModeNEQ(*i.ThemeModeNEQ))
+	}
+	if len(i.ThemeModeIn) > 0 {
+		predicates = append(predicates, trustcentersetting.ThemeModeIn(i.ThemeModeIn...))
+	}
+	if len(i.ThemeModeNotIn) > 0 {
+		predicates = append(predicates, trustcentersetting.ThemeModeNotIn(i.ThemeModeNotIn...))
+	}
+	if i.ThemeModeIsNil {
+		predicates = append(predicates, trustcentersetting.ThemeModeIsNil())
+	}
+	if i.ThemeModeNotNil {
+		predicates = append(predicates, trustcentersetting.ThemeModeNotNil())
+	}
+	if i.PrimaryColor != nil {
+		predicates = append(predicates, trustcentersetting.PrimaryColorEQ(*i.PrimaryColor))
+	}
+	if i.PrimaryColorNEQ != nil {
+		predicates = append(predicates, trustcentersetting.PrimaryColorNEQ(*i.PrimaryColorNEQ))
+	}
+	if len(i.PrimaryColorIn) > 0 {
+		predicates = append(predicates, trustcentersetting.PrimaryColorIn(i.PrimaryColorIn...))
+	}
+	if len(i.PrimaryColorNotIn) > 0 {
+		predicates = append(predicates, trustcentersetting.PrimaryColorNotIn(i.PrimaryColorNotIn...))
+	}
+	if i.PrimaryColorGT != nil {
+		predicates = append(predicates, trustcentersetting.PrimaryColorGT(*i.PrimaryColorGT))
+	}
+	if i.PrimaryColorGTE != nil {
+		predicates = append(predicates, trustcentersetting.PrimaryColorGTE(*i.PrimaryColorGTE))
+	}
+	if i.PrimaryColorLT != nil {
+		predicates = append(predicates, trustcentersetting.PrimaryColorLT(*i.PrimaryColorLT))
+	}
+	if i.PrimaryColorLTE != nil {
+		predicates = append(predicates, trustcentersetting.PrimaryColorLTE(*i.PrimaryColorLTE))
+	}
+	if i.PrimaryColorContains != nil {
+		predicates = append(predicates, trustcentersetting.PrimaryColorContains(*i.PrimaryColorContains))
+	}
+	if i.PrimaryColorHasPrefix != nil {
+		predicates = append(predicates, trustcentersetting.PrimaryColorHasPrefix(*i.PrimaryColorHasPrefix))
+	}
+	if i.PrimaryColorHasSuffix != nil {
+		predicates = append(predicates, trustcentersetting.PrimaryColorHasSuffix(*i.PrimaryColorHasSuffix))
+	}
+	if i.PrimaryColorIsNil {
+		predicates = append(predicates, trustcentersetting.PrimaryColorIsNil())
+	}
+	if i.PrimaryColorNotNil {
+		predicates = append(predicates, trustcentersetting.PrimaryColorNotNil())
+	}
+	if i.PrimaryColorEqualFold != nil {
+		predicates = append(predicates, trustcentersetting.PrimaryColorEqualFold(*i.PrimaryColorEqualFold))
+	}
+	if i.PrimaryColorContainsFold != nil {
+		predicates = append(predicates, trustcentersetting.PrimaryColorContainsFold(*i.PrimaryColorContainsFold))
+	}
+	if i.Font != nil {
+		predicates = append(predicates, trustcentersetting.FontEQ(*i.Font))
+	}
+	if i.FontNEQ != nil {
+		predicates = append(predicates, trustcentersetting.FontNEQ(*i.FontNEQ))
+	}
+	if len(i.FontIn) > 0 {
+		predicates = append(predicates, trustcentersetting.FontIn(i.FontIn...))
+	}
+	if len(i.FontNotIn) > 0 {
+		predicates = append(predicates, trustcentersetting.FontNotIn(i.FontNotIn...))
+	}
+	if i.FontGT != nil {
+		predicates = append(predicates, trustcentersetting.FontGT(*i.FontGT))
+	}
+	if i.FontGTE != nil {
+		predicates = append(predicates, trustcentersetting.FontGTE(*i.FontGTE))
+	}
+	if i.FontLT != nil {
+		predicates = append(predicates, trustcentersetting.FontLT(*i.FontLT))
+	}
+	if i.FontLTE != nil {
+		predicates = append(predicates, trustcentersetting.FontLTE(*i.FontLTE))
+	}
+	if i.FontContains != nil {
+		predicates = append(predicates, trustcentersetting.FontContains(*i.FontContains))
+	}
+	if i.FontHasPrefix != nil {
+		predicates = append(predicates, trustcentersetting.FontHasPrefix(*i.FontHasPrefix))
+	}
+	if i.FontHasSuffix != nil {
+		predicates = append(predicates, trustcentersetting.FontHasSuffix(*i.FontHasSuffix))
+	}
+	if i.FontIsNil {
+		predicates = append(predicates, trustcentersetting.FontIsNil())
+	}
+	if i.FontNotNil {
+		predicates = append(predicates, trustcentersetting.FontNotNil())
+	}
+	if i.FontEqualFold != nil {
+		predicates = append(predicates, trustcentersetting.FontEqualFold(*i.FontEqualFold))
+	}
+	if i.FontContainsFold != nil {
+		predicates = append(predicates, trustcentersetting.FontContainsFold(*i.FontContainsFold))
+	}
+	if i.ForegroundColor != nil {
+		predicates = append(predicates, trustcentersetting.ForegroundColorEQ(*i.ForegroundColor))
+	}
+	if i.ForegroundColorNEQ != nil {
+		predicates = append(predicates, trustcentersetting.ForegroundColorNEQ(*i.ForegroundColorNEQ))
+	}
+	if len(i.ForegroundColorIn) > 0 {
+		predicates = append(predicates, trustcentersetting.ForegroundColorIn(i.ForegroundColorIn...))
+	}
+	if len(i.ForegroundColorNotIn) > 0 {
+		predicates = append(predicates, trustcentersetting.ForegroundColorNotIn(i.ForegroundColorNotIn...))
+	}
+	if i.ForegroundColorGT != nil {
+		predicates = append(predicates, trustcentersetting.ForegroundColorGT(*i.ForegroundColorGT))
+	}
+	if i.ForegroundColorGTE != nil {
+		predicates = append(predicates, trustcentersetting.ForegroundColorGTE(*i.ForegroundColorGTE))
+	}
+	if i.ForegroundColorLT != nil {
+		predicates = append(predicates, trustcentersetting.ForegroundColorLT(*i.ForegroundColorLT))
+	}
+	if i.ForegroundColorLTE != nil {
+		predicates = append(predicates, trustcentersetting.ForegroundColorLTE(*i.ForegroundColorLTE))
+	}
+	if i.ForegroundColorContains != nil {
+		predicates = append(predicates, trustcentersetting.ForegroundColorContains(*i.ForegroundColorContains))
+	}
+	if i.ForegroundColorHasPrefix != nil {
+		predicates = append(predicates, trustcentersetting.ForegroundColorHasPrefix(*i.ForegroundColorHasPrefix))
+	}
+	if i.ForegroundColorHasSuffix != nil {
+		predicates = append(predicates, trustcentersetting.ForegroundColorHasSuffix(*i.ForegroundColorHasSuffix))
+	}
+	if i.ForegroundColorIsNil {
+		predicates = append(predicates, trustcentersetting.ForegroundColorIsNil())
+	}
+	if i.ForegroundColorNotNil {
+		predicates = append(predicates, trustcentersetting.ForegroundColorNotNil())
+	}
+	if i.ForegroundColorEqualFold != nil {
+		predicates = append(predicates, trustcentersetting.ForegroundColorEqualFold(*i.ForegroundColorEqualFold))
+	}
+	if i.ForegroundColorContainsFold != nil {
+		predicates = append(predicates, trustcentersetting.ForegroundColorContainsFold(*i.ForegroundColorContainsFold))
+	}
+	if i.BackgroundColor != nil {
+		predicates = append(predicates, trustcentersetting.BackgroundColorEQ(*i.BackgroundColor))
+	}
+	if i.BackgroundColorNEQ != nil {
+		predicates = append(predicates, trustcentersetting.BackgroundColorNEQ(*i.BackgroundColorNEQ))
+	}
+	if len(i.BackgroundColorIn) > 0 {
+		predicates = append(predicates, trustcentersetting.BackgroundColorIn(i.BackgroundColorIn...))
+	}
+	if len(i.BackgroundColorNotIn) > 0 {
+		predicates = append(predicates, trustcentersetting.BackgroundColorNotIn(i.BackgroundColorNotIn...))
+	}
+	if i.BackgroundColorGT != nil {
+		predicates = append(predicates, trustcentersetting.BackgroundColorGT(*i.BackgroundColorGT))
+	}
+	if i.BackgroundColorGTE != nil {
+		predicates = append(predicates, trustcentersetting.BackgroundColorGTE(*i.BackgroundColorGTE))
+	}
+	if i.BackgroundColorLT != nil {
+		predicates = append(predicates, trustcentersetting.BackgroundColorLT(*i.BackgroundColorLT))
+	}
+	if i.BackgroundColorLTE != nil {
+		predicates = append(predicates, trustcentersetting.BackgroundColorLTE(*i.BackgroundColorLTE))
+	}
+	if i.BackgroundColorContains != nil {
+		predicates = append(predicates, trustcentersetting.BackgroundColorContains(*i.BackgroundColorContains))
+	}
+	if i.BackgroundColorHasPrefix != nil {
+		predicates = append(predicates, trustcentersetting.BackgroundColorHasPrefix(*i.BackgroundColorHasPrefix))
+	}
+	if i.BackgroundColorHasSuffix != nil {
+		predicates = append(predicates, trustcentersetting.BackgroundColorHasSuffix(*i.BackgroundColorHasSuffix))
+	}
+	if i.BackgroundColorIsNil {
+		predicates = append(predicates, trustcentersetting.BackgroundColorIsNil())
+	}
+	if i.BackgroundColorNotNil {
+		predicates = append(predicates, trustcentersetting.BackgroundColorNotNil())
+	}
+	if i.BackgroundColorEqualFold != nil {
+		predicates = append(predicates, trustcentersetting.BackgroundColorEqualFold(*i.BackgroundColorEqualFold))
+	}
+	if i.BackgroundColorContainsFold != nil {
+		predicates = append(predicates, trustcentersetting.BackgroundColorContainsFold(*i.BackgroundColorContainsFold))
+	}
+	if i.AccentColor != nil {
+		predicates = append(predicates, trustcentersetting.AccentColorEQ(*i.AccentColor))
+	}
+	if i.AccentColorNEQ != nil {
+		predicates = append(predicates, trustcentersetting.AccentColorNEQ(*i.AccentColorNEQ))
+	}
+	if len(i.AccentColorIn) > 0 {
+		predicates = append(predicates, trustcentersetting.AccentColorIn(i.AccentColorIn...))
+	}
+	if len(i.AccentColorNotIn) > 0 {
+		predicates = append(predicates, trustcentersetting.AccentColorNotIn(i.AccentColorNotIn...))
+	}
+	if i.AccentColorGT != nil {
+		predicates = append(predicates, trustcentersetting.AccentColorGT(*i.AccentColorGT))
+	}
+	if i.AccentColorGTE != nil {
+		predicates = append(predicates, trustcentersetting.AccentColorGTE(*i.AccentColorGTE))
+	}
+	if i.AccentColorLT != nil {
+		predicates = append(predicates, trustcentersetting.AccentColorLT(*i.AccentColorLT))
+	}
+	if i.AccentColorLTE != nil {
+		predicates = append(predicates, trustcentersetting.AccentColorLTE(*i.AccentColorLTE))
+	}
+	if i.AccentColorContains != nil {
+		predicates = append(predicates, trustcentersetting.AccentColorContains(*i.AccentColorContains))
+	}
+	if i.AccentColorHasPrefix != nil {
+		predicates = append(predicates, trustcentersetting.AccentColorHasPrefix(*i.AccentColorHasPrefix))
+	}
+	if i.AccentColorHasSuffix != nil {
+		predicates = append(predicates, trustcentersetting.AccentColorHasSuffix(*i.AccentColorHasSuffix))
+	}
+	if i.AccentColorIsNil {
+		predicates = append(predicates, trustcentersetting.AccentColorIsNil())
+	}
+	if i.AccentColorNotNil {
+		predicates = append(predicates, trustcentersetting.AccentColorNotNil())
+	}
+	if i.AccentColorEqualFold != nil {
+		predicates = append(predicates, trustcentersetting.AccentColorEqualFold(*i.AccentColorEqualFold))
+	}
+	if i.AccentColorContainsFold != nil {
+		predicates = append(predicates, trustcentersetting.AccentColorContainsFold(*i.AccentColorContainsFold))
 	}
 
 	if i.HasTrustCenter != nil {
@@ -76813,23 +77087,6 @@ type TrustCenterSettingHistoryWhereInput struct {
 	OverviewEqualFold    *string  `json:"overviewEqualFold,omitempty"`
 	OverviewContainsFold *string  `json:"overviewContainsFold,omitempty"`
 
-	// "primary_color" field predicates.
-	PrimaryColor             *string  `json:"primaryColor,omitempty"`
-	PrimaryColorNEQ          *string  `json:"primaryColorNEQ,omitempty"`
-	PrimaryColorIn           []string `json:"primaryColorIn,omitempty"`
-	PrimaryColorNotIn        []string `json:"primaryColorNotIn,omitempty"`
-	PrimaryColorGT           *string  `json:"primaryColorGT,omitempty"`
-	PrimaryColorGTE          *string  `json:"primaryColorGTE,omitempty"`
-	PrimaryColorLT           *string  `json:"primaryColorLT,omitempty"`
-	PrimaryColorLTE          *string  `json:"primaryColorLTE,omitempty"`
-	PrimaryColorContains     *string  `json:"primaryColorContains,omitempty"`
-	PrimaryColorHasPrefix    *string  `json:"primaryColorHasPrefix,omitempty"`
-	PrimaryColorHasSuffix    *string  `json:"primaryColorHasSuffix,omitempty"`
-	PrimaryColorIsNil        bool     `json:"primaryColorIsNil,omitempty"`
-	PrimaryColorNotNil       bool     `json:"primaryColorNotNil,omitempty"`
-	PrimaryColorEqualFold    *string  `json:"primaryColorEqualFold,omitempty"`
-	PrimaryColorContainsFold *string  `json:"primaryColorContainsFold,omitempty"`
-
 	// "logo_remote_url" field predicates.
 	LogoRemoteURL             *string  `json:"logoRemoteURL,omitempty"`
 	LogoRemoteURLNEQ          *string  `json:"logoRemoteURLNEQ,omitempty"`
@@ -76897,6 +77154,99 @@ type TrustCenterSettingHistoryWhereInput struct {
 	FaviconLocalFileIDNotNil       bool     `json:"faviconLocalFileIDNotNil,omitempty"`
 	FaviconLocalFileIDEqualFold    *string  `json:"faviconLocalFileIDEqualFold,omitempty"`
 	FaviconLocalFileIDContainsFold *string  `json:"faviconLocalFileIDContainsFold,omitempty"`
+
+	// "theme_mode" field predicates.
+	ThemeMode       *enums.TrustCenterThemeMode  `json:"themeMode,omitempty"`
+	ThemeModeNEQ    *enums.TrustCenterThemeMode  `json:"themeModeNEQ,omitempty"`
+	ThemeModeIn     []enums.TrustCenterThemeMode `json:"themeModeIn,omitempty"`
+	ThemeModeNotIn  []enums.TrustCenterThemeMode `json:"themeModeNotIn,omitempty"`
+	ThemeModeIsNil  bool                         `json:"themeModeIsNil,omitempty"`
+	ThemeModeNotNil bool                         `json:"themeModeNotNil,omitempty"`
+
+	// "primary_color" field predicates.
+	PrimaryColor             *string  `json:"primaryColor,omitempty"`
+	PrimaryColorNEQ          *string  `json:"primaryColorNEQ,omitempty"`
+	PrimaryColorIn           []string `json:"primaryColorIn,omitempty"`
+	PrimaryColorNotIn        []string `json:"primaryColorNotIn,omitempty"`
+	PrimaryColorGT           *string  `json:"primaryColorGT,omitempty"`
+	PrimaryColorGTE          *string  `json:"primaryColorGTE,omitempty"`
+	PrimaryColorLT           *string  `json:"primaryColorLT,omitempty"`
+	PrimaryColorLTE          *string  `json:"primaryColorLTE,omitempty"`
+	PrimaryColorContains     *string  `json:"primaryColorContains,omitempty"`
+	PrimaryColorHasPrefix    *string  `json:"primaryColorHasPrefix,omitempty"`
+	PrimaryColorHasSuffix    *string  `json:"primaryColorHasSuffix,omitempty"`
+	PrimaryColorIsNil        bool     `json:"primaryColorIsNil,omitempty"`
+	PrimaryColorNotNil       bool     `json:"primaryColorNotNil,omitempty"`
+	PrimaryColorEqualFold    *string  `json:"primaryColorEqualFold,omitempty"`
+	PrimaryColorContainsFold *string  `json:"primaryColorContainsFold,omitempty"`
+
+	// "font" field predicates.
+	Font             *string  `json:"font,omitempty"`
+	FontNEQ          *string  `json:"fontNEQ,omitempty"`
+	FontIn           []string `json:"fontIn,omitempty"`
+	FontNotIn        []string `json:"fontNotIn,omitempty"`
+	FontGT           *string  `json:"fontGT,omitempty"`
+	FontGTE          *string  `json:"fontGTE,omitempty"`
+	FontLT           *string  `json:"fontLT,omitempty"`
+	FontLTE          *string  `json:"fontLTE,omitempty"`
+	FontContains     *string  `json:"fontContains,omitempty"`
+	FontHasPrefix    *string  `json:"fontHasPrefix,omitempty"`
+	FontHasSuffix    *string  `json:"fontHasSuffix,omitempty"`
+	FontIsNil        bool     `json:"fontIsNil,omitempty"`
+	FontNotNil       bool     `json:"fontNotNil,omitempty"`
+	FontEqualFold    *string  `json:"fontEqualFold,omitempty"`
+	FontContainsFold *string  `json:"fontContainsFold,omitempty"`
+
+	// "foreground_color" field predicates.
+	ForegroundColor             *string  `json:"foregroundColor,omitempty"`
+	ForegroundColorNEQ          *string  `json:"foregroundColorNEQ,omitempty"`
+	ForegroundColorIn           []string `json:"foregroundColorIn,omitempty"`
+	ForegroundColorNotIn        []string `json:"foregroundColorNotIn,omitempty"`
+	ForegroundColorGT           *string  `json:"foregroundColorGT,omitempty"`
+	ForegroundColorGTE          *string  `json:"foregroundColorGTE,omitempty"`
+	ForegroundColorLT           *string  `json:"foregroundColorLT,omitempty"`
+	ForegroundColorLTE          *string  `json:"foregroundColorLTE,omitempty"`
+	ForegroundColorContains     *string  `json:"foregroundColorContains,omitempty"`
+	ForegroundColorHasPrefix    *string  `json:"foregroundColorHasPrefix,omitempty"`
+	ForegroundColorHasSuffix    *string  `json:"foregroundColorHasSuffix,omitempty"`
+	ForegroundColorIsNil        bool     `json:"foregroundColorIsNil,omitempty"`
+	ForegroundColorNotNil       bool     `json:"foregroundColorNotNil,omitempty"`
+	ForegroundColorEqualFold    *string  `json:"foregroundColorEqualFold,omitempty"`
+	ForegroundColorContainsFold *string  `json:"foregroundColorContainsFold,omitempty"`
+
+	// "background_color" field predicates.
+	BackgroundColor             *string  `json:"backgroundColor,omitempty"`
+	BackgroundColorNEQ          *string  `json:"backgroundColorNEQ,omitempty"`
+	BackgroundColorIn           []string `json:"backgroundColorIn,omitempty"`
+	BackgroundColorNotIn        []string `json:"backgroundColorNotIn,omitempty"`
+	BackgroundColorGT           *string  `json:"backgroundColorGT,omitempty"`
+	BackgroundColorGTE          *string  `json:"backgroundColorGTE,omitempty"`
+	BackgroundColorLT           *string  `json:"backgroundColorLT,omitempty"`
+	BackgroundColorLTE          *string  `json:"backgroundColorLTE,omitempty"`
+	BackgroundColorContains     *string  `json:"backgroundColorContains,omitempty"`
+	BackgroundColorHasPrefix    *string  `json:"backgroundColorHasPrefix,omitempty"`
+	BackgroundColorHasSuffix    *string  `json:"backgroundColorHasSuffix,omitempty"`
+	BackgroundColorIsNil        bool     `json:"backgroundColorIsNil,omitempty"`
+	BackgroundColorNotNil       bool     `json:"backgroundColorNotNil,omitempty"`
+	BackgroundColorEqualFold    *string  `json:"backgroundColorEqualFold,omitempty"`
+	BackgroundColorContainsFold *string  `json:"backgroundColorContainsFold,omitempty"`
+
+	// "accent_color" field predicates.
+	AccentColor             *string  `json:"accentColor,omitempty"`
+	AccentColorNEQ          *string  `json:"accentColorNEQ,omitempty"`
+	AccentColorIn           []string `json:"accentColorIn,omitempty"`
+	AccentColorNotIn        []string `json:"accentColorNotIn,omitempty"`
+	AccentColorGT           *string  `json:"accentColorGT,omitempty"`
+	AccentColorGTE          *string  `json:"accentColorGTE,omitempty"`
+	AccentColorLT           *string  `json:"accentColorLT,omitempty"`
+	AccentColorLTE          *string  `json:"accentColorLTE,omitempty"`
+	AccentColorContains     *string  `json:"accentColorContains,omitempty"`
+	AccentColorHasPrefix    *string  `json:"accentColorHasPrefix,omitempty"`
+	AccentColorHasSuffix    *string  `json:"accentColorHasSuffix,omitempty"`
+	AccentColorIsNil        bool     `json:"accentColorIsNil,omitempty"`
+	AccentColorNotNil       bool     `json:"accentColorNotNil,omitempty"`
+	AccentColorEqualFold    *string  `json:"accentColorEqualFold,omitempty"`
+	AccentColorContainsFold *string  `json:"accentColorContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -77366,51 +77716,6 @@ func (i *TrustCenterSettingHistoryWhereInput) P() (predicate.TrustCenterSettingH
 	if i.OverviewContainsFold != nil {
 		predicates = append(predicates, trustcentersettinghistory.OverviewContainsFold(*i.OverviewContainsFold))
 	}
-	if i.PrimaryColor != nil {
-		predicates = append(predicates, trustcentersettinghistory.PrimaryColorEQ(*i.PrimaryColor))
-	}
-	if i.PrimaryColorNEQ != nil {
-		predicates = append(predicates, trustcentersettinghistory.PrimaryColorNEQ(*i.PrimaryColorNEQ))
-	}
-	if len(i.PrimaryColorIn) > 0 {
-		predicates = append(predicates, trustcentersettinghistory.PrimaryColorIn(i.PrimaryColorIn...))
-	}
-	if len(i.PrimaryColorNotIn) > 0 {
-		predicates = append(predicates, trustcentersettinghistory.PrimaryColorNotIn(i.PrimaryColorNotIn...))
-	}
-	if i.PrimaryColorGT != nil {
-		predicates = append(predicates, trustcentersettinghistory.PrimaryColorGT(*i.PrimaryColorGT))
-	}
-	if i.PrimaryColorGTE != nil {
-		predicates = append(predicates, trustcentersettinghistory.PrimaryColorGTE(*i.PrimaryColorGTE))
-	}
-	if i.PrimaryColorLT != nil {
-		predicates = append(predicates, trustcentersettinghistory.PrimaryColorLT(*i.PrimaryColorLT))
-	}
-	if i.PrimaryColorLTE != nil {
-		predicates = append(predicates, trustcentersettinghistory.PrimaryColorLTE(*i.PrimaryColorLTE))
-	}
-	if i.PrimaryColorContains != nil {
-		predicates = append(predicates, trustcentersettinghistory.PrimaryColorContains(*i.PrimaryColorContains))
-	}
-	if i.PrimaryColorHasPrefix != nil {
-		predicates = append(predicates, trustcentersettinghistory.PrimaryColorHasPrefix(*i.PrimaryColorHasPrefix))
-	}
-	if i.PrimaryColorHasSuffix != nil {
-		predicates = append(predicates, trustcentersettinghistory.PrimaryColorHasSuffix(*i.PrimaryColorHasSuffix))
-	}
-	if i.PrimaryColorIsNil {
-		predicates = append(predicates, trustcentersettinghistory.PrimaryColorIsNil())
-	}
-	if i.PrimaryColorNotNil {
-		predicates = append(predicates, trustcentersettinghistory.PrimaryColorNotNil())
-	}
-	if i.PrimaryColorEqualFold != nil {
-		predicates = append(predicates, trustcentersettinghistory.PrimaryColorEqualFold(*i.PrimaryColorEqualFold))
-	}
-	if i.PrimaryColorContainsFold != nil {
-		predicates = append(predicates, trustcentersettinghistory.PrimaryColorContainsFold(*i.PrimaryColorContainsFold))
-	}
 	if i.LogoRemoteURL != nil {
 		predicates = append(predicates, trustcentersettinghistory.LogoRemoteURLEQ(*i.LogoRemoteURL))
 	}
@@ -77590,6 +77895,249 @@ func (i *TrustCenterSettingHistoryWhereInput) P() (predicate.TrustCenterSettingH
 	}
 	if i.FaviconLocalFileIDContainsFold != nil {
 		predicates = append(predicates, trustcentersettinghistory.FaviconLocalFileIDContainsFold(*i.FaviconLocalFileIDContainsFold))
+	}
+	if i.ThemeMode != nil {
+		predicates = append(predicates, trustcentersettinghistory.ThemeModeEQ(*i.ThemeMode))
+	}
+	if i.ThemeModeNEQ != nil {
+		predicates = append(predicates, trustcentersettinghistory.ThemeModeNEQ(*i.ThemeModeNEQ))
+	}
+	if len(i.ThemeModeIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.ThemeModeIn(i.ThemeModeIn...))
+	}
+	if len(i.ThemeModeNotIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.ThemeModeNotIn(i.ThemeModeNotIn...))
+	}
+	if i.ThemeModeIsNil {
+		predicates = append(predicates, trustcentersettinghistory.ThemeModeIsNil())
+	}
+	if i.ThemeModeNotNil {
+		predicates = append(predicates, trustcentersettinghistory.ThemeModeNotNil())
+	}
+	if i.PrimaryColor != nil {
+		predicates = append(predicates, trustcentersettinghistory.PrimaryColorEQ(*i.PrimaryColor))
+	}
+	if i.PrimaryColorNEQ != nil {
+		predicates = append(predicates, trustcentersettinghistory.PrimaryColorNEQ(*i.PrimaryColorNEQ))
+	}
+	if len(i.PrimaryColorIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.PrimaryColorIn(i.PrimaryColorIn...))
+	}
+	if len(i.PrimaryColorNotIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.PrimaryColorNotIn(i.PrimaryColorNotIn...))
+	}
+	if i.PrimaryColorGT != nil {
+		predicates = append(predicates, trustcentersettinghistory.PrimaryColorGT(*i.PrimaryColorGT))
+	}
+	if i.PrimaryColorGTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.PrimaryColorGTE(*i.PrimaryColorGTE))
+	}
+	if i.PrimaryColorLT != nil {
+		predicates = append(predicates, trustcentersettinghistory.PrimaryColorLT(*i.PrimaryColorLT))
+	}
+	if i.PrimaryColorLTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.PrimaryColorLTE(*i.PrimaryColorLTE))
+	}
+	if i.PrimaryColorContains != nil {
+		predicates = append(predicates, trustcentersettinghistory.PrimaryColorContains(*i.PrimaryColorContains))
+	}
+	if i.PrimaryColorHasPrefix != nil {
+		predicates = append(predicates, trustcentersettinghistory.PrimaryColorHasPrefix(*i.PrimaryColorHasPrefix))
+	}
+	if i.PrimaryColorHasSuffix != nil {
+		predicates = append(predicates, trustcentersettinghistory.PrimaryColorHasSuffix(*i.PrimaryColorHasSuffix))
+	}
+	if i.PrimaryColorIsNil {
+		predicates = append(predicates, trustcentersettinghistory.PrimaryColorIsNil())
+	}
+	if i.PrimaryColorNotNil {
+		predicates = append(predicates, trustcentersettinghistory.PrimaryColorNotNil())
+	}
+	if i.PrimaryColorEqualFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.PrimaryColorEqualFold(*i.PrimaryColorEqualFold))
+	}
+	if i.PrimaryColorContainsFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.PrimaryColorContainsFold(*i.PrimaryColorContainsFold))
+	}
+	if i.Font != nil {
+		predicates = append(predicates, trustcentersettinghistory.FontEQ(*i.Font))
+	}
+	if i.FontNEQ != nil {
+		predicates = append(predicates, trustcentersettinghistory.FontNEQ(*i.FontNEQ))
+	}
+	if len(i.FontIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.FontIn(i.FontIn...))
+	}
+	if len(i.FontNotIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.FontNotIn(i.FontNotIn...))
+	}
+	if i.FontGT != nil {
+		predicates = append(predicates, trustcentersettinghistory.FontGT(*i.FontGT))
+	}
+	if i.FontGTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.FontGTE(*i.FontGTE))
+	}
+	if i.FontLT != nil {
+		predicates = append(predicates, trustcentersettinghistory.FontLT(*i.FontLT))
+	}
+	if i.FontLTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.FontLTE(*i.FontLTE))
+	}
+	if i.FontContains != nil {
+		predicates = append(predicates, trustcentersettinghistory.FontContains(*i.FontContains))
+	}
+	if i.FontHasPrefix != nil {
+		predicates = append(predicates, trustcentersettinghistory.FontHasPrefix(*i.FontHasPrefix))
+	}
+	if i.FontHasSuffix != nil {
+		predicates = append(predicates, trustcentersettinghistory.FontHasSuffix(*i.FontHasSuffix))
+	}
+	if i.FontIsNil {
+		predicates = append(predicates, trustcentersettinghistory.FontIsNil())
+	}
+	if i.FontNotNil {
+		predicates = append(predicates, trustcentersettinghistory.FontNotNil())
+	}
+	if i.FontEqualFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.FontEqualFold(*i.FontEqualFold))
+	}
+	if i.FontContainsFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.FontContainsFold(*i.FontContainsFold))
+	}
+	if i.ForegroundColor != nil {
+		predicates = append(predicates, trustcentersettinghistory.ForegroundColorEQ(*i.ForegroundColor))
+	}
+	if i.ForegroundColorNEQ != nil {
+		predicates = append(predicates, trustcentersettinghistory.ForegroundColorNEQ(*i.ForegroundColorNEQ))
+	}
+	if len(i.ForegroundColorIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.ForegroundColorIn(i.ForegroundColorIn...))
+	}
+	if len(i.ForegroundColorNotIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.ForegroundColorNotIn(i.ForegroundColorNotIn...))
+	}
+	if i.ForegroundColorGT != nil {
+		predicates = append(predicates, trustcentersettinghistory.ForegroundColorGT(*i.ForegroundColorGT))
+	}
+	if i.ForegroundColorGTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.ForegroundColorGTE(*i.ForegroundColorGTE))
+	}
+	if i.ForegroundColorLT != nil {
+		predicates = append(predicates, trustcentersettinghistory.ForegroundColorLT(*i.ForegroundColorLT))
+	}
+	if i.ForegroundColorLTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.ForegroundColorLTE(*i.ForegroundColorLTE))
+	}
+	if i.ForegroundColorContains != nil {
+		predicates = append(predicates, trustcentersettinghistory.ForegroundColorContains(*i.ForegroundColorContains))
+	}
+	if i.ForegroundColorHasPrefix != nil {
+		predicates = append(predicates, trustcentersettinghistory.ForegroundColorHasPrefix(*i.ForegroundColorHasPrefix))
+	}
+	if i.ForegroundColorHasSuffix != nil {
+		predicates = append(predicates, trustcentersettinghistory.ForegroundColorHasSuffix(*i.ForegroundColorHasSuffix))
+	}
+	if i.ForegroundColorIsNil {
+		predicates = append(predicates, trustcentersettinghistory.ForegroundColorIsNil())
+	}
+	if i.ForegroundColorNotNil {
+		predicates = append(predicates, trustcentersettinghistory.ForegroundColorNotNil())
+	}
+	if i.ForegroundColorEqualFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.ForegroundColorEqualFold(*i.ForegroundColorEqualFold))
+	}
+	if i.ForegroundColorContainsFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.ForegroundColorContainsFold(*i.ForegroundColorContainsFold))
+	}
+	if i.BackgroundColor != nil {
+		predicates = append(predicates, trustcentersettinghistory.BackgroundColorEQ(*i.BackgroundColor))
+	}
+	if i.BackgroundColorNEQ != nil {
+		predicates = append(predicates, trustcentersettinghistory.BackgroundColorNEQ(*i.BackgroundColorNEQ))
+	}
+	if len(i.BackgroundColorIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.BackgroundColorIn(i.BackgroundColorIn...))
+	}
+	if len(i.BackgroundColorNotIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.BackgroundColorNotIn(i.BackgroundColorNotIn...))
+	}
+	if i.BackgroundColorGT != nil {
+		predicates = append(predicates, trustcentersettinghistory.BackgroundColorGT(*i.BackgroundColorGT))
+	}
+	if i.BackgroundColorGTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.BackgroundColorGTE(*i.BackgroundColorGTE))
+	}
+	if i.BackgroundColorLT != nil {
+		predicates = append(predicates, trustcentersettinghistory.BackgroundColorLT(*i.BackgroundColorLT))
+	}
+	if i.BackgroundColorLTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.BackgroundColorLTE(*i.BackgroundColorLTE))
+	}
+	if i.BackgroundColorContains != nil {
+		predicates = append(predicates, trustcentersettinghistory.BackgroundColorContains(*i.BackgroundColorContains))
+	}
+	if i.BackgroundColorHasPrefix != nil {
+		predicates = append(predicates, trustcentersettinghistory.BackgroundColorHasPrefix(*i.BackgroundColorHasPrefix))
+	}
+	if i.BackgroundColorHasSuffix != nil {
+		predicates = append(predicates, trustcentersettinghistory.BackgroundColorHasSuffix(*i.BackgroundColorHasSuffix))
+	}
+	if i.BackgroundColorIsNil {
+		predicates = append(predicates, trustcentersettinghistory.BackgroundColorIsNil())
+	}
+	if i.BackgroundColorNotNil {
+		predicates = append(predicates, trustcentersettinghistory.BackgroundColorNotNil())
+	}
+	if i.BackgroundColorEqualFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.BackgroundColorEqualFold(*i.BackgroundColorEqualFold))
+	}
+	if i.BackgroundColorContainsFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.BackgroundColorContainsFold(*i.BackgroundColorContainsFold))
+	}
+	if i.AccentColor != nil {
+		predicates = append(predicates, trustcentersettinghistory.AccentColorEQ(*i.AccentColor))
+	}
+	if i.AccentColorNEQ != nil {
+		predicates = append(predicates, trustcentersettinghistory.AccentColorNEQ(*i.AccentColorNEQ))
+	}
+	if len(i.AccentColorIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.AccentColorIn(i.AccentColorIn...))
+	}
+	if len(i.AccentColorNotIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.AccentColorNotIn(i.AccentColorNotIn...))
+	}
+	if i.AccentColorGT != nil {
+		predicates = append(predicates, trustcentersettinghistory.AccentColorGT(*i.AccentColorGT))
+	}
+	if i.AccentColorGTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.AccentColorGTE(*i.AccentColorGTE))
+	}
+	if i.AccentColorLT != nil {
+		predicates = append(predicates, trustcentersettinghistory.AccentColorLT(*i.AccentColorLT))
+	}
+	if i.AccentColorLTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.AccentColorLTE(*i.AccentColorLTE))
+	}
+	if i.AccentColorContains != nil {
+		predicates = append(predicates, trustcentersettinghistory.AccentColorContains(*i.AccentColorContains))
+	}
+	if i.AccentColorHasPrefix != nil {
+		predicates = append(predicates, trustcentersettinghistory.AccentColorHasPrefix(*i.AccentColorHasPrefix))
+	}
+	if i.AccentColorHasSuffix != nil {
+		predicates = append(predicates, trustcentersettinghistory.AccentColorHasSuffix(*i.AccentColorHasSuffix))
+	}
+	if i.AccentColorIsNil {
+		predicates = append(predicates, trustcentersettinghistory.AccentColorIsNil())
+	}
+	if i.AccentColorNotNil {
+		predicates = append(predicates, trustcentersettinghistory.AccentColorNotNil())
+	}
+	if i.AccentColorEqualFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.AccentColorEqualFold(*i.AccentColorEqualFold))
+	}
+	if i.AccentColorContainsFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.AccentColorContainsFold(*i.AccentColorContainsFold))
 	}
 
 	switch len(predicates) {

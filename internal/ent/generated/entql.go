@@ -2963,11 +2963,16 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersetting.FieldTrustCenterID:      {Type: field.TypeString, Column: trustcentersetting.FieldTrustCenterID},
 			trustcentersetting.FieldTitle:              {Type: field.TypeString, Column: trustcentersetting.FieldTitle},
 			trustcentersetting.FieldOverview:           {Type: field.TypeString, Column: trustcentersetting.FieldOverview},
-			trustcentersetting.FieldPrimaryColor:       {Type: field.TypeString, Column: trustcentersetting.FieldPrimaryColor},
 			trustcentersetting.FieldLogoRemoteURL:      {Type: field.TypeString, Column: trustcentersetting.FieldLogoRemoteURL},
 			trustcentersetting.FieldLogoLocalFileID:    {Type: field.TypeString, Column: trustcentersetting.FieldLogoLocalFileID},
 			trustcentersetting.FieldFaviconRemoteURL:   {Type: field.TypeString, Column: trustcentersetting.FieldFaviconRemoteURL},
 			trustcentersetting.FieldFaviconLocalFileID: {Type: field.TypeString, Column: trustcentersetting.FieldFaviconLocalFileID},
+			trustcentersetting.FieldThemeMode:          {Type: field.TypeEnum, Column: trustcentersetting.FieldThemeMode},
+			trustcentersetting.FieldPrimaryColor:       {Type: field.TypeString, Column: trustcentersetting.FieldPrimaryColor},
+			trustcentersetting.FieldFont:               {Type: field.TypeString, Column: trustcentersetting.FieldFont},
+			trustcentersetting.FieldForegroundColor:    {Type: field.TypeString, Column: trustcentersetting.FieldForegroundColor},
+			trustcentersetting.FieldBackgroundColor:    {Type: field.TypeString, Column: trustcentersetting.FieldBackgroundColor},
+			trustcentersetting.FieldAccentColor:        {Type: field.TypeString, Column: trustcentersetting.FieldAccentColor},
 		},
 	}
 	graph.Nodes[96] = &sqlgraph.Node{
@@ -2993,11 +2998,16 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersettinghistory.FieldTrustCenterID:      {Type: field.TypeString, Column: trustcentersettinghistory.FieldTrustCenterID},
 			trustcentersettinghistory.FieldTitle:              {Type: field.TypeString, Column: trustcentersettinghistory.FieldTitle},
 			trustcentersettinghistory.FieldOverview:           {Type: field.TypeString, Column: trustcentersettinghistory.FieldOverview},
-			trustcentersettinghistory.FieldPrimaryColor:       {Type: field.TypeString, Column: trustcentersettinghistory.FieldPrimaryColor},
 			trustcentersettinghistory.FieldLogoRemoteURL:      {Type: field.TypeString, Column: trustcentersettinghistory.FieldLogoRemoteURL},
 			trustcentersettinghistory.FieldLogoLocalFileID:    {Type: field.TypeString, Column: trustcentersettinghistory.FieldLogoLocalFileID},
 			trustcentersettinghistory.FieldFaviconRemoteURL:   {Type: field.TypeString, Column: trustcentersettinghistory.FieldFaviconRemoteURL},
 			trustcentersettinghistory.FieldFaviconLocalFileID: {Type: field.TypeString, Column: trustcentersettinghistory.FieldFaviconLocalFileID},
+			trustcentersettinghistory.FieldThemeMode:          {Type: field.TypeEnum, Column: trustcentersettinghistory.FieldThemeMode},
+			trustcentersettinghistory.FieldPrimaryColor:       {Type: field.TypeString, Column: trustcentersettinghistory.FieldPrimaryColor},
+			trustcentersettinghistory.FieldFont:               {Type: field.TypeString, Column: trustcentersettinghistory.FieldFont},
+			trustcentersettinghistory.FieldForegroundColor:    {Type: field.TypeString, Column: trustcentersettinghistory.FieldForegroundColor},
+			trustcentersettinghistory.FieldBackgroundColor:    {Type: field.TypeString, Column: trustcentersettinghistory.FieldBackgroundColor},
+			trustcentersettinghistory.FieldAccentColor:        {Type: field.TypeString, Column: trustcentersettinghistory.FieldAccentColor},
 		},
 	}
 	graph.Nodes[97] = &sqlgraph.Node{
@@ -25687,11 +25697,6 @@ func (f *TrustCenterSettingFilter) WhereOverview(p entql.StringP) {
 	f.Where(p.Field(trustcentersetting.FieldOverview))
 }
 
-// WherePrimaryColor applies the entql string predicate on the primary_color field.
-func (f *TrustCenterSettingFilter) WherePrimaryColor(p entql.StringP) {
-	f.Where(p.Field(trustcentersetting.FieldPrimaryColor))
-}
-
 // WhereLogoRemoteURL applies the entql string predicate on the logo_remote_url field.
 func (f *TrustCenterSettingFilter) WhereLogoRemoteURL(p entql.StringP) {
 	f.Where(p.Field(trustcentersetting.FieldLogoRemoteURL))
@@ -25710,6 +25715,36 @@ func (f *TrustCenterSettingFilter) WhereFaviconRemoteURL(p entql.StringP) {
 // WhereFaviconLocalFileID applies the entql string predicate on the favicon_local_file_id field.
 func (f *TrustCenterSettingFilter) WhereFaviconLocalFileID(p entql.StringP) {
 	f.Where(p.Field(trustcentersetting.FieldFaviconLocalFileID))
+}
+
+// WhereThemeMode applies the entql string predicate on the theme_mode field.
+func (f *TrustCenterSettingFilter) WhereThemeMode(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldThemeMode))
+}
+
+// WherePrimaryColor applies the entql string predicate on the primary_color field.
+func (f *TrustCenterSettingFilter) WherePrimaryColor(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldPrimaryColor))
+}
+
+// WhereFont applies the entql string predicate on the font field.
+func (f *TrustCenterSettingFilter) WhereFont(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldFont))
+}
+
+// WhereForegroundColor applies the entql string predicate on the foreground_color field.
+func (f *TrustCenterSettingFilter) WhereForegroundColor(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldForegroundColor))
+}
+
+// WhereBackgroundColor applies the entql string predicate on the background_color field.
+func (f *TrustCenterSettingFilter) WhereBackgroundColor(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldBackgroundColor))
+}
+
+// WhereAccentColor applies the entql string predicate on the accent_color field.
+func (f *TrustCenterSettingFilter) WhereAccentColor(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldAccentColor))
 }
 
 // WhereHasTrustCenter applies a predicate to check if query has an edge trust_center.
@@ -25868,11 +25903,6 @@ func (f *TrustCenterSettingHistoryFilter) WhereOverview(p entql.StringP) {
 	f.Where(p.Field(trustcentersettinghistory.FieldOverview))
 }
 
-// WherePrimaryColor applies the entql string predicate on the primary_color field.
-func (f *TrustCenterSettingHistoryFilter) WherePrimaryColor(p entql.StringP) {
-	f.Where(p.Field(trustcentersettinghistory.FieldPrimaryColor))
-}
-
 // WhereLogoRemoteURL applies the entql string predicate on the logo_remote_url field.
 func (f *TrustCenterSettingHistoryFilter) WhereLogoRemoteURL(p entql.StringP) {
 	f.Where(p.Field(trustcentersettinghistory.FieldLogoRemoteURL))
@@ -25891,6 +25921,36 @@ func (f *TrustCenterSettingHistoryFilter) WhereFaviconRemoteURL(p entql.StringP)
 // WhereFaviconLocalFileID applies the entql string predicate on the favicon_local_file_id field.
 func (f *TrustCenterSettingHistoryFilter) WhereFaviconLocalFileID(p entql.StringP) {
 	f.Where(p.Field(trustcentersettinghistory.FieldFaviconLocalFileID))
+}
+
+// WhereThemeMode applies the entql string predicate on the theme_mode field.
+func (f *TrustCenterSettingHistoryFilter) WhereThemeMode(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldThemeMode))
+}
+
+// WherePrimaryColor applies the entql string predicate on the primary_color field.
+func (f *TrustCenterSettingHistoryFilter) WherePrimaryColor(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldPrimaryColor))
+}
+
+// WhereFont applies the entql string predicate on the font field.
+func (f *TrustCenterSettingHistoryFilter) WhereFont(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldFont))
+}
+
+// WhereForegroundColor applies the entql string predicate on the foreground_color field.
+func (f *TrustCenterSettingHistoryFilter) WhereForegroundColor(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldForegroundColor))
+}
+
+// WhereBackgroundColor applies the entql string predicate on the background_color field.
+func (f *TrustCenterSettingHistoryFilter) WhereBackgroundColor(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldBackgroundColor))
+}
+
+// WhereAccentColor applies the entql string predicate on the accent_color field.
+func (f *TrustCenterSettingHistoryFilter) WhereAccentColor(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldAccentColor))
 }
 
 // addPredicate implements the predicateAdder interface.

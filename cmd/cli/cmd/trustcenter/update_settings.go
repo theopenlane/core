@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/utils/cli/tables"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
@@ -36,6 +37,13 @@ func init() {
 	updateSettingsCmd.Flags().StringP("primary-color", "p", "", "primary color for the trust center (hex color)")
 	updateSettingsCmd.Flags().StringP("logo-file", "l", "", "local of logo file to upload")
 	updateSettingsCmd.Flags().StringP("favicon-file", "f", "", "local of favicon file to upload")
+
+	// theme and styling options
+	updateSettingsCmd.Flags().StringP("theme-mode", "", "", "theme mode for the trust center (EASY or ADVANCED)")
+	updateSettingsCmd.Flags().StringP("font", "", "", "font for the trust center")
+	updateSettingsCmd.Flags().StringP("foreground-color", "", "", "foreground color for the trust center (hex color)")
+	updateSettingsCmd.Flags().StringP("background-color", "", "", "background color for the trust center (hex color)")
+	updateSettingsCmd.Flags().StringP("accent-color", "", "", "accent color for the trust center (hex color)")
 }
 
 // updateSettingsValidation validates the required fields for the command
@@ -62,6 +70,38 @@ func updateSettingsValidation() (id string, input openlaneclient.UpdateTrustCent
 	if primaryColor != "" {
 		input.PrimaryColor = &primaryColor
 	}
+
+	// Theme and styling options
+	themeMode := cmd.Config.String("theme-mode")
+	if themeMode != "" {
+		// Validate theme mode
+		themeModeEnum := enums.ToTrustCenterThemeMode(themeMode)
+		if *themeModeEnum == enums.TrustCenterThemeModeInvalid {
+			return id, input, nil, nil, cmd.NewRequiredFieldMissingError("invalid theme-mode, must be EASY or ADVANCED")
+		}
+		input.ThemeMode = themeModeEnum
+	}
+
+	font := cmd.Config.String("font")
+	if font != "" {
+		input.Font = &font
+	}
+
+	foregroundColor := cmd.Config.String("foreground-color")
+	if foregroundColor != "" {
+		input.ForegroundColor = &foregroundColor
+	}
+
+	backgroundColor := cmd.Config.String("background-color")
+	if backgroundColor != "" {
+		input.BackgroundColor = &backgroundColor
+	}
+
+	accentColor := cmd.Config.String("accent-color")
+	if accentColor != "" {
+		input.AccentColor = &accentColor
+	}
+
 	logoFileLoc := cmd.Config.String("logo-file")
 	if logoFileLoc != "" {
 		file, err := objects.NewUploadFile(logoFileLoc)
@@ -166,7 +206,7 @@ func consoleSettingsOutput(e any) error {
 // tableSettingsOutput prints the trust center settings in a table format
 func tableSettingsOutput(setting openlaneclient.UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) {
 	// create a table writer
-	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "TrustCenterID", "Title", "Overview", "PrimaryColor", "CreatedAt", "UpdatedAt")
+	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "TrustCenterID", "Title", "Overview", "PrimaryColor", "ThemeMode", "Font", "ForegroundColor", "BackgroundColor", "AccentColor", "CreatedAt", "UpdatedAt")
 
 	title := ""
 	if setting.Title != nil {
@@ -181,6 +221,31 @@ func tableSettingsOutput(setting openlaneclient.UpdateTrustCenterSetting_UpdateT
 	primaryColor := ""
 	if setting.PrimaryColor != nil {
 		primaryColor = *setting.PrimaryColor
+	}
+
+	themeMode := ""
+	if setting.ThemeMode != nil {
+		themeMode = setting.ThemeMode.String()
+	}
+
+	font := ""
+	if setting.Font != nil {
+		font = *setting.Font
+	}
+
+	foregroundColor := ""
+	if setting.ForegroundColor != nil {
+		foregroundColor = *setting.ForegroundColor
+	}
+
+	backgroundColor := ""
+	if setting.BackgroundColor != nil {
+		backgroundColor = *setting.BackgroundColor
+	}
+
+	accentColor := ""
+	if setting.AccentColor != nil {
+		accentColor = *setting.AccentColor
 	}
 
 	trustCenterID := ""
@@ -203,7 +268,12 @@ func tableSettingsOutput(setting openlaneclient.UpdateTrustCenterSetting_UpdateT
 		overview = overview[:47] + "..."
 	}
 
-	writer.AddRow(setting.ID, trustCenterID, title, overview, primaryColor, createdAt, updatedAt)
+	// Truncate font if it's too long for table display
+	if len(font) > 20 {
+		font = font[:17] + "..."
+	}
+
+	writer.AddRow(setting.ID, trustCenterID, title, overview, primaryColor, themeMode, font, foregroundColor, backgroundColor, accentColor, createdAt, updatedAt)
 
 	writer.Render()
 }

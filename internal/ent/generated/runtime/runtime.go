@@ -5474,7 +5474,7 @@ func init() {
 	// trustcentersetting.OverviewValidator is a validator for the "overview" field. It is called by the builders before save.
 	trustcentersetting.OverviewValidator = trustcentersettingDescOverview.Validators[0].(func(string) error)
 	// trustcentersettingDescLogoRemoteURL is the schema descriptor for logo_remote_url field.
-	trustcentersettingDescLogoRemoteURL := trustcentersettingFields[4].Descriptor()
+	trustcentersettingDescLogoRemoteURL := trustcentersettingFields[3].Descriptor()
 	// trustcentersetting.LogoRemoteURLValidator is a validator for the "logo_remote_url" field. It is called by the builders before save.
 	trustcentersetting.LogoRemoteURLValidator = func() func(string) error {
 		validators := trustcentersettingDescLogoRemoteURL.Validators
@@ -5492,7 +5492,7 @@ func init() {
 		}
 	}()
 	// trustcentersettingDescFaviconRemoteURL is the schema descriptor for favicon_remote_url field.
-	trustcentersettingDescFaviconRemoteURL := trustcentersettingFields[6].Descriptor()
+	trustcentersettingDescFaviconRemoteURL := trustcentersettingFields[5].Descriptor()
 	// trustcentersetting.FaviconRemoteURLValidator is a validator for the "favicon_remote_url" field. It is called by the builders before save.
 	trustcentersetting.FaviconRemoteURLValidator = func() func(string) error {
 		validators := trustcentersettingDescFaviconRemoteURL.Validators
