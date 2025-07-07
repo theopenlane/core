@@ -286,7 +286,7 @@ addons: {}`
 	defer func() { outWriter = os.Stdout }()
 
 	app := catalogApp()
-	err := app.Run([]string{"catalog", "--catalog", path, "--stripe-key", "sk", "--takeover"})
+	err := app.Run(context.Background(), []string{"catalog", "--catalog", path, "--stripe-key", "sk", "--takeover"})
 	require.NoError(t, err)
 	require.Empty(t, client.updated)
 }
@@ -326,7 +326,7 @@ addons: {}`
 	defer func() { outWriter = os.Stdout }()
 
 	app := catalogApp()
-	err := app.Run([]string{"catalog", "--catalog", path, "--stripe-key", "sk", "--takeover"})
+	err := app.Run(context.Background(), []string{"catalog", "--catalog", path, "--stripe-key", "sk", "--takeover"})
 	require.NoError(t, err)
 	require.Equal(t, []string{"price_1"}, client.updated)
 }
