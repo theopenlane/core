@@ -1804,13 +1804,14 @@ func (t *AdminSearch_AdminSearch_APITokens_PageInfo) GetStartCursor() *string {
 }
 
 type AdminSearch_AdminSearch_APITokens_Edges_Node struct {
-	ID            string   "json:\"id\" graphql:\"id\""
-	Name          string   "json:\"name\" graphql:\"name\""
-	OwnerID       *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RevokedBy     *string  "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
-	RevokedReason *string  "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
-	Scopes        []string "json:\"scopes,omitempty\" graphql:\"scopes\""
-	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
+	ID                string   "json:\"id\" graphql:\"id\""
+	Name              string   "json:\"name\" graphql:\"name\""
+	OwnerID           *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevokedBy         *string  "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason     *string  "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes            []string "json:\"scopes,omitempty\" graphql:\"scopes\""
+	SsoAuthorizations *string  "json:\"ssoAuthorizations,omitempty\" graphql:\"ssoAuthorizations\""
+	Tags              []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *AdminSearch_AdminSearch_APITokens_Edges_Node) GetID() string {
@@ -1848,6 +1849,12 @@ func (t *AdminSearch_AdminSearch_APITokens_Edges_Node) GetScopes() []string {
 		t = &AdminSearch_AdminSearch_APITokens_Edges_Node{}
 	}
 	return t.Scopes
+}
+func (t *AdminSearch_AdminSearch_APITokens_Edges_Node) GetSsoAuthorizations() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_APITokens_Edges_Node{}
+	}
+	return t.SsoAuthorizations
 }
 func (t *AdminSearch_AdminSearch_APITokens_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -5275,6 +5282,8 @@ type AdminSearch_AdminSearch_OrganizationSettings_Edges_Node struct {
 	ComplianceWebhookToken           *string         "json:\"complianceWebhookToken,omitempty\" graphql:\"complianceWebhookToken\""
 	Domains                          []string        "json:\"domains,omitempty\" graphql:\"domains\""
 	ID                               string          "json:\"id\" graphql:\"id\""
+	IdentityProviderClientID         *string         "json:\"identityProviderClientID,omitempty\" graphql:\"identityProviderClientID\""
+	IdentityProviderClientSecret     *string         "json:\"identityProviderClientSecret,omitempty\" graphql:\"identityProviderClientSecret\""
 	IdentityProviderEntityID         *string         "json:\"identityProviderEntityID,omitempty\" graphql:\"identityProviderEntityID\""
 	IdentityProviderMetadataEndpoint *string         "json:\"identityProviderMetadataEndpoint,omitempty\" graphql:\"identityProviderMetadataEndpoint\""
 	OidcDiscoveryEndpoint            *string         "json:\"oidcDiscoveryEndpoint,omitempty\" graphql:\"oidcDiscoveryEndpoint\""
@@ -5330,6 +5339,18 @@ func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetID() string
 		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetIdentityProviderClientID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProviderClientID
+}
+func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetIdentityProviderClientSecret() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProviderClientSecret
 }
 func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetIdentityProviderEntityID() *string {
 	if t == nil {
@@ -5437,12 +5458,13 @@ func (t *AdminSearch_AdminSearch_PersonalAccessTokens_PageInfo) GetStartCursor()
 }
 
 type AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node struct {
-	ID            string   "json:\"id\" graphql:\"id\""
-	Name          string   "json:\"name\" graphql:\"name\""
-	RevokedBy     *string  "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
-	RevokedReason *string  "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
-	Scopes        []string "json:\"scopes,omitempty\" graphql:\"scopes\""
-	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
+	ID                string   "json:\"id\" graphql:\"id\""
+	Name              string   "json:\"name\" graphql:\"name\""
+	RevokedBy         *string  "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason     *string  "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes            []string "json:\"scopes,omitempty\" graphql:\"scopes\""
+	SsoAuthorizations *string  "json:\"ssoAuthorizations,omitempty\" graphql:\"ssoAuthorizations\""
+	Tags              []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node) GetID() string {
@@ -5474,6 +5496,12 @@ func (t *AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node) GetScopes() []
 		t = &AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node{}
 	}
 	return t.Scopes
+}
+func (t *AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node) GetSsoAuthorizations() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.SsoAuthorizations
 }
 func (t *AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -48412,21 +48440,28 @@ func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node_Organization
 }
 
 type GetAllOrganizationSettings_OrganizationSettings_Edges_Node struct {
-	AllowedEmailDomains []string                                                                 "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
-	BillingAddress      *models.Address                                                          "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
-	BillingContact      *string                                                                  "json:\"billingContact,omitempty\" graphql:\"billingContact\""
-	BillingEmail        *string                                                                  "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
-	BillingPhone        *string                                                                  "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	CreatedAt           *time.Time                                                               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy           *string                                                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Domains             []string                                                                 "json:\"domains,omitempty\" graphql:\"domains\""
-	GeoLocation         *enums.Region                                                            "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
-	ID                  string                                                                   "json:\"id\" graphql:\"id\""
-	Organization        *GetAllOrganizationSettings_OrganizationSettings_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	Tags                []string                                                                 "json:\"tags,omitempty\" graphql:\"tags\""
-	TaxIdentifier       *string                                                                  "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
-	UpdatedAt           *time.Time                                                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy           *string                                                                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AllowedEmailDomains              []string                                                                 "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
+	BillingAddress                   *models.Address                                                          "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	BillingContact                   *string                                                                  "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail                     *string                                                                  "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone                     *string                                                                  "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	ComplianceWebhookToken           *string                                                                  "json:\"complianceWebhookToken,omitempty\" graphql:\"complianceWebhookToken\""
+	CreatedAt                        *time.Time                                                               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                        *string                                                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Domains                          []string                                                                 "json:\"domains,omitempty\" graphql:\"domains\""
+	GeoLocation                      *enums.Region                                                            "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
+	ID                               string                                                                   "json:\"id\" graphql:\"id\""
+	IdentityProvider                 *enums.SSOProvider                                                       "json:\"identityProvider,omitempty\" graphql:\"identityProvider\""
+	IdentityProviderClientSecret     *string                                                                  "json:\"identityProviderClientSecret,omitempty\" graphql:\"identityProviderClientSecret\""
+	IdentityProviderEntityID         *string                                                                  "json:\"identityProviderEntityID,omitempty\" graphql:\"identityProviderEntityID\""
+	IdentityProviderLoginEnforced    bool                                                                     "json:\"identityProviderLoginEnforced\" graphql:\"identityProviderLoginEnforced\""
+	IdentityProviderMetadataEndpoint *string                                                                  "json:\"identityProviderMetadataEndpoint,omitempty\" graphql:\"identityProviderMetadataEndpoint\""
+	OidcDiscoveryEndpoint            *string                                                                  "json:\"oidcDiscoveryEndpoint,omitempty\" graphql:\"oidcDiscoveryEndpoint\""
+	Organization                     *GetAllOrganizationSettings_OrganizationSettings_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
+	Tags                             []string                                                                 "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIdentifier                    *string                                                                  "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	UpdatedAt                        *time.Time                                                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                        *string                                                                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetAllowedEmailDomains() []string {
@@ -48459,6 +48494,12 @@ func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetBillingP
 	}
 	return t.BillingPhone
 }
+func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetComplianceWebhookToken() *string {
+	if t == nil {
+		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.ComplianceWebhookToken
+}
 func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
@@ -48488,6 +48529,42 @@ func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetID() str
 		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProvider() *enums.SSOProvider {
+	if t == nil {
+		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProvider
+}
+func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProviderClientSecret() *string {
+	if t == nil {
+		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProviderClientSecret
+}
+func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProviderEntityID() *string {
+	if t == nil {
+		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProviderEntityID
+}
+func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProviderLoginEnforced() bool {
+	if t == nil {
+		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProviderLoginEnforced
+}
+func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProviderMetadataEndpoint() *string {
+	if t == nil {
+		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProviderMetadataEndpoint
+}
+func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetOidcDiscoveryEndpoint() *string {
+	if t == nil {
+		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.OidcDiscoveryEndpoint
 }
 func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetOrganization() *GetAllOrganizationSettings_OrganizationSettings_Edges_Node_Organization {
 	if t == nil {
@@ -48561,21 +48638,28 @@ func (t *GetOrganizationSettingByID_OrganizationSetting_Organization) GetID() st
 }
 
 type GetOrganizationSettingByID_OrganizationSetting struct {
-	AllowedEmailDomains []string                                                     "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
-	BillingAddress      *models.Address                                              "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
-	BillingContact      *string                                                      "json:\"billingContact,omitempty\" graphql:\"billingContact\""
-	BillingEmail        *string                                                      "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
-	BillingPhone        *string                                                      "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	CreatedAt           *time.Time                                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy           *string                                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Domains             []string                                                     "json:\"domains,omitempty\" graphql:\"domains\""
-	GeoLocation         *enums.Region                                                "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
-	ID                  string                                                       "json:\"id\" graphql:\"id\""
-	Organization        *GetOrganizationSettingByID_OrganizationSetting_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	Tags                []string                                                     "json:\"tags,omitempty\" graphql:\"tags\""
-	TaxIdentifier       *string                                                      "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
-	UpdatedAt           *time.Time                                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy           *string                                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AllowedEmailDomains              []string                                                     "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
+	BillingAddress                   *models.Address                                              "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	BillingContact                   *string                                                      "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail                     *string                                                      "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone                     *string                                                      "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	ComplianceWebhookToken           *string                                                      "json:\"complianceWebhookToken,omitempty\" graphql:\"complianceWebhookToken\""
+	CreatedAt                        *time.Time                                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                        *string                                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Domains                          []string                                                     "json:\"domains,omitempty\" graphql:\"domains\""
+	GeoLocation                      *enums.Region                                                "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
+	ID                               string                                                       "json:\"id\" graphql:\"id\""
+	IdentityProvider                 *enums.SSOProvider                                           "json:\"identityProvider,omitempty\" graphql:\"identityProvider\""
+	IdentityProviderClientSecret     *string                                                      "json:\"identityProviderClientSecret,omitempty\" graphql:\"identityProviderClientSecret\""
+	IdentityProviderEntityID         *string                                                      "json:\"identityProviderEntityID,omitempty\" graphql:\"identityProviderEntityID\""
+	IdentityProviderLoginEnforced    bool                                                         "json:\"identityProviderLoginEnforced\" graphql:\"identityProviderLoginEnforced\""
+	IdentityProviderMetadataEndpoint *string                                                      "json:\"identityProviderMetadataEndpoint,omitempty\" graphql:\"identityProviderMetadataEndpoint\""
+	OidcDiscoveryEndpoint            *string                                                      "json:\"oidcDiscoveryEndpoint,omitempty\" graphql:\"oidcDiscoveryEndpoint\""
+	Organization                     *GetOrganizationSettingByID_OrganizationSetting_Organization "json:\"organization,omitempty\" graphql:\"organization\""
+	Tags                             []string                                                     "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIdentifier                    *string                                                      "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	UpdatedAt                        *time.Time                                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                        *string                                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetOrganizationSettingByID_OrganizationSetting) GetAllowedEmailDomains() []string {
@@ -48608,6 +48692,12 @@ func (t *GetOrganizationSettingByID_OrganizationSetting) GetBillingPhone() *stri
 	}
 	return t.BillingPhone
 }
+func (t *GetOrganizationSettingByID_OrganizationSetting) GetComplianceWebhookToken() *string {
+	if t == nil {
+		t = &GetOrganizationSettingByID_OrganizationSetting{}
+	}
+	return t.ComplianceWebhookToken
+}
 func (t *GetOrganizationSettingByID_OrganizationSetting) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetOrganizationSettingByID_OrganizationSetting{}
@@ -48637,6 +48727,42 @@ func (t *GetOrganizationSettingByID_OrganizationSetting) GetID() string {
 		t = &GetOrganizationSettingByID_OrganizationSetting{}
 	}
 	return t.ID
+}
+func (t *GetOrganizationSettingByID_OrganizationSetting) GetIdentityProvider() *enums.SSOProvider {
+	if t == nil {
+		t = &GetOrganizationSettingByID_OrganizationSetting{}
+	}
+	return t.IdentityProvider
+}
+func (t *GetOrganizationSettingByID_OrganizationSetting) GetIdentityProviderClientSecret() *string {
+	if t == nil {
+		t = &GetOrganizationSettingByID_OrganizationSetting{}
+	}
+	return t.IdentityProviderClientSecret
+}
+func (t *GetOrganizationSettingByID_OrganizationSetting) GetIdentityProviderEntityID() *string {
+	if t == nil {
+		t = &GetOrganizationSettingByID_OrganizationSetting{}
+	}
+	return t.IdentityProviderEntityID
+}
+func (t *GetOrganizationSettingByID_OrganizationSetting) GetIdentityProviderLoginEnforced() bool {
+	if t == nil {
+		t = &GetOrganizationSettingByID_OrganizationSetting{}
+	}
+	return t.IdentityProviderLoginEnforced
+}
+func (t *GetOrganizationSettingByID_OrganizationSetting) GetIdentityProviderMetadataEndpoint() *string {
+	if t == nil {
+		t = &GetOrganizationSettingByID_OrganizationSetting{}
+	}
+	return t.IdentityProviderMetadataEndpoint
+}
+func (t *GetOrganizationSettingByID_OrganizationSetting) GetOidcDiscoveryEndpoint() *string {
+	if t == nil {
+		t = &GetOrganizationSettingByID_OrganizationSetting{}
+	}
+	return t.OidcDiscoveryEndpoint
 }
 func (t *GetOrganizationSettingByID_OrganizationSetting) GetOrganization() *GetOrganizationSettingByID_OrganizationSetting_Organization {
 	if t == nil {
@@ -48688,21 +48814,28 @@ func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node_Organization) G
 }
 
 type GetOrganizationSettings_OrganizationSettings_Edges_Node struct {
-	AllowedEmailDomains []string                                                              "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
-	BillingAddress      *models.Address                                                       "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
-	BillingContact      *string                                                               "json:\"billingContact,omitempty\" graphql:\"billingContact\""
-	BillingEmail        *string                                                               "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
-	BillingPhone        *string                                                               "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	CreatedAt           *time.Time                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy           *string                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Domains             []string                                                              "json:\"domains,omitempty\" graphql:\"domains\""
-	GeoLocation         *enums.Region                                                         "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
-	ID                  string                                                                "json:\"id\" graphql:\"id\""
-	Organization        *GetOrganizationSettings_OrganizationSettings_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	Tags                []string                                                              "json:\"tags,omitempty\" graphql:\"tags\""
-	TaxIdentifier       *string                                                               "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
-	UpdatedAt           *time.Time                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy           *string                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AllowedEmailDomains              []string                                                              "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
+	BillingAddress                   *models.Address                                                       "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	BillingContact                   *string                                                               "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail                     *string                                                               "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone                     *string                                                               "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	ComplianceWebhookToken           *string                                                               "json:\"complianceWebhookToken,omitempty\" graphql:\"complianceWebhookToken\""
+	CreatedAt                        *time.Time                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                        *string                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Domains                          []string                                                              "json:\"domains,omitempty\" graphql:\"domains\""
+	GeoLocation                      *enums.Region                                                         "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
+	ID                               string                                                                "json:\"id\" graphql:\"id\""
+	IdentityProvider                 *enums.SSOProvider                                                    "json:\"identityProvider,omitempty\" graphql:\"identityProvider\""
+	IdentityProviderClientSecret     *string                                                               "json:\"identityProviderClientSecret,omitempty\" graphql:\"identityProviderClientSecret\""
+	IdentityProviderEntityID         *string                                                               "json:\"identityProviderEntityID,omitempty\" graphql:\"identityProviderEntityID\""
+	IdentityProviderLoginEnforced    bool                                                                  "json:\"identityProviderLoginEnforced\" graphql:\"identityProviderLoginEnforced\""
+	IdentityProviderMetadataEndpoint *string                                                               "json:\"identityProviderMetadataEndpoint,omitempty\" graphql:\"identityProviderMetadataEndpoint\""
+	OidcDiscoveryEndpoint            *string                                                               "json:\"oidcDiscoveryEndpoint,omitempty\" graphql:\"oidcDiscoveryEndpoint\""
+	Organization                     *GetOrganizationSettings_OrganizationSettings_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
+	Tags                             []string                                                              "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIdentifier                    *string                                                               "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	UpdatedAt                        *time.Time                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                        *string                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetAllowedEmailDomains() []string {
@@ -48735,6 +48868,12 @@ func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetBillingPhon
 	}
 	return t.BillingPhone
 }
+func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetComplianceWebhookToken() *string {
+	if t == nil {
+		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.ComplianceWebhookToken
+}
 func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
@@ -48764,6 +48903,42 @@ func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetID() string
 		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProvider() *enums.SSOProvider {
+	if t == nil {
+		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProvider
+}
+func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProviderClientSecret() *string {
+	if t == nil {
+		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProviderClientSecret
+}
+func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProviderEntityID() *string {
+	if t == nil {
+		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProviderEntityID
+}
+func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProviderLoginEnforced() bool {
+	if t == nil {
+		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProviderLoginEnforced
+}
+func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProviderMetadataEndpoint() *string {
+	if t == nil {
+		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProviderMetadataEndpoint
+}
+func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetOidcDiscoveryEndpoint() *string {
+	if t == nil {
+		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.OidcDiscoveryEndpoint
 }
 func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetOrganization() *GetOrganizationSettings_OrganizationSettings_Edges_Node_Organization {
 	if t == nil {
@@ -48837,21 +49012,28 @@ func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting
 }
 
 type UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting struct {
-	AllowedEmailDomains []string                                                                              "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
-	BillingAddress      *models.Address                                                                       "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
-	BillingContact      *string                                                                               "json:\"billingContact,omitempty\" graphql:\"billingContact\""
-	BillingEmail        *string                                                                               "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
-	BillingPhone        *string                                                                               "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	CreatedAt           *time.Time                                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy           *string                                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Domains             []string                                                                              "json:\"domains,omitempty\" graphql:\"domains\""
-	GeoLocation         *enums.Region                                                                         "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
-	ID                  string                                                                                "json:\"id\" graphql:\"id\""
-	Organization        *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	Tags                []string                                                                              "json:\"tags,omitempty\" graphql:\"tags\""
-	TaxIdentifier       *string                                                                               "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
-	UpdatedAt           *time.Time                                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy           *string                                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AllowedEmailDomains              []string                                                                              "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
+	BillingAddress                   *models.Address                                                                       "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	BillingContact                   *string                                                                               "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail                     *string                                                                               "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone                     *string                                                                               "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	ComplianceWebhookToken           *string                                                                               "json:\"complianceWebhookToken,omitempty\" graphql:\"complianceWebhookToken\""
+	CreatedAt                        *time.Time                                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                        *string                                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Domains                          []string                                                                              "json:\"domains,omitempty\" graphql:\"domains\""
+	GeoLocation                      *enums.Region                                                                         "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
+	ID                               string                                                                                "json:\"id\" graphql:\"id\""
+	IdentityProvider                 *enums.SSOProvider                                                                    "json:\"identityProvider,omitempty\" graphql:\"identityProvider\""
+	IdentityProviderClientSecret     *string                                                                               "json:\"identityProviderClientSecret,omitempty\" graphql:\"identityProviderClientSecret\""
+	IdentityProviderEntityID         *string                                                                               "json:\"identityProviderEntityID,omitempty\" graphql:\"identityProviderEntityID\""
+	IdentityProviderLoginEnforced    bool                                                                                  "json:\"identityProviderLoginEnforced\" graphql:\"identityProviderLoginEnforced\""
+	IdentityProviderMetadataEndpoint *string                                                                               "json:\"identityProviderMetadataEndpoint,omitempty\" graphql:\"identityProviderMetadataEndpoint\""
+	OidcDiscoveryEndpoint            *string                                                                               "json:\"oidcDiscoveryEndpoint,omitempty\" graphql:\"oidcDiscoveryEndpoint\""
+	Organization                     *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_Organization "json:\"organization,omitempty\" graphql:\"organization\""
+	Tags                             []string                                                                              "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIdentifier                    *string                                                                               "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	UpdatedAt                        *time.Time                                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                        *string                                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetAllowedEmailDomains() []string {
@@ -48884,6 +49066,12 @@ func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting
 	}
 	return t.BillingPhone
 }
+func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetComplianceWebhookToken() *string {
+	if t == nil {
+		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
+	}
+	return t.ComplianceWebhookToken
+}
 func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
@@ -48913,6 +49101,42 @@ func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting
 		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
 	}
 	return t.ID
+}
+func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetIdentityProvider() *enums.SSOProvider {
+	if t == nil {
+		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
+	}
+	return t.IdentityProvider
+}
+func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetIdentityProviderClientSecret() *string {
+	if t == nil {
+		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
+	}
+	return t.IdentityProviderClientSecret
+}
+func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetIdentityProviderEntityID() *string {
+	if t == nil {
+		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
+	}
+	return t.IdentityProviderEntityID
+}
+func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetIdentityProviderLoginEnforced() bool {
+	if t == nil {
+		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
+	}
+	return t.IdentityProviderLoginEnforced
+}
+func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetIdentityProviderMetadataEndpoint() *string {
+	if t == nil {
+		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
+	}
+	return t.IdentityProviderMetadataEndpoint
+}
+func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetOidcDiscoveryEndpoint() *string {
+	if t == nil {
+		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
+	}
+	return t.OidcDiscoveryEndpoint
 }
 func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetOrganization() *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_Organization {
 	if t == nil {
@@ -87945,6 +88169,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					scopes
 					revokedReason
 					revokedBy
+					ssoAuthorizations
 				}
 			}
 		}
@@ -88516,6 +88741,8 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					taxIdentifier
 					organizationID
 					allowedEmailDomains
+					identityProviderClientID
+					identityProviderClientSecret
 					identityProviderMetadataEndpoint
 					identityProviderEntityID
 					oidcDiscoveryEndpoint
@@ -88537,6 +88764,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					tags
 					name
 					scopes
+					ssoAuthorizations
 					revokedReason
 					revokedBy
 				}
@@ -101024,6 +101252,13 @@ const GetAllOrganizationSettingsDocument = `query GetAllOrganizationSettings {
 				taxIdentifier
 				updatedAt
 				updatedBy
+				identityProvider
+				identityProviderEntityID
+				identityProviderLoginEnforced
+				oidcDiscoveryEndpoint
+				identityProviderClientSecret
+				identityProviderMetadataEndpoint
+				complianceWebhookToken
 				organization {
 					id
 					displayName
@@ -101065,6 +101300,13 @@ const GetOrganizationSettingByIDDocument = `query GetOrganizationSettingByID ($o
 		taxIdentifier
 		updatedAt
 		updatedBy
+		identityProvider
+		identityProviderEntityID
+		identityProviderLoginEnforced
+		oidcDiscoveryEndpoint
+		identityProviderClientSecret
+		identityProviderMetadataEndpoint
+		complianceWebhookToken
 		organization {
 			id
 			displayName
@@ -101108,6 +101350,13 @@ const GetOrganizationSettingsDocument = `query GetOrganizationSettings ($where: 
 				taxIdentifier
 				updatedAt
 				updatedBy
+				identityProvider
+				identityProviderEntityID
+				identityProviderLoginEnforced
+				oidcDiscoveryEndpoint
+				identityProviderClientSecret
+				identityProviderMetadataEndpoint
+				complianceWebhookToken
 				organization {
 					id
 					displayName
@@ -101152,6 +101401,13 @@ const UpdateOrganizationSettingDocument = `mutation UpdateOrganizationSetting ($
 			taxIdentifier
 			updatedAt
 			updatedBy
+			identityProvider
+			identityProviderEntityID
+			identityProviderLoginEnforced
+			oidcDiscoveryEndpoint
+			identityProviderClientSecret
+			identityProviderMetadataEndpoint
+			complianceWebhookToken
 			organization {
 				id
 				displayName

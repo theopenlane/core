@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // APIToken holds the schema definition for the APIToken entity.
@@ -106,6 +107,9 @@ func (APIToken) Fields() []ent.Field {
 			Comment("when the token was revoked").
 			Optional().
 			Nillable(),
+		field.JSON("sso_authorizations", models.SSOAuthorizationMap{}).
+			Comment("SSO verification time for the owning organization").
+			Optional(),
 	}
 }
 

@@ -19,9 +19,13 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/pkg/enums"
 	api "github.com/theopenlane/core/pkg/models"
+	sso "github.com/theopenlane/core/pkg/ssoutils"
 )
 
 // SessionSkipperFunc is the function that determines if the session check should be skipped
@@ -46,7 +50,7 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 
 			validator, err := conf.Validator()
 			if err != nil {
-				return unauthorized(c, err)
+				return unauthorized(c, err, conf, validator)
 			}
 
 			// Create a reauthenticator function to handle refresh tokens if they are provided.
@@ -59,10 +63,10 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 				switch {
 				case errors.Is(err, ErrNoAuthorization):
 					if bearerToken, err = reauthenticate(c); err != nil {
-						return unauthorized(c, err)
+						return unauthorized(c, err, conf, validator)
 					}
 				default:
-					return unauthorized(c, err)
+					return unauthorized(c, err, conf, validator)
 				}
 			}
 
@@ -77,22 +81,22 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 			case auth.PATAuthentication, auth.APITokenAuthentication:
 				au, id, err = checkToken(reqCtx, conf, bearerToken)
 				if err != nil {
-					return unauthorized(c, err)
+					return unauthorized(c, err, conf, validator)
 				}
 
 			default:
 				claims, err := validator.Verify(bearerToken)
 				if err != nil {
-					return unauthorized(c, err)
+					return unauthorized(c, err, conf, validator)
 				}
 
 				if strings.HasPrefix(claims.UserID, "anon:") {
 					if !conf.AllowAnonymous {
-						return unauthorized(c, ErrAnonymousAccessNotAllowed)
+						return unauthorized(c, ErrAnonymousAccessNotAllowed, conf, validator)
 					}
 					an, err := createAnonymousTrustCenterUserFromClaims(reqCtx, conf.DBClient, claims, auth.JWTAuthentication)
 					if err != nil {
-						return unauthorized(c, err)
+						return unauthorized(c, err, conf, validator)
 					}
 
 					auth.SetAnonymousTrustCenterUserContext(c, an)
@@ -103,7 +107,7 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 				// Add claims to context for use in downstream processing and continue handlers
 				au, err = createAuthenticatedUserFromClaims(reqCtx, conf.DBClient, claims, auth.JWTAuthentication)
 				if err != nil {
-					return unauthorized(c, err)
+					return unauthorized(c, err, conf, validator)
 				}
 
 				auth.SetRefreshToken(c, bearerToken)
@@ -117,8 +121,8 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 					Strs("org_id", au.OrganizationIDs)
 			})
 
-			if err := updateLastUsed(c.Request().Context(), conf.DBClient, au, id); err != nil {
-				return unauthorized(c, err)
+			if err := updateLastUsedFunc(c.Request().Context(), conf.DBClient, au, id); err != nil {
+				return unauthorized(c, err, conf, validator)
 			}
 
 			return next(c)
@@ -249,13 +253,13 @@ func checkToken(ctx context.Context, conf *Options, token string) (*auth.Authent
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	// check if the token is a personal access token
-	au, id, err := isValidPersonalAccessToken(ctx, *conf.DBClient, token)
+	au, id, err := isValidPersonalAccessToken(ctx, conf.DBClient, token)
 	if err == nil {
 		return au, id, nil
 	}
 
 	// check if the token is an API token
-	au, id, err = isValidAPIToken(ctx, *conf.DBClient, token)
+	au, id, err = isValidAPIToken(ctx, conf.DBClient, token)
 	if err == nil {
 		return au, id, nil
 	}
@@ -264,13 +268,8 @@ func checkToken(ctx context.Context, conf *Options, token string) (*auth.Authent
 }
 
 // isValidPersonalAccessToken checks if the provided token is a valid personal access token and returns the authenticated user
-func isValidPersonalAccessToken(ctx context.Context, dbClient ent.Client, token string) (*auth.AuthenticatedUser, string, error) {
-	// query for the token before the user is authorized
-	// allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	pat, err := dbClient.PersonalAccessToken.Query().Where(personalaccesstoken.Token(token)).
-		WithOwner().
-		WithOrganizations().
-		Only(ctx)
+func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client, token string) (*auth.AuthenticatedUser, string, error) {
+	pat, err := fetchPATFunc(ctx, dbClient, token)
 	if err != nil {
 		return nil, "", err
 	}
@@ -291,6 +290,20 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient ent.Client, token 
 	}
 
 	for _, org := range orgs {
+		enforced, err := isSSOEnforcedFunc(ctx, dbClient, org.ID)
+		if err != nil {
+			return nil, "", err
+		}
+		if enforced {
+			authorized, err := isPATSSOAuthorizedFunc(ctx, dbClient, pat.ID, org.ID)
+			if err != nil {
+				return nil, "", err
+			}
+			if !authorized {
+				return nil, "", ErrTokenSSORequired
+			}
+		}
+
 		orgIDs = append(orgIDs, org.ID)
 	}
 
@@ -303,11 +316,8 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient ent.Client, token 
 	}, pat.ID, nil
 }
 
-func isValidAPIToken(ctx context.Context, dbClient ent.Client, token string) (*auth.AuthenticatedUser, string, error) {
-	// query for the token before the user is authorized
-	// allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	t, err := dbClient.APIToken.Query().Where(apitoken.Token(token)).
-		Only(ctx)
+func isValidAPIToken(ctx context.Context, dbClient *ent.Client, token string) (*auth.AuthenticatedUser, string, error) {
+	t, err := fetchAPITokenFunc(ctx, dbClient, token)
 	if err != nil {
 		return nil, "", err
 	}
@@ -315,6 +325,17 @@ func isValidAPIToken(ctx context.Context, dbClient ent.Client, token string) (*a
 	// check if the token has expired
 	if t.ExpiresAt != nil && t.ExpiresAt.Before(time.Now()) {
 		return nil, "", rout.ErrExpiredCredentials
+	}
+
+	enforced, err := isSSOEnforcedFunc(ctx, dbClient, t.OwnerID)
+	if err != nil {
+		return nil, "", err
+	}
+
+	if enforced {
+		if t.SSOAuthorizations == nil || t.SSOAuthorizations[t.OwnerID].IsZero() {
+			return nil, "", ErrTokenSSORequired
+		}
 	}
 
 	return &auth.AuthenticatedUser{
@@ -341,11 +362,156 @@ func getSubjectName(user *ent.User) string {
 	return subjectName
 }
 
-// unauthorized returns a 401 Unauthorized response with the error message.
-func unauthorized(c echo.Context, err error) error {
-	if err := c.JSON(http.StatusUnauthorized, rout.ErrorResponse(err)); err != nil {
-		return err
+// unauthorized returns a 401 Unauthorized response with the error message
+func unauthorized(c echo.Context, err error, conf *Options, v tokens.Validator) error {
+	reqCtx := c.Request().Context()
+
+	if v != nil && conf != nil && conf.DBClient != nil {
+		orgID := orgIDFromToken(c, v)
+		if orgID != "" {
+			userID := userIDFromToken(c, v)
+			if userID != "" {
+				enforced, dbErr := isSSOEnforcedFunc(reqCtx, conf.DBClient, orgID)
+
+				if dbErr == nil && enforced {
+					role, mErr := orgRoleFunc(reqCtx, conf.DBClient, userID, orgID)
+
+					if mErr == nil && role != enums.RoleOwner {
+						if redirErr := c.Redirect(http.StatusFound, sso.SSOLogin(c.Echo(), orgID)); redirErr != nil {
+							return redirErr
+						}
+
+						return nil
+					}
+				}
+			}
+		}
 	}
 
-	return err
+	if jsonErr := c.JSON(http.StatusUnauthorized, rout.ErrorResponse(err)); jsonErr != nil {
+		log.Error().Err(jsonErr).Msg("failed to write unauthorized JSON response")
+		return jsonErr
+	}
+
+	return nil
 }
+
+// orgIDFromToken extracts the organization ID from the token in the request context
+func orgIDFromToken(c echo.Context, v tokens.Validator) string {
+	authHeader := c.Request().Header.Get("Authorization")
+
+	if authHeader != "" {
+		token, err := auth.GetBearerToken(c)
+		if err != nil {
+			log.Error().Err(err).Msg("failed to get bearer token from context")
+			return ""
+		}
+
+		if token != "" {
+			if claims, parseErr := v.Parse(token); parseErr == nil {
+				return claims.OrgID
+			}
+		}
+	}
+
+	cookie, err := c.Cookie("refresh_token")
+	if err == nil && cookie != nil && cookie.Value != "" {
+		refresh := cookie.Value
+
+		if claims, parseErr := v.Parse(refresh); parseErr == nil {
+			return claims.OrgID
+		}
+	}
+
+	return ""
+}
+
+// isSSOEnforced checks if SSO is enforced for the given organization ID
+func isSSOEnforced(ctx context.Context, db *ent.Client, orgID string) (bool, error) {
+	setting, err := db.OrganizationSetting.Query().Where(organizationsetting.OrganizationID(orgID)).
+		Only(privacy.DecisionContext(ctx, privacy.Allow))
+	if err != nil {
+		if ent.IsNotFound(err) {
+			return false, nil
+		}
+
+		return false, err
+	}
+
+	return setting.IdentityProviderLoginEnforced, nil
+}
+
+// userIDFromToken extracts the user ID from the token in the request context
+func userIDFromToken(c echo.Context, v tokens.Validator) string {
+	authHeader := c.Request().Header.Get("Authorization")
+	if authHeader != "" {
+		token, _ := auth.GetBearerToken(c)
+		if token != "" {
+			if claims, parseErr := v.Parse(token); parseErr == nil {
+				return claims.UserID
+			}
+		}
+	}
+
+	cookie, err := c.Cookie("refresh_token")
+	if err == nil && cookie != nil && cookie.Value != "" {
+		refresh := cookie.Value
+		if claims, parseErr := v.Parse(refresh); parseErr == nil {
+			return claims.UserID
+		}
+	}
+
+	return ""
+}
+
+// isPATSSOAuthorized checks if the personal access token is authorized for SSO with the given organization ID
+func isPATSSOAuthorized(ctx context.Context, db *ent.Client, tokenID, orgID string) (bool, error) {
+	pat, err := db.PersonalAccessToken.Get(ctx, tokenID)
+	if err != nil {
+		if ent.IsNotFound(err) {
+			return false, nil
+		}
+
+		return false, err
+	}
+
+	ctx = api.WithSSOAuthorizations(ctx, &pat.SSOAuthorizations)
+	auths, ok := api.SSOAuthorizationsFromContext(ctx)
+	if !ok || auths == nil {
+		return false, nil
+	}
+
+	_, ok = (*auths)[orgID]
+
+	return ok, nil
+}
+
+// function variables allow tests to override SSO checks without a database
+var (
+	isSSOEnforcedFunc = isSSOEnforced
+	orgRoleFunc       = func(ctx context.Context, db *ent.Client, userID, orgID string) (enums.Role, error) {
+		member, err := db.OrgMembership.Query().
+			Where(orgmembership.UserID(userID), orgmembership.OrganizationID(orgID)).
+			Only(privacy.DecisionContext(ctx, privacy.Allow))
+		if err != nil {
+			return "", err
+		}
+
+		return member.Role, nil
+	}
+
+	fetchPATFunc = func(ctx context.Context, db *ent.Client, token string) (*ent.PersonalAccessToken, error) {
+		return db.PersonalAccessToken.Query().Where(personalaccesstoken.Token(token)).
+			WithOwner().
+			WithOrganizations().
+			Only(ctx)
+	}
+
+	fetchAPITokenFunc = func(ctx context.Context, db *ent.Client, token string) (*ent.APIToken, error) {
+		return db.APIToken.Query().Where(apitoken.Token(token)).Only(ctx)
+	}
+
+	isPATSSOAuthorizedFunc = isPATSSOAuthorized
+
+	updateLastUsedFunc = updateLastUsed
+)

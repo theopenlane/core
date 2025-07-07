@@ -210,6 +210,9 @@ func handlerSetup(db *ent.Client) *handlers.Handler {
 		SessionConfig: db.SessionConfig,
 		AuthManager:   as,
 		Entitlements:  db.EntitlementManager,
+		OauthProvider: handlers.OauthProviderConfig{
+			RedirectURL: "http://localhost",
+		},
 	}
 
 	return h

@@ -40,8 +40,10 @@ type APIToken struct {
 	// the user who revoked the token
 	RevokedBy *string `json:"revokedBy,omitempty"`
 	// when the token was revoked
-	RevokedAt *time.Time    `json:"revokedAt,omitempty"`
-	Owner     *Organization `json:"owner,omitempty"`
+	RevokedAt *time.Time `json:"revokedAt,omitempty"`
+	// SSO verification time for the owning organization
+	SsoAuthorizations *string       `json:"ssoAuthorizations,omitempty"`
+	Owner             *Organization `json:"owner,omitempty"`
 }
 
 func (APIToken) IsNode() {}
@@ -4579,7 +4581,9 @@ type CreateAPITokenInput struct {
 	RevokedBy *string `json:"revokedBy,omitempty"`
 	// when the token was revoked
 	RevokedAt *time.Time `json:"revokedAt,omitempty"`
-	OwnerID   *string    `json:"ownerID,omitempty"`
+	// SSO verification time for the owning organization
+	SsoAuthorizations *string `json:"ssoAuthorizations,omitempty"`
+	OwnerID           *string `json:"ownerID,omitempty"`
 }
 
 // CreateActionPlanInput is used for create ActionPlan object.
@@ -5480,9 +5484,11 @@ type CreatePersonalAccessTokenInput struct {
 	// when the token expires
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// a description of the token's purpose
-	Description *string    `json:"description,omitempty"`
-	Scopes      []string   `json:"scopes,omitempty"`
-	LastUsedAt  *time.Time `json:"lastUsedAt,omitempty"`
+	Description *string  `json:"description,omitempty"`
+	Scopes      []string `json:"scopes,omitempty"`
+	// SSO authorization timestamps by organization id
+	SsoAuthorizations *string    `json:"ssoAuthorizations,omitempty"`
+	LastUsedAt        *time.Time `json:"lastUsedAt,omitempty"`
 	// whether the token is active
 	IsActive        *bool    `json:"isActive,omitempty"`
 	OrganizationIDs []string `json:"organizationIDs,omitempty"`
@@ -16866,6 +16872,10 @@ type OrganizationSetting struct {
 	AllowedEmailDomains []string `json:"allowedEmailDomains,omitempty"`
 	// SSO provider type for the organization
 	IdentityProvider *enums.SSOProvider `json:"identityProvider,omitempty"`
+	// client ID for SSO integration
+	IdentityProviderClientID *string `json:"identityProviderClientID,omitempty"`
+	// client secret for SSO integration
+	IdentityProviderClientSecret *string `json:"identityProviderClientSecret,omitempty"`
 	// metadata URL for the SSO provider
 	IdentityProviderMetadataEndpoint *string `json:"identityProviderMetadataEndpoint,omitempty"`
 	// SAML entity ID for the SSO provider
@@ -16951,6 +16961,10 @@ type OrganizationSettingHistory struct {
 	AllowedEmailDomains []string `json:"allowedEmailDomains,omitempty"`
 	// SSO provider type for the organization
 	IdentityProvider *enums.SSOProvider `json:"identityProvider,omitempty"`
+	// client ID for SSO integration
+	IdentityProviderClientID *string `json:"identityProviderClientID,omitempty"`
+	// client secret for SSO integration
+	IdentityProviderClientSecret *string `json:"identityProviderClientSecret,omitempty"`
 	// metadata URL for the SSO provider
 	IdentityProviderMetadataEndpoint *string `json:"identityProviderMetadataEndpoint,omitempty"`
 	// SAML entity ID for the SSO provider
@@ -17189,6 +17203,38 @@ type OrganizationSettingHistoryWhereInput struct {
 	IdentityProviderNotIn  []enums.SSOProvider `json:"identityProviderNotIn,omitempty"`
 	IdentityProviderIsNil  *bool               `json:"identityProviderIsNil,omitempty"`
 	IdentityProviderNotNil *bool               `json:"identityProviderNotNil,omitempty"`
+	// identity_provider_client_id field predicates
+	IdentityProviderClientID             *string  `json:"identityProviderClientID,omitempty"`
+	IdentityProviderClientIdneq          *string  `json:"identityProviderClientIDNEQ,omitempty"`
+	IdentityProviderClientIDIn           []string `json:"identityProviderClientIDIn,omitempty"`
+	IdentityProviderClientIDNotIn        []string `json:"identityProviderClientIDNotIn,omitempty"`
+	IdentityProviderClientIdgt           *string  `json:"identityProviderClientIDGT,omitempty"`
+	IdentityProviderClientIdgte          *string  `json:"identityProviderClientIDGTE,omitempty"`
+	IdentityProviderClientIdlt           *string  `json:"identityProviderClientIDLT,omitempty"`
+	IdentityProviderClientIdlte          *string  `json:"identityProviderClientIDLTE,omitempty"`
+	IdentityProviderClientIDContains     *string  `json:"identityProviderClientIDContains,omitempty"`
+	IdentityProviderClientIDHasPrefix    *string  `json:"identityProviderClientIDHasPrefix,omitempty"`
+	IdentityProviderClientIDHasSuffix    *string  `json:"identityProviderClientIDHasSuffix,omitempty"`
+	IdentityProviderClientIDIsNil        *bool    `json:"identityProviderClientIDIsNil,omitempty"`
+	IdentityProviderClientIDNotNil       *bool    `json:"identityProviderClientIDNotNil,omitempty"`
+	IdentityProviderClientIDEqualFold    *string  `json:"identityProviderClientIDEqualFold,omitempty"`
+	IdentityProviderClientIDContainsFold *string  `json:"identityProviderClientIDContainsFold,omitempty"`
+	// identity_provider_client_secret field predicates
+	IdentityProviderClientSecret             *string  `json:"identityProviderClientSecret,omitempty"`
+	IdentityProviderClientSecretNeq          *string  `json:"identityProviderClientSecretNEQ,omitempty"`
+	IdentityProviderClientSecretIn           []string `json:"identityProviderClientSecretIn,omitempty"`
+	IdentityProviderClientSecretNotIn        []string `json:"identityProviderClientSecretNotIn,omitempty"`
+	IdentityProviderClientSecretGt           *string  `json:"identityProviderClientSecretGT,omitempty"`
+	IdentityProviderClientSecretGte          *string  `json:"identityProviderClientSecretGTE,omitempty"`
+	IdentityProviderClientSecretLt           *string  `json:"identityProviderClientSecretLT,omitempty"`
+	IdentityProviderClientSecretLte          *string  `json:"identityProviderClientSecretLTE,omitempty"`
+	IdentityProviderClientSecretContains     *string  `json:"identityProviderClientSecretContains,omitempty"`
+	IdentityProviderClientSecretHasPrefix    *string  `json:"identityProviderClientSecretHasPrefix,omitempty"`
+	IdentityProviderClientSecretHasSuffix    *string  `json:"identityProviderClientSecretHasSuffix,omitempty"`
+	IdentityProviderClientSecretIsNil        *bool    `json:"identityProviderClientSecretIsNil,omitempty"`
+	IdentityProviderClientSecretNotNil       *bool    `json:"identityProviderClientSecretNotNil,omitempty"`
+	IdentityProviderClientSecretEqualFold    *string  `json:"identityProviderClientSecretEqualFold,omitempty"`
+	IdentityProviderClientSecretContainsFold *string  `json:"identityProviderClientSecretContainsFold,omitempty"`
 	// identity_provider_metadata_endpoint field predicates
 	IdentityProviderMetadataEndpoint             *string  `json:"identityProviderMetadataEndpoint,omitempty"`
 	IdentityProviderMetadataEndpointNeq          *string  `json:"identityProviderMetadataEndpointNEQ,omitempty"`
@@ -17440,6 +17486,38 @@ type OrganizationSettingWhereInput struct {
 	IdentityProviderNotIn  []enums.SSOProvider `json:"identityProviderNotIn,omitempty"`
 	IdentityProviderIsNil  *bool               `json:"identityProviderIsNil,omitempty"`
 	IdentityProviderNotNil *bool               `json:"identityProviderNotNil,omitempty"`
+	// identity_provider_client_id field predicates
+	IdentityProviderClientID             *string  `json:"identityProviderClientID,omitempty"`
+	IdentityProviderClientIdneq          *string  `json:"identityProviderClientIDNEQ,omitempty"`
+	IdentityProviderClientIDIn           []string `json:"identityProviderClientIDIn,omitempty"`
+	IdentityProviderClientIDNotIn        []string `json:"identityProviderClientIDNotIn,omitempty"`
+	IdentityProviderClientIdgt           *string  `json:"identityProviderClientIDGT,omitempty"`
+	IdentityProviderClientIdgte          *string  `json:"identityProviderClientIDGTE,omitempty"`
+	IdentityProviderClientIdlt           *string  `json:"identityProviderClientIDLT,omitempty"`
+	IdentityProviderClientIdlte          *string  `json:"identityProviderClientIDLTE,omitempty"`
+	IdentityProviderClientIDContains     *string  `json:"identityProviderClientIDContains,omitempty"`
+	IdentityProviderClientIDHasPrefix    *string  `json:"identityProviderClientIDHasPrefix,omitempty"`
+	IdentityProviderClientIDHasSuffix    *string  `json:"identityProviderClientIDHasSuffix,omitempty"`
+	IdentityProviderClientIDIsNil        *bool    `json:"identityProviderClientIDIsNil,omitempty"`
+	IdentityProviderClientIDNotNil       *bool    `json:"identityProviderClientIDNotNil,omitempty"`
+	IdentityProviderClientIDEqualFold    *string  `json:"identityProviderClientIDEqualFold,omitempty"`
+	IdentityProviderClientIDContainsFold *string  `json:"identityProviderClientIDContainsFold,omitempty"`
+	// identity_provider_client_secret field predicates
+	IdentityProviderClientSecret             *string  `json:"identityProviderClientSecret,omitempty"`
+	IdentityProviderClientSecretNeq          *string  `json:"identityProviderClientSecretNEQ,omitempty"`
+	IdentityProviderClientSecretIn           []string `json:"identityProviderClientSecretIn,omitempty"`
+	IdentityProviderClientSecretNotIn        []string `json:"identityProviderClientSecretNotIn,omitempty"`
+	IdentityProviderClientSecretGt           *string  `json:"identityProviderClientSecretGT,omitempty"`
+	IdentityProviderClientSecretGte          *string  `json:"identityProviderClientSecretGTE,omitempty"`
+	IdentityProviderClientSecretLt           *string  `json:"identityProviderClientSecretLT,omitempty"`
+	IdentityProviderClientSecretLte          *string  `json:"identityProviderClientSecretLTE,omitempty"`
+	IdentityProviderClientSecretContains     *string  `json:"identityProviderClientSecretContains,omitempty"`
+	IdentityProviderClientSecretHasPrefix    *string  `json:"identityProviderClientSecretHasPrefix,omitempty"`
+	IdentityProviderClientSecretHasSuffix    *string  `json:"identityProviderClientSecretHasSuffix,omitempty"`
+	IdentityProviderClientSecretIsNil        *bool    `json:"identityProviderClientSecretIsNil,omitempty"`
+	IdentityProviderClientSecretNotNil       *bool    `json:"identityProviderClientSecretNotNil,omitempty"`
+	IdentityProviderClientSecretEqualFold    *string  `json:"identityProviderClientSecretEqualFold,omitempty"`
+	IdentityProviderClientSecretContainsFold *string  `json:"identityProviderClientSecretContainsFold,omitempty"`
 	// identity_provider_metadata_endpoint field predicates
 	IdentityProviderMetadataEndpoint             *string  `json:"identityProviderMetadataEndpoint,omitempty"`
 	IdentityProviderMetadataEndpointNeq          *string  `json:"identityProviderMetadataEndpointNEQ,omitempty"`
@@ -17885,9 +17963,11 @@ type PersonalAccessToken struct {
 	// when the token expires
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// a description of the token's purpose
-	Description *string    `json:"description,omitempty"`
-	Scopes      []string   `json:"scopes,omitempty"`
-	LastUsedAt  *time.Time `json:"lastUsedAt,omitempty"`
+	Description *string  `json:"description,omitempty"`
+	Scopes      []string `json:"scopes,omitempty"`
+	// SSO authorization timestamps by organization id
+	SsoAuthorizations *string    `json:"ssoAuthorizations,omitempty"`
+	LastUsedAt        *time.Time `json:"lastUsedAt,omitempty"`
 	// whether the token is active
 	IsActive *bool `json:"isActive,omitempty"`
 	// the reason the token was revoked
@@ -25842,8 +25922,11 @@ type UpdateAPITokenInput struct {
 	// when the token was revoked
 	RevokedAt      *time.Time `json:"revokedAt,omitempty"`
 	ClearRevokedAt *bool      `json:"clearRevokedAt,omitempty"`
-	OwnerID        *string    `json:"ownerID,omitempty"`
-	ClearOwner     *bool      `json:"clearOwner,omitempty"`
+	// SSO verification time for the owning organization
+	SsoAuthorizations      *string `json:"ssoAuthorizations,omitempty"`
+	ClearSSOAuthorizations *bool   `json:"clearSSOAuthorizations,omitempty"`
+	OwnerID                *string `json:"ownerID,omitempty"`
+	ClearOwner             *bool   `json:"clearOwner,omitempty"`
 }
 
 // UpdateActionPlanInput is used for update ActionPlan object.
@@ -27339,13 +27422,16 @@ type UpdatePersonalAccessTokenInput struct {
 	// the name associated with the token
 	Name *string `json:"name,omitempty"`
 	// a description of the token's purpose
-	Description      *string    `json:"description,omitempty"`
-	ClearDescription *bool      `json:"clearDescription,omitempty"`
-	Scopes           []string   `json:"scopes,omitempty"`
-	AppendScopes     []string   `json:"appendScopes,omitempty"`
-	ClearScopes      *bool      `json:"clearScopes,omitempty"`
-	LastUsedAt       *time.Time `json:"lastUsedAt,omitempty"`
-	ClearLastUsedAt  *bool      `json:"clearLastUsedAt,omitempty"`
+	Description      *string  `json:"description,omitempty"`
+	ClearDescription *bool    `json:"clearDescription,omitempty"`
+	Scopes           []string `json:"scopes,omitempty"`
+	AppendScopes     []string `json:"appendScopes,omitempty"`
+	ClearScopes      *bool    `json:"clearScopes,omitempty"`
+	// SSO authorization timestamps by organization id
+	SsoAuthorizations      *string    `json:"ssoAuthorizations,omitempty"`
+	ClearSSOAuthorizations *bool      `json:"clearSSOAuthorizations,omitempty"`
+	LastUsedAt             *time.Time `json:"lastUsedAt,omitempty"`
+	ClearLastUsedAt        *bool      `json:"clearLastUsedAt,omitempty"`
 	// whether the token is active
 	IsActive              *bool    `json:"isActive,omitempty"`
 	ClearIsActive         *bool    `json:"clearIsActive,omitempty"`

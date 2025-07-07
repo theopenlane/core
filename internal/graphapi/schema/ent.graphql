@@ -45,6 +45,10 @@ type APIToken implements Node {
   when the token was revoked
   """
   revokedAt: Time
+  """
+  SSO verification time for the owning organization
+  """
+  ssoAuthorizations: SSOAuthorizationMap
   owner: Organization
 }
 """
@@ -7354,6 +7358,10 @@ input CreateAPITokenInput {
   when the token was revoked
   """
   revokedAt: Time
+  """
+  SSO verification time for the owning organization
+  """
+  ssoAuthorizations: SSOAuthorizationMap
   ownerID: ID
 }
 """
@@ -8697,6 +8705,10 @@ input CreatePersonalAccessTokenInput {
   """
   description: String
   scopes: [String!]
+  """
+  SSO authorization timestamps by organization id
+  """
+  ssoAuthorizations: SSOAuthorizationMap
   lastUsedAt: Time
   """
   whether the token is active
@@ -28064,6 +28076,14 @@ type OrganizationSetting implements Node {
   """
   identityProvider: OrganizationSettingSSOProvider
   """
+  client ID for SSO integration
+  """
+  identityProviderClientID: String
+  """
+  client secret for SSO integration
+  """
+  identityProviderClientSecret: String
+  """
   metadata URL for the SSO provider
   """
   identityProviderMetadataEndpoint: String
@@ -28203,6 +28223,14 @@ type OrganizationSettingHistory implements Node {
   SSO provider type for the organization
   """
   identityProvider: OrganizationSettingHistorySSOProvider
+  """
+  client ID for SSO integration
+  """
+  identityProviderClientID: String
+  """
+  client secret for SSO integration
+  """
+  identityProviderClientSecret: String
   """
   metadata URL for the SSO provider
   """
@@ -28535,6 +28563,42 @@ input OrganizationSettingHistoryWhereInput {
   identityProviderIsNil: Boolean
   identityProviderNotNil: Boolean
   """
+  identity_provider_client_id field predicates
+  """
+  identityProviderClientID: String
+  identityProviderClientIDNEQ: String
+  identityProviderClientIDIn: [String!]
+  identityProviderClientIDNotIn: [String!]
+  identityProviderClientIDGT: String
+  identityProviderClientIDGTE: String
+  identityProviderClientIDLT: String
+  identityProviderClientIDLTE: String
+  identityProviderClientIDContains: String
+  identityProviderClientIDHasPrefix: String
+  identityProviderClientIDHasSuffix: String
+  identityProviderClientIDIsNil: Boolean
+  identityProviderClientIDNotNil: Boolean
+  identityProviderClientIDEqualFold: String
+  identityProviderClientIDContainsFold: String
+  """
+  identity_provider_client_secret field predicates
+  """
+  identityProviderClientSecret: String
+  identityProviderClientSecretNEQ: String
+  identityProviderClientSecretIn: [String!]
+  identityProviderClientSecretNotIn: [String!]
+  identityProviderClientSecretGT: String
+  identityProviderClientSecretGTE: String
+  identityProviderClientSecretLT: String
+  identityProviderClientSecretLTE: String
+  identityProviderClientSecretContains: String
+  identityProviderClientSecretHasPrefix: String
+  identityProviderClientSecretHasSuffix: String
+  identityProviderClientSecretIsNil: Boolean
+  identityProviderClientSecretNotNil: Boolean
+  identityProviderClientSecretEqualFold: String
+  identityProviderClientSecretContainsFold: String
+  """
   identity_provider_metadata_endpoint field predicates
   """
   identityProviderMetadataEndpoint: String
@@ -28847,6 +28911,42 @@ input OrganizationSettingWhereInput {
   identityProviderNotIn: [OrganizationSettingSSOProvider!]
   identityProviderIsNil: Boolean
   identityProviderNotNil: Boolean
+  """
+  identity_provider_client_id field predicates
+  """
+  identityProviderClientID: String
+  identityProviderClientIDNEQ: String
+  identityProviderClientIDIn: [String!]
+  identityProviderClientIDNotIn: [String!]
+  identityProviderClientIDGT: String
+  identityProviderClientIDGTE: String
+  identityProviderClientIDLT: String
+  identityProviderClientIDLTE: String
+  identityProviderClientIDContains: String
+  identityProviderClientIDHasPrefix: String
+  identityProviderClientIDHasSuffix: String
+  identityProviderClientIDIsNil: Boolean
+  identityProviderClientIDNotNil: Boolean
+  identityProviderClientIDEqualFold: String
+  identityProviderClientIDContainsFold: String
+  """
+  identity_provider_client_secret field predicates
+  """
+  identityProviderClientSecret: String
+  identityProviderClientSecretNEQ: String
+  identityProviderClientSecretIn: [String!]
+  identityProviderClientSecretNotIn: [String!]
+  identityProviderClientSecretGT: String
+  identityProviderClientSecretGTE: String
+  identityProviderClientSecretLT: String
+  identityProviderClientSecretLTE: String
+  identityProviderClientSecretContains: String
+  identityProviderClientSecretHasPrefix: String
+  identityProviderClientSecretHasSuffix: String
+  identityProviderClientSecretIsNil: Boolean
+  identityProviderClientSecretNotNil: Boolean
+  identityProviderClientSecretEqualFold: String
+  identityProviderClientSecretContainsFold: String
   """
   identity_provider_metadata_endpoint field predicates
   """
@@ -29465,6 +29565,10 @@ type PersonalAccessToken implements Node {
   """
   description: String
   scopes: [String!]
+  """
+  SSO authorization timestamps by organization id
+  """
+  ssoAuthorizations: SSOAuthorizationMap
   lastUsedAt: Time
   """
   whether the token is active
@@ -44936,6 +45040,11 @@ input UpdateAPITokenInput {
   """
   revokedAt: Time
   clearRevokedAt: Boolean
+  """
+  SSO verification time for the owning organization
+  """
+  ssoAuthorizations: SSOAuthorizationMap
+  clearSSOAuthorizations: Boolean
   ownerID: ID
   clearOwner: Boolean
 }
@@ -46845,6 +46954,11 @@ input UpdatePersonalAccessTokenInput {
   scopes: [String!]
   appendScopes: [String!]
   clearScopes: Boolean
+  """
+  SSO authorization timestamps by organization id
+  """
+  ssoAuthorizations: SSOAuthorizationMap
+  clearSSOAuthorizations: Boolean
   lastUsedAt: Time
   clearLastUsedAt: Boolean
   """
@@ -48433,6 +48547,7 @@ enum UserAuthProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.Aut
   GOOGLE
   GITHUB
   WEBAUTHN
+  OIDC
 }
 """
 A connection to a list of items.
@@ -48529,6 +48644,7 @@ enum UserHistoryAuthProvider @goModel(model: "github.com/theopenlane/core/pkg/en
   GOOGLE
   GITHUB
   WEBAUTHN
+  OIDC
 }
 """
 A connection to a list of items.

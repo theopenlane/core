@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // APIToken is the model entity for the APIToken schema.
@@ -55,6 +56,8 @@ type APIToken struct {
 	RevokedBy *string `json:"revoked_by,omitempty"`
 	// when the token was revoked
 	RevokedAt *time.Time `json:"revoked_at,omitempty"`
+	// SSO verification time for the owning organization
+	SSOAuthorizations models.SSOAuthorizationMap `json:"sso_authorizations,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the APITokenQuery when eager-loading is set.
 	Edges        APITokenEdges `json:"edges"`
@@ -88,7 +91,7 @@ func (*APIToken) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case apitoken.FieldTags, apitoken.FieldScopes:
+		case apitoken.FieldTags, apitoken.FieldScopes, apitoken.FieldSSOAuthorizations:
 			values[i] = new([]byte)
 		case apitoken.FieldIsActive:
 			values[i] = new(sql.NullBool)
@@ -235,6 +238,14 @@ func (at *APIToken) assignValues(columns []string, values []any) error {
 				at.RevokedAt = new(time.Time)
 				*at.RevokedAt = value.Time
 			}
+		case apitoken.FieldSSOAuthorizations:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field sso_authorizations", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &at.SSOAuthorizations); err != nil {
+					return fmt.Errorf("unmarshal field sso_authorizations: %w", err)
+				}
+			}
 		default:
 			at.selectValues.Set(columns[i], values[i])
 		}
@@ -341,6 +352,9 @@ func (at *APIToken) String() string {
 		builder.WriteString("revoked_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
+	builder.WriteString(", ")
+	builder.WriteString("sso_authorizations=")
+	builder.WriteString(fmt.Sprintf("%v", at.SSOAuthorizations))
 	builder.WriteByte(')')
 	return builder.String()
 }

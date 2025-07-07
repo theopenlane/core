@@ -11,17 +11,18 @@ import (
 
 // CreateAPITokenInput represents a mutation input for creating apitokens.
 type CreateAPITokenInput struct {
-	Tags          []string
-	Name          string
-	ExpiresAt     *time.Time
-	Description   *string
-	Scopes        []string
-	LastUsedAt    *time.Time
-	IsActive      *bool
-	RevokedReason *string
-	RevokedBy     *string
-	RevokedAt     *time.Time
-	OwnerID       *string
+	Tags              []string
+	Name              string
+	ExpiresAt         *time.Time
+	Description       *string
+	Scopes            []string
+	LastUsedAt        *time.Time
+	IsActive          *bool
+	RevokedReason     *string
+	RevokedBy         *string
+	RevokedAt         *time.Time
+	SSOAuthorizations models.SSOAuthorizationMap
+	OwnerID           *string
 }
 
 // Mutate applies the CreateAPITokenInput on the APITokenMutation builder.
@@ -54,6 +55,9 @@ func (i *CreateAPITokenInput) Mutate(m *APITokenMutation) {
 	if v := i.RevokedAt; v != nil {
 		m.SetRevokedAt(*v)
 	}
+	if v := i.SSOAuthorizations; v != nil {
+		m.SetSSOAuthorizations(v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -67,27 +71,29 @@ func (c *APITokenCreate) SetInput(i CreateAPITokenInput) *APITokenCreate {
 
 // UpdateAPITokenInput represents a mutation input for updating apitokens.
 type UpdateAPITokenInput struct {
-	ClearTags          bool
-	Tags               []string
-	AppendTags         []string
-	Name               *string
-	ClearDescription   bool
-	Description        *string
-	ClearScopes        bool
-	Scopes             []string
-	AppendScopes       []string
-	ClearLastUsedAt    bool
-	LastUsedAt         *time.Time
-	ClearIsActive      bool
-	IsActive           *bool
-	ClearRevokedReason bool
-	RevokedReason      *string
-	ClearRevokedBy     bool
-	RevokedBy          *string
-	ClearRevokedAt     bool
-	RevokedAt          *time.Time
-	ClearOwner         bool
-	OwnerID            *string
+	ClearTags              bool
+	Tags                   []string
+	AppendTags             []string
+	Name                   *string
+	ClearDescription       bool
+	Description            *string
+	ClearScopes            bool
+	Scopes                 []string
+	AppendScopes           []string
+	ClearLastUsedAt        bool
+	LastUsedAt             *time.Time
+	ClearIsActive          bool
+	IsActive               *bool
+	ClearRevokedReason     bool
+	RevokedReason          *string
+	ClearRevokedBy         bool
+	RevokedBy              *string
+	ClearRevokedAt         bool
+	RevokedAt              *time.Time
+	ClearSSOAuthorizations bool
+	SSOAuthorizations      models.SSOAuthorizationMap
+	ClearOwner             bool
+	OwnerID                *string
 }
 
 // Mutate applies the UpdateAPITokenInput on the APITokenMutation builder.
@@ -148,6 +154,12 @@ func (i *UpdateAPITokenInput) Mutate(m *APITokenMutation) {
 	}
 	if v := i.RevokedAt; v != nil {
 		m.SetRevokedAt(*v)
+	}
+	if i.ClearSSOAuthorizations {
+		m.ClearSSOAuthorizations()
+	}
+	if v := i.SSOAuthorizations; v != nil {
+		m.SetSSOAuthorizations(v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -7627,15 +7639,16 @@ func (c *OrganizationSettingUpdateOne) SetInput(i UpdateOrganizationSettingInput
 
 // CreatePersonalAccessTokenInput represents a mutation input for creating personalaccesstokens.
 type CreatePersonalAccessTokenInput struct {
-	Tags            []string
-	Name            string
-	ExpiresAt       *time.Time
-	Description     *string
-	Scopes          []string
-	LastUsedAt      *time.Time
-	IsActive        *bool
-	OrganizationIDs []string
-	EventIDs        []string
+	Tags              []string
+	Name              string
+	ExpiresAt         *time.Time
+	Description       *string
+	Scopes            []string
+	SSOAuthorizations models.SSOAuthorizationMap
+	LastUsedAt        *time.Time
+	IsActive          *bool
+	OrganizationIDs   []string
+	EventIDs          []string
 }
 
 // Mutate applies the CreatePersonalAccessTokenInput on the PersonalAccessTokenMutation builder.
@@ -7652,6 +7665,9 @@ func (i *CreatePersonalAccessTokenInput) Mutate(m *PersonalAccessTokenMutation) 
 	}
 	if v := i.Scopes; v != nil {
 		m.SetScopes(v)
+	}
+	if v := i.SSOAuthorizations; v != nil {
+		m.SetSSOAuthorizations(v)
 	}
 	if v := i.LastUsedAt; v != nil {
 		m.SetLastUsedAt(*v)
@@ -7675,25 +7691,27 @@ func (c *PersonalAccessTokenCreate) SetInput(i CreatePersonalAccessTokenInput) *
 
 // UpdatePersonalAccessTokenInput represents a mutation input for updating personalaccesstokens.
 type UpdatePersonalAccessTokenInput struct {
-	ClearTags             bool
-	Tags                  []string
-	AppendTags            []string
-	Name                  *string
-	ClearDescription      bool
-	Description           *string
-	ClearScopes           bool
-	Scopes                []string
-	AppendScopes          []string
-	ClearLastUsedAt       bool
-	LastUsedAt            *time.Time
-	ClearIsActive         bool
-	IsActive              *bool
-	ClearOrganizations    bool
-	AddOrganizationIDs    []string
-	RemoveOrganizationIDs []string
-	ClearEvents           bool
-	AddEventIDs           []string
-	RemoveEventIDs        []string
+	ClearTags              bool
+	Tags                   []string
+	AppendTags             []string
+	Name                   *string
+	ClearDescription       bool
+	Description            *string
+	ClearScopes            bool
+	Scopes                 []string
+	AppendScopes           []string
+	ClearSSOAuthorizations bool
+	SSOAuthorizations      models.SSOAuthorizationMap
+	ClearLastUsedAt        bool
+	LastUsedAt             *time.Time
+	ClearIsActive          bool
+	IsActive               *bool
+	ClearOrganizations     bool
+	AddOrganizationIDs     []string
+	RemoveOrganizationIDs  []string
+	ClearEvents            bool
+	AddEventIDs            []string
+	RemoveEventIDs         []string
 }
 
 // Mutate applies the UpdatePersonalAccessTokenInput on the PersonalAccessTokenMutation builder.
@@ -7724,6 +7742,12 @@ func (i *UpdatePersonalAccessTokenInput) Mutate(m *PersonalAccessTokenMutation) 
 	}
 	if i.AppendScopes != nil {
 		m.AppendScopes(i.Scopes)
+	}
+	if i.ClearSSOAuthorizations {
+		m.ClearSSOAuthorizations()
+	}
+	if v := i.SSOAuthorizations; v != nil {
+		m.SetSSOAuthorizations(v)
 	}
 	if i.ClearLastUsedAt {
 		m.ClearLastUsedAt()

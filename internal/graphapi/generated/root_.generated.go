@@ -63,24 +63,25 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	APIToken struct {
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		ExpiresAt     func(childComplexity int) int
-		ID            func(childComplexity int) int
-		IsActive      func(childComplexity int) int
-		LastUsedAt    func(childComplexity int) int
-		Name          func(childComplexity int) int
-		Owner         func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
-		RevokedAt     func(childComplexity int) int
-		RevokedBy     func(childComplexity int) int
-		RevokedReason func(childComplexity int) int
-		Scopes        func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		Token         func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		CreatedAt         func(childComplexity int) int
+		CreatedBy         func(childComplexity int) int
+		Description       func(childComplexity int) int
+		ExpiresAt         func(childComplexity int) int
+		ID                func(childComplexity int) int
+		IsActive          func(childComplexity int) int
+		LastUsedAt        func(childComplexity int) int
+		Name              func(childComplexity int) int
+		Owner             func(childComplexity int) int
+		OwnerID           func(childComplexity int) int
+		RevokedAt         func(childComplexity int) int
+		RevokedBy         func(childComplexity int) int
+		RevokedReason     func(childComplexity int) int
+		SSOAuthorizations func(childComplexity int) int
+		Scopes            func(childComplexity int) int
+		Tags              func(childComplexity int) int
+		Token             func(childComplexity int) int
+		UpdatedAt         func(childComplexity int) int
+		UpdatedBy         func(childComplexity int) int
 	}
 
 	APITokenBulkCreatePayload struct {
@@ -2864,6 +2865,8 @@ type ComplexityRoot struct {
 		GeoLocation                      func(childComplexity int) int
 		ID                               func(childComplexity int) int
 		IdentityProvider                 func(childComplexity int) int
+		IdentityProviderClientID         func(childComplexity int) int
+		IdentityProviderClientSecret     func(childComplexity int) int
 		IdentityProviderEntityID         func(childComplexity int) int
 		IdentityProviderLoginEnforced    func(childComplexity int) int
 		IdentityProviderMetadataEndpoint func(childComplexity int) int
@@ -2914,6 +2917,8 @@ type ComplexityRoot struct {
 		HistoryTime                      func(childComplexity int) int
 		ID                               func(childComplexity int) int
 		IdentityProvider                 func(childComplexity int) int
+		IdentityProviderClientID         func(childComplexity int) int
+		IdentityProviderClientSecret     func(childComplexity int) int
 		IdentityProviderEntityID         func(childComplexity int) int
 		IdentityProviderLoginEnforced    func(childComplexity int) int
 		IdentityProviderMetadataEndpoint func(childComplexity int) int
@@ -2954,25 +2959,26 @@ type ComplexityRoot struct {
 	}
 
 	PersonalAccessToken struct {
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Description   func(childComplexity int) int
-		Events        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
-		ExpiresAt     func(childComplexity int) int
-		ID            func(childComplexity int) int
-		IsActive      func(childComplexity int) int
-		LastUsedAt    func(childComplexity int) int
-		Name          func(childComplexity int) int
-		Organizations func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
-		Owner         func(childComplexity int) int
-		RevokedAt     func(childComplexity int) int
-		RevokedBy     func(childComplexity int) int
-		RevokedReason func(childComplexity int) int
-		Scopes        func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		Token         func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		CreatedAt         func(childComplexity int) int
+		CreatedBy         func(childComplexity int) int
+		Description       func(childComplexity int) int
+		Events            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		ExpiresAt         func(childComplexity int) int
+		ID                func(childComplexity int) int
+		IsActive          func(childComplexity int) int
+		LastUsedAt        func(childComplexity int) int
+		Name              func(childComplexity int) int
+		Organizations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
+		Owner             func(childComplexity int) int
+		RevokedAt         func(childComplexity int) int
+		RevokedBy         func(childComplexity int) int
+		RevokedReason     func(childComplexity int) int
+		SSOAuthorizations func(childComplexity int) int
+		Scopes            func(childComplexity int) int
+		Tags              func(childComplexity int) int
+		Token             func(childComplexity int) int
+		UpdatedAt         func(childComplexity int) int
+		UpdatedBy         func(childComplexity int) int
 	}
 
 	PersonalAccessTokenBulkCreatePayload struct {
@@ -4777,6 +4783,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.APIToken.RevokedReason(childComplexity), true
+
+	case "APIToken.ssoAuthorizations":
+		if e.complexity.APIToken.SSOAuthorizations == nil {
+			break
+		}
+
+		return e.complexity.APIToken.SSOAuthorizations(childComplexity), true
 
 	case "APIToken.scopes":
 		if e.complexity.APIToken.Scopes == nil {
@@ -19981,6 +19994,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.OrganizationSetting.IdentityProvider(childComplexity), true
 
+	case "OrganizationSetting.identityProviderClientID":
+		if e.complexity.OrganizationSetting.IdentityProviderClientID == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.IdentityProviderClientID(childComplexity), true
+
+	case "OrganizationSetting.identityProviderClientSecret":
+		if e.complexity.OrganizationSetting.IdentityProviderClientSecret == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSetting.IdentityProviderClientSecret(childComplexity), true
+
 	case "OrganizationSetting.identityProviderEntityID":
 		if e.complexity.OrganizationSetting.IdentityProviderEntityID == nil {
 			break
@@ -20204,6 +20231,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrganizationSettingHistory.IdentityProvider(childComplexity), true
+
+	case "OrganizationSettingHistory.identityProviderClientID":
+		if e.complexity.OrganizationSettingHistory.IdentityProviderClientID == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.IdentityProviderClientID(childComplexity), true
+
+	case "OrganizationSettingHistory.identityProviderClientSecret":
+		if e.complexity.OrganizationSettingHistory.IdentityProviderClientSecret == nil {
+			break
+		}
+
+		return e.complexity.OrganizationSettingHistory.IdentityProviderClientSecret(childComplexity), true
 
 	case "OrganizationSettingHistory.identityProviderEntityID":
 		if e.complexity.OrganizationSettingHistory.IdentityProviderEntityID == nil {
@@ -20466,6 +20507,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.PersonalAccessToken.RevokedReason(childComplexity), true
+
+	case "PersonalAccessToken.ssoAuthorizations":
+		if e.complexity.PersonalAccessToken.SSOAuthorizations == nil {
+			break
+		}
+
+		return e.complexity.PersonalAccessToken.SSOAuthorizations(childComplexity), true
 
 	case "PersonalAccessToken.scopes":
 		if e.complexity.PersonalAccessToken.Scopes == nil {
@@ -33343,6 +33391,10 @@ type APIToken implements Node {
   when the token was revoked
   """
   revokedAt: Time
+  """
+  SSO verification time for the owning organization
+  """
+  ssoAuthorizations: SSOAuthorizationMap
   owner: Organization
 }
 """
@@ -40652,6 +40704,10 @@ input CreateAPITokenInput {
   when the token was revoked
   """
   revokedAt: Time
+  """
+  SSO verification time for the owning organization
+  """
+  ssoAuthorizations: SSOAuthorizationMap
   ownerID: ID
 }
 """
@@ -41995,6 +42051,10 @@ input CreatePersonalAccessTokenInput {
   """
   description: String
   scopes: [String!]
+  """
+  SSO authorization timestamps by organization id
+  """
+  ssoAuthorizations: SSOAuthorizationMap
   lastUsedAt: Time
   """
   whether the token is active
@@ -61362,6 +61422,14 @@ type OrganizationSetting implements Node {
   """
   identityProvider: OrganizationSettingSSOProvider
   """
+  client ID for SSO integration
+  """
+  identityProviderClientID: String
+  """
+  client secret for SSO integration
+  """
+  identityProviderClientSecret: String
+  """
   metadata URL for the SSO provider
   """
   identityProviderMetadataEndpoint: String
@@ -61501,6 +61569,14 @@ type OrganizationSettingHistory implements Node {
   SSO provider type for the organization
   """
   identityProvider: OrganizationSettingHistorySSOProvider
+  """
+  client ID for SSO integration
+  """
+  identityProviderClientID: String
+  """
+  client secret for SSO integration
+  """
+  identityProviderClientSecret: String
   """
   metadata URL for the SSO provider
   """
@@ -61833,6 +61909,42 @@ input OrganizationSettingHistoryWhereInput {
   identityProviderIsNil: Boolean
   identityProviderNotNil: Boolean
   """
+  identity_provider_client_id field predicates
+  """
+  identityProviderClientID: String
+  identityProviderClientIDNEQ: String
+  identityProviderClientIDIn: [String!]
+  identityProviderClientIDNotIn: [String!]
+  identityProviderClientIDGT: String
+  identityProviderClientIDGTE: String
+  identityProviderClientIDLT: String
+  identityProviderClientIDLTE: String
+  identityProviderClientIDContains: String
+  identityProviderClientIDHasPrefix: String
+  identityProviderClientIDHasSuffix: String
+  identityProviderClientIDIsNil: Boolean
+  identityProviderClientIDNotNil: Boolean
+  identityProviderClientIDEqualFold: String
+  identityProviderClientIDContainsFold: String
+  """
+  identity_provider_client_secret field predicates
+  """
+  identityProviderClientSecret: String
+  identityProviderClientSecretNEQ: String
+  identityProviderClientSecretIn: [String!]
+  identityProviderClientSecretNotIn: [String!]
+  identityProviderClientSecretGT: String
+  identityProviderClientSecretGTE: String
+  identityProviderClientSecretLT: String
+  identityProviderClientSecretLTE: String
+  identityProviderClientSecretContains: String
+  identityProviderClientSecretHasPrefix: String
+  identityProviderClientSecretHasSuffix: String
+  identityProviderClientSecretIsNil: Boolean
+  identityProviderClientSecretNotNil: Boolean
+  identityProviderClientSecretEqualFold: String
+  identityProviderClientSecretContainsFold: String
+  """
   identity_provider_metadata_endpoint field predicates
   """
   identityProviderMetadataEndpoint: String
@@ -62145,6 +62257,42 @@ input OrganizationSettingWhereInput {
   identityProviderNotIn: [OrganizationSettingSSOProvider!]
   identityProviderIsNil: Boolean
   identityProviderNotNil: Boolean
+  """
+  identity_provider_client_id field predicates
+  """
+  identityProviderClientID: String
+  identityProviderClientIDNEQ: String
+  identityProviderClientIDIn: [String!]
+  identityProviderClientIDNotIn: [String!]
+  identityProviderClientIDGT: String
+  identityProviderClientIDGTE: String
+  identityProviderClientIDLT: String
+  identityProviderClientIDLTE: String
+  identityProviderClientIDContains: String
+  identityProviderClientIDHasPrefix: String
+  identityProviderClientIDHasSuffix: String
+  identityProviderClientIDIsNil: Boolean
+  identityProviderClientIDNotNil: Boolean
+  identityProviderClientIDEqualFold: String
+  identityProviderClientIDContainsFold: String
+  """
+  identity_provider_client_secret field predicates
+  """
+  identityProviderClientSecret: String
+  identityProviderClientSecretNEQ: String
+  identityProviderClientSecretIn: [String!]
+  identityProviderClientSecretNotIn: [String!]
+  identityProviderClientSecretGT: String
+  identityProviderClientSecretGTE: String
+  identityProviderClientSecretLT: String
+  identityProviderClientSecretLTE: String
+  identityProviderClientSecretContains: String
+  identityProviderClientSecretHasPrefix: String
+  identityProviderClientSecretHasSuffix: String
+  identityProviderClientSecretIsNil: Boolean
+  identityProviderClientSecretNotNil: Boolean
+  identityProviderClientSecretEqualFold: String
+  identityProviderClientSecretContainsFold: String
   """
   identity_provider_metadata_endpoint field predicates
   """
@@ -62763,6 +62911,10 @@ type PersonalAccessToken implements Node {
   """
   description: String
   scopes: [String!]
+  """
+  SSO authorization timestamps by organization id
+  """
+  ssoAuthorizations: SSOAuthorizationMap
   lastUsedAt: Time
   """
   whether the token is active
@@ -78234,6 +78386,11 @@ input UpdateAPITokenInput {
   """
   revokedAt: Time
   clearRevokedAt: Boolean
+  """
+  SSO verification time for the owning organization
+  """
+  ssoAuthorizations: SSOAuthorizationMap
+  clearSSOAuthorizations: Boolean
   ownerID: ID
   clearOwner: Boolean
 }
@@ -80143,6 +80300,11 @@ input UpdatePersonalAccessTokenInput {
   scopes: [String!]
   appendScopes: [String!]
   clearScopes: Boolean
+  """
+  SSO authorization timestamps by organization id
+  """
+  ssoAuthorizations: SSOAuthorizationMap
+  clearSSOAuthorizations: Boolean
   lastUsedAt: Time
   clearLastUsedAt: Boolean
   """
@@ -81731,6 +81893,7 @@ enum UserAuthProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.Aut
   GOOGLE
   GITHUB
   WEBAUTHN
+  OIDC
 }
 """
 A connection to a list of items.
@@ -81827,6 +81990,7 @@ enum UserHistoryAuthProvider @goModel(model: "github.com/theopenlane/core/pkg/en
   GOOGLE
   GITHUB
   WEBAUTHN
+  OIDC
 }
 """
 A connection to a list of items.
@@ -86350,6 +86514,11 @@ Change is a difference between two updates to an object used by
 the audit history resolvers
 """
 scalar Change
+"""
+SSOAuthorizationMap is a map of organization IDs to SSO verification timestamps.
+This scalar is used to track SSO verification times for organizations in the context of token authorization.
+"""
+scalar SSOAuthorizationMap
 `, BuiltIn: false},
 	{Name: "../schema/scan.graphql", Input: `extend type Query {
     """

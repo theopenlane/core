@@ -201,6 +201,11 @@ func RegisterRoutes(router *Router) error {
 		registerWebAuthnWellKnownHandler,
 		registerAcmeSolverHandler,
 		registerCSRFHandler,
+		registerWebfingerHandler,
+		registerSSOLoginHandler,
+		registerSSOCallbackHandler,
+		registerSSOTokenAuthorizeHandler,
+		registerSSOTokenCallbackHandler,
 		registerTrustCenterAnonymousJWTHandler,
 
 		// JOB Runners

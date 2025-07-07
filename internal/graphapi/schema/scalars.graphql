@@ -58,3 +58,8 @@ Change is a difference between two updates to an object used by
 the audit history resolvers
 """
 scalar Change
+"""
+SSOAuthorizationMap is a map of organization IDs to SSO verification timestamps.
+This scalar is used to track SSO verification times for organizations in the context of token authorization.
+"""
+scalar SSOAuthorizationMap

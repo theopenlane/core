@@ -99,6 +99,10 @@ func (ec *executionContext) fieldContext_OrganizationSettingBulkCreatePayload_or
 				return ec.fieldContext_OrganizationSetting_allowedEmailDomains(ctx, field)
 			case "identityProvider":
 				return ec.fieldContext_OrganizationSetting_identityProvider(ctx, field)
+			case "identityProviderClientID":
+				return ec.fieldContext_OrganizationSetting_identityProviderClientID(ctx, field)
+			case "identityProviderClientSecret":
+				return ec.fieldContext_OrganizationSetting_identityProviderClientSecret(ctx, field)
 			case "identityProviderMetadataEndpoint":
 				return ec.fieldContext_OrganizationSetting_identityProviderMetadataEndpoint(ctx, field)
 			case "identityProviderEntityID":
@@ -193,6 +197,10 @@ func (ec *executionContext) fieldContext_OrganizationSettingCreatePayload_organi
 				return ec.fieldContext_OrganizationSetting_allowedEmailDomains(ctx, field)
 			case "identityProvider":
 				return ec.fieldContext_OrganizationSetting_identityProvider(ctx, field)
+			case "identityProviderClientID":
+				return ec.fieldContext_OrganizationSetting_identityProviderClientID(ctx, field)
+			case "identityProviderClientSecret":
+				return ec.fieldContext_OrganizationSetting_identityProviderClientSecret(ctx, field)
 			case "identityProviderMetadataEndpoint":
 				return ec.fieldContext_OrganizationSetting_identityProviderMetadataEndpoint(ctx, field)
 			case "identityProviderEntityID":
@@ -331,6 +339,10 @@ func (ec *executionContext) fieldContext_OrganizationSettingUpdatePayload_organi
 				return ec.fieldContext_OrganizationSetting_allowedEmailDomains(ctx, field)
 			case "identityProvider":
 				return ec.fieldContext_OrganizationSetting_identityProvider(ctx, field)
+			case "identityProviderClientID":
+				return ec.fieldContext_OrganizationSetting_identityProviderClientID(ctx, field)
+			case "identityProviderClientSecret":
+				return ec.fieldContext_OrganizationSetting_identityProviderClientSecret(ctx, field)
 			case "identityProviderMetadataEndpoint":
 				return ec.fieldContext_OrganizationSetting_identityProviderMetadataEndpoint(ctx, field)
 			case "identityProviderEntityID":

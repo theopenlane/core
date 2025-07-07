@@ -127,24 +127,25 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "APIToken",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			apitoken.FieldCreatedAt:     {Type: field.TypeTime, Column: apitoken.FieldCreatedAt},
-			apitoken.FieldUpdatedAt:     {Type: field.TypeTime, Column: apitoken.FieldUpdatedAt},
-			apitoken.FieldCreatedBy:     {Type: field.TypeString, Column: apitoken.FieldCreatedBy},
-			apitoken.FieldUpdatedBy:     {Type: field.TypeString, Column: apitoken.FieldUpdatedBy},
-			apitoken.FieldDeletedAt:     {Type: field.TypeTime, Column: apitoken.FieldDeletedAt},
-			apitoken.FieldDeletedBy:     {Type: field.TypeString, Column: apitoken.FieldDeletedBy},
-			apitoken.FieldTags:          {Type: field.TypeJSON, Column: apitoken.FieldTags},
-			apitoken.FieldOwnerID:       {Type: field.TypeString, Column: apitoken.FieldOwnerID},
-			apitoken.FieldName:          {Type: field.TypeString, Column: apitoken.FieldName},
-			apitoken.FieldToken:         {Type: field.TypeString, Column: apitoken.FieldToken},
-			apitoken.FieldExpiresAt:     {Type: field.TypeTime, Column: apitoken.FieldExpiresAt},
-			apitoken.FieldDescription:   {Type: field.TypeString, Column: apitoken.FieldDescription},
-			apitoken.FieldScopes:        {Type: field.TypeJSON, Column: apitoken.FieldScopes},
-			apitoken.FieldLastUsedAt:    {Type: field.TypeTime, Column: apitoken.FieldLastUsedAt},
-			apitoken.FieldIsActive:      {Type: field.TypeBool, Column: apitoken.FieldIsActive},
-			apitoken.FieldRevokedReason: {Type: field.TypeString, Column: apitoken.FieldRevokedReason},
-			apitoken.FieldRevokedBy:     {Type: field.TypeString, Column: apitoken.FieldRevokedBy},
-			apitoken.FieldRevokedAt:     {Type: field.TypeTime, Column: apitoken.FieldRevokedAt},
+			apitoken.FieldCreatedAt:         {Type: field.TypeTime, Column: apitoken.FieldCreatedAt},
+			apitoken.FieldUpdatedAt:         {Type: field.TypeTime, Column: apitoken.FieldUpdatedAt},
+			apitoken.FieldCreatedBy:         {Type: field.TypeString, Column: apitoken.FieldCreatedBy},
+			apitoken.FieldUpdatedBy:         {Type: field.TypeString, Column: apitoken.FieldUpdatedBy},
+			apitoken.FieldDeletedAt:         {Type: field.TypeTime, Column: apitoken.FieldDeletedAt},
+			apitoken.FieldDeletedBy:         {Type: field.TypeString, Column: apitoken.FieldDeletedBy},
+			apitoken.FieldTags:              {Type: field.TypeJSON, Column: apitoken.FieldTags},
+			apitoken.FieldOwnerID:           {Type: field.TypeString, Column: apitoken.FieldOwnerID},
+			apitoken.FieldName:              {Type: field.TypeString, Column: apitoken.FieldName},
+			apitoken.FieldToken:             {Type: field.TypeString, Column: apitoken.FieldToken},
+			apitoken.FieldExpiresAt:         {Type: field.TypeTime, Column: apitoken.FieldExpiresAt},
+			apitoken.FieldDescription:       {Type: field.TypeString, Column: apitoken.FieldDescription},
+			apitoken.FieldScopes:            {Type: field.TypeJSON, Column: apitoken.FieldScopes},
+			apitoken.FieldLastUsedAt:        {Type: field.TypeTime, Column: apitoken.FieldLastUsedAt},
+			apitoken.FieldIsActive:          {Type: field.TypeBool, Column: apitoken.FieldIsActive},
+			apitoken.FieldRevokedReason:     {Type: field.TypeString, Column: apitoken.FieldRevokedReason},
+			apitoken.FieldRevokedBy:         {Type: field.TypeString, Column: apitoken.FieldRevokedBy},
+			apitoken.FieldRevokedAt:         {Type: field.TypeTime, Column: apitoken.FieldRevokedAt},
+			apitoken.FieldSSOAuthorizations: {Type: field.TypeJSON, Column: apitoken.FieldSSOAuthorizations},
 		},
 	}
 	graph.Nodes[1] = &sqlgraph.Node{
@@ -2124,24 +2125,25 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "PersonalAccessToken",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			personalaccesstoken.FieldCreatedAt:     {Type: field.TypeTime, Column: personalaccesstoken.FieldCreatedAt},
-			personalaccesstoken.FieldUpdatedAt:     {Type: field.TypeTime, Column: personalaccesstoken.FieldUpdatedAt},
-			personalaccesstoken.FieldCreatedBy:     {Type: field.TypeString, Column: personalaccesstoken.FieldCreatedBy},
-			personalaccesstoken.FieldUpdatedBy:     {Type: field.TypeString, Column: personalaccesstoken.FieldUpdatedBy},
-			personalaccesstoken.FieldDeletedAt:     {Type: field.TypeTime, Column: personalaccesstoken.FieldDeletedAt},
-			personalaccesstoken.FieldDeletedBy:     {Type: field.TypeString, Column: personalaccesstoken.FieldDeletedBy},
-			personalaccesstoken.FieldTags:          {Type: field.TypeJSON, Column: personalaccesstoken.FieldTags},
-			personalaccesstoken.FieldOwnerID:       {Type: field.TypeString, Column: personalaccesstoken.FieldOwnerID},
-			personalaccesstoken.FieldName:          {Type: field.TypeString, Column: personalaccesstoken.FieldName},
-			personalaccesstoken.FieldToken:         {Type: field.TypeString, Column: personalaccesstoken.FieldToken},
-			personalaccesstoken.FieldExpiresAt:     {Type: field.TypeTime, Column: personalaccesstoken.FieldExpiresAt},
-			personalaccesstoken.FieldDescription:   {Type: field.TypeString, Column: personalaccesstoken.FieldDescription},
-			personalaccesstoken.FieldScopes:        {Type: field.TypeJSON, Column: personalaccesstoken.FieldScopes},
-			personalaccesstoken.FieldLastUsedAt:    {Type: field.TypeTime, Column: personalaccesstoken.FieldLastUsedAt},
-			personalaccesstoken.FieldIsActive:      {Type: field.TypeBool, Column: personalaccesstoken.FieldIsActive},
-			personalaccesstoken.FieldRevokedReason: {Type: field.TypeString, Column: personalaccesstoken.FieldRevokedReason},
-			personalaccesstoken.FieldRevokedBy:     {Type: field.TypeString, Column: personalaccesstoken.FieldRevokedBy},
-			personalaccesstoken.FieldRevokedAt:     {Type: field.TypeTime, Column: personalaccesstoken.FieldRevokedAt},
+			personalaccesstoken.FieldCreatedAt:         {Type: field.TypeTime, Column: personalaccesstoken.FieldCreatedAt},
+			personalaccesstoken.FieldUpdatedAt:         {Type: field.TypeTime, Column: personalaccesstoken.FieldUpdatedAt},
+			personalaccesstoken.FieldCreatedBy:         {Type: field.TypeString, Column: personalaccesstoken.FieldCreatedBy},
+			personalaccesstoken.FieldUpdatedBy:         {Type: field.TypeString, Column: personalaccesstoken.FieldUpdatedBy},
+			personalaccesstoken.FieldDeletedAt:         {Type: field.TypeTime, Column: personalaccesstoken.FieldDeletedAt},
+			personalaccesstoken.FieldDeletedBy:         {Type: field.TypeString, Column: personalaccesstoken.FieldDeletedBy},
+			personalaccesstoken.FieldTags:              {Type: field.TypeJSON, Column: personalaccesstoken.FieldTags},
+			personalaccesstoken.FieldOwnerID:           {Type: field.TypeString, Column: personalaccesstoken.FieldOwnerID},
+			personalaccesstoken.FieldName:              {Type: field.TypeString, Column: personalaccesstoken.FieldName},
+			personalaccesstoken.FieldToken:             {Type: field.TypeString, Column: personalaccesstoken.FieldToken},
+			personalaccesstoken.FieldExpiresAt:         {Type: field.TypeTime, Column: personalaccesstoken.FieldExpiresAt},
+			personalaccesstoken.FieldDescription:       {Type: field.TypeString, Column: personalaccesstoken.FieldDescription},
+			personalaccesstoken.FieldScopes:            {Type: field.TypeJSON, Column: personalaccesstoken.FieldScopes},
+			personalaccesstoken.FieldSSOAuthorizations: {Type: field.TypeJSON, Column: personalaccesstoken.FieldSSOAuthorizations},
+			personalaccesstoken.FieldLastUsedAt:        {Type: field.TypeTime, Column: personalaccesstoken.FieldLastUsedAt},
+			personalaccesstoken.FieldIsActive:          {Type: field.TypeBool, Column: personalaccesstoken.FieldIsActive},
+			personalaccesstoken.FieldRevokedReason:     {Type: field.TypeString, Column: personalaccesstoken.FieldRevokedReason},
+			personalaccesstoken.FieldRevokedBy:         {Type: field.TypeString, Column: personalaccesstoken.FieldRevokedBy},
+			personalaccesstoken.FieldRevokedAt:         {Type: field.TypeTime, Column: personalaccesstoken.FieldRevokedAt},
 		},
 	}
 	graph.Nodes[70] = &sqlgraph.Node{
@@ -8396,6 +8398,11 @@ func (f *APITokenFilter) WhereRevokedBy(p entql.StringP) {
 // WhereRevokedAt applies the entql time.Time predicate on the revoked_at field.
 func (f *APITokenFilter) WhereRevokedAt(p entql.TimeP) {
 	f.Where(p.Field(apitoken.FieldRevokedAt))
+}
+
+// WhereSSOAuthorizations applies the entql json.RawMessage predicate on the sso_authorizations field.
+func (f *APITokenFilter) WhereSSOAuthorizations(p entql.BytesP) {
+	f.Where(p.Field(apitoken.FieldSSOAuthorizations))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -20775,6 +20782,11 @@ func (f *PersonalAccessTokenFilter) WhereDescription(p entql.StringP) {
 // WhereScopes applies the entql json.RawMessage predicate on the scopes field.
 func (f *PersonalAccessTokenFilter) WhereScopes(p entql.BytesP) {
 	f.Where(p.Field(personalaccesstoken.FieldScopes))
+}
+
+// WhereSSOAuthorizations applies the entql json.RawMessage predicate on the sso_authorizations field.
+func (f *PersonalAccessTokenFilter) WhereSSOAuthorizations(p entql.BytesP) {
+	f.Where(p.Field(personalaccesstoken.FieldSSOAuthorizations))
 }
 
 // WhereLastUsedAt applies the entql time.Time predicate on the last_used_at field.
