@@ -1,4 +1,4 @@
-h1:6d7R8dEcPFwMCRhgCGfE3snlUqrUsDc6QqP7J4DJIp4=
+h1:AQcRym84S+4adD9FWK6KAMYP+1hJrLWkThnt6spr95w=
 20250414203515_init.sql h1:BeTEtWy9s9mO1t9vLhKE/W3Z/NZS7kklzlmvffjgMys=
 20250418204251_control_objective.sql h1:2zhXUjbVshiTwzY0qh87de8Wh8j2tLDO6KRbn6oohx4=
 20250421141007_aauid_not_unique_per_machine.sql h1:bMzfq+NBG4IFyOf/YintEKVhmQ6ttnQymzRV8/RiuPo=
@@ -28,3 +28,4 @@ h1:6d7R8dEcPFwMCRhgCGfE3snlUqrUsDc6QqP7J4DJIp4=
 20250704192850_indexes.sql h1:ZZzSX8iXQBE7A2P9W0wgC8CQna4aEDMt90W7x1b68T4=
 20250705143955_trustcenterfavicon.sql h1:M7cuBuRaof9/V2LBtlbuG7wua9PNnQBkuZ9IC3vE+Rs=
 20250706174116_ssotokenauthorization.sql h1:fFR1P74g3YLWzkSuz5PoNJvtv41mFuPTeBbSQl2o39Y=
+20250707035347_trustcenter_advancedtheme.sql h1:VGLSse5rrfSnUbvWoXdVf/gNlzjLno60ja3rkr/rWWo=
