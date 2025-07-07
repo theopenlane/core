@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"go/format"
 	"os"
@@ -9,14 +10,14 @@ import (
 
 	"github.com/dave/jennifer/jen"
 	yaml "github.com/goccy/go-yaml"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 
 	"github.com/theopenlane/core/pkg/catalog"
 )
 
 // main is the entry point for the gencatalog CLI application and just a // little wrapper instead of having everything in main
 func main() {
-	if err := genyamlApp().Run(os.Args); err != nil {
+	if err := genyamlApp().Run(context.Background(), os.Args); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
@@ -29,8 +30,8 @@ var repoPath = "github.com/theopenlane/core/pkg/catalog"
 // it's generally easier to work with Go code than YAML, especially at
 // runtime; contantly unmarshalling YAML within our app has performance
 // and usability implications
-func genyamlApp() *cli.App {
-	app := &cli.App{
+func genyamlApp() *cli.Command {
+	app := &cli.Command{
 		Name:  "gencatalog",
 		Usage: "Generate a Go source file from a catalog YAML file",
 		Flags: []cli.Flag{
@@ -38,16 +39,16 @@ func genyamlApp() *cli.App {
 				Name:    "in",
 				Value:   "catalog.yaml",
 				Usage:   "Path to the catalog YAML file",
-				EnvVars: []string{"OPENLANE_CATALOG_FILE"},
+				Sources: cli.EnvVars("OPENLANE_CATALOG_FILE"),
 			},
 			&cli.StringFlag{
 				Name:    "out",
 				Value:   "./gencatalog/gencatalog.go",
 				Usage:   "Output Go file (stdout if empty)",
-				EnvVars: []string{"OPENLANE_CATALOG_OUTPUT"},
+				Sources: cli.EnvVars("OPENLANE_CATALOG_OUTPUT"),
 			},
 		},
-		Action: func(c *cli.Context) error {
+		Action: func(_ context.Context, c *cli.Command) error {
 			input := c.String("in")
 			output := c.String("out")
 
