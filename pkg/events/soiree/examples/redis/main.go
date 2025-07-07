@@ -3,7 +3,7 @@ package main
 import (
 	"time"
 
-	"github.com/cenkalti/backoff/v4"
+	"github.com/cenkalti/backoff/v5"
 	"github.com/redis/go-redis/v9"
 	"github.com/theopenlane/core/pkg/events/soiree"
 )
