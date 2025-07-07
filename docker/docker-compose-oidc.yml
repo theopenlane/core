@@ -1,6 +1,6 @@
 services:
   dex:
-    image: ghcr.io/dexidp/dex:v2.38.0
+    image: ghcr.io/dexidp/dex:v2.43.1
     volumes:
       - ./files/dex.yaml:/etc/dex/config.yaml:ro
     command: ["dex", "serve", "/etc/dex/config.yaml"]
