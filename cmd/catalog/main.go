@@ -9,7 +9,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 
 	"github.com/stripe/stripe-go/v82"
 	"github.com/theopenlane/core/pkg/catalog"

@@ -85,7 +85,6 @@ require (
 	github.com/theopenlane/riverboat v0.1.6
 	github.com/theopenlane/utils v0.4.7
 	github.com/tmc/langchaingo v0.1.13
-	github.com/urfave/cli/v2 v2.27.7
 	github.com/vektah/gqlparser/v2 v2.5.30
 	github.com/vektra/mockery/v3 v3.5.0
 	github.com/wk8/go-ordered-map/v2 v2.1.8
@@ -400,6 +399,7 @@ require (
 	github.com/ulikunitz/xz v0.5.12 // indirect
 	github.com/ultraware/funlen v0.2.0 // indirect
 	github.com/ultraware/whitespace v0.2.0 // indirect
+	github.com/urfave/cli/v2 v2.27.7 // indirect
 	github.com/uudashr/gocognit v1.2.0 // indirect
 	github.com/uudashr/iface v1.3.1 // indirect
 	github.com/weppos/publicsuffix-go v0.40.3-0.20250127173806-e489a31678ca // indirect
