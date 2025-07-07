@@ -82,7 +82,7 @@ require (
 	github.com/theopenlane/gqlgen-plugins v0.6.2
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.14.0
-	github.com/theopenlane/newman v0.1.6
+	github.com/theopenlane/newman v0.1.7
 	github.com/theopenlane/riverboat v0.1.6
 	github.com/theopenlane/utils v0.4.7
 	github.com/tmc/langchaingo v0.1.13
@@ -581,7 +581,7 @@ require (
 	github.com/prometheus/common v0.63.0 // indirect
 	github.com/prometheus/procfs v0.16.1 // indirect
 	github.com/pterm/pterm v0.12.81
-	github.com/resend/resend-go/v2 v2.20.0 // indirect
+	github.com/resend/resend-go/v2 v2.21.0 // indirect
 	github.com/riverqueue/river/riverdriver v0.23.1 // indirect
 	github.com/riverqueue/river/rivershared v0.23.1 // indirect
 	github.com/riverqueue/river/rivertype v0.23.1
