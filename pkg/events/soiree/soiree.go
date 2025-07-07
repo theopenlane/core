@@ -1,6 +1,6 @@
 package soiree
 
-import "github.com/cenkalti/backoff/v4"
+import "github.com/cenkalti/backoff/v5"
 
 // Soiree is an interface that defines the behavior of your get-together
 type Soiree interface {

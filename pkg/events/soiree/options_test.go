@@ -5,7 +5,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/cenkalti/backoff/v4"
+	"github.com/cenkalti/backoff/v5"
 )
 
 const errorMessage = "On() failed with error: %v"

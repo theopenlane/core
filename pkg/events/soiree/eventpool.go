@@ -7,7 +7,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/cenkalti/backoff/v4"
+	"github.com/cenkalti/backoff/v5"
 )
 
 // EventPool struct is controlling subscribing and unsubscribing listeners to topics, and emitting events to all subscribers
