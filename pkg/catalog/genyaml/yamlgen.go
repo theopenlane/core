@@ -48,7 +48,7 @@ func genyamlApp() *cli.Command {
 				Sources: cli.EnvVars("OPENLANE_CATALOG_OUTPUT"),
 			},
 		},
-		Action: func(ctx context.Context, c *cli.Command) error {
+		Action: func(_ context.Context, c *cli.Command) error {
 			input := c.String("in")
 			output := c.String("out")
 
