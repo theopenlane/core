@@ -27,7 +27,7 @@ steps:
           location: "NYC"
         cancel_on_build_failing: true
         plugins:
-          - docker#v5.12.0:
+          - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               command: ["task", "ci"]
@@ -42,7 +42,7 @@ steps:
         key: "generate_config"
         cancel_on_build_failing: true
         plugins:
-          - docker#v5.12.0:
+          - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               command: ["task", "config:ci"]
@@ -66,7 +66,7 @@ steps:
         timeout_in_minutes: 20
         key: "lint"
         plugins:
-          - docker#v5.12.0:
+          - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               command: ["task", "go:lint:ci"]
               always_pull: true
@@ -91,7 +91,7 @@ steps:
             version:
               - 17-alpine
         plugins:
-          - docker#v5.12.0:
+          - docker#v5.13.0:
               image: ghcr.io/theopenlane/build-image:latest
               always_pull: true
               command: ["task", "go:testsum:ci"]
@@ -115,7 +115,7 @@ steps:
           size: $RUNNER_SMALL
         key: "fga_test"
         plugins:
-          - docker#v5.12.0:
+          - docker#v5.13.0:
               image: openfga/cli:v0.5.1
               propagate-environment: true
               command: ["model", "test", "--tests", "fga/tests/tests.yaml"]
@@ -166,7 +166,7 @@ steps:
           - artifacts#v1.9.4:
               download: "junit.xml"
               step: "go_test"
-          - docker#v5.12.0:
+          - docker#v5.13.0:
               image: "sonarsource/sonar-scanner-cli:11.2"
               propagate-environment: true
               volumes:
@@ -192,7 +192,7 @@ steps:
           - artifacts#v1.9.4:
               download: "junit.xml"
               step: "go_test"
-          - docker#v5.12.0:
+          - docker#v5.13.0:
               image: "sonarsource/sonar-scanner-cli:11.2"
               propagate-environment: true
               volumes:
@@ -214,7 +214,7 @@ steps:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
         plugins:
-          - docker#v5.12.0:
+          - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
@@ -234,7 +234,7 @@ steps:
         cancel_on_build_failing: true
         artifact_paths: "bin/openlane-cli"
         plugins:
-          - docker#v5.12.0:
+          - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
@@ -302,7 +302,7 @@ steps:
           - cluster-secrets#v1.0.0:
               variables:
                 APOLLO_KEY: APOLLO_KEY
-          - docker#v5.12.0:
+          - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
@@ -397,7 +397,7 @@ steps:
           - cluster-secrets#v1.0.0:
               variables:
                 APOLLO_KEY: APOLLO_KEY
-          - docker#v5.12.0:
+          - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
