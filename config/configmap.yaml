@@ -56,6 +56,7 @@ data:
   CORE_SERVER_CSRFPROTECTION_SAMESITE: {{ .Values.core.server.csrfProtection.sameSite | default "Lax" }}
   CORE_SERVER_CSRFPROTECTION_COOKIEHTTPONLY: {{ .Values.core.server.csrfProtection.cookieHttpOnly | default false }}
   CORE_SERVER_CSRFPROTECTION_COOKIEDOMAIN: {{ .Values.core.server.csrfProtection.cookieDomain }}
+  CORE_SERVER_CSRFPROTECTION_COOKIEPATH: {{ .Values.core.server.csrfProtection.cookiePath | default "/" }}
   CORE_SERVER_SECRETMANAGER: {{ .Values.core.server.secretManager }}
   CORE_SERVER_DEFAULTTRUSTCENTERDOMAIN: {{ .Values.core.server.defaultTrustCenterDomain }}
   CORE_ENTCONFIG_ENTITYTYPES: {{ .Values.core.entConfig.entityTypes }}
