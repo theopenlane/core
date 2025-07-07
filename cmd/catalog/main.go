@@ -50,15 +50,15 @@ var outWriter io.Writer = os.Stdout
 
 // main is the entry point for the catalog CLI application
 func main() {
-	if err := catalogApp().Run(os.Args); err != nil {
+	if err := catalogApp().Run(context.Background(), os.Args); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }
 
 // catalogApp creates a CLI application for reconciling a catalog with Stripe
-func catalogApp() *cli.App {
-	app := &cli.App{
+func catalogApp() *cli.Command {
+	app := &cli.Command{
 		Name:  "catalog",
 		Usage: "reconcile catalog with Stripe",
 		Flags: []cli.Flag{
@@ -70,7 +70,7 @@ func catalogApp() *cli.App {
 			&cli.StringFlag{
 				Name:    "stripe-key",
 				Usage:   "stripe API key",
-				EnvVars: []string{"STRIPE_API_KEY"},
+				Sources: cli.EnvVars("STRIPE_API_KEY"),
 			},
 			&cli.BoolFlag{
 				Name:  "takeover",
@@ -81,7 +81,7 @@ func catalogApp() *cli.App {
 				Usage: "write price IDs back to catalog file",
 			},
 		},
-		Action: func(c *cli.Context) error {
+		Action: func(ctx context.Context, c *cli.Command) error {
 			catalogFile := c.String("catalog")
 			apiKey := c.String("stripe-key")
 			takeover := c.Bool("takeover")
@@ -101,8 +101,6 @@ func catalogApp() *cli.App {
 			if err != nil {
 				return fmt.Errorf("stripe client: %w", err)
 			}
-
-			ctx := c.Context
 
 			// Pull all existing products from Stripe to build a lookup by name.
 			prodMap, err := buildProductMap(ctx, sc)
