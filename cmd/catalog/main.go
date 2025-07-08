@@ -37,6 +37,9 @@ type stripeClient interface {
 	ListProducts(ctx context.Context) ([]*stripe.Product, error)
 	GetPrice(ctx context.Context, id string) (*stripe.Price, error)
 	FindPriceForProduct(ctx context.Context, productID string, currency string, unitAmount int64, interval, nickname, lookupKey, metadata string, meta map[string]string) (*stripe.Price, error)
+	GetPriceByLookupKey(ctx context.Context, lookupKey string) (*stripe.Price, error)
+	GetFeatureByLookupKey(ctx context.Context, lookupKey string) (*stripe.EntitlementsFeature, error)
+	GetProduct(ctx context.Context, id string) (*stripe.Product, error)
 	UpdatePriceMetadata(ctx context.Context, priceID string, metadata map[string]string) (*stripe.Price, error)
 }
 
@@ -101,6 +104,18 @@ func catalogApp() *cli.Command {
 			sc, err := newClient(entitlements.WithAPIKey(apiKey))
 			if err != nil {
 				return fmt.Errorf("stripe client: %w", err)
+			}
+
+			conflicts, err := cat.LookupKeyConflicts(ctx, sc)
+			if err != nil {
+				return fmt.Errorf("lookup keys: %w", err)
+			}
+
+			if len(conflicts) > 0 {
+				for _, c := range conflicts {
+					fmt.Fprintf(os.Stderr, "lookup key %s already exists as %s %s for %s\n", c.LookupKey, c.Resource, c.ID, c.Feature)
+				}
+				return catalog.ErrLookupKeyConflict
 			}
 
 			// Pull all existing products from Stripe to build a lookup by name.
@@ -285,6 +300,7 @@ func processFeatureSet(ctx context.Context, sc stripeClient, prodMap map[string]
 			var t []takeoverInfo
 
 			feat, t, missingPrices = updateFeaturePrices(ctx, sc, prod, name, feat)
+			feat.ProductID = prod.ID
 
 			takeovers = append(takeovers, t...)
 		} else {
@@ -421,7 +437,7 @@ func printFeatureReports(reports []featureReport) {
 	writer := tables.NewTableWriter(outWriter, "Type", "Feature", "Product", "MissingPrices")
 
 	for _, r := range reports {
-		_ = writer.AddRow(r.kind, r.name, r.product, r.missingPrices)
+		_ = writer.AddRow(r.kind, string(r.name), r.product, r.missingPrices)
 	}
 
 	_ = writer.Render()

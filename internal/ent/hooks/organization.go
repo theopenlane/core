@@ -10,7 +10,6 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/stripe/stripe-go/v82"
 
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
@@ -221,28 +220,31 @@ func createOrgSettings(ctx context.Context, m *generated.OrganizationMutation) e
 }
 
 // createOrgSubscription creates the default organization subscription for a new org
-func createOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m GenericMutation) error {
+func createOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m GenericMutation) (*generated.OrgSubscription, error) {
 	// ensure we can always pull the org subscription for the organization
 	allowCtx := contextx.With(ctx, auth.OrgSubscriptionContextKey{})
 
 	orgSubscriptions, err := orgCreated.OrgSubscriptions(allowCtx)
 	if err != nil {
 		zerolog.Ctx(ctx).Error().Err(err).Msg("error getting org subscriptions")
-		return err
+		return nil, err
 	}
 
 	// if this is empty generate a default org setting schema
 	if len(orgSubscriptions) == 0 {
-		if err := defaultOrgSubscription(ctx, orgCreated, m); err != nil {
+		sub, err := defaultOrgSubscription(ctx, orgCreated, m)
+		if err != nil {
 			zerolog.Ctx(ctx).Error().Err(err).Msg("error creating default org subscription")
 
-			return err
+			return nil, err
 		}
+
+		orgSubscriptions = []*generated.OrgSubscription{sub}
 	}
 
 	zerolog.Ctx(ctx).Debug().Msg("created default org subscription")
 
-	return nil
+	return orgSubscriptions[0], nil
 }
 
 const (
@@ -252,12 +254,12 @@ const (
 )
 
 // defaultOrgSubscription is the default way to create an org subscription when an organization is first created
-func defaultOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m GenericMutation) error {
+func defaultOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m GenericMutation) (*generated.OrgSubscription, error) {
 	return m.Client().OrgSubscription.Create().
 		SetStripeSubscriptionID(subscriptionPendingUpdate).
 		SetOwnerID(orgCreated.ID).
 		SetActive(true).
-		SetStripeSubscriptionStatus(string(stripe.SubscriptionStatusTrialing)).Exec(ctx)
+		SetStripeSubscriptionStatus(string(stripe.SubscriptionStatusTrialing)).Save(ctx)
 }
 
 // createEntityTypes creates the default entity types for a new org
@@ -293,7 +295,8 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 		return err
 	}
 
-	if err := createOrgSubscription(ctx, orgCreated, m); err != nil {
+	orgSubs, err := createOrgSubscription(ctx, orgCreated, m)
+	if err != nil {
 		return err
 	}
 
@@ -309,9 +312,14 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 		return err
 	}
 
+	modulesCreated, err := createDefaultOrgModulesProductsPrices(ctx, orgCreated, m, orgSubs, withTrial())
+	if err != nil {
+		return err
+	}
+
 	// create default feature tuples for base functionality when entitlements are enabled
 	if m.Client().EntitlementManager != nil {
-		if err := createFeatureTuples(ctx, m.Authz, orgCreated.ID, []string{string(entx.ModuleBase), string(entx.ModuleCompliance)}); err != nil {
+		if err := createFeatureTuples(ctx, m.Authz, orgCreated.ID, modulesCreated); err != nil {
 			zerolog.Ctx(ctx).Error().Err(err).Msg("error creating default feature tuples")
 
 			return err
@@ -603,14 +611,46 @@ func createFeatureTuples(ctx context.Context, authz fgax.Client, orgID string, f
 	return nil
 }
 
-// createDefaultOrgModulesProductsPrices creates default OrgModule, OrgProduct, and OrgPrice for base and compliance modules
-func createDefaultOrgModulesProductsPrices(ctx context.Context, orgCreated *generated.Organization, m GenericMutation, orgSubs *generated.OrgSubscription) error {
-	modulesToEntitle := []string{"base", "compliance"}
+// orgModuleConfig controls which modules are selected when creating default module records
+type orgModuleConfig struct {
+	personalOrg bool
+	trial       bool
+}
 
-	for _, moduleName := range modulesToEntitle {
-		mod, ok := cataloggen.DefaultCatalog.Modules[moduleName]
-		if !ok {
-			continue // skip if not in catalog
+// orgModuleOption sets fields on orgModuleConfig
+type orgModuleOption func(*orgModuleConfig)
+
+func withPersonalOrg() orgModuleOption {
+	return func(c *orgModuleConfig) {
+		c.personalOrg = true
+	}
+}
+
+func withTrial() orgModuleOption {
+	return func(c *orgModuleConfig) {
+		c.trial = true
+	}
+}
+
+// createDefaultOrgModulesProductsPrices creates default OrgModule, OrgProduct, and OrgPrice for base and compliance modules
+func createDefaultOrgModulesProductsPrices(ctx context.Context, orgCreated *generated.Organization, m GenericMutation, orgSubs *generated.OrgSubscription, opts ...orgModuleOption) ([]string, error) {
+	cfg := orgModuleConfig{}
+
+	for _, opt := range opts {
+		opt(&cfg)
+	}
+
+	modulesCreated := make([]string, 0)
+
+	for moduleName, mod := range cataloggen.DefaultCatalog.Modules {
+		if cfg.personalOrg && !mod.PersonalOrg {
+			continue
+		}
+		if cfg.trial && !mod.IncludeWithTrial {
+			continue
+		}
+		if !cfg.personalOrg && !cfg.trial {
+			continue
 		}
 
 		// Find the first price with "month" interval
@@ -635,7 +675,7 @@ func createDefaultOrgModulesProductsPrices(ctx context.Context, orgCreated *gene
 			SetPrice(models.Price{Amount: float64(monthlyPrice.UnitAmount), Interval: monthlyPrice.Interval}).
 			Save(ctx)
 		if err != nil {
-			return fmt.Errorf("failed to create OrgModule for %s: %w", moduleName, err)
+			return nil, fmt.Errorf("failed to create OrgModule for %s: %w", moduleName, err)
 		}
 
 		// Create OrgProduct for this module
@@ -647,7 +687,7 @@ func createDefaultOrgModulesProductsPrices(ctx context.Context, orgCreated *gene
 			SetActive(true).
 			Save(ctx)
 		if err != nil {
-			return fmt.Errorf("failed to create OrgProduct for %s: %w", moduleName, err)
+			return nil, fmt.Errorf("failed to create OrgProduct for %s: %w", moduleName, err)
 		}
 
 		// Create only the monthly OrgPrice for this product and set edge to OrgProduct
@@ -660,9 +700,11 @@ func createDefaultOrgModulesProductsPrices(ctx context.Context, orgCreated *gene
 			SetActive(true).
 			Save(ctx)
 		if err != nil {
-			return fmt.Errorf("failed to create OrgPrice for module %s: %w", moduleName, err)
+			return nil, fmt.Errorf("failed to create OrgPrice for module %s: %w", moduleName, err)
 		}
+
+		modulesCreated = append(modulesCreated, moduleName)
 	}
 
-	return nil
+	return modulesCreated, nil
 }

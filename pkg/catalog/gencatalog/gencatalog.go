@@ -23,6 +23,7 @@ var DefaultCatalog = catalog.Catalog{
 			}}},
 			Description: "Domain and Vulnerability Scanning",
 			DisplayName: "Scanning",
+			LookupKey:   "domain_scanning",
 		},
 		"extra_evidence_storage": catalog.Feature{
 			Audience: "public",
@@ -36,9 +37,9 @@ var DefaultCatalog = catalog.Catalog{
 			}}},
 			Description: "Additional evidence storage for compliance",
 			DisplayName: "Additional Evidence Storage (100GB)",
-			Usage:       &catalog.Usage{EvidenceStorageGB: int64(100)},
+			LookupKey:   "extra_evidence_storage",
 		},
-		"policy-management": catalog.Feature{
+		"policy_management": catalog.Feature{
 			Audience: "beta",
 			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
 				Interval:   "month",
@@ -55,8 +56,9 @@ var DefaultCatalog = catalog.Catalog{
 			}}},
 			Description: "Policy and Procedure Management",
 			DisplayName: "Policy & Procedure Management",
+			LookupKey:   "policy_management",
 		},
-		"risk-management": catalog.Feature{
+		"risk_management": catalog.Feature{
 			Audience: "beta",
 			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
 				Interval:   "month",
@@ -73,6 +75,7 @@ var DefaultCatalog = catalog.Catalog{
 			}}},
 			Description: "Risk Management",
 			DisplayName: "Risk Management",
+			LookupKey:   "risk_management",
 		},
 	},
 	Modules: map[string]catalog.Feature{
@@ -85,31 +88,34 @@ var DefaultCatalog = catalog.Catalog{
 				PriceID:    "price_1RiLtTBvxky1R7SvV8rJYmlt",
 				UnitAmount: int64(0),
 			}}},
-			Description: "Core system access",
-			DisplayName: "Base Module",
+			Description:      "Core system access",
+			DisplayName:      "Base Module",
+			IncludeWithTrial: true,
+			LookupKey:        "base",
+			PersonalOrg:      true,
 		},
 		"compliance": catalog.Feature{
 			Audience: "public",
 			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
 				Interval:   "month",
 				LookupKey:  "price_compliance_month",
-				Metadata:   map[string]string{"tier": "base"},
 				Nickname:   "price_compliance_month",
 				PriceID:    "price_1RiLtUBvxky1R7SvGMiUkBIQ",
 				UnitAmount: int64(450),
 			}, catalog.Price{
 				Interval:   "year",
 				LookupKey:  "price_compliance_annual",
-				Metadata:   map[string]string{"tier": "base"},
 				Nickname:   "price_compliance_annual",
 				PriceID:    "price_1RiLtUBvxky1R7SvH6hP7CvC",
 				UnitAmount: int64(5000),
 			}}},
-			Description: "Core compliance automation",
-			DisplayName: "Compliance Module",
-			Usage:       &catalog.Usage{EvidenceStorageGB: int64(250)},
+			Description:      "Core compliance automation",
+			DisplayName:      "Compliance Module",
+			IncludeWithTrial: true,
+			LookupKey:        "compliance",
+			Usage:            &catalog.Usage{EvidenceStorageGB: int64(250)},
 		},
-		"entity-management": catalog.Feature{
+		"entity_management": catalog.Feature{
 			Audience: "private",
 			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
 				Interval:   "month",
@@ -126,6 +132,7 @@ var DefaultCatalog = catalog.Catalog{
 			}}},
 			Description: "Vendor Risk Management",
 			DisplayName: "Vendor Management",
+			LookupKey:   "entity_management",
 		},
 		"trust_center": catalog.Feature{
 			Audience: "beta",
@@ -144,8 +151,9 @@ var DefaultCatalog = catalog.Catalog{
 			}}},
 			Description: "Public security portal",
 			DisplayName: "Trust Center",
+			LookupKey:   "trust_center",
 		},
-		"vulnerability-management": catalog.Feature{
+		"vulnerability_management": catalog.Feature{
 			Audience: "private",
 			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
 				Interval:   "month",
@@ -162,6 +170,7 @@ var DefaultCatalog = catalog.Catalog{
 			}}},
 			Description: "vulnerability scanning and management",
 			DisplayName: "Vulnerability Scanning and Management",
+			LookupKey:   "vulnerability_management",
 		},
 	},
 	SHA:     "d21b9ae3ff2758902ec42e6cc09da842318cc6d71d4d84ba58338a3333eb6685",

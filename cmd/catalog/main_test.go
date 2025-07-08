@@ -72,6 +72,7 @@ func captureOutput(f func()) string {
 type fakeClient struct {
 	products []*stripe.Product
 	prices   map[string]*stripe.Price
+	features map[string]*stripe.EntitlementsFeature
 	updated  []string
 }
 
@@ -81,6 +82,36 @@ func (f *fakeClient) ListProducts(ctx context.Context) ([]*stripe.Product, error
 
 func (f *fakeClient) GetPrice(ctx context.Context, id string) (*stripe.Price, error) {
 	return f.prices[id], nil
+}
+
+func (f *fakeClient) GetPriceByLookupKey(ctx context.Context, lookupKey string) (*stripe.Price, error) {
+	for _, p := range f.prices {
+		if p.LookupKey == lookupKey {
+			return p, nil
+		}
+	}
+
+	return nil, nil
+}
+
+func (f *fakeClient) GetFeatureByLookupKey(ctx context.Context, lookupKey string) (*stripe.EntitlementsFeature, error) {
+	for _, feat := range f.features {
+		if feat.LookupKey == lookupKey {
+			return feat, nil
+		}
+	}
+
+	return nil, nil
+}
+
+func (f *fakeClient) GetProduct(ctx context.Context, id string) (*stripe.Product, error) {
+	for _, p := range f.products {
+		if p.ID == id {
+			return p, nil
+		}
+	}
+
+	return nil, nil
 }
 
 func (f *fakeClient) FindPriceForProduct(ctx context.Context, productID string, currency string, unitAmount int64, interval, nickname, lookupKey, metadata string, meta map[string]string) (*stripe.Price, error) {
@@ -275,6 +306,7 @@ sha: bad
 modules:
   mod1:
     display_name: Prod1
+	lookup_key: mod1
     description: D
     audience: public
     billing:
@@ -291,7 +323,7 @@ addons: {}`
 	prod := &stripe.Product{ID: "prod1", Name: "Prod1"}
 	price := &stripe.Price{ID: "price_1", UnitAmount: 100, Recurring: &stripe.PriceRecurring{Interval: "month"}, LookupKey: "p1_month", Product: prod, Metadata: map[string]string{catalog.ManagedByKey: catalog.ManagedByValue}}
 
-	client := &fakeClient{products: []*stripe.Product{prod}, prices: map[string]*stripe.Price{"price_1": price}}
+	client := &fakeClient{products: []*stripe.Product{prod}, prices: map[string]*stripe.Price{"price_1": price}, features: map[string]*stripe.EntitlementsFeature{}}
 	newClient = func(opts ...entitlements.StripeOptions) (stripeClient, error) { return client, nil }
 	defer func() {
 		newClient = func(opts ...entitlements.StripeOptions) (stripeClient, error) {
@@ -315,6 +347,7 @@ sha: bad
 modules:
   mod1:
     display_name: Prod1
+	lookup_key: mod1
     description: D
     audience: public
     billing:
@@ -347,4 +380,39 @@ addons: {}`
 	err := app.Run(context.Background(), []string{"catalog", "--catalog", path, "--stripe-key", "sk", "--takeover"})
 	require.NoError(t, err)
 	assert.Equal(t, []string{"price_1"}, client.updated)
+}
+
+func TestCatalogAppLookupKeyConflict(t *testing.T) {
+	catYAML := `version: v1
+sha: bad
+modules:
+  mod1:
+    display_name: Prod1
+    lookup_key: mod1
+    description: D
+    audience: public
+    billing:
+      prices:
+        - interval: month
+          unit_amount: 100
+          nickname: p1_month
+          lookup_key: p1_month
+addons: {}`
+
+	path := writeTempCatalogFile(t, catYAML)
+
+	prod := &stripe.Product{ID: "prod1", Name: "Prod1"}
+	price := &stripe.Price{ID: "price_conflict", UnitAmount: 200, Recurring: &stripe.PriceRecurring{Interval: "month"}, LookupKey: "p1_month", Product: prod}
+
+	client := &fakeClient{products: []*stripe.Product{prod}, prices: map[string]*stripe.Price{"price_1": price}, features: map[string]*stripe.EntitlementsFeature{}}
+	newClient = func(opts ...entitlements.StripeOptions) (stripeClient, error) { return client, nil }
+	defer func() {
+		newClient = func(opts ...entitlements.StripeOptions) (stripeClient, error) {
+			return entitlements.NewStripeClient(opts...)
+		}
+	}()
+
+	app := catalogApp()
+	err := app.Run(context.Background(), []string{"catalog", "--catalog", path, "--stripe-key", "sk"})
+	require.ErrorIs(t, err, catalog.ErrLookupKeyConflict)
 }

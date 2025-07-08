@@ -3,6 +3,7 @@ sha: d21b9ae3ff2758902ec42e6cc09da842318cc6d71d4d84ba58338a3333eb6685
 modules:
   base:
     display_name: Base Module
+    lookup_key: base
     description: Core system access
     billing:
       prices:
@@ -12,8 +13,11 @@ modules:
           lookup_key: base_free
           price_id: price_1RiLtTBvxky1R7SvV8rJYmlt
     audience: public
+    personal_org: true
+    include_with_trial: true
   compliance:
     display_name: Compliance Module
+    lookup_key: compliance
     description: Core compliance automation
     billing:
       prices:
@@ -21,21 +25,20 @@ modules:
           unit_amount: 450
           nickname: price_compliance_month
           lookup_key: price_compliance_month
-          metadata:
-            tier: base
           price_id: price_1RiLtUBvxky1R7SvGMiUkBIQ
         - interval: year
           unit_amount: 5000
           nickname: price_compliance_annual
           lookup_key: price_compliance_annual
-          metadata:
-            tier: base
           price_id: price_1RiLtUBvxky1R7SvH6hP7CvC
     audience: public
+    personal_org: false
+    include_with_trial: true
     usage:
       evidence_storage_gb: 250
-  entity-management:
+  entity_management:
     display_name: Vendor Management
+    lookup_key: entity_management
     description: Vendor Risk Management
     billing:
       prices:
@@ -50,8 +53,11 @@ modules:
           lookup_key: price_vendor_annual
           price_id: price_1RiLtXBvxky1R7SvlgkFcVdp
     audience: private
+    personal_org: false
+    include_with_trial: false
   trust_center:
     display_name: Trust Center
+    lookup_key: trust_center
     description: Public security portal
     billing:
       prices:
@@ -66,8 +72,11 @@ modules:
           lookup_key: price_trust_center_annual
           price_id: price_1RiLtWBvxky1R7SvmYigHfrJ
     audience: beta
-  vulnerability-management:
+    personal_org: false
+    include_with_trial: false
+  vulnerability_management:
     display_name: Vulnerability Scanning and Management
+    lookup_key: vulnerability_management
     description: vulnerability scanning and management
     billing:
       prices:
@@ -82,9 +91,13 @@ modules:
           lookup_key: price_vulnerability_annual
           price_id: price_1RiM2MBvxky1R7SvAcA1oveK
     audience: private
+    personal_org: false
+    include_with_trial: false
+
 addons:
   domain_scanning:
     display_name: Scanning
+    lookup_key: domain_scanning
     description: Domain and Vulnerability Scanning
     billing:
       prices:
@@ -99,8 +112,11 @@ addons:
           lookup_key: domain_scan_annual
           price_id: price_1RiM2OBvxky1R7SvYTz99Txj
     audience: private
+    personal_org: false
+    include_with_trial: false
   extra_evidence_storage:
     display_name: Additional Evidence Storage (100GB)
+    lookup_key: extra_evidence_storage
     description: Additional evidence storage for compliance
     billing:
       prices:
@@ -112,10 +128,11 @@ addons:
             increment_gb: "100"
           price_id: price_1RiM2PBvxky1R7SvM91n3KfI
     audience: public
-    usage:
-      evidence_storage_gb: 100
-  policy-management:
+    personal_org: false
+    include_with_trial: false
+  policy_management:
     display_name: Policy & Procedure Management
+    lookup_key: policy_management
     description: Policy and Procedure Management
     billing:
       prices:
@@ -130,8 +147,11 @@ addons:
           lookup_key: price_policy_annual
           price_id: price_1RiM2RBvxky1R7SvmDjcjnNZ
     audience: beta
-  risk-management:
+    personal_org: false
+    include_with_trial: false
+  risk_management:
     display_name: Risk Management
+    lookup_key: risk_management
     description: Risk Management
     billing:
       prices:
@@ -146,3 +166,5 @@ addons:
           lookup_key: price_risk_annual
           price_id: price_1RiM2wBvxky1R7SvvAq9a3bm
     audience: beta
+    personal_org: false
+    include_with_trial: false
