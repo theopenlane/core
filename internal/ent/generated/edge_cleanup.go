@@ -954,6 +954,18 @@ func SubcontrolHistoryEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
+func SubprocessorEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subprocessor edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func SubprocessorHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subprocessorhistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
 func SubscriberEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subscriber edge")), entfga.DeleteTuplesFirstKey{})
 
@@ -1024,6 +1036,18 @@ func TrustCenterSettingEdgeCleanup(ctx context.Context, id string) error {
 
 func TrustCenterSettingHistoryEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcentersettinghistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func TrustCenterSubprocessorEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcentersubprocessor edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func TrustCenterSubprocessorHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcentersubprocessorhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }

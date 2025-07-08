@@ -186,6 +186,10 @@ type Tx struct {
 	Subcontrol *SubcontrolClient
 	// SubcontrolHistory is the client for interacting with the SubcontrolHistory builders.
 	SubcontrolHistory *SubcontrolHistoryClient
+	// Subprocessor is the client for interacting with the Subprocessor builders.
+	Subprocessor *SubprocessorClient
+	// SubprocessorHistory is the client for interacting with the SubprocessorHistory builders.
+	SubprocessorHistory *SubprocessorHistoryClient
 	// Subscriber is the client for interacting with the Subscriber builders.
 	Subscriber *SubscriberClient
 	// TFASetting is the client for interacting with the TFASetting builders.
@@ -206,6 +210,10 @@ type Tx struct {
 	TrustCenterSetting *TrustCenterSettingClient
 	// TrustCenterSettingHistory is the client for interacting with the TrustCenterSettingHistory builders.
 	TrustCenterSettingHistory *TrustCenterSettingHistoryClient
+	// TrustCenterSubprocessor is the client for interacting with the TrustCenterSubprocessor builders.
+	TrustCenterSubprocessor *TrustCenterSubprocessorClient
+	// TrustCenterSubprocessorHistory is the client for interacting with the TrustCenterSubprocessorHistory builders.
+	TrustCenterSubprocessorHistory *TrustCenterSubprocessorHistoryClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 	// UserHistory is the client for interacting with the UserHistory builders.
@@ -434,6 +442,8 @@ func (tx *Tx) init() {
 	tx.StandardHistory = NewStandardHistoryClient(tx.config)
 	tx.Subcontrol = NewSubcontrolClient(tx.config)
 	tx.SubcontrolHistory = NewSubcontrolHistoryClient(tx.config)
+	tx.Subprocessor = NewSubprocessorClient(tx.config)
+	tx.SubprocessorHistory = NewSubprocessorHistoryClient(tx.config)
 	tx.Subscriber = NewSubscriberClient(tx.config)
 	tx.TFASetting = NewTFASettingClient(tx.config)
 	tx.Task = NewTaskClient(tx.config)
@@ -444,6 +454,8 @@ func (tx *Tx) init() {
 	tx.TrustCenterHistory = NewTrustCenterHistoryClient(tx.config)
 	tx.TrustCenterSetting = NewTrustCenterSettingClient(tx.config)
 	tx.TrustCenterSettingHistory = NewTrustCenterSettingHistoryClient(tx.config)
+	tx.TrustCenterSubprocessor = NewTrustCenterSubprocessorClient(tx.config)
+	tx.TrustCenterSubprocessorHistory = NewTrustCenterSubprocessorHistoryClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 	tx.UserHistory = NewUserHistoryClient(tx.config)
 	tx.UserSetting = NewUserSettingClient(tx.config)

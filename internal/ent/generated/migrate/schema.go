@@ -4120,6 +4120,50 @@ var (
 			},
 		},
 	}
+	// SubprocessorsColumns holds the columns for the "subprocessors" table.
+	SubprocessorsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+	}
+	// SubprocessorsTable holds the schema information for the "subprocessors" table.
+	SubprocessorsTable = &schema.Table{
+		Name:       "subprocessors",
+		Columns:    SubprocessorsColumns,
+		PrimaryKey: []*schema.Column{SubprocessorsColumns[0]},
+	}
+	// SubprocessorHistoryColumns holds the columns for the "subprocessor_history" table.
+	SubprocessorHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+	}
+	// SubprocessorHistoryTable holds the schema information for the "subprocessor_history" table.
+	SubprocessorHistoryTable = &schema.Table{
+		Name:       "subprocessor_history",
+		Columns:    SubprocessorHistoryColumns,
+		PrimaryKey: []*schema.Column{SubprocessorHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "subprocessorhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{SubprocessorHistoryColumns[1]},
+			},
+		},
+	}
 	// SubscribersColumns holds the columns for the "subscribers" table.
 	SubscribersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -4573,6 +4617,50 @@ var (
 				Name:    "trustcentersettinghistory_history_time",
 				Unique:  false,
 				Columns: []*schema.Column{TrustCenterSettingHistoryColumns[1]},
+			},
+		},
+	}
+	// TrustCenterSubprocessorsColumns holds the columns for the "trust_center_subprocessors" table.
+	TrustCenterSubprocessorsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+	}
+	// TrustCenterSubprocessorsTable holds the schema information for the "trust_center_subprocessors" table.
+	TrustCenterSubprocessorsTable = &schema.Table{
+		Name:       "trust_center_subprocessors",
+		Columns:    TrustCenterSubprocessorsColumns,
+		PrimaryKey: []*schema.Column{TrustCenterSubprocessorsColumns[0]},
+	}
+	// TrustCenterSubprocessorHistoryColumns holds the columns for the "trust_center_subprocessor_history" table.
+	TrustCenterSubprocessorHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+	}
+	// TrustCenterSubprocessorHistoryTable holds the schema information for the "trust_center_subprocessor_history" table.
+	TrustCenterSubprocessorHistoryTable = &schema.Table{
+		Name:       "trust_center_subprocessor_history",
+		Columns:    TrustCenterSubprocessorHistoryColumns,
+		PrimaryKey: []*schema.Column{TrustCenterSubprocessorHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "trustcentersubprocessorhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterSubprocessorHistoryColumns[1]},
 			},
 		},
 	}
@@ -7516,6 +7604,8 @@ var (
 		StandardHistoryTable,
 		SubcontrolsTable,
 		SubcontrolHistoryTable,
+		SubprocessorsTable,
+		SubprocessorHistoryTable,
 		SubscribersTable,
 		TfaSettingsTable,
 		TasksTable,
@@ -7526,6 +7616,8 @@ var (
 		TrustCenterHistoryTable,
 		TrustCenterSettingsTable,
 		TrustCenterSettingHistoryTable,
+		TrustCenterSubprocessorsTable,
+		TrustCenterSubprocessorHistoryTable,
 		UsersTable,
 		UserHistoryTable,
 		UserSettingsTable,
@@ -7874,6 +7966,9 @@ func init() {
 	SubcontrolHistoryTable.Annotation = &entsql.Annotation{
 		Table: "subcontrol_history",
 	}
+	SubprocessorHistoryTable.Annotation = &entsql.Annotation{
+		Table: "subprocessor_history",
+	}
 	SubscribersTable.ForeignKeys[0].RefTable = OrganizationsTable
 	TfaSettingsTable.ForeignKeys[0].RefTable = UsersTable
 	TasksTable.ForeignKeys[0].RefTable = OrganizationsTable
@@ -7896,6 +7991,9 @@ func init() {
 	TrustCenterSettingsTable.ForeignKeys[2].RefTable = FilesTable
 	TrustCenterSettingHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_setting_history",
+	}
+	TrustCenterSubprocessorHistoryTable.Annotation = &entsql.Annotation{
+		Table: "trust_center_subprocessor_history",
 	}
 	UsersTable.ForeignKeys[0].RefTable = FilesTable
 	UserHistoryTable.Annotation = &entsql.Annotation{

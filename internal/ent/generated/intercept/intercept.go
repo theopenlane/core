@@ -96,6 +96,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
@@ -106,6 +108,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -2518,6 +2522,60 @@ func (f TraverseSubcontrolHistory) Traverse(ctx context.Context, q generated.Que
 	return fmt.Errorf("unexpected query type %T. expect *generated.SubcontrolHistoryQuery", q)
 }
 
+// The SubprocessorFunc type is an adapter to allow the use of ordinary function as a Querier.
+type SubprocessorFunc func(context.Context, *generated.SubprocessorQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f SubprocessorFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.SubprocessorQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.SubprocessorQuery", q)
+}
+
+// The TraverseSubprocessor type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseSubprocessor func(context.Context, *generated.SubprocessorQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseSubprocessor) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseSubprocessor) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.SubprocessorQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.SubprocessorQuery", q)
+}
+
+// The SubprocessorHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type SubprocessorHistoryFunc func(context.Context, *generated.SubprocessorHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f SubprocessorHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.SubprocessorHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.SubprocessorHistoryQuery", q)
+}
+
+// The TraverseSubprocessorHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseSubprocessorHistory func(context.Context, *generated.SubprocessorHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseSubprocessorHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseSubprocessorHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.SubprocessorHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.SubprocessorHistoryQuery", q)
+}
+
 // The SubscriberFunc type is an adapter to allow the use of ordinary function as a Querier.
 type SubscriberFunc func(context.Context, *generated.SubscriberQuery) (generated.Value, error)
 
@@ -2786,6 +2844,60 @@ func (f TraverseTrustCenterSettingHistory) Traverse(ctx context.Context, q gener
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterSettingHistoryQuery", q)
+}
+
+// The TrustCenterSubprocessorFunc type is an adapter to allow the use of ordinary function as a Querier.
+type TrustCenterSubprocessorFunc func(context.Context, *generated.TrustCenterSubprocessorQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f TrustCenterSubprocessorFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.TrustCenterSubprocessorQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterSubprocessorQuery", q)
+}
+
+// The TraverseTrustCenterSubprocessor type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseTrustCenterSubprocessor func(context.Context, *generated.TrustCenterSubprocessorQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseTrustCenterSubprocessor) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseTrustCenterSubprocessor) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TrustCenterSubprocessorQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterSubprocessorQuery", q)
+}
+
+// The TrustCenterSubprocessorHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type TrustCenterSubprocessorHistoryFunc func(context.Context, *generated.TrustCenterSubprocessorHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f TrustCenterSubprocessorHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.TrustCenterSubprocessorHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterSubprocessorHistoryQuery", q)
+}
+
+// The TraverseTrustCenterSubprocessorHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseTrustCenterSubprocessorHistory func(context.Context, *generated.TrustCenterSubprocessorHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseTrustCenterSubprocessorHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseTrustCenterSubprocessorHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TrustCenterSubprocessorHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterSubprocessorHistoryQuery", q)
 }
 
 // The UserFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -3100,6 +3212,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.SubcontrolQuery, predicate.Subcontrol, subcontrol.OrderOption]{typ: generated.TypeSubcontrol, tq: q}, nil
 	case *generated.SubcontrolHistoryQuery:
 		return &query[*generated.SubcontrolHistoryQuery, predicate.SubcontrolHistory, subcontrolhistory.OrderOption]{typ: generated.TypeSubcontrolHistory, tq: q}, nil
+	case *generated.SubprocessorQuery:
+		return &query[*generated.SubprocessorQuery, predicate.Subprocessor, subprocessor.OrderOption]{typ: generated.TypeSubprocessor, tq: q}, nil
+	case *generated.SubprocessorHistoryQuery:
+		return &query[*generated.SubprocessorHistoryQuery, predicate.SubprocessorHistory, subprocessorhistory.OrderOption]{typ: generated.TypeSubprocessorHistory, tq: q}, nil
 	case *generated.SubscriberQuery:
 		return &query[*generated.SubscriberQuery, predicate.Subscriber, subscriber.OrderOption]{typ: generated.TypeSubscriber, tq: q}, nil
 	case *generated.TFASettingQuery:
@@ -3120,6 +3236,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.TrustCenterSettingQuery, predicate.TrustCenterSetting, trustcentersetting.OrderOption]{typ: generated.TypeTrustCenterSetting, tq: q}, nil
 	case *generated.TrustCenterSettingHistoryQuery:
 		return &query[*generated.TrustCenterSettingHistoryQuery, predicate.TrustCenterSettingHistory, trustcentersettinghistory.OrderOption]{typ: generated.TypeTrustCenterSettingHistory, tq: q}, nil
+	case *generated.TrustCenterSubprocessorQuery:
+		return &query[*generated.TrustCenterSubprocessorQuery, predicate.TrustCenterSubprocessor, trustcentersubprocessor.OrderOption]{typ: generated.TypeTrustCenterSubprocessor, tq: q}, nil
+	case *generated.TrustCenterSubprocessorHistoryQuery:
+		return &query[*generated.TrustCenterSubprocessorHistoryQuery, predicate.TrustCenterSubprocessorHistory, trustcentersubprocessorhistory.OrderOption]{typ: generated.TypeTrustCenterSubprocessorHistory, tq: q}, nil
 	case *generated.UserQuery:
 		return &query[*generated.UserQuery, predicate.User, user.OrderOption]{typ: generated.TypeUser, tq: q}, nil
 	case *generated.UserHistoryQuery:

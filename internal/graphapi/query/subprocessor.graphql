@@ -1,0 +1,111 @@
+
+mutation CreateBulkCSVSubprocessor($input: Upload!) {
+  createBulkCSVSubprocessor(input: $input) {
+    subprocessors {
+      createdAt
+      createdBy
+      id
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkSubprocessor($input: [CreateSubprocessorInput!]) {
+  createBulkSubprocessor(input: $input) {
+    subprocessors {
+      createdAt
+      createdBy
+      id
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateSubprocessor($input: CreateSubprocessorInput!) {
+  createSubprocessor(input: $input) {
+    subprocessor {
+      createdAt
+      createdBy
+      id
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteSubprocessor($deleteSubprocessorId: ID!) {
+  deleteSubprocessor(id: $deleteSubprocessorId) {
+    deletedID
+  }
+}
+
+query GetAllSubprocessors {
+  subprocessors {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetSubprocessorByID($subprocessorId: ID!) {
+  subprocessor(id: $subprocessorId) {
+    createdAt
+    createdBy
+    id
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetSubprocessors($first: Int, $last: Int, $where: SubprocessorWhereInput) {
+  subprocessors(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateSubprocessor($updateSubprocessorId: ID!, $input: UpdateSubprocessorInput!) {
+  updateSubprocessor(id: $updateSubprocessorId, input: $input) {
+    subprocessor {
+      createdAt
+      createdBy
+      id
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}

@@ -797,6 +797,21 @@ query AdminSearch($query: String!) {
         }
       }
     }
+    subprocessors {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+        }
+      }
+    }
     subscribers {
       totalCount
       pageInfo {
@@ -872,6 +887,21 @@ query AdminSearch($query: String!) {
           ownerID
           slug
           customDomainID
+        }
+      }
+    }
+    trustCenterSubprocessors {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
         }
       }
     }

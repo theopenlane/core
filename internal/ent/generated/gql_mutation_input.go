@@ -10181,6 +10181,56 @@ func (c *SubcontrolUpdateOne) SetInput(i UpdateSubcontrolInput) *SubcontrolUpdat
 	return c
 }
 
+// CreateSubprocessorInput represents a mutation input for creating subprocessors.
+type CreateSubprocessorInput struct {
+	Tags []string
+}
+
+// Mutate applies the CreateSubprocessorInput on the SubprocessorMutation builder.
+func (i *CreateSubprocessorInput) Mutate(m *SubprocessorMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+}
+
+// SetInput applies the change-set in the CreateSubprocessorInput on the SubprocessorCreate builder.
+func (c *SubprocessorCreate) SetInput(i CreateSubprocessorInput) *SubprocessorCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateSubprocessorInput represents a mutation input for updating subprocessors.
+type UpdateSubprocessorInput struct {
+	ClearTags  bool
+	Tags       []string
+	AppendTags []string
+}
+
+// Mutate applies the UpdateSubprocessorInput on the SubprocessorMutation builder.
+func (i *UpdateSubprocessorInput) Mutate(m *SubprocessorMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+}
+
+// SetInput applies the change-set in the UpdateSubprocessorInput on the SubprocessorUpdate builder.
+func (c *SubprocessorUpdate) SetInput(i UpdateSubprocessorInput) *SubprocessorUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateSubprocessorInput on the SubprocessorUpdateOne builder.
+func (c *SubprocessorUpdateOne) SetInput(i UpdateSubprocessorInput) *SubprocessorUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateSubscriberInput represents a mutation input for creating subscribers.
 type CreateSubscriberInput struct {
 	Tags        []string
@@ -11059,6 +11109,56 @@ func (c *TrustCenterSettingUpdate) SetInput(i UpdateTrustCenterSettingInput) *Tr
 
 // SetInput applies the change-set in the UpdateTrustCenterSettingInput on the TrustCenterSettingUpdateOne builder.
 func (c *TrustCenterSettingUpdateOne) SetInput(i UpdateTrustCenterSettingInput) *TrustCenterSettingUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateTrustCenterSubprocessorInput represents a mutation input for creating trustcentersubprocessors.
+type CreateTrustCenterSubprocessorInput struct {
+	Tags []string
+}
+
+// Mutate applies the CreateTrustCenterSubprocessorInput on the TrustCenterSubprocessorMutation builder.
+func (i *CreateTrustCenterSubprocessorInput) Mutate(m *TrustCenterSubprocessorMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+}
+
+// SetInput applies the change-set in the CreateTrustCenterSubprocessorInput on the TrustCenterSubprocessorCreate builder.
+func (c *TrustCenterSubprocessorCreate) SetInput(i CreateTrustCenterSubprocessorInput) *TrustCenterSubprocessorCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateTrustCenterSubprocessorInput represents a mutation input for updating trustcentersubprocessors.
+type UpdateTrustCenterSubprocessorInput struct {
+	ClearTags  bool
+	Tags       []string
+	AppendTags []string
+}
+
+// Mutate applies the UpdateTrustCenterSubprocessorInput on the TrustCenterSubprocessorMutation builder.
+func (i *UpdateTrustCenterSubprocessorInput) Mutate(m *TrustCenterSubprocessorMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterSubprocessorInput on the TrustCenterSubprocessorUpdate builder.
+func (c *TrustCenterSubprocessorUpdate) SetInput(i UpdateTrustCenterSubprocessorInput) *TrustCenterSubprocessorUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterSubprocessorInput on the TrustCenterSubprocessorUpdateOne builder.
+func (c *TrustCenterSubprocessorUpdateOne) SetInput(i UpdateTrustCenterSubprocessorInput) *TrustCenterSubprocessorUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

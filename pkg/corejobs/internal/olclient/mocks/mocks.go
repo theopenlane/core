@@ -3390,6 +3390,89 @@ func (_c *MockOpenlaneGraphClient_CreateBulkCSVSubcontrol_Call) RunAndReturn(run
 	return _c
 }
 
+// CreateBulkCSVSubprocessor provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CreateBulkCSVSubprocessor(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkCSVSubprocessor, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateBulkCSVSubprocessor")
+	}
+
+	var r0 *openlaneclient.CreateBulkCSVSubprocessor
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, graphql.Upload, ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkCSVSubprocessor, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, graphql.Upload, ...clientv2.RequestInterceptor) *openlaneclient.CreateBulkCSVSubprocessor); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CreateBulkCSVSubprocessor)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, graphql.Upload, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CreateBulkCSVSubprocessor_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateBulkCSVSubprocessor'
+type MockOpenlaneGraphClient_CreateBulkCSVSubprocessor_Call struct {
+	*mock.Call
+}
+
+// CreateBulkCSVSubprocessor is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVSubprocessor(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVSubprocessor_Call {
+	return &MockOpenlaneGraphClient_CreateBulkCSVSubprocessor_Call{Call: _e.mock.On("CreateBulkCSVSubprocessor",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkCSVSubprocessor_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVSubprocessor_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkCSVSubprocessor_Call) Return(createBulkCSVSubprocessor *openlaneclient.CreateBulkCSVSubprocessor, err error) *MockOpenlaneGraphClient_CreateBulkCSVSubprocessor_Call {
+	_c.Call.Return(createBulkCSVSubprocessor, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkCSVSubprocessor_Call) RunAndReturn(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkCSVSubprocessor, error)) *MockOpenlaneGraphClient_CreateBulkCSVSubprocessor_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // CreateBulkCSVSubscriber provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) CreateBulkCSVSubscriber(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkCSVSubscriber, error) {
 	var tmpRet mock.Arguments
@@ -3635,6 +3718,89 @@ func (_c *MockOpenlaneGraphClient_CreateBulkCSVTemplate_Call) Return(createBulkC
 }
 
 func (_c *MockOpenlaneGraphClient_CreateBulkCSVTemplate_Call) RunAndReturn(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkCSVTemplate, error)) *MockOpenlaneGraphClient_CreateBulkCSVTemplate_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// CreateBulkCSVTrustCenterSubprocessor provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CreateBulkCSVTrustCenterSubprocessor(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkCSVTrustCenterSubprocessor, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateBulkCSVTrustCenterSubprocessor")
+	}
+
+	var r0 *openlaneclient.CreateBulkCSVTrustCenterSubprocessor
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, graphql.Upload, ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkCSVTrustCenterSubprocessor, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, graphql.Upload, ...clientv2.RequestInterceptor) *openlaneclient.CreateBulkCSVTrustCenterSubprocessor); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CreateBulkCSVTrustCenterSubprocessor)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, graphql.Upload, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CreateBulkCSVTrustCenterSubprocessor_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateBulkCSVTrustCenterSubprocessor'
+type MockOpenlaneGraphClient_CreateBulkCSVTrustCenterSubprocessor_Call struct {
+	*mock.Call
+}
+
+// CreateBulkCSVTrustCenterSubprocessor is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkCSVTrustCenterSubprocessor(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkCSVTrustCenterSubprocessor_Call {
+	return &MockOpenlaneGraphClient_CreateBulkCSVTrustCenterSubprocessor_Call{Call: _e.mock.On("CreateBulkCSVTrustCenterSubprocessor",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkCSVTrustCenterSubprocessor_Call) Run(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkCSVTrustCenterSubprocessor_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 graphql.Upload
+		if args[1] != nil {
+			arg1 = args[1].(graphql.Upload)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkCSVTrustCenterSubprocessor_Call) Return(createBulkCSVTrustCenterSubprocessor *openlaneclient.CreateBulkCSVTrustCenterSubprocessor, err error) *MockOpenlaneGraphClient_CreateBulkCSVTrustCenterSubprocessor_Call {
+	_c.Call.Return(createBulkCSVTrustCenterSubprocessor, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkCSVTrustCenterSubprocessor_Call) RunAndReturn(run func(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkCSVTrustCenterSubprocessor, error)) *MockOpenlaneGraphClient_CreateBulkCSVTrustCenterSubprocessor_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -5963,6 +6129,89 @@ func (_c *MockOpenlaneGraphClient_CreateBulkSubcontrol_Call) RunAndReturn(run fu
 	return _c
 }
 
+// CreateBulkSubprocessor provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CreateBulkSubprocessor(ctx context.Context, input []*openlaneclient.CreateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkSubprocessor, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateBulkSubprocessor")
+	}
+
+	var r0 *openlaneclient.CreateBulkSubprocessor
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, []*openlaneclient.CreateSubprocessorInput, ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkSubprocessor, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, []*openlaneclient.CreateSubprocessorInput, ...clientv2.RequestInterceptor) *openlaneclient.CreateBulkSubprocessor); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CreateBulkSubprocessor)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, []*openlaneclient.CreateSubprocessorInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CreateBulkSubprocessor_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateBulkSubprocessor'
+type MockOpenlaneGraphClient_CreateBulkSubprocessor_Call struct {
+	*mock.Call
+}
+
+// CreateBulkSubprocessor is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateSubprocessorInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkSubprocessor(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkSubprocessor_Call {
+	return &MockOpenlaneGraphClient_CreateBulkSubprocessor_Call{Call: _e.mock.On("CreateBulkSubprocessor",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkSubprocessor_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateSubprocessorInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkSubprocessor_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateSubprocessorInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateSubprocessorInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkSubprocessor_Call) Return(createBulkSubprocessor *openlaneclient.CreateBulkSubprocessor, err error) *MockOpenlaneGraphClient_CreateBulkSubprocessor_Call {
+	_c.Call.Return(createBulkSubprocessor, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkSubprocessor_Call) RunAndReturn(run func(ctx context.Context, input []*openlaneclient.CreateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkSubprocessor, error)) *MockOpenlaneGraphClient_CreateBulkSubprocessor_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // CreateBulkSubscriber provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) CreateBulkSubscriber(ctx context.Context, input []*openlaneclient.CreateSubscriberInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkSubscriber, error) {
 	var tmpRet mock.Arguments
@@ -6208,6 +6457,89 @@ func (_c *MockOpenlaneGraphClient_CreateBulkTemplate_Call) Return(createBulkTemp
 }
 
 func (_c *MockOpenlaneGraphClient_CreateBulkTemplate_Call) RunAndReturn(run func(ctx context.Context, input []*openlaneclient.CreateTemplateInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkTemplate, error)) *MockOpenlaneGraphClient_CreateBulkTemplate_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// CreateBulkTrustCenterSubprocessor provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CreateBulkTrustCenterSubprocessor(ctx context.Context, input []*openlaneclient.CreateTrustCenterSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkTrustCenterSubprocessor, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateBulkTrustCenterSubprocessor")
+	}
+
+	var r0 *openlaneclient.CreateBulkTrustCenterSubprocessor
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, []*openlaneclient.CreateTrustCenterSubprocessorInput, ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkTrustCenterSubprocessor, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, []*openlaneclient.CreateTrustCenterSubprocessorInput, ...clientv2.RequestInterceptor) *openlaneclient.CreateBulkTrustCenterSubprocessor); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CreateBulkTrustCenterSubprocessor)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, []*openlaneclient.CreateTrustCenterSubprocessorInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CreateBulkTrustCenterSubprocessor_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateBulkTrustCenterSubprocessor'
+type MockOpenlaneGraphClient_CreateBulkTrustCenterSubprocessor_Call struct {
+	*mock.Call
+}
+
+// CreateBulkTrustCenterSubprocessor is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input []*openlaneclient.CreateTrustCenterSubprocessorInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CreateBulkTrustCenterSubprocessor(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateBulkTrustCenterSubprocessor_Call {
+	return &MockOpenlaneGraphClient_CreateBulkTrustCenterSubprocessor_Call{Call: _e.mock.On("CreateBulkTrustCenterSubprocessor",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkTrustCenterSubprocessor_Call) Run(run func(ctx context.Context, input []*openlaneclient.CreateTrustCenterSubprocessorInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateBulkTrustCenterSubprocessor_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.CreateTrustCenterSubprocessorInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.CreateTrustCenterSubprocessorInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkTrustCenterSubprocessor_Call) Return(createBulkTrustCenterSubprocessor *openlaneclient.CreateBulkTrustCenterSubprocessor, err error) *MockOpenlaneGraphClient_CreateBulkTrustCenterSubprocessor_Call {
+	_c.Call.Return(createBulkTrustCenterSubprocessor, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateBulkTrustCenterSubprocessor_Call) RunAndReturn(run func(ctx context.Context, input []*openlaneclient.CreateTrustCenterSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateBulkTrustCenterSubprocessor, error)) *MockOpenlaneGraphClient_CreateBulkTrustCenterSubprocessor_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -9734,6 +10066,89 @@ func (_c *MockOpenlaneGraphClient_CreateSubcontrol_Call) RunAndReturn(run func(c
 	return _c
 }
 
+// CreateSubprocessor provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CreateSubprocessor(ctx context.Context, input openlaneclient.CreateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateSubprocessor, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateSubprocessor")
+	}
+
+	var r0 *openlaneclient.CreateSubprocessor
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateSubprocessorInput, ...clientv2.RequestInterceptor) (*openlaneclient.CreateSubprocessor, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateSubprocessorInput, ...clientv2.RequestInterceptor) *openlaneclient.CreateSubprocessor); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CreateSubprocessor)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, openlaneclient.CreateSubprocessorInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CreateSubprocessor_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateSubprocessor'
+type MockOpenlaneGraphClient_CreateSubprocessor_Call struct {
+	*mock.Call
+}
+
+// CreateSubprocessor is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input openlaneclient.CreateSubprocessorInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CreateSubprocessor(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateSubprocessor_Call {
+	return &MockOpenlaneGraphClient_CreateSubprocessor_Call{Call: _e.mock.On("CreateSubprocessor",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CreateSubprocessor_Call) Run(run func(ctx context.Context, input openlaneclient.CreateSubprocessorInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateSubprocessor_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateSubprocessorInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateSubprocessorInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateSubprocessor_Call) Return(createSubprocessor *openlaneclient.CreateSubprocessor, err error) *MockOpenlaneGraphClient_CreateSubprocessor_Call {
+	_c.Call.Return(createSubprocessor, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateSubprocessor_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.CreateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateSubprocessor, error)) *MockOpenlaneGraphClient_CreateSubprocessor_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // CreateSubscriber provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) CreateSubscriber(ctx context.Context, input openlaneclient.CreateSubscriberInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateSubscriber, error) {
 	var tmpRet mock.Arguments
@@ -10228,6 +10643,89 @@ func (_c *MockOpenlaneGraphClient_CreateTrustCenterSetting_Call) Return(createTr
 }
 
 func (_c *MockOpenlaneGraphClient_CreateTrustCenterSetting_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.CreateTrustCenterSettingInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustCenterSetting, error)) *MockOpenlaneGraphClient_CreateTrustCenterSetting_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// CreateTrustCenterSubprocessor provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) CreateTrustCenterSubprocessor(ctx context.Context, input openlaneclient.CreateTrustCenterSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustCenterSubprocessor, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for CreateTrustCenterSubprocessor")
+	}
+
+	var r0 *openlaneclient.CreateTrustCenterSubprocessor
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateTrustCenterSubprocessorInput, ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustCenterSubprocessor, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateTrustCenterSubprocessorInput, ...clientv2.RequestInterceptor) *openlaneclient.CreateTrustCenterSubprocessor); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.CreateTrustCenterSubprocessor)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, openlaneclient.CreateTrustCenterSubprocessorInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_CreateTrustCenterSubprocessor_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateTrustCenterSubprocessor'
+type MockOpenlaneGraphClient_CreateTrustCenterSubprocessor_Call struct {
+	*mock.Call
+}
+
+// CreateTrustCenterSubprocessor is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input openlaneclient.CreateTrustCenterSubprocessorInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) CreateTrustCenterSubprocessor(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateTrustCenterSubprocessor_Call {
+	return &MockOpenlaneGraphClient_CreateTrustCenterSubprocessor_Call{Call: _e.mock.On("CreateTrustCenterSubprocessor",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_CreateTrustCenterSubprocessor_Call) Run(run func(ctx context.Context, input openlaneclient.CreateTrustCenterSubprocessorInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateTrustCenterSubprocessor_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 openlaneclient.CreateTrustCenterSubprocessorInput
+		if args[1] != nil {
+			arg1 = args[1].(openlaneclient.CreateTrustCenterSubprocessorInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateTrustCenterSubprocessor_Call) Return(createTrustCenterSubprocessor *openlaneclient.CreateTrustCenterSubprocessor, err error) *MockOpenlaneGraphClient_CreateTrustCenterSubprocessor_Call {
+	_c.Call.Return(createTrustCenterSubprocessor, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_CreateTrustCenterSubprocessor_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.CreateTrustCenterSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustCenterSubprocessor, error)) *MockOpenlaneGraphClient_CreateTrustCenterSubprocessor_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -13309,6 +13807,89 @@ func (_c *MockOpenlaneGraphClient_DeleteSubcontrol_Call) RunAndReturn(run func(c
 	return _c
 }
 
+// DeleteSubprocessor provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) DeleteSubprocessor(ctx context.Context, deleteSubprocessorID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteSubprocessor, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, deleteSubprocessorID, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, deleteSubprocessorID)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteSubprocessor")
+	}
+
+	var r0 *openlaneclient.DeleteSubprocessor
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) (*openlaneclient.DeleteSubprocessor, error)); ok {
+		return returnFunc(ctx, deleteSubprocessorID, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) *openlaneclient.DeleteSubprocessor); ok {
+		r0 = returnFunc(ctx, deleteSubprocessorID, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.DeleteSubprocessor)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, deleteSubprocessorID, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_DeleteSubprocessor_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteSubprocessor'
+type MockOpenlaneGraphClient_DeleteSubprocessor_Call struct {
+	*mock.Call
+}
+
+// DeleteSubprocessor is a helper method to define mock.On call
+//   - ctx context.Context
+//   - deleteSubprocessorID string
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) DeleteSubprocessor(ctx interface{}, deleteSubprocessorID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteSubprocessor_Call {
+	return &MockOpenlaneGraphClient_DeleteSubprocessor_Call{Call: _e.mock.On("DeleteSubprocessor",
+		append([]interface{}{ctx, deleteSubprocessorID}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteSubprocessor_Call) Run(run func(ctx context.Context, deleteSubprocessorID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteSubprocessor_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteSubprocessor_Call) Return(deleteSubprocessor *openlaneclient.DeleteSubprocessor, err error) *MockOpenlaneGraphClient_DeleteSubprocessor_Call {
+	_c.Call.Return(deleteSubprocessor, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteSubprocessor_Call) RunAndReturn(run func(ctx context.Context, deleteSubprocessorID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteSubprocessor, error)) *MockOpenlaneGraphClient_DeleteSubprocessor_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // DeleteSubscriber provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) DeleteSubscriber(ctx context.Context, deleteSubscriberEmail string, subscriberOrganization *string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteSubscriber, error) {
 	var tmpRet mock.Arguments
@@ -13643,6 +14224,89 @@ func (_c *MockOpenlaneGraphClient_DeleteTrustCenterSetting_Call) Return(deleteTr
 }
 
 func (_c *MockOpenlaneGraphClient_DeleteTrustCenterSetting_Call) RunAndReturn(run func(ctx context.Context, deleteTrustCenterSettingID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteTrustCenterSetting, error)) *MockOpenlaneGraphClient_DeleteTrustCenterSetting_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// DeleteTrustCenterSubprocessor provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) DeleteTrustCenterSubprocessor(ctx context.Context, deleteTrustCenterSubprocessorID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteTrustCenterSubprocessor, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, deleteTrustCenterSubprocessorID, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, deleteTrustCenterSubprocessorID)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteTrustCenterSubprocessor")
+	}
+
+	var r0 *openlaneclient.DeleteTrustCenterSubprocessor
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) (*openlaneclient.DeleteTrustCenterSubprocessor, error)); ok {
+		return returnFunc(ctx, deleteTrustCenterSubprocessorID, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) *openlaneclient.DeleteTrustCenterSubprocessor); ok {
+		r0 = returnFunc(ctx, deleteTrustCenterSubprocessorID, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.DeleteTrustCenterSubprocessor)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, deleteTrustCenterSubprocessorID, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_DeleteTrustCenterSubprocessor_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteTrustCenterSubprocessor'
+type MockOpenlaneGraphClient_DeleteTrustCenterSubprocessor_Call struct {
+	*mock.Call
+}
+
+// DeleteTrustCenterSubprocessor is a helper method to define mock.On call
+//   - ctx context.Context
+//   - deleteTrustCenterSubprocessorID string
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) DeleteTrustCenterSubprocessor(ctx interface{}, deleteTrustCenterSubprocessorID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteTrustCenterSubprocessor_Call {
+	return &MockOpenlaneGraphClient_DeleteTrustCenterSubprocessor_Call{Call: _e.mock.On("DeleteTrustCenterSubprocessor",
+		append([]interface{}{ctx, deleteTrustCenterSubprocessorID}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteTrustCenterSubprocessor_Call) Run(run func(ctx context.Context, deleteTrustCenterSubprocessorID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteTrustCenterSubprocessor_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteTrustCenterSubprocessor_Call) Return(deleteTrustCenterSubprocessor *openlaneclient.DeleteTrustCenterSubprocessor, err error) *MockOpenlaneGraphClient_DeleteTrustCenterSubprocessor_Call {
+	_c.Call.Return(deleteTrustCenterSubprocessor, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteTrustCenterSubprocessor_Call) RunAndReturn(run func(ctx context.Context, deleteTrustCenterSubprocessorID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteTrustCenterSubprocessor, error)) *MockOpenlaneGraphClient_DeleteTrustCenterSubprocessor_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -20157,6 +20821,160 @@ func (_c *MockOpenlaneGraphClient_GetAllSubcontrols_Call) RunAndReturn(run func(
 	return _c
 }
 
+// GetAllSubprocessorHistories provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetAllSubprocessorHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllSubprocessorHistories, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetAllSubprocessorHistories")
+	}
+
+	var r0 *openlaneclient.GetAllSubprocessorHistories
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) (*openlaneclient.GetAllSubprocessorHistories, error)); ok {
+		return returnFunc(ctx, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) *openlaneclient.GetAllSubprocessorHistories); ok {
+		r0 = returnFunc(ctx, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetAllSubprocessorHistories)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetAllSubprocessorHistories_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAllSubprocessorHistories'
+type MockOpenlaneGraphClient_GetAllSubprocessorHistories_Call struct {
+	*mock.Call
+}
+
+// GetAllSubprocessorHistories is a helper method to define mock.On call
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetAllSubprocessorHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllSubprocessorHistories_Call {
+	return &MockOpenlaneGraphClient_GetAllSubprocessorHistories_Call{Call: _e.mock.On("GetAllSubprocessorHistories",
+		append([]interface{}{ctx}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllSubprocessorHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllSubprocessorHistories_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllSubprocessorHistories_Call) Return(getAllSubprocessorHistories *openlaneclient.GetAllSubprocessorHistories, err error) *MockOpenlaneGraphClient_GetAllSubprocessorHistories_Call {
+	_c.Call.Return(getAllSubprocessorHistories, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllSubprocessorHistories_Call) RunAndReturn(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllSubprocessorHistories, error)) *MockOpenlaneGraphClient_GetAllSubprocessorHistories_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetAllSubprocessors provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetAllSubprocessors(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllSubprocessors, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetAllSubprocessors")
+	}
+
+	var r0 *openlaneclient.GetAllSubprocessors
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) (*openlaneclient.GetAllSubprocessors, error)); ok {
+		return returnFunc(ctx, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) *openlaneclient.GetAllSubprocessors); ok {
+		r0 = returnFunc(ctx, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetAllSubprocessors)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetAllSubprocessors_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAllSubprocessors'
+type MockOpenlaneGraphClient_GetAllSubprocessors_Call struct {
+	*mock.Call
+}
+
+// GetAllSubprocessors is a helper method to define mock.On call
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetAllSubprocessors(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllSubprocessors_Call {
+	return &MockOpenlaneGraphClient_GetAllSubprocessors_Call{Call: _e.mock.On("GetAllSubprocessors",
+		append([]interface{}{ctx}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllSubprocessors_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllSubprocessors_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllSubprocessors_Call) Return(getAllSubprocessors *openlaneclient.GetAllSubprocessors, err error) *MockOpenlaneGraphClient_GetAllSubprocessors_Call {
+	_c.Call.Return(getAllSubprocessors, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllSubprocessors_Call) RunAndReturn(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllSubprocessors, error)) *MockOpenlaneGraphClient_GetAllSubprocessors_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetAllSubscribers provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) GetAllSubscribers(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllSubscribers, error) {
 	var tmpRet mock.Arguments
@@ -20846,6 +21664,160 @@ func (_c *MockOpenlaneGraphClient_GetAllTrustCenterSettings_Call) Return(getAllT
 }
 
 func (_c *MockOpenlaneGraphClient_GetAllTrustCenterSettings_Call) RunAndReturn(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenterSettings, error)) *MockOpenlaneGraphClient_GetAllTrustCenterSettings_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetAllTrustCenterSubprocessorHistories provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetAllTrustCenterSubprocessorHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenterSubprocessorHistories, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetAllTrustCenterSubprocessorHistories")
+	}
+
+	var r0 *openlaneclient.GetAllTrustCenterSubprocessorHistories
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenterSubprocessorHistories, error)); ok {
+		return returnFunc(ctx, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) *openlaneclient.GetAllTrustCenterSubprocessorHistories); ok {
+		r0 = returnFunc(ctx, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetAllTrustCenterSubprocessorHistories)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetAllTrustCenterSubprocessorHistories_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAllTrustCenterSubprocessorHistories'
+type MockOpenlaneGraphClient_GetAllTrustCenterSubprocessorHistories_Call struct {
+	*mock.Call
+}
+
+// GetAllTrustCenterSubprocessorHistories is a helper method to define mock.On call
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetAllTrustCenterSubprocessorHistories(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllTrustCenterSubprocessorHistories_Call {
+	return &MockOpenlaneGraphClient_GetAllTrustCenterSubprocessorHistories_Call{Call: _e.mock.On("GetAllTrustCenterSubprocessorHistories",
+		append([]interface{}{ctx}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTrustCenterSubprocessorHistories_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllTrustCenterSubprocessorHistories_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTrustCenterSubprocessorHistories_Call) Return(getAllTrustCenterSubprocessorHistories *openlaneclient.GetAllTrustCenterSubprocessorHistories, err error) *MockOpenlaneGraphClient_GetAllTrustCenterSubprocessorHistories_Call {
+	_c.Call.Return(getAllTrustCenterSubprocessorHistories, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTrustCenterSubprocessorHistories_Call) RunAndReturn(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenterSubprocessorHistories, error)) *MockOpenlaneGraphClient_GetAllTrustCenterSubprocessorHistories_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetAllTrustCenterSubprocessors provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetAllTrustCenterSubprocessors(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenterSubprocessors, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetAllTrustCenterSubprocessors")
+	}
+
+	var r0 *openlaneclient.GetAllTrustCenterSubprocessors
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenterSubprocessors, error)); ok {
+		return returnFunc(ctx, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) *openlaneclient.GetAllTrustCenterSubprocessors); ok {
+		r0 = returnFunc(ctx, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetAllTrustCenterSubprocessors)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetAllTrustCenterSubprocessors_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAllTrustCenterSubprocessors'
+type MockOpenlaneGraphClient_GetAllTrustCenterSubprocessors_Call struct {
+	*mock.Call
+}
+
+// GetAllTrustCenterSubprocessors is a helper method to define mock.On call
+//   - ctx context.Context
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetAllTrustCenterSubprocessors(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllTrustCenterSubprocessors_Call {
+	return &MockOpenlaneGraphClient_GetAllTrustCenterSubprocessors_Call{Call: _e.mock.On("GetAllTrustCenterSubprocessors",
+		append([]interface{}{ctx}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTrustCenterSubprocessors_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllTrustCenterSubprocessors_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 1 {
+			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		}
+		arg1 = variadicArgs
+		run(
+			arg0,
+			arg1...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTrustCenterSubprocessors_Call) Return(getAllTrustCenterSubprocessors *openlaneclient.GetAllTrustCenterSubprocessors, err error) *MockOpenlaneGraphClient_GetAllTrustCenterSubprocessors_Call {
+	_c.Call.Return(getAllTrustCenterSubprocessors, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetAllTrustCenterSubprocessors_Call) RunAndReturn(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTrustCenterSubprocessors, error)) *MockOpenlaneGraphClient_GetAllTrustCenterSubprocessors_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -31625,6 +32597,279 @@ func (_c *MockOpenlaneGraphClient_GetSubcontrols_Call) RunAndReturn(run func(ctx
 	return _c
 }
 
+// GetSubprocessorByID provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetSubprocessorByID(ctx context.Context, subprocessorID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetSubprocessorByID, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, subprocessorID, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, subprocessorID)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetSubprocessorByID")
+	}
+
+	var r0 *openlaneclient.GetSubprocessorByID
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) (*openlaneclient.GetSubprocessorByID, error)); ok {
+		return returnFunc(ctx, subprocessorID, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) *openlaneclient.GetSubprocessorByID); ok {
+		r0 = returnFunc(ctx, subprocessorID, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetSubprocessorByID)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, subprocessorID, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetSubprocessorByID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetSubprocessorByID'
+type MockOpenlaneGraphClient_GetSubprocessorByID_Call struct {
+	*mock.Call
+}
+
+// GetSubprocessorByID is a helper method to define mock.On call
+//   - ctx context.Context
+//   - subprocessorID string
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetSubprocessorByID(ctx interface{}, subprocessorID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetSubprocessorByID_Call {
+	return &MockOpenlaneGraphClient_GetSubprocessorByID_Call{Call: _e.mock.On("GetSubprocessorByID",
+		append([]interface{}{ctx, subprocessorID}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetSubprocessorByID_Call) Run(run func(ctx context.Context, subprocessorID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetSubprocessorByID_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetSubprocessorByID_Call) Return(getSubprocessorByID *openlaneclient.GetSubprocessorByID, err error) *MockOpenlaneGraphClient_GetSubprocessorByID_Call {
+	_c.Call.Return(getSubprocessorByID, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetSubprocessorByID_Call) RunAndReturn(run func(ctx context.Context, subprocessorID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetSubprocessorByID, error)) *MockOpenlaneGraphClient_GetSubprocessorByID_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetSubprocessorHistories provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetSubprocessorHistories(ctx context.Context, first *int64, last *int64, where *openlaneclient.SubprocessorHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetSubprocessorHistories, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, first, last, where, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, first, last, where)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetSubprocessorHistories")
+	}
+
+	var r0 *openlaneclient.GetSubprocessorHistories
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.SubprocessorHistoryWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetSubprocessorHistories, error)); ok {
+		return returnFunc(ctx, first, last, where, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.SubprocessorHistoryWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetSubprocessorHistories); ok {
+		r0 = returnFunc(ctx, first, last, where, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetSubprocessorHistories)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *openlaneclient.SubprocessorHistoryWhereInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, where, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetSubprocessorHistories_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetSubprocessorHistories'
+type MockOpenlaneGraphClient_GetSubprocessorHistories_Call struct {
+	*mock.Call
+}
+
+// GetSubprocessorHistories is a helper method to define mock.On call
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.SubprocessorHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetSubprocessorHistories(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetSubprocessorHistories_Call {
+	return &MockOpenlaneGraphClient_GetSubprocessorHistories_Call{Call: _e.mock.On("GetSubprocessorHistories",
+		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetSubprocessorHistories_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.SubprocessorHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetSubprocessorHistories_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.SubprocessorHistoryWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.SubprocessorHistoryWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetSubprocessorHistories_Call) Return(getSubprocessorHistories *openlaneclient.GetSubprocessorHistories, err error) *MockOpenlaneGraphClient_GetSubprocessorHistories_Call {
+	_c.Call.Return(getSubprocessorHistories, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetSubprocessorHistories_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.SubprocessorHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetSubprocessorHistories, error)) *MockOpenlaneGraphClient_GetSubprocessorHistories_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetSubprocessors provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetSubprocessors(ctx context.Context, first *int64, last *int64, where *openlaneclient.SubprocessorWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetSubprocessors, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, first, last, where, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, first, last, where)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetSubprocessors")
+	}
+
+	var r0 *openlaneclient.GetSubprocessors
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.SubprocessorWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetSubprocessors, error)); ok {
+		return returnFunc(ctx, first, last, where, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.SubprocessorWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetSubprocessors); ok {
+		r0 = returnFunc(ctx, first, last, where, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetSubprocessors)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *openlaneclient.SubprocessorWhereInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, where, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetSubprocessors_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetSubprocessors'
+type MockOpenlaneGraphClient_GetSubprocessors_Call struct {
+	*mock.Call
+}
+
+// GetSubprocessors is a helper method to define mock.On call
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.SubprocessorWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetSubprocessors(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetSubprocessors_Call {
+	return &MockOpenlaneGraphClient_GetSubprocessors_Call{Call: _e.mock.On("GetSubprocessors",
+		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetSubprocessors_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.SubprocessorWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetSubprocessors_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.SubprocessorWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.SubprocessorWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetSubprocessors_Call) Return(getSubprocessors *openlaneclient.GetSubprocessors, err error) *MockOpenlaneGraphClient_GetSubprocessors_Call {
+	_c.Call.Return(getSubprocessors, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetSubprocessors_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.SubprocessorWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetSubprocessors, error)) *MockOpenlaneGraphClient_GetSubprocessors_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetSubscriberByEmail provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) GetSubscriberByEmail(ctx context.Context, email string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetSubscriberByEmail, error) {
 	var tmpRet mock.Arguments
@@ -32760,6 +34005,279 @@ func (_c *MockOpenlaneGraphClient_GetTrustCenterSettings_Call) Return(getTrustCe
 }
 
 func (_c *MockOpenlaneGraphClient_GetTrustCenterSettings_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterSettingWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterSettings, error)) *MockOpenlaneGraphClient_GetTrustCenterSettings_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetTrustCenterSubprocessorByID provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetTrustCenterSubprocessorByID(ctx context.Context, trustCenterSubprocessorID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterSubprocessorByID, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, trustCenterSubprocessorID, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, trustCenterSubprocessorID)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetTrustCenterSubprocessorByID")
+	}
+
+	var r0 *openlaneclient.GetTrustCenterSubprocessorByID
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterSubprocessorByID, error)); ok {
+		return returnFunc(ctx, trustCenterSubprocessorID, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) *openlaneclient.GetTrustCenterSubprocessorByID); ok {
+		r0 = returnFunc(ctx, trustCenterSubprocessorID, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetTrustCenterSubprocessorByID)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, trustCenterSubprocessorID, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetTrustCenterSubprocessorByID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetTrustCenterSubprocessorByID'
+type MockOpenlaneGraphClient_GetTrustCenterSubprocessorByID_Call struct {
+	*mock.Call
+}
+
+// GetTrustCenterSubprocessorByID is a helper method to define mock.On call
+//   - ctx context.Context
+//   - trustCenterSubprocessorID string
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetTrustCenterSubprocessorByID(ctx interface{}, trustCenterSubprocessorID interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTrustCenterSubprocessorByID_Call {
+	return &MockOpenlaneGraphClient_GetTrustCenterSubprocessorByID_Call{Call: _e.mock.On("GetTrustCenterSubprocessorByID",
+		append([]interface{}{ctx, trustCenterSubprocessorID}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterSubprocessorByID_Call) Run(run func(ctx context.Context, trustCenterSubprocessorID string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTrustCenterSubprocessorByID_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterSubprocessorByID_Call) Return(getTrustCenterSubprocessorByID *openlaneclient.GetTrustCenterSubprocessorByID, err error) *MockOpenlaneGraphClient_GetTrustCenterSubprocessorByID_Call {
+	_c.Call.Return(getTrustCenterSubprocessorByID, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterSubprocessorByID_Call) RunAndReturn(run func(ctx context.Context, trustCenterSubprocessorID string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterSubprocessorByID, error)) *MockOpenlaneGraphClient_GetTrustCenterSubprocessorByID_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetTrustCenterSubprocessorHistories provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetTrustCenterSubprocessorHistories(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterSubprocessorHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterSubprocessorHistories, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, first, last, where, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, first, last, where)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetTrustCenterSubprocessorHistories")
+	}
+
+	var r0 *openlaneclient.GetTrustCenterSubprocessorHistories
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterSubprocessorHistoryWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterSubprocessorHistories, error)); ok {
+		return returnFunc(ctx, first, last, where, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterSubprocessorHistoryWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetTrustCenterSubprocessorHistories); ok {
+		r0 = returnFunc(ctx, first, last, where, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetTrustCenterSubprocessorHistories)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterSubprocessorHistoryWhereInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, where, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetTrustCenterSubprocessorHistories_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetTrustCenterSubprocessorHistories'
+type MockOpenlaneGraphClient_GetTrustCenterSubprocessorHistories_Call struct {
+	*mock.Call
+}
+
+// GetTrustCenterSubprocessorHistories is a helper method to define mock.On call
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.TrustCenterSubprocessorHistoryWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetTrustCenterSubprocessorHistories(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTrustCenterSubprocessorHistories_Call {
+	return &MockOpenlaneGraphClient_GetTrustCenterSubprocessorHistories_Call{Call: _e.mock.On("GetTrustCenterSubprocessorHistories",
+		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterSubprocessorHistories_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterSubprocessorHistoryWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTrustCenterSubprocessorHistories_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.TrustCenterSubprocessorHistoryWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.TrustCenterSubprocessorHistoryWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterSubprocessorHistories_Call) Return(getTrustCenterSubprocessorHistories *openlaneclient.GetTrustCenterSubprocessorHistories, err error) *MockOpenlaneGraphClient_GetTrustCenterSubprocessorHistories_Call {
+	_c.Call.Return(getTrustCenterSubprocessorHistories, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterSubprocessorHistories_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterSubprocessorHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterSubprocessorHistories, error)) *MockOpenlaneGraphClient_GetTrustCenterSubprocessorHistories_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetTrustCenterSubprocessors provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetTrustCenterSubprocessors(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterSubprocessorWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterSubprocessors, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, first, last, where, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, first, last, where)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetTrustCenterSubprocessors")
+	}
+
+	var r0 *openlaneclient.GetTrustCenterSubprocessors
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterSubprocessorWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterSubprocessors, error)); ok {
+		return returnFunc(ctx, first, last, where, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterSubprocessorWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetTrustCenterSubprocessors); ok {
+		r0 = returnFunc(ctx, first, last, where, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetTrustCenterSubprocessors)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterSubprocessorWhereInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, where, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetTrustCenterSubprocessors_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetTrustCenterSubprocessors'
+type MockOpenlaneGraphClient_GetTrustCenterSubprocessors_Call struct {
+	*mock.Call
+}
+
+// GetTrustCenterSubprocessors is a helper method to define mock.On call
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - where *openlaneclient.TrustCenterSubprocessorWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetTrustCenterSubprocessors(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTrustCenterSubprocessors_Call {
+	return &MockOpenlaneGraphClient_GetTrustCenterSubprocessors_Call{Call: _e.mock.On("GetTrustCenterSubprocessors",
+		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterSubprocessors_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterSubprocessorWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTrustCenterSubprocessors_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *openlaneclient.TrustCenterSubprocessorWhereInput
+		if args[3] != nil {
+			arg3 = args[3].(*openlaneclient.TrustCenterSubprocessorWhereInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterSubprocessors_Call) Return(getTrustCenterSubprocessors *openlaneclient.GetTrustCenterSubprocessors, err error) *MockOpenlaneGraphClient_GetTrustCenterSubprocessors_Call {
+	_c.Call.Return(getTrustCenterSubprocessors, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCenterSubprocessors_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterSubprocessorWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenterSubprocessors, error)) *MockOpenlaneGraphClient_GetTrustCenterSubprocessors_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -36899,6 +38417,95 @@ func (_c *MockOpenlaneGraphClient_UpdateSubcontrol_Call) RunAndReturn(run func(c
 	return _c
 }
 
+// UpdateSubprocessor provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) UpdateSubprocessor(ctx context.Context, updateSubprocessorID string, input openlaneclient.UpdateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateSubprocessor, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, updateSubprocessorID, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, updateSubprocessorID, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateSubprocessor")
+	}
+
+	var r0 *openlaneclient.UpdateSubprocessor
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateSubprocessorInput, ...clientv2.RequestInterceptor) (*openlaneclient.UpdateSubprocessor, error)); ok {
+		return returnFunc(ctx, updateSubprocessorID, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateSubprocessorInput, ...clientv2.RequestInterceptor) *openlaneclient.UpdateSubprocessor); ok {
+		r0 = returnFunc(ctx, updateSubprocessorID, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.UpdateSubprocessor)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, openlaneclient.UpdateSubprocessorInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, updateSubprocessorID, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_UpdateSubprocessor_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateSubprocessor'
+type MockOpenlaneGraphClient_UpdateSubprocessor_Call struct {
+	*mock.Call
+}
+
+// UpdateSubprocessor is a helper method to define mock.On call
+//   - ctx context.Context
+//   - updateSubprocessorID string
+//   - input openlaneclient.UpdateSubprocessorInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) UpdateSubprocessor(ctx interface{}, updateSubprocessorID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateSubprocessor_Call {
+	return &MockOpenlaneGraphClient_UpdateSubprocessor_Call{Call: _e.mock.On("UpdateSubprocessor",
+		append([]interface{}{ctx, updateSubprocessorID, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateSubprocessor_Call) Run(run func(ctx context.Context, updateSubprocessorID string, input openlaneclient.UpdateSubprocessorInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateSubprocessor_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateSubprocessorInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateSubprocessorInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateSubprocessor_Call) Return(updateSubprocessor *openlaneclient.UpdateSubprocessor, err error) *MockOpenlaneGraphClient_UpdateSubprocessor_Call {
+	_c.Call.Return(updateSubprocessor, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateSubprocessor_Call) RunAndReturn(run func(ctx context.Context, updateSubprocessorID string, input openlaneclient.UpdateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateSubprocessor, error)) *MockOpenlaneGraphClient_UpdateSubprocessor_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // UpdateSubscriber provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) UpdateSubscriber(ctx context.Context, email string, input openlaneclient.UpdateSubscriberInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateSubscriber, error) {
 	var tmpRet mock.Arguments
@@ -37530,6 +39137,95 @@ func (_c *MockOpenlaneGraphClient_UpdateTrustCenterSetting_Call) Return(updateTr
 }
 
 func (_c *MockOpenlaneGraphClient_UpdateTrustCenterSetting_Call) RunAndReturn(run func(ctx context.Context, updateTrustCenterSettingID string, input openlaneclient.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustCenterSetting, error)) *MockOpenlaneGraphClient_UpdateTrustCenterSetting_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateTrustCenterSubprocessor provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) UpdateTrustCenterSubprocessor(ctx context.Context, updateTrustCenterSubprocessorID string, input openlaneclient.UpdateTrustCenterSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustCenterSubprocessor, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, updateTrustCenterSubprocessorID, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, updateTrustCenterSubprocessorID, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateTrustCenterSubprocessor")
+	}
+
+	var r0 *openlaneclient.UpdateTrustCenterSubprocessor
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateTrustCenterSubprocessorInput, ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustCenterSubprocessor, error)); ok {
+		return returnFunc(ctx, updateTrustCenterSubprocessorID, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateTrustCenterSubprocessorInput, ...clientv2.RequestInterceptor) *openlaneclient.UpdateTrustCenterSubprocessor); ok {
+		r0 = returnFunc(ctx, updateTrustCenterSubprocessorID, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.UpdateTrustCenterSubprocessor)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, openlaneclient.UpdateTrustCenterSubprocessorInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, updateTrustCenterSubprocessorID, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_UpdateTrustCenterSubprocessor_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateTrustCenterSubprocessor'
+type MockOpenlaneGraphClient_UpdateTrustCenterSubprocessor_Call struct {
+	*mock.Call
+}
+
+// UpdateTrustCenterSubprocessor is a helper method to define mock.On call
+//   - ctx context.Context
+//   - updateTrustCenterSubprocessorID string
+//   - input openlaneclient.UpdateTrustCenterSubprocessorInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) UpdateTrustCenterSubprocessor(ctx interface{}, updateTrustCenterSubprocessorID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateTrustCenterSubprocessor_Call {
+	return &MockOpenlaneGraphClient_UpdateTrustCenterSubprocessor_Call{Call: _e.mock.On("UpdateTrustCenterSubprocessor",
+		append([]interface{}{ctx, updateTrustCenterSubprocessorID, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateTrustCenterSubprocessor_Call) Run(run func(ctx context.Context, updateTrustCenterSubprocessorID string, input openlaneclient.UpdateTrustCenterSubprocessorInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateTrustCenterSubprocessor_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateTrustCenterSubprocessorInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateTrustCenterSubprocessorInput)
+		}
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateTrustCenterSubprocessor_Call) Return(updateTrustCenterSubprocessor *openlaneclient.UpdateTrustCenterSubprocessor, err error) *MockOpenlaneGraphClient_UpdateTrustCenterSubprocessor_Call {
+	_c.Call.Return(updateTrustCenterSubprocessor, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateTrustCenterSubprocessor_Call) RunAndReturn(run func(ctx context.Context, updateTrustCenterSubprocessorID string, input openlaneclient.UpdateTrustCenterSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustCenterSubprocessor, error)) *MockOpenlaneGraphClient_UpdateTrustCenterSubprocessor_Call {
 	_c.Call.Return(run)
 	return _c
 }

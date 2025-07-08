@@ -597,6 +597,21 @@ query GlobalSearch($query: String!) {
         }
       }
     }
+    subprocessors {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+        }
+      }
+    }
     subscribers {
       totalCount
       pageInfo {
@@ -648,6 +663,21 @@ query GlobalSearch($query: String!) {
       }
     }
     trustCenters {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+        }
+      }
+    }
+    trustCenterSubprocessors {
       totalCount
       pageInfo {
         hasNextPage

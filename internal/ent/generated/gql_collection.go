@@ -92,6 +92,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
@@ -102,6 +104,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -38866,6 +38870,245 @@ func newSubcontrolHistoryPaginateArgs(rv map[string]any) *subcontrolhistoryPagin
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (s *SubprocessorQuery) CollectFields(ctx context.Context, satisfies ...string) (*SubprocessorQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return s, nil
+	}
+	if err := s.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return s, nil
+}
+
+func (s *SubprocessorQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(subprocessor.Columns))
+		selectedFields = []string{subprocessor.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "createdAt":
+			if _, ok := fieldSeen[subprocessor.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, subprocessor.FieldCreatedAt)
+				fieldSeen[subprocessor.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[subprocessor.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, subprocessor.FieldUpdatedAt)
+				fieldSeen[subprocessor.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[subprocessor.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, subprocessor.FieldCreatedBy)
+				fieldSeen[subprocessor.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[subprocessor.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, subprocessor.FieldUpdatedBy)
+				fieldSeen[subprocessor.FieldUpdatedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[subprocessor.FieldTags]; !ok {
+				selectedFields = append(selectedFields, subprocessor.FieldTags)
+				fieldSeen[subprocessor.FieldTags] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		s.Select(selectedFields...)
+	}
+	return nil
+}
+
+type subprocessorPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []SubprocessorPaginateOption
+}
+
+func newSubprocessorPaginateArgs(rv map[string]any) *subprocessorPaginateArgs {
+	args := &subprocessorPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*SubprocessorOrder:
+			args.opts = append(args.opts, WithSubprocessorOrder(v))
+		case []any:
+			var orders []*SubprocessorOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &SubprocessorOrder{Field: &SubprocessorOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithSubprocessorOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*SubprocessorWhereInput); ok {
+		args.opts = append(args.opts, WithSubprocessorFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (sh *SubprocessorHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*SubprocessorHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return sh, nil
+	}
+	if err := sh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return sh, nil
+}
+
+func (sh *SubprocessorHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(subprocessorhistory.Columns))
+		selectedFields = []string{subprocessorhistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[subprocessorhistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, subprocessorhistory.FieldHistoryTime)
+				fieldSeen[subprocessorhistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[subprocessorhistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, subprocessorhistory.FieldRef)
+				fieldSeen[subprocessorhistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[subprocessorhistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, subprocessorhistory.FieldOperation)
+				fieldSeen[subprocessorhistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[subprocessorhistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, subprocessorhistory.FieldCreatedAt)
+				fieldSeen[subprocessorhistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[subprocessorhistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, subprocessorhistory.FieldUpdatedAt)
+				fieldSeen[subprocessorhistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[subprocessorhistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, subprocessorhistory.FieldCreatedBy)
+				fieldSeen[subprocessorhistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[subprocessorhistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, subprocessorhistory.FieldUpdatedBy)
+				fieldSeen[subprocessorhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[subprocessorhistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, subprocessorhistory.FieldTags)
+				fieldSeen[subprocessorhistory.FieldTags] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		sh.Select(selectedFields...)
+	}
+	return nil
+}
+
+type subprocessorhistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []SubprocessorHistoryPaginateOption
+}
+
+func newSubprocessorHistoryPaginateArgs(rv map[string]any) *subprocessorhistoryPaginateArgs {
+	args := &subprocessorhistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &SubprocessorHistoryOrder{Field: &SubprocessorHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithSubprocessorHistoryOrder(order))
+			}
+		case *SubprocessorHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithSubprocessorHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*SubprocessorHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithSubprocessorHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (s *SubscriberQuery) CollectFields(ctx context.Context, satisfies ...string) (*SubscriberQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
@@ -41872,6 +42115,245 @@ func newTrustCenterSettingHistoryPaginateArgs(rv map[string]any) *trustcenterset
 	}
 	if v, ok := rv[whereField].(*TrustCenterSettingHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithTrustCenterSettingHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (tcs *TrustCenterSubprocessorQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustCenterSubprocessorQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return tcs, nil
+	}
+	if err := tcs.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return tcs, nil
+}
+
+func (tcs *TrustCenterSubprocessorQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(trustcentersubprocessor.Columns))
+		selectedFields = []string{trustcentersubprocessor.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "createdAt":
+			if _, ok := fieldSeen[trustcentersubprocessor.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessor.FieldCreatedAt)
+				fieldSeen[trustcentersubprocessor.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[trustcentersubprocessor.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessor.FieldUpdatedAt)
+				fieldSeen[trustcentersubprocessor.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[trustcentersubprocessor.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessor.FieldCreatedBy)
+				fieldSeen[trustcentersubprocessor.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[trustcentersubprocessor.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessor.FieldUpdatedBy)
+				fieldSeen[trustcentersubprocessor.FieldUpdatedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[trustcentersubprocessor.FieldTags]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessor.FieldTags)
+				fieldSeen[trustcentersubprocessor.FieldTags] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		tcs.Select(selectedFields...)
+	}
+	return nil
+}
+
+type trustcentersubprocessorPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []TrustCenterSubprocessorPaginateOption
+}
+
+func newTrustCenterSubprocessorPaginateArgs(rv map[string]any) *trustcentersubprocessorPaginateArgs {
+	args := &trustcentersubprocessorPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*TrustCenterSubprocessorOrder:
+			args.opts = append(args.opts, WithTrustCenterSubprocessorOrder(v))
+		case []any:
+			var orders []*TrustCenterSubprocessorOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &TrustCenterSubprocessorOrder{Field: &TrustCenterSubprocessorOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithTrustCenterSubprocessorOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*TrustCenterSubprocessorWhereInput); ok {
+		args.opts = append(args.opts, WithTrustCenterSubprocessorFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (tcsh *TrustCenterSubprocessorHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustCenterSubprocessorHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return tcsh, nil
+	}
+	if err := tcsh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return tcsh, nil
+}
+
+func (tcsh *TrustCenterSubprocessorHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(trustcentersubprocessorhistory.Columns))
+		selectedFields = []string{trustcentersubprocessorhistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[trustcentersubprocessorhistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessorhistory.FieldHistoryTime)
+				fieldSeen[trustcentersubprocessorhistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[trustcentersubprocessorhistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessorhistory.FieldRef)
+				fieldSeen[trustcentersubprocessorhistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[trustcentersubprocessorhistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessorhistory.FieldOperation)
+				fieldSeen[trustcentersubprocessorhistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[trustcentersubprocessorhistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessorhistory.FieldCreatedAt)
+				fieldSeen[trustcentersubprocessorhistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[trustcentersubprocessorhistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessorhistory.FieldUpdatedAt)
+				fieldSeen[trustcentersubprocessorhistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[trustcentersubprocessorhistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessorhistory.FieldCreatedBy)
+				fieldSeen[trustcentersubprocessorhistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[trustcentersubprocessorhistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessorhistory.FieldUpdatedBy)
+				fieldSeen[trustcentersubprocessorhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[trustcentersubprocessorhistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessorhistory.FieldTags)
+				fieldSeen[trustcentersubprocessorhistory.FieldTags] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		tcsh.Select(selectedFields...)
+	}
+	return nil
+}
+
+type trustcentersubprocessorhistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []TrustCenterSubprocessorHistoryPaginateOption
+}
+
+func newTrustCenterSubprocessorHistoryPaginateArgs(rv map[string]any) *trustcentersubprocessorhistoryPaginateArgs {
+	args := &trustcentersubprocessorhistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &TrustCenterSubprocessorHistoryOrder{Field: &TrustCenterSubprocessorHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithTrustCenterSubprocessorHistoryOrder(order))
+			}
+		case *TrustCenterSubprocessorHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithTrustCenterSubprocessorHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*TrustCenterSubprocessorHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithTrustCenterSubprocessorHistoryFilter(v.Filter))
 	}
 	return args
 }
