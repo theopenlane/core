@@ -116,6 +116,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*SubcontrolMutation]() {
 		c.Subcontrol.Use(hook)
 	}
+	for _, hook := range history.Hooks[*SubprocessorMutation]() {
+		c.Subprocessor.Use(hook)
+	}
 	for _, hook := range history.Hooks[*TaskMutation]() {
 		c.Task.Use(hook)
 	}
@@ -127,6 +130,9 @@ func (c *Client) WithHistory() {
 	}
 	for _, hook := range history.Hooks[*TrustCenterSettingMutation]() {
 		c.TrustCenterSetting.Use(hook)
+	}
+	for _, hook := range history.Hooks[*TrustCenterSubprocessorMutation]() {
+		c.TrustCenterSubprocessor.Use(hook)
 	}
 	for _, hook := range history.Hooks[*UserMutation]() {
 		c.User.Use(hook)

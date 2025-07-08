@@ -55,10 +55,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
 )
@@ -2941,6 +2943,54 @@ func (sh *SubcontrolHistory) Diff(history *SubcontrolHistory) (*HistoryDiff[Subc
 	return nil, ErrIdenticalHistory
 }
 
+func (sh *SubprocessorHistory) changes(new *SubprocessorHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(sh.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldCreatedAt, sh.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(sh.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldUpdatedAt, sh.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(sh.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldCreatedBy, sh.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(sh.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldDeletedAt, sh.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(sh.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldDeletedBy, sh.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(sh.Tags, new.Tags) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldTags, sh.Tags, new.Tags))
+	}
+	return changes
+}
+
+func (sh *SubprocessorHistory) Diff(history *SubprocessorHistory) (*HistoryDiff[SubprocessorHistory], error) {
+	if sh.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	shUnix, historyUnix := sh.HistoryTime.Unix(), history.HistoryTime.Unix()
+	shOlder := shUnix < historyUnix || (shUnix == historyUnix && sh.ID < history.ID)
+	historyOlder := shUnix > historyUnix || (shUnix == historyUnix && sh.ID > history.ID)
+
+	if shOlder {
+		return &HistoryDiff[SubprocessorHistory]{
+			Old:     sh,
+			New:     history,
+			Changes: sh.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[SubprocessorHistory]{
+			Old:     history,
+			New:     sh,
+			Changes: history.changes(sh),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
 func (th *TaskHistory) changes(new *TaskHistory) []Change {
 	var changes []Change
 	if !reflect.DeepEqual(th.CreatedAt, new.CreatedAt) {
@@ -3218,6 +3268,54 @@ func (tcsh *TrustCenterSettingHistory) Diff(history *TrustCenterSettingHistory) 
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[TrustCenterSettingHistory]{
+			Old:     history,
+			New:     tcsh,
+			Changes: history.changes(tcsh),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
+func (tcsh *TrustCenterSubprocessorHistory) changes(new *TrustCenterSubprocessorHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(tcsh.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldCreatedAt, tcsh.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(tcsh.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldUpdatedAt, tcsh.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(tcsh.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldCreatedBy, tcsh.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(tcsh.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldDeletedAt, tcsh.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(tcsh.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldDeletedBy, tcsh.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(tcsh.Tags, new.Tags) {
+		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldTags, tcsh.Tags, new.Tags))
+	}
+	return changes
+}
+
+func (tcsh *TrustCenterSubprocessorHistory) Diff(history *TrustCenterSubprocessorHistory) (*HistoryDiff[TrustCenterSubprocessorHistory], error) {
+	if tcsh.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	tcshUnix, historyUnix := tcsh.HistoryTime.Unix(), history.HistoryTime.Unix()
+	tcshOlder := tcshUnix < historyUnix || (tcshUnix == historyUnix && tcsh.ID < history.ID)
+	historyOlder := tcshUnix > historyUnix || (tcshUnix == historyUnix && tcsh.ID > history.ID)
+
+	if tcshOlder {
+		return &HistoryDiff[TrustCenterSubprocessorHistory]{
+			Old:     tcsh,
+			New:     history,
+			Changes: tcsh.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[TrustCenterSubprocessorHistory]{
 			Old:     history,
 			New:     tcsh,
 			Changes: history.changes(tcsh),
@@ -3639,6 +3737,12 @@ func (c *Client) Audit(ctx context.Context, after *Cursor, first *int, before *C
 	}
 	result.Edges = append(result.Edges, record.Edges...)
 
+	record, err = auditSubprocessorHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
 	record, err = auditTaskHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
@@ -3658,6 +3762,12 @@ func (c *Client) Audit(ctx context.Context, after *Cursor, first *int, before *C
 	result.Edges = append(result.Edges, record.Edges...)
 
 	record, err = auditTrustCenterSettingHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
+	record, err = auditTrustCenterSubprocessorHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -5155,6 +5265,47 @@ func (c *Client) AuditWithFilter(ctx context.Context, after *Cursor, first *int,
 
 		return
 	}
+	if where.Table == strings.TrimSuffix("SubprocessorHistory", "History") {
+		// map AuditLogWhereInput to SubprocessorHistoryWhereInput
+		whereInput := &SubprocessorHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to SubprocessorHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &SubprocessorHistoryOrder{
+			Field:     SubprocessorHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditSubprocessorHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
 	if where.Table == strings.TrimSuffix("TaskHistory", "History") {
 		// map AuditLogWhereInput to TaskHistoryWhereInput
 		whereInput := &TaskHistoryWhereInput{}
@@ -5313,6 +5464,47 @@ func (c *Client) AuditWithFilter(ctx context.Context, after *Cursor, first *int,
 		}
 
 		result, err = auditTrustCenterSettingHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
+	if where.Table == strings.TrimSuffix("TrustCenterSubprocessorHistory", "History") {
+		// map AuditLogWhereInput to TrustCenterSubprocessorHistoryWhereInput
+		whereInput := &TrustCenterSubprocessorHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to TrustCenterSubprocessorHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &TrustCenterSubprocessorHistoryOrder{
+			Field:     TrustCenterSubprocessorHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditTrustCenterSubprocessorHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
@@ -8053,6 +8245,79 @@ func auditSubcontrolHistory(ctx context.Context, config config, after *Cursor, f
 	return result, nil
 }
 
+type subprocessorhistoryref struct {
+	Ref string
+}
+
+func auditSubprocessorHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *SubprocessorHistoryOrder, where *SubprocessorHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []SubprocessorHistoryPaginateOption{
+		WithSubprocessorHistoryOrder(orderBy),
+		WithSubprocessorHistoryFilter(where.Filter),
+	}
+
+	client := NewSubprocessorHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "SubprocessorHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&SubprocessorHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&SubprocessorHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					subprocessorhistory.Ref(curr.Node.Ref),
+					subprocessorhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(subprocessorhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &SubprocessorHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
 type taskhistoryref struct {
 	Ref string
 }
@@ -8325,6 +8590,79 @@ func auditTrustCenterSettingHistory(ctx context.Context, config config, after *C
 			// but just in case, we will handle it gracefully
 			if len(prev) == 0 {
 				prev = append(prev, &TrustCenterSettingHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type trustcentersubprocessorhistoryref struct {
+	Ref string
+}
+
+func auditTrustCenterSubprocessorHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *TrustCenterSubprocessorHistoryOrder, where *TrustCenterSubprocessorHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []TrustCenterSubprocessorHistoryPaginateOption{
+		WithTrustCenterSubprocessorHistoryOrder(orderBy),
+		WithTrustCenterSubprocessorHistoryFilter(where.Filter),
+	}
+
+	client := NewTrustCenterSubprocessorHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "TrustCenterSubprocessorHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&TrustCenterSubprocessorHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&TrustCenterSubprocessorHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					trustcentersubprocessorhistory.Ref(curr.Node.Ref),
+					trustcentersubprocessorhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(trustcentersubprocessorhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &TrustCenterSubprocessorHistory{})
 			}
 
 			record.Changes = prev[0].changes(curr.Node)

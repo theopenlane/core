@@ -267,6 +267,12 @@ type Subcontrol func(*sql.Selector)
 // SubcontrolHistory is the predicate function for subcontrolhistory builders.
 type SubcontrolHistory func(*sql.Selector)
 
+// Subprocessor is the predicate function for subprocessor builders.
+type Subprocessor func(*sql.Selector)
+
+// SubprocessorHistory is the predicate function for subprocessorhistory builders.
+type SubprocessorHistory func(*sql.Selector)
+
 // Subscriber is the predicate function for subscriber builders.
 type Subscriber func(*sql.Selector)
 
@@ -296,6 +302,12 @@ type TrustCenterSetting func(*sql.Selector)
 
 // TrustCenterSettingHistory is the predicate function for trustcentersettinghistory builders.
 type TrustCenterSettingHistory func(*sql.Selector)
+
+// TrustCenterSubprocessor is the predicate function for trustcentersubprocessor builders.
+type TrustCenterSubprocessor func(*sql.Selector)
+
+// TrustCenterSubprocessorHistory is the predicate function for trustcentersubprocessorhistory builders.
+type TrustCenterSubprocessorHistory func(*sql.Selector)
 
 // User is the predicate function for user builders.
 type User func(*sql.Selector)

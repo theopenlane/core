@@ -192,6 +192,8 @@ type SchemaConfig struct {
 	SubcontrolProcedures               string // Subcontrol-procedures->Procedure table.
 	SubcontrolControlImplementations   string // Subcontrol-control_implementations->ControlImplementation table.
 	SubcontrolHistory                  string // SubcontrolHistory table.
+	Subprocessor                       string // Subprocessor table.
+	SubprocessorHistory                string // SubprocessorHistory table.
 	Subscriber                         string // Subscriber table.
 	SubscriberEvents                   string // Subscriber-events->Event table.
 	TFASetting                         string // TFASetting table.
@@ -206,6 +208,8 @@ type SchemaConfig struct {
 	TrustCenterSetting                 string // TrustCenterSetting table.
 	TrustCenterSettingFiles            string // TrustCenterSetting-files->File table.
 	TrustCenterSettingHistory          string // TrustCenterSettingHistory table.
+	TrustCenterSubprocessor            string // TrustCenterSubprocessor table.
+	TrustCenterSubprocessorHistory     string // TrustCenterSubprocessorHistory table.
 	User                               string // User table.
 	UserFiles                          string // User-files->File table.
 	UserEvents                         string // User-events->Event table.

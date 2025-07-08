@@ -405,6 +405,16 @@ type OpenlaneGraphClient interface {
 	UpdateSubcontrol(ctx context.Context, updateSubcontrolID string, input UpdateSubcontrolInput, interceptors ...clientv2.RequestInterceptor) (*UpdateSubcontrol, error)
 	GetAllSubcontrolHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllSubcontrolHistories, error)
 	GetSubcontrolHistories(ctx context.Context, where *SubcontrolHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetSubcontrolHistories, error)
+	CreateBulkCSVSubprocessor(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVSubprocessor, error)
+	CreateBulkSubprocessor(ctx context.Context, input []*CreateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkSubprocessor, error)
+	CreateSubprocessor(ctx context.Context, input CreateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*CreateSubprocessor, error)
+	DeleteSubprocessor(ctx context.Context, deleteSubprocessorID string, interceptors ...clientv2.RequestInterceptor) (*DeleteSubprocessor, error)
+	GetAllSubprocessors(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllSubprocessors, error)
+	GetSubprocessorByID(ctx context.Context, subprocessorID string, interceptors ...clientv2.RequestInterceptor) (*GetSubprocessorByID, error)
+	GetSubprocessors(ctx context.Context, first *int64, last *int64, where *SubprocessorWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetSubprocessors, error)
+	UpdateSubprocessor(ctx context.Context, updateSubprocessorID string, input UpdateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*UpdateSubprocessor, error)
+	GetAllSubprocessorHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllSubprocessorHistories, error)
+	GetSubprocessorHistories(ctx context.Context, first *int64, last *int64, where *SubprocessorHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetSubprocessorHistories, error)
 	CreateBulkCSVSubscriber(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVSubscriber, error)
 	CreateBulkSubscriber(ctx context.Context, input []*CreateSubscriberInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkSubscriber, error)
 	CreateSubscriber(ctx context.Context, input CreateSubscriberInput, interceptors ...clientv2.RequestInterceptor) (*CreateSubscriber, error)
@@ -452,6 +462,16 @@ type OpenlaneGraphClient interface {
 	UpdateTrustCenterSetting(ctx context.Context, updateTrustCenterSettingID string, input UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterSetting, error)
 	GetAllTrustCenterSettingHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterSettingHistories, error)
 	GetTrustCenterSettingHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterSettingHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterSettingHistories, error)
+	CreateBulkCSVTrustCenterSubprocessor(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTrustCenterSubprocessor, error)
+	CreateBulkTrustCenterSubprocessor(ctx context.Context, input []*CreateTrustCenterSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTrustCenterSubprocessor, error)
+	CreateTrustCenterSubprocessor(ctx context.Context, input CreateTrustCenterSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterSubprocessor, error)
+	DeleteTrustCenterSubprocessor(ctx context.Context, deleteTrustCenterSubprocessorID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTrustCenterSubprocessor, error)
+	GetAllTrustCenterSubprocessors(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterSubprocessors, error)
+	GetTrustCenterSubprocessorByID(ctx context.Context, trustCenterSubprocessorID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterSubprocessorByID, error)
+	GetTrustCenterSubprocessors(ctx context.Context, first *int64, last *int64, where *TrustCenterSubprocessorWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterSubprocessors, error)
+	UpdateTrustCenterSubprocessor(ctx context.Context, updateTrustCenterSubprocessorID string, input UpdateTrustCenterSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterSubprocessor, error)
+	GetAllTrustCenterSubprocessorHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterSubprocessorHistories, error)
+	GetTrustCenterSubprocessorHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterSubprocessorHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterSubprocessorHistories, error)
 	CreateUser(ctx context.Context, input CreateUserInput, avatarFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateUser, error)
 	DeleteUser(ctx context.Context, deleteUserID string, interceptors ...clientv2.RequestInterceptor) (*DeleteUser, error)
 	GetAllUsers(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllUsers, error)
@@ -6659,6 +6679,92 @@ func (t *AdminSearch_AdminSearch_Subcontrols) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type AdminSearch_AdminSearch_Subprocessors_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Subprocessors_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Subprocessors_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Subprocessors_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Subprocessors_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Subprocessors_Edges_Node struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *AdminSearch_AdminSearch_Subprocessors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Subprocessors_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type AdminSearch_AdminSearch_Subprocessors_Edges struct {
+	Node *AdminSearch_AdminSearch_Subprocessors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *AdminSearch_AdminSearch_Subprocessors_Edges) GetNode() *AdminSearch_AdminSearch_Subprocessors_Edges_Node {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors_Edges{}
+	}
+	return t.Node
+}
+
+type AdminSearch_AdminSearch_Subprocessors struct {
+	Edges      []*AdminSearch_AdminSearch_Subprocessors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Subprocessors_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                          "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Subprocessors) GetEdges() []*AdminSearch_AdminSearch_Subprocessors_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Subprocessors) GetPageInfo() *AdminSearch_AdminSearch_Subprocessors_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Subprocessors) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors{}
+	}
+	return t.TotalCount
+}
+
 type AdminSearch_AdminSearch_Subscribers_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -7129,6 +7235,92 @@ func (t *AdminSearch_AdminSearch_TrustCenters) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type AdminSearch_AdminSearch_TrustCenterSubprocessors_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_TrustCenterSubprocessors_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenterSubprocessors_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_TrustCenterSubprocessors_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenterSubprocessors_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_TrustCenterSubprocessors_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenterSubprocessors_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_TrustCenterSubprocessors_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenterSubprocessors_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_TrustCenterSubprocessors_Edges_Node struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *AdminSearch_AdminSearch_TrustCenterSubprocessors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_TrustCenterSubprocessors_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type AdminSearch_AdminSearch_TrustCenterSubprocessors_Edges struct {
+	Node *AdminSearch_AdminSearch_TrustCenterSubprocessors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *AdminSearch_AdminSearch_TrustCenterSubprocessors_Edges) GetNode() *AdminSearch_AdminSearch_TrustCenterSubprocessors_Edges_Node {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenterSubprocessors_Edges{}
+	}
+	return t.Node
+}
+
+type AdminSearch_AdminSearch_TrustCenterSubprocessors struct {
+	Edges      []*AdminSearch_AdminSearch_TrustCenterSubprocessors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_TrustCenterSubprocessors_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                     "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_TrustCenterSubprocessors) GetEdges() []*AdminSearch_AdminSearch_TrustCenterSubprocessors_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenterSubprocessors{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_TrustCenterSubprocessors) GetPageInfo() *AdminSearch_AdminSearch_TrustCenterSubprocessors_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenterSubprocessors{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_TrustCenterSubprocessors) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenterSubprocessors{}
+	}
+	return t.TotalCount
+}
+
 type AdminSearch_AdminSearch_Users_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -7487,10 +7679,12 @@ type AdminSearch_AdminSearch struct {
 	ScheduledJobs               *AdminSearch_AdminSearch_ScheduledJobs               "json:\"scheduledJobs,omitempty\" graphql:\"scheduledJobs\""
 	Standards                   *AdminSearch_AdminSearch_Standards                   "json:\"standards,omitempty\" graphql:\"standards\""
 	Subcontrols                 *AdminSearch_AdminSearch_Subcontrols                 "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
+	Subprocessors               *AdminSearch_AdminSearch_Subprocessors               "json:\"subprocessors,omitempty\" graphql:\"subprocessors\""
 	Subscribers                 *AdminSearch_AdminSearch_Subscribers                 "json:\"subscribers,omitempty\" graphql:\"subscribers\""
 	Tasks                       *AdminSearch_AdminSearch_Tasks                       "json:\"tasks,omitempty\" graphql:\"tasks\""
 	Templates                   *AdminSearch_AdminSearch_Templates                   "json:\"templates,omitempty\" graphql:\"templates\""
 	TotalCount                  int64                                                "json:\"totalCount\" graphql:\"totalCount\""
+	TrustCenterSubprocessors    *AdminSearch_AdminSearch_TrustCenterSubprocessors    "json:\"trustCenterSubprocessors,omitempty\" graphql:\"trustCenterSubprocessors\""
 	TrustCenters                *AdminSearch_AdminSearch_TrustCenters                "json:\"trustCenters,omitempty\" graphql:\"trustCenters\""
 	UserSettings                *AdminSearch_AdminSearch_UserSettings                "json:\"userSettings,omitempty\" graphql:\"userSettings\""
 	Users                       *AdminSearch_AdminSearch_Users                       "json:\"users,omitempty\" graphql:\"users\""
@@ -7713,6 +7907,12 @@ func (t *AdminSearch_AdminSearch) GetSubcontrols() *AdminSearch_AdminSearch_Subc
 	}
 	return t.Subcontrols
 }
+func (t *AdminSearch_AdminSearch) GetSubprocessors() *AdminSearch_AdminSearch_Subprocessors {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Subprocessors
+}
 func (t *AdminSearch_AdminSearch) GetSubscribers() *AdminSearch_AdminSearch_Subscribers {
 	if t == nil {
 		t = &AdminSearch_AdminSearch{}
@@ -7736,6 +7936,12 @@ func (t *AdminSearch_AdminSearch) GetTotalCount() int64 {
 		t = &AdminSearch_AdminSearch{}
 	}
 	return t.TotalCount
+}
+func (t *AdminSearch_AdminSearch) GetTrustCenterSubprocessors() *AdminSearch_AdminSearch_TrustCenterSubprocessors {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.TrustCenterSubprocessors
 }
 func (t *AdminSearch_AdminSearch) GetTrustCenters() *AdminSearch_AdminSearch_TrustCenters {
 	if t == nil {
@@ -68208,6 +68414,92 @@ func (t *GlobalSearch_Search_Subcontrols) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type GlobalSearch_Search_Subprocessors_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Subprocessors_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Subprocessors_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Subprocessors_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Subprocessors_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Subprocessors_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Subprocessors_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Subprocessors_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Subprocessors_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Subprocessors_Edges_Node struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Subprocessors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Subprocessors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Subprocessors_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Subprocessors_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Subprocessors_Edges struct {
+	Node *GlobalSearch_Search_Subprocessors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GlobalSearch_Search_Subprocessors_Edges) GetNode() *GlobalSearch_Search_Subprocessors_Edges_Node {
+	if t == nil {
+		t = &GlobalSearch_Search_Subprocessors_Edges{}
+	}
+	return t.Node
+}
+
+type GlobalSearch_Search_Subprocessors struct {
+	Edges      []*GlobalSearch_Search_Subprocessors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Subprocessors_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                      "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Subprocessors) GetEdges() []*GlobalSearch_Search_Subprocessors_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Subprocessors{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Subprocessors) GetPageInfo() *GlobalSearch_Search_Subprocessors_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Subprocessors{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Subprocessors) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Subprocessors{}
+	}
+	return t.TotalCount
+}
+
 type GlobalSearch_Search_Subscribers_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -68587,6 +68879,92 @@ func (t *GlobalSearch_Search_TrustCenters) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type GlobalSearch_Search_TrustCenterSubprocessors_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_TrustCenterSubprocessors_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenterSubprocessors_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_TrustCenterSubprocessors_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenterSubprocessors_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_TrustCenterSubprocessors_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenterSubprocessors_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_TrustCenterSubprocessors_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenterSubprocessors_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_TrustCenterSubprocessors_Edges_Node struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_TrustCenterSubprocessors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_TrustCenterSubprocessors_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_TrustCenterSubprocessors_Edges struct {
+	Node *GlobalSearch_Search_TrustCenterSubprocessors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GlobalSearch_Search_TrustCenterSubprocessors_Edges) GetNode() *GlobalSearch_Search_TrustCenterSubprocessors_Edges_Node {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenterSubprocessors_Edges{}
+	}
+	return t.Node
+}
+
+type GlobalSearch_Search_TrustCenterSubprocessors struct {
+	Edges      []*GlobalSearch_Search_TrustCenterSubprocessors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_TrustCenterSubprocessors_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                 "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_TrustCenterSubprocessors) GetEdges() []*GlobalSearch_Search_TrustCenterSubprocessors_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenterSubprocessors{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_TrustCenterSubprocessors) GetPageInfo() *GlobalSearch_Search_TrustCenterSubprocessors_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenterSubprocessors{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_TrustCenterSubprocessors) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenterSubprocessors{}
+	}
+	return t.TotalCount
+}
+
 type GlobalSearch_Search_Users_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -68889,10 +69267,12 @@ type GlobalSearch_Search struct {
 	ScheduledJobs               *GlobalSearch_Search_ScheduledJobs               "json:\"scheduledJobs,omitempty\" graphql:\"scheduledJobs\""
 	Standards                   *GlobalSearch_Search_Standards                   "json:\"standards,omitempty\" graphql:\"standards\""
 	Subcontrols                 *GlobalSearch_Search_Subcontrols                 "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
+	Subprocessors               *GlobalSearch_Search_Subprocessors               "json:\"subprocessors,omitempty\" graphql:\"subprocessors\""
 	Subscribers                 *GlobalSearch_Search_Subscribers                 "json:\"subscribers,omitempty\" graphql:\"subscribers\""
 	Tasks                       *GlobalSearch_Search_Tasks                       "json:\"tasks,omitempty\" graphql:\"tasks\""
 	Templates                   *GlobalSearch_Search_Templates                   "json:\"templates,omitempty\" graphql:\"templates\""
 	TotalCount                  int64                                            "json:\"totalCount\" graphql:\"totalCount\""
+	TrustCenterSubprocessors    *GlobalSearch_Search_TrustCenterSubprocessors    "json:\"trustCenterSubprocessors,omitempty\" graphql:\"trustCenterSubprocessors\""
 	TrustCenters                *GlobalSearch_Search_TrustCenters                "json:\"trustCenters,omitempty\" graphql:\"trustCenters\""
 	UserSettings                *GlobalSearch_Search_UserSettings                "json:\"userSettings,omitempty\" graphql:\"userSettings\""
 	Users                       *GlobalSearch_Search_Users                       "json:\"users,omitempty\" graphql:\"users\""
@@ -69115,6 +69495,12 @@ func (t *GlobalSearch_Search) GetSubcontrols() *GlobalSearch_Search_Subcontrols 
 	}
 	return t.Subcontrols
 }
+func (t *GlobalSearch_Search) GetSubprocessors() *GlobalSearch_Search_Subprocessors {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Subprocessors
+}
 func (t *GlobalSearch_Search) GetSubscribers() *GlobalSearch_Search_Subscribers {
 	if t == nil {
 		t = &GlobalSearch_Search{}
@@ -69138,6 +69524,12 @@ func (t *GlobalSearch_Search) GetTotalCount() int64 {
 		t = &GlobalSearch_Search{}
 	}
 	return t.TotalCount
+}
+func (t *GlobalSearch_Search) GetTrustCenterSubprocessors() *GlobalSearch_Search_TrustCenterSubprocessors {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.TrustCenterSubprocessors
 }
 func (t *GlobalSearch_Search) GetTrustCenters() *GlobalSearch_Search_TrustCenters {
 	if t == nil {
@@ -73297,6 +73689,789 @@ func (t *GetSubcontrolHistories_SubcontrolHistories) GetEdges() []*GetSubcontrol
 		t = &GetSubcontrolHistories_SubcontrolHistories{}
 	}
 	return t.Edges
+}
+
+type CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor struct {
+	Subprocessors []*CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors "json:\"subprocessors,omitempty\" graphql:\"subprocessors\""
+}
+
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor) GetSubprocessors() []*CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor{}
+	}
+	return t.Subprocessors
+}
+
+type CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetID() string {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
+	}
+	return t.ID
+}
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkSubprocessor_CreateBulkSubprocessor struct {
+	Subprocessors []*CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors "json:\"subprocessors,omitempty\" graphql:\"subprocessors\""
+}
+
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor) GetSubprocessors() []*CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor{}
+	}
+	return t.Subprocessors
+}
+
+type CreateSubprocessor_CreateSubprocessor_Subprocessor struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetID() string {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
+	}
+	return t.ID
+}
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetTags() []string {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
+	}
+	return t.Tags
+}
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateSubprocessor_CreateSubprocessor struct {
+	Subprocessor CreateSubprocessor_CreateSubprocessor_Subprocessor "json:\"subprocessor\" graphql:\"subprocessor\""
+}
+
+func (t *CreateSubprocessor_CreateSubprocessor) GetSubprocessor() *CreateSubprocessor_CreateSubprocessor_Subprocessor {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor{}
+	}
+	return &t.Subprocessor
+}
+
+type DeleteSubprocessor_DeleteSubprocessor struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteSubprocessor_DeleteSubprocessor) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteSubprocessor_DeleteSubprocessor{}
+	}
+	return t.DeletedID
+}
+
+type GetAllSubprocessors_Subprocessors_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllSubprocessors_Subprocessors_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllSubprocessors_Subprocessors_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllSubprocessors_Subprocessors_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllSubprocessors_Subprocessors_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllSubprocessors_Subprocessors_Edges_Node struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllSubprocessors_Subprocessors_Edges struct {
+	Node *GetAllSubprocessors_Subprocessors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllSubprocessors_Subprocessors_Edges) GetNode() *GetAllSubprocessors_Subprocessors_Edges_Node {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllSubprocessors_Subprocessors struct {
+	Edges      []*GetAllSubprocessors_Subprocessors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllSubprocessors_Subprocessors_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                      "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllSubprocessors_Subprocessors) GetEdges() []*GetAllSubprocessors_Subprocessors_Edges {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors{}
+	}
+	return t.Edges
+}
+func (t *GetAllSubprocessors_Subprocessors) GetPageInfo() *GetAllSubprocessors_Subprocessors_PageInfo {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllSubprocessors_Subprocessors) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors{}
+	}
+	return t.TotalCount
+}
+
+type GetSubprocessorByID_Subprocessor struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetSubprocessorByID_Subprocessor) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor{}
+	}
+	return t.CreatedAt
+}
+func (t *GetSubprocessorByID_Subprocessor) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor{}
+	}
+	return t.CreatedBy
+}
+func (t *GetSubprocessorByID_Subprocessor) GetID() string {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor{}
+	}
+	return t.ID
+}
+func (t *GetSubprocessorByID_Subprocessor) GetTags() []string {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor{}
+	}
+	return t.Tags
+}
+func (t *GetSubprocessorByID_Subprocessor) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetSubprocessorByID_Subprocessor) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor{}
+	}
+	return t.UpdatedBy
+}
+
+type GetSubprocessors_Subprocessors_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetSubprocessors_Subprocessors_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetSubprocessors_Subprocessors_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetSubprocessors_Subprocessors_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetSubprocessors_Subprocessors_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetSubprocessors_Subprocessors_Edges_Node struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetSubprocessors_Subprocessors_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetSubprocessors_Subprocessors_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetSubprocessors_Subprocessors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetSubprocessors_Subprocessors_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetSubprocessors_Subprocessors_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetSubprocessors_Subprocessors_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetSubprocessors_Subprocessors_Edges struct {
+	Node *GetSubprocessors_Subprocessors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetSubprocessors_Subprocessors_Edges) GetNode() *GetSubprocessors_Subprocessors_Edges_Node {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges{}
+	}
+	return t.Node
+}
+
+type GetSubprocessors_Subprocessors struct {
+	Edges      []*GetSubprocessors_Subprocessors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetSubprocessors_Subprocessors_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                   "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetSubprocessors_Subprocessors) GetEdges() []*GetSubprocessors_Subprocessors_Edges {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors{}
+	}
+	return t.Edges
+}
+func (t *GetSubprocessors_Subprocessors) GetPageInfo() *GetSubprocessors_Subprocessors_PageInfo {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors{}
+	}
+	return &t.PageInfo
+}
+func (t *GetSubprocessors_Subprocessors) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors{}
+	}
+	return t.TotalCount
+}
+
+type UpdateSubprocessor_UpdateSubprocessor_Subprocessor struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetID() string {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
+	}
+	return t.ID
+}
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetTags() []string {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
+	}
+	return t.Tags
+}
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateSubprocessor_UpdateSubprocessor struct {
+	Subprocessor UpdateSubprocessor_UpdateSubprocessor_Subprocessor "json:\"subprocessor\" graphql:\"subprocessor\""
+}
+
+func (t *UpdateSubprocessor_UpdateSubprocessor) GetSubprocessor() *UpdateSubprocessor_UpdateSubprocessor_Subprocessor {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor{}
+	}
+	return &t.Subprocessor
+}
+
+type GetAllSubprocessorHistories_SubprocessorHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node struct {
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllSubprocessorHistories_SubprocessorHistories_Edges struct {
+	Node *GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_Edges) GetNode() *GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllSubprocessorHistories_SubprocessorHistories struct {
+	Edges      []*GetAllSubprocessorHistories_SubprocessorHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllSubprocessorHistories_SubprocessorHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                      "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllSubprocessorHistories_SubprocessorHistories) GetEdges() []*GetAllSubprocessorHistories_SubprocessorHistories_Edges {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories) GetPageInfo() *GetAllSubprocessorHistories_SubprocessorHistories_PageInfo {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories{}
+	}
+	return t.TotalCount
+}
+
+type GetSubprocessorHistories_SubprocessorHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetSubprocessorHistories_SubprocessorHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetSubprocessorHistories_SubprocessorHistories_Edges_Node struct {
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetSubprocessorHistories_SubprocessorHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetSubprocessorHistories_SubprocessorHistories_Edges struct {
+	Node *GetSubprocessorHistories_SubprocessorHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetSubprocessorHistories_SubprocessorHistories_Edges) GetNode() *GetSubprocessorHistories_SubprocessorHistories_Edges_Node {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetSubprocessorHistories_SubprocessorHistories struct {
+	Edges      []*GetSubprocessorHistories_SubprocessorHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetSubprocessorHistories_SubprocessorHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                   "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetSubprocessorHistories_SubprocessorHistories) GetEdges() []*GetSubprocessorHistories_SubprocessorHistories_Edges {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories{}
+	}
+	return t.Edges
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories) GetPageInfo() *GetSubprocessorHistories_SubprocessorHistories_PageInfo {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories{}
+	}
+	return t.TotalCount
 }
 
 type CreateBulkCSVSubscriber_CreateBulkCSVSubscriber_Subscribers struct {
@@ -80049,6 +81224,789 @@ func (t *GetTrustCenterSettingHistories_TrustCenterSettingHistories) GetPageInfo
 func (t *GetTrustCenterSettingHistories_TrustCenterSettingHistories) GetTotalCount() int64 {
 	if t == nil {
 		t = &GetTrustCenterSettingHistories_TrustCenterSettingHistories{}
+	}
+	return t.TotalCount
+}
+
+type CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor struct {
+	TrustCenterSubprocessors []*CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors "json:\"trustCenterSubprocessors,omitempty\" graphql:\"trustCenterSubprocessors\""
+}
+
+func (t *CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor) GetTrustCenterSubprocessors() []*CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor{}
+	}
+	return t.TrustCenterSubprocessors
+}
+
+type CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors) GetID() string {
+	if t == nil {
+		t = &CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors{}
+	}
+	return t.ID
+}
+func (t *CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor struct {
+	TrustCenterSubprocessors []*CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors "json:\"trustCenterSubprocessors,omitempty\" graphql:\"trustCenterSubprocessors\""
+}
+
+func (t *CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor) GetTrustCenterSubprocessors() []*CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors {
+	if t == nil {
+		t = &CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor{}
+	}
+	return t.TrustCenterSubprocessors
+}
+
+type CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor) GetID() string {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.ID
+}
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor) GetTags() []string {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.Tags
+}
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor struct {
+	TrustCenterSubprocessor CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor "json:\"trustCenterSubprocessor\" graphql:\"trustCenterSubprocessor\""
+}
+
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor) GetTrustCenterSubprocessor() *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor{}
+	}
+	return &t.TrustCenterSubprocessor
+}
+
+type DeleteTrustCenterSubprocessor_DeleteTrustCenterSubprocessor struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteTrustCenterSubprocessor_DeleteTrustCenterSubprocessor) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteTrustCenterSubprocessor_DeleteTrustCenterSubprocessor{}
+	}
+	return t.DeletedID
+}
+
+type GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges struct {
+	Node *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges) GetNode() *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllTrustCenterSubprocessors_TrustCenterSubprocessors struct {
+	Edges      []*GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                            "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors) GetEdges() []*GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors{}
+	}
+	return t.Edges
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors) GetPageInfo() *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors{}
+	}
+	return t.TotalCount
+}
+
+type GetTrustCenterSubprocessorByID_TrustCenterSubprocessor struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor) GetID() string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor) GetTags() []string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor{}
+	}
+	return t.Tags
+}
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges struct {
+	Node *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges) GetNode() *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges{}
+	}
+	return t.Node
+}
+
+type GetTrustCenterSubprocessors_TrustCenterSubprocessors struct {
+	Edges      []*GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                         "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors) GetEdges() []*GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors{}
+	}
+	return t.Edges
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors) GetPageInfo() *GetTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors{}
+	}
+	return &t.PageInfo
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors{}
+	}
+	return t.TotalCount
+}
+
+type UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor) GetID() string {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.ID
+}
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor) GetTags() []string {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.Tags
+}
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor struct {
+	TrustCenterSubprocessor UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor "json:\"trustCenterSubprocessor\" graphql:\"trustCenterSubprocessor\""
+}
+
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor) GetTrustCenterSubprocessor() *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor{}
+	}
+	return &t.TrustCenterSubprocessor
+}
+
+type GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node struct {
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges struct {
+	Node *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges) GetNode() *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories struct {
+	Edges      []*GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                                            "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories) GetEdges() []*GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories) GetPageInfo() *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories{}
+	}
+	return t.TotalCount
+}
+
+type GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node struct {
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges struct {
+	Node *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges) GetNode() *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories struct {
+	Edges      []*GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                                         "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories) GetEdges() []*GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories{}
+	}
+	return t.Edges
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories) GetPageInfo() *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories{}
 	}
 	return t.TotalCount
 }
@@ -87384,6 +89342,116 @@ func (t *GetSubcontrolHistories) GetSubcontrolHistories() *GetSubcontrolHistorie
 	return &t.SubcontrolHistories
 }
 
+type CreateBulkCSVSubprocessor struct {
+	CreateBulkCSVSubprocessor CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor "json:\"createBulkCSVSubprocessor\" graphql:\"createBulkCSVSubprocessor\""
+}
+
+func (t *CreateBulkCSVSubprocessor) GetCreateBulkCSVSubprocessor() *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor{}
+	}
+	return &t.CreateBulkCSVSubprocessor
+}
+
+type CreateBulkSubprocessor struct {
+	CreateBulkSubprocessor CreateBulkSubprocessor_CreateBulkSubprocessor "json:\"createBulkSubprocessor\" graphql:\"createBulkSubprocessor\""
+}
+
+func (t *CreateBulkSubprocessor) GetCreateBulkSubprocessor() *CreateBulkSubprocessor_CreateBulkSubprocessor {
+	if t == nil {
+		t = &CreateBulkSubprocessor{}
+	}
+	return &t.CreateBulkSubprocessor
+}
+
+type CreateSubprocessor struct {
+	CreateSubprocessor CreateSubprocessor_CreateSubprocessor "json:\"createSubprocessor\" graphql:\"createSubprocessor\""
+}
+
+func (t *CreateSubprocessor) GetCreateSubprocessor() *CreateSubprocessor_CreateSubprocessor {
+	if t == nil {
+		t = &CreateSubprocessor{}
+	}
+	return &t.CreateSubprocessor
+}
+
+type DeleteSubprocessor struct {
+	DeleteSubprocessor DeleteSubprocessor_DeleteSubprocessor "json:\"deleteSubprocessor\" graphql:\"deleteSubprocessor\""
+}
+
+func (t *DeleteSubprocessor) GetDeleteSubprocessor() *DeleteSubprocessor_DeleteSubprocessor {
+	if t == nil {
+		t = &DeleteSubprocessor{}
+	}
+	return &t.DeleteSubprocessor
+}
+
+type GetAllSubprocessors struct {
+	Subprocessors GetAllSubprocessors_Subprocessors "json:\"subprocessors\" graphql:\"subprocessors\""
+}
+
+func (t *GetAllSubprocessors) GetSubprocessors() *GetAllSubprocessors_Subprocessors {
+	if t == nil {
+		t = &GetAllSubprocessors{}
+	}
+	return &t.Subprocessors
+}
+
+type GetSubprocessorByID struct {
+	Subprocessor GetSubprocessorByID_Subprocessor "json:\"subprocessor\" graphql:\"subprocessor\""
+}
+
+func (t *GetSubprocessorByID) GetSubprocessor() *GetSubprocessorByID_Subprocessor {
+	if t == nil {
+		t = &GetSubprocessorByID{}
+	}
+	return &t.Subprocessor
+}
+
+type GetSubprocessors struct {
+	Subprocessors GetSubprocessors_Subprocessors "json:\"subprocessors\" graphql:\"subprocessors\""
+}
+
+func (t *GetSubprocessors) GetSubprocessors() *GetSubprocessors_Subprocessors {
+	if t == nil {
+		t = &GetSubprocessors{}
+	}
+	return &t.Subprocessors
+}
+
+type UpdateSubprocessor struct {
+	UpdateSubprocessor UpdateSubprocessor_UpdateSubprocessor "json:\"updateSubprocessor\" graphql:\"updateSubprocessor\""
+}
+
+func (t *UpdateSubprocessor) GetUpdateSubprocessor() *UpdateSubprocessor_UpdateSubprocessor {
+	if t == nil {
+		t = &UpdateSubprocessor{}
+	}
+	return &t.UpdateSubprocessor
+}
+
+type GetAllSubprocessorHistories struct {
+	SubprocessorHistories GetAllSubprocessorHistories_SubprocessorHistories "json:\"subprocessorHistories\" graphql:\"subprocessorHistories\""
+}
+
+func (t *GetAllSubprocessorHistories) GetSubprocessorHistories() *GetAllSubprocessorHistories_SubprocessorHistories {
+	if t == nil {
+		t = &GetAllSubprocessorHistories{}
+	}
+	return &t.SubprocessorHistories
+}
+
+type GetSubprocessorHistories struct {
+	SubprocessorHistories GetSubprocessorHistories_SubprocessorHistories "json:\"subprocessorHistories\" graphql:\"subprocessorHistories\""
+}
+
+func (t *GetSubprocessorHistories) GetSubprocessorHistories() *GetSubprocessorHistories_SubprocessorHistories {
+	if t == nil {
+		t = &GetSubprocessorHistories{}
+	}
+	return &t.SubprocessorHistories
+}
+
 type CreateBulkCSVSubscriber struct {
 	CreateBulkCSVSubscriber CreateBulkCSVSubscriber_CreateBulkCSVSubscriber "json:\"createBulkCSVSubscriber\" graphql:\"createBulkCSVSubscriber\""
 }
@@ -87899,6 +89967,116 @@ func (t *GetTrustCenterSettingHistories) GetTrustCenterSettingHistories() *GetTr
 		t = &GetTrustCenterSettingHistories{}
 	}
 	return &t.TrustCenterSettingHistories
+}
+
+type CreateBulkCSVTrustCenterSubprocessor struct {
+	CreateBulkCSVTrustCenterSubprocessor CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor "json:\"createBulkCSVTrustCenterSubprocessor\" graphql:\"createBulkCSVTrustCenterSubprocessor\""
+}
+
+func (t *CreateBulkCSVTrustCenterSubprocessor) GetCreateBulkCSVTrustCenterSubprocessor() *CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterSubprocessor{}
+	}
+	return &t.CreateBulkCSVTrustCenterSubprocessor
+}
+
+type CreateBulkTrustCenterSubprocessor struct {
+	CreateBulkTrustCenterSubprocessor CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor "json:\"createBulkTrustCenterSubprocessor\" graphql:\"createBulkTrustCenterSubprocessor\""
+}
+
+func (t *CreateBulkTrustCenterSubprocessor) GetCreateBulkTrustCenterSubprocessor() *CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor {
+	if t == nil {
+		t = &CreateBulkTrustCenterSubprocessor{}
+	}
+	return &t.CreateBulkTrustCenterSubprocessor
+}
+
+type CreateTrustCenterSubprocessor struct {
+	CreateTrustCenterSubprocessor CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor "json:\"createTrustCenterSubprocessor\" graphql:\"createTrustCenterSubprocessor\""
+}
+
+func (t *CreateTrustCenterSubprocessor) GetCreateTrustCenterSubprocessor() *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor{}
+	}
+	return &t.CreateTrustCenterSubprocessor
+}
+
+type DeleteTrustCenterSubprocessor struct {
+	DeleteTrustCenterSubprocessor DeleteTrustCenterSubprocessor_DeleteTrustCenterSubprocessor "json:\"deleteTrustCenterSubprocessor\" graphql:\"deleteTrustCenterSubprocessor\""
+}
+
+func (t *DeleteTrustCenterSubprocessor) GetDeleteTrustCenterSubprocessor() *DeleteTrustCenterSubprocessor_DeleteTrustCenterSubprocessor {
+	if t == nil {
+		t = &DeleteTrustCenterSubprocessor{}
+	}
+	return &t.DeleteTrustCenterSubprocessor
+}
+
+type GetAllTrustCenterSubprocessors struct {
+	TrustCenterSubprocessors GetAllTrustCenterSubprocessors_TrustCenterSubprocessors "json:\"trustCenterSubprocessors\" graphql:\"trustCenterSubprocessors\""
+}
+
+func (t *GetAllTrustCenterSubprocessors) GetTrustCenterSubprocessors() *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors{}
+	}
+	return &t.TrustCenterSubprocessors
+}
+
+type GetTrustCenterSubprocessorByID struct {
+	TrustCenterSubprocessor GetTrustCenterSubprocessorByID_TrustCenterSubprocessor "json:\"trustCenterSubprocessor\" graphql:\"trustCenterSubprocessor\""
+}
+
+func (t *GetTrustCenterSubprocessorByID) GetTrustCenterSubprocessor() *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID{}
+	}
+	return &t.TrustCenterSubprocessor
+}
+
+type GetTrustCenterSubprocessors struct {
+	TrustCenterSubprocessors GetTrustCenterSubprocessors_TrustCenterSubprocessors "json:\"trustCenterSubprocessors\" graphql:\"trustCenterSubprocessors\""
+}
+
+func (t *GetTrustCenterSubprocessors) GetTrustCenterSubprocessors() *GetTrustCenterSubprocessors_TrustCenterSubprocessors {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors{}
+	}
+	return &t.TrustCenterSubprocessors
+}
+
+type UpdateTrustCenterSubprocessor struct {
+	UpdateTrustCenterSubprocessor UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor "json:\"updateTrustCenterSubprocessor\" graphql:\"updateTrustCenterSubprocessor\""
+}
+
+func (t *UpdateTrustCenterSubprocessor) GetUpdateTrustCenterSubprocessor() *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor{}
+	}
+	return &t.UpdateTrustCenterSubprocessor
+}
+
+type GetAllTrustCenterSubprocessorHistories struct {
+	TrustCenterSubprocessorHistories GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories "json:\"trustCenterSubprocessorHistories\" graphql:\"trustCenterSubprocessorHistories\""
+}
+
+func (t *GetAllTrustCenterSubprocessorHistories) GetTrustCenterSubprocessorHistories() *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories{}
+	}
+	return &t.TrustCenterSubprocessorHistories
+}
+
+type GetTrustCenterSubprocessorHistories struct {
+	TrustCenterSubprocessorHistories GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories "json:\"trustCenterSubprocessorHistories\" graphql:\"trustCenterSubprocessorHistories\""
+}
+
+func (t *GetTrustCenterSubprocessorHistories) GetTrustCenterSubprocessorHistories() *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories{}
+	}
+	return &t.TrustCenterSubprocessorHistories
 }
 
 type CreateUser struct {
@@ -89298,6 +91476,21 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 				}
 			}
 		}
+		subprocessors {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					tags
+				}
+			}
+		}
 		subscribers {
 			totalCount
 			pageInfo {
@@ -89373,6 +91566,21 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					ownerID
 					slug
 					customDomainID
+				}
+			}
+		}
+		trustCenterSubprocessors {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					tags
 				}
 			}
 		}
@@ -106866,6 +109074,21 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 				}
 			}
 		}
+		subprocessors {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					tags
+				}
+			}
+		}
 		subscribers {
 			totalCount
 			pageInfo {
@@ -106917,6 +109140,21 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 			}
 		}
 		trustCenters {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					tags
+				}
+			}
+		}
+		trustCenterSubprocessors {
 			totalCount
 			pageInfo {
 				hasNextPage
@@ -108005,6 +110243,350 @@ func (c *Client) GetSubcontrolHistories(ctx context.Context, where *SubcontrolHi
 
 	var res GetSubcontrolHistories
 	if err := c.Client.Post(ctx, "GetSubcontrolHistories", GetSubcontrolHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVSubprocessorDocument = `mutation CreateBulkCSVSubprocessor ($input: Upload!) {
+	createBulkCSVSubprocessor(input: $input) {
+		subprocessors {
+			createdAt
+			createdBy
+			id
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVSubprocessor(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVSubprocessor, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVSubprocessor
+	if err := c.Client.Post(ctx, "CreateBulkCSVSubprocessor", CreateBulkCSVSubprocessorDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkSubprocessorDocument = `mutation CreateBulkSubprocessor ($input: [CreateSubprocessorInput!]) {
+	createBulkSubprocessor(input: $input) {
+		subprocessors {
+			createdAt
+			createdBy
+			id
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkSubprocessor(ctx context.Context, input []*CreateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkSubprocessor, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkSubprocessor
+	if err := c.Client.Post(ctx, "CreateBulkSubprocessor", CreateBulkSubprocessorDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateSubprocessorDocument = `mutation CreateSubprocessor ($input: CreateSubprocessorInput!) {
+	createSubprocessor(input: $input) {
+		subprocessor {
+			createdAt
+			createdBy
+			id
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateSubprocessor(ctx context.Context, input CreateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*CreateSubprocessor, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateSubprocessor
+	if err := c.Client.Post(ctx, "CreateSubprocessor", CreateSubprocessorDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteSubprocessorDocument = `mutation DeleteSubprocessor ($deleteSubprocessorId: ID!) {
+	deleteSubprocessor(id: $deleteSubprocessorId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteSubprocessor(ctx context.Context, deleteSubprocessorID string, interceptors ...clientv2.RequestInterceptor) (*DeleteSubprocessor, error) {
+	vars := map[string]any{
+		"deleteSubprocessorId": deleteSubprocessorID,
+	}
+
+	var res DeleteSubprocessor
+	if err := c.Client.Post(ctx, "DeleteSubprocessor", DeleteSubprocessorDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllSubprocessorsDocument = `query GetAllSubprocessors {
+	subprocessors {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllSubprocessors(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllSubprocessors, error) {
+	vars := map[string]any{}
+
+	var res GetAllSubprocessors
+	if err := c.Client.Post(ctx, "GetAllSubprocessors", GetAllSubprocessorsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetSubprocessorByIDDocument = `query GetSubprocessorByID ($subprocessorId: ID!) {
+	subprocessor(id: $subprocessorId) {
+		createdAt
+		createdBy
+		id
+		tags
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetSubprocessorByID(ctx context.Context, subprocessorID string, interceptors ...clientv2.RequestInterceptor) (*GetSubprocessorByID, error) {
+	vars := map[string]any{
+		"subprocessorId": subprocessorID,
+	}
+
+	var res GetSubprocessorByID
+	if err := c.Client.Post(ctx, "GetSubprocessorByID", GetSubprocessorByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetSubprocessorsDocument = `query GetSubprocessors ($first: Int, $last: Int, $where: SubprocessorWhereInput) {
+	subprocessors(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetSubprocessors(ctx context.Context, first *int64, last *int64, where *SubprocessorWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetSubprocessors, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetSubprocessors
+	if err := c.Client.Post(ctx, "GetSubprocessors", GetSubprocessorsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateSubprocessorDocument = `mutation UpdateSubprocessor ($updateSubprocessorId: ID!, $input: UpdateSubprocessorInput!) {
+	updateSubprocessor(id: $updateSubprocessorId, input: $input) {
+		subprocessor {
+			createdAt
+			createdBy
+			id
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateSubprocessor(ctx context.Context, updateSubprocessorID string, input UpdateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*UpdateSubprocessor, error) {
+	vars := map[string]any{
+		"updateSubprocessorId": updateSubprocessorID,
+		"input":                input,
+	}
+
+	var res UpdateSubprocessor
+	if err := c.Client.Post(ctx, "UpdateSubprocessor", UpdateSubprocessorDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllSubprocessorHistoriesDocument = `query GetAllSubprocessorHistories {
+	subprocessorHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				operation
+				ref
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllSubprocessorHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllSubprocessorHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllSubprocessorHistories
+	if err := c.Client.Post(ctx, "GetAllSubprocessorHistories", GetAllSubprocessorHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetSubprocessorHistoriesDocument = `query GetSubprocessorHistories ($first: Int, $last: Int, $where: SubprocessorHistoryWhereInput) {
+	subprocessorHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				operation
+				ref
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetSubprocessorHistories(ctx context.Context, first *int64, last *int64, where *SubprocessorHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetSubprocessorHistories, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetSubprocessorHistories
+	if err := c.Client.Post(ctx, "GetSubprocessorHistories", GetSubprocessorHistoriesDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -110098,6 +112680,350 @@ func (c *Client) GetTrustCenterSettingHistories(ctx context.Context, first *int6
 	return &res, nil
 }
 
+const CreateBulkCSVTrustCenterSubprocessorDocument = `mutation CreateBulkCSVTrustCenterSubprocessor ($input: Upload!) {
+	createBulkCSVTrustCenterSubprocessor(input: $input) {
+		trustCenterSubprocessors {
+			createdAt
+			createdBy
+			id
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVTrustCenterSubprocessor(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTrustCenterSubprocessor, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVTrustCenterSubprocessor
+	if err := c.Client.Post(ctx, "CreateBulkCSVTrustCenterSubprocessor", CreateBulkCSVTrustCenterSubprocessorDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkTrustCenterSubprocessorDocument = `mutation CreateBulkTrustCenterSubprocessor ($input: [CreateTrustCenterSubprocessorInput!]) {
+	createBulkTrustCenterSubprocessor(input: $input) {
+		trustCenterSubprocessors {
+			createdAt
+			createdBy
+			id
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkTrustCenterSubprocessor(ctx context.Context, input []*CreateTrustCenterSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTrustCenterSubprocessor, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkTrustCenterSubprocessor
+	if err := c.Client.Post(ctx, "CreateBulkTrustCenterSubprocessor", CreateBulkTrustCenterSubprocessorDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateTrustCenterSubprocessorDocument = `mutation CreateTrustCenterSubprocessor ($input: CreateTrustCenterSubprocessorInput!) {
+	createTrustCenterSubprocessor(input: $input) {
+		trustCenterSubprocessor {
+			createdAt
+			createdBy
+			id
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateTrustCenterSubprocessor(ctx context.Context, input CreateTrustCenterSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterSubprocessor, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateTrustCenterSubprocessor
+	if err := c.Client.Post(ctx, "CreateTrustCenterSubprocessor", CreateTrustCenterSubprocessorDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteTrustCenterSubprocessorDocument = `mutation DeleteTrustCenterSubprocessor ($deleteTrustCenterSubprocessorId: ID!) {
+	deleteTrustCenterSubprocessor(id: $deleteTrustCenterSubprocessorId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteTrustCenterSubprocessor(ctx context.Context, deleteTrustCenterSubprocessorID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTrustCenterSubprocessor, error) {
+	vars := map[string]any{
+		"deleteTrustCenterSubprocessorId": deleteTrustCenterSubprocessorID,
+	}
+
+	var res DeleteTrustCenterSubprocessor
+	if err := c.Client.Post(ctx, "DeleteTrustCenterSubprocessor", DeleteTrustCenterSubprocessorDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllTrustCenterSubprocessorsDocument = `query GetAllTrustCenterSubprocessors {
+	trustCenterSubprocessors {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllTrustCenterSubprocessors(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterSubprocessors, error) {
+	vars := map[string]any{}
+
+	var res GetAllTrustCenterSubprocessors
+	if err := c.Client.Post(ctx, "GetAllTrustCenterSubprocessors", GetAllTrustCenterSubprocessorsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTrustCenterSubprocessorByIDDocument = `query GetTrustCenterSubprocessorByID ($trustCenterSubprocessorId: ID!) {
+	trustCenterSubprocessor(id: $trustCenterSubprocessorId) {
+		createdAt
+		createdBy
+		id
+		tags
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetTrustCenterSubprocessorByID(ctx context.Context, trustCenterSubprocessorID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterSubprocessorByID, error) {
+	vars := map[string]any{
+		"trustCenterSubprocessorId": trustCenterSubprocessorID,
+	}
+
+	var res GetTrustCenterSubprocessorByID
+	if err := c.Client.Post(ctx, "GetTrustCenterSubprocessorByID", GetTrustCenterSubprocessorByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTrustCenterSubprocessorsDocument = `query GetTrustCenterSubprocessors ($first: Int, $last: Int, $where: TrustCenterSubprocessorWhereInput) {
+	trustCenterSubprocessors(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetTrustCenterSubprocessors(ctx context.Context, first *int64, last *int64, where *TrustCenterSubprocessorWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterSubprocessors, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetTrustCenterSubprocessors
+	if err := c.Client.Post(ctx, "GetTrustCenterSubprocessors", GetTrustCenterSubprocessorsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateTrustCenterSubprocessorDocument = `mutation UpdateTrustCenterSubprocessor ($updateTrustCenterSubprocessorId: ID!, $input: UpdateTrustCenterSubprocessorInput!) {
+	updateTrustCenterSubprocessor(id: $updateTrustCenterSubprocessorId, input: $input) {
+		trustCenterSubprocessor {
+			createdAt
+			createdBy
+			id
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateTrustCenterSubprocessor(ctx context.Context, updateTrustCenterSubprocessorID string, input UpdateTrustCenterSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterSubprocessor, error) {
+	vars := map[string]any{
+		"updateTrustCenterSubprocessorId": updateTrustCenterSubprocessorID,
+		"input":                           input,
+	}
+
+	var res UpdateTrustCenterSubprocessor
+	if err := c.Client.Post(ctx, "UpdateTrustCenterSubprocessor", UpdateTrustCenterSubprocessorDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllTrustCenterSubprocessorHistoriesDocument = `query GetAllTrustCenterSubprocessorHistories {
+	trustCenterSubprocessorHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				operation
+				ref
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllTrustCenterSubprocessorHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterSubprocessorHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllTrustCenterSubprocessorHistories
+	if err := c.Client.Post(ctx, "GetAllTrustCenterSubprocessorHistories", GetAllTrustCenterSubprocessorHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTrustCenterSubprocessorHistoriesDocument = `query GetTrustCenterSubprocessorHistories ($first: Int, $last: Int, $where: TrustCenterSubprocessorHistoryWhereInput) {
+	trustCenterSubprocessorHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				operation
+				ref
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetTrustCenterSubprocessorHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterSubprocessorHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterSubprocessorHistories, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetTrustCenterSubprocessorHistories
+	if err := c.Client.Post(ctx, "GetTrustCenterSubprocessorHistories", GetTrustCenterSubprocessorHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateUserDocument = `mutation CreateUser ($input: CreateUserInput!, $avatarFile: Upload) {
 	createUser(input: $input, avatarFile: $avatarFile) {
 		user {
@@ -110933,459 +113859,479 @@ func (c *Client) GetAllWebauthns(ctx context.Context, interceptors ...clientv2.R
 }
 
 var DocumentOperationNames = map[string]string{
-	CreateBulkCSVActionPlanDocument:              "CreateBulkCSVActionPlan",
-	CreateBulkActionPlanDocument:                 "CreateBulkActionPlan",
-	CreateActionPlanDocument:                     "CreateActionPlan",
-	DeleteActionPlanDocument:                     "DeleteActionPlan",
-	GetAllActionPlansDocument:                    "GetAllActionPlans",
-	GetActionPlanByIDDocument:                    "GetActionPlanByID",
-	GetActionPlansDocument:                       "GetActionPlans",
-	UpdateActionPlanDocument:                     "UpdateActionPlan",
-	GetAllActionPlanHistoriesDocument:            "GetAllActionPlanHistories",
-	GetActionPlanHistoriesDocument:               "GetActionPlanHistories",
-	AdminSearchDocument:                          "AdminSearch",
-	CreateAPITokenDocument:                       "CreateAPIToken",
-	DeleteAPITokenDocument:                       "DeleteAPIToken",
-	GetAllAPITokensDocument:                      "GetAllAPITokens",
-	GetAPITokenByIDDocument:                      "GetAPITokenByID",
-	GetAPITokensDocument:                         "GetAPITokens",
-	UpdateAPITokenDocument:                       "UpdateAPIToken",
-	CreateBulkCSVAssetDocument:                   "CreateBulkCSVAsset",
-	CreateBulkAssetDocument:                      "CreateBulkAsset",
-	CreateAssetDocument:                          "CreateAsset",
-	DeleteAssetDocument:                          "DeleteAsset",
-	GetAllAssetsDocument:                         "GetAllAssets",
-	GetAssetByIDDocument:                         "GetAssetByID",
-	GetAssetsDocument:                            "GetAssets",
-	UpdateAssetDocument:                          "UpdateAsset",
-	GetAllAssetHistoriesDocument:                 "GetAllAssetHistories",
-	GetAssetHistoriesDocument:                    "GetAssetHistories",
-	AuditLogsDocument:                            "AuditLogs",
-	CreateBulkContactDocument:                    "CreateBulkContact",
-	CreateBulkCSVContactDocument:                 "CreateBulkCSVContact",
-	CreateContactDocument:                        "CreateContact",
-	DeleteContactDocument:                        "DeleteContact",
-	GetAllContactsDocument:                       "GetAllContacts",
-	GetContactByIDDocument:                       "GetContactByID",
-	GetContactsDocument:                          "GetContacts",
-	UpdateContactDocument:                        "UpdateContact",
-	GetAllContactHistoriesDocument:               "GetAllContactHistories",
-	GetContactHistoriesDocument:                  "GetContactHistories",
-	CreateBulkControlDocument:                    "CreateBulkControl",
-	CreateBulkCSVControlDocument:                 "CreateBulkCSVControl",
-	CreateControlDocument:                        "CreateControl",
-	DeleteControlDocument:                        "DeleteControl",
-	GetAllControlsDocument:                       "GetAllControls",
-	GetControlByIDDocument:                       "GetControlByID",
-	GetControlsDocument:                          "GetControls",
-	UpdateControlDocument:                        "UpdateControl",
-	CreateControlsByCloneDocument:                "CreateControlsByClone",
-	CreateControlsByCloneReturnIDDocument:        "CreateControlsByCloneReturnID",
-	GetControlCategoriesDocument:                 "GetControlCategories",
-	GetControlSubcategoriesDocument:              "GetControlSubcategories",
-	GetAllControlHistoriesDocument:               "GetAllControlHistories",
-	GetControlHistoriesDocument:                  "GetControlHistories",
-	CreateBulkControlImplementationDocument:      "CreateBulkControlImplementation",
-	CreateBulkCSVControlImplementationDocument:   "CreateBulkCSVControlImplementation",
-	CreateControlImplementationDocument:          "CreateControlImplementation",
-	DeleteControlImplementationDocument:          "DeleteControlImplementation",
-	GetAllControlImplementationsDocument:         "GetAllControlImplementations",
-	GetControlImplementationByIDDocument:         "GetControlImplementationByID",
-	GetControlImplementationsDocument:            "GetControlImplementations",
-	UpdateControlImplementationDocument:          "UpdateControlImplementation",
-	GetAllControlImplementationHistoriesDocument: "GetAllControlImplementationHistories",
-	GetControlImplementationHistoriesDocument:    "GetControlImplementationHistories",
-	CreateBulkCSVControlObjectiveDocument:        "CreateBulkCSVControlObjective",
-	CreateBulkControlObjectiveDocument:           "CreateBulkControlObjective",
-	CreateControlObjectiveDocument:               "CreateControlObjective",
-	DeleteControlObjectiveDocument:               "DeleteControlObjective",
-	GetAllControlObjectivesDocument:              "GetAllControlObjectives",
-	GetControlObjectiveByIDDocument:              "GetControlObjectiveByID",
-	GetControlObjectivesDocument:                 "GetControlObjectives",
-	UpdateControlObjectiveDocument:               "UpdateControlObjective",
-	GetAllControlObjectiveHistoriesDocument:      "GetAllControlObjectiveHistories",
-	GetControlObjectiveHistoriesDocument:         "GetControlObjectiveHistories",
-	CreateBulkCSVControlScheduledJobDocument:     "CreateBulkCSVControlScheduledJob",
-	CreateBulkControlScheduledJobDocument:        "CreateBulkControlScheduledJob",
-	CreateControlScheduledJobDocument:            "CreateControlScheduledJob",
-	DeleteControlScheduledJobDocument:            "DeleteControlScheduledJob",
-	GetAllControlScheduledJobsDocument:           "GetAllControlScheduledJobs",
-	GetControlScheduledJobByIDDocument:           "GetControlScheduledJobByID",
-	GetControlScheduledJobsDocument:              "GetControlScheduledJobs",
-	UpdateControlScheduledJobDocument:            "UpdateControlScheduledJob",
-	GetAllControlScheduledJobHistoriesDocument:   "GetAllControlScheduledJobHistories",
-	GetControlScheduledJobHistoriesDocument:      "GetControlScheduledJobHistories",
-	CreateBulkCSVCustomDomainDocument:            "CreateBulkCSVCustomDomain",
-	CreateBulkCustomDomainDocument:               "CreateBulkCustomDomain",
-	CreateCustomDomainDocument:                   "CreateCustomDomain",
-	DeleteCustomDomainDocument:                   "DeleteCustomDomain",
-	GetAllCustomDomainsDocument:                  "GetAllCustomDomains",
-	GetCustomDomainByIDDocument:                  "GetCustomDomainByID",
-	GetCustomDomainsDocument:                     "GetCustomDomains",
-	UpdateCustomDomainDocument:                   "UpdateCustomDomain",
-	GetAllCustomDomainHistoriesDocument:          "GetAllCustomDomainHistories",
-	GetCustomDomainHistoriesDocument:             "GetCustomDomainHistories",
-	CreateBulkCSVDNSVerificationDocument:         "CreateBulkCSVDNSVerification",
-	CreateBulkDNSVerificationDocument:            "CreateBulkDNSVerification",
-	CreateDNSVerificationDocument:                "CreateDNSVerification",
-	DeleteDNSVerificationDocument:                "DeleteDNSVerification",
-	GetAllDNSVerificationsDocument:               "GetAllDNSVerifications",
-	GetDNSVerificationByIDDocument:               "GetDNSVerificationByID",
-	GetDNSVerificationsDocument:                  "GetDNSVerifications",
-	UpdateDNSVerificationDocument:                "UpdateDNSVerification",
-	GetAllDNSVerificationHistoriesDocument:       "GetAllDNSVerificationHistories",
-	GetDNSVerificationHistoriesDocument:          "GetDNSVerificationHistories",
-	CreateDocumentDataDocument:                   "CreateDocumentData",
-	DeleteDocumentDataDocument:                   "DeleteDocumentData",
-	GetDocumentDataByIDDocument:                  "GetDocumentDataByID",
-	UpdateDocumentDataDocument:                   "UpdateDocumentData",
-	GetAllDocumentDataHistoriesDocument:          "GetAllDocumentDataHistories",
-	GetDocumentDataHistoriesDocument:             "GetDocumentDataHistories",
-	CreateBulkCSVEntityDocument:                  "CreateBulkCSVEntity",
-	CreateBulkEntityDocument:                     "CreateBulkEntity",
-	CreateEntityDocument:                         "CreateEntity",
-	DeleteEntityDocument:                         "DeleteEntity",
-	GetAllEntitiesDocument:                       "GetAllEntities",
-	GetEntitiesDocument:                          "GetEntities",
-	GetEntityByIDDocument:                        "GetEntityByID",
-	UpdateEntityDocument:                         "UpdateEntity",
-	GetAllEntityHistoriesDocument:                "GetAllEntityHistories",
-	GetEntityHistoriesDocument:                   "GetEntityHistories",
-	CreateBulkCSVEntityTypeDocument:              "CreateBulkCSVEntityType",
-	CreateBulkEntityTypeDocument:                 "CreateBulkEntityType",
-	CreateEntityTypeDocument:                     "CreateEntityType",
-	DeleteEntityTypeDocument:                     "DeleteEntityType",
-	GetAllEntityTypesDocument:                    "GetAllEntityTypes",
-	GetEntityTypeByIDDocument:                    "GetEntityTypeByID",
-	GetEntityTypesDocument:                       "GetEntityTypes",
-	UpdateEntityTypeDocument:                     "UpdateEntityType",
-	GetAllEntityTypeHistoriesDocument:            "GetAllEntityTypeHistories",
-	GetEntityTypeHistoriesDocument:               "GetEntityTypeHistories",
-	CreateBulkCSVEventDocument:                   "CreateBulkCSVEvent",
-	CreateBulkEventDocument:                      "CreateBulkEvent",
-	CreateEventDocument:                          "CreateEvent",
-	DeleteEventDocument:                          "DeleteEvent",
-	GetAllEventsDocument:                         "GetAllEvents",
-	GetEventByIDDocument:                         "GetEventByID",
-	GetEventsDocument:                            "GetEvents",
-	UpdateEventDocument:                          "UpdateEvent",
-	CreateEvidenceDocument:                       "CreateEvidence",
-	DeleteEvidenceDocument:                       "DeleteEvidence",
-	GetAllEvidencesDocument:                      "GetAllEvidences",
-	GetEvidenceByIDDocument:                      "GetEvidenceByID",
-	GetEvidencesDocument:                         "GetEvidences",
-	UpdateEvidenceDocument:                       "UpdateEvidence",
-	GetAllEvidenceHistoriesDocument:              "GetAllEvidenceHistories",
-	GetEvidenceHistoriesDocument:                 "GetEvidenceHistories",
-	DeleteFileDocument:                           "DeleteFile",
-	GetAllFilesDocument:                          "GetAllFiles",
-	GetFileByIDDocument:                          "GetFileByID",
-	GetFilesDocument:                             "GetFiles",
-	GetAllFileHistoriesDocument:                  "GetAllFileHistories",
-	GetFileHistoriesDocument:                     "GetFileHistories",
-	CreateBulkCSVGroupDocument:                   "CreateBulkCSVGroup",
-	CreateBulkGroupDocument:                      "CreateBulkGroup",
-	CreateGroupDocument:                          "CreateGroup",
-	CreateGroupByCloneDocument:                   "CreateGroupByClone",
-	CreateGroupWithMembersDocument:               "CreateGroupWithMembers",
-	DeleteGroupDocument:                          "DeleteGroup",
-	GetAllGroupsDocument:                         "GetAllGroups",
-	GetGroupByIDDocument:                         "GetGroupByID",
-	GetGroupInfoDocument:                         "GetGroupInfo",
-	GetGroupsDocument:                            "GetGroups",
-	UpdateGroupDocument:                          "UpdateGroup",
-	GetAllGroupHistoriesDocument:                 "GetAllGroupHistories",
-	GetGroupHistoriesDocument:                    "GetGroupHistories",
-	AddUserToGroupWithRoleDocument:               "AddUserToGroupWithRole",
-	CreateBulkCSVGroupMembersDocument:            "CreateBulkCSVGroupMembers",
-	CreateBulkGroupMembersDocument:               "CreateBulkGroupMembers",
-	GetGroupMembersByGroupIDDocument:             "GetGroupMembersByGroupID",
-	RemoveUserFromGroupDocument:                  "RemoveUserFromGroup",
-	UpdateUserRoleInGroupDocument:                "UpdateUserRoleInGroup",
-	GetAllGroupMembershipHistoriesDocument:       "GetAllGroupMembershipHistories",
-	GetGroupMembershipHistoriesDocument:          "GetGroupMembershipHistories",
-	GetAllGroupSettingsDocument:                  "GetAllGroupSettings",
-	GetGroupSettingByIDDocument:                  "GetGroupSettingByID",
-	GetGroupSettingsDocument:                     "GetGroupSettings",
-	UpdateGroupSettingDocument:                   "UpdateGroupSetting",
-	GetAllGroupSettingHistoriesDocument:          "GetAllGroupSettingHistories",
-	GetGroupSettingHistoriesDocument:             "GetGroupSettingHistories",
-	CreateBulkCSVHushDocument:                    "CreateBulkCSVHush",
-	CreateBulkHushDocument:                       "CreateBulkHush",
-	CreateHushDocument:                           "CreateHush",
-	GetAllHushesDocument:                         "GetAllHushes",
-	GetHushByIDDocument:                          "GetHushByID",
-	GetHushesDocument:                            "GetHushes",
-	UpdateHushDocument:                           "UpdateHush",
-	GetAllHushHistoriesDocument:                  "GetAllHushHistories",
-	GetHushHistoriesDocument:                     "GetHushHistories",
-	CreateBulkCSVIntegrationDocument:             "CreateBulkCSVIntegration",
-	CreateBulkIntegrationDocument:                "CreateBulkIntegration",
-	CreateIntegrationDocument:                    "CreateIntegration",
-	DeleteIntegrationDocument:                    "DeleteIntegration",
-	GetAllIntegrationsDocument:                   "GetAllIntegrations",
-	GetIntegrationByIDDocument:                   "GetIntegrationByID",
-	GetIntegrationsDocument:                      "GetIntegrations",
-	UpdateIntegrationDocument:                    "UpdateIntegration",
-	GetAllIntegrationHistoriesDocument:           "GetAllIntegrationHistories",
-	GetIntegrationHistoriesDocument:              "GetIntegrationHistories",
-	CreateBulkCSVInternalPolicyDocument:          "CreateBulkCSVInternalPolicy",
-	CreateBulkInternalPolicyDocument:             "CreateBulkInternalPolicy",
-	CreateInternalPolicyDocument:                 "CreateInternalPolicy",
-	DeleteInternalPolicyDocument:                 "DeleteInternalPolicy",
-	GetAllInternalPoliciesDocument:               "GetAllInternalPolicies",
-	GetInternalPoliciesDocument:                  "GetInternalPolicies",
-	GetInternalPolicyByIDDocument:                "GetInternalPolicyByID",
-	UpdateInternalPolicyDocument:                 "UpdateInternalPolicy",
-	GetAllInternalPolicyHistoriesDocument:        "GetAllInternalPolicyHistories",
-	GetInternalPolicyHistoriesDocument:           "GetInternalPolicyHistories",
-	CreateBulkCSVInviteDocument:                  "CreateBulkCSVInvite",
-	CreateBulkInviteDocument:                     "CreateBulkInvite",
-	CreateInviteDocument:                         "CreateInvite",
-	DeleteInviteDocument:                         "DeleteInvite",
-	GetAllInvitesDocument:                        "GetAllInvites",
-	GetInviteByIDDocument:                        "GetInviteByID",
-	InvitesByOrgIDDocument:                       "InvitesByOrgID",
-	GetAllJobResultsDocument:                     "GetAllJobResults",
-	GetJobResultByIDDocument:                     "GetJobResultByID",
-	GetJobResultsDocument:                        "GetJobResults",
-	DeleteJobRunnerDocument:                      "DeleteJobRunner",
-	GetAllJobRunnersDocument:                     "GetAllJobRunners",
-	GetJobRunnerByIDDocument:                     "GetJobRunnerByID",
-	GetJobRunnersDocument:                        "GetJobRunners",
-	UpdateJobRunnerDocument:                      "UpdateJobRunner",
-	CreateJobRunnerRegistrationTokenDocument:     "CreateJobRunnerRegistrationToken",
-	DeleteJobRunnerRegistrationTokenDocument:     "DeleteJobRunnerRegistrationToken",
-	GetAllJobRunnerRegistrationTokensDocument:    "GetAllJobRunnerRegistrationTokens",
-	GetJobRunnerRegistrationTokenByIDDocument:    "GetJobRunnerRegistrationTokenByID",
-	GetJobRunnerRegistrationTokensDocument:       "GetJobRunnerRegistrationTokens",
-	CreateJobRunnerTokenDocument:                 "CreateJobRunnerToken",
-	DeleteJobRunnerTokenDocument:                 "DeleteJobRunnerToken",
-	GetAllJobRunnerTokensDocument:                "GetAllJobRunnerTokens",
-	GetJobRunnerTokenByIDDocument:                "GetJobRunnerTokenByID",
-	GetJobRunnerTokensDocument:                   "GetJobRunnerTokens",
-	CreateBulkCSVMappableDomainDocument:          "CreateBulkCSVMappableDomain",
-	CreateBulkMappableDomainDocument:             "CreateBulkMappableDomain",
-	CreateMappableDomainDocument:                 "CreateMappableDomain",
-	DeleteMappableDomainDocument:                 "DeleteMappableDomain",
-	GetAllMappableDomainsDocument:                "GetAllMappableDomains",
-	GetMappableDomainByIDDocument:                "GetMappableDomainByID",
-	GetMappableDomainsDocument:                   "GetMappableDomains",
-	UpdateMappableDomainDocument:                 "UpdateMappableDomain",
-	GetAllMappableDomainHistoriesDocument:        "GetAllMappableDomainHistories",
-	GetMappableDomainHistoriesDocument:           "GetMappableDomainHistories",
-	CreateBulkCSVMappedControlDocument:           "CreateBulkCSVMappedControl",
-	CreateBulkMappedControlDocument:              "CreateBulkMappedControl",
-	CreateMappedControlDocument:                  "CreateMappedControl",
-	DeleteMappedControlDocument:                  "DeleteMappedControl",
-	GetAllMappedControlsDocument:                 "GetAllMappedControls",
-	GetMappedControlByIDDocument:                 "GetMappedControlByID",
-	GetMappedControlsDocument:                    "GetMappedControls",
-	UpdateMappedControlDocument:                  "UpdateMappedControl",
-	GetAllMappedControlHistoriesDocument:         "GetAllMappedControlHistories",
-	GetMappedControlHistoriesDocument:            "GetMappedControlHistories",
-	CreateBulkCSVNarrativeDocument:               "CreateBulkCSVNarrative",
-	CreateBulkNarrativeDocument:                  "CreateBulkNarrative",
-	CreateNarrativeDocument:                      "CreateNarrative",
-	DeleteNarrativeDocument:                      "DeleteNarrative",
-	GetAllNarrativesDocument:                     "GetAllNarratives",
-	GetNarrativeByIDDocument:                     "GetNarrativeByID",
-	GetNarrativesDocument:                        "GetNarratives",
-	UpdateNarrativeDocument:                      "UpdateNarrative",
-	GetAllNarrativeHistoriesDocument:             "GetAllNarrativeHistories",
-	GetNarrativeHistoriesDocument:                "GetNarrativeHistories",
-	GetNoteByIDDocument:                          "GetNoteByID",
-	GetAllNoteHistoriesDocument:                  "GetAllNoteHistories",
-	GetNoteHistoriesDocument:                     "GetNoteHistories",
-	CreateOnboardingDocument:                     "CreateOnboarding",
-	CreateOrganizationDocument:                   "CreateOrganization",
-	CreateOrganizationWithMembersDocument:        "CreateOrganizationWithMembers",
-	DeleteOrganizationDocument:                   "DeleteOrganization",
-	GetAllOrganizationsDocument:                  "GetAllOrganizations",
-	GetOrganizationByIDDocument:                  "GetOrganizationByID",
-	GetOrganizationsDocument:                     "GetOrganizations",
-	UpdateOrganizationDocument:                   "UpdateOrganization",
-	GetAllOrganizationHistoriesDocument:          "GetAllOrganizationHistories",
-	GetOrganizationHistoriesDocument:             "GetOrganizationHistories",
-	GetAllOrganizationSettingsDocument:           "GetAllOrganizationSettings",
-	GetOrganizationSettingByIDDocument:           "GetOrganizationSettingByID",
-	GetOrganizationSettingsDocument:              "GetOrganizationSettings",
-	UpdateOrganizationSettingDocument:            "UpdateOrganizationSetting",
-	GetAllOrganizationSettingHistoriesDocument:   "GetAllOrganizationSettingHistories",
-	GetOrganizationSettingHistoriesDocument:      "GetOrganizationSettingHistories",
-	AddUserToOrgWithRoleDocument:                 "AddUserToOrgWithRole",
-	CreateBulkCSVOrgMembersDocument:              "CreateBulkCSVOrgMembers",
-	CreateBulkOrgMembersDocument:                 "CreateBulkOrgMembers",
-	GetOrgMembersByOrgIDDocument:                 "GetOrgMembersByOrgID",
-	RemoveUserFromOrgDocument:                    "RemoveUserFromOrg",
-	UpdateUserRoleInOrgDocument:                  "UpdateUserRoleInOrg",
-	GetAllOrgMembershipHistoriesDocument:         "GetAllOrgMembershipHistories",
-	GetOrgMembershipHistoriesDocument:            "GetOrgMembershipHistories",
-	GetAllOrgSubscriptionsDocument:               "GetAllOrgSubscriptions",
-	GetOrgSubscriptionByIDDocument:               "GetOrgSubscriptionByID",
-	GetOrgSubscriptionsDocument:                  "GetOrgSubscriptions",
-	GetAllOrgSubscriptionHistoriesDocument:       "GetAllOrgSubscriptionHistories",
-	GetOrgSubscriptionHistoriesDocument:          "GetOrgSubscriptionHistories",
-	CreatePersonalAccessTokenDocument:            "CreatePersonalAccessToken",
-	DeletePersonalAccessTokenDocument:            "DeletePersonalAccessToken",
-	GetAllPersonalAccessTokensDocument:           "GetAllPersonalAccessTokens",
-	GetPersonalAccessTokenByIDDocument:           "GetPersonalAccessTokenByID",
-	GetPersonalAccessTokensDocument:              "GetPersonalAccessTokens",
-	UpdatePersonalAccessTokenDocument:            "UpdatePersonalAccessToken",
-	CreateBulkCSVProcedureDocument:               "CreateBulkCSVProcedure",
-	CreateBulkProcedureDocument:                  "CreateBulkProcedure",
-	CreateProcedureDocument:                      "CreateProcedure",
-	DeleteProcedureDocument:                      "DeleteProcedure",
-	GetAllProceduresDocument:                     "GetAllProcedures",
-	GetProcedureByIDDocument:                     "GetProcedureByID",
-	GetProceduresDocument:                        "GetProcedures",
-	UpdateProcedureDocument:                      "UpdateProcedure",
-	GetAllProcedureHistoriesDocument:             "GetAllProcedureHistories",
-	GetProcedureHistoriesDocument:                "GetProcedureHistories",
-	CreateBulkCSVProgramDocument:                 "CreateBulkCSVProgram",
-	CreateBulkProgramDocument:                    "CreateBulkProgram",
-	CreateControlWithSubcontrolsDocument:         "CreateControlWithSubcontrols",
-	CreateFullProgramDocument:                    "CreateFullProgram",
-	CreateFullProgramReturnIDsDocument:           "CreateFullProgramReturnIDs",
-	CreateProgramDocument:                        "CreateProgram",
-	CreateProgramWithMembersDocument:             "CreateProgramWithMembers",
-	DeleteProgramDocument:                        "DeleteProgram",
-	GetAllProgramsDocument:                       "GetAllPrograms",
-	GetProgramByIDDocument:                       "GetProgramByID",
-	GetProgramsDocument:                          "GetPrograms",
-	UpdateProgramDocument:                        "UpdateProgram",
-	AddUserToProgramWithRoleDocument:             "AddUserToProgramWithRole",
-	CreateBulkCSVProgramMembersDocument:          "CreateBulkCSVProgramMembers",
-	CreateBulkProgramMembersDocument:             "CreateBulkProgramMembers",
-	GetProgramMembersByProgramIDDocument:         "GetProgramMembersByProgramID",
-	RemoveUserFromProgramDocument:                "RemoveUserFromProgram",
-	UpdateUserRoleInProgramDocument:              "UpdateUserRoleInProgram",
-	GetAllProgramHistoriesDocument:               "GetAllProgramHistories",
-	GetProgramHistoriesDocument:                  "GetProgramHistories",
-	CreateBulkCSVProgramMembershipDocument:       "CreateBulkCSVProgramMembership",
-	CreateBulkProgramMembershipDocument:          "CreateBulkProgramMembership",
-	CreateProgramMembershipDocument:              "CreateProgramMembership",
-	DeleteProgramMembershipDocument:              "DeleteProgramMembership",
-	GetAllProgramMembershipsDocument:             "GetAllProgramMemberships",
-	GetProgramMembershipByIDDocument:             "GetProgramMembershipByID",
-	GetProgramMembershipsDocument:                "GetProgramMemberships",
-	UpdateProgramMembershipDocument:              "UpdateProgramMembership",
-	GetAllProgramMembershipHistoriesDocument:     "GetAllProgramMembershipHistories",
-	GetProgramMembershipHistoriesDocument:        "GetProgramMembershipHistories",
-	CreateBulkCSVRiskDocument:                    "CreateBulkCSVRisk",
-	CreateBulkRiskDocument:                       "CreateBulkRisk",
-	CreateRiskDocument:                           "CreateRisk",
-	DeleteRiskDocument:                           "DeleteRisk",
-	GetAllRisksDocument:                          "GetAllRisks",
-	GetRiskByIDDocument:                          "GetRiskByID",
-	GetRisksDocument:                             "GetRisks",
-	UpdateRiskDocument:                           "UpdateRisk",
-	GetAllRiskHistoriesDocument:                  "GetAllRiskHistories",
-	GetRiskHistoriesDocument:                     "GetRiskHistories",
-	CreateBulkCSVScanDocument:                    "CreateBulkCSVScan",
-	CreateBulkScanDocument:                       "CreateBulkScan",
-	CreateScanDocument:                           "CreateScan",
-	DeleteScanDocument:                           "DeleteScan",
-	GetAllScansDocument:                          "GetAllScans",
-	GetScanByIDDocument:                          "GetScanByID",
-	GetScansDocument:                             "GetScans",
-	UpdateScanDocument:                           "UpdateScan",
-	GetAllScanHistoriesDocument:                  "GetAllScanHistories",
-	GetScanHistoriesDocument:                     "GetScanHistories",
-	CreateBulkCSVScheduledJobDocument:            "CreateBulkCSVScheduledJob",
-	CreateBulkScheduledJobDocument:               "CreateBulkScheduledJob",
-	CreateScheduledJobDocument:                   "CreateScheduledJob",
-	DeleteScheduledJobDocument:                   "DeleteScheduledJob",
-	GetAllScheduledJobsDocument:                  "GetAllScheduledJobs",
-	GetScheduledJobByIDDocument:                  "GetScheduledJobByID",
-	GetScheduledJobsDocument:                     "GetScheduledJobs",
-	UpdateScheduledJobDocument:                   "UpdateScheduledJob",
-	GetAllScheduledJobHistoriesDocument:          "GetAllScheduledJobHistories",
-	GetScheduledJobHistoriesDocument:             "GetScheduledJobHistories",
-	GetAllScheduledJobRunsDocument:               "GetAllScheduledJobRuns",
-	GetScheduledJobRunByIDDocument:               "GetScheduledJobRunByID",
-	GetScheduledJobRunsDocument:                  "GetScheduledJobRuns",
-	GlobalSearchDocument:                         "GlobalSearch",
-	CreateStandardDocument:                       "CreateStandard",
-	DeleteStandardDocument:                       "DeleteStandard",
-	GetAllStandardsDocument:                      "GetAllStandards",
-	GetStandardByIDDocument:                      "GetStandardByID",
-	GetStandardsDocument:                         "GetStandards",
-	UpdateStandardDocument:                       "UpdateStandard",
-	GetAllStandardHistoriesDocument:              "GetAllStandardHistories",
-	GetStandardHistoriesDocument:                 "GetStandardHistories",
-	CreateBulkCSVSubcontrolDocument:              "CreateBulkCSVSubcontrol",
-	CreateBulkSubcontrolDocument:                 "CreateBulkSubcontrol",
-	CreateSubcontrolDocument:                     "CreateSubcontrol",
-	DeleteSubcontrolDocument:                     "DeleteSubcontrol",
-	GetAllSubcontrolsDocument:                    "GetAllSubcontrols",
-	GetSubcontrolByIDDocument:                    "GetSubcontrolByID",
-	GetSubcontrolsDocument:                       "GetSubcontrols",
-	UpdateSubcontrolDocument:                     "UpdateSubcontrol",
-	GetAllSubcontrolHistoriesDocument:            "GetAllSubcontrolHistories",
-	GetSubcontrolHistoriesDocument:               "GetSubcontrolHistories",
-	CreateBulkCSVSubscriberDocument:              "CreateBulkCSVSubscriber",
-	CreateBulkSubscriberDocument:                 "CreateBulkSubscriber",
-	CreateSubscriberDocument:                     "CreateSubscriber",
-	DeleteSubscriberDocument:                     "DeleteSubscriber",
-	GetAllSubscribersDocument:                    "GetAllSubscribers",
-	GetSubscriberByEmailDocument:                 "GetSubscriberByEmail",
-	GetSubscribersDocument:                       "GetSubscribers",
-	UpdateSubscriberDocument:                     "UpdateSubscriber",
-	CreateBulkCSVTaskDocument:                    "CreateBulkCSVTask",
-	CreateBulkTaskDocument:                       "CreateBulkTask",
-	CreateTaskDocument:                           "CreateTask",
-	DeleteTaskDocument:                           "DeleteTask",
-	GetAllTasksDocument:                          "GetAllTasks",
-	GetTaskByIDDocument:                          "GetTaskByID",
-	GetTasksDocument:                             "GetTasks",
-	UpdateTaskDocument:                           "UpdateTask",
-	UpdateTaskCommentDocument:                    "UpdateTaskComment",
-	GetAllTaskHistoriesDocument:                  "GetAllTaskHistories",
-	GetTaskHistoriesDocument:                     "GetTaskHistories",
-	CreateBulkCSVTemplateDocument:                "CreateBulkCSVTemplate",
-	CreateBulkTemplateDocument:                   "CreateBulkTemplate",
-	CreateTemplateDocument:                       "CreateTemplate",
-	GetAllTemplatesDocument:                      "GetAllTemplates",
-	GetTemplateByIDDocument:                      "GetTemplateByID",
-	UpdateTemplateDocument:                       "UpdateTemplate",
-	GetAllTemplateHistoriesDocument:              "GetAllTemplateHistories",
-	GetTemplateHistoriesDocument:                 "GetTemplateHistories",
-	CreateTFASettingDocument:                     "CreateTFASetting",
-	GetAllTFASettingsDocument:                    "GetAllTFASettings",
-	GetTFASettingDocument:                        "GetTFASetting",
-	UpdateTFASettingDocument:                     "UpdateTFASetting",
-	CreateTrustCenterDocument:                    "CreateTrustCenter",
-	DeleteTrustCenterDocument:                    "DeleteTrustCenter",
-	GetAllTrustCentersDocument:                   "GetAllTrustCenters",
-	GetTrustCenterByIDDocument:                   "GetTrustCenterByID",
-	GetTrustCentersDocument:                      "GetTrustCenters",
-	UpdateTrustCenterDocument:                    "UpdateTrustCenter",
-	GetAllTrustCenterHistoriesDocument:           "GetAllTrustCenterHistories",
-	GetTrustCenterHistoriesDocument:              "GetTrustCenterHistories",
-	CreateTrustCenterSettingDocument:             "CreateTrustCenterSetting",
-	DeleteTrustCenterSettingDocument:             "DeleteTrustCenterSetting",
-	GetAllTrustCenterSettingsDocument:            "GetAllTrustCenterSettings",
-	GetTrustCenterSettingByIDDocument:            "GetTrustCenterSettingByID",
-	GetTrustCenterSettingsDocument:               "GetTrustCenterSettings",
-	UpdateTrustCenterSettingDocument:             "UpdateTrustCenterSetting",
-	GetAllTrustCenterSettingHistoriesDocument:    "GetAllTrustCenterSettingHistories",
-	GetTrustCenterSettingHistoriesDocument:       "GetTrustCenterSettingHistories",
-	CreateUserDocument:                           "CreateUser",
-	DeleteUserDocument:                           "DeleteUser",
-	GetAllUsersDocument:                          "GetAllUsers",
-	GetSelfDocument:                              "GetSelf",
-	GetUserByIDDocument:                          "GetUserByID",
-	GetUserByIDWithOrgsDocument:                  "GetUserByIDWithOrgs",
-	UpdateUserDocument:                           "UpdateUser",
-	GetAllUserHistoriesDocument:                  "GetAllUserHistories",
-	GetUserHistoriesDocument:                     "GetUserHistories",
-	GetAllUserSettingsDocument:                   "GetAllUserSettings",
-	GetUserSettingByIDDocument:                   "GetUserSettingByID",
-	GetUserSettingsDocument:                      "GetUserSettings",
-	UpdateUserSettingDocument:                    "UpdateUserSetting",
-	GetAllUserSettingHistoriesDocument:           "GetAllUserSettingHistories",
-	GetUserSettingHistoriesDocument:              "GetUserSettingHistories",
-	DeleteWebauthnDocument:                       "DeleteWebauthn",
-	GetAllWebauthnsDocument:                      "GetAllWebauthns",
+	CreateBulkCSVActionPlanDocument:                "CreateBulkCSVActionPlan",
+	CreateBulkActionPlanDocument:                   "CreateBulkActionPlan",
+	CreateActionPlanDocument:                       "CreateActionPlan",
+	DeleteActionPlanDocument:                       "DeleteActionPlan",
+	GetAllActionPlansDocument:                      "GetAllActionPlans",
+	GetActionPlanByIDDocument:                      "GetActionPlanByID",
+	GetActionPlansDocument:                         "GetActionPlans",
+	UpdateActionPlanDocument:                       "UpdateActionPlan",
+	GetAllActionPlanHistoriesDocument:              "GetAllActionPlanHistories",
+	GetActionPlanHistoriesDocument:                 "GetActionPlanHistories",
+	AdminSearchDocument:                            "AdminSearch",
+	CreateAPITokenDocument:                         "CreateAPIToken",
+	DeleteAPITokenDocument:                         "DeleteAPIToken",
+	GetAllAPITokensDocument:                        "GetAllAPITokens",
+	GetAPITokenByIDDocument:                        "GetAPITokenByID",
+	GetAPITokensDocument:                           "GetAPITokens",
+	UpdateAPITokenDocument:                         "UpdateAPIToken",
+	CreateBulkCSVAssetDocument:                     "CreateBulkCSVAsset",
+	CreateBulkAssetDocument:                        "CreateBulkAsset",
+	CreateAssetDocument:                            "CreateAsset",
+	DeleteAssetDocument:                            "DeleteAsset",
+	GetAllAssetsDocument:                           "GetAllAssets",
+	GetAssetByIDDocument:                           "GetAssetByID",
+	GetAssetsDocument:                              "GetAssets",
+	UpdateAssetDocument:                            "UpdateAsset",
+	GetAllAssetHistoriesDocument:                   "GetAllAssetHistories",
+	GetAssetHistoriesDocument:                      "GetAssetHistories",
+	AuditLogsDocument:                              "AuditLogs",
+	CreateBulkContactDocument:                      "CreateBulkContact",
+	CreateBulkCSVContactDocument:                   "CreateBulkCSVContact",
+	CreateContactDocument:                          "CreateContact",
+	DeleteContactDocument:                          "DeleteContact",
+	GetAllContactsDocument:                         "GetAllContacts",
+	GetContactByIDDocument:                         "GetContactByID",
+	GetContactsDocument:                            "GetContacts",
+	UpdateContactDocument:                          "UpdateContact",
+	GetAllContactHistoriesDocument:                 "GetAllContactHistories",
+	GetContactHistoriesDocument:                    "GetContactHistories",
+	CreateBulkControlDocument:                      "CreateBulkControl",
+	CreateBulkCSVControlDocument:                   "CreateBulkCSVControl",
+	CreateControlDocument:                          "CreateControl",
+	DeleteControlDocument:                          "DeleteControl",
+	GetAllControlsDocument:                         "GetAllControls",
+	GetControlByIDDocument:                         "GetControlByID",
+	GetControlsDocument:                            "GetControls",
+	UpdateControlDocument:                          "UpdateControl",
+	CreateControlsByCloneDocument:                  "CreateControlsByClone",
+	CreateControlsByCloneReturnIDDocument:          "CreateControlsByCloneReturnID",
+	GetControlCategoriesDocument:                   "GetControlCategories",
+	GetControlSubcategoriesDocument:                "GetControlSubcategories",
+	GetAllControlHistoriesDocument:                 "GetAllControlHistories",
+	GetControlHistoriesDocument:                    "GetControlHistories",
+	CreateBulkControlImplementationDocument:        "CreateBulkControlImplementation",
+	CreateBulkCSVControlImplementationDocument:     "CreateBulkCSVControlImplementation",
+	CreateControlImplementationDocument:            "CreateControlImplementation",
+	DeleteControlImplementationDocument:            "DeleteControlImplementation",
+	GetAllControlImplementationsDocument:           "GetAllControlImplementations",
+	GetControlImplementationByIDDocument:           "GetControlImplementationByID",
+	GetControlImplementationsDocument:              "GetControlImplementations",
+	UpdateControlImplementationDocument:            "UpdateControlImplementation",
+	GetAllControlImplementationHistoriesDocument:   "GetAllControlImplementationHistories",
+	GetControlImplementationHistoriesDocument:      "GetControlImplementationHistories",
+	CreateBulkCSVControlObjectiveDocument:          "CreateBulkCSVControlObjective",
+	CreateBulkControlObjectiveDocument:             "CreateBulkControlObjective",
+	CreateControlObjectiveDocument:                 "CreateControlObjective",
+	DeleteControlObjectiveDocument:                 "DeleteControlObjective",
+	GetAllControlObjectivesDocument:                "GetAllControlObjectives",
+	GetControlObjectiveByIDDocument:                "GetControlObjectiveByID",
+	GetControlObjectivesDocument:                   "GetControlObjectives",
+	UpdateControlObjectiveDocument:                 "UpdateControlObjective",
+	GetAllControlObjectiveHistoriesDocument:        "GetAllControlObjectiveHistories",
+	GetControlObjectiveHistoriesDocument:           "GetControlObjectiveHistories",
+	CreateBulkCSVControlScheduledJobDocument:       "CreateBulkCSVControlScheduledJob",
+	CreateBulkControlScheduledJobDocument:          "CreateBulkControlScheduledJob",
+	CreateControlScheduledJobDocument:              "CreateControlScheduledJob",
+	DeleteControlScheduledJobDocument:              "DeleteControlScheduledJob",
+	GetAllControlScheduledJobsDocument:             "GetAllControlScheduledJobs",
+	GetControlScheduledJobByIDDocument:             "GetControlScheduledJobByID",
+	GetControlScheduledJobsDocument:                "GetControlScheduledJobs",
+	UpdateControlScheduledJobDocument:              "UpdateControlScheduledJob",
+	GetAllControlScheduledJobHistoriesDocument:     "GetAllControlScheduledJobHistories",
+	GetControlScheduledJobHistoriesDocument:        "GetControlScheduledJobHistories",
+	CreateBulkCSVCustomDomainDocument:              "CreateBulkCSVCustomDomain",
+	CreateBulkCustomDomainDocument:                 "CreateBulkCustomDomain",
+	CreateCustomDomainDocument:                     "CreateCustomDomain",
+	DeleteCustomDomainDocument:                     "DeleteCustomDomain",
+	GetAllCustomDomainsDocument:                    "GetAllCustomDomains",
+	GetCustomDomainByIDDocument:                    "GetCustomDomainByID",
+	GetCustomDomainsDocument:                       "GetCustomDomains",
+	UpdateCustomDomainDocument:                     "UpdateCustomDomain",
+	GetAllCustomDomainHistoriesDocument:            "GetAllCustomDomainHistories",
+	GetCustomDomainHistoriesDocument:               "GetCustomDomainHistories",
+	CreateBulkCSVDNSVerificationDocument:           "CreateBulkCSVDNSVerification",
+	CreateBulkDNSVerificationDocument:              "CreateBulkDNSVerification",
+	CreateDNSVerificationDocument:                  "CreateDNSVerification",
+	DeleteDNSVerificationDocument:                  "DeleteDNSVerification",
+	GetAllDNSVerificationsDocument:                 "GetAllDNSVerifications",
+	GetDNSVerificationByIDDocument:                 "GetDNSVerificationByID",
+	GetDNSVerificationsDocument:                    "GetDNSVerifications",
+	UpdateDNSVerificationDocument:                  "UpdateDNSVerification",
+	GetAllDNSVerificationHistoriesDocument:         "GetAllDNSVerificationHistories",
+	GetDNSVerificationHistoriesDocument:            "GetDNSVerificationHistories",
+	CreateDocumentDataDocument:                     "CreateDocumentData",
+	DeleteDocumentDataDocument:                     "DeleteDocumentData",
+	GetDocumentDataByIDDocument:                    "GetDocumentDataByID",
+	UpdateDocumentDataDocument:                     "UpdateDocumentData",
+	GetAllDocumentDataHistoriesDocument:            "GetAllDocumentDataHistories",
+	GetDocumentDataHistoriesDocument:               "GetDocumentDataHistories",
+	CreateBulkCSVEntityDocument:                    "CreateBulkCSVEntity",
+	CreateBulkEntityDocument:                       "CreateBulkEntity",
+	CreateEntityDocument:                           "CreateEntity",
+	DeleteEntityDocument:                           "DeleteEntity",
+	GetAllEntitiesDocument:                         "GetAllEntities",
+	GetEntitiesDocument:                            "GetEntities",
+	GetEntityByIDDocument:                          "GetEntityByID",
+	UpdateEntityDocument:                           "UpdateEntity",
+	GetAllEntityHistoriesDocument:                  "GetAllEntityHistories",
+	GetEntityHistoriesDocument:                     "GetEntityHistories",
+	CreateBulkCSVEntityTypeDocument:                "CreateBulkCSVEntityType",
+	CreateBulkEntityTypeDocument:                   "CreateBulkEntityType",
+	CreateEntityTypeDocument:                       "CreateEntityType",
+	DeleteEntityTypeDocument:                       "DeleteEntityType",
+	GetAllEntityTypesDocument:                      "GetAllEntityTypes",
+	GetEntityTypeByIDDocument:                      "GetEntityTypeByID",
+	GetEntityTypesDocument:                         "GetEntityTypes",
+	UpdateEntityTypeDocument:                       "UpdateEntityType",
+	GetAllEntityTypeHistoriesDocument:              "GetAllEntityTypeHistories",
+	GetEntityTypeHistoriesDocument:                 "GetEntityTypeHistories",
+	CreateBulkCSVEventDocument:                     "CreateBulkCSVEvent",
+	CreateBulkEventDocument:                        "CreateBulkEvent",
+	CreateEventDocument:                            "CreateEvent",
+	DeleteEventDocument:                            "DeleteEvent",
+	GetAllEventsDocument:                           "GetAllEvents",
+	GetEventByIDDocument:                           "GetEventByID",
+	GetEventsDocument:                              "GetEvents",
+	UpdateEventDocument:                            "UpdateEvent",
+	CreateEvidenceDocument:                         "CreateEvidence",
+	DeleteEvidenceDocument:                         "DeleteEvidence",
+	GetAllEvidencesDocument:                        "GetAllEvidences",
+	GetEvidenceByIDDocument:                        "GetEvidenceByID",
+	GetEvidencesDocument:                           "GetEvidences",
+	UpdateEvidenceDocument:                         "UpdateEvidence",
+	GetAllEvidenceHistoriesDocument:                "GetAllEvidenceHistories",
+	GetEvidenceHistoriesDocument:                   "GetEvidenceHistories",
+	DeleteFileDocument:                             "DeleteFile",
+	GetAllFilesDocument:                            "GetAllFiles",
+	GetFileByIDDocument:                            "GetFileByID",
+	GetFilesDocument:                               "GetFiles",
+	GetAllFileHistoriesDocument:                    "GetAllFileHistories",
+	GetFileHistoriesDocument:                       "GetFileHistories",
+	CreateBulkCSVGroupDocument:                     "CreateBulkCSVGroup",
+	CreateBulkGroupDocument:                        "CreateBulkGroup",
+	CreateGroupDocument:                            "CreateGroup",
+	CreateGroupByCloneDocument:                     "CreateGroupByClone",
+	CreateGroupWithMembersDocument:                 "CreateGroupWithMembers",
+	DeleteGroupDocument:                            "DeleteGroup",
+	GetAllGroupsDocument:                           "GetAllGroups",
+	GetGroupByIDDocument:                           "GetGroupByID",
+	GetGroupInfoDocument:                           "GetGroupInfo",
+	GetGroupsDocument:                              "GetGroups",
+	UpdateGroupDocument:                            "UpdateGroup",
+	GetAllGroupHistoriesDocument:                   "GetAllGroupHistories",
+	GetGroupHistoriesDocument:                      "GetGroupHistories",
+	AddUserToGroupWithRoleDocument:                 "AddUserToGroupWithRole",
+	CreateBulkCSVGroupMembersDocument:              "CreateBulkCSVGroupMembers",
+	CreateBulkGroupMembersDocument:                 "CreateBulkGroupMembers",
+	GetGroupMembersByGroupIDDocument:               "GetGroupMembersByGroupID",
+	RemoveUserFromGroupDocument:                    "RemoveUserFromGroup",
+	UpdateUserRoleInGroupDocument:                  "UpdateUserRoleInGroup",
+	GetAllGroupMembershipHistoriesDocument:         "GetAllGroupMembershipHistories",
+	GetGroupMembershipHistoriesDocument:            "GetGroupMembershipHistories",
+	GetAllGroupSettingsDocument:                    "GetAllGroupSettings",
+	GetGroupSettingByIDDocument:                    "GetGroupSettingByID",
+	GetGroupSettingsDocument:                       "GetGroupSettings",
+	UpdateGroupSettingDocument:                     "UpdateGroupSetting",
+	GetAllGroupSettingHistoriesDocument:            "GetAllGroupSettingHistories",
+	GetGroupSettingHistoriesDocument:               "GetGroupSettingHistories",
+	CreateBulkCSVHushDocument:                      "CreateBulkCSVHush",
+	CreateBulkHushDocument:                         "CreateBulkHush",
+	CreateHushDocument:                             "CreateHush",
+	GetAllHushesDocument:                           "GetAllHushes",
+	GetHushByIDDocument:                            "GetHushByID",
+	GetHushesDocument:                              "GetHushes",
+	UpdateHushDocument:                             "UpdateHush",
+	GetAllHushHistoriesDocument:                    "GetAllHushHistories",
+	GetHushHistoriesDocument:                       "GetHushHistories",
+	CreateBulkCSVIntegrationDocument:               "CreateBulkCSVIntegration",
+	CreateBulkIntegrationDocument:                  "CreateBulkIntegration",
+	CreateIntegrationDocument:                      "CreateIntegration",
+	DeleteIntegrationDocument:                      "DeleteIntegration",
+	GetAllIntegrationsDocument:                     "GetAllIntegrations",
+	GetIntegrationByIDDocument:                     "GetIntegrationByID",
+	GetIntegrationsDocument:                        "GetIntegrations",
+	UpdateIntegrationDocument:                      "UpdateIntegration",
+	GetAllIntegrationHistoriesDocument:             "GetAllIntegrationHistories",
+	GetIntegrationHistoriesDocument:                "GetIntegrationHistories",
+	CreateBulkCSVInternalPolicyDocument:            "CreateBulkCSVInternalPolicy",
+	CreateBulkInternalPolicyDocument:               "CreateBulkInternalPolicy",
+	CreateInternalPolicyDocument:                   "CreateInternalPolicy",
+	DeleteInternalPolicyDocument:                   "DeleteInternalPolicy",
+	GetAllInternalPoliciesDocument:                 "GetAllInternalPolicies",
+	GetInternalPoliciesDocument:                    "GetInternalPolicies",
+	GetInternalPolicyByIDDocument:                  "GetInternalPolicyByID",
+	UpdateInternalPolicyDocument:                   "UpdateInternalPolicy",
+	GetAllInternalPolicyHistoriesDocument:          "GetAllInternalPolicyHistories",
+	GetInternalPolicyHistoriesDocument:             "GetInternalPolicyHistories",
+	CreateBulkCSVInviteDocument:                    "CreateBulkCSVInvite",
+	CreateBulkInviteDocument:                       "CreateBulkInvite",
+	CreateInviteDocument:                           "CreateInvite",
+	DeleteInviteDocument:                           "DeleteInvite",
+	GetAllInvitesDocument:                          "GetAllInvites",
+	GetInviteByIDDocument:                          "GetInviteByID",
+	InvitesByOrgIDDocument:                         "InvitesByOrgID",
+	GetAllJobResultsDocument:                       "GetAllJobResults",
+	GetJobResultByIDDocument:                       "GetJobResultByID",
+	GetJobResultsDocument:                          "GetJobResults",
+	DeleteJobRunnerDocument:                        "DeleteJobRunner",
+	GetAllJobRunnersDocument:                       "GetAllJobRunners",
+	GetJobRunnerByIDDocument:                       "GetJobRunnerByID",
+	GetJobRunnersDocument:                          "GetJobRunners",
+	UpdateJobRunnerDocument:                        "UpdateJobRunner",
+	CreateJobRunnerRegistrationTokenDocument:       "CreateJobRunnerRegistrationToken",
+	DeleteJobRunnerRegistrationTokenDocument:       "DeleteJobRunnerRegistrationToken",
+	GetAllJobRunnerRegistrationTokensDocument:      "GetAllJobRunnerRegistrationTokens",
+	GetJobRunnerRegistrationTokenByIDDocument:      "GetJobRunnerRegistrationTokenByID",
+	GetJobRunnerRegistrationTokensDocument:         "GetJobRunnerRegistrationTokens",
+	CreateJobRunnerTokenDocument:                   "CreateJobRunnerToken",
+	DeleteJobRunnerTokenDocument:                   "DeleteJobRunnerToken",
+	GetAllJobRunnerTokensDocument:                  "GetAllJobRunnerTokens",
+	GetJobRunnerTokenByIDDocument:                  "GetJobRunnerTokenByID",
+	GetJobRunnerTokensDocument:                     "GetJobRunnerTokens",
+	CreateBulkCSVMappableDomainDocument:            "CreateBulkCSVMappableDomain",
+	CreateBulkMappableDomainDocument:               "CreateBulkMappableDomain",
+	CreateMappableDomainDocument:                   "CreateMappableDomain",
+	DeleteMappableDomainDocument:                   "DeleteMappableDomain",
+	GetAllMappableDomainsDocument:                  "GetAllMappableDomains",
+	GetMappableDomainByIDDocument:                  "GetMappableDomainByID",
+	GetMappableDomainsDocument:                     "GetMappableDomains",
+	UpdateMappableDomainDocument:                   "UpdateMappableDomain",
+	GetAllMappableDomainHistoriesDocument:          "GetAllMappableDomainHistories",
+	GetMappableDomainHistoriesDocument:             "GetMappableDomainHistories",
+	CreateBulkCSVMappedControlDocument:             "CreateBulkCSVMappedControl",
+	CreateBulkMappedControlDocument:                "CreateBulkMappedControl",
+	CreateMappedControlDocument:                    "CreateMappedControl",
+	DeleteMappedControlDocument:                    "DeleteMappedControl",
+	GetAllMappedControlsDocument:                   "GetAllMappedControls",
+	GetMappedControlByIDDocument:                   "GetMappedControlByID",
+	GetMappedControlsDocument:                      "GetMappedControls",
+	UpdateMappedControlDocument:                    "UpdateMappedControl",
+	GetAllMappedControlHistoriesDocument:           "GetAllMappedControlHistories",
+	GetMappedControlHistoriesDocument:              "GetMappedControlHistories",
+	CreateBulkCSVNarrativeDocument:                 "CreateBulkCSVNarrative",
+	CreateBulkNarrativeDocument:                    "CreateBulkNarrative",
+	CreateNarrativeDocument:                        "CreateNarrative",
+	DeleteNarrativeDocument:                        "DeleteNarrative",
+	GetAllNarrativesDocument:                       "GetAllNarratives",
+	GetNarrativeByIDDocument:                       "GetNarrativeByID",
+	GetNarrativesDocument:                          "GetNarratives",
+	UpdateNarrativeDocument:                        "UpdateNarrative",
+	GetAllNarrativeHistoriesDocument:               "GetAllNarrativeHistories",
+	GetNarrativeHistoriesDocument:                  "GetNarrativeHistories",
+	GetNoteByIDDocument:                            "GetNoteByID",
+	GetAllNoteHistoriesDocument:                    "GetAllNoteHistories",
+	GetNoteHistoriesDocument:                       "GetNoteHistories",
+	CreateOnboardingDocument:                       "CreateOnboarding",
+	CreateOrganizationDocument:                     "CreateOrganization",
+	CreateOrganizationWithMembersDocument:          "CreateOrganizationWithMembers",
+	DeleteOrganizationDocument:                     "DeleteOrganization",
+	GetAllOrganizationsDocument:                    "GetAllOrganizations",
+	GetOrganizationByIDDocument:                    "GetOrganizationByID",
+	GetOrganizationsDocument:                       "GetOrganizations",
+	UpdateOrganizationDocument:                     "UpdateOrganization",
+	GetAllOrganizationHistoriesDocument:            "GetAllOrganizationHistories",
+	GetOrganizationHistoriesDocument:               "GetOrganizationHistories",
+	GetAllOrganizationSettingsDocument:             "GetAllOrganizationSettings",
+	GetOrganizationSettingByIDDocument:             "GetOrganizationSettingByID",
+	GetOrganizationSettingsDocument:                "GetOrganizationSettings",
+	UpdateOrganizationSettingDocument:              "UpdateOrganizationSetting",
+	GetAllOrganizationSettingHistoriesDocument:     "GetAllOrganizationSettingHistories",
+	GetOrganizationSettingHistoriesDocument:        "GetOrganizationSettingHistories",
+	AddUserToOrgWithRoleDocument:                   "AddUserToOrgWithRole",
+	CreateBulkCSVOrgMembersDocument:                "CreateBulkCSVOrgMembers",
+	CreateBulkOrgMembersDocument:                   "CreateBulkOrgMembers",
+	GetOrgMembersByOrgIDDocument:                   "GetOrgMembersByOrgID",
+	RemoveUserFromOrgDocument:                      "RemoveUserFromOrg",
+	UpdateUserRoleInOrgDocument:                    "UpdateUserRoleInOrg",
+	GetAllOrgMembershipHistoriesDocument:           "GetAllOrgMembershipHistories",
+	GetOrgMembershipHistoriesDocument:              "GetOrgMembershipHistories",
+	GetAllOrgSubscriptionsDocument:                 "GetAllOrgSubscriptions",
+	GetOrgSubscriptionByIDDocument:                 "GetOrgSubscriptionByID",
+	GetOrgSubscriptionsDocument:                    "GetOrgSubscriptions",
+	GetAllOrgSubscriptionHistoriesDocument:         "GetAllOrgSubscriptionHistories",
+	GetOrgSubscriptionHistoriesDocument:            "GetOrgSubscriptionHistories",
+	CreatePersonalAccessTokenDocument:              "CreatePersonalAccessToken",
+	DeletePersonalAccessTokenDocument:              "DeletePersonalAccessToken",
+	GetAllPersonalAccessTokensDocument:             "GetAllPersonalAccessTokens",
+	GetPersonalAccessTokenByIDDocument:             "GetPersonalAccessTokenByID",
+	GetPersonalAccessTokensDocument:                "GetPersonalAccessTokens",
+	UpdatePersonalAccessTokenDocument:              "UpdatePersonalAccessToken",
+	CreateBulkCSVProcedureDocument:                 "CreateBulkCSVProcedure",
+	CreateBulkProcedureDocument:                    "CreateBulkProcedure",
+	CreateProcedureDocument:                        "CreateProcedure",
+	DeleteProcedureDocument:                        "DeleteProcedure",
+	GetAllProceduresDocument:                       "GetAllProcedures",
+	GetProcedureByIDDocument:                       "GetProcedureByID",
+	GetProceduresDocument:                          "GetProcedures",
+	UpdateProcedureDocument:                        "UpdateProcedure",
+	GetAllProcedureHistoriesDocument:               "GetAllProcedureHistories",
+	GetProcedureHistoriesDocument:                  "GetProcedureHistories",
+	CreateBulkCSVProgramDocument:                   "CreateBulkCSVProgram",
+	CreateBulkProgramDocument:                      "CreateBulkProgram",
+	CreateControlWithSubcontrolsDocument:           "CreateControlWithSubcontrols",
+	CreateFullProgramDocument:                      "CreateFullProgram",
+	CreateFullProgramReturnIDsDocument:             "CreateFullProgramReturnIDs",
+	CreateProgramDocument:                          "CreateProgram",
+	CreateProgramWithMembersDocument:               "CreateProgramWithMembers",
+	DeleteProgramDocument:                          "DeleteProgram",
+	GetAllProgramsDocument:                         "GetAllPrograms",
+	GetProgramByIDDocument:                         "GetProgramByID",
+	GetProgramsDocument:                            "GetPrograms",
+	UpdateProgramDocument:                          "UpdateProgram",
+	AddUserToProgramWithRoleDocument:               "AddUserToProgramWithRole",
+	CreateBulkCSVProgramMembersDocument:            "CreateBulkCSVProgramMembers",
+	CreateBulkProgramMembersDocument:               "CreateBulkProgramMembers",
+	GetProgramMembersByProgramIDDocument:           "GetProgramMembersByProgramID",
+	RemoveUserFromProgramDocument:                  "RemoveUserFromProgram",
+	UpdateUserRoleInProgramDocument:                "UpdateUserRoleInProgram",
+	GetAllProgramHistoriesDocument:                 "GetAllProgramHistories",
+	GetProgramHistoriesDocument:                    "GetProgramHistories",
+	CreateBulkCSVProgramMembershipDocument:         "CreateBulkCSVProgramMembership",
+	CreateBulkProgramMembershipDocument:            "CreateBulkProgramMembership",
+	CreateProgramMembershipDocument:                "CreateProgramMembership",
+	DeleteProgramMembershipDocument:                "DeleteProgramMembership",
+	GetAllProgramMembershipsDocument:               "GetAllProgramMemberships",
+	GetProgramMembershipByIDDocument:               "GetProgramMembershipByID",
+	GetProgramMembershipsDocument:                  "GetProgramMemberships",
+	UpdateProgramMembershipDocument:                "UpdateProgramMembership",
+	GetAllProgramMembershipHistoriesDocument:       "GetAllProgramMembershipHistories",
+	GetProgramMembershipHistoriesDocument:          "GetProgramMembershipHistories",
+	CreateBulkCSVRiskDocument:                      "CreateBulkCSVRisk",
+	CreateBulkRiskDocument:                         "CreateBulkRisk",
+	CreateRiskDocument:                             "CreateRisk",
+	DeleteRiskDocument:                             "DeleteRisk",
+	GetAllRisksDocument:                            "GetAllRisks",
+	GetRiskByIDDocument:                            "GetRiskByID",
+	GetRisksDocument:                               "GetRisks",
+	UpdateRiskDocument:                             "UpdateRisk",
+	GetAllRiskHistoriesDocument:                    "GetAllRiskHistories",
+	GetRiskHistoriesDocument:                       "GetRiskHistories",
+	CreateBulkCSVScanDocument:                      "CreateBulkCSVScan",
+	CreateBulkScanDocument:                         "CreateBulkScan",
+	CreateScanDocument:                             "CreateScan",
+	DeleteScanDocument:                             "DeleteScan",
+	GetAllScansDocument:                            "GetAllScans",
+	GetScanByIDDocument:                            "GetScanByID",
+	GetScansDocument:                               "GetScans",
+	UpdateScanDocument:                             "UpdateScan",
+	GetAllScanHistoriesDocument:                    "GetAllScanHistories",
+	GetScanHistoriesDocument:                       "GetScanHistories",
+	CreateBulkCSVScheduledJobDocument:              "CreateBulkCSVScheduledJob",
+	CreateBulkScheduledJobDocument:                 "CreateBulkScheduledJob",
+	CreateScheduledJobDocument:                     "CreateScheduledJob",
+	DeleteScheduledJobDocument:                     "DeleteScheduledJob",
+	GetAllScheduledJobsDocument:                    "GetAllScheduledJobs",
+	GetScheduledJobByIDDocument:                    "GetScheduledJobByID",
+	GetScheduledJobsDocument:                       "GetScheduledJobs",
+	UpdateScheduledJobDocument:                     "UpdateScheduledJob",
+	GetAllScheduledJobHistoriesDocument:            "GetAllScheduledJobHistories",
+	GetScheduledJobHistoriesDocument:               "GetScheduledJobHistories",
+	GetAllScheduledJobRunsDocument:                 "GetAllScheduledJobRuns",
+	GetScheduledJobRunByIDDocument:                 "GetScheduledJobRunByID",
+	GetScheduledJobRunsDocument:                    "GetScheduledJobRuns",
+	GlobalSearchDocument:                           "GlobalSearch",
+	CreateStandardDocument:                         "CreateStandard",
+	DeleteStandardDocument:                         "DeleteStandard",
+	GetAllStandardsDocument:                        "GetAllStandards",
+	GetStandardByIDDocument:                        "GetStandardByID",
+	GetStandardsDocument:                           "GetStandards",
+	UpdateStandardDocument:                         "UpdateStandard",
+	GetAllStandardHistoriesDocument:                "GetAllStandardHistories",
+	GetStandardHistoriesDocument:                   "GetStandardHistories",
+	CreateBulkCSVSubcontrolDocument:                "CreateBulkCSVSubcontrol",
+	CreateBulkSubcontrolDocument:                   "CreateBulkSubcontrol",
+	CreateSubcontrolDocument:                       "CreateSubcontrol",
+	DeleteSubcontrolDocument:                       "DeleteSubcontrol",
+	GetAllSubcontrolsDocument:                      "GetAllSubcontrols",
+	GetSubcontrolByIDDocument:                      "GetSubcontrolByID",
+	GetSubcontrolsDocument:                         "GetSubcontrols",
+	UpdateSubcontrolDocument:                       "UpdateSubcontrol",
+	GetAllSubcontrolHistoriesDocument:              "GetAllSubcontrolHistories",
+	GetSubcontrolHistoriesDocument:                 "GetSubcontrolHistories",
+	CreateBulkCSVSubprocessorDocument:              "CreateBulkCSVSubprocessor",
+	CreateBulkSubprocessorDocument:                 "CreateBulkSubprocessor",
+	CreateSubprocessorDocument:                     "CreateSubprocessor",
+	DeleteSubprocessorDocument:                     "DeleteSubprocessor",
+	GetAllSubprocessorsDocument:                    "GetAllSubprocessors",
+	GetSubprocessorByIDDocument:                    "GetSubprocessorByID",
+	GetSubprocessorsDocument:                       "GetSubprocessors",
+	UpdateSubprocessorDocument:                     "UpdateSubprocessor",
+	GetAllSubprocessorHistoriesDocument:            "GetAllSubprocessorHistories",
+	GetSubprocessorHistoriesDocument:               "GetSubprocessorHistories",
+	CreateBulkCSVSubscriberDocument:                "CreateBulkCSVSubscriber",
+	CreateBulkSubscriberDocument:                   "CreateBulkSubscriber",
+	CreateSubscriberDocument:                       "CreateSubscriber",
+	DeleteSubscriberDocument:                       "DeleteSubscriber",
+	GetAllSubscribersDocument:                      "GetAllSubscribers",
+	GetSubscriberByEmailDocument:                   "GetSubscriberByEmail",
+	GetSubscribersDocument:                         "GetSubscribers",
+	UpdateSubscriberDocument:                       "UpdateSubscriber",
+	CreateBulkCSVTaskDocument:                      "CreateBulkCSVTask",
+	CreateBulkTaskDocument:                         "CreateBulkTask",
+	CreateTaskDocument:                             "CreateTask",
+	DeleteTaskDocument:                             "DeleteTask",
+	GetAllTasksDocument:                            "GetAllTasks",
+	GetTaskByIDDocument:                            "GetTaskByID",
+	GetTasksDocument:                               "GetTasks",
+	UpdateTaskDocument:                             "UpdateTask",
+	UpdateTaskCommentDocument:                      "UpdateTaskComment",
+	GetAllTaskHistoriesDocument:                    "GetAllTaskHistories",
+	GetTaskHistoriesDocument:                       "GetTaskHistories",
+	CreateBulkCSVTemplateDocument:                  "CreateBulkCSVTemplate",
+	CreateBulkTemplateDocument:                     "CreateBulkTemplate",
+	CreateTemplateDocument:                         "CreateTemplate",
+	GetAllTemplatesDocument:                        "GetAllTemplates",
+	GetTemplateByIDDocument:                        "GetTemplateByID",
+	UpdateTemplateDocument:                         "UpdateTemplate",
+	GetAllTemplateHistoriesDocument:                "GetAllTemplateHistories",
+	GetTemplateHistoriesDocument:                   "GetTemplateHistories",
+	CreateTFASettingDocument:                       "CreateTFASetting",
+	GetAllTFASettingsDocument:                      "GetAllTFASettings",
+	GetTFASettingDocument:                          "GetTFASetting",
+	UpdateTFASettingDocument:                       "UpdateTFASetting",
+	CreateTrustCenterDocument:                      "CreateTrustCenter",
+	DeleteTrustCenterDocument:                      "DeleteTrustCenter",
+	GetAllTrustCentersDocument:                     "GetAllTrustCenters",
+	GetTrustCenterByIDDocument:                     "GetTrustCenterByID",
+	GetTrustCentersDocument:                        "GetTrustCenters",
+	UpdateTrustCenterDocument:                      "UpdateTrustCenter",
+	GetAllTrustCenterHistoriesDocument:             "GetAllTrustCenterHistories",
+	GetTrustCenterHistoriesDocument:                "GetTrustCenterHistories",
+	CreateTrustCenterSettingDocument:               "CreateTrustCenterSetting",
+	DeleteTrustCenterSettingDocument:               "DeleteTrustCenterSetting",
+	GetAllTrustCenterSettingsDocument:              "GetAllTrustCenterSettings",
+	GetTrustCenterSettingByIDDocument:              "GetTrustCenterSettingByID",
+	GetTrustCenterSettingsDocument:                 "GetTrustCenterSettings",
+	UpdateTrustCenterSettingDocument:               "UpdateTrustCenterSetting",
+	GetAllTrustCenterSettingHistoriesDocument:      "GetAllTrustCenterSettingHistories",
+	GetTrustCenterSettingHistoriesDocument:         "GetTrustCenterSettingHistories",
+	CreateBulkCSVTrustCenterSubprocessorDocument:   "CreateBulkCSVTrustCenterSubprocessor",
+	CreateBulkTrustCenterSubprocessorDocument:      "CreateBulkTrustCenterSubprocessor",
+	CreateTrustCenterSubprocessorDocument:          "CreateTrustCenterSubprocessor",
+	DeleteTrustCenterSubprocessorDocument:          "DeleteTrustCenterSubprocessor",
+	GetAllTrustCenterSubprocessorsDocument:         "GetAllTrustCenterSubprocessors",
+	GetTrustCenterSubprocessorByIDDocument:         "GetTrustCenterSubprocessorByID",
+	GetTrustCenterSubprocessorsDocument:            "GetTrustCenterSubprocessors",
+	UpdateTrustCenterSubprocessorDocument:          "UpdateTrustCenterSubprocessor",
+	GetAllTrustCenterSubprocessorHistoriesDocument: "GetAllTrustCenterSubprocessorHistories",
+	GetTrustCenterSubprocessorHistoriesDocument:    "GetTrustCenterSubprocessorHistories",
+	CreateUserDocument:                             "CreateUser",
+	DeleteUserDocument:                             "DeleteUser",
+	GetAllUsersDocument:                            "GetAllUsers",
+	GetSelfDocument:                                "GetSelf",
+	GetUserByIDDocument:                            "GetUserByID",
+	GetUserByIDWithOrgsDocument:                    "GetUserByIDWithOrgs",
+	UpdateUserDocument:                             "UpdateUser",
+	GetAllUserHistoriesDocument:                    "GetAllUserHistories",
+	GetUserHistoriesDocument:                       "GetUserHistories",
+	GetAllUserSettingsDocument:                     "GetAllUserSettings",
+	GetUserSettingByIDDocument:                     "GetUserSettingByID",
+	GetUserSettingsDocument:                        "GetUserSettings",
+	UpdateUserSettingDocument:                      "UpdateUserSetting",
+	GetAllUserSettingHistoriesDocument:             "GetAllUserSettingHistories",
+	GetUserSettingHistoriesDocument:                "GetUserSettingHistories",
+	DeleteWebauthnDocument:                         "DeleteWebauthn",
+	GetAllWebauthnsDocument:                        "GetAllWebauthns",
 }

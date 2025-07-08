@@ -1110,10 +1110,12 @@ type SearchResults struct {
 	ScheduledJobs               *generated.ScheduledJobConnection               `json:"scheduledJobs,omitempty"`
 	Standards                   *generated.StandardConnection                   `json:"standards,omitempty"`
 	Subcontrols                 *generated.SubcontrolConnection                 `json:"subcontrols,omitempty"`
+	Subprocessors               *generated.SubprocessorConnection               `json:"subprocessors,omitempty"`
 	Subscribers                 *generated.SubscriberConnection                 `json:"subscribers,omitempty"`
 	Tasks                       *generated.TaskConnection                       `json:"tasks,omitempty"`
 	Templates                   *generated.TemplateConnection                   `json:"templates,omitempty"`
 	TrustCenters                *generated.TrustCenterConnection                `json:"trustCenters,omitempty"`
+	TrustCenterSubprocessors    *generated.TrustCenterSubprocessorConnection    `json:"trustCenterSubprocessors,omitempty"`
 	Users                       *generated.UserConnection                       `json:"users,omitempty"`
 	UserSettings                *generated.UserSettingConnection                `json:"userSettings,omitempty"`
 	Webauthns                   *generated.WebauthnConnection                   `json:"webauthns,omitempty"`
@@ -1165,6 +1167,30 @@ type SubcontrolDeletePayload struct {
 type SubcontrolUpdatePayload struct {
 	// Updated subcontrol
 	Subcontrol *generated.Subcontrol `json:"subcontrol"`
+}
+
+// Return response for createBulkSubprocessor mutation
+type SubprocessorBulkCreatePayload struct {
+	// Created subprocessors
+	Subprocessors []*generated.Subprocessor `json:"subprocessors,omitempty"`
+}
+
+// Return response for createSubprocessor mutation
+type SubprocessorCreatePayload struct {
+	// Created subprocessor
+	Subprocessor *generated.Subprocessor `json:"subprocessor"`
+}
+
+// Return response for deleteSubprocessor mutation
+type SubprocessorDeletePayload struct {
+	// Deleted subprocessor ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateSubprocessor mutation
+type SubprocessorUpdatePayload struct {
+	// Updated subprocessor
+	Subprocessor *generated.Subprocessor `json:"subprocessor"`
 }
 
 // Return response for createBulkSubscriber mutation
@@ -1290,6 +1316,30 @@ type TrustCenterSettingDeletePayload struct {
 type TrustCenterSettingUpdatePayload struct {
 	// Updated trustCenterSetting
 	TrustCenterSetting *generated.TrustCenterSetting `json:"trustCenterSetting"`
+}
+
+// Return response for createBulkTrustCenterSubprocessor mutation
+type TrustCenterSubprocessorBulkCreatePayload struct {
+	// Created trustCenterSubprocessors
+	TrustCenterSubprocessors []*generated.TrustCenterSubprocessor `json:"trustCenterSubprocessors,omitempty"`
+}
+
+// Return response for createTrustCenterSubprocessor mutation
+type TrustCenterSubprocessorCreatePayload struct {
+	// Created trustCenterSubprocessor
+	TrustCenterSubprocessor *generated.TrustCenterSubprocessor `json:"trustCenterSubprocessor"`
+}
+
+// Return response for deleteTrustCenterSubprocessor mutation
+type TrustCenterSubprocessorDeletePayload struct {
+	// Deleted trustCenterSubprocessor ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateTrustCenterSubprocessor mutation
+type TrustCenterSubprocessorUpdatePayload struct {
+	// Updated trustCenterSubprocessor
+	TrustCenterSubprocessor *generated.TrustCenterSubprocessor `json:"trustCenterSubprocessor"`
 }
 
 // Return response for updateTrustCenter mutation

@@ -2199,6 +2199,54 @@ func (f SubcontrolHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m g
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.SubcontrolHistoryMutation", m)
 }
 
+// The SubprocessorQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type SubprocessorQueryRuleFunc func(context.Context, *generated.SubprocessorQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f SubprocessorQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.SubprocessorQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.SubprocessorQuery", q)
+}
+
+// The SubprocessorMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type SubprocessorMutationRuleFunc func(context.Context, *generated.SubprocessorMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f SubprocessorMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.SubprocessorMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.SubprocessorMutation", m)
+}
+
+// The SubprocessorHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type SubprocessorHistoryQueryRuleFunc func(context.Context, *generated.SubprocessorHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f SubprocessorHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.SubprocessorHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.SubprocessorHistoryQuery", q)
+}
+
+// The SubprocessorHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type SubprocessorHistoryMutationRuleFunc func(context.Context, *generated.SubprocessorHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f SubprocessorHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.SubprocessorHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.SubprocessorHistoryMutation", m)
+}
+
 // The SubscriberQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type SubscriberQueryRuleFunc func(context.Context, *generated.SubscriberQuery) error
@@ -2437,6 +2485,54 @@ func (f TrustCenterSettingHistoryMutationRuleFunc) EvalMutation(ctx context.Cont
 		return f(ctx, m)
 	}
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.TrustCenterSettingHistoryMutation", m)
+}
+
+// The TrustCenterSubprocessorQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type TrustCenterSubprocessorQueryRuleFunc func(context.Context, *generated.TrustCenterSubprocessorQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f TrustCenterSubprocessorQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TrustCenterSubprocessorQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.TrustCenterSubprocessorQuery", q)
+}
+
+// The TrustCenterSubprocessorMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type TrustCenterSubprocessorMutationRuleFunc func(context.Context, *generated.TrustCenterSubprocessorMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f TrustCenterSubprocessorMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.TrustCenterSubprocessorMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.TrustCenterSubprocessorMutation", m)
+}
+
+// The TrustCenterSubprocessorHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type TrustCenterSubprocessorHistoryQueryRuleFunc func(context.Context, *generated.TrustCenterSubprocessorHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f TrustCenterSubprocessorHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TrustCenterSubprocessorHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.TrustCenterSubprocessorHistoryQuery", q)
+}
+
+// The TrustCenterSubprocessorHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type TrustCenterSubprocessorHistoryMutationRuleFunc func(context.Context, *generated.TrustCenterSubprocessorHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f TrustCenterSubprocessorHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.TrustCenterSubprocessorHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.TrustCenterSubprocessorHistoryMutation", m)
 }
 
 // The UserQueryRuleFunc type is an adapter to allow the use of ordinary
@@ -2768,6 +2864,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.SubcontrolHistoryQuery:
 		return q.Filter(), nil
+	case *generated.SubprocessorQuery:
+		return q.Filter(), nil
+	case *generated.SubprocessorHistoryQuery:
+		return q.Filter(), nil
 	case *generated.SubscriberQuery:
 		return q.Filter(), nil
 	case *generated.TFASettingQuery:
@@ -2787,6 +2887,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 	case *generated.TrustCenterSettingQuery:
 		return q.Filter(), nil
 	case *generated.TrustCenterSettingHistoryQuery:
+		return q.Filter(), nil
+	case *generated.TrustCenterSubprocessorQuery:
+		return q.Filter(), nil
+	case *generated.TrustCenterSubprocessorHistoryQuery:
 		return q.Filter(), nil
 	case *generated.UserQuery:
 		return q.Filter(), nil
@@ -2979,6 +3083,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 		return m.Filter(), nil
 	case *generated.SubcontrolHistoryMutation:
 		return m.Filter(), nil
+	case *generated.SubprocessorMutation:
+		return m.Filter(), nil
+	case *generated.SubprocessorHistoryMutation:
+		return m.Filter(), nil
 	case *generated.SubscriberMutation:
 		return m.Filter(), nil
 	case *generated.TFASettingMutation:
@@ -2998,6 +3106,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.TrustCenterSettingMutation:
 		return m.Filter(), nil
 	case *generated.TrustCenterSettingHistoryMutation:
+		return m.Filter(), nil
+	case *generated.TrustCenterSubprocessorMutation:
+		return m.Filter(), nil
+	case *generated.TrustCenterSubprocessorHistoryMutation:
 		return m.Filter(), nil
 	case *generated.UserMutation:
 		return m.Filter(), nil

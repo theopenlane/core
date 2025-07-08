@@ -44,10 +44,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
 )
@@ -1708,6 +1710,52 @@ func (shq *SubcontrolHistoryQuery) AsOf(ctx context.Context, time time.Time) (*S
 		First(ctx)
 }
 
+func (s *Subprocessor) History() *SubprocessorHistoryQuery {
+	historyClient := NewSubprocessorHistoryClient(s.config)
+	return historyClient.Query().Where(subprocessorhistory.Ref(s.ID))
+}
+
+func (sh *SubprocessorHistory) Next(ctx context.Context) (*SubprocessorHistory, error) {
+	client := NewSubprocessorHistoryClient(sh.config)
+	return client.Query().
+		Where(
+			subprocessorhistory.Ref(sh.Ref),
+			subprocessorhistory.HistoryTimeGT(sh.HistoryTime),
+		).
+		Order(subprocessorhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (sh *SubprocessorHistory) Prev(ctx context.Context) (*SubprocessorHistory, error) {
+	client := NewSubprocessorHistoryClient(sh.config)
+	return client.Query().
+		Where(
+			subprocessorhistory.Ref(sh.Ref),
+			subprocessorhistory.HistoryTimeLT(sh.HistoryTime),
+		).
+		Order(subprocessorhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (shq *SubprocessorHistoryQuery) Earliest(ctx context.Context) (*SubprocessorHistory, error) {
+	return shq.
+		Order(subprocessorhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (shq *SubprocessorHistoryQuery) Latest(ctx context.Context) (*SubprocessorHistory, error) {
+	return shq.
+		Order(subprocessorhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (shq *SubprocessorHistoryQuery) AsOf(ctx context.Context, time time.Time) (*SubprocessorHistory, error) {
+	return shq.
+		Where(subprocessorhistory.HistoryTimeLTE(time)).
+		Order(subprocessorhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
 func (t *Task) History() *TaskHistoryQuery {
 	historyClient := NewTaskHistoryClient(t.config)
 	return historyClient.Query().Where(taskhistory.Ref(t.ID))
@@ -1889,6 +1937,52 @@ func (tcshq *TrustCenterSettingHistoryQuery) AsOf(ctx context.Context, time time
 	return tcshq.
 		Where(trustcentersettinghistory.HistoryTimeLTE(time)).
 		Order(trustcentersettinghistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (tcs *TrustCenterSubprocessor) History() *TrustCenterSubprocessorHistoryQuery {
+	historyClient := NewTrustCenterSubprocessorHistoryClient(tcs.config)
+	return historyClient.Query().Where(trustcentersubprocessorhistory.Ref(tcs.ID))
+}
+
+func (tcsh *TrustCenterSubprocessorHistory) Next(ctx context.Context) (*TrustCenterSubprocessorHistory, error) {
+	client := NewTrustCenterSubprocessorHistoryClient(tcsh.config)
+	return client.Query().
+		Where(
+			trustcentersubprocessorhistory.Ref(tcsh.Ref),
+			trustcentersubprocessorhistory.HistoryTimeGT(tcsh.HistoryTime),
+		).
+		Order(trustcentersubprocessorhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (tcsh *TrustCenterSubprocessorHistory) Prev(ctx context.Context) (*TrustCenterSubprocessorHistory, error) {
+	client := NewTrustCenterSubprocessorHistoryClient(tcsh.config)
+	return client.Query().
+		Where(
+			trustcentersubprocessorhistory.Ref(tcsh.Ref),
+			trustcentersubprocessorhistory.HistoryTimeLT(tcsh.HistoryTime),
+		).
+		Order(trustcentersubprocessorhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (tcshq *TrustCenterSubprocessorHistoryQuery) Earliest(ctx context.Context) (*TrustCenterSubprocessorHistory, error) {
+	return tcshq.
+		Order(trustcentersubprocessorhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (tcshq *TrustCenterSubprocessorHistoryQuery) Latest(ctx context.Context) (*TrustCenterSubprocessorHistory, error) {
+	return tcshq.
+		Order(trustcentersubprocessorhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (tcshq *TrustCenterSubprocessorHistoryQuery) AsOf(ctx context.Context, time time.Time) (*TrustCenterSubprocessorHistory, error) {
+	return tcshq.
+		Where(trustcentersubprocessorhistory.HistoryTimeLTE(time)).
+		Order(trustcentersubprocessorhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

@@ -46,10 +46,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
@@ -1682,6 +1684,38 @@ func adminSearchSubcontrols(ctx context.Context, query string, after *entgql.Cur
 	return request.Paginate(ctx, after, first, before, last)
 }
 
+// searchSubprocessor searches for Subprocessor based on the query string looking for matches
+func searchSubprocessors(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.SubprocessorConnection, error) {
+	request := withTransactionalMutation(ctx).Subprocessor.Query().
+		Where(
+			subprocessor.Or(
+				subprocessor.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchSubprocessor searches for Subprocessor based on the query string looking for matches
+func adminSearchSubprocessors(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.SubprocessorConnection, error) {
+	request := withTransactionalMutation(ctx).Subprocessor.Query().
+		Where(
+			subprocessor.Or(
+				subprocessor.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
 // searchSubscriber searches for Subscriber based on the query string looking for matches
 func searchSubscribers(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.SubscriberConnection, error) {
 	request := withTransactionalMutation(ctx).Subscriber.Query().
@@ -1838,6 +1872,38 @@ func adminSearchTrustCenters(ctx context.Context, query string, after *entgql.Cu
 				trustcenter.OwnerIDContainsFold(query),        // search by OwnerID
 				trustcenter.SlugContainsFold(query),           // search by Slug
 				trustcenter.CustomDomainIDContainsFold(query), // search by CustomDomainID
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchTrustCenterSubprocessor searches for TrustCenterSubprocessor based on the query string looking for matches
+func searchTrustCenterSubprocessors(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterSubprocessorConnection, error) {
+	request := withTransactionalMutation(ctx).TrustCenterSubprocessor.Query().
+		Where(
+			trustcentersubprocessor.Or(
+				trustcentersubprocessor.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchTrustCenterSubprocessor searches for TrustCenterSubprocessor based on the query string looking for matches
+func adminSearchTrustCenterSubprocessors(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterSubprocessorConnection, error) {
+	request := withTransactionalMutation(ctx).TrustCenterSubprocessor.Query().
+		Where(
+			trustcentersubprocessor.Or(
+				trustcentersubprocessor.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
 			),
 		)
 

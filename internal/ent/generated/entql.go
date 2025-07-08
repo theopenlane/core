@@ -91,6 +91,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
@@ -101,6 +103,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -115,7 +119,7 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 102)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 106)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   apitoken.Table,
@@ -2721,6 +2725,49 @@ var schemaGraph = func() *sqlgraph.Schema {
 	}
 	graph.Nodes[87] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
+			Table:   subprocessor.Table,
+			Columns: subprocessor.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: subprocessor.FieldID,
+			},
+		},
+		Type: "Subprocessor",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			subprocessor.FieldCreatedAt: {Type: field.TypeTime, Column: subprocessor.FieldCreatedAt},
+			subprocessor.FieldUpdatedAt: {Type: field.TypeTime, Column: subprocessor.FieldUpdatedAt},
+			subprocessor.FieldCreatedBy: {Type: field.TypeString, Column: subprocessor.FieldCreatedBy},
+			subprocessor.FieldUpdatedBy: {Type: field.TypeString, Column: subprocessor.FieldUpdatedBy},
+			subprocessor.FieldDeletedAt: {Type: field.TypeTime, Column: subprocessor.FieldDeletedAt},
+			subprocessor.FieldDeletedBy: {Type: field.TypeString, Column: subprocessor.FieldDeletedBy},
+			subprocessor.FieldTags:      {Type: field.TypeJSON, Column: subprocessor.FieldTags},
+		},
+	}
+	graph.Nodes[88] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   subprocessorhistory.Table,
+			Columns: subprocessorhistory.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: subprocessorhistory.FieldID,
+			},
+		},
+		Type: "SubprocessorHistory",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			subprocessorhistory.FieldHistoryTime: {Type: field.TypeTime, Column: subprocessorhistory.FieldHistoryTime},
+			subprocessorhistory.FieldRef:         {Type: field.TypeString, Column: subprocessorhistory.FieldRef},
+			subprocessorhistory.FieldOperation:   {Type: field.TypeEnum, Column: subprocessorhistory.FieldOperation},
+			subprocessorhistory.FieldCreatedAt:   {Type: field.TypeTime, Column: subprocessorhistory.FieldCreatedAt},
+			subprocessorhistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: subprocessorhistory.FieldUpdatedAt},
+			subprocessorhistory.FieldCreatedBy:   {Type: field.TypeString, Column: subprocessorhistory.FieldCreatedBy},
+			subprocessorhistory.FieldUpdatedBy:   {Type: field.TypeString, Column: subprocessorhistory.FieldUpdatedBy},
+			subprocessorhistory.FieldDeletedAt:   {Type: field.TypeTime, Column: subprocessorhistory.FieldDeletedAt},
+			subprocessorhistory.FieldDeletedBy:   {Type: field.TypeString, Column: subprocessorhistory.FieldDeletedBy},
+			subprocessorhistory.FieldTags:        {Type: field.TypeJSON, Column: subprocessorhistory.FieldTags},
+		},
+	}
+	graph.Nodes[89] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
 			Table:   subscriber.Table,
 			Columns: subscriber.Columns,
 			ID: &sqlgraph.FieldSpec{
@@ -2750,7 +2797,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subscriber.FieldSendAttempts:  {Type: field.TypeInt, Column: subscriber.FieldSendAttempts},
 		},
 	}
-	graph.Nodes[88] = &sqlgraph.Node{
+	graph.Nodes[90] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   tfasetting.Table,
 			Columns: tfasetting.Columns,
@@ -2776,7 +2823,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tfasetting.FieldTotpAllowed:     {Type: field.TypeBool, Column: tfasetting.FieldTotpAllowed},
 		},
 	}
-	graph.Nodes[89] = &sqlgraph.Node{
+	graph.Nodes[91] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   task.Table,
 			Columns: task.Columns,
@@ -2806,7 +2853,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			task.FieldAssignerID: {Type: field.TypeString, Column: task.FieldAssignerID},
 		},
 	}
-	graph.Nodes[90] = &sqlgraph.Node{
+	graph.Nodes[92] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   taskhistory.Table,
 			Columns: taskhistory.Columns,
@@ -2839,7 +2886,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			taskhistory.FieldAssignerID:  {Type: field.TypeString, Column: taskhistory.FieldAssignerID},
 		},
 	}
-	graph.Nodes[91] = &sqlgraph.Node{
+	graph.Nodes[93] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   template.Table,
 			Columns: template.Columns,
@@ -2865,7 +2912,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			template.FieldUischema:     {Type: field.TypeJSON, Column: template.FieldUischema},
 		},
 	}
-	graph.Nodes[92] = &sqlgraph.Node{
+	graph.Nodes[94] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   templatehistory.Table,
 			Columns: templatehistory.Columns,
@@ -2894,7 +2941,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			templatehistory.FieldUischema:     {Type: field.TypeJSON, Column: templatehistory.FieldUischema},
 		},
 	}
-	graph.Nodes[93] = &sqlgraph.Node{
+	graph.Nodes[95] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenter.Table,
 			Columns: trustcenter.Columns,
@@ -2917,7 +2964,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenter.FieldCustomDomainID: {Type: field.TypeString, Column: trustcenter.FieldCustomDomainID},
 		},
 	}
-	graph.Nodes[94] = &sqlgraph.Node{
+	graph.Nodes[96] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterhistory.Table,
 			Columns: trustcenterhistory.Columns,
@@ -2943,7 +2990,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterhistory.FieldCustomDomainID: {Type: field.TypeString, Column: trustcenterhistory.FieldCustomDomainID},
 		},
 	}
-	graph.Nodes[95] = &sqlgraph.Node{
+	graph.Nodes[97] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentersetting.Table,
 			Columns: trustcentersetting.Columns,
@@ -2975,7 +3022,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersetting.FieldAccentColor:        {Type: field.TypeString, Column: trustcentersetting.FieldAccentColor},
 		},
 	}
-	graph.Nodes[96] = &sqlgraph.Node{
+	graph.Nodes[98] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentersettinghistory.Table,
 			Columns: trustcentersettinghistory.Columns,
@@ -3010,7 +3057,50 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersettinghistory.FieldAccentColor:        {Type: field.TypeString, Column: trustcentersettinghistory.FieldAccentColor},
 		},
 	}
-	graph.Nodes[97] = &sqlgraph.Node{
+	graph.Nodes[99] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   trustcentersubprocessor.Table,
+			Columns: trustcentersubprocessor.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: trustcentersubprocessor.FieldID,
+			},
+		},
+		Type: "TrustCenterSubprocessor",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			trustcentersubprocessor.FieldCreatedAt: {Type: field.TypeTime, Column: trustcentersubprocessor.FieldCreatedAt},
+			trustcentersubprocessor.FieldUpdatedAt: {Type: field.TypeTime, Column: trustcentersubprocessor.FieldUpdatedAt},
+			trustcentersubprocessor.FieldCreatedBy: {Type: field.TypeString, Column: trustcentersubprocessor.FieldCreatedBy},
+			trustcentersubprocessor.FieldUpdatedBy: {Type: field.TypeString, Column: trustcentersubprocessor.FieldUpdatedBy},
+			trustcentersubprocessor.FieldDeletedAt: {Type: field.TypeTime, Column: trustcentersubprocessor.FieldDeletedAt},
+			trustcentersubprocessor.FieldDeletedBy: {Type: field.TypeString, Column: trustcentersubprocessor.FieldDeletedBy},
+			trustcentersubprocessor.FieldTags:      {Type: field.TypeJSON, Column: trustcentersubprocessor.FieldTags},
+		},
+	}
+	graph.Nodes[100] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   trustcentersubprocessorhistory.Table,
+			Columns: trustcentersubprocessorhistory.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: trustcentersubprocessorhistory.FieldID,
+			},
+		},
+		Type: "TrustCenterSubprocessorHistory",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			trustcentersubprocessorhistory.FieldHistoryTime: {Type: field.TypeTime, Column: trustcentersubprocessorhistory.FieldHistoryTime},
+			trustcentersubprocessorhistory.FieldRef:         {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldRef},
+			trustcentersubprocessorhistory.FieldOperation:   {Type: field.TypeEnum, Column: trustcentersubprocessorhistory.FieldOperation},
+			trustcentersubprocessorhistory.FieldCreatedAt:   {Type: field.TypeTime, Column: trustcentersubprocessorhistory.FieldCreatedAt},
+			trustcentersubprocessorhistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: trustcentersubprocessorhistory.FieldUpdatedAt},
+			trustcentersubprocessorhistory.FieldCreatedBy:   {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldCreatedBy},
+			trustcentersubprocessorhistory.FieldUpdatedBy:   {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldUpdatedBy},
+			trustcentersubprocessorhistory.FieldDeletedAt:   {Type: field.TypeTime, Column: trustcentersubprocessorhistory.FieldDeletedAt},
+			trustcentersubprocessorhistory.FieldDeletedBy:   {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldDeletedBy},
+			trustcentersubprocessorhistory.FieldTags:        {Type: field.TypeJSON, Column: trustcentersubprocessorhistory.FieldTags},
+		},
+	}
+	graph.Nodes[101] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   user.Table,
 			Columns: user.Columns,
@@ -3044,7 +3134,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			user.FieldRole:              {Type: field.TypeEnum, Column: user.FieldRole},
 		},
 	}
-	graph.Nodes[98] = &sqlgraph.Node{
+	graph.Nodes[102] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   userhistory.Table,
 			Columns: userhistory.Columns,
@@ -3081,7 +3171,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			userhistory.FieldRole:              {Type: field.TypeEnum, Column: userhistory.FieldRole},
 		},
 	}
-	graph.Nodes[99] = &sqlgraph.Node{
+	graph.Nodes[103] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   usersetting.Table,
 			Columns: usersetting.Columns,
@@ -3110,7 +3200,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			usersetting.FieldPhoneNumber:       {Type: field.TypeString, Column: usersetting.FieldPhoneNumber},
 		},
 	}
-	graph.Nodes[100] = &sqlgraph.Node{
+	graph.Nodes[104] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   usersettinghistory.Table,
 			Columns: usersettinghistory.Columns,
@@ -3142,7 +3232,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			usersettinghistory.FieldPhoneNumber:       {Type: field.TypeString, Column: usersettinghistory.FieldPhoneNumber},
 		},
 	}
-	graph.Nodes[101] = &sqlgraph.Node{
+	graph.Nodes[105] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   webauthn.Table,
 			Columns: webauthn.Columns,
@@ -24385,6 +24475,171 @@ func (f *SubcontrolHistoryFilter) WhereControlID(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
+func (sq *SubprocessorQuery) addPredicate(pred func(s *sql.Selector)) {
+	sq.predicates = append(sq.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the SubprocessorQuery builder.
+func (sq *SubprocessorQuery) Filter() *SubprocessorFilter {
+	return &SubprocessorFilter{config: sq.config, predicateAdder: sq}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *SubprocessorMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the SubprocessorMutation builder.
+func (m *SubprocessorMutation) Filter() *SubprocessorFilter {
+	return &SubprocessorFilter{config: m.config, predicateAdder: m}
+}
+
+// SubprocessorFilter provides a generic filtering capability at runtime for SubprocessorQuery.
+type SubprocessorFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *SubprocessorFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[87].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *SubprocessorFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(subprocessor.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *SubprocessorFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(subprocessor.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *SubprocessorFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(subprocessor.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *SubprocessorFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(subprocessor.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *SubprocessorFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(subprocessor.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *SubprocessorFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(subprocessor.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *SubprocessorFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(subprocessor.FieldDeletedBy))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *SubprocessorFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(subprocessor.FieldTags))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (shq *SubprocessorHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	shq.predicates = append(shq.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the SubprocessorHistoryQuery builder.
+func (shq *SubprocessorHistoryQuery) Filter() *SubprocessorHistoryFilter {
+	return &SubprocessorHistoryFilter{config: shq.config, predicateAdder: shq}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *SubprocessorHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the SubprocessorHistoryMutation builder.
+func (m *SubprocessorHistoryMutation) Filter() *SubprocessorHistoryFilter {
+	return &SubprocessorHistoryFilter{config: m.config, predicateAdder: m}
+}
+
+// SubprocessorHistoryFilter provides a generic filtering capability at runtime for SubprocessorHistoryQuery.
+type SubprocessorHistoryFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *SubprocessorHistoryFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[88].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *SubprocessorHistoryFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(subprocessorhistory.FieldID))
+}
+
+// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
+func (f *SubprocessorHistoryFilter) WhereHistoryTime(p entql.TimeP) {
+	f.Where(p.Field(subprocessorhistory.FieldHistoryTime))
+}
+
+// WhereRef applies the entql string predicate on the ref field.
+func (f *SubprocessorHistoryFilter) WhereRef(p entql.StringP) {
+	f.Where(p.Field(subprocessorhistory.FieldRef))
+}
+
+// WhereOperation applies the entql string predicate on the operation field.
+func (f *SubprocessorHistoryFilter) WhereOperation(p entql.StringP) {
+	f.Where(p.Field(subprocessorhistory.FieldOperation))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *SubprocessorHistoryFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(subprocessorhistory.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *SubprocessorHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(subprocessorhistory.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *SubprocessorHistoryFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(subprocessorhistory.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *SubprocessorHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(subprocessorhistory.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *SubprocessorHistoryFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(subprocessorhistory.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *SubprocessorHistoryFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(subprocessorhistory.FieldDeletedBy))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *SubprocessorHistoryFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(subprocessorhistory.FieldTags))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (sq *SubscriberQuery) addPredicate(pred func(s *sql.Selector)) {
 	sq.predicates = append(sq.predicates, pred)
 }
@@ -24413,7 +24668,7 @@ type SubscriberFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SubscriberFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[87].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[89].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -24571,7 +24826,7 @@ type TFASettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TFASettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[88].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[90].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -24690,7 +24945,7 @@ type TaskFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TaskFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[89].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[91].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -24997,7 +25252,7 @@ type TaskHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TaskHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[90].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[92].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -25137,7 +25392,7 @@ type TemplateFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TemplateFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[91].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[93].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -25284,7 +25539,7 @@ type TemplateHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TemplateHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[92].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[94].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -25404,7 +25659,7 @@ type TrustCenterFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[93].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[95].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -25536,7 +25791,7 @@ type TrustCenterHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[94].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[96].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -25641,7 +25896,7 @@ type TrustCenterSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[95].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[97].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -25832,7 +26087,7 @@ type TrustCenterSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[96].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[98].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -25954,6 +26209,171 @@ func (f *TrustCenterSettingHistoryFilter) WhereAccentColor(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
+func (tcsq *TrustCenterSubprocessorQuery) addPredicate(pred func(s *sql.Selector)) {
+	tcsq.predicates = append(tcsq.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the TrustCenterSubprocessorQuery builder.
+func (tcsq *TrustCenterSubprocessorQuery) Filter() *TrustCenterSubprocessorFilter {
+	return &TrustCenterSubprocessorFilter{config: tcsq.config, predicateAdder: tcsq}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *TrustCenterSubprocessorMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the TrustCenterSubprocessorMutation builder.
+func (m *TrustCenterSubprocessorMutation) Filter() *TrustCenterSubprocessorFilter {
+	return &TrustCenterSubprocessorFilter{config: m.config, predicateAdder: m}
+}
+
+// TrustCenterSubprocessorFilter provides a generic filtering capability at runtime for TrustCenterSubprocessorQuery.
+type TrustCenterSubprocessorFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *TrustCenterSubprocessorFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[99].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *TrustCenterSubprocessorFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessor.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *TrustCenterSubprocessorFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcentersubprocessor.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *TrustCenterSubprocessorFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcentersubprocessor.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *TrustCenterSubprocessorFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessor.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *TrustCenterSubprocessorFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessor.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *TrustCenterSubprocessorFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcentersubprocessor.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *TrustCenterSubprocessorFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessor.FieldDeletedBy))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *TrustCenterSubprocessorFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(trustcentersubprocessor.FieldTags))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (tcshq *TrustCenterSubprocessorHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	tcshq.predicates = append(tcshq.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the TrustCenterSubprocessorHistoryQuery builder.
+func (tcshq *TrustCenterSubprocessorHistoryQuery) Filter() *TrustCenterSubprocessorHistoryFilter {
+	return &TrustCenterSubprocessorHistoryFilter{config: tcshq.config, predicateAdder: tcshq}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *TrustCenterSubprocessorHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the TrustCenterSubprocessorHistoryMutation builder.
+func (m *TrustCenterSubprocessorHistoryMutation) Filter() *TrustCenterSubprocessorHistoryFilter {
+	return &TrustCenterSubprocessorHistoryFilter{config: m.config, predicateAdder: m}
+}
+
+// TrustCenterSubprocessorHistoryFilter provides a generic filtering capability at runtime for TrustCenterSubprocessorHistoryQuery.
+type TrustCenterSubprocessorHistoryFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *TrustCenterSubprocessorHistoryFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[100].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldID))
+}
+
+// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereHistoryTime(p entql.TimeP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldHistoryTime))
+}
+
+// WhereRef applies the entql string predicate on the ref field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereRef(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldRef))
+}
+
+// WhereOperation applies the entql string predicate on the operation field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereOperation(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldOperation))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldDeletedBy))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldTags))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (uq *UserQuery) addPredicate(pred func(s *sql.Selector)) {
 	uq.predicates = append(uq.predicates, pred)
 }
@@ -25982,7 +26402,7 @@ type UserFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[97].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[101].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -26393,7 +26813,7 @@ type UserHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[98].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[102].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -26553,7 +26973,7 @@ type UserSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[99].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[103].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -26715,7 +27135,7 @@ type UserSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[100].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[104].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -26850,7 +27270,7 @@ type WebauthnFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WebauthnFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[101].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[105].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})

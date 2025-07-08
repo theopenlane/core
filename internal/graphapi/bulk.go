@@ -636,6 +636,25 @@ func (r *mutationResolver) bulkCreateSubcontrol(ctx context.Context, input []*ge
 	}, nil
 }
 
+// bulkCreateSubprocessor uses the CreateBulk function to create multiple Subprocessor entities
+func (r *mutationResolver) bulkCreateSubprocessor(ctx context.Context, input []*generated.CreateSubprocessorInput) (*model.SubprocessorBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.SubprocessorCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Subprocessor.Create().SetInput(*data)
+	}
+
+	res, err := c.Subprocessor.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "subprocessor"})
+	}
+
+	// return response
+	return &model.SubprocessorBulkCreatePayload{
+		Subprocessors: res,
+	}, nil
+}
+
 // bulkCreateSubscriber uses the CreateBulk function to create multiple Subscriber entities
 func (r *mutationResolver) bulkCreateSubscriber(ctx context.Context, input []*generated.CreateSubscriberInput) (*model.SubscriberBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -690,6 +709,25 @@ func (r *mutationResolver) bulkCreateTemplate(ctx context.Context, input []*gene
 	// return response
 	return &model.TemplateBulkCreatePayload{
 		Templates: res,
+	}, nil
+}
+
+// bulkCreateTrustCenterSubprocessor uses the CreateBulk function to create multiple TrustCenterSubprocessor entities
+func (r *mutationResolver) bulkCreateTrustCenterSubprocessor(ctx context.Context, input []*generated.CreateTrustCenterSubprocessorInput) (*model.TrustCenterSubprocessorBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.TrustCenterSubprocessorCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.TrustCenterSubprocessor.Create().SetInput(*data)
+	}
+
+	res, err := c.TrustCenterSubprocessor.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcentersubprocessor"})
+	}
+
+	// return response
+	return &model.TrustCenterSubprocessorBulkCreatePayload{
+		TrustCenterSubprocessors: res,
 	}, nil
 }
 
