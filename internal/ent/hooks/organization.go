@@ -25,8 +25,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
+	"github.com/theopenlane/core/pkg/catalog"
 	"github.com/theopenlane/core/pkg/catalog/features"
+	cataloggen "github.com/theopenlane/core/pkg/catalog/gencatalog"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects"
 )
 
@@ -595,6 +598,70 @@ func createFeatureTuples(ctx context.Context, authz fgax.Client, orgID string, f
 
 	if cache, ok := features.CacheFromContext(ctx); ok {
 		return cache.Set(ctx, orgID, feats)
+	}
+
+	return nil
+}
+
+// createDefaultOrgModulesProductsPrices creates default OrgModule, OrgProduct, and OrgPrice for base and compliance modules
+func createDefaultOrgModulesProductsPrices(ctx context.Context, orgCreated *generated.Organization, m GenericMutation, orgSubs *generated.OrgSubscription) error {
+	modulesToEntitle := []string{"base", "compliance"}
+
+	for _, moduleName := range modulesToEntitle {
+		mod, ok := cataloggen.DefaultCatalog.Modules[moduleName]
+		if !ok {
+			continue // skip if not in catalog
+		}
+
+		// Find the first price with "month" interval
+		var monthlyPrice *catalog.Price
+		for _, price := range mod.Billing.Prices {
+			if price.Interval == "month" {
+				monthlyPrice = &price
+				break
+			}
+		}
+
+		if monthlyPrice == nil {
+			continue // skip if no monthly price
+		}
+
+		// Create OrgModule
+		orgMod, err := m.Client().OrgModule.Create().
+			SetModule(moduleName).
+			SetSubscriptionID(orgSubs.ID).
+			SetOwnerID(orgCreated.ID).
+			SetActive(true).
+			SetPrice(models.Price{Amount: float64(monthlyPrice.UnitAmount), Interval: monthlyPrice.Interval}).
+			Save(ctx)
+		if err != nil {
+			return fmt.Errorf("failed to create OrgModule for %s: %w", moduleName, err)
+		}
+
+		// Create OrgProduct for this module
+		orgProduct, err := m.Client().OrgProduct.Create().
+			SetModule(moduleName).
+			SetOwnerID(orgCreated.ID).
+			SetModule(orgMod.ID).
+			SetSubscriptionID(orgSubs.ID).
+			SetActive(true).
+			Save(ctx)
+		if err != nil {
+			return fmt.Errorf("failed to create OrgProduct for %s: %w", moduleName, err)
+		}
+
+		// Create only the monthly OrgPrice for this product and set edge to OrgProduct
+		_, err = m.Client().OrgPrice.Create().
+			SetProductID(orgProduct.ID).
+			SetPrice(models.Price{Amount: float64(monthlyPrice.UnitAmount), Interval: monthlyPrice.Interval}).
+			SetOwnerID(orgCreated.ID).
+			SetSubscriptionID(orgSubs.ID).
+			SetStripePriceID(monthlyPrice.PriceID).
+			SetActive(true).
+			Save(ctx)
+		if err != nil {
+			return fmt.Errorf("failed to create OrgPrice for module %s: %w", moduleName, err)
+		}
 	}
 
 	return nil

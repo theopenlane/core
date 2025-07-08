@@ -79,6 +79,7 @@ func catalogApp() *cli.Command {
 			&cli.BoolFlag{
 				Name:  "write",
 				Usage: "write price IDs back to catalog file",
+				Value: true, // default to true to ensure up to date price IDs
 			},
 		},
 		Action: func(ctx context.Context, c *cli.Command) error {

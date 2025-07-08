@@ -46,7 +46,7 @@ const (
 	graphQueryDir  = graphDir + "query/"
 	schemaPath     = "./internal/ent/schema"
 	templateDir    = "./internal/ent/generate/templates/ent"
-	featureMapDir  = "./internal/features/"
+	featureMapDir  = "./internal/entitlements/features/"
 )
 
 func main() {
