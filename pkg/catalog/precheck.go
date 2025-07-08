@@ -3,11 +3,12 @@ package catalog
 import (
 	"context"
 	"fmt"
+	"net/http"
 
 	"github.com/stripe/stripe-go/v82"
 )
 
-// LookupKeyConflict describes an existing Stripe price using a lookup key.
+// LookupKeyConflict describes an existing Stripe price using a lookup key
 type LookupKeyConflict struct {
 	Feature   string
 	Resource  string
@@ -15,21 +16,32 @@ type LookupKeyConflict struct {
 	ID        string
 }
 
-// lookupKeyCheckConfig holds optional settings for checking lookup keys.
+// lookupKeyCheckConfig holds optional settings for checking lookup keys
 type lookupKeyCheckConfig struct {
 	failFast bool
 }
 
-// LookupKeyCheckOption configures lookup key conflict checks.
+// LookupKeyCheckOption configures lookup key conflict checks
 type LookupKeyCheckOption func(*lookupKeyCheckConfig)
 
-// WithFailFast stops checking after the first conflict is found.
+// WithFailFast stops checking after the first conflict is found
 func WithFailFast(f bool) LookupKeyCheckOption {
 	return func(c *lookupKeyCheckConfig) { c.failFast = f }
 }
 
+// notFound reports whether the error from Stripe indicates a missing resource
+func notFound(err error) bool {
+	if se, ok := err.(*stripe.Error); ok {
+		if se.Code == stripe.ErrorCodeResourceMissing || se.HTTPStatusCode == http.StatusNotFound {
+			return true
+		}
+	}
+
+	return false
+}
+
 // LookupKeyConflicts scans all feature prices and reports lookup keys that
-// already exist in Stripe under a different price ID.
+// already exist in Stripe under a different price ID
 type lookupPriceGetter interface {
 	GetPriceByLookupKey(ctx context.Context, lookupKey string) (*stripe.Price, error)
 }
@@ -48,6 +60,9 @@ type lookupClient interface {
 	lookupProductGetter
 }
 
+// LookupKeyConflicts checks the catalog for any lookup key conflicts with existing
+// Stripe products, features, or prices. It returns a slice of LookupKeyConflict
+// structs describing any conflicts found
 func (c *Catalog) LookupKeyConflicts(ctx context.Context, sc lookupClient, opts ...LookupKeyCheckOption) ([]LookupKeyConflict, error) {
 	if c == nil || sc == nil {
 		return nil, ErrContextandClientRequired
@@ -62,8 +77,11 @@ func (c *Catalog) LookupKeyConflicts(ctx context.Context, sc lookupClient, opts 
 
 	check := func(kind string, fs FeatureSet) error {
 		for name, f := range fs {
-			if prod, err := sc.GetProduct(ctx, name); err != nil {
-				return err
+			prod, err := sc.GetProduct(ctx, name)
+			if err != nil {
+				if !notFound(err) {
+					return err
+				}
 			} else if prod != nil {
 				conflicts = append(conflicts, LookupKeyConflict{Feature: fmt.Sprintf("%s:%s", kind, name), Resource: "product", LookupKey: name, ID: prod.ID})
 				if cfg.failFast {
@@ -76,6 +94,7 @@ func (c *Catalog) LookupKeyConflicts(ctx context.Context, sc lookupClient, opts 
 				if err != nil {
 					return err
 				}
+
 				if feat != nil {
 					conflicts = append(conflicts, LookupKeyConflict{Feature: fmt.Sprintf("%s:%s", kind, name), Resource: "feature", LookupKey: f.LookupKey, ID: feat.ID})
 					if cfg.failFast {

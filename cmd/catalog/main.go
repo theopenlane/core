@@ -7,6 +7,7 @@ import (
 	"io"
 	"maps"
 	"os"
+	"slices"
 	"strings"
 
 	"github.com/urfave/cli/v3"
@@ -284,7 +285,12 @@ func processFeatureSet(ctx context.Context, sc stripeClient, prodMap map[string]
 
 	var reports []featureReport
 
-	for name, feat := range fs {
+	names := slices.Collect(maps.Keys(fs))
+	slices.Sort(names)
+
+	for _, name := range names {
+		feat := fs[name]
+
 		var prod *stripe.Product
 
 		if entSc, ok := sc.(*entitlements.StripeClient); ok {

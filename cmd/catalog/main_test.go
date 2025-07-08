@@ -306,7 +306,7 @@ sha: bad
 modules:
   mod1:
     display_name: Prod1
-	lookup_key: mod1
+    lookup_key: mod1
     description: D
     audience: public
     billing:
@@ -347,7 +347,7 @@ sha: bad
 modules:
   mod1:
     display_name: Prod1
-	lookup_key: mod1
+    lookup_key: mod1
     description: D
     audience: public
     billing:

@@ -25,7 +25,7 @@ sha: ae5bcf31543244e0bc0b0a14a4374ae2f199eebe805de0ad58f20d36b5d5649b
 modules:
   mod1:
     display_name: M1
-	lookup_key: mod1
+    lookup_key: mod1
     description: This is a module
     billing:
       prices:
@@ -37,7 +37,7 @@ modules:
 addons:
   add1:
     display_name: A1
-	lookup_key: add1
+    lookup_key: add1
     description: Addon description
     billing:
       prices:

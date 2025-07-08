@@ -54,8 +54,19 @@ func TestPrintRows(t *testing.T) {
 	if err := r.printRows(rows); err != nil {
 		t.Fatalf("print rows: %v", err)
 	}
-	out := buf.String()
-	if !strings.Contains(out, "1\ttest") {
-		t.Fatalf("unexpected output: %q", out)
+
+	lines := strings.Split(strings.TrimSpace(buf.String()), "\n")
+	if len(lines) != 2 {
+		t.Fatalf("unexpected line count: %d", len(lines))
+	}
+
+	header := strings.Fields(lines[0])
+	if len(header) != 2 || header[0] != "ORGANIZATION" || header[1] != "ACTION" {
+		t.Fatalf("unexpected header: %q", lines[0])
+	}
+
+	row := strings.Fields(lines[1])
+	if len(row) != 2 || row[0] != "1" || row[1] != "test" {
+		t.Fatalf("unexpected row: %q", lines[1])
 	}
 }
