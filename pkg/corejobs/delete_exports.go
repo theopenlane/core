@@ -45,7 +45,7 @@ func (w *DeleteExportContentWorker) WithOpenlaneClient(cl olclient.OpenlaneClien
 
 // Work satisfies the river.Worker interface for the delete export worker
 // it deletes exports that are older than the configured cutoff duration
-func (w *DeleteExportContentWorker) Work(ctx context.Context, job *river.Job[DeleteExportContentArgs]) error {
+func (w *DeleteExportContentWorker) Work(ctx context.Context, _ *river.Job[DeleteExportContentArgs]) error {
 
 	if w.olClient == nil {
 		cl, err := getOpenlaneClient(CustomDomainConfig{
