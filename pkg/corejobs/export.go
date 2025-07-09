@@ -16,7 +16,7 @@ import (
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
-// ExportContentArgs for the worker to process the custom domain
+// ExportContentArgs for the worker to process and update the record for the updated content
 type ExportContentArgs struct {
 	// ID of the export
 	ExportID string `json:"export_id,omitempty"`
@@ -30,8 +30,7 @@ type ExportWorkerConfig struct {
 // Kind satisfies the river.Job interface
 func (ExportContentArgs) Kind() string { return "export_content" }
 
-// ExportContentWorker creates a custom hostname in cloudflare, and
-// creates and updates the records in our system
+// ExportContentWorker exports the content into csv and makes it downloadable
 type ExportContentWorker struct {
 	river.WorkerDefaults[ExportContentArgs]
 
