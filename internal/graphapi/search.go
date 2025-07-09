@@ -1689,10 +1689,11 @@ func searchSubprocessors(ctx context.Context, query string, after *entgql.Cursor
 	request := withTransactionalMutation(ctx).Subprocessor.Query().
 		Where(
 			subprocessor.Or(
-				subprocessor.ID(query), // search equal to ID
+				subprocessor.ID(query),               // search equal to ID
+				subprocessor.NameContainsFold(query), // search by Name
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
 			),
 		)
@@ -1710,6 +1711,11 @@ func adminSearchSubprocessors(ctx context.Context, query string, after *entgql.C
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
+				subprocessor.OwnerIDContainsFold(query),         // search by OwnerID
+				subprocessor.NameContainsFold(query),            // search by Name
+				subprocessor.DescriptionContainsFold(query),     // search by Description
+				subprocessor.LogoRemoteURLContainsFold(query),   // search by LogoRemoteURL
+				subprocessor.LogoLocalFileIDContainsFold(query), // search by LogoLocalFileID
 			),
 		)
 

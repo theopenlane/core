@@ -193,6 +193,7 @@ type SchemaConfig struct {
 	SubcontrolControlImplementations   string // Subcontrol-control_implementations->ControlImplementation table.
 	SubcontrolHistory                  string // SubcontrolHistory table.
 	Subprocessor                       string // Subprocessor table.
+	SubprocessorFiles                  string // Subprocessor-files->File table.
 	SubprocessorHistory                string // SubprocessorHistory table.
 	Subscriber                         string // Subscriber table.
 	SubscriberEvents                   string // Subscriber-events->Event table.

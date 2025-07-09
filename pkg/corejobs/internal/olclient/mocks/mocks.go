@@ -10067,12 +10067,12 @@ func (_c *MockOpenlaneGraphClient_CreateSubcontrol_Call) RunAndReturn(run func(c
 }
 
 // CreateSubprocessor provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) CreateSubprocessor(ctx context.Context, input openlaneclient.CreateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateSubprocessor, error) {
+func (_mock *MockOpenlaneGraphClient) CreateSubprocessor(ctx context.Context, input openlaneclient.CreateSubprocessorInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateSubprocessor, error) {
 	var tmpRet mock.Arguments
 	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, input, interceptors)
+		tmpRet = _mock.Called(ctx, input, logoFile, interceptors)
 	} else {
-		tmpRet = _mock.Called(ctx, input)
+		tmpRet = _mock.Called(ctx, input, logoFile)
 	}
 	ret := tmpRet
 
@@ -10082,18 +10082,18 @@ func (_mock *MockOpenlaneGraphClient) CreateSubprocessor(ctx context.Context, in
 
 	var r0 *openlaneclient.CreateSubprocessor
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateSubprocessorInput, ...clientv2.RequestInterceptor) (*openlaneclient.CreateSubprocessor, error)); ok {
-		return returnFunc(ctx, input, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateSubprocessorInput, *graphql.Upload, ...clientv2.RequestInterceptor) (*openlaneclient.CreateSubprocessor, error)); ok {
+		return returnFunc(ctx, input, logoFile, interceptors...)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateSubprocessorInput, ...clientv2.RequestInterceptor) *openlaneclient.CreateSubprocessor); ok {
-		r0 = returnFunc(ctx, input, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateSubprocessorInput, *graphql.Upload, ...clientv2.RequestInterceptor) *openlaneclient.CreateSubprocessor); ok {
+		r0 = returnFunc(ctx, input, logoFile, interceptors...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*openlaneclient.CreateSubprocessor)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, openlaneclient.CreateSubprocessorInput, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, input, interceptors...)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, openlaneclient.CreateSubprocessorInput, *graphql.Upload, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, logoFile, interceptors...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -10108,13 +10108,14 @@ type MockOpenlaneGraphClient_CreateSubprocessor_Call struct {
 // CreateSubprocessor is a helper method to define mock.On call
 //   - ctx context.Context
 //   - input openlaneclient.CreateSubprocessorInput
+//   - logoFile *graphql.Upload
 //   - interceptors ...clientv2.RequestInterceptor
-func (_e *MockOpenlaneGraphClient_Expecter) CreateSubprocessor(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateSubprocessor_Call {
+func (_e *MockOpenlaneGraphClient_Expecter) CreateSubprocessor(ctx interface{}, input interface{}, logoFile interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateSubprocessor_Call {
 	return &MockOpenlaneGraphClient_CreateSubprocessor_Call{Call: _e.mock.On("CreateSubprocessor",
-		append([]interface{}{ctx, input}, interceptors...)...)}
+		append([]interface{}{ctx, input, logoFile}, interceptors...)...)}
 }
 
-func (_c *MockOpenlaneGraphClient_CreateSubprocessor_Call) Run(run func(ctx context.Context, input openlaneclient.CreateSubprocessorInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateSubprocessor_Call {
+func (_c *MockOpenlaneGraphClient_CreateSubprocessor_Call) Run(run func(ctx context.Context, input openlaneclient.CreateSubprocessorInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateSubprocessor_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -10124,16 +10125,21 @@ func (_c *MockOpenlaneGraphClient_CreateSubprocessor_Call) Run(run func(ctx cont
 		if args[1] != nil {
 			arg1 = args[1].(openlaneclient.CreateSubprocessorInput)
 		}
-		var arg2 []clientv2.RequestInterceptor
-		var variadicArgs []clientv2.RequestInterceptor
-		if len(args) > 2 {
-			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		var arg2 *graphql.Upload
+		if args[2] != nil {
+			arg2 = args[2].(*graphql.Upload)
 		}
-		arg2 = variadicArgs
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
 		run(
 			arg0,
 			arg1,
-			arg2...,
+			arg2,
+			arg3...,
 		)
 	})
 	return _c
@@ -10144,7 +10150,7 @@ func (_c *MockOpenlaneGraphClient_CreateSubprocessor_Call) Return(createSubproce
 	return _c
 }
 
-func (_c *MockOpenlaneGraphClient_CreateSubprocessor_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.CreateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateSubprocessor, error)) *MockOpenlaneGraphClient_CreateSubprocessor_Call {
+func (_c *MockOpenlaneGraphClient_CreateSubprocessor_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.CreateSubprocessorInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateSubprocessor, error)) *MockOpenlaneGraphClient_CreateSubprocessor_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -38418,12 +38424,12 @@ func (_c *MockOpenlaneGraphClient_UpdateSubcontrol_Call) RunAndReturn(run func(c
 }
 
 // UpdateSubprocessor provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) UpdateSubprocessor(ctx context.Context, updateSubprocessorID string, input openlaneclient.UpdateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateSubprocessor, error) {
+func (_mock *MockOpenlaneGraphClient) UpdateSubprocessor(ctx context.Context, updateSubprocessorID string, input openlaneclient.UpdateSubprocessorInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateSubprocessor, error) {
 	var tmpRet mock.Arguments
 	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, updateSubprocessorID, input, interceptors)
+		tmpRet = _mock.Called(ctx, updateSubprocessorID, input, logoFile, interceptors)
 	} else {
-		tmpRet = _mock.Called(ctx, updateSubprocessorID, input)
+		tmpRet = _mock.Called(ctx, updateSubprocessorID, input, logoFile)
 	}
 	ret := tmpRet
 
@@ -38433,18 +38439,18 @@ func (_mock *MockOpenlaneGraphClient) UpdateSubprocessor(ctx context.Context, up
 
 	var r0 *openlaneclient.UpdateSubprocessor
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateSubprocessorInput, ...clientv2.RequestInterceptor) (*openlaneclient.UpdateSubprocessor, error)); ok {
-		return returnFunc(ctx, updateSubprocessorID, input, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateSubprocessorInput, *graphql.Upload, ...clientv2.RequestInterceptor) (*openlaneclient.UpdateSubprocessor, error)); ok {
+		return returnFunc(ctx, updateSubprocessorID, input, logoFile, interceptors...)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateSubprocessorInput, ...clientv2.RequestInterceptor) *openlaneclient.UpdateSubprocessor); ok {
-		r0 = returnFunc(ctx, updateSubprocessorID, input, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateSubprocessorInput, *graphql.Upload, ...clientv2.RequestInterceptor) *openlaneclient.UpdateSubprocessor); ok {
+		r0 = returnFunc(ctx, updateSubprocessorID, input, logoFile, interceptors...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*openlaneclient.UpdateSubprocessor)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, string, openlaneclient.UpdateSubprocessorInput, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, updateSubprocessorID, input, interceptors...)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, openlaneclient.UpdateSubprocessorInput, *graphql.Upload, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, updateSubprocessorID, input, logoFile, interceptors...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -38460,13 +38466,14 @@ type MockOpenlaneGraphClient_UpdateSubprocessor_Call struct {
 //   - ctx context.Context
 //   - updateSubprocessorID string
 //   - input openlaneclient.UpdateSubprocessorInput
+//   - logoFile *graphql.Upload
 //   - interceptors ...clientv2.RequestInterceptor
-func (_e *MockOpenlaneGraphClient_Expecter) UpdateSubprocessor(ctx interface{}, updateSubprocessorID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateSubprocessor_Call {
+func (_e *MockOpenlaneGraphClient_Expecter) UpdateSubprocessor(ctx interface{}, updateSubprocessorID interface{}, input interface{}, logoFile interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateSubprocessor_Call {
 	return &MockOpenlaneGraphClient_UpdateSubprocessor_Call{Call: _e.mock.On("UpdateSubprocessor",
-		append([]interface{}{ctx, updateSubprocessorID, input}, interceptors...)...)}
+		append([]interface{}{ctx, updateSubprocessorID, input, logoFile}, interceptors...)...)}
 }
 
-func (_c *MockOpenlaneGraphClient_UpdateSubprocessor_Call) Run(run func(ctx context.Context, updateSubprocessorID string, input openlaneclient.UpdateSubprocessorInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateSubprocessor_Call {
+func (_c *MockOpenlaneGraphClient_UpdateSubprocessor_Call) Run(run func(ctx context.Context, updateSubprocessorID string, input openlaneclient.UpdateSubprocessorInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateSubprocessor_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -38480,17 +38487,22 @@ func (_c *MockOpenlaneGraphClient_UpdateSubprocessor_Call) Run(run func(ctx cont
 		if args[2] != nil {
 			arg2 = args[2].(openlaneclient.UpdateSubprocessorInput)
 		}
-		var arg3 []clientv2.RequestInterceptor
-		var variadicArgs []clientv2.RequestInterceptor
-		if len(args) > 3 {
-			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		var arg3 *graphql.Upload
+		if args[3] != nil {
+			arg3 = args[3].(*graphql.Upload)
 		}
-		arg3 = variadicArgs
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
 		run(
 			arg0,
 			arg1,
 			arg2,
-			arg3...,
+			arg3,
+			arg4...,
 		)
 	})
 	return _c
@@ -38501,7 +38513,7 @@ func (_c *MockOpenlaneGraphClient_UpdateSubprocessor_Call) Return(updateSubproce
 	return _c
 }
 
-func (_c *MockOpenlaneGraphClient_UpdateSubprocessor_Call) RunAndReturn(run func(ctx context.Context, updateSubprocessorID string, input openlaneclient.UpdateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateSubprocessor, error)) *MockOpenlaneGraphClient_UpdateSubprocessor_Call {
+func (_c *MockOpenlaneGraphClient_UpdateSubprocessor_Call) RunAndReturn(run func(ctx context.Context, updateSubprocessorID string, input openlaneclient.UpdateSubprocessorInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateSubprocessor, error)) *MockOpenlaneGraphClient_UpdateSubprocessor_Call {
 	_c.Call.Return(run)
 	return _c
 }

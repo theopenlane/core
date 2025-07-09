@@ -12,6 +12,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 
@@ -122,9 +124,175 @@ func (su *SubprocessorUpdate) ClearTags() *SubprocessorUpdate {
 	return su
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (su *SubprocessorUpdate) SetOwnerID(s string) *SubprocessorUpdate {
+	su.mutation.SetOwnerID(s)
+	return su
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (su *SubprocessorUpdate) SetNillableOwnerID(s *string) *SubprocessorUpdate {
+	if s != nil {
+		su.SetOwnerID(*s)
+	}
+	return su
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (su *SubprocessorUpdate) ClearOwnerID() *SubprocessorUpdate {
+	su.mutation.ClearOwnerID()
+	return su
+}
+
+// SetName sets the "name" field.
+func (su *SubprocessorUpdate) SetName(s string) *SubprocessorUpdate {
+	su.mutation.SetName(s)
+	return su
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (su *SubprocessorUpdate) SetNillableName(s *string) *SubprocessorUpdate {
+	if s != nil {
+		su.SetName(*s)
+	}
+	return su
+}
+
+// SetDescription sets the "description" field.
+func (su *SubprocessorUpdate) SetDescription(s string) *SubprocessorUpdate {
+	su.mutation.SetDescription(s)
+	return su
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (su *SubprocessorUpdate) SetNillableDescription(s *string) *SubprocessorUpdate {
+	if s != nil {
+		su.SetDescription(*s)
+	}
+	return su
+}
+
+// ClearDescription clears the value of the "description" field.
+func (su *SubprocessorUpdate) ClearDescription() *SubprocessorUpdate {
+	su.mutation.ClearDescription()
+	return su
+}
+
+// SetLogoRemoteURL sets the "logo_remote_url" field.
+func (su *SubprocessorUpdate) SetLogoRemoteURL(s string) *SubprocessorUpdate {
+	su.mutation.SetLogoRemoteURL(s)
+	return su
+}
+
+// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
+func (su *SubprocessorUpdate) SetNillableLogoRemoteURL(s *string) *SubprocessorUpdate {
+	if s != nil {
+		su.SetLogoRemoteURL(*s)
+	}
+	return su
+}
+
+// ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
+func (su *SubprocessorUpdate) ClearLogoRemoteURL() *SubprocessorUpdate {
+	su.mutation.ClearLogoRemoteURL()
+	return su
+}
+
+// SetLogoLocalFileID sets the "logo_local_file_id" field.
+func (su *SubprocessorUpdate) SetLogoLocalFileID(s string) *SubprocessorUpdate {
+	su.mutation.SetLogoLocalFileID(s)
+	return su
+}
+
+// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
+func (su *SubprocessorUpdate) SetNillableLogoLocalFileID(s *string) *SubprocessorUpdate {
+	if s != nil {
+		su.SetLogoLocalFileID(*s)
+	}
+	return su
+}
+
+// ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
+func (su *SubprocessorUpdate) ClearLogoLocalFileID() *SubprocessorUpdate {
+	su.mutation.ClearLogoLocalFileID()
+	return su
+}
+
+// SetOwner sets the "owner" edge to the Organization entity.
+func (su *SubprocessorUpdate) SetOwner(o *Organization) *SubprocessorUpdate {
+	return su.SetOwnerID(o.ID)
+}
+
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (su *SubprocessorUpdate) AddFileIDs(ids ...string) *SubprocessorUpdate {
+	su.mutation.AddFileIDs(ids...)
+	return su
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (su *SubprocessorUpdate) AddFiles(f ...*File) *SubprocessorUpdate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return su.AddFileIDs(ids...)
+}
+
+// SetLogoFileID sets the "logo_file" edge to the File entity by ID.
+func (su *SubprocessorUpdate) SetLogoFileID(id string) *SubprocessorUpdate {
+	su.mutation.SetLogoFileID(id)
+	return su
+}
+
+// SetNillableLogoFileID sets the "logo_file" edge to the File entity by ID if the given value is not nil.
+func (su *SubprocessorUpdate) SetNillableLogoFileID(id *string) *SubprocessorUpdate {
+	if id != nil {
+		su = su.SetLogoFileID(*id)
+	}
+	return su
+}
+
+// SetLogoFile sets the "logo_file" edge to the File entity.
+func (su *SubprocessorUpdate) SetLogoFile(f *File) *SubprocessorUpdate {
+	return su.SetLogoFileID(f.ID)
+}
+
 // Mutation returns the SubprocessorMutation object of the builder.
 func (su *SubprocessorUpdate) Mutation() *SubprocessorMutation {
 	return su.mutation
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (su *SubprocessorUpdate) ClearOwner() *SubprocessorUpdate {
+	su.mutation.ClearOwner()
+	return su
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (su *SubprocessorUpdate) ClearFiles() *SubprocessorUpdate {
+	su.mutation.ClearFiles()
+	return su
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (su *SubprocessorUpdate) RemoveFileIDs(ids ...string) *SubprocessorUpdate {
+	su.mutation.RemoveFileIDs(ids...)
+	return su
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (su *SubprocessorUpdate) RemoveFiles(f ...*File) *SubprocessorUpdate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return su.RemoveFileIDs(ids...)
+}
+
+// ClearLogoFile clears the "logo_file" edge to the File entity.
+func (su *SubprocessorUpdate) ClearLogoFile() *SubprocessorUpdate {
+	su.mutation.ClearLogoFile()
+	return su
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -169,6 +337,21 @@ func (su *SubprocessorUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (su *SubprocessorUpdate) check() error {
+	if v, ok := su.mutation.Name(); ok {
+		if err := subprocessor.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Subprocessor.name": %w`, err)}
+		}
+	}
+	if v, ok := su.mutation.LogoRemoteURL(); ok {
+		if err := subprocessor.LogoRemoteURLValidator(v); err != nil {
+			return &ValidationError{Name: "logo_remote_url", err: fmt.Errorf(`generated: validator failed for field "Subprocessor.logo_remote_url": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (su *SubprocessorUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SubprocessorUpdate {
 	su.modifiers = append(su.modifiers, modifiers...)
@@ -176,6 +359,9 @@ func (su *SubprocessorUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *S
 }
 
 func (su *SubprocessorUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := su.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(subprocessor.Table, subprocessor.Columns, sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString))
 	if ps := su.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -224,6 +410,134 @@ func (su *SubprocessorUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.TagsCleared() {
 		_spec.ClearField(subprocessor.FieldTags, field.TypeJSON)
+	}
+	if su.mutation.SystemOwnedCleared() {
+		_spec.ClearField(subprocessor.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := su.mutation.Name(); ok {
+		_spec.SetField(subprocessor.FieldName, field.TypeString, value)
+	}
+	if value, ok := su.mutation.Description(); ok {
+		_spec.SetField(subprocessor.FieldDescription, field.TypeString, value)
+	}
+	if su.mutation.DescriptionCleared() {
+		_spec.ClearField(subprocessor.FieldDescription, field.TypeString)
+	}
+	if value, ok := su.mutation.LogoRemoteURL(); ok {
+		_spec.SetField(subprocessor.FieldLogoRemoteURL, field.TypeString, value)
+	}
+	if su.mutation.LogoRemoteURLCleared() {
+		_spec.ClearField(subprocessor.FieldLogoRemoteURL, field.TypeString)
+	}
+	if su.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   subprocessor.OwnerTable,
+			Columns: []string{subprocessor.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.Subprocessor
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   subprocessor.OwnerTable,
+			Columns: []string{subprocessor.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.Subprocessor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if su.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subprocessor.FilesTable,
+			Columns: subprocessor.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.SubprocessorFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.RemovedFilesIDs(); len(nodes) > 0 && !su.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subprocessor.FilesTable,
+			Columns: subprocessor.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.SubprocessorFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subprocessor.FilesTable,
+			Columns: subprocessor.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.SubprocessorFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if su.mutation.LogoFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subprocessor.LogoFileTable,
+			Columns: []string{subprocessor.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.Subprocessor
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.LogoFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subprocessor.LogoFileTable,
+			Columns: []string{subprocessor.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.Subprocessor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_spec.Node.Schema = su.schemaConfig.Subprocessor
 	ctx = internal.NewSchemaConfigContext(ctx, su.schemaConfig)
@@ -339,9 +653,175 @@ func (suo *SubprocessorUpdateOne) ClearTags() *SubprocessorUpdateOne {
 	return suo
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (suo *SubprocessorUpdateOne) SetOwnerID(s string) *SubprocessorUpdateOne {
+	suo.mutation.SetOwnerID(s)
+	return suo
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (suo *SubprocessorUpdateOne) SetNillableOwnerID(s *string) *SubprocessorUpdateOne {
+	if s != nil {
+		suo.SetOwnerID(*s)
+	}
+	return suo
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (suo *SubprocessorUpdateOne) ClearOwnerID() *SubprocessorUpdateOne {
+	suo.mutation.ClearOwnerID()
+	return suo
+}
+
+// SetName sets the "name" field.
+func (suo *SubprocessorUpdateOne) SetName(s string) *SubprocessorUpdateOne {
+	suo.mutation.SetName(s)
+	return suo
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (suo *SubprocessorUpdateOne) SetNillableName(s *string) *SubprocessorUpdateOne {
+	if s != nil {
+		suo.SetName(*s)
+	}
+	return suo
+}
+
+// SetDescription sets the "description" field.
+func (suo *SubprocessorUpdateOne) SetDescription(s string) *SubprocessorUpdateOne {
+	suo.mutation.SetDescription(s)
+	return suo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (suo *SubprocessorUpdateOne) SetNillableDescription(s *string) *SubprocessorUpdateOne {
+	if s != nil {
+		suo.SetDescription(*s)
+	}
+	return suo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (suo *SubprocessorUpdateOne) ClearDescription() *SubprocessorUpdateOne {
+	suo.mutation.ClearDescription()
+	return suo
+}
+
+// SetLogoRemoteURL sets the "logo_remote_url" field.
+func (suo *SubprocessorUpdateOne) SetLogoRemoteURL(s string) *SubprocessorUpdateOne {
+	suo.mutation.SetLogoRemoteURL(s)
+	return suo
+}
+
+// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
+func (suo *SubprocessorUpdateOne) SetNillableLogoRemoteURL(s *string) *SubprocessorUpdateOne {
+	if s != nil {
+		suo.SetLogoRemoteURL(*s)
+	}
+	return suo
+}
+
+// ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
+func (suo *SubprocessorUpdateOne) ClearLogoRemoteURL() *SubprocessorUpdateOne {
+	suo.mutation.ClearLogoRemoteURL()
+	return suo
+}
+
+// SetLogoLocalFileID sets the "logo_local_file_id" field.
+func (suo *SubprocessorUpdateOne) SetLogoLocalFileID(s string) *SubprocessorUpdateOne {
+	suo.mutation.SetLogoLocalFileID(s)
+	return suo
+}
+
+// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
+func (suo *SubprocessorUpdateOne) SetNillableLogoLocalFileID(s *string) *SubprocessorUpdateOne {
+	if s != nil {
+		suo.SetLogoLocalFileID(*s)
+	}
+	return suo
+}
+
+// ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
+func (suo *SubprocessorUpdateOne) ClearLogoLocalFileID() *SubprocessorUpdateOne {
+	suo.mutation.ClearLogoLocalFileID()
+	return suo
+}
+
+// SetOwner sets the "owner" edge to the Organization entity.
+func (suo *SubprocessorUpdateOne) SetOwner(o *Organization) *SubprocessorUpdateOne {
+	return suo.SetOwnerID(o.ID)
+}
+
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (suo *SubprocessorUpdateOne) AddFileIDs(ids ...string) *SubprocessorUpdateOne {
+	suo.mutation.AddFileIDs(ids...)
+	return suo
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (suo *SubprocessorUpdateOne) AddFiles(f ...*File) *SubprocessorUpdateOne {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return suo.AddFileIDs(ids...)
+}
+
+// SetLogoFileID sets the "logo_file" edge to the File entity by ID.
+func (suo *SubprocessorUpdateOne) SetLogoFileID(id string) *SubprocessorUpdateOne {
+	suo.mutation.SetLogoFileID(id)
+	return suo
+}
+
+// SetNillableLogoFileID sets the "logo_file" edge to the File entity by ID if the given value is not nil.
+func (suo *SubprocessorUpdateOne) SetNillableLogoFileID(id *string) *SubprocessorUpdateOne {
+	if id != nil {
+		suo = suo.SetLogoFileID(*id)
+	}
+	return suo
+}
+
+// SetLogoFile sets the "logo_file" edge to the File entity.
+func (suo *SubprocessorUpdateOne) SetLogoFile(f *File) *SubprocessorUpdateOne {
+	return suo.SetLogoFileID(f.ID)
+}
+
 // Mutation returns the SubprocessorMutation object of the builder.
 func (suo *SubprocessorUpdateOne) Mutation() *SubprocessorMutation {
 	return suo.mutation
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (suo *SubprocessorUpdateOne) ClearOwner() *SubprocessorUpdateOne {
+	suo.mutation.ClearOwner()
+	return suo
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (suo *SubprocessorUpdateOne) ClearFiles() *SubprocessorUpdateOne {
+	suo.mutation.ClearFiles()
+	return suo
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (suo *SubprocessorUpdateOne) RemoveFileIDs(ids ...string) *SubprocessorUpdateOne {
+	suo.mutation.RemoveFileIDs(ids...)
+	return suo
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (suo *SubprocessorUpdateOne) RemoveFiles(f ...*File) *SubprocessorUpdateOne {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return suo.RemoveFileIDs(ids...)
+}
+
+// ClearLogoFile clears the "logo_file" edge to the File entity.
+func (suo *SubprocessorUpdateOne) ClearLogoFile() *SubprocessorUpdateOne {
+	suo.mutation.ClearLogoFile()
+	return suo
 }
 
 // Where appends a list predicates to the SubprocessorUpdate builder.
@@ -399,6 +879,21 @@ func (suo *SubprocessorUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (suo *SubprocessorUpdateOne) check() error {
+	if v, ok := suo.mutation.Name(); ok {
+		if err := subprocessor.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Subprocessor.name": %w`, err)}
+		}
+	}
+	if v, ok := suo.mutation.LogoRemoteURL(); ok {
+		if err := subprocessor.LogoRemoteURLValidator(v); err != nil {
+			return &ValidationError{Name: "logo_remote_url", err: fmt.Errorf(`generated: validator failed for field "Subprocessor.logo_remote_url": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (suo *SubprocessorUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SubprocessorUpdateOne {
 	suo.modifiers = append(suo.modifiers, modifiers...)
@@ -406,6 +901,9 @@ func (suo *SubprocessorUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)
 }
 
 func (suo *SubprocessorUpdateOne) sqlSave(ctx context.Context) (_node *Subprocessor, err error) {
+	if err := suo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(subprocessor.Table, subprocessor.Columns, sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString))
 	id, ok := suo.mutation.ID()
 	if !ok {
@@ -471,6 +969,134 @@ func (suo *SubprocessorUpdateOne) sqlSave(ctx context.Context) (_node *Subproces
 	}
 	if suo.mutation.TagsCleared() {
 		_spec.ClearField(subprocessor.FieldTags, field.TypeJSON)
+	}
+	if suo.mutation.SystemOwnedCleared() {
+		_spec.ClearField(subprocessor.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := suo.mutation.Name(); ok {
+		_spec.SetField(subprocessor.FieldName, field.TypeString, value)
+	}
+	if value, ok := suo.mutation.Description(); ok {
+		_spec.SetField(subprocessor.FieldDescription, field.TypeString, value)
+	}
+	if suo.mutation.DescriptionCleared() {
+		_spec.ClearField(subprocessor.FieldDescription, field.TypeString)
+	}
+	if value, ok := suo.mutation.LogoRemoteURL(); ok {
+		_spec.SetField(subprocessor.FieldLogoRemoteURL, field.TypeString, value)
+	}
+	if suo.mutation.LogoRemoteURLCleared() {
+		_spec.ClearField(subprocessor.FieldLogoRemoteURL, field.TypeString)
+	}
+	if suo.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   subprocessor.OwnerTable,
+			Columns: []string{subprocessor.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.Subprocessor
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   subprocessor.OwnerTable,
+			Columns: []string{subprocessor.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.Subprocessor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subprocessor.FilesTable,
+			Columns: subprocessor.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.SubprocessorFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !suo.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subprocessor.FilesTable,
+			Columns: subprocessor.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.SubprocessorFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subprocessor.FilesTable,
+			Columns: subprocessor.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.SubprocessorFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.LogoFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subprocessor.LogoFileTable,
+			Columns: []string{subprocessor.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.Subprocessor
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.LogoFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subprocessor.LogoFileTable,
+			Columns: []string{subprocessor.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.Subprocessor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_spec.Node.Schema = suo.schemaConfig.Subprocessor
 	ctx = internal.NewSchemaConfigContext(ctx, suo.schemaConfig)

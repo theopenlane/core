@@ -2020,6 +2020,18 @@ func (f *File) TrustCenterSetting(ctx context.Context) (result []*TrustCenterSet
 	return result, err
 }
 
+func (f *File) Subprocessor(ctx context.Context) (result []*Subprocessor, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = f.NamedSubprocessor(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = f.Edges.SubprocessorOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = f.QuerySubprocessor().All(ctx)
+	}
+	return result, err
+}
+
 func (gr *Group) Owner(ctx context.Context) (*Organization, error) {
 	result, err := gr.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -4868,6 +4880,27 @@ func (o *Organization) Scans(
 	return o.QueryScans().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (o *Organization) Subprocessors(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*SubprocessorOrder, where *SubprocessorWhereInput,
+) (*SubprocessorConnection, error) {
+	opts := []SubprocessorPaginateOption{
+		WithSubprocessorOrder(orderBy),
+		WithSubprocessorFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := o.Edges.totalCount[61][alias]
+	if nodes, err := o.NamedSubprocessors(alias); err == nil || hasTotalCount {
+		pager, err := newSubprocessorPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &SubprocessorConnection{Edges: []*SubprocessorEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return o.QuerySubprocessors().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (o *Organization) Members(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*OrgMembershipOrder, where *OrgMembershipWhereInput,
 ) (*OrgMembershipConnection, error) {
@@ -4876,7 +4909,7 @@ func (o *Organization) Members(
 		WithOrgMembershipFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[61][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[62][alias]
 	if nodes, err := o.NamedMembers(alias); err == nil || hasTotalCount {
 		pager, err := newOrgMembershipPager(opts, last != nil)
 		if err != nil {
@@ -6273,6 +6306,43 @@ func (s *Subcontrol) ScheduledJobs(
 		return conn, nil
 	}
 	return s.QueryScheduledJobs().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (s *Subprocessor) Owner(ctx context.Context) (*Organization, error) {
+	result, err := s.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = s.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (s *Subprocessor) Files(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FileOrder, where *FileWhereInput,
+) (*FileConnection, error) {
+	opts := []FilePaginateOption{
+		WithFileOrder(orderBy),
+		WithFileFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := s.Edges.totalCount[1][alias]
+	if nodes, err := s.NamedFiles(alias); err == nil || hasTotalCount {
+		pager, err := newFilePager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &FileConnection{Edges: []*FileEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return s.QueryFiles().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (s *Subprocessor) LogoFile(ctx context.Context) (*File, error) {
+	result, err := s.Edges.LogoFileOrErr()
+	if IsNotLoaded(err) {
+		result, err = s.QueryLogoFile().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (s *Subscriber) Owner(ctx context.Context) (*Organization, error) {

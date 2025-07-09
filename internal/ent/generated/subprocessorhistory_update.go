@@ -122,6 +122,100 @@ func (shu *SubprocessorHistoryUpdate) ClearTags() *SubprocessorHistoryUpdate {
 	return shu
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (shu *SubprocessorHistoryUpdate) SetOwnerID(s string) *SubprocessorHistoryUpdate {
+	shu.mutation.SetOwnerID(s)
+	return shu
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (shu *SubprocessorHistoryUpdate) SetNillableOwnerID(s *string) *SubprocessorHistoryUpdate {
+	if s != nil {
+		shu.SetOwnerID(*s)
+	}
+	return shu
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (shu *SubprocessorHistoryUpdate) ClearOwnerID() *SubprocessorHistoryUpdate {
+	shu.mutation.ClearOwnerID()
+	return shu
+}
+
+// SetName sets the "name" field.
+func (shu *SubprocessorHistoryUpdate) SetName(s string) *SubprocessorHistoryUpdate {
+	shu.mutation.SetName(s)
+	return shu
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (shu *SubprocessorHistoryUpdate) SetNillableName(s *string) *SubprocessorHistoryUpdate {
+	if s != nil {
+		shu.SetName(*s)
+	}
+	return shu
+}
+
+// SetDescription sets the "description" field.
+func (shu *SubprocessorHistoryUpdate) SetDescription(s string) *SubprocessorHistoryUpdate {
+	shu.mutation.SetDescription(s)
+	return shu
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (shu *SubprocessorHistoryUpdate) SetNillableDescription(s *string) *SubprocessorHistoryUpdate {
+	if s != nil {
+		shu.SetDescription(*s)
+	}
+	return shu
+}
+
+// ClearDescription clears the value of the "description" field.
+func (shu *SubprocessorHistoryUpdate) ClearDescription() *SubprocessorHistoryUpdate {
+	shu.mutation.ClearDescription()
+	return shu
+}
+
+// SetLogoRemoteURL sets the "logo_remote_url" field.
+func (shu *SubprocessorHistoryUpdate) SetLogoRemoteURL(s string) *SubprocessorHistoryUpdate {
+	shu.mutation.SetLogoRemoteURL(s)
+	return shu
+}
+
+// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
+func (shu *SubprocessorHistoryUpdate) SetNillableLogoRemoteURL(s *string) *SubprocessorHistoryUpdate {
+	if s != nil {
+		shu.SetLogoRemoteURL(*s)
+	}
+	return shu
+}
+
+// ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
+func (shu *SubprocessorHistoryUpdate) ClearLogoRemoteURL() *SubprocessorHistoryUpdate {
+	shu.mutation.ClearLogoRemoteURL()
+	return shu
+}
+
+// SetLogoLocalFileID sets the "logo_local_file_id" field.
+func (shu *SubprocessorHistoryUpdate) SetLogoLocalFileID(s string) *SubprocessorHistoryUpdate {
+	shu.mutation.SetLogoLocalFileID(s)
+	return shu
+}
+
+// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
+func (shu *SubprocessorHistoryUpdate) SetNillableLogoLocalFileID(s *string) *SubprocessorHistoryUpdate {
+	if s != nil {
+		shu.SetLogoLocalFileID(*s)
+	}
+	return shu
+}
+
+// ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
+func (shu *SubprocessorHistoryUpdate) ClearLogoLocalFileID() *SubprocessorHistoryUpdate {
+	shu.mutation.ClearLogoLocalFileID()
+	return shu
+}
+
 // Mutation returns the SubprocessorHistoryMutation object of the builder.
 func (shu *SubprocessorHistoryUpdate) Mutation() *SubprocessorHistoryMutation {
 	return shu.mutation
@@ -221,6 +315,36 @@ func (shu *SubprocessorHistoryUpdate) sqlSave(ctx context.Context) (n int, err e
 	}
 	if shu.mutation.TagsCleared() {
 		_spec.ClearField(subprocessorhistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := shu.mutation.OwnerID(); ok {
+		_spec.SetField(subprocessorhistory.FieldOwnerID, field.TypeString, value)
+	}
+	if shu.mutation.OwnerIDCleared() {
+		_spec.ClearField(subprocessorhistory.FieldOwnerID, field.TypeString)
+	}
+	if shu.mutation.SystemOwnedCleared() {
+		_spec.ClearField(subprocessorhistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := shu.mutation.Name(); ok {
+		_spec.SetField(subprocessorhistory.FieldName, field.TypeString, value)
+	}
+	if value, ok := shu.mutation.Description(); ok {
+		_spec.SetField(subprocessorhistory.FieldDescription, field.TypeString, value)
+	}
+	if shu.mutation.DescriptionCleared() {
+		_spec.ClearField(subprocessorhistory.FieldDescription, field.TypeString)
+	}
+	if value, ok := shu.mutation.LogoRemoteURL(); ok {
+		_spec.SetField(subprocessorhistory.FieldLogoRemoteURL, field.TypeString, value)
+	}
+	if shu.mutation.LogoRemoteURLCleared() {
+		_spec.ClearField(subprocessorhistory.FieldLogoRemoteURL, field.TypeString)
+	}
+	if value, ok := shu.mutation.LogoLocalFileID(); ok {
+		_spec.SetField(subprocessorhistory.FieldLogoLocalFileID, field.TypeString, value)
+	}
+	if shu.mutation.LogoLocalFileIDCleared() {
+		_spec.ClearField(subprocessorhistory.FieldLogoLocalFileID, field.TypeString)
 	}
 	_spec.Node.Schema = shu.schemaConfig.SubprocessorHistory
 	ctx = internal.NewSchemaConfigContext(ctx, shu.schemaConfig)
@@ -333,6 +457,100 @@ func (shuo *SubprocessorHistoryUpdateOne) AppendTags(s []string) *SubprocessorHi
 // ClearTags clears the value of the "tags" field.
 func (shuo *SubprocessorHistoryUpdateOne) ClearTags() *SubprocessorHistoryUpdateOne {
 	shuo.mutation.ClearTags()
+	return shuo
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (shuo *SubprocessorHistoryUpdateOne) SetOwnerID(s string) *SubprocessorHistoryUpdateOne {
+	shuo.mutation.SetOwnerID(s)
+	return shuo
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (shuo *SubprocessorHistoryUpdateOne) SetNillableOwnerID(s *string) *SubprocessorHistoryUpdateOne {
+	if s != nil {
+		shuo.SetOwnerID(*s)
+	}
+	return shuo
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (shuo *SubprocessorHistoryUpdateOne) ClearOwnerID() *SubprocessorHistoryUpdateOne {
+	shuo.mutation.ClearOwnerID()
+	return shuo
+}
+
+// SetName sets the "name" field.
+func (shuo *SubprocessorHistoryUpdateOne) SetName(s string) *SubprocessorHistoryUpdateOne {
+	shuo.mutation.SetName(s)
+	return shuo
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (shuo *SubprocessorHistoryUpdateOne) SetNillableName(s *string) *SubprocessorHistoryUpdateOne {
+	if s != nil {
+		shuo.SetName(*s)
+	}
+	return shuo
+}
+
+// SetDescription sets the "description" field.
+func (shuo *SubprocessorHistoryUpdateOne) SetDescription(s string) *SubprocessorHistoryUpdateOne {
+	shuo.mutation.SetDescription(s)
+	return shuo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (shuo *SubprocessorHistoryUpdateOne) SetNillableDescription(s *string) *SubprocessorHistoryUpdateOne {
+	if s != nil {
+		shuo.SetDescription(*s)
+	}
+	return shuo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (shuo *SubprocessorHistoryUpdateOne) ClearDescription() *SubprocessorHistoryUpdateOne {
+	shuo.mutation.ClearDescription()
+	return shuo
+}
+
+// SetLogoRemoteURL sets the "logo_remote_url" field.
+func (shuo *SubprocessorHistoryUpdateOne) SetLogoRemoteURL(s string) *SubprocessorHistoryUpdateOne {
+	shuo.mutation.SetLogoRemoteURL(s)
+	return shuo
+}
+
+// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
+func (shuo *SubprocessorHistoryUpdateOne) SetNillableLogoRemoteURL(s *string) *SubprocessorHistoryUpdateOne {
+	if s != nil {
+		shuo.SetLogoRemoteURL(*s)
+	}
+	return shuo
+}
+
+// ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
+func (shuo *SubprocessorHistoryUpdateOne) ClearLogoRemoteURL() *SubprocessorHistoryUpdateOne {
+	shuo.mutation.ClearLogoRemoteURL()
+	return shuo
+}
+
+// SetLogoLocalFileID sets the "logo_local_file_id" field.
+func (shuo *SubprocessorHistoryUpdateOne) SetLogoLocalFileID(s string) *SubprocessorHistoryUpdateOne {
+	shuo.mutation.SetLogoLocalFileID(s)
+	return shuo
+}
+
+// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
+func (shuo *SubprocessorHistoryUpdateOne) SetNillableLogoLocalFileID(s *string) *SubprocessorHistoryUpdateOne {
+	if s != nil {
+		shuo.SetLogoLocalFileID(*s)
+	}
+	return shuo
+}
+
+// ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
+func (shuo *SubprocessorHistoryUpdateOne) ClearLogoLocalFileID() *SubprocessorHistoryUpdateOne {
+	shuo.mutation.ClearLogoLocalFileID()
 	return shuo
 }
 
@@ -465,6 +683,36 @@ func (shuo *SubprocessorHistoryUpdateOne) sqlSave(ctx context.Context) (_node *S
 	}
 	if shuo.mutation.TagsCleared() {
 		_spec.ClearField(subprocessorhistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := shuo.mutation.OwnerID(); ok {
+		_spec.SetField(subprocessorhistory.FieldOwnerID, field.TypeString, value)
+	}
+	if shuo.mutation.OwnerIDCleared() {
+		_spec.ClearField(subprocessorhistory.FieldOwnerID, field.TypeString)
+	}
+	if shuo.mutation.SystemOwnedCleared() {
+		_spec.ClearField(subprocessorhistory.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := shuo.mutation.Name(); ok {
+		_spec.SetField(subprocessorhistory.FieldName, field.TypeString, value)
+	}
+	if value, ok := shuo.mutation.Description(); ok {
+		_spec.SetField(subprocessorhistory.FieldDescription, field.TypeString, value)
+	}
+	if shuo.mutation.DescriptionCleared() {
+		_spec.ClearField(subprocessorhistory.FieldDescription, field.TypeString)
+	}
+	if value, ok := shuo.mutation.LogoRemoteURL(); ok {
+		_spec.SetField(subprocessorhistory.FieldLogoRemoteURL, field.TypeString, value)
+	}
+	if shuo.mutation.LogoRemoteURLCleared() {
+		_spec.ClearField(subprocessorhistory.FieldLogoRemoteURL, field.TypeString)
+	}
+	if value, ok := shuo.mutation.LogoLocalFileID(); ok {
+		_spec.SetField(subprocessorhistory.FieldLogoLocalFileID, field.TypeString, value)
+	}
+	if shuo.mutation.LogoLocalFileIDCleared() {
+		_spec.ClearField(subprocessorhistory.FieldLogoLocalFileID, field.TypeString)
 	}
 	_spec.Node.Schema = shuo.schemaConfig.SubprocessorHistory
 	ctx = internal.NewSchemaConfigContext(ctx, shuo.schemaConfig)

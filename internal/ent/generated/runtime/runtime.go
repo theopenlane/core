@@ -5001,18 +5001,33 @@ func init() {
 	}
 	subprocessorMixinHooks0 := subprocessorMixin[0].Hooks()
 	subprocessorMixinHooks1 := subprocessorMixin[1].Hooks()
+	subprocessorMixinHooks5 := subprocessorMixin[5].Hooks()
+	subprocessorMixinHooks6 := subprocessorMixin[6].Hooks()
+	subprocessorHooks := schema.Subprocessor{}.Hooks()
 
 	subprocessor.Hooks[1] = subprocessorMixinHooks0[0]
 
 	subprocessor.Hooks[2] = subprocessorMixinHooks1[0]
+
+	subprocessor.Hooks[3] = subprocessorMixinHooks5[0]
+
+	subprocessor.Hooks[4] = subprocessorMixinHooks6[0]
+
+	subprocessor.Hooks[5] = subprocessorHooks[0]
 	subprocessorMixinInters1 := subprocessorMixin[1].Interceptors()
+	subprocessorMixinInters5 := subprocessorMixin[5].Interceptors()
+	subprocessorInters := schema.Subprocessor{}.Interceptors()
 	subprocessor.Interceptors[0] = subprocessorMixinInters1[0]
+	subprocessor.Interceptors[1] = subprocessorMixinInters5[0]
+	subprocessor.Interceptors[2] = subprocessorInters[0]
 	subprocessorMixinFields0 := subprocessorMixin[0].Fields()
 	_ = subprocessorMixinFields0
 	subprocessorMixinFields2 := subprocessorMixin[2].Fields()
 	_ = subprocessorMixinFields2
 	subprocessorMixinFields3 := subprocessorMixin[3].Fields()
 	_ = subprocessorMixinFields3
+	subprocessorMixinFields6 := subprocessorMixin[6].Fields()
+	_ = subprocessorMixinFields6
 	subprocessorFields := schema.Subprocessor{}.Fields()
 	_ = subprocessorFields
 	// subprocessorDescCreatedAt is the schema descriptor for created_at field.
@@ -5029,6 +5044,32 @@ func init() {
 	subprocessorDescTags := subprocessorMixinFields3[0].Descriptor()
 	// subprocessor.DefaultTags holds the default value on creation for the tags field.
 	subprocessor.DefaultTags = subprocessorDescTags.Default.([]string)
+	// subprocessorDescSystemOwned is the schema descriptor for system_owned field.
+	subprocessorDescSystemOwned := subprocessorMixinFields6[0].Descriptor()
+	// subprocessor.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	subprocessor.DefaultSystemOwned = subprocessorDescSystemOwned.Default.(bool)
+	// subprocessorDescName is the schema descriptor for name field.
+	subprocessorDescName := subprocessorFields[0].Descriptor()
+	// subprocessor.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	subprocessor.NameValidator = subprocessorDescName.Validators[0].(func(string) error)
+	// subprocessorDescLogoRemoteURL is the schema descriptor for logo_remote_url field.
+	subprocessorDescLogoRemoteURL := subprocessorFields[2].Descriptor()
+	// subprocessor.LogoRemoteURLValidator is a validator for the "logo_remote_url" field. It is called by the builders before save.
+	subprocessor.LogoRemoteURLValidator = func() func(string) error {
+		validators := subprocessorDescLogoRemoteURL.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(logo_remote_url string) error {
+			for _, fn := range fns {
+				if err := fn(logo_remote_url); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	// subprocessorDescID is the schema descriptor for id field.
 	subprocessorDescID := subprocessorMixinFields2[0].Descriptor()
 	// subprocessor.DefaultID holds the default value on creation for the id field.
@@ -5055,6 +5096,10 @@ func init() {
 	subprocessorhistoryDescTags := subprocessorhistoryFields[10].Descriptor()
 	// subprocessorhistory.DefaultTags holds the default value on creation for the tags field.
 	subprocessorhistory.DefaultTags = subprocessorhistoryDescTags.Default.([]string)
+	// subprocessorhistoryDescSystemOwned is the schema descriptor for system_owned field.
+	subprocessorhistoryDescSystemOwned := subprocessorhistoryFields[12].Descriptor()
+	// subprocessorhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	subprocessorhistory.DefaultSystemOwned = subprocessorhistoryDescSystemOwned.Default.(bool)
 	// subprocessorhistoryDescID is the schema descriptor for id field.
 	subprocessorhistoryDescID := subprocessorhistoryFields[9].Descriptor()
 	// subprocessorhistory.DefaultID holds the default value on creation for the id field.

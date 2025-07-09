@@ -8032,6 +8032,7 @@ input CreateFileInput {
   evidenceIDs: [ID!]
   eventIDs: [ID!]
   trustCenterSettingIDs: [ID!]
+  subprocessorIDs: [ID!]
 }
 """
 CreateGroupInput is used for create Group object.
@@ -8602,6 +8603,7 @@ input CreateOrganizationInput {
   trustCenterIDs: [ID!]
   assetIDs: [ID!]
   scanIDs: [ID!]
+  subprocessorIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -9215,6 +9217,21 @@ input CreateSubprocessorInput {
   tags associated with the object
   """
   tags: [String!]
+  """
+  name of the standard body
+  """
+  name: String!
+  """
+  description of the subprocessor
+  """
+  description: String
+  """
+  URL of the logo
+  """
+  logoRemoteURL: String
+  ownerID: ID
+  fileIDs: [ID!]
+  logoFileID: ID
 }
 """
 CreateSubscriberInput is used for create Subscriber object.
@@ -14549,6 +14566,7 @@ type File implements Node {
     where: EventWhereInput
   ): EventConnection!
   trustCenterSetting: [TrustCenterSetting!]
+  subprocessor: [Subprocessor!]
 }
 """
 A connection to a list of items.
@@ -15426,6 +15444,11 @@ input FileWhereInput {
   """
   hasTrustCenterSetting: Boolean
   hasTrustCenterSettingWith: [TrustCenterSettingWhereInput!]
+  """
+  subprocessor edge predicates
+  """
+  hasSubprocessor: Boolean
+  hasSubprocessorWith: [SubprocessorWhereInput!]
 }
 type Group implements Node {
   id: ID!
@@ -27660,6 +27683,37 @@ type Organization implements Node {
     """
     where: ScanWhereInput
   ): ScanConnection!
+  subprocessors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subprocessors returned from the connection.
+    """
+    orderBy: [SubprocessorOrder!]
+
+    """
+    Filtering options for Subprocessors returned from the connection.
+    """
+    where: SubprocessorWhereInput
+  ): SubprocessorConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -29553,6 +29607,11 @@ input OrganizationWhereInput {
   """
   hasScans: Boolean
   hasScansWith: [ScanWhereInput!]
+  """
+  subprocessors edge predicates
+  """
+  hasSubprocessors: Boolean
+  hasSubprocessorsWith: [SubprocessorWhereInput!]
   """
   members edge predicates
   """
@@ -41732,6 +41791,63 @@ type Subprocessor implements Node {
   tags associated with the object
   """
   tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  name of the standard body
+  """
+  name: String!
+  """
+  description of the subprocessor
+  """
+  description: String
+  """
+  URL of the logo
+  """
+  logoRemoteURL: String
+  """
+  The local logo file id, takes precedence over the logo remote URL
+  """
+  logoLocalFileID: ID
+  owner: Organization
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+  logoFile: File
 }
 """
 A connection to a list of items.
@@ -41776,6 +41892,30 @@ type SubprocessorHistory implements Node {
   tags associated with the object
   """
   tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  name of the standard body
+  """
+  name: String!
+  """
+  description of the subprocessor
+  """
+  description: String
+  """
+  URL of the logo
+  """
+  logoRemoteURL: String
+  """
+  The local logo file id, takes precedence over the logo remote URL
+  """
+  logoLocalFileID: String
 }
 """
 A connection to a list of items.
@@ -41835,6 +41975,7 @@ enum SubprocessorHistoryOrderField {
   history_time
   created_at
   updated_at
+  name
 }
 """
 SubprocessorHistoryWhereInput is used for filtering SubprocessorHistory objects.
@@ -41955,6 +42096,101 @@ input SubprocessorHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  logo_remote_url field predicates
+  """
+  logoRemoteURL: String
+  logoRemoteURLNEQ: String
+  logoRemoteURLIn: [String!]
+  logoRemoteURLNotIn: [String!]
+  logoRemoteURLGT: String
+  logoRemoteURLGTE: String
+  logoRemoteURLLT: String
+  logoRemoteURLLTE: String
+  logoRemoteURLContains: String
+  logoRemoteURLHasPrefix: String
+  logoRemoteURLHasSuffix: String
+  logoRemoteURLIsNil: Boolean
+  logoRemoteURLNotNil: Boolean
+  logoRemoteURLEqualFold: String
+  logoRemoteURLContainsFold: String
+  """
+  logo_local_file_id field predicates
+  """
+  logoLocalFileID: String
+  logoLocalFileIDNEQ: String
+  logoLocalFileIDIn: [String!]
+  logoLocalFileIDNotIn: [String!]
+  logoLocalFileIDGT: String
+  logoLocalFileIDGTE: String
+  logoLocalFileIDLT: String
+  logoLocalFileIDLTE: String
+  logoLocalFileIDContains: String
+  logoLocalFileIDHasPrefix: String
+  logoLocalFileIDHasSuffix: String
+  logoLocalFileIDIsNil: Boolean
+  logoLocalFileIDNotNil: Boolean
+  logoLocalFileIDEqualFold: String
+  logoLocalFileIDContainsFold: String
 }
 """
 Ordering options for Subprocessor connections
@@ -41975,6 +42211,7 @@ Properties by which Subprocessor connections can be ordered.
 enum SubprocessorOrderField {
   created_at
   updated_at
+  name
 }
 """
 SubprocessorWhereInput is used for filtering Subprocessor objects.
@@ -42059,6 +42296,116 @@ input SubprocessorWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  logo_remote_url field predicates
+  """
+  logoRemoteURL: String
+  logoRemoteURLNEQ: String
+  logoRemoteURLIn: [String!]
+  logoRemoteURLNotIn: [String!]
+  logoRemoteURLGT: String
+  logoRemoteURLGTE: String
+  logoRemoteURLLT: String
+  logoRemoteURLLTE: String
+  logoRemoteURLContains: String
+  logoRemoteURLHasPrefix: String
+  logoRemoteURLHasSuffix: String
+  logoRemoteURLIsNil: Boolean
+  logoRemoteURLNotNil: Boolean
+  logoRemoteURLEqualFold: String
+  logoRemoteURLContainsFold: String
+  """
+  logo_local_file_id field predicates
+  """
+  logoLocalFileID: ID
+  logoLocalFileIDNEQ: ID
+  logoLocalFileIDIn: [ID!]
+  logoLocalFileIDNotIn: [ID!]
+  logoLocalFileIDGT: ID
+  logoLocalFileIDGTE: ID
+  logoLocalFileIDLT: ID
+  logoLocalFileIDLTE: ID
+  logoLocalFileIDContains: ID
+  logoLocalFileIDHasPrefix: ID
+  logoLocalFileIDHasSuffix: ID
+  logoLocalFileIDIsNil: Boolean
+  logoLocalFileIDNotNil: Boolean
+  logoLocalFileIDEqualFold: ID
+  logoLocalFileIDContainsFold: ID
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
+  """
+  logo_file edge predicates
+  """
+  hasLogoFile: Boolean
+  hasLogoFileWith: [FileWhereInput!]
 }
 type Subscriber implements Node {
   id: ID!
@@ -47080,6 +47427,9 @@ input UpdateFileInput {
   addTrustCenterSettingIDs: [ID!]
   removeTrustCenterSettingIDs: [ID!]
   clearTrustCenterSetting: Boolean
+  addSubprocessorIDs: [ID!]
+  removeSubprocessorIDs: [ID!]
+  clearSubprocessor: Boolean
 }
 """
 UpdateGroupInput is used for update Group object.
@@ -47884,6 +48234,9 @@ input UpdateOrganizationInput {
   addScanIDs: [ID!]
   removeScanIDs: [ID!]
   clearScans: Boolean
+  addSubprocessorIDs: [ID!]
+  removeSubprocessorIDs: [ID!]
+  clearSubprocessors: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -48721,6 +49074,27 @@ input UpdateSubprocessorInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
+  """
+  name of the standard body
+  """
+  name: String
+  """
+  description of the subprocessor
+  """
+  description: String
+  clearDescription: Boolean
+  """
+  URL of the logo
+  """
+  logoRemoteURL: String
+  clearLogoRemoteURL: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
+  logoFileID: ID
+  clearLogoFile: Boolean
 }
 """
 UpdateSubscriberInput is used for update Subscriber object.

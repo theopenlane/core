@@ -809,6 +809,11 @@ query AdminSearch($query: String!) {
         node {
           id
           tags
+          ownerID
+          name
+          description
+          logoRemoteURL
+          logoLocalFileID
         }
       }
     }

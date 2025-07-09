@@ -32954,6 +32954,20 @@ var (
 			}
 		},
 	}
+	// SubprocessorOrderFieldName orders Subprocessor by name.
+	SubprocessorOrderFieldName = &SubprocessorOrderField{
+		Value: func(s *Subprocessor) (ent.Value, error) {
+			return s.Name, nil
+		},
+		column: subprocessor.FieldName,
+		toTerm: subprocessor.ByName,
+		toCursor: func(s *Subprocessor) Cursor {
+			return Cursor{
+				ID:    s.ID,
+				Value: s.Name,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -32964,6 +32978,8 @@ func (f SubprocessorOrderField) String() string {
 		str = "created_at"
 	case SubprocessorOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case SubprocessorOrderFieldName.column:
+		str = "name"
 	}
 	return str
 }
@@ -32984,6 +33000,8 @@ func (f *SubprocessorOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *SubprocessorOrderFieldCreatedAt
 	case "updated_at":
 		*f = *SubprocessorOrderFieldUpdatedAt
+	case "name":
+		*f = *SubprocessorOrderFieldName
 	default:
 		return fmt.Errorf("%s is not a valid SubprocessorOrderField", str)
 	}
@@ -33282,6 +33300,20 @@ var (
 			}
 		},
 	}
+	// SubprocessorHistoryOrderFieldName orders SubprocessorHistory by name.
+	SubprocessorHistoryOrderFieldName = &SubprocessorHistoryOrderField{
+		Value: func(sh *SubprocessorHistory) (ent.Value, error) {
+			return sh.Name, nil
+		},
+		column: subprocessorhistory.FieldName,
+		toTerm: subprocessorhistory.ByName,
+		toCursor: func(sh *SubprocessorHistory) Cursor {
+			return Cursor{
+				ID:    sh.ID,
+				Value: sh.Name,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -33294,6 +33326,8 @@ func (f SubprocessorHistoryOrderField) String() string {
 		str = "created_at"
 	case SubprocessorHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case SubprocessorHistoryOrderFieldName.column:
+		str = "name"
 	}
 	return str
 }
@@ -33316,6 +33350,8 @@ func (f *SubprocessorHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *SubprocessorHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *SubprocessorHistoryOrderFieldUpdatedAt
+	case "name":
+		*f = *SubprocessorHistoryOrderFieldName
 	default:
 		return fmt.Errorf("%s is not a valid SubprocessorHistoryOrderField", str)
 	}

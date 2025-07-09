@@ -10,6 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 )
 
@@ -31,8 +33,71 @@ type Subprocessor struct {
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
-	Tags         []string `json:"tags,omitempty"`
+	Tags []string `json:"tags,omitempty"`
+	// the organization id that owns the object
+	OwnerID string `json:"owner_id,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned bool `json:"system_owned,omitempty"`
+	// name of the standard body
+	Name string `json:"name,omitempty"`
+	// description of the subprocessor
+	Description string `json:"description,omitempty"`
+	// URL of the logo
+	LogoRemoteURL *string `json:"logo_remote_url,omitempty"`
+	// The local logo file id, takes precedence over the logo remote URL
+	LogoLocalFileID *string `json:"logo_local_file_id,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the SubprocessorQuery when eager-loading is set.
+	Edges        SubprocessorEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// SubprocessorEdges holds the relations/edges for other nodes in the graph.
+type SubprocessorEdges struct {
+	// Owner holds the value of the owner edge.
+	Owner *Organization `json:"owner,omitempty"`
+	// Files holds the value of the files edge.
+	Files []*File `json:"files,omitempty"`
+	// LogoFile holds the value of the logo_file edge.
+	LogoFile *File `json:"logo_file,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [3]bool
+	// totalCount holds the count of the edges above.
+	totalCount [3]map[string]int
+
+	namedFiles map[string][]*File
+}
+
+// OwnerOrErr returns the Owner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SubprocessorEdges) OwnerOrErr() (*Organization, error) {
+	if e.Owner != nil {
+		return e.Owner, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: organization.Label}
+	}
+	return nil, &NotLoadedError{edge: "owner"}
+}
+
+// FilesOrErr returns the Files value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubprocessorEdges) FilesOrErr() ([]*File, error) {
+	if e.loadedTypes[1] {
+		return e.Files, nil
+	}
+	return nil, &NotLoadedError{edge: "files"}
+}
+
+// LogoFileOrErr returns the LogoFile value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SubprocessorEdges) LogoFileOrErr() (*File, error) {
+	if e.LogoFile != nil {
+		return e.LogoFile, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: file.Label}
+	}
+	return nil, &NotLoadedError{edge: "logo_file"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -42,7 +107,9 @@ func (*Subprocessor) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case subprocessor.FieldTags:
 			values[i] = new([]byte)
-		case subprocessor.FieldID, subprocessor.FieldCreatedBy, subprocessor.FieldUpdatedBy, subprocessor.FieldDeletedBy:
+		case subprocessor.FieldSystemOwned:
+			values[i] = new(sql.NullBool)
+		case subprocessor.FieldID, subprocessor.FieldCreatedBy, subprocessor.FieldUpdatedBy, subprocessor.FieldDeletedBy, subprocessor.FieldOwnerID, subprocessor.FieldName, subprocessor.FieldDescription, subprocessor.FieldLogoRemoteURL, subprocessor.FieldLogoLocalFileID:
 			values[i] = new(sql.NullString)
 		case subprocessor.FieldCreatedAt, subprocessor.FieldUpdatedAt, subprocessor.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -111,6 +178,44 @@ func (s *Subprocessor) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case subprocessor.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				s.OwnerID = value.String
+			}
+		case subprocessor.FieldSystemOwned:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
+			} else if value.Valid {
+				s.SystemOwned = value.Bool
+			}
+		case subprocessor.FieldName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name", values[i])
+			} else if value.Valid {
+				s.Name = value.String
+			}
+		case subprocessor.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				s.Description = value.String
+			}
+		case subprocessor.FieldLogoRemoteURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field logo_remote_url", values[i])
+			} else if value.Valid {
+				s.LogoRemoteURL = new(string)
+				*s.LogoRemoteURL = value.String
+			}
+		case subprocessor.FieldLogoLocalFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field logo_local_file_id", values[i])
+			} else if value.Valid {
+				s.LogoLocalFileID = new(string)
+				*s.LogoLocalFileID = value.String
+			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
 		}
@@ -122,6 +227,21 @@ func (s *Subprocessor) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (s *Subprocessor) Value(name string) (ent.Value, error) {
 	return s.selectValues.Get(name)
+}
+
+// QueryOwner queries the "owner" edge of the Subprocessor entity.
+func (s *Subprocessor) QueryOwner() *OrganizationQuery {
+	return NewSubprocessorClient(s.config).QueryOwner(s)
+}
+
+// QueryFiles queries the "files" edge of the Subprocessor entity.
+func (s *Subprocessor) QueryFiles() *FileQuery {
+	return NewSubprocessorClient(s.config).QueryFiles(s)
+}
+
+// QueryLogoFile queries the "logo_file" edge of the Subprocessor entity.
+func (s *Subprocessor) QueryLogoFile() *FileQuery {
+	return NewSubprocessorClient(s.config).QueryLogoFile(s)
 }
 
 // Update returns a builder for updating this Subprocessor.
@@ -167,8 +287,54 @@ func (s *Subprocessor) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", s.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(s.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("system_owned=")
+	builder.WriteString(fmt.Sprintf("%v", s.SystemOwned))
+	builder.WriteString(", ")
+	builder.WriteString("name=")
+	builder.WriteString(s.Name)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(s.Description)
+	builder.WriteString(", ")
+	if v := s.LogoRemoteURL; v != nil {
+		builder.WriteString("logo_remote_url=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := s.LogoLocalFileID; v != nil {
+		builder.WriteString("logo_local_file_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedFiles returns the Files named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (s *Subprocessor) NamedFiles(name string) ([]*File, error) {
+	if s.Edges.namedFiles == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := s.Edges.namedFiles[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (s *Subprocessor) appendNamedFiles(name string, edges ...*File) {
+	if s.Edges.namedFiles == nil {
+		s.Edges.namedFiles = make(map[string][]*File)
+	}
+	if len(edges) == 0 {
+		s.Edges.namedFiles[name] = []*File{}
+	} else {
+		s.Edges.namedFiles[name] = append(s.Edges.namedFiles[name], edges...)
+	}
 }
 
 // Subprocessors is a parsable slice of Subprocessor.

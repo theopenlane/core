@@ -7563,6 +7563,25 @@ func (c *FileClient) QueryTrustCenterSetting(f *File) *TrustCenterSettingQuery {
 	return query
 }
 
+// QuerySubprocessor queries the subprocessor edge of a File.
+func (c *FileClient) QuerySubprocessor(f *File) *SubprocessorQuery {
+	query := (&SubprocessorClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(subprocessor.Table, subprocessor.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.SubprocessorTable, file.SubprocessorPrimaryKey...),
+		)
+		schemaConfig := f.schemaConfig
+		step.To.Schema = schemaConfig.Subprocessor
+		step.Edge.Schema = schemaConfig.SubprocessorFiles
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *FileClient) Hooks() []Hook {
 	hooks := c.hooks.File
@@ -15560,6 +15579,25 @@ func (c *OrganizationClient) QueryScans(o *Organization) *ScanQuery {
 	return query
 }
 
+// QuerySubprocessors queries the subprocessors edge of a Organization.
+func (c *OrganizationClient) QuerySubprocessors(o *Organization) *SubprocessorQuery {
+	query := (&SubprocessorClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(subprocessor.Table, subprocessor.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.SubprocessorsTable, organization.SubprocessorsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Subprocessor
+		step.Edge.Schema = schemaConfig.Subprocessor
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(o *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -20249,6 +20287,63 @@ func (c *SubprocessorClient) GetX(ctx context.Context, id string) *Subprocessor 
 		panic(err)
 	}
 	return obj
+}
+
+// QueryOwner queries the owner edge of a Subprocessor.
+func (c *SubprocessorClient) QueryOwner(s *Subprocessor) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subprocessor.Table, subprocessor.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, subprocessor.OwnerTable, subprocessor.OwnerColumn),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Subprocessor
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFiles queries the files edge of a Subprocessor.
+func (c *SubprocessorClient) QueryFiles(s *Subprocessor) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subprocessor.Table, subprocessor.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, subprocessor.FilesTable, subprocessor.FilesPrimaryKey...),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.SubprocessorFiles
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryLogoFile queries the logo_file edge of a Subprocessor.
+func (c *SubprocessorClient) QueryLogoFile(s *Subprocessor) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subprocessor.Table, subprocessor.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subprocessor.LogoFileTable, subprocessor.LogoFileColumn),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.Subprocessor
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.

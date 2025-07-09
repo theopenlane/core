@@ -57,6 +57,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -1235,6 +1236,21 @@ func (ou *OrganizationUpdate) AddScans(s ...*Scan) *OrganizationUpdate {
 		ids[i] = s[i].ID
 	}
 	return ou.AddScanIDs(ids...)
+}
+
+// AddSubprocessorIDs adds the "subprocessors" edge to the Subprocessor entity by IDs.
+func (ou *OrganizationUpdate) AddSubprocessorIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddSubprocessorIDs(ids...)
+	return ou
+}
+
+// AddSubprocessors adds the "subprocessors" edges to the Subprocessor entity.
+func (ou *OrganizationUpdate) AddSubprocessors(s ...*Subprocessor) *OrganizationUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ou.AddSubprocessorIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -2548,6 +2564,27 @@ func (ou *OrganizationUpdate) RemoveScans(s ...*Scan) *OrganizationUpdate {
 		ids[i] = s[i].ID
 	}
 	return ou.RemoveScanIDs(ids...)
+}
+
+// ClearSubprocessors clears all "subprocessors" edges to the Subprocessor entity.
+func (ou *OrganizationUpdate) ClearSubprocessors() *OrganizationUpdate {
+	ou.mutation.ClearSubprocessors()
+	return ou
+}
+
+// RemoveSubprocessorIDs removes the "subprocessors" edge to Subprocessor entities by IDs.
+func (ou *OrganizationUpdate) RemoveSubprocessorIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveSubprocessorIDs(ids...)
+	return ou
+}
+
+// RemoveSubprocessors removes "subprocessors" edges to Subprocessor entities.
+func (ou *OrganizationUpdate) RemoveSubprocessors(s ...*Subprocessor) *OrganizationUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ou.RemoveSubprocessorIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -5740,6 +5777,54 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ou.mutation.SubprocessorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SubprocessorsTable,
+			Columns: []string{organization.SubprocessorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Subprocessor
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedSubprocessorsIDs(); len(nodes) > 0 && !ou.mutation.SubprocessorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SubprocessorsTable,
+			Columns: []string{organization.SubprocessorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Subprocessor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.SubprocessorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SubprocessorsTable,
+			Columns: []string{organization.SubprocessorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Subprocessor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ou.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -6967,6 +7052,21 @@ func (ouo *OrganizationUpdateOne) AddScans(s ...*Scan) *OrganizationUpdateOne {
 		ids[i] = s[i].ID
 	}
 	return ouo.AddScanIDs(ids...)
+}
+
+// AddSubprocessorIDs adds the "subprocessors" edge to the Subprocessor entity by IDs.
+func (ouo *OrganizationUpdateOne) AddSubprocessorIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddSubprocessorIDs(ids...)
+	return ouo
+}
+
+// AddSubprocessors adds the "subprocessors" edges to the Subprocessor entity.
+func (ouo *OrganizationUpdateOne) AddSubprocessors(s ...*Subprocessor) *OrganizationUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ouo.AddSubprocessorIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -8280,6 +8380,27 @@ func (ouo *OrganizationUpdateOne) RemoveScans(s ...*Scan) *OrganizationUpdateOne
 		ids[i] = s[i].ID
 	}
 	return ouo.RemoveScanIDs(ids...)
+}
+
+// ClearSubprocessors clears all "subprocessors" edges to the Subprocessor entity.
+func (ouo *OrganizationUpdateOne) ClearSubprocessors() *OrganizationUpdateOne {
+	ouo.mutation.ClearSubprocessors()
+	return ouo
+}
+
+// RemoveSubprocessorIDs removes the "subprocessors" edge to Subprocessor entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveSubprocessorIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveSubprocessorIDs(ids...)
+	return ouo
+}
+
+// RemoveSubprocessors removes "subprocessors" edges to Subprocessor entities.
+func (ouo *OrganizationUpdateOne) RemoveSubprocessors(s ...*Subprocessor) *OrganizationUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ouo.RemoveSubprocessorIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -11497,6 +11618,54 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			},
 		}
 		edge.Schema = ouo.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.SubprocessorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SubprocessorsTable,
+			Columns: []string{organization.SubprocessorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Subprocessor
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedSubprocessorsIDs(); len(nodes) > 0 && !ouo.mutation.SubprocessorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SubprocessorsTable,
+			Columns: []string{organization.SubprocessorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Subprocessor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.SubprocessorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SubprocessorsTable,
+			Columns: []string{organization.SubprocessorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Subprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

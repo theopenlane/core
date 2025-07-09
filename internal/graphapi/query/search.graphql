@@ -608,6 +608,7 @@ query GlobalSearch($query: String!) {
       edges {
         node {
           id
+          name
           tags
         }
       }

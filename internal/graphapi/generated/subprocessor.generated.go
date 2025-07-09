@@ -77,6 +77,24 @@ func (ec *executionContext) fieldContext_SubprocessorBulkCreatePayload_subproces
 				return ec.fieldContext_Subprocessor_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subprocessor_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Subprocessor_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Subprocessor_systemOwned(ctx, field)
+			case "name":
+				return ec.fieldContext_Subprocessor_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Subprocessor_description(ctx, field)
+			case "logoRemoteURL":
+				return ec.fieldContext_Subprocessor_logoRemoteURL(ctx, field)
+			case "logoLocalFileID":
+				return ec.fieldContext_Subprocessor_logoLocalFileID(ctx, field)
+			case "owner":
+				return ec.fieldContext_Subprocessor_owner(ctx, field)
+			case "files":
+				return ec.fieldContext_Subprocessor_files(ctx, field)
+			case "logoFile":
+				return ec.fieldContext_Subprocessor_logoFile(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subprocessor", field.Name)
 		},
@@ -135,6 +153,24 @@ func (ec *executionContext) fieldContext_SubprocessorCreatePayload_subprocessor(
 				return ec.fieldContext_Subprocessor_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subprocessor_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Subprocessor_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Subprocessor_systemOwned(ctx, field)
+			case "name":
+				return ec.fieldContext_Subprocessor_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Subprocessor_description(ctx, field)
+			case "logoRemoteURL":
+				return ec.fieldContext_Subprocessor_logoRemoteURL(ctx, field)
+			case "logoLocalFileID":
+				return ec.fieldContext_Subprocessor_logoLocalFileID(ctx, field)
+			case "owner":
+				return ec.fieldContext_Subprocessor_owner(ctx, field)
+			case "files":
+				return ec.fieldContext_Subprocessor_files(ctx, field)
+			case "logoFile":
+				return ec.fieldContext_Subprocessor_logoFile(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subprocessor", field.Name)
 		},
@@ -237,6 +273,24 @@ func (ec *executionContext) fieldContext_SubprocessorUpdatePayload_subprocessor(
 				return ec.fieldContext_Subprocessor_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Subprocessor_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Subprocessor_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_Subprocessor_systemOwned(ctx, field)
+			case "name":
+				return ec.fieldContext_Subprocessor_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Subprocessor_description(ctx, field)
+			case "logoRemoteURL":
+				return ec.fieldContext_Subprocessor_logoRemoteURL(ctx, field)
+			case "logoLocalFileID":
+				return ec.fieldContext_Subprocessor_logoLocalFileID(ctx, field)
+			case "owner":
+				return ec.fieldContext_Subprocessor_owner(ctx, field)
+			case "files":
+				return ec.fieldContext_Subprocessor_files(ctx, field)
+			case "logoFile":
+				return ec.fieldContext_Subprocessor_logoFile(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subprocessor", field.Name)
 		},

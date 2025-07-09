@@ -6,7 +6,10 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -92,6 +95,36 @@ func DeletedAt(v time.Time) predicate.Subprocessor {
 // DeletedBy applies equality check predicate on the "deleted_by" field. It's identical to DeletedByEQ.
 func DeletedBy(v string) predicate.Subprocessor {
 	return predicate.Subprocessor(sql.FieldEQ(FieldDeletedBy, v))
+}
+
+// OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
+func OwnerID(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldEQ(FieldOwnerID, v))
+}
+
+// SystemOwned applies equality check predicate on the "system_owned" field. It's identical to SystemOwnedEQ.
+func SystemOwned(v bool) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldEQ(FieldSystemOwned, v))
+}
+
+// Name applies equality check predicate on the "name" field. It's identical to NameEQ.
+func Name(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldEQ(FieldName, v))
+}
+
+// Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
+func Description(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldEQ(FieldDescription, v))
+}
+
+// LogoRemoteURL applies equality check predicate on the "logo_remote_url" field. It's identical to LogoRemoteURLEQ.
+func LogoRemoteURL(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldEQ(FieldLogoRemoteURL, v))
+}
+
+// LogoLocalFileID applies equality check predicate on the "logo_local_file_id" field. It's identical to LogoLocalFileIDEQ.
+func LogoLocalFileID(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldEQ(FieldLogoLocalFileID, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -477,6 +510,478 @@ func TagsIsNil() predicate.Subprocessor {
 // TagsNotNil applies the NotNil predicate on the "tags" field.
 func TagsNotNil() predicate.Subprocessor {
 	return predicate.Subprocessor(sql.FieldNotNull(FieldTags))
+}
+
+// OwnerIDEQ applies the EQ predicate on the "owner_id" field.
+func OwnerIDEQ(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldEQ(FieldOwnerID, v))
+}
+
+// OwnerIDNEQ applies the NEQ predicate on the "owner_id" field.
+func OwnerIDNEQ(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldNEQ(FieldOwnerID, v))
+}
+
+// OwnerIDIn applies the In predicate on the "owner_id" field.
+func OwnerIDIn(vs ...string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldIn(FieldOwnerID, vs...))
+}
+
+// OwnerIDNotIn applies the NotIn predicate on the "owner_id" field.
+func OwnerIDNotIn(vs ...string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldNotIn(FieldOwnerID, vs...))
+}
+
+// OwnerIDGT applies the GT predicate on the "owner_id" field.
+func OwnerIDGT(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldGT(FieldOwnerID, v))
+}
+
+// OwnerIDGTE applies the GTE predicate on the "owner_id" field.
+func OwnerIDGTE(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldGTE(FieldOwnerID, v))
+}
+
+// OwnerIDLT applies the LT predicate on the "owner_id" field.
+func OwnerIDLT(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldLT(FieldOwnerID, v))
+}
+
+// OwnerIDLTE applies the LTE predicate on the "owner_id" field.
+func OwnerIDLTE(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldLTE(FieldOwnerID, v))
+}
+
+// OwnerIDContains applies the Contains predicate on the "owner_id" field.
+func OwnerIDContains(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldContains(FieldOwnerID, v))
+}
+
+// OwnerIDHasPrefix applies the HasPrefix predicate on the "owner_id" field.
+func OwnerIDHasPrefix(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldHasPrefix(FieldOwnerID, v))
+}
+
+// OwnerIDHasSuffix applies the HasSuffix predicate on the "owner_id" field.
+func OwnerIDHasSuffix(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldHasSuffix(FieldOwnerID, v))
+}
+
+// OwnerIDIsNil applies the IsNil predicate on the "owner_id" field.
+func OwnerIDIsNil() predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldIsNull(FieldOwnerID))
+}
+
+// OwnerIDNotNil applies the NotNil predicate on the "owner_id" field.
+func OwnerIDNotNil() predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldNotNull(FieldOwnerID))
+}
+
+// OwnerIDEqualFold applies the EqualFold predicate on the "owner_id" field.
+func OwnerIDEqualFold(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldEqualFold(FieldOwnerID, v))
+}
+
+// OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
+func OwnerIDContainsFold(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldContainsFold(FieldOwnerID, v))
+}
+
+// SystemOwnedEQ applies the EQ predicate on the "system_owned" field.
+func SystemOwnedEQ(v bool) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldEQ(FieldSystemOwned, v))
+}
+
+// SystemOwnedNEQ applies the NEQ predicate on the "system_owned" field.
+func SystemOwnedNEQ(v bool) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldNEQ(FieldSystemOwned, v))
+}
+
+// SystemOwnedIsNil applies the IsNil predicate on the "system_owned" field.
+func SystemOwnedIsNil() predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldIsNull(FieldSystemOwned))
+}
+
+// SystemOwnedNotNil applies the NotNil predicate on the "system_owned" field.
+func SystemOwnedNotNil() predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldNotNull(FieldSystemOwned))
+}
+
+// NameEQ applies the EQ predicate on the "name" field.
+func NameEQ(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldEQ(FieldName, v))
+}
+
+// NameNEQ applies the NEQ predicate on the "name" field.
+func NameNEQ(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldNEQ(FieldName, v))
+}
+
+// NameIn applies the In predicate on the "name" field.
+func NameIn(vs ...string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldIn(FieldName, vs...))
+}
+
+// NameNotIn applies the NotIn predicate on the "name" field.
+func NameNotIn(vs ...string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldNotIn(FieldName, vs...))
+}
+
+// NameGT applies the GT predicate on the "name" field.
+func NameGT(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldGT(FieldName, v))
+}
+
+// NameGTE applies the GTE predicate on the "name" field.
+func NameGTE(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldGTE(FieldName, v))
+}
+
+// NameLT applies the LT predicate on the "name" field.
+func NameLT(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldLT(FieldName, v))
+}
+
+// NameLTE applies the LTE predicate on the "name" field.
+func NameLTE(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldLTE(FieldName, v))
+}
+
+// NameContains applies the Contains predicate on the "name" field.
+func NameContains(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldContains(FieldName, v))
+}
+
+// NameHasPrefix applies the HasPrefix predicate on the "name" field.
+func NameHasPrefix(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldHasPrefix(FieldName, v))
+}
+
+// NameHasSuffix applies the HasSuffix predicate on the "name" field.
+func NameHasSuffix(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldHasSuffix(FieldName, v))
+}
+
+// NameEqualFold applies the EqualFold predicate on the "name" field.
+func NameEqualFold(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldEqualFold(FieldName, v))
+}
+
+// NameContainsFold applies the ContainsFold predicate on the "name" field.
+func NameContainsFold(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldContainsFold(FieldName, v))
+}
+
+// DescriptionEQ applies the EQ predicate on the "description" field.
+func DescriptionEQ(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldEQ(FieldDescription, v))
+}
+
+// DescriptionNEQ applies the NEQ predicate on the "description" field.
+func DescriptionNEQ(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldNEQ(FieldDescription, v))
+}
+
+// DescriptionIn applies the In predicate on the "description" field.
+func DescriptionIn(vs ...string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldIn(FieldDescription, vs...))
+}
+
+// DescriptionNotIn applies the NotIn predicate on the "description" field.
+func DescriptionNotIn(vs ...string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldNotIn(FieldDescription, vs...))
+}
+
+// DescriptionGT applies the GT predicate on the "description" field.
+func DescriptionGT(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldGT(FieldDescription, v))
+}
+
+// DescriptionGTE applies the GTE predicate on the "description" field.
+func DescriptionGTE(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldGTE(FieldDescription, v))
+}
+
+// DescriptionLT applies the LT predicate on the "description" field.
+func DescriptionLT(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldLT(FieldDescription, v))
+}
+
+// DescriptionLTE applies the LTE predicate on the "description" field.
+func DescriptionLTE(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldLTE(FieldDescription, v))
+}
+
+// DescriptionContains applies the Contains predicate on the "description" field.
+func DescriptionContains(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldContains(FieldDescription, v))
+}
+
+// DescriptionHasPrefix applies the HasPrefix predicate on the "description" field.
+func DescriptionHasPrefix(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldHasPrefix(FieldDescription, v))
+}
+
+// DescriptionHasSuffix applies the HasSuffix predicate on the "description" field.
+func DescriptionHasSuffix(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldHasSuffix(FieldDescription, v))
+}
+
+// DescriptionIsNil applies the IsNil predicate on the "description" field.
+func DescriptionIsNil() predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldIsNull(FieldDescription))
+}
+
+// DescriptionNotNil applies the NotNil predicate on the "description" field.
+func DescriptionNotNil() predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldNotNull(FieldDescription))
+}
+
+// DescriptionEqualFold applies the EqualFold predicate on the "description" field.
+func DescriptionEqualFold(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldEqualFold(FieldDescription, v))
+}
+
+// DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
+func DescriptionContainsFold(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldContainsFold(FieldDescription, v))
+}
+
+// LogoRemoteURLEQ applies the EQ predicate on the "logo_remote_url" field.
+func LogoRemoteURLEQ(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldEQ(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLNEQ applies the NEQ predicate on the "logo_remote_url" field.
+func LogoRemoteURLNEQ(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldNEQ(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLIn applies the In predicate on the "logo_remote_url" field.
+func LogoRemoteURLIn(vs ...string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldIn(FieldLogoRemoteURL, vs...))
+}
+
+// LogoRemoteURLNotIn applies the NotIn predicate on the "logo_remote_url" field.
+func LogoRemoteURLNotIn(vs ...string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldNotIn(FieldLogoRemoteURL, vs...))
+}
+
+// LogoRemoteURLGT applies the GT predicate on the "logo_remote_url" field.
+func LogoRemoteURLGT(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldGT(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLGTE applies the GTE predicate on the "logo_remote_url" field.
+func LogoRemoteURLGTE(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldGTE(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLLT applies the LT predicate on the "logo_remote_url" field.
+func LogoRemoteURLLT(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldLT(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLLTE applies the LTE predicate on the "logo_remote_url" field.
+func LogoRemoteURLLTE(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldLTE(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLContains applies the Contains predicate on the "logo_remote_url" field.
+func LogoRemoteURLContains(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldContains(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLHasPrefix applies the HasPrefix predicate on the "logo_remote_url" field.
+func LogoRemoteURLHasPrefix(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldHasPrefix(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLHasSuffix applies the HasSuffix predicate on the "logo_remote_url" field.
+func LogoRemoteURLHasSuffix(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldHasSuffix(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLIsNil applies the IsNil predicate on the "logo_remote_url" field.
+func LogoRemoteURLIsNil() predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldIsNull(FieldLogoRemoteURL))
+}
+
+// LogoRemoteURLNotNil applies the NotNil predicate on the "logo_remote_url" field.
+func LogoRemoteURLNotNil() predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldNotNull(FieldLogoRemoteURL))
+}
+
+// LogoRemoteURLEqualFold applies the EqualFold predicate on the "logo_remote_url" field.
+func LogoRemoteURLEqualFold(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldEqualFold(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLContainsFold applies the ContainsFold predicate on the "logo_remote_url" field.
+func LogoRemoteURLContainsFold(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldContainsFold(FieldLogoRemoteURL, v))
+}
+
+// LogoLocalFileIDEQ applies the EQ predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDEQ(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldEQ(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDNEQ applies the NEQ predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDNEQ(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldNEQ(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDIn applies the In predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDIn(vs ...string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldIn(FieldLogoLocalFileID, vs...))
+}
+
+// LogoLocalFileIDNotIn applies the NotIn predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDNotIn(vs ...string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldNotIn(FieldLogoLocalFileID, vs...))
+}
+
+// LogoLocalFileIDGT applies the GT predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDGT(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldGT(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDGTE applies the GTE predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDGTE(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldGTE(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDLT applies the LT predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDLT(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldLT(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDLTE applies the LTE predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDLTE(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldLTE(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDContains applies the Contains predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDContains(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldContains(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDHasPrefix applies the HasPrefix predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDHasPrefix(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldHasPrefix(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDHasSuffix applies the HasSuffix predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDHasSuffix(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldHasSuffix(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDIsNil applies the IsNil predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDIsNil() predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldIsNull(FieldLogoLocalFileID))
+}
+
+// LogoLocalFileIDNotNil applies the NotNil predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDNotNil() predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldNotNull(FieldLogoLocalFileID))
+}
+
+// LogoLocalFileIDEqualFold applies the EqualFold predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDEqualFold(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldEqualFold(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDContainsFold applies the ContainsFold predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDContainsFold(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldContainsFold(FieldLogoLocalFileID, v))
+}
+
+// HasOwner applies the HasEdge predicate on the "owner" edge.
+func HasOwner() predicate.Subprocessor {
+	return predicate.Subprocessor(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Subprocessor
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasOwnerWith applies the HasEdge predicate on the "owner" edge with a given conditions (other predicates).
+func HasOwnerWith(preds ...predicate.Organization) predicate.Subprocessor {
+	return predicate.Subprocessor(func(s *sql.Selector) {
+		step := newOwnerStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Subprocessor
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFiles applies the HasEdge predicate on the "files" edge.
+func HasFiles() predicate.Subprocessor {
+	return predicate.Subprocessor(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.SubprocessorFiles
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFilesWith applies the HasEdge predicate on the "files" edge with a given conditions (other predicates).
+func HasFilesWith(preds ...predicate.File) predicate.Subprocessor {
+	return predicate.Subprocessor(func(s *sql.Selector) {
+		step := newFilesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.SubprocessorFiles
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasLogoFile applies the HasEdge predicate on the "logo_file" edge.
+func HasLogoFile() predicate.Subprocessor {
+	return predicate.Subprocessor(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, LogoFileTable, LogoFileColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.Subprocessor
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasLogoFileWith applies the HasEdge predicate on the "logo_file" edge with a given conditions (other predicates).
+func HasLogoFileWith(preds ...predicate.File) predicate.Subprocessor {
+	return predicate.Subprocessor(func(s *sql.Selector) {
+		step := newLogoFileStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.Subprocessor
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

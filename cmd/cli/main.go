@@ -76,7 +76,6 @@ import (
 	_ "github.com/theopenlane/core/cmd/cli/cmd/riskhistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/standardhistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/subcontrolhistory"
-	_ "github.com/theopenlane/core/cmd/cli/cmd/subprocessorhistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/taskhistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/templatehistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/userhistory"
