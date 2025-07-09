@@ -24,6 +24,7 @@ func TestMutationCreateExport(t *testing.T) {
 			request: openlaneclient.CreateExportInput{
 				ExportType: enums.ExportTypeControl,
 				OwnerID:    &testUser1.OrganizationID,
+				Format:     enums.ExportFormatCsv,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -33,6 +34,7 @@ func TestMutationCreateExport(t *testing.T) {
 			request: openlaneclient.CreateExportInput{
 				ExportType: enums.ExportTypeControl,
 				OwnerID:    &testUser1.OrganizationID,
+				Format:     enums.ExportFormatCsv,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -42,6 +44,7 @@ func TestMutationCreateExport(t *testing.T) {
 			request: openlaneclient.CreateExportInput{
 				ExportType: enums.ExportTypeControl,
 				OwnerID:    &testUser1.OrganizationID,
+				Format:     enums.ExportFormatCsv,
 			},
 			client: suite.client.api,
 			ctx:    systemAdminUser.UserCtx,
@@ -50,6 +53,7 @@ func TestMutationCreateExport(t *testing.T) {
 			name: "missing owner id with PAT",
 			request: openlaneclient.CreateExportInput{
 				ExportType: enums.ExportTypeControl,
+				Format:     enums.ExportFormatCsv,
 			},
 			client:      suite.client.apiWithPAT,
 			ctx:         context.Background(),
@@ -92,6 +96,7 @@ func TestMutationUpdateExport(t *testing.T) {
 	createResp, err := suite.client.api.CreateExport(testUser1.UserCtx, openlaneclient.CreateExportInput{
 		ExportType: enums.ExportTypeControl,
 		OwnerID:    &testUser1.OrganizationID,
+		Format:     enums.ExportFormatCsv,
 	})
 	assert.NilError(t, err)
 	assert.Assert(t, createResp != nil)
@@ -173,6 +178,7 @@ func TestQueryExport(t *testing.T) {
 	createResp, err := suite.client.api.CreateExport(testUser1.UserCtx, openlaneclient.CreateExportInput{
 		ExportType: enums.ExportTypeControl,
 		OwnerID:    &testUser1.OrganizationID,
+		Format:     enums.ExportFormatCsv,
 	})
 	assert.NilError(t, err)
 	assert.Assert(t, createResp != nil)
@@ -267,6 +273,7 @@ func TestMutationDeleteExport(t *testing.T) {
 				resp, err := suite.client.api.CreateExport(testUser1.UserCtx, openlaneclient.CreateExportInput{
 					ExportType: enums.ExportTypeControl,
 					OwnerID:    &testUser1.OrganizationID,
+					Format:     enums.ExportFormatCsv,
 				})
 				assert.NilError(t, err)
 				return resp.CreateExport.Export.ID
@@ -278,6 +285,7 @@ func TestMutationDeleteExport(t *testing.T) {
 			name: "unauthorized user - regular user cannot delete",
 			setupExport: func() string {
 				resp, err := suite.client.api.CreateExport(testUser1.UserCtx, openlaneclient.CreateExportInput{
+					Format:     enums.ExportFormatCsv,
 					ExportType: enums.ExportTypeControl,
 					OwnerID:    &testUser1.OrganizationID,
 				})
@@ -292,6 +300,7 @@ func TestMutationDeleteExport(t *testing.T) {
 			name: "unauthorized user - different org user cannot delete",
 			setupExport: func() string {
 				resp, err := suite.client.api.CreateExport(testUser1.UserCtx, openlaneclient.CreateExportInput{
+					Format:     enums.ExportFormatCsv,
 					ExportType: enums.ExportTypeControl,
 					OwnerID:    &testUser1.OrganizationID,
 				})
