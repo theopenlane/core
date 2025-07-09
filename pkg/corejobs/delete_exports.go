@@ -7,6 +7,7 @@ import (
 	"github.com/riverqueue/river"
 
 	"github.com/theopenlane/core/pkg/corejobs/internal/olclient"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -62,6 +63,7 @@ func (w *DeleteExportContentWorker) Work(ctx context.Context, job *river.Job[Del
 
 	exports, err := w.olClient.GetExports(ctx, nil, nil, &openlaneclient.ExportWhereInput{
 		CreatedAtLte: &cutOffTime,
+		Status:       &enums.ExportStatusReady,
 	})
 	if err != nil {
 		return err
