@@ -129,9 +129,9 @@ func ExportTypeValidator(et enums.ExportType) error {
 }
 
 // FormatValidator is a validator for the "format" field enum values. It is called by the builders before save.
-func FormatValidator(f enums.ExportType) error {
+func FormatValidator(f enums.ExportFormat) error {
 	switch f.String() {
-	case "CONTROL":
+	case "CSV":
 		return nil
 	default:
 		return fmt.Errorf("export: invalid enum value for format field: %q", f)
@@ -277,10 +277,10 @@ var (
 )
 
 var (
-	// enums.ExportType must implement graphql.Marshaler.
-	_ graphql.Marshaler = (*enums.ExportType)(nil)
-	// enums.ExportType must implement graphql.Unmarshaler.
-	_ graphql.Unmarshaler = (*enums.ExportType)(nil)
+	// enums.ExportFormat must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.ExportFormat)(nil)
+	// enums.ExportFormat must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.ExportFormat)(nil)
 )
 
 var (

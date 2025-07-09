@@ -42683,7 +42683,7 @@ input CreateExportInput {
   """
   the format of export, e.g., csv and others
   """
-  format: ExportExportType!
+  format: ExportExportFormat!
   ownerID: ID
   eventIDs: [ID!]
   fileIDs: [ID!]
@@ -49179,7 +49179,7 @@ type Export implements Node {
   """
   the format of export, e.g., csv and others
   """
-  format: ExportExportType!
+  format: ExportExportFormat!
   """
   the status of the export, e.g., pending, ready, failed
   """
@@ -49281,6 +49281,12 @@ type ExportEdge {
   A cursor for use in pagination.
   """
   cursor: Cursor!
+}
+"""
+ExportExportFormat is enum for the field format
+"""
+enum ExportExportFormat @goModel(model: "github.com/theopenlane/core/pkg/enums.ExportFormat") {
+  CSV
 }
 """
 ExportExportStatus is enum for the field status
@@ -49430,10 +49436,10 @@ input ExportWhereInput {
   """
   format field predicates
   """
-  format: ExportExportType
-  formatNEQ: ExportExportType
-  formatIn: [ExportExportType!]
-  formatNotIn: [ExportExportType!]
+  format: ExportExportFormat
+  formatNEQ: ExportExportFormat
+  formatIn: [ExportExportFormat!]
+  formatNotIn: [ExportExportFormat!]
   """
   status field predicates
   """

@@ -4976,9 +4976,11 @@ type CreateEvidenceInput struct {
 type CreateExportInput struct {
 	// the type of export, e.g., control, policy, etc.
 	ExportType enums.ExportType `json:"exportType"`
-	OwnerID    *string          `json:"ownerID,omitempty"`
-	EventIDs   []string         `json:"eventIDs,omitempty"`
-	FileIDs    []string         `json:"fileIDs,omitempty"`
+	// the format of export, e.g., csv and others
+	Format   enums.ExportFormat `json:"format"`
+	OwnerID  *string            `json:"ownerID,omitempty"`
+	EventIDs []string           `json:"eventIDs,omitempty"`
+	FileIDs  []string           `json:"fileIDs,omitempty"`
 }
 
 // CreateFileInput is used for create File object.
@@ -9138,6 +9140,8 @@ type Export struct {
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the type of export, e.g., control, policy, etc.
 	ExportType enums.ExportType `json:"exportType"`
+	// the format of export, e.g., csv and others
+	Format enums.ExportFormat `json:"format"`
 	// the status of the export, e.g., pending, ready, failed
 	Status enums.ExportStatus `json:"status"`
 	// the user who initiated the export
@@ -9291,6 +9295,11 @@ type ExportWhereInput struct {
 	ExportTypeNeq   *enums.ExportType  `json:"exportTypeNEQ,omitempty"`
 	ExportTypeIn    []enums.ExportType `json:"exportTypeIn,omitempty"`
 	ExportTypeNotIn []enums.ExportType `json:"exportTypeNotIn,omitempty"`
+	// format field predicates
+	Format      *enums.ExportFormat  `json:"format,omitempty"`
+	FormatNeq   *enums.ExportFormat  `json:"formatNEQ,omitempty"`
+	FormatIn    []enums.ExportFormat `json:"formatIn,omitempty"`
+	FormatNotIn []enums.ExportFormat `json:"formatNotIn,omitempty"`
 	// status field predicates
 	Status      *enums.ExportStatus  `json:"status,omitempty"`
 	StatusNeq   *enums.ExportStatus  `json:"statusNEQ,omitempty"`
@@ -32520,6 +32529,7 @@ const (
 	ExportOrderFieldCreatedAt  ExportOrderField = "created_at"
 	ExportOrderFieldUpdatedAt  ExportOrderField = "updated_at"
 	ExportOrderFieldExportType ExportOrderField = "export_type"
+	ExportOrderFieldFormat     ExportOrderField = "format"
 	ExportOrderFieldStatus     ExportOrderField = "status"
 )
 
@@ -32527,12 +32537,13 @@ var AllExportOrderField = []ExportOrderField{
 	ExportOrderFieldCreatedAt,
 	ExportOrderFieldUpdatedAt,
 	ExportOrderFieldExportType,
+	ExportOrderFieldFormat,
 	ExportOrderFieldStatus,
 }
 
 func (e ExportOrderField) IsValid() bool {
 	switch e {
-	case ExportOrderFieldCreatedAt, ExportOrderFieldUpdatedAt, ExportOrderFieldExportType, ExportOrderFieldStatus:
+	case ExportOrderFieldCreatedAt, ExportOrderFieldUpdatedAt, ExportOrderFieldExportType, ExportOrderFieldFormat, ExportOrderFieldStatus:
 		return true
 	}
 	return false

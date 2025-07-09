@@ -487,15 +487,10 @@ type trust_center_setting
 
 type export
   relations
-    define can_view: [user, service] or can_edit or (viewer but not blocked)
-    define can_edit: [service] or system_admin from system
-    define can_delete: [service] or system_admin from system
-    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [organization]
+    define can_view: [user, service] or can_edit
+    define can_edit: [service] or system_admin from system  
+    define can_delete: system_admin from system
     define system: [system]
-    define viewer: [group#member] or editor or can_view from parent
-    define editor: [group#member] or can_edit from parent
-    define blocked: [user, group#member]
 
 ## Conditions
 # Public groups access; affects the view access of users in the organization

@@ -36,7 +36,7 @@ type Export struct {
 	// the type of export, e.g., control, policy, etc.
 	ExportType enums.ExportType `json:"export_type,omitempty"`
 	// the format of export, e.g., csv and others
-	Format enums.ExportType `json:"format,omitempty"`
+	Format enums.ExportFormat `json:"format,omitempty"`
 	// the status of the export, e.g., pending, ready, failed
 	Status enums.ExportStatus `json:"status,omitempty"`
 	// the user who initiated the export
@@ -176,7 +176,7 @@ func (e *Export) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field format", values[i])
 			} else if value.Valid {
-				e.Format = enums.ExportType(value.String)
+				e.Format = enums.ExportFormat(value.String)
 			}
 		case export.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {

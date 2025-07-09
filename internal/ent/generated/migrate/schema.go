@@ -1379,7 +1379,7 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "export_type", Type: field.TypeEnum, Enums: []string{"CONTROL"}},
-		{Name: "format", Type: field.TypeEnum, Enums: []string{"CONTROL"}},
+		{Name: "format", Type: field.TypeEnum, Enums: []string{"CSV"}},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "FAILED", "READY"}, Default: "PENDING"},
 		{Name: "requestor_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},

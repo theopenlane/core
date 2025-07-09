@@ -44,7 +44,7 @@ func (Export) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("format"),
 			).
-			GoType(enums.ExportType("")),
+			GoType(enums.ExportFormat("")),
 		field.Enum("status").
 			Comment("the status of the export, e.g., pending, ready, failed").
 			GoType(enums.ExportStatus("")).

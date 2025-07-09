@@ -129,8 +129,8 @@ func (ec *ExportCreate) SetExportType(et enums.ExportType) *ExportCreate {
 }
 
 // SetFormat sets the "format" field.
-func (ec *ExportCreate) SetFormat(et enums.ExportType) *ExportCreate {
-	ec.mutation.SetFormat(et)
+func (ec *ExportCreate) SetFormat(ef enums.ExportFormat) *ExportCreate {
+	ec.mutation.SetFormat(ef)
 	return ec
 }
 

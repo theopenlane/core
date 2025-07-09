@@ -589,19 +589,19 @@ func ExportTypeNotIn(vs ...enums.ExportType) predicate.Export {
 }
 
 // FormatEQ applies the EQ predicate on the "format" field.
-func FormatEQ(v enums.ExportType) predicate.Export {
+func FormatEQ(v enums.ExportFormat) predicate.Export {
 	vc := v
 	return predicate.Export(sql.FieldEQ(FieldFormat, vc))
 }
 
 // FormatNEQ applies the NEQ predicate on the "format" field.
-func FormatNEQ(v enums.ExportType) predicate.Export {
+func FormatNEQ(v enums.ExportFormat) predicate.Export {
 	vc := v
 	return predicate.Export(sql.FieldNEQ(FieldFormat, vc))
 }
 
 // FormatIn applies the In predicate on the "format" field.
-func FormatIn(vs ...enums.ExportType) predicate.Export {
+func FormatIn(vs ...enums.ExportFormat) predicate.Export {
 	v := make([]any, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -610,7 +610,7 @@ func FormatIn(vs ...enums.ExportType) predicate.Export {
 }
 
 // FormatNotIn applies the NotIn predicate on the "format" field.
-func FormatNotIn(vs ...enums.ExportType) predicate.Export {
+func FormatNotIn(vs ...enums.ExportFormat) predicate.Export {
 	v := make([]any, len(vs))
 	for i := range v {
 		v[i] = vs[i]

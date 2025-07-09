@@ -28894,7 +28894,7 @@ type CreateExport_CreateExport_Export struct {
 	CreatedAt   *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ExportType  enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
-	Format      enums.ExportType   "json:\"format\" graphql:\"format\""
+	Format      enums.ExportFormat "json:\"format\" graphql:\"format\""
 	ID          string             "json:\"id\" graphql:\"id\""
 	OwnerID     *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	RequestorID *string            "json:\"requestorID,omitempty\" graphql:\"requestorID\""
@@ -28921,7 +28921,7 @@ func (t *CreateExport_CreateExport_Export) GetExportType() *enums.ExportType {
 	}
 	return &t.ExportType
 }
-func (t *CreateExport_CreateExport_Export) GetFormat() *enums.ExportType {
+func (t *CreateExport_CreateExport_Export) GetFormat() *enums.ExportFormat {
 	if t == nil {
 		t = &CreateExport_CreateExport_Export{}
 	}
@@ -29011,7 +29011,7 @@ type GetAllExports_Exports_Edges_Node struct {
 	CreatedAt   *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ExportType  enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
-	Format      enums.ExportType   "json:\"format\" graphql:\"format\""
+	Format      enums.ExportFormat "json:\"format\" graphql:\"format\""
 	ID          string             "json:\"id\" graphql:\"id\""
 	OwnerID     *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	RequestorID *string            "json:\"requestorID,omitempty\" graphql:\"requestorID\""
@@ -29038,7 +29038,7 @@ func (t *GetAllExports_Exports_Edges_Node) GetExportType() *enums.ExportType {
 	}
 	return &t.ExportType
 }
-func (t *GetAllExports_Exports_Edges_Node) GetFormat() *enums.ExportType {
+func (t *GetAllExports_Exports_Edges_Node) GetFormat() *enums.ExportFormat {
 	if t == nil {
 		t = &GetAllExports_Exports_Edges_Node{}
 	}
@@ -29176,7 +29176,7 @@ type GetExportByID_Export struct {
 	CreatedBy   *string                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ExportType  enums.ExportType           "json:\"exportType\" graphql:\"exportType\""
 	Files       GetExportByID_Export_Files "json:\"files\" graphql:\"files\""
-	Format      enums.ExportType           "json:\"format\" graphql:\"format\""
+	Format      enums.ExportFormat         "json:\"format\" graphql:\"format\""
 	ID          string                     "json:\"id\" graphql:\"id\""
 	OwnerID     *string                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	RequestorID *string                    "json:\"requestorID,omitempty\" graphql:\"requestorID\""
@@ -29209,7 +29209,7 @@ func (t *GetExportByID_Export) GetFiles() *GetExportByID_Export_Files {
 	}
 	return &t.Files
 }
-func (t *GetExportByID_Export) GetFormat() *enums.ExportType {
+func (t *GetExportByID_Export) GetFormat() *enums.ExportFormat {
 	if t == nil {
 		t = &GetExportByID_Export{}
 	}
@@ -29288,7 +29288,7 @@ type GetExports_Exports_Edges_Node struct {
 	CreatedAt   *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ExportType  enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
-	Format      enums.ExportType   "json:\"format\" graphql:\"format\""
+	Format      enums.ExportFormat "json:\"format\" graphql:\"format\""
 	ID          string             "json:\"id\" graphql:\"id\""
 	OwnerID     *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	RequestorID *string            "json:\"requestorID,omitempty\" graphql:\"requestorID\""
@@ -29315,7 +29315,7 @@ func (t *GetExports_Exports_Edges_Node) GetExportType() *enums.ExportType {
 	}
 	return &t.ExportType
 }
-func (t *GetExports_Exports_Edges_Node) GetFormat() *enums.ExportType {
+func (t *GetExports_Exports_Edges_Node) GetFormat() *enums.ExportFormat {
 	if t == nil {
 		t = &GetExports_Exports_Edges_Node{}
 	}
@@ -29453,7 +29453,7 @@ type UpdateExport_UpdateExport_Export struct {
 	CreatedBy   *string                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ExportType  enums.ExportType                       "json:\"exportType\" graphql:\"exportType\""
 	Files       UpdateExport_UpdateExport_Export_Files "json:\"files\" graphql:\"files\""
-	Format      enums.ExportType                       "json:\"format\" graphql:\"format\""
+	Format      enums.ExportFormat                     "json:\"format\" graphql:\"format\""
 	ID          string                                 "json:\"id\" graphql:\"id\""
 	OwnerID     *string                                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	RequestorID *string                                "json:\"requestorID,omitempty\" graphql:\"requestorID\""
@@ -29486,7 +29486,7 @@ func (t *UpdateExport_UpdateExport_Export) GetFiles() *UpdateExport_UpdateExport
 	}
 	return &t.Files
 }
-func (t *UpdateExport_UpdateExport_Export) GetFormat() *enums.ExportType {
+func (t *UpdateExport_UpdateExport_Export) GetFormat() *enums.ExportFormat {
 	if t == nil {
 		t = &UpdateExport_UpdateExport_Export{}
 	}

@@ -24210,10 +24210,10 @@ type ExportWhereInput struct {
 	ExportTypeNotIn []enums.ExportType `json:"exportTypeNotIn,omitempty"`
 
 	// "format" field predicates.
-	Format      *enums.ExportType  `json:"format,omitempty"`
-	FormatNEQ   *enums.ExportType  `json:"formatNEQ,omitempty"`
-	FormatIn    []enums.ExportType `json:"formatIn,omitempty"`
-	FormatNotIn []enums.ExportType `json:"formatNotIn,omitempty"`
+	Format      *enums.ExportFormat  `json:"format,omitempty"`
+	FormatNEQ   *enums.ExportFormat  `json:"formatNEQ,omitempty"`
+	FormatIn    []enums.ExportFormat `json:"formatIn,omitempty"`
+	FormatNotIn []enums.ExportFormat `json:"formatNotIn,omitempty"`
 
 	// "status" field predicates.
 	Status      *enums.ExportStatus  `json:"status,omitempty"`

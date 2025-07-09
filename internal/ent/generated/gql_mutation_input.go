@@ -3388,7 +3388,7 @@ func (c *EvidenceUpdateOne) SetInput(i UpdateEvidenceInput) *EvidenceUpdateOne {
 // CreateExportInput represents a mutation input for creating exports.
 type CreateExportInput struct {
 	ExportType enums.ExportType
-	Format     enums.ExportType
+	Format     enums.ExportFormat
 	OwnerID    *string
 	EventIDs   []string
 	FileIDs    []string
