@@ -4166,9 +4166,9 @@ var (
 				},
 			},
 			{
-				Name:    "subprocessor_name",
+				Name:    "subprocessor_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{SubprocessorsColumns[9]},
+				Columns: []*schema.Column{SubprocessorsColumns[9], SubprocessorsColumns[12]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},

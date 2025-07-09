@@ -123,7 +123,7 @@ func (Subprocessor) Policy() ent.Policy {
 // Indexes of the Subprocessor
 func (Subprocessor) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("name").
+		index.Fields("name", "owner_id").
 			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
