@@ -79,7 +79,7 @@ require (
 	github.com/theopenlane/echox v0.2.4
 	github.com/theopenlane/emailtemplates v0.2.3
 	github.com/theopenlane/entx v0.11.0
-	github.com/theopenlane/gqlgen-plugins v0.6.2
+	github.com/theopenlane/gqlgen-plugins v0.6.3
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.14.0
 	github.com/theopenlane/newman v0.2.0

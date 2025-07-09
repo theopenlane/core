@@ -9159,6 +9159,12 @@ type ExportBulkCreatePayload struct {
 	Exports []*Export `json:"exports,omitempty"`
 }
 
+// Return response for deleteBulkExport mutation
+type ExportBulkDeletePayload struct {
+	// Deleted export IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
 // A connection to a list of items.
 type ExportConnection struct {
 	// A list of edges.

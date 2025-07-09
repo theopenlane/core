@@ -15262,6 +15262,15 @@ type ExportBulkCreatePayload {
 	exports: [Export!]
 }
 """
+Return response for deleteBulkExport mutation
+"""
+type ExportBulkDeletePayload {
+	"""
+	Deleted export IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
 A connection to a list of items.
 """
 type ExportConnection {
@@ -25622,6 +25631,24 @@ type Mutation {
 		"""
 		exportFiles: [Upload!]
 	): ExportUpdatePayload!
+	"""
+	Delete an existing export
+	"""
+	deleteExport(
+		"""
+		ID of the export
+		"""
+		id: ID!
+	): ExportDeletePayload!
+	"""
+	Delete multiple exports
+	"""
+	deleteBulkExport(
+		"""
+		IDs of the exports to delete
+		"""
+		ids: [ID!]!
+	): ExportBulkDeletePayload!
 	"""
 	Delete an existing file
 	"""

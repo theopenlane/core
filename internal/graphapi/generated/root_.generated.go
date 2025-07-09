@@ -1296,6 +1296,10 @@ type ComplexityRoot struct {
 		Exports func(childComplexity int) int
 	}
 
+	ExportBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
 	ExportConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -2390,6 +2394,7 @@ type ComplexityRoot struct {
 		DeleteAPIToken                       func(childComplexity int, id string) int
 		DeleteActionPlan                     func(childComplexity int, id string) int
 		DeleteAsset                          func(childComplexity int, id string) int
+		DeleteBulkExport                     func(childComplexity int, ids []string) int
 		DeleteContact                        func(childComplexity int, id string) int
 		DeleteControl                        func(childComplexity int, id string) int
 		DeleteControlImplementation          func(childComplexity int, id string) int
@@ -2402,6 +2407,7 @@ type ComplexityRoot struct {
 		DeleteEntityType                     func(childComplexity int, id string) int
 		DeleteEvent                          func(childComplexity int, id string) int
 		DeleteEvidence                       func(childComplexity int, id string) int
+		DeleteExport                         func(childComplexity int, id string) int
 		DeleteFile                           func(childComplexity int, id string) int
 		DeleteGroup                          func(childComplexity int, id string) int
 		DeleteGroupMembership                func(childComplexity int, id string) int
@@ -10817,6 +10823,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ExportBulkCreatePayload.Exports(childComplexity), true
 
+	case "ExportBulkDeletePayload.deletedIDs":
+		if e.complexity.ExportBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.ExportBulkDeletePayload.DeletedIDs(childComplexity), true
+
 	case "ExportConnection.edges":
 		if e.complexity.ExportConnection.Edges == nil {
 			break
@@ -16901,6 +16914,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteAsset(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteBulkExport":
+		if e.complexity.Mutation.DeleteBulkExport == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkExport_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkExport(childComplexity, args["ids"].([]string)), true
+
 	case "Mutation.deleteContact":
 		if e.complexity.Mutation.DeleteContact == nil {
 			break
@@ -17044,6 +17069,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.DeleteEvidence(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteExport":
+		if e.complexity.Mutation.DeleteExport == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteExport_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteExport(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteFile":
 		if e.complexity.Mutation.DeleteFile == nil {
@@ -87238,6 +87275,24 @@ extend type Mutation{
         """
         exportFiles: [Upload!]
     ): ExportUpdatePayload!
+    """
+    Delete an existing export
+    """
+    deleteExport(
+        """
+        ID of the export
+        """
+        id: ID!
+    ): ExportDeletePayload!
+    """
+    Delete multiple exports
+    """
+    deleteBulkExport(
+        """
+        IDs of the exports to delete
+        """
+        ids: [ID!]!
+    ): ExportBulkDeletePayload!
 }
 
 """
@@ -87278,6 +87333,16 @@ type ExportBulkCreatePayload {
     Created exports
     """
     exports: [Export!]
+}
+
+"""
+Return response for deleteBulkExport mutation
+"""
+type ExportBulkDeletePayload {
+    """
+    Deleted export IDs
+    """
+    deletedIDs: [ID!]!
 } 
 `, BuiltIn: false},
 	{Name: "../schema/file.graphql", Input: `extend type Query {

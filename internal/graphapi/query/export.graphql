@@ -116,4 +116,16 @@ mutation UpdateExport($id: ID!, $input: UpdateExportInput!, $exportFiles: [Uploa
       }
     }
   }
+}
+
+mutation DeleteExport($deleteExportId: ID!) {
+  deleteExport(id: $deleteExportId) {
+    deletedID
+  }
+}
+
+mutation DeleteBulkExport($ids: [ID!]!) {
+  deleteBulkExport(ids: $ids) {
+    deletedIDs
+  }
 } 

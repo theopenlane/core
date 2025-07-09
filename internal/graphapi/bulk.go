@@ -5,8 +5,10 @@ package graphapi
 import (
 	"context"
 
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/utils/rout"
 )
 
 // bulkCreateActionPlan uses the CreateBulk function to create multiple ActionPlan entities
@@ -272,6 +274,35 @@ func (r *mutationResolver) bulkCreateEvent(ctx context.Context, input []*generat
 	// return response
 	return &model.EventBulkCreatePayload{
 		Events: res,
+	}, nil
+}
+
+// bulkDeleteExport deletes multiple Export entities by their IDs
+func (r *mutationResolver) bulkDeleteExport(ctx context.Context, ids []string) (*model.ExportBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+
+	// delete each export individually to ensure proper cleanup
+	for _, id := range ids {
+		if err := withTransactionalMutation(ctx).Export.DeleteOneID(id).Exec(ctx); err != nil {
+			log.Error().Err(err).Str("export_id", id).Msg("failed to delete export in bulk operation")
+			continue
+		}
+
+		// call edge cleanup if the function exists
+		if err := generated.ExportEdgeCleanup(ctx, id); err != nil {
+			log.Error().Err(err).Str("export_id", id).Msg("failed to cleanup export edges in bulk operation")
+			continue
+		}
+
+		deletedIDs = append(deletedIDs, id)
+	}
+
+	return &model.ExportBulkDeletePayload{
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
