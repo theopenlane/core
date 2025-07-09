@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -149,4 +150,11 @@ func (File) Policy() ent.Policy {
 			privacy.AlwaysAllowRule(),
 		),
 	)
+}
+
+// Hooks of the File
+func (File) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookFileDelete(),
+	}
 }
