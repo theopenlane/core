@@ -402,6 +402,11 @@ func (o Organization) Edges() []ent.Edge {
 			edgeSchema:         Subprocessor{},
 			cascadeDeleteOwner: true,
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         Export{},
+			cascadeDeleteOwner: true,
+		}),
 	}
 }
 

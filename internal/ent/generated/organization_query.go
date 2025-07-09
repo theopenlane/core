@@ -28,6 +28,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
@@ -140,6 +141,7 @@ type OrganizationQuery struct {
 	withAssets                             *AssetQuery
 	withScans                              *ScanQuery
 	withSubprocessors                      *SubprocessorQuery
+	withExports                            *ExportQuery
 	withMembers                            *OrgMembershipQuery
 	loadTotal                              []func(context.Context, []*Organization) error
 	modifiers                              []func(*sql.Selector)
@@ -205,6 +207,7 @@ type OrganizationQuery struct {
 	withNamedAssets                        map[string]*AssetQuery
 	withNamedScans                         map[string]*ScanQuery
 	withNamedSubprocessors                 map[string]*SubprocessorQuery
+	withNamedExports                       map[string]*ExportQuery
 	withNamedMembers                       map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -1867,6 +1870,31 @@ func (oq *OrganizationQuery) QuerySubprocessors() *SubprocessorQuery {
 	return query
 }
 
+// QueryExports chains the current query on the "exports" edge.
+func (oq *OrganizationQuery) QueryExports() *ExportQuery {
+	query := (&ExportClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(export.Table, export.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ExportsTable, organization.ExportsColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.Export
+		step.Edge.Schema = schemaConfig.Export
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (oq *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: oq.config}).Query()
@@ -2149,6 +2177,7 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		withAssets:                        oq.withAssets.Clone(),
 		withScans:                         oq.withScans.Clone(),
 		withSubprocessors:                 oq.withSubprocessors.Clone(),
+		withExports:                       oq.withExports.Clone(),
 		withMembers:                       oq.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       oq.sql.Clone(),
@@ -2872,6 +2901,17 @@ func (oq *OrganizationQuery) WithSubprocessors(opts ...func(*SubprocessorQuery))
 	return oq
 }
 
+// WithExports tells the query-builder to eager-load the nodes that are connected to
+// the "exports" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithExports(opts ...func(*ExportQuery)) *OrganizationQuery {
+	query := (&ExportClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withExports = query
+	return oq
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (oq *OrganizationQuery) WithMembers(opts ...func(*OrgMembershipQuery)) *OrganizationQuery {
@@ -2967,7 +3007,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = oq.querySpec()
-		loadedTypes = [66]bool{
+		loadedTypes = [67]bool{
 			oq.withControlCreators != nil,
 			oq.withControlImplementationCreators != nil,
 			oq.withControlObjectiveCreators != nil,
@@ -3033,6 +3073,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			oq.withAssets != nil,
 			oq.withScans != nil,
 			oq.withSubprocessors != nil,
+			oq.withExports != nil,
 			oq.withMembers != nil,
 		}
 	)
@@ -3539,6 +3580,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := oq.withExports; query != nil {
+		if err := oq.loadExports(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Exports = []*Export{} },
+			func(n *Organization, e *Export) { n.Edges.Exports = append(n.Edges.Exports, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := oq.withMembers; query != nil {
 		if err := oq.loadMembers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Members = []*OrgMembership{} },
@@ -3979,6 +4027,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadSubprocessors(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedSubprocessors(name) },
 			func(n *Organization, e *Subprocessor) { n.appendNamedSubprocessors(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedExports {
+		if err := oq.loadExports(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedExports(name) },
+			func(n *Organization, e *Export) { n.appendNamedExports(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -6101,6 +6156,36 @@ func (oq *OrganizationQuery) loadSubprocessors(ctx context.Context, query *Subpr
 	}
 	return nil
 }
+func (oq *OrganizationQuery) loadExports(ctx context.Context, query *ExportQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Export)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(export.FieldOwnerID)
+	}
+	query.Where(predicate.Export(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.ExportsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (oq *OrganizationQuery) loadMembers(ctx context.Context, query *OrgMembershipQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrgMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -7101,6 +7186,20 @@ func (oq *OrganizationQuery) WithNamedSubprocessors(name string, opts ...func(*S
 		oq.withNamedSubprocessors = make(map[string]*SubprocessorQuery)
 	}
 	oq.withNamedSubprocessors[name] = query
+	return oq
+}
+
+// WithNamedExports tells the query-builder to eager-load the nodes that are connected to the "exports"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedExports(name string, opts ...func(*ExportQuery)) *OrganizationQuery {
+	query := (&ExportClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedExports == nil {
+		oq.withNamedExports = make(map[string]*ExportQuery)
+	}
+	oq.withNamedExports[name] = query
 	return oq
 }
 

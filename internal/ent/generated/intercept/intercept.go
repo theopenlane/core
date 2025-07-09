@@ -37,6 +37,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
+	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -954,6 +955,33 @@ func (f TraverseEvidenceHistory) Traverse(ctx context.Context, q generated.Query
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.EvidenceHistoryQuery", q)
+}
+
+// The ExportFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ExportFunc func(context.Context, *generated.ExportQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ExportFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ExportQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ExportQuery", q)
+}
+
+// The TraverseExport type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseExport func(context.Context, *generated.ExportQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseExport) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseExport) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ExportQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ExportQuery", q)
 }
 
 // The FileFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -3096,6 +3124,8 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.EvidenceQuery, predicate.Evidence, evidence.OrderOption]{typ: generated.TypeEvidence, tq: q}, nil
 	case *generated.EvidenceHistoryQuery:
 		return &query[*generated.EvidenceHistoryQuery, predicate.EvidenceHistory, evidencehistory.OrderOption]{typ: generated.TypeEvidenceHistory, tq: q}, nil
+	case *generated.ExportQuery:
+		return &query[*generated.ExportQuery, predicate.Export, export.OrderOption]{typ: generated.TypeExport, tq: q}, nil
 	case *generated.FileQuery:
 		return &query[*generated.FileQuery, predicate.File, file.OrderOption]{typ: generated.TypeFile, tq: q}, nil
 	case *generated.FileHistoryQuery:

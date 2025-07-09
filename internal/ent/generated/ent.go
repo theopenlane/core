@@ -41,6 +41,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
+	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -207,6 +208,7 @@ func checkColumn(table, column string) error {
 			event.Table:                          event.ValidColumn,
 			evidence.Table:                       evidence.ValidColumn,
 			evidencehistory.Table:                evidencehistory.ValidColumn,
+			export.Table:                         export.ValidColumn,
 			file.Table:                           file.ValidColumn,
 			filehistory.Table:                    filehistory.ValidColumn,
 			group.Table:                          group.ValidColumn,

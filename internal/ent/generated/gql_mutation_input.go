@@ -3385,6 +3385,92 @@ func (c *EvidenceUpdateOne) SetInput(i UpdateEvidenceInput) *EvidenceUpdateOne {
 	return c
 }
 
+// CreateExportInput represents a mutation input for creating exports.
+type CreateExportInput struct {
+	ExportType enums.ExportType
+	Format     enums.ExportFormat
+	OwnerID    *string
+	EventIDs   []string
+	FileIDs    []string
+}
+
+// Mutate applies the CreateExportInput on the ExportMutation builder.
+func (i *CreateExportInput) Mutate(m *ExportMutation) {
+	m.SetExportType(i.ExportType)
+	m.SetFormat(i.Format)
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.EventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateExportInput on the ExportCreate builder.
+func (c *ExportCreate) SetInput(i CreateExportInput) *ExportCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateExportInput represents a mutation input for updating exports.
+type UpdateExportInput struct {
+	Status         *enums.ExportStatus
+	ClearOwner     bool
+	OwnerID        *string
+	ClearEvents    bool
+	AddEventIDs    []string
+	RemoveEventIDs []string
+	ClearFiles     bool
+	AddFileIDs     []string
+	RemoveFileIDs  []string
+}
+
+// Mutate applies the UpdateExportInput on the ExportMutation builder.
+func (i *UpdateExportInput) Mutate(m *ExportMutation) {
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearEvents {
+		m.ClearEvents()
+	}
+	if v := i.AddEventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+	if v := i.RemoveEventIDs; len(v) > 0 {
+		m.RemoveEventIDs(v...)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateExportInput on the ExportUpdate builder.
+func (c *ExportUpdate) SetInput(i UpdateExportInput) *ExportUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateExportInput on the ExportUpdateOne builder.
+func (c *ExportUpdateOne) SetInput(i UpdateExportInput) *ExportUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateFileInput represents a mutation input for creating files.
 type CreateFileInput struct {
 	Tags                   []string
@@ -6409,6 +6495,7 @@ type CreateOrganizationInput struct {
 	AssetIDs                        []string
 	ScanIDs                         []string
 	SubprocessorIDs                 []string
+	ExportIDs                       []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -6615,6 +6702,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.SubprocessorIDs; len(v) > 0 {
 		m.AddSubprocessorIDs(v...)
 	}
+	if v := i.ExportIDs; len(v) > 0 {
+		m.AddExportIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -6811,6 +6901,9 @@ type UpdateOrganizationInput struct {
 	ClearSubprocessors                    bool
 	AddSubprocessorIDs                    []string
 	RemoveSubprocessorIDs                 []string
+	ClearExports                          bool
+	AddExportIDs                          []string
+	RemoveExportIDs                       []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -7372,6 +7465,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveSubprocessorIDs; len(v) > 0 {
 		m.RemoveSubprocessorIDs(v...)
+	}
+	if i.ClearExports {
+		m.ClearExports()
+	}
+	if v := i.AddExportIDs; len(v) > 0 {
+		m.AddExportIDs(v...)
+	}
+	if v := i.RemoveExportIDs; len(v) > 0 {
+		m.RemoveExportIDs(v...)
 	}
 }
 

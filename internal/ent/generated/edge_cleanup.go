@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
@@ -246,6 +247,12 @@ func EvidenceEdgeCleanup(ctx context.Context, id string) error {
 
 func EvidenceHistoryEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup evidencehistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func ExportEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup export edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -809,6 +816,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).Subprocessor.Query().Where((subprocessor.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if subprocessorCount, err := FromContext(ctx).Subprocessor.Delete().Where(subprocessor.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", subprocessorCount).Msg("deleting subprocessor")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Export.Query().Where((export.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if exportCount, err := FromContext(ctx).Export.Delete().Where(export.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", exportCount).Msg("deleting export")
 			return err
 		}
 	}

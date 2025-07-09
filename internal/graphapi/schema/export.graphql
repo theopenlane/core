@@ -1,0 +1,80 @@
+extend type Query {
+    """
+    Look up export by ID
+    """
+     export(
+        """
+        ID of the export
+        """
+        id: ID!
+    ):  Export!
+}
+
+extend type Mutation{
+    """
+    Create a new export
+    """
+    createExport(
+        """
+        values of the export
+        """
+        input: CreateExportInput!
+    ): ExportCreatePayload!
+    """
+    Update an existing export
+    """
+    updateExport(
+        """
+        ID of the export
+        """
+        id: ID!
+        """
+        New values for the export
+        """
+        input: UpdateExportInput!
+        """
+        Files to attach to the export
+        """
+        exportFiles: [Upload!]
+    ): ExportUpdatePayload!
+}
+
+"""
+Return response for createExport mutation
+"""
+type ExportCreatePayload {
+    """
+    Created export
+    """
+    export: Export!
+}
+
+"""
+Return response for updateExport mutation
+"""
+type ExportUpdatePayload {
+    """
+    Updated export
+    """
+    export: Export!
+}
+
+"""
+Return response for deleteExport mutation
+"""
+type ExportDeletePayload {
+    """
+    Deleted export ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkExport mutation
+"""
+type ExportBulkCreatePayload {
+    """
+    Created exports
+    """
+    exports: [Export!]
+} 
