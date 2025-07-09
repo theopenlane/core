@@ -492,6 +492,19 @@ type export
     define can_delete: system_admin from system
     define system: [system]
 
+type subprocessor
+  relations
+    #  user:* is used for system-owned public subprocessors that are available to all users
+    define can_view: [user:*, service:*] or viewer or parent_viewer
+    define can_edit: editor or parent_editor
+    define can_delete: editor or parent_editor
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent_viewer: member from parent
+    define parent_editor: admin from parent or owner from parent
+    define viewer: [user, service] or editor
+    define editor: [user, service]
+    define parent: [organization]
+
 ## Conditions
 # Public groups access; affects the view access of users in the organization
 condition public_group(public: bool) {
