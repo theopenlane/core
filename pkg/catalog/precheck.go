@@ -54,10 +54,15 @@ type lookupProductGetter interface {
 	GetProduct(ctx context.Context, productID string) (*stripe.Product, error)
 }
 
+type lookupProductLister interface {
+	ListProducts(ctx context.Context) ([]*stripe.Product, error)
+}
+
 type lookupClient interface {
 	lookupPriceGetter
 	lookupFeatureGetter
 	lookupProductGetter
+	lookupProductLister
 }
 
 // LookupKeyConflicts checks the catalog for any lookup key conflicts with existing
@@ -82,6 +87,19 @@ func (c *Catalog) LookupKeyConflicts(ctx context.Context, sc lookupClient, opts 
 				if !notFound(err) {
 					return err
 				}
+
+				products, lerr := sc.ListProducts(ctx)
+				if lerr != nil {
+					return lerr
+				}
+
+				for _, p := range products {
+					if p.Name == f.DisplayName {
+						conflicts = append(conflicts, LookupKeyConflict{Feature: fmt.Sprintf("%s:%s", kind, name), Resource: "product", LookupKey: name, ID: p.ID})
+						break
+					}
+				}
+
 			} else if prod != nil {
 				conflicts = append(conflicts, LookupKeyConflict{Feature: fmt.Sprintf("%s:%s", kind, name), Resource: "product", LookupKey: name, ID: prod.ID})
 				if cfg.failFast {

@@ -115,6 +115,12 @@ func (f *fakeClient) GetProduct(ctx context.Context, id string) (*stripe.Product
 }
 
 func (f *fakeClient) FindPriceForProduct(ctx context.Context, productID string, currency string, unitAmount int64, interval, nickname, lookupKey, metadata string, meta map[string]string) (*stripe.Price, error) {
+	for _, p := range f.prices {
+		if p.Product != nil && p.Product.ID == productID && p.LookupKey == lookupKey {
+			return p, nil
+		}
+	}
+
 	return nil, nil
 }
 
@@ -413,6 +419,7 @@ addons: {}`
 	}()
 
 	app := catalogApp()
-	err := app.Run(context.Background(), []string{"catalog", "--catalog", path, "--stripe-key", "sk"})
-	require.ErrorIs(t, err, catalog.ErrLookupKeyConflict)
+	err := app.Run(context.Background(), []string{"catalog", "--catalog", path, "--stripe-key", "sk", "--takeover"})
+	require.NoError(t, err)
+	assert.Equal(t, []string{"price_conflict"}, client.updated)
 }

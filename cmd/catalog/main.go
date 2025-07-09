@@ -112,11 +112,46 @@ func catalogApp() *cli.Command {
 				return fmt.Errorf("lookup keys: %w", err)
 			}
 
-			if len(conflicts) > 0 {
-				for _, c := range conflicts {
+			for _, c := range conflicts {
+				managed, merr := conflictManaged(ctx, sc, c)
+				if merr != nil {
 					fmt.Fprintf(os.Stderr, "lookup key %s already exists as %s %s for %s\n", c.LookupKey, c.Resource, c.ID, c.Feature)
+					continue
 				}
-				return catalog.ErrLookupKeyConflict
+
+				if !managed {
+					fmt.Fprintf(os.Stderr, "lookup key %s already exists as %s %s for %s\n", c.LookupKey, c.Resource, c.ID, c.Feature)
+					continue
+				}
+
+				parts := strings.SplitN(c.Feature, ":", 2)
+				if len(parts) != 2 {
+					continue
+				}
+
+				name := parts[1]
+				var feat catalog.Feature
+				var fs catalog.FeatureSet
+				if parts[0] == "module" {
+					feat = cat.Modules[name]
+					fs = cat.Modules
+				} else {
+					feat = cat.Addons[name]
+					fs = cat.Addons
+				}
+
+				switch c.Resource {
+				case "product":
+					feat.ProductID = c.ID
+				case "price":
+					for i, p := range feat.Billing.Prices {
+						if p.LookupKey == c.LookupKey {
+							feat.Billing.Prices[i].PriceID = c.ID
+						}
+					}
+				}
+
+				fs[name] = feat
 			}
 
 			// Pull all existing products from Stripe to build a lookup by name.
@@ -152,12 +187,13 @@ func catalogApp() *cli.Command {
 				}
 			}
 
-			// Optionally write updated price IDs back to disk.
+			// Optionally write updated price IDs back to disk
 			if write {
 				diff, err := cat.SaveCatalog(catalogFile)
 				if err != nil {
 					return fmt.Errorf("save catalog: %w", err)
 				}
+
 				fmt.Printf("Catalog successfully written to %s\n", catalogFile)
 				if diff != "" {
 					fmt.Println("Catalog changes:\n" + diff)
@@ -194,6 +230,38 @@ func buildProductMap(ctx context.Context, sc stripeClient) (map[string]*stripe.P
 	}
 
 	return prodMap, nil
+}
+
+// conflictManaged checks whether the conflict resource is managed by module manager.
+func conflictManaged(ctx context.Context, sc stripeClient, c catalog.LookupKeyConflict) (bool, error) {
+	switch c.Resource {
+	case "product":
+		prod, err := sc.GetProduct(ctx, c.ID)
+		if err != nil {
+			return false, err
+		}
+		if prod != nil && prod.Metadata != nil {
+			return prod.Metadata[catalog.ManagedByKey] == catalog.ManagedByValue, nil
+		}
+	case "feature":
+		feat, err := sc.GetFeatureByLookupKey(ctx, c.LookupKey)
+		if err != nil {
+			return false, err
+		}
+		if feat != nil && feat.Metadata != nil {
+			return feat.Metadata[catalog.ManagedByKey] == catalog.ManagedByValue, nil
+		}
+	case "price":
+		price, err := sc.GetPrice(ctx, c.ID)
+		if err != nil {
+			return false, err
+		}
+		if price != nil && price.Metadata != nil {
+			return price.Metadata[catalog.ManagedByKey] == catalog.ManagedByValue, nil
+		}
+	}
+
+	return false, nil
 }
 
 // resolveProduct attempts to find the Stripe product for a feature using

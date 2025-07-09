@@ -276,7 +276,16 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 	create := func(name string, f Feature) (Feature, error) {
 		prod, _ := resolveProduct(ctx, sc, prodMap, f)
 
-		var err error
+		lookup := name
+		if f.LookupKey != "" {
+			lookup = f.LookupKey
+		}
+
+		var feature *stripe.EntitlementsFeature
+		feature, err = sc.GetFeatureByLookupKey(ctx, lookup)
+		if err != nil {
+			return f, err
+		}
 
 		if prod == nil {
 			prod, err = sc.CreateProduct(ctx, name, f.DisplayName, f.Description, map[string]string{ManagedByKey: ManagedByValue})
@@ -285,31 +294,28 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 			}
 
 			prodMap[f.DisplayName] = prod
+		}
 
-			lookup := name
-			if f.LookupKey != "" {
-				lookup = f.LookupKey
-			}
-			feature, ferr := sc.CreateProductFeatureWithOptions(ctx,
+		if feature == nil {
+			feature, err = sc.CreateProductFeatureWithOptions(ctx,
 				&stripe.EntitlementsFeatureCreateParams{},
 				entitlements.WithFeatureName(f.DisplayName),
 				entitlements.WithFeatureLookupKey(lookup),
 			)
-
-			if ferr == nil {
-				_, ferr = sc.AttachFeatureToProductWithOptions(ctx,
-					&stripe.ProductFeatureCreateParams{},
-					entitlements.WithProductFeatureProductID(prod.ID),
-					entitlements.WithProductFeatureEntitlementFeatureID(feature.ID),
-				)
+			if err != nil {
+				return f, err
 			}
 
-			if ferr != nil {
-				return f, ferr
-			}
+			_, _ = sc.AttachFeatureToProductWithOptions(ctx,
+				&stripe.ProductFeatureCreateParams{},
+				entitlements.WithProductFeatureProductID(prod.ID),
+				entitlements.WithProductFeatureEntitlementFeatureID(feature.ID),
+			)
 		}
 
 		f.ProductID = prod.ID
+
+		var monthPriceID, yearPriceID string
 
 		for i, p := range f.Billing.Prices {
 			md := map[string]string{ManagedByKey: ManagedByValue}
@@ -329,6 +335,19 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 			}
 
 			f.Billing.Prices[i].PriceID = price.ID
+
+			switch p.Interval {
+			case "month":
+				monthPriceID = price.ID
+			case "year":
+				yearPriceID = price.ID
+			}
+		}
+
+		if monthPriceID != "" && yearPriceID != "" {
+			if err := sc.TagPriceUpsell(ctx, monthPriceID, yearPriceID); err != nil {
+				return f, err
+			}
 		}
 
 		return f, nil

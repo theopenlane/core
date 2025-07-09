@@ -25,6 +25,7 @@ func main() {
 }
 
 var repoPath = "github.com/theopenlane/core/pkg/catalog"
+var modelsPath = "github.com/theopenlane/core/pkg/models"
 
 // genyamlApp creates a CLI application for generating Go source files
 // from a catalog YAML file - the thought process behind this is that
@@ -132,7 +133,8 @@ func featureSetLit(fs catalog.FeatureSet) *jen.Statement {
 	dict := jen.Dict{}
 
 	for _, k := range keys {
-		dict[jen.Lit(k)] = featureLit(fs[k])
+		name := "Module" + strcase.UpperCamelCase(k)
+		dict[jen.Id("string").Call(jen.Qual(modelsPath, name))] = featureLit(fs[k])
 	}
 
 	return jen.Map(jen.String()).Qual(repoPath, "Feature").Values(dict)

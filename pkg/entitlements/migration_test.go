@@ -19,7 +19,7 @@ func TestTagPriceMigration(t *testing.T) {
 	backend := new(mocks.MockStripeBackend)
 	backends := &stripe.Backends{API: backend, Connect: backend, Uploads: backend}
 
-	meta := map[string]string{"migrate_to": "price_new"}
+	meta := map[string]string{entitlements.MigrateToKey: "price_new"}
 	backend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Run(func(args mock.Arguments) {
 		params := args.Get(3).(*stripe.PriceUpdateParams)
 		assert.Equal(t, meta, params.Metadata)
@@ -112,4 +112,34 @@ func TestMigrateSubscriptionPriceNil(t *testing.T) {
 	updated, err := sc.MigrateSubscriptionPrice(context.Background(), nil, "old", "new")
 	assert.NoError(t, err)
 	assert.Nil(t, updated)
+}
+
+func TestTagPriceUpsellError(t *testing.T) {
+	backend := new(mocks.MockStripeBackend)
+	backends := &stripe.Backends{API: backend, Connect: backend, Uploads: backend}
+	backend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(assert.AnError)
+
+	sc := entitlements.StripeClient{Client: stripe.NewClient("sk_test", stripe.WithBackends(backends))}
+
+	err := sc.TagPriceUpsell(context.Background(), "price_old", "price_new")
+	assert.Error(t, err)
+}
+
+func TestTagPriceUpsell(t *testing.T) {
+	ctx := context.Background()
+
+	backend := new(mocks.MockStripeBackend)
+	backends := &stripe.Backends{API: backend, Connect: backend, Uploads: backend}
+
+	meta := map[string]string{entitlements.UpsellToKey: "price_new"}
+	backend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Run(func(args mock.Arguments) {
+		params := args.Get(3).(*stripe.PriceUpdateParams)
+		assert.Equal(t, meta, params.Metadata)
+	}).Return(nil)
+
+	sc := entitlements.StripeClient{Client: stripe.NewClient("sk_test", stripe.WithBackends(backends))}
+
+	err := sc.TagPriceUpsell(ctx, "price_old", "price_new")
+	require.NoError(t, err)
+	backend.AssertExpectations(t)
 }
