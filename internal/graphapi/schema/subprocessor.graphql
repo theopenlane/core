@@ -19,6 +19,7 @@ extend type Mutation{
         values of the subprocessor
         """
         input: CreateSubprocessorInput!
+        logoFile: Upload
     ): SubprocessorCreatePayload!
     """
     Create multiple new subprocessors
@@ -50,6 +51,7 @@ extend type Mutation{
         New values for the subprocessor
         """
         input: UpdateSubprocessorInput!
+        logoFile: Upload
     ): SubprocessorUpdatePayload!
     """
     Delete an existing subprocessor
