@@ -105,6 +105,36 @@ func DeletedBy(v string) predicate.SubprocessorHistory {
 	return predicate.SubprocessorHistory(sql.FieldEQ(FieldDeletedBy, v))
 }
 
+// OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
+func OwnerID(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldEQ(FieldOwnerID, v))
+}
+
+// SystemOwned applies equality check predicate on the "system_owned" field. It's identical to SystemOwnedEQ.
+func SystemOwned(v bool) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldEQ(FieldSystemOwned, v))
+}
+
+// Name applies equality check predicate on the "name" field. It's identical to NameEQ.
+func Name(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldEQ(FieldName, v))
+}
+
+// Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
+func Description(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldEQ(FieldDescription, v))
+}
+
+// LogoRemoteURL applies equality check predicate on the "logo_remote_url" field. It's identical to LogoRemoteURLEQ.
+func LogoRemoteURL(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldEQ(FieldLogoRemoteURL, v))
+}
+
+// LogoLocalFileID applies equality check predicate on the "logo_local_file_id" field. It's identical to LogoLocalFileIDEQ.
+func LogoLocalFileID(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldEQ(FieldLogoLocalFileID, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.SubprocessorHistory {
 	return predicate.SubprocessorHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -623,6 +653,391 @@ func TagsIsNil() predicate.SubprocessorHistory {
 // TagsNotNil applies the NotNil predicate on the "tags" field.
 func TagsNotNil() predicate.SubprocessorHistory {
 	return predicate.SubprocessorHistory(sql.FieldNotNull(FieldTags))
+}
+
+// OwnerIDEQ applies the EQ predicate on the "owner_id" field.
+func OwnerIDEQ(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldEQ(FieldOwnerID, v))
+}
+
+// OwnerIDNEQ applies the NEQ predicate on the "owner_id" field.
+func OwnerIDNEQ(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldNEQ(FieldOwnerID, v))
+}
+
+// OwnerIDIn applies the In predicate on the "owner_id" field.
+func OwnerIDIn(vs ...string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldIn(FieldOwnerID, vs...))
+}
+
+// OwnerIDNotIn applies the NotIn predicate on the "owner_id" field.
+func OwnerIDNotIn(vs ...string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldNotIn(FieldOwnerID, vs...))
+}
+
+// OwnerIDGT applies the GT predicate on the "owner_id" field.
+func OwnerIDGT(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldGT(FieldOwnerID, v))
+}
+
+// OwnerIDGTE applies the GTE predicate on the "owner_id" field.
+func OwnerIDGTE(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldGTE(FieldOwnerID, v))
+}
+
+// OwnerIDLT applies the LT predicate on the "owner_id" field.
+func OwnerIDLT(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldLT(FieldOwnerID, v))
+}
+
+// OwnerIDLTE applies the LTE predicate on the "owner_id" field.
+func OwnerIDLTE(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldLTE(FieldOwnerID, v))
+}
+
+// OwnerIDContains applies the Contains predicate on the "owner_id" field.
+func OwnerIDContains(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldContains(FieldOwnerID, v))
+}
+
+// OwnerIDHasPrefix applies the HasPrefix predicate on the "owner_id" field.
+func OwnerIDHasPrefix(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldHasPrefix(FieldOwnerID, v))
+}
+
+// OwnerIDHasSuffix applies the HasSuffix predicate on the "owner_id" field.
+func OwnerIDHasSuffix(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldHasSuffix(FieldOwnerID, v))
+}
+
+// OwnerIDIsNil applies the IsNil predicate on the "owner_id" field.
+func OwnerIDIsNil() predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldIsNull(FieldOwnerID))
+}
+
+// OwnerIDNotNil applies the NotNil predicate on the "owner_id" field.
+func OwnerIDNotNil() predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldNotNull(FieldOwnerID))
+}
+
+// OwnerIDEqualFold applies the EqualFold predicate on the "owner_id" field.
+func OwnerIDEqualFold(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldEqualFold(FieldOwnerID, v))
+}
+
+// OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
+func OwnerIDContainsFold(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldContainsFold(FieldOwnerID, v))
+}
+
+// SystemOwnedEQ applies the EQ predicate on the "system_owned" field.
+func SystemOwnedEQ(v bool) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldEQ(FieldSystemOwned, v))
+}
+
+// SystemOwnedNEQ applies the NEQ predicate on the "system_owned" field.
+func SystemOwnedNEQ(v bool) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldNEQ(FieldSystemOwned, v))
+}
+
+// SystemOwnedIsNil applies the IsNil predicate on the "system_owned" field.
+func SystemOwnedIsNil() predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldIsNull(FieldSystemOwned))
+}
+
+// SystemOwnedNotNil applies the NotNil predicate on the "system_owned" field.
+func SystemOwnedNotNil() predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldNotNull(FieldSystemOwned))
+}
+
+// NameEQ applies the EQ predicate on the "name" field.
+func NameEQ(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldEQ(FieldName, v))
+}
+
+// NameNEQ applies the NEQ predicate on the "name" field.
+func NameNEQ(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldNEQ(FieldName, v))
+}
+
+// NameIn applies the In predicate on the "name" field.
+func NameIn(vs ...string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldIn(FieldName, vs...))
+}
+
+// NameNotIn applies the NotIn predicate on the "name" field.
+func NameNotIn(vs ...string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldNotIn(FieldName, vs...))
+}
+
+// NameGT applies the GT predicate on the "name" field.
+func NameGT(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldGT(FieldName, v))
+}
+
+// NameGTE applies the GTE predicate on the "name" field.
+func NameGTE(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldGTE(FieldName, v))
+}
+
+// NameLT applies the LT predicate on the "name" field.
+func NameLT(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldLT(FieldName, v))
+}
+
+// NameLTE applies the LTE predicate on the "name" field.
+func NameLTE(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldLTE(FieldName, v))
+}
+
+// NameContains applies the Contains predicate on the "name" field.
+func NameContains(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldContains(FieldName, v))
+}
+
+// NameHasPrefix applies the HasPrefix predicate on the "name" field.
+func NameHasPrefix(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldHasPrefix(FieldName, v))
+}
+
+// NameHasSuffix applies the HasSuffix predicate on the "name" field.
+func NameHasSuffix(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldHasSuffix(FieldName, v))
+}
+
+// NameEqualFold applies the EqualFold predicate on the "name" field.
+func NameEqualFold(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldEqualFold(FieldName, v))
+}
+
+// NameContainsFold applies the ContainsFold predicate on the "name" field.
+func NameContainsFold(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldContainsFold(FieldName, v))
+}
+
+// DescriptionEQ applies the EQ predicate on the "description" field.
+func DescriptionEQ(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldEQ(FieldDescription, v))
+}
+
+// DescriptionNEQ applies the NEQ predicate on the "description" field.
+func DescriptionNEQ(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldNEQ(FieldDescription, v))
+}
+
+// DescriptionIn applies the In predicate on the "description" field.
+func DescriptionIn(vs ...string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldIn(FieldDescription, vs...))
+}
+
+// DescriptionNotIn applies the NotIn predicate on the "description" field.
+func DescriptionNotIn(vs ...string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldNotIn(FieldDescription, vs...))
+}
+
+// DescriptionGT applies the GT predicate on the "description" field.
+func DescriptionGT(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldGT(FieldDescription, v))
+}
+
+// DescriptionGTE applies the GTE predicate on the "description" field.
+func DescriptionGTE(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldGTE(FieldDescription, v))
+}
+
+// DescriptionLT applies the LT predicate on the "description" field.
+func DescriptionLT(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldLT(FieldDescription, v))
+}
+
+// DescriptionLTE applies the LTE predicate on the "description" field.
+func DescriptionLTE(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldLTE(FieldDescription, v))
+}
+
+// DescriptionContains applies the Contains predicate on the "description" field.
+func DescriptionContains(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldContains(FieldDescription, v))
+}
+
+// DescriptionHasPrefix applies the HasPrefix predicate on the "description" field.
+func DescriptionHasPrefix(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldHasPrefix(FieldDescription, v))
+}
+
+// DescriptionHasSuffix applies the HasSuffix predicate on the "description" field.
+func DescriptionHasSuffix(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldHasSuffix(FieldDescription, v))
+}
+
+// DescriptionIsNil applies the IsNil predicate on the "description" field.
+func DescriptionIsNil() predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldIsNull(FieldDescription))
+}
+
+// DescriptionNotNil applies the NotNil predicate on the "description" field.
+func DescriptionNotNil() predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldNotNull(FieldDescription))
+}
+
+// DescriptionEqualFold applies the EqualFold predicate on the "description" field.
+func DescriptionEqualFold(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldEqualFold(FieldDescription, v))
+}
+
+// DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
+func DescriptionContainsFold(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldContainsFold(FieldDescription, v))
+}
+
+// LogoRemoteURLEQ applies the EQ predicate on the "logo_remote_url" field.
+func LogoRemoteURLEQ(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldEQ(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLNEQ applies the NEQ predicate on the "logo_remote_url" field.
+func LogoRemoteURLNEQ(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldNEQ(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLIn applies the In predicate on the "logo_remote_url" field.
+func LogoRemoteURLIn(vs ...string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldIn(FieldLogoRemoteURL, vs...))
+}
+
+// LogoRemoteURLNotIn applies the NotIn predicate on the "logo_remote_url" field.
+func LogoRemoteURLNotIn(vs ...string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldNotIn(FieldLogoRemoteURL, vs...))
+}
+
+// LogoRemoteURLGT applies the GT predicate on the "logo_remote_url" field.
+func LogoRemoteURLGT(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldGT(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLGTE applies the GTE predicate on the "logo_remote_url" field.
+func LogoRemoteURLGTE(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldGTE(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLLT applies the LT predicate on the "logo_remote_url" field.
+func LogoRemoteURLLT(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldLT(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLLTE applies the LTE predicate on the "logo_remote_url" field.
+func LogoRemoteURLLTE(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldLTE(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLContains applies the Contains predicate on the "logo_remote_url" field.
+func LogoRemoteURLContains(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldContains(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLHasPrefix applies the HasPrefix predicate on the "logo_remote_url" field.
+func LogoRemoteURLHasPrefix(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldHasPrefix(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLHasSuffix applies the HasSuffix predicate on the "logo_remote_url" field.
+func LogoRemoteURLHasSuffix(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldHasSuffix(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLIsNil applies the IsNil predicate on the "logo_remote_url" field.
+func LogoRemoteURLIsNil() predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldIsNull(FieldLogoRemoteURL))
+}
+
+// LogoRemoteURLNotNil applies the NotNil predicate on the "logo_remote_url" field.
+func LogoRemoteURLNotNil() predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldNotNull(FieldLogoRemoteURL))
+}
+
+// LogoRemoteURLEqualFold applies the EqualFold predicate on the "logo_remote_url" field.
+func LogoRemoteURLEqualFold(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldEqualFold(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLContainsFold applies the ContainsFold predicate on the "logo_remote_url" field.
+func LogoRemoteURLContainsFold(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldContainsFold(FieldLogoRemoteURL, v))
+}
+
+// LogoLocalFileIDEQ applies the EQ predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDEQ(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldEQ(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDNEQ applies the NEQ predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDNEQ(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldNEQ(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDIn applies the In predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDIn(vs ...string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldIn(FieldLogoLocalFileID, vs...))
+}
+
+// LogoLocalFileIDNotIn applies the NotIn predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDNotIn(vs ...string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldNotIn(FieldLogoLocalFileID, vs...))
+}
+
+// LogoLocalFileIDGT applies the GT predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDGT(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldGT(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDGTE applies the GTE predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDGTE(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldGTE(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDLT applies the LT predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDLT(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldLT(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDLTE applies the LTE predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDLTE(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldLTE(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDContains applies the Contains predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDContains(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldContains(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDHasPrefix applies the HasPrefix predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDHasPrefix(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldHasPrefix(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDHasSuffix applies the HasSuffix predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDHasSuffix(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldHasSuffix(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDIsNil applies the IsNil predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDIsNil() predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldIsNull(FieldLogoLocalFileID))
+}
+
+// LogoLocalFileIDNotNil applies the NotNil predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDNotNil() predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldNotNull(FieldLogoLocalFileID))
+}
+
+// LogoLocalFileIDEqualFold applies the EqualFold predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDEqualFold(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldEqualFold(FieldLogoLocalFileID, v))
+}
+
+// LogoLocalFileIDContainsFold applies the ContainsFold predicate on the "logo_local_file_id" field.
+func LogoLocalFileIDContainsFold(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldContainsFold(FieldLogoLocalFileID, v))
 }
 
 // And groups predicates with the AND operator between them.

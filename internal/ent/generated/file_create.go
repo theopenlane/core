@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -496,6 +497,21 @@ func (fc *FileCreate) AddTrustCenterSetting(t ...*TrustCenterSetting) *FileCreat
 	return fc.AddTrustCenterSettingIDs(ids...)
 }
 
+// AddSubprocessorIDs adds the "subprocessor" edge to the Subprocessor entity by IDs.
+func (fc *FileCreate) AddSubprocessorIDs(ids ...string) *FileCreate {
+	fc.mutation.AddSubprocessorIDs(ids...)
+	return fc
+}
+
+// AddSubprocessor adds the "subprocessor" edges to the Subprocessor entity.
+func (fc *FileCreate) AddSubprocessor(s ...*Subprocessor) *FileCreate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return fc.AddSubprocessorIDs(ids...)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (fc *FileCreate) Mutation() *FileMutation {
 	return fc.mutation
@@ -918,6 +934,23 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = fc.schemaConfig.TrustCenterSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := fc.mutation.SubprocessorIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.SubprocessorTable,
+			Columns: file.SubprocessorPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fc.schemaConfig.SubprocessorFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

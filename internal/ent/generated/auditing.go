@@ -2963,6 +2963,24 @@ func (sh *SubprocessorHistory) changes(new *SubprocessorHistory) []Change {
 	if !reflect.DeepEqual(sh.Tags, new.Tags) {
 		changes = append(changes, NewChange(subprocessorhistory.FieldTags, sh.Tags, new.Tags))
 	}
+	if !reflect.DeepEqual(sh.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldOwnerID, sh.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(sh.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldSystemOwned, sh.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(sh.Name, new.Name) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldName, sh.Name, new.Name))
+	}
+	if !reflect.DeepEqual(sh.Description, new.Description) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldDescription, sh.Description, new.Description))
+	}
+	if !reflect.DeepEqual(sh.LogoRemoteURL, new.LogoRemoteURL) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldLogoRemoteURL, sh.LogoRemoteURL, new.LogoRemoteURL))
+	}
+	if !reflect.DeepEqual(sh.LogoLocalFileID, new.LogoLocalFileID) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldLogoLocalFileID, sh.LogoLocalFileID, new.LogoLocalFileID))
+	}
 	return changes
 }
 

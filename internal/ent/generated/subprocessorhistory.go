@@ -38,8 +38,20 @@ type SubprocessorHistory struct {
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
-	Tags         []string `json:"tags,omitempty"`
-	selectValues sql.SelectValues
+	Tags []string `json:"tags,omitempty"`
+	// the organization id that owns the object
+	OwnerID string `json:"owner_id,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned bool `json:"system_owned,omitempty"`
+	// name of the standard body
+	Name string `json:"name,omitempty"`
+	// description of the subprocessor
+	Description string `json:"description,omitempty"`
+	// URL of the logo
+	LogoRemoteURL *string `json:"logo_remote_url,omitempty"`
+	// The local logo file id, takes precedence over the logo remote URL
+	LogoLocalFileID *string `json:"logo_local_file_id,omitempty"`
+	selectValues    sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -51,7 +63,9 @@ func (*SubprocessorHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case subprocessorhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case subprocessorhistory.FieldID, subprocessorhistory.FieldRef, subprocessorhistory.FieldCreatedBy, subprocessorhistory.FieldUpdatedBy, subprocessorhistory.FieldDeletedBy:
+		case subprocessorhistory.FieldSystemOwned:
+			values[i] = new(sql.NullBool)
+		case subprocessorhistory.FieldID, subprocessorhistory.FieldRef, subprocessorhistory.FieldCreatedBy, subprocessorhistory.FieldUpdatedBy, subprocessorhistory.FieldDeletedBy, subprocessorhistory.FieldOwnerID, subprocessorhistory.FieldName, subprocessorhistory.FieldDescription, subprocessorhistory.FieldLogoRemoteURL, subprocessorhistory.FieldLogoLocalFileID:
 			values[i] = new(sql.NullString)
 		case subprocessorhistory.FieldHistoryTime, subprocessorhistory.FieldCreatedAt, subprocessorhistory.FieldUpdatedAt, subprocessorhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -138,6 +152,44 @@ func (sh *SubprocessorHistory) assignValues(columns []string, values []any) erro
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case subprocessorhistory.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				sh.OwnerID = value.String
+			}
+		case subprocessorhistory.FieldSystemOwned:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
+			} else if value.Valid {
+				sh.SystemOwned = value.Bool
+			}
+		case subprocessorhistory.FieldName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name", values[i])
+			} else if value.Valid {
+				sh.Name = value.String
+			}
+		case subprocessorhistory.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				sh.Description = value.String
+			}
+		case subprocessorhistory.FieldLogoRemoteURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field logo_remote_url", values[i])
+			} else if value.Valid {
+				sh.LogoRemoteURL = new(string)
+				*sh.LogoRemoteURL = value.String
+			}
+		case subprocessorhistory.FieldLogoLocalFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field logo_local_file_id", values[i])
+			} else if value.Valid {
+				sh.LogoLocalFileID = new(string)
+				*sh.LogoLocalFileID = value.String
+			}
 		default:
 			sh.selectValues.Set(columns[i], values[i])
 		}
@@ -203,6 +255,28 @@ func (sh *SubprocessorHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", sh.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(sh.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("system_owned=")
+	builder.WriteString(fmt.Sprintf("%v", sh.SystemOwned))
+	builder.WriteString(", ")
+	builder.WriteString("name=")
+	builder.WriteString(sh.Name)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(sh.Description)
+	builder.WriteString(", ")
+	if v := sh.LogoRemoteURL; v != nil {
+		builder.WriteString("logo_remote_url=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := sh.LogoLocalFileID; v != nil {
+		builder.WriteString("logo_local_file_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -145,6 +145,82 @@ func (shc *SubprocessorHistoryCreate) SetTags(s []string) *SubprocessorHistoryCr
 	return shc
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (shc *SubprocessorHistoryCreate) SetOwnerID(s string) *SubprocessorHistoryCreate {
+	shc.mutation.SetOwnerID(s)
+	return shc
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (shc *SubprocessorHistoryCreate) SetNillableOwnerID(s *string) *SubprocessorHistoryCreate {
+	if s != nil {
+		shc.SetOwnerID(*s)
+	}
+	return shc
+}
+
+// SetSystemOwned sets the "system_owned" field.
+func (shc *SubprocessorHistoryCreate) SetSystemOwned(b bool) *SubprocessorHistoryCreate {
+	shc.mutation.SetSystemOwned(b)
+	return shc
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (shc *SubprocessorHistoryCreate) SetNillableSystemOwned(b *bool) *SubprocessorHistoryCreate {
+	if b != nil {
+		shc.SetSystemOwned(*b)
+	}
+	return shc
+}
+
+// SetName sets the "name" field.
+func (shc *SubprocessorHistoryCreate) SetName(s string) *SubprocessorHistoryCreate {
+	shc.mutation.SetName(s)
+	return shc
+}
+
+// SetDescription sets the "description" field.
+func (shc *SubprocessorHistoryCreate) SetDescription(s string) *SubprocessorHistoryCreate {
+	shc.mutation.SetDescription(s)
+	return shc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (shc *SubprocessorHistoryCreate) SetNillableDescription(s *string) *SubprocessorHistoryCreate {
+	if s != nil {
+		shc.SetDescription(*s)
+	}
+	return shc
+}
+
+// SetLogoRemoteURL sets the "logo_remote_url" field.
+func (shc *SubprocessorHistoryCreate) SetLogoRemoteURL(s string) *SubprocessorHistoryCreate {
+	shc.mutation.SetLogoRemoteURL(s)
+	return shc
+}
+
+// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
+func (shc *SubprocessorHistoryCreate) SetNillableLogoRemoteURL(s *string) *SubprocessorHistoryCreate {
+	if s != nil {
+		shc.SetLogoRemoteURL(*s)
+	}
+	return shc
+}
+
+// SetLogoLocalFileID sets the "logo_local_file_id" field.
+func (shc *SubprocessorHistoryCreate) SetLogoLocalFileID(s string) *SubprocessorHistoryCreate {
+	shc.mutation.SetLogoLocalFileID(s)
+	return shc
+}
+
+// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
+func (shc *SubprocessorHistoryCreate) SetNillableLogoLocalFileID(s *string) *SubprocessorHistoryCreate {
+	if s != nil {
+		shc.SetLogoLocalFileID(*s)
+	}
+	return shc
+}
+
 // SetID sets the "id" field.
 func (shc *SubprocessorHistoryCreate) SetID(s string) *SubprocessorHistoryCreate {
 	shc.mutation.SetID(s)
@@ -210,6 +286,10 @@ func (shc *SubprocessorHistoryCreate) defaults() {
 		v := subprocessorhistory.DefaultTags
 		shc.mutation.SetTags(v)
 	}
+	if _, ok := shc.mutation.SystemOwned(); !ok {
+		v := subprocessorhistory.DefaultSystemOwned
+		shc.mutation.SetSystemOwned(v)
+	}
 	if _, ok := shc.mutation.ID(); !ok {
 		v := subprocessorhistory.DefaultID()
 		shc.mutation.SetID(v)
@@ -228,6 +308,9 @@ func (shc *SubprocessorHistoryCreate) check() error {
 		if err := subprocessorhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "SubprocessorHistory.operation": %w`, err)}
 		}
+	}
+	if _, ok := shc.mutation.Name(); !ok {
+		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "SubprocessorHistory.name"`)}
 	}
 	return nil
 }
@@ -304,6 +387,30 @@ func (shc *SubprocessorHistoryCreate) createSpec() (*SubprocessorHistory, *sqlgr
 	if value, ok := shc.mutation.Tags(); ok {
 		_spec.SetField(subprocessorhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := shc.mutation.OwnerID(); ok {
+		_spec.SetField(subprocessorhistory.FieldOwnerID, field.TypeString, value)
+		_node.OwnerID = value
+	}
+	if value, ok := shc.mutation.SystemOwned(); ok {
+		_spec.SetField(subprocessorhistory.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := shc.mutation.Name(); ok {
+		_spec.SetField(subprocessorhistory.FieldName, field.TypeString, value)
+		_node.Name = value
+	}
+	if value, ok := shc.mutation.Description(); ok {
+		_spec.SetField(subprocessorhistory.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if value, ok := shc.mutation.LogoRemoteURL(); ok {
+		_spec.SetField(subprocessorhistory.FieldLogoRemoteURL, field.TypeString, value)
+		_node.LogoRemoteURL = &value
+	}
+	if value, ok := shc.mutation.LogoLocalFileID(); ok {
+		_spec.SetField(subprocessorhistory.FieldLogoLocalFileID, field.TypeString, value)
+		_node.LogoLocalFileID = &value
 	}
 	return _node, _spec
 }

@@ -54,6 +54,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -1260,6 +1261,21 @@ func (oc *OrganizationCreate) AddScans(s ...*Scan) *OrganizationCreate {
 		ids[i] = s[i].ID
 	}
 	return oc.AddScanIDs(ids...)
+}
+
+// AddSubprocessorIDs adds the "subprocessors" edge to the Subprocessor entity by IDs.
+func (oc *OrganizationCreate) AddSubprocessorIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddSubprocessorIDs(ids...)
+	return oc
+}
+
+// AddSubprocessors adds the "subprocessors" edges to the Subprocessor entity.
+func (oc *OrganizationCreate) AddSubprocessors(s ...*Subprocessor) *OrganizationCreate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return oc.AddSubprocessorIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -2571,6 +2587,23 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = oc.schemaConfig.Scan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.SubprocessorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SubprocessorsTable,
+			Columns: []string{organization.SubprocessorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.Subprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

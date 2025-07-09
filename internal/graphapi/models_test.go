@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -286,6 +287,16 @@ type StandardBuilder struct {
 	Name      string
 	Framework string
 	IsPublic  bool
+}
+
+type SubprocessorBuilder struct {
+	client *client
+
+	// Fields
+	Name          string
+	Description   string
+	LogoRemoteURL string
+	OwnerID       string
 }
 
 type NoteBuilder struct {
@@ -1172,6 +1183,41 @@ func (s *StandardBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Standa
 	assert.NilError(t, err)
 
 	return standard
+}
+
+// MustNew subprocessor builder is used to create, without authz checks, subprocessors in the database
+func (s *SubprocessorBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Subprocessor {
+	ctx = setContext(ctx, s.client.db)
+
+	if s.Name == "" {
+		for {
+			s.Name = gofakeit.Company()
+			_, err := s.client.db.Subprocessor.Query().Where(subprocessor.Name(s.Name)).Only(ctx)
+			if err != nil {
+				break
+			}
+		}
+	}
+
+	mutation := s.client.db.Subprocessor.Create().
+		SetName(s.Name)
+
+	if s.Description != "" {
+		mutation.SetDescription(s.Description)
+	}
+
+	if s.LogoRemoteURL != "" {
+		mutation.SetLogoRemoteURL(s.LogoRemoteURL)
+	}
+
+	if s.OwnerID != "" {
+		mutation.SetOwnerID(s.OwnerID)
+	}
+
+	subprocessor, err := mutation.Save(ctx)
+	assert.NilError(t, err)
+
+	return subprocessor
 }
 
 // MustNew note builder is used to create, without authz checks, notes in the database

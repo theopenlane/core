@@ -24441,6 +24441,10 @@ type FileWhereInput struct {
 	// "trust_center_setting" edge predicates.
 	HasTrustCenterSetting     *bool                           `json:"hasTrustCenterSetting,omitempty"`
 	HasTrustCenterSettingWith []*TrustCenterSettingWhereInput `json:"hasTrustCenterSettingWith,omitempty"`
+
+	// "subprocessor" edge predicates.
+	HasSubprocessor     *bool                     `json:"hasSubprocessor,omitempty"`
+	HasSubprocessorWith []*SubprocessorWhereInput `json:"hasSubprocessorWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -25465,6 +25469,24 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, file.HasTrustCenterSettingWith(with...))
+	}
+	if i.HasSubprocessor != nil {
+		p := file.HasSubprocessor()
+		if !*i.HasSubprocessor {
+			p = file.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSubprocessorWith) > 0 {
+		with := make([]predicate.Subprocessor, 0, len(i.HasSubprocessorWith))
+		for _, w := range i.HasSubprocessorWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSubprocessorWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, file.HasSubprocessorWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -47867,6 +47889,10 @@ type OrganizationWhereInput struct {
 	HasScans     *bool             `json:"hasScans,omitempty"`
 	HasScansWith []*ScanWhereInput `json:"hasScansWith,omitempty"`
 
+	// "subprocessors" edge predicates.
+	HasSubprocessors     *bool                     `json:"hasSubprocessors,omitempty"`
+	HasSubprocessorsWith []*SubprocessorWhereInput `json:"hasSubprocessorsWith,omitempty"`
+
 	// "members" edge predicates.
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
 	HasMembersWith []*OrgMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -49437,6 +49463,24 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasScansWith(with...))
+	}
+	if i.HasSubprocessors != nil {
+		p := organization.HasSubprocessors()
+		if !*i.HasSubprocessors {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSubprocessorsWith) > 0 {
+		with := make([]predicate.Subprocessor, 0, len(i.HasSubprocessorsWith))
+		for _, w := range i.HasSubprocessorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSubprocessorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasSubprocessorsWith(with...))
 	}
 	if i.HasMembers != nil {
 		p := organization.HasMembers()
@@ -70178,6 +70222,107 @@ type SubprocessorWhereInput struct {
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
+	// "system_owned" field predicates.
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNEQ    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  bool  `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil bool  `json:"systemOwnedNotNil,omitempty"`
+
+	// "name" field predicates.
+	Name             *string  `json:"name,omitempty"`
+	NameNEQ          *string  `json:"nameNEQ,omitempty"`
+	NameIn           []string `json:"nameIn,omitempty"`
+	NameNotIn        []string `json:"nameNotIn,omitempty"`
+	NameGT           *string  `json:"nameGT,omitempty"`
+	NameGTE          *string  `json:"nameGTE,omitempty"`
+	NameLT           *string  `json:"nameLT,omitempty"`
+	NameLTE          *string  `json:"nameLTE,omitempty"`
+	NameContains     *string  `json:"nameContains,omitempty"`
+	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
+	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
+	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
+	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+
+	// "description" field predicates.
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNEQ          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGT           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGTE          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLT           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLTE          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        bool     `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "logo_remote_url" field predicates.
+	LogoRemoteURL             *string  `json:"logoRemoteURL,omitempty"`
+	LogoRemoteURLNEQ          *string  `json:"logoRemoteURLNEQ,omitempty"`
+	LogoRemoteURLIn           []string `json:"logoRemoteURLIn,omitempty"`
+	LogoRemoteURLNotIn        []string `json:"logoRemoteURLNotIn,omitempty"`
+	LogoRemoteURLGT           *string  `json:"logoRemoteURLGT,omitempty"`
+	LogoRemoteURLGTE          *string  `json:"logoRemoteURLGTE,omitempty"`
+	LogoRemoteURLLT           *string  `json:"logoRemoteURLLT,omitempty"`
+	LogoRemoteURLLTE          *string  `json:"logoRemoteURLLTE,omitempty"`
+	LogoRemoteURLContains     *string  `json:"logoRemoteURLContains,omitempty"`
+	LogoRemoteURLHasPrefix    *string  `json:"logoRemoteURLHasPrefix,omitempty"`
+	LogoRemoteURLHasSuffix    *string  `json:"logoRemoteURLHasSuffix,omitempty"`
+	LogoRemoteURLIsNil        bool     `json:"logoRemoteURLIsNil,omitempty"`
+	LogoRemoteURLNotNil       bool     `json:"logoRemoteURLNotNil,omitempty"`
+	LogoRemoteURLEqualFold    *string  `json:"logoRemoteURLEqualFold,omitempty"`
+	LogoRemoteURLContainsFold *string  `json:"logoRemoteURLContainsFold,omitempty"`
+
+	// "logo_local_file_id" field predicates.
+	LogoLocalFileID             *string  `json:"logoLocalFileID,omitempty"`
+	LogoLocalFileIDNEQ          *string  `json:"logoLocalFileIDNEQ,omitempty"`
+	LogoLocalFileIDIn           []string `json:"logoLocalFileIDIn,omitempty"`
+	LogoLocalFileIDNotIn        []string `json:"logoLocalFileIDNotIn,omitempty"`
+	LogoLocalFileIDGT           *string  `json:"logoLocalFileIDGT,omitempty"`
+	LogoLocalFileIDGTE          *string  `json:"logoLocalFileIDGTE,omitempty"`
+	LogoLocalFileIDLT           *string  `json:"logoLocalFileIDLT,omitempty"`
+	LogoLocalFileIDLTE          *string  `json:"logoLocalFileIDLTE,omitempty"`
+	LogoLocalFileIDContains     *string  `json:"logoLocalFileIDContains,omitempty"`
+	LogoLocalFileIDHasPrefix    *string  `json:"logoLocalFileIDHasPrefix,omitempty"`
+	LogoLocalFileIDHasSuffix    *string  `json:"logoLocalFileIDHasSuffix,omitempty"`
+	LogoLocalFileIDIsNil        bool     `json:"logoLocalFileIDIsNil,omitempty"`
+	LogoLocalFileIDNotNil       bool     `json:"logoLocalFileIDNotNil,omitempty"`
+	LogoLocalFileIDEqualFold    *string  `json:"logoLocalFileIDEqualFold,omitempty"`
+	LogoLocalFileIDContainsFold *string  `json:"logoLocalFileIDContainsFold,omitempty"`
+
+	// "owner" edge predicates.
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+
+	// "files" edge predicates.
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+
+	// "logo_file" edge predicates.
+	HasLogoFile     *bool             `json:"hasLogoFile,omitempty"`
+	HasLogoFileWith []*FileWhereInput `json:"hasLogoFileWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -70431,7 +70576,292 @@ func (i *SubprocessorWhereInput) P() (predicate.Subprocessor, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, subprocessor.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, subprocessor.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, subprocessor.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, subprocessor.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, subprocessor.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, subprocessor.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, subprocessor.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, subprocessor.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, subprocessor.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, subprocessor.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, subprocessor.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, subprocessor.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, subprocessor.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, subprocessor.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, subprocessor.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, subprocessor.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.SystemOwned != nil {
+		predicates = append(predicates, subprocessor.SystemOwnedEQ(*i.SystemOwned))
+	}
+	if i.SystemOwnedNEQ != nil {
+		predicates = append(predicates, subprocessor.SystemOwnedNEQ(*i.SystemOwnedNEQ))
+	}
+	if i.SystemOwnedIsNil {
+		predicates = append(predicates, subprocessor.SystemOwnedIsNil())
+	}
+	if i.SystemOwnedNotNil {
+		predicates = append(predicates, subprocessor.SystemOwnedNotNil())
+	}
+	if i.Name != nil {
+		predicates = append(predicates, subprocessor.NameEQ(*i.Name))
+	}
+	if i.NameNEQ != nil {
+		predicates = append(predicates, subprocessor.NameNEQ(*i.NameNEQ))
+	}
+	if len(i.NameIn) > 0 {
+		predicates = append(predicates, subprocessor.NameIn(i.NameIn...))
+	}
+	if len(i.NameNotIn) > 0 {
+		predicates = append(predicates, subprocessor.NameNotIn(i.NameNotIn...))
+	}
+	if i.NameGT != nil {
+		predicates = append(predicates, subprocessor.NameGT(*i.NameGT))
+	}
+	if i.NameGTE != nil {
+		predicates = append(predicates, subprocessor.NameGTE(*i.NameGTE))
+	}
+	if i.NameLT != nil {
+		predicates = append(predicates, subprocessor.NameLT(*i.NameLT))
+	}
+	if i.NameLTE != nil {
+		predicates = append(predicates, subprocessor.NameLTE(*i.NameLTE))
+	}
+	if i.NameContains != nil {
+		predicates = append(predicates, subprocessor.NameContains(*i.NameContains))
+	}
+	if i.NameHasPrefix != nil {
+		predicates = append(predicates, subprocessor.NameHasPrefix(*i.NameHasPrefix))
+	}
+	if i.NameHasSuffix != nil {
+		predicates = append(predicates, subprocessor.NameHasSuffix(*i.NameHasSuffix))
+	}
+	if i.NameEqualFold != nil {
+		predicates = append(predicates, subprocessor.NameEqualFold(*i.NameEqualFold))
+	}
+	if i.NameContainsFold != nil {
+		predicates = append(predicates, subprocessor.NameContainsFold(*i.NameContainsFold))
+	}
+	if i.Description != nil {
+		predicates = append(predicates, subprocessor.DescriptionEQ(*i.Description))
+	}
+	if i.DescriptionNEQ != nil {
+		predicates = append(predicates, subprocessor.DescriptionNEQ(*i.DescriptionNEQ))
+	}
+	if len(i.DescriptionIn) > 0 {
+		predicates = append(predicates, subprocessor.DescriptionIn(i.DescriptionIn...))
+	}
+	if len(i.DescriptionNotIn) > 0 {
+		predicates = append(predicates, subprocessor.DescriptionNotIn(i.DescriptionNotIn...))
+	}
+	if i.DescriptionGT != nil {
+		predicates = append(predicates, subprocessor.DescriptionGT(*i.DescriptionGT))
+	}
+	if i.DescriptionGTE != nil {
+		predicates = append(predicates, subprocessor.DescriptionGTE(*i.DescriptionGTE))
+	}
+	if i.DescriptionLT != nil {
+		predicates = append(predicates, subprocessor.DescriptionLT(*i.DescriptionLT))
+	}
+	if i.DescriptionLTE != nil {
+		predicates = append(predicates, subprocessor.DescriptionLTE(*i.DescriptionLTE))
+	}
+	if i.DescriptionContains != nil {
+		predicates = append(predicates, subprocessor.DescriptionContains(*i.DescriptionContains))
+	}
+	if i.DescriptionHasPrefix != nil {
+		predicates = append(predicates, subprocessor.DescriptionHasPrefix(*i.DescriptionHasPrefix))
+	}
+	if i.DescriptionHasSuffix != nil {
+		predicates = append(predicates, subprocessor.DescriptionHasSuffix(*i.DescriptionHasSuffix))
+	}
+	if i.DescriptionIsNil {
+		predicates = append(predicates, subprocessor.DescriptionIsNil())
+	}
+	if i.DescriptionNotNil {
+		predicates = append(predicates, subprocessor.DescriptionNotNil())
+	}
+	if i.DescriptionEqualFold != nil {
+		predicates = append(predicates, subprocessor.DescriptionEqualFold(*i.DescriptionEqualFold))
+	}
+	if i.DescriptionContainsFold != nil {
+		predicates = append(predicates, subprocessor.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.LogoRemoteURL != nil {
+		predicates = append(predicates, subprocessor.LogoRemoteURLEQ(*i.LogoRemoteURL))
+	}
+	if i.LogoRemoteURLNEQ != nil {
+		predicates = append(predicates, subprocessor.LogoRemoteURLNEQ(*i.LogoRemoteURLNEQ))
+	}
+	if len(i.LogoRemoteURLIn) > 0 {
+		predicates = append(predicates, subprocessor.LogoRemoteURLIn(i.LogoRemoteURLIn...))
+	}
+	if len(i.LogoRemoteURLNotIn) > 0 {
+		predicates = append(predicates, subprocessor.LogoRemoteURLNotIn(i.LogoRemoteURLNotIn...))
+	}
+	if i.LogoRemoteURLGT != nil {
+		predicates = append(predicates, subprocessor.LogoRemoteURLGT(*i.LogoRemoteURLGT))
+	}
+	if i.LogoRemoteURLGTE != nil {
+		predicates = append(predicates, subprocessor.LogoRemoteURLGTE(*i.LogoRemoteURLGTE))
+	}
+	if i.LogoRemoteURLLT != nil {
+		predicates = append(predicates, subprocessor.LogoRemoteURLLT(*i.LogoRemoteURLLT))
+	}
+	if i.LogoRemoteURLLTE != nil {
+		predicates = append(predicates, subprocessor.LogoRemoteURLLTE(*i.LogoRemoteURLLTE))
+	}
+	if i.LogoRemoteURLContains != nil {
+		predicates = append(predicates, subprocessor.LogoRemoteURLContains(*i.LogoRemoteURLContains))
+	}
+	if i.LogoRemoteURLHasPrefix != nil {
+		predicates = append(predicates, subprocessor.LogoRemoteURLHasPrefix(*i.LogoRemoteURLHasPrefix))
+	}
+	if i.LogoRemoteURLHasSuffix != nil {
+		predicates = append(predicates, subprocessor.LogoRemoteURLHasSuffix(*i.LogoRemoteURLHasSuffix))
+	}
+	if i.LogoRemoteURLIsNil {
+		predicates = append(predicates, subprocessor.LogoRemoteURLIsNil())
+	}
+	if i.LogoRemoteURLNotNil {
+		predicates = append(predicates, subprocessor.LogoRemoteURLNotNil())
+	}
+	if i.LogoRemoteURLEqualFold != nil {
+		predicates = append(predicates, subprocessor.LogoRemoteURLEqualFold(*i.LogoRemoteURLEqualFold))
+	}
+	if i.LogoRemoteURLContainsFold != nil {
+		predicates = append(predicates, subprocessor.LogoRemoteURLContainsFold(*i.LogoRemoteURLContainsFold))
+	}
+	if i.LogoLocalFileID != nil {
+		predicates = append(predicates, subprocessor.LogoLocalFileIDEQ(*i.LogoLocalFileID))
+	}
+	if i.LogoLocalFileIDNEQ != nil {
+		predicates = append(predicates, subprocessor.LogoLocalFileIDNEQ(*i.LogoLocalFileIDNEQ))
+	}
+	if len(i.LogoLocalFileIDIn) > 0 {
+		predicates = append(predicates, subprocessor.LogoLocalFileIDIn(i.LogoLocalFileIDIn...))
+	}
+	if len(i.LogoLocalFileIDNotIn) > 0 {
+		predicates = append(predicates, subprocessor.LogoLocalFileIDNotIn(i.LogoLocalFileIDNotIn...))
+	}
+	if i.LogoLocalFileIDGT != nil {
+		predicates = append(predicates, subprocessor.LogoLocalFileIDGT(*i.LogoLocalFileIDGT))
+	}
+	if i.LogoLocalFileIDGTE != nil {
+		predicates = append(predicates, subprocessor.LogoLocalFileIDGTE(*i.LogoLocalFileIDGTE))
+	}
+	if i.LogoLocalFileIDLT != nil {
+		predicates = append(predicates, subprocessor.LogoLocalFileIDLT(*i.LogoLocalFileIDLT))
+	}
+	if i.LogoLocalFileIDLTE != nil {
+		predicates = append(predicates, subprocessor.LogoLocalFileIDLTE(*i.LogoLocalFileIDLTE))
+	}
+	if i.LogoLocalFileIDContains != nil {
+		predicates = append(predicates, subprocessor.LogoLocalFileIDContains(*i.LogoLocalFileIDContains))
+	}
+	if i.LogoLocalFileIDHasPrefix != nil {
+		predicates = append(predicates, subprocessor.LogoLocalFileIDHasPrefix(*i.LogoLocalFileIDHasPrefix))
+	}
+	if i.LogoLocalFileIDHasSuffix != nil {
+		predicates = append(predicates, subprocessor.LogoLocalFileIDHasSuffix(*i.LogoLocalFileIDHasSuffix))
+	}
+	if i.LogoLocalFileIDIsNil {
+		predicates = append(predicates, subprocessor.LogoLocalFileIDIsNil())
+	}
+	if i.LogoLocalFileIDNotNil {
+		predicates = append(predicates, subprocessor.LogoLocalFileIDNotNil())
+	}
+	if i.LogoLocalFileIDEqualFold != nil {
+		predicates = append(predicates, subprocessor.LogoLocalFileIDEqualFold(*i.LogoLocalFileIDEqualFold))
+	}
+	if i.LogoLocalFileIDContainsFold != nil {
+		predicates = append(predicates, subprocessor.LogoLocalFileIDContainsFold(*i.LogoLocalFileIDContainsFold))
+	}
 
+	if i.HasOwner != nil {
+		p := subprocessor.HasOwner()
+		if !*i.HasOwner {
+			p = subprocessor.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOwnerWith) > 0 {
+		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		for _, w := range i.HasOwnerWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOwnerWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, subprocessor.HasOwnerWith(with...))
+	}
+	if i.HasFiles != nil {
+		p := subprocessor.HasFiles()
+		if !*i.HasFiles {
+			p = subprocessor.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFilesWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		for _, w := range i.HasFilesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFilesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, subprocessor.HasFilesWith(with...))
+	}
+	if i.HasLogoFile != nil {
+		p := subprocessor.HasLogoFile()
+		if !*i.HasLogoFile {
+			p = subprocessor.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasLogoFileWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasLogoFileWith))
+		for _, w := range i.HasLogoFileWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasLogoFileWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, subprocessor.HasLogoFileWith(with...))
+	}
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptySubprocessorWhereInput
@@ -70551,6 +70981,95 @@ type SubprocessorHistoryWhereInput struct {
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
+	// "system_owned" field predicates.
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNEQ    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  bool  `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil bool  `json:"systemOwnedNotNil,omitempty"`
+
+	// "name" field predicates.
+	Name             *string  `json:"name,omitempty"`
+	NameNEQ          *string  `json:"nameNEQ,omitempty"`
+	NameIn           []string `json:"nameIn,omitempty"`
+	NameNotIn        []string `json:"nameNotIn,omitempty"`
+	NameGT           *string  `json:"nameGT,omitempty"`
+	NameGTE          *string  `json:"nameGTE,omitempty"`
+	NameLT           *string  `json:"nameLT,omitempty"`
+	NameLTE          *string  `json:"nameLTE,omitempty"`
+	NameContains     *string  `json:"nameContains,omitempty"`
+	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
+	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
+	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
+	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+
+	// "description" field predicates.
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNEQ          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGT           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGTE          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLT           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLTE          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        bool     `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "logo_remote_url" field predicates.
+	LogoRemoteURL             *string  `json:"logoRemoteURL,omitempty"`
+	LogoRemoteURLNEQ          *string  `json:"logoRemoteURLNEQ,omitempty"`
+	LogoRemoteURLIn           []string `json:"logoRemoteURLIn,omitempty"`
+	LogoRemoteURLNotIn        []string `json:"logoRemoteURLNotIn,omitempty"`
+	LogoRemoteURLGT           *string  `json:"logoRemoteURLGT,omitempty"`
+	LogoRemoteURLGTE          *string  `json:"logoRemoteURLGTE,omitempty"`
+	LogoRemoteURLLT           *string  `json:"logoRemoteURLLT,omitempty"`
+	LogoRemoteURLLTE          *string  `json:"logoRemoteURLLTE,omitempty"`
+	LogoRemoteURLContains     *string  `json:"logoRemoteURLContains,omitempty"`
+	LogoRemoteURLHasPrefix    *string  `json:"logoRemoteURLHasPrefix,omitempty"`
+	LogoRemoteURLHasSuffix    *string  `json:"logoRemoteURLHasSuffix,omitempty"`
+	LogoRemoteURLIsNil        bool     `json:"logoRemoteURLIsNil,omitempty"`
+	LogoRemoteURLNotNil       bool     `json:"logoRemoteURLNotNil,omitempty"`
+	LogoRemoteURLEqualFold    *string  `json:"logoRemoteURLEqualFold,omitempty"`
+	LogoRemoteURLContainsFold *string  `json:"logoRemoteURLContainsFold,omitempty"`
+
+	// "logo_local_file_id" field predicates.
+	LogoLocalFileID             *string  `json:"logoLocalFileID,omitempty"`
+	LogoLocalFileIDNEQ          *string  `json:"logoLocalFileIDNEQ,omitempty"`
+	LogoLocalFileIDIn           []string `json:"logoLocalFileIDIn,omitempty"`
+	LogoLocalFileIDNotIn        []string `json:"logoLocalFileIDNotIn,omitempty"`
+	LogoLocalFileIDGT           *string  `json:"logoLocalFileIDGT,omitempty"`
+	LogoLocalFileIDGTE          *string  `json:"logoLocalFileIDGTE,omitempty"`
+	LogoLocalFileIDLT           *string  `json:"logoLocalFileIDLT,omitempty"`
+	LogoLocalFileIDLTE          *string  `json:"logoLocalFileIDLTE,omitempty"`
+	LogoLocalFileIDContains     *string  `json:"logoLocalFileIDContains,omitempty"`
+	LogoLocalFileIDHasPrefix    *string  `json:"logoLocalFileIDHasPrefix,omitempty"`
+	LogoLocalFileIDHasSuffix    *string  `json:"logoLocalFileIDHasSuffix,omitempty"`
+	LogoLocalFileIDIsNil        bool     `json:"logoLocalFileIDIsNil,omitempty"`
+	LogoLocalFileIDNotNil       bool     `json:"logoLocalFileIDNotNil,omitempty"`
+	LogoLocalFileIDEqualFold    *string  `json:"logoLocalFileIDEqualFold,omitempty"`
+	LogoLocalFileIDContainsFold *string  `json:"logoLocalFileIDContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -70884,6 +71403,237 @@ func (i *SubprocessorHistoryWhereInput) P() (predicate.SubprocessorHistory, erro
 	}
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, subprocessorhistory.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, subprocessorhistory.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, subprocessorhistory.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, subprocessorhistory.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, subprocessorhistory.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, subprocessorhistory.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, subprocessorhistory.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, subprocessorhistory.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, subprocessorhistory.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, subprocessorhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, subprocessorhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, subprocessorhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, subprocessorhistory.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, subprocessorhistory.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, subprocessorhistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, subprocessorhistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.SystemOwned != nil {
+		predicates = append(predicates, subprocessorhistory.SystemOwnedEQ(*i.SystemOwned))
+	}
+	if i.SystemOwnedNEQ != nil {
+		predicates = append(predicates, subprocessorhistory.SystemOwnedNEQ(*i.SystemOwnedNEQ))
+	}
+	if i.SystemOwnedIsNil {
+		predicates = append(predicates, subprocessorhistory.SystemOwnedIsNil())
+	}
+	if i.SystemOwnedNotNil {
+		predicates = append(predicates, subprocessorhistory.SystemOwnedNotNil())
+	}
+	if i.Name != nil {
+		predicates = append(predicates, subprocessorhistory.NameEQ(*i.Name))
+	}
+	if i.NameNEQ != nil {
+		predicates = append(predicates, subprocessorhistory.NameNEQ(*i.NameNEQ))
+	}
+	if len(i.NameIn) > 0 {
+		predicates = append(predicates, subprocessorhistory.NameIn(i.NameIn...))
+	}
+	if len(i.NameNotIn) > 0 {
+		predicates = append(predicates, subprocessorhistory.NameNotIn(i.NameNotIn...))
+	}
+	if i.NameGT != nil {
+		predicates = append(predicates, subprocessorhistory.NameGT(*i.NameGT))
+	}
+	if i.NameGTE != nil {
+		predicates = append(predicates, subprocessorhistory.NameGTE(*i.NameGTE))
+	}
+	if i.NameLT != nil {
+		predicates = append(predicates, subprocessorhistory.NameLT(*i.NameLT))
+	}
+	if i.NameLTE != nil {
+		predicates = append(predicates, subprocessorhistory.NameLTE(*i.NameLTE))
+	}
+	if i.NameContains != nil {
+		predicates = append(predicates, subprocessorhistory.NameContains(*i.NameContains))
+	}
+	if i.NameHasPrefix != nil {
+		predicates = append(predicates, subprocessorhistory.NameHasPrefix(*i.NameHasPrefix))
+	}
+	if i.NameHasSuffix != nil {
+		predicates = append(predicates, subprocessorhistory.NameHasSuffix(*i.NameHasSuffix))
+	}
+	if i.NameEqualFold != nil {
+		predicates = append(predicates, subprocessorhistory.NameEqualFold(*i.NameEqualFold))
+	}
+	if i.NameContainsFold != nil {
+		predicates = append(predicates, subprocessorhistory.NameContainsFold(*i.NameContainsFold))
+	}
+	if i.Description != nil {
+		predicates = append(predicates, subprocessorhistory.DescriptionEQ(*i.Description))
+	}
+	if i.DescriptionNEQ != nil {
+		predicates = append(predicates, subprocessorhistory.DescriptionNEQ(*i.DescriptionNEQ))
+	}
+	if len(i.DescriptionIn) > 0 {
+		predicates = append(predicates, subprocessorhistory.DescriptionIn(i.DescriptionIn...))
+	}
+	if len(i.DescriptionNotIn) > 0 {
+		predicates = append(predicates, subprocessorhistory.DescriptionNotIn(i.DescriptionNotIn...))
+	}
+	if i.DescriptionGT != nil {
+		predicates = append(predicates, subprocessorhistory.DescriptionGT(*i.DescriptionGT))
+	}
+	if i.DescriptionGTE != nil {
+		predicates = append(predicates, subprocessorhistory.DescriptionGTE(*i.DescriptionGTE))
+	}
+	if i.DescriptionLT != nil {
+		predicates = append(predicates, subprocessorhistory.DescriptionLT(*i.DescriptionLT))
+	}
+	if i.DescriptionLTE != nil {
+		predicates = append(predicates, subprocessorhistory.DescriptionLTE(*i.DescriptionLTE))
+	}
+	if i.DescriptionContains != nil {
+		predicates = append(predicates, subprocessorhistory.DescriptionContains(*i.DescriptionContains))
+	}
+	if i.DescriptionHasPrefix != nil {
+		predicates = append(predicates, subprocessorhistory.DescriptionHasPrefix(*i.DescriptionHasPrefix))
+	}
+	if i.DescriptionHasSuffix != nil {
+		predicates = append(predicates, subprocessorhistory.DescriptionHasSuffix(*i.DescriptionHasSuffix))
+	}
+	if i.DescriptionIsNil {
+		predicates = append(predicates, subprocessorhistory.DescriptionIsNil())
+	}
+	if i.DescriptionNotNil {
+		predicates = append(predicates, subprocessorhistory.DescriptionNotNil())
+	}
+	if i.DescriptionEqualFold != nil {
+		predicates = append(predicates, subprocessorhistory.DescriptionEqualFold(*i.DescriptionEqualFold))
+	}
+	if i.DescriptionContainsFold != nil {
+		predicates = append(predicates, subprocessorhistory.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.LogoRemoteURL != nil {
+		predicates = append(predicates, subprocessorhistory.LogoRemoteURLEQ(*i.LogoRemoteURL))
+	}
+	if i.LogoRemoteURLNEQ != nil {
+		predicates = append(predicates, subprocessorhistory.LogoRemoteURLNEQ(*i.LogoRemoteURLNEQ))
+	}
+	if len(i.LogoRemoteURLIn) > 0 {
+		predicates = append(predicates, subprocessorhistory.LogoRemoteURLIn(i.LogoRemoteURLIn...))
+	}
+	if len(i.LogoRemoteURLNotIn) > 0 {
+		predicates = append(predicates, subprocessorhistory.LogoRemoteURLNotIn(i.LogoRemoteURLNotIn...))
+	}
+	if i.LogoRemoteURLGT != nil {
+		predicates = append(predicates, subprocessorhistory.LogoRemoteURLGT(*i.LogoRemoteURLGT))
+	}
+	if i.LogoRemoteURLGTE != nil {
+		predicates = append(predicates, subprocessorhistory.LogoRemoteURLGTE(*i.LogoRemoteURLGTE))
+	}
+	if i.LogoRemoteURLLT != nil {
+		predicates = append(predicates, subprocessorhistory.LogoRemoteURLLT(*i.LogoRemoteURLLT))
+	}
+	if i.LogoRemoteURLLTE != nil {
+		predicates = append(predicates, subprocessorhistory.LogoRemoteURLLTE(*i.LogoRemoteURLLTE))
+	}
+	if i.LogoRemoteURLContains != nil {
+		predicates = append(predicates, subprocessorhistory.LogoRemoteURLContains(*i.LogoRemoteURLContains))
+	}
+	if i.LogoRemoteURLHasPrefix != nil {
+		predicates = append(predicates, subprocessorhistory.LogoRemoteURLHasPrefix(*i.LogoRemoteURLHasPrefix))
+	}
+	if i.LogoRemoteURLHasSuffix != nil {
+		predicates = append(predicates, subprocessorhistory.LogoRemoteURLHasSuffix(*i.LogoRemoteURLHasSuffix))
+	}
+	if i.LogoRemoteURLIsNil {
+		predicates = append(predicates, subprocessorhistory.LogoRemoteURLIsNil())
+	}
+	if i.LogoRemoteURLNotNil {
+		predicates = append(predicates, subprocessorhistory.LogoRemoteURLNotNil())
+	}
+	if i.LogoRemoteURLEqualFold != nil {
+		predicates = append(predicates, subprocessorhistory.LogoRemoteURLEqualFold(*i.LogoRemoteURLEqualFold))
+	}
+	if i.LogoRemoteURLContainsFold != nil {
+		predicates = append(predicates, subprocessorhistory.LogoRemoteURLContainsFold(*i.LogoRemoteURLContainsFold))
+	}
+	if i.LogoLocalFileID != nil {
+		predicates = append(predicates, subprocessorhistory.LogoLocalFileIDEQ(*i.LogoLocalFileID))
+	}
+	if i.LogoLocalFileIDNEQ != nil {
+		predicates = append(predicates, subprocessorhistory.LogoLocalFileIDNEQ(*i.LogoLocalFileIDNEQ))
+	}
+	if len(i.LogoLocalFileIDIn) > 0 {
+		predicates = append(predicates, subprocessorhistory.LogoLocalFileIDIn(i.LogoLocalFileIDIn...))
+	}
+	if len(i.LogoLocalFileIDNotIn) > 0 {
+		predicates = append(predicates, subprocessorhistory.LogoLocalFileIDNotIn(i.LogoLocalFileIDNotIn...))
+	}
+	if i.LogoLocalFileIDGT != nil {
+		predicates = append(predicates, subprocessorhistory.LogoLocalFileIDGT(*i.LogoLocalFileIDGT))
+	}
+	if i.LogoLocalFileIDGTE != nil {
+		predicates = append(predicates, subprocessorhistory.LogoLocalFileIDGTE(*i.LogoLocalFileIDGTE))
+	}
+	if i.LogoLocalFileIDLT != nil {
+		predicates = append(predicates, subprocessorhistory.LogoLocalFileIDLT(*i.LogoLocalFileIDLT))
+	}
+	if i.LogoLocalFileIDLTE != nil {
+		predicates = append(predicates, subprocessorhistory.LogoLocalFileIDLTE(*i.LogoLocalFileIDLTE))
+	}
+	if i.LogoLocalFileIDContains != nil {
+		predicates = append(predicates, subprocessorhistory.LogoLocalFileIDContains(*i.LogoLocalFileIDContains))
+	}
+	if i.LogoLocalFileIDHasPrefix != nil {
+		predicates = append(predicates, subprocessorhistory.LogoLocalFileIDHasPrefix(*i.LogoLocalFileIDHasPrefix))
+	}
+	if i.LogoLocalFileIDHasSuffix != nil {
+		predicates = append(predicates, subprocessorhistory.LogoLocalFileIDHasSuffix(*i.LogoLocalFileIDHasSuffix))
+	}
+	if i.LogoLocalFileIDIsNil {
+		predicates = append(predicates, subprocessorhistory.LogoLocalFileIDIsNil())
+	}
+	if i.LogoLocalFileIDNotNil {
+		predicates = append(predicates, subprocessorhistory.LogoLocalFileIDNotNil())
+	}
+	if i.LogoLocalFileIDEqualFold != nil {
+		predicates = append(predicates, subprocessorhistory.LogoLocalFileIDEqualFold(*i.LogoLocalFileIDEqualFold))
+	}
+	if i.LogoLocalFileIDContainsFold != nil {
+		predicates = append(predicates, subprocessorhistory.LogoLocalFileIDContainsFold(*i.LogoLocalFileIDContainsFold))
 	}
 
 	switch len(predicates) {

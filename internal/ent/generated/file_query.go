@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -52,6 +53,7 @@ type FileQuery struct {
 	withEvidence                 *EvidenceQuery
 	withEvents                   *EventQuery
 	withTrustCenterSetting       *TrustCenterSettingQuery
+	withSubprocessor             *SubprocessorQuery
 	withFKs                      bool
 	loadTotal                    []func(context.Context, []*File) error
 	modifiers                    []func(*sql.Selector)
@@ -68,6 +70,7 @@ type FileQuery struct {
 	withNamedEvidence            map[string]*EvidenceQuery
 	withNamedEvents              map[string]*EventQuery
 	withNamedTrustCenterSetting  map[string]*TrustCenterSettingQuery
+	withNamedSubprocessor        map[string]*SubprocessorQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -429,6 +432,31 @@ func (fq *FileQuery) QueryTrustCenterSetting() *TrustCenterSettingQuery {
 	return query
 }
 
+// QuerySubprocessor chains the current query on the "subprocessor" edge.
+func (fq *FileQuery) QuerySubprocessor() *SubprocessorQuery {
+	query := (&SubprocessorClient{config: fq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := fq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := fq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, selector),
+			sqlgraph.To(subprocessor.Table, subprocessor.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.SubprocessorTable, file.SubprocessorPrimaryKey...),
+		)
+		schemaConfig := fq.schemaConfig
+		step.To.Schema = schemaConfig.Subprocessor
+		step.Edge.Schema = schemaConfig.SubprocessorFiles
+		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first File entity from the query.
 // Returns a *NotFoundError when no File was found.
 func (fq *FileQuery) First(ctx context.Context) (*File, error) {
@@ -634,6 +662,7 @@ func (fq *FileQuery) Clone() *FileQuery {
 		withEvidence:            fq.withEvidence.Clone(),
 		withEvents:              fq.withEvents.Clone(),
 		withTrustCenterSetting:  fq.withTrustCenterSetting.Clone(),
+		withSubprocessor:        fq.withSubprocessor.Clone(),
 		// clone intermediate query.
 		sql:       fq.sql.Clone(),
 		path:      fq.path,
@@ -784,6 +813,17 @@ func (fq *FileQuery) WithTrustCenterSetting(opts ...func(*TrustCenterSettingQuer
 	return fq
 }
 
+// WithSubprocessor tells the query-builder to eager-load the nodes that are connected to
+// the "subprocessor" edge. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithSubprocessor(opts ...func(*SubprocessorQuery)) *FileQuery {
+	query := (&SubprocessorClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	fq.withSubprocessor = query
+	return fq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -869,7 +909,7 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 		nodes       = []*File{}
 		withFKs     = fq.withFKs
 		_spec       = fq.querySpec()
-		loadedTypes = [13]bool{
+		loadedTypes = [14]bool{
 			fq.withUser != nil,
 			fq.withOrganization != nil,
 			fq.withGroups != nil,
@@ -883,6 +923,7 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			fq.withEvidence != nil,
 			fq.withEvents != nil,
 			fq.withTrustCenterSetting != nil,
+			fq.withSubprocessor != nil,
 		}
 	)
 	if withFKs {
@@ -1006,6 +1047,13 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			return nil, err
 		}
 	}
+	if query := fq.withSubprocessor; query != nil {
+		if err := fq.loadSubprocessor(ctx, query, nodes,
+			func(n *File) { n.Edges.Subprocessor = []*Subprocessor{} },
+			func(n *File, e *Subprocessor) { n.Edges.Subprocessor = append(n.Edges.Subprocessor, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range fq.withNamedUser {
 		if err := fq.loadUser(ctx, query, nodes,
 			func(n *File) { n.appendNamedUser(name) },
@@ -1094,6 +1142,13 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 		if err := fq.loadTrustCenterSetting(ctx, query, nodes,
 			func(n *File) { n.appendNamedTrustCenterSetting(name) },
 			func(n *File, e *TrustCenterSetting) { n.appendNamedTrustCenterSetting(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range fq.withNamedSubprocessor {
+		if err := fq.loadSubprocessor(ctx, query, nodes,
+			func(n *File) { n.appendNamedSubprocessor(name) },
+			func(n *File, e *Subprocessor) { n.appendNamedSubprocessor(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1911,6 +1966,68 @@ func (fq *FileQuery) loadTrustCenterSetting(ctx context.Context, query *TrustCen
 	}
 	return nil
 }
+func (fq *FileQuery) loadSubprocessor(ctx context.Context, query *SubprocessorQuery, nodes []*File, init func(*File), assign func(*File, *Subprocessor)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*File)
+	nids := make(map[string]map[*File]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(file.SubprocessorTable)
+		joinT.Schema(fq.schemaConfig.SubprocessorFiles)
+		s.Join(joinT).On(s.C(subprocessor.FieldID), joinT.C(file.SubprocessorPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(file.SubprocessorPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(file.SubprocessorPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*File]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Subprocessor](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "subprocessor" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (fq *FileQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := fq.querySpec()
@@ -2189,6 +2306,20 @@ func (fq *FileQuery) WithNamedTrustCenterSetting(name string, opts ...func(*Trus
 		fq.withNamedTrustCenterSetting = make(map[string]*TrustCenterSettingQuery)
 	}
 	fq.withNamedTrustCenterSetting[name] = query
+	return fq
+}
+
+// WithNamedSubprocessor tells the query-builder to eager-load the nodes that are connected to the "subprocessor"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithNamedSubprocessor(name string, opts ...func(*SubprocessorQuery)) *FileQuery {
+	query := (&SubprocessorClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if fq.withNamedSubprocessor == nil {
+		fq.withNamedSubprocessor = make(map[string]*SubprocessorQuery)
+	}
+	fq.withNamedSubprocessor[name] = query
 	return fq
 }
 

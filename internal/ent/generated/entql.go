@@ -2734,13 +2734,19 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Subprocessor",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			subprocessor.FieldCreatedAt: {Type: field.TypeTime, Column: subprocessor.FieldCreatedAt},
-			subprocessor.FieldUpdatedAt: {Type: field.TypeTime, Column: subprocessor.FieldUpdatedAt},
-			subprocessor.FieldCreatedBy: {Type: field.TypeString, Column: subprocessor.FieldCreatedBy},
-			subprocessor.FieldUpdatedBy: {Type: field.TypeString, Column: subprocessor.FieldUpdatedBy},
-			subprocessor.FieldDeletedAt: {Type: field.TypeTime, Column: subprocessor.FieldDeletedAt},
-			subprocessor.FieldDeletedBy: {Type: field.TypeString, Column: subprocessor.FieldDeletedBy},
-			subprocessor.FieldTags:      {Type: field.TypeJSON, Column: subprocessor.FieldTags},
+			subprocessor.FieldCreatedAt:       {Type: field.TypeTime, Column: subprocessor.FieldCreatedAt},
+			subprocessor.FieldUpdatedAt:       {Type: field.TypeTime, Column: subprocessor.FieldUpdatedAt},
+			subprocessor.FieldCreatedBy:       {Type: field.TypeString, Column: subprocessor.FieldCreatedBy},
+			subprocessor.FieldUpdatedBy:       {Type: field.TypeString, Column: subprocessor.FieldUpdatedBy},
+			subprocessor.FieldDeletedAt:       {Type: field.TypeTime, Column: subprocessor.FieldDeletedAt},
+			subprocessor.FieldDeletedBy:       {Type: field.TypeString, Column: subprocessor.FieldDeletedBy},
+			subprocessor.FieldTags:            {Type: field.TypeJSON, Column: subprocessor.FieldTags},
+			subprocessor.FieldOwnerID:         {Type: field.TypeString, Column: subprocessor.FieldOwnerID},
+			subprocessor.FieldSystemOwned:     {Type: field.TypeBool, Column: subprocessor.FieldSystemOwned},
+			subprocessor.FieldName:            {Type: field.TypeString, Column: subprocessor.FieldName},
+			subprocessor.FieldDescription:     {Type: field.TypeString, Column: subprocessor.FieldDescription},
+			subprocessor.FieldLogoRemoteURL:   {Type: field.TypeString, Column: subprocessor.FieldLogoRemoteURL},
+			subprocessor.FieldLogoLocalFileID: {Type: field.TypeString, Column: subprocessor.FieldLogoLocalFileID},
 		},
 	}
 	graph.Nodes[88] = &sqlgraph.Node{
@@ -2754,16 +2760,22 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "SubprocessorHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			subprocessorhistory.FieldHistoryTime: {Type: field.TypeTime, Column: subprocessorhistory.FieldHistoryTime},
-			subprocessorhistory.FieldRef:         {Type: field.TypeString, Column: subprocessorhistory.FieldRef},
-			subprocessorhistory.FieldOperation:   {Type: field.TypeEnum, Column: subprocessorhistory.FieldOperation},
-			subprocessorhistory.FieldCreatedAt:   {Type: field.TypeTime, Column: subprocessorhistory.FieldCreatedAt},
-			subprocessorhistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: subprocessorhistory.FieldUpdatedAt},
-			subprocessorhistory.FieldCreatedBy:   {Type: field.TypeString, Column: subprocessorhistory.FieldCreatedBy},
-			subprocessorhistory.FieldUpdatedBy:   {Type: field.TypeString, Column: subprocessorhistory.FieldUpdatedBy},
-			subprocessorhistory.FieldDeletedAt:   {Type: field.TypeTime, Column: subprocessorhistory.FieldDeletedAt},
-			subprocessorhistory.FieldDeletedBy:   {Type: field.TypeString, Column: subprocessorhistory.FieldDeletedBy},
-			subprocessorhistory.FieldTags:        {Type: field.TypeJSON, Column: subprocessorhistory.FieldTags},
+			subprocessorhistory.FieldHistoryTime:     {Type: field.TypeTime, Column: subprocessorhistory.FieldHistoryTime},
+			subprocessorhistory.FieldRef:             {Type: field.TypeString, Column: subprocessorhistory.FieldRef},
+			subprocessorhistory.FieldOperation:       {Type: field.TypeEnum, Column: subprocessorhistory.FieldOperation},
+			subprocessorhistory.FieldCreatedAt:       {Type: field.TypeTime, Column: subprocessorhistory.FieldCreatedAt},
+			subprocessorhistory.FieldUpdatedAt:       {Type: field.TypeTime, Column: subprocessorhistory.FieldUpdatedAt},
+			subprocessorhistory.FieldCreatedBy:       {Type: field.TypeString, Column: subprocessorhistory.FieldCreatedBy},
+			subprocessorhistory.FieldUpdatedBy:       {Type: field.TypeString, Column: subprocessorhistory.FieldUpdatedBy},
+			subprocessorhistory.FieldDeletedAt:       {Type: field.TypeTime, Column: subprocessorhistory.FieldDeletedAt},
+			subprocessorhistory.FieldDeletedBy:       {Type: field.TypeString, Column: subprocessorhistory.FieldDeletedBy},
+			subprocessorhistory.FieldTags:            {Type: field.TypeJSON, Column: subprocessorhistory.FieldTags},
+			subprocessorhistory.FieldOwnerID:         {Type: field.TypeString, Column: subprocessorhistory.FieldOwnerID},
+			subprocessorhistory.FieldSystemOwned:     {Type: field.TypeBool, Column: subprocessorhistory.FieldSystemOwned},
+			subprocessorhistory.FieldName:            {Type: field.TypeString, Column: subprocessorhistory.FieldName},
+			subprocessorhistory.FieldDescription:     {Type: field.TypeString, Column: subprocessorhistory.FieldDescription},
+			subprocessorhistory.FieldLogoRemoteURL:   {Type: field.TypeString, Column: subprocessorhistory.FieldLogoRemoteURL},
+			subprocessorhistory.FieldLogoLocalFileID: {Type: field.TypeString, Column: subprocessorhistory.FieldLogoLocalFileID},
 		},
 	}
 	graph.Nodes[89] = &sqlgraph.Node{
@@ -4688,6 +4700,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"File",
 		"TrustCenterSetting",
+	)
+	graph.MustAddE(
+		"subprocessor",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.SubprocessorTable,
+			Columns: file.SubprocessorPrimaryKey,
+			Bidi:    false,
+		},
+		"File",
+		"Subprocessor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -6766,6 +6790,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Scan",
 	)
 	graph.MustAddE(
+		"subprocessors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SubprocessorsTable,
+			Columns: []string{organization.SubprocessorsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Subprocessor",
+	)
+	graph.MustAddE(
 		"members",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -7772,6 +7808,42 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Subcontrol",
 		"MappedControl",
+	)
+	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   subprocessor.OwnerTable,
+			Columns: []string{subprocessor.OwnerColumn},
+			Bidi:    false,
+		},
+		"Subprocessor",
+		"Organization",
+	)
+	graph.MustAddE(
+		"files",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subprocessor.FilesTable,
+			Columns: subprocessor.FilesPrimaryKey,
+			Bidi:    false,
+		},
+		"Subprocessor",
+		"File",
+	)
+	graph.MustAddE(
+		"logo_file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subprocessor.LogoFileTable,
+			Columns: []string{subprocessor.LogoFileColumn},
+			Bidi:    false,
+		},
+		"Subprocessor",
+		"File",
 	)
 	graph.MustAddE(
 		"owner",
@@ -13815,6 +13887,20 @@ func (f *FileFilter) WhereHasTrustCenterSetting() {
 // WhereHasTrustCenterSettingWith applies a predicate to check if query has an edge trust_center_setting with a given conditions (other predicates).
 func (f *FileFilter) WhereHasTrustCenterSettingWith(preds ...predicate.TrustCenterSetting) {
 	f.Where(entql.HasEdgeWith("trust_center_setting", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSubprocessor applies a predicate to check if query has an edge subprocessor.
+func (f *FileFilter) WhereHasSubprocessor() {
+	f.Where(entql.HasEdge("subprocessor"))
+}
+
+// WhereHasSubprocessorWith applies a predicate to check if query has an edge subprocessor with a given conditions (other predicates).
+func (f *FileFilter) WhereHasSubprocessorWith(preds ...predicate.Subprocessor) {
+	f.Where(entql.HasEdgeWith("subprocessor", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -20148,6 +20234,20 @@ func (f *OrganizationFilter) WhereHasScansWith(preds ...predicate.Scan) {
 	})))
 }
 
+// WhereHasSubprocessors applies a predicate to check if query has an edge subprocessors.
+func (f *OrganizationFilter) WhereHasSubprocessors() {
+	f.Where(entql.HasEdge("subprocessors"))
+}
+
+// WhereHasSubprocessorsWith applies a predicate to check if query has an edge subprocessors with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasSubprocessorsWith(preds ...predicate.Subprocessor) {
+	f.Where(entql.HasEdgeWith("subprocessors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasMembers applies a predicate to check if query has an edge members.
 func (f *OrganizationFilter) WhereHasMembers() {
 	f.Where(entql.HasEdge("members"))
@@ -24549,6 +24649,78 @@ func (f *SubprocessorFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(subprocessor.FieldTags))
 }
 
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *SubprocessorFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(subprocessor.FieldOwnerID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *SubprocessorFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(subprocessor.FieldSystemOwned))
+}
+
+// WhereName applies the entql string predicate on the name field.
+func (f *SubprocessorFilter) WhereName(p entql.StringP) {
+	f.Where(p.Field(subprocessor.FieldName))
+}
+
+// WhereDescription applies the entql string predicate on the description field.
+func (f *SubprocessorFilter) WhereDescription(p entql.StringP) {
+	f.Where(p.Field(subprocessor.FieldDescription))
+}
+
+// WhereLogoRemoteURL applies the entql string predicate on the logo_remote_url field.
+func (f *SubprocessorFilter) WhereLogoRemoteURL(p entql.StringP) {
+	f.Where(p.Field(subprocessor.FieldLogoRemoteURL))
+}
+
+// WhereLogoLocalFileID applies the entql string predicate on the logo_local_file_id field.
+func (f *SubprocessorFilter) WhereLogoLocalFileID(p entql.StringP) {
+	f.Where(p.Field(subprocessor.FieldLogoLocalFileID))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *SubprocessorFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *SubprocessorFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFiles applies a predicate to check if query has an edge files.
+func (f *SubprocessorFilter) WhereHasFiles() {
+	f.Where(entql.HasEdge("files"))
+}
+
+// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
+func (f *SubprocessorFilter) WhereHasFilesWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasLogoFile applies a predicate to check if query has an edge logo_file.
+func (f *SubprocessorFilter) WhereHasLogoFile() {
+	f.Where(entql.HasEdge("logo_file"))
+}
+
+// WhereHasLogoFileWith applies a predicate to check if query has an edge logo_file with a given conditions (other predicates).
+func (f *SubprocessorFilter) WhereHasLogoFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("logo_file", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (shq *SubprocessorHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	shq.predicates = append(shq.predicates, pred)
@@ -24637,6 +24809,36 @@ func (f *SubprocessorHistoryFilter) WhereDeletedBy(p entql.StringP) {
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
 func (f *SubprocessorHistoryFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(subprocessorhistory.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *SubprocessorHistoryFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(subprocessorhistory.FieldOwnerID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *SubprocessorHistoryFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(subprocessorhistory.FieldSystemOwned))
+}
+
+// WhereName applies the entql string predicate on the name field.
+func (f *SubprocessorHistoryFilter) WhereName(p entql.StringP) {
+	f.Where(p.Field(subprocessorhistory.FieldName))
+}
+
+// WhereDescription applies the entql string predicate on the description field.
+func (f *SubprocessorHistoryFilter) WhereDescription(p entql.StringP) {
+	f.Where(p.Field(subprocessorhistory.FieldDescription))
+}
+
+// WhereLogoRemoteURL applies the entql string predicate on the logo_remote_url field.
+func (f *SubprocessorHistoryFilter) WhereLogoRemoteURL(p entql.StringP) {
+	f.Where(p.Field(subprocessorhistory.FieldLogoRemoteURL))
+}
+
+// WhereLogoLocalFileID applies the entql string predicate on the logo_local_file_id field.
+func (f *SubprocessorHistoryFilter) WhereLogoLocalFileID(p entql.StringP) {
+	f.Where(p.Field(subprocessorhistory.FieldLogoLocalFileID))
 }
 
 // addPredicate implements the predicateAdder interface.

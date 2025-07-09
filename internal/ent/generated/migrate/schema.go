@@ -4130,12 +4130,50 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
 	}
 	// SubprocessorsTable holds the schema information for the "subprocessors" table.
 	SubprocessorsTable = &schema.Table{
 		Name:       "subprocessors",
 		Columns:    SubprocessorsColumns,
 		PrimaryKey: []*schema.Column{SubprocessorsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "subprocessors_organizations_subprocessors",
+				Columns:    []*schema.Column{SubprocessorsColumns[12]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "subprocessors_files_logo_file",
+				Columns:    []*schema.Column{SubprocessorsColumns[13]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "subprocessor_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{SubprocessorsColumns[12]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "subprocessor_name_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{SubprocessorsColumns[9], SubprocessorsColumns[12]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
 	}
 	// SubprocessorHistoryColumns holds the columns for the "subprocessor_history" table.
 	SubprocessorHistoryColumns = []*schema.Column{
@@ -4150,6 +4188,12 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
 	}
 	// SubprocessorHistoryTable holds the schema information for the "subprocessor_history" table.
 	SubprocessorHistoryTable = &schema.Table{
@@ -7315,6 +7359,31 @@ var (
 			},
 		},
 	}
+	// SubprocessorFilesColumns holds the columns for the "subprocessor_files" table.
+	SubprocessorFilesColumns = []*schema.Column{
+		{Name: "subprocessor_id", Type: field.TypeString},
+		{Name: "file_id", Type: field.TypeString},
+	}
+	// SubprocessorFilesTable holds the schema information for the "subprocessor_files" table.
+	SubprocessorFilesTable = &schema.Table{
+		Name:       "subprocessor_files",
+		Columns:    SubprocessorFilesColumns,
+		PrimaryKey: []*schema.Column{SubprocessorFilesColumns[0], SubprocessorFilesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "subprocessor_files_subprocessor_id",
+				Columns:    []*schema.Column{SubprocessorFilesColumns[0]},
+				RefColumns: []*schema.Column{SubprocessorsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "subprocessor_files_file_id",
+				Columns:    []*schema.Column{SubprocessorFilesColumns[1]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// SubscriberEventsColumns holds the columns for the "subscriber_events" table.
 	SubscriberEventsColumns = []*schema.Column{
 		{Name: "subscriber_id", Type: field.TypeString},
@@ -7721,6 +7790,7 @@ var (
 		SubcontrolRisksTable,
 		SubcontrolProceduresTable,
 		SubcontrolControlImplementationsTable,
+		SubprocessorFilesTable,
 		SubscriberEventsTable,
 		TaskEvidenceTable,
 		TemplateFilesTable,
@@ -7966,6 +8036,8 @@ func init() {
 	SubcontrolHistoryTable.Annotation = &entsql.Annotation{
 		Table: "subcontrol_history",
 	}
+	SubprocessorsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	SubprocessorsTable.ForeignKeys[1].RefTable = FilesTable
 	SubprocessorHistoryTable.Annotation = &entsql.Annotation{
 		Table: "subprocessor_history",
 	}
@@ -8201,6 +8273,8 @@ func init() {
 	SubcontrolProceduresTable.ForeignKeys[1].RefTable = ProceduresTable
 	SubcontrolControlImplementationsTable.ForeignKeys[0].RefTable = SubcontrolsTable
 	SubcontrolControlImplementationsTable.ForeignKeys[1].RefTable = ControlImplementationsTable
+	SubprocessorFilesTable.ForeignKeys[0].RefTable = SubprocessorsTable
+	SubprocessorFilesTable.ForeignKeys[1].RefTable = FilesTable
 	SubscriberEventsTable.ForeignKeys[0].RefTable = SubscribersTable
 	SubscriberEventsTable.ForeignKeys[1].RefTable = EventsTable
 	TaskEvidenceTable.ForeignKeys[0].RefTable = TasksTable

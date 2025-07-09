@@ -211,10 +211,10 @@ type MutationResolver interface {
 	CreateBulkCSVSubcontrol(ctx context.Context, input graphql.Upload) (*model.SubcontrolBulkCreatePayload, error)
 	UpdateSubcontrol(ctx context.Context, id string, input generated.UpdateSubcontrolInput) (*model.SubcontrolUpdatePayload, error)
 	DeleteSubcontrol(ctx context.Context, id string) (*model.SubcontrolDeletePayload, error)
-	CreateSubprocessor(ctx context.Context, input generated.CreateSubprocessorInput) (*model.SubprocessorCreatePayload, error)
+	CreateSubprocessor(ctx context.Context, input generated.CreateSubprocessorInput, logoFile *graphql.Upload) (*model.SubprocessorCreatePayload, error)
 	CreateBulkSubprocessor(ctx context.Context, input []*generated.CreateSubprocessorInput) (*model.SubprocessorBulkCreatePayload, error)
 	CreateBulkCSVSubprocessor(ctx context.Context, input graphql.Upload) (*model.SubprocessorBulkCreatePayload, error)
-	UpdateSubprocessor(ctx context.Context, id string, input generated.UpdateSubprocessorInput) (*model.SubprocessorUpdatePayload, error)
+	UpdateSubprocessor(ctx context.Context, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload) (*model.SubprocessorUpdatePayload, error)
 	DeleteSubprocessor(ctx context.Context, id string) (*model.SubprocessorDeletePayload, error)
 	CreateSubscriber(ctx context.Context, input generated.CreateSubscriberInput) (*model.SubscriberCreatePayload, error)
 	CreateBulkSubscriber(ctx context.Context, input []*generated.CreateSubscriberInput) (*model.SubscriberBulkCreatePayload, error)
@@ -3950,6 +3950,11 @@ func (ec *executionContext) field_Mutation_createSubprocessor_args(ctx context.C
 		return nil, err
 	}
 	args["input"] = arg0
+	arg1, err := ec.field_Mutation_createSubprocessor_argsLogoFile(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["logoFile"] = arg1
 	return args, nil
 }
 func (ec *executionContext) field_Mutation_createSubprocessor_argsInput(
@@ -3967,6 +3972,24 @@ func (ec *executionContext) field_Mutation_createSubprocessor_argsInput(
 	}
 
 	var zeroVal generated.CreateSubprocessorInput
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_createSubprocessor_argsLogoFile(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (*graphql.Upload, error) {
+	if _, ok := rawArgs["logoFile"]; !ok {
+		var zeroVal *graphql.Upload
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("logoFile"))
+	if tmp, ok := rawArgs["logoFile"]; ok {
+		return ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
+	}
+
+	var zeroVal *graphql.Upload
 	return zeroVal, nil
 }
 
@@ -7711,6 +7734,11 @@ func (ec *executionContext) field_Mutation_updateSubprocessor_args(ctx context.C
 		return nil, err
 	}
 	args["input"] = arg1
+	arg2, err := ec.field_Mutation_updateSubprocessor_argsLogoFile(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["logoFile"] = arg2
 	return args, nil
 }
 func (ec *executionContext) field_Mutation_updateSubprocessor_argsID(
@@ -7746,6 +7774,24 @@ func (ec *executionContext) field_Mutation_updateSubprocessor_argsInput(
 	}
 
 	var zeroVal generated.UpdateSubprocessorInput
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_updateSubprocessor_argsLogoFile(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (*graphql.Upload, error) {
+	if _, ok := rawArgs["logoFile"]; !ok {
+		var zeroVal *graphql.Upload
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("logoFile"))
+	if tmp, ok := rawArgs["logoFile"]; ok {
+		return ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
+	}
+
+	var zeroVal *graphql.Upload
 	return zeroVal, nil
 }
 
@@ -20120,7 +20166,7 @@ func (ec *executionContext) _Mutation_createSubprocessor(ctx context.Context, fi
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateSubprocessor(rctx, fc.Args["input"].(generated.CreateSubprocessorInput))
+		return ec.resolvers.Mutation().CreateSubprocessor(rctx, fc.Args["input"].(generated.CreateSubprocessorInput), fc.Args["logoFile"].(*graphql.Upload))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -20297,7 +20343,7 @@ func (ec *executionContext) _Mutation_updateSubprocessor(ctx context.Context, fi
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateSubprocessor(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateSubprocessorInput))
+		return ec.resolvers.Mutation().UpdateSubprocessor(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateSubprocessorInput), fc.Args["logoFile"].(*graphql.Upload))
 	})
 	if err != nil {
 		ec.Error(ctx, err)

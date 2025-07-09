@@ -4,11 +4,14 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 )
 
@@ -109,6 +112,82 @@ func (sc *SubprocessorCreate) SetTags(s []string) *SubprocessorCreate {
 	return sc
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (sc *SubprocessorCreate) SetOwnerID(s string) *SubprocessorCreate {
+	sc.mutation.SetOwnerID(s)
+	return sc
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (sc *SubprocessorCreate) SetNillableOwnerID(s *string) *SubprocessorCreate {
+	if s != nil {
+		sc.SetOwnerID(*s)
+	}
+	return sc
+}
+
+// SetSystemOwned sets the "system_owned" field.
+func (sc *SubprocessorCreate) SetSystemOwned(b bool) *SubprocessorCreate {
+	sc.mutation.SetSystemOwned(b)
+	return sc
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (sc *SubprocessorCreate) SetNillableSystemOwned(b *bool) *SubprocessorCreate {
+	if b != nil {
+		sc.SetSystemOwned(*b)
+	}
+	return sc
+}
+
+// SetName sets the "name" field.
+func (sc *SubprocessorCreate) SetName(s string) *SubprocessorCreate {
+	sc.mutation.SetName(s)
+	return sc
+}
+
+// SetDescription sets the "description" field.
+func (sc *SubprocessorCreate) SetDescription(s string) *SubprocessorCreate {
+	sc.mutation.SetDescription(s)
+	return sc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (sc *SubprocessorCreate) SetNillableDescription(s *string) *SubprocessorCreate {
+	if s != nil {
+		sc.SetDescription(*s)
+	}
+	return sc
+}
+
+// SetLogoRemoteURL sets the "logo_remote_url" field.
+func (sc *SubprocessorCreate) SetLogoRemoteURL(s string) *SubprocessorCreate {
+	sc.mutation.SetLogoRemoteURL(s)
+	return sc
+}
+
+// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
+func (sc *SubprocessorCreate) SetNillableLogoRemoteURL(s *string) *SubprocessorCreate {
+	if s != nil {
+		sc.SetLogoRemoteURL(*s)
+	}
+	return sc
+}
+
+// SetLogoLocalFileID sets the "logo_local_file_id" field.
+func (sc *SubprocessorCreate) SetLogoLocalFileID(s string) *SubprocessorCreate {
+	sc.mutation.SetLogoLocalFileID(s)
+	return sc
+}
+
+// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
+func (sc *SubprocessorCreate) SetNillableLogoLocalFileID(s *string) *SubprocessorCreate {
+	if s != nil {
+		sc.SetLogoLocalFileID(*s)
+	}
+	return sc
+}
+
 // SetID sets the "id" field.
 func (sc *SubprocessorCreate) SetID(s string) *SubprocessorCreate {
 	sc.mutation.SetID(s)
@@ -121,6 +200,45 @@ func (sc *SubprocessorCreate) SetNillableID(s *string) *SubprocessorCreate {
 		sc.SetID(*s)
 	}
 	return sc
+}
+
+// SetOwner sets the "owner" edge to the Organization entity.
+func (sc *SubprocessorCreate) SetOwner(o *Organization) *SubprocessorCreate {
+	return sc.SetOwnerID(o.ID)
+}
+
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (sc *SubprocessorCreate) AddFileIDs(ids ...string) *SubprocessorCreate {
+	sc.mutation.AddFileIDs(ids...)
+	return sc
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (sc *SubprocessorCreate) AddFiles(f ...*File) *SubprocessorCreate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return sc.AddFileIDs(ids...)
+}
+
+// SetLogoFileID sets the "logo_file" edge to the File entity by ID.
+func (sc *SubprocessorCreate) SetLogoFileID(id string) *SubprocessorCreate {
+	sc.mutation.SetLogoFileID(id)
+	return sc
+}
+
+// SetNillableLogoFileID sets the "logo_file" edge to the File entity by ID if the given value is not nil.
+func (sc *SubprocessorCreate) SetNillableLogoFileID(id *string) *SubprocessorCreate {
+	if id != nil {
+		sc = sc.SetLogoFileID(*id)
+	}
+	return sc
+}
+
+// SetLogoFile sets the "logo_file" edge to the File entity.
+func (sc *SubprocessorCreate) SetLogoFile(f *File) *SubprocessorCreate {
+	return sc.SetLogoFileID(f.ID)
 }
 
 // Mutation returns the SubprocessorMutation object of the builder.
@@ -178,6 +296,10 @@ func (sc *SubprocessorCreate) defaults() error {
 		v := subprocessor.DefaultTags
 		sc.mutation.SetTags(v)
 	}
+	if _, ok := sc.mutation.SystemOwned(); !ok {
+		v := subprocessor.DefaultSystemOwned
+		sc.mutation.SetSystemOwned(v)
+	}
 	if _, ok := sc.mutation.ID(); !ok {
 		if subprocessor.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized subprocessor.DefaultID (forgotten import generated/runtime?)")
@@ -190,6 +312,19 @@ func (sc *SubprocessorCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (sc *SubprocessorCreate) check() error {
+	if _, ok := sc.mutation.Name(); !ok {
+		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Subprocessor.name"`)}
+	}
+	if v, ok := sc.mutation.Name(); ok {
+		if err := subprocessor.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Subprocessor.name": %w`, err)}
+		}
+	}
+	if v, ok := sc.mutation.LogoRemoteURL(); ok {
+		if err := subprocessor.LogoRemoteURLValidator(v); err != nil {
+			return &ValidationError{Name: "logo_remote_url", err: fmt.Errorf(`generated: validator failed for field "Subprocessor.logo_remote_url": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -253,6 +388,75 @@ func (sc *SubprocessorCreate) createSpec() (*Subprocessor, *sqlgraph.CreateSpec)
 	if value, ok := sc.mutation.Tags(); ok {
 		_spec.SetField(subprocessor.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := sc.mutation.SystemOwned(); ok {
+		_spec.SetField(subprocessor.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := sc.mutation.Name(); ok {
+		_spec.SetField(subprocessor.FieldName, field.TypeString, value)
+		_node.Name = value
+	}
+	if value, ok := sc.mutation.Description(); ok {
+		_spec.SetField(subprocessor.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if value, ok := sc.mutation.LogoRemoteURL(); ok {
+		_spec.SetField(subprocessor.FieldLogoRemoteURL, field.TypeString, value)
+		_node.LogoRemoteURL = &value
+	}
+	if nodes := sc.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   subprocessor.OwnerTable,
+			Columns: []string{subprocessor.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.Subprocessor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subprocessor.FilesTable,
+			Columns: subprocessor.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.SubprocessorFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.LogoFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subprocessor.LogoFileTable,
+			Columns: []string{subprocessor.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.Subprocessor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.LogoLocalFileID = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

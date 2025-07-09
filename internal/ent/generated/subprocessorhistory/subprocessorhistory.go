@@ -37,6 +37,18 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldOwnerID holds the string denoting the owner_id field in the database.
+	FieldOwnerID = "owner_id"
+	// FieldSystemOwned holds the string denoting the system_owned field in the database.
+	FieldSystemOwned = "system_owned"
+	// FieldName holds the string denoting the name field in the database.
+	FieldName = "name"
+	// FieldDescription holds the string denoting the description field in the database.
+	FieldDescription = "description"
+	// FieldLogoRemoteURL holds the string denoting the logo_remote_url field in the database.
+	FieldLogoRemoteURL = "logo_remote_url"
+	// FieldLogoLocalFileID holds the string denoting the logo_local_file_id field in the database.
+	FieldLogoLocalFileID = "logo_local_file_id"
 	// Table holds the table name of the subprocessorhistory in the database.
 	Table = "subprocessor_history"
 )
@@ -54,6 +66,12 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldTags,
+	FieldOwnerID,
+	FieldSystemOwned,
+	FieldName,
+	FieldDescription,
+	FieldLogoRemoteURL,
+	FieldLogoLocalFileID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -83,6 +101,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
+	DefaultSystemOwned bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -148,6 +168,36 @@ func ByDeletedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByDeletedBy orders the results by the deleted_by field.
 func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
+}
+
+// ByOwnerID orders the results by the owner_id field.
+func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
+// BySystemOwned orders the results by the system_owned field.
+func BySystemOwned(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSystemOwned, opts...).ToFunc()
+}
+
+// ByName orders the results by the name field.
+func ByName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByDescription orders the results by the description field.
+func ByDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByLogoRemoteURL orders the results by the logo_remote_url field.
+func ByLogoRemoteURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLogoRemoteURL, opts...).ToFunc()
+}
+
+// ByLogoLocalFileID orders the results by the logo_local_file_id field.
+func ByLogoLocalFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLogoLocalFileID, opts...).ToFunc()
 }
 
 var (

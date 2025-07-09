@@ -8,6 +8,17 @@ mutation CreateBulkCSVSubprocessor($input: Upload!) {
       tags
       updatedAt
       updatedBy
+      name
+      description
+      logoRemoteURL
+      logoLocalFileID
+      logoFile {
+        presignedURL
+      }
+      owner {
+        id
+        name
+      }
     }
   }
 }
@@ -21,12 +32,23 @@ mutation CreateBulkSubprocessor($input: [CreateSubprocessorInput!]) {
       tags
       updatedAt
       updatedBy
+      name
+      description
+      logoRemoteURL
+      logoLocalFileID
+      logoFile {
+        presignedURL
+      }
+      owner {
+        id
+        name
+      }
     }
   }
 }
 
-mutation CreateSubprocessor($input: CreateSubprocessorInput!) {
-  createSubprocessor(input: $input) {
+mutation CreateSubprocessor($input: CreateSubprocessorInput!, $logoFile: Upload) {
+  createSubprocessor(input: $input, logoFile: $logoFile) {
     subprocessor {
       createdAt
       createdBy
@@ -34,6 +56,17 @@ mutation CreateSubprocessor($input: CreateSubprocessorInput!) {
       tags
       updatedAt
       updatedBy
+      name
+      description
+      logoRemoteURL
+      logoLocalFileID
+      logoFile {
+        presignedURL
+      }
+      owner {
+        id
+        name
+      }
     }
   }
 }
@@ -61,6 +94,17 @@ query GetAllSubprocessors {
         tags
         updatedAt
         updatedBy
+        name
+        description
+        logoRemoteURL
+        logoLocalFileID
+        logoFile {
+          presignedURL
+        }
+        owner {
+          id
+          name
+        }
       }
     }
   }
@@ -73,6 +117,17 @@ query GetSubprocessorByID($subprocessorId: ID!) {
     tags
     updatedAt
     updatedBy
+    name
+    description
+    logoRemoteURL
+    logoLocalFileID
+    logoFile {
+      presignedURL
+    }
+    owner {
+      id
+      name
+    }
   }
 }
 
@@ -93,12 +148,23 @@ query GetSubprocessors($first: Int, $last: Int, $where: SubprocessorWhereInput) 
         tags
         updatedAt
         updatedBy
+        name
+        description
+        logoRemoteURL
+        logoLocalFileID
+        logoFile {
+          presignedURL
+        }
+        owner {
+          id
+          name
+        }
       }
     }
   }
 }
-mutation UpdateSubprocessor($updateSubprocessorId: ID!, $input: UpdateSubprocessorInput!) {
-  updateSubprocessor(id: $updateSubprocessorId, input: $input) {
+mutation UpdateSubprocessor($updateSubprocessorId: ID!, $input: UpdateSubprocessorInput!, $logoFile: Upload) {
+  updateSubprocessor(id: $updateSubprocessorId, input: $input, logoFile: $logoFile) {
     subprocessor {
       createdAt
       createdBy
@@ -106,6 +172,17 @@ mutation UpdateSubprocessor($updateSubprocessorId: ID!, $input: UpdateSubprocess
       tags
       updatedAt
       updatedBy
+      name
+      description
+      logoRemoteURL
+      logoLocalFileID
+      logoFile {
+        presignedURL
+      }
+      owner {
+        id
+        name
+      }
     }
   }
 }

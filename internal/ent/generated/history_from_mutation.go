@@ -9560,6 +9560,30 @@ func (m *SubprocessorMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetTags(tags)
 	}
 
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
+	if description, exists := m.Description(); exists {
+		create = create.SetDescription(description)
+	}
+
+	if logoRemoteURL, exists := m.LogoRemoteURL(); exists {
+		create = create.SetNillableLogoRemoteURL(&logoRemoteURL)
+	}
+
+	if logoLocalFileID, exists := m.LogoLocalFileID(); exists {
+		create = create.SetNillableLogoLocalFileID(&logoLocalFileID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -9632,6 +9656,42 @@ func (m *SubprocessorMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetTags(subprocessor.Tags)
 		}
 
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(subprocessor.OwnerID)
+		}
+
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(subprocessor.SystemOwned)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(subprocessor.Name)
+		}
+
+		if description, exists := m.Description(); exists {
+			create = create.SetDescription(description)
+		} else {
+			create = create.SetDescription(subprocessor.Description)
+		}
+
+		if logoRemoteURL, exists := m.LogoRemoteURL(); exists {
+			create = create.SetNillableLogoRemoteURL(&logoRemoteURL)
+		} else {
+			create = create.SetNillableLogoRemoteURL(subprocessor.LogoRemoteURL)
+		}
+
+		if logoLocalFileID, exists := m.LogoLocalFileID(); exists {
+			create = create.SetNillableLogoLocalFileID(&logoLocalFileID)
+		} else {
+			create = create.SetNillableLogoLocalFileID(subprocessor.LogoLocalFileID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -9671,6 +9731,12 @@ func (m *SubprocessorMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetDeletedAt(subprocessor.DeletedAt).
 			SetDeletedBy(subprocessor.DeletedBy).
 			SetTags(subprocessor.Tags).
+			SetOwnerID(subprocessor.OwnerID).
+			SetSystemOwned(subprocessor.SystemOwned).
+			SetName(subprocessor.Name).
+			SetDescription(subprocessor.Description).
+			SetNillableLogoRemoteURL(subprocessor.LogoRemoteURL).
+			SetNillableLogoLocalFileID(subprocessor.LogoLocalFileID).
 			Save(ctx)
 		if err != nil {
 			return err

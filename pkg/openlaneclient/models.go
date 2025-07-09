@@ -5014,6 +5014,7 @@ type CreateFileInput struct {
 	EvidenceIDs            []string `json:"evidenceIDs,omitempty"`
 	EventIDs               []string `json:"eventIDs,omitempty"`
 	TrustCenterSettingIDs  []string `json:"trustCenterSettingIDs,omitempty"`
+	SubprocessorIDs        []string `json:"subprocessorIDs,omitempty"`
 }
 
 type CreateFullProgramInput struct {
@@ -5428,6 +5429,7 @@ type CreateOrganizationInput struct {
 	TrustCenterIDs                  []string                        `json:"trustCenterIDs,omitempty"`
 	AssetIDs                        []string                        `json:"assetIDs,omitempty"`
 	ScanIDs                         []string                        `json:"scanIDs,omitempty"`
+	SubprocessorIDs                 []string                        `json:"subprocessorIDs,omitempty"`
 	CreateOrgSettings               *CreateOrganizationSettingInput `json:"createOrgSettings,omitempty"`
 }
 
@@ -5806,6 +5808,15 @@ type CreateSubcontrolInput struct {
 type CreateSubprocessorInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// name of the standard body
+	Name string `json:"name"`
+	// description of the subprocessor
+	Description *string `json:"description,omitempty"`
+	// URL of the logo
+	LogoRemoteURL *string  `json:"logoRemoteURL,omitempty"`
+	OwnerID       *string  `json:"ownerID,omitempty"`
+	FileIDs       []string `json:"fileIDs,omitempty"`
+	LogoFileID    *string  `json:"logoFileID,omitempty"`
 }
 
 // CreateSubscriberInput is used for create Subscriber object.
@@ -9152,6 +9163,7 @@ type File struct {
 	Evidence            []*Evidence            `json:"evidence,omitempty"`
 	Events              *EventConnection       `json:"events"`
 	TrustCenterSetting  []*TrustCenterSetting  `json:"trustCenterSetting,omitempty"`
+	Subprocessor        []*Subprocessor        `json:"subprocessor,omitempty"`
 	PresignedURL        *string                `json:"presignedURL,omitempty"`
 }
 
@@ -9852,6 +9864,9 @@ type FileWhereInput struct {
 	// trust_center_setting edge predicates
 	HasTrustCenterSetting     *bool                           `json:"hasTrustCenterSetting,omitempty"`
 	HasTrustCenterSettingWith []*TrustCenterSettingWhereInput `json:"hasTrustCenterSettingWith,omitempty"`
+	// subprocessor edge predicates
+	HasSubprocessor     *bool                     `json:"hasSubprocessor,omitempty"`
+	HasSubprocessorWith []*SubprocessorWhereInput `json:"hasSubprocessorWith,omitempty"`
 }
 
 type Group struct {
@@ -16579,6 +16594,7 @@ type Organization struct {
 	TrustCenters                  *TrustCenterConnection                `json:"trustCenters"`
 	Assets                        *AssetConnection                      `json:"assets"`
 	Scans                         *ScanConnection                       `json:"scans"`
+	Subprocessors                 *SubprocessorConnection               `json:"subprocessors"`
 	Members                       *OrgMembershipConnection              `json:"members"`
 }
 
@@ -17955,6 +17971,9 @@ type OrganizationWhereInput struct {
 	// scans edge predicates
 	HasScans     *bool             `json:"hasScans,omitempty"`
 	HasScansWith []*ScanWhereInput `json:"hasScansWith,omitempty"`
+	// subprocessors edge predicates
+	HasSubprocessors     *bool                     `json:"hasSubprocessors,omitempty"`
+	HasSubprocessorsWith []*SubprocessorWhereInput `json:"hasSubprocessorsWith,omitempty"`
 	// members edge predicates
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
 	HasMembersWith []*OrgMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -23529,6 +23548,21 @@ type Subprocessor struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// name of the standard body
+	Name string `json:"name"`
+	// description of the subprocessor
+	Description *string `json:"description,omitempty"`
+	// URL of the logo
+	LogoRemoteURL *string `json:"logoRemoteURL,omitempty"`
+	// The local logo file id, takes precedence over the logo remote URL
+	LogoLocalFileID *string         `json:"logoLocalFileID,omitempty"`
+	Owner           *Organization   `json:"owner,omitempty"`
+	Files           *FileConnection `json:"files"`
+	LogoFile        *File           `json:"logoFile,omitempty"`
 }
 
 func (Subprocessor) IsNode() {}
@@ -23580,6 +23614,18 @@ type SubprocessorHistory struct {
 	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// name of the standard body
+	Name string `json:"name"`
+	// description of the subprocessor
+	Description *string `json:"description,omitempty"`
+	// URL of the logo
+	LogoRemoteURL *string `json:"logoRemoteURL,omitempty"`
+	// The local logo file id, takes precedence over the logo remote URL
+	LogoLocalFileID *string `json:"logoLocalFileID,omitempty"`
 }
 
 func (SubprocessorHistory) IsNode() {}
@@ -23711,6 +23757,89 @@ type SubprocessorHistoryWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// name field predicates
+	Name             *string  `json:"name,omitempty"`
+	NameNeq          *string  `json:"nameNEQ,omitempty"`
+	NameIn           []string `json:"nameIn,omitempty"`
+	NameNotIn        []string `json:"nameNotIn,omitempty"`
+	NameGt           *string  `json:"nameGT,omitempty"`
+	NameGte          *string  `json:"nameGTE,omitempty"`
+	NameLt           *string  `json:"nameLT,omitempty"`
+	NameLte          *string  `json:"nameLTE,omitempty"`
+	NameContains     *string  `json:"nameContains,omitempty"`
+	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
+	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
+	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
+	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+	// description field predicates
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+	// logo_remote_url field predicates
+	LogoRemoteURL             *string  `json:"logoRemoteURL,omitempty"`
+	LogoRemoteURLNeq          *string  `json:"logoRemoteURLNEQ,omitempty"`
+	LogoRemoteURLIn           []string `json:"logoRemoteURLIn,omitempty"`
+	LogoRemoteURLNotIn        []string `json:"logoRemoteURLNotIn,omitempty"`
+	LogoRemoteURLGt           *string  `json:"logoRemoteURLGT,omitempty"`
+	LogoRemoteURLGte          *string  `json:"logoRemoteURLGTE,omitempty"`
+	LogoRemoteURLLt           *string  `json:"logoRemoteURLLT,omitempty"`
+	LogoRemoteURLLte          *string  `json:"logoRemoteURLLTE,omitempty"`
+	LogoRemoteURLContains     *string  `json:"logoRemoteURLContains,omitempty"`
+	LogoRemoteURLHasPrefix    *string  `json:"logoRemoteURLHasPrefix,omitempty"`
+	LogoRemoteURLHasSuffix    *string  `json:"logoRemoteURLHasSuffix,omitempty"`
+	LogoRemoteURLIsNil        *bool    `json:"logoRemoteURLIsNil,omitempty"`
+	LogoRemoteURLNotNil       *bool    `json:"logoRemoteURLNotNil,omitempty"`
+	LogoRemoteURLEqualFold    *string  `json:"logoRemoteURLEqualFold,omitempty"`
+	LogoRemoteURLContainsFold *string  `json:"logoRemoteURLContainsFold,omitempty"`
+	// logo_local_file_id field predicates
+	LogoLocalFileID             *string  `json:"logoLocalFileID,omitempty"`
+	LogoLocalFileIdneq          *string  `json:"logoLocalFileIDNEQ,omitempty"`
+	LogoLocalFileIDIn           []string `json:"logoLocalFileIDIn,omitempty"`
+	LogoLocalFileIDNotIn        []string `json:"logoLocalFileIDNotIn,omitempty"`
+	LogoLocalFileIdgt           *string  `json:"logoLocalFileIDGT,omitempty"`
+	LogoLocalFileIdgte          *string  `json:"logoLocalFileIDGTE,omitempty"`
+	LogoLocalFileIdlt           *string  `json:"logoLocalFileIDLT,omitempty"`
+	LogoLocalFileIdlte          *string  `json:"logoLocalFileIDLTE,omitempty"`
+	LogoLocalFileIDContains     *string  `json:"logoLocalFileIDContains,omitempty"`
+	LogoLocalFileIDHasPrefix    *string  `json:"logoLocalFileIDHasPrefix,omitempty"`
+	LogoLocalFileIDHasSuffix    *string  `json:"logoLocalFileIDHasSuffix,omitempty"`
+	LogoLocalFileIDIsNil        *bool    `json:"logoLocalFileIDIsNil,omitempty"`
+	LogoLocalFileIDNotNil       *bool    `json:"logoLocalFileIDNotNil,omitempty"`
+	LogoLocalFileIDEqualFold    *string  `json:"logoLocalFileIDEqualFold,omitempty"`
+	LogoLocalFileIDContainsFold *string  `json:"logoLocalFileIDContainsFold,omitempty"`
 }
 
 // Ordering options for Subprocessor connections
@@ -23798,6 +23927,98 @@ type SubprocessorWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// name field predicates
+	Name             *string  `json:"name,omitempty"`
+	NameNeq          *string  `json:"nameNEQ,omitempty"`
+	NameIn           []string `json:"nameIn,omitempty"`
+	NameNotIn        []string `json:"nameNotIn,omitempty"`
+	NameGt           *string  `json:"nameGT,omitempty"`
+	NameGte          *string  `json:"nameGTE,omitempty"`
+	NameLt           *string  `json:"nameLT,omitempty"`
+	NameLte          *string  `json:"nameLTE,omitempty"`
+	NameContains     *string  `json:"nameContains,omitempty"`
+	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
+	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
+	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
+	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+	// description field predicates
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+	// logo_remote_url field predicates
+	LogoRemoteURL             *string  `json:"logoRemoteURL,omitempty"`
+	LogoRemoteURLNeq          *string  `json:"logoRemoteURLNEQ,omitempty"`
+	LogoRemoteURLIn           []string `json:"logoRemoteURLIn,omitempty"`
+	LogoRemoteURLNotIn        []string `json:"logoRemoteURLNotIn,omitempty"`
+	LogoRemoteURLGt           *string  `json:"logoRemoteURLGT,omitempty"`
+	LogoRemoteURLGte          *string  `json:"logoRemoteURLGTE,omitempty"`
+	LogoRemoteURLLt           *string  `json:"logoRemoteURLLT,omitempty"`
+	LogoRemoteURLLte          *string  `json:"logoRemoteURLLTE,omitempty"`
+	LogoRemoteURLContains     *string  `json:"logoRemoteURLContains,omitempty"`
+	LogoRemoteURLHasPrefix    *string  `json:"logoRemoteURLHasPrefix,omitempty"`
+	LogoRemoteURLHasSuffix    *string  `json:"logoRemoteURLHasSuffix,omitempty"`
+	LogoRemoteURLIsNil        *bool    `json:"logoRemoteURLIsNil,omitempty"`
+	LogoRemoteURLNotNil       *bool    `json:"logoRemoteURLNotNil,omitempty"`
+	LogoRemoteURLEqualFold    *string  `json:"logoRemoteURLEqualFold,omitempty"`
+	LogoRemoteURLContainsFold *string  `json:"logoRemoteURLContainsFold,omitempty"`
+	// logo_local_file_id field predicates
+	LogoLocalFileID             *string  `json:"logoLocalFileID,omitempty"`
+	LogoLocalFileIdneq          *string  `json:"logoLocalFileIDNEQ,omitempty"`
+	LogoLocalFileIDIn           []string `json:"logoLocalFileIDIn,omitempty"`
+	LogoLocalFileIDNotIn        []string `json:"logoLocalFileIDNotIn,omitempty"`
+	LogoLocalFileIdgt           *string  `json:"logoLocalFileIDGT,omitempty"`
+	LogoLocalFileIdgte          *string  `json:"logoLocalFileIDGTE,omitempty"`
+	LogoLocalFileIdlt           *string  `json:"logoLocalFileIDLT,omitempty"`
+	LogoLocalFileIdlte          *string  `json:"logoLocalFileIDLTE,omitempty"`
+	LogoLocalFileIDContains     *string  `json:"logoLocalFileIDContains,omitempty"`
+	LogoLocalFileIDHasPrefix    *string  `json:"logoLocalFileIDHasPrefix,omitempty"`
+	LogoLocalFileIDHasSuffix    *string  `json:"logoLocalFileIDHasSuffix,omitempty"`
+	LogoLocalFileIDIsNil        *bool    `json:"logoLocalFileIDIsNil,omitempty"`
+	LogoLocalFileIDNotNil       *bool    `json:"logoLocalFileIDNotNil,omitempty"`
+	LogoLocalFileIDEqualFold    *string  `json:"logoLocalFileIDEqualFold,omitempty"`
+	LogoLocalFileIDContainsFold *string  `json:"logoLocalFileIDContainsFold,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// files edge predicates
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// logo_file edge predicates
+	HasLogoFile     *bool             `json:"hasLogoFile,omitempty"`
+	HasLogoFileWith []*FileWhereInput `json:"hasLogoFileWith,omitempty"`
 }
 
 type Subscriber struct {
@@ -27412,6 +27633,9 @@ type UpdateFileInput struct {
 	AddTrustCenterSettingIDs     []string `json:"addTrustCenterSettingIDs,omitempty"`
 	RemoveTrustCenterSettingIDs  []string `json:"removeTrustCenterSettingIDs,omitempty"`
 	ClearTrustCenterSetting      *bool    `json:"clearTrustCenterSetting,omitempty"`
+	AddSubprocessorIDs           []string `json:"addSubprocessorIDs,omitempty"`
+	RemoveSubprocessorIDs        []string `json:"removeSubprocessorIDs,omitempty"`
+	ClearSubprocessor            *bool    `json:"clearSubprocessor,omitempty"`
 }
 
 // UpdateGroupInput is used for update Group object.
@@ -28088,6 +28312,9 @@ type UpdateOrganizationInput struct {
 	AddScanIDs                            []string                        `json:"addScanIDs,omitempty"`
 	RemoveScanIDs                         []string                        `json:"removeScanIDs,omitempty"`
 	ClearScans                            *bool                           `json:"clearScans,omitempty"`
+	AddSubprocessorIDs                    []string                        `json:"addSubprocessorIDs,omitempty"`
+	RemoveSubprocessorIDs                 []string                        `json:"removeSubprocessorIDs,omitempty"`
+	ClearSubprocessors                    *bool                           `json:"clearSubprocessors,omitempty"`
 	AddOrgMembers                         []*CreateOrgMembershipInput     `json:"addOrgMembers,omitempty"`
 	RemoveOrgMembers                      []string                        `json:"removeOrgMembers,omitempty"`
 	UpdateOrgSettings                     *UpdateOrganizationSettingInput `json:"updateOrgSettings,omitempty"`
@@ -28698,6 +28925,21 @@ type UpdateSubprocessorInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// name of the standard body
+	Name *string `json:"name,omitempty"`
+	// description of the subprocessor
+	Description      *string `json:"description,omitempty"`
+	ClearDescription *bool   `json:"clearDescription,omitempty"`
+	// URL of the logo
+	LogoRemoteURL      *string  `json:"logoRemoteURL,omitempty"`
+	ClearLogoRemoteURL *bool    `json:"clearLogoRemoteURL,omitempty"`
+	OwnerID            *string  `json:"ownerID,omitempty"`
+	ClearOwner         *bool    `json:"clearOwner,omitempty"`
+	AddFileIDs         []string `json:"addFileIDs,omitempty"`
+	RemoveFileIDs      []string `json:"removeFileIDs,omitempty"`
+	ClearFiles         *bool    `json:"clearFiles,omitempty"`
+	LogoFileID         *string  `json:"logoFileID,omitempty"`
+	ClearLogoFile      *bool    `json:"clearLogoFile,omitempty"`
 }
 
 // UpdateSubscriberInput is used for update Subscriber object.
@@ -35464,17 +35706,19 @@ const (
 	SubprocessorHistoryOrderFieldHistoryTime SubprocessorHistoryOrderField = "history_time"
 	SubprocessorHistoryOrderFieldCreatedAt   SubprocessorHistoryOrderField = "created_at"
 	SubprocessorHistoryOrderFieldUpdatedAt   SubprocessorHistoryOrderField = "updated_at"
+	SubprocessorHistoryOrderFieldName        SubprocessorHistoryOrderField = "name"
 )
 
 var AllSubprocessorHistoryOrderField = []SubprocessorHistoryOrderField{
 	SubprocessorHistoryOrderFieldHistoryTime,
 	SubprocessorHistoryOrderFieldCreatedAt,
 	SubprocessorHistoryOrderFieldUpdatedAt,
+	SubprocessorHistoryOrderFieldName,
 }
 
 func (e SubprocessorHistoryOrderField) IsValid() bool {
 	switch e {
-	case SubprocessorHistoryOrderFieldHistoryTime, SubprocessorHistoryOrderFieldCreatedAt, SubprocessorHistoryOrderFieldUpdatedAt:
+	case SubprocessorHistoryOrderFieldHistoryTime, SubprocessorHistoryOrderFieldCreatedAt, SubprocessorHistoryOrderFieldUpdatedAt, SubprocessorHistoryOrderFieldName:
 		return true
 	}
 	return false
@@ -35521,16 +35765,18 @@ type SubprocessorOrderField string
 const (
 	SubprocessorOrderFieldCreatedAt SubprocessorOrderField = "created_at"
 	SubprocessorOrderFieldUpdatedAt SubprocessorOrderField = "updated_at"
+	SubprocessorOrderFieldName      SubprocessorOrderField = "name"
 )
 
 var AllSubprocessorOrderField = []SubprocessorOrderField{
 	SubprocessorOrderFieldCreatedAt,
 	SubprocessorOrderFieldUpdatedAt,
+	SubprocessorOrderFieldName,
 }
 
 func (e SubprocessorOrderField) IsValid() bool {
 	switch e {
-	case SubprocessorOrderFieldCreatedAt, SubprocessorOrderFieldUpdatedAt:
+	case SubprocessorOrderFieldCreatedAt, SubprocessorOrderFieldUpdatedAt, SubprocessorOrderFieldName:
 		return true
 	}
 	return false

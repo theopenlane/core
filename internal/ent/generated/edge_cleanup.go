@@ -55,6 +55,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -801,6 +802,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).Scan.Query().Where((scan.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if scanCount, err := FromContext(ctx).Scan.Delete().Where(scan.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", scanCount).Msg("deleting scan")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Subprocessor.Query().Where((subprocessor.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if subprocessorCount, err := FromContext(ctx).Subprocessor.Delete().Where(subprocessor.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", subprocessorCount).Msg("deleting subprocessor")
 			return err
 		}
 	}

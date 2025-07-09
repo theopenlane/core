@@ -1302,6 +1302,7 @@ type ComplexityRoot struct {
 		StorageScheme         func(childComplexity int) int
 		StorageVolume         func(childComplexity int) int
 		StoreKey              func(childComplexity int) int
+		Subprocessor          func(childComplexity int) int
 		Tags                  func(childComplexity int) int
 		Template              func(childComplexity int) int
 		TrustCenterSetting    func(childComplexity int) int
@@ -2332,7 +2333,7 @@ type ComplexityRoot struct {
 		CreateScheduledJob                   func(childComplexity int, input generated.CreateScheduledJobInput) int
 		CreateStandard                       func(childComplexity int, input generated.CreateStandardInput) int
 		CreateSubcontrol                     func(childComplexity int, input generated.CreateSubcontrolInput) int
-		CreateSubprocessor                   func(childComplexity int, input generated.CreateSubprocessorInput) int
+		CreateSubprocessor                   func(childComplexity int, input generated.CreateSubprocessorInput, logoFile *graphql.Upload) int
 		CreateSubscriber                     func(childComplexity int, input generated.CreateSubscriberInput) int
 		CreateTFASetting                     func(childComplexity int, input generated.CreateTFASettingInput) int
 		CreateTask                           func(childComplexity int, input generated.CreateTaskInput) int
@@ -2430,7 +2431,7 @@ type ComplexityRoot struct {
 		UpdateScheduledJob                   func(childComplexity int, id string, input generated.UpdateScheduledJobInput) int
 		UpdateStandard                       func(childComplexity int, id string, input generated.UpdateStandardInput) int
 		UpdateSubcontrol                     func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
-		UpdateSubprocessor                   func(childComplexity int, id string, input generated.UpdateSubprocessorInput) int
+		UpdateSubprocessor                   func(childComplexity int, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload) int
 		UpdateSubscriber                     func(childComplexity int, email string, input generated.UpdateSubscriberInput) int
 		UpdateTFASetting                     func(childComplexity int, input generated.UpdateTFASettingInput) int
 		UpdateTask                           func(childComplexity int, id string, input generated.UpdateTaskInput) int
@@ -2795,6 +2796,7 @@ type ComplexityRoot struct {
 		StandardCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Standards                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
 		Subcontrols                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Subprocessors                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubprocessorOrder, where *generated.SubprocessorWhereInput) int
 		Subscribers                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
 		Tags                          func(childComplexity int) int
 		Tasks                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
@@ -4104,12 +4106,21 @@ type ComplexityRoot struct {
 	}
 
 	Subprocessor struct {
-		CreatedAt func(childComplexity int) int
-		CreatedBy func(childComplexity int) int
-		ID        func(childComplexity int) int
-		Tags      func(childComplexity int) int
-		UpdatedAt func(childComplexity int) int
-		UpdatedBy func(childComplexity int) int
+		CreatedAt       func(childComplexity int) int
+		CreatedBy       func(childComplexity int) int
+		Description     func(childComplexity int) int
+		Files           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		ID              func(childComplexity int) int
+		LogoFile        func(childComplexity int) int
+		LogoLocalFileID func(childComplexity int) int
+		LogoRemoteURL   func(childComplexity int) int
+		Name            func(childComplexity int) int
+		Owner           func(childComplexity int) int
+		OwnerID         func(childComplexity int) int
+		SystemOwned     func(childComplexity int) int
+		Tags            func(childComplexity int) int
+		UpdatedAt       func(childComplexity int) int
+		UpdatedBy       func(childComplexity int) int
 	}
 
 	SubprocessorBulkCreatePayload struct {
@@ -4136,15 +4147,21 @@ type ComplexityRoot struct {
 	}
 
 	SubprocessorHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		CreatedAt       func(childComplexity int) int
+		CreatedBy       func(childComplexity int) int
+		Description     func(childComplexity int) int
+		HistoryTime     func(childComplexity int) int
+		ID              func(childComplexity int) int
+		LogoLocalFileID func(childComplexity int) int
+		LogoRemoteURL   func(childComplexity int) int
+		Name            func(childComplexity int) int
+		Operation       func(childComplexity int) int
+		OwnerID         func(childComplexity int) int
+		Ref             func(childComplexity int) int
+		SystemOwned     func(childComplexity int) int
+		Tags            func(childComplexity int) int
+		UpdatedAt       func(childComplexity int) int
+		UpdatedBy       func(childComplexity int) int
 	}
 
 	SubprocessorHistoryConnection struct {
@@ -10829,6 +10846,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.File.StoreKey(childComplexity), true
 
+	case "File.subprocessor":
+		if e.complexity.File.Subprocessor == nil {
+			break
+		}
+
+		return e.complexity.File.Subprocessor(childComplexity), true
+
 	case "File.tags":
 		if e.complexity.File.Tags == nil {
 			break
@@ -16507,7 +16531,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateSubprocessor(childComplexity, args["input"].(generated.CreateSubprocessorInput)), true
+		return e.complexity.Mutation.CreateSubprocessor(childComplexity, args["input"].(generated.CreateSubprocessorInput), args["logoFile"].(*graphql.Upload)), true
 
 	case "Mutation.createSubscriber":
 		if e.complexity.Mutation.CreateSubscriber == nil {
@@ -17683,7 +17707,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateSubprocessor(childComplexity, args["id"].(string), args["input"].(generated.UpdateSubprocessorInput)), true
+		return e.complexity.Mutation.UpdateSubprocessor(childComplexity, args["id"].(string), args["input"].(generated.UpdateSubprocessorInput), args["logoFile"].(*graphql.Upload)), true
 
 	case "Mutation.updateSubscriber":
 		if e.complexity.Mutation.UpdateSubscriber == nil {
@@ -19857,6 +19881,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
+
+	case "Organization.subprocessors":
+		if e.complexity.Organization.Subprocessors == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_subprocessors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Subprocessors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubprocessorOrder), args["where"].(*generated.SubprocessorWhereInput)), true
 
 	case "Organization.subscribers":
 		if e.complexity.Organization.Subscribers == nil {
@@ -28232,12 +28268,80 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Subprocessor.CreatedBy(childComplexity), true
 
+	case "Subprocessor.description":
+		if e.complexity.Subprocessor.Description == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.Description(childComplexity), true
+
+	case "Subprocessor.files":
+		if e.complexity.Subprocessor.Files == nil {
+			break
+		}
+
+		args, err := ec.field_Subprocessor_files_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Subprocessor.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
+
 	case "Subprocessor.id":
 		if e.complexity.Subprocessor.ID == nil {
 			break
 		}
 
 		return e.complexity.Subprocessor.ID(childComplexity), true
+
+	case "Subprocessor.logoFile":
+		if e.complexity.Subprocessor.LogoFile == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.LogoFile(childComplexity), true
+
+	case "Subprocessor.logoLocalFileID":
+		if e.complexity.Subprocessor.LogoLocalFileID == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.LogoLocalFileID(childComplexity), true
+
+	case "Subprocessor.logoRemoteURL":
+		if e.complexity.Subprocessor.LogoRemoteURL == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.LogoRemoteURL(childComplexity), true
+
+	case "Subprocessor.name":
+		if e.complexity.Subprocessor.Name == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.Name(childComplexity), true
+
+	case "Subprocessor.owner":
+		if e.complexity.Subprocessor.Owner == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.Owner(childComplexity), true
+
+	case "Subprocessor.ownerID":
+		if e.complexity.Subprocessor.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.OwnerID(childComplexity), true
+
+	case "Subprocessor.systemOwned":
+		if e.complexity.Subprocessor.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.SystemOwned(childComplexity), true
 
 	case "Subprocessor.tags":
 		if e.complexity.Subprocessor.Tags == nil {
@@ -28330,6 +28434,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SubprocessorHistory.CreatedBy(childComplexity), true
 
+	case "SubprocessorHistory.description":
+		if e.complexity.SubprocessorHistory.Description == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.Description(childComplexity), true
+
 	case "SubprocessorHistory.historyTime":
 		if e.complexity.SubprocessorHistory.HistoryTime == nil {
 			break
@@ -28344,6 +28455,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SubprocessorHistory.ID(childComplexity), true
 
+	case "SubprocessorHistory.logoLocalFileID":
+		if e.complexity.SubprocessorHistory.LogoLocalFileID == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.LogoLocalFileID(childComplexity), true
+
+	case "SubprocessorHistory.logoRemoteURL":
+		if e.complexity.SubprocessorHistory.LogoRemoteURL == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.LogoRemoteURL(childComplexity), true
+
+	case "SubprocessorHistory.name":
+		if e.complexity.SubprocessorHistory.Name == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.Name(childComplexity), true
+
 	case "SubprocessorHistory.operation":
 		if e.complexity.SubprocessorHistory.Operation == nil {
 			break
@@ -28351,12 +28483,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SubprocessorHistory.Operation(childComplexity), true
 
+	case "SubprocessorHistory.ownerID":
+		if e.complexity.SubprocessorHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.OwnerID(childComplexity), true
+
 	case "SubprocessorHistory.ref":
 		if e.complexity.SubprocessorHistory.Ref == nil {
 			break
 		}
 
 		return e.complexity.SubprocessorHistory.Ref(childComplexity), true
+
+	case "SubprocessorHistory.systemOwned":
+		if e.complexity.SubprocessorHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.SystemOwned(childComplexity), true
 
 	case "SubprocessorHistory.tags":
 		if e.complexity.SubprocessorHistory.Tags == nil {
@@ -42320,6 +42466,7 @@ input CreateFileInput {
   evidenceIDs: [ID!]
   eventIDs: [ID!]
   trustCenterSettingIDs: [ID!]
+  subprocessorIDs: [ID!]
 }
 """
 CreateGroupInput is used for create Group object.
@@ -42890,6 +43037,7 @@ input CreateOrganizationInput {
   trustCenterIDs: [ID!]
   assetIDs: [ID!]
   scanIDs: [ID!]
+  subprocessorIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -43503,6 +43651,21 @@ input CreateSubprocessorInput {
   tags associated with the object
   """
   tags: [String!]
+  """
+  name of the standard body
+  """
+  name: String!
+  """
+  description of the subprocessor
+  """
+  description: String
+  """
+  URL of the logo
+  """
+  logoRemoteURL: String
+  ownerID: ID
+  fileIDs: [ID!]
+  logoFileID: ID
 }
 """
 CreateSubscriberInput is used for create Subscriber object.
@@ -48837,6 +49000,7 @@ type File implements Node {
     where: EventWhereInput
   ): EventConnection!
   trustCenterSetting: [TrustCenterSetting!]
+  subprocessor: [Subprocessor!]
 }
 """
 A connection to a list of items.
@@ -49714,6 +49878,11 @@ input FileWhereInput {
   """
   hasTrustCenterSetting: Boolean
   hasTrustCenterSettingWith: [TrustCenterSettingWhereInput!]
+  """
+  subprocessor edge predicates
+  """
+  hasSubprocessor: Boolean
+  hasSubprocessorWith: [SubprocessorWhereInput!]
 }
 type Group implements Node {
   id: ID!
@@ -61948,6 +62117,37 @@ type Organization implements Node {
     """
     where: ScanWhereInput
   ): ScanConnection!
+  subprocessors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subprocessors returned from the connection.
+    """
+    orderBy: [SubprocessorOrder!]
+
+    """
+    Filtering options for Subprocessors returned from the connection.
+    """
+    where: SubprocessorWhereInput
+  ): SubprocessorConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -63841,6 +64041,11 @@ input OrganizationWhereInput {
   """
   hasScans: Boolean
   hasScansWith: [ScanWhereInput!]
+  """
+  subprocessors edge predicates
+  """
+  hasSubprocessors: Boolean
+  hasSubprocessorsWith: [SubprocessorWhereInput!]
   """
   members edge predicates
   """
@@ -76020,6 +76225,63 @@ type Subprocessor implements Node {
   tags associated with the object
   """
   tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  name of the standard body
+  """
+  name: String!
+  """
+  description of the subprocessor
+  """
+  description: String
+  """
+  URL of the logo
+  """
+  logoRemoteURL: String
+  """
+  The local logo file id, takes precedence over the logo remote URL
+  """
+  logoLocalFileID: ID
+  owner: Organization
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+  logoFile: File
 }
 """
 A connection to a list of items.
@@ -76064,6 +76326,30 @@ type SubprocessorHistory implements Node {
   tags associated with the object
   """
   tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  name of the standard body
+  """
+  name: String!
+  """
+  description of the subprocessor
+  """
+  description: String
+  """
+  URL of the logo
+  """
+  logoRemoteURL: String
+  """
+  The local logo file id, takes precedence over the logo remote URL
+  """
+  logoLocalFileID: String
 }
 """
 A connection to a list of items.
@@ -76123,6 +76409,7 @@ enum SubprocessorHistoryOrderField {
   history_time
   created_at
   updated_at
+  name
 }
 """
 SubprocessorHistoryWhereInput is used for filtering SubprocessorHistory objects.
@@ -76243,6 +76530,101 @@ input SubprocessorHistoryWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  logo_remote_url field predicates
+  """
+  logoRemoteURL: String
+  logoRemoteURLNEQ: String
+  logoRemoteURLIn: [String!]
+  logoRemoteURLNotIn: [String!]
+  logoRemoteURLGT: String
+  logoRemoteURLGTE: String
+  logoRemoteURLLT: String
+  logoRemoteURLLTE: String
+  logoRemoteURLContains: String
+  logoRemoteURLHasPrefix: String
+  logoRemoteURLHasSuffix: String
+  logoRemoteURLIsNil: Boolean
+  logoRemoteURLNotNil: Boolean
+  logoRemoteURLEqualFold: String
+  logoRemoteURLContainsFold: String
+  """
+  logo_local_file_id field predicates
+  """
+  logoLocalFileID: String
+  logoLocalFileIDNEQ: String
+  logoLocalFileIDIn: [String!]
+  logoLocalFileIDNotIn: [String!]
+  logoLocalFileIDGT: String
+  logoLocalFileIDGTE: String
+  logoLocalFileIDLT: String
+  logoLocalFileIDLTE: String
+  logoLocalFileIDContains: String
+  logoLocalFileIDHasPrefix: String
+  logoLocalFileIDHasSuffix: String
+  logoLocalFileIDIsNil: Boolean
+  logoLocalFileIDNotNil: Boolean
+  logoLocalFileIDEqualFold: String
+  logoLocalFileIDContainsFold: String
 }
 """
 Ordering options for Subprocessor connections
@@ -76263,6 +76645,7 @@ Properties by which Subprocessor connections can be ordered.
 enum SubprocessorOrderField {
   created_at
   updated_at
+  name
 }
 """
 SubprocessorWhereInput is used for filtering Subprocessor objects.
@@ -76347,6 +76730,116 @@ input SubprocessorWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  logo_remote_url field predicates
+  """
+  logoRemoteURL: String
+  logoRemoteURLNEQ: String
+  logoRemoteURLIn: [String!]
+  logoRemoteURLNotIn: [String!]
+  logoRemoteURLGT: String
+  logoRemoteURLGTE: String
+  logoRemoteURLLT: String
+  logoRemoteURLLTE: String
+  logoRemoteURLContains: String
+  logoRemoteURLHasPrefix: String
+  logoRemoteURLHasSuffix: String
+  logoRemoteURLIsNil: Boolean
+  logoRemoteURLNotNil: Boolean
+  logoRemoteURLEqualFold: String
+  logoRemoteURLContainsFold: String
+  """
+  logo_local_file_id field predicates
+  """
+  logoLocalFileID: ID
+  logoLocalFileIDNEQ: ID
+  logoLocalFileIDIn: [ID!]
+  logoLocalFileIDNotIn: [ID!]
+  logoLocalFileIDGT: ID
+  logoLocalFileIDGTE: ID
+  logoLocalFileIDLT: ID
+  logoLocalFileIDLTE: ID
+  logoLocalFileIDContains: ID
+  logoLocalFileIDHasPrefix: ID
+  logoLocalFileIDHasSuffix: ID
+  logoLocalFileIDIsNil: Boolean
+  logoLocalFileIDNotNil: Boolean
+  logoLocalFileIDEqualFold: ID
+  logoLocalFileIDContainsFold: ID
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
+  """
+  logo_file edge predicates
+  """
+  hasLogoFile: Boolean
+  hasLogoFileWith: [FileWhereInput!]
 }
 type Subscriber implements Node {
   id: ID!
@@ -81368,6 +81861,9 @@ input UpdateFileInput {
   addTrustCenterSettingIDs: [ID!]
   removeTrustCenterSettingIDs: [ID!]
   clearTrustCenterSetting: Boolean
+  addSubprocessorIDs: [ID!]
+  removeSubprocessorIDs: [ID!]
+  clearSubprocessor: Boolean
 }
 """
 UpdateGroupInput is used for update Group object.
@@ -82172,6 +82668,9 @@ input UpdateOrganizationInput {
   addScanIDs: [ID!]
   removeScanIDs: [ID!]
   clearScans: Boolean
+  addSubprocessorIDs: [ID!]
+  removeSubprocessorIDs: [ID!]
+  clearSubprocessors: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -83009,6 +83508,27 @@ input UpdateSubprocessorInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
+  """
+  name of the standard body
+  """
+  name: String
+  """
+  description of the subprocessor
+  """
+  description: String
+  clearDescription: Boolean
+  """
+  URL of the logo
+  """
+  logoRemoteURL: String
+  clearLogoRemoteURL: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
+  logoFileID: ID
+  clearLogoFile: Boolean
 }
 """
 UpdateSubscriberInput is used for update Subscriber object.
@@ -90231,6 +90751,7 @@ extend type Mutation{
         values of the subprocessor
         """
         input: CreateSubprocessorInput!
+        logoFile: Upload
     ): SubprocessorCreatePayload!
     """
     Create multiple new subprocessors
@@ -90262,6 +90783,7 @@ extend type Mutation{
         New values for the subprocessor
         """
         input: UpdateSubprocessorInput!
+        logoFile: Upload
     ): SubprocessorUpdatePayload!
     """
     Delete an existing subprocessor

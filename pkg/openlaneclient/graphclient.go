@@ -407,12 +407,12 @@ type OpenlaneGraphClient interface {
 	GetSubcontrolHistories(ctx context.Context, where *SubcontrolHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetSubcontrolHistories, error)
 	CreateBulkCSVSubprocessor(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVSubprocessor, error)
 	CreateBulkSubprocessor(ctx context.Context, input []*CreateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkSubprocessor, error)
-	CreateSubprocessor(ctx context.Context, input CreateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*CreateSubprocessor, error)
+	CreateSubprocessor(ctx context.Context, input CreateSubprocessorInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateSubprocessor, error)
 	DeleteSubprocessor(ctx context.Context, deleteSubprocessorID string, interceptors ...clientv2.RequestInterceptor) (*DeleteSubprocessor, error)
 	GetAllSubprocessors(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllSubprocessors, error)
 	GetSubprocessorByID(ctx context.Context, subprocessorID string, interceptors ...clientv2.RequestInterceptor) (*GetSubprocessorByID, error)
 	GetSubprocessors(ctx context.Context, first *int64, last *int64, where *SubprocessorWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetSubprocessors, error)
-	UpdateSubprocessor(ctx context.Context, updateSubprocessorID string, input UpdateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*UpdateSubprocessor, error)
+	UpdateSubprocessor(ctx context.Context, updateSubprocessorID string, input UpdateSubprocessorInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateSubprocessor, error)
 	GetAllSubprocessorHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllSubprocessorHistories, error)
 	GetSubprocessorHistories(ctx context.Context, first *int64, last *int64, where *SubprocessorHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetSubprocessorHistories, error)
 	CreateBulkCSVSubscriber(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVSubscriber, error)
@@ -6712,15 +6712,50 @@ func (t *AdminSearch_AdminSearch_Subprocessors_PageInfo) GetStartCursor() *strin
 }
 
 type AdminSearch_AdminSearch_Subprocessors_Edges_Node struct {
-	ID   string   "json:\"id\" graphql:\"id\""
-	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+	Description     *string  "json:\"description,omitempty\" graphql:\"description\""
+	ID              string   "json:\"id\" graphql:\"id\""
+	LogoLocalFileID *string  "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string  "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name            string   "json:\"name\" graphql:\"name\""
+	OwnerID         *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags            []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
+func (t *AdminSearch_AdminSearch_Subprocessors_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors_Edges_Node{}
+	}
+	return t.Description
+}
 func (t *AdminSearch_AdminSearch_Subprocessors_Edges_Node) GetID() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Subprocessors_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Subprocessors_Edges_Node) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors_Edges_Node{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *AdminSearch_AdminSearch_Subprocessors_Edges_Node) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors_Edges_Node{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *AdminSearch_AdminSearch_Subprocessors_Edges_Node) GetName() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *AdminSearch_AdminSearch_Subprocessors_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors_Edges_Node{}
+	}
+	return t.OwnerID
 }
 func (t *AdminSearch_AdminSearch_Subprocessors_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -68448,6 +68483,7 @@ func (t *GlobalSearch_Search_Subprocessors_PageInfo) GetStartCursor() *string {
 
 type GlobalSearch_Search_Subprocessors_Edges_Node struct {
 	ID   string   "json:\"id\" graphql:\"id\""
+	Name string   "json:\"name\" graphql:\"name\""
 	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
@@ -68456,6 +68492,12 @@ func (t *GlobalSearch_Search_Subprocessors_Edges_Node) GetID() string {
 		t = &GlobalSearch_Search_Subprocessors_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *GlobalSearch_Search_Subprocessors_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Subprocessors_Edges_Node{}
+	}
+	return t.Name
 }
 func (t *GlobalSearch_Search_Subprocessors_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -73691,13 +73733,48 @@ func (t *GetSubcontrolHistories_SubcontrolHistories) GetEdges() []*GetSubcontrol
 	return t.Edges
 }
 
+type CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors_Owner struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors_Owner) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors_Owner{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors_Owner) GetName() string {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors_Owner{}
+	}
+	return t.Name
+}
+
 type CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt       *time.Time                                                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                                                     "json:\"description,omitempty\" graphql:\"description\""
+	ID              string                                                                      "json:\"id\" graphql:\"id\""
+	LogoFile        *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                                     "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                                     "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name            string                                                                      "json:\"name\" graphql:\"name\""
+	Owner           *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors_Owner    "json:\"owner,omitempty\" graphql:\"owner\""
+	Tags            []string                                                                    "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time                                                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetCreatedAt() *time.Time {
@@ -73712,11 +73789,47 @@ func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetC
 	}
 	return t.CreatedBy
 }
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
+	}
+	return t.Description
+}
 func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetID() string {
 	if t == nil {
 		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
 	}
 	return t.ID
+}
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetLogoFile() *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors_LogoFile {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
+	}
+	return t.LogoFile
+}
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetName() string {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
+	}
+	return t.Name
+}
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetOwner() *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors_Owner {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
+	}
+	return t.Owner
 }
 func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetTags() []string {
 	if t == nil {
@@ -73748,13 +73861,48 @@ func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor) GetSubprocessors()
 	return t.Subprocessors
 }
 
+type CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors_Owner struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors_Owner) GetID() string {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors_Owner{}
+	}
+	return t.ID
+}
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors_Owner) GetName() string {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors_Owner{}
+	}
+	return t.Name
+}
+
 type CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt       *time.Time                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                                               "json:\"description,omitempty\" graphql:\"description\""
+	ID              string                                                                "json:\"id\" graphql:\"id\""
+	LogoFile        *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                               "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                               "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name            string                                                                "json:\"name\" graphql:\"name\""
+	Owner           *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors_Owner    "json:\"owner,omitempty\" graphql:\"owner\""
+	Tags            []string                                                              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetCreatedAt() *time.Time {
@@ -73769,11 +73917,47 @@ func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetCreated
 	}
 	return t.CreatedBy
 }
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
+	}
+	return t.Description
+}
 func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetID() string {
 	if t == nil {
 		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
 	}
 	return t.ID
+}
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetLogoFile() *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors_LogoFile {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
+	}
+	return t.LogoFile
+}
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetName() string {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
+	}
+	return t.Name
+}
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetOwner() *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors_Owner {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
+	}
+	return t.Owner
 }
 func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetTags() []string {
 	if t == nil {
@@ -73805,13 +73989,48 @@ func (t *CreateBulkSubprocessor_CreateBulkSubprocessor) GetSubprocessors() []*Cr
 	return t.Subprocessors
 }
 
+type CreateSubprocessor_CreateSubprocessor_Subprocessor_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type CreateSubprocessor_CreateSubprocessor_Subprocessor_Owner struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor_Owner) GetID() string {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor_Owner{}
+	}
+	return t.ID
+}
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor_Owner) GetName() string {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor_Owner{}
+	}
+	return t.Name
+}
+
 type CreateSubprocessor_CreateSubprocessor_Subprocessor struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt       *time.Time                                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                                      "json:\"description,omitempty\" graphql:\"description\""
+	ID              string                                                       "json:\"id\" graphql:\"id\""
+	LogoFile        *CreateSubprocessor_CreateSubprocessor_Subprocessor_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                      "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                      "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name            string                                                       "json:\"name\" graphql:\"name\""
+	Owner           *CreateSubprocessor_CreateSubprocessor_Subprocessor_Owner    "json:\"owner,omitempty\" graphql:\"owner\""
+	Tags            []string                                                     "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time                                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetCreatedAt() *time.Time {
@@ -73826,11 +74045,47 @@ func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetCreatedBy() *str
 	}
 	return t.CreatedBy
 }
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetDescription() *string {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
+	}
+	return t.Description
+}
 func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetID() string {
 	if t == nil {
 		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
 	}
 	return t.ID
+}
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetLogoFile() *CreateSubprocessor_CreateSubprocessor_Subprocessor_LogoFile {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
+	}
+	return t.LogoFile
+}
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetName() string {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
+	}
+	return t.Name
+}
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetOwner() *CreateSubprocessor_CreateSubprocessor_Subprocessor_Owner {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
+	}
+	return t.Owner
 }
 func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetTags() []string {
 	if t == nil {
@@ -73905,13 +74160,48 @@ func (t *GetAllSubprocessors_Subprocessors_PageInfo) GetStartCursor() *string {
 	return t.StartCursor
 }
 
+type GetAllSubprocessors_Subprocessors_Edges_Node_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetAllSubprocessors_Subprocessors_Edges_Node_Owner struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node_Owner) GetID() string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node_Owner{}
+	}
+	return t.ID
+}
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node_Owner) GetName() string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node_Owner{}
+	}
+	return t.Name
+}
+
 type GetAllSubprocessors_Subprocessors_Edges_Node struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt       *time.Time                                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                                "json:\"description,omitempty\" graphql:\"description\""
+	ID              string                                                 "json:\"id\" graphql:\"id\""
+	LogoFile        *GetAllSubprocessors_Subprocessors_Edges_Node_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name            string                                                 "json:\"name\" graphql:\"name\""
+	Owner           *GetAllSubprocessors_Subprocessors_Edges_Node_Owner    "json:\"owner,omitempty\" graphql:\"owner\""
+	Tags            []string                                               "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time                                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetCreatedAt() *time.Time {
@@ -73926,11 +74216,47 @@ func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.Description
+}
 func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetLogoFile() *GetAllSubprocessors_Subprocessors_Edges_Node_LogoFile {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.LogoFile
+}
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetOwner() *GetAllSubprocessors_Subprocessors_Edges_Node_Owner {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.Owner
 }
 func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -73987,13 +74313,48 @@ func (t *GetAllSubprocessors_Subprocessors) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type GetSubprocessorByID_Subprocessor_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetSubprocessorByID_Subprocessor_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetSubprocessorByID_Subprocessor_Owner struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetSubprocessorByID_Subprocessor_Owner) GetID() string {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor_Owner{}
+	}
+	return t.ID
+}
+func (t *GetSubprocessorByID_Subprocessor_Owner) GetName() string {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor_Owner{}
+	}
+	return t.Name
+}
+
 type GetSubprocessorByID_Subprocessor struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt       *time.Time                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                    "json:\"description,omitempty\" graphql:\"description\""
+	ID              string                                     "json:\"id\" graphql:\"id\""
+	LogoFile        *GetSubprocessorByID_Subprocessor_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                    "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                    "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name            string                                     "json:\"name\" graphql:\"name\""
+	Owner           *GetSubprocessorByID_Subprocessor_Owner    "json:\"owner,omitempty\" graphql:\"owner\""
+	Tags            []string                                   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetSubprocessorByID_Subprocessor) GetCreatedAt() *time.Time {
@@ -74008,11 +74369,47 @@ func (t *GetSubprocessorByID_Subprocessor) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
+func (t *GetSubprocessorByID_Subprocessor) GetDescription() *string {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor{}
+	}
+	return t.Description
+}
 func (t *GetSubprocessorByID_Subprocessor) GetID() string {
 	if t == nil {
 		t = &GetSubprocessorByID_Subprocessor{}
 	}
 	return t.ID
+}
+func (t *GetSubprocessorByID_Subprocessor) GetLogoFile() *GetSubprocessorByID_Subprocessor_LogoFile {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor{}
+	}
+	return t.LogoFile
+}
+func (t *GetSubprocessorByID_Subprocessor) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *GetSubprocessorByID_Subprocessor) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *GetSubprocessorByID_Subprocessor) GetName() string {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor{}
+	}
+	return t.Name
+}
+func (t *GetSubprocessorByID_Subprocessor) GetOwner() *GetSubprocessorByID_Subprocessor_Owner {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor{}
+	}
+	return t.Owner
 }
 func (t *GetSubprocessorByID_Subprocessor) GetTags() []string {
 	if t == nil {
@@ -74065,13 +74462,48 @@ func (t *GetSubprocessors_Subprocessors_PageInfo) GetStartCursor() *string {
 	return t.StartCursor
 }
 
+type GetSubprocessors_Subprocessors_Edges_Node_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetSubprocessors_Subprocessors_Edges_Node_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetSubprocessors_Subprocessors_Edges_Node_Owner struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetSubprocessors_Subprocessors_Edges_Node_Owner) GetID() string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node_Owner{}
+	}
+	return t.ID
+}
+func (t *GetSubprocessors_Subprocessors_Edges_Node_Owner) GetName() string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node_Owner{}
+	}
+	return t.Name
+}
+
 type GetSubprocessors_Subprocessors_Edges_Node struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt       *time.Time                                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                             "json:\"description,omitempty\" graphql:\"description\""
+	ID              string                                              "json:\"id\" graphql:\"id\""
+	LogoFile        *GetSubprocessors_Subprocessors_Edges_Node_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                             "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                             "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name            string                                              "json:\"name\" graphql:\"name\""
+	Owner           *GetSubprocessors_Subprocessors_Edges_Node_Owner    "json:\"owner,omitempty\" graphql:\"owner\""
+	Tags            []string                                            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetSubprocessors_Subprocessors_Edges_Node) GetCreatedAt() *time.Time {
@@ -74086,11 +74518,47 @@ func (t *GetSubprocessors_Subprocessors_Edges_Node) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
+func (t *GetSubprocessors_Subprocessors_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.Description
+}
 func (t *GetSubprocessors_Subprocessors_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetSubprocessors_Subprocessors_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *GetSubprocessors_Subprocessors_Edges_Node) GetLogoFile() *GetSubprocessors_Subprocessors_Edges_Node_LogoFile {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.LogoFile
+}
+func (t *GetSubprocessors_Subprocessors_Edges_Node) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *GetSubprocessors_Subprocessors_Edges_Node) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *GetSubprocessors_Subprocessors_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetSubprocessors_Subprocessors_Edges_Node) GetOwner() *GetSubprocessors_Subprocessors_Edges_Node_Owner {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.Owner
 }
 func (t *GetSubprocessors_Subprocessors_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -74147,13 +74615,48 @@ func (t *GetSubprocessors_Subprocessors) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type UpdateSubprocessor_UpdateSubprocessor_Subprocessor_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type UpdateSubprocessor_UpdateSubprocessor_Subprocessor_Owner struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor_Owner) GetID() string {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor_Owner{}
+	}
+	return t.ID
+}
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor_Owner) GetName() string {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor_Owner{}
+	}
+	return t.Name
+}
+
 type UpdateSubprocessor_UpdateSubprocessor_Subprocessor struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt       *time.Time                                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                                      "json:\"description,omitempty\" graphql:\"description\""
+	ID              string                                                       "json:\"id\" graphql:\"id\""
+	LogoFile        *UpdateSubprocessor_UpdateSubprocessor_Subprocessor_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                      "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                      "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name            string                                                       "json:\"name\" graphql:\"name\""
+	Owner           *UpdateSubprocessor_UpdateSubprocessor_Subprocessor_Owner    "json:\"owner,omitempty\" graphql:\"owner\""
+	Tags            []string                                                     "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time                                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetCreatedAt() *time.Time {
@@ -74168,11 +74671,47 @@ func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetCreatedBy() *str
 	}
 	return t.CreatedBy
 }
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetDescription() *string {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
+	}
+	return t.Description
+}
 func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetID() string {
 	if t == nil {
 		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
 	}
 	return t.ID
+}
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetLogoFile() *UpdateSubprocessor_UpdateSubprocessor_Subprocessor_LogoFile {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
+	}
+	return t.LogoFile
+}
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetName() string {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
+	}
+	return t.Name
+}
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetOwner() *UpdateSubprocessor_UpdateSubprocessor_Subprocessor_Owner {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
+	}
+	return t.Owner
 }
 func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetTags() []string {
 	if t == nil {
@@ -91488,6 +92027,11 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 				node {
 					id
 					tags
+					ownerID
+					name
+					description
+					logoRemoteURL
+					logoLocalFileID
 				}
 			}
 		}
@@ -109085,6 +109629,7 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 			edges {
 				node {
 					id
+					name
 					tags
 				}
 			}
@@ -110262,6 +110807,17 @@ const CreateBulkCSVSubprocessorDocument = `mutation CreateBulkCSVSubprocessor ($
 			tags
 			updatedAt
 			updatedBy
+			name
+			description
+			logoRemoteURL
+			logoLocalFileID
+			logoFile {
+				presignedURL
+			}
+			owner {
+				id
+				name
+			}
 		}
 	}
 }
@@ -110293,6 +110849,17 @@ const CreateBulkSubprocessorDocument = `mutation CreateBulkSubprocessor ($input:
 			tags
 			updatedAt
 			updatedBy
+			name
+			description
+			logoRemoteURL
+			logoLocalFileID
+			logoFile {
+				presignedURL
+			}
+			owner {
+				id
+				name
+			}
 		}
 	}
 }
@@ -110315,8 +110882,8 @@ func (c *Client) CreateBulkSubprocessor(ctx context.Context, input []*CreateSubp
 	return &res, nil
 }
 
-const CreateSubprocessorDocument = `mutation CreateSubprocessor ($input: CreateSubprocessorInput!) {
-	createSubprocessor(input: $input) {
+const CreateSubprocessorDocument = `mutation CreateSubprocessor ($input: CreateSubprocessorInput!, $logoFile: Upload) {
+	createSubprocessor(input: $input, logoFile: $logoFile) {
 		subprocessor {
 			createdAt
 			createdBy
@@ -110324,14 +110891,26 @@ const CreateSubprocessorDocument = `mutation CreateSubprocessor ($input: CreateS
 			tags
 			updatedAt
 			updatedBy
+			name
+			description
+			logoRemoteURL
+			logoLocalFileID
+			logoFile {
+				presignedURL
+			}
+			owner {
+				id
+				name
+			}
 		}
 	}
 }
 `
 
-func (c *Client) CreateSubprocessor(ctx context.Context, input CreateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*CreateSubprocessor, error) {
+func (c *Client) CreateSubprocessor(ctx context.Context, input CreateSubprocessorInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateSubprocessor, error) {
 	vars := map[string]any{
-		"input": input,
+		"input":    input,
+		"logoFile": logoFile,
 	}
 
 	var res CreateSubprocessor
@@ -110387,6 +110966,17 @@ const GetAllSubprocessorsDocument = `query GetAllSubprocessors {
 				tags
 				updatedAt
 				updatedBy
+				name
+				description
+				logoRemoteURL
+				logoLocalFileID
+				logoFile {
+					presignedURL
+				}
+				owner {
+					id
+					name
+				}
 			}
 		}
 	}
@@ -110416,6 +111006,17 @@ const GetSubprocessorByIDDocument = `query GetSubprocessorByID ($subprocessorId:
 		tags
 		updatedAt
 		updatedBy
+		name
+		description
+		logoRemoteURL
+		logoLocalFileID
+		logoFile {
+			presignedURL
+		}
+		owner {
+			id
+			name
+		}
 	}
 }
 `
@@ -110454,6 +111055,17 @@ const GetSubprocessorsDocument = `query GetSubprocessors ($first: Int, $last: In
 				tags
 				updatedAt
 				updatedBy
+				name
+				description
+				logoRemoteURL
+				logoLocalFileID
+				logoFile {
+					presignedURL
+				}
+				owner {
+					id
+					name
+				}
 			}
 		}
 	}
@@ -110479,8 +111091,8 @@ func (c *Client) GetSubprocessors(ctx context.Context, first *int64, last *int64
 	return &res, nil
 }
 
-const UpdateSubprocessorDocument = `mutation UpdateSubprocessor ($updateSubprocessorId: ID!, $input: UpdateSubprocessorInput!) {
-	updateSubprocessor(id: $updateSubprocessorId, input: $input) {
+const UpdateSubprocessorDocument = `mutation UpdateSubprocessor ($updateSubprocessorId: ID!, $input: UpdateSubprocessorInput!, $logoFile: Upload) {
+	updateSubprocessor(id: $updateSubprocessorId, input: $input, logoFile: $logoFile) {
 		subprocessor {
 			createdAt
 			createdBy
@@ -110488,15 +111100,27 @@ const UpdateSubprocessorDocument = `mutation UpdateSubprocessor ($updateSubproce
 			tags
 			updatedAt
 			updatedBy
+			name
+			description
+			logoRemoteURL
+			logoLocalFileID
+			logoFile {
+				presignedURL
+			}
+			owner {
+				id
+				name
+			}
 		}
 	}
 }
 `
 
-func (c *Client) UpdateSubprocessor(ctx context.Context, updateSubprocessorID string, input UpdateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*UpdateSubprocessor, error) {
+func (c *Client) UpdateSubprocessor(ctx context.Context, updateSubprocessorID string, input UpdateSubprocessorInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateSubprocessor, error) {
 	vars := map[string]any{
 		"updateSubprocessorId": updateSubprocessorID,
 		"input":                input,
+		"logoFile":             logoFile,
 	}
 
 	var res UpdateSubprocessor
