@@ -61,6 +61,30 @@ func (r *mutationResolver) UpdateExport(ctx context.Context, id string, input ge
 	}, nil
 }
 
+// DeleteExport is the resolver for the deleteExport field.
+func (r *mutationResolver) DeleteExport(ctx context.Context, id string) (*model.ExportDeletePayload, error) {
+	if err := withTransactionalMutation(ctx).Export.DeleteOneID(id).Exec(ctx); err != nil {
+		return nil, parseRequestError(err, action{action: ActionDelete, object: "export"})
+	}
+
+	if err := generated.ExportEdgeCleanup(ctx, id); err != nil {
+		return nil, newCascadeDeleteError(err)
+	}
+
+	return &model.ExportDeletePayload{
+		DeletedID: id,
+	}, nil
+}
+
+// DeleteBulkExport is the resolver for the deleteBulkExport field.
+func (r *mutationResolver) DeleteBulkExport(ctx context.Context, ids []string) (*model.ExportBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteExport(ctx, ids)
+}
+
 // Export is the resolver for the export field.
 func (r *queryResolver) Export(ctx context.Context, id string) (*generated.Export, error) {
 	query, err := withTransactionalMutation(ctx).Export.Query().Where(export.ID(id)).CollectFields(ctx)

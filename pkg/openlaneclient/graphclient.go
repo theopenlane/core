@@ -163,6 +163,8 @@ type OpenlaneGraphClient interface {
 	GetExportByID(ctx context.Context, exportID string, interceptors ...clientv2.RequestInterceptor) (*GetExportByID, error)
 	GetExports(ctx context.Context, first *int64, last *int64, where *ExportWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetExports, error)
 	UpdateExport(ctx context.Context, id string, input UpdateExportInput, exportFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateExport, error)
+	DeleteExport(ctx context.Context, deleteExportID string, interceptors ...clientv2.RequestInterceptor) (*DeleteExport, error)
+	DeleteBulkExport(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkExport, error)
 	DeleteFile(ctx context.Context, deleteFileID string, interceptors ...clientv2.RequestInterceptor) (*DeleteFile, error)
 	GetAllFiles(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllFiles, error)
 	GetFileByID(ctx context.Context, fileID string, interceptors ...clientv2.RequestInterceptor) (*GetFileByID, error)
@@ -29538,6 +29540,28 @@ func (t *UpdateExport_UpdateExport) GetExport() *UpdateExport_UpdateExport_Expor
 		t = &UpdateExport_UpdateExport{}
 	}
 	return &t.Export
+}
+
+type DeleteExport_DeleteExport struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteExport_DeleteExport) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteExport_DeleteExport{}
+	}
+	return t.DeletedID
+}
+
+type DeleteBulkExport_DeleteBulkExport struct {
+	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+}
+
+func (t *DeleteBulkExport_DeleteBulkExport) GetDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkExport_DeleteBulkExport{}
+	}
+	return t.DeletedIDs
 }
 
 type DeleteFile_DeleteFile struct {
@@ -87874,6 +87898,28 @@ func (t *UpdateExport) GetUpdateExport() *UpdateExport_UpdateExport {
 	return &t.UpdateExport
 }
 
+type DeleteExport struct {
+	DeleteExport DeleteExport_DeleteExport "json:\"deleteExport\" graphql:\"deleteExport\""
+}
+
+func (t *DeleteExport) GetDeleteExport() *DeleteExport_DeleteExport {
+	if t == nil {
+		t = &DeleteExport{}
+	}
+	return &t.DeleteExport
+}
+
+type DeleteBulkExport struct {
+	DeleteBulkExport DeleteBulkExport_DeleteBulkExport "json:\"deleteBulkExport\" graphql:\"deleteBulkExport\""
+}
+
+func (t *DeleteBulkExport) GetDeleteBulkExport() *DeleteBulkExport_DeleteBulkExport {
+	if t == nil {
+		t = &DeleteBulkExport{}
+	}
+	return &t.DeleteBulkExport
+}
+
 type DeleteFile struct {
 	DeleteFile DeleteFile_DeleteFile "json:\"deleteFile\" graphql:\"deleteFile\""
 }
@@ -99286,6 +99332,54 @@ func (c *Client) UpdateExport(ctx context.Context, id string, input UpdateExport
 
 	var res UpdateExport
 	if err := c.Client.Post(ctx, "UpdateExport", UpdateExportDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteExportDocument = `mutation DeleteExport ($deleteExportId: ID!) {
+	deleteExport(id: $deleteExportId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteExport(ctx context.Context, deleteExportID string, interceptors ...clientv2.RequestInterceptor) (*DeleteExport, error) {
+	vars := map[string]any{
+		"deleteExportId": deleteExportID,
+	}
+
+	var res DeleteExport
+	if err := c.Client.Post(ctx, "DeleteExport", DeleteExportDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteBulkExportDocument = `mutation DeleteBulkExport ($ids: [ID!]!) {
+	deleteBulkExport(ids: $ids) {
+		deletedIDs
+	}
+}
+`
+
+func (c *Client) DeleteBulkExport(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkExport, error) {
+	vars := map[string]any{
+		"ids": ids,
+	}
+
+	var res DeleteBulkExport
+	if err := c.Client.Post(ctx, "DeleteBulkExport", DeleteBulkExportDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -115555,6 +115649,8 @@ var DocumentOperationNames = map[string]string{
 	GetExportByIDDocument:                          "GetExportByID",
 	GetExportsDocument:                             "GetExports",
 	UpdateExportDocument:                           "UpdateExport",
+	DeleteExportDocument:                           "DeleteExport",
+	DeleteBulkExportDocument:                       "DeleteBulkExport",
 	DeleteFileDocument:                             "DeleteFile",
 	GetAllFilesDocument:                            "GetAllFiles",
 	GetFileByIDDocument:                            "GetFileByID",

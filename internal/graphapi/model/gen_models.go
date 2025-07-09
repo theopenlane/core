@@ -424,6 +424,12 @@ type ExportBulkCreatePayload struct {
 	Exports []*generated.Export `json:"exports,omitempty"`
 }
 
+// Return response for deleteBulkExport mutation
+type ExportBulkDeletePayload struct {
+	// Deleted export IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
 // Return response for createExport mutation
 type ExportCreatePayload struct {
 	// Created export

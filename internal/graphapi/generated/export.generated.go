@@ -98,6 +98,50 @@ func (ec *executionContext) fieldContext_ExportBulkCreatePayload_exports(_ conte
 	return fc, nil
 }
 
+func (ec *executionContext) _ExportBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ExportBulkDeletePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ExportBulkDeletePayload_deletedIDs(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.DeletedIDs, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalNID2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ExportBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ExportBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ExportCreatePayload_export(ctx context.Context, field graphql.CollectedField, obj *model.ExportCreatePayload) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ExportCreatePayload_export(ctx, field)
 	if err != nil {
@@ -334,6 +378,45 @@ func (ec *executionContext) _ExportBulkCreatePayload(ctx context.Context, sel as
 	return out
 }
 
+var exportBulkDeletePayloadImplementors = []string{"ExportBulkDeletePayload"}
+
+func (ec *executionContext) _ExportBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.ExportBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, exportBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ExportBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._ExportBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var exportCreatePayloadImplementors = []string{"ExportCreatePayload"}
 
 func (ec *executionContext) _ExportCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.ExportCreatePayload) graphql.Marshaler {
@@ -455,6 +538,20 @@ func (ec *executionContext) _ExportUpdatePayload(ctx context.Context, sel ast.Se
 
 // region    ***************************** type.gotpl *****************************
 
+func (ec *executionContext) marshalNExportBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐExportBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ExportBulkDeletePayload) graphql.Marshaler {
+	return ec._ExportBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNExportBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐExportBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ExportBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ExportBulkDeletePayload(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNExportCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐExportCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ExportCreatePayload) graphql.Marshaler {
 	return ec._ExportCreatePayload(ctx, sel, &v)
 }
@@ -467,6 +564,20 @@ func (ec *executionContext) marshalNExportCreatePayload2ᚖgithubᚗcomᚋtheope
 		return graphql.Null
 	}
 	return ec._ExportCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNExportDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐExportDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ExportDeletePayload) graphql.Marshaler {
+	return ec._ExportDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNExportDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐExportDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ExportDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ExportDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNExportUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐExportUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ExportUpdatePayload) graphql.Marshaler {
