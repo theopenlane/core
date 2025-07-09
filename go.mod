@@ -70,7 +70,7 @@ require (
 	github.com/rs/zerolog v1.34.0
 	github.com/samber/lo v1.51.0
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.2
-	github.com/sebdah/goldie/v2 v2.6.0
+	github.com/sebdah/goldie/v2 v2.7.1
 	github.com/spf13/cobra v1.9.1
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.10.0
