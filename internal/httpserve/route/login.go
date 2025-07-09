@@ -17,7 +17,7 @@ func registerLoginHandler(router *Router) (err error) {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: mw,
+		Middlewares: baseMiddleware(router), // leaves off the csrf middleware
 		Handler: func(c echo.Context) error {
 			return router.Handler.LoginHandler(c)
 		},
