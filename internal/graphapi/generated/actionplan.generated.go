@@ -92,6 +92,8 @@ type MutationResolver interface {
 	CreateEvidence(ctx context.Context, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload) (*model.EvidenceCreatePayload, error)
 	UpdateEvidence(ctx context.Context, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload) (*model.EvidenceUpdatePayload, error)
 	DeleteEvidence(ctx context.Context, id string) (*model.EvidenceDeletePayload, error)
+	CreateExport(ctx context.Context, input generated.CreateExportInput) (*model.ExportCreatePayload, error)
+	UpdateExport(ctx context.Context, id string, input generated.UpdateExportInput, exportFiles []*graphql.Upload) (*model.ExportUpdatePayload, error)
 	DeleteFile(ctx context.Context, id string) (*model.FileDeletePayload, error)
 	CreateGroup(ctx context.Context, input generated.CreateGroupInput) (*model.GroupCreatePayload, error)
 	CreateBulkGroup(ctx context.Context, input []*generated.CreateGroupInput) (*model.GroupBulkCreatePayload, error)
@@ -2938,6 +2940,34 @@ func (ec *executionContext) field_Mutation_createEvidence_argsEvidenceFiles(
 	}
 
 	var zeroVal []*graphql.Upload
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_createExport_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := ec.field_Mutation_createExport_argsInput(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+func (ec *executionContext) field_Mutation_createExport_argsInput(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (generated.CreateExportInput, error) {
+	if _, ok := rawArgs["input"]; !ok {
+		var zeroVal generated.CreateExportInput
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+	if tmp, ok := rawArgs["input"]; ok {
+		return ec.unmarshalNCreateExportInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateExportInput(ctx, tmp)
+	}
+
+	var zeroVal generated.CreateExportInput
 	return zeroVal, nil
 }
 
@@ -6518,6 +6548,80 @@ func (ec *executionContext) field_Mutation_updateEvidence_argsEvidenceFiles(
 
 	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("evidenceFiles"))
 	if tmp, ok := rawArgs["evidenceFiles"]; ok {
+		return ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ(ctx, tmp)
+	}
+
+	var zeroVal []*graphql.Upload
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_updateExport_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := ec.field_Mutation_updateExport_argsID(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	arg1, err := ec.field_Mutation_updateExport_argsInput(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
+	arg2, err := ec.field_Mutation_updateExport_argsExportFiles(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["exportFiles"] = arg2
+	return args, nil
+}
+func (ec *executionContext) field_Mutation_updateExport_argsID(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (string, error) {
+	if _, ok := rawArgs["id"]; !ok {
+		var zeroVal string
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+	if tmp, ok := rawArgs["id"]; ok {
+		return ec.unmarshalNID2string(ctx, tmp)
+	}
+
+	var zeroVal string
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_updateExport_argsInput(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (generated.UpdateExportInput, error) {
+	if _, ok := rawArgs["input"]; !ok {
+		var zeroVal generated.UpdateExportInput
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+	if tmp, ok := rawArgs["input"]; ok {
+		return ec.unmarshalNUpdateExportInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateExportInput(ctx, tmp)
+	}
+
+	var zeroVal generated.UpdateExportInput
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_updateExport_argsExportFiles(
+	ctx context.Context,
+	rawArgs map[string]any,
+) ([]*graphql.Upload, error) {
+	if _, ok := rawArgs["exportFiles"]; !ok {
+		var zeroVal []*graphql.Upload
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("exportFiles"))
+	if tmp, ok := rawArgs["exportFiles"]; ok {
 		return ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ(ctx, tmp)
 	}
 
@@ -13125,6 +13229,124 @@ func (ec *executionContext) fieldContext_Mutation_deleteEvidence(ctx context.Con
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteEvidence_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createExport(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createExport(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateExport(rctx, fc.Args["input"].(generated.CreateExportInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.ExportCreatePayload)
+	fc.Result = res
+	return ec.marshalNExportCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐExportCreatePayload(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createExport(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "export":
+				return ec.fieldContext_ExportCreatePayload_export(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ExportCreatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createExport_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateExport(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateExport(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateExport(rctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateExportInput), fc.Args["exportFiles"].([]*graphql.Upload))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.ExportUpdatePayload)
+	fc.Result = res
+	return ec.marshalNExportUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐExportUpdatePayload(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateExport(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "export":
+				return ec.fieldContext_ExportUpdatePayload_export(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ExportUpdatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateExport_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -23279,6 +23501,20 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteEvidence":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteEvidence(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createExport":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createExport(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateExport":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateExport(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

@@ -42,6 +42,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
+	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -11482,6 +11483,413 @@ func (eh *EvidenceHistory) ToEdge(order *EvidenceHistoryOrder) *EvidenceHistoryE
 	return &EvidenceHistoryEdge{
 		Node:   eh,
 		Cursor: order.Field.toCursor(eh),
+	}
+}
+
+// ExportEdge is the edge representation of Export.
+type ExportEdge struct {
+	Node   *Export `json:"node"`
+	Cursor Cursor  `json:"cursor"`
+}
+
+// ExportConnection is the connection containing edges to Export.
+type ExportConnection struct {
+	Edges      []*ExportEdge `json:"edges"`
+	PageInfo   PageInfo      `json:"pageInfo"`
+	TotalCount int           `json:"totalCount"`
+}
+
+func (c *ExportConnection) build(nodes []*Export, pager *exportPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *Export
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Export {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Export {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*ExportEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &ExportEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// ExportPaginateOption enables pagination customization.
+type ExportPaginateOption func(*exportPager) error
+
+// WithExportOrder configures pagination ordering.
+func WithExportOrder(order []*ExportOrder) ExportPaginateOption {
+	return func(pager *exportPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithExportFilter configures pagination filter.
+func WithExportFilter(filter func(*ExportQuery) (*ExportQuery, error)) ExportPaginateOption {
+	return func(pager *exportPager) error {
+		if filter == nil {
+			return errors.New("ExportQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type exportPager struct {
+	reverse bool
+	order   []*ExportOrder
+	filter  func(*ExportQuery) (*ExportQuery, error)
+}
+
+func newExportPager(opts []ExportPaginateOption, reverse bool) (*exportPager, error) {
+	pager := &exportPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *exportPager) applyFilter(query *ExportQuery) (*ExportQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *exportPager) toCursor(e *Export) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(e).Value)
+	}
+	return Cursor{ID: e.ID, Value: cs_}
+}
+
+func (p *exportPager) applyCursors(query *ExportQuery, after, before *Cursor) (*ExportQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultExportOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
+	}
+	return query, nil
+}
+
+func (p *exportPager) applyOrder(query *ExportQuery) *ExportQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultExportOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultExportOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *exportPager) orderExpr(query *ExportQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultExportOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Export.
+func (e *ExportQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...ExportPaginateOption,
+) (*ExportConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newExportPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if e, err = pager.applyFilter(e); err != nil {
+		return nil, err
+	}
+	conn := &ExportConnection{Edges: []*ExportEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := e.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if e, err = pager.applyCursors(e, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		e.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := e.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	e = pager.applyOrder(e)
+	nodes, err := e.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// ExportOrderFieldCreatedAt orders Export by created_at.
+	ExportOrderFieldCreatedAt = &ExportOrderField{
+		Value: func(e *Export) (ent.Value, error) {
+			return e.CreatedAt, nil
+		},
+		column: export.FieldCreatedAt,
+		toTerm: export.ByCreatedAt,
+		toCursor: func(e *Export) Cursor {
+			return Cursor{
+				ID:    e.ID,
+				Value: e.CreatedAt,
+			}
+		},
+	}
+	// ExportOrderFieldUpdatedAt orders Export by updated_at.
+	ExportOrderFieldUpdatedAt = &ExportOrderField{
+		Value: func(e *Export) (ent.Value, error) {
+			return e.UpdatedAt, nil
+		},
+		column: export.FieldUpdatedAt,
+		toTerm: export.ByUpdatedAt,
+		toCursor: func(e *Export) Cursor {
+			return Cursor{
+				ID:    e.ID,
+				Value: e.UpdatedAt,
+			}
+		},
+	}
+	// ExportOrderFieldExportType orders Export by export_type.
+	ExportOrderFieldExportType = &ExportOrderField{
+		Value: func(e *Export) (ent.Value, error) {
+			return e.ExportType, nil
+		},
+		column: export.FieldExportType,
+		toTerm: export.ByExportType,
+		toCursor: func(e *Export) Cursor {
+			return Cursor{
+				ID:    e.ID,
+				Value: e.ExportType,
+			}
+		},
+	}
+	// ExportOrderFieldFormat orders Export by format.
+	ExportOrderFieldFormat = &ExportOrderField{
+		Value: func(e *Export) (ent.Value, error) {
+			return e.Format, nil
+		},
+		column: export.FieldFormat,
+		toTerm: export.ByFormat,
+		toCursor: func(e *Export) Cursor {
+			return Cursor{
+				ID:    e.ID,
+				Value: e.Format,
+			}
+		},
+	}
+	// ExportOrderFieldStatus orders Export by status.
+	ExportOrderFieldStatus = &ExportOrderField{
+		Value: func(e *Export) (ent.Value, error) {
+			return e.Status, nil
+		},
+		column: export.FieldStatus,
+		toTerm: export.ByStatus,
+		toCursor: func(e *Export) Cursor {
+			return Cursor{
+				ID:    e.ID,
+				Value: e.Status,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ExportOrderField) String() string {
+	var str string
+	switch f.column {
+	case ExportOrderFieldCreatedAt.column:
+		str = "created_at"
+	case ExportOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case ExportOrderFieldExportType.column:
+		str = "export_type"
+	case ExportOrderFieldFormat.column:
+		str = "format"
+	case ExportOrderFieldStatus.column:
+		str = "status"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ExportOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ExportOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ExportOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *ExportOrderFieldCreatedAt
+	case "updated_at":
+		*f = *ExportOrderFieldUpdatedAt
+	case "export_type":
+		*f = *ExportOrderFieldExportType
+	case "format":
+		*f = *ExportOrderFieldFormat
+	case "status":
+		*f = *ExportOrderFieldStatus
+	default:
+		return fmt.Errorf("%s is not a valid ExportOrderField", str)
+	}
+	return nil
+}
+
+// ExportOrderField defines the ordering field of Export.
+type ExportOrderField struct {
+	// Value extracts the ordering value from the given Export.
+	Value    func(*Export) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) export.OrderOption
+	toCursor func(*Export) Cursor
+}
+
+// ExportOrder defines the ordering of Export.
+type ExportOrder struct {
+	Direction OrderDirection    `json:"direction"`
+	Field     *ExportOrderField `json:"field"`
+}
+
+// DefaultExportOrder is the default ordering of Export.
+var DefaultExportOrder = &ExportOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &ExportOrderField{
+		Value: func(e *Export) (ent.Value, error) {
+			return e.ID, nil
+		},
+		column: export.FieldID,
+		toTerm: export.ByID,
+		toCursor: func(e *Export) Cursor {
+			return Cursor{ID: e.ID}
+		},
+	},
+}
+
+// ToEdge converts Export into ExportEdge.
+func (e *Export) ToEdge(order *ExportOrder) *ExportEdge {
+	if order == nil {
+		order = DefaultExportOrder
+	}
+	return &ExportEdge{
+		Node:   e,
+		Cursor: order.Field.toCursor(e),
 	}
 }
 

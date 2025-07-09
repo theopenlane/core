@@ -27,6 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
@@ -1251,6 +1252,21 @@ func (ou *OrganizationUpdate) AddSubprocessors(s ...*Subprocessor) *Organization
 		ids[i] = s[i].ID
 	}
 	return ou.AddSubprocessorIDs(ids...)
+}
+
+// AddExportIDs adds the "exports" edge to the Export entity by IDs.
+func (ou *OrganizationUpdate) AddExportIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddExportIDs(ids...)
+	return ou
+}
+
+// AddExports adds the "exports" edges to the Export entity.
+func (ou *OrganizationUpdate) AddExports(e ...*Export) *OrganizationUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return ou.AddExportIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -2585,6 +2601,27 @@ func (ou *OrganizationUpdate) RemoveSubprocessors(s ...*Subprocessor) *Organizat
 		ids[i] = s[i].ID
 	}
 	return ou.RemoveSubprocessorIDs(ids...)
+}
+
+// ClearExports clears all "exports" edges to the Export entity.
+func (ou *OrganizationUpdate) ClearExports() *OrganizationUpdate {
+	ou.mutation.ClearExports()
+	return ou
+}
+
+// RemoveExportIDs removes the "exports" edge to Export entities by IDs.
+func (ou *OrganizationUpdate) RemoveExportIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveExportIDs(ids...)
+	return ou
+}
+
+// RemoveExports removes "exports" edges to Export entities.
+func (ou *OrganizationUpdate) RemoveExports(e ...*Export) *OrganizationUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return ou.RemoveExportIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -5825,6 +5862,54 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ou.mutation.ExportsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ExportsTable,
+			Columns: []string{organization.ExportsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Export
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedExportsIDs(); len(nodes) > 0 && !ou.mutation.ExportsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ExportsTable,
+			Columns: []string{organization.ExportsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Export
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.ExportsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ExportsTable,
+			Columns: []string{organization.ExportsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Export
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ou.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -7067,6 +7152,21 @@ func (ouo *OrganizationUpdateOne) AddSubprocessors(s ...*Subprocessor) *Organiza
 		ids[i] = s[i].ID
 	}
 	return ouo.AddSubprocessorIDs(ids...)
+}
+
+// AddExportIDs adds the "exports" edge to the Export entity by IDs.
+func (ouo *OrganizationUpdateOne) AddExportIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddExportIDs(ids...)
+	return ouo
+}
+
+// AddExports adds the "exports" edges to the Export entity.
+func (ouo *OrganizationUpdateOne) AddExports(e ...*Export) *OrganizationUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return ouo.AddExportIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -8401,6 +8501,27 @@ func (ouo *OrganizationUpdateOne) RemoveSubprocessors(s ...*Subprocessor) *Organ
 		ids[i] = s[i].ID
 	}
 	return ouo.RemoveSubprocessorIDs(ids...)
+}
+
+// ClearExports clears all "exports" edges to the Export entity.
+func (ouo *OrganizationUpdateOne) ClearExports() *OrganizationUpdateOne {
+	ouo.mutation.ClearExports()
+	return ouo
+}
+
+// RemoveExportIDs removes the "exports" edge to Export entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveExportIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveExportIDs(ids...)
+	return ouo
+}
+
+// RemoveExports removes "exports" edges to Export entities.
+func (ouo *OrganizationUpdateOne) RemoveExports(e ...*Export) *OrganizationUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return ouo.RemoveExportIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -11666,6 +11787,54 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			},
 		}
 		edge.Schema = ouo.schemaConfig.Subprocessor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.ExportsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ExportsTable,
+			Columns: []string{organization.ExportsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Export
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedExportsIDs(); len(nodes) > 0 && !ouo.mutation.ExportsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ExportsTable,
+			Columns: []string{organization.ExportsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Export
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.ExportsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ExportsTable,
+			Columns: []string{organization.ExportsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Export
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

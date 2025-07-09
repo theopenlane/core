@@ -63,6 +63,7 @@ type File struct {
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the FileQuery when eager-loading is set.
 	Edges        FileEdges `json:"edges"`
+	export_files *string
 	note_files   *string
 	selectValues sql.SelectValues
 
@@ -261,7 +262,9 @@ func (*File) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case file.FieldCreatedAt, file.FieldUpdatedAt, file.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case file.ForeignKeys[0]: // note_files
+		case file.ForeignKeys[0]: // export_files
+			values[i] = new(sql.NullString)
+		case file.ForeignKeys[1]: // note_files
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -413,6 +416,13 @@ func (f *File) assignValues(columns []string, values []any) error {
 				f.FileContents = *value
 			}
 		case file.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field export_files", values[i])
+			} else if value.Valid {
+				f.export_files = new(string)
+				*f.export_files = value.String
+			}
+		case file.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field note_files", values[i])
 			} else if value.Valid {

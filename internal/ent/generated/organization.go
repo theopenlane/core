@@ -190,13 +190,15 @@ type OrganizationEdges struct {
 	Scans []*Scan `json:"scans,omitempty"`
 	// Subprocessors holds the value of the subprocessors edge.
 	Subprocessors []*Subprocessor `json:"subprocessors,omitempty"`
+	// Exports holds the value of the exports edge.
+	Exports []*Export `json:"exports,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [66]bool
+	loadedTypes [67]bool
 	// totalCount holds the count of the edges above.
-	totalCount [63]map[string]int
+	totalCount [64]map[string]int
 
 	namedControlCreators               map[string][]*Group
 	namedControlImplementationCreators map[string][]*Group
@@ -260,6 +262,7 @@ type OrganizationEdges struct {
 	namedAssets                        map[string][]*Asset
 	namedScans                         map[string][]*Scan
 	namedSubprocessors                 map[string][]*Subprocessor
+	namedExports                       map[string][]*Export
 	namedMembers                       map[string][]*OrgMembership
 }
 
@@ -854,10 +857,19 @@ func (e OrganizationEdges) SubprocessorsOrErr() ([]*Subprocessor, error) {
 	return nil, &NotLoadedError{edge: "subprocessors"}
 }
 
+// ExportsOrErr returns the Exports value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) ExportsOrErr() ([]*Export, error) {
+	if e.loadedTypes[65] {
+		return e.Exports, nil
+	}
+	return nil, &NotLoadedError{edge: "exports"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[65] {
+	if e.loadedTypes[66] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -1334,6 +1346,11 @@ func (o *Organization) QueryScans() *ScanQuery {
 // QuerySubprocessors queries the "subprocessors" edge of the Organization entity.
 func (o *Organization) QuerySubprocessors() *SubprocessorQuery {
 	return NewOrganizationClient(o.config).QuerySubprocessors(o)
+}
+
+// QueryExports queries the "exports" edge of the Organization entity.
+func (o *Organization) QueryExports() *ExportQuery {
+	return NewOrganizationClient(o.config).QueryExports(o)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -2906,6 +2923,30 @@ func (o *Organization) appendNamedSubprocessors(name string, edges ...*Subproces
 		o.Edges.namedSubprocessors[name] = []*Subprocessor{}
 	} else {
 		o.Edges.namedSubprocessors[name] = append(o.Edges.namedSubprocessors[name], edges...)
+	}
+}
+
+// NamedExports returns the Exports named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedExports(name string) ([]*Export, error) {
+	if o.Edges.namedExports == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedExports[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedExports(name string, edges ...*Export) {
+	if o.Edges.namedExports == nil {
+		o.Edges.namedExports = make(map[string][]*Export)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedExports[name] = []*Export{}
+	} else {
+		o.Edges.namedExports[name] = append(o.Edges.namedExports[name], edges...)
 	}
 }
 

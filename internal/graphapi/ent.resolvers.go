@@ -943,6 +943,40 @@ func (r *queryResolver) EvidenceHistories(ctx context.Context, after *entgql.Cur
 	return res, err
 }
 
+// Exports is the resolver for the exports field.
+func (r *queryResolver) Exports(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ExportOrder, where *generated.ExportWhereInput) (*generated.ExportConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.ExportOrder{
+			{
+				Field:     generated.ExportOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).Export.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "export"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithExportOrder(orderBy),
+		generated.WithExportFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "export"})
+	}
+
+	return res, err
+}
+
 // Files is the resolver for the files field.
 func (r *queryResolver) Files(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) (*generated.FileConnection, error) {
 	// set page limit if nothing was set

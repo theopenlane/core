@@ -177,6 +177,8 @@ const (
 	EdgeScans = "scans"
 	// EdgeSubprocessors holds the string denoting the subprocessors edge name in mutations.
 	EdgeSubprocessors = "subprocessors"
+	// EdgeExports holds the string denoting the exports edge name in mutations.
+	EdgeExports = "exports"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -622,6 +624,13 @@ const (
 	SubprocessorsInverseTable = "subprocessors"
 	// SubprocessorsColumn is the table column denoting the subprocessors relation/edge.
 	SubprocessorsColumn = "owner_id"
+	// ExportsTable is the table that holds the exports relation/edge.
+	ExportsTable = "exports"
+	// ExportsInverseTable is the table name for the Export entity.
+	// It exists in this package in order to avoid circular dependency with the "export" package.
+	ExportsInverseTable = "exports"
+	// ExportsColumn is the table column denoting the exports relation/edge.
+	ExportsColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -1686,6 +1695,20 @@ func BySubprocessors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByExportsCount orders the results by exports count.
+func ByExportsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newExportsStep(), opts...)
+	}
+}
+
+// ByExports orders the results by exports terms.
+func ByExports(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newExportsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -2152,6 +2175,13 @@ func newSubprocessorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SubprocessorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, SubprocessorsTable, SubprocessorsColumn),
+	)
+}
+func newExportsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ExportsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ExportsTable, ExportsColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

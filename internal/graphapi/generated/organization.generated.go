@@ -217,6 +217,8 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_scans(ctx, field)
 			case "subprocessors":
 				return ec.fieldContext_Organization_subprocessors(ctx, field)
+			case "exports":
+				return ec.fieldContext_Organization_exports(ctx, field)
 			case "members":
 				return ec.fieldContext_Organization_members(ctx, field)
 			}
@@ -417,6 +419,8 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_scans(ctx, field)
 			case "subprocessors":
 				return ec.fieldContext_Organization_subprocessors(ctx, field)
+			case "exports":
+				return ec.fieldContext_Organization_exports(ctx, field)
 			case "members":
 				return ec.fieldContext_Organization_members(ctx, field)
 			}
@@ -661,6 +665,8 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_scans(ctx, field)
 			case "subprocessors":
 				return ec.fieldContext_Organization_subprocessors(ctx, field)
+			case "exports":
+				return ec.fieldContext_Organization_exports(ctx, field)
 			case "members":
 				return ec.fieldContext_Organization_members(ctx, field)
 			}
