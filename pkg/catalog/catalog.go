@@ -288,7 +288,7 @@ func (c *Catalog) EnsurePrices(ctx context.Context, sc *entitlements.StripeClien
 		}
 
 		if prod == nil {
-			prod, err = sc.CreateProduct(ctx, name, f.DisplayName, f.Description, map[string]string{ManagedByKey: ManagedByValue})
+			prod, err = sc.CreateProduct(ctx, f.DisplayName, f.Description, map[string]string{ManagedByKey: ManagedByValue})
 			if err != nil {
 				return f, ErrFailedToCreateProduct
 			}
