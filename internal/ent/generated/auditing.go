@@ -3311,8 +3311,17 @@ func (tcsh *TrustCenterSubprocessorHistory) changes(new *TrustCenterSubprocessor
 	if !reflect.DeepEqual(tcsh.DeletedBy, new.DeletedBy) {
 		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldDeletedBy, tcsh.DeletedBy, new.DeletedBy))
 	}
-	if !reflect.DeepEqual(tcsh.Tags, new.Tags) {
-		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldTags, tcsh.Tags, new.Tags))
+	if !reflect.DeepEqual(tcsh.SubprocessorID, new.SubprocessorID) {
+		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldSubprocessorID, tcsh.SubprocessorID, new.SubprocessorID))
+	}
+	if !reflect.DeepEqual(tcsh.TrustCenterID, new.TrustCenterID) {
+		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldTrustCenterID, tcsh.TrustCenterID, new.TrustCenterID))
+	}
+	if !reflect.DeepEqual(tcsh.Countries, new.Countries) {
+		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldCountries, tcsh.Countries, new.Countries))
+	}
+	if !reflect.DeepEqual(tcsh.Category, new.Category) {
+		changes = append(changes, NewChange(trustcentersubprocessorhistory.FieldCategory, tcsh.Category, new.Category))
 	}
 	return changes
 }

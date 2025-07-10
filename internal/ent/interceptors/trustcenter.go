@@ -23,6 +23,8 @@ func InterceptorTrustCenter() ent.Interceptor {
 	})
 }
 
+// InterceptorTrustCenterChild is middleware to change the TrustCenterChild query.
+// Should be used by schemas that are owned by a trust center
 func InterceptorTrustCenterChild() ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
 		// skip if not a graph ctx
@@ -38,7 +40,6 @@ func InterceptorTrustCenterChild() ent.Interceptor {
 
 		if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
 			if anon.TrustCenterID != "" && anon.OrganizationID != "" {
-				// q.WhereP(trustcentersetting.HasTrustCenterWith(trustcenter.IDEQ(anon.TrustCenterID)))
 				q.WhereP(sql.FieldEQ("trust_center_id", anon.TrustCenterID))
 				return nil
 			}

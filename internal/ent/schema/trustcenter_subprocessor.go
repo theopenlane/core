@@ -15,6 +15,10 @@ import (
 	"github.com/theopenlane/iam/entfga"
 )
 
+const (
+	trustCenterSubprocessorCategoryMaxLen = 255
+)
+
 // TrustCenterSubprocessor holds the schema definition for the TrustCenterSubprocessor entity
 type TrustCenterSubprocessor struct {
 	SchemaFuncs
@@ -56,7 +60,7 @@ func (TrustCenterSubprocessor) Fields() []ent.Field {
 		field.String("category").
 			Comment("Category of the subprocessor, e.g. 'Data Warehouse' or 'Infrastructure Hosting'").
 			NotEmpty().
-			MaxLen(255),
+			MaxLen(trustCenterSubprocessorCategoryMaxLen),
 	}
 }
 

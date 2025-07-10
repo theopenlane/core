@@ -70930,6 +70930,10 @@ type SubprocessorWhereInput struct {
 	// "logo_file" edge predicates.
 	HasLogoFile     *bool             `json:"hasLogoFile,omitempty"`
 	HasLogoFileWith []*FileWhereInput `json:"hasLogoFileWith,omitempty"`
+
+	// "trust_center_subprocessors" edge predicates.
+	HasTrustCenterSubprocessors     *bool                                `json:"hasTrustCenterSubprocessors,omitempty"`
+	HasTrustCenterSubprocessorsWith []*TrustCenterSubprocessorWhereInput `json:"hasTrustCenterSubprocessorsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -71468,6 +71472,24 @@ func (i *SubprocessorWhereInput) P() (predicate.Subprocessor, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, subprocessor.HasLogoFileWith(with...))
+	}
+	if i.HasTrustCenterSubprocessors != nil {
+		p := subprocessor.HasTrustCenterSubprocessors()
+		if !*i.HasTrustCenterSubprocessors {
+			p = subprocessor.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTrustCenterSubprocessorsWith) > 0 {
+		with := make([]predicate.TrustCenterSubprocessor, 0, len(i.HasTrustCenterSubprocessorsWith))
+		for _, w := range i.HasTrustCenterSubprocessorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTrustCenterSubprocessorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, subprocessor.HasTrustCenterSubprocessorsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -76790,6 +76812,10 @@ type TrustCenterWhereInput struct {
 	// "setting" edge predicates.
 	HasSetting     *bool                           `json:"hasSetting,omitempty"`
 	HasSettingWith []*TrustCenterSettingWhereInput `json:"hasSettingWith,omitempty"`
+
+	// "trust_center_subprocessors" edge predicates.
+	HasTrustCenterSubprocessors     *bool                                `json:"hasTrustCenterSubprocessors,omitempty"`
+	HasTrustCenterSubprocessorsWith []*TrustCenterSubprocessorWhereInput `json:"hasTrustCenterSubprocessorsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -77232,6 +77258,24 @@ func (i *TrustCenterWhereInput) P() (predicate.TrustCenter, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, trustcenter.HasSettingWith(with...))
+	}
+	if i.HasTrustCenterSubprocessors != nil {
+		p := trustcenter.HasTrustCenterSubprocessors()
+		if !*i.HasTrustCenterSubprocessors {
+			p = trustcenter.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTrustCenterSubprocessorsWith) > 0 {
+		with := make([]predicate.TrustCenterSubprocessor, 0, len(i.HasTrustCenterSubprocessorsWith))
+		for _, w := range i.HasTrustCenterSubprocessorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTrustCenterSubprocessorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenter.HasTrustCenterSubprocessorsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -80381,6 +80425,61 @@ type TrustCenterSubprocessorWhereInput struct {
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "subprocessor_id" field predicates.
+	SubprocessorID             *string  `json:"subprocessorID,omitempty"`
+	SubprocessorIDNEQ          *string  `json:"subprocessorIDNEQ,omitempty"`
+	SubprocessorIDIn           []string `json:"subprocessorIDIn,omitempty"`
+	SubprocessorIDNotIn        []string `json:"subprocessorIDNotIn,omitempty"`
+	SubprocessorIDGT           *string  `json:"subprocessorIDGT,omitempty"`
+	SubprocessorIDGTE          *string  `json:"subprocessorIDGTE,omitempty"`
+	SubprocessorIDLT           *string  `json:"subprocessorIDLT,omitempty"`
+	SubprocessorIDLTE          *string  `json:"subprocessorIDLTE,omitempty"`
+	SubprocessorIDContains     *string  `json:"subprocessorIDContains,omitempty"`
+	SubprocessorIDHasPrefix    *string  `json:"subprocessorIDHasPrefix,omitempty"`
+	SubprocessorIDHasSuffix    *string  `json:"subprocessorIDHasSuffix,omitempty"`
+	SubprocessorIDEqualFold    *string  `json:"subprocessorIDEqualFold,omitempty"`
+	SubprocessorIDContainsFold *string  `json:"subprocessorIDContainsFold,omitempty"`
+
+	// "trust_center_id" field predicates.
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIDNEQ          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIDGT           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIDGTE          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIDLT           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIDLTE          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        bool     `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       bool     `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+
+	// "category" field predicates.
+	Category             *string  `json:"category,omitempty"`
+	CategoryNEQ          *string  `json:"categoryNEQ,omitempty"`
+	CategoryIn           []string `json:"categoryIn,omitempty"`
+	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
+	CategoryGT           *string  `json:"categoryGT,omitempty"`
+	CategoryGTE          *string  `json:"categoryGTE,omitempty"`
+	CategoryLT           *string  `json:"categoryLT,omitempty"`
+	CategoryLTE          *string  `json:"categoryLTE,omitempty"`
+	CategoryContains     *string  `json:"categoryContains,omitempty"`
+	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
+	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
+	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
+	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
+
+	// "trust_center" edge predicates.
+	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
+	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
+
+	// "subprocessor" edge predicates.
+	HasSubprocessor     *bool                     `json:"hasSubprocessor,omitempty"`
+	HasSubprocessorWith []*SubprocessorWhereInput `json:"hasSubprocessorWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -80634,7 +80733,166 @@ func (i *TrustCenterSubprocessorWhereInput) P() (predicate.TrustCenterSubprocess
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, trustcentersubprocessor.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
+	if i.SubprocessorID != nil {
+		predicates = append(predicates, trustcentersubprocessor.SubprocessorIDEQ(*i.SubprocessorID))
+	}
+	if i.SubprocessorIDNEQ != nil {
+		predicates = append(predicates, trustcentersubprocessor.SubprocessorIDNEQ(*i.SubprocessorIDNEQ))
+	}
+	if len(i.SubprocessorIDIn) > 0 {
+		predicates = append(predicates, trustcentersubprocessor.SubprocessorIDIn(i.SubprocessorIDIn...))
+	}
+	if len(i.SubprocessorIDNotIn) > 0 {
+		predicates = append(predicates, trustcentersubprocessor.SubprocessorIDNotIn(i.SubprocessorIDNotIn...))
+	}
+	if i.SubprocessorIDGT != nil {
+		predicates = append(predicates, trustcentersubprocessor.SubprocessorIDGT(*i.SubprocessorIDGT))
+	}
+	if i.SubprocessorIDGTE != nil {
+		predicates = append(predicates, trustcentersubprocessor.SubprocessorIDGTE(*i.SubprocessorIDGTE))
+	}
+	if i.SubprocessorIDLT != nil {
+		predicates = append(predicates, trustcentersubprocessor.SubprocessorIDLT(*i.SubprocessorIDLT))
+	}
+	if i.SubprocessorIDLTE != nil {
+		predicates = append(predicates, trustcentersubprocessor.SubprocessorIDLTE(*i.SubprocessorIDLTE))
+	}
+	if i.SubprocessorIDContains != nil {
+		predicates = append(predicates, trustcentersubprocessor.SubprocessorIDContains(*i.SubprocessorIDContains))
+	}
+	if i.SubprocessorIDHasPrefix != nil {
+		predicates = append(predicates, trustcentersubprocessor.SubprocessorIDHasPrefix(*i.SubprocessorIDHasPrefix))
+	}
+	if i.SubprocessorIDHasSuffix != nil {
+		predicates = append(predicates, trustcentersubprocessor.SubprocessorIDHasSuffix(*i.SubprocessorIDHasSuffix))
+	}
+	if i.SubprocessorIDEqualFold != nil {
+		predicates = append(predicates, trustcentersubprocessor.SubprocessorIDEqualFold(*i.SubprocessorIDEqualFold))
+	}
+	if i.SubprocessorIDContainsFold != nil {
+		predicates = append(predicates, trustcentersubprocessor.SubprocessorIDContainsFold(*i.SubprocessorIDContainsFold))
+	}
+	if i.TrustCenterID != nil {
+		predicates = append(predicates, trustcentersubprocessor.TrustCenterIDEQ(*i.TrustCenterID))
+	}
+	if i.TrustCenterIDNEQ != nil {
+		predicates = append(predicates, trustcentersubprocessor.TrustCenterIDNEQ(*i.TrustCenterIDNEQ))
+	}
+	if len(i.TrustCenterIDIn) > 0 {
+		predicates = append(predicates, trustcentersubprocessor.TrustCenterIDIn(i.TrustCenterIDIn...))
+	}
+	if len(i.TrustCenterIDNotIn) > 0 {
+		predicates = append(predicates, trustcentersubprocessor.TrustCenterIDNotIn(i.TrustCenterIDNotIn...))
+	}
+	if i.TrustCenterIDGT != nil {
+		predicates = append(predicates, trustcentersubprocessor.TrustCenterIDGT(*i.TrustCenterIDGT))
+	}
+	if i.TrustCenterIDGTE != nil {
+		predicates = append(predicates, trustcentersubprocessor.TrustCenterIDGTE(*i.TrustCenterIDGTE))
+	}
+	if i.TrustCenterIDLT != nil {
+		predicates = append(predicates, trustcentersubprocessor.TrustCenterIDLT(*i.TrustCenterIDLT))
+	}
+	if i.TrustCenterIDLTE != nil {
+		predicates = append(predicates, trustcentersubprocessor.TrustCenterIDLTE(*i.TrustCenterIDLTE))
+	}
+	if i.TrustCenterIDContains != nil {
+		predicates = append(predicates, trustcentersubprocessor.TrustCenterIDContains(*i.TrustCenterIDContains))
+	}
+	if i.TrustCenterIDHasPrefix != nil {
+		predicates = append(predicates, trustcentersubprocessor.TrustCenterIDHasPrefix(*i.TrustCenterIDHasPrefix))
+	}
+	if i.TrustCenterIDHasSuffix != nil {
+		predicates = append(predicates, trustcentersubprocessor.TrustCenterIDHasSuffix(*i.TrustCenterIDHasSuffix))
+	}
+	if i.TrustCenterIDIsNil {
+		predicates = append(predicates, trustcentersubprocessor.TrustCenterIDIsNil())
+	}
+	if i.TrustCenterIDNotNil {
+		predicates = append(predicates, trustcentersubprocessor.TrustCenterIDNotNil())
+	}
+	if i.TrustCenterIDEqualFold != nil {
+		predicates = append(predicates, trustcentersubprocessor.TrustCenterIDEqualFold(*i.TrustCenterIDEqualFold))
+	}
+	if i.TrustCenterIDContainsFold != nil {
+		predicates = append(predicates, trustcentersubprocessor.TrustCenterIDContainsFold(*i.TrustCenterIDContainsFold))
+	}
+	if i.Category != nil {
+		predicates = append(predicates, trustcentersubprocessor.CategoryEQ(*i.Category))
+	}
+	if i.CategoryNEQ != nil {
+		predicates = append(predicates, trustcentersubprocessor.CategoryNEQ(*i.CategoryNEQ))
+	}
+	if len(i.CategoryIn) > 0 {
+		predicates = append(predicates, trustcentersubprocessor.CategoryIn(i.CategoryIn...))
+	}
+	if len(i.CategoryNotIn) > 0 {
+		predicates = append(predicates, trustcentersubprocessor.CategoryNotIn(i.CategoryNotIn...))
+	}
+	if i.CategoryGT != nil {
+		predicates = append(predicates, trustcentersubprocessor.CategoryGT(*i.CategoryGT))
+	}
+	if i.CategoryGTE != nil {
+		predicates = append(predicates, trustcentersubprocessor.CategoryGTE(*i.CategoryGTE))
+	}
+	if i.CategoryLT != nil {
+		predicates = append(predicates, trustcentersubprocessor.CategoryLT(*i.CategoryLT))
+	}
+	if i.CategoryLTE != nil {
+		predicates = append(predicates, trustcentersubprocessor.CategoryLTE(*i.CategoryLTE))
+	}
+	if i.CategoryContains != nil {
+		predicates = append(predicates, trustcentersubprocessor.CategoryContains(*i.CategoryContains))
+	}
+	if i.CategoryHasPrefix != nil {
+		predicates = append(predicates, trustcentersubprocessor.CategoryHasPrefix(*i.CategoryHasPrefix))
+	}
+	if i.CategoryHasSuffix != nil {
+		predicates = append(predicates, trustcentersubprocessor.CategoryHasSuffix(*i.CategoryHasSuffix))
+	}
+	if i.CategoryEqualFold != nil {
+		predicates = append(predicates, trustcentersubprocessor.CategoryEqualFold(*i.CategoryEqualFold))
+	}
+	if i.CategoryContainsFold != nil {
+		predicates = append(predicates, trustcentersubprocessor.CategoryContainsFold(*i.CategoryContainsFold))
+	}
 
+	if i.HasTrustCenter != nil {
+		p := trustcentersubprocessor.HasTrustCenter()
+		if !*i.HasTrustCenter {
+			p = trustcentersubprocessor.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTrustCenterWith) > 0 {
+		with := make([]predicate.TrustCenter, 0, len(i.HasTrustCenterWith))
+		for _, w := range i.HasTrustCenterWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTrustCenterWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcentersubprocessor.HasTrustCenterWith(with...))
+	}
+	if i.HasSubprocessor != nil {
+		p := trustcentersubprocessor.HasSubprocessor()
+		if !*i.HasSubprocessor {
+			p = trustcentersubprocessor.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSubprocessorWith) > 0 {
+		with := make([]predicate.Subprocessor, 0, len(i.HasSubprocessorWith))
+		for _, w := range i.HasSubprocessorWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSubprocessorWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcentersubprocessor.HasSubprocessorWith(with...))
+	}
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyTrustCenterSubprocessorWhereInput
@@ -80754,6 +81012,53 @@ type TrustCenterSubprocessorHistoryWhereInput struct {
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "subprocessor_id" field predicates.
+	SubprocessorID             *string  `json:"subprocessorID,omitempty"`
+	SubprocessorIDNEQ          *string  `json:"subprocessorIDNEQ,omitempty"`
+	SubprocessorIDIn           []string `json:"subprocessorIDIn,omitempty"`
+	SubprocessorIDNotIn        []string `json:"subprocessorIDNotIn,omitempty"`
+	SubprocessorIDGT           *string  `json:"subprocessorIDGT,omitempty"`
+	SubprocessorIDGTE          *string  `json:"subprocessorIDGTE,omitempty"`
+	SubprocessorIDLT           *string  `json:"subprocessorIDLT,omitempty"`
+	SubprocessorIDLTE          *string  `json:"subprocessorIDLTE,omitempty"`
+	SubprocessorIDContains     *string  `json:"subprocessorIDContains,omitempty"`
+	SubprocessorIDHasPrefix    *string  `json:"subprocessorIDHasPrefix,omitempty"`
+	SubprocessorIDHasSuffix    *string  `json:"subprocessorIDHasSuffix,omitempty"`
+	SubprocessorIDEqualFold    *string  `json:"subprocessorIDEqualFold,omitempty"`
+	SubprocessorIDContainsFold *string  `json:"subprocessorIDContainsFold,omitempty"`
+
+	// "trust_center_id" field predicates.
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIDNEQ          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIDGT           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIDGTE          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIDLT           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIDLTE          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        bool     `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       bool     `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+
+	// "category" field predicates.
+	Category             *string  `json:"category,omitempty"`
+	CategoryNEQ          *string  `json:"categoryNEQ,omitempty"`
+	CategoryIn           []string `json:"categoryIn,omitempty"`
+	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
+	CategoryGT           *string  `json:"categoryGT,omitempty"`
+	CategoryGTE          *string  `json:"categoryGTE,omitempty"`
+	CategoryLT           *string  `json:"categoryLT,omitempty"`
+	CategoryLTE          *string  `json:"categoryLTE,omitempty"`
+	CategoryContains     *string  `json:"categoryContains,omitempty"`
+	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
+	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
+	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
+	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -81087,6 +81392,129 @@ func (i *TrustCenterSubprocessorHistoryWhereInput) P() (predicate.TrustCenterSub
 	}
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, trustcentersubprocessorhistory.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.SubprocessorID != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.SubprocessorIDEQ(*i.SubprocessorID))
+	}
+	if i.SubprocessorIDNEQ != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.SubprocessorIDNEQ(*i.SubprocessorIDNEQ))
+	}
+	if len(i.SubprocessorIDIn) > 0 {
+		predicates = append(predicates, trustcentersubprocessorhistory.SubprocessorIDIn(i.SubprocessorIDIn...))
+	}
+	if len(i.SubprocessorIDNotIn) > 0 {
+		predicates = append(predicates, trustcentersubprocessorhistory.SubprocessorIDNotIn(i.SubprocessorIDNotIn...))
+	}
+	if i.SubprocessorIDGT != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.SubprocessorIDGT(*i.SubprocessorIDGT))
+	}
+	if i.SubprocessorIDGTE != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.SubprocessorIDGTE(*i.SubprocessorIDGTE))
+	}
+	if i.SubprocessorIDLT != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.SubprocessorIDLT(*i.SubprocessorIDLT))
+	}
+	if i.SubprocessorIDLTE != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.SubprocessorIDLTE(*i.SubprocessorIDLTE))
+	}
+	if i.SubprocessorIDContains != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.SubprocessorIDContains(*i.SubprocessorIDContains))
+	}
+	if i.SubprocessorIDHasPrefix != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.SubprocessorIDHasPrefix(*i.SubprocessorIDHasPrefix))
+	}
+	if i.SubprocessorIDHasSuffix != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.SubprocessorIDHasSuffix(*i.SubprocessorIDHasSuffix))
+	}
+	if i.SubprocessorIDEqualFold != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.SubprocessorIDEqualFold(*i.SubprocessorIDEqualFold))
+	}
+	if i.SubprocessorIDContainsFold != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.SubprocessorIDContainsFold(*i.SubprocessorIDContainsFold))
+	}
+	if i.TrustCenterID != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.TrustCenterIDEQ(*i.TrustCenterID))
+	}
+	if i.TrustCenterIDNEQ != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.TrustCenterIDNEQ(*i.TrustCenterIDNEQ))
+	}
+	if len(i.TrustCenterIDIn) > 0 {
+		predicates = append(predicates, trustcentersubprocessorhistory.TrustCenterIDIn(i.TrustCenterIDIn...))
+	}
+	if len(i.TrustCenterIDNotIn) > 0 {
+		predicates = append(predicates, trustcentersubprocessorhistory.TrustCenterIDNotIn(i.TrustCenterIDNotIn...))
+	}
+	if i.TrustCenterIDGT != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.TrustCenterIDGT(*i.TrustCenterIDGT))
+	}
+	if i.TrustCenterIDGTE != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.TrustCenterIDGTE(*i.TrustCenterIDGTE))
+	}
+	if i.TrustCenterIDLT != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.TrustCenterIDLT(*i.TrustCenterIDLT))
+	}
+	if i.TrustCenterIDLTE != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.TrustCenterIDLTE(*i.TrustCenterIDLTE))
+	}
+	if i.TrustCenterIDContains != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.TrustCenterIDContains(*i.TrustCenterIDContains))
+	}
+	if i.TrustCenterIDHasPrefix != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.TrustCenterIDHasPrefix(*i.TrustCenterIDHasPrefix))
+	}
+	if i.TrustCenterIDHasSuffix != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.TrustCenterIDHasSuffix(*i.TrustCenterIDHasSuffix))
+	}
+	if i.TrustCenterIDIsNil {
+		predicates = append(predicates, trustcentersubprocessorhistory.TrustCenterIDIsNil())
+	}
+	if i.TrustCenterIDNotNil {
+		predicates = append(predicates, trustcentersubprocessorhistory.TrustCenterIDNotNil())
+	}
+	if i.TrustCenterIDEqualFold != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.TrustCenterIDEqualFold(*i.TrustCenterIDEqualFold))
+	}
+	if i.TrustCenterIDContainsFold != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.TrustCenterIDContainsFold(*i.TrustCenterIDContainsFold))
+	}
+	if i.Category != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.CategoryEQ(*i.Category))
+	}
+	if i.CategoryNEQ != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.CategoryNEQ(*i.CategoryNEQ))
+	}
+	if len(i.CategoryIn) > 0 {
+		predicates = append(predicates, trustcentersubprocessorhistory.CategoryIn(i.CategoryIn...))
+	}
+	if len(i.CategoryNotIn) > 0 {
+		predicates = append(predicates, trustcentersubprocessorhistory.CategoryNotIn(i.CategoryNotIn...))
+	}
+	if i.CategoryGT != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.CategoryGT(*i.CategoryGT))
+	}
+	if i.CategoryGTE != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.CategoryGTE(*i.CategoryGTE))
+	}
+	if i.CategoryLT != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.CategoryLT(*i.CategoryLT))
+	}
+	if i.CategoryLTE != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.CategoryLTE(*i.CategoryLTE))
+	}
+	if i.CategoryContains != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.CategoryContains(*i.CategoryContains))
+	}
+	if i.CategoryHasPrefix != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.CategoryHasPrefix(*i.CategoryHasPrefix))
+	}
+	if i.CategoryHasSuffix != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.CategoryHasSuffix(*i.CategoryHasSuffix))
+	}
+	if i.CategoryEqualFold != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.CategoryEqualFold(*i.CategoryEqualFold))
+	}
+	if i.CategoryContainsFold != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.CategoryContainsFold(*i.CategoryContainsFold))
 	}
 
 	switch len(predicates) {

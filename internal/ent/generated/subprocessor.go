@@ -60,13 +60,16 @@ type SubprocessorEdges struct {
 	Files []*File `json:"files,omitempty"`
 	// LogoFile holds the value of the logo_file edge.
 	LogoFile *File `json:"logo_file,omitempty"`
+	// TrustCenterSubprocessors holds the value of the trust_center_subprocessors edge.
+	TrustCenterSubprocessors []*TrustCenterSubprocessor `json:"trust_center_subprocessors,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [4]map[string]int
 
-	namedFiles map[string][]*File
+	namedFiles                    map[string][]*File
+	namedTrustCenterSubprocessors map[string][]*TrustCenterSubprocessor
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -98,6 +101,15 @@ func (e SubprocessorEdges) LogoFileOrErr() (*File, error) {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "logo_file"}
+}
+
+// TrustCenterSubprocessorsOrErr returns the TrustCenterSubprocessors value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubprocessorEdges) TrustCenterSubprocessorsOrErr() ([]*TrustCenterSubprocessor, error) {
+	if e.loadedTypes[3] {
+		return e.TrustCenterSubprocessors, nil
+	}
+	return nil, &NotLoadedError{edge: "trust_center_subprocessors"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -244,6 +256,11 @@ func (s *Subprocessor) QueryLogoFile() *FileQuery {
 	return NewSubprocessorClient(s.config).QueryLogoFile(s)
 }
 
+// QueryTrustCenterSubprocessors queries the "trust_center_subprocessors" edge of the Subprocessor entity.
+func (s *Subprocessor) QueryTrustCenterSubprocessors() *TrustCenterSubprocessorQuery {
+	return NewSubprocessorClient(s.config).QueryTrustCenterSubprocessors(s)
+}
+
 // Update returns a builder for updating this Subprocessor.
 // Note that you need to call Subprocessor.Unwrap() before calling this method if this Subprocessor
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -334,6 +351,30 @@ func (s *Subprocessor) appendNamedFiles(name string, edges ...*File) {
 		s.Edges.namedFiles[name] = []*File{}
 	} else {
 		s.Edges.namedFiles[name] = append(s.Edges.namedFiles[name], edges...)
+	}
+}
+
+// NamedTrustCenterSubprocessors returns the TrustCenterSubprocessors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (s *Subprocessor) NamedTrustCenterSubprocessors(name string) ([]*TrustCenterSubprocessor, error) {
+	if s.Edges.namedTrustCenterSubprocessors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := s.Edges.namedTrustCenterSubprocessors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (s *Subprocessor) appendNamedTrustCenterSubprocessors(name string, edges ...*TrustCenterSubprocessor) {
+	if s.Edges.namedTrustCenterSubprocessors == nil {
+		s.Edges.namedTrustCenterSubprocessors = make(map[string][]*TrustCenterSubprocessor)
+	}
+	if len(edges) == 0 {
+		s.Edges.namedTrustCenterSubprocessors[name] = []*TrustCenterSubprocessor{}
+	} else {
+		s.Edges.namedTrustCenterSubprocessors[name] = append(s.Edges.namedTrustCenterSubprocessors[name], edges...)
 	}
 }
 
