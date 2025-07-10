@@ -92,10 +92,10 @@ require (
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	github.com/xeipuuv/gojsonschema v1.2.0
 	gocloud.dev v0.42.0
-	golang.org/x/crypto v0.39.0
+	golang.org/x/crypto v0.40.0
 	golang.org/x/oauth2 v0.30.0
-	golang.org/x/term v0.32.0
-	golang.org/x/text v0.26.0
+	golang.org/x/term v0.33.0
+	golang.org/x/text v0.27.0
 	golang.org/x/tools v0.34.0
 	gotest.tools/gotestsum v1.12.3
 	gotest.tools/v3 v3.5.2
@@ -633,7 +633,7 @@ require (
 	golang.org/x/mod v0.26.0
 	golang.org/x/net v0.41.0 // indirect
 	golang.org/x/sync v0.16.0
-	golang.org/x/sys v0.33.0 // indirect
+	golang.org/x/sys v0.34.0 // indirect
 	golang.org/x/time v0.12.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
 	google.golang.org/api v0.240.0
