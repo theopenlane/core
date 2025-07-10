@@ -2,6 +2,10 @@ package corejobs_test
 
 import (
 	"context"
+	"encoding/json"
+	"net/http"
+	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/99designs/gqlgen/graphql"
@@ -17,26 +21,53 @@ import (
 	olmocks "github.com/theopenlane/core/pkg/corejobs/internal/olclient/mocks"
 )
 
+func mockGraphQLServer(t *testing.T, responses map[string]interface{}) *httptest.Server {
+	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var requestBody struct {
+			Query string `json:"query"`
+		}
+
+		err := json.NewDecoder(r.Body).Decode(&requestBody)
+		require.NoError(t, err)
+
+		var response map[string]interface{}
+		if strings.Contains(requestBody.Query, "controls") {
+			response = map[string]interface{}{
+				"controls": responses["controls"],
+			}
+		} else if strings.Contains(requestBody.Query, "evidences") {
+			response = map[string]interface{}{
+				"evidences": responses["evidences"],
+			}
+		} else {
+			response = responses
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"data": response,
+		})
+	}))
+}
+
 func TestExportContentWorker(t *testing.T) {
 	t.Parallel()
 
 	exportID := "export123"
 	controlID1 := "control123"
 	controlID2 := "control456"
+	ownerID := "owner123"
 
 	testCases := []struct {
 		name                     string
 		input                    corejobs.ExportContentArgs
-		config                   corejobs.ExportWorkerConfig
 		getExportByIDResponse    *openlaneclient.GetExportByID
 		getExportByIDError       error
-		getAllControlsResponse   *openlaneclient.GetAllControls
-		getAllControlsError      error
+		graphQLResponses         map[string]interface{}
 		updateExportError        error
 		updateExportErrorSecond  error
 		expectedError            string
 		expectGetExportByID      bool
-		expectGetAllControls     bool
 		expectUpdateExport       bool
 		expectUpdateExportFiles  bool
 		expectUpdateExportSecond bool
@@ -47,34 +78,35 @@ func TestExportContentWorker(t *testing.T) {
 			input: corejobs.ExportContentArgs{
 				ExportID: exportID,
 			},
-			config: corejobs.ExportWorkerConfig{
-				OpenlaneAPIHost:  "https://api.example.com",
-				OpenlaneAPIToken: "test-token",
-			},
 			getExportByIDResponse: &openlaneclient.GetExportByID{
 				Export: openlaneclient.GetExportByID_Export{
 					ID:         exportID,
 					ExportType: enums.ExportTypeControl,
+					OwnerID:    &ownerID,
+					Fields:     []string{"id", "name", "description"},
 				},
 			},
-			getAllControlsResponse: &openlaneclient.GetAllControls{
-				Controls: openlaneclient.GetAllControls_Controls{
-					Edges: []*openlaneclient.GetAllControls_Controls_Edges{
-						{
-							Node: &openlaneclient.GetAllControls_Controls_Edges_Node{
-								ID: controlID1,
+			graphQLResponses: map[string]interface{}{
+				"controls": map[string]interface{}{
+					"edges": []interface{}{
+						map[string]interface{}{
+							"node": map[string]interface{}{
+								"id":          controlID1,
+								"name":        "Control 1",
+								"description": "First control",
 							},
 						},
-						{
-							Node: &openlaneclient.GetAllControls_Controls_Edges_Node{
-								ID: controlID2,
+						map[string]interface{}{
+							"node": map[string]interface{}{
+								"id":          controlID2,
+								"name":        "Control 2",
+								"description": "Second control",
 							},
 						},
 					},
 				},
 			},
 			expectGetExportByID:     true,
-			expectGetAllControls:    true,
 			expectUpdateExport:      true,
 			expectUpdateExportFiles: true,
 			expectedExportStatus:    &enums.ExportStatusReady,
@@ -84,10 +116,6 @@ func TestExportContentWorker(t *testing.T) {
 			input: corejobs.ExportContentArgs{
 				ExportID: "",
 			},
-			config: corejobs.ExportWorkerConfig{
-				OpenlaneAPIHost:  "https://api.example.com",
-				OpenlaneAPIToken: "test-token",
-			},
 			expectedError:       "export_id is required for the export_content job",
 			expectGetExportByID: false,
 		},
@@ -96,101 +124,53 @@ func TestExportContentWorker(t *testing.T) {
 			input: corejobs.ExportContentArgs{
 				ExportID: exportID,
 			},
-			config: corejobs.ExportWorkerConfig{
-				OpenlaneAPIHost:  "https://api.example.com",
-				OpenlaneAPIToken: "test-token",
-			},
 			getExportByIDError:   assert.AnError,
 			expectGetExportByID:  true,
 			expectUpdateExport:   true,
 			expectedExportStatus: &enums.ExportStatusFailed,
 		},
 		{
-			name: "unsupported export type",
+			name: "no data found for export",
 			input: corejobs.ExportContentArgs{
 				ExportID: exportID,
-			},
-			config: corejobs.ExportWorkerConfig{
-				OpenlaneAPIHost:  "https://api.example.com",
-				OpenlaneAPIToken: "test-token",
-			},
-			getExportByIDResponse: &openlaneclient.GetExportByID{
-				Export: openlaneclient.GetExportByID_Export{
-					ID:         exportID,
-					ExportType: enums.ExportTypeInvalid, // Unsupported type
-				},
-			},
-			expectGetExportByID:  true,
-			expectUpdateExport:   true,
-			expectedExportStatus: &enums.ExportStatusFailed,
-		},
-		{
-			name: "error getting controls",
-			input: corejobs.ExportContentArgs{
-				ExportID: exportID,
-			},
-			config: corejobs.ExportWorkerConfig{
-				OpenlaneAPIHost:  "https://api.example.com",
-				OpenlaneAPIToken: "test-token",
 			},
 			getExportByIDResponse: &openlaneclient.GetExportByID{
 				Export: openlaneclient.GetExportByID_Export{
 					ID:         exportID,
 					ExportType: enums.ExportTypeControl,
+					OwnerID:    &ownerID,
+					Fields:     []string{"id", "name"},
 				},
 			},
-			getAllControlsError:  assert.AnError,
-			expectGetExportByID:  true,
-			expectGetAllControls: true,
-			expectUpdateExport:   true,
-			expectedExportStatus: &enums.ExportStatusFailed,
-		},
-		{
-			name: "no controls found",
-			input: corejobs.ExportContentArgs{
-				ExportID: exportID,
-			},
-			config: corejobs.ExportWorkerConfig{
-				OpenlaneAPIHost:  "https://api.example.com",
-				OpenlaneAPIToken: "test-token",
-			},
-			getExportByIDResponse: &openlaneclient.GetExportByID{
-				Export: openlaneclient.GetExportByID_Export{
-					ID:         exportID,
-					ExportType: enums.ExportTypeControl,
-				},
-			},
-			getAllControlsResponse: &openlaneclient.GetAllControls{
-				Controls: openlaneclient.GetAllControls_Controls{
-					Edges: []*openlaneclient.GetAllControls_Controls_Edges{},
+			graphQLResponses: map[string]interface{}{
+				"controls": map[string]interface{}{
+					"edges": []interface{}{},
 				},
 			},
 			expectGetExportByID:  true,
-			expectGetAllControls: true,
 			expectUpdateExport:   true,
-			expectedExportStatus: &enums.ExportStatusFailed,
+			expectedExportStatus: &enums.ExportStatusNodata,
 		},
 		{
 			name: "error updating export with file",
 			input: corejobs.ExportContentArgs{
 				ExportID: exportID,
 			},
-			config: corejobs.ExportWorkerConfig{
-				OpenlaneAPIHost:  "https://api.example.com",
-				OpenlaneAPIToken: "test-token",
-			},
 			getExportByIDResponse: &openlaneclient.GetExportByID{
 				Export: openlaneclient.GetExportByID_Export{
 					ID:         exportID,
 					ExportType: enums.ExportTypeControl,
+					OwnerID:    &ownerID,
+					Fields:     []string{"id", "name"},
 				},
 			},
-			getAllControlsResponse: &openlaneclient.GetAllControls{
-				Controls: openlaneclient.GetAllControls_Controls{
-					Edges: []*openlaneclient.GetAllControls_Controls_Edges{
-						{
-							Node: &openlaneclient.GetAllControls_Controls_Edges_Node{
-								ID: controlID1,
+			graphQLResponses: map[string]interface{}{
+				"controls": map[string]interface{}{
+					"edges": []interface{}{
+						map[string]interface{}{
+							"node": map[string]interface{}{
+								"id":   controlID1,
+								"name": "Control 1",
 							},
 						},
 					},
@@ -198,16 +178,52 @@ func TestExportContentWorker(t *testing.T) {
 			},
 			updateExportError:        assert.AnError,
 			expectGetExportByID:      true,
-			expectGetAllControls:     true,
 			expectUpdateExport:       true,
 			expectUpdateExportFiles:  true,
 			expectUpdateExportSecond: true,
 			expectedExportStatus:     &enums.ExportStatusFailed,
 		},
+		{
+			name: "export evidence type",
+			input: corejobs.ExportContentArgs{
+				ExportID: exportID,
+			},
+			getExportByIDResponse: &openlaneclient.GetExportByID{
+				Export: openlaneclient.GetExportByID_Export{
+					ID:         exportID,
+					ExportType: enums.ExportTypeEvidence,
+					OwnerID:    &ownerID,
+					Fields:     []string{"id", "name", "type"},
+				},
+			},
+			graphQLResponses: map[string]interface{}{
+				"evidences": map[string]interface{}{
+					"edges": []interface{}{
+						map[string]interface{}{
+							"node": map[string]interface{}{
+								"id":   "evidence123",
+								"name": "Evidence 1",
+								"type": "Document",
+							},
+						},
+					},
+				},
+			},
+			expectGetExportByID:     true,
+			expectUpdateExport:      true,
+			expectUpdateExportFiles: true,
+			expectedExportStatus:    &enums.ExportStatusReady,
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
+			var mockServer *httptest.Server
+			if tc.graphQLResponses != nil {
+				mockServer = mockGraphQLServer(t, tc.graphQLResponses)
+				defer mockServer.Close()
+			}
+
 			olMock := olmocks.NewMockOpenlaneGraphClient(t)
 
 			if tc.expectGetExportByID {
@@ -216,17 +232,8 @@ func TestExportContentWorker(t *testing.T) {
 				}), tc.input.ExportID).Return(tc.getExportByIDResponse, tc.getExportByIDError)
 			}
 
-			if tc.expectGetAllControls {
-				olMock.EXPECT().GetAllControls(mock.MatchedBy(func(ctx context.Context) bool {
-					return ctx != nil
-				})).Return(tc.getAllControlsResponse, tc.getAllControlsError)
-			}
-
 			if tc.expectUpdateExport {
 				if tc.expectUpdateExportFiles {
-
-					// success
-					//
 					olMock.EXPECT().UpdateExport(mock.MatchedBy(func(ctx context.Context) bool {
 						return ctx != nil
 					}), tc.input.ExportID, mock.MatchedBy(func(input openlaneclient.UpdateExportInput) bool {
@@ -243,18 +250,29 @@ func TestExportContentWorker(t *testing.T) {
 						}), ([]*graphql.Upload)(nil)).Return(&openlaneclient.UpdateExport{}, tc.updateExportErrorSecond)
 					}
 				} else {
-
 					olMock.EXPECT().UpdateExport(mock.MatchedBy(func(ctx context.Context) bool {
 						return ctx != nil
 					}), tc.input.ExportID, mock.MatchedBy(func(input openlaneclient.UpdateExportInput) bool {
-						return input.Status != nil && *input.Status == *tc.expectedExportStatus
+						if input.Status == nil {
+							return false
+						}
+						expectedStatus := *tc.expectedExportStatus
+						actualStatus := *input.Status
+						return actualStatus == expectedStatus
 					}), ([]*graphql.Upload)(nil)).Return(&openlaneclient.UpdateExport{}, tc.updateExportError)
-
 				}
 			}
 
+			config := corejobs.ExportWorkerConfig{
+				OpenlaneAPIHost:  "https://api.example.com",
+				OpenlaneAPIToken: "test-token",
+			}
+			if mockServer != nil {
+				config.OpenlaneAPIHost = mockServer.URL
+			}
+
 			worker := &corejobs.ExportContentWorker{
-				Config: tc.config,
+				Config: config,
 			}
 
 			worker.WithOpenlaneClient(olMock)
@@ -270,6 +288,63 @@ func TestExportContentWorker(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestExportContentWorker_GraphQLErrorResponse(t *testing.T) {
+	t.Parallel()
+
+	exportID := "export123"
+	ownerID := "owner123"
+
+	// mock server that returns GraphQL errors
+	mockServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"errors": []interface{}{
+				map[string]interface{}{
+					"message": "Field 'controls' not found",
+				},
+			},
+		})
+	}))
+	defer mockServer.Close()
+
+	olMock := olmocks.NewMockOpenlaneGraphClient(t)
+
+	// mock successful GetExportByID
+	olMock.EXPECT().GetExportByID(mock.MatchedBy(func(ctx context.Context) bool {
+		return ctx != nil
+	}), exportID).Return(&openlaneclient.GetExportByID{
+		Export: openlaneclient.GetExportByID_Export{
+			ID:         exportID,
+			ExportType: enums.ExportTypeControl,
+			OwnerID:    &ownerID,
+			Fields:     []string{"id", "name"},
+		},
+	}, nil)
+
+	// mock failed UpdateExport call
+	olMock.EXPECT().UpdateExport(mock.MatchedBy(func(ctx context.Context) bool {
+		return ctx != nil
+	}), exportID, mock.MatchedBy(func(input openlaneclient.UpdateExportInput) bool {
+		return input.Status != nil && *input.Status == enums.ExportStatusFailed
+	}), ([]*graphql.Upload)(nil)).Return(&openlaneclient.UpdateExport{}, nil)
+
+	worker := &corejobs.ExportContentWorker{
+		Config: corejobs.ExportWorkerConfig{
+			OpenlaneAPIHost:  mockServer.URL,
+			OpenlaneAPIToken: "test-token",
+		},
+	}
+
+	worker.WithOpenlaneClient(olMock)
+
+	ctx := context.Background()
+	err := worker.Work(ctx, &river.Job[corejobs.ExportContentArgs]{
+		Args: corejobs.ExportContentArgs{ExportID: exportID},
+	})
+
+	require.NoError(t, err)
 }
 
 func TestExportContentWorker_WithOpenlaneClient(t *testing.T) {
