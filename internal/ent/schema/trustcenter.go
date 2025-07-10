@@ -93,6 +93,12 @@ func (t TrustCenter) Edges() []ent.Edge {
 				entx.CascadeAnnotationField("TrustCenter"),
 			},
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:    t,
+			name:          "subprocessors",
+			edgeSchema:    TrustCenterSubprocessor{},
+			cascadeDelete: "TrustCenter",
+		}),
 	}
 }
 

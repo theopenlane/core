@@ -5,7 +5,6 @@ mutation CreateBulkCSVTrustCenterSubprocessor($input: Upload!) {
       createdAt
       createdBy
       id
-      tags
       updatedAt
       updatedBy
     }
@@ -18,7 +17,6 @@ mutation CreateBulkTrustCenterSubprocessor($input: [CreateTrustCenterSubprocesso
       createdAt
       createdBy
       id
-      tags
       updatedAt
       updatedBy
     }
@@ -31,9 +29,19 @@ mutation CreateTrustCenterSubprocessor($input: CreateTrustCenterSubprocessorInpu
       createdAt
       createdBy
       id
-      tags
       updatedAt
       updatedBy
+      trustCenterID
+      countries
+      category
+      subprocessor {
+        name
+        description
+        logoFile {
+          presignedURL
+        }
+        logoRemoteURL
+      }
     }
   }
 }
@@ -58,9 +66,19 @@ query GetAllTrustCenterSubprocessors {
         createdAt
         createdBy
         id
-        tags
         updatedAt
         updatedBy
+        trustCenterID
+        countries
+        category
+        subprocessor {
+          name
+          description
+          logoFile {
+            presignedURL
+          }
+          logoRemoteURL
+        }
       }
     }
   }
@@ -70,9 +88,19 @@ query GetTrustCenterSubprocessorByID($trustCenterSubprocessorId: ID!) {
     createdAt
     createdBy
     id
-    tags
     updatedAt
     updatedBy
+    trustCenterID
+    countries
+    category
+    subprocessor {
+      name
+      description
+      logoFile {
+        presignedURL
+      }
+      logoRemoteURL
+    }
   }
 }
 
@@ -90,9 +118,19 @@ query GetTrustCenterSubprocessors($first: Int, $last: Int, $where: TrustCenterSu
         createdAt
         createdBy
         id
-        tags
         updatedAt
         updatedBy
+        trustCenterID
+        countries
+        category
+        subprocessor {
+          name
+          description
+          logoFile {
+            presignedURL
+          }
+          logoRemoteURL
+        }
       }
     }
   }
@@ -103,9 +141,19 @@ mutation UpdateTrustCenterSubprocessor($updateTrustCenterSubprocessorId: ID!, $i
       createdAt
       createdBy
       id
-      tags
       updatedAt
       updatedBy
+      trustCenterID
+      countries
+      category
+      subprocessor {
+        name
+        description
+        logoFile {
+          presignedURL
+        }
+        logoRemoteURL
+      }
     }
   }
 }
