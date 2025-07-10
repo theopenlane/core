@@ -14,6 +14,7 @@ import (
 
 var (
 	errExportTypeNotProvided = errors.New("provide export type")
+	errFieldsNotProvided     = errors.New("atleast one field must be provided for the schema to export")
 )
 
 func HookExport() ent.Hook {
@@ -37,6 +38,11 @@ func handleExportCreate(ctx context.Context, m *generated.ExportMutation, next e
 
 	if err := ValidateExportType(exportType.String()); err != nil {
 		return nil, err
+	}
+
+	values := m.Fields()
+	if len(values) == 0 {
+		return nil, errFieldsNotProvided
 	}
 
 	requestorID, err := auth.GetSubjectIDFromContext(ctx)

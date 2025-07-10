@@ -6,6 +6,7 @@ mutation CreateExport($input: CreateExportInput!) {
       exportType
       format
       id
+      fields
       ownerID
       requestorID
       status
@@ -31,6 +32,7 @@ query GetAllExports {
         exportType
         id
         format
+        fields
         ownerID
         requestorID
         status
@@ -49,6 +51,7 @@ query GetExportByID($exportId: ID!) {
     ownerID
     requestorID
     status
+    fields
     updatedAt
     format
     updatedBy
@@ -84,6 +87,7 @@ query GetExports($first: Int, $last: Int, $where: ExportWhereInput) {
         ownerID
         requestorID
         status
+        fields
         updatedAt
         updatedBy
       }
@@ -99,6 +103,7 @@ mutation UpdateExport($id: ID!, $input: UpdateExportInput!, $exportFiles: [Uploa
       exportType
       id
       ownerID
+      fields
       requestorID
       status
       format

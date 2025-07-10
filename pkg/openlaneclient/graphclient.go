@@ -28896,6 +28896,7 @@ type CreateExport_CreateExport_Export struct {
 	CreatedAt   *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ExportType  enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
+	Fields      []string           "json:\"fields,omitempty\" graphql:\"fields\""
 	Format      enums.ExportFormat "json:\"format\" graphql:\"format\""
 	ID          string             "json:\"id\" graphql:\"id\""
 	OwnerID     *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -28922,6 +28923,12 @@ func (t *CreateExport_CreateExport_Export) GetExportType() *enums.ExportType {
 		t = &CreateExport_CreateExport_Export{}
 	}
 	return &t.ExportType
+}
+func (t *CreateExport_CreateExport_Export) GetFields() []string {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return t.Fields
 }
 func (t *CreateExport_CreateExport_Export) GetFormat() *enums.ExportFormat {
 	if t == nil {
@@ -29013,6 +29020,7 @@ type GetAllExports_Exports_Edges_Node struct {
 	CreatedAt   *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ExportType  enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
+	Fields      []string           "json:\"fields,omitempty\" graphql:\"fields\""
 	Format      enums.ExportFormat "json:\"format\" graphql:\"format\""
 	ID          string             "json:\"id\" graphql:\"id\""
 	OwnerID     *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -29039,6 +29047,12 @@ func (t *GetAllExports_Exports_Edges_Node) GetExportType() *enums.ExportType {
 		t = &GetAllExports_Exports_Edges_Node{}
 	}
 	return &t.ExportType
+}
+func (t *GetAllExports_Exports_Edges_Node) GetFields() []string {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return t.Fields
 }
 func (t *GetAllExports_Exports_Edges_Node) GetFormat() *enums.ExportFormat {
 	if t == nil {
@@ -29177,6 +29191,7 @@ type GetExportByID_Export struct {
 	CreatedAt   *time.Time                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ExportType  enums.ExportType           "json:\"exportType\" graphql:\"exportType\""
+	Fields      []string                   "json:\"fields,omitempty\" graphql:\"fields\""
 	Files       GetExportByID_Export_Files "json:\"files\" graphql:\"files\""
 	Format      enums.ExportFormat         "json:\"format\" graphql:\"format\""
 	ID          string                     "json:\"id\" graphql:\"id\""
@@ -29204,6 +29219,12 @@ func (t *GetExportByID_Export) GetExportType() *enums.ExportType {
 		t = &GetExportByID_Export{}
 	}
 	return &t.ExportType
+}
+func (t *GetExportByID_Export) GetFields() []string {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return t.Fields
 }
 func (t *GetExportByID_Export) GetFiles() *GetExportByID_Export_Files {
 	if t == nil {
@@ -29290,6 +29311,7 @@ type GetExports_Exports_Edges_Node struct {
 	CreatedAt   *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ExportType  enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
+	Fields      []string           "json:\"fields,omitempty\" graphql:\"fields\""
 	Format      enums.ExportFormat "json:\"format\" graphql:\"format\""
 	ID          string             "json:\"id\" graphql:\"id\""
 	OwnerID     *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -29316,6 +29338,12 @@ func (t *GetExports_Exports_Edges_Node) GetExportType() *enums.ExportType {
 		t = &GetExports_Exports_Edges_Node{}
 	}
 	return &t.ExportType
+}
+func (t *GetExports_Exports_Edges_Node) GetFields() []string {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return t.Fields
 }
 func (t *GetExports_Exports_Edges_Node) GetFormat() *enums.ExportFormat {
 	if t == nil {
@@ -29454,6 +29482,7 @@ type UpdateExport_UpdateExport_Export struct {
 	CreatedAt   *time.Time                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ExportType  enums.ExportType                       "json:\"exportType\" graphql:\"exportType\""
+	Fields      []string                               "json:\"fields,omitempty\" graphql:\"fields\""
 	Files       UpdateExport_UpdateExport_Export_Files "json:\"files\" graphql:\"files\""
 	Format      enums.ExportFormat                     "json:\"format\" graphql:\"format\""
 	ID          string                                 "json:\"id\" graphql:\"id\""
@@ -29481,6 +29510,12 @@ func (t *UpdateExport_UpdateExport_Export) GetExportType() *enums.ExportType {
 		t = &UpdateExport_UpdateExport_Export{}
 	}
 	return &t.ExportType
+}
+func (t *UpdateExport_UpdateExport_Export) GetFields() []string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return t.Fields
 }
 func (t *UpdateExport_UpdateExport_Export) GetFiles() *UpdateExport_UpdateExport_Export_Files {
 	if t == nil {
@@ -99137,6 +99172,7 @@ const CreateExportDocument = `mutation CreateExport ($input: CreateExportInput!)
 			exportType
 			format
 			id
+			fields
 			ownerID
 			requestorID
 			status
@@ -99180,6 +99216,7 @@ const GetAllExportsDocument = `query GetAllExports {
 				exportType
 				id
 				format
+				fields
 				ownerID
 				requestorID
 				status
@@ -99215,6 +99252,7 @@ const GetExportByIDDocument = `query GetExportByID ($exportId: ID!) {
 		ownerID
 		requestorID
 		status
+		fields
 		updatedAt
 		format
 		updatedBy
@@ -99268,6 +99306,7 @@ const GetExportsDocument = `query GetExports ($first: Int, $last: Int, $where: E
 				ownerID
 				requestorID
 				status
+				fields
 				updatedAt
 				updatedBy
 			}
@@ -99303,6 +99342,7 @@ const UpdateExportDocument = `mutation UpdateExport ($id: ID!, $input: UpdateExp
 			exportType
 			id
 			ownerID
+			fields
 			requestorID
 			status
 			format

@@ -3389,6 +3389,7 @@ func (c *EvidenceUpdateOne) SetInput(i UpdateEvidenceInput) *EvidenceUpdateOne {
 type CreateExportInput struct {
 	ExportType enums.ExportType
 	Format     enums.ExportFormat
+	Fields     []string
 	OwnerID    *string
 	EventIDs   []string
 	FileIDs    []string
@@ -3398,6 +3399,9 @@ type CreateExportInput struct {
 func (i *CreateExportInput) Mutate(m *ExportMutation) {
 	m.SetExportType(i.ExportType)
 	m.SetFormat(i.Format)
+	if v := i.Fields; v != nil {
+		m.SetFields(v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}

@@ -335,6 +335,9 @@ func (eu *ExportUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if eu.mutation.RequestorIDCleared() {
 		_spec.ClearField(export.FieldRequestorID, field.TypeString)
 	}
+	if eu.mutation.FieldsCleared() {
+		_spec.ClearField(export.FieldFields, field.TypeJSON)
+	}
 	if eu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -815,6 +818,9 @@ func (euo *ExportUpdateOne) sqlSave(ctx context.Context) (_node *Export, err err
 	}
 	if euo.mutation.RequestorIDCleared() {
 		_spec.ClearField(export.FieldRequestorID, field.TypeString)
+	}
+	if euo.mutation.FieldsCleared() {
+		_spec.ClearField(export.FieldFields, field.TypeJSON)
 	}
 	if euo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -1016,6 +1016,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			export.FieldFormat:      {Type: field.TypeEnum, Column: export.FieldFormat},
 			export.FieldStatus:      {Type: field.TypeEnum, Column: export.FieldStatus},
 			export.FieldRequestorID: {Type: field.TypeString, Column: export.FieldRequestorID},
+			export.FieldFields:      {Type: field.TypeJSON, Column: export.FieldFields},
 		},
 	}
 	graph.Nodes[30] = &sqlgraph.Node{
@@ -13732,6 +13733,11 @@ func (f *ExportFilter) WhereStatus(p entql.StringP) {
 // WhereRequestorID applies the entql string predicate on the requestor_id field.
 func (f *ExportFilter) WhereRequestorID(p entql.StringP) {
 	f.Where(p.Field(export.FieldRequestorID))
+}
+
+// WhereFields applies the entql json.RawMessage predicate on the fields field.
+func (f *ExportFilter) WhereFields(p entql.BytesP) {
+	f.Where(p.Field(export.FieldFields))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.

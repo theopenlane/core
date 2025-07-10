@@ -11,6 +11,12 @@ import (
 	"github.com/riverqueue/river"
 	"github.com/rs/zerolog/log"
 
+	"encoding/csv"
+	"encoding/json"
+	"io"
+	"net/http"
+	"strings"
+
 	"github.com/theopenlane/core/pkg/corejobs/internal/olclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
@@ -73,39 +79,46 @@ func (w *ExportContentWorker) Work(ctx context.Context, job *river.Job[ExportCon
 		return w.updateExportStatus(ctx, job.Args.ExportID, enums.ExportStatusFailed)
 	}
 
-	switch export.Export.ExportType {
-	case enums.ExportTypeControl:
-		return w.exportControls(ctx, job.Args.ExportID)
-	default:
-		log.Error().Str("export_type", string(export.Export.ExportType)).Msg("unsupported export type")
+	ownerIDPtr := export.Export.OwnerID
+	ownerID := ""
+	if ownerIDPtr != nil {
+		ownerID = *ownerIDPtr
+	}
+
+	exportType := strings.ToLower(export.Export.ExportType.String())
+
+	fields := export.Export.Fields
+
+	// since the exporttype would be correct. just append "s" to build up the root query
+	// e.g control becomes controls , evidence becomes evidences
+	rootQuery := exportType + "s"
+
+	query := w.buildGraphQLQuery(rootQuery, fields, ownerID)
+
+	data, err := w.executeGraphQLQuery(ctx, query)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to execute GraphQL query")
 		return w.updateExportStatus(ctx, job.Args.ExportID, enums.ExportStatusFailed)
 	}
-}
 
-func (w *ExportContentWorker) exportControls(ctx context.Context, exportID string) error {
-	controls, err := w.olClient.GetAllControls(ctx)
+	nodes, err := w.extractNodes(data, rootQuery)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to fetch controls")
-		return w.updateExportStatus(ctx, exportID, enums.ExportStatusFailed)
+		log.Error().Err(err).Msg("failed to extract nodes from response")
+		return w.updateExportStatus(ctx, job.Args.ExportID, enums.ExportStatusFailed)
 	}
 
-	if len(controls.Controls.Edges) == 0 {
-		log.Info().Msg("no controls found for export")
-		return w.updateExportStatus(ctx, exportID, enums.ExportStatusFailed)
+	if len(nodes) == 0 {
+		log.Info().Msg("no data found for export")
+		return w.updateExportStatus(ctx, job.Args.ExportID, enums.ExportStatusNodata)
 	}
 
-	controlNodes := make([]*openlaneclient.GetAllControls_Controls_Edges_Node, 0, len(controls.Controls.Edges))
-	for _, edge := range controls.Controls.Edges {
-		controlNodes = append(controlNodes, edge.Node)
-	}
-
-	csvData, err := gocsv.MarshalBytes(&controlNodes)
+	csvData, err := w.marshalToCSV(nodes)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to marshal controls to CSV")
-		return w.updateExportStatus(ctx, exportID, enums.ExportStatusFailed)
+		log.Error().Err(err).Msg("failed to marshal to CSV")
+		return w.updateExportStatus(ctx, job.Args.ExportID, enums.ExportStatusFailed)
 	}
 
-	filename := fmt.Sprintf("controls_export_%s_%s.csv", exportID, time.Now().Format("20060102_150405"))
+	filename := fmt.Sprintf("%s_export_%s_%s.csv", rootQuery, job.Args.ExportID, time.Now().Format("20060102_150405"))
 	reader := bytes.NewReader(csvData)
 
 	upload := &graphql.Upload{
@@ -119,13 +132,159 @@ func (w *ExportContentWorker) exportControls(ctx context.Context, exportID strin
 		Status: &enums.ExportStatusReady,
 	}
 
-	_, err = w.olClient.UpdateExport(ctx, exportID, updateInput, []*graphql.Upload{upload})
+	_, err = w.olClient.UpdateExport(ctx, job.Args.ExportID, updateInput, []*graphql.Upload{upload})
 	if err != nil {
 		log.Error().Err(err).Msg("failed to update export with file")
-		return w.updateExportStatus(ctx, exportID, enums.ExportStatusFailed)
+		return w.updateExportStatus(ctx, job.Args.ExportID, enums.ExportStatusFailed)
 	}
 
 	return nil
+}
+
+func (w *ExportContentWorker) buildGraphQLQuery(root string, fields []string, ownerID string) string {
+	if len(fields) == 0 {
+		fields = []string{"id"}
+	}
+
+	fieldStr := strings.Join(fields, "\n        ")
+
+	var whereStr string
+	if ownerID != "" {
+		whereStr = fmt.Sprintf(`(where: {ownerID: "%s"})`, ownerID)
+	}
+
+	return fmt.Sprintf(`query {
+  %s%s {
+    edges {
+      node {
+        %s
+      }
+    }
+  }
+}`, root, whereStr, fieldStr)
+}
+
+func (w *ExportContentWorker) executeGraphQLQuery(ctx context.Context, query string) (map[string]any, error) {
+	body := map[string]string{"query": query}
+
+	jsonBody, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "POST", w.Config.OpenlaneAPIHost+"/query", bytes.NewReader(jsonBody))
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/graphql-response+json")
+	req.Header.Set("Authorization", "Bearer "+w.Config.OpenlaneAPIToken)
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("unexpected status: %d", resp.StatusCode)
+	}
+
+	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var result struct {
+		Data   map[string]any `json:"data"`
+		Errors []any          `json:"errors"`
+	}
+
+	if err := json.Unmarshal(respBody, &result); err != nil {
+		return nil, err
+	}
+
+	if len(result.Errors) > 0 {
+		return nil, fmt.Errorf("graphql errors: %v", result.Errors)
+	}
+
+	return result.Data, nil
+}
+
+func (w *ExportContentWorker) extractNodes(data map[string]any, root string) ([]map[string]any, error) {
+	rootData, ok := data[root].(map[string]any)
+	if !ok {
+		return nil, fmt.Errorf("missing root '%s' in response", root)
+	}
+
+	edges, ok := rootData["edges"].([]any)
+	if !ok {
+		return nil, fmt.Errorf("missing edges in response")
+	}
+
+	nodes := make([]map[string]any, 0, len(edges))
+	for _, edge := range edges {
+		edgeMap, ok := edge.(map[string]any)
+		if !ok {
+			continue
+		}
+		node, ok := edgeMap["node"].(map[string]any)
+		if ok {
+			nodes = append(nodes, node)
+		}
+	}
+
+	return nodes, nil
+}
+
+func (w *ExportContentWorker) marshalToCSV(nodes []map[string]any) ([]byte, error) {
+	if len(nodes) == 0 {
+		return nil, nil
+	}
+
+	headers := make([]string, 0)
+	for k := range nodes[0] {
+		headers = append(headers, k)
+	}
+
+	if len(headers) == 0 {
+		return nil, nil
+	}
+
+	var buf bytes.Buffer
+
+	wr := csv.NewWriter(&buf)
+
+	writer := gocsv.NewSafeCSVWriter(wr)
+
+	if err := writer.Write(headers); err != nil {
+		return nil, err
+	}
+
+	for _, node := range nodes {
+		row := make([]string, len(headers))
+		for i, h := range headers {
+			val := node[h]
+			if val == nil {
+				row[i] = ""
+			} else {
+				row[i] = fmt.Sprint(val)
+			}
+		}
+
+		if err := writer.Write(row); err != nil {
+			return nil, err
+		}
+	}
+
+	writer.Flush()
+
+	if err := writer.Error(); err != nil {
+		return nil, err
+	}
+
+	return buf.Bytes(), nil
 }
 
 func (w *ExportContentWorker) updateExportStatus(ctx context.Context, exportID string, status enums.ExportStatus) error {

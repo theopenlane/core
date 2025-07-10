@@ -40,6 +40,8 @@ const (
 	FieldStatus = "status"
 	// FieldRequestorID holds the string denoting the requestor_id field in the database.
 	FieldRequestorID = "requestor_id"
+	// FieldFields holds the string denoting the fields field in the database.
+	FieldFields = "fields"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
@@ -85,6 +87,7 @@ var Columns = []string{
 	FieldFormat,
 	FieldStatus,
 	FieldRequestorID,
+	FieldFields,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -114,6 +117,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// RequestorIDValidator is a validator for the "requestor_id" field. It is called by the builders before save.
 	RequestorIDValidator func(string) error
+	// DefaultFields holds the default value on creation for the "fields" field.
+	DefaultFields []string
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -143,7 +148,7 @@ const DefaultStatus enums.ExportStatus = "PENDING"
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.ExportStatus) error {
 	switch s.String() {
-	case "PENDING", "FAILED", "READY":
+	case "PENDING", "FAILED", "READY", "NODATA":
 		return nil
 	default:
 		return fmt.Errorf("export: invalid enum value for status field: %q", s)

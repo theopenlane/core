@@ -7974,6 +7974,10 @@ input CreateExportInput {
   the format of export, e.g., csv and others
   """
   format: ExportExportFormat!
+  """
+  the specific fields to include in the export (defaults to only the id if not provided)
+  """
+  fields: [String!]
   ownerID: ID
   eventIDs: [ID!]
   fileIDs: [ID!]
@@ -14478,6 +14482,10 @@ type Export implements Node {
   the user who initiated the export
   """
   requestorID: String
+  """
+  the specific fields to include in the export (defaults to only the id if not provided)
+  """
+  fields: [String!]
   owner: Organization
   events(
     """
@@ -14585,6 +14593,7 @@ enum ExportExportStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.E
   PENDING
   FAILED
   READY
+  NODATA
 }
 """
 ExportExportType is enum for the field export_type

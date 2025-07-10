@@ -1811,6 +1811,10 @@ func init() {
 	exportDescRequestorID := exportFields[3].Descriptor()
 	// export.RequestorIDValidator is a validator for the "requestor_id" field. It is called by the builders before save.
 	export.RequestorIDValidator = exportDescRequestorID.Validators[0].(func(string) error)
+	// exportDescFields is the schema descriptor for fields field.
+	exportDescFields := exportFields[4].Descriptor()
+	// export.DefaultFields holds the default value on creation for the fields field.
+	export.DefaultFields = exportDescFields.Default.([]string)
 	// exportDescID is the schema descriptor for id field.
 	exportDescID := exportMixinFields2[0].Descriptor()
 	// export.DefaultID holds the default value on creation for the id field.

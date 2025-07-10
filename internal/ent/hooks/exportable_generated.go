@@ -22,7 +22,7 @@ func IsSchemaExportable(schemaName string) bool {
 func ValidateExportType(exportType string) error {
 	schemaName := strings.ToLower(exportType)
 	if !IsSchemaExportable(schemaName) {
-		return fmt.Errorf("schema %s is not exportable (missing Exportable annotation)", exportType) // nolint:err113
+		return fmt.Errorf("schema %s is not exportable (missing Exportable annotation)", exportType)
 	}
 	return nil
 }
