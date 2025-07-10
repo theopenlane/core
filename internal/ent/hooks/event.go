@@ -25,9 +25,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	catalog "github.com/theopenlane/core/internal/entitlements/entmapping"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/events/soiree"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/slacktemplates"
 )
 
@@ -428,8 +428,6 @@ func handleOrgSubscriptionCreated(event soiree.Event) error {
 	allowCtx := privacy.DecisionContext(event.Context(), privacy.Allow)
 	allowCtx = contextx.With(allowCtx, auth.OrgSubscriptionContextKey{})
 
-	orgCustomer := &entitlements.OrganizationCustomer{}
-
 	orgSubs, err := client.OrgSubscription.Get(allowCtx, lo.ValueOr(event.Properties(), "ID", "").(string))
 	if err != nil {
 		zerolog.Ctx(event.Context()).Err(err).Msg("Failed to fetch organization subscription")
@@ -437,13 +435,17 @@ func handleOrgSubscriptionCreated(event soiree.Event) error {
 		return err
 	}
 
+	orgCustomer := catalog.PopulatePricesForOrganizationCustomer(&entitlements.OrganizationCustomer{})
 	orgCustomer.OrganizationSubscriptionID = orgSubs.ID
 
-	if err := updateOrgCustomerWithSubscription(allowCtx, orgSubs, client, orgCustomer); err != nil {
+	orgCustomer, err = updateOrgCustomerWithSubscription(allowCtx, orgSubs, client, orgCustomer)
+	if err != nil {
 		zerolog.Ctx(event.Context()).Err(err).Msg("Failed to fetch organization from subscription")
 
 		return nil
 	}
+
+	zerolog.Ctx(event.Context()).Debug().Msgf("Prices attached to organization customer: %+v", orgCustomer.Prices)
 
 	if err = entMgr.FindOrCreateCustomer(allowCtx, orgCustomer); err != nil {
 		zerolog.Ctx(event.Context()).Err(err).Msg("Failed to create customer")
@@ -462,29 +464,10 @@ func handleOrgSubscriptionCreated(event soiree.Event) error {
 
 // updateCustomerOrgSub maps the customer fields to the organization subscription and update the organization subscription in the database
 func updateCustomerOrgSub(ctx context.Context, customer *entitlements.OrganizationCustomer, client any) error {
-	// validate the customer data before updating the organization subscription
-	if len(customer.Prices) > 1 {
-		zerolog.Ctx(ctx).Error().Str("organization_id", customer.OrganizationID).Str("customer_id", customer.StripeCustomerID).Int("prices", len(customer.Prices)).Msg("found multiple prices, skipping all updates")
-
-		return ErrTooManyPrices
-	}
-
 	if customer.OrganizationSubscriptionID == "" {
 		zerolog.Ctx(ctx).Error().Msg("organization subscription ID is empty on customer, unable to update organization subscription")
 
 		return ErrNoSubscriptions
-	}
-
-	productName := ""
-	productPrice := models.Price{}
-
-	if len(customer.Prices) == 1 {
-		productName = customer.Prices[0].ProductName
-		productPrice = models.Price{
-			Amount:   customer.Prices[0].Price,
-			Currency: customer.Prices[0].Currency,
-			Interval: customer.Prices[0].Interval,
-		}
 	}
 
 	// update the expiration date based on the subscription status
@@ -507,11 +490,7 @@ func updateCustomerOrgSub(ctx context.Context, customer *entitlements.Organizati
 		SetStripeCustomerID(customer.StripeCustomerID).
 		SetStripeSubscriptionStatus(customer.Subscription.Status).
 		SetActive(active).
-		SetProductTier(productName).
-		SetFeatures(customer.FeatureNames).
-		SetFeatureLookupKeys(customer.Features).
-		SetStripeProductTierID(customer.Subscription.ProductID).
-		SetProductPrice(productPrice)
+		SetStripeProductTierID(customer.Subscription.ProductID)
 
 	// ensure the correct expiration date is set based on the subscription status
 	// if the subscription is trialing, set the expiration date to the trial end date
@@ -527,16 +506,16 @@ func updateCustomerOrgSub(ctx context.Context, customer *entitlements.Organizati
 
 // updateOrgCustomerWithSubscription updates the organization customer with the subscription data
 // by querying the organization and organization settings
-func updateOrgCustomerWithSubscription(ctx context.Context, orgSubs *entgen.OrgSubscription, client any, o *entitlements.OrganizationCustomer) error {
+func updateOrgCustomerWithSubscription(ctx context.Context, orgSubs *entgen.OrgSubscription, client any, o *entitlements.OrganizationCustomer) (*entitlements.OrganizationCustomer, error) {
 	if orgSubs == nil {
-		return ErrNoSubscriptions
+		return nil, ErrNoSubscriptions
 	}
 
 	org, err := client.(*entgen.Client).Organization.Query().Where(organization.ID(orgSubs.OwnerID)).WithSetting().Only(ctx)
 	if err != nil {
 		zerolog.Ctx(ctx).Err(err).Msgf("Failed to fetch organization by organization ID %s", orgSubs.OwnerID)
 
-		return err
+		return nil, err
 	}
 
 	if org.Edges.Setting != nil {
@@ -551,7 +530,7 @@ func updateOrgCustomerWithSubscription(ctx context.Context, orgSubs *entgen.OrgS
 	o.PersonalOrg = org.PersonalOrg
 	o.Email = org.Edges.Setting.BillingEmail
 
-	return nil
+	return o, nil
 }
 
 // handleOrganizationSettingsUpdateOne handles the update of an organization setting and updates the customer in Stripe

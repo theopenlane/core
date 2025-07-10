@@ -3,6 +3,7 @@ package models
 import (
 	"fmt"
 	"io"
+	"slices"
 )
 
 // OrgModule identifies a purchasable module
@@ -10,19 +11,22 @@ type OrgModule string
 
 // IsValid reports whether m is a known module constant
 func (m OrgModule) IsValid() bool {
-	for _, v := range AllOrgModules {
-		if m == v {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(AllOrgModules, m)
 }
 
-func (m OrgModule) String() string { return string(m) }
+// String returns the string representation of the OrgModule
+func (m OrgModule) String() string {
+	return string(m)
+}
 
 // UnmarshalText implements encoding.TextUnmarshaler
 func (m *OrgModule) UnmarshalText(text []byte) error {
 	*m = OrgModule(text)
+
+	if !m.IsValid() {
+		return fmt.Errorf("invalid OrgModule: %q", text)
+	}
+
 	return nil
 }
 
@@ -44,5 +48,6 @@ func (m *OrgModule) UnmarshalGQL(v any) error {
 	}
 
 	*m = OrgModule(str)
+
 	return nil
 }

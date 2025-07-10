@@ -69,7 +69,7 @@ func catalogApp() *cli.Command {
 			&cli.StringFlag{
 				Name:  "catalog",
 				Usage: "catalog file path",
-				Value: "./pkg/catalog/catalog.yaml",
+				Value: "./pkg/catalog/catalog.yaml", // set the value to sandbox catalog by default to avoid disasters
 			},
 			&cli.StringFlag{
 				Name:    "stripe-key",
@@ -240,6 +240,7 @@ func conflictManaged(ctx context.Context, sc stripeClient, c catalog.LookupKeyCo
 		if err != nil {
 			return false, err
 		}
+
 		if prod != nil && prod.Metadata != nil {
 			return prod.Metadata[catalog.ManagedByKey] == catalog.ManagedByValue, nil
 		}
@@ -248,6 +249,7 @@ func conflictManaged(ctx context.Context, sc stripeClient, c catalog.LookupKeyCo
 		if err != nil {
 			return false, err
 		}
+
 		if feat != nil && feat.Metadata != nil {
 			return feat.Metadata[catalog.ManagedByKey] == catalog.ManagedByValue, nil
 		}
@@ -256,6 +258,7 @@ func conflictManaged(ctx context.Context, sc stripeClient, c catalog.LookupKeyCo
 		if err != nil {
 			return false, err
 		}
+
 		if price != nil && price.Metadata != nil {
 			return price.Metadata[catalog.ManagedByKey] == catalog.ManagedByValue, nil
 		}

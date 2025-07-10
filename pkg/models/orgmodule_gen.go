@@ -3,15 +3,17 @@
 package models
 
 const (
-	ModuleBase                    OrgModule = "base"
-	ModuleCompliance              OrgModule = "compliance"
-	ModuleDomainScanning          OrgModule = "domain_scanning"
-	ModuleEntityManagement        OrgModule = "entity_management"
-	ModuleExtraEvidenceStorage    OrgModule = "extra_evidence_storage"
-	ModulePolicyManagement        OrgModule = "policy_management"
-	ModuleRiskManagement          OrgModule = "risk_management"
-	ModuleTrustCenter             OrgModule = "trust_center"
-	ModuleVulnerabilityManagement OrgModule = "vulnerability_management"
+	CatalogBaseModule                    OrgModule = "base_module"
+	CatalogComplianceModule              OrgModule = "compliance_module"
+	CatalogDomainScanningAddon           OrgModule = "domain_scanning_addon"
+	CatalogEntityManagementModule        OrgModule = "entity_management_module"
+	CatalogExtraEvidenceStorageAddon     OrgModule = "extra_evidence_storage_addon"
+	CatalogPolicyManagementAddon         OrgModule = "policy_management_addon"
+	CatalogRiskManagementAddon           OrgModule = "risk_management_addon"
+	CatalogTrustCenterModule             OrgModule = "trust_center_module"
+	CatalogVulnerabilityManagementModule OrgModule = "vulnerability_management_module"
 )
 
-var AllOrgModules = []OrgModule{ModuleBase, ModuleCompliance, ModuleDomainScanning, ModuleEntityManagement, ModuleExtraEvidenceStorage, ModulePolicyManagement, ModuleRiskManagement, ModuleTrustCenter, ModuleVulnerabilityManagement}
+var AllOrgModules = []OrgModule{CatalogBaseModule, CatalogComplianceModule, CatalogDomainScanningAddon, CatalogEntityManagementModule, CatalogExtraEvidenceStorageAddon, CatalogPolicyManagementAddon, CatalogRiskManagementAddon, CatalogTrustCenterModule, CatalogVulnerabilityManagementModule}
+var PersonalOrgModules = []OrgModule{CatalogBaseModule}
+var TrialModules = []OrgModule{CatalogBaseModule, CatalogComplianceModule}

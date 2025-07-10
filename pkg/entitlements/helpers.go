@@ -55,11 +55,19 @@ func WritePlansToYAML(product []Product, filename string) error {
 	return nil
 }
 
-// seq2IsEmpty checks if a stripe.Seq2 is empty
-func seq2IsEmpty[K any, V error](seq stripe.Seq2[K, V]) bool {
+// Seq2IsEmpty checks if a stripe.Seq2 is empty.
+//
+// Parameters:
+//   - seq: a stripe.Seq2 iterator of type K and error type V.
+//
+// Returns:
+//   - bool: true if the sequence is empty, false otherwise.
+func Seq2IsEmpty[K any, V error](seq stripe.Seq2[K, V]) bool {
+	isEmpty := true
 	seq(func(_ K, _ V) bool {
-		return false
+		isEmpty = false
+		return false // stop after first element
 	})
 
-	return true
+	return isEmpty
 }
