@@ -9,6 +9,8 @@ import (
 
 // ExportableSchemas contains all schemas that have Exportable annotation
 var ExportableSchemas = map[string]bool{
+	"control": true,
+	"evidence": true,
 }
 
 // IsSchemaExportable checks if a schema name is exportable
@@ -20,7 +22,7 @@ func IsSchemaExportable(schemaName string) bool {
 func ValidateExportType(exportType string) error {
 	schemaName := strings.ToLower(exportType)
 	if !IsSchemaExportable(schemaName) {
-		return fmt.Errorf("schema %s is not exportable (missing Exportable annotation)", exportType)
+		return fmt.Errorf("schema %s is not exportable (missing Exportable annotation)", exportType) // nolint:err113
 	}
 	return nil
 }

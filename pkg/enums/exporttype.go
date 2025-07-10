@@ -12,6 +12,8 @@ type ExportType string
 var (
 	// ExportTypeControl indicates the control.
 	ExportTypeControl ExportType = "CONTROL"
+	// ExportTypeEvidence indicates the evidence.
+	ExportTypeEvidence ExportType = "EVIDENCE"
 	// ExportTypeInvalid is used when an unknown or unsupported value is provided.
 	ExportTypeInvalid ExportType = "EXPORTTYPE_INVALID"
 )
@@ -20,6 +22,7 @@ var (
 func (ExportType) Values() []string {
 	return []string{
 		string(ExportTypeControl),
+		string(ExportTypeEvidence),
 	}
 }
 
@@ -33,6 +36,8 @@ func ToExportType(r string) *ExportType {
 	switch strings.ToUpper(r) {
 	case ExportTypeControl.String():
 		return &ExportTypeControl
+	case ExportTypeEvidence.String():
+		return &ExportTypeEvidence
 	default:
 		return &ExportTypeInvalid
 	}
@@ -47,7 +52,7 @@ func (r ExportType) MarshalGQL(w io.Writer) {
 func (r *ExportType) UnmarshalGQL(v interface{}) error {
 	str, ok := v.(string)
 	if !ok {
-		return fmt.Errorf("wrong type for ExportType, got: %T", v) //nolint:err113
+		return fmt.Errorf("wrong type for ExportType, got: %T", v)  //nolint:err113
 	}
 
 	*r = ExportType(str)

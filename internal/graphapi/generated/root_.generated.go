@@ -49338,6 +49338,7 @@ ExportExportType is enum for the field export_type
 """
 enum ExportExportType @goModel(model: "github.com/theopenlane/core/pkg/enums.ExportType") {
   CONTROL
+  EVIDENCE
 }
 """
 Ordering options for Export connections
