@@ -55,7 +55,7 @@ func WithEcho(e *echo.Echo) RouterOption {
 	}
 }
 
-// WithLocalFiles is a Router  that allows the local files to be set on the router
+// WithLocalFiles is a RouterOption that allows the local files to be set on the router
 func WithLocalFiles(lf string) RouterOption {
 	return func(r *Router) {
 		r.LocalFilePath = lf
