@@ -435,8 +435,7 @@ func handleOrgSubscriptionCreated(event soiree.Event) error {
 		return err
 	}
 
-	orgCustomer := catalog.PopulatePricesForOrganizationCustomer(&entitlements.OrganizationCustomer{})
-	orgCustomer.OrganizationSubscriptionID = orgSubs.ID
+	orgCustomer := &entitlements.OrganizationCustomer{OrganizationSubscriptionID: orgSubs.ID}
 
 	orgCustomer, err = updateOrgCustomerWithSubscription(allowCtx, orgSubs, client, orgCustomer)
 	if err != nil {
@@ -444,6 +443,8 @@ func handleOrgSubscriptionCreated(event soiree.Event) error {
 
 		return nil
 	}
+	// personalOrg flag is set by updateOrgCustomerWithSubscription so compute pricing afterwards
+	orgCustomer = catalog.PopulatePricesForOrganizationCustomer(orgCustomer)
 
 	zerolog.Ctx(event.Context()).Debug().Msgf("Prices attached to organization customer: %+v", orgCustomer.Prices)
 

@@ -39,7 +39,7 @@ func genyamlApp() *cli.Command {
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "in",
-				Value:   "catalog_sandbox.yaml",
+				Value:   "catalog.yaml",
 				Usage:   "Path to the catalog YAML file",
 				Sources: cli.EnvVars("OPENLANE_CATALOG_FILE"),
 			},

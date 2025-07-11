@@ -11,6 +11,7 @@ modules:
           unit_amount: 0
           nickname: base_module_monthly
           lookup_key: base_module_monthly
+          price_id: price_1RjV2qBvxky1R7SvCt1I2sCY
         - interval: year
           unit_amount: 0
           nickname: base_module_free
