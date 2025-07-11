@@ -25,6 +25,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	objmw "github.com/theopenlane/core/internal/middleware/objects"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
+	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/middleware/cors"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/objects"
@@ -115,6 +116,11 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	otpMan := totp.NewOTP(otpOpts...)
 
+	pool := soiree.NewPondPool(
+		soiree.WithMaxWorkers(100), //nolint:mnd
+		soiree.WithName("ent_client_pool"),
+	)
+
 	opts := []ent.Option{
 		ent.Authz(*fgaClient),
 		ent.Emailer(&emailtemplates.Config{
@@ -126,6 +132,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 		ent.TOTP(&totp.Client{
 			Manager: otpMan,
 		}),
+		ent.PondPool(pool),
 	}
 
 	// create database connection

@@ -9,7 +9,6 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -115,9 +114,6 @@ func (Subprocessor) Hooks() []ent.Hook {
 // Policy of the Subprocessor
 func (Subprocessor) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			privacy.AlwaysAllowRule(), // access is filtered by the traversal interceptor
-		),
 		policy.WithMutationRules(
 			rule.SystemOwnedSubprocessor(),
 			policy.CheckOrgWriteAccess(),

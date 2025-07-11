@@ -170,14 +170,20 @@ func WithAuth() ServerOption {
 		s.Config.Handler.OauthProvider = s.Config.Settings.Auth.Providers
 
 		// add auth middleware
-		conf := authmw.NewAuthOptions(
+		opts := []authmw.Option{
 			authmw.WithAudience(s.Config.Settings.Auth.Token.Audience),
 			authmw.WithIssuer(s.Config.Settings.Auth.Token.Issuer),
 			authmw.WithJWKSEndpoint(s.Config.Settings.Auth.Token.JWKSEndpoint),
 			authmw.WithDBClient(s.Config.Handler.DBClient),
 			authmw.WithCookieConfig(s.Config.SessionConfig.CookieConfig),
 			authmw.WithAllowAnonymous(true),
-		)
+		}
+
+		if s.Config.Handler.RedisClient != nil {
+			opts = append(opts, authmw.WithRedisClient(s.Config.Handler.RedisClient))
+		}
+
+		conf := authmw.NewAuthOptions(opts...)
 
 		s.Config.Handler.WebAuthn = webauthn.NewWithConfig(s.Config.Settings.Auth.Providers.Webauthn)
 

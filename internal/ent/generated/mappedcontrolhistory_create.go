@@ -237,7 +237,9 @@ func (mchc *MappedControlHistoryCreate) Mutation() *MappedControlHistoryMutation
 
 // Save creates the MappedControlHistory in the database.
 func (mchc *MappedControlHistoryCreate) Save(ctx context.Context) (*MappedControlHistory, error) {
-	mchc.defaults()
+	if err := mchc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, mchc.sqlSave, mchc.mutation, mchc.hooks)
 }
 
@@ -264,16 +266,25 @@ func (mchc *MappedControlHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (mchc *MappedControlHistoryCreate) defaults() {
+func (mchc *MappedControlHistoryCreate) defaults() error {
 	if _, ok := mchc.mutation.HistoryTime(); !ok {
+		if mappedcontrolhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized mappedcontrolhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := mappedcontrolhistory.DefaultHistoryTime()
 		mchc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := mchc.mutation.CreatedAt(); !ok {
+		if mappedcontrolhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized mappedcontrolhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := mappedcontrolhistory.DefaultCreatedAt()
 		mchc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := mchc.mutation.UpdatedAt(); !ok {
+		if mappedcontrolhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized mappedcontrolhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := mappedcontrolhistory.DefaultUpdatedAt()
 		mchc.mutation.SetUpdatedAt(v)
 	}
@@ -290,9 +301,13 @@ func (mchc *MappedControlHistoryCreate) defaults() {
 		mchc.mutation.SetSource(v)
 	}
 	if _, ok := mchc.mutation.ID(); !ok {
+		if mappedcontrolhistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized mappedcontrolhistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := mappedcontrolhistory.DefaultID()
 		mchc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

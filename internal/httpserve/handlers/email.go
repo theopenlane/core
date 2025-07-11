@@ -31,7 +31,7 @@ func (h *Handler) sendVerificationEmail(ctx context.Context, user *User, token s
 		return err
 	}
 
-	log.Info().Msg("queued email")
+	log.Debug().Msg("queued email")
 
 	return nil
 }

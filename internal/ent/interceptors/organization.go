@@ -2,9 +2,11 @@ package interceptors
 
 import (
 	"context"
+	"strings"
 
 	"entgo.io/ent"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -23,25 +25,67 @@ func InterceptorOrganization() ent.Interceptor {
 			return nil
 		}
 
+		if ok := rule.IsInternalRequest(ctx); ok {
+			return nil
+		}
+
 		if rule.ContextHasPrivacyTokenOfType[*token.OrgInviteToken](ctx) ||
 			rule.ContextHasPrivacyTokenOfType[*token.SignUpToken](ctx) {
 			return nil
 		}
 
-		// if this is an API token, only allow the query if it is for the organization
-		if auth.IsAPITokenAuthentication(ctx) {
-			orgID, err := auth.GetOrganizationIDFromContext(ctx)
-			if err != nil {
-				return err
+		// Authenticated users should have their organizations IDs set in their auth context
+		// after logging in, check this first before using the AddIDPredicate and requiring a
+		// query to fga
+		authorizedOrgs, err := auth.GetOrganizationIDsFromContext(ctx)
+
+		authType := auth.GetAuthTypeFromContext(ctx)
+		if err == nil && len(authorizedOrgs) > 0 {
+			// if the request is not using a JWT, we can restrict to the authorized orgs
+			// from the context
+			if authType != auth.JWTAuthentication {
+				q.WhereP(organization.IDIn(authorizedOrgs...))
+
+				return nil
 			}
 
-			q.WhereP(organization.IDEQ(orgID))
+			// if the request is using a JWT and is not org owned, for example user profile, personal access tokens, etc,
+			// as well as a query on all organizations for a user,
+			// we need to restrict on all organization instead of just the current one
+			useListObjectsTypes := []string{
+				"personalAccessToken", // ability to add multiple orgs to a PAT
+				"organization",        // ability to list all orgs user has access to
+				"orgMemberships",      // due to parent org relationships, we need to check all orgs
+				"userSetting",         // default org ID
+				"user",                // default org ID
+			}
 
+			// fall back to ListObjects if we are in one of the cases above
+			fCtx := graphql.GetFieldContext(ctx)
+			fieldCheck := ""
+			if fCtx != nil {
+				if fCtx.Object == "Query" || fCtx.Object == "Mutation" {
+					fieldCheck = fCtx.Field.Name
+				} else {
+					fieldCheck = fCtx.Object
+				}
+
+				if fieldCheck != "" {
+					for _, t := range useListObjectsTypes {
+						if strings.Contains(strings.ToLower(fieldCheck), strings.ToLower(t)) {
+							return AddIDPredicate(ctx, q)
+						}
+					}
+				}
+			}
+
+			// other requests can fall back to the authorized orgs
+			q.WhereP(organization.IDIn(authorizedOrgs...))
 			return nil
 		}
 
-		// use the id predicate; there will never be a large list of orgs
-		// so its safe to use list objects ahead of time
+		// fallback to the AddIDPredicate if we don't have any org IDs in the context
+		// this shouldn't happen in normal operation, but is a safety net
 		return AddIDPredicate(ctx, q)
 	})
 }

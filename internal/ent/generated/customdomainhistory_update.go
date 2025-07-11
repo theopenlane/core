@@ -169,7 +169,9 @@ func (cdhu *CustomDomainHistoryUpdate) Mutation() *CustomDomainHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (cdhu *CustomDomainHistoryUpdate) Save(ctx context.Context) (int, error) {
-	cdhu.defaults()
+	if err := cdhu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, cdhu.sqlSave, cdhu.mutation, cdhu.hooks)
 }
 
@@ -196,11 +198,15 @@ func (cdhu *CustomDomainHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (cdhu *CustomDomainHistoryUpdate) defaults() {
+func (cdhu *CustomDomainHistoryUpdate) defaults() error {
 	if _, ok := cdhu.mutation.UpdatedAt(); !ok && !cdhu.mutation.UpdatedAtCleared() {
+		if customdomainhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized customdomainhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := customdomainhistory.UpdateDefaultUpdatedAt()
 		cdhu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -448,7 +454,9 @@ func (cdhuo *CustomDomainHistoryUpdateOne) Select(field string, fields ...string
 
 // Save executes the query and returns the updated CustomDomainHistory entity.
 func (cdhuo *CustomDomainHistoryUpdateOne) Save(ctx context.Context) (*CustomDomainHistory, error) {
-	cdhuo.defaults()
+	if err := cdhuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, cdhuo.sqlSave, cdhuo.mutation, cdhuo.hooks)
 }
 
@@ -475,11 +483,15 @@ func (cdhuo *CustomDomainHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (cdhuo *CustomDomainHistoryUpdateOne) defaults() {
+func (cdhuo *CustomDomainHistoryUpdateOne) defaults() error {
 	if _, ok := cdhuo.mutation.UpdatedAt(); !ok && !cdhuo.mutation.UpdatedAtCleared() {
+		if customdomainhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized customdomainhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := customdomainhistory.UpdateDefaultUpdatedAt()
 		cdhuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.

@@ -273,7 +273,7 @@ func TestMutationCreateInvite(t *testing.T) {
 	}
 
 	// delete organization created
-	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: orgWithRestrictions.ID}).MustDelete(testUserCreator.UserCtx, t)
+	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: orgWithRestrictions.ID}).MustDelete(orgWithRestrictionsCtx, t)
 	// delete org member created
 	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, ID: om.ID}).MustDelete(testUser1.UserCtx, t)
 }

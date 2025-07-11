@@ -21,8 +21,11 @@ import (
 )
 
 func TestQueryTask(t *testing.T) {
-	task := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	anonymousContext := createAnonymousTrustCenterContext("abc123", testUser1.OrganizationID)
+	testUser := suite.userBuilder(context.Background(), t)
+	patClient := suite.setupPatClient(testUser, t)
+
+	task := (&TaskBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	anonymousContext := createAnonymousTrustCenterContext("abc123", testUser.OrganizationID)
 
 	testCases := []struct {
 		name     string
@@ -35,19 +38,19 @@ func TestQueryTask(t *testing.T) {
 			name:    "happy path",
 			queryID: task.ID,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     testUser.UserCtx,
 		},
 		{
 			name:    "happy path using personal access token",
 			queryID: task.ID,
-			client:  suite.client.apiWithPAT,
+			client:  patClient,
 			ctx:     context.Background(),
 		},
 		{
 			name:     notFoundErrorMsg,
 			queryID:  "notfound",
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      testUser.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
@@ -81,7 +84,7 @@ func TestQueryTask(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: task.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: task.ID}).MustDelete(testUser.UserCtx, t)
 }
 
 func TestQueryTasks(t *testing.T) {
@@ -247,9 +250,10 @@ func TestQueryTasks(t *testing.T) {
 			var after *string
 
 			if tc.useCursor {
-				if tc.orderBy[0].Field == openlaneclient.TaskOrderFieldDue {
+				switch tc.orderBy[0].Field {
+				case openlaneclient.TaskOrderFieldDue:
 					after = startCursorDue
-				} else if tc.orderBy[0].Field == openlaneclient.TaskOrderFieldCreatedAt {
+				case openlaneclient.TaskOrderFieldCreatedAt:
 					after = startCursorCreated
 				}
 			}
@@ -266,9 +270,10 @@ func TestQueryTasks(t *testing.T) {
 				assert.Assert(t, resp.Tasks.PageInfo.HasNextPage)
 				assert.Assert(t, resp.Tasks.PageInfo.EndCursor != nil)
 
-				if tc.orderBy[0].Field == openlaneclient.TaskOrderFieldDue {
+				switch tc.orderBy[0].Field {
+				case openlaneclient.TaskOrderFieldDue:
 					startCursorDue = resp.Tasks.PageInfo.EndCursor
-				} else if tc.orderBy[0].Field == openlaneclient.TaskOrderFieldCreatedAt {
+				case openlaneclient.TaskOrderFieldCreatedAt:
 					startCursorCreated = resp.Tasks.PageInfo.EndCursor
 				}
 			} else if tc.useCursor {
@@ -288,8 +293,15 @@ func TestQueryTasks(t *testing.T) {
 }
 
 func TestMutationCreateTask(t *testing.T) {
-	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	testUser := suite.userBuilder(context.Background(), t)
+	patClient := suite.setupPatClient(testUser, t)
+	apiClient := suite.setupAPITokenClient(testUser.UserCtx, t)
+
+	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	om2 := (&OrgMemberBuilder{client: suite.client, Role: enums.RoleAdmin.String()}).MustNew(testUser.UserCtx, t)
+
 	userCtx := auth.NewTestContextWithOrgID(om.UserID, om.OrganizationID)
+	adminCtx := auth.NewTestContextWithOrgID(om2.UserID, om2.OrganizationID)
 
 	testCases := []struct {
 		name        string
@@ -304,7 +316,7 @@ func TestMutationCreateTask(t *testing.T) {
 				Title: "test-task",
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    testUser.UserCtx,
 		},
 		{
 			name: "happy path, all input",
@@ -317,7 +329,7 @@ func TestMutationCreateTask(t *testing.T) {
 				AssigneeID: &om.UserID, // assign the task to another user
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    testUser.UserCtx,
 		},
 		{
 			name: "create with assignee not in org should fail",
@@ -326,16 +338,16 @@ func TestMutationCreateTask(t *testing.T) {
 				AssigneeID: &testUser2.ID,
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         testUser.UserCtx,
 			expectedErr: "user not in organization",
 		},
 		{
 			name: "happy path, using pat",
 			request: openlaneclient.CreateTaskInput{
 				Title:   "test-task",
-				OwnerID: &testUser1.OrganizationID,
+				OwnerID: &testUser.OrganizationID,
 			},
-			client: suite.client.apiWithPAT,
+			client: patClient,
 			ctx:    context.Background(),
 		},
 		{
@@ -343,7 +355,7 @@ func TestMutationCreateTask(t *testing.T) {
 			request: openlaneclient.CreateTaskInput{
 				Title: "test-task",
 			},
-			client: suite.client.apiWithToken,
+			client: apiClient,
 			ctx:    context.Background(),
 		},
 		{
@@ -352,7 +364,7 @@ func TestMutationCreateTask(t *testing.T) {
 				Details: lo.ToPtr("makin' a list, checkin' it twice"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         testUser.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 	}
@@ -410,12 +422,12 @@ func TestMutationCreateTask(t *testing.T) {
 			}
 
 			// when using an API token, the assigner is not set
-			if tc.client == suite.client.apiWithToken {
+			if tc.client == apiClient {
 				assert.Check(t, is.Nil(resp.CreateTask.Task.Assigner))
 			} else {
 				// otherwise it defaults to the authorized user
 				assert.Check(t, resp.CreateTask.Task.Assigner != nil)
-				assert.Check(t, is.Equal(testUser1.ID, resp.CreateTask.Task.Assigner.ID))
+				assert.Check(t, is.Equal(testUser.ID, resp.CreateTask.Task.Assigner.ID))
 			}
 
 			if tc.request.AssigneeID == nil {
@@ -430,18 +442,18 @@ func TestMutationCreateTask(t *testing.T) {
 				assert.Check(t, taskResp != nil)
 
 				// make sure the another org member cannot see the task
-				taskResp, err = suite.client.api.GetTaskByID(adminUser.UserCtx, resp.CreateTask.Task.ID)
+				taskResp, err = suite.client.api.GetTaskByID(adminCtx, resp.CreateTask.Task.ID)
 
 				assert.Check(t, is.Nil(taskResp))
 			}
 
 			// cleanup
-			(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: resp.CreateTask.Task.ID}).MustDelete(testUser1.UserCtx, t)
+			(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: resp.CreateTask.Task.ID}).MustDelete(testUser.UserCtx, t)
 		})
 	}
 
 	// cleanup
-	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, ID: om.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, ID: om.ID}).MustDelete(testUser.UserCtx, t)
 }
 
 func TestMutationUpdateTask(t *testing.T) {
@@ -775,8 +787,10 @@ func TestMutationUpdateTask(t *testing.T) {
 }
 
 func TestMutationDeleteTask(t *testing.T) {
-	task1 := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	task2 := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	testUser := suite.userBuilder(context.Background(), t)
+	patClient := suite.setupPatClient(testUser, t)
+	task1 := (&TaskBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	task2 := (&TaskBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -796,26 +810,26 @@ func TestMutationDeleteTask(t *testing.T) {
 			name:       "happy path, delete task",
 			idToDelete: task1.ID,
 			client:     suite.client.api,
-			ctx:        testUser1.UserCtx,
+			ctx:        testUser.UserCtx,
 		},
 		{
 			name:        "task already deleted, not found",
 			idToDelete:  task1.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         testUser.UserCtx,
 			expectedErr: "task not found",
 		},
 		{
 			name:       "happy path, delete task using personal access token",
 			idToDelete: task2.ID,
-			client:     suite.client.apiWithPAT,
+			client:     patClient,
 			ctx:        context.Background(),
 		},
 		{
 			name:        "unknown task, not found",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         testUser.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}

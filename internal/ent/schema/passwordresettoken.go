@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/entx/history"
 	emixin "github.com/theopenlane/entx/mixin"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -119,7 +118,6 @@ func (PasswordResetToken) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			rule.AllowAfterApplyingPrivacyTokenFilter[*token.ResetToken](),
-			privacy.AlwaysAllowRule(),
 		),
 		policy.WithOnMutationRules(
 			ent.OpCreate,

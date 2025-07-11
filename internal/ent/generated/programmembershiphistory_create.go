@@ -159,7 +159,9 @@ func (pmhc *ProgramMembershipHistoryCreate) Mutation() *ProgramMembershipHistory
 
 // Save creates the ProgramMembershipHistory in the database.
 func (pmhc *ProgramMembershipHistoryCreate) Save(ctx context.Context) (*ProgramMembershipHistory, error) {
-	pmhc.defaults()
+	if err := pmhc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, pmhc.sqlSave, pmhc.mutation, pmhc.hooks)
 }
 
@@ -186,16 +188,25 @@ func (pmhc *ProgramMembershipHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (pmhc *ProgramMembershipHistoryCreate) defaults() {
+func (pmhc *ProgramMembershipHistoryCreate) defaults() error {
 	if _, ok := pmhc.mutation.HistoryTime(); !ok {
+		if programmembershiphistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized programmembershiphistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := programmembershiphistory.DefaultHistoryTime()
 		pmhc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := pmhc.mutation.CreatedAt(); !ok {
+		if programmembershiphistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized programmembershiphistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := programmembershiphistory.DefaultCreatedAt()
 		pmhc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := pmhc.mutation.UpdatedAt(); !ok {
+		if programmembershiphistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized programmembershiphistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := programmembershiphistory.DefaultUpdatedAt()
 		pmhc.mutation.SetUpdatedAt(v)
 	}
@@ -204,9 +215,13 @@ func (pmhc *ProgramMembershipHistoryCreate) defaults() {
 		pmhc.mutation.SetRole(v)
 	}
 	if _, ok := pmhc.mutation.ID(); !ok {
+		if programmembershiphistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized programmembershiphistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := programmembershiphistory.DefaultID()
 		pmhc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

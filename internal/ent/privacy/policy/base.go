@@ -5,14 +5,19 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/entx/history"
 )
 
 // prePolicy is executed before privacy policy
 var prePolicy = privacy.Policy{
 	Query: privacy.QueryPolicy{
+		// allow internal requests (used in tests) to proceed to query tables
 		rule.AllowIfInternalRequest(),
+		// allow history requests to proceed to query tables
+		history.AllowIfHistoryRequest(),
 	},
 	Mutation: privacy.MutationPolicy{
+		// allow internal requests (used in tests) to proceed to mutate tables
 		rule.AllowIfInternalRequest(),
 	},
 }
@@ -20,8 +25,7 @@ var prePolicy = privacy.Policy{
 // postPolicy is executed after privacy policy
 var postPolicy = privacy.Policy{
 	Query: privacy.QueryPolicy{
-		// TODO: update to always allow after policies implemented on all schemas
-		privacy.AlwaysDenyRule(),
+		privacy.AlwaysAllowRule(),
 	},
 	Mutation: privacy.MutationPolicy{
 		privacy.AlwaysDenyRule(),

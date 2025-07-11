@@ -86,9 +86,6 @@ func (MappableDomain) Indexes() []ent.Index {
 // Policy of the MappableDomain
 func (MappableDomain) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			privacy.AlwaysAllowRule(),
-		),
 		policy.WithMutationRules(
 			rule.AllowMutationIfSystemAdmin(),
 			privacy.AlwaysDenyRule(),

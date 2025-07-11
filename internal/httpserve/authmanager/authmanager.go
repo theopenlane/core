@@ -196,8 +196,6 @@ func (a *Client) createTokenPair(ctx context.Context, user *generated.User, targ
 			return nil, err
 		}
 
-		log.Warn().Err(err).Msg("user attempting to authenticate into an org they cannot access; switching to personal org")
-
 		targetOrgID = newTarget
 	}
 

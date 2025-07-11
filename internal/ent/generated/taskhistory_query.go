@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -331,6 +332,12 @@ func (thq *TaskHistoryQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		thq.sql = prev
+	}
+	if taskhistory.Policy == nil {
+		return errors.New("generated: uninitialized taskhistory.Policy (forgotten import generated/runtime?)")
+	}
+	if err := taskhistory.Policy.EvalQuery(ctx, thq); err != nil {
+		return err
 	}
 	return nil
 }

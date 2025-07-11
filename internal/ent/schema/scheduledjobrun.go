@@ -6,7 +6,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx"
@@ -129,10 +128,6 @@ func (ScheduledJobRun) Policy() ent.Policy {
 	// add the new policy here, the default post-policy is to deny all
 	// so you need to ensure there are rules in place to allow the actions you want
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			// add query rules here, the below is the recommended default
-			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
-		),
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
 		),

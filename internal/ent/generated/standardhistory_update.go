@@ -422,7 +422,9 @@ func (shu *StandardHistoryUpdate) Mutation() *StandardHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (shu *StandardHistoryUpdate) Save(ctx context.Context) (int, error) {
-	shu.defaults()
+	if err := shu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, shu.sqlSave, shu.mutation, shu.hooks)
 }
 
@@ -449,11 +451,15 @@ func (shu *StandardHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (shu *StandardHistoryUpdate) defaults() {
+func (shu *StandardHistoryUpdate) defaults() error {
 	if _, ok := shu.mutation.UpdatedAt(); !ok && !shu.mutation.UpdatedAtCleared() {
+		if standardhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized standardhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := standardhistory.UpdateDefaultUpdatedAt()
 		shu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -1049,7 +1055,9 @@ func (shuo *StandardHistoryUpdateOne) Select(field string, fields ...string) *St
 
 // Save executes the query and returns the updated StandardHistory entity.
 func (shuo *StandardHistoryUpdateOne) Save(ctx context.Context) (*StandardHistory, error) {
-	shuo.defaults()
+	if err := shuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, shuo.sqlSave, shuo.mutation, shuo.hooks)
 }
 
@@ -1076,11 +1084,15 @@ func (shuo *StandardHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (shuo *StandardHistoryUpdateOne) defaults() {
+func (shuo *StandardHistoryUpdateOne) defaults() error {
 	if _, ok := shuo.mutation.UpdatedAt(); !ok && !shuo.mutation.UpdatedAtCleared() {
+		if standardhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized standardhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := standardhistory.UpdateDefaultUpdatedAt()
 		shuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

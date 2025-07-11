@@ -231,7 +231,9 @@ func (mchu *MappedControlHistoryUpdate) Mutation() *MappedControlHistoryMutation
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (mchu *MappedControlHistoryUpdate) Save(ctx context.Context) (int, error) {
-	mchu.defaults()
+	if err := mchu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, mchu.sqlSave, mchu.mutation, mchu.hooks)
 }
 
@@ -258,11 +260,15 @@ func (mchu *MappedControlHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (mchu *MappedControlHistoryUpdate) defaults() {
+func (mchu *MappedControlHistoryUpdate) defaults() error {
 	if _, ok := mchu.mutation.UpdatedAt(); !ok && !mchu.mutation.UpdatedAtCleared() {
+		if mappedcontrolhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized mappedcontrolhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := mappedcontrolhistory.UpdateDefaultUpdatedAt()
 		mchu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -607,7 +613,9 @@ func (mchuo *MappedControlHistoryUpdateOne) Select(field string, fields ...strin
 
 // Save executes the query and returns the updated MappedControlHistory entity.
 func (mchuo *MappedControlHistoryUpdateOne) Save(ctx context.Context) (*MappedControlHistory, error) {
-	mchuo.defaults()
+	if err := mchuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, mchuo.sqlSave, mchuo.mutation, mchuo.hooks)
 }
 
@@ -634,11 +642,15 @@ func (mchuo *MappedControlHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (mchuo *MappedControlHistoryUpdateOne) defaults() {
+func (mchuo *MappedControlHistoryUpdateOne) defaults() error {
 	if _, ok := mchuo.mutation.UpdatedAt(); !ok && !mchuo.mutation.UpdatedAtCleared() {
+		if mappedcontrolhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized mappedcontrolhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := mappedcontrolhistory.UpdateDefaultUpdatedAt()
 		mchuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

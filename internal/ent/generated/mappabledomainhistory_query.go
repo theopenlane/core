@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -331,6 +332,12 @@ func (mdhq *MappableDomainHistoryQuery) prepareQuery(ctx context.Context) error 
 			return err
 		}
 		mdhq.sql = prev
+	}
+	if mappabledomainhistory.Policy == nil {
+		return errors.New("generated: uninitialized mappabledomainhistory.Policy (forgotten import generated/runtime?)")
+	}
+	if err := mappabledomainhistory.Policy.EvalQuery(ctx, mdhq); err != nil {
+		return err
 	}
 	return nil
 }

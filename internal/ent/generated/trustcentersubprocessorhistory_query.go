@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -331,6 +332,12 @@ func (tcshq *TrustCenterSubprocessorHistoryQuery) prepareQuery(ctx context.Conte
 			return err
 		}
 		tcshq.sql = prev
+	}
+	if trustcentersubprocessorhistory.Policy == nil {
+		return errors.New("generated: uninitialized trustcentersubprocessorhistory.Policy (forgotten import generated/runtime?)")
+	}
+	if err := trustcentersubprocessorhistory.Policy.EvalQuery(ctx, tcshq); err != nil {
+		return err
 	}
 	return nil
 }

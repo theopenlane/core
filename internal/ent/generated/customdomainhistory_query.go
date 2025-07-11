@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -331,6 +332,12 @@ func (cdhq *CustomDomainHistoryQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		cdhq.sql = prev
+	}
+	if customdomainhistory.Policy == nil {
+		return errors.New("generated: uninitialized customdomainhistory.Policy (forgotten import generated/runtime?)")
+	}
+	if err := customdomainhistory.Policy.EvalQuery(ctx, cdhq); err != nil {
+		return err
 	}
 	return nil
 }

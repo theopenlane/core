@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/theopenlane/core/internal/ent/interceptors"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/iam/entfga"
@@ -98,6 +99,16 @@ func (NarrativeHistory) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("history_time"),
 	}
+}
+
+// Policy of the NarrativeHistory.
+// ensure history.AllowIfHistoryRequest() is already added to the base policy
+func (NarrativeHistory) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithMutationRules(
+			history.AllowIfHistoryRequest(),
+		),
+	)
 }
 
 // Interceptors of the NarrativeHistory
