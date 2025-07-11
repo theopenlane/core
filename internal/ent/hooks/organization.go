@@ -679,6 +679,9 @@ func createDefaultOrgModulesProductsPrices(ctx context.Context, orgCreated *gene
 			continue // skip if no monthly price
 		}
 
+		newCtx := contextx.With(ctx, auth.OrganizationCreationContextKey{})
+		newCtx = contextx.With(newCtx, auth.OrgSubscriptionContextKey{})
+
 		// we set the price purely for reference; it will not be used for billing - we care mostly about the association of subscription to module
 		orgMod, err := m.Client().OrgModule.Create().
 			SetModule(moduleName).
@@ -686,7 +689,7 @@ func createDefaultOrgModulesProductsPrices(ctx context.Context, orgCreated *gene
 			SetOwnerID(orgCreated.ID).
 			SetActive(true).
 			SetPrice(models.Price{Amount: float64(monthlyPrice.UnitAmount), Interval: monthlyPrice.Interval}).
-			Save(ctx)
+			Save(newCtx)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create OrgModule for %s: %w", moduleName, err)
 		}
@@ -700,7 +703,7 @@ func createDefaultOrgModulesProductsPrices(ctx context.Context, orgCreated *gene
 			SetModule(orgMod.ID).
 			SetSubscriptionID(orgSubs.ID).
 			SetActive(true).
-			Save(ctx)
+			Save(newCtx)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create OrgProduct for %s: %w", moduleName, err)
 		}
@@ -716,7 +719,7 @@ func createDefaultOrgModulesProductsPrices(ctx context.Context, orgCreated *gene
 			SetSubscriptionID(orgSubs.ID).
 			SetStripePriceID(monthlyPrice.PriceID).
 			SetActive(true).
-			Save(ctx)
+			Save(newCtx)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create OrgPrice for module %s: %w", moduleName, err)
 		}

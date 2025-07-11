@@ -89,6 +89,12 @@ var DefaultCatalog = catalog.Catalog{
 		string(models.CatalogBaseModule): catalog.Feature{
 			Audience: "public",
 			Billing: catalog.Billing{Prices: []catalog.Price{catalog.Price{
+				Interval:   "month",
+				LookupKey:  "base_module_monthly",
+				Nickname:   "base_module_monthly",
+				PriceID:    "price_1RjUGVQrAxy77qa71BBYvS0S",
+				UnitAmount: int64(0),
+			}, catalog.Price{
 				Interval:   "year",
 				LookupKey:  "base_module_free",
 				Nickname:   "base_module_free",
@@ -185,6 +191,6 @@ var DefaultCatalog = catalog.Catalog{
 			ProductID:   "prod_SeQN6ZyE2ssUjw",
 		},
 	},
-	SHA:     "d10bc42ff7f4d2dfbab7e9460d87e79aed1950f6734faf1636ad352f3ac5354b",
-	Version: "v0.0.6",
+	SHA:     "521944bcb41bc64858be398b1255fbd5df55259bb44f3121dfcac3a5812498d7",
+	Version: "v0.0.5",
 }

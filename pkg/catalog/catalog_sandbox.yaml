@@ -1,5 +1,5 @@
-version: v0.0.6
-sha: d10bc42ff7f4d2dfbab7e9460d87e79aed1950f6734faf1636ad352f3ac5354b
+version: v0.0.5
+sha: 521944bcb41bc64858be398b1255fbd5df55259bb44f3121dfcac3a5812498d7
 modules:
   base_module:
     display_name: Base Module
@@ -7,6 +7,11 @@ modules:
     description: Core System Access
     billing:
       prices:
+        - interval: month
+          unit_amount: 0
+          nickname: base_module_monthly
+          lookup_key: base_module_monthly
+          price_id: price_1RjUGVQrAxy77qa71BBYvS0S
         - interval: year
           unit_amount: 0
           nickname: base_module_free

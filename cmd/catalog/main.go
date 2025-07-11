@@ -69,7 +69,7 @@ func catalogApp() *cli.Command {
 			&cli.StringFlag{
 				Name:  "catalog",
 				Usage: "catalog file path",
-				Value: "./pkg/catalog/catalog.yaml", // set the value to sandbox catalog by default to avoid disasters
+				Value: "./pkg/catalog/catalog_sandbox.yaml", // set the value to sandbox catalog by default to avoid disasters
 			},
 			&cli.StringFlag{
 				Name:    "stripe-key",

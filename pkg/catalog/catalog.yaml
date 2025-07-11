@@ -7,6 +7,10 @@ modules:
     description: Core System Access
     billing:
       prices:
+        - interval: month
+          unit_amount: 0
+          nickname: base_module_monthly
+          lookup_key: base_module_monthly
         - interval: year
           unit_amount: 0
           nickname: base_module_free
