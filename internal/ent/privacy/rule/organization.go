@@ -137,14 +137,6 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 	if access {
 		log.Debug().Str("relation", relation).Msg("access allowed for organization based on fga")
 
-		// add the org id to the context so that it can be used later
-		// this is useful to prevent multiple checks for the same organization
-		// for things like the org switcher in the UI
-		err = auth.AddOrganizationIDToContext(ctx, organizationID)
-		if err != nil {
-			log.Debug().Err(err).Msg("failed to add organization ID to context")
-		}
-
 		if cache, ok := permissioncache.CacheFromContext(ctx); ok {
 			if err := cache.SetRole(ctx, au.SubjectID, organizationID, relation); err != nil {
 				log.Err(err).Msg("failed to set role cache")
