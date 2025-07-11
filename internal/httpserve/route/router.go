@@ -13,6 +13,7 @@ import (
 )
 
 var (
+	baseMW = []echo.MiddlewareFunc{}
 	mw     = []echo.MiddlewareFunc{}
 	authMW = []echo.MiddlewareFunc{}
 
@@ -54,7 +55,7 @@ func WithEcho(e *echo.Echo) RouterOption {
 	}
 }
 
-// WithLocalFiles is a RouterOption that allows the local files to be set on the router
+// WithLocalFiles is a Router  that allows the local files to be set on the router
 func WithLocalFiles(lf string) RouterOption {
 	return func(r *Router) {
 		r.LocalFilePath = lf
@@ -155,11 +156,13 @@ func (r *Router) Base() *echo.Group {
 
 // RegisterRoutes with the echo routers - Router is defined within openapi.go
 func RegisterRoutes(router *Router) error {
+	// base middleware for all routes that does not included additional middleware
+	baseMW = baseMiddleware(router)
 	// Middleware for restricted endpoints
 	restrictedEndpointsMW = restrictedMiddleware(router)
 	// Middleware for authenticated endpoints
 	authMW = authMiddleware(router)
-	// Default middleware for other routes
+	// Default middleware for other routes which includes additional middleware
 	mw = defaultMiddleware(router)
 
 	// routeHandlers that take the router and handler as input
@@ -242,13 +245,13 @@ func baseMiddleware(router *Router) []echo.MiddlewareFunc {
 		EntDBClient: router.Handler.DBClient,
 	}
 
-	return append(mw, middleware.Recover(), transactionConfig.Middleware)
+	return append(baseMW, middleware.Recover(), transactionConfig.Middleware)
 }
 
 // restrictedMiddleware returns the middleware for the router that is used on restricted routes
 // it includes the base middleware, the rate limiter, and any additional middleware
 func restrictedMiddleware(router *Router) []echo.MiddlewareFunc {
-	mw := baseMiddleware(router)
+	mw := baseMW
 
 	// add the restricted endpoints middleware
 	mw = append(mw, router.Handler.AdditionalMiddleware...)
@@ -260,7 +263,7 @@ func restrictedMiddleware(router *Router) []echo.MiddlewareFunc {
 // it includes the transaction middleware, the auth middleware, and any additional middleware
 // after the auth middleware
 func authMiddleware(router *Router) []echo.MiddlewareFunc {
-	mw := baseMiddleware(router)
+	mw := baseMW
 
 	// add the auth middleware
 	mw = append(mw, router.Handler.AuthMiddleware...)
@@ -275,5 +278,5 @@ func authMiddleware(router *Router) []echo.MiddlewareFunc {
 func defaultMiddleware(router *Router) []echo.MiddlewareFunc {
 	// this is the default middleware that is applied to all routes
 	// it includes the transaction middleware and any additional middleware
-	return append(baseMiddleware(router), router.Handler.AdditionalMiddleware...)
+	return append(baseMW, router.Handler.AdditionalMiddleware...)
 }
