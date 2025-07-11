@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/core/pkg/testutils"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -255,6 +256,56 @@ func TestQueryControls(t *testing.T) {
 	}
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: controlAnotherOrg.ID}).MustDelete(userAnotherOrg.UserCtx, t)
+}
+
+func TestQueryControlsMultipleOrgCheck(t *testing.T) {
+	// test to make sure we don't get cross org results back even if the user technically has access to them
+	testUser := suite.userBuilder(context.Background(), t)
+
+	// create controls for the test user in their org
+	control := (&ControlBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	testUserOriginalCtx := auth.NewTestContextWithOrgID(testUser.ID, testUser.OrganizationID)
+
+	// create another org and a control in that org
+	anotherOrg := (&OrganizationBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	testUserCtxUpdate := auth.NewTestContextWithOrgID(testUser.ID, anotherOrg.ID)
+
+	controlAnotherOrg := (&ControlBuilder{client: suite.client}).MustNew(testUserCtxUpdate, t)
+
+	testCases := []struct {
+		name            string
+		client          *openlaneclient.OpenlaneClient
+		first           *int64
+		last            *int64
+		ctx             context.Context
+		expectedResults int
+	}{
+		{
+			name:            "happy path",
+			client:          suite.client.api,
+			ctx:             testUserOriginalCtx,
+			expectedResults: 1,
+		},
+		{
+			name:            "happy path",
+			client:          suite.client.api,
+			ctx:             testUserCtxUpdate,
+			expectedResults: 1,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("List "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.GetAllControls(tc.ctx)
+			assert.NilError(t, err)
+			assert.Check(t, resp != nil)
+
+			assert.Check(t, is.Len(resp.Controls.Edges, tc.expectedResults))
+			assert.Check(t, is.Equal(int64(tc.expectedResults), resp.Controls.TotalCount))
+		})
+	}
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUserOriginalCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: controlAnotherOrg.ID}).MustDelete(testUserCtxUpdate, t)
 }
 
 func TestMutationCreateControl(t *testing.T) {

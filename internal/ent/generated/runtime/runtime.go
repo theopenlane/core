@@ -1719,8 +1719,18 @@ func init() {
 	// entitytypehistory.DefaultID holds the default value on creation for the id field.
 	entitytypehistory.DefaultID = entitytypehistoryDescID.Default.(func() string)
 	eventMixin := schema.Event{}.Mixin()
+	event.Policy = privacy.NewPolicies(schema.Event{})
+	event.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := event.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	eventMixinHooks0 := eventMixin[0].Hooks()
-	event.Hooks[0] = eventMixinHooks0[0]
+
+	event.Hooks[1] = eventMixinHooks0[0]
 	eventMixinFields0 := eventMixin[0].Fields()
 	_ = eventMixinFields0
 	eventMixinFields1 := eventMixin[1].Fields()
