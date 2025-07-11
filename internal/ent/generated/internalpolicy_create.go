@@ -626,11 +626,6 @@ func (ipc *InternalPolicyCreate) check() error {
 			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.revision": %w`, err)}
 		}
 	}
-	if v, ok := ipc.mutation.OwnerID(); ok {
-		if err := internalpolicy.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.owner_id": %w`, err)}
-		}
-	}
 	if _, ok := ipc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "InternalPolicy.name"`)}
 	}

@@ -610,11 +610,6 @@ func (pc *ProcedureCreate) check() error {
 			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "Procedure.revision": %w`, err)}
 		}
 	}
-	if v, ok := pc.mutation.OwnerID(); ok {
-		if err := procedure.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Procedure.owner_id": %w`, err)}
-		}
-	}
 	if _, ok := pc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Procedure.name"`)}
 	}

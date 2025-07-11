@@ -104,7 +104,7 @@ func (e Evidence) Mixin() []ent.Mixin {
 				withParents(
 					Control{}, Subcontrol{}, ControlObjective{}, Program{},
 					Task{}, Procedure{}, InternalPolicy{}), // used to create parent tuples for the evidence
-				withOrganizationOwner(false),
+				withOrganizationOwner(true),
 			),
 		},
 	}.getMixins()

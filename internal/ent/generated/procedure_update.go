@@ -885,11 +885,6 @@ func (pu *ProcedureUpdate) check() error {
 			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "Procedure.revision": %w`, err)}
 		}
 	}
-	if v, ok := pu.mutation.OwnerID(); ok {
-		if err := procedure.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Procedure.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := pu.mutation.Name(); ok {
 		if err := procedure.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Procedure.name": %w`, err)}
@@ -2487,11 +2482,6 @@ func (puo *ProcedureUpdateOne) check() error {
 	if v, ok := puo.mutation.Revision(); ok {
 		if err := procedure.RevisionValidator(v); err != nil {
 			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "Procedure.revision": %w`, err)}
-		}
-	}
-	if v, ok := puo.mutation.OwnerID(); ok {
-		if err := procedure.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Procedure.owner_id": %w`, err)}
 		}
 	}
 	if v, ok := puo.mutation.Name(); ok {

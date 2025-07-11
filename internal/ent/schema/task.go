@@ -102,7 +102,7 @@ func (t Task) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Task](t,
 				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Risk{}, Asset{}, Scan{}),
-				withOrganizationOwner(false),
+				withOrganizationOwner(true),
 			),
 		},
 	}.getMixins()
