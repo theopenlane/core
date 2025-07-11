@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/gertd/go-pluralize"
 	"github.com/gocarina/gocsv"
 	"github.com/riverqueue/river"
 	"github.com/rs/zerolog/log"
@@ -42,13 +43,21 @@ type ExportContentWorker struct {
 
 	Config ExportWorkerConfig `koanf:"config" json:"config" jsonschema:"description=the configuration for exporting"`
 
-	olClient olclient.OpenlaneClient
+	olClient   olclient.OpenlaneClient
+	httpClient *http.Client
 }
 
 // WithOpenlaneClient sets the Openlane client for the worker
 // and returns the worker for method chaining
 func (w *ExportContentWorker) WithOpenlaneClient(cl olclient.OpenlaneClient) *ExportContentWorker {
 	w.olClient = cl
+	return w
+}
+
+// WithHTTPClient sets the http client to use for the outward
+// http request
+func (w *ExportContentWorker) WithHTTPClient(client *http.Client) *ExportContentWorker {
+	w.httpClient = client
 	return w
 }
 
@@ -73,6 +82,12 @@ func (w *ExportContentWorker) Work(ctx context.Context, job *river.Job[ExportCon
 		w.olClient = cl
 	}
 
+	if w.httpClient == nil {
+		w.httpClient = &http.Client{
+			Timeout: time.Second * 30,
+		}
+	}
+
 	export, err := w.olClient.GetExportByID(ctx, job.Args.ExportID)
 	if err != nil {
 		log.Error().Err(err).Str("export_id", job.Args.ExportID).Msg("failed to get export")
@@ -89,9 +104,7 @@ func (w *ExportContentWorker) Work(ctx context.Context, job *river.Job[ExportCon
 
 	fields := export.Export.Fields
 
-	// since the exporttype would be correct. just append "s" to build up the root query
-	// e.g control becomes controls , evidence becomes evidences
-	rootQuery := exportType + "s"
+	rootQuery := pluralize.NewClient().Plural(exportType)
 
 	query := w.buildGraphQLQuery(rootQuery, fields, ownerID)
 
@@ -172,7 +185,7 @@ func (w *ExportContentWorker) executeGraphQLQuery(ctx context.Context, query str
 		return nil, err
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "POST", w.Config.OpenlaneAPIHost+"/query", bytes.NewReader(jsonBody))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, w.Config.OpenlaneAPIHost+"/query", bytes.NewReader(jsonBody))
 	if err != nil {
 		return nil, err
 	}
@@ -181,7 +194,7 @@ func (w *ExportContentWorker) executeGraphQLQuery(ctx context.Context, query str
 	req.Header.Set("Accept", "application/graphql-response+json")
 	req.Header.Set("Authorization", "Bearer "+w.Config.OpenlaneAPIToken)
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := w.httpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}

@@ -14,7 +14,7 @@ import (
 
 var (
 	errExportTypeNotProvided = errors.New("provide export type")
-	errFieldsNotProvided     = errors.New("atleast one field must be provided for the schema to export")
+	errFieldsNotProvided     = errors.New("at least one field must be provided for the schema to export")
 )
 
 func HookExport() ent.Hook {
