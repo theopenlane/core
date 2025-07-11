@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up trustCenterSubprocessor by ID
+    """
+     trustCenterSubprocessor(
+        """
+        ID of the trustCenterSubprocessor
+        """
+        id: ID!
+    ):  TrustCenterSubprocessor!
+}
+
+extend type Mutation{
+    """
+    Create a new trustCenterSubprocessor
+    """
+    createTrustCenterSubprocessor(
+        """
+        values of the trustCenterSubprocessor
+        """
+        input: CreateTrustCenterSubprocessorInput!
+    ): TrustCenterSubprocessorCreatePayload!
+    """
+    Create multiple new trustCenterSubprocessors
+    """
+    createBulkTrustCenterSubprocessor(
+        """
+        values of the trustCenterSubprocessor
+        """
+        input: [CreateTrustCenterSubprocessorInput!]
+    ): TrustCenterSubprocessorBulkCreatePayload!
+    """
+    Create multiple new trustCenterSubprocessors via file upload
+    """
+    createBulkCSVTrustCenterSubprocessor(
+        """
+        csv file containing values of the trustCenterSubprocessor
+        """
+        input: Upload!
+    ): TrustCenterSubprocessorBulkCreatePayload!
+    """
+    Update an existing trustCenterSubprocessor
+    """
+    updateTrustCenterSubprocessor(
+        """
+        ID of the trustCenterSubprocessor
+        """
+        id: ID!
+        """
+        New values for the trustCenterSubprocessor
+        """
+        input: UpdateTrustCenterSubprocessorInput!
+    ): TrustCenterSubprocessorUpdatePayload!
+    """
+    Delete an existing trustCenterSubprocessor
+    """
+    deleteTrustCenterSubprocessor(
+        """
+        ID of the trustCenterSubprocessor
+        """
+        id: ID!
+    ): TrustCenterSubprocessorDeletePayload!
+}
+
+"""
+Return response for createTrustCenterSubprocessor mutation
+"""
+type TrustCenterSubprocessorCreatePayload {
+    """
+    Created trustCenterSubprocessor
+    """
+    trustCenterSubprocessor: TrustCenterSubprocessor!
+}
+
+"""
+Return response for updateTrustCenterSubprocessor mutation
+"""
+type TrustCenterSubprocessorUpdatePayload {
+    """
+    Updated trustCenterSubprocessor
+    """
+    trustCenterSubprocessor: TrustCenterSubprocessor!
+}
+
+"""
+Return response for deleteTrustCenterSubprocessor mutation
+"""
+type TrustCenterSubprocessorDeletePayload {
+    """
+    Deleted trustCenterSubprocessor ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkTrustCenterSubprocessor mutation
+"""
+type TrustCenterSubprocessorBulkCreatePayload {
+    """
+    Created trustCenterSubprocessors
+    """
+    trustCenterSubprocessors: [TrustCenterSubprocessor!]
+}

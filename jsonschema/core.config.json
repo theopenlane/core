@@ -341,6 +341,10 @@
         "cookieDomain": {
           "type": "string",
           "description": "CookieDomain specifies the domain for the CSRF cookie, default to no domain"
+        },
+        "cookiePath": {
+          "type": "string",
+          "description": "CookiePath specifies the path for the CSRF cookie, default to \"/\""
         }
       },
       "additionalProperties": false,

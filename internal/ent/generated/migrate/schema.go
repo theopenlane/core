@@ -1264,12 +1264,21 @@ var (
 		{Name: "correlation_id", Type: field.TypeString, Nullable: true},
 		{Name: "event_type", Type: field.TypeString},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "export_events", Type: field.TypeString, Nullable: true},
 	}
 	// EventsTable holds the schema information for the "events" table.
 	EventsTable = &schema.Table{
 		Name:       "events",
 		Columns:    EventsColumns,
 		PrimaryKey: []*schema.Column{EventsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "events_exports_events",
+				Columns:    []*schema.Column{EventsColumns[10]},
+				RefColumns: []*schema.Column{ExportsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// EvidencesColumns holds the columns for the "evidences" table.
 	EvidencesColumns = []*schema.Column{
@@ -1360,6 +1369,45 @@ var (
 			},
 		},
 	}
+	// ExportsColumns holds the columns for the "exports" table.
+	ExportsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "export_type", Type: field.TypeEnum, Enums: []string{"CONTROL"}},
+		{Name: "format", Type: field.TypeEnum, Enums: []string{"CSV"}},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "FAILED", "READY"}, Default: "PENDING"},
+		{Name: "requestor_id", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// ExportsTable holds the schema information for the "exports" table.
+	ExportsTable = &schema.Table{
+		Name:       "exports",
+		Columns:    ExportsColumns,
+		PrimaryKey: []*schema.Column{ExportsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "exports_organizations_exports",
+				Columns:    []*schema.Column{ExportsColumns[11]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "export_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{ExportsColumns[11]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
 	// FilesColumns holds the columns for the "files" table.
 	FilesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -1384,6 +1432,7 @@ var (
 		{Name: "storage_volume", Type: field.TypeString, Nullable: true},
 		{Name: "storage_path", Type: field.TypeString, Nullable: true},
 		{Name: "file_contents", Type: field.TypeBytes, Nullable: true},
+		{Name: "export_files", Type: field.TypeString, Nullable: true},
 		{Name: "note_files", Type: field.TypeString, Nullable: true},
 	}
 	// FilesTable holds the schema information for the "files" table.
@@ -1393,8 +1442,14 @@ var (
 		PrimaryKey: []*schema.Column{FilesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "files_notes_files",
+				Symbol:     "files_exports_files",
 				Columns:    []*schema.Column{FilesColumns[22]},
+				RefColumns: []*schema.Column{ExportsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "files_notes_files",
+				Columns:    []*schema.Column{FilesColumns[23]},
 				RefColumns: []*schema.Column{NotesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -4120,6 +4175,94 @@ var (
 			},
 		},
 	}
+	// SubprocessorsColumns holds the columns for the "subprocessors" table.
+	SubprocessorsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
+	}
+	// SubprocessorsTable holds the schema information for the "subprocessors" table.
+	SubprocessorsTable = &schema.Table{
+		Name:       "subprocessors",
+		Columns:    SubprocessorsColumns,
+		PrimaryKey: []*schema.Column{SubprocessorsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "subprocessors_organizations_subprocessors",
+				Columns:    []*schema.Column{SubprocessorsColumns[12]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "subprocessors_files_logo_file",
+				Columns:    []*schema.Column{SubprocessorsColumns[13]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "subprocessor_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{SubprocessorsColumns[12]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "subprocessor_name_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{SubprocessorsColumns[9], SubprocessorsColumns[12]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
+	// SubprocessorHistoryColumns holds the columns for the "subprocessor_history" table.
+	SubprocessorHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
+	}
+	// SubprocessorHistoryTable holds the schema information for the "subprocessor_history" table.
+	SubprocessorHistoryTable = &schema.Table{
+		Name:       "subprocessor_history",
+		Columns:    SubprocessorHistoryColumns,
+		PrimaryKey: []*schema.Column{SubprocessorHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "subprocessorhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{SubprocessorHistoryColumns[1]},
+			},
+		},
+	}
 	// SubscribersColumns holds the columns for the "subscribers" table.
 	SubscribersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -4573,6 +4716,50 @@ var (
 				Name:    "trustcentersettinghistory_history_time",
 				Unique:  false,
 				Columns: []*schema.Column{TrustCenterSettingHistoryColumns[1]},
+			},
+		},
+	}
+	// TrustCenterSubprocessorsColumns holds the columns for the "trust_center_subprocessors" table.
+	TrustCenterSubprocessorsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+	}
+	// TrustCenterSubprocessorsTable holds the schema information for the "trust_center_subprocessors" table.
+	TrustCenterSubprocessorsTable = &schema.Table{
+		Name:       "trust_center_subprocessors",
+		Columns:    TrustCenterSubprocessorsColumns,
+		PrimaryKey: []*schema.Column{TrustCenterSubprocessorsColumns[0]},
+	}
+	// TrustCenterSubprocessorHistoryColumns holds the columns for the "trust_center_subprocessor_history" table.
+	TrustCenterSubprocessorHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+	}
+	// TrustCenterSubprocessorHistoryTable holds the schema information for the "trust_center_subprocessor_history" table.
+	TrustCenterSubprocessorHistoryTable = &schema.Table{
+		Name:       "trust_center_subprocessor_history",
+		Columns:    TrustCenterSubprocessorHistoryColumns,
+		PrimaryKey: []*schema.Column{TrustCenterSubprocessorHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "trustcentersubprocessorhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterSubprocessorHistoryColumns[1]},
 			},
 		},
 	}
@@ -7227,6 +7414,31 @@ var (
 			},
 		},
 	}
+	// SubprocessorFilesColumns holds the columns for the "subprocessor_files" table.
+	SubprocessorFilesColumns = []*schema.Column{
+		{Name: "subprocessor_id", Type: field.TypeString},
+		{Name: "file_id", Type: field.TypeString},
+	}
+	// SubprocessorFilesTable holds the schema information for the "subprocessor_files" table.
+	SubprocessorFilesTable = &schema.Table{
+		Name:       "subprocessor_files",
+		Columns:    SubprocessorFilesColumns,
+		PrimaryKey: []*schema.Column{SubprocessorFilesColumns[0], SubprocessorFilesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "subprocessor_files_subprocessor_id",
+				Columns:    []*schema.Column{SubprocessorFilesColumns[0]},
+				RefColumns: []*schema.Column{SubprocessorsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "subprocessor_files_file_id",
+				Columns:    []*schema.Column{SubprocessorFilesColumns[1]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// SubscriberEventsColumns holds the columns for the "subscriber_events" table.
 	SubscriberEventsColumns = []*schema.Column{
 		{Name: "subscriber_id", Type: field.TypeString},
@@ -7458,6 +7670,7 @@ var (
 		EventsTable,
 		EvidencesTable,
 		EvidenceHistoryTable,
+		ExportsTable,
 		FilesTable,
 		FileHistoryTable,
 		GroupsTable,
@@ -7516,6 +7729,8 @@ var (
 		StandardHistoryTable,
 		SubcontrolsTable,
 		SubcontrolHistoryTable,
+		SubprocessorsTable,
+		SubprocessorHistoryTable,
 		SubscribersTable,
 		TfaSettingsTable,
 		TasksTable,
@@ -7526,6 +7741,8 @@ var (
 		TrustCenterHistoryTable,
 		TrustCenterSettingsTable,
 		TrustCenterSettingHistoryTable,
+		TrustCenterSubprocessorsTable,
+		TrustCenterSubprocessorHistoryTable,
 		UsersTable,
 		UserHistoryTable,
 		UserSettingsTable,
@@ -7629,6 +7846,7 @@ var (
 		SubcontrolRisksTable,
 		SubcontrolProceduresTable,
 		SubcontrolControlImplementationsTable,
+		SubprocessorFilesTable,
 		SubscriberEventsTable,
 		TaskEvidenceTable,
 		TemplateFilesTable,
@@ -7709,11 +7927,14 @@ func init() {
 	EntityTypeHistoryTable.Annotation = &entsql.Annotation{
 		Table: "entity_type_history",
 	}
+	EventsTable.ForeignKeys[0].RefTable = ExportsTable
 	EvidencesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	EvidenceHistoryTable.Annotation = &entsql.Annotation{
 		Table: "evidence_history",
 	}
-	FilesTable.ForeignKeys[0].RefTable = NotesTable
+	ExportsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	FilesTable.ForeignKeys[0].RefTable = ExportsTable
+	FilesTable.ForeignKeys[1].RefTable = NotesTable
 	FileHistoryTable.Annotation = &entsql.Annotation{
 		Table: "file_history",
 	}
@@ -7874,6 +8095,11 @@ func init() {
 	SubcontrolHistoryTable.Annotation = &entsql.Annotation{
 		Table: "subcontrol_history",
 	}
+	SubprocessorsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	SubprocessorsTable.ForeignKeys[1].RefTable = FilesTable
+	SubprocessorHistoryTable.Annotation = &entsql.Annotation{
+		Table: "subprocessor_history",
+	}
 	SubscribersTable.ForeignKeys[0].RefTable = OrganizationsTable
 	TfaSettingsTable.ForeignKeys[0].RefTable = UsersTable
 	TasksTable.ForeignKeys[0].RefTable = OrganizationsTable
@@ -7896,6 +8122,9 @@ func init() {
 	TrustCenterSettingsTable.ForeignKeys[2].RefTable = FilesTable
 	TrustCenterSettingHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_setting_history",
+	}
+	TrustCenterSubprocessorHistoryTable.Annotation = &entsql.Annotation{
+		Table: "trust_center_subprocessor_history",
 	}
 	UsersTable.ForeignKeys[0].RefTable = FilesTable
 	UserHistoryTable.Annotation = &entsql.Annotation{
@@ -8103,6 +8332,8 @@ func init() {
 	SubcontrolProceduresTable.ForeignKeys[1].RefTable = ProceduresTable
 	SubcontrolControlImplementationsTable.ForeignKeys[0].RefTable = SubcontrolsTable
 	SubcontrolControlImplementationsTable.ForeignKeys[1].RefTable = ControlImplementationsTable
+	SubprocessorFilesTable.ForeignKeys[0].RefTable = SubprocessorsTable
+	SubprocessorFilesTable.ForeignKeys[1].RefTable = FilesTable
 	SubscriberEventsTable.ForeignKeys[0].RefTable = SubscribersTable
 	SubscriberEventsTable.ForeignKeys[1].RefTable = EventsTable
 	TaskEvidenceTable.ForeignKeys[0].RefTable = TasksTable

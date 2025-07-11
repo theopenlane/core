@@ -212,6 +212,7 @@ server:
         cookie: ol.csrf-token
         cookieDomain: ""
         cookieHttpOnly: false
+        cookiePath: /
         enabled: false
         header: X-CSRF-Token
         sameSite: Lax

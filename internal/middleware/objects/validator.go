@@ -31,6 +31,7 @@ var validMimeTypes = map[string][]string{
 	"faviconFile":   {"image/jpeg", "image/png", "image/x-icon"},
 	"evidenceFiles": sharedMimeTypes,
 	"noteFiles":     sharedMimeTypes,
+	"exportFiles":   {"text/csv"},
 }
 
 // MimeTypeValidator returns a validation function for the given key

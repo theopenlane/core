@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -101,6 +102,7 @@ func (f File) Edges() []ent.Edge {
 		defaultEdgeFrom(f, Evidence{}),
 		defaultEdgeToWithPagination(f, Event{}),
 		defaultEdgeFrom(f, TrustCenterSetting{}),
+		defaultEdgeFrom(f, Subprocessor{}),
 	}
 }
 
@@ -111,7 +113,7 @@ func (f File) Mixin() []ent.Mixin {
 			newObjectOwnedMixin[generated.File](f,
 				withParents(
 					Organization{}, Program{}, Control{}, Procedure{}, Template{}, Subcontrol{}, DocumentData{},
-					Contact{}, InternalPolicy{}, Narrative{}, Evidence{}, TrustCenterSetting{}), // used to create parent tuples for the file
+					Contact{}, InternalPolicy{}, Narrative{}, Evidence{}, TrustCenterSetting{}, Subprocessor{}, Export{}), // used to create parent tuples for the file
 				withHookFuncs(), // use an empty hook, file processing is handled in middleware
 			),
 		},
@@ -148,4 +150,11 @@ func (File) Policy() ent.Policy {
 			privacy.AlwaysAllowRule(),
 		),
 	)
+}
+
+// Hooks of the File
+func (File) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookFileDelete(),
+	}
 }

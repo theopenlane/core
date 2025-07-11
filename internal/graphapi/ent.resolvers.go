@@ -943,6 +943,40 @@ func (r *queryResolver) EvidenceHistories(ctx context.Context, after *entgql.Cur
 	return res, err
 }
 
+// Exports is the resolver for the exports field.
+func (r *queryResolver) Exports(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ExportOrder, where *generated.ExportWhereInput) (*generated.ExportConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.ExportOrder{
+			{
+				Field:     generated.ExportOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).Export.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "export"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithExportOrder(orderBy),
+		generated.WithExportFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "export"})
+	}
+
+	return res, err
+}
+
 // Files is the resolver for the files field.
 func (r *queryResolver) Files(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) (*generated.FileConnection, error) {
 	// set page limit if nothing was set
@@ -2697,6 +2731,72 @@ func (r *queryResolver) SubcontrolHistories(ctx context.Context, after *entgql.C
 	return res, err
 }
 
+// Subprocessors is the resolver for the subprocessors field.
+func (r *queryResolver) Subprocessors(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubprocessorOrder, where *generated.SubprocessorWhereInput) (*generated.SubprocessorConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.SubprocessorOrder{
+			{
+				Field:     generated.SubprocessorOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).Subprocessor.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "subprocessor"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithSubprocessorOrder(orderBy),
+		generated.WithSubprocessorFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "subprocessor"})
+	}
+
+	return res, err
+}
+
+// SubprocessorHistories is the resolver for the subprocessorHistories field.
+func (r *queryResolver) SubprocessorHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.SubprocessorHistoryOrder, where *generated.SubprocessorHistoryWhereInput) (*generated.SubprocessorHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.SubprocessorHistoryOrder{
+			Field:     generated.SubprocessorHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).SubprocessorHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "subprocessorhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithSubprocessorHistoryOrder(orderBy),
+		generated.WithSubprocessorHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "subprocessorhistory"})
+	}
+
+	return res, err
+}
+
 // Subscribers is the resolver for the subscribers field.
 func (r *queryResolver) Subscribers(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) (*generated.SubscriberConnection, error) {
 	// set page limit if nothing was set
@@ -3024,6 +3124,72 @@ func (r *queryResolver) TrustCenterSettingHistories(ctx context.Context, after *
 		generated.WithTrustCenterSettingHistoryFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentersettinghistory"})
+	}
+
+	return res, err
+}
+
+// TrustCenterSubprocessors is the resolver for the trustCenterSubprocessors field.
+func (r *queryResolver) TrustCenterSubprocessors(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterSubprocessorOrder, where *generated.TrustCenterSubprocessorWhereInput) (*generated.TrustCenterSubprocessorConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.TrustCenterSubprocessorOrder{
+			{
+				Field:     generated.TrustCenterSubprocessorOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).TrustCenterSubprocessor.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentersubprocessor"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTrustCenterSubprocessorOrder(orderBy),
+		generated.WithTrustCenterSubprocessorFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentersubprocessor"})
+	}
+
+	return res, err
+}
+
+// TrustCenterSubprocessorHistories is the resolver for the trustCenterSubprocessorHistories field.
+func (r *queryResolver) TrustCenterSubprocessorHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustCenterSubprocessorHistoryOrder, where *generated.TrustCenterSubprocessorHistoryWhereInput) (*generated.TrustCenterSubprocessorHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.TrustCenterSubprocessorHistoryOrder{
+			Field:     generated.TrustCenterSubprocessorHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).TrustCenterSubprocessorHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentersubprocessorhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTrustCenterSubprocessorHistoryOrder(orderBy),
+		generated.WithTrustCenterSubprocessorHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentersubprocessorhistory"})
 	}
 
 	return res, err

@@ -3385,6 +3385,92 @@ func (c *EvidenceUpdateOne) SetInput(i UpdateEvidenceInput) *EvidenceUpdateOne {
 	return c
 }
 
+// CreateExportInput represents a mutation input for creating exports.
+type CreateExportInput struct {
+	ExportType enums.ExportType
+	Format     enums.ExportFormat
+	OwnerID    *string
+	EventIDs   []string
+	FileIDs    []string
+}
+
+// Mutate applies the CreateExportInput on the ExportMutation builder.
+func (i *CreateExportInput) Mutate(m *ExportMutation) {
+	m.SetExportType(i.ExportType)
+	m.SetFormat(i.Format)
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.EventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateExportInput on the ExportCreate builder.
+func (c *ExportCreate) SetInput(i CreateExportInput) *ExportCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateExportInput represents a mutation input for updating exports.
+type UpdateExportInput struct {
+	Status         *enums.ExportStatus
+	ClearOwner     bool
+	OwnerID        *string
+	ClearEvents    bool
+	AddEventIDs    []string
+	RemoveEventIDs []string
+	ClearFiles     bool
+	AddFileIDs     []string
+	RemoveFileIDs  []string
+}
+
+// Mutate applies the UpdateExportInput on the ExportMutation builder.
+func (i *UpdateExportInput) Mutate(m *ExportMutation) {
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearEvents {
+		m.ClearEvents()
+	}
+	if v := i.AddEventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+	if v := i.RemoveEventIDs; len(v) > 0 {
+		m.RemoveEventIDs(v...)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateExportInput on the ExportUpdate builder.
+func (c *ExportUpdate) SetInput(i UpdateExportInput) *ExportUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateExportInput on the ExportUpdateOne builder.
+func (c *ExportUpdateOne) SetInput(i UpdateExportInput) *ExportUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateFileInput represents a mutation input for creating files.
 type CreateFileInput struct {
 	Tags                   []string
@@ -3414,6 +3500,7 @@ type CreateFileInput struct {
 	EvidenceIDs            []string
 	EventIDs               []string
 	TrustCenterSettingIDs  []string
+	SubprocessorIDs        []string
 }
 
 // Mutate applies the CreateFileInput on the FileMutation builder.
@@ -3493,6 +3580,9 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	if v := i.TrustCenterSettingIDs; len(v) > 0 {
 		m.AddTrustCenterSettingIDs(v...)
 	}
+	if v := i.SubprocessorIDs; len(v) > 0 {
+		m.AddSubprocessorIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateFileInput on the FileCreate builder.
@@ -3568,6 +3658,9 @@ type UpdateFileInput struct {
 	ClearTrustCenterSetting      bool
 	AddTrustCenterSettingIDs     []string
 	RemoveTrustCenterSettingIDs  []string
+	ClearSubprocessor            bool
+	AddSubprocessorIDs           []string
+	RemoveSubprocessorIDs        []string
 }
 
 // Mutate applies the UpdateFileInput on the FileMutation builder.
@@ -3766,6 +3859,15 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.RemoveTrustCenterSettingIDs; len(v) > 0 {
 		m.RemoveTrustCenterSettingIDs(v...)
+	}
+	if i.ClearSubprocessor {
+		m.ClearSubprocessor()
+	}
+	if v := i.AddSubprocessorIDs; len(v) > 0 {
+		m.AddSubprocessorIDs(v...)
+	}
+	if v := i.RemoveSubprocessorIDs; len(v) > 0 {
+		m.RemoveSubprocessorIDs(v...)
 	}
 }
 
@@ -6392,6 +6494,8 @@ type CreateOrganizationInput struct {
 	TrustCenterIDs                  []string
 	AssetIDs                        []string
 	ScanIDs                         []string
+	SubprocessorIDs                 []string
+	ExportIDs                       []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -6595,6 +6699,12 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.ScanIDs; len(v) > 0 {
 		m.AddScanIDs(v...)
 	}
+	if v := i.SubprocessorIDs; len(v) > 0 {
+		m.AddSubprocessorIDs(v...)
+	}
+	if v := i.ExportIDs; len(v) > 0 {
+		m.AddExportIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -6788,6 +6898,12 @@ type UpdateOrganizationInput struct {
 	ClearScans                            bool
 	AddScanIDs                            []string
 	RemoveScanIDs                         []string
+	ClearSubprocessors                    bool
+	AddSubprocessorIDs                    []string
+	RemoveSubprocessorIDs                 []string
+	ClearExports                          bool
+	AddExportIDs                          []string
+	RemoveExportIDs                       []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -7340,6 +7456,24 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveScanIDs; len(v) > 0 {
 		m.RemoveScanIDs(v...)
+	}
+	if i.ClearSubprocessors {
+		m.ClearSubprocessors()
+	}
+	if v := i.AddSubprocessorIDs; len(v) > 0 {
+		m.AddSubprocessorIDs(v...)
+	}
+	if v := i.RemoveSubprocessorIDs; len(v) > 0 {
+		m.RemoveSubprocessorIDs(v...)
+	}
+	if i.ClearExports {
+		m.ClearExports()
+	}
+	if v := i.AddExportIDs; len(v) > 0 {
+		m.AddExportIDs(v...)
+	}
+	if v := i.RemoveExportIDs; len(v) > 0 {
+		m.RemoveExportIDs(v...)
 	}
 }
 
@@ -10181,6 +10315,126 @@ func (c *SubcontrolUpdateOne) SetInput(i UpdateSubcontrolInput) *SubcontrolUpdat
 	return c
 }
 
+// CreateSubprocessorInput represents a mutation input for creating subprocessors.
+type CreateSubprocessorInput struct {
+	Tags          []string
+	Name          string
+	Description   *string
+	LogoRemoteURL *string
+	OwnerID       *string
+	FileIDs       []string
+	LogoFileID    *string
+}
+
+// Mutate applies the CreateSubprocessorInput on the SubprocessorMutation builder.
+func (i *CreateSubprocessorInput) Mutate(m *SubprocessorMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetName(i.Name)
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.LogoRemoteURL; v != nil {
+		m.SetLogoRemoteURL(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.LogoFileID; v != nil {
+		m.SetLogoFileID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateSubprocessorInput on the SubprocessorCreate builder.
+func (c *SubprocessorCreate) SetInput(i CreateSubprocessorInput) *SubprocessorCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateSubprocessorInput represents a mutation input for updating subprocessors.
+type UpdateSubprocessorInput struct {
+	ClearTags          bool
+	Tags               []string
+	AppendTags         []string
+	Name               *string
+	ClearDescription   bool
+	Description        *string
+	ClearLogoRemoteURL bool
+	LogoRemoteURL      *string
+	ClearOwner         bool
+	OwnerID            *string
+	ClearFiles         bool
+	AddFileIDs         []string
+	RemoveFileIDs      []string
+	ClearLogoFile      bool
+	LogoFileID         *string
+}
+
+// Mutate applies the UpdateSubprocessorInput on the SubprocessorMutation builder.
+func (i *UpdateSubprocessorInput) Mutate(m *SubprocessorMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearLogoRemoteURL {
+		m.ClearLogoRemoteURL()
+	}
+	if v := i.LogoRemoteURL; v != nil {
+		m.SetLogoRemoteURL(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
+	}
+	if i.ClearLogoFile {
+		m.ClearLogoFile()
+	}
+	if v := i.LogoFileID; v != nil {
+		m.SetLogoFileID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateSubprocessorInput on the SubprocessorUpdate builder.
+func (c *SubprocessorUpdate) SetInput(i UpdateSubprocessorInput) *SubprocessorUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateSubprocessorInput on the SubprocessorUpdateOne builder.
+func (c *SubprocessorUpdateOne) SetInput(i UpdateSubprocessorInput) *SubprocessorUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateSubscriberInput represents a mutation input for creating subscribers.
 type CreateSubscriberInput struct {
 	Tags        []string
@@ -11059,6 +11313,56 @@ func (c *TrustCenterSettingUpdate) SetInput(i UpdateTrustCenterSettingInput) *Tr
 
 // SetInput applies the change-set in the UpdateTrustCenterSettingInput on the TrustCenterSettingUpdateOne builder.
 func (c *TrustCenterSettingUpdateOne) SetInput(i UpdateTrustCenterSettingInput) *TrustCenterSettingUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateTrustCenterSubprocessorInput represents a mutation input for creating trustcentersubprocessors.
+type CreateTrustCenterSubprocessorInput struct {
+	Tags []string
+}
+
+// Mutate applies the CreateTrustCenterSubprocessorInput on the TrustCenterSubprocessorMutation builder.
+func (i *CreateTrustCenterSubprocessorInput) Mutate(m *TrustCenterSubprocessorMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+}
+
+// SetInput applies the change-set in the CreateTrustCenterSubprocessorInput on the TrustCenterSubprocessorCreate builder.
+func (c *TrustCenterSubprocessorCreate) SetInput(i CreateTrustCenterSubprocessorInput) *TrustCenterSubprocessorCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateTrustCenterSubprocessorInput represents a mutation input for updating trustcentersubprocessors.
+type UpdateTrustCenterSubprocessorInput struct {
+	ClearTags  bool
+	Tags       []string
+	AppendTags []string
+}
+
+// Mutate applies the UpdateTrustCenterSubprocessorInput on the TrustCenterSubprocessorMutation builder.
+func (i *UpdateTrustCenterSubprocessorInput) Mutate(m *TrustCenterSubprocessorMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterSubprocessorInput on the TrustCenterSubprocessorUpdate builder.
+func (c *TrustCenterSubprocessorUpdate) SetInput(i UpdateTrustCenterSubprocessorInput) *TrustCenterSubprocessorUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterSubprocessorInput on the TrustCenterSubprocessorUpdateOne builder.
+func (c *TrustCenterSubprocessorUpdateOne) SetInput(i UpdateTrustCenterSubprocessorInput) *TrustCenterSubprocessorUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

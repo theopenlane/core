@@ -2893,6 +2893,64 @@ func HasScansWith(preds ...predicate.Scan) predicate.Organization {
 	})
 }
 
+// HasSubprocessors applies the HasEdge predicate on the "subprocessors" edge.
+func HasSubprocessors() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, SubprocessorsTable, SubprocessorsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subprocessor
+		step.Edge.Schema = schemaConfig.Subprocessor
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSubprocessorsWith applies the HasEdge predicate on the "subprocessors" edge with a given conditions (other predicates).
+func HasSubprocessorsWith(preds ...predicate.Subprocessor) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newSubprocessorsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subprocessor
+		step.Edge.Schema = schemaConfig.Subprocessor
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasExports applies the HasEdge predicate on the "exports" edge.
+func HasExports() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ExportsTable, ExportsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Export
+		step.Edge.Schema = schemaConfig.Export
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasExportsWith applies the HasEdge predicate on the "exports" edge with a given conditions (other predicates).
+func HasExportsWith(preds ...predicate.Export) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newExportsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Export
+		step.Edge.Schema = schemaConfig.Export
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasMembers applies the HasEdge predicate on the "members" edge.
 func HasMembers() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

@@ -11,6 +11,7 @@ server:
     cookie: ol.csrf-token
     secure: false # set to true in production
     sameSite: Lax
+    cookiePath: /
   enableGraphExtensions: true
   cacheControl:
     enabled: false

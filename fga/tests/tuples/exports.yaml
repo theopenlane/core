@@ -1,0 +1,45 @@
+############################################
+# Tuples for testing exports
+############################################
+
+
+- user: user:ulid-system-admin
+  relation: _self
+  object: user:ulid-system-admin
+- user: user:ulid-system-admin
+  relation: system_admin
+  object: system:openlane_core
+ 
+- user: service:ulid-export-service
+  relation: _self
+  object: service:ulid-export-service
+
+- user: service:ulid-general-service
+  relation: _self
+  object: service:ulid-general-service
+
+- user: user:ulid-regular-user
+  relation: _self
+  object: user:ulid-regular-user
+
+- user: system:openlane_core
+  relation: system
+  object: export:export-1
+- user: system:openlane_core
+  relation: system
+  object: export:export-2
+- user: system:openlane_core
+  relation: system
+  object: export:export-3
+
+- user: service:ulid-export-service
+  relation: can_edit
+  object: export:export-1
+
+- user: user:ulid-regular-user
+  relation: can_view
+  object: export:export-2
+
+- user: service:ulid-general-service
+  relation: can_view
+  object: export:export-3

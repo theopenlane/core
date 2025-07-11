@@ -42,6 +42,7 @@ import (
 	_ "github.com/theopenlane/core/cmd/cli/cmd/search"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/standard"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/subcontrol"
+	_ "github.com/theopenlane/core/cmd/cli/cmd/subprocessor"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/subscriber"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/switchcontext"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/task"

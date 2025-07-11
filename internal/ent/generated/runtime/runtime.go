@@ -35,6 +35,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
+	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -93,6 +94,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
@@ -103,6 +106,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -1760,6 +1765,56 @@ func init() {
 	evidencehistoryDescID := evidencehistoryFields[9].Descriptor()
 	// evidencehistory.DefaultID holds the default value on creation for the id field.
 	evidencehistory.DefaultID = evidencehistoryDescID.Default.(func() string)
+	exportMixin := schema.Export{}.Mixin()
+	export.Policy = privacy.NewPolicies(schema.Export{})
+	export.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := export.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	exportMixinHooks0 := exportMixin[0].Hooks()
+	exportMixinHooks1 := exportMixin[1].Hooks()
+	exportMixinHooks4 := exportMixin[4].Hooks()
+	exportHooks := schema.Export{}.Hooks()
+
+	export.Hooks[1] = exportMixinHooks0[0]
+
+	export.Hooks[2] = exportMixinHooks1[0]
+
+	export.Hooks[3] = exportMixinHooks4[0]
+
+	export.Hooks[4] = exportHooks[0]
+	exportMixinInters1 := exportMixin[1].Interceptors()
+	exportMixinInters4 := exportMixin[4].Interceptors()
+	export.Interceptors[0] = exportMixinInters1[0]
+	export.Interceptors[1] = exportMixinInters4[0]
+	exportMixinFields0 := exportMixin[0].Fields()
+	_ = exportMixinFields0
+	exportMixinFields2 := exportMixin[2].Fields()
+	_ = exportMixinFields2
+	exportFields := schema.Export{}.Fields()
+	_ = exportFields
+	// exportDescCreatedAt is the schema descriptor for created_at field.
+	exportDescCreatedAt := exportMixinFields0[0].Descriptor()
+	// export.DefaultCreatedAt holds the default value on creation for the created_at field.
+	export.DefaultCreatedAt = exportDescCreatedAt.Default.(func() time.Time)
+	// exportDescUpdatedAt is the schema descriptor for updated_at field.
+	exportDescUpdatedAt := exportMixinFields0[1].Descriptor()
+	// export.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	export.DefaultUpdatedAt = exportDescUpdatedAt.Default.(func() time.Time)
+	// export.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	export.UpdateDefaultUpdatedAt = exportDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// exportDescRequestorID is the schema descriptor for requestor_id field.
+	exportDescRequestorID := exportFields[3].Descriptor()
+	// export.RequestorIDValidator is a validator for the "requestor_id" field. It is called by the builders before save.
+	export.RequestorIDValidator = exportDescRequestorID.Validators[0].(func(string) error)
+	// exportDescID is the schema descriptor for id field.
+	exportDescID := exportMixinFields2[0].Descriptor()
+	// export.DefaultID holds the default value on creation for the id field.
+	export.DefaultID = exportDescID.Default.(func() string)
 	fileMixin := schema.File{}.Mixin()
 	file.Policy = privacy.NewPolicies(schema.File{})
 	file.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -1772,10 +1827,13 @@ func init() {
 	}
 	fileMixinHooks0 := fileMixin[0].Hooks()
 	fileMixinHooks1 := fileMixin[1].Hooks()
+	fileHooks := schema.File{}.Hooks()
 
 	file.Hooks[1] = fileMixinHooks0[0]
 
 	file.Hooks[2] = fileMixinHooks1[0]
+
+	file.Hooks[3] = fileHooks[0]
 	fileMixinInters1 := fileMixin[1].Interceptors()
 	fileMixinInters5 := fileMixin[5].Interceptors()
 	fileInters := schema.File{}.Interceptors()
@@ -4985,6 +5043,121 @@ func init() {
 	subcontrolhistoryDescID := subcontrolhistoryFields[9].Descriptor()
 	// subcontrolhistory.DefaultID holds the default value on creation for the id field.
 	subcontrolhistory.DefaultID = subcontrolhistoryDescID.Default.(func() string)
+	subprocessorMixin := schema.Subprocessor{}.Mixin()
+	subprocessor.Policy = privacy.NewPolicies(schema.Subprocessor{})
+	subprocessor.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := subprocessor.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	subprocessorMixinHooks0 := subprocessorMixin[0].Hooks()
+	subprocessorMixinHooks1 := subprocessorMixin[1].Hooks()
+	subprocessorMixinHooks5 := subprocessorMixin[5].Hooks()
+	subprocessorMixinHooks6 := subprocessorMixin[6].Hooks()
+	subprocessorHooks := schema.Subprocessor{}.Hooks()
+
+	subprocessor.Hooks[1] = subprocessorMixinHooks0[0]
+
+	subprocessor.Hooks[2] = subprocessorMixinHooks1[0]
+
+	subprocessor.Hooks[3] = subprocessorMixinHooks5[0]
+
+	subprocessor.Hooks[4] = subprocessorMixinHooks6[0]
+
+	subprocessor.Hooks[5] = subprocessorHooks[0]
+	subprocessorMixinInters1 := subprocessorMixin[1].Interceptors()
+	subprocessorMixinInters5 := subprocessorMixin[5].Interceptors()
+	subprocessorInters := schema.Subprocessor{}.Interceptors()
+	subprocessor.Interceptors[0] = subprocessorMixinInters1[0]
+	subprocessor.Interceptors[1] = subprocessorMixinInters5[0]
+	subprocessor.Interceptors[2] = subprocessorInters[0]
+	subprocessorMixinFields0 := subprocessorMixin[0].Fields()
+	_ = subprocessorMixinFields0
+	subprocessorMixinFields2 := subprocessorMixin[2].Fields()
+	_ = subprocessorMixinFields2
+	subprocessorMixinFields3 := subprocessorMixin[3].Fields()
+	_ = subprocessorMixinFields3
+	subprocessorMixinFields6 := subprocessorMixin[6].Fields()
+	_ = subprocessorMixinFields6
+	subprocessorFields := schema.Subprocessor{}.Fields()
+	_ = subprocessorFields
+	// subprocessorDescCreatedAt is the schema descriptor for created_at field.
+	subprocessorDescCreatedAt := subprocessorMixinFields0[0].Descriptor()
+	// subprocessor.DefaultCreatedAt holds the default value on creation for the created_at field.
+	subprocessor.DefaultCreatedAt = subprocessorDescCreatedAt.Default.(func() time.Time)
+	// subprocessorDescUpdatedAt is the schema descriptor for updated_at field.
+	subprocessorDescUpdatedAt := subprocessorMixinFields0[1].Descriptor()
+	// subprocessor.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	subprocessor.DefaultUpdatedAt = subprocessorDescUpdatedAt.Default.(func() time.Time)
+	// subprocessor.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	subprocessor.UpdateDefaultUpdatedAt = subprocessorDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// subprocessorDescTags is the schema descriptor for tags field.
+	subprocessorDescTags := subprocessorMixinFields3[0].Descriptor()
+	// subprocessor.DefaultTags holds the default value on creation for the tags field.
+	subprocessor.DefaultTags = subprocessorDescTags.Default.([]string)
+	// subprocessorDescSystemOwned is the schema descriptor for system_owned field.
+	subprocessorDescSystemOwned := subprocessorMixinFields6[0].Descriptor()
+	// subprocessor.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	subprocessor.DefaultSystemOwned = subprocessorDescSystemOwned.Default.(bool)
+	// subprocessorDescName is the schema descriptor for name field.
+	subprocessorDescName := subprocessorFields[0].Descriptor()
+	// subprocessor.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	subprocessor.NameValidator = subprocessorDescName.Validators[0].(func(string) error)
+	// subprocessorDescLogoRemoteURL is the schema descriptor for logo_remote_url field.
+	subprocessorDescLogoRemoteURL := subprocessorFields[2].Descriptor()
+	// subprocessor.LogoRemoteURLValidator is a validator for the "logo_remote_url" field. It is called by the builders before save.
+	subprocessor.LogoRemoteURLValidator = func() func(string) error {
+		validators := subprocessorDescLogoRemoteURL.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(logo_remote_url string) error {
+			for _, fn := range fns {
+				if err := fn(logo_remote_url); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// subprocessorDescID is the schema descriptor for id field.
+	subprocessorDescID := subprocessorMixinFields2[0].Descriptor()
+	// subprocessor.DefaultID holds the default value on creation for the id field.
+	subprocessor.DefaultID = subprocessorDescID.Default.(func() string)
+	subprocessorhistoryInters := schema.SubprocessorHistory{}.Interceptors()
+	subprocessorhistory.Interceptors[0] = subprocessorhistoryInters[0]
+	subprocessorhistoryFields := schema.SubprocessorHistory{}.Fields()
+	_ = subprocessorhistoryFields
+	// subprocessorhistoryDescHistoryTime is the schema descriptor for history_time field.
+	subprocessorhistoryDescHistoryTime := subprocessorhistoryFields[0].Descriptor()
+	// subprocessorhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	subprocessorhistory.DefaultHistoryTime = subprocessorhistoryDescHistoryTime.Default.(func() time.Time)
+	// subprocessorhistoryDescCreatedAt is the schema descriptor for created_at field.
+	subprocessorhistoryDescCreatedAt := subprocessorhistoryFields[3].Descriptor()
+	// subprocessorhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	subprocessorhistory.DefaultCreatedAt = subprocessorhistoryDescCreatedAt.Default.(func() time.Time)
+	// subprocessorhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	subprocessorhistoryDescUpdatedAt := subprocessorhistoryFields[4].Descriptor()
+	// subprocessorhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	subprocessorhistory.DefaultUpdatedAt = subprocessorhistoryDescUpdatedAt.Default.(func() time.Time)
+	// subprocessorhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	subprocessorhistory.UpdateDefaultUpdatedAt = subprocessorhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// subprocessorhistoryDescTags is the schema descriptor for tags field.
+	subprocessorhistoryDescTags := subprocessorhistoryFields[10].Descriptor()
+	// subprocessorhistory.DefaultTags holds the default value on creation for the tags field.
+	subprocessorhistory.DefaultTags = subprocessorhistoryDescTags.Default.([]string)
+	// subprocessorhistoryDescSystemOwned is the schema descriptor for system_owned field.
+	subprocessorhistoryDescSystemOwned := subprocessorhistoryFields[12].Descriptor()
+	// subprocessorhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	subprocessorhistory.DefaultSystemOwned = subprocessorhistoryDescSystemOwned.Default.(bool)
+	// subprocessorhistoryDescID is the schema descriptor for id field.
+	subprocessorhistoryDescID := subprocessorhistoryFields[9].Descriptor()
+	// subprocessorhistory.DefaultID holds the default value on creation for the id field.
+	subprocessorhistory.DefaultID = subprocessorhistoryDescID.Default.(func() string)
 	subscriberMixin := schema.Subscriber{}.Mixin()
 	subscriber.Policy = privacy.NewPolicies(schema.Subscriber{})
 	subscriber.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -5535,6 +5708,76 @@ func init() {
 	trustcentersettinghistoryDescID := trustcentersettinghistoryFields[9].Descriptor()
 	// trustcentersettinghistory.DefaultID holds the default value on creation for the id field.
 	trustcentersettinghistory.DefaultID = trustcentersettinghistoryDescID.Default.(func() string)
+	trustcentersubprocessorMixin := schema.TrustCenterSubprocessor{}.Mixin()
+	trustcentersubprocessor.Policy = privacy.NewPolicies(schema.TrustCenterSubprocessor{})
+	trustcentersubprocessor.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := trustcentersubprocessor.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	trustcentersubprocessorMixinHooks0 := trustcentersubprocessorMixin[0].Hooks()
+	trustcentersubprocessorMixinHooks1 := trustcentersubprocessorMixin[1].Hooks()
+
+	trustcentersubprocessor.Hooks[1] = trustcentersubprocessorMixinHooks0[0]
+
+	trustcentersubprocessor.Hooks[2] = trustcentersubprocessorMixinHooks1[0]
+	trustcentersubprocessorMixinInters1 := trustcentersubprocessorMixin[1].Interceptors()
+	trustcentersubprocessor.Interceptors[0] = trustcentersubprocessorMixinInters1[0]
+	trustcentersubprocessorMixinFields0 := trustcentersubprocessorMixin[0].Fields()
+	_ = trustcentersubprocessorMixinFields0
+	trustcentersubprocessorMixinFields2 := trustcentersubprocessorMixin[2].Fields()
+	_ = trustcentersubprocessorMixinFields2
+	trustcentersubprocessorMixinFields3 := trustcentersubprocessorMixin[3].Fields()
+	_ = trustcentersubprocessorMixinFields3
+	trustcentersubprocessorFields := schema.TrustCenterSubprocessor{}.Fields()
+	_ = trustcentersubprocessorFields
+	// trustcentersubprocessorDescCreatedAt is the schema descriptor for created_at field.
+	trustcentersubprocessorDescCreatedAt := trustcentersubprocessorMixinFields0[0].Descriptor()
+	// trustcentersubprocessor.DefaultCreatedAt holds the default value on creation for the created_at field.
+	trustcentersubprocessor.DefaultCreatedAt = trustcentersubprocessorDescCreatedAt.Default.(func() time.Time)
+	// trustcentersubprocessorDescUpdatedAt is the schema descriptor for updated_at field.
+	trustcentersubprocessorDescUpdatedAt := trustcentersubprocessorMixinFields0[1].Descriptor()
+	// trustcentersubprocessor.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	trustcentersubprocessor.DefaultUpdatedAt = trustcentersubprocessorDescUpdatedAt.Default.(func() time.Time)
+	// trustcentersubprocessor.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	trustcentersubprocessor.UpdateDefaultUpdatedAt = trustcentersubprocessorDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// trustcentersubprocessorDescTags is the schema descriptor for tags field.
+	trustcentersubprocessorDescTags := trustcentersubprocessorMixinFields3[0].Descriptor()
+	// trustcentersubprocessor.DefaultTags holds the default value on creation for the tags field.
+	trustcentersubprocessor.DefaultTags = trustcentersubprocessorDescTags.Default.([]string)
+	// trustcentersubprocessorDescID is the schema descriptor for id field.
+	trustcentersubprocessorDescID := trustcentersubprocessorMixinFields2[0].Descriptor()
+	// trustcentersubprocessor.DefaultID holds the default value on creation for the id field.
+	trustcentersubprocessor.DefaultID = trustcentersubprocessorDescID.Default.(func() string)
+	trustcentersubprocessorhistoryInters := schema.TrustCenterSubprocessorHistory{}.Interceptors()
+	trustcentersubprocessorhistory.Interceptors[0] = trustcentersubprocessorhistoryInters[0]
+	trustcentersubprocessorhistoryFields := schema.TrustCenterSubprocessorHistory{}.Fields()
+	_ = trustcentersubprocessorhistoryFields
+	// trustcentersubprocessorhistoryDescHistoryTime is the schema descriptor for history_time field.
+	trustcentersubprocessorhistoryDescHistoryTime := trustcentersubprocessorhistoryFields[0].Descriptor()
+	// trustcentersubprocessorhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	trustcentersubprocessorhistory.DefaultHistoryTime = trustcentersubprocessorhistoryDescHistoryTime.Default.(func() time.Time)
+	// trustcentersubprocessorhistoryDescCreatedAt is the schema descriptor for created_at field.
+	trustcentersubprocessorhistoryDescCreatedAt := trustcentersubprocessorhistoryFields[3].Descriptor()
+	// trustcentersubprocessorhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	trustcentersubprocessorhistory.DefaultCreatedAt = trustcentersubprocessorhistoryDescCreatedAt.Default.(func() time.Time)
+	// trustcentersubprocessorhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	trustcentersubprocessorhistoryDescUpdatedAt := trustcentersubprocessorhistoryFields[4].Descriptor()
+	// trustcentersubprocessorhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	trustcentersubprocessorhistory.DefaultUpdatedAt = trustcentersubprocessorhistoryDescUpdatedAt.Default.(func() time.Time)
+	// trustcentersubprocessorhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	trustcentersubprocessorhistory.UpdateDefaultUpdatedAt = trustcentersubprocessorhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// trustcentersubprocessorhistoryDescTags is the schema descriptor for tags field.
+	trustcentersubprocessorhistoryDescTags := trustcentersubprocessorhistoryFields[10].Descriptor()
+	// trustcentersubprocessorhistory.DefaultTags holds the default value on creation for the tags field.
+	trustcentersubprocessorhistory.DefaultTags = trustcentersubprocessorhistoryDescTags.Default.([]string)
+	// trustcentersubprocessorhistoryDescID is the schema descriptor for id field.
+	trustcentersubprocessorhistoryDescID := trustcentersubprocessorhistoryFields[9].Descriptor()
+	// trustcentersubprocessorhistory.DefaultID holds the default value on creation for the id field.
+	trustcentersubprocessorhistory.DefaultID = trustcentersubprocessorhistoryDescID.Default.(func() string)
 	userMixin := schema.User{}.Mixin()
 	user.Policy = privacy.NewPolicies(schema.User{})
 	user.Hooks[0] = func(next ent.Mutator) ent.Mutator {

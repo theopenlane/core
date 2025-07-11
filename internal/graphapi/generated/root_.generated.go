@@ -1276,6 +1276,53 @@ type ComplexityRoot struct {
 		Evidence func(childComplexity int) int
 	}
 
+	Export struct {
+		CreatedAt   func(childComplexity int) int
+		CreatedBy   func(childComplexity int) int
+		Events      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		ExportType  func(childComplexity int) int
+		Files       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Format      func(childComplexity int) int
+		ID          func(childComplexity int) int
+		Owner       func(childComplexity int) int
+		OwnerID     func(childComplexity int) int
+		RequestorID func(childComplexity int) int
+		Status      func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
+		UpdatedBy   func(childComplexity int) int
+	}
+
+	ExportBulkCreatePayload struct {
+		Exports func(childComplexity int) int
+	}
+
+	ExportBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
+	ExportConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	ExportCreatePayload struct {
+		Export func(childComplexity int) int
+	}
+
+	ExportDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	ExportEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	ExportUpdatePayload struct {
+		Export func(childComplexity int) int
+	}
+
 	File struct {
 		CategoryType          func(childComplexity int) int
 		Contact               func(childComplexity int) int
@@ -1302,6 +1349,7 @@ type ComplexityRoot struct {
 		StorageScheme         func(childComplexity int) int
 		StorageVolume         func(childComplexity int) int
 		StoreKey              func(childComplexity int) int
+		Subprocessor          func(childComplexity int) int
 		Tags                  func(childComplexity int) int
 		Template              func(childComplexity int) int
 		TrustCenterSetting    func(childComplexity int) int
@@ -2207,230 +2255,244 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		CreateAPIToken                     func(childComplexity int, input generated.CreateAPITokenInput) int
-		CreateActionPlan                   func(childComplexity int, input generated.CreateActionPlanInput) int
-		CreateAsset                        func(childComplexity int, input generated.CreateAssetInput) int
-		CreateBulkAPIToken                 func(childComplexity int, input []*generated.CreateAPITokenInput) int
-		CreateBulkActionPlan               func(childComplexity int, input []*generated.CreateActionPlanInput) int
-		CreateBulkAsset                    func(childComplexity int, input []*generated.CreateAssetInput) int
-		CreateBulkCSVAPIToken              func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVActionPlan            func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVAsset                 func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVContact               func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVControl               func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVControlImplementation func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVControlObjective      func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVControlScheduledJob   func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVCustomDomain          func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVDNSVerification       func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVDocumentData          func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVEntity                func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVEntityType            func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVEvent                 func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVGroup                 func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVGroupMembership       func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVGroupSetting          func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVHush                  func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVIntegration           func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVInternalPolicy        func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVInvite                func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVMappableDomain        func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVMappedControl         func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVNarrative             func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVOrgMembership         func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVOrganizationSetting   func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVProcedure             func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVProgram               func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVProgramMembership     func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVRisk                  func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVScan                  func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVScheduledJob          func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVSubcontrol            func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVSubscriber            func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVTask                  func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVTemplate              func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVUserSetting           func(childComplexity int, input graphql.Upload) int
-		CreateBulkContact                  func(childComplexity int, input []*generated.CreateContactInput) int
-		CreateBulkControl                  func(childComplexity int, input []*generated.CreateControlInput) int
-		CreateBulkControlImplementation    func(childComplexity int, input []*generated.CreateControlImplementationInput) int
-		CreateBulkControlObjective         func(childComplexity int, input []*generated.CreateControlObjectiveInput) int
-		CreateBulkControlScheduledJob      func(childComplexity int, input []*generated.CreateControlScheduledJobInput) int
-		CreateBulkCustomDomain             func(childComplexity int, input []*generated.CreateCustomDomainInput) int
-		CreateBulkDNSVerification          func(childComplexity int, input []*generated.CreateDNSVerificationInput) int
-		CreateBulkDocumentData             func(childComplexity int, input []*generated.CreateDocumentDataInput) int
-		CreateBulkEntity                   func(childComplexity int, input []*generated.CreateEntityInput) int
-		CreateBulkEntityType               func(childComplexity int, input []*generated.CreateEntityTypeInput) int
-		CreateBulkEvent                    func(childComplexity int, input []*generated.CreateEventInput) int
-		CreateBulkGroup                    func(childComplexity int, input []*generated.CreateGroupInput) int
-		CreateBulkGroupMembership          func(childComplexity int, input []*generated.CreateGroupMembershipInput) int
-		CreateBulkGroupSetting             func(childComplexity int, input []*generated.CreateGroupSettingInput) int
-		CreateBulkHush                     func(childComplexity int, input []*generated.CreateHushInput) int
-		CreateBulkIntegration              func(childComplexity int, input []*generated.CreateIntegrationInput) int
-		CreateBulkInternalPolicy           func(childComplexity int, input []*generated.CreateInternalPolicyInput) int
-		CreateBulkInvite                   func(childComplexity int, input []*generated.CreateInviteInput) int
-		CreateBulkMappableDomain           func(childComplexity int, input []*generated.CreateMappableDomainInput) int
-		CreateBulkMappedControl            func(childComplexity int, input []*generated.CreateMappedControlInput) int
-		CreateBulkNarrative                func(childComplexity int, input []*generated.CreateNarrativeInput) int
-		CreateBulkOrgMembership            func(childComplexity int, input []*generated.CreateOrgMembershipInput) int
-		CreateBulkOrganizationSetting      func(childComplexity int, input []*generated.CreateOrganizationSettingInput) int
-		CreateBulkProcedure                func(childComplexity int, input []*generated.CreateProcedureInput) int
-		CreateBulkProgram                  func(childComplexity int, input []*generated.CreateProgramInput) int
-		CreateBulkProgramMembership        func(childComplexity int, input []*generated.CreateProgramMembershipInput) int
-		CreateBulkRisk                     func(childComplexity int, input []*generated.CreateRiskInput) int
-		CreateBulkScan                     func(childComplexity int, input []*generated.CreateScanInput) int
-		CreateBulkScheduledJob             func(childComplexity int, input []*generated.CreateScheduledJobInput) int
-		CreateBulkSubcontrol               func(childComplexity int, input []*generated.CreateSubcontrolInput) int
-		CreateBulkSubscriber               func(childComplexity int, input []*generated.CreateSubscriberInput) int
-		CreateBulkTask                     func(childComplexity int, input []*generated.CreateTaskInput) int
-		CreateBulkTemplate                 func(childComplexity int, input []*generated.CreateTemplateInput) int
-		CreateBulkUserSetting              func(childComplexity int, input []*generated.CreateUserSettingInput) int
-		CreateContact                      func(childComplexity int, input generated.CreateContactInput) int
-		CreateControl                      func(childComplexity int, input generated.CreateControlInput) int
-		CreateControlImplementation        func(childComplexity int, input generated.CreateControlImplementationInput) int
-		CreateControlObjective             func(childComplexity int, input generated.CreateControlObjectiveInput) int
-		CreateControlScheduledJob          func(childComplexity int, input generated.CreateControlScheduledJobInput) int
-		CreateControlWithSubcontrols       func(childComplexity int, input model.CreateControlWithSubcontrolsInput) int
-		CreateControlsByClone              func(childComplexity int, input *model.CloneControlInput) int
-		CreateCustomDomain                 func(childComplexity int, input generated.CreateCustomDomainInput) int
-		CreateDNSVerification              func(childComplexity int, input generated.CreateDNSVerificationInput) int
-		CreateDocumentData                 func(childComplexity int, input generated.CreateDocumentDataInput) int
-		CreateEntity                       func(childComplexity int, input generated.CreateEntityInput) int
-		CreateEntityType                   func(childComplexity int, input generated.CreateEntityTypeInput) int
-		CreateEvent                        func(childComplexity int, input generated.CreateEventInput) int
-		CreateEvidence                     func(childComplexity int, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload) int
-		CreateFullProgram                  func(childComplexity int, input model.CreateFullProgramInput) int
-		CreateGroup                        func(childComplexity int, input generated.CreateGroupInput) int
-		CreateGroupByClone                 func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput, inheritGroupPermissions *string, cloneGroupMembers *string) int
-		CreateGroupMembership              func(childComplexity int, input generated.CreateGroupMembershipInput) int
-		CreateGroupSetting                 func(childComplexity int, input generated.CreateGroupSettingInput) int
-		CreateGroupWithMembers             func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput) int
-		CreateHush                         func(childComplexity int, input generated.CreateHushInput) int
-		CreateIntegration                  func(childComplexity int, input generated.CreateIntegrationInput) int
-		CreateInternalPolicy               func(childComplexity int, input generated.CreateInternalPolicyInput) int
-		CreateInvite                       func(childComplexity int, input generated.CreateInviteInput) int
-		CreateJobRunnerRegistrationToken   func(childComplexity int, input generated.CreateJobRunnerRegistrationTokenInput) int
-		CreateJobRunnerToken               func(childComplexity int, input generated.CreateJobRunnerTokenInput) int
-		CreateMappableDomain               func(childComplexity int, input generated.CreateMappableDomainInput) int
-		CreateMappedControl                func(childComplexity int, input generated.CreateMappedControlInput) int
-		CreateNarrative                    func(childComplexity int, input generated.CreateNarrativeInput) int
-		CreateOnboarding                   func(childComplexity int, input generated.CreateOnboardingInput) int
-		CreateOrgMembership                func(childComplexity int, input generated.CreateOrgMembershipInput) int
-		CreateOrganization                 func(childComplexity int, input generated.CreateOrganizationInput, avatarFile *graphql.Upload) int
-		CreateOrganizationSetting          func(childComplexity int, input generated.CreateOrganizationSettingInput) int
-		CreateOrganizationWithMembers      func(childComplexity int, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, members []*model.OrgMembersInput) int
-		CreatePersonalAccessToken          func(childComplexity int, input generated.CreatePersonalAccessTokenInput) int
-		CreateProcedure                    func(childComplexity int, input generated.CreateProcedureInput) int
-		CreateProgram                      func(childComplexity int, input generated.CreateProgramInput) int
-		CreateProgramMembership            func(childComplexity int, input generated.CreateProgramMembershipInput) int
-		CreateProgramWithMembers           func(childComplexity int, input model.CreateProgramWithMembersInput) int
-		CreateRisk                         func(childComplexity int, input generated.CreateRiskInput) int
-		CreateScan                         func(childComplexity int, input generated.CreateScanInput) int
-		CreateScheduledJob                 func(childComplexity int, input generated.CreateScheduledJobInput) int
-		CreateStandard                     func(childComplexity int, input generated.CreateStandardInput) int
-		CreateSubcontrol                   func(childComplexity int, input generated.CreateSubcontrolInput) int
-		CreateSubscriber                   func(childComplexity int, input generated.CreateSubscriberInput) int
-		CreateTFASetting                   func(childComplexity int, input generated.CreateTFASettingInput) int
-		CreateTask                         func(childComplexity int, input generated.CreateTaskInput) int
-		CreateTemplate                     func(childComplexity int, input generated.CreateTemplateInput) int
-		CreateTrustCenter                  func(childComplexity int, input generated.CreateTrustCenterInput) int
-		CreateTrustCenterSetting           func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
-		CreateUser                         func(childComplexity int, input generated.CreateUserInput, avatarFile *graphql.Upload) int
-		CreateUserSetting                  func(childComplexity int, input generated.CreateUserSettingInput) int
-		DeleteAPIToken                     func(childComplexity int, id string) int
-		DeleteActionPlan                   func(childComplexity int, id string) int
-		DeleteAsset                        func(childComplexity int, id string) int
-		DeleteContact                      func(childComplexity int, id string) int
-		DeleteControl                      func(childComplexity int, id string) int
-		DeleteControlImplementation        func(childComplexity int, id string) int
-		DeleteControlObjective             func(childComplexity int, id string) int
-		DeleteControlScheduledJob          func(childComplexity int, id string) int
-		DeleteCustomDomain                 func(childComplexity int, id string) int
-		DeleteDNSVerification              func(childComplexity int, id string) int
-		DeleteDocumentData                 func(childComplexity int, id string) int
-		DeleteEntity                       func(childComplexity int, id string) int
-		DeleteEntityType                   func(childComplexity int, id string) int
-		DeleteEvent                        func(childComplexity int, id string) int
-		DeleteEvidence                     func(childComplexity int, id string) int
-		DeleteFile                         func(childComplexity int, id string) int
-		DeleteGroup                        func(childComplexity int, id string) int
-		DeleteGroupMembership              func(childComplexity int, id string) int
-		DeleteGroupSetting                 func(childComplexity int, id string) int
-		DeleteHush                         func(childComplexity int, id string) int
-		DeleteIntegration                  func(childComplexity int, id string) int
-		DeleteInternalPolicy               func(childComplexity int, id string) int
-		DeleteInvite                       func(childComplexity int, id string) int
-		DeleteJobRunner                    func(childComplexity int, id string) int
-		DeleteJobRunnerRegistrationToken   func(childComplexity int, id string) int
-		DeleteJobRunnerToken               func(childComplexity int, id string) int
-		DeleteMappableDomain               func(childComplexity int, id string) int
-		DeleteMappedControl                func(childComplexity int, id string) int
-		DeleteNarrative                    func(childComplexity int, id string) int
-		DeleteOrgMembership                func(childComplexity int, id string) int
-		DeleteOrganization                 func(childComplexity int, id string) int
-		DeleteOrganizationSetting          func(childComplexity int, id string) int
-		DeletePersonalAccessToken          func(childComplexity int, id string) int
-		DeleteProcedure                    func(childComplexity int, id string) int
-		DeleteProgram                      func(childComplexity int, id string) int
-		DeleteProgramMembership            func(childComplexity int, id string) int
-		DeleteRisk                         func(childComplexity int, id string) int
-		DeleteScan                         func(childComplexity int, id string) int
-		DeleteScheduledJob                 func(childComplexity int, id string) int
-		DeleteStandard                     func(childComplexity int, id string) int
-		DeleteSubcontrol                   func(childComplexity int, id string) int
-		DeleteSubscriber                   func(childComplexity int, email string, ownerID *string) int
-		DeleteTask                         func(childComplexity int, id string) int
-		DeleteTemplate                     func(childComplexity int, id string) int
-		DeleteTrustCenter                  func(childComplexity int, id string) int
-		DeleteTrustCenterSetting           func(childComplexity int, id string) int
-		DeleteUser                         func(childComplexity int, id string) int
-		DeleteWebauthn                     func(childComplexity int, id string) int
-		UpdateAPIToken                     func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
-		UpdateActionPlan                   func(childComplexity int, id string, input generated.UpdateActionPlanInput) int
-		UpdateAsset                        func(childComplexity int, id string, input generated.UpdateAssetInput) int
-		UpdateContact                      func(childComplexity int, id string, input generated.UpdateContactInput) int
-		UpdateControl                      func(childComplexity int, id string, input generated.UpdateControlInput) int
-		UpdateControlImplementation        func(childComplexity int, id string, input generated.UpdateControlImplementationInput) int
-		UpdateControlObjective             func(childComplexity int, id string, input generated.UpdateControlObjectiveInput) int
-		UpdateControlScheduledJob          func(childComplexity int, id string, input generated.UpdateControlScheduledJobInput) int
-		UpdateCustomDomain                 func(childComplexity int, id string, input generated.UpdateCustomDomainInput) int
-		UpdateDNSVerification              func(childComplexity int, id string, input generated.UpdateDNSVerificationInput) int
-		UpdateDocumentData                 func(childComplexity int, id string, input generated.UpdateDocumentDataInput) int
-		UpdateEntity                       func(childComplexity int, id string, input generated.UpdateEntityInput) int
-		UpdateEntityType                   func(childComplexity int, id string, input generated.UpdateEntityTypeInput) int
-		UpdateEvent                        func(childComplexity int, id string, input generated.UpdateEventInput) int
-		UpdateEvidence                     func(childComplexity int, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload) int
-		UpdateGroup                        func(childComplexity int, id string, input generated.UpdateGroupInput) int
-		UpdateGroupMembership              func(childComplexity int, id string, input generated.UpdateGroupMembershipInput) int
-		UpdateGroupSetting                 func(childComplexity int, id string, input generated.UpdateGroupSettingInput) int
-		UpdateHush                         func(childComplexity int, id string, input generated.UpdateHushInput) int
-		UpdateIntegration                  func(childComplexity int, id string, input generated.UpdateIntegrationInput) int
-		UpdateInternalPolicy               func(childComplexity int, id string, input generated.UpdateInternalPolicyInput) int
-		UpdateInvite                       func(childComplexity int, id string, input generated.UpdateInviteInput) int
-		UpdateJobRunner                    func(childComplexity int, id string, input generated.UpdateJobRunnerInput) int
-		UpdateMappableDomain               func(childComplexity int, id string, input generated.UpdateMappableDomainInput) int
-		UpdateMappedControl                func(childComplexity int, id string, input generated.UpdateMappedControlInput) int
-		UpdateNarrative                    func(childComplexity int, id string, input generated.UpdateNarrativeInput) int
-		UpdateOrgMembership                func(childComplexity int, id string, input generated.UpdateOrgMembershipInput) int
-		UpdateOrganization                 func(childComplexity int, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload) int
-		UpdateOrganizationSetting          func(childComplexity int, id string, input generated.UpdateOrganizationSettingInput) int
-		UpdatePersonalAccessToken          func(childComplexity int, id string, input generated.UpdatePersonalAccessTokenInput) int
-		UpdateProcedure                    func(childComplexity int, id string, input generated.UpdateProcedureInput) int
-		UpdateProgram                      func(childComplexity int, id string, input generated.UpdateProgramInput) int
-		UpdateProgramMembership            func(childComplexity int, id string, input generated.UpdateProgramMembershipInput) int
-		UpdateRisk                         func(childComplexity int, id string, input generated.UpdateRiskInput) int
-		UpdateScan                         func(childComplexity int, id string, input generated.UpdateScanInput) int
-		UpdateScheduledJob                 func(childComplexity int, id string, input generated.UpdateScheduledJobInput) int
-		UpdateStandard                     func(childComplexity int, id string, input generated.UpdateStandardInput) int
-		UpdateSubcontrol                   func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
-		UpdateSubscriber                   func(childComplexity int, email string, input generated.UpdateSubscriberInput) int
-		UpdateTFASetting                   func(childComplexity int, input generated.UpdateTFASettingInput) int
-		UpdateTask                         func(childComplexity int, id string, input generated.UpdateTaskInput) int
-		UpdateTaskComment                  func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
-		UpdateTemplate                     func(childComplexity int, id string, input generated.UpdateTemplateInput) int
-		UpdateTrustCenter                  func(childComplexity int, id string, input generated.UpdateTrustCenterInput) int
-		UpdateTrustCenterSetting           func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
-		UpdateUser                         func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) int
-		UpdateUserSetting                  func(childComplexity int, id string, input generated.UpdateUserSettingInput) int
+		CreateAPIToken                       func(childComplexity int, input generated.CreateAPITokenInput) int
+		CreateActionPlan                     func(childComplexity int, input generated.CreateActionPlanInput) int
+		CreateAsset                          func(childComplexity int, input generated.CreateAssetInput) int
+		CreateBulkAPIToken                   func(childComplexity int, input []*generated.CreateAPITokenInput) int
+		CreateBulkActionPlan                 func(childComplexity int, input []*generated.CreateActionPlanInput) int
+		CreateBulkAsset                      func(childComplexity int, input []*generated.CreateAssetInput) int
+		CreateBulkCSVAPIToken                func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVActionPlan              func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVAsset                   func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVContact                 func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVControl                 func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVControlImplementation   func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVControlObjective        func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVControlScheduledJob     func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVCustomDomain            func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVDNSVerification         func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVDocumentData            func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVEntity                  func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVEntityType              func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVEvent                   func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVGroup                   func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVGroupMembership         func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVGroupSetting            func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVHush                    func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVIntegration             func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVInternalPolicy          func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVInvite                  func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVMappableDomain          func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVMappedControl           func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVNarrative               func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVOrgMembership           func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVOrganizationSetting     func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVProcedure               func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVProgram                 func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVProgramMembership       func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVRisk                    func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVScan                    func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVScheduledJob            func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVSubcontrol              func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVSubprocessor            func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVSubscriber              func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVTask                    func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVTemplate                func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVTrustCenterSubprocessor func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVUserSetting             func(childComplexity int, input graphql.Upload) int
+		CreateBulkContact                    func(childComplexity int, input []*generated.CreateContactInput) int
+		CreateBulkControl                    func(childComplexity int, input []*generated.CreateControlInput) int
+		CreateBulkControlImplementation      func(childComplexity int, input []*generated.CreateControlImplementationInput) int
+		CreateBulkControlObjective           func(childComplexity int, input []*generated.CreateControlObjectiveInput) int
+		CreateBulkControlScheduledJob        func(childComplexity int, input []*generated.CreateControlScheduledJobInput) int
+		CreateBulkCustomDomain               func(childComplexity int, input []*generated.CreateCustomDomainInput) int
+		CreateBulkDNSVerification            func(childComplexity int, input []*generated.CreateDNSVerificationInput) int
+		CreateBulkDocumentData               func(childComplexity int, input []*generated.CreateDocumentDataInput) int
+		CreateBulkEntity                     func(childComplexity int, input []*generated.CreateEntityInput) int
+		CreateBulkEntityType                 func(childComplexity int, input []*generated.CreateEntityTypeInput) int
+		CreateBulkEvent                      func(childComplexity int, input []*generated.CreateEventInput) int
+		CreateBulkGroup                      func(childComplexity int, input []*generated.CreateGroupInput) int
+		CreateBulkGroupMembership            func(childComplexity int, input []*generated.CreateGroupMembershipInput) int
+		CreateBulkGroupSetting               func(childComplexity int, input []*generated.CreateGroupSettingInput) int
+		CreateBulkHush                       func(childComplexity int, input []*generated.CreateHushInput) int
+		CreateBulkIntegration                func(childComplexity int, input []*generated.CreateIntegrationInput) int
+		CreateBulkInternalPolicy             func(childComplexity int, input []*generated.CreateInternalPolicyInput) int
+		CreateBulkInvite                     func(childComplexity int, input []*generated.CreateInviteInput) int
+		CreateBulkMappableDomain             func(childComplexity int, input []*generated.CreateMappableDomainInput) int
+		CreateBulkMappedControl              func(childComplexity int, input []*generated.CreateMappedControlInput) int
+		CreateBulkNarrative                  func(childComplexity int, input []*generated.CreateNarrativeInput) int
+		CreateBulkOrgMembership              func(childComplexity int, input []*generated.CreateOrgMembershipInput) int
+		CreateBulkOrganizationSetting        func(childComplexity int, input []*generated.CreateOrganizationSettingInput) int
+		CreateBulkProcedure                  func(childComplexity int, input []*generated.CreateProcedureInput) int
+		CreateBulkProgram                    func(childComplexity int, input []*generated.CreateProgramInput) int
+		CreateBulkProgramMembership          func(childComplexity int, input []*generated.CreateProgramMembershipInput) int
+		CreateBulkRisk                       func(childComplexity int, input []*generated.CreateRiskInput) int
+		CreateBulkScan                       func(childComplexity int, input []*generated.CreateScanInput) int
+		CreateBulkScheduledJob               func(childComplexity int, input []*generated.CreateScheduledJobInput) int
+		CreateBulkSubcontrol                 func(childComplexity int, input []*generated.CreateSubcontrolInput) int
+		CreateBulkSubprocessor               func(childComplexity int, input []*generated.CreateSubprocessorInput) int
+		CreateBulkSubscriber                 func(childComplexity int, input []*generated.CreateSubscriberInput) int
+		CreateBulkTask                       func(childComplexity int, input []*generated.CreateTaskInput) int
+		CreateBulkTemplate                   func(childComplexity int, input []*generated.CreateTemplateInput) int
+		CreateBulkTrustCenterSubprocessor    func(childComplexity int, input []*generated.CreateTrustCenterSubprocessorInput) int
+		CreateBulkUserSetting                func(childComplexity int, input []*generated.CreateUserSettingInput) int
+		CreateContact                        func(childComplexity int, input generated.CreateContactInput) int
+		CreateControl                        func(childComplexity int, input generated.CreateControlInput) int
+		CreateControlImplementation          func(childComplexity int, input generated.CreateControlImplementationInput) int
+		CreateControlObjective               func(childComplexity int, input generated.CreateControlObjectiveInput) int
+		CreateControlScheduledJob            func(childComplexity int, input generated.CreateControlScheduledJobInput) int
+		CreateControlWithSubcontrols         func(childComplexity int, input model.CreateControlWithSubcontrolsInput) int
+		CreateControlsByClone                func(childComplexity int, input *model.CloneControlInput) int
+		CreateCustomDomain                   func(childComplexity int, input generated.CreateCustomDomainInput) int
+		CreateDNSVerification                func(childComplexity int, input generated.CreateDNSVerificationInput) int
+		CreateDocumentData                   func(childComplexity int, input generated.CreateDocumentDataInput) int
+		CreateEntity                         func(childComplexity int, input generated.CreateEntityInput) int
+		CreateEntityType                     func(childComplexity int, input generated.CreateEntityTypeInput) int
+		CreateEvent                          func(childComplexity int, input generated.CreateEventInput) int
+		CreateEvidence                       func(childComplexity int, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload) int
+		CreateExport                         func(childComplexity int, input generated.CreateExportInput) int
+		CreateFullProgram                    func(childComplexity int, input model.CreateFullProgramInput) int
+		CreateGroup                          func(childComplexity int, input generated.CreateGroupInput) int
+		CreateGroupByClone                   func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput, inheritGroupPermissions *string, cloneGroupMembers *string) int
+		CreateGroupMembership                func(childComplexity int, input generated.CreateGroupMembershipInput) int
+		CreateGroupSetting                   func(childComplexity int, input generated.CreateGroupSettingInput) int
+		CreateGroupWithMembers               func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput) int
+		CreateHush                           func(childComplexity int, input generated.CreateHushInput) int
+		CreateIntegration                    func(childComplexity int, input generated.CreateIntegrationInput) int
+		CreateInternalPolicy                 func(childComplexity int, input generated.CreateInternalPolicyInput) int
+		CreateInvite                         func(childComplexity int, input generated.CreateInviteInput) int
+		CreateJobRunnerRegistrationToken     func(childComplexity int, input generated.CreateJobRunnerRegistrationTokenInput) int
+		CreateJobRunnerToken                 func(childComplexity int, input generated.CreateJobRunnerTokenInput) int
+		CreateMappableDomain                 func(childComplexity int, input generated.CreateMappableDomainInput) int
+		CreateMappedControl                  func(childComplexity int, input generated.CreateMappedControlInput) int
+		CreateNarrative                      func(childComplexity int, input generated.CreateNarrativeInput) int
+		CreateOnboarding                     func(childComplexity int, input generated.CreateOnboardingInput) int
+		CreateOrgMembership                  func(childComplexity int, input generated.CreateOrgMembershipInput) int
+		CreateOrganization                   func(childComplexity int, input generated.CreateOrganizationInput, avatarFile *graphql.Upload) int
+		CreateOrganizationSetting            func(childComplexity int, input generated.CreateOrganizationSettingInput) int
+		CreateOrganizationWithMembers        func(childComplexity int, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, members []*model.OrgMembersInput) int
+		CreatePersonalAccessToken            func(childComplexity int, input generated.CreatePersonalAccessTokenInput) int
+		CreateProcedure                      func(childComplexity int, input generated.CreateProcedureInput) int
+		CreateProgram                        func(childComplexity int, input generated.CreateProgramInput) int
+		CreateProgramMembership              func(childComplexity int, input generated.CreateProgramMembershipInput) int
+		CreateProgramWithMembers             func(childComplexity int, input model.CreateProgramWithMembersInput) int
+		CreateRisk                           func(childComplexity int, input generated.CreateRiskInput) int
+		CreateScan                           func(childComplexity int, input generated.CreateScanInput) int
+		CreateScheduledJob                   func(childComplexity int, input generated.CreateScheduledJobInput) int
+		CreateStandard                       func(childComplexity int, input generated.CreateStandardInput) int
+		CreateSubcontrol                     func(childComplexity int, input generated.CreateSubcontrolInput) int
+		CreateSubprocessor                   func(childComplexity int, input generated.CreateSubprocessorInput, logoFile *graphql.Upload) int
+		CreateSubscriber                     func(childComplexity int, input generated.CreateSubscriberInput) int
+		CreateTFASetting                     func(childComplexity int, input generated.CreateTFASettingInput) int
+		CreateTask                           func(childComplexity int, input generated.CreateTaskInput) int
+		CreateTemplate                       func(childComplexity int, input generated.CreateTemplateInput) int
+		CreateTrustCenter                    func(childComplexity int, input generated.CreateTrustCenterInput) int
+		CreateTrustCenterSetting             func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
+		CreateTrustCenterSubprocessor        func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
+		CreateUser                           func(childComplexity int, input generated.CreateUserInput, avatarFile *graphql.Upload) int
+		CreateUserSetting                    func(childComplexity int, input generated.CreateUserSettingInput) int
+		DeleteAPIToken                       func(childComplexity int, id string) int
+		DeleteActionPlan                     func(childComplexity int, id string) int
+		DeleteAsset                          func(childComplexity int, id string) int
+		DeleteBulkExport                     func(childComplexity int, ids []string) int
+		DeleteContact                        func(childComplexity int, id string) int
+		DeleteControl                        func(childComplexity int, id string) int
+		DeleteControlImplementation          func(childComplexity int, id string) int
+		DeleteControlObjective               func(childComplexity int, id string) int
+		DeleteControlScheduledJob            func(childComplexity int, id string) int
+		DeleteCustomDomain                   func(childComplexity int, id string) int
+		DeleteDNSVerification                func(childComplexity int, id string) int
+		DeleteDocumentData                   func(childComplexity int, id string) int
+		DeleteEntity                         func(childComplexity int, id string) int
+		DeleteEntityType                     func(childComplexity int, id string) int
+		DeleteEvent                          func(childComplexity int, id string) int
+		DeleteEvidence                       func(childComplexity int, id string) int
+		DeleteExport                         func(childComplexity int, id string) int
+		DeleteFile                           func(childComplexity int, id string) int
+		DeleteGroup                          func(childComplexity int, id string) int
+		DeleteGroupMembership                func(childComplexity int, id string) int
+		DeleteGroupSetting                   func(childComplexity int, id string) int
+		DeleteHush                           func(childComplexity int, id string) int
+		DeleteIntegration                    func(childComplexity int, id string) int
+		DeleteInternalPolicy                 func(childComplexity int, id string) int
+		DeleteInvite                         func(childComplexity int, id string) int
+		DeleteJobRunner                      func(childComplexity int, id string) int
+		DeleteJobRunnerRegistrationToken     func(childComplexity int, id string) int
+		DeleteJobRunnerToken                 func(childComplexity int, id string) int
+		DeleteMappableDomain                 func(childComplexity int, id string) int
+		DeleteMappedControl                  func(childComplexity int, id string) int
+		DeleteNarrative                      func(childComplexity int, id string) int
+		DeleteOrgMembership                  func(childComplexity int, id string) int
+		DeleteOrganization                   func(childComplexity int, id string) int
+		DeleteOrganizationSetting            func(childComplexity int, id string) int
+		DeletePersonalAccessToken            func(childComplexity int, id string) int
+		DeleteProcedure                      func(childComplexity int, id string) int
+		DeleteProgram                        func(childComplexity int, id string) int
+		DeleteProgramMembership              func(childComplexity int, id string) int
+		DeleteRisk                           func(childComplexity int, id string) int
+		DeleteScan                           func(childComplexity int, id string) int
+		DeleteScheduledJob                   func(childComplexity int, id string) int
+		DeleteStandard                       func(childComplexity int, id string) int
+		DeleteSubcontrol                     func(childComplexity int, id string) int
+		DeleteSubprocessor                   func(childComplexity int, id string) int
+		DeleteSubscriber                     func(childComplexity int, email string, ownerID *string) int
+		DeleteTask                           func(childComplexity int, id string) int
+		DeleteTemplate                       func(childComplexity int, id string) int
+		DeleteTrustCenter                    func(childComplexity int, id string) int
+		DeleteTrustCenterSetting             func(childComplexity int, id string) int
+		DeleteTrustCenterSubprocessor        func(childComplexity int, id string) int
+		DeleteUser                           func(childComplexity int, id string) int
+		DeleteWebauthn                       func(childComplexity int, id string) int
+		UpdateAPIToken                       func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
+		UpdateActionPlan                     func(childComplexity int, id string, input generated.UpdateActionPlanInput) int
+		UpdateAsset                          func(childComplexity int, id string, input generated.UpdateAssetInput) int
+		UpdateContact                        func(childComplexity int, id string, input generated.UpdateContactInput) int
+		UpdateControl                        func(childComplexity int, id string, input generated.UpdateControlInput) int
+		UpdateControlImplementation          func(childComplexity int, id string, input generated.UpdateControlImplementationInput) int
+		UpdateControlObjective               func(childComplexity int, id string, input generated.UpdateControlObjectiveInput) int
+		UpdateControlScheduledJob            func(childComplexity int, id string, input generated.UpdateControlScheduledJobInput) int
+		UpdateCustomDomain                   func(childComplexity int, id string, input generated.UpdateCustomDomainInput) int
+		UpdateDNSVerification                func(childComplexity int, id string, input generated.UpdateDNSVerificationInput) int
+		UpdateDocumentData                   func(childComplexity int, id string, input generated.UpdateDocumentDataInput) int
+		UpdateEntity                         func(childComplexity int, id string, input generated.UpdateEntityInput) int
+		UpdateEntityType                     func(childComplexity int, id string, input generated.UpdateEntityTypeInput) int
+		UpdateEvent                          func(childComplexity int, id string, input generated.UpdateEventInput) int
+		UpdateEvidence                       func(childComplexity int, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload) int
+		UpdateExport                         func(childComplexity int, id string, input generated.UpdateExportInput, exportFiles []*graphql.Upload) int
+		UpdateGroup                          func(childComplexity int, id string, input generated.UpdateGroupInput) int
+		UpdateGroupMembership                func(childComplexity int, id string, input generated.UpdateGroupMembershipInput) int
+		UpdateGroupSetting                   func(childComplexity int, id string, input generated.UpdateGroupSettingInput) int
+		UpdateHush                           func(childComplexity int, id string, input generated.UpdateHushInput) int
+		UpdateIntegration                    func(childComplexity int, id string, input generated.UpdateIntegrationInput) int
+		UpdateInternalPolicy                 func(childComplexity int, id string, input generated.UpdateInternalPolicyInput) int
+		UpdateInvite                         func(childComplexity int, id string, input generated.UpdateInviteInput) int
+		UpdateJobRunner                      func(childComplexity int, id string, input generated.UpdateJobRunnerInput) int
+		UpdateMappableDomain                 func(childComplexity int, id string, input generated.UpdateMappableDomainInput) int
+		UpdateMappedControl                  func(childComplexity int, id string, input generated.UpdateMappedControlInput) int
+		UpdateNarrative                      func(childComplexity int, id string, input generated.UpdateNarrativeInput) int
+		UpdateOrgMembership                  func(childComplexity int, id string, input generated.UpdateOrgMembershipInput) int
+		UpdateOrganization                   func(childComplexity int, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload) int
+		UpdateOrganizationSetting            func(childComplexity int, id string, input generated.UpdateOrganizationSettingInput) int
+		UpdatePersonalAccessToken            func(childComplexity int, id string, input generated.UpdatePersonalAccessTokenInput) int
+		UpdateProcedure                      func(childComplexity int, id string, input generated.UpdateProcedureInput) int
+		UpdateProgram                        func(childComplexity int, id string, input generated.UpdateProgramInput) int
+		UpdateProgramMembership              func(childComplexity int, id string, input generated.UpdateProgramMembershipInput) int
+		UpdateRisk                           func(childComplexity int, id string, input generated.UpdateRiskInput) int
+		UpdateScan                           func(childComplexity int, id string, input generated.UpdateScanInput) int
+		UpdateScheduledJob                   func(childComplexity int, id string, input generated.UpdateScheduledJobInput) int
+		UpdateStandard                       func(childComplexity int, id string, input generated.UpdateStandardInput) int
+		UpdateSubcontrol                     func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
+		UpdateSubprocessor                   func(childComplexity int, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload) int
+		UpdateSubscriber                     func(childComplexity int, email string, input generated.UpdateSubscriberInput) int
+		UpdateTFASetting                     func(childComplexity int, input generated.UpdateTFASettingInput) int
+		UpdateTask                           func(childComplexity int, id string, input generated.UpdateTaskInput) int
+		UpdateTaskComment                    func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
+		UpdateTemplate                       func(childComplexity int, id string, input generated.UpdateTemplateInput) int
+		UpdateTrustCenter                    func(childComplexity int, id string, input generated.UpdateTrustCenterInput) int
+		UpdateTrustCenterSetting             func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
+		UpdateTrustCenterSubprocessor        func(childComplexity int, id string, input generated.UpdateTrustCenterSubprocessorInput) int
+		UpdateUser                           func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) int
+		UpdateUserSetting                    func(childComplexity int, id string, input generated.UpdateUserSettingInput) int
 	}
 
 	Narrative struct {
@@ -2746,6 +2808,7 @@ type ComplexityRoot struct {
 		Events                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		Evidence                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		EvidenceCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Exports                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ExportOrder, where *generated.ExportWhereInput) int
 		Files                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		GroupCreators                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Groups                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -2785,6 +2848,7 @@ type ComplexityRoot struct {
 		StandardCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Standards                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
 		Subcontrols                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Subprocessors                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubprocessorOrder, where *generated.SubprocessorWhereInput) int
 		Subscribers                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
 		Tags                          func(childComplexity int) int
 		Tasks                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
@@ -3334,10 +3398,12 @@ type ComplexityRoot struct {
 		AdminSearch                           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminStandardSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminSubcontrolSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminSubprocessorSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminSubscriberSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminTaskSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminTemplateSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminTrustCenterSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminTrustCenterSubprocessorSearch    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminUserSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminUserSettingSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminWebauthnSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -3394,6 +3460,8 @@ type ComplexityRoot struct {
 		EvidenceHistories                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EvidenceHistoryOrder, where *generated.EvidenceHistoryWhereInput) int
 		EvidenceSearch                        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Evidences                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
+		Export                                func(childComplexity int, id string) int
+		Exports                               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ExportOrder, where *generated.ExportWhereInput) int
 		File                                  func(childComplexity int, id string) int
 		FileHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.FileHistoryOrder, where *generated.FileHistoryWhereInput) int
 		FileSearch                            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -3503,6 +3571,10 @@ type ComplexityRoot struct {
 		SubcontrolHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.SubcontrolHistoryOrder, where *generated.SubcontrolHistoryWhereInput) int
 		SubcontrolSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Subcontrols                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Subprocessor                          func(childComplexity int, id string) int
+		SubprocessorHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.SubprocessorHistoryOrder, where *generated.SubprocessorHistoryWhereInput) int
+		SubprocessorSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Subprocessors                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubprocessorOrder, where *generated.SubprocessorWhereInput) int
 		Subscriber                            func(childComplexity int, email string) int
 		SubscriberSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Subscribers                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
@@ -3522,6 +3594,10 @@ type ComplexityRoot struct {
 		TrustCenterSetting                    func(childComplexity int, id string) int
 		TrustCenterSettingHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustCenterSettingHistoryOrder, where *generated.TrustCenterSettingHistoryWhereInput) int
 		TrustCenterSettings                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterSettingOrder, where *generated.TrustCenterSettingWhereInput) int
+		TrustCenterSubprocessor               func(childComplexity int, id string) int
+		TrustCenterSubprocessorHistories      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustCenterSubprocessorHistoryOrder, where *generated.TrustCenterSubprocessorHistoryWhereInput) int
+		TrustCenterSubprocessorSearch         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		TrustCenterSubprocessors              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterSubprocessorOrder, where *generated.TrustCenterSubprocessorWhereInput) int
 		TrustCenters                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterOrder, where *generated.TrustCenterWhereInput) int
 		User                                  func(childComplexity int, id string) int
 		UserHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UserHistoryOrder, where *generated.UserHistoryWhereInput) int
@@ -3859,10 +3935,12 @@ type ComplexityRoot struct {
 		ScheduledJobs               func(childComplexity int) int
 		Standards                   func(childComplexity int) int
 		Subcontrols                 func(childComplexity int) int
+		Subprocessors               func(childComplexity int) int
 		Subscribers                 func(childComplexity int) int
 		Tasks                       func(childComplexity int) int
 		Templates                   func(childComplexity int) int
 		TotalCount                  func(childComplexity int) int
+		TrustCenterSubprocessors    func(childComplexity int) int
 		TrustCenters                func(childComplexity int) int
 		UserSettings                func(childComplexity int) int
 		Users                       func(childComplexity int) int
@@ -4079,6 +4157,80 @@ type ComplexityRoot struct {
 
 	SubcontrolUpdatePayload struct {
 		Subcontrol func(childComplexity int) int
+	}
+
+	Subprocessor struct {
+		CreatedAt       func(childComplexity int) int
+		CreatedBy       func(childComplexity int) int
+		Description     func(childComplexity int) int
+		Files           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		ID              func(childComplexity int) int
+		LogoFile        func(childComplexity int) int
+		LogoLocalFileID func(childComplexity int) int
+		LogoRemoteURL   func(childComplexity int) int
+		Name            func(childComplexity int) int
+		Owner           func(childComplexity int) int
+		OwnerID         func(childComplexity int) int
+		SystemOwned     func(childComplexity int) int
+		Tags            func(childComplexity int) int
+		UpdatedAt       func(childComplexity int) int
+		UpdatedBy       func(childComplexity int) int
+	}
+
+	SubprocessorBulkCreatePayload struct {
+		Subprocessors func(childComplexity int) int
+	}
+
+	SubprocessorConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	SubprocessorCreatePayload struct {
+		Subprocessor func(childComplexity int) int
+	}
+
+	SubprocessorDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	SubprocessorEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	SubprocessorHistory struct {
+		CreatedAt       func(childComplexity int) int
+		CreatedBy       func(childComplexity int) int
+		Description     func(childComplexity int) int
+		HistoryTime     func(childComplexity int) int
+		ID              func(childComplexity int) int
+		LogoLocalFileID func(childComplexity int) int
+		LogoRemoteURL   func(childComplexity int) int
+		Name            func(childComplexity int) int
+		Operation       func(childComplexity int) int
+		OwnerID         func(childComplexity int) int
+		Ref             func(childComplexity int) int
+		SystemOwned     func(childComplexity int) int
+		Tags            func(childComplexity int) int
+		UpdatedAt       func(childComplexity int) int
+		UpdatedBy       func(childComplexity int) int
+	}
+
+	SubprocessorHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	SubprocessorHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	SubprocessorUpdatePayload struct {
+		Subprocessor func(childComplexity int) int
 	}
 
 	Subscriber struct {
@@ -4473,6 +4625,65 @@ type ComplexityRoot struct {
 
 	TrustCenterSettingUpdatePayload struct {
 		TrustCenterSetting func(childComplexity int) int
+	}
+
+	TrustCenterSubprocessor struct {
+		CreatedAt func(childComplexity int) int
+		CreatedBy func(childComplexity int) int
+		ID        func(childComplexity int) int
+		Tags      func(childComplexity int) int
+		UpdatedAt func(childComplexity int) int
+		UpdatedBy func(childComplexity int) int
+	}
+
+	TrustCenterSubprocessorBulkCreatePayload struct {
+		TrustCenterSubprocessors func(childComplexity int) int
+	}
+
+	TrustCenterSubprocessorConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	TrustCenterSubprocessorCreatePayload struct {
+		TrustCenterSubprocessor func(childComplexity int) int
+	}
+
+	TrustCenterSubprocessorDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	TrustCenterSubprocessorEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	TrustCenterSubprocessorHistory struct {
+		CreatedAt   func(childComplexity int) int
+		CreatedBy   func(childComplexity int) int
+		HistoryTime func(childComplexity int) int
+		ID          func(childComplexity int) int
+		Operation   func(childComplexity int) int
+		Ref         func(childComplexity int) int
+		Tags        func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
+		UpdatedBy   func(childComplexity int) int
+	}
+
+	TrustCenterSubprocessorHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	TrustCenterSubprocessorHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	TrustCenterSubprocessorUpdatePayload struct {
+		TrustCenterSubprocessor func(childComplexity int) int
 	}
 
 	TrustCenterUpdatePayload struct {
@@ -10504,6 +10715,177 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EvidenceUpdatePayload.Evidence(childComplexity), true
 
+	case "Export.createdAt":
+		if e.complexity.Export.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Export.CreatedAt(childComplexity), true
+
+	case "Export.createdBy":
+		if e.complexity.Export.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.Export.CreatedBy(childComplexity), true
+
+	case "Export.events":
+		if e.complexity.Export.Events == nil {
+			break
+		}
+
+		args, err := ec.field_Export_events_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Export.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EventOrder), args["where"].(*generated.EventWhereInput)), true
+
+	case "Export.exportType":
+		if e.complexity.Export.ExportType == nil {
+			break
+		}
+
+		return e.complexity.Export.ExportType(childComplexity), true
+
+	case "Export.files":
+		if e.complexity.Export.Files == nil {
+			break
+		}
+
+		args, err := ec.field_Export_files_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Export.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
+
+	case "Export.format":
+		if e.complexity.Export.Format == nil {
+			break
+		}
+
+		return e.complexity.Export.Format(childComplexity), true
+
+	case "Export.id":
+		if e.complexity.Export.ID == nil {
+			break
+		}
+
+		return e.complexity.Export.ID(childComplexity), true
+
+	case "Export.owner":
+		if e.complexity.Export.Owner == nil {
+			break
+		}
+
+		return e.complexity.Export.Owner(childComplexity), true
+
+	case "Export.ownerID":
+		if e.complexity.Export.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.Export.OwnerID(childComplexity), true
+
+	case "Export.requestorID":
+		if e.complexity.Export.RequestorID == nil {
+			break
+		}
+
+		return e.complexity.Export.RequestorID(childComplexity), true
+
+	case "Export.status":
+		if e.complexity.Export.Status == nil {
+			break
+		}
+
+		return e.complexity.Export.Status(childComplexity), true
+
+	case "Export.updatedAt":
+		if e.complexity.Export.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Export.UpdatedAt(childComplexity), true
+
+	case "Export.updatedBy":
+		if e.complexity.Export.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.Export.UpdatedBy(childComplexity), true
+
+	case "ExportBulkCreatePayload.exports":
+		if e.complexity.ExportBulkCreatePayload.Exports == nil {
+			break
+		}
+
+		return e.complexity.ExportBulkCreatePayload.Exports(childComplexity), true
+
+	case "ExportBulkDeletePayload.deletedIDs":
+		if e.complexity.ExportBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.ExportBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "ExportConnection.edges":
+		if e.complexity.ExportConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.ExportConnection.Edges(childComplexity), true
+
+	case "ExportConnection.pageInfo":
+		if e.complexity.ExportConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.ExportConnection.PageInfo(childComplexity), true
+
+	case "ExportConnection.totalCount":
+		if e.complexity.ExportConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.ExportConnection.TotalCount(childComplexity), true
+
+	case "ExportCreatePayload.export":
+		if e.complexity.ExportCreatePayload.Export == nil {
+			break
+		}
+
+		return e.complexity.ExportCreatePayload.Export(childComplexity), true
+
+	case "ExportDeletePayload.deletedID":
+		if e.complexity.ExportDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.ExportDeletePayload.DeletedID(childComplexity), true
+
+	case "ExportEdge.cursor":
+		if e.complexity.ExportEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.ExportEdge.Cursor(childComplexity), true
+
+	case "ExportEdge.node":
+		if e.complexity.ExportEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.ExportEdge.Node(childComplexity), true
+
+	case "ExportUpdatePayload.export":
+		if e.complexity.ExportUpdatePayload.Export == nil {
+			break
+		}
+
+		return e.complexity.ExportUpdatePayload.Export(childComplexity), true
+
 	case "File.categoryType":
 		if e.complexity.File.CategoryType == nil {
 			break
@@ -10688,6 +11070,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.File.StoreKey(childComplexity), true
+
+	case "File.subprocessor":
+		if e.complexity.File.Subprocessor == nil {
+			break
+		}
+
+		return e.complexity.File.Subprocessor(childComplexity), true
 
 	case "File.tags":
 		if e.complexity.File.Tags == nil {
@@ -15325,6 +15714,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVSubcontrol(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.createBulkCSVSubprocessor":
+		if e.complexity.Mutation.CreateBulkCSVSubprocessor == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVSubprocessor_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVSubprocessor(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createBulkCSVSubscriber":
 		if e.complexity.Mutation.CreateBulkCSVSubscriber == nil {
 			break
@@ -15360,6 +15761,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkCSVTemplate(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.createBulkCSVTrustCenterSubprocessor":
+		if e.complexity.Mutation.CreateBulkCSVTrustCenterSubprocessor == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVTrustCenterSubprocessor_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVTrustCenterSubprocessor(childComplexity, args["input"].(graphql.Upload)), true
 
 	case "Mutation.createBulkCSVUserSetting":
 		if e.complexity.Mutation.CreateBulkCSVUserSetting == nil {
@@ -15733,6 +16146,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkSubcontrol(childComplexity, args["input"].([]*generated.CreateSubcontrolInput)), true
 
+	case "Mutation.createBulkSubprocessor":
+		if e.complexity.Mutation.CreateBulkSubprocessor == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkSubprocessor_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkSubprocessor(childComplexity, args["input"].([]*generated.CreateSubprocessorInput)), true
+
 	case "Mutation.createBulkSubscriber":
 		if e.complexity.Mutation.CreateBulkSubscriber == nil {
 			break
@@ -15768,6 +16193,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkTemplate(childComplexity, args["input"].([]*generated.CreateTemplateInput)), true
+
+	case "Mutation.createBulkTrustCenterSubprocessor":
+		if e.complexity.Mutation.CreateBulkTrustCenterSubprocessor == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkTrustCenterSubprocessor_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkTrustCenterSubprocessor(childComplexity, args["input"].([]*generated.CreateTrustCenterSubprocessorInput)), true
 
 	case "Mutation.createBulkUserSetting":
 		if e.complexity.Mutation.CreateBulkUserSetting == nil {
@@ -15948,6 +16385,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateEvidence(childComplexity, args["input"].(generated.CreateEvidenceInput), args["evidenceFiles"].([]*graphql.Upload)), true
+
+	case "Mutation.createExport":
+		if e.complexity.Mutation.CreateExport == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createExport_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateExport(childComplexity, args["input"].(generated.CreateExportInput)), true
 
 	case "Mutation.createFullProgram":
 		if e.complexity.Mutation.CreateFullProgram == nil {
@@ -16309,6 +16758,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateSubcontrol(childComplexity, args["input"].(generated.CreateSubcontrolInput)), true
 
+	case "Mutation.createSubprocessor":
+		if e.complexity.Mutation.CreateSubprocessor == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createSubprocessor_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateSubprocessor(childComplexity, args["input"].(generated.CreateSubprocessorInput), args["logoFile"].(*graphql.Upload)), true
+
 	case "Mutation.createSubscriber":
 		if e.complexity.Mutation.CreateSubscriber == nil {
 			break
@@ -16381,6 +16842,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateTrustCenterSetting(childComplexity, args["input"].(generated.CreateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload)), true
 
+	case "Mutation.createTrustCenterSubprocessor":
+		if e.complexity.Mutation.CreateTrustCenterSubprocessor == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createTrustCenterSubprocessor_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateTrustCenterSubprocessor(childComplexity, args["input"].(generated.CreateTrustCenterSubprocessorInput)), true
+
 	case "Mutation.createUser":
 		if e.complexity.Mutation.CreateUser == nil {
 			break
@@ -16440,6 +16913,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.DeleteAsset(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteBulkExport":
+		if e.complexity.Mutation.DeleteBulkExport == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkExport_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkExport(childComplexity, args["ids"].([]string)), true
 
 	case "Mutation.deleteContact":
 		if e.complexity.Mutation.DeleteContact == nil {
@@ -16584,6 +17069,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.DeleteEvidence(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteExport":
+		if e.complexity.Mutation.DeleteExport == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteExport_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteExport(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteFile":
 		if e.complexity.Mutation.DeleteFile == nil {
@@ -16897,6 +17394,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteSubcontrol(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteSubprocessor":
+		if e.complexity.Mutation.DeleteSubprocessor == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteSubprocessor_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteSubprocessor(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteSubscriber":
 		if e.complexity.Mutation.DeleteSubscriber == nil {
 			break
@@ -16956,6 +17465,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.DeleteTrustCenterSetting(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteTrustCenterSubprocessor":
+		if e.complexity.Mutation.DeleteTrustCenterSubprocessor == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteTrustCenterSubprocessor_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteTrustCenterSubprocessor(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteUser":
 		if e.complexity.Mutation.DeleteUser == nil {
@@ -17160,6 +17681,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateEvidence(childComplexity, args["id"].(string), args["input"].(generated.UpdateEvidenceInput), args["evidenceFiles"].([]*graphql.Upload)), true
+
+	case "Mutation.updateExport":
+		if e.complexity.Mutation.UpdateExport == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateExport_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateExport(childComplexity, args["id"].(string), args["input"].(generated.UpdateExportInput), args["exportFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.updateGroup":
 		if e.complexity.Mutation.UpdateGroup == nil {
@@ -17437,6 +17970,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateSubcontrol(childComplexity, args["id"].(string), args["input"].(generated.UpdateSubcontrolInput)), true
 
+	case "Mutation.updateSubprocessor":
+		if e.complexity.Mutation.UpdateSubprocessor == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateSubprocessor_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateSubprocessor(childComplexity, args["id"].(string), args["input"].(generated.UpdateSubprocessorInput), args["logoFile"].(*graphql.Upload)), true
+
 	case "Mutation.updateSubscriber":
 		if e.complexity.Mutation.UpdateSubscriber == nil {
 			break
@@ -17520,6 +18065,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateTrustCenterSetting(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload)), true
+
+	case "Mutation.updateTrustCenterSubprocessor":
+		if e.complexity.Mutation.UpdateTrustCenterSubprocessor == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateTrustCenterSubprocessor_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateTrustCenterSubprocessor(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterSubprocessorInput)), true
 
 	case "Mutation.updateUser":
 		if e.complexity.Mutation.UpdateUser == nil {
@@ -19160,6 +19717,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Organization.EvidenceCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
+	case "Organization.exports":
+		if e.complexity.Organization.Exports == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_exports_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Exports(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ExportOrder), args["where"].(*generated.ExportWhereInput)), true
+
 	case "Organization.files":
 		if e.complexity.Organization.Files == nil {
 			break
@@ -19597,6 +20166,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
+
+	case "Organization.subprocessors":
+		if e.complexity.Organization.Subprocessors == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_subprocessors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Subprocessors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubprocessorOrder), args["where"].(*generated.SubprocessorWhereInput)), true
 
 	case "Organization.subscribers":
 		if e.complexity.Organization.Subscribers == nil {
@@ -22618,6 +23199,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.AdminSubcontrolSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
+	case "Query.adminSubprocessorSearch":
+		if e.complexity.Query.AdminSubprocessorSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminSubprocessorSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminSubprocessorSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
 	case "Query.adminSubscriberSearch":
 		if e.complexity.Query.AdminSubscriberSearch == nil {
 			break
@@ -22665,6 +23258,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.AdminTrustCenterSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.adminTrustCenterSubprocessorSearch":
+		if e.complexity.Query.AdminTrustCenterSubprocessorSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminTrustCenterSubprocessorSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminTrustCenterSubprocessorSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
 	case "Query.adminUserSearch":
 		if e.complexity.Query.AdminUserSearch == nil {
@@ -23327,6 +23932,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.Evidences(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EvidenceOrder), args["where"].(*generated.EvidenceWhereInput)), true
+
+	case "Query.export":
+		if e.complexity.Query.Export == nil {
+			break
+		}
+
+		args, err := ec.field_Query_export_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Export(childComplexity, args["id"].(string)), true
+
+	case "Query.exports":
+		if e.complexity.Query.Exports == nil {
+			break
+		}
+
+		args, err := ec.field_Query_exports_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Exports(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ExportOrder), args["where"].(*generated.ExportWhereInput)), true
 
 	case "Query.file":
 		if e.complexity.Query.File == nil {
@@ -24631,6 +25260,54 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
 
+	case "Query.subprocessor":
+		if e.complexity.Query.Subprocessor == nil {
+			break
+		}
+
+		args, err := ec.field_Query_subprocessor_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Subprocessor(childComplexity, args["id"].(string)), true
+
+	case "Query.subprocessorHistories":
+		if e.complexity.Query.SubprocessorHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_subprocessorHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.SubprocessorHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.SubprocessorHistoryOrder), args["where"].(*generated.SubprocessorHistoryWhereInput)), true
+
+	case "Query.subprocessorSearch":
+		if e.complexity.Query.SubprocessorSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_subprocessorSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.SubprocessorSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.subprocessors":
+		if e.complexity.Query.Subprocessors == nil {
+			break
+		}
+
+		args, err := ec.field_Query_subprocessors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Subprocessors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubprocessorOrder), args["where"].(*generated.SubprocessorWhereInput)), true
+
 	case "Query.subscriber":
 		if e.complexity.Query.Subscriber == nil {
 			break
@@ -24858,6 +25535,54 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.TrustCenterSettings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterSettingOrder), args["where"].(*generated.TrustCenterSettingWhereInput)), true
+
+	case "Query.trustCenterSubprocessor":
+		if e.complexity.Query.TrustCenterSubprocessor == nil {
+			break
+		}
+
+		args, err := ec.field_Query_trustCenterSubprocessor_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.TrustCenterSubprocessor(childComplexity, args["id"].(string)), true
+
+	case "Query.trustCenterSubprocessorHistories":
+		if e.complexity.Query.TrustCenterSubprocessorHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_trustCenterSubprocessorHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.TrustCenterSubprocessorHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.TrustCenterSubprocessorHistoryOrder), args["where"].(*generated.TrustCenterSubprocessorHistoryWhereInput)), true
+
+	case "Query.trustCenterSubprocessorSearch":
+		if e.complexity.Query.TrustCenterSubprocessorSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_trustCenterSubprocessorSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.TrustCenterSubprocessorSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.trustCenterSubprocessors":
+		if e.complexity.Query.TrustCenterSubprocessors == nil {
+			break
+		}
+
+		args, err := ec.field_Query_trustCenterSubprocessors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.TrustCenterSubprocessors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterSubprocessorOrder), args["where"].(*generated.TrustCenterSubprocessorWhereInput)), true
 
 	case "Query.trustCenters":
 		if e.complexity.Query.TrustCenters == nil {
@@ -26649,6 +27374,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SearchResults.Subcontrols(childComplexity), true
 
+	case "SearchResults.subprocessors":
+		if e.complexity.SearchResults.Subprocessors == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.Subprocessors(childComplexity), true
+
 	case "SearchResults.subscribers":
 		if e.complexity.SearchResults.Subscribers == nil {
 			break
@@ -26676,6 +27408,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SearchResults.TotalCount(childComplexity), true
+
+	case "SearchResults.trustCenterSubprocessors":
+		if e.complexity.SearchResults.TrustCenterSubprocessors == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.TrustCenterSubprocessors(childComplexity), true
 
 	case "SearchResults.trustCenters":
 		if e.complexity.SearchResults.TrustCenters == nil {
@@ -27823,6 +28562,319 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SubcontrolUpdatePayload.Subcontrol(childComplexity), true
+
+	case "Subprocessor.createdAt":
+		if e.complexity.Subprocessor.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.CreatedAt(childComplexity), true
+
+	case "Subprocessor.createdBy":
+		if e.complexity.Subprocessor.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.CreatedBy(childComplexity), true
+
+	case "Subprocessor.description":
+		if e.complexity.Subprocessor.Description == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.Description(childComplexity), true
+
+	case "Subprocessor.files":
+		if e.complexity.Subprocessor.Files == nil {
+			break
+		}
+
+		args, err := ec.field_Subprocessor_files_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Subprocessor.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
+
+	case "Subprocessor.id":
+		if e.complexity.Subprocessor.ID == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.ID(childComplexity), true
+
+	case "Subprocessor.logoFile":
+		if e.complexity.Subprocessor.LogoFile == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.LogoFile(childComplexity), true
+
+	case "Subprocessor.logoLocalFileID":
+		if e.complexity.Subprocessor.LogoLocalFileID == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.LogoLocalFileID(childComplexity), true
+
+	case "Subprocessor.logoRemoteURL":
+		if e.complexity.Subprocessor.LogoRemoteURL == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.LogoRemoteURL(childComplexity), true
+
+	case "Subprocessor.name":
+		if e.complexity.Subprocessor.Name == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.Name(childComplexity), true
+
+	case "Subprocessor.owner":
+		if e.complexity.Subprocessor.Owner == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.Owner(childComplexity), true
+
+	case "Subprocessor.ownerID":
+		if e.complexity.Subprocessor.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.OwnerID(childComplexity), true
+
+	case "Subprocessor.systemOwned":
+		if e.complexity.Subprocessor.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.SystemOwned(childComplexity), true
+
+	case "Subprocessor.tags":
+		if e.complexity.Subprocessor.Tags == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.Tags(childComplexity), true
+
+	case "Subprocessor.updatedAt":
+		if e.complexity.Subprocessor.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.UpdatedAt(childComplexity), true
+
+	case "Subprocessor.updatedBy":
+		if e.complexity.Subprocessor.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.Subprocessor.UpdatedBy(childComplexity), true
+
+	case "SubprocessorBulkCreatePayload.subprocessors":
+		if e.complexity.SubprocessorBulkCreatePayload.Subprocessors == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorBulkCreatePayload.Subprocessors(childComplexity), true
+
+	case "SubprocessorConnection.edges":
+		if e.complexity.SubprocessorConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorConnection.Edges(childComplexity), true
+
+	case "SubprocessorConnection.pageInfo":
+		if e.complexity.SubprocessorConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorConnection.PageInfo(childComplexity), true
+
+	case "SubprocessorConnection.totalCount":
+		if e.complexity.SubprocessorConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorConnection.TotalCount(childComplexity), true
+
+	case "SubprocessorCreatePayload.subprocessor":
+		if e.complexity.SubprocessorCreatePayload.Subprocessor == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorCreatePayload.Subprocessor(childComplexity), true
+
+	case "SubprocessorDeletePayload.deletedID":
+		if e.complexity.SubprocessorDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorDeletePayload.DeletedID(childComplexity), true
+
+	case "SubprocessorEdge.cursor":
+		if e.complexity.SubprocessorEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorEdge.Cursor(childComplexity), true
+
+	case "SubprocessorEdge.node":
+		if e.complexity.SubprocessorEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorEdge.Node(childComplexity), true
+
+	case "SubprocessorHistory.createdAt":
+		if e.complexity.SubprocessorHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.CreatedAt(childComplexity), true
+
+	case "SubprocessorHistory.createdBy":
+		if e.complexity.SubprocessorHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.CreatedBy(childComplexity), true
+
+	case "SubprocessorHistory.description":
+		if e.complexity.SubprocessorHistory.Description == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.Description(childComplexity), true
+
+	case "SubprocessorHistory.historyTime":
+		if e.complexity.SubprocessorHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.HistoryTime(childComplexity), true
+
+	case "SubprocessorHistory.id":
+		if e.complexity.SubprocessorHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.ID(childComplexity), true
+
+	case "SubprocessorHistory.logoLocalFileID":
+		if e.complexity.SubprocessorHistory.LogoLocalFileID == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.LogoLocalFileID(childComplexity), true
+
+	case "SubprocessorHistory.logoRemoteURL":
+		if e.complexity.SubprocessorHistory.LogoRemoteURL == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.LogoRemoteURL(childComplexity), true
+
+	case "SubprocessorHistory.name":
+		if e.complexity.SubprocessorHistory.Name == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.Name(childComplexity), true
+
+	case "SubprocessorHistory.operation":
+		if e.complexity.SubprocessorHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.Operation(childComplexity), true
+
+	case "SubprocessorHistory.ownerID":
+		if e.complexity.SubprocessorHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.OwnerID(childComplexity), true
+
+	case "SubprocessorHistory.ref":
+		if e.complexity.SubprocessorHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.Ref(childComplexity), true
+
+	case "SubprocessorHistory.systemOwned":
+		if e.complexity.SubprocessorHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.SystemOwned(childComplexity), true
+
+	case "SubprocessorHistory.tags":
+		if e.complexity.SubprocessorHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.Tags(childComplexity), true
+
+	case "SubprocessorHistory.updatedAt":
+		if e.complexity.SubprocessorHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.UpdatedAt(childComplexity), true
+
+	case "SubprocessorHistory.updatedBy":
+		if e.complexity.SubprocessorHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistory.UpdatedBy(childComplexity), true
+
+	case "SubprocessorHistoryConnection.edges":
+		if e.complexity.SubprocessorHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistoryConnection.Edges(childComplexity), true
+
+	case "SubprocessorHistoryConnection.pageInfo":
+		if e.complexity.SubprocessorHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistoryConnection.PageInfo(childComplexity), true
+
+	case "SubprocessorHistoryConnection.totalCount":
+		if e.complexity.SubprocessorHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistoryConnection.TotalCount(childComplexity), true
+
+	case "SubprocessorHistoryEdge.cursor":
+		if e.complexity.SubprocessorHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistoryEdge.Cursor(childComplexity), true
+
+	case "SubprocessorHistoryEdge.node":
+		if e.complexity.SubprocessorHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorHistoryEdge.Node(childComplexity), true
+
+	case "SubprocessorUpdatePayload.subprocessor":
+		if e.complexity.SubprocessorUpdatePayload.Subprocessor == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorUpdatePayload.Subprocessor(childComplexity), true
 
 	case "Subscriber.active":
 		if e.complexity.Subscriber.Active == nil {
@@ -29602,6 +30654,209 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterSettingUpdatePayload.TrustCenterSetting(childComplexity), true
 
+	case "TrustCenterSubprocessor.createdAt":
+		if e.complexity.TrustCenterSubprocessor.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessor.CreatedAt(childComplexity), true
+
+	case "TrustCenterSubprocessor.createdBy":
+		if e.complexity.TrustCenterSubprocessor.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessor.CreatedBy(childComplexity), true
+
+	case "TrustCenterSubprocessor.id":
+		if e.complexity.TrustCenterSubprocessor.ID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessor.ID(childComplexity), true
+
+	case "TrustCenterSubprocessor.tags":
+		if e.complexity.TrustCenterSubprocessor.Tags == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessor.Tags(childComplexity), true
+
+	case "TrustCenterSubprocessor.updatedAt":
+		if e.complexity.TrustCenterSubprocessor.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessor.UpdatedAt(childComplexity), true
+
+	case "TrustCenterSubprocessor.updatedBy":
+		if e.complexity.TrustCenterSubprocessor.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessor.UpdatedBy(childComplexity), true
+
+	case "TrustCenterSubprocessorBulkCreatePayload.trustCenterSubprocessors":
+		if e.complexity.TrustCenterSubprocessorBulkCreatePayload.TrustCenterSubprocessors == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorBulkCreatePayload.TrustCenterSubprocessors(childComplexity), true
+
+	case "TrustCenterSubprocessorConnection.edges":
+		if e.complexity.TrustCenterSubprocessorConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorConnection.Edges(childComplexity), true
+
+	case "TrustCenterSubprocessorConnection.pageInfo":
+		if e.complexity.TrustCenterSubprocessorConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorConnection.PageInfo(childComplexity), true
+
+	case "TrustCenterSubprocessorConnection.totalCount":
+		if e.complexity.TrustCenterSubprocessorConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorConnection.TotalCount(childComplexity), true
+
+	case "TrustCenterSubprocessorCreatePayload.trustCenterSubprocessor":
+		if e.complexity.TrustCenterSubprocessorCreatePayload.TrustCenterSubprocessor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorCreatePayload.TrustCenterSubprocessor(childComplexity), true
+
+	case "TrustCenterSubprocessorDeletePayload.deletedID":
+		if e.complexity.TrustCenterSubprocessorDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorDeletePayload.DeletedID(childComplexity), true
+
+	case "TrustCenterSubprocessorEdge.cursor":
+		if e.complexity.TrustCenterSubprocessorEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorEdge.Cursor(childComplexity), true
+
+	case "TrustCenterSubprocessorEdge.node":
+		if e.complexity.TrustCenterSubprocessorEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorEdge.Node(childComplexity), true
+
+	case "TrustCenterSubprocessorHistory.createdAt":
+		if e.complexity.TrustCenterSubprocessorHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorHistory.CreatedAt(childComplexity), true
+
+	case "TrustCenterSubprocessorHistory.createdBy":
+		if e.complexity.TrustCenterSubprocessorHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorHistory.CreatedBy(childComplexity), true
+
+	case "TrustCenterSubprocessorHistory.historyTime":
+		if e.complexity.TrustCenterSubprocessorHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorHistory.HistoryTime(childComplexity), true
+
+	case "TrustCenterSubprocessorHistory.id":
+		if e.complexity.TrustCenterSubprocessorHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorHistory.ID(childComplexity), true
+
+	case "TrustCenterSubprocessorHistory.operation":
+		if e.complexity.TrustCenterSubprocessorHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorHistory.Operation(childComplexity), true
+
+	case "TrustCenterSubprocessorHistory.ref":
+		if e.complexity.TrustCenterSubprocessorHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorHistory.Ref(childComplexity), true
+
+	case "TrustCenterSubprocessorHistory.tags":
+		if e.complexity.TrustCenterSubprocessorHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorHistory.Tags(childComplexity), true
+
+	case "TrustCenterSubprocessorHistory.updatedAt":
+		if e.complexity.TrustCenterSubprocessorHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorHistory.UpdatedAt(childComplexity), true
+
+	case "TrustCenterSubprocessorHistory.updatedBy":
+		if e.complexity.TrustCenterSubprocessorHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorHistory.UpdatedBy(childComplexity), true
+
+	case "TrustCenterSubprocessorHistoryConnection.edges":
+		if e.complexity.TrustCenterSubprocessorHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorHistoryConnection.Edges(childComplexity), true
+
+	case "TrustCenterSubprocessorHistoryConnection.pageInfo":
+		if e.complexity.TrustCenterSubprocessorHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorHistoryConnection.PageInfo(childComplexity), true
+
+	case "TrustCenterSubprocessorHistoryConnection.totalCount":
+		if e.complexity.TrustCenterSubprocessorHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorHistoryConnection.TotalCount(childComplexity), true
+
+	case "TrustCenterSubprocessorHistoryEdge.cursor":
+		if e.complexity.TrustCenterSubprocessorHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorHistoryEdge.Cursor(childComplexity), true
+
+	case "TrustCenterSubprocessorHistoryEdge.node":
+		if e.complexity.TrustCenterSubprocessorHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorHistoryEdge.Node(childComplexity), true
+
+	case "TrustCenterSubprocessorUpdatePayload.trustCenterSubprocessor":
+		if e.complexity.TrustCenterSubprocessorUpdatePayload.TrustCenterSubprocessor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorUpdatePayload.TrustCenterSubprocessor(childComplexity), true
+
 	case "TrustCenterUpdatePayload.trustCenter":
 		if e.complexity.TrustCenterUpdatePayload.TrustCenter == nil {
 			break
@@ -30692,6 +31947,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateEntityTypeInput,
 		ec.unmarshalInputCreateEventInput,
 		ec.unmarshalInputCreateEvidenceInput,
+		ec.unmarshalInputCreateExportInput,
 		ec.unmarshalInputCreateFileInput,
 		ec.unmarshalInputCreateFullProgramInput,
 		ec.unmarshalInputCreateGroupInput,
@@ -30725,12 +31981,14 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateScheduledJobRunInput,
 		ec.unmarshalInputCreateStandardInput,
 		ec.unmarshalInputCreateSubcontrolInput,
+		ec.unmarshalInputCreateSubprocessorInput,
 		ec.unmarshalInputCreateSubscriberInput,
 		ec.unmarshalInputCreateTFASettingInput,
 		ec.unmarshalInputCreateTaskInput,
 		ec.unmarshalInputCreateTemplateInput,
 		ec.unmarshalInputCreateTrustCenterInput,
 		ec.unmarshalInputCreateTrustCenterSettingInput,
+		ec.unmarshalInputCreateTrustCenterSubprocessorInput,
 		ec.unmarshalInputCreateUserInput,
 		ec.unmarshalInputCreateUserSettingInput,
 		ec.unmarshalInputCustomDomainHistoryOrder,
@@ -30759,6 +32017,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputEvidenceHistoryWhereInput,
 		ec.unmarshalInputEvidenceOrder,
 		ec.unmarshalInputEvidenceWhereInput,
+		ec.unmarshalInputExportOrder,
+		ec.unmarshalInputExportWhereInput,
 		ec.unmarshalInputFileHistoryOrder,
 		ec.unmarshalInputFileHistoryWhereInput,
 		ec.unmarshalInputFileOrder,
@@ -30870,6 +32130,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputSubcontrolHistoryWhereInput,
 		ec.unmarshalInputSubcontrolOrder,
 		ec.unmarshalInputSubcontrolWhereInput,
+		ec.unmarshalInputSubprocessorHistoryOrder,
+		ec.unmarshalInputSubprocessorHistoryWhereInput,
+		ec.unmarshalInputSubprocessorOrder,
+		ec.unmarshalInputSubprocessorWhereInput,
 		ec.unmarshalInputSubscriberOrder,
 		ec.unmarshalInputSubscriberWhereInput,
 		ec.unmarshalInputTFASettingOrder,
@@ -30889,6 +32153,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputTrustCenterSettingHistoryWhereInput,
 		ec.unmarshalInputTrustCenterSettingOrder,
 		ec.unmarshalInputTrustCenterSettingWhereInput,
+		ec.unmarshalInputTrustCenterSubprocessorHistoryOrder,
+		ec.unmarshalInputTrustCenterSubprocessorHistoryWhereInput,
+		ec.unmarshalInputTrustCenterSubprocessorOrder,
+		ec.unmarshalInputTrustCenterSubprocessorWhereInput,
 		ec.unmarshalInputTrustCenterWhereInput,
 		ec.unmarshalInputUpdateAPITokenInput,
 		ec.unmarshalInputUpdateActionPlanInput,
@@ -30905,6 +32173,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateEntityTypeInput,
 		ec.unmarshalInputUpdateEventInput,
 		ec.unmarshalInputUpdateEvidenceInput,
+		ec.unmarshalInputUpdateExportInput,
 		ec.unmarshalInputUpdateFileInput,
 		ec.unmarshalInputUpdateGroupInput,
 		ec.unmarshalInputUpdateGroupMembershipInput,
@@ -30934,12 +32203,14 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateScheduledJobRunInput,
 		ec.unmarshalInputUpdateStandardInput,
 		ec.unmarshalInputUpdateSubcontrolInput,
+		ec.unmarshalInputUpdateSubprocessorInput,
 		ec.unmarshalInputUpdateSubscriberInput,
 		ec.unmarshalInputUpdateTFASettingInput,
 		ec.unmarshalInputUpdateTaskInput,
 		ec.unmarshalInputUpdateTemplateInput,
 		ec.unmarshalInputUpdateTrustCenterInput,
 		ec.unmarshalInputUpdateTrustCenterSettingInput,
+		ec.unmarshalInputUpdateTrustCenterSubprocessorInput,
 		ec.unmarshalInputUpdateUserInput,
 		ec.unmarshalInputUpdateUserSettingInput,
 		ec.unmarshalInputUserHistoryOrder,
@@ -32054,6 +33325,31 @@ type ActionPlanBulkCreatePayload {
         last: Int
     ): SubcontrolConnection
     """
+    Search across Subprocessor objects
+    """
+    adminSubprocessorSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): SubprocessorConnection
+    """
     Search across Subscriber objects
     """
     adminSubscriberSearch(
@@ -32153,6 +33449,31 @@ type ActionPlanBulkCreatePayload {
         """
         last: Int
     ): TrustCenterConnection
+    """
+    Search across TrustCenterSubprocessor objects
+    """
+    adminTrustCenterSubprocessorSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): TrustCenterSubprocessorConnection
     """
     Search across User objects
     """
@@ -41388,6 +42709,23 @@ input CreateEvidenceInput {
   taskIDs: [ID!]
 }
 """
+CreateExportInput is used for create Export object.
+Input was generated by ent.
+"""
+input CreateExportInput {
+  """
+  the type of export, e.g., control, policy, etc.
+  """
+  exportType: ExportExportType!
+  """
+  the format of export, e.g., csv and others
+  """
+  format: ExportExportFormat!
+  ownerID: ID
+  eventIDs: [ID!]
+  fileIDs: [ID!]
+}
+"""
 CreateFileInput is used for create File object.
 Input was generated by ent.
 """
@@ -41458,6 +42796,7 @@ input CreateFileInput {
   evidenceIDs: [ID!]
   eventIDs: [ID!]
   trustCenterSettingIDs: [ID!]
+  subprocessorIDs: [ID!]
 }
 """
 CreateGroupInput is used for create Group object.
@@ -42028,6 +43367,8 @@ input CreateOrganizationInput {
   trustCenterIDs: [ID!]
   assetIDs: [ID!]
   scanIDs: [ID!]
+  subprocessorIDs: [ID!]
+  exportIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -42633,6 +43974,31 @@ input CreateSubcontrolInput {
   scheduledJobIDs: [ID!]
 }
 """
+CreateSubprocessorInput is used for create Subprocessor object.
+Input was generated by ent.
+"""
+input CreateSubprocessorInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  name of the standard body
+  """
+  name: String!
+  """
+  description of the subprocessor
+  """
+  description: String
+  """
+  URL of the logo
+  """
+  logoRemoteURL: String
+  ownerID: ID
+  fileIDs: [ID!]
+  logoFileID: ID
+}
+"""
 CreateSubscriberInput is used for create Subscriber object.
 Input was generated by ent.
 """
@@ -42804,6 +44170,16 @@ input CreateTrustCenterSettingInput {
   fileIDs: [ID!]
   logoFileID: ID
   faviconFileID: ID
+}
+"""
+CreateTrustCenterSubprocessorInput is used for create TrustCenterSubprocessor object.
+Input was generated by ent.
+"""
+input CreateTrustCenterSubprocessorInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
 }
 """
 CreateUserInput is used for create User object.
@@ -47823,6 +49199,325 @@ input EvidenceWhereInput {
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
 }
+type Export implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  the type of export, e.g., control, policy, etc.
+  """
+  exportType: ExportExportType!
+  """
+  the format of export, e.g., csv and others
+  """
+  format: ExportExportFormat!
+  """
+  the status of the export, e.g., pending, ready, failed
+  """
+  status: ExportExportStatus!
+  """
+  the user who initiated the export
+  """
+  requestorID: String
+  owner: Organization
+  events(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Events returned from the connection.
+    """
+    orderBy: [EventOrder!]
+
+    """
+    Filtering options for Events returned from the connection.
+    """
+    where: EventWhereInput
+  ): EventConnection!
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+}
+"""
+A connection to a list of items.
+"""
+type ExportConnection {
+  """
+  A list of edges.
+  """
+  edges: [ExportEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ExportEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Export
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+ExportExportFormat is enum for the field format
+"""
+enum ExportExportFormat @goModel(model: "github.com/theopenlane/core/pkg/enums.ExportFormat") {
+  CSV
+}
+"""
+ExportExportStatus is enum for the field status
+"""
+enum ExportExportStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ExportStatus") {
+  PENDING
+  FAILED
+  READY
+}
+"""
+ExportExportType is enum for the field export_type
+"""
+enum ExportExportType @goModel(model: "github.com/theopenlane/core/pkg/enums.ExportType") {
+  CONTROL
+}
+"""
+Ordering options for Export connections
+"""
+input ExportOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Exports.
+  """
+  field: ExportOrderField!
+}
+"""
+Properties by which Export connections can be ordered.
+"""
+enum ExportOrderField {
+  created_at
+  updated_at
+  export_type
+  format
+  status
+}
+"""
+ExportWhereInput is used for filtering Export objects.
+Input was generated by ent.
+"""
+input ExportWhereInput {
+  not: ExportWhereInput
+  and: [ExportWhereInput!]
+  or: [ExportWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  export_type field predicates
+  """
+  exportType: ExportExportType
+  exportTypeNEQ: ExportExportType
+  exportTypeIn: [ExportExportType!]
+  exportTypeNotIn: [ExportExportType!]
+  """
+  format field predicates
+  """
+  format: ExportExportFormat
+  formatNEQ: ExportExportFormat
+  formatIn: [ExportExportFormat!]
+  formatNotIn: [ExportExportFormat!]
+  """
+  status field predicates
+  """
+  status: ExportExportStatus
+  statusNEQ: ExportExportStatus
+  statusIn: [ExportExportStatus!]
+  statusNotIn: [ExportExportStatus!]
+  """
+  requestor_id field predicates
+  """
+  requestorID: String
+  requestorIDNEQ: String
+  requestorIDIn: [String!]
+  requestorIDNotIn: [String!]
+  requestorIDGT: String
+  requestorIDGTE: String
+  requestorIDLT: String
+  requestorIDLTE: String
+  requestorIDContains: String
+  requestorIDHasPrefix: String
+  requestorIDHasSuffix: String
+  requestorIDIsNil: Boolean
+  requestorIDNotNil: Boolean
+  requestorIDEqualFold: String
+  requestorIDContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  events edge predicates
+  """
+  hasEvents: Boolean
+  hasEventsWith: [EventWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
+}
 type File implements Node {
   id: ID!
   createdAt: Time
@@ -47955,6 +49650,7 @@ type File implements Node {
     where: EventWhereInput
   ): EventConnection!
   trustCenterSetting: [TrustCenterSetting!]
+  subprocessor: [Subprocessor!]
 }
 """
 A connection to a list of items.
@@ -48832,6 +50528,11 @@ input FileWhereInput {
   """
   hasTrustCenterSetting: Boolean
   hasTrustCenterSettingWith: [TrustCenterSettingWhereInput!]
+  """
+  subprocessor edge predicates
+  """
+  hasSubprocessor: Boolean
+  hasSubprocessorWith: [SubprocessorWhereInput!]
 }
 type Group implements Node {
   id: ID!
@@ -61066,6 +62767,68 @@ type Organization implements Node {
     """
     where: ScanWhereInput
   ): ScanConnection!
+  subprocessors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subprocessors returned from the connection.
+    """
+    orderBy: [SubprocessorOrder!]
+
+    """
+    Filtering options for Subprocessors returned from the connection.
+    """
+    where: SubprocessorWhereInput
+  ): SubprocessorConnection!
+  exports(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Exports returned from the connection.
+    """
+    orderBy: [ExportOrder!]
+
+    """
+    Filtering options for Exports returned from the connection.
+    """
+    where: ExportWhereInput
+  ): ExportConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -62959,6 +64722,16 @@ input OrganizationWhereInput {
   """
   hasScans: Boolean
   hasScansWith: [ScanWhereInput!]
+  """
+  subprocessors edge predicates
+  """
+  hasSubprocessors: Boolean
+  hasSubprocessorsWith: [SubprocessorWhereInput!]
+  """
+  exports edge predicates
+  """
+  hasExports: Boolean
+  hasExportsWith: [ExportWhereInput!]
   """
   members edge predicates
   """
@@ -67386,6 +69159,37 @@ type Query {
     """
     where: EvidenceHistoryWhereInput
   ): EvidenceHistoryConnection!
+  exports(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Exports returned from the connection.
+    """
+    orderBy: [ExportOrder!]
+
+    """
+    Filtering options for Exports returned from the connection.
+    """
+    where: ExportWhereInput
+  ): ExportConnection!
   files(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -69029,6 +70833,68 @@ type Query {
     """
     where: SubcontrolHistoryWhereInput
   ): SubcontrolHistoryConnection!
+  subprocessors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subprocessors returned from the connection.
+    """
+    orderBy: [SubprocessorOrder!]
+
+    """
+    Filtering options for Subprocessors returned from the connection.
+    """
+    where: SubprocessorWhereInput
+  ): SubprocessorConnection!
+  subprocessorHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for SubprocessorHistories returned from the connection.
+    """
+    orderBy: SubprocessorHistoryOrder
+
+    """
+    Filtering options for SubprocessorHistories returned from the connection.
+    """
+    where: SubprocessorHistoryWhereInput
+  ): SubprocessorHistoryConnection!
   subscribers(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -69339,6 +71205,68 @@ type Query {
     """
     where: TrustCenterSettingHistoryWhereInput
   ): TrustCenterSettingHistoryConnection!
+  trustCenterSubprocessors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterSubprocessors returned from the connection.
+    """
+    orderBy: [TrustCenterSubprocessorOrder!]
+
+    """
+    Filtering options for TrustCenterSubprocessors returned from the connection.
+    """
+    where: TrustCenterSubprocessorWhereInput
+  ): TrustCenterSubprocessorConnection!
+  trustCenterSubprocessorHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterSubprocessorHistories returned from the connection.
+    """
+    orderBy: TrustCenterSubprocessorHistoryOrder
+
+    """
+    Filtering options for TrustCenterSubprocessorHistories returned from the connection.
+    """
+    where: TrustCenterSubprocessorHistoryWhereInput
+  ): TrustCenterSubprocessorHistoryConnection!
   users(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -75004,6 +76932,632 @@ input SubcontrolWhereInput {
   hasScheduledJobs: Boolean
   hasScheduledJobsWith: [ControlScheduledJobWhereInput!]
 }
+type Subprocessor implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  name of the standard body
+  """
+  name: String!
+  """
+  description of the subprocessor
+  """
+  description: String
+  """
+  URL of the logo
+  """
+  logoRemoteURL: String
+  """
+  The local logo file id, takes precedence over the logo remote URL
+  """
+  logoLocalFileID: ID
+  owner: Organization
+  files(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Files returned from the connection.
+    """
+    orderBy: [FileOrder!]
+
+    """
+    Filtering options for Files returned from the connection.
+    """
+    where: FileWhereInput
+  ): FileConnection!
+  logoFile: File
+}
+"""
+A connection to a list of items.
+"""
+type SubprocessorConnection {
+  """
+  A list of edges.
+  """
+  edges: [SubprocessorEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type SubprocessorEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Subprocessor
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type SubprocessorHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: SubprocessorHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  name of the standard body
+  """
+  name: String!
+  """
+  description of the subprocessor
+  """
+  description: String
+  """
+  URL of the logo
+  """
+  logoRemoteURL: String
+  """
+  The local logo file id, takes precedence over the logo remote URL
+  """
+  logoLocalFileID: String
+}
+"""
+A connection to a list of items.
+"""
+type SubprocessorHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [SubprocessorHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type SubprocessorHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: SubprocessorHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+SubprocessorHistoryOpType is enum for the field operation
+"""
+enum SubprocessorHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for SubprocessorHistory connections
+"""
+input SubprocessorHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order SubprocessorHistories.
+  """
+  field: SubprocessorHistoryOrderField!
+}
+"""
+Properties by which SubprocessorHistory connections can be ordered.
+"""
+enum SubprocessorHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  name
+}
+"""
+SubprocessorHistoryWhereInput is used for filtering SubprocessorHistory objects.
+Input was generated by ent.
+"""
+input SubprocessorHistoryWhereInput {
+  not: SubprocessorHistoryWhereInput
+  and: [SubprocessorHistoryWhereInput!]
+  or: [SubprocessorHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: SubprocessorHistoryOpType
+  operationNEQ: SubprocessorHistoryOpType
+  operationIn: [SubprocessorHistoryOpType!]
+  operationNotIn: [SubprocessorHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  logo_remote_url field predicates
+  """
+  logoRemoteURL: String
+  logoRemoteURLNEQ: String
+  logoRemoteURLIn: [String!]
+  logoRemoteURLNotIn: [String!]
+  logoRemoteURLGT: String
+  logoRemoteURLGTE: String
+  logoRemoteURLLT: String
+  logoRemoteURLLTE: String
+  logoRemoteURLContains: String
+  logoRemoteURLHasPrefix: String
+  logoRemoteURLHasSuffix: String
+  logoRemoteURLIsNil: Boolean
+  logoRemoteURLNotNil: Boolean
+  logoRemoteURLEqualFold: String
+  logoRemoteURLContainsFold: String
+  """
+  logo_local_file_id field predicates
+  """
+  logoLocalFileID: String
+  logoLocalFileIDNEQ: String
+  logoLocalFileIDIn: [String!]
+  logoLocalFileIDNotIn: [String!]
+  logoLocalFileIDGT: String
+  logoLocalFileIDGTE: String
+  logoLocalFileIDLT: String
+  logoLocalFileIDLTE: String
+  logoLocalFileIDContains: String
+  logoLocalFileIDHasPrefix: String
+  logoLocalFileIDHasSuffix: String
+  logoLocalFileIDIsNil: Boolean
+  logoLocalFileIDNotNil: Boolean
+  logoLocalFileIDEqualFold: String
+  logoLocalFileIDContainsFold: String
+}
+"""
+Ordering options for Subprocessor connections
+"""
+input SubprocessorOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Subprocessors.
+  """
+  field: SubprocessorOrderField!
+}
+"""
+Properties by which Subprocessor connections can be ordered.
+"""
+enum SubprocessorOrderField {
+  created_at
+  updated_at
+  name
+}
+"""
+SubprocessorWhereInput is used for filtering Subprocessor objects.
+Input was generated by ent.
+"""
+input SubprocessorWhereInput {
+  not: SubprocessorWhereInput
+  and: [SubprocessorWhereInput!]
+  or: [SubprocessorWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  logo_remote_url field predicates
+  """
+  logoRemoteURL: String
+  logoRemoteURLNEQ: String
+  logoRemoteURLIn: [String!]
+  logoRemoteURLNotIn: [String!]
+  logoRemoteURLGT: String
+  logoRemoteURLGTE: String
+  logoRemoteURLLT: String
+  logoRemoteURLLTE: String
+  logoRemoteURLContains: String
+  logoRemoteURLHasPrefix: String
+  logoRemoteURLHasSuffix: String
+  logoRemoteURLIsNil: Boolean
+  logoRemoteURLNotNil: Boolean
+  logoRemoteURLEqualFold: String
+  logoRemoteURLContainsFold: String
+  """
+  logo_local_file_id field predicates
+  """
+  logoLocalFileID: ID
+  logoLocalFileIDNEQ: ID
+  logoLocalFileIDIn: [ID!]
+  logoLocalFileIDNotIn: [ID!]
+  logoLocalFileIDGT: ID
+  logoLocalFileIDGTE: ID
+  logoLocalFileIDLT: ID
+  logoLocalFileIDLTE: ID
+  logoLocalFileIDContains: ID
+  logoLocalFileIDHasPrefix: ID
+  logoLocalFileIDHasSuffix: ID
+  logoLocalFileIDIsNil: Boolean
+  logoLocalFileIDNotNil: Boolean
+  logoLocalFileIDEqualFold: ID
+  logoLocalFileIDContainsFold: ID
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
+  """
+  logo_file edge predicates
+  """
+  hasLogoFile: Boolean
+  hasLogoFileWith: [FileWhereInput!]
+}
 type Subscriber implements Node {
   id: ID!
   createdAt: Time
@@ -78504,6 +81058,344 @@ input TrustCenterSettingWhereInput {
   hasFaviconFile: Boolean
   hasFaviconFileWith: [FileWhereInput!]
 }
+type TrustCenterSubprocessor implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+}
+"""
+A connection to a list of items.
+"""
+type TrustCenterSubprocessorConnection {
+  """
+  A list of edges.
+  """
+  edges: [TrustCenterSubprocessorEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type TrustCenterSubprocessorEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: TrustCenterSubprocessor
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type TrustCenterSubprocessorHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: TrustCenterSubprocessorHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+}
+"""
+A connection to a list of items.
+"""
+type TrustCenterSubprocessorHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [TrustCenterSubprocessorHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type TrustCenterSubprocessorHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: TrustCenterSubprocessorHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+TrustCenterSubprocessorHistoryOpType is enum for the field operation
+"""
+enum TrustCenterSubprocessorHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for TrustCenterSubprocessorHistory connections
+"""
+input TrustCenterSubprocessorHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order TrustCenterSubprocessorHistories.
+  """
+  field: TrustCenterSubprocessorHistoryOrderField!
+}
+"""
+Properties by which TrustCenterSubprocessorHistory connections can be ordered.
+"""
+enum TrustCenterSubprocessorHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+}
+"""
+TrustCenterSubprocessorHistoryWhereInput is used for filtering TrustCenterSubprocessorHistory objects.
+Input was generated by ent.
+"""
+input TrustCenterSubprocessorHistoryWhereInput {
+  not: TrustCenterSubprocessorHistoryWhereInput
+  and: [TrustCenterSubprocessorHistoryWhereInput!]
+  or: [TrustCenterSubprocessorHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: TrustCenterSubprocessorHistoryOpType
+  operationNEQ: TrustCenterSubprocessorHistoryOpType
+  operationIn: [TrustCenterSubprocessorHistoryOpType!]
+  operationNotIn: [TrustCenterSubprocessorHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+}
+"""
+Ordering options for TrustCenterSubprocessor connections
+"""
+input TrustCenterSubprocessorOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order TrustCenterSubprocessors.
+  """
+  field: TrustCenterSubprocessorOrderField!
+}
+"""
+Properties by which TrustCenterSubprocessor connections can be ordered.
+"""
+enum TrustCenterSubprocessorOrderField {
+  created_at
+  updated_at
+}
+"""
+TrustCenterSubprocessorWhereInput is used for filtering TrustCenterSubprocessor objects.
+Input was generated by ent.
+"""
+input TrustCenterSubprocessorWhereInput {
+  not: TrustCenterSubprocessorWhereInput
+  and: [TrustCenterSubprocessorWhereInput!]
+  or: [TrustCenterSubprocessorWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+}
 """
 TrustCenterWhereInput is used for filtering TrustCenter objects.
 Input was generated by ent.
@@ -79578,6 +82470,24 @@ input UpdateEvidenceInput {
   clearTasks: Boolean
 }
 """
+UpdateExportInput is used for update Export object.
+Input was generated by ent.
+"""
+input UpdateExportInput {
+  """
+  the status of the export, e.g., pending, ready, failed
+  """
+  status: ExportExportStatus
+  ownerID: ID
+  clearOwner: Boolean
+  addEventIDs: [ID!]
+  removeEventIDs: [ID!]
+  clearEvents: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
+}
+"""
 UpdateFileInput is used for update File object.
 Input was generated by ent.
 """
@@ -79686,6 +82596,9 @@ input UpdateFileInput {
   addTrustCenterSettingIDs: [ID!]
   removeTrustCenterSettingIDs: [ID!]
   clearTrustCenterSetting: Boolean
+  addSubprocessorIDs: [ID!]
+  removeSubprocessorIDs: [ID!]
+  clearSubprocessor: Boolean
 }
 """
 UpdateGroupInput is used for update Group object.
@@ -80490,6 +83403,12 @@ input UpdateOrganizationInput {
   addScanIDs: [ID!]
   removeScanIDs: [ID!]
   clearScans: Boolean
+  addSubprocessorIDs: [ID!]
+  removeSubprocessorIDs: [ID!]
+  clearSubprocessors: Boolean
+  addExportIDs: [ID!]
+  removeExportIDs: [ID!]
+  clearExports: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -81317,6 +84236,39 @@ input UpdateSubcontrolInput {
   clearScheduledJobs: Boolean
 }
 """
+UpdateSubprocessorInput is used for update Subprocessor object.
+Input was generated by ent.
+"""
+input UpdateSubprocessorInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  name of the standard body
+  """
+  name: String
+  """
+  description of the subprocessor
+  """
+  description: String
+  clearDescription: Boolean
+  """
+  URL of the logo
+  """
+  logoRemoteURL: String
+  clearLogoRemoteURL: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
+  logoFileID: ID
+  clearLogoFile: Boolean
+}
+"""
 UpdateSubscriberInput is used for update Subscriber object.
 Input was generated by ent.
 """
@@ -81559,6 +84511,18 @@ input UpdateTrustCenterSettingInput {
   clearLogoFile: Boolean
   faviconFileID: ID
   clearFaviconFile: Boolean
+}
+"""
+UpdateTrustCenterSubprocessorInput is used for update TrustCenterSubprocessor object.
+Input was generated by ent.
+"""
+input UpdateTrustCenterSubprocessorInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
 }
 """
 UpdateUserInput is used for update User object.
@@ -84272,6 +87236,115 @@ type EvidenceBulkCreatePayload {
     """
     evidences: [Evidence!]
 }`, BuiltIn: false},
+	{Name: "../schema/export.graphql", Input: `extend type Query {
+    """
+    Look up export by ID
+    """
+     export(
+        """
+        ID of the export
+        """
+        id: ID!
+    ):  Export!
+}
+
+extend type Mutation{
+    """
+    Create a new export
+    """
+    createExport(
+        """
+        values of the export
+        """
+        input: CreateExportInput!
+    ): ExportCreatePayload!
+    """
+    Update an existing export
+    """
+    updateExport(
+        """
+        ID of the export
+        """
+        id: ID!
+        """
+        New values for the export
+        """
+        input: UpdateExportInput!
+        """
+        Files to attach to the export
+        """
+        exportFiles: [Upload!]
+    ): ExportUpdatePayload!
+    """
+    Delete an existing export
+    """
+    deleteExport(
+        """
+        ID of the export
+        """
+        id: ID!
+    ): ExportDeletePayload!
+    """
+    Delete multiple exports
+    """
+    deleteBulkExport(
+        """
+        IDs of the exports to delete
+        """
+        ids: [ID!]!
+    ): ExportBulkDeletePayload!
+}
+
+"""
+Return response for createExport mutation
+"""
+type ExportCreatePayload {
+    """
+    Created export
+    """
+    export: Export!
+}
+
+"""
+Return response for updateExport mutation
+"""
+type ExportUpdatePayload {
+    """
+    Updated export
+    """
+    export: Export!
+}
+
+"""
+Return response for deleteExport mutation
+"""
+type ExportDeletePayload {
+    """
+    Deleted export ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkExport mutation
+"""
+type ExportBulkCreatePayload {
+    """
+    Created exports
+    """
+    exports: [Export!]
+}
+
+"""
+Return response for deleteBulkExport mutation
+"""
+type ExportBulkDeletePayload {
+    """
+    Deleted export IDs
+    """
+    deletedIDs: [ID!]!
+} 
+`, BuiltIn: false},
 	{Name: "../schema/file.graphql", Input: `extend type Query {
     """
     Look up file by ID
@@ -87983,6 +91056,31 @@ type ScheduledJobBulkCreatePayload {
         last: Int
     ): SubcontrolConnection
     """
+    Search across Subprocessor objects
+    """
+    subprocessorSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): SubprocessorConnection
+    """
     Search across Subscriber objects
     """
     subscriberSearch(
@@ -88082,6 +91180,31 @@ type ScheduledJobBulkCreatePayload {
         """
         last: Int
     ): TrustCenterConnection
+    """
+    Search across TrustCenterSubprocessor objects
+    """
+    trustCenterSubprocessorSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): TrustCenterSubprocessorConnection
     """
     Search across User objects
     """
@@ -88203,10 +91326,12 @@ type SearchResults{
   scheduledJobs: ScheduledJobConnection
   standards: StandardConnection
   subcontrols: SubcontrolConnection
+  subprocessors: SubprocessorConnection
   subscribers: SubscriberConnection
   tasks: TaskConnection
   templates: TemplateConnection
   trustCenters: TrustCenterConnection
+  trustCenterSubprocessors: TrustCenterSubprocessorConnection
   users: UserConnection
   userSettings: UserSettingConnection
   webauthns: WebauthnConnection
@@ -88451,6 +91576,111 @@ type SubcontrolBulkCreatePayload {
     Created subcontrols
     """
     subcontrols: [Subcontrol!]
+}`, BuiltIn: false},
+	{Name: "../schema/subprocessor.graphql", Input: `extend type Query {
+    """
+    Look up subprocessor by ID
+    """
+     subprocessor(
+        """
+        ID of the subprocessor
+        """
+        id: ID!
+    ):  Subprocessor!
+}
+
+extend type Mutation{
+    """
+    Create a new subprocessor
+    """
+    createSubprocessor(
+        """
+        values of the subprocessor
+        """
+        input: CreateSubprocessorInput!
+        logoFile: Upload
+    ): SubprocessorCreatePayload!
+    """
+    Create multiple new subprocessors
+    """
+    createBulkSubprocessor(
+        """
+        values of the subprocessor
+        """
+        input: [CreateSubprocessorInput!]
+    ): SubprocessorBulkCreatePayload!
+    """
+    Create multiple new subprocessors via file upload
+    """
+    createBulkCSVSubprocessor(
+        """
+        csv file containing values of the subprocessor
+        """
+        input: Upload!
+    ): SubprocessorBulkCreatePayload!
+    """
+    Update an existing subprocessor
+    """
+    updateSubprocessor(
+        """
+        ID of the subprocessor
+        """
+        id: ID!
+        """
+        New values for the subprocessor
+        """
+        input: UpdateSubprocessorInput!
+        logoFile: Upload
+    ): SubprocessorUpdatePayload!
+    """
+    Delete an existing subprocessor
+    """
+    deleteSubprocessor(
+        """
+        ID of the subprocessor
+        """
+        id: ID!
+    ): SubprocessorDeletePayload!
+}
+
+"""
+Return response for createSubprocessor mutation
+"""
+type SubprocessorCreatePayload {
+    """
+    Created subprocessor
+    """
+    subprocessor: Subprocessor!
+}
+
+"""
+Return response for updateSubprocessor mutation
+"""
+type SubprocessorUpdatePayload {
+    """
+    Updated subprocessor
+    """
+    subprocessor: Subprocessor!
+}
+
+"""
+Return response for deleteSubprocessor mutation
+"""
+type SubprocessorDeletePayload {
+    """
+    Deleted subprocessor ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkSubprocessor mutation
+"""
+type SubprocessorBulkCreatePayload {
+    """
+    Created subprocessors
+    """
+    subprocessors: [Subprocessor!]
 }`, BuiltIn: false},
 	{Name: "../schema/subscriber.graphql", Input: `extend type Query {
     """
@@ -89009,6 +92239,109 @@ type TrustCenterSettingBulkCreatePayload {
     Created trustCenterSettings
     """
     trustCenterSettings: [TrustCenterSetting!]
+}`, BuiltIn: false},
+	{Name: "../schema/trustcentersubprocessor.graphql", Input: `extend type Query {
+    """
+    Look up trustCenterSubprocessor by ID
+    """
+     trustCenterSubprocessor(
+        """
+        ID of the trustCenterSubprocessor
+        """
+        id: ID!
+    ):  TrustCenterSubprocessor!
+}
+
+extend type Mutation{
+    """
+    Create a new trustCenterSubprocessor
+    """
+    createTrustCenterSubprocessor(
+        """
+        values of the trustCenterSubprocessor
+        """
+        input: CreateTrustCenterSubprocessorInput!
+    ): TrustCenterSubprocessorCreatePayload!
+    """
+    Create multiple new trustCenterSubprocessors
+    """
+    createBulkTrustCenterSubprocessor(
+        """
+        values of the trustCenterSubprocessor
+        """
+        input: [CreateTrustCenterSubprocessorInput!]
+    ): TrustCenterSubprocessorBulkCreatePayload!
+    """
+    Create multiple new trustCenterSubprocessors via file upload
+    """
+    createBulkCSVTrustCenterSubprocessor(
+        """
+        csv file containing values of the trustCenterSubprocessor
+        """
+        input: Upload!
+    ): TrustCenterSubprocessorBulkCreatePayload!
+    """
+    Update an existing trustCenterSubprocessor
+    """
+    updateTrustCenterSubprocessor(
+        """
+        ID of the trustCenterSubprocessor
+        """
+        id: ID!
+        """
+        New values for the trustCenterSubprocessor
+        """
+        input: UpdateTrustCenterSubprocessorInput!
+    ): TrustCenterSubprocessorUpdatePayload!
+    """
+    Delete an existing trustCenterSubprocessor
+    """
+    deleteTrustCenterSubprocessor(
+        """
+        ID of the trustCenterSubprocessor
+        """
+        id: ID!
+    ): TrustCenterSubprocessorDeletePayload!
+}
+
+"""
+Return response for createTrustCenterSubprocessor mutation
+"""
+type TrustCenterSubprocessorCreatePayload {
+    """
+    Created trustCenterSubprocessor
+    """
+    trustCenterSubprocessor: TrustCenterSubprocessor!
+}
+
+"""
+Return response for updateTrustCenterSubprocessor mutation
+"""
+type TrustCenterSubprocessorUpdatePayload {
+    """
+    Updated trustCenterSubprocessor
+    """
+    trustCenterSubprocessor: TrustCenterSubprocessor!
+}
+
+"""
+Return response for deleteTrustCenterSubprocessor mutation
+"""
+type TrustCenterSubprocessorDeletePayload {
+    """
+    Deleted trustCenterSubprocessor ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkTrustCenterSubprocessor mutation
+"""
+type TrustCenterSubprocessorBulkCreatePayload {
+    """
+    Created trustCenterSubprocessors
+    """
+    trustCenterSubprocessors: [TrustCenterSubprocessor!]
 }`, BuiltIn: false},
 	{Name: "../schema/user.graphql", Input: `extend type Query {
     """

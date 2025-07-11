@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware"
 )
@@ -54,6 +55,10 @@ func NewWithConfig(config Config) (echo.MiddlewareFunc, error) {
 		if err := Validate(origins); err != nil {
 			return nil, fmt.Errorf("CORS config for prefix %s is invalid: %w", prefix, err)
 		}
+
+		// temporarily log the origins for debugging purposes, this only happens on startup so won't
+		// log much extra
+		log.Info().Strs("origins", origins).Msgf("CORS enabled for prefix %s", prefix)
 
 		conf := middleware.CORSConfig{
 			AllowOrigins:     origins,

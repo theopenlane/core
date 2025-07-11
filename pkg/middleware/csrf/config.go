@@ -26,6 +26,8 @@ type Config struct {
 	CookieHTTPOnly bool `json:"cookieHttpOnly" koanf:"cookieHttpOnly" default:"false"`
 	// CookieDomain specifies the domain for the CSRF cookie, default to no domain
 	CookieDomain string `json:"cookieDomain" koanf:"cookieDomain" default:""`
+	// CookiePath specifies the path for the CSRF cookie, default to "/"
+	CookiePath string `json:"cookiePath" koanf:"cookiePath" default:"/"`
 }
 
 // NewConfig returns a Config populated with default values.
@@ -37,6 +39,7 @@ func NewConfig() *Config {
 		Secure:         true,
 		SameSite:       "Lax",
 		CookieHTTPOnly: true,
+		CookiePath:     "/",
 	}
 }
 
@@ -66,6 +69,7 @@ func Middleware(conf *Config) echo.MiddlewareFunc {
 		CookieSameSite: parseSameSite(conf.SameSite),
 		Skipper:        csrfSkipperFunc,
 		CookieHTTPOnly: conf.CookieHTTPOnly,
+		CookiePath:     conf.CookiePath,
 	}
 
 	if conf.CookieDomain != "" {
