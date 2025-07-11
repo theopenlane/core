@@ -490,8 +490,7 @@ func updateCustomerOrgSub(ctx context.Context, customer *entitlements.Organizati
 		SetStripeSubscriptionID(customer.StripeSubscriptionID).
 		SetStripeCustomerID(customer.StripeCustomerID).
 		SetStripeSubscriptionStatus(customer.Subscription.Status).
-		SetActive(active).
-		SetStripeProductTierID(customer.Subscription.ProductID)
+		SetActive(active)
 
 	// ensure the correct expiration date is set based on the subscription status
 	// if the subscription is trialing, set the expiration date to the trial end date

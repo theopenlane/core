@@ -55,6 +55,12 @@ func WithDryRun(writer io.Writer) Option {
 	}
 }
 
+var (
+	ErrMissingClients        = fmt.Errorf("missing db or stripe client")
+	ErrMissingSubscriptionID = fmt.Errorf("missing organization subscription ID")
+	ErrMultiplePrices        = fmt.Errorf("multiple prices found for customer")
+)
+
 // New creates a new Reconciler
 func New(opts ...Option) (*Reconciler, error) {
 	r := &Reconciler{}
@@ -63,7 +69,7 @@ func New(opts ...Option) (*Reconciler, error) {
 	}
 
 	if r.db == nil || r.stripe == nil {
-		return nil, fmt.Errorf("missing db or stripe client")
+		return nil, ErrMissingClients
 	}
 
 	if r.dryRun && r.writer == nil {
@@ -160,11 +166,11 @@ func (r *Reconciler) reconcileOrg(ctx context.Context, org *ent.Organization) er
 // updateSubscription updates the organization subscription in the database
 func (r *Reconciler) updateSubscription(ctx context.Context, c *entitlements.OrganizationCustomer) error {
 	if c.OrganizationSubscriptionID == "" {
-		return fmt.Errorf("missing subscription id")
+		return ErrMissingSubscriptionID
 	}
 
 	if len(c.Prices) > 1 {
-		return fmt.Errorf("multiple prices found for customer %s", c.StripeCustomerID)
+		return ErrMultiplePrices
 	}
 
 	productName := ""
@@ -256,7 +262,7 @@ func (r *Reconciler) printRows(rows []actionRow) error {
 		return nil
 	}
 
-	tw := tabwriter.NewWriter(r.writer, 0, 8, 2, ' ', 0)
+	tw := tabwriter.NewWriter(r.writer, 0, 8, 2, ' ', 0) // nolint:mnd
 	fmt.Fprintln(tw, "ORGANIZATION\tACTION")
 	for _, row := range rows {
 		fmt.Fprintf(tw, "%s\t%s\n", row.OrgID, row.Action)

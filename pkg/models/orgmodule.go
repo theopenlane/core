@@ -24,7 +24,7 @@ func (m *OrgModule) UnmarshalText(text []byte) error {
 	*m = OrgModule(text)
 
 	if !m.IsValid() {
-		return fmt.Errorf("invalid OrgModule: %q", text)
+		return fmt.Errorf("invalid OrgModule: %q", text) //nolint:err113
 	}
 
 	return nil
