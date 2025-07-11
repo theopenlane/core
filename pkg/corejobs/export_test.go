@@ -104,6 +104,10 @@ func TestExportContentWorker(t *testing.T) {
 							},
 						},
 					},
+					"pageInfo": map[string]interface{}{
+						"hasNextPage": false,
+						"endCursor":   nil,
+					},
 				},
 			},
 			expectGetExportByID:     true,
@@ -145,6 +149,10 @@ func TestExportContentWorker(t *testing.T) {
 			graphQLResponses: map[string]interface{}{
 				"controls": map[string]interface{}{
 					"edges": []interface{}{},
+					"pageInfo": map[string]interface{}{
+						"hasNextPage": false,
+						"endCursor":   nil,
+					},
 				},
 			},
 			expectGetExportByID:  true,
@@ -173,6 +181,10 @@ func TestExportContentWorker(t *testing.T) {
 								"name": "Control 1",
 							},
 						},
+					},
+					"pageInfo": map[string]interface{}{
+						"hasNextPage": false,
+						"endCursor":   nil,
 					},
 				},
 			},
@@ -206,6 +218,10 @@ func TestExportContentWorker(t *testing.T) {
 								"type": "Document",
 							},
 						},
+					},
+					"pageInfo": map[string]interface{}{
+						"hasNextPage": false,
+						"endCursor":   nil,
 					},
 				},
 			},

@@ -21,6 +21,23 @@ import (
 	"github.com/theopenlane/core/pkg/corejobs/internal/olclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
+)
+
+const (
+	defaultHTTPTimeoutSeconds = 30
+	defaultPageSize           = 2
+)
+
+var (
+	errUnexpectedStatus   = fmt.Errorf("unexpected HTTP status")
+	errGraphQLErrors      = fmt.Errorf("GraphQL query returned errors")
+	errMissingRoot        = fmt.Errorf("missing root in response")
+	errMissingEdges       = fmt.Errorf("missing edges in response")
+	errMissingPageInfo    = fmt.Errorf("missing pageInfo in response")
+	errMissingHasNextPage = fmt.Errorf("missing hasNextPage in pageInfo")
+	errMissingEndCursor   = fmt.Errorf("missing endCursor in pageInfo")
 )
 
 // ExportContentArgs for the worker to process and update the record for the updated content
@@ -84,7 +101,7 @@ func (w *ExportContentWorker) Work(ctx context.Context, job *river.Job[ExportCon
 
 	if w.httpClient == nil {
 		w.httpClient = &http.Client{
-			Timeout: time.Second * 30,
+			Timeout: time.Second * defaultHTTPTimeoutSeconds,
 		}
 	}
 
@@ -101,31 +118,40 @@ func (w *ExportContentWorker) Work(ctx context.Context, job *river.Job[ExportCon
 	}
 
 	exportType := strings.ToLower(export.Export.ExportType.String())
-
+	singular := exportType
+	rootQuery := pluralize.NewClient().Plural(singular)
 	fields := export.Export.Fields
 
-	rootQuery := pluralize.NewClient().Plural(exportType)
-
-	query := w.buildGraphQLQuery(rootQuery, fields, ownerID)
-
-	data, err := w.executeGraphQLQuery(ctx, query)
-	if err != nil {
-		log.Error().Err(err).Msg("failed to execute GraphQL query")
-		return w.updateExportStatus(ctx, job.Args.ExportID, enums.ExportStatusFailed)
+	if len(fields) == 0 {
+		fields = []string{"id"}
 	}
 
-	nodes, err := w.extractNodes(data, rootQuery)
-	if err != nil {
-		log.Error().Err(err).Msg("failed to extract nodes from response")
-		return w.updateExportStatus(ctx, job.Args.ExportID, enums.ExportStatusFailed)
+	query := w.buildGraphQLQuery(rootQuery, singular, fields, ownerID != "")
+
+	var allNodes []map[string]any
+	var after *string
+
+	for {
+		nodes, hasNext, nextCursor, err := w.fetchPage(ctx, query, rootQuery, ownerID, after)
+		if err != nil {
+			return w.updateExportStatus(ctx, job.Args.ExportID, enums.ExportStatusFailed)
+		}
+
+		allNodes = append(allNodes, nodes...)
+
+		if !hasNext {
+			break
+		}
+
+		after = &nextCursor
 	}
 
-	if len(nodes) == 0 {
+	if len(allNodes) == 0 {
 		log.Info().Msg("no data found for export")
 		return w.updateExportStatus(ctx, job.Args.ExportID, enums.ExportStatusNodata)
 	}
 
-	csvData, err := w.marshalToCSV(nodes)
+	csvData, err := w.marshalToCSV(allNodes)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to marshal to CSV")
 		return w.updateExportStatus(ctx, job.Args.ExportID, enums.ExportStatusFailed)
@@ -154,31 +180,79 @@ func (w *ExportContentWorker) Work(ctx context.Context, job *river.Job[ExportCon
 	return nil
 }
 
-func (w *ExportContentWorker) buildGraphQLQuery(root string, fields []string, ownerID string) string {
+// buildGraphQLQuery generates a query that can be used to paginate and fetch all data
+//
+// e.g
+//
+// query GetControls(
+//
+//	$first: Int
+//	$last: Int
+//	$after: Cursor
+//	$before: Cursor
+//	$where: ControlWhereInput
+//	$orderBy: [ControlOrder!]
+//
+//	) {
+//	  controls(
+//	    first: $first
+//	    last: $last
+//	    after: $after
+//	    before: $before
+//	    where: $where
+//	    orderBy: $orderBy
+//	  ) {
+//	    totalCount
+//	    pageInfo {
+//	      startCursor
+//	      endCursor
+//	      hasPreviousPage
+//	      hasNextPage
+//	    }
+//	    edges {
+//	      node {
+//	        id
+//	      }
+//	    }
+//	  }
+//	}
+func (w *ExportContentWorker) buildGraphQLQuery(root string, singular string, fields []string, hasWhere bool) string {
 	if len(fields) == 0 {
 		fields = []string{"id"}
 	}
 
 	fieldStr := strings.Join(fields, "\n        ")
 
-	var whereStr string
-	if ownerID != "" {
-		whereStr = fmt.Sprintf(`(where: {ownerID: "%s"})`, ownerID)
+	var varStr string
+	var argStr string
+	if hasWhere {
+		caser := cases.Title(language.English)
+		whereInputType := caser.String(singular) + "WhereInput"
+		varStr = fmt.Sprintf(", $where: %s!", whereInputType)
+		argStr = ", where: $where"
 	}
 
-	return fmt.Sprintf(`query {
-  %s%s {
+	return fmt.Sprintf(`query ($first: Int, $after: Cursor%s) {
+  %s(first: $first, after: $after%s) {
+    totalCount
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
     edges {
       node {
         %s
       }
     }
   }
-}`, root, whereStr, fieldStr)
+}`, varStr, root, argStr, fieldStr)
 }
 
-func (w *ExportContentWorker) executeGraphQLQuery(ctx context.Context, query string) (map[string]any, error) {
-	body := map[string]string{"query": query}
+func (w *ExportContentWorker) executeGraphQLQuery(ctx context.Context, query string, variables map[string]any) (map[string]any, error) {
+	body := map[string]any{"query": query}
+	if len(variables) > 0 {
+		body["variables"] = variables
+	}
 
 	jsonBody, err := json.Marshal(body)
 	if err != nil {
@@ -201,7 +275,7 @@ func (w *ExportContentWorker) executeGraphQLQuery(ctx context.Context, query str
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status: %d", resp.StatusCode) // nolint:err113
+		return nil, fmt.Errorf("%w: %d", errUnexpectedStatus, resp.StatusCode)
 	}
 
 	respBody, err := io.ReadAll(resp.Body)
@@ -219,36 +293,10 @@ func (w *ExportContentWorker) executeGraphQLQuery(ctx context.Context, query str
 	}
 
 	if len(result.Errors) > 0 {
-		return nil, fmt.Errorf("graphql errors: %v", result.Errors) // nolint:err113
+		return nil, fmt.Errorf("%w: %v", errGraphQLErrors, result.Errors)
 	}
 
 	return result.Data, nil
-}
-
-func (w *ExportContentWorker) extractNodes(data map[string]any, root string) ([]map[string]any, error) {
-	rootData, ok := data[root].(map[string]any)
-	if !ok {
-		return nil, fmt.Errorf("missing root '%s' in response", root) // nolint:err113
-	}
-
-	edges, ok := rootData["edges"].([]any)
-	if !ok {
-		return nil, fmt.Errorf("missing edges in response") // nolint:err113
-	}
-
-	nodes := make([]map[string]any, 0, len(edges))
-	for _, edge := range edges {
-		edgeMap, ok := edge.(map[string]any)
-		if !ok {
-			continue
-		}
-		node, ok := edgeMap["node"].(map[string]any)
-		if ok {
-			nodes = append(nodes, node)
-		}
-	}
-
-	return nodes, nil
 }
 
 func (w *ExportContentWorker) marshalToCSV(nodes []map[string]any) ([]byte, error) {
@@ -320,4 +368,69 @@ func (w *ExportContentWorker) updateExportStatus(ctx context.Context, exportID s
 		Msg("export status updated")
 
 	return nil
+}
+
+func (w *ExportContentWorker) fetchPage(ctx context.Context, query, rootQuery, ownerID string, after *string) ([]map[string]any, bool, string, error) {
+	vars := map[string]any{
+		"first": defaultPageSize,
+	}
+	if after != nil {
+		vars["after"] = *after
+	}
+	if ownerID != "" {
+		vars["where"] = map[string]any{"ownerID": ownerID}
+	}
+
+	data, err := w.executeGraphQLQuery(ctx, query, vars)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to execute GraphQL query")
+		return nil, false, "", err
+	}
+
+	rootData, ok := data[rootQuery].(map[string]any)
+	if !ok {
+		log.Error().Msg("missing root in response")
+		return nil, false, "", errMissingRoot
+	}
+
+	edges, ok := rootData["edges"].([]any)
+	if !ok {
+		log.Error().Msg("missing edges in response")
+		return nil, false, "", errMissingEdges
+	}
+
+	nodes := make([]map[string]any, 0, len(edges))
+	for _, edge := range edges {
+		edgeMap, ok := edge.(map[string]any)
+		if !ok {
+			continue
+		}
+		node, ok := edgeMap["node"].(map[string]any)
+		if ok {
+			nodes = append(nodes, node)
+		}
+	}
+
+	pageInfo, ok := rootData["pageInfo"].(map[string]any)
+	if !ok {
+		log.Error().Msg("missing pageInfo in response")
+		return nil, false, "", errMissingPageInfo
+	}
+
+	hasNext, ok := pageInfo["hasNextPage"].(bool)
+	if !ok {
+		log.Error().Msg("missing hasNextPage in pageInfo")
+		return nil, false, "", errMissingHasNextPage
+	}
+
+	var endCursor string
+	if hasNext {
+		endCursor, ok = pageInfo["endCursor"].(string)
+		if !ok {
+			log.Error().Msg("missing endCursor in pageInfo")
+			return nil, false, "", errMissingEndCursor
+		}
+	}
+
+	return nodes, hasNext, endCursor, nil
 }

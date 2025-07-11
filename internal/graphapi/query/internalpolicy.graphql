@@ -122,8 +122,15 @@ mutation DeleteInternalPolicy($deleteInternalPolicyId: ID!) {
   }
 }
 
-query GetAllInternalPolicies {
-  internalPolicies {
+query GetAllInternalPolicies($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [InternalPolicyOrder!]) {
+  internalPolicies(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
     edges {
       node {
         approvalRequired
@@ -172,8 +179,15 @@ query GetAllInternalPolicies {
   }
 }
 
-query GetInternalPolicies($where: InternalPolicyWhereInput) {
-  internalPolicies(where: $where) {
+query GetInternalPolicies($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: InternalPolicyWhereInput, $orderBy: [InternalPolicyOrder!]) {
+  internalPolicies(first: $first, last: $last, after: $after, before: $before, where: $where, orderBy: $orderBy) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
     edges {
       node {
         approvalRequired

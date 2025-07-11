@@ -143,6 +143,8 @@ func (suite *HandlerTestSuite) createTestSubscriber(t *testing.T, orgID, email, 
 
 	reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
+	err = auth.SetSystemAdminInContext(reqCtx, true)
+
 	// store token in db
 	return suite.db.Subscriber.Create().
 		SetToken(user.EmailVerificationToken.String).

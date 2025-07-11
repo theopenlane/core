@@ -59,6 +59,10 @@ func CheckIsSystemAdmin(ctx context.Context, m ent.Mutation) (bool, error) {
 		return false, err
 	}
 
+	if au.IsSystemAdmin {
+		return true, nil
+	}
+
 	ac := fgax.AccessCheck{
 		ObjectType:  SystemObject,
 		ObjectID:    SystemObjectID,
@@ -76,6 +80,10 @@ func CheckIsSystemAdminWithContext(ctx context.Context) (bool, error) {
 	au, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
 		return false, err
+	}
+
+	if au.IsSystemAdmin {
+		return true, nil
 	}
 
 	ac := fgax.AccessCheck{
