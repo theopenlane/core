@@ -52,7 +52,7 @@ func (r ExportType) MarshalGQL(w io.Writer) {
 func (r *ExportType) UnmarshalGQL(v interface{}) error {
 	str, ok := v.(string)
 	if !ok {
-		return fmt.Errorf("wrong type for ExportType, got: %T", v)  //nolint:err113
+		return fmt.Errorf("wrong type for ExportType, got: %T", v) //nolint:err113
 	}
 
 	*r = ExportType(str)

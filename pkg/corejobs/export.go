@@ -188,7 +188,7 @@ func (w *ExportContentWorker) executeGraphQLQuery(ctx context.Context, query str
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status: %d", resp.StatusCode)
+		return nil, fmt.Errorf("unexpected status: %d", resp.StatusCode) // nolint:err113
 	}
 
 	respBody, err := io.ReadAll(resp.Body)
@@ -206,7 +206,7 @@ func (w *ExportContentWorker) executeGraphQLQuery(ctx context.Context, query str
 	}
 
 	if len(result.Errors) > 0 {
-		return nil, fmt.Errorf("graphql errors: %v", result.Errors)
+		return nil, fmt.Errorf("graphql errors: %v", result.Errors) // nolint:err113
 	}
 
 	return result.Data, nil
@@ -215,12 +215,12 @@ func (w *ExportContentWorker) executeGraphQLQuery(ctx context.Context, query str
 func (w *ExportContentWorker) extractNodes(data map[string]any, root string) ([]map[string]any, error) {
 	rootData, ok := data[root].(map[string]any)
 	if !ok {
-		return nil, fmt.Errorf("missing root '%s' in response", root)
+		return nil, fmt.Errorf("missing root '%s' in response", root) // nolint:err113
 	}
 
 	edges, ok := rootData["edges"].([]any)
 	if !ok {
-		return nil, fmt.Errorf("missing edges in response")
+		return nil, fmt.Errorf("missing edges in response") // nolint:err113
 	}
 
 	nodes := make([]map[string]any, 0, len(edges))
