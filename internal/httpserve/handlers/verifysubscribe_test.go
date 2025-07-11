@@ -16,10 +16,6 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
-	"github.com/theopenlane/utils/ulids"
-
-	"github.com/theopenlane/iam/auth"
-
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
@@ -124,26 +120,19 @@ func (suite *HandlerTestSuite) createTestSubscriber(t *testing.T, orgID, email, 
 	}
 
 	// create token
-	if err := user.CreateVerificationToken(); err != nil {
-		require.NoError(t, err)
-	}
+	err := user.CreateVerificationToken()
+	require.NoError(t, err)
 
 	if ttl != "" {
 		user.EmailVerificationExpires.String = ttl
 	}
 
 	expires, err := time.Parse(time.RFC3339Nano, user.EmailVerificationExpires.String)
-	if err != nil {
-		require.NoError(t, err)
-	}
+	require.NoError(t, err)
 
 	// set privacy allow in order to allow the creation of the users without
 	// authentication in the tests
-	ctx := auth.NewTestContextWithOrgID(ulids.New().String(), orgID)
-
-	reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	err = auth.SetSystemAdminInContext(reqCtx, true)
+	reqCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 
 	// store token in db
 	return suite.db.Subscriber.Create().
