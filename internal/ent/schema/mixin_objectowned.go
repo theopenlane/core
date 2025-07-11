@@ -297,9 +297,9 @@ var defaultTupleUpdateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 }
 
 // skipOrgHookForAdmins checks if the hook should be skipped for the given mutation for system admins
-func (o ObjectOwnedMixin) skipOrgHookForAdmins(ctx context.Context, m ent.Mutation) (bool, error) {
+func (o ObjectOwnedMixin) skipOrgHookForAdmins(ctx context.Context) (bool, error) {
 	if o.AllowEmptyForSystemAdmin {
-		isAdmin, err := rule.CheckIsSystemAdmin(ctx, m)
+		isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 		if err != nil {
 			return false, err
 		}

@@ -251,7 +251,9 @@ func (cihc *ControlImplementationHistoryCreate) Mutation() *ControlImplementatio
 
 // Save creates the ControlImplementationHistory in the database.
 func (cihc *ControlImplementationHistoryCreate) Save(ctx context.Context) (*ControlImplementationHistory, error) {
-	cihc.defaults()
+	if err := cihc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, cihc.sqlSave, cihc.mutation, cihc.hooks)
 }
 
@@ -278,16 +280,25 @@ func (cihc *ControlImplementationHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (cihc *ControlImplementationHistoryCreate) defaults() {
+func (cihc *ControlImplementationHistoryCreate) defaults() error {
 	if _, ok := cihc.mutation.HistoryTime(); !ok {
+		if controlimplementationhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized controlimplementationhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := controlimplementationhistory.DefaultHistoryTime()
 		cihc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := cihc.mutation.CreatedAt(); !ok {
+		if controlimplementationhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized controlimplementationhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := controlimplementationhistory.DefaultCreatedAt()
 		cihc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := cihc.mutation.UpdatedAt(); !ok {
+		if controlimplementationhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized controlimplementationhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := controlimplementationhistory.DefaultUpdatedAt()
 		cihc.mutation.SetUpdatedAt(v)
 	}
@@ -300,9 +311,13 @@ func (cihc *ControlImplementationHistoryCreate) defaults() {
 		cihc.mutation.SetStatus(v)
 	}
 	if _, ok := cihc.mutation.ID(); !ok {
+		if controlimplementationhistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized controlimplementationhistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := controlimplementationhistory.DefaultID()
 		cihc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

@@ -6,6 +6,7 @@ import (
 
 	"github.com/lestrrat-go/httprc/v3"
 	"github.com/lestrrat-go/jwx/v3/jwk"
+	"github.com/redis/go-redis/v9"
 	"github.com/theopenlane/echox/middleware"
 
 	"github.com/theopenlane/iam/sessions"
@@ -47,6 +48,8 @@ type Options struct {
 
 	// Used to check other auth types like personal access tokens
 	DBClient *ent.Client
+	// RedisClient is used to set the permission cache in the context
+	RedisClient *redis.Client
 }
 
 // Reauthenticator generates new access and refresh pair given a valid refresh token.
@@ -251,5 +254,13 @@ func WithDBClient(client *ent.Client) Option {
 func WithCookieConfig(cookieConfig *sessions.CookieConfig) Option {
 	return func(opts *Options) {
 		opts.CookieConfig = cookieConfig
+	}
+}
+
+// WithRedisClient allows the user to specify a Redis client for the auth middleware
+// in order to set the permission cache in the context.
+func WithRedisClient(redisClient *redis.Client) Option {
+	return func(opts *Options) {
+		opts.RedisClient = redisClient
 	}
 }

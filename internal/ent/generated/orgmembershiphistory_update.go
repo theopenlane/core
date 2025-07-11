@@ -85,7 +85,9 @@ func (omhu *OrgMembershipHistoryUpdate) Mutation() *OrgMembershipHistoryMutation
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (omhu *OrgMembershipHistoryUpdate) Save(ctx context.Context) (int, error) {
-	omhu.defaults()
+	if err := omhu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, omhu.sqlSave, omhu.mutation, omhu.hooks)
 }
 
@@ -112,11 +114,15 @@ func (omhu *OrgMembershipHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (omhu *OrgMembershipHistoryUpdate) defaults() {
+func (omhu *OrgMembershipHistoryUpdate) defaults() error {
 	if _, ok := omhu.mutation.UpdatedAt(); !ok && !omhu.mutation.UpdatedAtCleared() {
+		if orgmembershiphistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized orgmembershiphistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := orgmembershiphistory.UpdateDefaultUpdatedAt()
 		omhu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -261,7 +267,9 @@ func (omhuo *OrgMembershipHistoryUpdateOne) Select(field string, fields ...strin
 
 // Save executes the query and returns the updated OrgMembershipHistory entity.
 func (omhuo *OrgMembershipHistoryUpdateOne) Save(ctx context.Context) (*OrgMembershipHistory, error) {
-	omhuo.defaults()
+	if err := omhuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, omhuo.sqlSave, omhuo.mutation, omhuo.hooks)
 }
 
@@ -288,11 +296,15 @@ func (omhuo *OrgMembershipHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (omhuo *OrgMembershipHistoryUpdateOne) defaults() {
+func (omhuo *OrgMembershipHistoryUpdateOne) defaults() error {
 	if _, ok := omhuo.mutation.UpdatedAt(); !ok && !omhuo.mutation.UpdatedAtCleared() {
+		if orgmembershiphistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized orgmembershiphistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := orgmembershiphistory.UpdateDefaultUpdatedAt()
 		omhuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

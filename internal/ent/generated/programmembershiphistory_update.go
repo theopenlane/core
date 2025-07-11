@@ -85,7 +85,9 @@ func (pmhu *ProgramMembershipHistoryUpdate) Mutation() *ProgramMembershipHistory
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (pmhu *ProgramMembershipHistoryUpdate) Save(ctx context.Context) (int, error) {
-	pmhu.defaults()
+	if err := pmhu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, pmhu.sqlSave, pmhu.mutation, pmhu.hooks)
 }
 
@@ -112,11 +114,15 @@ func (pmhu *ProgramMembershipHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (pmhu *ProgramMembershipHistoryUpdate) defaults() {
+func (pmhu *ProgramMembershipHistoryUpdate) defaults() error {
 	if _, ok := pmhu.mutation.UpdatedAt(); !ok && !pmhu.mutation.UpdatedAtCleared() {
+		if programmembershiphistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized programmembershiphistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := programmembershiphistory.UpdateDefaultUpdatedAt()
 		pmhu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -261,7 +267,9 @@ func (pmhuo *ProgramMembershipHistoryUpdateOne) Select(field string, fields ...s
 
 // Save executes the query and returns the updated ProgramMembershipHistory entity.
 func (pmhuo *ProgramMembershipHistoryUpdateOne) Save(ctx context.Context) (*ProgramMembershipHistory, error) {
-	pmhuo.defaults()
+	if err := pmhuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, pmhuo.sqlSave, pmhuo.mutation, pmhuo.hooks)
 }
 
@@ -288,11 +296,15 @@ func (pmhuo *ProgramMembershipHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (pmhuo *ProgramMembershipHistoryUpdateOne) defaults() {
+func (pmhuo *ProgramMembershipHistoryUpdateOne) defaults() error {
 	if _, ok := pmhuo.mutation.UpdatedAt(); !ok && !pmhuo.mutation.UpdatedAtCleared() {
+		if programmembershiphistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized programmembershiphistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := programmembershiphistory.UpdateDefaultUpdatedAt()
 		pmhuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

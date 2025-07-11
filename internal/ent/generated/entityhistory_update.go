@@ -267,7 +267,9 @@ func (ehu *EntityHistoryUpdate) Mutation() *EntityHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (ehu *EntityHistoryUpdate) Save(ctx context.Context) (int, error) {
-	ehu.defaults()
+	if err := ehu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, ehu.sqlSave, ehu.mutation, ehu.hooks)
 }
 
@@ -294,11 +296,15 @@ func (ehu *EntityHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ehu *EntityHistoryUpdate) defaults() {
+func (ehu *EntityHistoryUpdate) defaults() error {
 	if _, ok := ehu.mutation.UpdatedAt(); !ok && !ehu.mutation.UpdatedAtCleared() {
+		if entityhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized entityhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := entityhistory.UpdateDefaultUpdatedAt()
 		ehu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -679,7 +685,9 @@ func (ehuo *EntityHistoryUpdateOne) Select(field string, fields ...string) *Enti
 
 // Save executes the query and returns the updated EntityHistory entity.
 func (ehuo *EntityHistoryUpdateOne) Save(ctx context.Context) (*EntityHistory, error) {
-	ehuo.defaults()
+	if err := ehuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, ehuo.sqlSave, ehuo.mutation, ehuo.hooks)
 }
 
@@ -706,11 +714,15 @@ func (ehuo *EntityHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ehuo *EntityHistoryUpdateOne) defaults() {
+func (ehuo *EntityHistoryUpdateOne) defaults() error {
 	if _, ok := ehuo.mutation.UpdatedAt(); !ok && !ehuo.mutation.UpdatedAtCleared() {
+		if entityhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized entityhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := entityhistory.UpdateDefaultUpdatedAt()
 		ehuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.

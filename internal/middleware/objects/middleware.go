@@ -78,7 +78,7 @@ func Upload(ctx context.Context, u *objects.Objects, files []objects.FileUpload)
 			return nil, err
 		}
 
-		log.Info().Str("file", fileData.UploadedFileName).
+		log.Debug().Str("file", fileData.UploadedFileName).
 			Str("id", fileData.FolderDestination).
 			Str("mime_type", fileData.MimeType).
 			Str("size", objects.FormatFileSize(fileData.Size)).

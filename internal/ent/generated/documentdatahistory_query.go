@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -331,6 +332,12 @@ func (ddhq *DocumentDataHistoryQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		ddhq.sql = prev
+	}
+	if documentdatahistory.Policy == nil {
+		return errors.New("generated: uninitialized documentdatahistory.Policy (forgotten import generated/runtime?)")
+	}
+	if err := documentdatahistory.Policy.EvalQuery(ctx, ddhq); err != nil {
+		return err
 	}
 	return nil
 }

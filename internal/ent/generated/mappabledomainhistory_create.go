@@ -178,7 +178,9 @@ func (mdhc *MappableDomainHistoryCreate) Mutation() *MappableDomainHistoryMutati
 
 // Save creates the MappableDomainHistory in the database.
 func (mdhc *MappableDomainHistoryCreate) Save(ctx context.Context) (*MappableDomainHistory, error) {
-	mdhc.defaults()
+	if err := mdhc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, mdhc.sqlSave, mdhc.mutation, mdhc.hooks)
 }
 
@@ -205,16 +207,25 @@ func (mdhc *MappableDomainHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (mdhc *MappableDomainHistoryCreate) defaults() {
+func (mdhc *MappableDomainHistoryCreate) defaults() error {
 	if _, ok := mdhc.mutation.HistoryTime(); !ok {
+		if mappabledomainhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized mappabledomainhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := mappabledomainhistory.DefaultHistoryTime()
 		mdhc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := mdhc.mutation.CreatedAt(); !ok {
+		if mappabledomainhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized mappabledomainhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := mappabledomainhistory.DefaultCreatedAt()
 		mdhc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := mdhc.mutation.UpdatedAt(); !ok {
+		if mappabledomainhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized mappabledomainhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := mappabledomainhistory.DefaultUpdatedAt()
 		mdhc.mutation.SetUpdatedAt(v)
 	}
@@ -223,9 +234,13 @@ func (mdhc *MappableDomainHistoryCreate) defaults() {
 		mdhc.mutation.SetTags(v)
 	}
 	if _, ok := mdhc.mutation.ID(); !ok {
+		if mappabledomainhistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized mappabledomainhistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := mappabledomainhistory.DefaultID()
 		mdhc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

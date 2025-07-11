@@ -20,21 +20,21 @@ func (suite *HookTestSuite) TestSetNewRevision() {
 	// Create a system admin user (needed right now for standards until we allow other users to create them and we aren't testing permissions here)
 	testUser := suite.seedSystemAdmin()
 	orgID := testUser.Edges.OrgMemberships[0].ID
-	ctx := auth.NewTestContextWithOrgID(testUser.ID, orgID)
+	ctx := auth.NewTestContextForSystemAdmin(testUser.ID, orgID)
 
 	// add the client to the context for hooks
 	ctx = generated.NewContext(ctx, suite.client)
 
-	patchCtx := auth.NewTestContextWithOrgID(testUser.ID, orgID)
+	patchCtx := auth.NewTestContextForSystemAdmin(testUser.ID, orgID)
 	models.WithVersionBumpRequestContext(patchCtx, &models.Patch)
 
-	minorCtx := auth.NewTestContextWithOrgID(testUser.ID, orgID)
+	minorCtx := auth.NewTestContextForSystemAdmin(testUser.ID, orgID)
 	models.WithVersionBumpRequestContext(minorCtx, &models.Minor)
 
-	majorCtx := auth.NewTestContextWithOrgID(testUser.ID, orgID)
+	majorCtx := auth.NewTestContextForSystemAdmin(testUser.ID, orgID)
 	models.WithVersionBumpRequestContext(majorCtx, &models.Major)
 
-	draftCtx := auth.NewTestContextWithOrgID(testUser.ID, orgID)
+	draftCtx := auth.NewTestContextForSystemAdmin(testUser.ID, orgID)
 	models.WithVersionBumpRequestContext(draftCtx, &models.PreRelease)
 
 	tests := []struct {
@@ -81,7 +81,7 @@ func (suite *HookTestSuite) TestSetNewRevision() {
 
 				update := suite.client.Standard.UpdateOne(std)
 
-				_, err = update.Save(patchCtx)
+				err = update.Exec(patchCtx)
 				require.NoError(t, err)
 
 				return update.Mutation()
@@ -98,7 +98,7 @@ func (suite *HookTestSuite) TestSetNewRevision() {
 
 				update := suite.client.Standard.UpdateOne(std)
 
-				_, err = update.Save(majorCtx)
+				err = update.Exec(majorCtx)
 				require.NoError(t, err)
 
 				return update.Mutation()
@@ -115,7 +115,7 @@ func (suite *HookTestSuite) TestSetNewRevision() {
 
 				update := suite.client.Standard.UpdateOne(std)
 
-				_, err = update.Save(minorCtx)
+				err = update.Exec(minorCtx)
 				require.NoError(t, err)
 
 				return update.Mutation()
@@ -132,7 +132,7 @@ func (suite *HookTestSuite) TestSetNewRevision() {
 
 				update := suite.client.Standard.UpdateOne(std)
 
-				_, err = update.Save(draftCtx)
+				err = update.Exec(draftCtx)
 				require.NoError(t, err)
 
 				return update.Mutation()

@@ -149,7 +149,9 @@ func (ddhu *DocumentDataHistoryUpdate) Mutation() *DocumentDataHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (ddhu *DocumentDataHistoryUpdate) Save(ctx context.Context) (int, error) {
-	ddhu.defaults()
+	if err := ddhu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, ddhu.sqlSave, ddhu.mutation, ddhu.hooks)
 }
 
@@ -176,11 +178,15 @@ func (ddhu *DocumentDataHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ddhu *DocumentDataHistoryUpdate) defaults() {
+func (ddhu *DocumentDataHistoryUpdate) defaults() error {
 	if _, ok := ddhu.mutation.UpdatedAt(); !ok && !ddhu.mutation.UpdatedAtCleared() {
+		if documentdatahistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized documentdatahistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := documentdatahistory.UpdateDefaultUpdatedAt()
 		ddhu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -405,7 +411,9 @@ func (ddhuo *DocumentDataHistoryUpdateOne) Select(field string, fields ...string
 
 // Save executes the query and returns the updated DocumentDataHistory entity.
 func (ddhuo *DocumentDataHistoryUpdateOne) Save(ctx context.Context) (*DocumentDataHistory, error) {
-	ddhuo.defaults()
+	if err := ddhuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, ddhuo.sqlSave, ddhuo.mutation, ddhuo.hooks)
 }
 
@@ -432,11 +440,15 @@ func (ddhuo *DocumentDataHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ddhuo *DocumentDataHistoryUpdateOne) defaults() {
+func (ddhuo *DocumentDataHistoryUpdateOne) defaults() error {
 	if _, ok := ddhuo.mutation.UpdatedAt(); !ok && !ddhuo.mutation.UpdatedAtCleared() {
+		if documentdatahistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized documentdatahistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := documentdatahistory.UpdateDefaultUpdatedAt()
 		ddhuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.

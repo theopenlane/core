@@ -45,7 +45,7 @@ func (h *Handler) ValidateTOTP(ctx echo.Context) error {
 	}
 
 	if user.Edges.TfaSettings == nil || len(user.Edges.TfaSettings) != 1 || user.Edges.TfaSettings[0].TfaSecret == nil {
-		log.Warn().Msg("tfa validation request but user has no TFA settings")
+		log.Info().Msg("tfa validation request but user has no TFA settings")
 
 		return h.InvalidInput(ctx, err)
 	}

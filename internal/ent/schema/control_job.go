@@ -7,7 +7,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/models"
@@ -131,9 +130,6 @@ func (ControlScheduledJob) Interceptors() []ent.Interceptor {
 // Policy of the ControlScheduledJob
 func (ControlScheduledJob) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			privacy.AlwaysAllowRule(),
-		),
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),

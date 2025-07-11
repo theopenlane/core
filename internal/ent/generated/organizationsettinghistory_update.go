@@ -475,7 +475,9 @@ func (oshu *OrganizationSettingHistoryUpdate) Mutation() *OrganizationSettingHis
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (oshu *OrganizationSettingHistoryUpdate) Save(ctx context.Context) (int, error) {
-	oshu.defaults()
+	if err := oshu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, oshu.sqlSave, oshu.mutation, oshu.hooks)
 }
 
@@ -502,11 +504,15 @@ func (oshu *OrganizationSettingHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (oshu *OrganizationSettingHistoryUpdate) defaults() {
+func (oshu *OrganizationSettingHistoryUpdate) defaults() error {
 	if _, ok := oshu.mutation.UpdatedAt(); !ok && !oshu.mutation.UpdatedAtCleared() {
+		if organizationsettinghistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized organizationsettinghistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := organizationsettinghistory.UpdateDefaultUpdatedAt()
 		oshu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -1176,7 +1182,9 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) Select(field string, fields ..
 
 // Save executes the query and returns the updated OrganizationSettingHistory entity.
 func (oshuo *OrganizationSettingHistoryUpdateOne) Save(ctx context.Context) (*OrganizationSettingHistory, error) {
-	oshuo.defaults()
+	if err := oshuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, oshuo.sqlSave, oshuo.mutation, oshuo.hooks)
 }
 
@@ -1203,11 +1211,15 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (oshuo *OrganizationSettingHistoryUpdateOne) defaults() {
+func (oshuo *OrganizationSettingHistoryUpdateOne) defaults() error {
 	if _, ok := oshuo.mutation.UpdatedAt(); !ok && !oshuo.mutation.UpdatedAtCleared() {
+		if organizationsettinghistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized organizationsettinghistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := organizationsettinghistory.UpdateDefaultUpdatedAt()
 		oshuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

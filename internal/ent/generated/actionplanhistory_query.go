@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -331,6 +332,12 @@ func (aphq *ActionPlanHistoryQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		aphq.sql = prev
+	}
+	if actionplanhistory.Policy == nil {
+		return errors.New("generated: uninitialized actionplanhistory.Policy (forgotten import generated/runtime?)")
+	}
+	if err := actionplanhistory.Policy.EvalQuery(ctx, aphq); err != nil {
+		return err
 	}
 	return nil
 }

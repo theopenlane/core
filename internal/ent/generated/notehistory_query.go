@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -331,6 +332,12 @@ func (nhq *NoteHistoryQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		nhq.sql = prev
+	}
+	if notehistory.Policy == nil {
+		return errors.New("generated: uninitialized notehistory.Policy (forgotten import generated/runtime?)")
+	}
+	if err := notehistory.Policy.EvalQuery(ctx, nhq); err != nil {
+		return err
 	}
 	return nil
 }

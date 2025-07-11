@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/theopenlane/core/internal/ent/interceptors"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 )
@@ -92,6 +93,16 @@ func (StandardHistory) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("history_time"),
 	}
+}
+
+// Policy of the StandardHistory.
+// ensure history.AllowIfHistoryRequest() is already added to the base policy
+func (StandardHistory) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithMutationRules(
+			history.AllowIfHistoryRequest(),
+		),
+	)
 }
 
 // Interceptors of the StandardHistory

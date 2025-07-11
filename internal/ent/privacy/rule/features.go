@@ -12,8 +12,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/pkg/catalog/features"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
+	"github.com/theopenlane/core/pkg/permissioncache"
 )
 
 // HasFeature reports whether the current organization has the given feature enabled
@@ -48,8 +48,8 @@ func orgFeatures(ctx context.Context) ([]string, error) {
 		return nil, nil
 	}
 
-	if cache, ok := features.CacheFromContext(ctx); ok {
-		feats, err := cache.Get(ctx, au.OrganizationID)
+	if cache, ok := permissioncache.CacheFromContext(ctx); ok {
+		feats, err := cache.GetFeatures(ctx, au.OrganizationID)
 		if err != nil {
 			log.Err(err).Msg("failed to get feature cache")
 		} else if len(feats) > 0 {
@@ -104,8 +104,8 @@ func orgFeatures(ctx context.Context) ([]string, error) {
 		}
 	}
 
-	if cache, ok := features.CacheFromContext(ctx); ok {
-		if err := cache.Set(ctx, au.OrganizationID, feats); err != nil {
+	if cache, ok := permissioncache.CacheFromContext(ctx); ok {
+		if err := cache.SetFeatures(ctx, au.OrganizationID, feats); err != nil {
 			log.Err(err).Msg("failed to set feature cache")
 		}
 	}

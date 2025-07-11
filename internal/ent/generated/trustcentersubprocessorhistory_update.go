@@ -129,7 +129,9 @@ func (tcshu *TrustCenterSubprocessorHistoryUpdate) Mutation() *TrustCenterSubpro
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (tcshu *TrustCenterSubprocessorHistoryUpdate) Save(ctx context.Context) (int, error) {
-	tcshu.defaults()
+	if err := tcshu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, tcshu.sqlSave, tcshu.mutation, tcshu.hooks)
 }
 
@@ -156,11 +158,15 @@ func (tcshu *TrustCenterSubprocessorHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (tcshu *TrustCenterSubprocessorHistoryUpdate) defaults() {
+func (tcshu *TrustCenterSubprocessorHistoryUpdate) defaults() error {
 	if _, ok := tcshu.mutation.UpdatedAt(); !ok && !tcshu.mutation.UpdatedAtCleared() {
+		if trustcentersubprocessorhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized trustcentersubprocessorhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := trustcentersubprocessorhistory.UpdateDefaultUpdatedAt()
 		tcshu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -356,7 +362,9 @@ func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) Select(field string, fiel
 
 // Save executes the query and returns the updated TrustCenterSubprocessorHistory entity.
 func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) Save(ctx context.Context) (*TrustCenterSubprocessorHistory, error) {
-	tcshuo.defaults()
+	if err := tcshuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, tcshuo.sqlSave, tcshuo.mutation, tcshuo.hooks)
 }
 
@@ -383,11 +391,15 @@ func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) ExecX(ctx context.Context
 }
 
 // defaults sets the default values of the builder before save.
-func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) defaults() {
+func (tcshuo *TrustCenterSubprocessorHistoryUpdateOne) defaults() error {
 	if _, ok := tcshuo.mutation.UpdatedAt(); !ok && !tcshuo.mutation.UpdatedAtCleared() {
+		if trustcentersubprocessorhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized trustcentersubprocessorhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := trustcentersubprocessorhistory.UpdateDefaultUpdatedAt()
 		tcshuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.

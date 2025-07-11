@@ -186,7 +186,9 @@ func (ethc *EntityTypeHistoryCreate) Mutation() *EntityTypeHistoryMutation {
 
 // Save creates the EntityTypeHistory in the database.
 func (ethc *EntityTypeHistoryCreate) Save(ctx context.Context) (*EntityTypeHistory, error) {
-	ethc.defaults()
+	if err := ethc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, ethc.sqlSave, ethc.mutation, ethc.hooks)
 }
 
@@ -213,16 +215,25 @@ func (ethc *EntityTypeHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ethc *EntityTypeHistoryCreate) defaults() {
+func (ethc *EntityTypeHistoryCreate) defaults() error {
 	if _, ok := ethc.mutation.HistoryTime(); !ok {
+		if entitytypehistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized entitytypehistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := entitytypehistory.DefaultHistoryTime()
 		ethc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := ethc.mutation.CreatedAt(); !ok {
+		if entitytypehistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized entitytypehistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := entitytypehistory.DefaultCreatedAt()
 		ethc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := ethc.mutation.UpdatedAt(); !ok {
+		if entitytypehistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized entitytypehistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := entitytypehistory.DefaultUpdatedAt()
 		ethc.mutation.SetUpdatedAt(v)
 	}
@@ -231,9 +242,13 @@ func (ethc *EntityTypeHistoryCreate) defaults() {
 		ethc.mutation.SetTags(v)
 	}
 	if _, ok := ethc.mutation.ID(); !ok {
+		if entitytypehistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized entitytypehistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := entitytypehistory.DefaultID()
 		ethc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

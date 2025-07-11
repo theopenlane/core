@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -269,10 +268,6 @@ func (User) Annotations() []schema.Annotation {
 // Policy of the User
 func (User) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			// interceptors are setup to filter users outside of the organization
-			privacy.AlwaysAllowRule(),
-		),
 		policy.WithOnMutationRules(
 			// the user hook has update operations on user create so we need to allow email
 			// token sign up for update operations as well

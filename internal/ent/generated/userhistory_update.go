@@ -356,7 +356,9 @@ func (uhu *UserHistoryUpdate) Mutation() *UserHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (uhu *UserHistoryUpdate) Save(ctx context.Context) (int, error) {
-	uhu.defaults()
+	if err := uhu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, uhu.sqlSave, uhu.mutation, uhu.hooks)
 }
 
@@ -383,19 +385,29 @@ func (uhu *UserHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (uhu *UserHistoryUpdate) defaults() {
+func (uhu *UserHistoryUpdate) defaults() error {
 	if _, ok := uhu.mutation.UpdatedAt(); !ok && !uhu.mutation.UpdatedAtCleared() {
+		if userhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized userhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := userhistory.UpdateDefaultUpdatedAt()
 		uhu.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := uhu.mutation.AvatarUpdatedAt(); !ok && !uhu.mutation.AvatarUpdatedAtCleared() {
+		if userhistory.UpdateDefaultAvatarUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized userhistory.UpdateDefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := userhistory.UpdateDefaultAvatarUpdatedAt()
 		uhu.mutation.SetAvatarUpdatedAt(v)
 	}
 	if _, ok := uhu.mutation.LastSeen(); !ok && !uhu.mutation.LastSeenCleared() {
+		if userhistory.UpdateDefaultLastSeen == nil {
+			return fmt.Errorf("generated: uninitialized userhistory.UpdateDefaultLastSeen (forgotten import generated/runtime?)")
+		}
 		v := userhistory.UpdateDefaultLastSeen()
 		uhu.mutation.SetLastSeen(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -909,7 +921,9 @@ func (uhuo *UserHistoryUpdateOne) Select(field string, fields ...string) *UserHi
 
 // Save executes the query and returns the updated UserHistory entity.
 func (uhuo *UserHistoryUpdateOne) Save(ctx context.Context) (*UserHistory, error) {
-	uhuo.defaults()
+	if err := uhuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, uhuo.sqlSave, uhuo.mutation, uhuo.hooks)
 }
 
@@ -936,19 +950,29 @@ func (uhuo *UserHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (uhuo *UserHistoryUpdateOne) defaults() {
+func (uhuo *UserHistoryUpdateOne) defaults() error {
 	if _, ok := uhuo.mutation.UpdatedAt(); !ok && !uhuo.mutation.UpdatedAtCleared() {
+		if userhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized userhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := userhistory.UpdateDefaultUpdatedAt()
 		uhuo.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := uhuo.mutation.AvatarUpdatedAt(); !ok && !uhuo.mutation.AvatarUpdatedAtCleared() {
+		if userhistory.UpdateDefaultAvatarUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized userhistory.UpdateDefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := userhistory.UpdateDefaultAvatarUpdatedAt()
 		uhuo.mutation.SetAvatarUpdatedAt(v)
 	}
 	if _, ok := uhuo.mutation.LastSeen(); !ok && !uhuo.mutation.LastSeenCleared() {
+		if userhistory.UpdateDefaultLastSeen == nil {
+			return fmt.Errorf("generated: uninitialized userhistory.UpdateDefaultLastSeen (forgotten import generated/runtime?)")
+		}
 		v := userhistory.UpdateDefaultLastSeen()
 		uhuo.mutation.SetLastSeen(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

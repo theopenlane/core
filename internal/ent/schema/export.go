@@ -103,7 +103,6 @@ func (Export) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			rule.AllowQueryIfSystemAdmin(),
-			privacy.AlwaysAllowRule(),
 		),
 		policy.WithOnMutationRules(ent.OpCreate,
 			privacy.AlwaysAllowRule(),

@@ -9,7 +9,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx"
@@ -148,9 +147,6 @@ func (JobResult) Interceptors() []ent.Interceptor {
 // Policy of the JobResult
 func (JobResult) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
-		),
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
 			// entfga.CheckEditAccess[*generated.JobResultMutation](),

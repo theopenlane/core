@@ -305,7 +305,9 @@ func (ehc *EvidenceHistoryCreate) Mutation() *EvidenceHistoryMutation {
 
 // Save creates the EvidenceHistory in the database.
 func (ehc *EvidenceHistoryCreate) Save(ctx context.Context) (*EvidenceHistory, error) {
-	ehc.defaults()
+	if err := ehc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, ehc.sqlSave, ehc.mutation, ehc.hooks)
 }
 
@@ -332,16 +334,25 @@ func (ehc *EvidenceHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ehc *EvidenceHistoryCreate) defaults() {
+func (ehc *EvidenceHistoryCreate) defaults() error {
 	if _, ok := ehc.mutation.HistoryTime(); !ok {
+		if evidencehistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized evidencehistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := evidencehistory.DefaultHistoryTime()
 		ehc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := ehc.mutation.CreatedAt(); !ok {
+		if evidencehistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized evidencehistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := evidencehistory.DefaultCreatedAt()
 		ehc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := ehc.mutation.UpdatedAt(); !ok {
+		if evidencehistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized evidencehistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := evidencehistory.DefaultUpdatedAt()
 		ehc.mutation.SetUpdatedAt(v)
 	}
@@ -350,6 +361,9 @@ func (ehc *EvidenceHistoryCreate) defaults() {
 		ehc.mutation.SetTags(v)
 	}
 	if _, ok := ehc.mutation.CreationDate(); !ok {
+		if evidencehistory.DefaultCreationDate == nil {
+			return fmt.Errorf("generated: uninitialized evidencehistory.DefaultCreationDate (forgotten import generated/runtime?)")
+		}
 		v := evidencehistory.DefaultCreationDate()
 		ehc.mutation.SetCreationDate(v)
 	}
@@ -366,9 +380,13 @@ func (ehc *EvidenceHistoryCreate) defaults() {
 		ehc.mutation.SetStatus(v)
 	}
 	if _, ok := ehc.mutation.ID(); !ok {
+		if evidencehistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized evidencehistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := evidencehistory.DefaultID()
 		ehc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

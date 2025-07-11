@@ -129,7 +129,9 @@ func (mdhu *MappableDomainHistoryUpdate) Mutation() *MappableDomainHistoryMutati
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (mdhu *MappableDomainHistoryUpdate) Save(ctx context.Context) (int, error) {
-	mdhu.defaults()
+	if err := mdhu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, mdhu.sqlSave, mdhu.mutation, mdhu.hooks)
 }
 
@@ -156,11 +158,15 @@ func (mdhu *MappableDomainHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (mdhu *MappableDomainHistoryUpdate) defaults() {
+func (mdhu *MappableDomainHistoryUpdate) defaults() error {
 	if _, ok := mdhu.mutation.UpdatedAt(); !ok && !mdhu.mutation.UpdatedAtCleared() {
+		if mappabledomainhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized mappabledomainhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := mappabledomainhistory.UpdateDefaultUpdatedAt()
 		mdhu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -356,7 +362,9 @@ func (mdhuo *MappableDomainHistoryUpdateOne) Select(field string, fields ...stri
 
 // Save executes the query and returns the updated MappableDomainHistory entity.
 func (mdhuo *MappableDomainHistoryUpdateOne) Save(ctx context.Context) (*MappableDomainHistory, error) {
-	mdhuo.defaults()
+	if err := mdhuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, mdhuo.sqlSave, mdhuo.mutation, mdhuo.hooks)
 }
 
@@ -383,11 +391,15 @@ func (mdhuo *MappableDomainHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (mdhuo *MappableDomainHistoryUpdateOne) defaults() {
+func (mdhuo *MappableDomainHistoryUpdateOne) defaults() error {
 	if _, ok := mdhuo.mutation.UpdatedAt(); !ok && !mdhuo.mutation.UpdatedAtCleared() {
+		if mappabledomainhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized mappabledomainhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := mappabledomainhistory.UpdateDefaultUpdatedAt()
 		mdhuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.

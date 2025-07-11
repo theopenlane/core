@@ -3,6 +3,7 @@ package rule
 import (
 	"context"
 	"errors"
+	"slices"
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
@@ -13,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/permissioncache"
 )
 
 // genericMutation is an interface for getting a mutation ID and type
@@ -37,6 +39,11 @@ func CheckCurrentOrgAccess(ctx context.Context, m ent.Mutation, relation string)
 
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err == nil {
+		if relation == fgax.CanView {
+			// if the relation is view, we can skip the check
+			return privacy.Allow
+		}
+
 		return checkOrgAccess(ctx, relation, orgID)
 	}
 
@@ -93,11 +100,24 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 		return nil
 	}
 
-	log.Debug().Str("relation", relation).Msg("checking access to organization")
-
 	au, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
 		return err
+	}
+
+	if slices.Contains(au.OrganizationIDs, organizationID) && relation == fgax.CanView {
+		log.Debug().Str("relation", relation).Msg("access allowed for organization based on user's orgs")
+
+		return privacy.Allow
+	}
+
+	// check the cache first
+	if cache, ok := permissioncache.CacheFromContext(ctx); ok {
+		if hasRole, err := cache.HasRole(ctx, au.SubjectID, organizationID, relation); err == nil && hasRole {
+			log.Debug().Str("relation", relation).Msg("access allowed for organization based on cache")
+
+			return privacy.Allow
+		}
 	}
 
 	ac := fgax.AccessCheck{
@@ -115,7 +135,21 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 	}
 
 	if access {
-		log.Debug().Str("relation", relation).Msg("access allowed for organization")
+		log.Debug().Str("relation", relation).Msg("access allowed for organization based on fga")
+
+		// add the org id to the context so that it can be used later
+		// this is useful to prevent multiple checks for the same organization
+		// for things like the org switcher in the UI
+		err = auth.AddOrganizationIDToContext(ctx, organizationID)
+		if err != nil {
+			log.Debug().Err(err).Msg("failed to add organization ID to context")
+		}
+
+		if cache, ok := permissioncache.CacheFromContext(ctx); ok {
+			if err := cache.SetRole(ctx, au.SubjectID, organizationID, relation); err != nil {
+				log.Err(err).Msg("failed to set role cache")
+			}
+		}
 
 		return privacy.Allow
 	}
@@ -137,6 +171,15 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 		user, err := auth.GetAuthenticatedUserFromContext(ctx)
 		if err != nil {
 			return err
+		}
+
+		// check the cache first
+		if cache, ok := permissioncache.CacheFromContext(ctx); ok {
+			if hasRole, err := cache.HasRole(ctx, user.SubjectID, user.OrganizationID, relation); err == nil && hasRole {
+				log.Debug().Str("relation", relation).Msg("access allowed for organization based on cache")
+
+				return privacy.Allow
+			}
 		}
 
 		ac := fgax.AccessCheck{
@@ -180,7 +223,7 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 			return privacy.Denyf("missing organization ID information in context")
 		}
 
-		log.Info().Str("relation", relation).
+		log.Debug().Str("relation", relation).
 			Str("organization_id", oID).
 			Msg("checking relationship tuples")
 
@@ -196,6 +239,12 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 			log.Debug().Str("relation", relation).
 				Str("organization_id", oID).
 				Msg("access allowed")
+
+			if cache, ok := permissioncache.CacheFromContext(ctx); ok {
+				if err := cache.SetRole(ctx, user.SubjectID, oID, relation); err != nil {
+					log.Err(err).Msg("failed to set role cache")
+				}
+			}
 
 			return privacy.Allow
 		}

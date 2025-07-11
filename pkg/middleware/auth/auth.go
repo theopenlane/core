@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/tokens"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -25,7 +26,18 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	api "github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/pkg/permissioncache"
 	sso "github.com/theopenlane/core/pkg/ssoutils"
+)
+
+// These are stored here, instead of iam because they are specific
+// to the openlane core service setup, other services could define different object
+// type and ids in particular
+const (
+	// SystemObject type for FGA authorization
+	SystemObject = "system"
+	// SystemObjectID for FGA authorization
+	SystemObjectID = "openlane_core"
 )
 
 // SessionSkipperFunc is the function that determines if the session check should be skipped
@@ -114,6 +126,10 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 			}
 
 			auth.SetAuthenticatedUserContext(c, au)
+
+			if conf.RedisClient != nil {
+				permissioncache.SetCacheContext(c, conf.RedisClient)
+			}
 
 			// add the user and org ID to the logger context
 			zerolog.Ctx(reqCtx).UpdateContext(func(c zerolog.Context) zerolog.Context {
@@ -215,10 +231,7 @@ func createAuthenticatedUserFromClaims(ctx context.Context, dbClient *ent.Client
 		return nil, err
 	}
 
-	// all the query to get the organization, need to bypass the authz filter to get the org
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	org, err := dbClient.Organization.Get(ctx, claims.OrgID)
+	systemAdmin, err := isSystemAdminFunc(ctx, dbClient, user.ID, auth.UserSubjectType)
 	if err != nil {
 		return nil, err
 	}
@@ -227,10 +240,10 @@ func createAuthenticatedUserFromClaims(ctx context.Context, dbClient *ent.Client
 		SubjectID:          user.ID,
 		SubjectName:        getSubjectName(user),
 		SubjectEmail:       user.Email,
-		OrganizationID:     org.ID,
-		OrganizationName:   org.Name,
-		OrganizationIDs:    []string{org.ID},
+		OrganizationID:     claims.OrgID,
+		OrganizationIDs:    []string{claims.OrgID},
 		AuthenticationType: authType,
+		IsSystemAdmin:      systemAdmin,
 	}, nil
 }
 
@@ -307,12 +320,18 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client, token
 		orgIDs = append(orgIDs, org.ID)
 	}
 
+	systemAdmin, err := isSystemAdminFunc(ctx, dbClient, pat.OwnerID, auth.UserSubjectType)
+	if err != nil {
+		return nil, "", err
+	}
+
 	return &auth.AuthenticatedUser{
 		SubjectID:          pat.OwnerID,
 		SubjectName:        getSubjectName(pat.Edges.Owner),
 		SubjectEmail:       pat.Edges.Owner.Email,
 		OrganizationIDs:    orgIDs,
 		AuthenticationType: auth.PATAuthentication,
+		IsSystemAdmin:      systemAdmin,
 	}, pat.ID, nil
 }
 
@@ -338,6 +357,11 @@ func isValidAPIToken(ctx context.Context, dbClient *ent.Client, token string) (*
 		}
 	}
 
+	systemAdmin, err := isSystemAdminFunc(ctx, dbClient, t.OwnerID, auth.ServiceSubjectType)
+	if err != nil {
+		return nil, "", err
+	}
+
 	return &auth.AuthenticatedUser{
 		SubjectID:          t.ID,
 		SubjectName:        fmt.Sprintf("service: %s", t.Name),
@@ -345,7 +369,28 @@ func isValidAPIToken(ctx context.Context, dbClient *ent.Client, token string) (*
 		OrganizationID:     t.OwnerID,
 		OrganizationIDs:    []string{t.OwnerID},
 		AuthenticationType: auth.APITokenAuthentication,
+		IsSystemAdmin:      systemAdmin,
 	}, t.ID, nil
+}
+
+// isSystemAdmin checks fga to see if the user is a system admin
+// it uses the authz client from the context to perform the check
+// it returns true if the user is a system admin, false otherwise
+// if the authz client is not available, it returns false
+func isSystemAdmin(ctx context.Context, dbClient *ent.Client, subjectID, subjectType string) (bool, error) {
+	ac := fgax.AccessCheck{
+		ObjectType:  SystemObject,
+		ObjectID:    SystemObjectID,
+		Relation:    fgax.SystemAdminRelation,
+		SubjectID:   subjectID,
+		SubjectType: subjectType,
+	}
+
+	if dbClient == nil {
+		return false, nil
+	}
+
+	return dbClient.Authz.CheckAccess(ctx, ac)
 }
 
 // getSubjectName returns the subject name for the user
@@ -514,4 +559,6 @@ var (
 	isPATSSOAuthorizedFunc = isPATSSOAuthorized
 
 	updateLastUsedFunc = updateLastUsed
+
+	isSystemAdminFunc = isSystemAdmin
 )

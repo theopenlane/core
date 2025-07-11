@@ -6,7 +6,6 @@ import (
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	generated "github.com/theopenlane/core/internal/ent/generated"
@@ -34,18 +33,21 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerSSOEnforced() {
 	ownerCtx := privacy.DecisionContext(ownerUser.UserCtx, privacy.Allow)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
-	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
+	setting, err := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
 		IdentityProviderLoginEnforced: ptr(true),
-	}).SaveX(ownerCtx)
+	}).Save(ownerCtx)
+	assert.NoError(t, err)
 
-	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      gofakeit.Name(),
 		SettingID: &setting.ID,
-	}).SaveX(ownerCtx)
+	}).Save(ownerCtx)
+	assert.NoError(t, err)
 
-	suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+	err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).
 		SetOrganizationID(org.ID).
-		ExecX(ownerCtx)
+		Exec(ownerCtx)
+	assert.NoError(t, err)
 
 	testUser := suite.userBuilderWithInput(ctx, &userInput{
 		password:      "$uper$ecretP@ssword",
@@ -54,11 +56,12 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerSSOEnforced() {
 	testUserCtx := privacy.DecisionContext(testUser.UserCtx, privacy.Allow)
 	testUserCtx = ent.NewContext(testUserCtx, suite.db)
 
-	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+	err = suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
 		OrganizationID: org.ID,
 		UserID:         testUser.UserInfo.ID,
 		Role:           &enums.RoleMember,
-	}).ExecX(testUserCtx)
+	}).Exec(testUserCtx)
+	assert.NoError(t, err)
 
 	suite.db.UserSetting.UpdateOneID(testUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(testUserCtx)
 
@@ -66,7 +69,7 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerSSOEnforced() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusFound, rec.Code)
+	assert.Equal(t, http.StatusFound, rec.Code)
 	assert.Equal(t, "/v1/sso/login?organization_id="+org.ID, rec.Header().Get("Location"))
 }
 func (suite *HandlerTestSuite) TestGoogleLoginHandlerSSOEnforcedOwnerBypass() {
@@ -85,18 +88,21 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerSSOEnforcedOwnerBypass() {
 	ownerCtx := privacy.DecisionContext(ownerUser.UserCtx, privacy.Allow)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
-	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
+	setting, err := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
 		IdentityProviderLoginEnforced: ptr(true),
-	}).SaveX(ownerCtx)
+	}).Save(ownerCtx)
+	assert.NoError(t, err)
 
-	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      gofakeit.Name(),
 		SettingID: &setting.ID,
-	}).SaveX(ownerCtx)
+	}).Save(ownerCtx)
+	assert.NoError(t, err)
 
-	suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+	err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).
 		SetOrganizationID(org.ID).
-		ExecX(ownerCtx)
+		Exec(ownerCtx)
+	assert.NoError(t, err)
 
 	// user is set as owner by default
 	suite.db.UserSetting.UpdateOneID(ownerUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(ownerCtx)
@@ -105,6 +111,6 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerSSOEnforcedOwnerBypass() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusFound, rec.Code)
+	assert.Equal(t, http.StatusFound, rec.Code)
 	assert.NotContains(t, rec.Header().Get("Location"), "/v1/sso/login")
 }

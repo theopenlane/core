@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 )
 
+// QueryLogger is an interceptor that logs the duration of each query.
 func QueryLogger() ent.InterceptFunc {
 	return func(next ent.Querier) ent.Querier {
 		return ent.QuerierFunc(func(ctx context.Context, query generated.Query) (ent.Value, error) {

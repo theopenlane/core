@@ -243,7 +243,9 @@ func (ohu *OrganizationHistoryUpdate) Mutation() *OrganizationHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (ohu *OrganizationHistoryUpdate) Save(ctx context.Context) (int, error) {
-	ohu.defaults()
+	if err := ohu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, ohu.sqlSave, ohu.mutation, ohu.hooks)
 }
 
@@ -270,15 +272,22 @@ func (ohu *OrganizationHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ohu *OrganizationHistoryUpdate) defaults() {
+func (ohu *OrganizationHistoryUpdate) defaults() error {
 	if _, ok := ohu.mutation.UpdatedAt(); !ok && !ohu.mutation.UpdatedAtCleared() {
+		if organizationhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized organizationhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := organizationhistory.UpdateDefaultUpdatedAt()
 		ohu.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := ohu.mutation.AvatarUpdatedAt(); !ok && !ohu.mutation.AvatarUpdatedAtCleared() {
+		if organizationhistory.UpdateDefaultAvatarUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized organizationhistory.UpdateDefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := organizationhistory.UpdateDefaultAvatarUpdatedAt()
 		ohu.mutation.SetAvatarUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -627,7 +636,9 @@ func (ohuo *OrganizationHistoryUpdateOne) Select(field string, fields ...string)
 
 // Save executes the query and returns the updated OrganizationHistory entity.
 func (ohuo *OrganizationHistoryUpdateOne) Save(ctx context.Context) (*OrganizationHistory, error) {
-	ohuo.defaults()
+	if err := ohuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, ohuo.sqlSave, ohuo.mutation, ohuo.hooks)
 }
 
@@ -654,15 +665,22 @@ func (ohuo *OrganizationHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ohuo *OrganizationHistoryUpdateOne) defaults() {
+func (ohuo *OrganizationHistoryUpdateOne) defaults() error {
 	if _, ok := ohuo.mutation.UpdatedAt(); !ok && !ohuo.mutation.UpdatedAtCleared() {
+		if organizationhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized organizationhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := organizationhistory.UpdateDefaultUpdatedAt()
 		ohuo.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := ohuo.mutation.AvatarUpdatedAt(); !ok && !ohuo.mutation.AvatarUpdatedAtCleared() {
+		if organizationhistory.UpdateDefaultAvatarUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized organizationhistory.UpdateDefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := organizationhistory.UpdateDefaultAvatarUpdatedAt()
 		ohuo.mutation.SetAvatarUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.

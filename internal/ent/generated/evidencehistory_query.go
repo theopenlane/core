@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -331,6 +332,12 @@ func (ehq *EvidenceHistoryQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		ehq.sql = prev
+	}
+	if evidencehistory.Policy == nil {
+		return errors.New("generated: uninitialized evidencehistory.Policy (forgotten import generated/runtime?)")
+	}
+	if err := evidencehistory.Policy.EvalQuery(ctx, ehq); err != nil {
+		return err
 	}
 	return nil
 }

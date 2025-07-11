@@ -221,7 +221,9 @@ func (shc *ScanHistoryCreate) Mutation() *ScanHistoryMutation {
 
 // Save creates the ScanHistory in the database.
 func (shc *ScanHistoryCreate) Save(ctx context.Context) (*ScanHistory, error) {
-	shc.defaults()
+	if err := shc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, shc.sqlSave, shc.mutation, shc.hooks)
 }
 
@@ -248,16 +250,25 @@ func (shc *ScanHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (shc *ScanHistoryCreate) defaults() {
+func (shc *ScanHistoryCreate) defaults() error {
 	if _, ok := shc.mutation.HistoryTime(); !ok {
+		if scanhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized scanhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := scanhistory.DefaultHistoryTime()
 		shc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := shc.mutation.CreatedAt(); !ok {
+		if scanhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized scanhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := scanhistory.DefaultCreatedAt()
 		shc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := shc.mutation.UpdatedAt(); !ok {
+		if scanhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized scanhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := scanhistory.DefaultUpdatedAt()
 		shc.mutation.SetUpdatedAt(v)
 	}
@@ -274,9 +285,13 @@ func (shc *ScanHistoryCreate) defaults() {
 		shc.mutation.SetStatus(v)
 	}
 	if _, ok := shc.mutation.ID(); !ok {
+		if scanhistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized scanhistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := scanhistory.DefaultID()
 		shc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

@@ -339,7 +339,9 @@ func (uhc *UserHistoryCreate) Mutation() *UserHistoryMutation {
 
 // Save creates the UserHistory in the database.
 func (uhc *UserHistoryCreate) Save(ctx context.Context) (*UserHistory, error) {
-	uhc.defaults()
+	if err := uhc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, uhc.sqlSave, uhc.mutation, uhc.hooks)
 }
 
@@ -366,16 +368,25 @@ func (uhc *UserHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (uhc *UserHistoryCreate) defaults() {
+func (uhc *UserHistoryCreate) defaults() error {
 	if _, ok := uhc.mutation.HistoryTime(); !ok {
+		if userhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized userhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := userhistory.DefaultHistoryTime()
 		uhc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := uhc.mutation.CreatedAt(); !ok {
+		if userhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized userhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := userhistory.DefaultCreatedAt()
 		uhc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := uhc.mutation.UpdatedAt(); !ok {
+		if userhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized userhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := userhistory.DefaultUpdatedAt()
 		uhc.mutation.SetUpdatedAt(v)
 	}
@@ -384,6 +395,9 @@ func (uhc *UserHistoryCreate) defaults() {
 		uhc.mutation.SetTags(v)
 	}
 	if _, ok := uhc.mutation.AvatarUpdatedAt(); !ok {
+		if userhistory.DefaultAvatarUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized userhistory.DefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := userhistory.DefaultAvatarUpdatedAt()
 		uhc.mutation.SetAvatarUpdatedAt(v)
 	}
@@ -396,9 +410,13 @@ func (uhc *UserHistoryCreate) defaults() {
 		uhc.mutation.SetRole(v)
 	}
 	if _, ok := uhc.mutation.ID(); !ok {
+		if userhistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized userhistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := userhistory.DefaultID()
 		uhc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

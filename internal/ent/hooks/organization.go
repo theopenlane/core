@@ -25,11 +25,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/catalog"
-	"github.com/theopenlane/core/pkg/catalog/features"
 	cataloggen "github.com/theopenlane/core/pkg/catalog/gencatalog"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/permissioncache"
 )
 
 // HookOrganization runs on org mutations to set default values that are not provided
@@ -611,8 +611,8 @@ func createFeatureTuples(ctx context.Context, authz fgax.Client, orgID string, f
 		return err
 	}
 
-	if cache, ok := features.CacheFromContext(ctx); ok {
-		return cache.Set(ctx, orgID, feats)
+	if cache, ok := permissioncache.CacheFromContext(ctx); ok {
+		return cache.SetFeatures(ctx, orgID, feats)
 	}
 
 	return nil

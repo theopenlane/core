@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -331,6 +332,12 @@ func (ihq *IntegrationHistoryQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		ihq.sql = prev
+	}
+	if integrationhistory.Policy == nil {
+		return errors.New("generated: uninitialized integrationhistory.Policy (forgotten import generated/runtime?)")
+	}
+	if err := integrationhistory.Policy.EvalQuery(ctx, ihq); err != nil {
+		return err
 	}
 	return nil
 }

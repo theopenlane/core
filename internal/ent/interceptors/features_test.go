@@ -12,16 +12,16 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/pkg/catalog/features"
+	"github.com/theopenlane/core/pkg/permissioncache"
 	"github.com/theopenlane/core/pkg/testutils"
 )
 
 func ctxWithFeatures(org string, feats []string) context.Context {
 	ctx := context.Background()
 	r := testutils.NewRedisClient()
-	cache := features.NewCache(r, time.Minute)
-	_ = cache.Set(ctx, org, feats)
-	ctx = features.WithCache(ctx, cache)
+	cache := permissioncache.NewCache(r, permissioncache.WithCacheTTL(time.Minute))
+	_ = cache.SetFeatures(ctx, org, feats)
+	ctx = permissioncache.WithCache(ctx, cache)
 	ctx = auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{OrganizationID: org})
 	return ctx
 }

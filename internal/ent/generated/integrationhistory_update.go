@@ -203,7 +203,9 @@ func (ihu *IntegrationHistoryUpdate) Mutation() *IntegrationHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (ihu *IntegrationHistoryUpdate) Save(ctx context.Context) (int, error) {
-	ihu.defaults()
+	if err := ihu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, ihu.sqlSave, ihu.mutation, ihu.hooks)
 }
 
@@ -230,11 +232,15 @@ func (ihu *IntegrationHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ihu *IntegrationHistoryUpdate) defaults() {
+func (ihu *IntegrationHistoryUpdate) defaults() error {
 	if _, ok := ihu.mutation.UpdatedAt(); !ok && !ihu.mutation.UpdatedAtCleared() {
+		if integrationhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized integrationhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := integrationhistory.UpdateDefaultUpdatedAt()
 		ihu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -525,7 +531,9 @@ func (ihuo *IntegrationHistoryUpdateOne) Select(field string, fields ...string) 
 
 // Save executes the query and returns the updated IntegrationHistory entity.
 func (ihuo *IntegrationHistoryUpdateOne) Save(ctx context.Context) (*IntegrationHistory, error) {
-	ihuo.defaults()
+	if err := ihuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, ihuo.sqlSave, ihuo.mutation, ihuo.hooks)
 }
 
@@ -552,11 +560,15 @@ func (ihuo *IntegrationHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ihuo *IntegrationHistoryUpdateOne) defaults() {
+func (ihuo *IntegrationHistoryUpdateOne) defaults() error {
 	if _, ok := ihuo.mutation.UpdatedAt(); !ok && !ihuo.mutation.UpdatedAtCleared() {
+		if integrationhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized integrationhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := integrationhistory.UpdateDefaultUpdatedAt()
 		ihuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.

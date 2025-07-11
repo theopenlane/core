@@ -531,7 +531,9 @@ func (chu *ControlHistoryUpdate) Mutation() *ControlHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (chu *ControlHistoryUpdate) Save(ctx context.Context) (int, error) {
-	chu.defaults()
+	if err := chu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, chu.sqlSave, chu.mutation, chu.hooks)
 }
 
@@ -558,11 +560,15 @@ func (chu *ControlHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (chu *ControlHistoryUpdate) defaults() {
+func (chu *ControlHistoryUpdate) defaults() error {
 	if _, ok := chu.mutation.UpdatedAt(); !ok && !chu.mutation.UpdatedAtCleared() {
+		if controlhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized controlhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := controlhistory.UpdateDefaultUpdatedAt()
 		chu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -1342,7 +1348,9 @@ func (chuo *ControlHistoryUpdateOne) Select(field string, fields ...string) *Con
 
 // Save executes the query and returns the updated ControlHistory entity.
 func (chuo *ControlHistoryUpdateOne) Save(ctx context.Context) (*ControlHistory, error) {
-	chuo.defaults()
+	if err := chuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, chuo.sqlSave, chuo.mutation, chuo.hooks)
 }
 
@@ -1369,11 +1377,15 @@ func (chuo *ControlHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (chuo *ControlHistoryUpdateOne) defaults() {
+func (chuo *ControlHistoryUpdateOne) defaults() error {
 	if _, ok := chuo.mutation.UpdatedAt(); !ok && !chuo.mutation.UpdatedAtCleared() {
+		if controlhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized controlhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := controlhistory.UpdateDefaultUpdatedAt()
 		chuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

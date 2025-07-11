@@ -34,7 +34,7 @@ func InterceptorJobRunnerRegistrationToken() ent.Interceptor {
 func InterceptorJobRunnerFilterSystemOwned() ent.Interceptor {
 	return intercept.TraverseJobRunner(
 		func(ctx context.Context, q *generated.JobRunnerQuery) error {
-			isAdmin, err := rule.CheckIsSystemAdmin(ctx, nil)
+			isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 			if err != nil {
 				return err
 			}

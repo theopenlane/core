@@ -375,7 +375,9 @@ func (shc *StandardHistoryCreate) Mutation() *StandardHistoryMutation {
 
 // Save creates the StandardHistory in the database.
 func (shc *StandardHistoryCreate) Save(ctx context.Context) (*StandardHistory, error) {
-	shc.defaults()
+	if err := shc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, shc.sqlSave, shc.mutation, shc.hooks)
 }
 
@@ -402,16 +404,25 @@ func (shc *StandardHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (shc *StandardHistoryCreate) defaults() {
+func (shc *StandardHistoryCreate) defaults() error {
 	if _, ok := shc.mutation.HistoryTime(); !ok {
+		if standardhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized standardhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := standardhistory.DefaultHistoryTime()
 		shc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := shc.mutation.CreatedAt(); !ok {
+		if standardhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized standardhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := standardhistory.DefaultCreatedAt()
 		shc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := shc.mutation.UpdatedAt(); !ok {
+		if standardhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized standardhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := standardhistory.DefaultUpdatedAt()
 		shc.mutation.SetUpdatedAt(v)
 	}
@@ -440,9 +451,13 @@ func (shc *StandardHistoryCreate) defaults() {
 		shc.mutation.SetFreeToUse(v)
 	}
 	if _, ok := shc.mutation.ID(); !ok {
+		if standardhistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized standardhistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := standardhistory.DefaultID()
 		shc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

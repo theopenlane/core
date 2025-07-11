@@ -49,7 +49,8 @@ func HookTrustCenter() ent.Hook {
 
 			settingID, _ := m.SettingID()
 			if settingID != "" {
-				log.Info().Msg("trust center setting ID provided, skipping default setting creation")
+				log.Debug().Msg("trust center setting ID provided, skipping default setting creation")
+
 				return retVal, nil
 			}
 
