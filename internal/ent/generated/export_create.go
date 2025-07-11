@@ -162,6 +162,12 @@ func (ec *ExportCreate) SetNillableRequestorID(s *string) *ExportCreate {
 	return ec
 }
 
+// SetFields sets the "fields" field.
+func (ec *ExportCreate) SetFields(s []string) *ExportCreate {
+	ec.mutation.SetFields(s)
+	return ec
+}
+
 // SetID sets the "id" field.
 func (ec *ExportCreate) SetID(s string) *ExportCreate {
 	ec.mutation.SetID(s)
@@ -265,6 +271,10 @@ func (ec *ExportCreate) defaults() error {
 	if _, ok := ec.mutation.Status(); !ok {
 		v := export.DefaultStatus
 		ec.mutation.SetStatus(v)
+	}
+	if _, ok := ec.mutation.GetFields(); !ok {
+		v := export.DefaultFields
+		ec.mutation.SetFields(v)
 	}
 	if _, ok := ec.mutation.ID(); !ok {
 		if export.DefaultID == nil {
@@ -382,6 +392,10 @@ func (ec *ExportCreate) createSpec() (*Export, *sqlgraph.CreateSpec) {
 	if value, ok := ec.mutation.RequestorID(); ok {
 		_spec.SetField(export.FieldRequestorID, field.TypeString, value)
 		_node.RequestorID = value
+	}
+	if value, ok := ec.mutation.GetFields(); ok {
+		_spec.SetField(export.FieldFields, field.TypeJSON, value)
+		_node.Fields = value
 	}
 	if nodes := ec.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

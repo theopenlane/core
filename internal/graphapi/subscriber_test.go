@@ -143,7 +143,7 @@ func TestQuerySubscribers(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.GetAllSubscribers(tc.ctx)
+			resp, err := tc.client.GetAllSubscribers(tc.ctx, nil, nil, nil, nil, nil)
 
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)

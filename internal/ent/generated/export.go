@@ -3,6 +3,7 @@
 package generated
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -41,6 +42,8 @@ type Export struct {
 	Status enums.ExportStatus `json:"status,omitempty"`
 	// the user who initiated the export
 	RequestorID string `json:"requestor_id,omitempty"`
+	// the specific fields to include in the export (defaults to only the id if not provided)
+	Fields []string `json:"fields,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ExportQuery when eager-loading is set.
 	Edges        ExportEdges `json:"edges"`
@@ -99,6 +102,8 @@ func (*Export) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case export.FieldFields:
+			values[i] = new([]byte)
 		case export.FieldID, export.FieldCreatedBy, export.FieldUpdatedBy, export.FieldDeletedBy, export.FieldOwnerID, export.FieldExportType, export.FieldFormat, export.FieldStatus, export.FieldRequestorID:
 			values[i] = new(sql.NullString)
 		case export.FieldCreatedAt, export.FieldUpdatedAt, export.FieldDeletedAt:
@@ -190,6 +195,14 @@ func (e *Export) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				e.RequestorID = value.String
 			}
+		case export.FieldFields:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field fields", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &e.Fields); err != nil {
+					return fmt.Errorf("unmarshal field fields: %w", err)
+				}
+			}
 		default:
 			e.selectValues.Set(columns[i], values[i])
 		}
@@ -273,6 +286,9 @@ func (e *Export) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("requestor_id=")
 	builder.WriteString(e.RequestorID)
+	builder.WriteString(", ")
+	builder.WriteString("fields=")
+	builder.WriteString(fmt.Sprintf("%v", e.Fields))
 	builder.WriteByte(')')
 	return builder.String()
 }

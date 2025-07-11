@@ -12,6 +12,18 @@ type ExportType string
 var (
 	// ExportTypeControl indicates the control.
 	ExportTypeControl ExportType = "CONTROL"
+	// ExportTypeEvidence indicates the evidence.
+	ExportTypeEvidence ExportType = "EVIDENCE"
+	// ExportTypeInternalpolicy indicates the internalpolicy.
+	ExportTypeInternalpolicy ExportType = "INTERNALPOLICY"
+	// ExportTypeProcedure indicates the procedure.
+	ExportTypeProcedure ExportType = "PROCEDURE"
+	// ExportTypeRisk indicates the risk.
+	ExportTypeRisk ExportType = "RISK"
+	// ExportTypeSubscriber indicates the subscriber.
+	ExportTypeSubscriber ExportType = "SUBSCRIBER"
+	// ExportTypeTask indicates the task.
+	ExportTypeTask ExportType = "TASK"
 	// ExportTypeInvalid is used when an unknown or unsupported value is provided.
 	ExportTypeInvalid ExportType = "EXPORTTYPE_INVALID"
 )
@@ -20,6 +32,12 @@ var (
 func (ExportType) Values() []string {
 	return []string{
 		string(ExportTypeControl),
+		string(ExportTypeEvidence),
+		string(ExportTypeInternalpolicy),
+		string(ExportTypeProcedure),
+		string(ExportTypeRisk),
+		string(ExportTypeSubscriber),
+		string(ExportTypeTask),
 	}
 }
 
@@ -33,6 +51,18 @@ func ToExportType(r string) *ExportType {
 	switch strings.ToUpper(r) {
 	case ExportTypeControl.String():
 		return &ExportTypeControl
+	case ExportTypeEvidence.String():
+		return &ExportTypeEvidence
+	case ExportTypeInternalpolicy.String():
+		return &ExportTypeInternalpolicy
+	case ExportTypeProcedure.String():
+		return &ExportTypeProcedure
+	case ExportTypeRisk.String():
+		return &ExportTypeRisk
+	case ExportTypeSubscriber.String():
+		return &ExportTypeSubscriber
+	case ExportTypeTask.String():
+		return &ExportTypeTask
 	default:
 		return &ExportTypeInvalid
 	}

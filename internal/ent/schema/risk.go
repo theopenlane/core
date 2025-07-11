@@ -178,7 +178,7 @@ func (r Risk) Mixin() []ent.Mixin {
 			newObjectOwnedMixin[generated.Risk](r,
 				withParents(
 					Program{}, Control{}, Procedure{}, ControlObjective{}, InternalPolicy{}, Subcontrol{}),
-				withOrganizationOwner(false),
+				withOrganizationOwner(true),
 			),
 			// add groups permissions with viewer, editor, and blocked groups
 			newGroupPermissionsMixin(),
@@ -191,6 +191,7 @@ func (Risk) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.Features("compliance", "policy-management", "risk-management", "asset-management", "entity-management", "continuous-compliance-automation"),
 		entfga.SelfAccessChecks(),
+		entx.Exportable{},
 	}
 }
 

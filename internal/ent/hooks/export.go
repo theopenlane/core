@@ -8,14 +8,13 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/pkg/corejobs"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/iam/auth"
 )
 
 var (
-	errExportTypeInvalid     = errors.New("export type is invalid")
 	errExportTypeNotProvided = errors.New("provide export type")
+	errFieldsNotProvided     = errors.New("at least one field must be provided for the schema to export")
 )
 
 func HookExport() ent.Hook {
@@ -37,8 +36,13 @@ func handleExportCreate(ctx context.Context, m *generated.ExportMutation, next e
 		return nil, errExportTypeNotProvided
 	}
 
-	if exportType != enums.ExportTypeControl {
-		return nil, errExportTypeInvalid
+	if err := ValidateExportType(exportType.String()); err != nil {
+		return nil, err
+	}
+
+	values := m.Fields()
+	if len(values) == 0 {
+		return nil, errFieldsNotProvided
 	}
 
 	requestorID, err := auth.GetSubjectIDFromContext(ctx)

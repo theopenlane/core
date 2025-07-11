@@ -58,7 +58,7 @@ type OpenlaneGraphClient interface {
 	DeleteControl(ctx context.Context, deleteControlID string, interceptors ...clientv2.RequestInterceptor) (*DeleteControl, error)
 	GetAllControls(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllControls, error)
 	GetControlByID(ctx context.Context, controlID string, interceptors ...clientv2.RequestInterceptor) (*GetControlByID, error)
-	GetControls(ctx context.Context, first *int64, last *int64, where *ControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControls, error)
+	GetControls(ctx context.Context, first *int64, last *int64, after *string, before *string, where *ControlWhereInput, orderBy []*ControlOrder, interceptors ...clientv2.RequestInterceptor) (*GetControls, error)
 	UpdateControl(ctx context.Context, updateControlID string, input UpdateControlInput, interceptors ...clientv2.RequestInterceptor) (*UpdateControl, error)
 	CreateControlsByClone(ctx context.Context, input CloneControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateControlsByClone, error)
 	CreateControlsByCloneReturnID(ctx context.Context, input CloneControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateControlsByCloneReturnID, error)
@@ -221,8 +221,8 @@ type OpenlaneGraphClient interface {
 	CreateBulkInternalPolicy(ctx context.Context, input []*CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkInternalPolicy, error)
 	CreateInternalPolicy(ctx context.Context, input CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateInternalPolicy, error)
 	DeleteInternalPolicy(ctx context.Context, deleteInternalPolicyID string, interceptors ...clientv2.RequestInterceptor) (*DeleteInternalPolicy, error)
-	GetAllInternalPolicies(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllInternalPolicies, error)
-	GetInternalPolicies(ctx context.Context, where *InternalPolicyWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicies, error)
+	GetAllInternalPolicies(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*InternalPolicyOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllInternalPolicies, error)
+	GetInternalPolicies(ctx context.Context, first *int64, last *int64, after *string, before *string, where *InternalPolicyWhereInput, orderBy []*InternalPolicyOrder, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicies, error)
 	GetInternalPolicyByID(ctx context.Context, internalPolicyID string, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicyByID, error)
 	UpdateInternalPolicy(ctx context.Context, updateInternalPolicyID string, input UpdateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*UpdateInternalPolicy, error)
 	GetAllInternalPolicyHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllInternalPolicyHistories, error)
@@ -364,9 +364,9 @@ type OpenlaneGraphClient interface {
 	CreateBulkRisk(ctx context.Context, input []*CreateRiskInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkRisk, error)
 	CreateRisk(ctx context.Context, input CreateRiskInput, interceptors ...clientv2.RequestInterceptor) (*CreateRisk, error)
 	DeleteRisk(ctx context.Context, deleteRiskID string, interceptors ...clientv2.RequestInterceptor) (*DeleteRisk, error)
-	GetAllRisks(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllRisks, error)
+	GetAllRisks(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*RiskOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllRisks, error)
 	GetRiskByID(ctx context.Context, riskID string, interceptors ...clientv2.RequestInterceptor) (*GetRiskByID, error)
-	GetRisks(ctx context.Context, where *RiskWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetRisks, error)
+	GetRisks(ctx context.Context, first *int64, last *int64, after *string, before *string, where *RiskWhereInput, orderBy []*RiskOrder, interceptors ...clientv2.RequestInterceptor) (*GetRisks, error)
 	UpdateRisk(ctx context.Context, updateRiskID string, input UpdateRiskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateRisk, error)
 	GetAllRiskHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllRiskHistories, error)
 	GetRiskHistories(ctx context.Context, where *RiskHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetRiskHistories, error)
@@ -426,15 +426,15 @@ type OpenlaneGraphClient interface {
 	CreateBulkSubscriber(ctx context.Context, input []*CreateSubscriberInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkSubscriber, error)
 	CreateSubscriber(ctx context.Context, input CreateSubscriberInput, interceptors ...clientv2.RequestInterceptor) (*CreateSubscriber, error)
 	DeleteSubscriber(ctx context.Context, deleteSubscriberEmail string, subscriberOrganization *string, interceptors ...clientv2.RequestInterceptor) (*DeleteSubscriber, error)
-	GetAllSubscribers(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllSubscribers, error)
+	GetAllSubscribers(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*SubscriberOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllSubscribers, error)
 	GetSubscriberByEmail(ctx context.Context, email string, interceptors ...clientv2.RequestInterceptor) (*GetSubscriberByEmail, error)
-	GetSubscribers(ctx context.Context, where *SubscriberWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetSubscribers, error)
+	GetSubscribers(ctx context.Context, first *int64, last *int64, after *string, before *string, where *SubscriberWhereInput, orderBy []*SubscriberOrder, interceptors ...clientv2.RequestInterceptor) (*GetSubscribers, error)
 	UpdateSubscriber(ctx context.Context, email string, input UpdateSubscriberInput, interceptors ...clientv2.RequestInterceptor) (*UpdateSubscriber, error)
 	CreateBulkCSVTask(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTask, error)
 	CreateBulkTask(ctx context.Context, input []*CreateTaskInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTask, error)
 	CreateTask(ctx context.Context, input CreateTaskInput, interceptors ...clientv2.RequestInterceptor) (*CreateTask, error)
 	DeleteTask(ctx context.Context, deleteTaskID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTask, error)
-	GetAllTasks(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTasks, error)
+	GetAllTasks(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*TaskOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllTasks, error)
 	GetTaskByID(ctx context.Context, taskID string, interceptors ...clientv2.RequestInterceptor) (*GetTaskByID, error)
 	GetTasks(ctx context.Context, first *int64, last *int64, after *string, before *string, where *TaskWhereInput, orderBy []*TaskOrder, interceptors ...clientv2.RequestInterceptor) (*GetTasks, error)
 	UpdateTask(ctx context.Context, updateTaskID string, input UpdateTaskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTask, error)
@@ -28896,6 +28896,7 @@ type CreateExport_CreateExport_Export struct {
 	CreatedAt   *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ExportType  enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
+	Fields      []string           "json:\"fields,omitempty\" graphql:\"fields\""
 	Format      enums.ExportFormat "json:\"format\" graphql:\"format\""
 	ID          string             "json:\"id\" graphql:\"id\""
 	OwnerID     *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -28922,6 +28923,12 @@ func (t *CreateExport_CreateExport_Export) GetExportType() *enums.ExportType {
 		t = &CreateExport_CreateExport_Export{}
 	}
 	return &t.ExportType
+}
+func (t *CreateExport_CreateExport_Export) GetFields() []string {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return t.Fields
 }
 func (t *CreateExport_CreateExport_Export) GetFormat() *enums.ExportFormat {
 	if t == nil {
@@ -29013,6 +29020,7 @@ type GetAllExports_Exports_Edges_Node struct {
 	CreatedAt   *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ExportType  enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
+	Fields      []string           "json:\"fields,omitempty\" graphql:\"fields\""
 	Format      enums.ExportFormat "json:\"format\" graphql:\"format\""
 	ID          string             "json:\"id\" graphql:\"id\""
 	OwnerID     *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -29039,6 +29047,12 @@ func (t *GetAllExports_Exports_Edges_Node) GetExportType() *enums.ExportType {
 		t = &GetAllExports_Exports_Edges_Node{}
 	}
 	return &t.ExportType
+}
+func (t *GetAllExports_Exports_Edges_Node) GetFields() []string {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return t.Fields
 }
 func (t *GetAllExports_Exports_Edges_Node) GetFormat() *enums.ExportFormat {
 	if t == nil {
@@ -29177,6 +29191,7 @@ type GetExportByID_Export struct {
 	CreatedAt   *time.Time                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ExportType  enums.ExportType           "json:\"exportType\" graphql:\"exportType\""
+	Fields      []string                   "json:\"fields,omitempty\" graphql:\"fields\""
 	Files       GetExportByID_Export_Files "json:\"files\" graphql:\"files\""
 	Format      enums.ExportFormat         "json:\"format\" graphql:\"format\""
 	ID          string                     "json:\"id\" graphql:\"id\""
@@ -29204,6 +29219,12 @@ func (t *GetExportByID_Export) GetExportType() *enums.ExportType {
 		t = &GetExportByID_Export{}
 	}
 	return &t.ExportType
+}
+func (t *GetExportByID_Export) GetFields() []string {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return t.Fields
 }
 func (t *GetExportByID_Export) GetFiles() *GetExportByID_Export_Files {
 	if t == nil {
@@ -29290,6 +29311,7 @@ type GetExports_Exports_Edges_Node struct {
 	CreatedAt   *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ExportType  enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
+	Fields      []string           "json:\"fields,omitempty\" graphql:\"fields\""
 	Format      enums.ExportFormat "json:\"format\" graphql:\"format\""
 	ID          string             "json:\"id\" graphql:\"id\""
 	OwnerID     *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -29316,6 +29338,12 @@ func (t *GetExports_Exports_Edges_Node) GetExportType() *enums.ExportType {
 		t = &GetExports_Exports_Edges_Node{}
 	}
 	return &t.ExportType
+}
+func (t *GetExports_Exports_Edges_Node) GetFields() []string {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return t.Fields
 }
 func (t *GetExports_Exports_Edges_Node) GetFormat() *enums.ExportFormat {
 	if t == nil {
@@ -29454,6 +29482,7 @@ type UpdateExport_UpdateExport_Export struct {
 	CreatedAt   *time.Time                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ExportType  enums.ExportType                       "json:\"exportType\" graphql:\"exportType\""
+	Fields      []string                               "json:\"fields,omitempty\" graphql:\"fields\""
 	Files       UpdateExport_UpdateExport_Export_Files "json:\"files\" graphql:\"files\""
 	Format      enums.ExportFormat                     "json:\"format\" graphql:\"format\""
 	ID          string                                 "json:\"id\" graphql:\"id\""
@@ -29481,6 +29510,12 @@ func (t *UpdateExport_UpdateExport_Export) GetExportType() *enums.ExportType {
 		t = &UpdateExport_UpdateExport_Export{}
 	}
 	return &t.ExportType
+}
+func (t *UpdateExport_UpdateExport_Export) GetFields() []string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return t.Fields
 }
 func (t *UpdateExport_UpdateExport_Export) GetFiles() *UpdateExport_UpdateExport_Export_Files {
 	if t == nil {
@@ -37368,6 +37403,38 @@ func (t *DeleteInternalPolicy_DeleteInternalPolicy) GetDeletedID() string {
 	return t.DeletedID
 }
 
+type GetAllInternalPolicies_InternalPolicies_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllInternalPolicies_InternalPolicies_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllInternalPolicies_InternalPolicies_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllInternalPolicies_InternalPolicies_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllInternalPolicies_InternalPolicies_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies_PageInfo{}
+	}
+	return t.StartCursor
+}
+
 type GetAllInternalPolicies_InternalPolicies_Edges_Node_Editors_Edges_Node struct {
 	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
@@ -37647,7 +37714,9 @@ func (t *GetAllInternalPolicies_InternalPolicies_Edges) GetNode() *GetAllInterna
 }
 
 type GetAllInternalPolicies_InternalPolicies struct {
-	Edges []*GetAllInternalPolicies_InternalPolicies_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetAllInternalPolicies_InternalPolicies_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllInternalPolicies_InternalPolicies_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                            "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetAllInternalPolicies_InternalPolicies) GetEdges() []*GetAllInternalPolicies_InternalPolicies_Edges {
@@ -37655,6 +37724,50 @@ func (t *GetAllInternalPolicies_InternalPolicies) GetEdges() []*GetAllInternalPo
 		t = &GetAllInternalPolicies_InternalPolicies{}
 	}
 	return t.Edges
+}
+func (t *GetAllInternalPolicies_InternalPolicies) GetPageInfo() *GetAllInternalPolicies_InternalPolicies_PageInfo {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllInternalPolicies_InternalPolicies) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies{}
+	}
+	return t.TotalCount
+}
+
+type GetInternalPolicies_InternalPolicies_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetInternalPolicies_InternalPolicies_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetInternalPolicies_InternalPolicies_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetInternalPolicies_InternalPolicies_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetInternalPolicies_InternalPolicies_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_PageInfo{}
+	}
+	return t.StartCursor
 }
 
 type GetInternalPolicies_InternalPolicies_Edges_Node_Editors_Edges_Node struct {
@@ -37929,7 +38042,9 @@ func (t *GetInternalPolicies_InternalPolicies_Edges) GetNode() *GetInternalPolic
 }
 
 type GetInternalPolicies_InternalPolicies struct {
-	Edges []*GetInternalPolicies_InternalPolicies_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetInternalPolicies_InternalPolicies_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetInternalPolicies_InternalPolicies_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                         "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetInternalPolicies_InternalPolicies) GetEdges() []*GetInternalPolicies_InternalPolicies_Edges {
@@ -37937,6 +38052,18 @@ func (t *GetInternalPolicies_InternalPolicies) GetEdges() []*GetInternalPolicies
 		t = &GetInternalPolicies_InternalPolicies{}
 	}
 	return t.Edges
+}
+func (t *GetInternalPolicies_InternalPolicies) GetPageInfo() *GetInternalPolicies_InternalPolicies_PageInfo {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies{}
+	}
+	return &t.PageInfo
+}
+func (t *GetInternalPolicies_InternalPolicies) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies{}
+	}
+	return t.TotalCount
 }
 
 type GetInternalPolicyByID_InternalPolicy_Editors_Edges_Node struct {
@@ -60975,6 +61102,38 @@ func (t *DeleteRisk_DeleteRisk) GetDeletedID() string {
 	return t.DeletedID
 }
 
+type GetAllRisks_Risks_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllRisks_Risks_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllRisks_Risks_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllRisks_Risks_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllRisks_Risks_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllRisks_Risks_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllRisks_Risks_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllRisks_Risks_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllRisks_Risks_PageInfo{}
+	}
+	return t.StartCursor
+}
+
 type GetAllRisks_Risks_Edges_Node_Programs_Edges_Node struct {
 	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
@@ -61341,7 +61500,9 @@ func (t *GetAllRisks_Risks_Edges) GetNode() *GetAllRisks_Risks_Edges_Node {
 }
 
 type GetAllRisks_Risks struct {
-	Edges []*GetAllRisks_Risks_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetAllRisks_Risks_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllRisks_Risks_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                      "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetAllRisks_Risks) GetEdges() []*GetAllRisks_Risks_Edges {
@@ -61349,6 +61510,18 @@ func (t *GetAllRisks_Risks) GetEdges() []*GetAllRisks_Risks_Edges {
 		t = &GetAllRisks_Risks{}
 	}
 	return t.Edges
+}
+func (t *GetAllRisks_Risks) GetPageInfo() *GetAllRisks_Risks_PageInfo {
+	if t == nil {
+		t = &GetAllRisks_Risks{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllRisks_Risks) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllRisks_Risks{}
+	}
+	return t.TotalCount
 }
 
 type GetRiskByID_Risk_Programs_Edges_Node struct {
@@ -61703,6 +61876,38 @@ func (t *GetRiskByID_Risk) GetViewers() *GetRiskByID_Risk_Viewers {
 		t = &GetRiskByID_Risk{}
 	}
 	return &t.Viewers
+}
+
+type GetRisks_Risks_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetRisks_Risks_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetRisks_Risks_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetRisks_Risks_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetRisks_Risks_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetRisks_Risks_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetRisks_Risks_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetRisks_Risks_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetRisks_Risks_PageInfo{}
+	}
+	return t.StartCursor
 }
 
 type GetRisks_Risks_Edges_Node_Programs_Edges_Node struct {
@@ -62071,7 +62276,9 @@ func (t *GetRisks_Risks_Edges) GetNode() *GetRisks_Risks_Edges_Node {
 }
 
 type GetRisks_Risks struct {
-	Edges []*GetRisks_Risks_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetRisks_Risks_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetRisks_Risks_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                   "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetRisks_Risks) GetEdges() []*GetRisks_Risks_Edges {
@@ -62079,6 +62286,18 @@ func (t *GetRisks_Risks) GetEdges() []*GetRisks_Risks_Edges {
 		t = &GetRisks_Risks{}
 	}
 	return t.Edges
+}
+func (t *GetRisks_Risks) GetPageInfo() *GetRisks_Risks_PageInfo {
+	if t == nil {
+		t = &GetRisks_Risks{}
+	}
+	return &t.PageInfo
+}
+func (t *GetRisks_Risks) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetRisks_Risks{}
+	}
+	return t.TotalCount
 }
 
 type UpdateRisk_UpdateRisk_Risk_Programs_Edges_Node struct {
@@ -75881,6 +76100,38 @@ func (t *DeleteSubscriber_DeleteSubscriber) GetEmail() string {
 	return t.Email
 }
 
+type GetAllSubscribers_Subscribers_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllSubscribers_Subscribers_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllSubscribers_Subscribers_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllSubscribers_Subscribers_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllSubscribers_Subscribers_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllSubscribers_Subscribers_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllSubscribers_Subscribers_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllSubscribers_Subscribers_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllSubscribers_Subscribers_PageInfo{}
+	}
+	return t.StartCursor
+}
+
 type GetAllSubscribers_Subscribers_Edges_Node struct {
 	Active        bool    "json:\"active\" graphql:\"active\""
 	Email         string  "json:\"email\" graphql:\"email\""
@@ -75946,7 +76197,9 @@ func (t *GetAllSubscribers_Subscribers_Edges) GetNode() *GetAllSubscribers_Subsc
 }
 
 type GetAllSubscribers_Subscribers struct {
-	Edges []*GetAllSubscribers_Subscribers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetAllSubscribers_Subscribers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllSubscribers_Subscribers_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                  "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetAllSubscribers_Subscribers) GetEdges() []*GetAllSubscribers_Subscribers_Edges {
@@ -75954,6 +76207,18 @@ func (t *GetAllSubscribers_Subscribers) GetEdges() []*GetAllSubscribers_Subscrib
 		t = &GetAllSubscribers_Subscribers{}
 	}
 	return t.Edges
+}
+func (t *GetAllSubscribers_Subscribers) GetPageInfo() *GetAllSubscribers_Subscribers_PageInfo {
+	if t == nil {
+		t = &GetAllSubscribers_Subscribers{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllSubscribers_Subscribers) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllSubscribers_Subscribers{}
+	}
+	return t.TotalCount
 }
 
 type GetSubscriberByEmail_Subscriber struct {
@@ -76007,6 +76272,38 @@ func (t *GetSubscriberByEmail_Subscriber) GetVerifiedEmail() bool {
 		t = &GetSubscriberByEmail_Subscriber{}
 	}
 	return t.VerifiedEmail
+}
+
+type GetSubscribers_Subscribers_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetSubscribers_Subscribers_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetSubscribers_Subscribers_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetSubscribers_Subscribers_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetSubscribers_Subscribers_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetSubscribers_Subscribers_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetSubscribers_Subscribers_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetSubscribers_Subscribers_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetSubscribers_Subscribers_PageInfo{}
+	}
+	return t.StartCursor
 }
 
 type GetSubscribers_Subscribers_Edges_Node struct {
@@ -76074,7 +76371,9 @@ func (t *GetSubscribers_Subscribers_Edges) GetNode() *GetSubscribers_Subscribers
 }
 
 type GetSubscribers_Subscribers struct {
-	Edges []*GetSubscribers_Subscribers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetSubscribers_Subscribers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetSubscribers_Subscribers_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                               "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetSubscribers_Subscribers) GetEdges() []*GetSubscribers_Subscribers_Edges {
@@ -76082,6 +76381,18 @@ func (t *GetSubscribers_Subscribers) GetEdges() []*GetSubscribers_Subscribers_Ed
 		t = &GetSubscribers_Subscribers{}
 	}
 	return t.Edges
+}
+func (t *GetSubscribers_Subscribers) GetPageInfo() *GetSubscribers_Subscribers_PageInfo {
+	if t == nil {
+		t = &GetSubscribers_Subscribers{}
+	}
+	return &t.PageInfo
+}
+func (t *GetSubscribers_Subscribers) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetSubscribers_Subscribers{}
+	}
+	return t.TotalCount
 }
 
 type UpdateSubscriber_UpdateSubscriber_Subscriber struct {
@@ -94477,8 +94788,8 @@ func (c *Client) GetControlByID(ctx context.Context, controlID string, intercept
 	return &res, nil
 }
 
-const GetControlsDocument = `query GetControls ($first: Int, $last: Int, $where: ControlWhereInput) {
-	controls(first: $first, last: $last, where: $where) {
+const GetControlsDocument = `query GetControls ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: ControlWhereInput, $orderBy: [ControlOrder!]) {
+	controls(first: $first, last: $last, after: $after, before: $before, where: $where, orderBy: $orderBy) {
 		totalCount
 		pageInfo {
 			startCursor
@@ -94576,11 +94887,14 @@ const GetControlsDocument = `query GetControls ($first: Int, $last: Int, $where:
 }
 `
 
-func (c *Client) GetControls(ctx context.Context, first *int64, last *int64, where *ControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControls, error) {
+func (c *Client) GetControls(ctx context.Context, first *int64, last *int64, after *string, before *string, where *ControlWhereInput, orderBy []*ControlOrder, interceptors ...clientv2.RequestInterceptor) (*GetControls, error) {
 	vars := map[string]any{
-		"first": first,
-		"last":  last,
-		"where": where,
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"where":   where,
+		"orderBy": orderBy,
 	}
 
 	var res GetControls
@@ -99137,6 +99451,7 @@ const CreateExportDocument = `mutation CreateExport ($input: CreateExportInput!)
 			exportType
 			format
 			id
+			fields
 			ownerID
 			requestorID
 			status
@@ -99180,6 +99495,7 @@ const GetAllExportsDocument = `query GetAllExports {
 				exportType
 				id
 				format
+				fields
 				ownerID
 				requestorID
 				status
@@ -99215,6 +99531,7 @@ const GetExportByIDDocument = `query GetExportByID ($exportId: ID!) {
 		ownerID
 		requestorID
 		status
+		fields
 		updatedAt
 		format
 		updatedBy
@@ -99268,6 +99585,7 @@ const GetExportsDocument = `query GetExports ($first: Int, $last: Int, $where: E
 				ownerID
 				requestorID
 				status
+				fields
 				updatedAt
 				updatedBy
 			}
@@ -99303,6 +99621,7 @@ const UpdateExportDocument = `mutation UpdateExport ($id: ID!, $input: UpdateExp
 			exportType
 			id
 			ownerID
+			fields
 			requestorID
 			status
 			format
@@ -101839,8 +102158,15 @@ func (c *Client) DeleteInternalPolicy(ctx context.Context, deleteInternalPolicyI
 	return &res, nil
 }
 
-const GetAllInternalPoliciesDocument = `query GetAllInternalPolicies {
-	internalPolicies {
+const GetAllInternalPoliciesDocument = `query GetAllInternalPolicies ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [InternalPolicyOrder!]) {
+	internalPolicies(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
 				approvalRequired
@@ -101890,8 +102216,14 @@ const GetAllInternalPoliciesDocument = `query GetAllInternalPolicies {
 }
 `
 
-func (c *Client) GetAllInternalPolicies(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllInternalPolicies, error) {
-	vars := map[string]any{}
+func (c *Client) GetAllInternalPolicies(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*InternalPolicyOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllInternalPolicies, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"orderBy": orderBy,
+	}
 
 	var res GetAllInternalPolicies
 	if err := c.Client.Post(ctx, "GetAllInternalPolicies", GetAllInternalPoliciesDocument, &res, vars, interceptors...); err != nil {
@@ -101905,8 +102237,15 @@ func (c *Client) GetAllInternalPolicies(ctx context.Context, interceptors ...cli
 	return &res, nil
 }
 
-const GetInternalPoliciesDocument = `query GetInternalPolicies ($where: InternalPolicyWhereInput) {
-	internalPolicies(where: $where) {
+const GetInternalPoliciesDocument = `query GetInternalPolicies ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: InternalPolicyWhereInput, $orderBy: [InternalPolicyOrder!]) {
+	internalPolicies(first: $first, last: $last, after: $after, before: $before, where: $where, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
 				approvalRequired
@@ -101955,9 +102294,14 @@ const GetInternalPoliciesDocument = `query GetInternalPolicies ($where: Internal
 }
 `
 
-func (c *Client) GetInternalPolicies(ctx context.Context, where *InternalPolicyWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicies, error) {
+func (c *Client) GetInternalPolicies(ctx context.Context, first *int64, last *int64, after *string, before *string, where *InternalPolicyWhereInput, orderBy []*InternalPolicyOrder, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicies, error) {
 	vars := map[string]any{
-		"where": where,
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"where":   where,
+		"orderBy": orderBy,
 	}
 
 	var res GetInternalPolicies
@@ -108672,8 +109016,15 @@ func (c *Client) DeleteRisk(ctx context.Context, deleteRiskID string, intercepto
 	return &res, nil
 }
 
-const GetAllRisksDocument = `query GetAllRisks {
-	risks {
+const GetAllRisksDocument = `query GetAllRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [RiskOrder!]) {
+	risks(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
 				businessCosts
@@ -108739,8 +109090,14 @@ const GetAllRisksDocument = `query GetAllRisks {
 }
 `
 
-func (c *Client) GetAllRisks(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllRisks, error) {
-	vars := map[string]any{}
+func (c *Client) GetAllRisks(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*RiskOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllRisks, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"orderBy": orderBy,
+	}
 
 	var res GetAllRisks
 	if err := c.Client.Post(ctx, "GetAllRisks", GetAllRisksDocument, &res, vars, interceptors...); err != nil {
@@ -108834,8 +109191,15 @@ func (c *Client) GetRiskByID(ctx context.Context, riskID string, interceptors ..
 	return &res, nil
 }
 
-const GetRisksDocument = `query GetRisks ($where: RiskWhereInput) {
-	risks(where: $where) {
+const GetRisksDocument = `query GetRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: RiskWhereInput, $orderBy: [RiskOrder!]) {
+	risks(first: $first, last: $last, after: $after, before: $before, where: $where, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
 				businessCosts
@@ -108901,9 +109265,14 @@ const GetRisksDocument = `query GetRisks ($where: RiskWhereInput) {
 }
 `
 
-func (c *Client) GetRisks(ctx context.Context, where *RiskWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetRisks, error) {
+func (c *Client) GetRisks(ctx context.Context, first *int64, last *int64, after *string, before *string, where *RiskWhereInput, orderBy []*RiskOrder, interceptors ...clientv2.RequestInterceptor) (*GetRisks, error) {
 	vars := map[string]any{
-		"where": where,
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"where":   where,
+		"orderBy": orderBy,
 	}
 
 	var res GetRisks
@@ -112357,8 +112726,15 @@ func (c *Client) DeleteSubscriber(ctx context.Context, deleteSubscriberEmail str
 	return &res, nil
 }
 
-const GetAllSubscribersDocument = `query GetAllSubscribers {
-	subscribers {
+const GetAllSubscribersDocument = `query GetAllSubscribers ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [SubscriberOrder!]) {
+	subscribers(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
 				active
@@ -112374,8 +112750,14 @@ const GetAllSubscribersDocument = `query GetAllSubscribers {
 }
 `
 
-func (c *Client) GetAllSubscribers(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllSubscribers, error) {
-	vars := map[string]any{}
+func (c *Client) GetAllSubscribers(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*SubscriberOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllSubscribers, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"orderBy": orderBy,
+	}
 
 	var res GetAllSubscribers
 	if err := c.Client.Post(ctx, "GetAllSubscribers", GetAllSubscribersDocument, &res, vars, interceptors...); err != nil {
@@ -112419,8 +112801,15 @@ func (c *Client) GetSubscriberByEmail(ctx context.Context, email string, interce
 	return &res, nil
 }
 
-const GetSubscribersDocument = `query GetSubscribers ($where: SubscriberWhereInput) {
-	subscribers(where: $where) {
+const GetSubscribersDocument = `query GetSubscribers ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: SubscriberWhereInput, $orderBy: [SubscriberOrder!]) {
+	subscribers(first: $first, last: $last, after: $after, before: $before, where: $where, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
 				active
@@ -112436,9 +112825,14 @@ const GetSubscribersDocument = `query GetSubscribers ($where: SubscriberWhereInp
 }
 `
 
-func (c *Client) GetSubscribers(ctx context.Context, where *SubscriberWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetSubscribers, error) {
+func (c *Client) GetSubscribers(ctx context.Context, first *int64, last *int64, after *string, before *string, where *SubscriberWhereInput, orderBy []*SubscriberOrder, interceptors ...clientv2.RequestInterceptor) (*GetSubscribers, error) {
 	vars := map[string]any{
-		"where": where,
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"where":   where,
+		"orderBy": orderBy,
 	}
 
 	var res GetSubscribers
@@ -112698,8 +113092,8 @@ func (c *Client) DeleteTask(ctx context.Context, deleteTaskID string, intercepto
 	return &res, nil
 }
 
-const GetAllTasksDocument = `query GetAllTasks {
-	tasks {
+const GetAllTasksDocument = `query GetAllTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [TaskOrder!]) {
+	tasks(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
 		totalCount
 		pageInfo {
 			startCursor
@@ -112765,8 +113159,14 @@ const GetAllTasksDocument = `query GetAllTasks {
 }
 `
 
-func (c *Client) GetAllTasks(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTasks, error) {
-	vars := map[string]any{}
+func (c *Client) GetAllTasks(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*TaskOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllTasks, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"orderBy": orderBy,
+	}
 
 	var res GetAllTasks
 	if err := c.Client.Post(ctx, "GetAllTasks", GetAllTasksDocument, &res, vars, interceptors...); err != nil {

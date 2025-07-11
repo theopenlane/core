@@ -39,7 +39,9 @@ func TestDeleteExportContentWorker(t *testing.T) {
 			name:  "happy path - delete exports",
 			input: corejobs.DeleteExportContentArgs{},
 			config: corejobs.DeleteExportWorkerConfig{
-				CutoffDuration: cutoffDuration,
+				OpenlaneAPIHost:  "https://api.example.com",
+				OpenlaneAPIToken: "test-token",
+				CutoffDuration:   cutoffDuration,
 			},
 			getExportsResponse: &openlaneclient.GetExports{
 				Exports: openlaneclient.GetExports_Exports{
@@ -64,7 +66,9 @@ func TestDeleteExportContentWorker(t *testing.T) {
 			name:  "happy path - no exports to delete",
 			input: corejobs.DeleteExportContentArgs{},
 			config: corejobs.DeleteExportWorkerConfig{
-				CutoffDuration: cutoffDuration,
+				OpenlaneAPIHost:  "https://api.example.com",
+				OpenlaneAPIToken: "test-token",
+				CutoffDuration:   cutoffDuration,
 			},
 			getExportsResponse: &openlaneclient.GetExports{
 				Exports: openlaneclient.GetExports_Exports{
@@ -77,11 +81,37 @@ func TestDeleteExportContentWorker(t *testing.T) {
 			name:  "error getting exports",
 			input: corejobs.DeleteExportContentArgs{},
 			config: corejobs.DeleteExportWorkerConfig{
-				CutoffDuration: cutoffDuration,
+				OpenlaneAPIHost:  "https://api.example.com",
+				OpenlaneAPIToken: "test-token",
+				CutoffDuration:   cutoffDuration,
 			},
 			getExportsError:        assert.AnError,
 			expectedError:          "assert.AnError",
 			expectDeleteBulkExport: false,
+		},
+		{
+			name:  "error during bulk delete",
+			input: corejobs.DeleteExportContentArgs{},
+			config: corejobs.DeleteExportWorkerConfig{
+				OpenlaneAPIHost:  "https://api.example.com",
+				OpenlaneAPIToken: "test-token",
+				CutoffDuration:   cutoffDuration,
+			},
+			getExportsResponse: &openlaneclient.GetExports{
+				Exports: openlaneclient.GetExports_Exports{
+					Edges: []*openlaneclient.GetExports_Exports_Edges{
+						{
+							Node: &openlaneclient.GetExports_Exports_Edges_Node{
+								ID: exportID1,
+							},
+						},
+					},
+				},
+			},
+			deleteBulkExportError:  assert.AnError,
+			expectedDeletedIDs:     []string{exportID1},
+			expectedError:          "assert.AnError",
+			expectDeleteBulkExport: true,
 		},
 	}
 
@@ -113,8 +143,28 @@ func TestDeleteExportContentWorker(t *testing.T) {
 					return false
 				}
 
-				if input.Status == nil || *input.Status != enums.ExportStatusReady {
+				if input.StatusIn == nil {
 					return false
+				}
+
+				expectedStatuses := []enums.ExportStatus{
+					enums.ExportStatusNodata,
+					enums.ExportStatusReady,
+				}
+
+				if len(input.StatusIn) != len(expectedStatuses) {
+					return false
+				}
+
+				statusMap := make(map[enums.ExportStatus]bool)
+				for _, status := range input.StatusIn {
+					statusMap[status] = true
+				}
+
+				for _, expectedStatus := range expectedStatuses {
+					if !statusMap[expectedStatus] {
+						return false
+					}
 				}
 
 				return true

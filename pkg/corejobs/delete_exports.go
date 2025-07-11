@@ -63,7 +63,10 @@ func (w *DeleteExportContentWorker) Work(ctx context.Context, _ *river.Job[Delet
 
 	exports, err := w.olClient.GetExports(ctx, nil, nil, &openlaneclient.ExportWhereInput{
 		CreatedAtLte: &cutOffTime,
-		Status:       &enums.ExportStatusReady,
+		StatusIn: []enums.ExportStatus{
+			enums.ExportStatusNodata,
+			enums.ExportStatusReady,
+		},
 	})
 	if err != nil {
 		return err

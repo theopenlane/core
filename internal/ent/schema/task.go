@@ -102,7 +102,7 @@ func (t Task) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Task](t,
 				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Risk{}, Asset{}, Scan{}),
-				withOrganizationOwner(false),
+				withOrganizationOwner(true),
 			),
 		},
 	}.getMixins()
@@ -148,6 +148,7 @@ func (Task) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.Features("compliance", "policy-management", "risk-management", "asset-management", "entity-management", "continuous-compliance-automation"),
 		entfga.SelfAccessChecks(),
+		entx.Exportable{},
 	}
 }
 

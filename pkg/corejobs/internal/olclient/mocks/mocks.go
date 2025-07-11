@@ -18151,12 +18151,12 @@ func (_c *MockOpenlaneGraphClient_GetAllIntegrations_Call) RunAndReturn(run func
 }
 
 // GetAllInternalPolicies provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) GetAllInternalPolicies(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllInternalPolicies, error) {
+func (_mock *MockOpenlaneGraphClient) GetAllInternalPolicies(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*openlaneclient.InternalPolicyOrder, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllInternalPolicies, error) {
 	var tmpRet mock.Arguments
 	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, interceptors)
+		tmpRet = _mock.Called(ctx, first, last, after, before, orderBy, interceptors)
 	} else {
-		tmpRet = _mock.Called(ctx)
+		tmpRet = _mock.Called(ctx, first, last, after, before, orderBy)
 	}
 	ret := tmpRet
 
@@ -18166,18 +18166,18 @@ func (_mock *MockOpenlaneGraphClient) GetAllInternalPolicies(ctx context.Context
 
 	var r0 *openlaneclient.GetAllInternalPolicies
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) (*openlaneclient.GetAllInternalPolicies, error)); ok {
-		return returnFunc(ctx, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *string, *string, []*openlaneclient.InternalPolicyOrder, ...clientv2.RequestInterceptor) (*openlaneclient.GetAllInternalPolicies, error)); ok {
+		return returnFunc(ctx, first, last, after, before, orderBy, interceptors...)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) *openlaneclient.GetAllInternalPolicies); ok {
-		r0 = returnFunc(ctx, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *string, *string, []*openlaneclient.InternalPolicyOrder, ...clientv2.RequestInterceptor) *openlaneclient.GetAllInternalPolicies); ok {
+		r0 = returnFunc(ctx, first, last, after, before, orderBy, interceptors...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*openlaneclient.GetAllInternalPolicies)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, interceptors...)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *string, *string, []*openlaneclient.InternalPolicyOrder, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, after, before, orderBy, interceptors...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -18191,27 +18191,57 @@ type MockOpenlaneGraphClient_GetAllInternalPolicies_Call struct {
 
 // GetAllInternalPolicies is a helper method to define mock.On call
 //   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - after *string
+//   - before *string
+//   - orderBy []*openlaneclient.InternalPolicyOrder
 //   - interceptors ...clientv2.RequestInterceptor
-func (_e *MockOpenlaneGraphClient_Expecter) GetAllInternalPolicies(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllInternalPolicies_Call {
+func (_e *MockOpenlaneGraphClient_Expecter) GetAllInternalPolicies(ctx interface{}, first interface{}, last interface{}, after interface{}, before interface{}, orderBy interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllInternalPolicies_Call {
 	return &MockOpenlaneGraphClient_GetAllInternalPolicies_Call{Call: _e.mock.On("GetAllInternalPolicies",
-		append([]interface{}{ctx}, interceptors...)...)}
+		append([]interface{}{ctx, first, last, after, before, orderBy}, interceptors...)...)}
 }
 
-func (_c *MockOpenlaneGraphClient_GetAllInternalPolicies_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllInternalPolicies_Call {
+func (_c *MockOpenlaneGraphClient_GetAllInternalPolicies_Call) Run(run func(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*openlaneclient.InternalPolicyOrder, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllInternalPolicies_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
 			arg0 = args[0].(context.Context)
 		}
-		var arg1 []clientv2.RequestInterceptor
-		var variadicArgs []clientv2.RequestInterceptor
-		if len(args) > 1 {
-			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
 		}
-		arg1 = variadicArgs
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *string
+		if args[3] != nil {
+			arg3 = args[3].(*string)
+		}
+		var arg4 *string
+		if args[4] != nil {
+			arg4 = args[4].(*string)
+		}
+		var arg5 []*openlaneclient.InternalPolicyOrder
+		if args[5] != nil {
+			arg5 = args[5].([]*openlaneclient.InternalPolicyOrder)
+		}
+		var arg6 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 6 {
+			variadicArgs = args[6].([]clientv2.RequestInterceptor)
+		}
+		arg6 = variadicArgs
 		run(
 			arg0,
-			arg1...,
+			arg1,
+			arg2,
+			arg3,
+			arg4,
+			arg5,
+			arg6...,
 		)
 	})
 	return _c
@@ -18222,7 +18252,7 @@ func (_c *MockOpenlaneGraphClient_GetAllInternalPolicies_Call) Return(getAllInte
 	return _c
 }
 
-func (_c *MockOpenlaneGraphClient_GetAllInternalPolicies_Call) RunAndReturn(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllInternalPolicies, error)) *MockOpenlaneGraphClient_GetAllInternalPolicies_Call {
+func (_c *MockOpenlaneGraphClient_GetAllInternalPolicies_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*openlaneclient.InternalPolicyOrder, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllInternalPolicies, error)) *MockOpenlaneGraphClient_GetAllInternalPolicies_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -20384,12 +20414,12 @@ func (_c *MockOpenlaneGraphClient_GetAllRiskHistories_Call) RunAndReturn(run fun
 }
 
 // GetAllRisks provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) GetAllRisks(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllRisks, error) {
+func (_mock *MockOpenlaneGraphClient) GetAllRisks(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*openlaneclient.RiskOrder, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllRisks, error) {
 	var tmpRet mock.Arguments
 	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, interceptors)
+		tmpRet = _mock.Called(ctx, first, last, after, before, orderBy, interceptors)
 	} else {
-		tmpRet = _mock.Called(ctx)
+		tmpRet = _mock.Called(ctx, first, last, after, before, orderBy)
 	}
 	ret := tmpRet
 
@@ -20399,18 +20429,18 @@ func (_mock *MockOpenlaneGraphClient) GetAllRisks(ctx context.Context, intercept
 
 	var r0 *openlaneclient.GetAllRisks
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) (*openlaneclient.GetAllRisks, error)); ok {
-		return returnFunc(ctx, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *string, *string, []*openlaneclient.RiskOrder, ...clientv2.RequestInterceptor) (*openlaneclient.GetAllRisks, error)); ok {
+		return returnFunc(ctx, first, last, after, before, orderBy, interceptors...)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) *openlaneclient.GetAllRisks); ok {
-		r0 = returnFunc(ctx, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *string, *string, []*openlaneclient.RiskOrder, ...clientv2.RequestInterceptor) *openlaneclient.GetAllRisks); ok {
+		r0 = returnFunc(ctx, first, last, after, before, orderBy, interceptors...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*openlaneclient.GetAllRisks)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, interceptors...)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *string, *string, []*openlaneclient.RiskOrder, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, after, before, orderBy, interceptors...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -20424,27 +20454,57 @@ type MockOpenlaneGraphClient_GetAllRisks_Call struct {
 
 // GetAllRisks is a helper method to define mock.On call
 //   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - after *string
+//   - before *string
+//   - orderBy []*openlaneclient.RiskOrder
 //   - interceptors ...clientv2.RequestInterceptor
-func (_e *MockOpenlaneGraphClient_Expecter) GetAllRisks(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllRisks_Call {
+func (_e *MockOpenlaneGraphClient_Expecter) GetAllRisks(ctx interface{}, first interface{}, last interface{}, after interface{}, before interface{}, orderBy interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllRisks_Call {
 	return &MockOpenlaneGraphClient_GetAllRisks_Call{Call: _e.mock.On("GetAllRisks",
-		append([]interface{}{ctx}, interceptors...)...)}
+		append([]interface{}{ctx, first, last, after, before, orderBy}, interceptors...)...)}
 }
 
-func (_c *MockOpenlaneGraphClient_GetAllRisks_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllRisks_Call {
+func (_c *MockOpenlaneGraphClient_GetAllRisks_Call) Run(run func(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*openlaneclient.RiskOrder, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllRisks_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
 			arg0 = args[0].(context.Context)
 		}
-		var arg1 []clientv2.RequestInterceptor
-		var variadicArgs []clientv2.RequestInterceptor
-		if len(args) > 1 {
-			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
 		}
-		arg1 = variadicArgs
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *string
+		if args[3] != nil {
+			arg3 = args[3].(*string)
+		}
+		var arg4 *string
+		if args[4] != nil {
+			arg4 = args[4].(*string)
+		}
+		var arg5 []*openlaneclient.RiskOrder
+		if args[5] != nil {
+			arg5 = args[5].([]*openlaneclient.RiskOrder)
+		}
+		var arg6 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 6 {
+			variadicArgs = args[6].([]clientv2.RequestInterceptor)
+		}
+		arg6 = variadicArgs
 		run(
 			arg0,
-			arg1...,
+			arg1,
+			arg2,
+			arg3,
+			arg4,
+			arg5,
+			arg6...,
 		)
 	})
 	return _c
@@ -20455,7 +20515,7 @@ func (_c *MockOpenlaneGraphClient_GetAllRisks_Call) Return(getAllRisks *openlane
 	return _c
 }
 
-func (_c *MockOpenlaneGraphClient_GetAllRisks_Call) RunAndReturn(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllRisks, error)) *MockOpenlaneGraphClient_GetAllRisks_Call {
+func (_c *MockOpenlaneGraphClient_GetAllRisks_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*openlaneclient.RiskOrder, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllRisks, error)) *MockOpenlaneGraphClient_GetAllRisks_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -21308,12 +21368,12 @@ func (_c *MockOpenlaneGraphClient_GetAllSubprocessors_Call) RunAndReturn(run fun
 }
 
 // GetAllSubscribers provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) GetAllSubscribers(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllSubscribers, error) {
+func (_mock *MockOpenlaneGraphClient) GetAllSubscribers(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*openlaneclient.SubscriberOrder, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllSubscribers, error) {
 	var tmpRet mock.Arguments
 	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, interceptors)
+		tmpRet = _mock.Called(ctx, first, last, after, before, orderBy, interceptors)
 	} else {
-		tmpRet = _mock.Called(ctx)
+		tmpRet = _mock.Called(ctx, first, last, after, before, orderBy)
 	}
 	ret := tmpRet
 
@@ -21323,18 +21383,18 @@ func (_mock *MockOpenlaneGraphClient) GetAllSubscribers(ctx context.Context, int
 
 	var r0 *openlaneclient.GetAllSubscribers
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) (*openlaneclient.GetAllSubscribers, error)); ok {
-		return returnFunc(ctx, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *string, *string, []*openlaneclient.SubscriberOrder, ...clientv2.RequestInterceptor) (*openlaneclient.GetAllSubscribers, error)); ok {
+		return returnFunc(ctx, first, last, after, before, orderBy, interceptors...)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) *openlaneclient.GetAllSubscribers); ok {
-		r0 = returnFunc(ctx, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *string, *string, []*openlaneclient.SubscriberOrder, ...clientv2.RequestInterceptor) *openlaneclient.GetAllSubscribers); ok {
+		r0 = returnFunc(ctx, first, last, after, before, orderBy, interceptors...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*openlaneclient.GetAllSubscribers)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, interceptors...)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *string, *string, []*openlaneclient.SubscriberOrder, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, after, before, orderBy, interceptors...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -21348,27 +21408,57 @@ type MockOpenlaneGraphClient_GetAllSubscribers_Call struct {
 
 // GetAllSubscribers is a helper method to define mock.On call
 //   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - after *string
+//   - before *string
+//   - orderBy []*openlaneclient.SubscriberOrder
 //   - interceptors ...clientv2.RequestInterceptor
-func (_e *MockOpenlaneGraphClient_Expecter) GetAllSubscribers(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllSubscribers_Call {
+func (_e *MockOpenlaneGraphClient_Expecter) GetAllSubscribers(ctx interface{}, first interface{}, last interface{}, after interface{}, before interface{}, orderBy interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllSubscribers_Call {
 	return &MockOpenlaneGraphClient_GetAllSubscribers_Call{Call: _e.mock.On("GetAllSubscribers",
-		append([]interface{}{ctx}, interceptors...)...)}
+		append([]interface{}{ctx, first, last, after, before, orderBy}, interceptors...)...)}
 }
 
-func (_c *MockOpenlaneGraphClient_GetAllSubscribers_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllSubscribers_Call {
+func (_c *MockOpenlaneGraphClient_GetAllSubscribers_Call) Run(run func(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*openlaneclient.SubscriberOrder, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllSubscribers_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
 			arg0 = args[0].(context.Context)
 		}
-		var arg1 []clientv2.RequestInterceptor
-		var variadicArgs []clientv2.RequestInterceptor
-		if len(args) > 1 {
-			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
 		}
-		arg1 = variadicArgs
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *string
+		if args[3] != nil {
+			arg3 = args[3].(*string)
+		}
+		var arg4 *string
+		if args[4] != nil {
+			arg4 = args[4].(*string)
+		}
+		var arg5 []*openlaneclient.SubscriberOrder
+		if args[5] != nil {
+			arg5 = args[5].([]*openlaneclient.SubscriberOrder)
+		}
+		var arg6 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 6 {
+			variadicArgs = args[6].([]clientv2.RequestInterceptor)
+		}
+		arg6 = variadicArgs
 		run(
 			arg0,
-			arg1...,
+			arg1,
+			arg2,
+			arg3,
+			arg4,
+			arg5,
+			arg6...,
 		)
 	})
 	return _c
@@ -21379,7 +21469,7 @@ func (_c *MockOpenlaneGraphClient_GetAllSubscribers_Call) Return(getAllSubscribe
 	return _c
 }
 
-func (_c *MockOpenlaneGraphClient_GetAllSubscribers_Call) RunAndReturn(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllSubscribers, error)) *MockOpenlaneGraphClient_GetAllSubscribers_Call {
+func (_c *MockOpenlaneGraphClient_GetAllSubscribers_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*openlaneclient.SubscriberOrder, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllSubscribers, error)) *MockOpenlaneGraphClient_GetAllSubscribers_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -21539,12 +21629,12 @@ func (_c *MockOpenlaneGraphClient_GetAllTaskHistories_Call) RunAndReturn(run fun
 }
 
 // GetAllTasks provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) GetAllTasks(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTasks, error) {
+func (_mock *MockOpenlaneGraphClient) GetAllTasks(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*openlaneclient.TaskOrder, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTasks, error) {
 	var tmpRet mock.Arguments
 	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, interceptors)
+		tmpRet = _mock.Called(ctx, first, last, after, before, orderBy, interceptors)
 	} else {
-		tmpRet = _mock.Called(ctx)
+		tmpRet = _mock.Called(ctx, first, last, after, before, orderBy)
 	}
 	ret := tmpRet
 
@@ -21554,18 +21644,18 @@ func (_mock *MockOpenlaneGraphClient) GetAllTasks(ctx context.Context, intercept
 
 	var r0 *openlaneclient.GetAllTasks
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTasks, error)); ok {
-		return returnFunc(ctx, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *string, *string, []*openlaneclient.TaskOrder, ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTasks, error)); ok {
+		return returnFunc(ctx, first, last, after, before, orderBy, interceptors...)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, ...clientv2.RequestInterceptor) *openlaneclient.GetAllTasks); ok {
-		r0 = returnFunc(ctx, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *string, *string, []*openlaneclient.TaskOrder, ...clientv2.RequestInterceptor) *openlaneclient.GetAllTasks); ok {
+		r0 = returnFunc(ctx, first, last, after, before, orderBy, interceptors...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*openlaneclient.GetAllTasks)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, interceptors...)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *string, *string, []*openlaneclient.TaskOrder, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, after, before, orderBy, interceptors...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -21579,27 +21669,57 @@ type MockOpenlaneGraphClient_GetAllTasks_Call struct {
 
 // GetAllTasks is a helper method to define mock.On call
 //   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - after *string
+//   - before *string
+//   - orderBy []*openlaneclient.TaskOrder
 //   - interceptors ...clientv2.RequestInterceptor
-func (_e *MockOpenlaneGraphClient_Expecter) GetAllTasks(ctx interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllTasks_Call {
+func (_e *MockOpenlaneGraphClient_Expecter) GetAllTasks(ctx interface{}, first interface{}, last interface{}, after interface{}, before interface{}, orderBy interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetAllTasks_Call {
 	return &MockOpenlaneGraphClient_GetAllTasks_Call{Call: _e.mock.On("GetAllTasks",
-		append([]interface{}{ctx}, interceptors...)...)}
+		append([]interface{}{ctx, first, last, after, before, orderBy}, interceptors...)...)}
 }
 
-func (_c *MockOpenlaneGraphClient_GetAllTasks_Call) Run(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllTasks_Call {
+func (_c *MockOpenlaneGraphClient_GetAllTasks_Call) Run(run func(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*openlaneclient.TaskOrder, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetAllTasks_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
 			arg0 = args[0].(context.Context)
 		}
-		var arg1 []clientv2.RequestInterceptor
-		var variadicArgs []clientv2.RequestInterceptor
-		if len(args) > 1 {
-			variadicArgs = args[1].([]clientv2.RequestInterceptor)
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
 		}
-		arg1 = variadicArgs
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *string
+		if args[3] != nil {
+			arg3 = args[3].(*string)
+		}
+		var arg4 *string
+		if args[4] != nil {
+			arg4 = args[4].(*string)
+		}
+		var arg5 []*openlaneclient.TaskOrder
+		if args[5] != nil {
+			arg5 = args[5].([]*openlaneclient.TaskOrder)
+		}
+		var arg6 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 6 {
+			variadicArgs = args[6].([]clientv2.RequestInterceptor)
+		}
+		arg6 = variadicArgs
 		run(
 			arg0,
-			arg1...,
+			arg1,
+			arg2,
+			arg3,
+			arg4,
+			arg5,
+			arg6...,
 		)
 	})
 	return _c
@@ -21610,7 +21730,7 @@ func (_c *MockOpenlaneGraphClient_GetAllTasks_Call) Return(getAllTasks *openlane
 	return _c
 }
 
-func (_c *MockOpenlaneGraphClient_GetAllTasks_Call) RunAndReturn(run func(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTasks, error)) *MockOpenlaneGraphClient_GetAllTasks_Call {
+func (_c *MockOpenlaneGraphClient_GetAllTasks_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*openlaneclient.TaskOrder, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetAllTasks, error)) *MockOpenlaneGraphClient_GetAllTasks_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -24230,12 +24350,12 @@ func (_c *MockOpenlaneGraphClient_GetControlSubcategories_Call) RunAndReturn(run
 }
 
 // GetControls provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) GetControls(ctx context.Context, first *int64, last *int64, where *openlaneclient.ControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetControls, error) {
+func (_mock *MockOpenlaneGraphClient) GetControls(ctx context.Context, first *int64, last *int64, after *string, before *string, where *openlaneclient.ControlWhereInput, orderBy []*openlaneclient.ControlOrder, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetControls, error) {
 	var tmpRet mock.Arguments
 	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, first, last, where, interceptors)
+		tmpRet = _mock.Called(ctx, first, last, after, before, where, orderBy, interceptors)
 	} else {
-		tmpRet = _mock.Called(ctx, first, last, where)
+		tmpRet = _mock.Called(ctx, first, last, after, before, where, orderBy)
 	}
 	ret := tmpRet
 
@@ -24245,18 +24365,18 @@ func (_mock *MockOpenlaneGraphClient) GetControls(ctx context.Context, first *in
 
 	var r0 *openlaneclient.GetControls
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.ControlWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetControls, error)); ok {
-		return returnFunc(ctx, first, last, where, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *string, *string, *openlaneclient.ControlWhereInput, []*openlaneclient.ControlOrder, ...clientv2.RequestInterceptor) (*openlaneclient.GetControls, error)); ok {
+		return returnFunc(ctx, first, last, after, before, where, orderBy, interceptors...)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.ControlWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetControls); ok {
-		r0 = returnFunc(ctx, first, last, where, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *string, *string, *openlaneclient.ControlWhereInput, []*openlaneclient.ControlOrder, ...clientv2.RequestInterceptor) *openlaneclient.GetControls); ok {
+		r0 = returnFunc(ctx, first, last, after, before, where, orderBy, interceptors...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*openlaneclient.GetControls)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *openlaneclient.ControlWhereInput, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, first, last, where, interceptors...)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *string, *string, *openlaneclient.ControlWhereInput, []*openlaneclient.ControlOrder, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, after, before, where, orderBy, interceptors...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -24272,14 +24392,17 @@ type MockOpenlaneGraphClient_GetControls_Call struct {
 //   - ctx context.Context
 //   - first *int64
 //   - last *int64
+//   - after *string
+//   - before *string
 //   - where *openlaneclient.ControlWhereInput
+//   - orderBy []*openlaneclient.ControlOrder
 //   - interceptors ...clientv2.RequestInterceptor
-func (_e *MockOpenlaneGraphClient_Expecter) GetControls(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetControls_Call {
+func (_e *MockOpenlaneGraphClient_Expecter) GetControls(ctx interface{}, first interface{}, last interface{}, after interface{}, before interface{}, where interface{}, orderBy interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetControls_Call {
 	return &MockOpenlaneGraphClient_GetControls_Call{Call: _e.mock.On("GetControls",
-		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
+		append([]interface{}{ctx, first, last, after, before, where, orderBy}, interceptors...)...)}
 }
 
-func (_c *MockOpenlaneGraphClient_GetControls_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.ControlWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetControls_Call {
+func (_c *MockOpenlaneGraphClient_GetControls_Call) Run(run func(ctx context.Context, first *int64, last *int64, after *string, before *string, where *openlaneclient.ControlWhereInput, orderBy []*openlaneclient.ControlOrder, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetControls_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -24293,22 +24416,37 @@ func (_c *MockOpenlaneGraphClient_GetControls_Call) Run(run func(ctx context.Con
 		if args[2] != nil {
 			arg2 = args[2].(*int64)
 		}
-		var arg3 *openlaneclient.ControlWhereInput
+		var arg3 *string
 		if args[3] != nil {
-			arg3 = args[3].(*openlaneclient.ControlWhereInput)
+			arg3 = args[3].(*string)
 		}
-		var arg4 []clientv2.RequestInterceptor
+		var arg4 *string
+		if args[4] != nil {
+			arg4 = args[4].(*string)
+		}
+		var arg5 *openlaneclient.ControlWhereInput
+		if args[5] != nil {
+			arg5 = args[5].(*openlaneclient.ControlWhereInput)
+		}
+		var arg6 []*openlaneclient.ControlOrder
+		if args[6] != nil {
+			arg6 = args[6].([]*openlaneclient.ControlOrder)
+		}
+		var arg7 []clientv2.RequestInterceptor
 		var variadicArgs []clientv2.RequestInterceptor
-		if len(args) > 4 {
-			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		if len(args) > 7 {
+			variadicArgs = args[7].([]clientv2.RequestInterceptor)
 		}
-		arg4 = variadicArgs
+		arg7 = variadicArgs
 		run(
 			arg0,
 			arg1,
 			arg2,
 			arg3,
-			arg4...,
+			arg4,
+			arg5,
+			arg6,
+			arg7...,
 		)
 	})
 	return _c
@@ -24319,7 +24457,7 @@ func (_c *MockOpenlaneGraphClient_GetControls_Call) Return(getControls *openlane
 	return _c
 }
 
-func (_c *MockOpenlaneGraphClient_GetControls_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.ControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetControls, error)) *MockOpenlaneGraphClient_GetControls_Call {
+func (_c *MockOpenlaneGraphClient_GetControls_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, after *string, before *string, where *openlaneclient.ControlWhereInput, orderBy []*openlaneclient.ControlOrder, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetControls, error)) *MockOpenlaneGraphClient_GetControls_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -27634,12 +27772,12 @@ func (_c *MockOpenlaneGraphClient_GetIntegrations_Call) RunAndReturn(run func(ct
 }
 
 // GetInternalPolicies provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) GetInternalPolicies(ctx context.Context, where *openlaneclient.InternalPolicyWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetInternalPolicies, error) {
+func (_mock *MockOpenlaneGraphClient) GetInternalPolicies(ctx context.Context, first *int64, last *int64, after *string, before *string, where *openlaneclient.InternalPolicyWhereInput, orderBy []*openlaneclient.InternalPolicyOrder, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetInternalPolicies, error) {
 	var tmpRet mock.Arguments
 	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, where, interceptors)
+		tmpRet = _mock.Called(ctx, first, last, after, before, where, orderBy, interceptors)
 	} else {
-		tmpRet = _mock.Called(ctx, where)
+		tmpRet = _mock.Called(ctx, first, last, after, before, where, orderBy)
 	}
 	ret := tmpRet
 
@@ -27649,18 +27787,18 @@ func (_mock *MockOpenlaneGraphClient) GetInternalPolicies(ctx context.Context, w
 
 	var r0 *openlaneclient.GetInternalPolicies
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *openlaneclient.InternalPolicyWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetInternalPolicies, error)); ok {
-		return returnFunc(ctx, where, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *string, *string, *openlaneclient.InternalPolicyWhereInput, []*openlaneclient.InternalPolicyOrder, ...clientv2.RequestInterceptor) (*openlaneclient.GetInternalPolicies, error)); ok {
+		return returnFunc(ctx, first, last, after, before, where, orderBy, interceptors...)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *openlaneclient.InternalPolicyWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetInternalPolicies); ok {
-		r0 = returnFunc(ctx, where, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *string, *string, *openlaneclient.InternalPolicyWhereInput, []*openlaneclient.InternalPolicyOrder, ...clientv2.RequestInterceptor) *openlaneclient.GetInternalPolicies); ok {
+		r0 = returnFunc(ctx, first, last, after, before, where, orderBy, interceptors...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*openlaneclient.GetInternalPolicies)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, *openlaneclient.InternalPolicyWhereInput, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, where, interceptors...)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *string, *string, *openlaneclient.InternalPolicyWhereInput, []*openlaneclient.InternalPolicyOrder, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, after, before, where, orderBy, interceptors...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -27674,33 +27812,63 @@ type MockOpenlaneGraphClient_GetInternalPolicies_Call struct {
 
 // GetInternalPolicies is a helper method to define mock.On call
 //   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - after *string
+//   - before *string
 //   - where *openlaneclient.InternalPolicyWhereInput
+//   - orderBy []*openlaneclient.InternalPolicyOrder
 //   - interceptors ...clientv2.RequestInterceptor
-func (_e *MockOpenlaneGraphClient_Expecter) GetInternalPolicies(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetInternalPolicies_Call {
+func (_e *MockOpenlaneGraphClient_Expecter) GetInternalPolicies(ctx interface{}, first interface{}, last interface{}, after interface{}, before interface{}, where interface{}, orderBy interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetInternalPolicies_Call {
 	return &MockOpenlaneGraphClient_GetInternalPolicies_Call{Call: _e.mock.On("GetInternalPolicies",
-		append([]interface{}{ctx, where}, interceptors...)...)}
+		append([]interface{}{ctx, first, last, after, before, where, orderBy}, interceptors...)...)}
 }
 
-func (_c *MockOpenlaneGraphClient_GetInternalPolicies_Call) Run(run func(ctx context.Context, where *openlaneclient.InternalPolicyWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetInternalPolicies_Call {
+func (_c *MockOpenlaneGraphClient_GetInternalPolicies_Call) Run(run func(ctx context.Context, first *int64, last *int64, after *string, before *string, where *openlaneclient.InternalPolicyWhereInput, orderBy []*openlaneclient.InternalPolicyOrder, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetInternalPolicies_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
 			arg0 = args[0].(context.Context)
 		}
-		var arg1 *openlaneclient.InternalPolicyWhereInput
+		var arg1 *int64
 		if args[1] != nil {
-			arg1 = args[1].(*openlaneclient.InternalPolicyWhereInput)
+			arg1 = args[1].(*int64)
 		}
-		var arg2 []clientv2.RequestInterceptor
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *string
+		if args[3] != nil {
+			arg3 = args[3].(*string)
+		}
+		var arg4 *string
+		if args[4] != nil {
+			arg4 = args[4].(*string)
+		}
+		var arg5 *openlaneclient.InternalPolicyWhereInput
+		if args[5] != nil {
+			arg5 = args[5].(*openlaneclient.InternalPolicyWhereInput)
+		}
+		var arg6 []*openlaneclient.InternalPolicyOrder
+		if args[6] != nil {
+			arg6 = args[6].([]*openlaneclient.InternalPolicyOrder)
+		}
+		var arg7 []clientv2.RequestInterceptor
 		var variadicArgs []clientv2.RequestInterceptor
-		if len(args) > 2 {
-			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		if len(args) > 7 {
+			variadicArgs = args[7].([]clientv2.RequestInterceptor)
 		}
-		arg2 = variadicArgs
+		arg7 = variadicArgs
 		run(
 			arg0,
 			arg1,
-			arg2...,
+			arg2,
+			arg3,
+			arg4,
+			arg5,
+			arg6,
+			arg7...,
 		)
 	})
 	return _c
@@ -27711,7 +27879,7 @@ func (_c *MockOpenlaneGraphClient_GetInternalPolicies_Call) Return(getInternalPo
 	return _c
 }
 
-func (_c *MockOpenlaneGraphClient_GetInternalPolicies_Call) RunAndReturn(run func(ctx context.Context, where *openlaneclient.InternalPolicyWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetInternalPolicies, error)) *MockOpenlaneGraphClient_GetInternalPolicies_Call {
+func (_c *MockOpenlaneGraphClient_GetInternalPolicies_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, after *string, before *string, where *openlaneclient.InternalPolicyWhereInput, orderBy []*openlaneclient.InternalPolicyOrder, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetInternalPolicies, error)) *MockOpenlaneGraphClient_GetInternalPolicies_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -31714,12 +31882,12 @@ func (_c *MockOpenlaneGraphClient_GetRiskHistories_Call) RunAndReturn(run func(c
 }
 
 // GetRisks provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) GetRisks(ctx context.Context, where *openlaneclient.RiskWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetRisks, error) {
+func (_mock *MockOpenlaneGraphClient) GetRisks(ctx context.Context, first *int64, last *int64, after *string, before *string, where *openlaneclient.RiskWhereInput, orderBy []*openlaneclient.RiskOrder, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetRisks, error) {
 	var tmpRet mock.Arguments
 	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, where, interceptors)
+		tmpRet = _mock.Called(ctx, first, last, after, before, where, orderBy, interceptors)
 	} else {
-		tmpRet = _mock.Called(ctx, where)
+		tmpRet = _mock.Called(ctx, first, last, after, before, where, orderBy)
 	}
 	ret := tmpRet
 
@@ -31729,18 +31897,18 @@ func (_mock *MockOpenlaneGraphClient) GetRisks(ctx context.Context, where *openl
 
 	var r0 *openlaneclient.GetRisks
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *openlaneclient.RiskWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetRisks, error)); ok {
-		return returnFunc(ctx, where, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *string, *string, *openlaneclient.RiskWhereInput, []*openlaneclient.RiskOrder, ...clientv2.RequestInterceptor) (*openlaneclient.GetRisks, error)); ok {
+		return returnFunc(ctx, first, last, after, before, where, orderBy, interceptors...)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *openlaneclient.RiskWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetRisks); ok {
-		r0 = returnFunc(ctx, where, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *string, *string, *openlaneclient.RiskWhereInput, []*openlaneclient.RiskOrder, ...clientv2.RequestInterceptor) *openlaneclient.GetRisks); ok {
+		r0 = returnFunc(ctx, first, last, after, before, where, orderBy, interceptors...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*openlaneclient.GetRisks)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, *openlaneclient.RiskWhereInput, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, where, interceptors...)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *string, *string, *openlaneclient.RiskWhereInput, []*openlaneclient.RiskOrder, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, after, before, where, orderBy, interceptors...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -31754,33 +31922,63 @@ type MockOpenlaneGraphClient_GetRisks_Call struct {
 
 // GetRisks is a helper method to define mock.On call
 //   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - after *string
+//   - before *string
 //   - where *openlaneclient.RiskWhereInput
+//   - orderBy []*openlaneclient.RiskOrder
 //   - interceptors ...clientv2.RequestInterceptor
-func (_e *MockOpenlaneGraphClient_Expecter) GetRisks(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetRisks_Call {
+func (_e *MockOpenlaneGraphClient_Expecter) GetRisks(ctx interface{}, first interface{}, last interface{}, after interface{}, before interface{}, where interface{}, orderBy interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetRisks_Call {
 	return &MockOpenlaneGraphClient_GetRisks_Call{Call: _e.mock.On("GetRisks",
-		append([]interface{}{ctx, where}, interceptors...)...)}
+		append([]interface{}{ctx, first, last, after, before, where, orderBy}, interceptors...)...)}
 }
 
-func (_c *MockOpenlaneGraphClient_GetRisks_Call) Run(run func(ctx context.Context, where *openlaneclient.RiskWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetRisks_Call {
+func (_c *MockOpenlaneGraphClient_GetRisks_Call) Run(run func(ctx context.Context, first *int64, last *int64, after *string, before *string, where *openlaneclient.RiskWhereInput, orderBy []*openlaneclient.RiskOrder, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetRisks_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
 			arg0 = args[0].(context.Context)
 		}
-		var arg1 *openlaneclient.RiskWhereInput
+		var arg1 *int64
 		if args[1] != nil {
-			arg1 = args[1].(*openlaneclient.RiskWhereInput)
+			arg1 = args[1].(*int64)
 		}
-		var arg2 []clientv2.RequestInterceptor
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *string
+		if args[3] != nil {
+			arg3 = args[3].(*string)
+		}
+		var arg4 *string
+		if args[4] != nil {
+			arg4 = args[4].(*string)
+		}
+		var arg5 *openlaneclient.RiskWhereInput
+		if args[5] != nil {
+			arg5 = args[5].(*openlaneclient.RiskWhereInput)
+		}
+		var arg6 []*openlaneclient.RiskOrder
+		if args[6] != nil {
+			arg6 = args[6].([]*openlaneclient.RiskOrder)
+		}
+		var arg7 []clientv2.RequestInterceptor
 		var variadicArgs []clientv2.RequestInterceptor
-		if len(args) > 2 {
-			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		if len(args) > 7 {
+			variadicArgs = args[7].([]clientv2.RequestInterceptor)
 		}
-		arg2 = variadicArgs
+		arg7 = variadicArgs
 		run(
 			arg0,
 			arg1,
-			arg2...,
+			arg2,
+			arg3,
+			arg4,
+			arg5,
+			arg6,
+			arg7...,
 		)
 	})
 	return _c
@@ -31791,7 +31989,7 @@ func (_c *MockOpenlaneGraphClient_GetRisks_Call) Return(getRisks *openlaneclient
 	return _c
 }
 
-func (_c *MockOpenlaneGraphClient_GetRisks_Call) RunAndReturn(run func(ctx context.Context, where *openlaneclient.RiskWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetRisks, error)) *MockOpenlaneGraphClient_GetRisks_Call {
+func (_c *MockOpenlaneGraphClient_GetRisks_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, after *string, before *string, where *openlaneclient.RiskWhereInput, orderBy []*openlaneclient.RiskOrder, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetRisks, error)) *MockOpenlaneGraphClient_GetRisks_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -33464,12 +33662,12 @@ func (_c *MockOpenlaneGraphClient_GetSubscriberByEmail_Call) RunAndReturn(run fu
 }
 
 // GetSubscribers provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) GetSubscribers(ctx context.Context, where *openlaneclient.SubscriberWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetSubscribers, error) {
+func (_mock *MockOpenlaneGraphClient) GetSubscribers(ctx context.Context, first *int64, last *int64, after *string, before *string, where *openlaneclient.SubscriberWhereInput, orderBy []*openlaneclient.SubscriberOrder, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetSubscribers, error) {
 	var tmpRet mock.Arguments
 	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, where, interceptors)
+		tmpRet = _mock.Called(ctx, first, last, after, before, where, orderBy, interceptors)
 	} else {
-		tmpRet = _mock.Called(ctx, where)
+		tmpRet = _mock.Called(ctx, first, last, after, before, where, orderBy)
 	}
 	ret := tmpRet
 
@@ -33479,18 +33677,18 @@ func (_mock *MockOpenlaneGraphClient) GetSubscribers(ctx context.Context, where 
 
 	var r0 *openlaneclient.GetSubscribers
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *openlaneclient.SubscriberWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetSubscribers, error)); ok {
-		return returnFunc(ctx, where, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *string, *string, *openlaneclient.SubscriberWhereInput, []*openlaneclient.SubscriberOrder, ...clientv2.RequestInterceptor) (*openlaneclient.GetSubscribers, error)); ok {
+		return returnFunc(ctx, first, last, after, before, where, orderBy, interceptors...)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *openlaneclient.SubscriberWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetSubscribers); ok {
-		r0 = returnFunc(ctx, where, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *string, *string, *openlaneclient.SubscriberWhereInput, []*openlaneclient.SubscriberOrder, ...clientv2.RequestInterceptor) *openlaneclient.GetSubscribers); ok {
+		r0 = returnFunc(ctx, first, last, after, before, where, orderBy, interceptors...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*openlaneclient.GetSubscribers)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, *openlaneclient.SubscriberWhereInput, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, where, interceptors...)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *string, *string, *openlaneclient.SubscriberWhereInput, []*openlaneclient.SubscriberOrder, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, after, before, where, orderBy, interceptors...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -33504,33 +33702,63 @@ type MockOpenlaneGraphClient_GetSubscribers_Call struct {
 
 // GetSubscribers is a helper method to define mock.On call
 //   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - after *string
+//   - before *string
 //   - where *openlaneclient.SubscriberWhereInput
+//   - orderBy []*openlaneclient.SubscriberOrder
 //   - interceptors ...clientv2.RequestInterceptor
-func (_e *MockOpenlaneGraphClient_Expecter) GetSubscribers(ctx interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetSubscribers_Call {
+func (_e *MockOpenlaneGraphClient_Expecter) GetSubscribers(ctx interface{}, first interface{}, last interface{}, after interface{}, before interface{}, where interface{}, orderBy interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetSubscribers_Call {
 	return &MockOpenlaneGraphClient_GetSubscribers_Call{Call: _e.mock.On("GetSubscribers",
-		append([]interface{}{ctx, where}, interceptors...)...)}
+		append([]interface{}{ctx, first, last, after, before, where, orderBy}, interceptors...)...)}
 }
 
-func (_c *MockOpenlaneGraphClient_GetSubscribers_Call) Run(run func(ctx context.Context, where *openlaneclient.SubscriberWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetSubscribers_Call {
+func (_c *MockOpenlaneGraphClient_GetSubscribers_Call) Run(run func(ctx context.Context, first *int64, last *int64, after *string, before *string, where *openlaneclient.SubscriberWhereInput, orderBy []*openlaneclient.SubscriberOrder, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetSubscribers_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
 			arg0 = args[0].(context.Context)
 		}
-		var arg1 *openlaneclient.SubscriberWhereInput
+		var arg1 *int64
 		if args[1] != nil {
-			arg1 = args[1].(*openlaneclient.SubscriberWhereInput)
+			arg1 = args[1].(*int64)
 		}
-		var arg2 []clientv2.RequestInterceptor
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *string
+		if args[3] != nil {
+			arg3 = args[3].(*string)
+		}
+		var arg4 *string
+		if args[4] != nil {
+			arg4 = args[4].(*string)
+		}
+		var arg5 *openlaneclient.SubscriberWhereInput
+		if args[5] != nil {
+			arg5 = args[5].(*openlaneclient.SubscriberWhereInput)
+		}
+		var arg6 []*openlaneclient.SubscriberOrder
+		if args[6] != nil {
+			arg6 = args[6].([]*openlaneclient.SubscriberOrder)
+		}
+		var arg7 []clientv2.RequestInterceptor
 		var variadicArgs []clientv2.RequestInterceptor
-		if len(args) > 2 {
-			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		if len(args) > 7 {
+			variadicArgs = args[7].([]clientv2.RequestInterceptor)
 		}
-		arg2 = variadicArgs
+		arg7 = variadicArgs
 		run(
 			arg0,
 			arg1,
-			arg2...,
+			arg2,
+			arg3,
+			arg4,
+			arg5,
+			arg6,
+			arg7...,
 		)
 	})
 	return _c
@@ -33541,7 +33769,7 @@ func (_c *MockOpenlaneGraphClient_GetSubscribers_Call) Return(getSubscribers *op
 	return _c
 }
 
-func (_c *MockOpenlaneGraphClient_GetSubscribers_Call) RunAndReturn(run func(ctx context.Context, where *openlaneclient.SubscriberWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetSubscribers, error)) *MockOpenlaneGraphClient_GetSubscribers_Call {
+func (_c *MockOpenlaneGraphClient_GetSubscribers_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, after *string, before *string, where *openlaneclient.SubscriberWhereInput, orderBy []*openlaneclient.SubscriberOrder, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetSubscribers, error)) *MockOpenlaneGraphClient_GetSubscribers_Call {
 	_c.Call.Return(run)
 	return _c
 }

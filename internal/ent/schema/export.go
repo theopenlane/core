@@ -61,6 +61,11 @@ func (Export) Fields() []ent.Field {
 			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput),
 			),
+		field.JSON("fields", []string{}).
+			Comment("the specific fields to include in the export (defaults to only the id if not provided)").
+			Default([]string{"id"}).
+			Optional().
+			Immutable(),
 	}
 }
 

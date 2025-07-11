@@ -1281,6 +1281,7 @@ type ComplexityRoot struct {
 		CreatedBy   func(childComplexity int) int
 		Events      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		ExportType  func(childComplexity int) int
+		Fields      func(childComplexity int) int
 		Files       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		Format      func(childComplexity int) int
 		ID          func(childComplexity int) int
@@ -10747,6 +10748,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Export.ExportType(childComplexity), true
+
+	case "Export.fields":
+		if e.complexity.Export.Fields == nil {
+			break
+		}
+
+		return e.complexity.Export.Fields(childComplexity), true
 
 	case "Export.files":
 		if e.complexity.Export.Files == nil {
@@ -42721,6 +42729,10 @@ input CreateExportInput {
   the format of export, e.g., csv and others
   """
   format: ExportExportFormat!
+  """
+  the specific fields to include in the export (defaults to only the id if not provided)
+  """
+  fields: [String!]
   ownerID: ID
   eventIDs: [ID!]
   fileIDs: [ID!]
@@ -49225,6 +49237,10 @@ type Export implements Node {
   the user who initiated the export
   """
   requestorID: String
+  """
+  the specific fields to include in the export (defaults to only the id if not provided)
+  """
+  fields: [String!]
   owner: Organization
   events(
     """
@@ -49332,12 +49348,19 @@ enum ExportExportStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.E
   PENDING
   FAILED
   READY
+  NODATA
 }
 """
 ExportExportType is enum for the field export_type
 """
 enum ExportExportType @goModel(model: "github.com/theopenlane/core/pkg/enums.ExportType") {
   CONTROL
+  EVIDENCE
+  INTERNALPOLICY
+  PROCEDURE
+  RISK
+  SUBSCRIBER
+  TASK
 }
 """
 Ordering options for Export connections
