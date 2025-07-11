@@ -13,11 +13,16 @@ import (
 )
 
 var (
+	// baseMW includes the basic middleware, which includes the transaction middleware and recovery middleware, most endpoints will not use this, but use `mw` instead
 	baseMW = []echo.MiddlewareFunc{}
-	mw     = []echo.MiddlewareFunc{}
+	// mw is the default middleware that is applied to all routes, it includes the transaction middleware and any additional middleware (including csrf)
+	// this is used for most routes that are not authenticated or restricted
+	mw = []echo.MiddlewareFunc{}
+	// authMW is the middleware that is used on authenticated routes, it includes the transaction middleware, the auth middleware, and any additional middleware after the auth middleware
 	authMW = []echo.MiddlewareFunc{}
 
-	restrictedRateLimit   = &ratelimit.Config{RateLimit: 10, BurstLimit: 10, ExpiresIn: 15 * time.Minute} //nolint:mnd
+	restrictedRateLimit = &ratelimit.Config{RateLimit: 10, BurstLimit: 10, ExpiresIn: 15 * time.Minute} //nolint:mnd
+	// restrictedEndpointsMW is the middleware that is used on restricted endpoints, it includes the base middleware, additional middleware, and the rate limiter
 	restrictedEndpointsMW = []echo.MiddlewareFunc{}
 )
 
@@ -240,22 +245,23 @@ func RegisterRoutes(router *Router) error {
 // this isn't used directly in the router register, instead its combined with other middleware functions below
 // to include the additional middleware
 func baseMiddleware(router *Router) []echo.MiddlewareFunc {
+	mw := []echo.MiddlewareFunc{}
+
 	// add transaction middleware
 	transactionConfig := transaction.Client{
 		EntDBClient: router.Handler.DBClient,
 	}
 
-	return append(baseMW, middleware.Recover(), transactionConfig.Middleware)
+	return append(mw, middleware.Recover(), transactionConfig.Middleware)
 }
 
 // restrictedMiddleware returns the middleware for the router that is used on restricted routes
 // it includes the base middleware, the rate limiter, and any additional middleware
 func restrictedMiddleware(router *Router) []echo.MiddlewareFunc {
 	mw := baseMW
-
-	// add the restricted endpoints middleware
+	// add the restricted endpoints middleware (includes csrf)
 	mw = append(mw, router.Handler.AdditionalMiddleware...)
-
+	// add the rate limiter middleware
 	return append(mw, ratelimit.RateLimiterWithConfig(restrictedRateLimit))
 }
 
@@ -264,19 +270,17 @@ func restrictedMiddleware(router *Router) []echo.MiddlewareFunc {
 // after the auth middleware
 func authMiddleware(router *Router) []echo.MiddlewareFunc {
 	mw := baseMW
-
 	// add the auth middleware
 	mw = append(mw, router.Handler.AuthMiddleware...)
-	// append any additional middleware after the auth middleware
-	mw = append(mw, router.Handler.AdditionalMiddleware...)
-
-	return mw
+	// append any additional middleware after the auth middleware (includes csrf)
+	return append(mw, router.Handler.AdditionalMiddleware...)
 }
 
 // defaultMiddleware returns the default middleware for the router to be used
 // on all unauthenticated + unrestricted routes
 func defaultMiddleware(router *Router) []echo.MiddlewareFunc {
+	mw := baseMW
 	// this is the default middleware that is applied to all routes
-	// it includes the transaction middleware and any additional middleware
-	return append(baseMW, router.Handler.AdditionalMiddleware...)
+	// it includes the transaction middleware and any additional middleware (includes csrf)
+	return append(mw, router.Handler.AdditionalMiddleware...)
 }
