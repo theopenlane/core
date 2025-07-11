@@ -83,6 +83,7 @@ func (InternalPolicy) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.Features("compliance", "policy-management"),
 		entfga.SelfAccessChecks(),
+		entx.Exportable{},
 	}
 }
 

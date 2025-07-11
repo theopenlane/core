@@ -149,6 +149,7 @@ func (Subscriber) Annotations() []schema.Annotation {
 		history.Annotations{
 			Exclude: true,
 		},
+		entx.Exportable{},
 	}
 }
 

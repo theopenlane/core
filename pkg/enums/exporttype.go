@@ -14,6 +14,16 @@ var (
 	ExportTypeControl ExportType = "CONTROL"
 	// ExportTypeEvidence indicates the evidence.
 	ExportTypeEvidence ExportType = "EVIDENCE"
+	// ExportTypeInternalpolicy indicates the internalpolicy.
+	ExportTypeInternalpolicy ExportType = "INTERNALPOLICY"
+	// ExportTypeProcedure indicates the procedure.
+	ExportTypeProcedure ExportType = "PROCEDURE"
+	// ExportTypeRisk indicates the risk.
+	ExportTypeRisk ExportType = "RISK"
+	// ExportTypeSubscriber indicates the subscriber.
+	ExportTypeSubscriber ExportType = "SUBSCRIBER"
+	// ExportTypeTask indicates the task.
+	ExportTypeTask ExportType = "TASK"
 	// ExportTypeInvalid is used when an unknown or unsupported value is provided.
 	ExportTypeInvalid ExportType = "EXPORTTYPE_INVALID"
 )
@@ -23,6 +33,11 @@ func (ExportType) Values() []string {
 	return []string{
 		string(ExportTypeControl),
 		string(ExportTypeEvidence),
+		string(ExportTypeInternalpolicy),
+		string(ExportTypeProcedure),
+		string(ExportTypeRisk),
+		string(ExportTypeSubscriber),
+		string(ExportTypeTask),
 	}
 }
 
@@ -38,6 +53,16 @@ func ToExportType(r string) *ExportType {
 		return &ExportTypeControl
 	case ExportTypeEvidence.String():
 		return &ExportTypeEvidence
+	case ExportTypeInternalpolicy.String():
+		return &ExportTypeInternalpolicy
+	case ExportTypeProcedure.String():
+		return &ExportTypeProcedure
+	case ExportTypeRisk.String():
+		return &ExportTypeRisk
+	case ExportTypeSubscriber.String():
+		return &ExportTypeSubscriber
+	case ExportTypeTask.String():
+		return &ExportTypeTask
 	default:
 		return &ExportTypeInvalid
 	}
@@ -52,7 +77,7 @@ func (r ExportType) MarshalGQL(w io.Writer) {
 func (r *ExportType) UnmarshalGQL(v interface{}) error {
 	str, ok := v.(string)
 	if !ok {
-		return fmt.Errorf("wrong type for ExportType, got: %T", v) //nolint:err113
+		return fmt.Errorf("wrong type for ExportType, got: %T", v)  //nolint:err113
 	}
 
 	*r = ExportType(str)
