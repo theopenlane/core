@@ -51,6 +51,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -1878,6 +1879,38 @@ func adminSearchTrustCenters(ctx context.Context, query string, after *entgql.Cu
 				trustcenter.OwnerIDContainsFold(query),        // search by OwnerID
 				trustcenter.SlugContainsFold(query),           // search by Slug
 				trustcenter.CustomDomainIDContainsFold(query), // search by CustomDomainID
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchTrustCenterCompliance searches for TrustCenterCompliance based on the query string looking for matches
+func searchTrustCenterCompliances(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterComplianceConnection, error) {
+	request := withTransactionalMutation(ctx).TrustCenterCompliance.Query().
+		Where(
+			trustcentercompliance.Or(
+				trustcentercompliance.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchTrustCenterCompliance searches for TrustCenterCompliance based on the query string looking for matches
+func adminSearchTrustCenterCompliances(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterComplianceConnection, error) {
+	request := withTransactionalMutation(ctx).TrustCenterCompliance.Query().
+		Where(
+			trustcentercompliance.Or(
+				trustcentercompliance.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
 			),
 		)
 
