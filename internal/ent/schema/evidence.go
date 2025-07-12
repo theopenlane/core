@@ -104,7 +104,7 @@ func (e Evidence) Mixin() []ent.Mixin {
 				withParents(
 					Control{}, Subcontrol{}, ControlObjective{}, Program{},
 					Task{}, Procedure{}, InternalPolicy{}), // used to create parent tuples for the evidence
-				withOrganizationOwner(false),
+				withOrganizationOwner(true),
 			),
 		},
 	}.getMixins()
@@ -125,8 +125,9 @@ func (e Evidence) Edges() []ent.Edge {
 // Annotations of the Evidence
 func (Evidence) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "continuous-compliance-automation"),
+		entx.Features(entx.ModuleCompliance, entx.ModuleContinuousComplianceAutomation),
 		entfga.SelfAccessChecks(),
+		entx.Exportable{},
 	}
 }
 

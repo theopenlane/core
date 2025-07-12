@@ -162,7 +162,7 @@ func TestQueryRisks(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.GetAllRisks(tc.ctx)
+			resp, err := tc.client.GetAllRisks(tc.ctx, nil, nil, nil, nil, nil)
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 

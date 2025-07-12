@@ -4977,10 +4977,12 @@ type CreateExportInput struct {
 	// the type of export, e.g., control, policy, etc.
 	ExportType enums.ExportType `json:"exportType"`
 	// the format of export, e.g., csv and others
-	Format   enums.ExportFormat `json:"format"`
-	OwnerID  *string            `json:"ownerID,omitempty"`
-	EventIDs []string           `json:"eventIDs,omitempty"`
-	FileIDs  []string           `json:"fileIDs,omitempty"`
+	Format enums.ExportFormat `json:"format"`
+	// the specific fields to include in the export (defaults to only the id if not provided)
+	Fields   []string `json:"fields,omitempty"`
+	OwnerID  *string  `json:"ownerID,omitempty"`
+	EventIDs []string `json:"eventIDs,omitempty"`
+	FileIDs  []string `json:"fileIDs,omitempty"`
 }
 
 // CreateFileInput is used for create File object.
@@ -9145,10 +9147,12 @@ type Export struct {
 	// the status of the export, e.g., pending, ready, failed
 	Status enums.ExportStatus `json:"status"`
 	// the user who initiated the export
-	RequestorID *string          `json:"requestorID,omitempty"`
-	Owner       *Organization    `json:"owner,omitempty"`
-	Events      *EventConnection `json:"events"`
-	Files       *FileConnection  `json:"files"`
+	RequestorID *string `json:"requestorID,omitempty"`
+	// the specific fields to include in the export (defaults to only the id if not provided)
+	Fields []string         `json:"fields,omitempty"`
+	Owner  *Organization    `json:"owner,omitempty"`
+	Events *EventConnection `json:"events"`
+	Files  *FileConnection  `json:"files"`
 }
 
 func (Export) IsNode() {}

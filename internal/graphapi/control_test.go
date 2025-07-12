@@ -220,7 +220,7 @@ func TestQueryControls(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
 			if tc.first != nil || tc.last != nil {
-				resp, err := tc.client.GetControls(tc.ctx, tc.first, tc.last, nil)
+				resp, err := tc.client.GetControls(tc.ctx, tc.first, tc.last, nil, nil, nil, nil)
 				assert.NilError(t, err)
 				assert.Check(t, resp != nil)
 

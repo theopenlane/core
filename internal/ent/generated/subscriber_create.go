@@ -355,11 +355,6 @@ func (sc *SubscriberCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (sc *SubscriberCreate) check() error {
-	if v, ok := sc.mutation.OwnerID(); ok {
-		if err := subscriber.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Subscriber.owner_id": %w`, err)}
-		}
-	}
 	if _, ok := sc.mutation.Email(); !ok {
 		return &ValidationError{Name: "email", err: errors.New(`generated: missing required field "Subscriber.email"`)}
 	}

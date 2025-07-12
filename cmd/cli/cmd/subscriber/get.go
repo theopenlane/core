@@ -53,7 +53,7 @@ func get(ctx context.Context) error {
 		where.Active = &active
 	}
 
-	o, err := client.GetSubscribers(ctx, &where)
+	o, err := client.GetSubscribers(ctx, nil, nil, nil, nil, &where, nil)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

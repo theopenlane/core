@@ -12539,6 +12539,11 @@ func (e *ExportQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				selectedFields = append(selectedFields, export.FieldRequestorID)
 				fieldSeen[export.FieldRequestorID] = struct{}{}
 			}
+		case "fields":
+			if _, ok := fieldSeen[export.FieldFields]; !ok {
+				selectedFields = append(selectedFields, export.FieldFields)
+				fieldSeen[export.FieldFields] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

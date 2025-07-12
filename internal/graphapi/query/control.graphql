@@ -327,8 +327,8 @@ query GetControlByID($controlId: ID!) {
   }
 }
 
-query GetControls($first: Int, $last: Int, $where: ControlWhereInput) {
-  controls(first: $first, last: $last, where: $where) {
+query GetControls($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: ControlWhereInput, $orderBy: [ControlOrder!]) {
+  controls(first: $first, last: $last, after: $after, before: $before, where: $where, orderBy: $orderBy) {
     totalCount
     pageInfo {
       startCursor

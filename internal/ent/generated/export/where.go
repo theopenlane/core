@@ -723,6 +723,16 @@ func RequestorIDContainsFold(v string) predicate.Export {
 	return predicate.Export(sql.FieldContainsFold(FieldRequestorID, v))
 }
 
+// FieldsIsNil applies the IsNil predicate on the "fields" field.
+func FieldsIsNil() predicate.Export {
+	return predicate.Export(sql.FieldIsNull(FieldFields))
+}
+
+// FieldsNotNil applies the NotNil predicate on the "fields" field.
+func FieldsNotNil() predicate.Export {
+	return predicate.Export(sql.FieldNotNull(FieldFields))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Export {
 	return predicate.Export(func(s *sql.Selector) {

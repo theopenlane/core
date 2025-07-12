@@ -16,6 +16,8 @@ var (
 	ExportStatusFailed ExportStatus = "FAILED"
 	// ExportStatusReady indicates the ready.
 	ExportStatusReady ExportStatus = "READY"
+	// ExportStatusNodata indicates the nodata.
+	ExportStatusNodata ExportStatus = "NODATA"
 	// ExportStatusInvalid is used when an unknown or unsupported value is provided.
 	ExportStatusInvalid ExportStatus = "EXPORTSTATUS_INVALID"
 )
@@ -26,6 +28,7 @@ func (ExportStatus) Values() []string {
 		string(ExportStatusPending),
 		string(ExportStatusFailed),
 		string(ExportStatusReady),
+		string(ExportStatusNodata),
 	}
 }
 
@@ -43,6 +46,8 @@ func ToExportStatus(r string) *ExportStatus {
 		return &ExportStatusFailed
 	case ExportStatusReady.String():
 		return &ExportStatusReady
+	case ExportStatusNodata.String():
+		return &ExportStatusNodata
 	default:
 		return &ExportStatusInvalid
 	}
