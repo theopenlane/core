@@ -63,6 +63,7 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		taskResults                       *generated.TaskConnection
 		templateResults                   *generated.TemplateConnection
 		trustcenterResults                *generated.TrustCenterConnection
+		trustcentercomplianceResults      *generated.TrustCenterComplianceConnection
 		trustcentersubprocessorResults    *generated.TrustCenterSubprocessorConnection
 		userResults                       *generated.UserConnection
 		usersettingResults                *generated.UserSettingConnection
@@ -359,6 +360,13 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		},
 		func() {
 			var err error
+			trustcentercomplianceResults, err = searchTrustCenterCompliances(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
 			trustcentersubprocessorResults, err = searchTrustCenterSubprocessors(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
@@ -600,6 +608,11 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		res.TrustCenters = trustcenterResults
 
 		res.TotalCount += trustcenterResults.TotalCount
+	}
+	if trustcentercomplianceResults != nil && len(trustcentercomplianceResults.Edges) > 0 {
+		res.TrustCenterCompliances = trustcentercomplianceResults
+
+		res.TotalCount += trustcentercomplianceResults.TotalCount
 	}
 	if trustcentersubprocessorResults != nil && len(trustcentersubprocessorResults.Edges) > 0 {
 		res.TrustCenterSubprocessors = trustcentersubprocessorResults
@@ -1033,6 +1046,16 @@ func (r *queryResolver) TrustCenterSearch(ctx context.Context, query string, aft
 
 	// return the results
 	return trustcenterResults, nil
+}
+func (r *queryResolver) TrustCenterComplianceSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterComplianceConnection, error) {
+	trustcentercomplianceResults, err := searchTrustCenterCompliances(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return trustcentercomplianceResults, nil
 }
 func (r *queryResolver) TrustCenterSubprocessorSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterSubprocessorConnection, error) {
 	trustcentersubprocessorResults, err := searchTrustCenterSubprocessors(ctx, query, after, first, before, last)
