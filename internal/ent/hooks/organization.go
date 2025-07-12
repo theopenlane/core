@@ -653,15 +653,15 @@ func createDefaultOrgModulesProductsPrices(ctx context.Context, orgCreated *gene
 
 	// the catalog contains config for which things should be in a trial, or added for a personal org
 	for moduleName, mod := range cataloggen.DefaultCatalog.Modules {
-		if cfg.personalOrg && !mod.PersonalOrg {
-			continue
-		}
-
-		if cfg.trial && !mod.IncludeWithTrial {
-			continue
-		}
-
 		if !cfg.personalOrg && !cfg.trial {
+			continue
+		}
+
+		if !mod.PersonalOrg {
+			continue
+		}
+
+		if !mod.IncludeWithTrial {
 			continue
 		}
 
@@ -712,15 +712,14 @@ func createDefaultOrgModulesProductsPrices(ctx context.Context, orgCreated *gene
 
 		// we care mostly about which price ID we used in stripe, so we create the local reference for the price because it's the resource which dictates most of the billing toggles in stripe
 		// we don't actually care that it's active or not, but it's relevant to set because we could end up with many prices on a product, and many products on a module
-		_, err = m.Client().OrgPrice.Create().
+		if err := m.Client().OrgPrice.Create().
 			SetProductID(orgProduct.ID).
 			SetPrice(models.Price{Amount: float64(monthlyPrice.UnitAmount), Interval: monthlyPrice.Interval}).
 			SetOwnerID(orgCreated.ID).
 			SetSubscriptionID(orgSubs.ID).
 			SetStripePriceID(monthlyPrice.PriceID).
 			SetActive(true).
-			Save(newCtx)
-		if err != nil {
+			Exec(newCtx); err != nil {
 			return nil, fmt.Errorf("failed to create OrgPrice for module %s: %w", moduleName, err)
 		}
 

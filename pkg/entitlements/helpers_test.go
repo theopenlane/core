@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v82"
 	"github.com/theopenlane/core/pkg/entitlements"
 )
@@ -78,7 +77,7 @@ func TestWriteYAMLHelpers(t *testing.T) {
 	assert.NoError(t, entitlements.WritePlansToYAML(plans, plansFile))
 
 	pData, err := os.ReadFile(plansFile)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Contains(t, string(pData), "Test")
 
 }

@@ -65,7 +65,7 @@ func (sc *StripeClient) GetSubscriptionByID(ctx context.Context, id string) (*st
 
 var trialdays int64 = 30
 
-// CreateTrialSubscriptionWithPrices creates a trial subscription using the provided prices
+// CreateSubscriptionWithPrices creates a subscription using the provided prices
 func (sc *StripeClient) CreateSubscriptionWithPrices(ctx context.Context, cust *stripe.Customer, o *OrganizationCustomer) (*Subscription, error) {
 	subsMetadata := make(map[string]string)
 	if cust.Metadata != nil {

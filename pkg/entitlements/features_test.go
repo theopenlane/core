@@ -6,7 +6,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v82"
 
 	"github.com/theopenlane/core/pkg/entitlements"
@@ -34,14 +33,14 @@ func TestGetFeatureByLookupKey(t *testing.T) {
 	sc, _ := setupFeatureClient([]*stripe.EntitlementsFeature{feature}, nil)
 
 	found, err := sc.GetFeatureByLookupKey(ctx, "basic")
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, feature, found)
 }
 
 func TestGetFeatureByLookupKeyNotFound(t *testing.T) {
 	sc, _ := setupFeatureClient(nil, nil)
 	feat, err := sc.GetFeatureByLookupKey(context.Background(), "missing")
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Nil(t, feat)
 }
 

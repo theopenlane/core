@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/pkg/catalog"
 )
@@ -15,11 +14,12 @@ func writeTempCatalog(t *testing.T, data string) string {
 	t.Helper()
 	dir := t.TempDir()
 	p := filepath.Join(dir, "catalog.yaml")
-	require.NoError(t, os.WriteFile(p, []byte(data), 0o644))
+	assert.NoError(t, os.WriteFile(p, []byte(data), 0o644))
 	return p
 }
 
 func TestLoadCatalog(t *testing.T) {
+	t.Parallel()
 	yaml := `version: v0.0.1
 sha: ae5bcf31543244e0bc0b0a14a4374ae2f199eebe805de0ad58f20d36b5d5649b
 modules:
@@ -48,18 +48,20 @@ addons:
 	path := writeTempCatalog(t, yaml)
 
 	c, err := catalog.LoadCatalog(path)
-	require.NoError(t, err)
-	require.NotNil(t, c)
+	assert.NoError(t, err)
+	assert.NotNil(t, c)
 	assert.Contains(t, c.Modules, "mod1")
 	assert.Contains(t, c.Addons, "add1")
 }
 
 func TestLoadCatalogMissing(t *testing.T) {
+	t.Parallel()
 	_, err := catalog.LoadCatalog("/no/such/file")
 	assert.ErrorIs(t, err, os.ErrNotExist)
 }
 
 func TestVisible(t *testing.T) {
+	t.Parallel()
 	c := &catalog.Catalog{
 		Modules: catalog.FeatureSet{
 			"m1": {Audience: "public"},

@@ -6,7 +6,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v82"
 
 	"github.com/theopenlane/core/pkg/entitlements"
@@ -14,7 +13,7 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	c := require.New(t)
+	c := assert.New(t)
 
 	t.Setenv("STRIPE_SECRET_KEY", "secret_key")
 
@@ -24,7 +23,7 @@ func TestNew(t *testing.T) {
 }
 
 func TestNewErrMissingAPIKey(t *testing.T) {
-	c := require.New(t)
+	c := assert.New(t)
 
 	stripeService, err := entitlements.NewStripeClient()
 	c.Nil(stripeService)
@@ -92,7 +91,7 @@ func TestNewConfig(t *testing.T) {
 }
 
 func TestCreateCustomer(t *testing.T) {
-	c := require.New(t)
+	c := assert.New(t)
 
 	expectedCustomer := &stripe.Customer{
 		ID:    "cus_123",
@@ -150,7 +149,7 @@ func TestCreateCustomer(t *testing.T) {
 }
 
 func TestUpdateCustomer(t *testing.T) {
-	c := require.New(t)
+	c := assert.New(t)
 
 	expectedCustomer := &stripe.Customer{
 		ID:    "cus_123",
@@ -192,7 +191,7 @@ func TestUpdateCustomer(t *testing.T) {
 }
 
 func TestDeleteCustomer(t *testing.T) {
-	c := require.New(t)
+	c := assert.New(t)
 
 	expectedCustomer := &stripe.Customer{
 		ID: "cus_123",
@@ -226,7 +225,7 @@ func TestDeleteCustomer(t *testing.T) {
 }
 
 func TestCreateSubscription(t *testing.T) {
-	c := require.New(t)
+	c := assert.New(t)
 
 	expectedSubscription := &stripe.Subscription{
 		ID: "sub_123",
@@ -266,7 +265,7 @@ func TestCreateSubscription(t *testing.T) {
 }
 
 func TestUpdateSubscription(t *testing.T) {
-	c := require.New(t)
+	c := assert.New(t)
 
 	expectedSubscription := &stripe.Subscription{
 		ID: "sub_123",
@@ -305,7 +304,7 @@ func TestUpdateSubscription(t *testing.T) {
 }
 
 func TestCancelSubscription(t *testing.T) {
-	c := require.New(t)
+	c := assert.New(t)
 
 	expectedSubscription := &stripe.Subscription{
 		ID: "sub_123",
@@ -338,7 +337,7 @@ func TestCancelSubscription(t *testing.T) {
 }
 
 func TestMapStripeSubscription(t *testing.T) {
-	c := require.New(t)
+	c := assert.New(t)
 
 	stripeSubscription := &stripe.Subscription{
 		ID: "sub_123",
@@ -409,7 +408,7 @@ func TestMapStripeSubscription(t *testing.T) {
 }
 
 func TestCreateSubscriptionWithOptions_MultipleItems(t *testing.T) {
-	c := require.New(t)
+	c := assert.New(t)
 
 	expectedSubscription := &stripe.Subscription{
 		ID: "sub_multi",
@@ -447,7 +446,7 @@ func TestCreateSubscriptionWithOptions_MultipleItems(t *testing.T) {
 }
 
 func TestUpdateSubscriptionWithOptions_AddNewItemsIfNotExist(t *testing.T) {
-	c := require.New(t)
+	c := assert.New(t)
 
 	existingItems := []*stripe.SubscriptionItem{
 		{ID: "item_1", Price: &stripe.Price{ID: "price_1"}},
@@ -489,7 +488,7 @@ func TestUpdateSubscriptionWithOptions_AddNewItemsIfNotExist(t *testing.T) {
 }
 
 func TestCreateWebhookEndpoint(t *testing.T) {
-	c := require.New(t)
+	c := assert.New(t)
 
 	expectedWebhook := &stripe.WebhookEndpoint{
 		ID:     "we_123",
@@ -520,7 +519,7 @@ func TestCreateWebhookEndpoint(t *testing.T) {
 }
 
 func TestCreateWebhookEndpointDefaultEvents(t *testing.T) {
-	c := require.New(t)
+	c := assert.New(t)
 
 	expectedWebhook := &stripe.WebhookEndpoint{
 		ID:     "we_123",

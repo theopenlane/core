@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/assert"
 	"github.com/stripe/stripe-go/v82"
 
 	"github.com/theopenlane/core/pkg/catalog"
@@ -44,6 +44,7 @@ func (f *fakeLookup) ListProducts(ctx context.Context) ([]*stripe.Product, error
 }
 
 func TestLookupKeyConflicts(t *testing.T) {
+	t.Parallel()
 	cat := &catalog.Catalog{
 		Modules: catalog.FeatureSet{
 			"m1": {
@@ -58,11 +59,12 @@ func TestLookupKeyConflicts(t *testing.T) {
 	prod := &stripe.Product{ID: "m1", Name: "mod1"}
 
 	conflicts, err := cat.LookupKeyConflicts(context.Background(), &fakeLookup{price: price, feature: feat, product: prod, products: []*stripe.Product{prod}})
-	require.NoError(t, err)
-	require.Len(t, conflicts, 3)
+	assert.NoError(t, err)
+	assert.Len(t, conflicts, 3)
 }
 
 func TestLookupKeyConflictsByName(t *testing.T) {
+	t.Parallel()
 	cat := &catalog.Catalog{
 		Modules: catalog.FeatureSet{
 			"m2": {
@@ -75,6 +77,6 @@ func TestLookupKeyConflictsByName(t *testing.T) {
 	prod := &stripe.Product{ID: "prod_x", Name: "mod2"}
 
 	conflicts, err := cat.LookupKeyConflicts(context.Background(), &fakeLookup{products: []*stripe.Product{prod}})
-	require.NoError(t, err)
-	require.Len(t, conflicts, 1)
+	assert.NoError(t, err)
+	assert.Len(t, conflicts, 1)
 }

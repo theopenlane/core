@@ -12,6 +12,7 @@ import (
 	"github.com/stripe/stripe-go/v82"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -84,6 +85,7 @@ func (r *Reconciler) Reconcile(ctx context.Context) error {
 	orgs, err := r.db.Organization.Query().
 		WithOrgSubscriptions().
 		WithSetting().
+		Where(organization.DeletedAtIsNil()).
 		All(ctx)
 	if err != nil {
 		return fmt.Errorf("query organizations: %w", err)
@@ -232,13 +234,13 @@ func (r *Reconciler) analyzeOrg(ctx context.Context, org *ent.Organization) (str
 	customerMissing := sub == nil || sub.StripeCustomerID == ""
 	subscriptionMissing := sub == nil || sub.StripeSubscriptionID == ""
 
-	if sub != nil && sub.StripeCustomerID != "" {
+	if !customerMissing {
 		if _, err := r.stripe.GetCustomerByStripeID(ctx, sub.StripeCustomerID); err != nil {
 			customerMissing = true
 		}
 	}
 
-	if sub != nil && sub.StripeSubscriptionID != "" {
+	if !subscriptionMissing {
 		if _, err := r.stripe.GetSubscriptionByID(ctx, sub.StripeSubscriptionID); err != nil {
 			subscriptionMissing = true
 		}
