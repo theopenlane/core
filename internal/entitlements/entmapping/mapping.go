@@ -7,6 +7,7 @@ import (
 	"github.com/stripe/stripe-go/v82"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	catalog "github.com/theopenlane/core/internal/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -393,4 +394,21 @@ func ApplyStripeSubscriptionItem[T OrgModuleSetter[T]](b T, item *stripe.Subscri
 	b.SetModuleLookupKey(item.Price.LookupKey)
 
 	return b
+}
+
+// PopulatePricesForOrganizationCustomer sets Prices on the OrganizationCustomer and returns it.
+func PopulatePricesForOrganizationCustomer(o *entitlements.OrganizationCustomer) *entitlements.OrganizationCustomer {
+	var priceIDs []string
+	if o.PersonalOrg {
+		priceIDs = catalog.PersonalOrgMonthlyPriceIDs()
+	} else {
+		priceIDs = catalog.TrialMonthlyPriceIDs()
+	}
+
+	o.Prices = make([]entitlements.Price, len(priceIDs))
+	for i, priceID := range priceIDs {
+		o.Prices[i] = entitlements.Price{ID: priceID}
+	}
+
+	return o
 }

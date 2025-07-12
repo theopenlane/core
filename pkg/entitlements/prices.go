@@ -6,6 +6,12 @@ import (
 	"github.com/stripe/stripe-go/v82"
 )
 
+// MigrateToKey is the metadata key used to indicate the price that a subscription should migrate to
+const MigrateToKey = "migrate_to"
+
+// UpsellToKey is the metadata key used to denote the price that another price should upsell into
+const UpsellToKey = "upsell_to"
+
 // CreatePrice a price for a product in stripe
 func (sc *StripeClient) CreatePrice(ctx context.Context, productID string, unitAmount int64, currency, interval, nickname, lookupKey string, metadata map[string]string) (*stripe.Price, error) {
 	params := &stripe.PriceCreateParams{
@@ -203,7 +209,16 @@ func (sc *StripeClient) FindPriceForProduct(ctx context.Context, productID, pric
 
 // TagPriceMigration annotates a price in preparation for migration to a new price
 func (sc *StripeClient) TagPriceMigration(ctx context.Context, fromPriceID, toPriceID string) error {
-	md := map[string]string{"migrate_to": toPriceID}
+	md := map[string]string{MigrateToKey: toPriceID}
+
+	_, err := sc.UpdatePriceMetadata(ctx, fromPriceID, md)
+
+	return err
+}
+
+// TagPriceUpsell annotates a price so that consumers can upsell to a new price.
+func (sc *StripeClient) TagPriceUpsell(ctx context.Context, fromPriceID, toPriceID string) error {
+	md := map[string]string{UpsellToKey: toPriceID}
 
 	_, err := sc.UpdatePriceMetadata(ctx, fromPriceID, md)
 

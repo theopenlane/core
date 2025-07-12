@@ -10,7 +10,6 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/stripe/stripe-go/v82"
 
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
@@ -25,8 +24,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
+	"github.com/theopenlane/core/pkg/catalog"
 	"github.com/theopenlane/core/pkg/catalog/features"
+	cataloggen "github.com/theopenlane/core/pkg/catalog/gencatalog"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects"
 )
 
@@ -218,28 +220,31 @@ func createOrgSettings(ctx context.Context, m *generated.OrganizationMutation) e
 }
 
 // createOrgSubscription creates the default organization subscription for a new org
-func createOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m GenericMutation) error {
+func createOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m GenericMutation) (*generated.OrgSubscription, error) {
 	// ensure we can always pull the org subscription for the organization
 	allowCtx := contextx.With(ctx, auth.OrgSubscriptionContextKey{})
 
 	orgSubscriptions, err := orgCreated.OrgSubscriptions(allowCtx)
 	if err != nil {
 		zerolog.Ctx(ctx).Error().Err(err).Msg("error getting org subscriptions")
-		return err
+		return nil, err
 	}
 
 	// if this is empty generate a default org setting schema
 	if len(orgSubscriptions) == 0 {
-		if err := defaultOrgSubscription(ctx, orgCreated, m); err != nil {
+		sub, err := defaultOrgSubscription(ctx, orgCreated, m)
+		if err != nil {
 			zerolog.Ctx(ctx).Error().Err(err).Msg("error creating default org subscription")
 
-			return err
+			return nil, err
 		}
+
+		orgSubscriptions = []*generated.OrgSubscription{sub}
 	}
 
 	zerolog.Ctx(ctx).Debug().Msg("created default org subscription")
 
-	return nil
+	return orgSubscriptions[0], nil
 }
 
 const (
@@ -249,12 +254,19 @@ const (
 )
 
 // defaultOrgSubscription is the default way to create an org subscription when an organization is first created
-func defaultOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m GenericMutation) error {
-	return m.Client().OrgSubscription.Create().
+func defaultOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m GenericMutation) (*generated.OrgSubscription, error) {
+	subs, err := m.Client().OrgSubscription.Create().
 		SetStripeSubscriptionID(subscriptionPendingUpdate).
 		SetOwnerID(orgCreated.ID).
 		SetActive(true).
-		SetStripeSubscriptionStatus(string(stripe.SubscriptionStatusTrialing)).Exec(ctx)
+		SetStripeSubscriptionStatus(string(stripe.SubscriptionStatusTrialing)).Save(ctx)
+	if err != nil {
+		zerolog.Ctx(ctx).Error().Err(err).Msg("error creating default orgsubscription")
+
+		return nil, err
+	}
+
+	return subs, nil
 }
 
 // createEntityTypes creates the default entity types for a new org
@@ -290,7 +302,8 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 		return err
 	}
 
-	if err := createOrgSubscription(ctx, orgCreated, m); err != nil {
+	orgSubs, err := createOrgSubscription(ctx, orgCreated, m)
+	if err != nil {
 		return err
 	}
 
@@ -306,9 +319,14 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 		return err
 	}
 
+	modulesCreated, err := createDefaultOrgModulesProductsPrices(ctx, orgCreated, m, orgSubs, withTrial())
+	if err != nil {
+		return err
+	}
+
 	// create default feature tuples for base functionality when entitlements are enabled
 	if m.Client().EntitlementManager != nil {
-		if err := createFeatureTuples(ctx, m.Authz, orgCreated.ID, []string{string(entx.ModuleBase), string(entx.ModuleCompliance)}); err != nil {
+		if err := createFeatureTuples(ctx, m.Authz, orgCreated.ID, modulesCreated); err != nil {
 			zerolog.Ctx(ctx).Error().Err(err).Msg("error creating default feature tuples")
 
 			return err
@@ -598,4 +616,117 @@ func createFeatureTuples(ctx context.Context, authz fgax.Client, orgID string, f
 	}
 
 	return nil
+}
+
+// orgModuleConfig controls which modules are selected when creating default module records - small functional options wrapper
+type orgModuleConfig struct {
+	personalOrg bool
+	trial       bool
+}
+
+// orgModuleOption sets fields on orgModuleConfig
+type orgModuleOption func(*orgModuleConfig)
+
+// withPersonalOrg sets the personalOrg flag to true, allowing personal org modules to be included
+func withPersonalOrg() orgModuleOption {
+	return func(c *orgModuleConfig) {
+		c.personalOrg = true
+	}
+}
+
+// withTrial sets the trial flag to true, allowing trial modules to be included
+func withTrial() orgModuleOption {
+	return func(c *orgModuleConfig) {
+		c.trial = true
+	}
+}
+
+// createDefaultOrgModulesProductsPrices creates default OrgModule, OrgProduct, and OrgPrice for base and compliance modules
+func createDefaultOrgModulesProductsPrices(ctx context.Context, orgCreated *generated.Organization, m GenericMutation, orgSubs *generated.OrgSubscription, opts ...orgModuleOption) ([]string, error) {
+	cfg := orgModuleConfig{}
+
+	for _, opt := range opts {
+		opt(&cfg)
+	}
+
+	modulesCreated := make([]string, 0)
+
+	// the catalog contains config for which things should be in a trial, or added for a personal org
+	for moduleName, mod := range cataloggen.DefaultCatalog.Modules {
+		if !cfg.personalOrg && !cfg.trial {
+			continue
+		}
+
+		if !mod.PersonalOrg {
+			continue
+		}
+
+		if !mod.IncludeWithTrial {
+			continue
+		}
+
+		// Find the first price with "month" interval
+		// we want to create, by default, a monthly recurring price rather than a one-time or annual
+		var monthlyPrice *catalog.Price
+		for _, price := range mod.Billing.Prices {
+			if price.Interval == "month" {
+				monthlyPrice = &price
+				break
+			}
+		}
+
+		if monthlyPrice == nil {
+			continue // skip if no monthly price
+		}
+
+		newCtx := contextx.With(ctx, auth.OrganizationCreationContextKey{})
+		newCtx = contextx.With(newCtx, auth.OrgSubscriptionContextKey{})
+
+		// we set the price purely for reference; it will not be used for billing - we care mostly about the association of subscription to module
+		orgMod, err := m.Client().OrgModule.Create().
+			SetModule(moduleName).
+			SetSubscriptionID(orgSubs.ID).
+			SetOwnerID(orgCreated.ID).
+			SetActive(true).
+			SetPrice(models.Price{Amount: float64(monthlyPrice.UnitAmount), Interval: monthlyPrice.Interval}).
+			Save(newCtx)
+		if err != nil {
+			return nil, fmt.Errorf("failed to create OrgModule for %s: %w", moduleName, err)
+		}
+
+		zerolog.Ctx(ctx).Debug().Msgf("created OrgModule for %s with ID %s", moduleName, orgMod.ID)
+
+		// the product and price entries are somewhat redundant but creating them for reference and future extensibility
+		orgProduct, err := m.Client().OrgProduct.Create().
+			SetModule(moduleName).
+			SetOwnerID(orgCreated.ID).
+			SetModule(orgMod.ID).
+			SetSubscriptionID(orgSubs.ID).
+			SetActive(true).
+			Save(newCtx)
+		if err != nil {
+			return nil, fmt.Errorf("failed to create OrgProduct for %s: %w", moduleName, err)
+		}
+
+		zerolog.Ctx(ctx).Debug().Msgf("created OrgProduct for %s with ID %s", moduleName, orgProduct.ID)
+
+		// we care mostly about which price ID we used in stripe, so we create the local reference for the price because it's the resource which dictates most of the billing toggles in stripe
+		// we don't actually care that it's active or not, but it's relevant to set because we could end up with many prices on a product, and many products on a module
+		if err := m.Client().OrgPrice.Create().
+			SetProductID(orgProduct.ID).
+			SetPrice(models.Price{Amount: float64(monthlyPrice.UnitAmount), Interval: monthlyPrice.Interval}).
+			SetOwnerID(orgCreated.ID).
+			SetSubscriptionID(orgSubs.ID).
+			SetStripePriceID(monthlyPrice.PriceID).
+			SetActive(true).
+			Exec(newCtx); err != nil {
+			return nil, fmt.Errorf("failed to create OrgPrice for module %s: %w", moduleName, err)
+		}
+
+		zerolog.Ctx(ctx).Debug().Msgf("created OrgPrice for %s with Stripe Price ID %s", moduleName, monthlyPrice.PriceID)
+
+		modulesCreated = append(modulesCreated, moduleName)
+	}
+
+	return modulesCreated, nil
 }

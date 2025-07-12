@@ -90,7 +90,7 @@ func TestPriceMigrateApply(t *testing.T) {
 	defer func() { outWriter = os.Stdout }()
 
 	app := migrationApp()
-	err := app.Run(context.Background(), []string{"pricemigrate", "--old-price", "old", "--new-price", "new", "--customers", "cus_1"})
+	err := app.Run(context.Background(), []string{"pricemigrate", "--old-price", "old", "--new-price", "new", "--customers", "cus_1", "--dry-run=false"})
 	require.NoError(t, err)
 
 	require.Equal(t, "old", client.taggedFrom)

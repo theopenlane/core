@@ -14,7 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 
-	em "github.com/theopenlane/core/internal/entmapping"
+	em "github.com/theopenlane/core/internal/entitlements/entmapping"
 )
 
 // syncSubscriptionItemsWithStripe ensures OrgProduct, OrgPrice, and OrgModule

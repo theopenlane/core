@@ -6,7 +6,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v82"
 
 	"github.com/theopenlane/core/pkg/entitlements"
@@ -35,7 +34,7 @@ func TestGetCustomerByStripeID(t *testing.T) {
 	sc, _ := setupCustomerClient(expected, nil)
 
 	cust, err := sc.GetCustomerByStripeID(ctx, "cus_123")
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, expected, cust)
 }
 

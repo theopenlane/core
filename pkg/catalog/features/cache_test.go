@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/pkg/catalog/features"
 	"github.com/theopenlane/core/pkg/testutils"
@@ -18,10 +17,10 @@ func TestCacheSetGet(t *testing.T) {
 	c := features.NewCache(r, time.Minute)
 
 	err := c.Set(ctx, "org1", []string{"a", "b"})
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	vals, err := c.Get(ctx, "org1")
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.ElementsMatch(t, []string{"a", "b"}, vals)
 }
 

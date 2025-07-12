@@ -12,9 +12,8 @@ func (sc *StripeClient) GetProductByID(ctx context.Context, id string) (*stripe.
 }
 
 // CreateProduct creates a new product in Stripe
-func (sc *StripeClient) CreateProduct(ctx context.Context, id, name, description string, metadata map[string]string) (*stripe.Product, error) {
+func (sc *StripeClient) CreateProduct(ctx context.Context, name, description string, metadata map[string]string) (*stripe.Product, error) {
 	params := &stripe.ProductCreateParams{
-		ID:          stripe.String(id),
 		Name:        stripe.String(name),
 		Description: stripe.String(description),
 	}
@@ -170,4 +169,21 @@ func (sc *StripeClient) GetFeaturesByProductID(ctx context.Context, productID st
 	}
 
 	return productfeatures
+}
+
+// FindProductByName searches for a product in Stripe matching the provided name
+// It returns the first product found or nil when none match
+func (sc *StripeClient) FindProductByName(ctx context.Context, name string) (*stripe.Product, error) {
+	products, err := sc.ListProducts(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, p := range products {
+		if p.Name == name {
+			return p, nil
+		}
+	}
+
+	return nil, nil
 }

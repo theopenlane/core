@@ -61,9 +61,9 @@ func (sc *StripeClient) CreateCustomer(ctx context.Context, c *OrganizationCusto
 // https://docs.stripe.com/search#search-query-language
 func (sc *StripeClient) SearchCustomers(ctx context.Context, query string) (customers []*stripe.Customer, err error) {
 	params := &stripe.CustomerSearchParams{
+		Expand: []*string{stripe.String("data.tax"), stripe.String("data.subscriptions")},
 		SearchParams: stripe.SearchParams{
 			Query:   query,
-			Expand:  []*string{stripe.String("data.tax"), stripe.String("data.subscriptions")},
 			Context: ctx,
 		},
 	}
@@ -94,20 +94,14 @@ func (sc *StripeClient) createCustomerAndSubscription(ctx context.Context, o *Or
 	o.StripeCustomerID = customer.ID
 	o.Metadata = customer.Metadata
 
-	var subscription *Subscription
-
-	if o.PersonalOrg {
-		subscription, err = sc.CreatePersonalOrgFreeTierSubs(ctx, customer.ID)
-	} else {
-		subscription, err = sc.CreateTrialSubscription(ctx, customer)
-	}
-
+	subscription, err := sc.CreateSubscriptionWithPrices(ctx, customer, o)
 	if err != nil {
 		return err
 	}
 
 	o.StripeSubscriptionID = subscription.ID
 	o.Subscription = *subscription
+
 	log.Debug().Str("customer_id", customer.ID).Str("subscription_id", subscription.ID).Msg("subscription created")
 
 	if err := sc.retrieveFeatureLists(ctx, o); err != nil {
@@ -130,6 +124,7 @@ func (sc *StripeClient) FindOrCreateCustomer(ctx context.Context, o *Organizatio
 		return sc.createCustomerAndSubscription(ctx, o)
 	case 1:
 		o.StripeCustomerID = customers[0].ID
+		o.StripeSubscriptionID = customers[0].Subscriptions.Data[0].ID
 
 		return sc.retrieveFeatureLists(ctx, o)
 	default:

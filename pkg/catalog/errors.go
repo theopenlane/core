@@ -17,4 +17,6 @@ var (
 	ErrFailedToCreatePrice = errors.New("failed to create price in Stripe")
 	// ErrContextandClientRequired = errors.New("context and client are required for catalog operations"
 	ErrContextandClientRequired = errors.New("context and client are required for catalog operations")
+	// ErrLookupKeyConflict indicates a price lookup key already exists in Stripe
+	ErrLookupKeyConflict = errors.New("lookup key conflict")
 )

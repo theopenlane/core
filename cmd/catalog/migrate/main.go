@@ -43,7 +43,7 @@ func migrationApp() *cli.Command {
 			&cli.StringSliceFlag{Name: "customers", Usage: "comma separated customer IDs to migrate"},
 			&cli.StringFlag{Name: "stripe-key", Usage: "stripe API key", Sources: cli.EnvVars("STRIPE_API_KEY")},
 			&cli.BoolFlag{Name: "no-migrate", Usage: "only tag the price and do not update subscriptions"},
-			&cli.BoolFlag{Name: "dry-run", Usage: "list customers and subscriptions that would be migrated"},
+			&cli.BoolFlag{Name: "dry-run", Usage: "list customers and subscriptions that would be migrated", Value: true}, // default to true to avoid accidental migrations
 		},
 		Action: func(ctx context.Context, c *cli.Command) error {
 			oldPrice := c.String("old-price")
