@@ -81,6 +81,7 @@ func (t Subprocessor) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(t,
 				withSkipForSystemAdmin(true), // allow empty owner_id for system admin
+				withAllowAnonymousTrustCenterAccess(true),
 			),
 			mixin.SystemOwnedMixin{},
 		},
@@ -96,6 +97,10 @@ func (t Subprocessor) Edges() []ent.Edge {
 			name:       "logo_file",
 			t:          File.Type,
 			field:      "logo_local_file_id",
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: TrustCenterSubprocessor{},
 		}),
 	}
 }

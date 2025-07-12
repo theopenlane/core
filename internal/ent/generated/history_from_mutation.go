@@ -10778,8 +10778,20 @@ func (m *TrustCenterSubprocessorMutation) CreateHistoryFromCreate(ctx context.Co
 		create = create.SetDeletedBy(deletedBy)
 	}
 
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
+	if subprocessorID, exists := m.SubprocessorID(); exists {
+		create = create.SetSubprocessorID(subprocessorID)
+	}
+
+	if trustCenterID, exists := m.TrustCenterID(); exists {
+		create = create.SetTrustCenterID(trustCenterID)
+	}
+
+	if countries, exists := m.Countries(); exists {
+		create = create.SetCountries(countries)
+	}
+
+	if category, exists := m.Category(); exists {
+		create = create.SetCategory(category)
 	}
 
 	_, err := create.Save(ctx)
@@ -10848,10 +10860,28 @@ func (m *TrustCenterSubprocessorMutation) CreateHistoryFromUpdate(ctx context.Co
 			create = create.SetDeletedBy(trustcentersubprocessor.DeletedBy)
 		}
 
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
+		if subprocessorID, exists := m.SubprocessorID(); exists {
+			create = create.SetSubprocessorID(subprocessorID)
 		} else {
-			create = create.SetTags(trustcentersubprocessor.Tags)
+			create = create.SetSubprocessorID(trustcentersubprocessor.SubprocessorID)
+		}
+
+		if trustCenterID, exists := m.TrustCenterID(); exists {
+			create = create.SetTrustCenterID(trustCenterID)
+		} else {
+			create = create.SetTrustCenterID(trustcentersubprocessor.TrustCenterID)
+		}
+
+		if countries, exists := m.Countries(); exists {
+			create = create.SetCountries(countries)
+		} else {
+			create = create.SetCountries(trustcentersubprocessor.Countries)
+		}
+
+		if category, exists := m.Category(); exists {
+			create = create.SetCategory(category)
+		} else {
+			create = create.SetCategory(trustcentersubprocessor.Category)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -10892,7 +10922,10 @@ func (m *TrustCenterSubprocessorMutation) CreateHistoryFromDelete(ctx context.Co
 			SetUpdatedBy(trustcentersubprocessor.UpdatedBy).
 			SetDeletedAt(trustcentersubprocessor.DeletedAt).
 			SetDeletedBy(trustcentersubprocessor.DeletedBy).
-			SetTags(trustcentersubprocessor.Tags).
+			SetSubprocessorID(trustcentersubprocessor.SubprocessorID).
+			SetTrustCenterID(trustcentersubprocessor.TrustCenterID).
+			SetCountries(trustcentersubprocessor.Countries).
+			SetCategory(trustcentersubprocessor.Category).
 			Save(ctx)
 		if err != nil {
 			return err

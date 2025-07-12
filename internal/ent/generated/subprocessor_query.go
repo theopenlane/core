@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -24,16 +25,18 @@ import (
 // SubprocessorQuery is the builder for querying Subprocessor entities.
 type SubprocessorQuery struct {
 	config
-	ctx            *QueryContext
-	order          []subprocessor.OrderOption
-	inters         []Interceptor
-	predicates     []predicate.Subprocessor
-	withOwner      *OrganizationQuery
-	withFiles      *FileQuery
-	withLogoFile   *FileQuery
-	loadTotal      []func(context.Context, []*Subprocessor) error
-	modifiers      []func(*sql.Selector)
-	withNamedFiles map[string]*FileQuery
+	ctx                               *QueryContext
+	order                             []subprocessor.OrderOption
+	inters                            []Interceptor
+	predicates                        []predicate.Subprocessor
+	withOwner                         *OrganizationQuery
+	withFiles                         *FileQuery
+	withLogoFile                      *FileQuery
+	withTrustCenterSubprocessors      *TrustCenterSubprocessorQuery
+	loadTotal                         []func(context.Context, []*Subprocessor) error
+	modifiers                         []func(*sql.Selector)
+	withNamedFiles                    map[string]*FileQuery
+	withNamedTrustCenterSubprocessors map[string]*TrustCenterSubprocessorQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -139,6 +142,31 @@ func (sq *SubprocessorQuery) QueryLogoFile() *FileQuery {
 		schemaConfig := sq.schemaConfig
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.Subprocessor
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTrustCenterSubprocessors chains the current query on the "trust_center_subprocessors" edge.
+func (sq *SubprocessorQuery) QueryTrustCenterSubprocessors() *TrustCenterSubprocessorQuery {
+	query := (&TrustCenterSubprocessorClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subprocessor.Table, subprocessor.FieldID, selector),
+			sqlgraph.To(trustcentersubprocessor.Table, trustcentersubprocessor.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, subprocessor.TrustCenterSubprocessorsTable, subprocessor.TrustCenterSubprocessorsColumn),
+		)
+		schemaConfig := sq.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterSubprocessor
+		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -332,14 +360,15 @@ func (sq *SubprocessorQuery) Clone() *SubprocessorQuery {
 		return nil
 	}
 	return &SubprocessorQuery{
-		config:       sq.config,
-		ctx:          sq.ctx.Clone(),
-		order:        append([]subprocessor.OrderOption{}, sq.order...),
-		inters:       append([]Interceptor{}, sq.inters...),
-		predicates:   append([]predicate.Subprocessor{}, sq.predicates...),
-		withOwner:    sq.withOwner.Clone(),
-		withFiles:    sq.withFiles.Clone(),
-		withLogoFile: sq.withLogoFile.Clone(),
+		config:                       sq.config,
+		ctx:                          sq.ctx.Clone(),
+		order:                        append([]subprocessor.OrderOption{}, sq.order...),
+		inters:                       append([]Interceptor{}, sq.inters...),
+		predicates:                   append([]predicate.Subprocessor{}, sq.predicates...),
+		withOwner:                    sq.withOwner.Clone(),
+		withFiles:                    sq.withFiles.Clone(),
+		withLogoFile:                 sq.withLogoFile.Clone(),
+		withTrustCenterSubprocessors: sq.withTrustCenterSubprocessors.Clone(),
 		// clone intermediate query.
 		sql:       sq.sql.Clone(),
 		path:      sq.path,
@@ -377,6 +406,17 @@ func (sq *SubprocessorQuery) WithLogoFile(opts ...func(*FileQuery)) *Subprocesso
 		opt(query)
 	}
 	sq.withLogoFile = query
+	return sq
+}
+
+// WithTrustCenterSubprocessors tells the query-builder to eager-load the nodes that are connected to
+// the "trust_center_subprocessors" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubprocessorQuery) WithTrustCenterSubprocessors(opts ...func(*TrustCenterSubprocessorQuery)) *SubprocessorQuery {
+	query := (&TrustCenterSubprocessorClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withTrustCenterSubprocessors = query
 	return sq
 }
 
@@ -464,10 +504,11 @@ func (sq *SubprocessorQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Subprocessor{}
 		_spec       = sq.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [4]bool{
 			sq.withOwner != nil,
 			sq.withFiles != nil,
 			sq.withLogoFile != nil,
+			sq.withTrustCenterSubprocessors != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -512,10 +553,26 @@ func (sq *SubprocessorQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := sq.withTrustCenterSubprocessors; query != nil {
+		if err := sq.loadTrustCenterSubprocessors(ctx, query, nodes,
+			func(n *Subprocessor) { n.Edges.TrustCenterSubprocessors = []*TrustCenterSubprocessor{} },
+			func(n *Subprocessor, e *TrustCenterSubprocessor) {
+				n.Edges.TrustCenterSubprocessors = append(n.Edges.TrustCenterSubprocessors, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range sq.withNamedFiles {
 		if err := sq.loadFiles(ctx, query, nodes,
 			func(n *Subprocessor) { n.appendNamedFiles(name) },
 			func(n *Subprocessor, e *File) { n.appendNamedFiles(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range sq.withNamedTrustCenterSubprocessors {
+		if err := sq.loadTrustCenterSubprocessors(ctx, query, nodes,
+			func(n *Subprocessor) { n.appendNamedTrustCenterSubprocessors(name) },
+			func(n *Subprocessor, e *TrustCenterSubprocessor) { n.appendNamedTrustCenterSubprocessors(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -650,6 +707,36 @@ func (sq *SubprocessorQuery) loadLogoFile(ctx context.Context, query *FileQuery,
 	}
 	return nil
 }
+func (sq *SubprocessorQuery) loadTrustCenterSubprocessors(ctx context.Context, query *TrustCenterSubprocessorQuery, nodes []*Subprocessor, init func(*Subprocessor), assign func(*Subprocessor, *TrustCenterSubprocessor)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Subprocessor)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(trustcentersubprocessor.FieldSubprocessorID)
+	}
+	query.Where(predicate.TrustCenterSubprocessor(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(subprocessor.TrustCenterSubprocessorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.SubprocessorID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "subprocessor_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (sq *SubprocessorQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := sq.querySpec()
@@ -766,6 +853,20 @@ func (sq *SubprocessorQuery) WithNamedFiles(name string, opts ...func(*FileQuery
 		sq.withNamedFiles = make(map[string]*FileQuery)
 	}
 	sq.withNamedFiles[name] = query
+	return sq
+}
+
+// WithNamedTrustCenterSubprocessors tells the query-builder to eager-load the nodes that are connected to the "trust_center_subprocessors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubprocessorQuery) WithNamedTrustCenterSubprocessors(name string, opts ...func(*TrustCenterSubprocessorQuery)) *SubprocessorQuery {
+	query := (&TrustCenterSubprocessorClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if sq.withNamedTrustCenterSubprocessors == nil {
+		sq.withNamedTrustCenterSubprocessors = make(map[string]*TrustCenterSubprocessorQuery)
+	}
+	sq.withNamedTrustCenterSubprocessors[name] = query
 	return sq
 }
 

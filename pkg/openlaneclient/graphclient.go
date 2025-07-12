@@ -7277,92 +7277,6 @@ func (t *AdminSearch_AdminSearch_TrustCenters) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
-type AdminSearch_AdminSearch_TrustCenterSubprocessors_PageInfo struct {
-	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
-	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
-	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
-	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
-}
-
-func (t *AdminSearch_AdminSearch_TrustCenterSubprocessors_PageInfo) GetEndCursor() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_TrustCenterSubprocessors_PageInfo{}
-	}
-	return t.EndCursor
-}
-func (t *AdminSearch_AdminSearch_TrustCenterSubprocessors_PageInfo) GetHasNextPage() bool {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_TrustCenterSubprocessors_PageInfo{}
-	}
-	return t.HasNextPage
-}
-func (t *AdminSearch_AdminSearch_TrustCenterSubprocessors_PageInfo) GetHasPreviousPage() bool {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_TrustCenterSubprocessors_PageInfo{}
-	}
-	return t.HasPreviousPage
-}
-func (t *AdminSearch_AdminSearch_TrustCenterSubprocessors_PageInfo) GetStartCursor() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_TrustCenterSubprocessors_PageInfo{}
-	}
-	return t.StartCursor
-}
-
-type AdminSearch_AdminSearch_TrustCenterSubprocessors_Edges_Node struct {
-	ID   string   "json:\"id\" graphql:\"id\""
-	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
-}
-
-func (t *AdminSearch_AdminSearch_TrustCenterSubprocessors_Edges_Node) GetID() string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_TrustCenterSubprocessors_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *AdminSearch_AdminSearch_TrustCenterSubprocessors_Edges_Node) GetTags() []string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_TrustCenterSubprocessors_Edges_Node{}
-	}
-	return t.Tags
-}
-
-type AdminSearch_AdminSearch_TrustCenterSubprocessors_Edges struct {
-	Node *AdminSearch_AdminSearch_TrustCenterSubprocessors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *AdminSearch_AdminSearch_TrustCenterSubprocessors_Edges) GetNode() *AdminSearch_AdminSearch_TrustCenterSubprocessors_Edges_Node {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_TrustCenterSubprocessors_Edges{}
-	}
-	return t.Node
-}
-
-type AdminSearch_AdminSearch_TrustCenterSubprocessors struct {
-	Edges      []*AdminSearch_AdminSearch_TrustCenterSubprocessors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-	PageInfo   AdminSearch_AdminSearch_TrustCenterSubprocessors_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
-	TotalCount int64                                                     "json:\"totalCount\" graphql:\"totalCount\""
-}
-
-func (t *AdminSearch_AdminSearch_TrustCenterSubprocessors) GetEdges() []*AdminSearch_AdminSearch_TrustCenterSubprocessors_Edges {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_TrustCenterSubprocessors{}
-	}
-	return t.Edges
-}
-func (t *AdminSearch_AdminSearch_TrustCenterSubprocessors) GetPageInfo() *AdminSearch_AdminSearch_TrustCenterSubprocessors_PageInfo {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_TrustCenterSubprocessors{}
-	}
-	return &t.PageInfo
-}
-func (t *AdminSearch_AdminSearch_TrustCenterSubprocessors) GetTotalCount() int64 {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_TrustCenterSubprocessors{}
-	}
-	return t.TotalCount
-}
-
 type AdminSearch_AdminSearch_Users_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -7726,7 +7640,6 @@ type AdminSearch_AdminSearch struct {
 	Tasks                       *AdminSearch_AdminSearch_Tasks                       "json:\"tasks,omitempty\" graphql:\"tasks\""
 	Templates                   *AdminSearch_AdminSearch_Templates                   "json:\"templates,omitempty\" graphql:\"templates\""
 	TotalCount                  int64                                                "json:\"totalCount\" graphql:\"totalCount\""
-	TrustCenterSubprocessors    *AdminSearch_AdminSearch_TrustCenterSubprocessors    "json:\"trustCenterSubprocessors,omitempty\" graphql:\"trustCenterSubprocessors\""
 	TrustCenters                *AdminSearch_AdminSearch_TrustCenters                "json:\"trustCenters,omitempty\" graphql:\"trustCenters\""
 	UserSettings                *AdminSearch_AdminSearch_UserSettings                "json:\"userSettings,omitempty\" graphql:\"userSettings\""
 	Users                       *AdminSearch_AdminSearch_Users                       "json:\"users,omitempty\" graphql:\"users\""
@@ -7978,12 +7891,6 @@ func (t *AdminSearch_AdminSearch) GetTotalCount() int64 {
 		t = &AdminSearch_AdminSearch{}
 	}
 	return t.TotalCount
-}
-func (t *AdminSearch_AdminSearch) GetTrustCenterSubprocessors() *AdminSearch_AdminSearch_TrustCenterSubprocessors {
-	if t == nil {
-		t = &AdminSearch_AdminSearch{}
-	}
-	return t.TrustCenterSubprocessors
 }
 func (t *AdminSearch_AdminSearch) GetTrustCenters() *AdminSearch_AdminSearch_TrustCenters {
 	if t == nil {
@@ -69819,92 +69726,6 @@ func (t *GlobalSearch_Search_TrustCenters) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
-type GlobalSearch_Search_TrustCenterSubprocessors_PageInfo struct {
-	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
-	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
-	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
-	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
-}
-
-func (t *GlobalSearch_Search_TrustCenterSubprocessors_PageInfo) GetEndCursor() *string {
-	if t == nil {
-		t = &GlobalSearch_Search_TrustCenterSubprocessors_PageInfo{}
-	}
-	return t.EndCursor
-}
-func (t *GlobalSearch_Search_TrustCenterSubprocessors_PageInfo) GetHasNextPage() bool {
-	if t == nil {
-		t = &GlobalSearch_Search_TrustCenterSubprocessors_PageInfo{}
-	}
-	return t.HasNextPage
-}
-func (t *GlobalSearch_Search_TrustCenterSubprocessors_PageInfo) GetHasPreviousPage() bool {
-	if t == nil {
-		t = &GlobalSearch_Search_TrustCenterSubprocessors_PageInfo{}
-	}
-	return t.HasPreviousPage
-}
-func (t *GlobalSearch_Search_TrustCenterSubprocessors_PageInfo) GetStartCursor() *string {
-	if t == nil {
-		t = &GlobalSearch_Search_TrustCenterSubprocessors_PageInfo{}
-	}
-	return t.StartCursor
-}
-
-type GlobalSearch_Search_TrustCenterSubprocessors_Edges_Node struct {
-	ID   string   "json:\"id\" graphql:\"id\""
-	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
-}
-
-func (t *GlobalSearch_Search_TrustCenterSubprocessors_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GlobalSearch_Search_TrustCenterSubprocessors_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *GlobalSearch_Search_TrustCenterSubprocessors_Edges_Node) GetTags() []string {
-	if t == nil {
-		t = &GlobalSearch_Search_TrustCenterSubprocessors_Edges_Node{}
-	}
-	return t.Tags
-}
-
-type GlobalSearch_Search_TrustCenterSubprocessors_Edges struct {
-	Node *GlobalSearch_Search_TrustCenterSubprocessors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GlobalSearch_Search_TrustCenterSubprocessors_Edges) GetNode() *GlobalSearch_Search_TrustCenterSubprocessors_Edges_Node {
-	if t == nil {
-		t = &GlobalSearch_Search_TrustCenterSubprocessors_Edges{}
-	}
-	return t.Node
-}
-
-type GlobalSearch_Search_TrustCenterSubprocessors struct {
-	Edges      []*GlobalSearch_Search_TrustCenterSubprocessors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-	PageInfo   GlobalSearch_Search_TrustCenterSubprocessors_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
-	TotalCount int64                                                 "json:\"totalCount\" graphql:\"totalCount\""
-}
-
-func (t *GlobalSearch_Search_TrustCenterSubprocessors) GetEdges() []*GlobalSearch_Search_TrustCenterSubprocessors_Edges {
-	if t == nil {
-		t = &GlobalSearch_Search_TrustCenterSubprocessors{}
-	}
-	return t.Edges
-}
-func (t *GlobalSearch_Search_TrustCenterSubprocessors) GetPageInfo() *GlobalSearch_Search_TrustCenterSubprocessors_PageInfo {
-	if t == nil {
-		t = &GlobalSearch_Search_TrustCenterSubprocessors{}
-	}
-	return &t.PageInfo
-}
-func (t *GlobalSearch_Search_TrustCenterSubprocessors) GetTotalCount() int64 {
-	if t == nil {
-		t = &GlobalSearch_Search_TrustCenterSubprocessors{}
-	}
-	return t.TotalCount
-}
-
 type GlobalSearch_Search_Users_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -70212,7 +70033,6 @@ type GlobalSearch_Search struct {
 	Tasks                       *GlobalSearch_Search_Tasks                       "json:\"tasks,omitempty\" graphql:\"tasks\""
 	Templates                   *GlobalSearch_Search_Templates                   "json:\"templates,omitempty\" graphql:\"templates\""
 	TotalCount                  int64                                            "json:\"totalCount\" graphql:\"totalCount\""
-	TrustCenterSubprocessors    *GlobalSearch_Search_TrustCenterSubprocessors    "json:\"trustCenterSubprocessors,omitempty\" graphql:\"trustCenterSubprocessors\""
 	TrustCenters                *GlobalSearch_Search_TrustCenters                "json:\"trustCenters,omitempty\" graphql:\"trustCenters\""
 	UserSettings                *GlobalSearch_Search_UserSettings                "json:\"userSettings,omitempty\" graphql:\"userSettings\""
 	Users                       *GlobalSearch_Search_Users                       "json:\"users,omitempty\" graphql:\"users\""
@@ -70464,12 +70284,6 @@ func (t *GlobalSearch_Search) GetTotalCount() int64 {
 		t = &GlobalSearch_Search{}
 	}
 	return t.TotalCount
-}
-func (t *GlobalSearch_Search) GetTrustCenterSubprocessors() *GlobalSearch_Search_TrustCenterSubprocessors {
-	if t == nil {
-		t = &GlobalSearch_Search{}
-	}
-	return t.TrustCenterSubprocessors
 }
 func (t *GlobalSearch_Search) GetTrustCenters() *GlobalSearch_Search_TrustCenters {
 	if t == nil {
@@ -82761,7 +82575,6 @@ type CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_T
 	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
@@ -82783,12 +82596,6 @@ func (t *CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocess
 		t = &CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors{}
 	}
 	return t.ID
-}
-func (t *CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors) GetTags() []string {
-	if t == nil {
-		t = &CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors{}
-	}
-	return t.Tags
 }
 func (t *CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -82818,7 +82625,6 @@ type CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCe
 	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
@@ -82840,12 +82646,6 @@ func (t *CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_Tru
 		t = &CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors{}
 	}
 	return t.ID
-}
-func (t *CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors) GetTags() []string {
-	if t == nil {
-		t = &CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors{}
-	}
-	return t.Tags
 }
 func (t *CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -82871,15 +82671,73 @@ func (t *CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor) Ge
 	return t.TrustCenterSubprocessors
 }
 
-type CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+type CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
 }
 
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor struct {
+	Description   *string                                                                                                    "json:\"description,omitempty\" graphql:\"description\""
+	LogoFile      *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoRemoteURL *string                                                                                                    "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name          string                                                                                                     "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor) GetDescription() *string {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor{}
+	}
+	return t.Description
+}
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor) GetLogoFile() *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor_LogoFile {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor{}
+	}
+	return t.LogoFile
+}
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor) GetName() string {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor{}
+	}
+	return t.Name
+}
+
+type CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor struct {
+	Category      string                                                                                           "json:\"category\" graphql:\"category\""
+	Countries     []string                                                                                         "json:\"countries,omitempty\" graphql:\"countries\""
+	CreatedAt     *time.Time                                                                                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                                                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID            string                                                                                           "json:\"id\" graphql:\"id\""
+	Subprocessor  CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor "json:\"subprocessor\" graphql:\"subprocessor\""
+	TrustCenterID *string                                                                                          "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time                                                                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                                                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor) GetCategory() string {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.Category
+}
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor) GetCountries() []string {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.Countries
+}
 func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor{}
@@ -82898,11 +82756,17 @@ func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenter
 	}
 	return t.ID
 }
-func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor) GetTags() []string {
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor) GetSubprocessor() *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor {
 	if t == nil {
 		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor{}
 	}
-	return t.Tags
+	return &t.Subprocessor
+}
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor) GetTrustCenterID() *string {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.TrustCenterID
 }
 func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -82971,15 +82835,73 @@ func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo) GetSt
 	return t.StartCursor
 }
 
-type GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+type GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
 }
 
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor struct {
+	Description   *string                                                                                   "json:\"description,omitempty\" graphql:\"description\""
+	LogoFile      *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoRemoteURL *string                                                                                   "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name          string                                                                                    "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor) GetDescription() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor{}
+	}
+	return t.Description
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor) GetLogoFile() *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor_LogoFile {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor{}
+	}
+	return t.LogoFile
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor) GetName() string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor{}
+	}
+	return t.Name
+}
+
+type GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node struct {
+	Category      string                                                                          "json:\"category\" graphql:\"category\""
+	Countries     []string                                                                        "json:\"countries,omitempty\" graphql:\"countries\""
+	CreatedAt     *time.Time                                                                      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                                         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID            string                                                                          "json:\"id\" graphql:\"id\""
+	Subprocessor  GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor "json:\"subprocessor\" graphql:\"subprocessor\""
+	TrustCenterID *string                                                                         "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time                                                                      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                                                         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetCategory() string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.Category
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetCountries() []string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.Countries
+}
 func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
@@ -82998,11 +82920,17 @@ func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) Get
 	}
 	return t.ID
 }
-func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetTags() []string {
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetSubprocessor() *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor {
 	if t == nil {
 		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
 	}
-	return t.Tags
+	return &t.Subprocessor
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetTrustCenterID() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.TrustCenterID
 }
 func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -83053,15 +82981,73 @@ func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors) GetTotalCount(
 	return t.TotalCount
 }
 
-type GetTrustCenterSubprocessorByID_TrustCenterSubprocessor struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+type GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
 }
 
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor struct {
+	Description   *string                                                                       "json:\"description,omitempty\" graphql:\"description\""
+	LogoFile      *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoRemoteURL *string                                                                       "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name          string                                                                        "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor) GetDescription() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor{}
+	}
+	return t.Description
+}
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor) GetLogoFile() *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor_LogoFile {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor{}
+	}
+	return t.LogoFile
+}
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor) GetName() string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor{}
+	}
+	return t.Name
+}
+
+type GetTrustCenterSubprocessorByID_TrustCenterSubprocessor struct {
+	Category      string                                                              "json:\"category\" graphql:\"category\""
+	Countries     []string                                                            "json:\"countries,omitempty\" graphql:\"countries\""
+	CreatedAt     *time.Time                                                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID            string                                                              "json:\"id\" graphql:\"id\""
+	Subprocessor  GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor "json:\"subprocessor\" graphql:\"subprocessor\""
+	TrustCenterID *string                                                             "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time                                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor) GetCategory() string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor{}
+	}
+	return t.Category
+}
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor) GetCountries() []string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor{}
+	}
+	return t.Countries
+}
 func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor{}
@@ -83080,11 +83066,17 @@ func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor) GetID() string 
 	}
 	return t.ID
 }
-func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor) GetTags() []string {
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor) GetSubprocessor() *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor {
 	if t == nil {
 		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor{}
 	}
-	return t.Tags
+	return &t.Subprocessor
+}
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor) GetTrustCenterID() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor{}
+	}
+	return t.TrustCenterID
 }
 func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -83131,15 +83123,73 @@ func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo) GetStart
 	return t.StartCursor
 }
 
-type GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+type GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
 }
 
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor struct {
+	Description   *string                                                                                "json:\"description,omitempty\" graphql:\"description\""
+	LogoFile      *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoRemoteURL *string                                                                                "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name          string                                                                                 "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor) GetDescription() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor{}
+	}
+	return t.Description
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor) GetLogoFile() *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor_LogoFile {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor{}
+	}
+	return t.LogoFile
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor) GetName() string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor{}
+	}
+	return t.Name
+}
+
+type GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node struct {
+	Category      string                                                                       "json:\"category\" graphql:\"category\""
+	Countries     []string                                                                     "json:\"countries,omitempty\" graphql:\"countries\""
+	CreatedAt     *time.Time                                                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID            string                                                                       "json:\"id\" graphql:\"id\""
+	Subprocessor  GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor "json:\"subprocessor\" graphql:\"subprocessor\""
+	TrustCenterID *string                                                                      "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time                                                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetCategory() string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.Category
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetCountries() []string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.Countries
+}
 func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
@@ -83158,11 +83208,17 @@ func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetID(
 	}
 	return t.ID
 }
-func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetTags() []string {
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetSubprocessor() *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor {
 	if t == nil {
 		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
 	}
-	return t.Tags
+	return &t.Subprocessor
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetTrustCenterID() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.TrustCenterID
 }
 func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -83213,15 +83269,73 @@ func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors) GetTotalCount() i
 	return t.TotalCount
 }
 
-type UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor struct {
-	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID        string     "json:\"id\" graphql:\"id\""
-	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+type UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
 }
 
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor struct {
+	Description   *string                                                                                                    "json:\"description,omitempty\" graphql:\"description\""
+	LogoFile      *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoRemoteURL *string                                                                                                    "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name          string                                                                                                     "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor) GetDescription() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor{}
+	}
+	return t.Description
+}
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor) GetLogoFile() *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor_LogoFile {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor{}
+	}
+	return t.LogoFile
+}
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor) GetName() string {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor{}
+	}
+	return t.Name
+}
+
+type UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor struct {
+	Category      string                                                                                           "json:\"category\" graphql:\"category\""
+	Countries     []string                                                                                         "json:\"countries,omitempty\" graphql:\"countries\""
+	CreatedAt     *time.Time                                                                                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                                                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID            string                                                                                           "json:\"id\" graphql:\"id\""
+	Subprocessor  UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor "json:\"subprocessor\" graphql:\"subprocessor\""
+	TrustCenterID *string                                                                                          "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time                                                                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                                                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor) GetCategory() string {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.Category
+}
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor) GetCountries() []string {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.Countries
+}
 func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor{}
@@ -83240,11 +83354,17 @@ func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenter
 	}
 	return t.ID
 }
-func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor) GetTags() []string {
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor) GetSubprocessor() *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor {
 	if t == nil {
 		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor{}
 	}
-	return t.Tags
+	return &t.Subprocessor
+}
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor) GetTrustCenterID() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.TrustCenterID
 }
 func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -83309,7 +83429,6 @@ type GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edg
 	ID          string         "json:\"id\" graphql:\"id\""
 	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
 	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
@@ -83349,12 +83468,6 @@ func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories
 		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
 	}
 	return t.Ref
-}
-func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetTags() []string {
-	if t == nil {
-		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
-	}
-	return t.Tags
 }
 func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -83444,7 +83557,6 @@ type GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_
 	ID          string         "json:\"id\" graphql:\"id\""
 	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
 	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
@@ -83484,12 +83596,6 @@ func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Ed
 		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
 	}
 	return t.Ref
-}
-func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetTags() []string {
-	if t == nil {
-		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
-	}
-	return t.Tags
 }
 func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -93177,21 +93283,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					ownerID
 					slug
 					customDomainID
-				}
-			}
-		}
-		trustCenterSubprocessors {
-			totalCount
-			pageInfo {
-				hasNextPage
-				hasPreviousPage
-				startCursor
-				endCursor
-			}
-			edges {
-				node {
-					id
-					tags
 				}
 			}
 		}
@@ -111085,21 +111176,6 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 				}
 			}
 		}
-		trustCenterSubprocessors {
-			totalCount
-			pageInfo {
-				hasNextPage
-				hasPreviousPage
-				startCursor
-				endCursor
-			}
-			edges {
-				node {
-					id
-					tags
-				}
-			}
-		}
 		users {
 			totalCount
 			pageInfo {
@@ -114727,7 +114803,6 @@ const CreateBulkCSVTrustCenterSubprocessorDocument = `mutation CreateBulkCSVTrus
 			createdAt
 			createdBy
 			id
-			tags
 			updatedAt
 			updatedBy
 		}
@@ -114758,7 +114833,6 @@ const CreateBulkTrustCenterSubprocessorDocument = `mutation CreateBulkTrustCente
 			createdAt
 			createdBy
 			id
-			tags
 			updatedAt
 			updatedBy
 		}
@@ -114789,9 +114863,19 @@ const CreateTrustCenterSubprocessorDocument = `mutation CreateTrustCenterSubproc
 			createdAt
 			createdBy
 			id
-			tags
 			updatedAt
 			updatedBy
+			trustCenterID
+			countries
+			category
+			subprocessor {
+				name
+				description
+				logoFile {
+					presignedURL
+				}
+				logoRemoteURL
+			}
 		}
 	}
 }
@@ -114852,9 +114936,19 @@ const GetAllTrustCenterSubprocessorsDocument = `query GetAllTrustCenterSubproces
 				createdAt
 				createdBy
 				id
-				tags
 				updatedAt
 				updatedBy
+				trustCenterID
+				countries
+				category
+				subprocessor {
+					name
+					description
+					logoFile {
+						presignedURL
+					}
+					logoRemoteURL
+				}
 			}
 		}
 	}
@@ -114881,9 +114975,19 @@ const GetTrustCenterSubprocessorByIDDocument = `query GetTrustCenterSubprocessor
 		createdAt
 		createdBy
 		id
-		tags
 		updatedAt
 		updatedBy
+		trustCenterID
+		countries
+		category
+		subprocessor {
+			name
+			description
+			logoFile {
+				presignedURL
+			}
+			logoRemoteURL
+		}
 	}
 }
 `
@@ -114919,9 +115023,19 @@ const GetTrustCenterSubprocessorsDocument = `query GetTrustCenterSubprocessors (
 				createdAt
 				createdBy
 				id
-				tags
 				updatedAt
 				updatedBy
+				trustCenterID
+				countries
+				category
+				subprocessor {
+					name
+					description
+					logoFile {
+						presignedURL
+					}
+					logoRemoteURL
+				}
 			}
 		}
 	}
@@ -114953,9 +115067,19 @@ const UpdateTrustCenterSubprocessorDocument = `mutation UpdateTrustCenterSubproc
 			createdAt
 			createdBy
 			id
-			tags
 			updatedAt
 			updatedBy
+			trustCenterID
+			countries
+			category
+			subprocessor {
+				name
+				description
+				logoFile {
+					presignedURL
+				}
+				logoRemoteURL
+			}
 		}
 	}
 }
@@ -114996,7 +115120,6 @@ const GetAllTrustCenterSubprocessorHistoriesDocument = `query GetAllTrustCenterS
 				id
 				operation
 				ref
-				tags
 				updatedAt
 				updatedBy
 			}
@@ -115037,7 +115160,6 @@ const GetTrustCenterSubprocessorHistoriesDocument = `query GetTrustCenterSubproc
 				id
 				operation
 				ref
-				tags
 				updatedAt
 				updatedBy
 			}

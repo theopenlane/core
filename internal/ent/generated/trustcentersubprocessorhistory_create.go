@@ -139,9 +139,35 @@ func (tcshc *TrustCenterSubprocessorHistoryCreate) SetNillableDeletedBy(s *strin
 	return tcshc
 }
 
-// SetTags sets the "tags" field.
-func (tcshc *TrustCenterSubprocessorHistoryCreate) SetTags(s []string) *TrustCenterSubprocessorHistoryCreate {
-	tcshc.mutation.SetTags(s)
+// SetSubprocessorID sets the "subprocessor_id" field.
+func (tcshc *TrustCenterSubprocessorHistoryCreate) SetSubprocessorID(s string) *TrustCenterSubprocessorHistoryCreate {
+	tcshc.mutation.SetSubprocessorID(s)
+	return tcshc
+}
+
+// SetTrustCenterID sets the "trust_center_id" field.
+func (tcshc *TrustCenterSubprocessorHistoryCreate) SetTrustCenterID(s string) *TrustCenterSubprocessorHistoryCreate {
+	tcshc.mutation.SetTrustCenterID(s)
+	return tcshc
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (tcshc *TrustCenterSubprocessorHistoryCreate) SetNillableTrustCenterID(s *string) *TrustCenterSubprocessorHistoryCreate {
+	if s != nil {
+		tcshc.SetTrustCenterID(*s)
+	}
+	return tcshc
+}
+
+// SetCountries sets the "countries" field.
+func (tcshc *TrustCenterSubprocessorHistoryCreate) SetCountries(s []string) *TrustCenterSubprocessorHistoryCreate {
+	tcshc.mutation.SetCountries(s)
+	return tcshc
+}
+
+// SetCategory sets the "category" field.
+func (tcshc *TrustCenterSubprocessorHistoryCreate) SetCategory(s string) *TrustCenterSubprocessorHistoryCreate {
+	tcshc.mutation.SetCategory(s)
 	return tcshc
 }
 
@@ -206,10 +232,6 @@ func (tcshc *TrustCenterSubprocessorHistoryCreate) defaults() {
 		v := trustcentersubprocessorhistory.DefaultUpdatedAt()
 		tcshc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := tcshc.mutation.Tags(); !ok {
-		v := trustcentersubprocessorhistory.DefaultTags
-		tcshc.mutation.SetTags(v)
-	}
 	if _, ok := tcshc.mutation.ID(); !ok {
 		v := trustcentersubprocessorhistory.DefaultID()
 		tcshc.mutation.SetID(v)
@@ -228,6 +250,12 @@ func (tcshc *TrustCenterSubprocessorHistoryCreate) check() error {
 		if err := trustcentersubprocessorhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSubprocessorHistory.operation": %w`, err)}
 		}
+	}
+	if _, ok := tcshc.mutation.SubprocessorID(); !ok {
+		return &ValidationError{Name: "subprocessor_id", err: errors.New(`generated: missing required field "TrustCenterSubprocessorHistory.subprocessor_id"`)}
+	}
+	if _, ok := tcshc.mutation.Category(); !ok {
+		return &ValidationError{Name: "category", err: errors.New(`generated: missing required field "TrustCenterSubprocessorHistory.category"`)}
 	}
 	return nil
 }
@@ -301,9 +329,21 @@ func (tcshc *TrustCenterSubprocessorHistoryCreate) createSpec() (*TrustCenterSub
 		_spec.SetField(trustcentersubprocessorhistory.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := tcshc.mutation.Tags(); ok {
-		_spec.SetField(trustcentersubprocessorhistory.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
+	if value, ok := tcshc.mutation.SubprocessorID(); ok {
+		_spec.SetField(trustcentersubprocessorhistory.FieldSubprocessorID, field.TypeString, value)
+		_node.SubprocessorID = value
+	}
+	if value, ok := tcshc.mutation.TrustCenterID(); ok {
+		_spec.SetField(trustcentersubprocessorhistory.FieldTrustCenterID, field.TypeString, value)
+		_node.TrustCenterID = value
+	}
+	if value, ok := tcshc.mutation.Countries(); ok {
+		_spec.SetField(trustcentersubprocessorhistory.FieldCountries, field.TypeJSON, value)
+		_node.Countries = value
+	}
+	if value, ok := tcshc.mutation.Category(); ok {
+		_spec.SetField(trustcentersubprocessorhistory.FieldCategory, field.TypeString, value)
+		_node.Category = value
 	}
 	return _node, _spec
 }

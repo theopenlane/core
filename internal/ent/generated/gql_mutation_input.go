@@ -10321,13 +10321,14 @@ func (c *SubcontrolUpdateOne) SetInput(i UpdateSubcontrolInput) *SubcontrolUpdat
 
 // CreateSubprocessorInput represents a mutation input for creating subprocessors.
 type CreateSubprocessorInput struct {
-	Tags          []string
-	Name          string
-	Description   *string
-	LogoRemoteURL *string
-	OwnerID       *string
-	FileIDs       []string
-	LogoFileID    *string
+	Tags                       []string
+	Name                       string
+	Description                *string
+	LogoRemoteURL              *string
+	OwnerID                    *string
+	FileIDs                    []string
+	LogoFileID                 *string
+	TrustCenterSubprocessorIDs []string
 }
 
 // Mutate applies the CreateSubprocessorInput on the SubprocessorMutation builder.
@@ -10351,6 +10352,9 @@ func (i *CreateSubprocessorInput) Mutate(m *SubprocessorMutation) {
 	if v := i.LogoFileID; v != nil {
 		m.SetLogoFileID(*v)
 	}
+	if v := i.TrustCenterSubprocessorIDs; len(v) > 0 {
+		m.AddTrustCenterSubprocessorIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateSubprocessorInput on the SubprocessorCreate builder.
@@ -10361,21 +10365,24 @@ func (c *SubprocessorCreate) SetInput(i CreateSubprocessorInput) *SubprocessorCr
 
 // UpdateSubprocessorInput represents a mutation input for updating subprocessors.
 type UpdateSubprocessorInput struct {
-	ClearTags          bool
-	Tags               []string
-	AppendTags         []string
-	Name               *string
-	ClearDescription   bool
-	Description        *string
-	ClearLogoRemoteURL bool
-	LogoRemoteURL      *string
-	ClearOwner         bool
-	OwnerID            *string
-	ClearFiles         bool
-	AddFileIDs         []string
-	RemoveFileIDs      []string
-	ClearLogoFile      bool
-	LogoFileID         *string
+	ClearTags                        bool
+	Tags                             []string
+	AppendTags                       []string
+	Name                             *string
+	ClearDescription                 bool
+	Description                      *string
+	ClearLogoRemoteURL               bool
+	LogoRemoteURL                    *string
+	ClearOwner                       bool
+	OwnerID                          *string
+	ClearFiles                       bool
+	AddFileIDs                       []string
+	RemoveFileIDs                    []string
+	ClearLogoFile                    bool
+	LogoFileID                       *string
+	ClearTrustCenterSubprocessors    bool
+	AddTrustCenterSubprocessorIDs    []string
+	RemoveTrustCenterSubprocessorIDs []string
 }
 
 // Mutate applies the UpdateSubprocessorInput on the SubprocessorMutation builder.
@@ -10424,6 +10431,15 @@ func (i *UpdateSubprocessorInput) Mutate(m *SubprocessorMutation) {
 	}
 	if v := i.LogoFileID; v != nil {
 		m.SetLogoFileID(*v)
+	}
+	if i.ClearTrustCenterSubprocessors {
+		m.ClearTrustCenterSubprocessors()
+	}
+	if v := i.AddTrustCenterSubprocessorIDs; len(v) > 0 {
+		m.AddTrustCenterSubprocessorIDs(v...)
+	}
+	if v := i.RemoveTrustCenterSubprocessorIDs; len(v) > 0 {
+		m.RemoveTrustCenterSubprocessorIDs(v...)
 	}
 }
 
@@ -11031,10 +11047,11 @@ func (c *TemplateUpdateOne) SetInput(i UpdateTemplateInput) *TemplateUpdateOne {
 
 // CreateTrustCenterInput represents a mutation input for creating trustcenters.
 type CreateTrustCenterInput struct {
-	Tags           []string
-	OwnerID        *string
-	CustomDomainID *string
-	SettingID      *string
+	Tags                       []string
+	OwnerID                    *string
+	CustomDomainID             *string
+	SettingID                  *string
+	TrustCenterSubprocessorIDs []string
 }
 
 // Mutate applies the CreateTrustCenterInput on the TrustCenterMutation builder.
@@ -11051,6 +11068,9 @@ func (i *CreateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	if v := i.SettingID; v != nil {
 		m.SetSettingID(*v)
 	}
+	if v := i.TrustCenterSubprocessorIDs; len(v) > 0 {
+		m.AddTrustCenterSubprocessorIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateTrustCenterInput on the TrustCenterCreate builder.
@@ -11061,15 +11081,18 @@ func (c *TrustCenterCreate) SetInput(i CreateTrustCenterInput) *TrustCenterCreat
 
 // UpdateTrustCenterInput represents a mutation input for updating trustcenters.
 type UpdateTrustCenterInput struct {
-	ClearTags         bool
-	Tags              []string
-	AppendTags        []string
-	ClearOwner        bool
-	OwnerID           *string
-	ClearCustomDomain bool
-	CustomDomainID    *string
-	ClearSetting      bool
-	SettingID         *string
+	ClearTags                        bool
+	Tags                             []string
+	AppendTags                       []string
+	ClearOwner                       bool
+	OwnerID                          *string
+	ClearCustomDomain                bool
+	CustomDomainID                   *string
+	ClearSetting                     bool
+	SettingID                        *string
+	ClearTrustCenterSubprocessors    bool
+	AddTrustCenterSubprocessorIDs    []string
+	RemoveTrustCenterSubprocessorIDs []string
 }
 
 // Mutate applies the UpdateTrustCenterInput on the TrustCenterMutation builder.
@@ -11100,6 +11123,15 @@ func (i *UpdateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.SettingID; v != nil {
 		m.SetSettingID(*v)
+	}
+	if i.ClearTrustCenterSubprocessors {
+		m.ClearTrustCenterSubprocessors()
+	}
+	if v := i.AddTrustCenterSubprocessorIDs; len(v) > 0 {
+		m.AddTrustCenterSubprocessorIDs(v...)
+	}
+	if v := i.RemoveTrustCenterSubprocessorIDs; len(v) > 0 {
+		m.RemoveTrustCenterSubprocessorIDs(v...)
 	}
 }
 
@@ -11323,14 +11355,22 @@ func (c *TrustCenterSettingUpdateOne) SetInput(i UpdateTrustCenterSettingInput) 
 
 // CreateTrustCenterSubprocessorInput represents a mutation input for creating trustcentersubprocessors.
 type CreateTrustCenterSubprocessorInput struct {
-	Tags []string
+	Countries      []string
+	Category       string
+	TrustCenterID  *string
+	SubprocessorID string
 }
 
 // Mutate applies the CreateTrustCenterSubprocessorInput on the TrustCenterSubprocessorMutation builder.
 func (i *CreateTrustCenterSubprocessorInput) Mutate(m *TrustCenterSubprocessorMutation) {
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
+	if v := i.Countries; v != nil {
+		m.SetCountries(v)
 	}
+	m.SetCategory(i.Category)
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
+	m.SetSubprocessorID(i.SubprocessorID)
 }
 
 // SetInput applies the change-set in the CreateTrustCenterSubprocessorInput on the TrustCenterSubprocessorCreate builder.
@@ -11341,21 +11381,37 @@ func (c *TrustCenterSubprocessorCreate) SetInput(i CreateTrustCenterSubprocessor
 
 // UpdateTrustCenterSubprocessorInput represents a mutation input for updating trustcentersubprocessors.
 type UpdateTrustCenterSubprocessorInput struct {
-	ClearTags  bool
-	Tags       []string
-	AppendTags []string
+	ClearCountries   bool
+	Countries        []string
+	AppendCountries  []string
+	Category         *string
+	ClearTrustCenter bool
+	TrustCenterID    *string
+	SubprocessorID   *string
 }
 
 // Mutate applies the UpdateTrustCenterSubprocessorInput on the TrustCenterSubprocessorMutation builder.
 func (i *UpdateTrustCenterSubprocessorInput) Mutate(m *TrustCenterSubprocessorMutation) {
-	if i.ClearTags {
-		m.ClearTags()
+	if i.ClearCountries {
+		m.ClearCountries()
 	}
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
+	if v := i.Countries; v != nil {
+		m.SetCountries(v)
 	}
-	if i.AppendTags != nil {
-		m.AppendTags(i.Tags)
+	if i.AppendCountries != nil {
+		m.AppendCountries(i.Countries)
+	}
+	if v := i.Category; v != nil {
+		m.SetCategory(*v)
+	}
+	if i.ClearTrustCenter {
+		m.ClearTrustCenter()
+	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
+	if v := i.SubprocessorID; v != nil {
+		m.SetSubprocessorID(*v)
 	}
 }
 

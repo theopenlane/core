@@ -13,6 +13,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -21,12 +23,14 @@ import (
 // TrustCenterSubprocessorQuery is the builder for querying TrustCenterSubprocessor entities.
 type TrustCenterSubprocessorQuery struct {
 	config
-	ctx        *QueryContext
-	order      []trustcentersubprocessor.OrderOption
-	inters     []Interceptor
-	predicates []predicate.TrustCenterSubprocessor
-	loadTotal  []func(context.Context, []*TrustCenterSubprocessor) error
-	modifiers  []func(*sql.Selector)
+	ctx              *QueryContext
+	order            []trustcentersubprocessor.OrderOption
+	inters           []Interceptor
+	predicates       []predicate.TrustCenterSubprocessor
+	withTrustCenter  *TrustCenterQuery
+	withSubprocessor *SubprocessorQuery
+	loadTotal        []func(context.Context, []*TrustCenterSubprocessor) error
+	modifiers        []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -61,6 +65,56 @@ func (tcsq *TrustCenterSubprocessorQuery) Unique(unique bool) *TrustCenterSubpro
 func (tcsq *TrustCenterSubprocessorQuery) Order(o ...trustcentersubprocessor.OrderOption) *TrustCenterSubprocessorQuery {
 	tcsq.order = append(tcsq.order, o...)
 	return tcsq
+}
+
+// QueryTrustCenter chains the current query on the "trust_center" edge.
+func (tcsq *TrustCenterSubprocessorQuery) QueryTrustCenter() *TrustCenterQuery {
+	query := (&TrustCenterClient{config: tcsq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tcsq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tcsq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentersubprocessor.Table, trustcentersubprocessor.FieldID, selector),
+			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, trustcentersubprocessor.TrustCenterTable, trustcentersubprocessor.TrustCenterColumn),
+		)
+		schemaConfig := tcsq.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
+		fromU = sqlgraph.SetNeighbors(tcsq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySubprocessor chains the current query on the "subprocessor" edge.
+func (tcsq *TrustCenterSubprocessorQuery) QuerySubprocessor() *SubprocessorQuery {
+	query := (&SubprocessorClient{config: tcsq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tcsq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tcsq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentersubprocessor.Table, trustcentersubprocessor.FieldID, selector),
+			sqlgraph.To(subprocessor.Table, subprocessor.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, trustcentersubprocessor.SubprocessorTable, trustcentersubprocessor.SubprocessorColumn),
+		)
+		schemaConfig := tcsq.schemaConfig
+		step.To.Schema = schemaConfig.Subprocessor
+		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
+		fromU = sqlgraph.SetNeighbors(tcsq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first TrustCenterSubprocessor entity from the query.
@@ -250,16 +304,40 @@ func (tcsq *TrustCenterSubprocessorQuery) Clone() *TrustCenterSubprocessorQuery 
 		return nil
 	}
 	return &TrustCenterSubprocessorQuery{
-		config:     tcsq.config,
-		ctx:        tcsq.ctx.Clone(),
-		order:      append([]trustcentersubprocessor.OrderOption{}, tcsq.order...),
-		inters:     append([]Interceptor{}, tcsq.inters...),
-		predicates: append([]predicate.TrustCenterSubprocessor{}, tcsq.predicates...),
+		config:           tcsq.config,
+		ctx:              tcsq.ctx.Clone(),
+		order:            append([]trustcentersubprocessor.OrderOption{}, tcsq.order...),
+		inters:           append([]Interceptor{}, tcsq.inters...),
+		predicates:       append([]predicate.TrustCenterSubprocessor{}, tcsq.predicates...),
+		withTrustCenter:  tcsq.withTrustCenter.Clone(),
+		withSubprocessor: tcsq.withSubprocessor.Clone(),
 		// clone intermediate query.
 		sql:       tcsq.sql.Clone(),
 		path:      tcsq.path,
 		modifiers: append([]func(*sql.Selector){}, tcsq.modifiers...),
 	}
+}
+
+// WithTrustCenter tells the query-builder to eager-load the nodes that are connected to
+// the "trust_center" edge. The optional arguments are used to configure the query builder of the edge.
+func (tcsq *TrustCenterSubprocessorQuery) WithTrustCenter(opts ...func(*TrustCenterQuery)) *TrustCenterSubprocessorQuery {
+	query := (&TrustCenterClient{config: tcsq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tcsq.withTrustCenter = query
+	return tcsq
+}
+
+// WithSubprocessor tells the query-builder to eager-load the nodes that are connected to
+// the "subprocessor" edge. The optional arguments are used to configure the query builder of the edge.
+func (tcsq *TrustCenterSubprocessorQuery) WithSubprocessor(opts ...func(*SubprocessorQuery)) *TrustCenterSubprocessorQuery {
+	query := (&SubprocessorClient{config: tcsq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tcsq.withSubprocessor = query
+	return tcsq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -344,8 +422,12 @@ func (tcsq *TrustCenterSubprocessorQuery) prepareQuery(ctx context.Context) erro
 
 func (tcsq *TrustCenterSubprocessorQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TrustCenterSubprocessor, error) {
 	var (
-		nodes = []*TrustCenterSubprocessor{}
-		_spec = tcsq.querySpec()
+		nodes       = []*TrustCenterSubprocessor{}
+		_spec       = tcsq.querySpec()
+		loadedTypes = [2]bool{
+			tcsq.withTrustCenter != nil,
+			tcsq.withSubprocessor != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*TrustCenterSubprocessor).scanValues(nil, columns)
@@ -353,6 +435,7 @@ func (tcsq *TrustCenterSubprocessorQuery) sqlAll(ctx context.Context, hooks ...q
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &TrustCenterSubprocessor{config: tcsq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	_spec.Node.Schema = tcsq.schemaConfig.TrustCenterSubprocessor
@@ -369,12 +452,83 @@ func (tcsq *TrustCenterSubprocessorQuery) sqlAll(ctx context.Context, hooks ...q
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := tcsq.withTrustCenter; query != nil {
+		if err := tcsq.loadTrustCenter(ctx, query, nodes, nil,
+			func(n *TrustCenterSubprocessor, e *TrustCenter) { n.Edges.TrustCenter = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := tcsq.withSubprocessor; query != nil {
+		if err := tcsq.loadSubprocessor(ctx, query, nodes, nil,
+			func(n *TrustCenterSubprocessor, e *Subprocessor) { n.Edges.Subprocessor = e }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range tcsq.loadTotal {
 		if err := tcsq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
+}
+
+func (tcsq *TrustCenterSubprocessorQuery) loadTrustCenter(ctx context.Context, query *TrustCenterQuery, nodes []*TrustCenterSubprocessor, init func(*TrustCenterSubprocessor), assign func(*TrustCenterSubprocessor, *TrustCenter)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*TrustCenterSubprocessor)
+	for i := range nodes {
+		fk := nodes[i].TrustCenterID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(trustcenter.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "trust_center_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (tcsq *TrustCenterSubprocessorQuery) loadSubprocessor(ctx context.Context, query *SubprocessorQuery, nodes []*TrustCenterSubprocessor, init func(*TrustCenterSubprocessor), assign func(*TrustCenterSubprocessor, *Subprocessor)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*TrustCenterSubprocessor)
+	for i := range nodes {
+		fk := nodes[i].SubprocessorID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(subprocessor.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "subprocessor_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (tcsq *TrustCenterSubprocessorQuery) sqlCount(ctx context.Context) (int, error) {
@@ -406,6 +560,12 @@ func (tcsq *TrustCenterSubprocessorQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != trustcentersubprocessor.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if tcsq.withTrustCenter != nil {
+			_spec.Node.AddColumnOnce(trustcentersubprocessor.FieldTrustCenterID)
+		}
+		if tcsq.withSubprocessor != nil {
+			_spec.Node.AddColumnOnce(trustcentersubprocessor.FieldSubprocessorID)
 		}
 	}
 	if ps := tcsq.predicates; len(ps) > 0 {

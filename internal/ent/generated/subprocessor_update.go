@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -257,6 +258,21 @@ func (su *SubprocessorUpdate) SetLogoFile(f *File) *SubprocessorUpdate {
 	return su.SetLogoFileID(f.ID)
 }
 
+// AddTrustCenterSubprocessorIDs adds the "trust_center_subprocessors" edge to the TrustCenterSubprocessor entity by IDs.
+func (su *SubprocessorUpdate) AddTrustCenterSubprocessorIDs(ids ...string) *SubprocessorUpdate {
+	su.mutation.AddTrustCenterSubprocessorIDs(ids...)
+	return su
+}
+
+// AddTrustCenterSubprocessors adds the "trust_center_subprocessors" edges to the TrustCenterSubprocessor entity.
+func (su *SubprocessorUpdate) AddTrustCenterSubprocessors(t ...*TrustCenterSubprocessor) *SubprocessorUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return su.AddTrustCenterSubprocessorIDs(ids...)
+}
+
 // Mutation returns the SubprocessorMutation object of the builder.
 func (su *SubprocessorUpdate) Mutation() *SubprocessorMutation {
 	return su.mutation
@@ -293,6 +309,27 @@ func (su *SubprocessorUpdate) RemoveFiles(f ...*File) *SubprocessorUpdate {
 func (su *SubprocessorUpdate) ClearLogoFile() *SubprocessorUpdate {
 	su.mutation.ClearLogoFile()
 	return su
+}
+
+// ClearTrustCenterSubprocessors clears all "trust_center_subprocessors" edges to the TrustCenterSubprocessor entity.
+func (su *SubprocessorUpdate) ClearTrustCenterSubprocessors() *SubprocessorUpdate {
+	su.mutation.ClearTrustCenterSubprocessors()
+	return su
+}
+
+// RemoveTrustCenterSubprocessorIDs removes the "trust_center_subprocessors" edge to TrustCenterSubprocessor entities by IDs.
+func (su *SubprocessorUpdate) RemoveTrustCenterSubprocessorIDs(ids ...string) *SubprocessorUpdate {
+	su.mutation.RemoveTrustCenterSubprocessorIDs(ids...)
+	return su
+}
+
+// RemoveTrustCenterSubprocessors removes "trust_center_subprocessors" edges to TrustCenterSubprocessor entities.
+func (su *SubprocessorUpdate) RemoveTrustCenterSubprocessors(t ...*TrustCenterSubprocessor) *SubprocessorUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return su.RemoveTrustCenterSubprocessorIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -534,6 +571,54 @@ func (su *SubprocessorUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = su.schemaConfig.Subprocessor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if su.mutation.TrustCenterSubprocessorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   subprocessor.TrustCenterSubprocessorsTable,
+			Columns: []string{subprocessor.TrustCenterSubprocessorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.TrustCenterSubprocessor
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.RemovedTrustCenterSubprocessorsIDs(); len(nodes) > 0 && !su.mutation.TrustCenterSubprocessorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   subprocessor.TrustCenterSubprocessorsTable,
+			Columns: []string{subprocessor.TrustCenterSubprocessorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.TrustCenterSubprocessor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.TrustCenterSubprocessorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   subprocessor.TrustCenterSubprocessorsTable,
+			Columns: []string{subprocessor.TrustCenterSubprocessorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.TrustCenterSubprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -786,6 +871,21 @@ func (suo *SubprocessorUpdateOne) SetLogoFile(f *File) *SubprocessorUpdateOne {
 	return suo.SetLogoFileID(f.ID)
 }
 
+// AddTrustCenterSubprocessorIDs adds the "trust_center_subprocessors" edge to the TrustCenterSubprocessor entity by IDs.
+func (suo *SubprocessorUpdateOne) AddTrustCenterSubprocessorIDs(ids ...string) *SubprocessorUpdateOne {
+	suo.mutation.AddTrustCenterSubprocessorIDs(ids...)
+	return suo
+}
+
+// AddTrustCenterSubprocessors adds the "trust_center_subprocessors" edges to the TrustCenterSubprocessor entity.
+func (suo *SubprocessorUpdateOne) AddTrustCenterSubprocessors(t ...*TrustCenterSubprocessor) *SubprocessorUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return suo.AddTrustCenterSubprocessorIDs(ids...)
+}
+
 // Mutation returns the SubprocessorMutation object of the builder.
 func (suo *SubprocessorUpdateOne) Mutation() *SubprocessorMutation {
 	return suo.mutation
@@ -822,6 +922,27 @@ func (suo *SubprocessorUpdateOne) RemoveFiles(f ...*File) *SubprocessorUpdateOne
 func (suo *SubprocessorUpdateOne) ClearLogoFile() *SubprocessorUpdateOne {
 	suo.mutation.ClearLogoFile()
 	return suo
+}
+
+// ClearTrustCenterSubprocessors clears all "trust_center_subprocessors" edges to the TrustCenterSubprocessor entity.
+func (suo *SubprocessorUpdateOne) ClearTrustCenterSubprocessors() *SubprocessorUpdateOne {
+	suo.mutation.ClearTrustCenterSubprocessors()
+	return suo
+}
+
+// RemoveTrustCenterSubprocessorIDs removes the "trust_center_subprocessors" edge to TrustCenterSubprocessor entities by IDs.
+func (suo *SubprocessorUpdateOne) RemoveTrustCenterSubprocessorIDs(ids ...string) *SubprocessorUpdateOne {
+	suo.mutation.RemoveTrustCenterSubprocessorIDs(ids...)
+	return suo
+}
+
+// RemoveTrustCenterSubprocessors removes "trust_center_subprocessors" edges to TrustCenterSubprocessor entities.
+func (suo *SubprocessorUpdateOne) RemoveTrustCenterSubprocessors(t ...*TrustCenterSubprocessor) *SubprocessorUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return suo.RemoveTrustCenterSubprocessorIDs(ids...)
 }
 
 // Where appends a list predicates to the SubprocessorUpdate builder.
@@ -1093,6 +1214,54 @@ func (suo *SubprocessorUpdateOne) sqlSave(ctx context.Context) (_node *Subproces
 			},
 		}
 		edge.Schema = suo.schemaConfig.Subprocessor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.TrustCenterSubprocessorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   subprocessor.TrustCenterSubprocessorsTable,
+			Columns: []string{subprocessor.TrustCenterSubprocessorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.TrustCenterSubprocessor
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.RemovedTrustCenterSubprocessorsIDs(); len(nodes) > 0 && !suo.mutation.TrustCenterSubprocessorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   subprocessor.TrustCenterSubprocessorsTable,
+			Columns: []string{subprocessor.TrustCenterSubprocessorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.TrustCenterSubprocessor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.TrustCenterSubprocessorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   subprocessor.TrustCenterSubprocessorsTable,
+			Columns: []string{subprocessor.TrustCenterSubprocessorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.TrustCenterSubprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -95,6 +95,8 @@ func (ec *executionContext) fieldContext_SubprocessorBulkCreatePayload_subproces
 				return ec.fieldContext_Subprocessor_files(ctx, field)
 			case "logoFile":
 				return ec.fieldContext_Subprocessor_logoFile(ctx, field)
+			case "trustCenterSubprocessors":
+				return ec.fieldContext_Subprocessor_trustCenterSubprocessors(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subprocessor", field.Name)
 		},
@@ -171,6 +173,8 @@ func (ec *executionContext) fieldContext_SubprocessorCreatePayload_subprocessor(
 				return ec.fieldContext_Subprocessor_files(ctx, field)
 			case "logoFile":
 				return ec.fieldContext_Subprocessor_logoFile(ctx, field)
+			case "trustCenterSubprocessors":
+				return ec.fieldContext_Subprocessor_trustCenterSubprocessors(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subprocessor", field.Name)
 		},
@@ -291,6 +295,8 @@ func (ec *executionContext) fieldContext_SubprocessorUpdatePayload_subprocessor(
 				return ec.fieldContext_Subprocessor_files(ctx, field)
 			case "logoFile":
 				return ec.fieldContext_Subprocessor_logoFile(ctx, field)
+			case "trustCenterSubprocessors":
+				return ec.fieldContext_Subprocessor_trustCenterSubprocessors(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subprocessor", field.Name)
 		},

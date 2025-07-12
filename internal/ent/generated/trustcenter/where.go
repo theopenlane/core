@@ -809,6 +809,35 @@ func HasSettingWith(preds ...predicate.TrustCenterSetting) predicate.TrustCenter
 	})
 }
 
+// HasTrustCenterSubprocessors applies the HasEdge predicate on the "trust_center_subprocessors" edge.
+func HasTrustCenterSubprocessors() predicate.TrustCenter {
+	return predicate.TrustCenter(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterSubprocessorsTable, TrustCenterSubprocessorsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenterSubprocessor
+		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTrustCenterSubprocessorsWith applies the HasEdge predicate on the "trust_center_subprocessors" edge with a given conditions (other predicates).
+func HasTrustCenterSubprocessorsWith(preds ...predicate.TrustCenterSubprocessor) predicate.TrustCenter {
+	return predicate.TrustCenter(func(s *sql.Selector) {
+		step := newTrustCenterSubprocessorsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenterSubprocessor
+		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.TrustCenter) predicate.TrustCenter {
 	return predicate.TrustCenter(sql.AndPredicates(predicates...))

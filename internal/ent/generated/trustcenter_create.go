@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 )
 
 // TrustCenterCreate is the builder for creating a TrustCenter entity.
@@ -195,6 +196,21 @@ func (tcc *TrustCenterCreate) SetNillableSettingID(id *string) *TrustCenterCreat
 // SetSetting sets the "setting" edge to the TrustCenterSetting entity.
 func (tcc *TrustCenterCreate) SetSetting(t *TrustCenterSetting) *TrustCenterCreate {
 	return tcc.SetSettingID(t.ID)
+}
+
+// AddTrustCenterSubprocessorIDs adds the "trust_center_subprocessors" edge to the TrustCenterSubprocessor entity by IDs.
+func (tcc *TrustCenterCreate) AddTrustCenterSubprocessorIDs(ids ...string) *TrustCenterCreate {
+	tcc.mutation.AddTrustCenterSubprocessorIDs(ids...)
+	return tcc
+}
+
+// AddTrustCenterSubprocessors adds the "trust_center_subprocessors" edges to the TrustCenterSubprocessor entity.
+func (tcc *TrustCenterCreate) AddTrustCenterSubprocessors(t ...*TrustCenterSubprocessor) *TrustCenterCreate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return tcc.AddTrustCenterSubprocessorIDs(ids...)
 }
 
 // Mutation returns the TrustCenterMutation object of the builder.
@@ -390,6 +406,23 @@ func (tcc *TrustCenterCreate) createSpec() (*TrustCenter, *sqlgraph.CreateSpec) 
 			},
 		}
 		edge.Schema = tcc.schemaConfig.TrustCenterSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tcc.mutation.TrustCenterSubprocessorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterSubprocessorsTable,
+			Columns: []string{trustcenter.TrustCenterSubprocessorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcc.schemaConfig.TrustCenterSubprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

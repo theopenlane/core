@@ -55,11 +55,15 @@ type TrustCenterEdges struct {
 	CustomDomain *CustomDomain `json:"custom_domain,omitempty"`
 	// Setting holds the value of the setting edge.
 	Setting *TrustCenterSetting `json:"setting,omitempty"`
+	// TrustCenterSubprocessors holds the value of the trust_center_subprocessors edge.
+	TrustCenterSubprocessors []*TrustCenterSubprocessor `json:"trust_center_subprocessors,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [4]map[string]int
+
+	namedTrustCenterSubprocessors map[string][]*TrustCenterSubprocessor
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -93,6 +97,15 @@ func (e TrustCenterEdges) SettingOrErr() (*TrustCenterSetting, error) {
 		return nil, &NotFoundError{label: trustcentersetting.Label}
 	}
 	return nil, &NotLoadedError{edge: "setting"}
+}
+
+// TrustCenterSubprocessorsOrErr returns the TrustCenterSubprocessors value or an error if the edge
+// was not loaded in eager-loading.
+func (e TrustCenterEdges) TrustCenterSubprocessorsOrErr() ([]*TrustCenterSubprocessor, error) {
+	if e.loadedTypes[3] {
+		return e.TrustCenterSubprocessors, nil
+	}
+	return nil, &NotLoadedError{edge: "trust_center_subprocessors"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -217,6 +230,11 @@ func (tc *TrustCenter) QuerySetting() *TrustCenterSettingQuery {
 	return NewTrustCenterClient(tc.config).QuerySetting(tc)
 }
 
+// QueryTrustCenterSubprocessors queries the "trust_center_subprocessors" edge of the TrustCenter entity.
+func (tc *TrustCenter) QueryTrustCenterSubprocessors() *TrustCenterSubprocessorQuery {
+	return NewTrustCenterClient(tc.config).QueryTrustCenterSubprocessors(tc)
+}
+
 // Update returns a builder for updating this TrustCenter.
 // Note that you need to call TrustCenter.Unwrap() before calling this method if this TrustCenter
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -271,6 +289,30 @@ func (tc *TrustCenter) String() string {
 	builder.WriteString(tc.CustomDomainID)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedTrustCenterSubprocessors returns the TrustCenterSubprocessors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (tc *TrustCenter) NamedTrustCenterSubprocessors(name string) ([]*TrustCenterSubprocessor, error) {
+	if tc.Edges.namedTrustCenterSubprocessors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := tc.Edges.namedTrustCenterSubprocessors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (tc *TrustCenter) appendNamedTrustCenterSubprocessors(name string, edges ...*TrustCenterSubprocessor) {
+	if tc.Edges.namedTrustCenterSubprocessors == nil {
+		tc.Edges.namedTrustCenterSubprocessors = make(map[string][]*TrustCenterSubprocessor)
+	}
+	if len(edges) == 0 {
+		tc.Edges.namedTrustCenterSubprocessors[name] = []*TrustCenterSubprocessor{}
+	} else {
+		tc.Edges.namedTrustCenterSubprocessors[name] = append(tc.Edges.namedTrustCenterSubprocessors[name], edges...)
+	}
 }
 
 // TrustCenters is a parsable slice of TrustCenter.

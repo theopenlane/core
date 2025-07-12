@@ -92,6 +92,8 @@ func (ec *executionContext) fieldContext_TrustCenterCreatePayload_trustCenter(_ 
 				return ec.fieldContext_TrustCenter_customDomain(ctx, field)
 			case "setting":
 				return ec.fieldContext_TrustCenter_setting(ctx, field)
+			case "trustCenterSubprocessors":
+				return ec.fieldContext_TrustCenter_trustCenterSubprocessors(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenter", field.Name)
 		},
@@ -206,6 +208,8 @@ func (ec *executionContext) fieldContext_TrustCenterUpdatePayload_trustCenter(_ 
 				return ec.fieldContext_TrustCenter_customDomain(ctx, field)
 			case "setting":
 				return ec.fieldContext_TrustCenter_setting(ctx, field)
+			case "trustCenterSubprocessors":
+				return ec.fieldContext_TrustCenter_trustCenterSubprocessors(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenter", field.Name)
 		},

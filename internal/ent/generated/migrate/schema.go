@@ -4729,13 +4729,40 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "countries", Type: field.TypeJSON, Nullable: true},
+		{Name: "category", Type: field.TypeString, Size: 255},
+		{Name: "subprocessor_id", Type: field.TypeString},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterSubprocessorsTable holds the schema information for the "trust_center_subprocessors" table.
 	TrustCenterSubprocessorsTable = &schema.Table{
 		Name:       "trust_center_subprocessors",
 		Columns:    TrustCenterSubprocessorsColumns,
 		PrimaryKey: []*schema.Column{TrustCenterSubprocessorsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "trust_center_subprocessors_subprocessors_trust_center_subprocessors",
+				Columns:    []*schema.Column{TrustCenterSubprocessorsColumns[9]},
+				RefColumns: []*schema.Column{SubprocessorsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "trust_center_subprocessors_trust_centers_trust_center_subprocessors",
+				Columns:    []*schema.Column{TrustCenterSubprocessorsColumns[10]},
+				RefColumns: []*schema.Column{TrustCentersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "trustcentersubprocessor_subprocessor_id_trust_center_id",
+				Unique:  true,
+				Columns: []*schema.Column{TrustCenterSubprocessorsColumns[9], TrustCenterSubprocessorsColumns[10]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
 	}
 	// TrustCenterSubprocessorHistoryColumns holds the columns for the "trust_center_subprocessor_history" table.
 	TrustCenterSubprocessorHistoryColumns = []*schema.Column{
@@ -4749,7 +4776,10 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "subprocessor_id", Type: field.TypeString},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+		{Name: "countries", Type: field.TypeJSON, Nullable: true},
+		{Name: "category", Type: field.TypeString, Size: 255},
 	}
 	// TrustCenterSubprocessorHistoryTable holds the schema information for the "trust_center_subprocessor_history" table.
 	TrustCenterSubprocessorHistoryTable = &schema.Table{
@@ -8124,6 +8154,8 @@ func init() {
 	TrustCenterSettingHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_setting_history",
 	}
+	TrustCenterSubprocessorsTable.ForeignKeys[0].RefTable = SubprocessorsTable
+	TrustCenterSubprocessorsTable.ForeignKeys[1].RefTable = TrustCentersTable
 	TrustCenterSubprocessorHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_subprocessor_history",
 	}

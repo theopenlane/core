@@ -20565,6 +20565,25 @@ func (c *SubprocessorClient) QueryLogoFile(s *Subprocessor) *FileQuery {
 	return query
 }
 
+// QueryTrustCenterSubprocessors queries the trust_center_subprocessors edge of a Subprocessor.
+func (c *SubprocessorClient) QueryTrustCenterSubprocessors(s *Subprocessor) *TrustCenterSubprocessorQuery {
+	query := (&TrustCenterSubprocessorClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subprocessor.Table, subprocessor.FieldID, id),
+			sqlgraph.To(trustcentersubprocessor.Table, trustcentersubprocessor.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, subprocessor.TrustCenterSubprocessorsTable, subprocessor.TrustCenterSubprocessorsColumn),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterSubprocessor
+		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *SubprocessorClient) Hooks() []Hook {
 	hooks := c.hooks.Subprocessor
@@ -22060,6 +22079,25 @@ func (c *TrustCenterClient) QuerySetting(tc *TrustCenter) *TrustCenterSettingQue
 	return query
 }
 
+// QueryTrustCenterSubprocessors queries the trust_center_subprocessors edge of a TrustCenter.
+func (c *TrustCenterClient) QueryTrustCenterSubprocessors(tc *TrustCenter) *TrustCenterSubprocessorQuery {
+	query := (&TrustCenterSubprocessorClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := tc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, id),
+			sqlgraph.To(trustcentersubprocessor.Table, trustcentersubprocessor.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.TrustCenterSubprocessorsTable, trustcenter.TrustCenterSubprocessorsColumn),
+		)
+		schemaConfig := tc.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterSubprocessor
+		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
+		fromV = sqlgraph.Neighbors(tc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *TrustCenterClient) Hooks() []Hook {
 	hooks := c.hooks.TrustCenter
@@ -22672,6 +22710,44 @@ func (c *TrustCenterSubprocessorClient) GetX(ctx context.Context, id string) *Tr
 		panic(err)
 	}
 	return obj
+}
+
+// QueryTrustCenter queries the trust_center edge of a TrustCenterSubprocessor.
+func (c *TrustCenterSubprocessorClient) QueryTrustCenter(tcs *TrustCenterSubprocessor) *TrustCenterQuery {
+	query := (&TrustCenterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := tcs.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentersubprocessor.Table, trustcentersubprocessor.FieldID, id),
+			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, trustcentersubprocessor.TrustCenterTable, trustcentersubprocessor.TrustCenterColumn),
+		)
+		schemaConfig := tcs.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
+		fromV = sqlgraph.Neighbors(tcs.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubprocessor queries the subprocessor edge of a TrustCenterSubprocessor.
+func (c *TrustCenterSubprocessorClient) QuerySubprocessor(tcs *TrustCenterSubprocessor) *SubprocessorQuery {
+	query := (&SubprocessorClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := tcs.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentersubprocessor.Table, trustcentersubprocessor.FieldID, id),
+			sqlgraph.To(subprocessor.Table, subprocessor.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, trustcentersubprocessor.SubprocessorTable, trustcentersubprocessor.SubprocessorColumn),
+		)
+		schemaConfig := tcs.schemaConfig
+		step.To.Schema = schemaConfig.Subprocessor
+		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
+		fromV = sqlgraph.Neighbors(tcs.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.

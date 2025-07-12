@@ -13,6 +13,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -104,27 +106,97 @@ func (tcsu *TrustCenterSubprocessorUpdate) ClearDeletedBy() *TrustCenterSubproce
 	return tcsu
 }
 
-// SetTags sets the "tags" field.
-func (tcsu *TrustCenterSubprocessorUpdate) SetTags(s []string) *TrustCenterSubprocessorUpdate {
-	tcsu.mutation.SetTags(s)
+// SetSubprocessorID sets the "subprocessor_id" field.
+func (tcsu *TrustCenterSubprocessorUpdate) SetSubprocessorID(s string) *TrustCenterSubprocessorUpdate {
+	tcsu.mutation.SetSubprocessorID(s)
 	return tcsu
 }
 
-// AppendTags appends s to the "tags" field.
-func (tcsu *TrustCenterSubprocessorUpdate) AppendTags(s []string) *TrustCenterSubprocessorUpdate {
-	tcsu.mutation.AppendTags(s)
+// SetNillableSubprocessorID sets the "subprocessor_id" field if the given value is not nil.
+func (tcsu *TrustCenterSubprocessorUpdate) SetNillableSubprocessorID(s *string) *TrustCenterSubprocessorUpdate {
+	if s != nil {
+		tcsu.SetSubprocessorID(*s)
+	}
 	return tcsu
 }
 
-// ClearTags clears the value of the "tags" field.
-func (tcsu *TrustCenterSubprocessorUpdate) ClearTags() *TrustCenterSubprocessorUpdate {
-	tcsu.mutation.ClearTags()
+// SetTrustCenterID sets the "trust_center_id" field.
+func (tcsu *TrustCenterSubprocessorUpdate) SetTrustCenterID(s string) *TrustCenterSubprocessorUpdate {
+	tcsu.mutation.SetTrustCenterID(s)
 	return tcsu
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (tcsu *TrustCenterSubprocessorUpdate) SetNillableTrustCenterID(s *string) *TrustCenterSubprocessorUpdate {
+	if s != nil {
+		tcsu.SetTrustCenterID(*s)
+	}
+	return tcsu
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (tcsu *TrustCenterSubprocessorUpdate) ClearTrustCenterID() *TrustCenterSubprocessorUpdate {
+	tcsu.mutation.ClearTrustCenterID()
+	return tcsu
+}
+
+// SetCountries sets the "countries" field.
+func (tcsu *TrustCenterSubprocessorUpdate) SetCountries(s []string) *TrustCenterSubprocessorUpdate {
+	tcsu.mutation.SetCountries(s)
+	return tcsu
+}
+
+// AppendCountries appends s to the "countries" field.
+func (tcsu *TrustCenterSubprocessorUpdate) AppendCountries(s []string) *TrustCenterSubprocessorUpdate {
+	tcsu.mutation.AppendCountries(s)
+	return tcsu
+}
+
+// ClearCountries clears the value of the "countries" field.
+func (tcsu *TrustCenterSubprocessorUpdate) ClearCountries() *TrustCenterSubprocessorUpdate {
+	tcsu.mutation.ClearCountries()
+	return tcsu
+}
+
+// SetCategory sets the "category" field.
+func (tcsu *TrustCenterSubprocessorUpdate) SetCategory(s string) *TrustCenterSubprocessorUpdate {
+	tcsu.mutation.SetCategory(s)
+	return tcsu
+}
+
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (tcsu *TrustCenterSubprocessorUpdate) SetNillableCategory(s *string) *TrustCenterSubprocessorUpdate {
+	if s != nil {
+		tcsu.SetCategory(*s)
+	}
+	return tcsu
+}
+
+// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
+func (tcsu *TrustCenterSubprocessorUpdate) SetTrustCenter(t *TrustCenter) *TrustCenterSubprocessorUpdate {
+	return tcsu.SetTrustCenterID(t.ID)
+}
+
+// SetSubprocessor sets the "subprocessor" edge to the Subprocessor entity.
+func (tcsu *TrustCenterSubprocessorUpdate) SetSubprocessor(s *Subprocessor) *TrustCenterSubprocessorUpdate {
+	return tcsu.SetSubprocessorID(s.ID)
 }
 
 // Mutation returns the TrustCenterSubprocessorMutation object of the builder.
 func (tcsu *TrustCenterSubprocessorUpdate) Mutation() *TrustCenterSubprocessorMutation {
 	return tcsu.mutation
+}
+
+// ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
+func (tcsu *TrustCenterSubprocessorUpdate) ClearTrustCenter() *TrustCenterSubprocessorUpdate {
+	tcsu.mutation.ClearTrustCenter()
+	return tcsu
+}
+
+// ClearSubprocessor clears the "subprocessor" edge to the Subprocessor entity.
+func (tcsu *TrustCenterSubprocessorUpdate) ClearSubprocessor() *TrustCenterSubprocessorUpdate {
+	tcsu.mutation.ClearSubprocessor()
+	return tcsu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -169,6 +241,29 @@ func (tcsu *TrustCenterSubprocessorUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (tcsu *TrustCenterSubprocessorUpdate) check() error {
+	if v, ok := tcsu.mutation.SubprocessorID(); ok {
+		if err := trustcentersubprocessor.SubprocessorIDValidator(v); err != nil {
+			return &ValidationError{Name: "subprocessor_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSubprocessor.subprocessor_id": %w`, err)}
+		}
+	}
+	if v, ok := tcsu.mutation.TrustCenterID(); ok {
+		if err := trustcentersubprocessor.TrustCenterIDValidator(v); err != nil {
+			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSubprocessor.trust_center_id": %w`, err)}
+		}
+	}
+	if v, ok := tcsu.mutation.Category(); ok {
+		if err := trustcentersubprocessor.CategoryValidator(v); err != nil {
+			return &ValidationError{Name: "category", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSubprocessor.category": %w`, err)}
+		}
+	}
+	if tcsu.mutation.SubprocessorCleared() && len(tcsu.mutation.SubprocessorIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "TrustCenterSubprocessor.subprocessor"`)
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (tcsu *TrustCenterSubprocessorUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterSubprocessorUpdate {
 	tcsu.modifiers = append(tcsu.modifiers, modifiers...)
@@ -176,6 +271,9 @@ func (tcsu *TrustCenterSubprocessorUpdate) Modify(modifiers ...func(u *sql.Updat
 }
 
 func (tcsu *TrustCenterSubprocessorUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := tcsu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(trustcentersubprocessor.Table, trustcentersubprocessor.Columns, sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString))
 	if ps := tcsu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -214,16 +312,81 @@ func (tcsu *TrustCenterSubprocessorUpdate) sqlSave(ctx context.Context) (n int, 
 	if tcsu.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcentersubprocessor.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := tcsu.mutation.Tags(); ok {
-		_spec.SetField(trustcentersubprocessor.FieldTags, field.TypeJSON, value)
+	if value, ok := tcsu.mutation.Countries(); ok {
+		_spec.SetField(trustcentersubprocessor.FieldCountries, field.TypeJSON, value)
 	}
-	if value, ok := tcsu.mutation.AppendedTags(); ok {
+	if value, ok := tcsu.mutation.AppendedCountries(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, trustcentersubprocessor.FieldTags, value)
+			sqljson.Append(u, trustcentersubprocessor.FieldCountries, value)
 		})
 	}
-	if tcsu.mutation.TagsCleared() {
-		_spec.ClearField(trustcentersubprocessor.FieldTags, field.TypeJSON)
+	if tcsu.mutation.CountriesCleared() {
+		_spec.ClearField(trustcentersubprocessor.FieldCountries, field.TypeJSON)
+	}
+	if value, ok := tcsu.mutation.Category(); ok {
+		_spec.SetField(trustcentersubprocessor.FieldCategory, field.TypeString, value)
+	}
+	if tcsu.mutation.TrustCenterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentersubprocessor.TrustCenterTable,
+			Columns: []string{trustcentersubprocessor.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsu.schemaConfig.TrustCenterSubprocessor
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tcsu.mutation.TrustCenterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentersubprocessor.TrustCenterTable,
+			Columns: []string{trustcentersubprocessor.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsu.schemaConfig.TrustCenterSubprocessor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tcsu.mutation.SubprocessorCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentersubprocessor.SubprocessorTable,
+			Columns: []string{trustcentersubprocessor.SubprocessorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsu.schemaConfig.TrustCenterSubprocessor
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tcsu.mutation.SubprocessorIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentersubprocessor.SubprocessorTable,
+			Columns: []string{trustcentersubprocessor.SubprocessorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsu.schemaConfig.TrustCenterSubprocessor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_spec.Node.Schema = tcsu.schemaConfig.TrustCenterSubprocessor
 	ctx = internal.NewSchemaConfigContext(ctx, tcsu.schemaConfig)
@@ -321,27 +484,97 @@ func (tcsuo *TrustCenterSubprocessorUpdateOne) ClearDeletedBy() *TrustCenterSubp
 	return tcsuo
 }
 
-// SetTags sets the "tags" field.
-func (tcsuo *TrustCenterSubprocessorUpdateOne) SetTags(s []string) *TrustCenterSubprocessorUpdateOne {
-	tcsuo.mutation.SetTags(s)
+// SetSubprocessorID sets the "subprocessor_id" field.
+func (tcsuo *TrustCenterSubprocessorUpdateOne) SetSubprocessorID(s string) *TrustCenterSubprocessorUpdateOne {
+	tcsuo.mutation.SetSubprocessorID(s)
 	return tcsuo
 }
 
-// AppendTags appends s to the "tags" field.
-func (tcsuo *TrustCenterSubprocessorUpdateOne) AppendTags(s []string) *TrustCenterSubprocessorUpdateOne {
-	tcsuo.mutation.AppendTags(s)
+// SetNillableSubprocessorID sets the "subprocessor_id" field if the given value is not nil.
+func (tcsuo *TrustCenterSubprocessorUpdateOne) SetNillableSubprocessorID(s *string) *TrustCenterSubprocessorUpdateOne {
+	if s != nil {
+		tcsuo.SetSubprocessorID(*s)
+	}
 	return tcsuo
 }
 
-// ClearTags clears the value of the "tags" field.
-func (tcsuo *TrustCenterSubprocessorUpdateOne) ClearTags() *TrustCenterSubprocessorUpdateOne {
-	tcsuo.mutation.ClearTags()
+// SetTrustCenterID sets the "trust_center_id" field.
+func (tcsuo *TrustCenterSubprocessorUpdateOne) SetTrustCenterID(s string) *TrustCenterSubprocessorUpdateOne {
+	tcsuo.mutation.SetTrustCenterID(s)
 	return tcsuo
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (tcsuo *TrustCenterSubprocessorUpdateOne) SetNillableTrustCenterID(s *string) *TrustCenterSubprocessorUpdateOne {
+	if s != nil {
+		tcsuo.SetTrustCenterID(*s)
+	}
+	return tcsuo
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (tcsuo *TrustCenterSubprocessorUpdateOne) ClearTrustCenterID() *TrustCenterSubprocessorUpdateOne {
+	tcsuo.mutation.ClearTrustCenterID()
+	return tcsuo
+}
+
+// SetCountries sets the "countries" field.
+func (tcsuo *TrustCenterSubprocessorUpdateOne) SetCountries(s []string) *TrustCenterSubprocessorUpdateOne {
+	tcsuo.mutation.SetCountries(s)
+	return tcsuo
+}
+
+// AppendCountries appends s to the "countries" field.
+func (tcsuo *TrustCenterSubprocessorUpdateOne) AppendCountries(s []string) *TrustCenterSubprocessorUpdateOne {
+	tcsuo.mutation.AppendCountries(s)
+	return tcsuo
+}
+
+// ClearCountries clears the value of the "countries" field.
+func (tcsuo *TrustCenterSubprocessorUpdateOne) ClearCountries() *TrustCenterSubprocessorUpdateOne {
+	tcsuo.mutation.ClearCountries()
+	return tcsuo
+}
+
+// SetCategory sets the "category" field.
+func (tcsuo *TrustCenterSubprocessorUpdateOne) SetCategory(s string) *TrustCenterSubprocessorUpdateOne {
+	tcsuo.mutation.SetCategory(s)
+	return tcsuo
+}
+
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (tcsuo *TrustCenterSubprocessorUpdateOne) SetNillableCategory(s *string) *TrustCenterSubprocessorUpdateOne {
+	if s != nil {
+		tcsuo.SetCategory(*s)
+	}
+	return tcsuo
+}
+
+// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
+func (tcsuo *TrustCenterSubprocessorUpdateOne) SetTrustCenter(t *TrustCenter) *TrustCenterSubprocessorUpdateOne {
+	return tcsuo.SetTrustCenterID(t.ID)
+}
+
+// SetSubprocessor sets the "subprocessor" edge to the Subprocessor entity.
+func (tcsuo *TrustCenterSubprocessorUpdateOne) SetSubprocessor(s *Subprocessor) *TrustCenterSubprocessorUpdateOne {
+	return tcsuo.SetSubprocessorID(s.ID)
 }
 
 // Mutation returns the TrustCenterSubprocessorMutation object of the builder.
 func (tcsuo *TrustCenterSubprocessorUpdateOne) Mutation() *TrustCenterSubprocessorMutation {
 	return tcsuo.mutation
+}
+
+// ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
+func (tcsuo *TrustCenterSubprocessorUpdateOne) ClearTrustCenter() *TrustCenterSubprocessorUpdateOne {
+	tcsuo.mutation.ClearTrustCenter()
+	return tcsuo
+}
+
+// ClearSubprocessor clears the "subprocessor" edge to the Subprocessor entity.
+func (tcsuo *TrustCenterSubprocessorUpdateOne) ClearSubprocessor() *TrustCenterSubprocessorUpdateOne {
+	tcsuo.mutation.ClearSubprocessor()
+	return tcsuo
 }
 
 // Where appends a list predicates to the TrustCenterSubprocessorUpdate builder.
@@ -399,6 +632,29 @@ func (tcsuo *TrustCenterSubprocessorUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (tcsuo *TrustCenterSubprocessorUpdateOne) check() error {
+	if v, ok := tcsuo.mutation.SubprocessorID(); ok {
+		if err := trustcentersubprocessor.SubprocessorIDValidator(v); err != nil {
+			return &ValidationError{Name: "subprocessor_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSubprocessor.subprocessor_id": %w`, err)}
+		}
+	}
+	if v, ok := tcsuo.mutation.TrustCenterID(); ok {
+		if err := trustcentersubprocessor.TrustCenterIDValidator(v); err != nil {
+			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSubprocessor.trust_center_id": %w`, err)}
+		}
+	}
+	if v, ok := tcsuo.mutation.Category(); ok {
+		if err := trustcentersubprocessor.CategoryValidator(v); err != nil {
+			return &ValidationError{Name: "category", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSubprocessor.category": %w`, err)}
+		}
+	}
+	if tcsuo.mutation.SubprocessorCleared() && len(tcsuo.mutation.SubprocessorIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "TrustCenterSubprocessor.subprocessor"`)
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (tcsuo *TrustCenterSubprocessorUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterSubprocessorUpdateOne {
 	tcsuo.modifiers = append(tcsuo.modifiers, modifiers...)
@@ -406,6 +662,9 @@ func (tcsuo *TrustCenterSubprocessorUpdateOne) Modify(modifiers ...func(u *sql.U
 }
 
 func (tcsuo *TrustCenterSubprocessorUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenterSubprocessor, err error) {
+	if err := tcsuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(trustcentersubprocessor.Table, trustcentersubprocessor.Columns, sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString))
 	id, ok := tcsuo.mutation.ID()
 	if !ok {
@@ -461,16 +720,81 @@ func (tcsuo *TrustCenterSubprocessorUpdateOne) sqlSave(ctx context.Context) (_no
 	if tcsuo.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcentersubprocessor.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := tcsuo.mutation.Tags(); ok {
-		_spec.SetField(trustcentersubprocessor.FieldTags, field.TypeJSON, value)
+	if value, ok := tcsuo.mutation.Countries(); ok {
+		_spec.SetField(trustcentersubprocessor.FieldCountries, field.TypeJSON, value)
 	}
-	if value, ok := tcsuo.mutation.AppendedTags(); ok {
+	if value, ok := tcsuo.mutation.AppendedCountries(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, trustcentersubprocessor.FieldTags, value)
+			sqljson.Append(u, trustcentersubprocessor.FieldCountries, value)
 		})
 	}
-	if tcsuo.mutation.TagsCleared() {
-		_spec.ClearField(trustcentersubprocessor.FieldTags, field.TypeJSON)
+	if tcsuo.mutation.CountriesCleared() {
+		_spec.ClearField(trustcentersubprocessor.FieldCountries, field.TypeJSON)
+	}
+	if value, ok := tcsuo.mutation.Category(); ok {
+		_spec.SetField(trustcentersubprocessor.FieldCategory, field.TypeString, value)
+	}
+	if tcsuo.mutation.TrustCenterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentersubprocessor.TrustCenterTable,
+			Columns: []string{trustcentersubprocessor.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsuo.schemaConfig.TrustCenterSubprocessor
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tcsuo.mutation.TrustCenterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentersubprocessor.TrustCenterTable,
+			Columns: []string{trustcentersubprocessor.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsuo.schemaConfig.TrustCenterSubprocessor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tcsuo.mutation.SubprocessorCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentersubprocessor.SubprocessorTable,
+			Columns: []string{trustcentersubprocessor.SubprocessorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsuo.schemaConfig.TrustCenterSubprocessor
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tcsuo.mutation.SubprocessorIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentersubprocessor.SubprocessorTable,
+			Columns: []string{trustcentersubprocessor.SubprocessorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsuo.schemaConfig.TrustCenterSubprocessor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_spec.Node.Schema = tcsuo.schemaConfig.TrustCenterSubprocessor
 	ctx = internal.NewSchemaConfigContext(ctx, tcsuo.schemaConfig)

@@ -6416,6 +6416,27 @@ func (s *Subprocessor) LogoFile(ctx context.Context) (*File, error) {
 	return result, MaskNotFound(err)
 }
 
+func (s *Subprocessor) TrustCenterSubprocessors(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TrustCenterSubprocessorOrder, where *TrustCenterSubprocessorWhereInput,
+) (*TrustCenterSubprocessorConnection, error) {
+	opts := []TrustCenterSubprocessorPaginateOption{
+		WithTrustCenterSubprocessorOrder(orderBy),
+		WithTrustCenterSubprocessorFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := s.Edges.totalCount[3][alias]
+	if nodes, err := s.NamedTrustCenterSubprocessors(alias); err == nil || hasTotalCount {
+		pager, err := newTrustCenterSubprocessorPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TrustCenterSubprocessorConnection{Edges: []*TrustCenterSubprocessorEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return s.QueryTrustCenterSubprocessors().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (s *Subscriber) Owner(ctx context.Context) (*Organization, error) {
 	result, err := s.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -6761,6 +6782,27 @@ func (tc *TrustCenter) Setting(ctx context.Context) (*TrustCenterSetting, error)
 	return result, MaskNotFound(err)
 }
 
+func (tc *TrustCenter) TrustCenterSubprocessors(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TrustCenterSubprocessorOrder, where *TrustCenterSubprocessorWhereInput,
+) (*TrustCenterSubprocessorConnection, error) {
+	opts := []TrustCenterSubprocessorPaginateOption{
+		WithTrustCenterSubprocessorOrder(orderBy),
+		WithTrustCenterSubprocessorFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := tc.Edges.totalCount[3][alias]
+	if nodes, err := tc.NamedTrustCenterSubprocessors(alias); err == nil || hasTotalCount {
+		pager, err := newTrustCenterSubprocessorPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TrustCenterSubprocessorConnection{Edges: []*TrustCenterSubprocessorEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return tc.QueryTrustCenterSubprocessors().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (tcs *TrustCenterSetting) TrustCenter(ctx context.Context) (*TrustCenter, error) {
 	result, err := tcs.Edges.TrustCenterOrErr()
 	if IsNotLoaded(err) {
@@ -6804,6 +6846,22 @@ func (tcs *TrustCenterSetting) FaviconFile(ctx context.Context) (*File, error) {
 		result, err = tcs.QueryFaviconFile().Only(ctx)
 	}
 	return result, MaskNotFound(err)
+}
+
+func (tcs *TrustCenterSubprocessor) TrustCenter(ctx context.Context) (*TrustCenter, error) {
+	result, err := tcs.Edges.TrustCenterOrErr()
+	if IsNotLoaded(err) {
+		result, err = tcs.QueryTrustCenter().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (tcs *TrustCenterSubprocessor) Subprocessor(ctx context.Context) (*Subprocessor, error) {
+	result, err := tcs.Edges.SubprocessorOrErr()
+	if IsNotLoaded(err) {
+		result, err = tcs.QuerySubprocessor().Only(ctx)
+	}
+	return result, err
 }
 
 func (u *User) PersonalAccessTokens(
