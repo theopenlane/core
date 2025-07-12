@@ -14,7 +14,7 @@ func SystemOwnedSubprocessor() privacy.SubprocessorMutationRuleFunc {
 	return privacy.SubprocessorMutationRuleFunc(func(ctx context.Context, m *generated.SubprocessorMutation) error {
 		systemOwned, _ := m.SystemOwned()
 
-		allowAdmin, err := CheckIsSystemAdmin(ctx, m)
+		allowAdmin, err := CheckIsSystemAdminWithContext(ctx)
 		if err != nil {
 			return err
 		}

@@ -227,7 +227,9 @@ func (thc *TemplateHistoryCreate) Mutation() *TemplateHistoryMutation {
 
 // Save creates the TemplateHistory in the database.
 func (thc *TemplateHistoryCreate) Save(ctx context.Context) (*TemplateHistory, error) {
-	thc.defaults()
+	if err := thc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, thc.sqlSave, thc.mutation, thc.hooks)
 }
 
@@ -254,16 +256,25 @@ func (thc *TemplateHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (thc *TemplateHistoryCreate) defaults() {
+func (thc *TemplateHistoryCreate) defaults() error {
 	if _, ok := thc.mutation.HistoryTime(); !ok {
+		if templatehistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized templatehistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := templatehistory.DefaultHistoryTime()
 		thc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := thc.mutation.CreatedAt(); !ok {
+		if templatehistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized templatehistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := templatehistory.DefaultCreatedAt()
 		thc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := thc.mutation.UpdatedAt(); !ok {
+		if templatehistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized templatehistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := templatehistory.DefaultUpdatedAt()
 		thc.mutation.SetUpdatedAt(v)
 	}
@@ -276,9 +287,13 @@ func (thc *TemplateHistoryCreate) defaults() {
 		thc.mutation.SetTemplateType(v)
 	}
 	if _, ok := thc.mutation.ID(); !ok {
+		if templatehistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized templatehistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := templatehistory.DefaultID()
 		thc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

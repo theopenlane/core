@@ -525,7 +525,9 @@ func (shu *SubcontrolHistoryUpdate) Mutation() *SubcontrolHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (shu *SubcontrolHistoryUpdate) Save(ctx context.Context) (int, error) {
-	shu.defaults()
+	if err := shu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, shu.sqlSave, shu.mutation, shu.hooks)
 }
 
@@ -552,11 +554,15 @@ func (shu *SubcontrolHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (shu *SubcontrolHistoryUpdate) defaults() {
+func (shu *SubcontrolHistoryUpdate) defaults() error {
 	if _, ok := shu.mutation.UpdatedAt(); !ok && !shu.mutation.UpdatedAtCleared() {
+		if subcontrolhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized subcontrolhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := subcontrolhistory.UpdateDefaultUpdatedAt()
 		shu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -1327,7 +1333,9 @@ func (shuo *SubcontrolHistoryUpdateOne) Select(field string, fields ...string) *
 
 // Save executes the query and returns the updated SubcontrolHistory entity.
 func (shuo *SubcontrolHistoryUpdateOne) Save(ctx context.Context) (*SubcontrolHistory, error) {
-	shuo.defaults()
+	if err := shuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, shuo.sqlSave, shuo.mutation, shuo.hooks)
 }
 
@@ -1354,11 +1362,15 @@ func (shuo *SubcontrolHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (shuo *SubcontrolHistoryUpdateOne) defaults() {
+func (shuo *SubcontrolHistoryUpdateOne) defaults() error {
 	if _, ok := shuo.mutation.UpdatedAt(); !ok && !shuo.mutation.UpdatedAtCleared() {
+		if subcontrolhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized subcontrolhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := subcontrolhistory.UpdateDefaultUpdatedAt()
 		shuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

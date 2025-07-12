@@ -97,7 +97,7 @@ independently from session data and can be fetched with `Get` or written with
 `Set`.
 
 ```go
-c := features.NewCache(redisClient, time.Minute)
+c := features.NewCache(redisClient, permissioncache.WithCacheTTL(time.Minute))
 _ = c.Set(ctx, "org1", []string{"evidence", "search"})
 feats, _ := c.Get(ctx, "org1")
 ```

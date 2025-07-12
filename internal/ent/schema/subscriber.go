@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -159,7 +158,6 @@ func (Subscriber) Policy() ent.Policy {
 		policy.WithQueryRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.SignUpToken](),
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.VerifyToken](),
-			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
 		),
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.SignUpToken](),

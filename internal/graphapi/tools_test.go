@@ -28,6 +28,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/entdb"
 	objmw "github.com/theopenlane/core/internal/middleware/objects"
+	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/objects"
 	mock_objects "github.com/theopenlane/core/pkg/objects/mocks"
 	"github.com/theopenlane/core/pkg/openlaneclient"
@@ -151,6 +152,11 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	summarizerClient, err := summarizer.NewSummarizer(*entCfg)
 	assert.NilError(t, err)
 
+	pool := soiree.NewPondPool(
+		soiree.WithMaxWorkers(100), //nolint:mnd
+		soiree.WithName("ent_client_pool"),
+	)
+
 	opts := []ent.Option{
 		ent.Authz(*fgaClient),
 		ent.Emailer(&emailtemplates.Config{}), // add noop email config
@@ -161,6 +167,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		ent.SessionConfig(&sessionConfig),
 		ent.EntConfig(entCfg),
 		ent.Summarizer(summarizerClient),
+		ent.PondPool(pool),
 	}
 
 	// create database connection

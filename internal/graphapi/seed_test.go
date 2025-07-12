@@ -9,8 +9,8 @@ import (
 	"gotest.tools/v3/assert"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
+	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 )
@@ -155,14 +155,17 @@ func (suite *GraphTestSuite) systemAdminBuilder(ctx context.Context, t *testing.
 	req := fgax.TupleRequest{
 		SubjectID:   newUser.ID,
 		SubjectType: auth.UserSubjectType,
-		ObjectID:    rule.SystemObjectID,
-		ObjectType:  rule.SystemObject,
+		ObjectID:    authmw.SystemObjectID,
+		ObjectType:  authmw.SystemObject,
 		Relation:    fgax.SystemAdminRelation,
 	}
 
 	// add system admin relation for user
 	_, err := suite.client.db.Authz.WriteTupleKeys(context.Background(), []fgax.TupleKey{fgax.GetTupleKey(req)}, nil)
 	assert.NilError(t, err)
+
+	// set the user as a system admin
+	newUser.UserCtx = auth.NewTestContextForSystemAdmin(newUser.ID, newUser.OrganizationID)
 
 	return newUser
 }

@@ -138,9 +138,6 @@ func (File) Interceptors() []ent.Interceptor {
 // Policy of the File
 func (File) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
-		),
 		policy.WithOnMutationRules(
 			// check permissions on delete and update operations, creation is handled by the parent object
 			ent.OpDelete|ent.OpDeleteOne|ent.OpUpdate|ent.OpUpdateOne,

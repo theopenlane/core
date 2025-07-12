@@ -57,7 +57,7 @@ func newOrgOwnedMixin(schema any, opts ...objectOwnedOption) ObjectOwnedMixin {
 var defaultOrgHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			skip, err := o.orgHookSkipper(ctx, m)
+			skip, err := o.orgHookSkipper(ctx)
 			if err != nil {
 				return nil, err
 			}
@@ -102,7 +102,7 @@ var defaultOrgHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 var orgHookCreateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			skip, err := o.skipOrgHookForAdmins(ctx, m)
+			skip, err := o.skipOrgHookForAdmins(ctx)
 			if err != nil {
 				return nil, err
 			}
@@ -298,7 +298,7 @@ func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept
 
 // orgHookSkipper skips the organization hook based on the context
 // looking for specific token types or mutations done by system admins
-func (o ObjectOwnedMixin) orgHookSkipper(ctx context.Context, m ent.Mutation) (bool, error) {
+func (o ObjectOwnedMixin) orgHookSkipper(ctx context.Context) (bool, error) {
 	// skip the hook if the context has the token type
 	// this is useful for tokens, where the user is not yet authenticated to
 	// a particular organization yet and auth policy allows this
@@ -317,7 +317,7 @@ func (o ObjectOwnedMixin) orgHookSkipper(ctx context.Context, m ent.Mutation) (b
 		return true, nil
 	}
 
-	skip, err := o.skipOrgHookForAdmins(ctx, m)
+	skip, err := o.skipOrgHookForAdmins(ctx)
 	if err != nil {
 		return false, err
 	}

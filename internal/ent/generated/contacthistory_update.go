@@ -278,7 +278,9 @@ func (chu *ContactHistoryUpdate) Mutation() *ContactHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (chu *ContactHistoryUpdate) Save(ctx context.Context) (int, error) {
-	chu.defaults()
+	if err := chu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, chu.sqlSave, chu.mutation, chu.hooks)
 }
 
@@ -305,11 +307,15 @@ func (chu *ContactHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (chu *ContactHistoryUpdate) defaults() {
+func (chu *ContactHistoryUpdate) defaults() error {
 	if _, ok := chu.mutation.UpdatedAt(); !ok && !chu.mutation.UpdatedAtCleared() {
+		if contacthistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized contacthistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := contacthistory.UpdateDefaultUpdatedAt()
 		chu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -708,7 +714,9 @@ func (chuo *ContactHistoryUpdateOne) Select(field string, fields ...string) *Con
 
 // Save executes the query and returns the updated ContactHistory entity.
 func (chuo *ContactHistoryUpdateOne) Save(ctx context.Context) (*ContactHistory, error) {
-	chuo.defaults()
+	if err := chuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, chuo.sqlSave, chuo.mutation, chuo.hooks)
 }
 
@@ -735,11 +743,15 @@ func (chuo *ContactHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (chuo *ContactHistoryUpdateOne) defaults() {
+func (chuo *ContactHistoryUpdateOne) defaults() error {
 	if _, ok := chuo.mutation.UpdatedAt(); !ok && !chuo.mutation.UpdatedAtCleared() {
+		if contacthistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized contacthistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := contacthistory.UpdateDefaultUpdatedAt()
 		chuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

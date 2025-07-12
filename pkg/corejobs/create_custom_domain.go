@@ -67,7 +67,7 @@ func (w *CreateCustomDomainWorker) WithRiverClient(cl riverqueue.JobClient) *Cre
 // Work satisfies the river.Worker interface for the create custom domain worker
 // it creates a custom domain for an organization
 func (w *CreateCustomDomainWorker) Work(ctx context.Context, job *river.Job[CreateCustomDomainArgs]) error {
-	log.Info().Str("custom_domain_id", job.Args.CustomDomainID).Msg("creating custom domain")
+	log.Debug().Str("custom_domain_id", job.Args.CustomDomainID).Msg("creating custom domain")
 
 	if job.Args.CustomDomainID == "" {
 		return newMissingRequiredArg("custom_domain_id", CreateCustomDomainArgs{}.Kind())

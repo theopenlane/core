@@ -257,6 +257,8 @@ func TestQueryStandards(t *testing.T) {
 }
 
 func TestMutationCreateStandard(t *testing.T) {
+	patClientSystemAdmin := suite.setupPatClient(systemAdminUser, t)
+
 	numControls := 20
 	controlIDs := []string{}
 	for range numControls {
@@ -295,6 +297,15 @@ func TestMutationCreateStandard(t *testing.T) {
 			},
 			client: suite.client.api,
 			ctx:    systemAdminUser.UserCtx,
+		},
+		{
+			name: "happy path, system admin - system owned using pat",
+			request: openlaneclient.CreateStandardInput{
+				Name:     "Super Awesome Standard",
+				IsPublic: lo.ToPtr(true),
+			},
+			client: patClientSystemAdmin,
+			ctx:    context.Background(),
 		},
 		{
 			name: "happy path, system admin - system owned and public",
@@ -422,7 +433,7 @@ func TestMutationCreateStandard(t *testing.T) {
 			assert.Check(t, is.Equal(expectedStatus, *resp.CreateStandard.Standard.Status))
 
 			expectedSystemOwned := false
-			if tc.ctx == systemAdminUser.UserCtx {
+			if tc.ctx == systemAdminUser.UserCtx || tc.client == patClientSystemAdmin {
 				expectedSystemOwned = true
 			}
 			assert.Check(t, is.Equal(expectedSystemOwned, *resp.CreateStandard.Standard.SystemOwned))

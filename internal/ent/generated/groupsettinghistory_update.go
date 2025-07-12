@@ -199,7 +199,9 @@ func (gshu *GroupSettingHistoryUpdate) Mutation() *GroupSettingHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (gshu *GroupSettingHistoryUpdate) Save(ctx context.Context) (int, error) {
-	gshu.defaults()
+	if err := gshu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, gshu.sqlSave, gshu.mutation, gshu.hooks)
 }
 
@@ -226,11 +228,15 @@ func (gshu *GroupSettingHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (gshu *GroupSettingHistoryUpdate) defaults() {
+func (gshu *GroupSettingHistoryUpdate) defaults() error {
 	if _, ok := gshu.mutation.UpdatedAt(); !ok && !gshu.mutation.UpdatedAtCleared() {
+		if groupsettinghistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized groupsettinghistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := groupsettinghistory.UpdateDefaultUpdatedAt()
 		gshu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -527,7 +533,9 @@ func (gshuo *GroupSettingHistoryUpdateOne) Select(field string, fields ...string
 
 // Save executes the query and returns the updated GroupSettingHistory entity.
 func (gshuo *GroupSettingHistoryUpdateOne) Save(ctx context.Context) (*GroupSettingHistory, error) {
-	gshuo.defaults()
+	if err := gshuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, gshuo.sqlSave, gshuo.mutation, gshuo.hooks)
 }
 
@@ -554,11 +562,15 @@ func (gshuo *GroupSettingHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (gshuo *GroupSettingHistoryUpdateOne) defaults() {
+func (gshuo *GroupSettingHistoryUpdateOne) defaults() error {
 	if _, ok := gshuo.mutation.UpdatedAt(); !ok && !gshuo.mutation.UpdatedAtCleared() {
+		if groupsettinghistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized groupsettinghistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := groupsettinghistory.UpdateDefaultUpdatedAt()
 		gshuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

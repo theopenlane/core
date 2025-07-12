@@ -369,7 +369,9 @@ func (phc *ProcedureHistoryCreate) Mutation() *ProcedureHistoryMutation {
 
 // Save creates the ProcedureHistory in the database.
 func (phc *ProcedureHistoryCreate) Save(ctx context.Context) (*ProcedureHistory, error) {
-	phc.defaults()
+	if err := phc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, phc.sqlSave, phc.mutation, phc.hooks)
 }
 
@@ -396,16 +398,25 @@ func (phc *ProcedureHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (phc *ProcedureHistoryCreate) defaults() {
+func (phc *ProcedureHistoryCreate) defaults() error {
 	if _, ok := phc.mutation.HistoryTime(); !ok {
+		if procedurehistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized procedurehistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := procedurehistory.DefaultHistoryTime()
 		phc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := phc.mutation.CreatedAt(); !ok {
+		if procedurehistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized procedurehistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := procedurehistory.DefaultCreatedAt()
 		phc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := phc.mutation.UpdatedAt(); !ok {
+		if procedurehistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized procedurehistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := procedurehistory.DefaultUpdatedAt()
 		phc.mutation.SetUpdatedAt(v)
 	}
@@ -458,9 +469,13 @@ func (phc *ProcedureHistoryCreate) defaults() {
 		phc.mutation.SetDismissedImprovementSuggestions(v)
 	}
 	if _, ok := phc.mutation.ID(); !ok {
+		if procedurehistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized procedurehistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := procedurehistory.DefaultID()
 		phc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

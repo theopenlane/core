@@ -29,7 +29,7 @@ func SystemOwnedStandards() privacy.StandardMutationRuleFunc {
 
 		hasAdminField := systemOwned || isPublic || freeToUse
 
-		allowAdmin, err := CheckIsSystemAdmin(ctx, m)
+		allowAdmin, err := CheckIsSystemAdminWithContext(ctx)
 		if err != nil {
 			return err
 		}

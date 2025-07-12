@@ -208,7 +208,9 @@ func (tchc *TrustCenterHistoryCreate) Mutation() *TrustCenterHistoryMutation {
 
 // Save creates the TrustCenterHistory in the database.
 func (tchc *TrustCenterHistoryCreate) Save(ctx context.Context) (*TrustCenterHistory, error) {
-	tchc.defaults()
+	if err := tchc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, tchc.sqlSave, tchc.mutation, tchc.hooks)
 }
 
@@ -235,16 +237,25 @@ func (tchc *TrustCenterHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (tchc *TrustCenterHistoryCreate) defaults() {
+func (tchc *TrustCenterHistoryCreate) defaults() error {
 	if _, ok := tchc.mutation.HistoryTime(); !ok {
+		if trustcenterhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized trustcenterhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := trustcenterhistory.DefaultHistoryTime()
 		tchc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := tchc.mutation.CreatedAt(); !ok {
+		if trustcenterhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized trustcenterhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := trustcenterhistory.DefaultCreatedAt()
 		tchc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := tchc.mutation.UpdatedAt(); !ok {
+		if trustcenterhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized trustcenterhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := trustcenterhistory.DefaultUpdatedAt()
 		tchc.mutation.SetUpdatedAt(v)
 	}
@@ -253,9 +264,13 @@ func (tchc *TrustCenterHistoryCreate) defaults() {
 		tchc.mutation.SetTags(v)
 	}
 	if _, ok := tchc.mutation.ID(); !ok {
+		if trustcenterhistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized trustcenterhistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := trustcenterhistory.DefaultID()
 		tchc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

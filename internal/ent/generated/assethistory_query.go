@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -331,6 +332,12 @@ func (ahq *AssetHistoryQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		ahq.sql = prev
+	}
+	if assethistory.Policy == nil {
+		return errors.New("generated: uninitialized assethistory.Policy (forgotten import generated/runtime?)")
+	}
+	if err := assethistory.Policy.EvalQuery(ctx, ahq); err != nil {
+		return err
 	}
 	return nil
 }

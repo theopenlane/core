@@ -271,7 +271,9 @@ func (chc *ContactHistoryCreate) Mutation() *ContactHistoryMutation {
 
 // Save creates the ContactHistory in the database.
 func (chc *ContactHistoryCreate) Save(ctx context.Context) (*ContactHistory, error) {
-	chc.defaults()
+	if err := chc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, chc.sqlSave, chc.mutation, chc.hooks)
 }
 
@@ -298,16 +300,25 @@ func (chc *ContactHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (chc *ContactHistoryCreate) defaults() {
+func (chc *ContactHistoryCreate) defaults() error {
 	if _, ok := chc.mutation.HistoryTime(); !ok {
+		if contacthistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized contacthistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := contacthistory.DefaultHistoryTime()
 		chc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := chc.mutation.CreatedAt(); !ok {
+		if contacthistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized contacthistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := contacthistory.DefaultCreatedAt()
 		chc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := chc.mutation.UpdatedAt(); !ok {
+		if contacthistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized contacthistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := contacthistory.DefaultUpdatedAt()
 		chc.mutation.SetUpdatedAt(v)
 	}
@@ -320,9 +331,13 @@ func (chc *ContactHistoryCreate) defaults() {
 		chc.mutation.SetStatus(v)
 	}
 	if _, ok := chc.mutation.ID(); !ok {
+		if contacthistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized contacthistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := contacthistory.DefaultID()
 		chc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

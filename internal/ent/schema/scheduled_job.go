@@ -7,7 +7,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -104,16 +103,6 @@ func (s ScheduledJob) Mixin() []ent.Mixin {
 	}.getMixins()
 }
 
-// Edges of the ScheduledJob
-func (s ScheduledJob) Edges() []ent.Edge {
-	return []ent.Edge{}
-}
-
-// Indexes of the ScheduledJob
-func (ScheduledJob) Indexes() []ent.Index {
-	return []ent.Index{}
-}
-
 // Annotations of the ScheduledJob
 func (ScheduledJob) Annotations() []schema.Annotation {
 	return []schema.Annotation{
@@ -128,17 +117,9 @@ func (ScheduledJob) Hooks() []ent.Hook {
 	}
 }
 
-// Interceptors of the ScheduledJob
-func (ScheduledJob) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
-}
-
 // Policy of the ScheduledJob
 func (ScheduledJob) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			privacy.AlwaysAllowRule(),
-		),
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),

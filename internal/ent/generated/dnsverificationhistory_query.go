@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -331,6 +332,12 @@ func (dvhq *DNSVerificationHistoryQuery) prepareQuery(ctx context.Context) error
 			return err
 		}
 		dvhq.sql = prev
+	}
+	if dnsverificationhistory.Policy == nil {
+		return errors.New("generated: uninitialized dnsverificationhistory.Policy (forgotten import generated/runtime?)")
+	}
+	if err := dnsverificationhistory.Policy.EvalQuery(ctx, dvhq); err != nil {
+		return err
 	}
 	return nil
 }

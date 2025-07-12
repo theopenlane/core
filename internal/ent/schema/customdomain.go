@@ -112,7 +112,6 @@ func (CustomDomain) Indexes() []ent.Index {
 func (CustomDomain) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.CheckOrgReadAccess(),
 			rule.AllowQueryIfSystemAdmin(),
 		),
 		policy.WithOnMutationRules(

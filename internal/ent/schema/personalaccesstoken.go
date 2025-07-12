@@ -185,8 +185,5 @@ func (PersonalAccessToken) Policy() ent.Policy {
 			rule.AllowMutationAfterApplyingOwnerFilter(),
 			privacy.AlwaysAllowRule(),
 		},
-		Query: privacy.QueryPolicy{
-			privacy.AlwaysAllowRule(),
-		},
 	}
 }

@@ -256,7 +256,9 @@ func (ehc *EntityHistoryCreate) Mutation() *EntityHistoryMutation {
 
 // Save creates the EntityHistory in the database.
 func (ehc *EntityHistoryCreate) Save(ctx context.Context) (*EntityHistory, error) {
-	ehc.defaults()
+	if err := ehc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, ehc.sqlSave, ehc.mutation, ehc.hooks)
 }
 
@@ -283,16 +285,25 @@ func (ehc *EntityHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ehc *EntityHistoryCreate) defaults() {
+func (ehc *EntityHistoryCreate) defaults() error {
 	if _, ok := ehc.mutation.HistoryTime(); !ok {
+		if entityhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized entityhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := entityhistory.DefaultHistoryTime()
 		ehc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := ehc.mutation.CreatedAt(); !ok {
+		if entityhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized entityhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := entityhistory.DefaultCreatedAt()
 		ehc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := ehc.mutation.UpdatedAt(); !ok {
+		if entityhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized entityhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := entityhistory.DefaultUpdatedAt()
 		ehc.mutation.SetUpdatedAt(v)
 	}
@@ -305,9 +316,13 @@ func (ehc *EntityHistoryCreate) defaults() {
 		ehc.mutation.SetStatus(v)
 	}
 	if _, ok := ehc.mutation.ID(); !ok {
+		if entityhistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized entityhistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := entityhistory.DefaultID()
 		ehc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

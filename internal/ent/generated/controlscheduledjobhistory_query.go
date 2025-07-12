@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -331,6 +332,12 @@ func (csjhq *ControlScheduledJobHistoryQuery) prepareQuery(ctx context.Context) 
 			return err
 		}
 		csjhq.sql = prev
+	}
+	if controlscheduledjobhistory.Policy == nil {
+		return errors.New("generated: uninitialized controlscheduledjobhistory.Policy (forgotten import generated/runtime?)")
+	}
+	if err := controlscheduledjobhistory.Policy.EvalQuery(ctx, csjhq); err != nil {
+		return err
 	}
 	return nil
 }

@@ -43,12 +43,3 @@ func (mixin UserOwnedMutationPolicyMixin) Policy() ent.Policy {
 		},
 	}
 }
-
-// Policy sets the policy for querying owned fields by the user
-func (mixin UserOwnedQueryPolicyMixin) Policy() ent.Policy {
-	return privacy.Policy{
-		Query: privacy.QueryPolicy{
-			privacy.AlwaysAllowRule(),
-		},
-	}
-}

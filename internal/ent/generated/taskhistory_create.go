@@ -292,7 +292,9 @@ func (thc *TaskHistoryCreate) Mutation() *TaskHistoryMutation {
 
 // Save creates the TaskHistory in the database.
 func (thc *TaskHistoryCreate) Save(ctx context.Context) (*TaskHistory, error) {
-	thc.defaults()
+	if err := thc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, thc.sqlSave, thc.mutation, thc.hooks)
 }
 
@@ -319,16 +321,25 @@ func (thc *TaskHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (thc *TaskHistoryCreate) defaults() {
+func (thc *TaskHistoryCreate) defaults() error {
 	if _, ok := thc.mutation.HistoryTime(); !ok {
+		if taskhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized taskhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := taskhistory.DefaultHistoryTime()
 		thc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := thc.mutation.CreatedAt(); !ok {
+		if taskhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized taskhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := taskhistory.DefaultCreatedAt()
 		thc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := thc.mutation.UpdatedAt(); !ok {
+		if taskhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized taskhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := taskhistory.DefaultUpdatedAt()
 		thc.mutation.SetUpdatedAt(v)
 	}
@@ -341,9 +352,13 @@ func (thc *TaskHistoryCreate) defaults() {
 		thc.mutation.SetStatus(v)
 	}
 	if _, ok := thc.mutation.ID(); !ok {
+		if taskhistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized taskhistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := taskhistory.DefaultID()
 		thc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

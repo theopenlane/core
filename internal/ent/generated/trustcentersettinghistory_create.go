@@ -343,7 +343,9 @@ func (tcshc *TrustCenterSettingHistoryCreate) Mutation() *TrustCenterSettingHist
 
 // Save creates the TrustCenterSettingHistory in the database.
 func (tcshc *TrustCenterSettingHistoryCreate) Save(ctx context.Context) (*TrustCenterSettingHistory, error) {
-	tcshc.defaults()
+	if err := tcshc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, tcshc.sqlSave, tcshc.mutation, tcshc.hooks)
 }
 
@@ -370,16 +372,25 @@ func (tcshc *TrustCenterSettingHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (tcshc *TrustCenterSettingHistoryCreate) defaults() {
+func (tcshc *TrustCenterSettingHistoryCreate) defaults() error {
 	if _, ok := tcshc.mutation.HistoryTime(); !ok {
+		if trustcentersettinghistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized trustcentersettinghistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := trustcentersettinghistory.DefaultHistoryTime()
 		tcshc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := tcshc.mutation.CreatedAt(); !ok {
+		if trustcentersettinghistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized trustcentersettinghistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := trustcentersettinghistory.DefaultCreatedAt()
 		tcshc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := tcshc.mutation.UpdatedAt(); !ok {
+		if trustcentersettinghistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized trustcentersettinghistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := trustcentersettinghistory.DefaultUpdatedAt()
 		tcshc.mutation.SetUpdatedAt(v)
 	}
@@ -388,9 +399,13 @@ func (tcshc *TrustCenterSettingHistoryCreate) defaults() {
 		tcshc.mutation.SetThemeMode(v)
 	}
 	if _, ok := tcshc.mutation.ID(); !ok {
+		if trustcentersettinghistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized trustcentersettinghistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := trustcentersettinghistory.DefaultID()
 		tcshc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

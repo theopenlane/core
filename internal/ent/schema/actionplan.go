@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -96,9 +95,6 @@ func (ActionPlan) Annotations() []schema.Annotation {
 // Policy of the ActionPlan
 func (ActionPlan) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
-		),
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ActionPlanMutation](),

@@ -116,6 +116,7 @@ func (Onboarding) Policy() ent.Policy {
 			// this data should not be queried, so we deny all queries except
 			// those explicitly allowed from internal services
 			rule.AllowIfContextAllowRule(),
+			privacy.AlwaysDenyRule(), // deny all queries by default
 		),
 		policy.WithMutationRules(
 			rule.AllowIfContextAllowRule(),

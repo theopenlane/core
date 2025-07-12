@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -331,6 +332,12 @@ func (tchq *TrustCenterHistoryQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		tchq.sql = prev
+	}
+	if trustcenterhistory.Policy == nil {
+		return errors.New("generated: uninitialized trustcenterhistory.Policy (forgotten import generated/runtime?)")
+	}
+	if err := trustcenterhistory.Policy.EvalQuery(ctx, tchq); err != nil {
+		return err
 	}
 	return nil
 }

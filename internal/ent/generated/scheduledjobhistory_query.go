@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -331,6 +332,12 @@ func (sjhq *ScheduledJobHistoryQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		sjhq.sql = prev
+	}
+	if scheduledjobhistory.Policy == nil {
+		return errors.New("generated: uninitialized scheduledjobhistory.Policy (forgotten import generated/runtime?)")
+	}
+	if err := scheduledjobhistory.Policy.EvalQuery(ctx, sjhq); err != nil {
+		return err
 	}
 	return nil
 }

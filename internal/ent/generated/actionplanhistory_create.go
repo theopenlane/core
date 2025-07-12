@@ -405,7 +405,9 @@ func (aphc *ActionPlanHistoryCreate) Mutation() *ActionPlanHistoryMutation {
 
 // Save creates the ActionPlanHistory in the database.
 func (aphc *ActionPlanHistoryCreate) Save(ctx context.Context) (*ActionPlanHistory, error) {
-	aphc.defaults()
+	if err := aphc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, aphc.sqlSave, aphc.mutation, aphc.hooks)
 }
 
@@ -432,16 +434,25 @@ func (aphc *ActionPlanHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (aphc *ActionPlanHistoryCreate) defaults() {
+func (aphc *ActionPlanHistoryCreate) defaults() error {
 	if _, ok := aphc.mutation.HistoryTime(); !ok {
+		if actionplanhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized actionplanhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := actionplanhistory.DefaultHistoryTime()
 		aphc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := aphc.mutation.CreatedAt(); !ok {
+		if actionplanhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized actionplanhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := actionplanhistory.DefaultCreatedAt()
 		aphc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := aphc.mutation.UpdatedAt(); !ok {
+		if actionplanhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized actionplanhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := actionplanhistory.DefaultUpdatedAt()
 		aphc.mutation.SetUpdatedAt(v)
 	}
@@ -494,9 +505,13 @@ func (aphc *ActionPlanHistoryCreate) defaults() {
 		aphc.mutation.SetDismissedImprovementSuggestions(v)
 	}
 	if _, ok := aphc.mutation.ID(); !ok {
+		if actionplanhistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized actionplanhistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := actionplanhistory.DefaultID()
 		aphc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
