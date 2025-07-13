@@ -101,7 +101,6 @@ func (TrustCenterSubprocessor) Policy() ent.Policy {
 		),
 		policy.WithMutationRules(
 			entfga.CheckEditAccess[*generated.TrustCenterSubprocessorMutation](),
-			privacy.AlwaysAllowRule(),
 		),
 	)
 }
