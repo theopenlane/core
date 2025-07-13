@@ -1173,6 +1173,30 @@ func (f TrustCenterFunc) Mutate(ctx context.Context, m generated.Mutation) (gene
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.TrustCenterMutation", m)
 }
 
+// The TrustCenterComplianceFunc type is an adapter to allow the use of ordinary
+// function as TrustCenterCompliance mutator.
+type TrustCenterComplianceFunc func(context.Context, *generated.TrustCenterComplianceMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TrustCenterComplianceFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.TrustCenterComplianceMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.TrustCenterComplianceMutation", m)
+}
+
+// The TrustCenterComplianceHistoryFunc type is an adapter to allow the use of ordinary
+// function as TrustCenterComplianceHistory mutator.
+type TrustCenterComplianceHistoryFunc func(context.Context, *generated.TrustCenterComplianceHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TrustCenterComplianceHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.TrustCenterComplianceHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.TrustCenterComplianceHistoryMutation", m)
+}
+
 // The TrustCenterHistoryFunc type is an adapter to allow the use of ordinary
 // function as TrustCenterHistory mutator.
 type TrustCenterHistoryFunc func(context.Context, *generated.TrustCenterHistoryMutation) (generated.Value, error)

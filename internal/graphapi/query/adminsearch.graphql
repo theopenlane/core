@@ -895,6 +895,21 @@ query AdminSearch($query: String!) {
         }
       }
     }
+    trustCenterCompliances {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+        }
+      }
+    }
     users {
       totalCount
       pageInfo {
