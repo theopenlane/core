@@ -52,6 +52,8 @@ func InterceptorOrganization() ent.Interceptor {
 			// if the request is using a JWT and is not org owned, for example user profile, personal access tokens, etc,
 			// as well as a query on all organizations for a user,
 			// we need to restrict on all organization instead of just the current one
+			// we do pattern matching on these types so that things like `deleteOrganization` are included
+			// along with a query type of organizations, as an example
 			useListObjectsTypes := []string{
 				"personalAccessToken", // ability to add multiple orgs to a PAT
 				"organization",        // ability to list all orgs user has access to

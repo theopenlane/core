@@ -81,13 +81,20 @@ func (c *Cache) SetFeatures(ctx context.Context, orgID string, values []string) 
 // SetRole stores the role for a subject ID.
 func (c *Cache) SetRole(ctx context.Context, subjectID, orgID string, value string) error {
 	roles, err := c.get(ctx, c.roleKey(subjectID, orgID))
-	if err == nil {
-		if slices.Contains(roles, value) {
-			return nil
-		}
-
-		roles = append(roles, value)
+	if err != nil {
+		return err
 	}
+
+	// If the roles slice is nil, it means there are no roles set yet for this subjectID and orgID
+	if roles == nil {
+		roles = []string{}
+	} else if slices.Contains(roles, value) {
+		// If the role already exists, we do not need to add it again
+		return nil
+	}
+
+	// append the new role to the existing roles
+	roles = append(roles, value)
 
 	return c.set(ctx, c.roleKey(subjectID, orgID), roles)
 }

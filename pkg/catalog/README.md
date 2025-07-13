@@ -88,23 +88,6 @@ if err != nil {
 fmt.Println(diff)
 ```
 
-## Features Subpackage
-
-The [`features`](features) directory contains helpers for caching enabled
-features for an organization. `Cache` is a small wrapper around Redis that
-stores a set of feature names keyed by organization ID. Entries expire
-independently from session data and can be fetched with `Get` or written with
-`Set`.
-
-```go
-c := features.NewCache(redisClient, permissioncache.WithCacheTTL(time.Minute))
-_ = c.Set(ctx, "org1", []string{"evidence", "search"})
-feats, _ := c.Get(ctx, "org1")
-```
-
-Use `features.WithCache` and `features.CacheFromContext` to make the cache
-available throughout a request lifecycle.
-
 ## Seeding a Stripe Sandbox
 
 Best way to test this setup is to create a new Stripe sandbox, grab the API key, and seed it with your products and prices (creating a new catalog file and removing the existing product ID's and price ID's is best method), similar to below (NOTE: the 404's are intentional, this is a pre-check to ensure the configured catalog doesn't have products and prices in the stripe instance, and that results in 404 errors for "didn't find product and price"):
