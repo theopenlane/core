@@ -39538,6 +39538,95 @@ func (s *SubprocessorQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, subprocessor.FieldLogoLocalFileID)
 				fieldSeen[subprocessor.FieldLogoLocalFileID] = struct{}{}
 			}
+
+		case "trustCenterSubprocessors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TrustCenterSubprocessorClient{config: s.config}).Query()
+			)
+			args := newTrustCenterSubprocessorPaginateArgs(fieldArgs(ctx, new(TrustCenterSubprocessorWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newTrustCenterSubprocessorPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					s.loadTotal = append(s.loadTotal, func(ctx context.Context, nodes []*Subprocessor) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"subprocessor_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(subprocessor.TrustCenterSubprocessorsColumn), ids...))
+						})
+						if err := query.GroupBy(subprocessor.TrustCenterSubprocessorsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[3] == nil {
+								nodes[i].Edges.totalCount[3] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[3][alias] = n
+						}
+						return nil
+					})
+				} else {
+					s.loadTotal = append(s.loadTotal, func(_ context.Context, nodes []*Subprocessor) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.TrustCenterSubprocessors)
+							if nodes[i].Edges.totalCount[3] == nil {
+								nodes[i].Edges.totalCount[3] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[3][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, trustcentersubprocessorImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(subprocessor.TrustCenterSubprocessorsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			s.WithNamedTrustCenterSubprocessors(alias, func(wq *TrustCenterSubprocessorQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[subprocessor.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, subprocessor.FieldCreatedAt)
@@ -42082,6 +42171,95 @@ func (tc *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				return err
 			}
 			tc.withSetting = query
+
+		case "trustCenterSubprocessors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TrustCenterSubprocessorClient{config: tc.config}).Query()
+			)
+			args := newTrustCenterSubprocessorPaginateArgs(fieldArgs(ctx, new(TrustCenterSubprocessorWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newTrustCenterSubprocessorPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					tc.loadTotal = append(tc.loadTotal, func(ctx context.Context, nodes []*TrustCenter) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"trust_center_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(trustcenter.TrustCenterSubprocessorsColumn), ids...))
+						})
+						if err := query.GroupBy(trustcenter.TrustCenterSubprocessorsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[3] == nil {
+								nodes[i].Edges.totalCount[3] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[3][alias] = n
+						}
+						return nil
+					})
+				} else {
+					tc.loadTotal = append(tc.loadTotal, func(_ context.Context, nodes []*TrustCenter) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.TrustCenterSubprocessors)
+							if nodes[i].Edges.totalCount[3] == nil {
+								nodes[i].Edges.totalCount[3] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[3][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, trustcentersubprocessorImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(trustcenter.TrustCenterSubprocessorsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			tc.WithNamedTrustCenterSubprocessors(alias, func(wq *TrustCenterSubprocessorQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[trustcenter.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, trustcenter.FieldCreatedAt)
@@ -42848,6 +43026,36 @@ func (tcs *TrustCenterSubprocessorQuery) collectField(ctx context.Context, oneNo
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+
+		case "trustCenter":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TrustCenterClient{config: tcs.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, trustcenterImplementors)...); err != nil {
+				return err
+			}
+			tcs.withTrustCenter = query
+			if _, ok := fieldSeen[trustcentersubprocessor.FieldTrustCenterID]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessor.FieldTrustCenterID)
+				fieldSeen[trustcentersubprocessor.FieldTrustCenterID] = struct{}{}
+			}
+
+		case "subprocessor":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SubprocessorClient{config: tcs.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, subprocessorImplementors)...); err != nil {
+				return err
+			}
+			tcs.withSubprocessor = query
+			if _, ok := fieldSeen[trustcentersubprocessor.FieldSubprocessorID]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessor.FieldSubprocessorID)
+				fieldSeen[trustcentersubprocessor.FieldSubprocessorID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[trustcentersubprocessor.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, trustcentersubprocessor.FieldCreatedAt)
@@ -42868,10 +43076,25 @@ func (tcs *TrustCenterSubprocessorQuery) collectField(ctx context.Context, oneNo
 				selectedFields = append(selectedFields, trustcentersubprocessor.FieldUpdatedBy)
 				fieldSeen[trustcentersubprocessor.FieldUpdatedBy] = struct{}{}
 			}
-		case "tags":
-			if _, ok := fieldSeen[trustcentersubprocessor.FieldTags]; !ok {
-				selectedFields = append(selectedFields, trustcentersubprocessor.FieldTags)
-				fieldSeen[trustcentersubprocessor.FieldTags] = struct{}{}
+		case "subprocessorID":
+			if _, ok := fieldSeen[trustcentersubprocessor.FieldSubprocessorID]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessor.FieldSubprocessorID)
+				fieldSeen[trustcentersubprocessor.FieldSubprocessorID] = struct{}{}
+			}
+		case "trustCenterID":
+			if _, ok := fieldSeen[trustcentersubprocessor.FieldTrustCenterID]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessor.FieldTrustCenterID)
+				fieldSeen[trustcentersubprocessor.FieldTrustCenterID] = struct{}{}
+			}
+		case "countries":
+			if _, ok := fieldSeen[trustcentersubprocessor.FieldCountries]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessor.FieldCountries)
+				fieldSeen[trustcentersubprocessor.FieldCountries] = struct{}{}
+			}
+		case "category":
+			if _, ok := fieldSeen[trustcentersubprocessor.FieldCategory]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessor.FieldCategory)
+				fieldSeen[trustcentersubprocessor.FieldCategory] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -42998,10 +43221,25 @@ func (tcsh *TrustCenterSubprocessorHistoryQuery) collectField(ctx context.Contex
 				selectedFields = append(selectedFields, trustcentersubprocessorhistory.FieldUpdatedBy)
 				fieldSeen[trustcentersubprocessorhistory.FieldUpdatedBy] = struct{}{}
 			}
-		case "tags":
-			if _, ok := fieldSeen[trustcentersubprocessorhistory.FieldTags]; !ok {
-				selectedFields = append(selectedFields, trustcentersubprocessorhistory.FieldTags)
-				fieldSeen[trustcentersubprocessorhistory.FieldTags] = struct{}{}
+		case "subprocessorID":
+			if _, ok := fieldSeen[trustcentersubprocessorhistory.FieldSubprocessorID]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessorhistory.FieldSubprocessorID)
+				fieldSeen[trustcentersubprocessorhistory.FieldSubprocessorID] = struct{}{}
+			}
+		case "trustCenterID":
+			if _, ok := fieldSeen[trustcentersubprocessorhistory.FieldTrustCenterID]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessorhistory.FieldTrustCenterID)
+				fieldSeen[trustcentersubprocessorhistory.FieldTrustCenterID] = struct{}{}
+			}
+		case "countries":
+			if _, ok := fieldSeen[trustcentersubprocessorhistory.FieldCountries]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessorhistory.FieldCountries)
+				fieldSeen[trustcentersubprocessorhistory.FieldCountries] = struct{}{}
+			}
+		case "category":
+			if _, ok := fieldSeen[trustcentersubprocessorhistory.FieldCategory]; !ok {
+				selectedFields = append(selectedFields, trustcentersubprocessorhistory.FieldCategory)
+				fieldSeen[trustcentersubprocessorhistory.FieldCategory] = struct{}{}
 			}
 		case "id":
 		case "__typename":

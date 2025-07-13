@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 )
 
 // SubprocessorCreate is the builder for creating a Subprocessor entity.
@@ -241,6 +242,21 @@ func (sc *SubprocessorCreate) SetLogoFile(f *File) *SubprocessorCreate {
 	return sc.SetLogoFileID(f.ID)
 }
 
+// AddTrustCenterSubprocessorIDs adds the "trust_center_subprocessors" edge to the TrustCenterSubprocessor entity by IDs.
+func (sc *SubprocessorCreate) AddTrustCenterSubprocessorIDs(ids ...string) *SubprocessorCreate {
+	sc.mutation.AddTrustCenterSubprocessorIDs(ids...)
+	return sc
+}
+
+// AddTrustCenterSubprocessors adds the "trust_center_subprocessors" edges to the TrustCenterSubprocessor entity.
+func (sc *SubprocessorCreate) AddTrustCenterSubprocessors(t ...*TrustCenterSubprocessor) *SubprocessorCreate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return sc.AddTrustCenterSubprocessorIDs(ids...)
+}
+
 // Mutation returns the SubprocessorMutation object of the builder.
 func (sc *SubprocessorCreate) Mutation() *SubprocessorMutation {
 	return sc.mutation
@@ -456,6 +472,23 @@ func (sc *SubprocessorCreate) createSpec() (*Subprocessor, *sqlgraph.CreateSpec)
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.LogoLocalFileID = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.TrustCenterSubprocessorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   subprocessor.TrustCenterSubprocessorsTable,
+			Columns: []string{subprocessor.TrustCenterSubprocessorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.TrustCenterSubprocessor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

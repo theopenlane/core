@@ -17,7 +17,6 @@ query GetAllTrustCenterSubprocessorHistories {
         id
         operation
         ref
-        tags
         updatedAt
         updatedBy
       }
@@ -42,7 +41,6 @@ query GetTrustCenterSubprocessorHistories($first: Int, $last: Int, $where: Trust
         id
         operation
         ref
-        tags
         updatedAt
         updatedBy
       }

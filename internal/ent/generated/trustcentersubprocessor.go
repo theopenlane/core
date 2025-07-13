@@ -10,6 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 )
 
@@ -30,9 +32,53 @@ type TrustCenterSubprocessor struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// tags associated with the object
-	Tags         []string `json:"tags,omitempty"`
+	// ID of the subprocessor
+	SubprocessorID string `json:"subprocessor_id,omitempty"`
+	// ID of the trust center
+	TrustCenterID string `json:"trust_center_id,omitempty"`
+	// country codes or country where the subprocessor is located
+	Countries []string `json:"countries,omitempty"`
+	// Category of the subprocessor, e.g. 'Data Warehouse' or 'Infrastructure Hosting'
+	Category string `json:"category,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the TrustCenterSubprocessorQuery when eager-loading is set.
+	Edges        TrustCenterSubprocessorEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// TrustCenterSubprocessorEdges holds the relations/edges for other nodes in the graph.
+type TrustCenterSubprocessorEdges struct {
+	// TrustCenter holds the value of the trust_center edge.
+	TrustCenter *TrustCenter `json:"trust_center,omitempty"`
+	// Subprocessor holds the value of the subprocessor edge.
+	Subprocessor *Subprocessor `json:"subprocessor,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [2]bool
+	// totalCount holds the count of the edges above.
+	totalCount [2]map[string]int
+}
+
+// TrustCenterOrErr returns the TrustCenter value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterSubprocessorEdges) TrustCenterOrErr() (*TrustCenter, error) {
+	if e.TrustCenter != nil {
+		return e.TrustCenter, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: trustcenter.Label}
+	}
+	return nil, &NotLoadedError{edge: "trust_center"}
+}
+
+// SubprocessorOrErr returns the Subprocessor value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterSubprocessorEdges) SubprocessorOrErr() (*Subprocessor, error) {
+	if e.Subprocessor != nil {
+		return e.Subprocessor, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: subprocessor.Label}
+	}
+	return nil, &NotLoadedError{edge: "subprocessor"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -40,9 +86,9 @@ func (*TrustCenterSubprocessor) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case trustcentersubprocessor.FieldTags:
+		case trustcentersubprocessor.FieldCountries:
 			values[i] = new([]byte)
-		case trustcentersubprocessor.FieldID, trustcentersubprocessor.FieldCreatedBy, trustcentersubprocessor.FieldUpdatedBy, trustcentersubprocessor.FieldDeletedBy:
+		case trustcentersubprocessor.FieldID, trustcentersubprocessor.FieldCreatedBy, trustcentersubprocessor.FieldUpdatedBy, trustcentersubprocessor.FieldDeletedBy, trustcentersubprocessor.FieldSubprocessorID, trustcentersubprocessor.FieldTrustCenterID, trustcentersubprocessor.FieldCategory:
 			values[i] = new(sql.NullString)
 		case trustcentersubprocessor.FieldCreatedAt, trustcentersubprocessor.FieldUpdatedAt, trustcentersubprocessor.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -103,13 +149,31 @@ func (tcs *TrustCenterSubprocessor) assignValues(columns []string, values []any)
 			} else if value.Valid {
 				tcs.DeletedBy = value.String
 			}
-		case trustcentersubprocessor.FieldTags:
+		case trustcentersubprocessor.FieldSubprocessorID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field subprocessor_id", values[i])
+			} else if value.Valid {
+				tcs.SubprocessorID = value.String
+			}
+		case trustcentersubprocessor.FieldTrustCenterID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
+			} else if value.Valid {
+				tcs.TrustCenterID = value.String
+			}
+		case trustcentersubprocessor.FieldCountries:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field tags", values[i])
+				return fmt.Errorf("unexpected type %T for field countries", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &tcs.Tags); err != nil {
-					return fmt.Errorf("unmarshal field tags: %w", err)
+				if err := json.Unmarshal(*value, &tcs.Countries); err != nil {
+					return fmt.Errorf("unmarshal field countries: %w", err)
 				}
+			}
+		case trustcentersubprocessor.FieldCategory:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field category", values[i])
+			} else if value.Valid {
+				tcs.Category = value.String
 			}
 		default:
 			tcs.selectValues.Set(columns[i], values[i])
@@ -122,6 +186,16 @@ func (tcs *TrustCenterSubprocessor) assignValues(columns []string, values []any)
 // This includes values selected through modifiers, order, etc.
 func (tcs *TrustCenterSubprocessor) Value(name string) (ent.Value, error) {
 	return tcs.selectValues.Get(name)
+}
+
+// QueryTrustCenter queries the "trust_center" edge of the TrustCenterSubprocessor entity.
+func (tcs *TrustCenterSubprocessor) QueryTrustCenter() *TrustCenterQuery {
+	return NewTrustCenterSubprocessorClient(tcs.config).QueryTrustCenter(tcs)
+}
+
+// QuerySubprocessor queries the "subprocessor" edge of the TrustCenterSubprocessor entity.
+func (tcs *TrustCenterSubprocessor) QuerySubprocessor() *SubprocessorQuery {
+	return NewTrustCenterSubprocessorClient(tcs.config).QuerySubprocessor(tcs)
 }
 
 // Update returns a builder for updating this TrustCenterSubprocessor.
@@ -165,8 +239,17 @@ func (tcs *TrustCenterSubprocessor) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(tcs.DeletedBy)
 	builder.WriteString(", ")
-	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", tcs.Tags))
+	builder.WriteString("subprocessor_id=")
+	builder.WriteString(tcs.SubprocessorID)
+	builder.WriteString(", ")
+	builder.WriteString("trust_center_id=")
+	builder.WriteString(tcs.TrustCenterID)
+	builder.WriteString(", ")
+	builder.WriteString("countries=")
+	builder.WriteString(fmt.Sprintf("%v", tcs.Countries))
+	builder.WriteString(", ")
+	builder.WriteString("category=")
+	builder.WriteString(tcs.Category)
 	builder.WriteByte(')')
 	return builder.String()
 }

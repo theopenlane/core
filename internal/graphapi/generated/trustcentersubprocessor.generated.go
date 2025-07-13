@@ -75,8 +75,18 @@ func (ec *executionContext) fieldContext_TrustCenterSubprocessorBulkCreatePayloa
 				return ec.fieldContext_TrustCenterSubprocessor_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_TrustCenterSubprocessor_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_TrustCenterSubprocessor_tags(ctx, field)
+			case "subprocessorID":
+				return ec.fieldContext_TrustCenterSubprocessor_subprocessorID(ctx, field)
+			case "trustCenterID":
+				return ec.fieldContext_TrustCenterSubprocessor_trustCenterID(ctx, field)
+			case "countries":
+				return ec.fieldContext_TrustCenterSubprocessor_countries(ctx, field)
+			case "category":
+				return ec.fieldContext_TrustCenterSubprocessor_category(ctx, field)
+			case "trustCenter":
+				return ec.fieldContext_TrustCenterSubprocessor_trustCenter(ctx, field)
+			case "subprocessor":
+				return ec.fieldContext_TrustCenterSubprocessor_subprocessor(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterSubprocessor", field.Name)
 		},
@@ -133,8 +143,18 @@ func (ec *executionContext) fieldContext_TrustCenterSubprocessorCreatePayload_tr
 				return ec.fieldContext_TrustCenterSubprocessor_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_TrustCenterSubprocessor_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_TrustCenterSubprocessor_tags(ctx, field)
+			case "subprocessorID":
+				return ec.fieldContext_TrustCenterSubprocessor_subprocessorID(ctx, field)
+			case "trustCenterID":
+				return ec.fieldContext_TrustCenterSubprocessor_trustCenterID(ctx, field)
+			case "countries":
+				return ec.fieldContext_TrustCenterSubprocessor_countries(ctx, field)
+			case "category":
+				return ec.fieldContext_TrustCenterSubprocessor_category(ctx, field)
+			case "trustCenter":
+				return ec.fieldContext_TrustCenterSubprocessor_trustCenter(ctx, field)
+			case "subprocessor":
+				return ec.fieldContext_TrustCenterSubprocessor_subprocessor(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterSubprocessor", field.Name)
 		},
@@ -235,8 +255,18 @@ func (ec *executionContext) fieldContext_TrustCenterSubprocessorUpdatePayload_tr
 				return ec.fieldContext_TrustCenterSubprocessor_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_TrustCenterSubprocessor_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_TrustCenterSubprocessor_tags(ctx, field)
+			case "subprocessorID":
+				return ec.fieldContext_TrustCenterSubprocessor_subprocessorID(ctx, field)
+			case "trustCenterID":
+				return ec.fieldContext_TrustCenterSubprocessor_trustCenterID(ctx, field)
+			case "countries":
+				return ec.fieldContext_TrustCenterSubprocessor_countries(ctx, field)
+			case "category":
+				return ec.fieldContext_TrustCenterSubprocessor_category(ctx, field)
+			case "trustCenter":
+				return ec.fieldContext_TrustCenterSubprocessor_trustCenter(ctx, field)
+			case "subprocessor":
+				return ec.fieldContext_TrustCenterSubprocessor_subprocessor(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterSubprocessor", field.Name)
 		},

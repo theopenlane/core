@@ -37,8 +37,14 @@ type TrustCenterSubprocessorHistory struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// tags associated with the object
-	Tags         []string `json:"tags,omitempty"`
+	// ID of the subprocessor
+	SubprocessorID string `json:"subprocessor_id,omitempty"`
+	// ID of the trust center
+	TrustCenterID string `json:"trust_center_id,omitempty"`
+	// country codes or country where the subprocessor is located
+	Countries []string `json:"countries,omitempty"`
+	// Category of the subprocessor, e.g. 'Data Warehouse' or 'Infrastructure Hosting'
+	Category     string `json:"category,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -47,11 +53,11 @@ func (*TrustCenterSubprocessorHistory) scanValues(columns []string) ([]any, erro
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case trustcentersubprocessorhistory.FieldTags:
+		case trustcentersubprocessorhistory.FieldCountries:
 			values[i] = new([]byte)
 		case trustcentersubprocessorhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case trustcentersubprocessorhistory.FieldID, trustcentersubprocessorhistory.FieldRef, trustcentersubprocessorhistory.FieldCreatedBy, trustcentersubprocessorhistory.FieldUpdatedBy, trustcentersubprocessorhistory.FieldDeletedBy:
+		case trustcentersubprocessorhistory.FieldID, trustcentersubprocessorhistory.FieldRef, trustcentersubprocessorhistory.FieldCreatedBy, trustcentersubprocessorhistory.FieldUpdatedBy, trustcentersubprocessorhistory.FieldDeletedBy, trustcentersubprocessorhistory.FieldSubprocessorID, trustcentersubprocessorhistory.FieldTrustCenterID, trustcentersubprocessorhistory.FieldCategory:
 			values[i] = new(sql.NullString)
 		case trustcentersubprocessorhistory.FieldHistoryTime, trustcentersubprocessorhistory.FieldCreatedAt, trustcentersubprocessorhistory.FieldUpdatedAt, trustcentersubprocessorhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -130,13 +136,31 @@ func (tcsh *TrustCenterSubprocessorHistory) assignValues(columns []string, value
 			} else if value.Valid {
 				tcsh.DeletedBy = value.String
 			}
-		case trustcentersubprocessorhistory.FieldTags:
+		case trustcentersubprocessorhistory.FieldSubprocessorID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field subprocessor_id", values[i])
+			} else if value.Valid {
+				tcsh.SubprocessorID = value.String
+			}
+		case trustcentersubprocessorhistory.FieldTrustCenterID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
+			} else if value.Valid {
+				tcsh.TrustCenterID = value.String
+			}
+		case trustcentersubprocessorhistory.FieldCountries:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field tags", values[i])
+				return fmt.Errorf("unexpected type %T for field countries", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &tcsh.Tags); err != nil {
-					return fmt.Errorf("unmarshal field tags: %w", err)
+				if err := json.Unmarshal(*value, &tcsh.Countries); err != nil {
+					return fmt.Errorf("unmarshal field countries: %w", err)
 				}
+			}
+		case trustcentersubprocessorhistory.FieldCategory:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field category", values[i])
+			} else if value.Valid {
+				tcsh.Category = value.String
 			}
 		default:
 			tcsh.selectValues.Set(columns[i], values[i])
@@ -201,8 +225,17 @@ func (tcsh *TrustCenterSubprocessorHistory) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(tcsh.DeletedBy)
 	builder.WriteString(", ")
-	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", tcsh.Tags))
+	builder.WriteString("subprocessor_id=")
+	builder.WriteString(tcsh.SubprocessorID)
+	builder.WriteString(", ")
+	builder.WriteString("trust_center_id=")
+	builder.WriteString(tcsh.TrustCenterID)
+	builder.WriteString(", ")
+	builder.WriteString("countries=")
+	builder.WriteString(fmt.Sprintf("%v", tcsh.Countries))
+	builder.WriteString(", ")
+	builder.WriteString("category=")
+	builder.WriteString(tcsh.Category)
 	builder.WriteByte(')')
 	return builder.String()
 }

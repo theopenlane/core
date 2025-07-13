@@ -54,15 +54,7 @@ func (r *mutationResolver) CreateBulkCSVTrustCenterSubprocessor(ctx context.Cont
 
 // UpdateTrustCenterSubprocessor is the resolver for the updateTrustCenterSubprocessor field.
 func (r *mutationResolver) UpdateTrustCenterSubprocessor(ctx context.Context, id string, input generated.UpdateTrustCenterSubprocessorInput) (*model.TrustCenterSubprocessorUpdatePayload, error) {
-	res, err := withTransactionalMutation(ctx).TrustCenterSubprocessor.Get(ctx, id)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "trustcentersubprocessor"})
-	}
-
-	// setup update request
-	req := res.Update().SetInput(input).AppendTags(input.AppendTags)
-
-	res, err = req.Save(ctx)
+	res, err := withTransactionalMutation(ctx).TrustCenterSubprocessor.UpdateOneID(id).SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "trustcentersubprocessor"})
 	}

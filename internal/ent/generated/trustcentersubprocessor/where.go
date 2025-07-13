@@ -6,7 +6,10 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -92,6 +95,21 @@ func DeletedAt(v time.Time) predicate.TrustCenterSubprocessor {
 // DeletedBy applies equality check predicate on the "deleted_by" field. It's identical to DeletedByEQ.
 func DeletedBy(v string) predicate.TrustCenterSubprocessor {
 	return predicate.TrustCenterSubprocessor(sql.FieldEQ(FieldDeletedBy, v))
+}
+
+// SubprocessorID applies equality check predicate on the "subprocessor_id" field. It's identical to SubprocessorIDEQ.
+func SubprocessorID(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldEQ(FieldSubprocessorID, v))
+}
+
+// TrustCenterID applies equality check predicate on the "trust_center_id" field. It's identical to TrustCenterIDEQ.
+func TrustCenterID(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldEQ(FieldTrustCenterID, v))
+}
+
+// Category applies equality check predicate on the "category" field. It's identical to CategoryEQ.
+func Category(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldEQ(FieldCategory, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -469,14 +487,277 @@ func DeletedByContainsFold(v string) predicate.TrustCenterSubprocessor {
 	return predicate.TrustCenterSubprocessor(sql.FieldContainsFold(FieldDeletedBy, v))
 }
 
-// TagsIsNil applies the IsNil predicate on the "tags" field.
-func TagsIsNil() predicate.TrustCenterSubprocessor {
-	return predicate.TrustCenterSubprocessor(sql.FieldIsNull(FieldTags))
+// SubprocessorIDEQ applies the EQ predicate on the "subprocessor_id" field.
+func SubprocessorIDEQ(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldEQ(FieldSubprocessorID, v))
 }
 
-// TagsNotNil applies the NotNil predicate on the "tags" field.
-func TagsNotNil() predicate.TrustCenterSubprocessor {
-	return predicate.TrustCenterSubprocessor(sql.FieldNotNull(FieldTags))
+// SubprocessorIDNEQ applies the NEQ predicate on the "subprocessor_id" field.
+func SubprocessorIDNEQ(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldNEQ(FieldSubprocessorID, v))
+}
+
+// SubprocessorIDIn applies the In predicate on the "subprocessor_id" field.
+func SubprocessorIDIn(vs ...string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldIn(FieldSubprocessorID, vs...))
+}
+
+// SubprocessorIDNotIn applies the NotIn predicate on the "subprocessor_id" field.
+func SubprocessorIDNotIn(vs ...string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldNotIn(FieldSubprocessorID, vs...))
+}
+
+// SubprocessorIDGT applies the GT predicate on the "subprocessor_id" field.
+func SubprocessorIDGT(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldGT(FieldSubprocessorID, v))
+}
+
+// SubprocessorIDGTE applies the GTE predicate on the "subprocessor_id" field.
+func SubprocessorIDGTE(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldGTE(FieldSubprocessorID, v))
+}
+
+// SubprocessorIDLT applies the LT predicate on the "subprocessor_id" field.
+func SubprocessorIDLT(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldLT(FieldSubprocessorID, v))
+}
+
+// SubprocessorIDLTE applies the LTE predicate on the "subprocessor_id" field.
+func SubprocessorIDLTE(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldLTE(FieldSubprocessorID, v))
+}
+
+// SubprocessorIDContains applies the Contains predicate on the "subprocessor_id" field.
+func SubprocessorIDContains(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldContains(FieldSubprocessorID, v))
+}
+
+// SubprocessorIDHasPrefix applies the HasPrefix predicate on the "subprocessor_id" field.
+func SubprocessorIDHasPrefix(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldHasPrefix(FieldSubprocessorID, v))
+}
+
+// SubprocessorIDHasSuffix applies the HasSuffix predicate on the "subprocessor_id" field.
+func SubprocessorIDHasSuffix(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldHasSuffix(FieldSubprocessorID, v))
+}
+
+// SubprocessorIDEqualFold applies the EqualFold predicate on the "subprocessor_id" field.
+func SubprocessorIDEqualFold(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldEqualFold(FieldSubprocessorID, v))
+}
+
+// SubprocessorIDContainsFold applies the ContainsFold predicate on the "subprocessor_id" field.
+func SubprocessorIDContainsFold(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldContainsFold(FieldSubprocessorID, v))
+}
+
+// TrustCenterIDEQ applies the EQ predicate on the "trust_center_id" field.
+func TrustCenterIDEQ(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldEQ(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDNEQ applies the NEQ predicate on the "trust_center_id" field.
+func TrustCenterIDNEQ(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldNEQ(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDIn applies the In predicate on the "trust_center_id" field.
+func TrustCenterIDIn(vs ...string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldIn(FieldTrustCenterID, vs...))
+}
+
+// TrustCenterIDNotIn applies the NotIn predicate on the "trust_center_id" field.
+func TrustCenterIDNotIn(vs ...string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldNotIn(FieldTrustCenterID, vs...))
+}
+
+// TrustCenterIDGT applies the GT predicate on the "trust_center_id" field.
+func TrustCenterIDGT(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldGT(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDGTE applies the GTE predicate on the "trust_center_id" field.
+func TrustCenterIDGTE(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldGTE(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDLT applies the LT predicate on the "trust_center_id" field.
+func TrustCenterIDLT(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldLT(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDLTE applies the LTE predicate on the "trust_center_id" field.
+func TrustCenterIDLTE(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldLTE(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDContains applies the Contains predicate on the "trust_center_id" field.
+func TrustCenterIDContains(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldContains(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDHasPrefix applies the HasPrefix predicate on the "trust_center_id" field.
+func TrustCenterIDHasPrefix(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldHasPrefix(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDHasSuffix applies the HasSuffix predicate on the "trust_center_id" field.
+func TrustCenterIDHasSuffix(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldHasSuffix(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDIsNil applies the IsNil predicate on the "trust_center_id" field.
+func TrustCenterIDIsNil() predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldIsNull(FieldTrustCenterID))
+}
+
+// TrustCenterIDNotNil applies the NotNil predicate on the "trust_center_id" field.
+func TrustCenterIDNotNil() predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldNotNull(FieldTrustCenterID))
+}
+
+// TrustCenterIDEqualFold applies the EqualFold predicate on the "trust_center_id" field.
+func TrustCenterIDEqualFold(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldEqualFold(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDContainsFold applies the ContainsFold predicate on the "trust_center_id" field.
+func TrustCenterIDContainsFold(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldContainsFold(FieldTrustCenterID, v))
+}
+
+// CountriesIsNil applies the IsNil predicate on the "countries" field.
+func CountriesIsNil() predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldIsNull(FieldCountries))
+}
+
+// CountriesNotNil applies the NotNil predicate on the "countries" field.
+func CountriesNotNil() predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldNotNull(FieldCountries))
+}
+
+// CategoryEQ applies the EQ predicate on the "category" field.
+func CategoryEQ(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldEQ(FieldCategory, v))
+}
+
+// CategoryNEQ applies the NEQ predicate on the "category" field.
+func CategoryNEQ(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldNEQ(FieldCategory, v))
+}
+
+// CategoryIn applies the In predicate on the "category" field.
+func CategoryIn(vs ...string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldIn(FieldCategory, vs...))
+}
+
+// CategoryNotIn applies the NotIn predicate on the "category" field.
+func CategoryNotIn(vs ...string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldNotIn(FieldCategory, vs...))
+}
+
+// CategoryGT applies the GT predicate on the "category" field.
+func CategoryGT(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldGT(FieldCategory, v))
+}
+
+// CategoryGTE applies the GTE predicate on the "category" field.
+func CategoryGTE(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldGTE(FieldCategory, v))
+}
+
+// CategoryLT applies the LT predicate on the "category" field.
+func CategoryLT(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldLT(FieldCategory, v))
+}
+
+// CategoryLTE applies the LTE predicate on the "category" field.
+func CategoryLTE(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldLTE(FieldCategory, v))
+}
+
+// CategoryContains applies the Contains predicate on the "category" field.
+func CategoryContains(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldContains(FieldCategory, v))
+}
+
+// CategoryHasPrefix applies the HasPrefix predicate on the "category" field.
+func CategoryHasPrefix(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldHasPrefix(FieldCategory, v))
+}
+
+// CategoryHasSuffix applies the HasSuffix predicate on the "category" field.
+func CategoryHasSuffix(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldHasSuffix(FieldCategory, v))
+}
+
+// CategoryEqualFold applies the EqualFold predicate on the "category" field.
+func CategoryEqualFold(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldEqualFold(FieldCategory, v))
+}
+
+// CategoryContainsFold applies the ContainsFold predicate on the "category" field.
+func CategoryContainsFold(v string) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(sql.FieldContainsFold(FieldCategory, v))
+}
+
+// HasTrustCenter applies the HasEdge predicate on the "trust_center" edge.
+func HasTrustCenter() predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, TrustCenterTable, TrustCenterColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTrustCenterWith applies the HasEdge predicate on the "trust_center" edge with a given conditions (other predicates).
+func HasTrustCenterWith(preds ...predicate.TrustCenter) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(func(s *sql.Selector) {
+		step := newTrustCenterStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSubprocessor applies the HasEdge predicate on the "subprocessor" edge.
+func HasSubprocessor() predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, SubprocessorTable, SubprocessorColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subprocessor
+		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSubprocessorWith applies the HasEdge predicate on the "subprocessor" edge with a given conditions (other predicates).
+func HasSubprocessorWith(preds ...predicate.Subprocessor) predicate.TrustCenterSubprocessor {
+	return predicate.TrustCenterSubprocessor(func(s *sql.Selector) {
+		step := newSubprocessorStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subprocessor
+		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

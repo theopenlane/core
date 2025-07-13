@@ -5711,13 +5711,13 @@ func init() {
 
 	trustcentersubprocessor.Hooks[2] = trustcentersubprocessorMixinHooks1[0]
 	trustcentersubprocessorMixinInters1 := trustcentersubprocessorMixin[1].Interceptors()
+	trustcentersubprocessorInters := schema.TrustCenterSubprocessor{}.Interceptors()
 	trustcentersubprocessor.Interceptors[0] = trustcentersubprocessorMixinInters1[0]
+	trustcentersubprocessor.Interceptors[1] = trustcentersubprocessorInters[0]
 	trustcentersubprocessorMixinFields0 := trustcentersubprocessorMixin[0].Fields()
 	_ = trustcentersubprocessorMixinFields0
 	trustcentersubprocessorMixinFields2 := trustcentersubprocessorMixin[2].Fields()
 	_ = trustcentersubprocessorMixinFields2
-	trustcentersubprocessorMixinFields3 := trustcentersubprocessorMixin[3].Fields()
-	_ = trustcentersubprocessorMixinFields3
 	trustcentersubprocessorFields := schema.TrustCenterSubprocessor{}.Fields()
 	_ = trustcentersubprocessorFields
 	// trustcentersubprocessorDescCreatedAt is the schema descriptor for created_at field.
@@ -5730,10 +5730,32 @@ func init() {
 	trustcentersubprocessor.DefaultUpdatedAt = trustcentersubprocessorDescUpdatedAt.Default.(func() time.Time)
 	// trustcentersubprocessor.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	trustcentersubprocessor.UpdateDefaultUpdatedAt = trustcentersubprocessorDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// trustcentersubprocessorDescTags is the schema descriptor for tags field.
-	trustcentersubprocessorDescTags := trustcentersubprocessorMixinFields3[0].Descriptor()
-	// trustcentersubprocessor.DefaultTags holds the default value on creation for the tags field.
-	trustcentersubprocessor.DefaultTags = trustcentersubprocessorDescTags.Default.([]string)
+	// trustcentersubprocessorDescSubprocessorID is the schema descriptor for subprocessor_id field.
+	trustcentersubprocessorDescSubprocessorID := trustcentersubprocessorFields[0].Descriptor()
+	// trustcentersubprocessor.SubprocessorIDValidator is a validator for the "subprocessor_id" field. It is called by the builders before save.
+	trustcentersubprocessor.SubprocessorIDValidator = trustcentersubprocessorDescSubprocessorID.Validators[0].(func(string) error)
+	// trustcentersubprocessorDescTrustCenterID is the schema descriptor for trust_center_id field.
+	trustcentersubprocessorDescTrustCenterID := trustcentersubprocessorFields[1].Descriptor()
+	// trustcentersubprocessor.TrustCenterIDValidator is a validator for the "trust_center_id" field. It is called by the builders before save.
+	trustcentersubprocessor.TrustCenterIDValidator = trustcentersubprocessorDescTrustCenterID.Validators[0].(func(string) error)
+	// trustcentersubprocessorDescCategory is the schema descriptor for category field.
+	trustcentersubprocessorDescCategory := trustcentersubprocessorFields[3].Descriptor()
+	// trustcentersubprocessor.CategoryValidator is a validator for the "category" field. It is called by the builders before save.
+	trustcentersubprocessor.CategoryValidator = func() func(string) error {
+		validators := trustcentersubprocessorDescCategory.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(category string) error {
+			for _, fn := range fns {
+				if err := fn(category); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	// trustcentersubprocessorDescID is the schema descriptor for id field.
 	trustcentersubprocessorDescID := trustcentersubprocessorMixinFields2[0].Descriptor()
 	// trustcentersubprocessor.DefaultID holds the default value on creation for the id field.
@@ -5756,10 +5778,6 @@ func init() {
 	trustcentersubprocessorhistory.DefaultUpdatedAt = trustcentersubprocessorhistoryDescUpdatedAt.Default.(func() time.Time)
 	// trustcentersubprocessorhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	trustcentersubprocessorhistory.UpdateDefaultUpdatedAt = trustcentersubprocessorhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// trustcentersubprocessorhistoryDescTags is the schema descriptor for tags field.
-	trustcentersubprocessorhistoryDescTags := trustcentersubprocessorhistoryFields[10].Descriptor()
-	// trustcentersubprocessorhistory.DefaultTags holds the default value on creation for the tags field.
-	trustcentersubprocessorhistory.DefaultTags = trustcentersubprocessorhistoryDescTags.Default.([]string)
 	// trustcentersubprocessorhistoryDescID is the schema descriptor for id field.
 	trustcentersubprocessorhistoryDescID := trustcentersubprocessorhistoryFields[9].Descriptor()
 	// trustcentersubprocessorhistory.DefaultID holds the default value on creation for the id field.
