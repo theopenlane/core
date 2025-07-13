@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -138,9 +137,6 @@ func (ControlObjective) Annotations() []schema.Annotation {
 // Policy of the ControlObjective
 func (ControlObjective) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
-		),
 		policy.WithMutationRules(
 			rule.CanCreateObjectsUnderParent[*generated.ControlObjectiveMutation](rule.ProgramParent),     // if mutation contains program_id, check access
 			rule.CanCreateObjectsUnderParent[*generated.ControlObjectiveMutation](rule.ControlsParent),    // if mutation contains control_id, check access

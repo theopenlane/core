@@ -140,11 +140,8 @@ func serve(ctx context.Context) error {
 		ent.EntitlementManager(so.Config.Handler.Entitlements),
 		ent.ObjectManager(so.Config.ObjectManager),
 		ent.Summarizer(so.Config.Handler.Summarizer),
+		ent.PondPool(pool),
 	)
-
-	if pool != nil {
-		entOpts = append(entOpts, ent.PondPool(pool))
-	}
 
 	// Setup DB connection
 	log.Info().Interface("db", so.Config.Settings.DB.DatabaseName).Msg("connecting to database")

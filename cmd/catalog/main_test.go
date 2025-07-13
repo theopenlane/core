@@ -7,6 +7,8 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"slices"
+	"strings"
 	"testing"
 
 	"github.com/oklog/ulid/v2"
@@ -246,7 +248,13 @@ func TestProcessFeatureSet(t *testing.T) {
 	assert.True(t, missing)
 	assert.Len(t, takeovers, 1)
 	assert.Len(t, reports, 2)
+
+	slices.SortFunc(reports, func(a, b featureReport) int {
+		return strings.Compare(a.name, b.name)
+	})
+
 	assert.Equal(t, "f1", reports[0].name)
+	assert.Equal(t, "f2", reports[1].name)
 }
 
 func TestHandleTakeovers(t *testing.T) {

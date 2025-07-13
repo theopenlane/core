@@ -8,6 +8,7 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
@@ -18,6 +19,7 @@ func TestMutationCreateOnboarding(t *testing.T) {
 	// create another user for this test
 	// so it doesn't interfere with the other tests
 	onboardingUser := suite.userBuilder(context.Background(), t)
+	onboardingUser2 := suite.userBuilder(context.Background(), t)
 
 	companyName := "Test Acme Corp, Inc."
 
@@ -37,7 +39,7 @@ func TestMutationCreateOnboarding(t *testing.T) {
 			ctx:    onboardingUser.UserCtx,
 		},
 		{
-			name: "happy path, all input",
+			name: "happy path, all input, same name should not error due to retries",
 			request: openlaneclient.CreateOnboardingInput{
 				CompanyName: companyName,
 				Domains:     []string{gofakeit.DomainName(), gofakeit.DomainName()},
@@ -57,7 +59,7 @@ func TestMutationCreateOnboarding(t *testing.T) {
 				},
 			},
 			client: suite.client.api,
-			ctx:    onboardingUser.UserCtx,
+			ctx:    onboardingUser2.UserCtx,
 		},
 		{
 			name:        "missing required field",
@@ -104,6 +106,9 @@ func TestMutationCreateOnboarding(t *testing.T) {
 			assert.Check(t, resp.CreateOnboarding.Onboarding.ID != "")
 			assert.Check(t, resp.CreateOnboarding.Onboarding.OrganizationID != nil)
 			assert.Check(t, is.Equal(tc.request.CompanyName, resp.CreateOnboarding.Onboarding.CompanyName))
+
+			// Cleanup onboarding data
+			(&Cleanup[*generated.OnboardingDeleteOne]{client: suite.client.db.Onboarding, IDs: []string{resp.CreateOnboarding.Onboarding.ID}}).MustDelete(tc.ctx, t)
 		})
 	}
 }

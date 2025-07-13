@@ -206,7 +206,9 @@ func (cdhc *CustomDomainHistoryCreate) Mutation() *CustomDomainHistoryMutation {
 
 // Save creates the CustomDomainHistory in the database.
 func (cdhc *CustomDomainHistoryCreate) Save(ctx context.Context) (*CustomDomainHistory, error) {
-	cdhc.defaults()
+	if err := cdhc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, cdhc.sqlSave, cdhc.mutation, cdhc.hooks)
 }
 
@@ -233,16 +235,25 @@ func (cdhc *CustomDomainHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (cdhc *CustomDomainHistoryCreate) defaults() {
+func (cdhc *CustomDomainHistoryCreate) defaults() error {
 	if _, ok := cdhc.mutation.HistoryTime(); !ok {
+		if customdomainhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized customdomainhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := customdomainhistory.DefaultHistoryTime()
 		cdhc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := cdhc.mutation.CreatedAt(); !ok {
+		if customdomainhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized customdomainhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := customdomainhistory.DefaultCreatedAt()
 		cdhc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := cdhc.mutation.UpdatedAt(); !ok {
+		if customdomainhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized customdomainhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := customdomainhistory.DefaultUpdatedAt()
 		cdhc.mutation.SetUpdatedAt(v)
 	}
@@ -251,9 +262,13 @@ func (cdhc *CustomDomainHistoryCreate) defaults() {
 		cdhc.mutation.SetTags(v)
 	}
 	if _, ok := cdhc.mutation.ID(); !ok {
+		if customdomainhistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized customdomainhistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := customdomainhistory.DefaultID()
 		cdhc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

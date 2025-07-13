@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -331,6 +332,12 @@ func (cihq *ControlImplementationHistoryQuery) prepareQuery(ctx context.Context)
 			return err
 		}
 		cihq.sql = prev
+	}
+	if controlimplementationhistory.Policy == nil {
+		return errors.New("generated: uninitialized controlimplementationhistory.Policy (forgotten import generated/runtime?)")
+	}
+	if err := controlimplementationhistory.Policy.EvalQuery(ctx, cihq); err != nil {
+		return err
 	}
 	return nil
 }

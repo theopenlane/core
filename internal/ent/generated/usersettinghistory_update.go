@@ -292,7 +292,9 @@ func (ushu *UserSettingHistoryUpdate) Mutation() *UserSettingHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (ushu *UserSettingHistoryUpdate) Save(ctx context.Context) (int, error) {
-	ushu.defaults()
+	if err := ushu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, ushu.sqlSave, ushu.mutation, ushu.hooks)
 }
 
@@ -319,11 +321,15 @@ func (ushu *UserSettingHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ushu *UserSettingHistoryUpdate) defaults() {
+func (ushu *UserSettingHistoryUpdate) defaults() error {
 	if _, ok := ushu.mutation.UpdatedAt(); !ok && !ushu.mutation.UpdatedAtCleared() {
+		if usersettinghistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized usersettinghistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := usersettinghistory.UpdateDefaultUpdatedAt()
 		ushu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -739,7 +745,9 @@ func (ushuo *UserSettingHistoryUpdateOne) Select(field string, fields ...string)
 
 // Save executes the query and returns the updated UserSettingHistory entity.
 func (ushuo *UserSettingHistoryUpdateOne) Save(ctx context.Context) (*UserSettingHistory, error) {
-	ushuo.defaults()
+	if err := ushuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, ushuo.sqlSave, ushuo.mutation, ushuo.hooks)
 }
 
@@ -766,11 +774,15 @@ func (ushuo *UserSettingHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ushuo *UserSettingHistoryUpdateOne) defaults() {
+func (ushuo *UserSettingHistoryUpdateOne) defaults() error {
 	if _, ok := ushuo.mutation.UpdatedAt(); !ok && !ushuo.mutation.UpdatedAtCleared() {
+		if usersettinghistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized usersettinghistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := usersettinghistory.UpdateDefaultUpdatedAt()
 		ushuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

@@ -52,7 +52,7 @@ type SystemOwnedMutation interface {
 func HookSystemOwned() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			admin, err := rule.CheckIsSystemAdmin(ctx, m)
+			admin, err := rule.CheckIsSystemAdminWithContext(ctx)
 			if err != nil {
 				log.Error().Err(err).Msg("unable to check if user is system admin, skipping setting system owned")
 

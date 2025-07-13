@@ -8,7 +8,6 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -163,9 +162,6 @@ func (Standard) Interceptors() []ent.Interceptor {
 // Policy of the Standard
 func (Standard) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			privacy.AlwaysAllowRule(), // access is filtered by the traversal interceptor
-		),
 		policy.WithMutationRules(
 			rule.SystemOwnedStandards(), // checks for the system owned field
 			policy.CheckCreateAccess(),

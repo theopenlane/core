@@ -31,7 +31,6 @@ func (suite *HandlerTestSuite) TestCreateTrustCenterAnonymousJWT() {
 		SetZoneID("1234").
 		Save(ctx)
 	require.NoError(t, err)
-	fmt.Printf("%+v\n", mappableDomain)
 
 	customDomain, err := suite.db.CustomDomain.Create().
 		SetCnameRecord("trust.meow.org").

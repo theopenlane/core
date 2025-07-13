@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 )
 
 // HookOnboarding runs on onboarding mutations to create the organization and settings
@@ -65,8 +66,12 @@ func createOrgUniqueName(ctx context.Context, m *generated.OnboardingMutation, i
 		return nil, ErrMaxAttemptsOrganization
 	}
 
-	// if this is not the first attempt, append a random string to the provided name
-	exists, err := m.Client().Organization.Query().Where(organization.Name(input.Name)).Exist(ctx)
+	// check for the existence of the organization with the given name
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	exists, err := m.Client().Organization.Query().Where(
+		organization.Name(input.Name),
+		organization.DeletedAtIsNil(),
+	).Exist(allowCtx)
 	if err != nil {
 		return nil, err
 	}

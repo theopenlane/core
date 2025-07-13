@@ -293,7 +293,9 @@ func (ushc *UserSettingHistoryCreate) Mutation() *UserSettingHistoryMutation {
 
 // Save creates the UserSettingHistory in the database.
 func (ushc *UserSettingHistoryCreate) Save(ctx context.Context) (*UserSettingHistory, error) {
-	ushc.defaults()
+	if err := ushc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, ushc.sqlSave, ushc.mutation, ushc.hooks)
 }
 
@@ -320,16 +322,25 @@ func (ushc *UserSettingHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ushc *UserSettingHistoryCreate) defaults() {
+func (ushc *UserSettingHistoryCreate) defaults() error {
 	if _, ok := ushc.mutation.HistoryTime(); !ok {
+		if usersettinghistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized usersettinghistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := usersettinghistory.DefaultHistoryTime()
 		ushc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := ushc.mutation.CreatedAt(); !ok {
+		if usersettinghistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized usersettinghistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := usersettinghistory.DefaultCreatedAt()
 		ushc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := ushc.mutation.UpdatedAt(); !ok {
+		if usersettinghistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized usersettinghistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := usersettinghistory.DefaultUpdatedAt()
 		ushc.mutation.SetUpdatedAt(v)
 	}
@@ -358,9 +369,13 @@ func (ushc *UserSettingHistoryCreate) defaults() {
 		ushc.mutation.SetIsTfaEnabled(v)
 	}
 	if _, ok := ushc.mutation.ID(); !ok {
+		if usersettinghistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized usersettinghistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := usersettinghistory.DefaultID()
 		ushc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

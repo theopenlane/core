@@ -374,7 +374,9 @@ func (phu *ProgramHistoryUpdate) Mutation() *ProgramHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (phu *ProgramHistoryUpdate) Save(ctx context.Context) (int, error) {
-	phu.defaults()
+	if err := phu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, phu.sqlSave, phu.mutation, phu.hooks)
 }
 
@@ -401,11 +403,15 @@ func (phu *ProgramHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (phu *ProgramHistoryUpdate) defaults() {
+func (phu *ProgramHistoryUpdate) defaults() error {
 	if _, ok := phu.mutation.UpdatedAt(); !ok && !phu.mutation.UpdatedAtCleared() {
+		if programhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized programhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := programhistory.UpdateDefaultUpdatedAt()
 		phu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -929,7 +935,9 @@ func (phuo *ProgramHistoryUpdateOne) Select(field string, fields ...string) *Pro
 
 // Save executes the query and returns the updated ProgramHistory entity.
 func (phuo *ProgramHistoryUpdateOne) Save(ctx context.Context) (*ProgramHistory, error) {
-	phuo.defaults()
+	if err := phuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, phuo.sqlSave, phuo.mutation, phuo.hooks)
 }
 
@@ -956,11 +964,15 @@ func (phuo *ProgramHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (phuo *ProgramHistoryUpdateOne) defaults() {
+func (phuo *ProgramHistoryUpdateOne) defaults() error {
 	if _, ok := phuo.mutation.UpdatedAt(); !ok && !phuo.mutation.UpdatedAtCleared() {
+		if programhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized programhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := programhistory.UpdateDefaultUpdatedAt()
 		phuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

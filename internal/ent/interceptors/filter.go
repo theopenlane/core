@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
@@ -138,7 +139,7 @@ func FilterQueryResults[V any]() ent.InterceptFunc {
 // using the BatchCheck in FGA and returns the filtered results as the ent.Value based on the provided type
 func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Querier) (ent.Value, error) {
 	// by pass checks on invite or pre-allowed request
-	if _, allow := privacy.DecisionFromContext(ctx); allow {
+	if skipFilter(ctx) {
 		return next.Query(ctx, query)
 	}
 
@@ -191,6 +192,20 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 			return v, nil
 		}
 	}
+}
+
+func skipFilter(ctx context.Context) bool {
+	// by pass checks on invite or pre-allowed request
+	if _, allow := privacy.DecisionFromContext(ctx); allow {
+		return true
+	}
+
+	if ok := history.IsHistoryRequest(ctx); ok {
+		// skip filtering for history requests
+		return true
+	}
+
+	return false
 }
 
 // filterIDList filters a list of object ids to only include the objects that the user has access to

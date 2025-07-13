@@ -223,7 +223,9 @@ func (shu *SubprocessorHistoryUpdate) Mutation() *SubprocessorHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (shu *SubprocessorHistoryUpdate) Save(ctx context.Context) (int, error) {
-	shu.defaults()
+	if err := shu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, shu.sqlSave, shu.mutation, shu.hooks)
 }
 
@@ -250,11 +252,15 @@ func (shu *SubprocessorHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (shu *SubprocessorHistoryUpdate) defaults() {
+func (shu *SubprocessorHistoryUpdate) defaults() error {
 	if _, ok := shu.mutation.UpdatedAt(); !ok && !shu.mutation.UpdatedAtCleared() {
+		if subprocessorhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized subprocessorhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := subprocessorhistory.UpdateDefaultUpdatedAt()
 		shu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -574,7 +580,9 @@ func (shuo *SubprocessorHistoryUpdateOne) Select(field string, fields ...string)
 
 // Save executes the query and returns the updated SubprocessorHistory entity.
 func (shuo *SubprocessorHistoryUpdateOne) Save(ctx context.Context) (*SubprocessorHistory, error) {
-	shuo.defaults()
+	if err := shuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, shuo.sqlSave, shuo.mutation, shuo.hooks)
 }
 
@@ -601,11 +609,15 @@ func (shuo *SubprocessorHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (shuo *SubprocessorHistoryUpdateOne) defaults() {
+func (shuo *SubprocessorHistoryUpdateOne) defaults() error {
 	if _, ok := shuo.mutation.UpdatedAt(); !ok && !shuo.mutation.UpdatedAtCleared() {
+		if subprocessorhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized subprocessorhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := subprocessorhistory.UpdateDefaultUpdatedAt()
 		shuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.

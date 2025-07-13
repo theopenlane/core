@@ -532,7 +532,9 @@ func (aphu *ActionPlanHistoryUpdate) Mutation() *ActionPlanHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (aphu *ActionPlanHistoryUpdate) Save(ctx context.Context) (int, error) {
-	aphu.defaults()
+	if err := aphu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, aphu.sqlSave, aphu.mutation, aphu.hooks)
 }
 
@@ -559,11 +561,15 @@ func (aphu *ActionPlanHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (aphu *ActionPlanHistoryUpdate) defaults() {
+func (aphu *ActionPlanHistoryUpdate) defaults() error {
 	if _, ok := aphu.mutation.UpdatedAt(); !ok && !aphu.mutation.UpdatedAtCleared() {
+		if actionplanhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized actionplanhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := actionplanhistory.UpdateDefaultUpdatedAt()
 		aphu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -1337,7 +1343,9 @@ func (aphuo *ActionPlanHistoryUpdateOne) Select(field string, fields ...string) 
 
 // Save executes the query and returns the updated ActionPlanHistory entity.
 func (aphuo *ActionPlanHistoryUpdateOne) Save(ctx context.Context) (*ActionPlanHistory, error) {
-	aphuo.defaults()
+	if err := aphuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, aphuo.sqlSave, aphuo.mutation, aphuo.hooks)
 }
 
@@ -1364,11 +1372,15 @@ func (aphuo *ActionPlanHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (aphuo *ActionPlanHistoryUpdateOne) defaults() {
+func (aphuo *ActionPlanHistoryUpdateOne) defaults() error {
 	if _, ok := aphuo.mutation.UpdatedAt(); !ok && !aphuo.mutation.UpdatedAtCleared() {
+		if actionplanhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized actionplanhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := actionplanhistory.UpdateDefaultUpdatedAt()
 		aphuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

@@ -404,7 +404,9 @@ func (oshc *OrganizationSettingHistoryCreate) Mutation() *OrganizationSettingHis
 
 // Save creates the OrganizationSettingHistory in the database.
 func (oshc *OrganizationSettingHistoryCreate) Save(ctx context.Context) (*OrganizationSettingHistory, error) {
-	oshc.defaults()
+	if err := oshc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, oshc.sqlSave, oshc.mutation, oshc.hooks)
 }
 
@@ -431,16 +433,25 @@ func (oshc *OrganizationSettingHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (oshc *OrganizationSettingHistoryCreate) defaults() {
+func (oshc *OrganizationSettingHistoryCreate) defaults() error {
 	if _, ok := oshc.mutation.HistoryTime(); !ok {
+		if organizationsettinghistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized organizationsettinghistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := organizationsettinghistory.DefaultHistoryTime()
 		oshc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := oshc.mutation.CreatedAt(); !ok {
+		if organizationsettinghistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized organizationsettinghistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := organizationsettinghistory.DefaultCreatedAt()
 		oshc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := oshc.mutation.UpdatedAt(); !ok {
+		if organizationsettinghistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized organizationsettinghistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := organizationsettinghistory.DefaultUpdatedAt()
 		oshc.mutation.SetUpdatedAt(v)
 	}
@@ -465,13 +476,20 @@ func (oshc *OrganizationSettingHistoryCreate) defaults() {
 		oshc.mutation.SetIdentityProviderLoginEnforced(v)
 	}
 	if _, ok := oshc.mutation.ComplianceWebhookToken(); !ok {
+		if organizationsettinghistory.DefaultComplianceWebhookToken == nil {
+			return fmt.Errorf("generated: uninitialized organizationsettinghistory.DefaultComplianceWebhookToken (forgotten import generated/runtime?)")
+		}
 		v := organizationsettinghistory.DefaultComplianceWebhookToken()
 		oshc.mutation.SetComplianceWebhookToken(v)
 	}
 	if _, ok := oshc.mutation.ID(); !ok {
+		if organizationsettinghistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized organizationsettinghistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := organizationsettinghistory.DefaultID()
 		oshc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

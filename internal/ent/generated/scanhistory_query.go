@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -331,6 +332,12 @@ func (shq *ScanHistoryQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		shq.sql = prev
+	}
+	if scanhistory.Policy == nil {
+		return errors.New("generated: uninitialized scanhistory.Policy (forgotten import generated/runtime?)")
+	}
+	if err := scanhistory.Policy.EvalQuery(ctx, shq); err != nil {
+		return err
 	}
 	return nil
 }

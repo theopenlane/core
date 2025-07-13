@@ -115,10 +115,6 @@ func ({{ $name }}) Policy() ent.Policy {
 	// add the new policy here, the default post-policy is to deny all
 	// so you need to ensure there are rules in place to allow the actions you want
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			// add query rules here, the below is the recommended default
-			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
-		),
 		policy.WithMutationRules(
 			// add mutation rules here, the below is the recommended default
 			policy.CheckCreateAccess(),

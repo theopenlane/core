@@ -65,10 +65,6 @@ func (s Scan) Edges() []ent.Edge {
 
 func (Scan) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			policy.CheckOrgReadAccess(),
-			rule.AllowQueryIfSystemAdmin(),
-		),
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
 			rule.AllowMutationIfSystemAdmin(),

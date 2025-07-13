@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -331,6 +332,12 @@ func (shq *StandardHistoryQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		shq.sql = prev
+	}
+	if standardhistory.Policy == nil {
+		return errors.New("generated: uninitialized standardhistory.Policy (forgotten import generated/runtime?)")
+	}
+	if err := standardhistory.Policy.EvalQuery(ctx, shq); err != nil {
+		return err
 	}
 	return nil
 }

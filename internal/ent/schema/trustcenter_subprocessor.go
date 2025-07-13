@@ -9,7 +9,6 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/iam/entfga"
@@ -96,9 +95,6 @@ func (TrustCenterSubprocessor) Hooks() []ent.Hook {
 // Policy of the TrustCenterSubprocessor
 func (TrustCenterSubprocessor) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			privacy.AlwaysAllowRule(),
-		),
 		policy.WithMutationRules(
 			entfga.CheckEditAccess[*generated.TrustCenterSubprocessorMutation](),
 		),

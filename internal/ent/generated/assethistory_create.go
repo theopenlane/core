@@ -263,7 +263,9 @@ func (ahc *AssetHistoryCreate) Mutation() *AssetHistoryMutation {
 
 // Save creates the AssetHistory in the database.
 func (ahc *AssetHistoryCreate) Save(ctx context.Context) (*AssetHistory, error) {
-	ahc.defaults()
+	if err := ahc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, ahc.sqlSave, ahc.mutation, ahc.hooks)
 }
 
@@ -290,16 +292,25 @@ func (ahc *AssetHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ahc *AssetHistoryCreate) defaults() {
+func (ahc *AssetHistoryCreate) defaults() error {
 	if _, ok := ahc.mutation.HistoryTime(); !ok {
+		if assethistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized assethistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := assethistory.DefaultHistoryTime()
 		ahc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := ahc.mutation.CreatedAt(); !ok {
+		if assethistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized assethistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := assethistory.DefaultCreatedAt()
 		ahc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := ahc.mutation.UpdatedAt(); !ok {
+		if assethistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized assethistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := assethistory.DefaultUpdatedAt()
 		ahc.mutation.SetUpdatedAt(v)
 	}
@@ -312,9 +323,13 @@ func (ahc *AssetHistoryCreate) defaults() {
 		ahc.mutation.SetAssetType(v)
 	}
 	if _, ok := ahc.mutation.ID(); !ok {
+		if assethistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized assethistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := assethistory.DefaultID()
 		ahc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

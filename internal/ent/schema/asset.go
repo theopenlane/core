@@ -74,10 +74,6 @@ func (a Asset) Edges() []ent.Edge {
 
 func (Asset) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			// object owner check done via scan
-			policy.CheckOrgReadAccess(),
-		),
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
 		),

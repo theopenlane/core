@@ -18,7 +18,7 @@ import (
 // CreateOrganization is the resolver for the createOrganization field.
 func (r *mutationResolver) CreateOrganization(ctx context.Context, input generated.CreateOrganizationInput, avatarFile *graphql.Upload) (*model.OrganizationCreatePayload, error) {
 	if auth.GetAuthTypeFromContext(ctx) != auth.JWTAuthentication {
-		log.Info().Msg("organization attempted to be created with non-JWT auth type")
+		log.Debug().Msg("organization attempted to be created with non-JWT auth type")
 
 		return nil, ErrResourceNotAccessibleWithToken
 	}

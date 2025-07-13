@@ -192,7 +192,9 @@ func (tcshc *TrustCenterSubprocessorHistoryCreate) Mutation() *TrustCenterSubpro
 
 // Save creates the TrustCenterSubprocessorHistory in the database.
 func (tcshc *TrustCenterSubprocessorHistoryCreate) Save(ctx context.Context) (*TrustCenterSubprocessorHistory, error) {
-	tcshc.defaults()
+	if err := tcshc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, tcshc.sqlSave, tcshc.mutation, tcshc.hooks)
 }
 
@@ -219,23 +221,36 @@ func (tcshc *TrustCenterSubprocessorHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (tcshc *TrustCenterSubprocessorHistoryCreate) defaults() {
+func (tcshc *TrustCenterSubprocessorHistoryCreate) defaults() error {
 	if _, ok := tcshc.mutation.HistoryTime(); !ok {
+		if trustcentersubprocessorhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized trustcentersubprocessorhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := trustcentersubprocessorhistory.DefaultHistoryTime()
 		tcshc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := tcshc.mutation.CreatedAt(); !ok {
+		if trustcentersubprocessorhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized trustcentersubprocessorhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := trustcentersubprocessorhistory.DefaultCreatedAt()
 		tcshc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := tcshc.mutation.UpdatedAt(); !ok {
+		if trustcentersubprocessorhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized trustcentersubprocessorhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := trustcentersubprocessorhistory.DefaultUpdatedAt()
 		tcshc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := tcshc.mutation.ID(); !ok {
+		if trustcentersubprocessorhistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized trustcentersubprocessorhistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := trustcentersubprocessorhistory.DefaultID()
 		tcshc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

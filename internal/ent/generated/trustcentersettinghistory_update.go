@@ -371,7 +371,9 @@ func (tcshu *TrustCenterSettingHistoryUpdate) Mutation() *TrustCenterSettingHist
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (tcshu *TrustCenterSettingHistoryUpdate) Save(ctx context.Context) (int, error) {
-	tcshu.defaults()
+	if err := tcshu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, tcshu.sqlSave, tcshu.mutation, tcshu.hooks)
 }
 
@@ -398,11 +400,15 @@ func (tcshu *TrustCenterSettingHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (tcshu *TrustCenterSettingHistoryUpdate) defaults() {
+func (tcshu *TrustCenterSettingHistoryUpdate) defaults() error {
 	if _, ok := tcshu.mutation.UpdatedAt(); !ok && !tcshu.mutation.UpdatedAtCleared() {
+		if trustcentersettinghistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized trustcentersettinghistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := trustcentersettinghistory.UpdateDefaultUpdatedAt()
 		tcshu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -920,7 +926,9 @@ func (tcshuo *TrustCenterSettingHistoryUpdateOne) Select(field string, fields ..
 
 // Save executes the query and returns the updated TrustCenterSettingHistory entity.
 func (tcshuo *TrustCenterSettingHistoryUpdateOne) Save(ctx context.Context) (*TrustCenterSettingHistory, error) {
-	tcshuo.defaults()
+	if err := tcshuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, tcshuo.sqlSave, tcshuo.mutation, tcshuo.hooks)
 }
 
@@ -947,11 +955,15 @@ func (tcshuo *TrustCenterSettingHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (tcshuo *TrustCenterSettingHistoryUpdateOne) defaults() {
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) defaults() error {
 	if _, ok := tcshuo.mutation.UpdatedAt(); !ok && !tcshuo.mutation.UpdatedAtCleared() {
+		if trustcentersettinghistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized trustcentersettinghistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := trustcentersettinghistory.UpdateDefaultUpdatedAt()
 		tcshuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

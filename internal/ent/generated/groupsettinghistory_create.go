@@ -231,7 +231,9 @@ func (gshc *GroupSettingHistoryCreate) Mutation() *GroupSettingHistoryMutation {
 
 // Save creates the GroupSettingHistory in the database.
 func (gshc *GroupSettingHistoryCreate) Save(ctx context.Context) (*GroupSettingHistory, error) {
-	gshc.defaults()
+	if err := gshc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, gshc.sqlSave, gshc.mutation, gshc.hooks)
 }
 
@@ -258,16 +260,25 @@ func (gshc *GroupSettingHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (gshc *GroupSettingHistoryCreate) defaults() {
+func (gshc *GroupSettingHistoryCreate) defaults() error {
 	if _, ok := gshc.mutation.HistoryTime(); !ok {
+		if groupsettinghistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized groupsettinghistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := groupsettinghistory.DefaultHistoryTime()
 		gshc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := gshc.mutation.CreatedAt(); !ok {
+		if groupsettinghistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized groupsettinghistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := groupsettinghistory.DefaultCreatedAt()
 		gshc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := gshc.mutation.UpdatedAt(); !ok {
+		if groupsettinghistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized groupsettinghistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := groupsettinghistory.DefaultUpdatedAt()
 		gshc.mutation.SetUpdatedAt(v)
 	}
@@ -288,9 +299,13 @@ func (gshc *GroupSettingHistoryCreate) defaults() {
 		gshc.mutation.SetSyncToGithub(v)
 	}
 	if _, ok := gshc.mutation.ID(); !ok {
+		if groupsettinghistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized groupsettinghistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := groupsettinghistory.DefaultID()
 		gshc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

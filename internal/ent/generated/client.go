@@ -1833,7 +1833,8 @@ func (c *ActionPlanHistoryClient) GetX(ctx context.Context, id string) *ActionPl
 
 // Hooks returns the client hooks.
 func (c *ActionPlanHistoryClient) Hooks() []Hook {
-	return c.hooks.ActionPlanHistory
+	hooks := c.hooks.ActionPlanHistory
+	return append(hooks[:len(hooks):len(hooks)], actionplanhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -2235,7 +2236,8 @@ func (c *AssetHistoryClient) GetX(ctx context.Context, id string) *AssetHistory 
 
 // Hooks returns the client hooks.
 func (c *AssetHistoryClient) Hooks() []Hook {
-	return c.hooks.AssetHistory
+	hooks := c.hooks.AssetHistory
+	return append(hooks[:len(hooks):len(hooks)], assethistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -2561,7 +2563,8 @@ func (c *ContactHistoryClient) GetX(ctx context.Context, id string) *ContactHist
 
 // Hooks returns the client hooks.
 func (c *ContactHistoryClient) Hooks() []Hook {
-	return c.hooks.ContactHistory
+	hooks := c.hooks.ContactHistory
+	return append(hooks[:len(hooks):len(hooks)], contacthistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -3248,7 +3251,8 @@ func (c *ControlHistoryClient) GetX(ctx context.Context, id string) *ControlHist
 
 // Hooks returns the client hooks.
 func (c *ControlHistoryClient) Hooks() []Hook {
-	return c.hooks.ControlHistory
+	hooks := c.hooks.ControlHistory
+	return append(hooks[:len(hooks):len(hooks)], controlhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -3631,7 +3635,8 @@ func (c *ControlImplementationHistoryClient) GetX(ctx context.Context, id string
 
 // Hooks returns the client hooks.
 func (c *ControlImplementationHistoryClient) Hooks() []Hook {
-	return c.hooks.ControlImplementationHistory
+	hooks := c.hooks.ControlImplementationHistory
+	return append(hooks[:len(hooks):len(hooks)], controlimplementationhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -4147,7 +4152,8 @@ func (c *ControlObjectiveHistoryClient) GetX(ctx context.Context, id string) *Co
 
 // Hooks returns the client hooks.
 func (c *ControlObjectiveHistoryClient) Hooks() []Hook {
-	return c.hooks.ControlObjectiveHistory
+	hooks := c.hooks.ControlObjectiveHistory
+	return append(hooks[:len(hooks):len(hooks)], controlobjectivehistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -4511,7 +4517,8 @@ func (c *ControlScheduledJobHistoryClient) GetX(ctx context.Context, id string) 
 
 // Hooks returns the client hooks.
 func (c *ControlScheduledJobHistoryClient) Hooks() []Hook {
-	return c.hooks.ControlScheduledJobHistory
+	hooks := c.hooks.ControlScheduledJobHistory
+	return append(hooks[:len(hooks):len(hooks)], controlscheduledjobhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -4837,7 +4844,8 @@ func (c *CustomDomainHistoryClient) GetX(ctx context.Context, id string) *Custom
 
 // Hooks returns the client hooks.
 func (c *CustomDomainHistoryClient) Hooks() []Hook {
-	return c.hooks.CustomDomainHistory
+	hooks := c.hooks.CustomDomainHistory
+	return append(hooks[:len(hooks):len(hooks)], customdomainhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -5144,7 +5152,8 @@ func (c *DNSVerificationHistoryClient) GetX(ctx context.Context, id string) *DNS
 
 // Hooks returns the client hooks.
 func (c *DNSVerificationHistoryClient) Hooks() []Hook {
-	return c.hooks.DNSVerificationHistory
+	hooks := c.hooks.DNSVerificationHistory
+	return append(hooks[:len(hooks):len(hooks)], dnsverificationhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -5489,7 +5498,8 @@ func (c *DocumentDataHistoryClient) GetX(ctx context.Context, id string) *Docume
 
 // Hooks returns the client hooks.
 func (c *DocumentDataHistoryClient) Hooks() []Hook {
-	return c.hooks.DocumentDataHistory
+	hooks := c.hooks.DocumentDataHistory
+	return append(hooks[:len(hooks):len(hooks)], documentdatahistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -6121,7 +6131,8 @@ func (c *EntityHistoryClient) GetX(ctx context.Context, id string) *EntityHistor
 
 // Hooks returns the client hooks.
 func (c *EntityHistoryClient) Hooks() []Hook {
-	return c.hooks.EntityHistory
+	hooks := c.hooks.EntityHistory
+	return append(hooks[:len(hooks):len(hooks)], entityhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -6428,7 +6439,8 @@ func (c *EntityTypeHistoryClient) GetX(ctx context.Context, id string) *EntityTy
 
 // Hooks returns the client hooks.
 func (c *EntityTypeHistoryClient) Hooks() []Hook {
-	return c.hooks.EntityTypeHistory
+	hooks := c.hooks.EntityTypeHistory
+	return append(hooks[:len(hooks):len(hooks)], entitytypehistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -7192,7 +7204,8 @@ func (c *EvidenceHistoryClient) GetX(ctx context.Context, id string) *EvidenceHi
 
 // Hooks returns the client hooks.
 func (c *EvidenceHistoryClient) Hooks() []Hook {
-	return c.hooks.EvidenceHistory
+	hooks := c.hooks.EvidenceHistory
+	return append(hooks[:len(hooks):len(hooks)], evidencehistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -7919,7 +7932,8 @@ func (c *FileHistoryClient) GetX(ctx context.Context, id string) *FileHistory {
 
 // Hooks returns the client hooks.
 func (c *FileHistoryClient) Hooks() []Hook {
-	return c.hooks.FileHistory
+	hooks := c.hooks.FileHistory
+	return append(hooks[:len(hooks):len(hooks)], filehistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -8834,7 +8848,8 @@ func (c *GroupHistoryClient) GetX(ctx context.Context, id string) *GroupHistory 
 
 // Hooks returns the client hooks.
 func (c *GroupHistoryClient) Hooks() []Hook {
-	return c.hooks.GroupHistory
+	hooks := c.hooks.GroupHistory
+	return append(hooks[:len(hooks):len(hooks)], grouphistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -9179,7 +9194,8 @@ func (c *GroupMembershipHistoryClient) GetX(ctx context.Context, id string) *Gro
 
 // Hooks returns the client hooks.
 func (c *GroupMembershipHistoryClient) Hooks() []Hook {
-	return c.hooks.GroupMembershipHistory
+	hooks := c.hooks.GroupMembershipHistory
+	return append(hooks[:len(hooks):len(hooks)], groupmembershiphistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -9467,7 +9483,8 @@ func (c *GroupSettingHistoryClient) GetX(ctx context.Context, id string) *GroupS
 
 // Hooks returns the client hooks.
 func (c *GroupSettingHistoryClient) Hooks() []Hook {
-	return c.hooks.GroupSettingHistory
+	hooks := c.hooks.GroupSettingHistory
+	return append(hooks[:len(hooks):len(hooks)], groupsettinghistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -10118,7 +10135,8 @@ func (c *IntegrationHistoryClient) GetX(ctx context.Context, id string) *Integra
 
 // Hooks returns the client hooks.
 func (c *IntegrationHistoryClient) Hooks() []Hook {
-	return c.hooks.IntegrationHistory
+	hooks := c.hooks.IntegrationHistory
+	return append(hooks[:len(hooks):len(hooks)], integrationhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -10634,7 +10652,8 @@ func (c *InternalPolicyHistoryClient) GetX(ctx context.Context, id string) *Inte
 
 // Hooks returns the client hooks.
 func (c *InternalPolicyHistoryClient) Hooks() []Hook {
-	return c.hooks.InternalPolicyHistory
+	hooks := c.hooks.InternalPolicyHistory
+	return append(hooks[:len(hooks):len(hooks)], internalpolicyhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -11806,7 +11825,8 @@ func (c *MappableDomainHistoryClient) GetX(ctx context.Context, id string) *Mapp
 
 // Hooks returns the client hooks.
 func (c *MappableDomainHistoryClient) Hooks() []Hook {
-	return c.hooks.MappableDomainHistory
+	hooks := c.hooks.MappableDomainHistory
+	return append(hooks[:len(hooks):len(hooks)], mappabledomainhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -12208,7 +12228,8 @@ func (c *MappedControlHistoryClient) GetX(ctx context.Context, id string) *Mappe
 
 // Hooks returns the client hooks.
 func (c *MappedControlHistoryClient) Hooks() []Hook {
-	return c.hooks.MappedControlHistory
+	hooks := c.hooks.MappedControlHistory
+	return append(hooks[:len(hooks):len(hooks)], mappedcontrolhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -12629,7 +12650,8 @@ func (c *NarrativeHistoryClient) GetX(ctx context.Context, id string) *Narrative
 
 // Hooks returns the client hooks.
 func (c *NarrativeHistoryClient) Hooks() []Hook {
-	return c.hooks.NarrativeHistory
+	hooks := c.hooks.NarrativeHistory
+	return append(hooks[:len(hooks):len(hooks)], narrativehistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -12955,7 +12977,8 @@ func (c *NoteHistoryClient) GetX(ctx context.Context, id string) *NoteHistory {
 
 // Hooks returns the client hooks.
 func (c *NoteHistoryClient) Hooks() []Hook {
-	return c.hooks.NoteHistory
+	hooks := c.hooks.NoteHistory
+	return append(hooks[:len(hooks):len(hooks)], notehistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -13435,7 +13458,8 @@ func (c *OrgMembershipHistoryClient) GetX(ctx context.Context, id string) *OrgMe
 
 // Hooks returns the client hooks.
 func (c *OrgMembershipHistoryClient) Hooks() []Hook {
-	return c.hooks.OrgMembershipHistory
+	hooks := c.hooks.OrgMembershipHistory
+	return append(hooks[:len(hooks):len(hooks)], orgmembershiphistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -15973,7 +15997,8 @@ func (c *OrganizationHistoryClient) GetX(ctx context.Context, id string) *Organi
 
 // Hooks returns the client hooks.
 func (c *OrganizationHistoryClient) Hooks() []Hook {
-	return c.hooks.OrganizationHistory
+	hooks := c.hooks.OrganizationHistory
+	return append(hooks[:len(hooks):len(hooks)], organizationhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -16280,7 +16305,8 @@ func (c *OrganizationSettingHistoryClient) GetX(ctx context.Context, id string) 
 
 // Hooks returns the client hooks.
 func (c *OrganizationSettingHistoryClient) Hooks() []Hook {
-	return c.hooks.OrganizationSettingHistory
+	hooks := c.hooks.OrganizationSettingHistory
+	return append(hooks[:len(hooks):len(hooks)], organizationsettinghistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -17123,7 +17149,8 @@ func (c *ProcedureHistoryClient) GetX(ctx context.Context, id string) *Procedure
 
 // Hooks returns the client hooks.
 func (c *ProcedureHistoryClient) Hooks() []Hook {
-	return c.hooks.ProcedureHistory
+	hooks := c.hooks.ProcedureHistory
+	return append(hooks[:len(hooks):len(hooks)], procedurehistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -17734,7 +17761,8 @@ func (c *ProgramHistoryClient) GetX(ctx context.Context, id string) *ProgramHist
 
 // Hooks returns the client hooks.
 func (c *ProgramHistoryClient) Hooks() []Hook {
-	return c.hooks.ProgramHistory
+	hooks := c.hooks.ProgramHistory
+	return append(hooks[:len(hooks):len(hooks)], programhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -18060,7 +18088,8 @@ func (c *ProgramMembershipHistoryClient) GetX(ctx context.Context, id string) *P
 
 // Hooks returns the client hooks.
 func (c *ProgramMembershipHistoryClient) Hooks() []Hook {
-	return c.hooks.ProgramMembershipHistory
+	hooks := c.hooks.ProgramMembershipHistory
+	return append(hooks[:len(hooks):len(hooks)], programmembershiphistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -18633,7 +18662,8 @@ func (c *RiskHistoryClient) GetX(ctx context.Context, id string) *RiskHistory {
 
 // Hooks returns the client hooks.
 func (c *RiskHistoryClient) Hooks() []Hook {
-	return c.hooks.RiskHistory
+	hooks := c.hooks.RiskHistory
+	return append(hooks[:len(hooks):len(hooks)], riskhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -19016,7 +19046,8 @@ func (c *ScanHistoryClient) GetX(ctx context.Context, id string) *ScanHistory {
 
 // Hooks returns the client hooks.
 func (c *ScanHistoryClient) Hooks() []Hook {
-	return c.hooks.ScanHistory
+	hooks := c.hooks.ScanHistory
+	return append(hooks[:len(hooks):len(hooks)], scanhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -19304,7 +19335,8 @@ func (c *ScheduledJobHistoryClient) GetX(ctx context.Context, id string) *Schedu
 
 // Hooks returns the client hooks.
 func (c *ScheduledJobHistoryClient) Hooks() []Hook {
-	return c.hooks.ScheduledJobHistory
+	hooks := c.hooks.ScheduledJobHistory
+	return append(hooks[:len(hooks):len(hooks)], scheduledjobhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -19803,7 +19835,8 @@ func (c *StandardHistoryClient) GetX(ctx context.Context, id string) *StandardHi
 
 // Hooks returns the client hooks.
 func (c *StandardHistoryClient) Hooks() []Hook {
-	return c.hooks.StandardHistory
+	hooks := c.hooks.StandardHistory
+	return append(hooks[:len(hooks):len(hooks)], standardhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -20376,7 +20409,8 @@ func (c *SubcontrolHistoryClient) GetX(ctx context.Context, id string) *Subcontr
 
 // Hooks returns the client hooks.
 func (c *SubcontrolHistoryClient) Hooks() []Hook {
-	return c.hooks.SubcontrolHistory
+	hooks := c.hooks.SubcontrolHistory
+	return append(hooks[:len(hooks):len(hooks)], subcontrolhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -20721,7 +20755,8 @@ func (c *SubprocessorHistoryClient) GetX(ctx context.Context, id string) *Subpro
 
 // Hooks returns the client hooks.
 func (c *SubprocessorHistoryClient) Hooks() []Hook {
-	return c.hooks.SubprocessorHistory
+	hooks := c.hooks.SubprocessorHistory
+	return append(hooks[:len(hooks):len(hooks)], subprocessorhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -21564,7 +21599,8 @@ func (c *TaskHistoryClient) GetX(ctx context.Context, id string) *TaskHistory {
 
 // Hooks returns the client hooks.
 func (c *TaskHistoryClient) Hooks() []Hook {
-	return c.hooks.TaskHistory
+	hooks := c.hooks.TaskHistory
+	return append(hooks[:len(hooks):len(hooks)], taskhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -21890,7 +21926,8 @@ func (c *TemplateHistoryClient) GetX(ctx context.Context, id string) *TemplateHi
 
 // Hooks returns the client hooks.
 func (c *TemplateHistoryClient) Hooks() []Hook {
-	return c.hooks.TemplateHistory
+	hooks := c.hooks.TemplateHistory
+	return append(hooks[:len(hooks):len(hooks)], templatehistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -22235,7 +22272,8 @@ func (c *TrustCenterHistoryClient) GetX(ctx context.Context, id string) *TrustCe
 
 // Hooks returns the client hooks.
 func (c *TrustCenterHistoryClient) Hooks() []Hook {
-	return c.hooks.TrustCenterHistory
+	hooks := c.hooks.TrustCenterHistory
+	return append(hooks[:len(hooks):len(hooks)], trustcenterhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -22580,7 +22618,8 @@ func (c *TrustCenterSettingHistoryClient) GetX(ctx context.Context, id string) *
 
 // Hooks returns the client hooks.
 func (c *TrustCenterSettingHistoryClient) Hooks() []Hook {
-	return c.hooks.TrustCenterSettingHistory
+	hooks := c.hooks.TrustCenterSettingHistory
+	return append(hooks[:len(hooks):len(hooks)], trustcentersettinghistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -22887,7 +22926,8 @@ func (c *TrustCenterSubprocessorHistoryClient) GetX(ctx context.Context, id stri
 
 // Hooks returns the client hooks.
 func (c *TrustCenterSubprocessorHistoryClient) Hooks() []Hook {
-	return c.hooks.TrustCenterSubprocessorHistory
+	hooks := c.hooks.TrustCenterSubprocessorHistory
+	return append(hooks[:len(hooks):len(hooks)], trustcentersubprocessorhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -23517,7 +23557,8 @@ func (c *UserHistoryClient) GetX(ctx context.Context, id string) *UserHistory {
 
 // Hooks returns the client hooks.
 func (c *UserHistoryClient) Hooks() []Hook {
-	return c.hooks.UserHistory
+	hooks := c.hooks.UserHistory
+	return append(hooks[:len(hooks):len(hooks)], userhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -23843,7 +23884,8 @@ func (c *UserSettingHistoryClient) GetX(ctx context.Context, id string) *UserSet
 
 // Hooks returns the client hooks.
 func (c *UserSettingHistoryClient) Hooks() []Hook {
-	return c.hooks.UserSettingHistory
+	hooks := c.hooks.UserSettingHistory
+	return append(hooks[:len(hooks):len(hooks)], usersettinghistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
