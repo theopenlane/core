@@ -15,11 +15,6 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 )
 
-// TODO: Add this to configuration This will allow for folks to test out their
-// trust center before they have custom domains, e.g.
-// trust.openlane.com/catcafe
-const defaultTrustCenterDomain = "trust.openlane.com"
-
 func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context) error {
 	referer := ctx.Request().URL.Query().Get("referer")
 
@@ -47,7 +42,7 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context) error {
 	var trustCenter *generated.TrustCenter
 
 	// 3. check if the URL is the "default trust center domain"
-	if hostname == defaultTrustCenterDomain {
+	if hostname == h.DefaultTrustCenterDomain {
 		// 4. if we have the default trust center domain, then we require the PATH of the url to be the "slug"
 		pathSegments := strings.Split(strings.Trim(parsedURL.Path, "/"), "/")
 		if len(pathSegments) == 0 || pathSegments[0] == "" {
