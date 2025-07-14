@@ -1,53 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-#
-# EXECUTION CONTEXT: Docker container (with git, gh, docker, jq, buildkite-agent)
-# REQUIRED TOOLS: git, gh, docker, jq, buildkite-agent
-# ASSUMPTIONS: GitHub token available, Docker daemon accessible
-#
-
 # Draft PR automation for config changes
 # Creates draft PRs in openlane-infra when config changes are detected in core repo
-# Links PRs together with comments for better visibility
-
-# Check required tools are available in container
-check_required_tools() {
-    local missing_tools=()
-
-    for tool in git gh docker jq buildkite-agent; do
-        if ! command -v "$tool" >/dev/null 2>&1; then
-            missing_tools+=("$tool")
-        fi
-    done
-
-    if [[ ${#missing_tools[@]} -gt 0 ]]; then
-        echo "❌ Missing required tools: ${missing_tools[*]}"
-        echo "This script must run in a container with these tools installed"
-        echo "Expected to run via Buildkite pipeline with ghcr.io/theopenlane/build-image:latest"
-        exit 1
-    fi
-}
-
-# Verify environment variables are set
-check_environment() {
-    local missing_vars=()
-
-    for var in HELM_CHART_REPO BUILDKITE_BRANCH; do
-        if [[ -z "${!var:-}" ]]; then
-            missing_vars+=("$var")
-        fi
-    done
-
-    if [[ ${#missing_vars[@]} -gt 0 ]]; then
-        echo "❌ Missing required environment variables: ${missing_vars[*]}"
-        exit 1
-    fi
-}
-
-# Run checks
-check_required_tools
-check_environment
 
 YQ_VERSION=${YQ_VERSION:-4.9.6}
 repo="${HELM_CHART_REPO}"
@@ -61,7 +16,6 @@ echo "Repository: $repo"
 echo "Chart directory: $chart_dir"
 echo "Core PR: ${BUILDKITE_PULL_REQUEST:-none}"
 echo "Core Branch: ${BUILDKITE_BRANCH}"
-echo "Tools verified: ✅"
 
 # Check if we're in a PR context
 if [[ -z "${BUILDKITE_PULL_REQUEST:-}" || "${BUILDKITE_PULL_REQUEST}" == "false" ]]; then
@@ -89,153 +43,65 @@ git checkout -b "$draft_branch"
 changes_made=false
 change_summary=""
 
-# Import functions from helm-automation.sh
-source "${BUILDKITE_BUILD_CHECKOUT_PATH}/.buildkite/helm-automation.sh" 2>/dev/null || {
-  # If sourcing fails, define the functions we need
-  function merge_helm_values() {
-    local source="$1"
-    local target="$2"
-    local description="$3"
+# Use the helm-automation.sh functions by sourcing it
+source "${BUILDKITE_BUILD_CHECKOUT_PATH}/.buildkite/helm-automation.sh"
 
-    if [[ ! -f "$source" ]]; then
-      echo "⚠️  Source values file not found: $source"
-      return 1
-    fi
-
-    echo "🔄 Merging $description"
-
-    # Create backup of existing values
-    if [[ -f "$target" ]]; then
-      cp "$target" "${target}.backup"
-    fi
-
-    # Create temporary merged file
-    local temp_merged="${target}.merged"
-
-    if [[ -f "$target" ]]; then
-      echo "  📋 Extracting core configuration from generated values..."
-      docker run --rm -v "${PWD}":/workdir mikefarah/yq:"${YQ_VERSION}" e '.core' "$source" > /tmp/core-values.yaml
-
-      echo "  🔀 Merging with existing chart values..."
-      docker run --rm -v "${PWD}":/workdir mikefarah/yq:"${YQ_VERSION}" e '. as $target | load("/tmp/core-values.yaml") as $core | $target | .core = $core' "$target" > "$temp_merged"
-
-      # Also merge any externalSecrets configuration if it exists
-      if docker run --rm -v "${PWD}":/workdir mikefarah/yq:"${YQ_VERSION}" e '.externalSecrets' "$source" | grep -v "null" > /dev/null 2>&1; then
-        echo "  🔐 Merging external secrets configuration..."
-        docker run --rm -v "${PWD}":/workdir mikefarah/yq:"${YQ_VERSION}" e '.externalSecrets' "$source" > /tmp/external-secrets.yaml
-        docker run --rm -v "${PWD}":/workdir mikefarah/yq:"${YQ_VERSION}" e '. as $target | load("/tmp/external-secrets.yaml") as $secrets | $target | .externalSecrets = $secrets' "$temp_merged" > "${temp_merged}.tmp"
-        mv "${temp_merged}.tmp" "$temp_merged"
-      fi
-    else
-      echo "  ✨ Creating new values file..."
-      cp "$source" "$temp_merged"
-    fi
-
-    # Check if there are actual differences
-    if [[ -f "$target" ]] && diff -q "$target" "$temp_merged" > /dev/null 2>&1; then
-      echo "  ℹ️  No changes detected in $description"
-      rm -f "$temp_merged" "${target}.backup" /tmp/core-values.yaml /tmp/external-secrets.yaml
-      return 1
-    fi
-
-    # Apply the merged changes
-    mv "$temp_merged" "$target"
-    git add "$target"
-    changes_made=true
-    change_summary+="\\n- 🔄 Merged $description"
-
-    # Cleanup
-    rm -f "${target}.backup" /tmp/core-values.yaml /tmp/external-secrets.yaml
-
-    return 0
-  }
-
-  function copy_and_track() {
-    local source="$1"
-    local target="$2"
-    local description="$3"
-
-    if [[ -f "$source" ]]; then
-      # Check if target exists and has differences
-      if [[ -f "$target" ]]; then
-        if ! diff -q "$source" "$target" > /dev/null 2>&1; then
-          echo "Updating $description"
-          cp "$source" "$target"
-          git add "$target"
-          changes_made=true
-          change_summary+="\\n- ✅ Updated $description"
-          return 0
-        fi
-      else
-        echo "Creating $description"
-        mkdir -p "$(dirname "$target")"
-        cp "$source" "$target"
-        git add "$target"
-        changes_made=true
-        change_summary+="\\n- ✨ Created $description"
-        return 0
-      fi
-    fi
-    return 1
-  }
-
-  function copy_directory_and_track() {
-    local source="$1"
-    local target="$2"
-    local description="$3"
-
-    if [[ -d "$source" ]]; then
-      # Check if target exists and has differences
-      if [[ -d "$target" ]]; then
-        if ! diff -r "$source" "$target" > /dev/null 2>&1; then
-          echo "Updating $description"
-          rm -rf "$target"
-          mkdir -p "$(dirname "$target")"
-          cp -r "$source" "$target"
-          git add "$target"
-          changes_made=true
-          change_summary+="\\n- 🔐 Updated $description"
-          return 0
-        fi
-      else
-        echo "Creating $description"
-        mkdir -p "$(dirname "$target")"
-        cp -r "$source" "$target"
-        git add "$target"
-        changes_made=true
-        change_summary+="\\n- 🆕 Created $description"
-        return 0
-      fi
-    fi
-    return 1
-  }
-}
-
-# Apply the same changes as helm-automation.sh but for draft PR
 echo "🔍 Checking for configuration changes..."
 
-# Update Helm values.yaml (intelligent merging approach)
-merge_helm_values \
+# Update Helm values.yaml using the function from helm-automation.sh
+if merge_helm_values \
   "$BUILDKITE_BUILD_CHECKOUT_PATH/config/helm-values.yaml" \
   "$chart_dir/values.yaml" \
-  "Helm values.yaml"
+  "Helm values.yaml"; then
+  changes_made=true
+  change_summary+="\n- 🔄 Merged Helm values.yaml"
+fi
 
 # Update external secrets directory
-copy_directory_and_track \
-  "$BUILDKITE_BUILD_CHECKOUT_PATH/config/external-secrets" \
-  "$chart_dir/templates/external-secrets" \
-  "External Secrets templates"
+if [[ -d "$BUILDKITE_BUILD_CHECKOUT_PATH/config/external-secrets" ]]; then
+  if [[ -d "$chart_dir/templates/external-secrets" ]]; then
+    if ! diff -r "$BUILDKITE_BUILD_CHECKOUT_PATH/config/external-secrets" "$chart_dir/templates/external-secrets" > /dev/null 2>&1; then
+      echo "Updating External Secrets templates"
+      rm -rf "$chart_dir/templates/external-secrets"
+      mkdir -p "$(dirname "$chart_dir/templates/external-secrets")"
+      cp -r "$BUILDKITE_BUILD_CHECKOUT_PATH/config/external-secrets" "$chart_dir/templates/external-secrets"
+      git add "$chart_dir/templates/external-secrets"
+      changes_made=true
+      change_summary+="\n- 🔐 Updated External Secrets templates"
+    fi
+  else
+    echo "Creating External Secrets templates"
+    mkdir -p "$(dirname "$chart_dir/templates/external-secrets")"
+    cp -r "$BUILDKITE_BUILD_CHECKOUT_PATH/config/external-secrets" "$chart_dir/templates/external-secrets"
+    git add "$chart_dir/templates/external-secrets"
+    changes_made=true
+    change_summary+="\n- 🆕 Created External Secrets templates"
+  fi
+fi
 
 # Legacy configmap support (for backward compatibility)
 if [[ -f "$BUILDKITE_BUILD_CHECKOUT_PATH/config/configmap.yaml" ]]; then
-  copy_and_track \
-    "$BUILDKITE_BUILD_CHECKOUT_PATH/config/configmap.yaml" \
-    "$chart_dir/templates/core-configmap.yaml" \
-    "ConfigMap template"
+  target="$chart_dir/templates/core-configmap.yaml"
+  if [[ -f "$target" ]]; then
+    if ! diff -q "$BUILDKITE_BUILD_CHECKOUT_PATH/config/configmap.yaml" "$target" > /dev/null 2>&1; then
+      echo "Updating ConfigMap template"
+      cp "$BUILDKITE_BUILD_CHECKOUT_PATH/config/configmap.yaml" "$target"
+      git add "$target"
+      changes_made=true
+      change_summary+="\n- ✅ Updated ConfigMap template"
+    fi
+  else
+    echo "Creating ConfigMap template"
+    mkdir -p "$(dirname "$target")"
+    cp "$BUILDKITE_BUILD_CHECKOUT_PATH/config/configmap.yaml" "$target"
+    git add "$target"
+    changes_made=true
+    change_summary+="\n- ✨ Created ConfigMap template"
+  fi
 fi
 
 # Check if we have any changes to commit
-if git diff --staged --quiet; then
+if [[ "$changes_made" == "false" ]]; then
   echo "ℹ️  No configuration changes detected, skipping draft PR creation"
   exit 0
 fi
