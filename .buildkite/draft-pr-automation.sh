@@ -117,6 +117,7 @@ merge_helm_values() {
 
   # Replace target with merged content
   mv "$temp_merged" "$target"
+  git add "$target"
   return 0
 }
 
