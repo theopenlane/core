@@ -6,6 +6,7 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -14,6 +15,18 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/pkg/enums"
+)
+
+var (
+	errUnexpectedStatusCode = errors.New("unexpected status code")
+	errEmptyResponseBody    = errors.New("empty response body")
+)
+
+const (
+	defaultTimeoutSeconds = 30
+
+	// randomIDByteLength is the number of bytes used for generating random IDs
+	randomIDByteLength = 4
 )
 
 type windmillRoundTripper struct {
@@ -57,7 +70,7 @@ func NewWindmill(cfg entconfig.Config) (*Client, error) {
 
 	timeout, err := time.ParseDuration(cfg.Windmill.DefaultTimeout)
 	if err != nil {
-		timeout = 30 * time.Second
+		timeout = defaultTimeoutSeconds * time.Second
 	}
 
 	transport := &windmillRoundTripper{
@@ -131,13 +144,13 @@ func (c *Client) CreateFlow(ctx context.Context, req CreateFlowRequest) (*Create
 	}
 
 	if resp.StatusCode != http.StatusCreated && resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status code: %d, URL: %s, response body: %s", resp.StatusCode, url, string(respBody))
+		return nil, fmt.Errorf("%w: %d, URL: %s, response body: %s", errUnexpectedStatusCode, resp.StatusCode, url, string(respBody))
 	}
 
 	// the response is plain text containing the flow path, not json
 	flowPath := string(respBody)
 	if flowPath == "" {
-		return nil, fmt.Errorf("empty response body")
+		return nil, errEmptyResponseBody
 	}
 
 	response := &CreateFlowResponse{
@@ -207,7 +220,7 @@ func (c *Client) UpdateFlow(ctx context.Context, path string, req UpdateFlowRequ
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+		return fmt.Errorf("%w: %d", errUnexpectedStatusCode, resp.StatusCode)
 	}
 
 	return nil
@@ -229,7 +242,7 @@ func (c *Client) GetFlow(ctx context.Context, path string) (*Flow, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+		return nil, fmt.Errorf("%w: %d", errUnexpectedStatusCode, resp.StatusCode)
 	}
 
 	var flow Flow
@@ -318,13 +331,13 @@ func (c *Client) CreateScheduledJob(ctx context.Context, req CreateScheduledJobR
 	}
 
 	if resp.StatusCode != http.StatusCreated && resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status code: %d, URL: %s, response body: %s", resp.StatusCode, url, string(respBody))
+		return nil, fmt.Errorf("%w: %d, URL: %s, response body: %s", errUnexpectedStatusCode, resp.StatusCode, url, string(respBody))
 	}
 
 	// the response is plain text containing the schedule path, not json
 	schedulePath := string(respBody)
 	if schedulePath == "" {
-		return nil, fmt.Errorf("empty response body")
+		return nil, errEmptyResponseBody
 	}
 
 	response := &CreateScheduledJobResponse{
@@ -399,7 +412,9 @@ func createFlowValue(rawContent []any, language enums.JobPlatformType) []any {
 
 // generateRandomID generates a random string ID
 func generateRandomID() string {
-	bytes := make([]byte, 4)
-	rand.Read(bytes)
+	bytes := make([]byte, randomIDByteLength)
+	if _, err := rand.Read(bytes); err != nil {
+		return fmt.Sprintf("%d", time.Now().UnixNano())
+	}
 	return hex.EncodeToString(bytes)
 }

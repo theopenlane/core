@@ -18,6 +18,10 @@ import (
 	"github.com/theopenlane/utils/ulids"
 )
 
+const (
+	defaultTimeout = 30 * time.Second
+)
+
 // HookScheduledJobCreate verifies a scheduled job has
 // a cron and the configuration matches what is expected
 // It also validates the download URL and creates a Windmill flow if configured
@@ -109,7 +113,7 @@ func downloadRawCode(ctx context.Context, downloadURL string) (string, error) {
 	}
 
 	client := &http.Client{
-		Timeout: 30 * time.Second,
+		Timeout: defaultTimeout,
 	}
 
 	req, err := http.NewRequestWithContext(ctx, "GET", downloadURL, nil)

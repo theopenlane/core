@@ -20,6 +20,8 @@ var (
 	ErrUnsupportedJobConfig = errors.New("we do not support this job type")
 	// ErrHTTPSOnlyURL defines an error where a non https url is being used for a ssl check
 	ErrHTTPSOnlyURL = errors.New("you can only check ssl of a domain with https")
+
+	errNilJobConfiguration = errors.New("JobConfiguration: UnmarshalJSON on nil pointer")
 )
 
 // JobConfiguration allows users configure the parameters that will be
@@ -37,7 +39,7 @@ func (job JobConfiguration) MarshalJSON() ([]byte, error) {
 // UnmarshalJSON implements the json.Unmarshaler interface
 func (job *JobConfiguration) UnmarshalJSON(data []byte) error {
 	if job == nil {
-		return errors.New("JobConfiguration: UnmarshalJSON on nil pointer")
+		return errNilJobConfiguration
 	}
 	*job = append((*job)[0:0], data...)
 	return nil
