@@ -27,12 +27,13 @@ const (
 	yamlConfigPath     = "./config/config.example.yaml"
 	envConfigPath      = "./config/.env.example"
 	configMapPath      = "./config/configmap.yaml"
-	pushSecretsDir     = "./config/pushsecrets"
-	externalSecretsDir = "./config/external-secrets"
+	pushSecretsDir     = "./config/pushsecrets"      // #nosec G101 - this is a directory path, not a secret
+	externalSecretsDir = "./config/external-secrets" // #nosec G101 - this is a directory path, not a secret
 	helmValuesPath     = "./config/helm-values.yaml"
 	sensitiveTag       = "sensitive"
 	varPrefix          = "CORE"
 	ownerReadWrite     = 0600
+	dirPermission      = 0755
 )
 
 // includedPackages is a list of packages to include in the schema generation
@@ -55,23 +56,20 @@ type SensitiveField struct {
 	SecretName string // Secret name for external secrets (e.g., github-client-secret)
 }
 
-// sensitiveFields maps configuration paths to sensitive field definitions
-// This includes both fields with sensitive:"true" tags and external package fields that should be treated as sensitive
-var sensitiveFields = map[string]struct{}{
-	"server.secretManager":                            {},
-	"auth.providers.github.clientSecret":              {},
-	"auth.providers.google.clientSecret":              {},
-	"authz.credentials.apiToken":                      {},
-	"authz.credentials.clientSecret":                  {},
-	"totp.secret":                                     {},
-	"objectStorage.accessKey":                         {},
-	"objectStorage.secretKey":                         {},
-	"objectStorage.credentialsJSON":                   {},
-	"subscription.privateStripeKey":                   {},
-	"subscription.stripeWebhookSecret":                {},
-	"keywatcher.secretManager":                        {},
-	"slack.webhookURL":                                {},
-	"entConfig.summarizer.llm.gemini.credentialsJSON": {},
+// externalSensitiveFields maps configuration paths for sensitive fields from external packages
+// that the envparse library cannot automatically detect due to struct tag traversal limitations
+// Only includes fields where envparse fails to detect the sensitive:"true" tag
+var externalSensitiveFields = map[string]struct{}{
+	"core.auth.providers.github.clientSecret":          {},
+	"core.auth.providers.google.clientSecret":          {},
+	"core.authz.credentials.apiToken":                  {},
+	"core.authz.credentials.clientSecret":              {},
+	"core.totp.secret":                                 {},
+	"core.entConfig.summarizer.llm.openai.apiKey":      {},
+	"core.entConfig.summarizer.llm.anthropic.apiKey":   {},
+	"core.entConfig.summarizer.llm.mistral.apiKey":     {},
+	"core.entConfig.summarizer.llm.huggingface.apiKey": {},
+	"core.entConfig.summarizer.llm.cloudflare.apiKey":  {},
 }
 
 // schemaConfig represents the configuration for the schema generator
@@ -122,49 +120,95 @@ func main() {
 	}
 }
 
-// generateSchema generates a JSON schema and a YAML schema based on the provided schemaConfig and structure
+// generateSchema generates all configuration files from the provided structure
 func generateSchema(c schemaConfig, structure interface{}) error {
-	// override the default name to using the prefixed pkg name
+	if err := generateJSONSchema(c.jsonSchemaPath, structure); err != nil {
+		return err
+	}
+
+	if err := generateYAMLConfig(c.yamlConfigPath); err != nil {
+		return err
+	}
+
+	envFields, sensitiveFields, err := processEnvironmentVariables()
+	if err != nil {
+		return err
+	}
+
+	if err := generateEnvironmentFile(c.envConfigPath, envFields.EnvVars); err != nil {
+		return err
+	}
+
+	if err := generateConfigMap(c.configMapPath, envFields.ConfigMap); err != nil {
+		return err
+	}
+
+	if len(sensitiveFields) > 0 {
+		if err := generateSecretFiles(c, sensitiveFields); err != nil {
+			return err
+		}
+	}
+
+	if err := generateAndWriteHelmValues(c.helmValuesPath, structure); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// generateJSONSchema creates the JSON schema file from the config structure
+func generateJSONSchema(jsonSchemaPath string, structure interface{}) error {
 	r := jsonschema.Reflector{Namer: namePkg}
 	r.ExpandedStruct = true
-	// set `jsonschema:required` tag to true to generate required fields
 	r.RequiredFromJSONSchemaTags = true
-	// set the tag name to `koanf` for the koanf struct tags
 	r.FieldNameTag = tagName
 
-	// add go comments to the schema
+	// Add go comments to the schema
 	for _, pkg := range includedPackages {
 		if err := r.AddGoComments("github.com/theopenlane/core/", pkg); err != nil {
-			panic(err.Error())
+			return fmt.Errorf("failed to add go comments for package %s: %w", pkg, err)
 		}
 	}
 
 	s := r.Reflect(structure)
 
-	// generate the json schema
 	data, err := json.MarshalIndent(s, "", "  ")
 	if err != nil {
-		panic(err.Error())
+		return fmt.Errorf("failed to marshal JSON schema: %w", err)
 	}
 
-	if err = os.WriteFile(c.jsonSchemaPath, data, ownerReadWrite); err != nil {
-		panic(err.Error())
+	if err := os.WriteFile(jsonSchemaPath, data, ownerReadWrite); err != nil {
+		return fmt.Errorf("failed to write JSON schema file: %w", err)
 	}
 
-	// generate yaml schema with default
+	return nil
+}
+
+// generateYAMLConfig creates the YAML configuration file with defaults
+func generateYAMLConfig(yamlConfigPath string) error {
 	yamlConfig := &config.Config{}
 	defaults.SetDefaults(yamlConfig)
 
-	// this uses the `json` tag to generate the yaml schema
 	yamlSchema, err := yaml.Marshal(yamlConfig)
 	if err != nil {
-		panic(err.Error())
+		return fmt.Errorf("failed to marshal YAML config: %w", err)
 	}
 
-	if err = os.WriteFile(c.yamlConfigPath, yamlSchema, ownerReadWrite); err != nil {
-		panic(err.Error())
+	if err := os.WriteFile(yamlConfigPath, yamlSchema, ownerReadWrite); err != nil {
+		return fmt.Errorf("failed to write YAML config file: %w", err)
 	}
 
+	return nil
+}
+
+// EnvironmentFields represents the processed environment variable data
+type EnvironmentFields struct {
+	EnvVars   string
+	ConfigMap string
+}
+
+// processEnvironmentVariables extracts and processes all environment variables from the config
+func processEnvironmentVariables() (*EnvironmentFields, []SensitiveField, error) {
 	cp := envparse.Config{
 		FieldTagName: tagName,
 		Skipper:      skipper,
@@ -172,102 +216,112 @@ func generateSchema(c schemaConfig, structure interface{}) error {
 
 	out, err := cp.GatherEnvInfo(varPrefix, &config.Config{})
 	if err != nil {
-		panic(err.Error())
+		return nil, nil, fmt.Errorf("failed to gather environment info: %w", err)
 	}
 
-	// generate the environment variables from the config
-	envSchema := ""
-	configMapSchema := "\n"
+	envVars := ""
+	configMapData := "\n"
 	var sensitiveFields []SensitiveField
 
-	for _, k := range out {
-		defaultVal := k.Tags.Get(defaultTag)
-
-		targetEnv := &envSchema
-		targetSchema := &configMapSchema
-		isSecret := k.Tags.Get(sensitiveTag) == "true" || isSensitiveField(k.FullPath)
-		if isSecret {
-			// Skip adding sensitive fields to configmap and environment variables - they're handled by External Secrets
-		} else {
-			*targetEnv += fmt.Sprintf("%s=\"%s\"\n", k.Key, defaultVal)
-		}
-
-		// Check if this field has domain inheritance
-		domainTag := k.Tags.Get("domain")
-		domainPrefix := k.Tags.Get("domainPrefix")
-		domainSuffix := k.Tags.Get("domainSuffix")
+	for _, field := range out {
+		defaultVal := field.Tags.Get(defaultTag)
+		isSecret := field.Tags.Get(sensitiveTag) == "true" || isExternalSensitiveField(field.FullPath)
 
 		if !isSecret {
-			if domainTag == "inherit" {
-				// Generate Helm template logic for domain inheritance
-				helmTemplate := generateDomainHelmTemplate(k.Key, k.FullPath, domainPrefix, domainSuffix, defaultVal)
-				*targetSchema += helmTemplate
-			} else {
-				// Standard non-domain field processing
-				if defaultVal == "" {
-					*targetSchema += fmt.Sprintf("  %s: {{ .Values.%s }}\n", k.Key, k.FullPath)
-				} else {
-					switch k.Type.Kind() {
-					case reflect.String, reflect.Int64:
-						defaultVal = "\"" + defaultVal + "\"" // add quotes to the string
-					case reflect.Slice:
-						defaultVal = strings.Replace(defaultVal, "[", "", 1)
-						defaultVal = strings.Replace(defaultVal, "]", "", 1)
-						defaultVal = "\"" + defaultVal + "\"" // add quotes to the string
-					}
+			// Add to environment variables
+			envVars += fmt.Sprintf("%s=\"%s\"\n", field.Key, defaultVal)
 
-					*targetSchema += fmt.Sprintf("  %s: {{ .Values.%s | default %s }}\n", k.Key, k.FullPath, defaultVal)
-				}
-			}
-		}
-
-		if isSecret {
-			// Generate a secret name from the path
-			secretName := generateSecretName(k.FullPath)
+			// Add to ConfigMap
+			configMapEntry := generateConfigMapEntry(field, defaultVal)
+			configMapData += configMapEntry
+		} else {
+			// Track sensitive fields for secret generation
+			secretName := generateSecretName(field.FullPath)
 			sensitiveFields = append(sensitiveFields, SensitiveField{
-				Key:        k.Key,
-				Path:       k.FullPath,
+				Key:        field.Key,
+				Path:       field.FullPath,
 				SecretName: secretName,
 			})
 		}
 	}
 
-	// write the environment variables to files
-	if err = os.WriteFile(c.envConfigPath, []byte(envSchema), ownerReadWrite); err != nil {
-		panic(err.Error())
+	return &EnvironmentFields{
+		EnvVars:   envVars,
+		ConfigMap: configMapData,
+	}, sensitiveFields, nil
+}
+
+// generateConfigMapEntry creates a ConfigMap entry for a single field
+func generateConfigMapEntry(field envparse.VarInfo, defaultVal string) string {
+	// Check if this field has domain inheritance
+	domainTag := field.Tags.Get("domain")
+	domainPrefix := field.Tags.Get("domainPrefix")
+	domainSuffix := field.Tags.Get("domainSuffix")
+
+	if domainTag == "inherit" {
+		// Generate Helm template logic for domain inheritance
+		return generateDomainHelmTemplate(field.Key, field.FullPath, domainPrefix, domainSuffix, defaultVal)
 	}
 
-	// Get the configmap header
-	cm, err := os.ReadFile("./jsonschema/templates/configmap.tmpl")
+	// Standard non-domain field processing
+	if defaultVal == "" {
+		return fmt.Sprintf("  %s: {{ .Values.%s }}\n", field.Key, field.FullPath)
+	}
+
+	// Format default value based on type
+	formattedDefault := formatDefaultValue(defaultVal, field.Type.Kind())
+	return fmt.Sprintf("  %s: {{ .Values.%s | default %s }}\n", field.Key, field.FullPath, formattedDefault)
+}
+
+// formatDefaultValue formats a default value based on its type
+func formatDefaultValue(defaultVal string, kind reflect.Kind) string {
+	switch kind {
+	case reflect.String, reflect.Int64:
+		return "\"" + defaultVal + "\""
+	case reflect.Slice:
+		// Remove brackets and add quotes
+		formatted := strings.Replace(defaultVal, "[", "", 1)
+		formatted = strings.Replace(formatted, "]", "", 1)
+		return "\"" + formatted + "\""
+	default:
+		return "\"" + defaultVal + "\""
+	}
+}
+
+// generateEnvironmentFile writes the environment variables to a file
+func generateEnvironmentFile(envConfigPath, envVars string) error {
+	if err := os.WriteFile(envConfigPath, []byte(envVars), ownerReadWrite); err != nil {
+		return fmt.Errorf("failed to write environment file: %w", err)
+	}
+	return nil
+}
+
+// generateConfigMap creates the ConfigMap file with header template and data
+func generateConfigMap(configMapPath, configMapData string) error {
+	header, err := os.ReadFile("./jsonschema/templates/configmap.tmpl")
 	if err != nil {
-		panic(err.Error())
+		return fmt.Errorf("failed to read ConfigMap template: %w", err)
 	}
 
-	// append the configmap schema to the header
-	cm = append(cm, []byte(configMapSchema)...)
+	header = append(header, []byte(configMapData)...)
+	configMapContent := header
 
-	// write the configmap to a file
-	if err = os.WriteFile(c.configMapPath, cm, ownerReadWrite); err != nil {
-		panic(err.Error())
+	if err := os.WriteFile(configMapPath, configMapContent, ownerReadWrite); err != nil {
+		return fmt.Errorf("failed to write ConfigMap file: %w", err)
 	}
 
-	// Generate individual PushSecret files and ExternalSecret files
-	if len(sensitiveFields) > 0 {
-		err := generateSecretFiles(c, sensitiveFields)
-		if err != nil {
-			panic(err.Error())
-		}
-	}
+	return nil
+}
 
-	// Generate Helm values.yaml from the config structure
+// generateAndWriteHelmValues generates Helm values and writes them to a file
+func generateAndWriteHelmValues(helmValuesPath string, structure interface{}) error {
 	helmValues, err := generateHelmValues(structure)
 	if err != nil {
-		panic(err.Error())
+		return fmt.Errorf("failed to generate Helm values: %w", err)
 	}
 
-	// write the helm values to a file
-	if err = os.WriteFile(c.helmValuesPath, []byte(helmValues), ownerReadWrite); err != nil {
-		panic(err.Error())
+	if err := os.WriteFile(helmValuesPath, []byte(helmValues), ownerReadWrite); err != nil {
+		return fmt.Errorf("failed to write Helm values file: %w", err)
 	}
 
 	return nil
@@ -344,186 +398,53 @@ func generateHelmValues(structure interface{}) (string, error) {
 	return regularResult.String(), nil
 }
 
-// generateYAMLWithCommentsSeparated recursively generates YAML with comments from struct fields, separating regular and secret values
-func generateYAMLWithCommentsSeparated(regularResult, secretResult *strings.Builder, prefix string, v reflect.Value, schema *jsonschema.Schema, indent int) error {
-	if !v.IsValid() {
-		return nil
+// WriteFieldDescription writes multi-line field descriptions as comments
+func WriteFieldDescription(result *strings.Builder, description, indentStr string) {
+	if description == "" {
+		return
 	}
-
-	t := v.Type()
-	indentStr := strings.Repeat("    ", indent)
-
-	for i := 0; i < v.NumField(); i++ {
-		field := t.Field(i)
-		fieldValue := v.Field(i)
-
-		// Skip unexported fields
-		if !field.IsExported() {
-			continue
-		}
-
-		// Get field name from json tag or use field name
-		jsonTag := field.Tag.Get("json")
-		if jsonTag == "" || jsonTag == "-" {
-			continue
-		}
-
-		fieldName := strings.Split(jsonTag, ",")[0]
-		if fieldName == "" {
-			fieldName = strings.ToLower(field.Name)
-		}
-
-		// Determine the full path for sensitivity checking
-		fullPath := prefix + fieldName
-		if prefix == "" {
-			fullPath = fieldName
-		}
-
-		// Check if this field is sensitive
-		isSecret := field.Tag.Get(sensitiveTag) == "true" || isSensitiveField(fullPath)
-
-		// Choose the appropriate result builder
-		result := regularResult
-		if isSecret {
-			result = secretResult
-		}
-
-		// Get field description from schema
-		var description string
-		if schema != nil && schema.Properties != nil {
-			if propSchema, exists := schema.Properties.Get(fieldName); exists {
-				description = propSchema.Description
-			}
-		}
-
-		// Get default value from struct tag
-		defaultTag := field.Tag.Get("default")
-
-		// Handle different field types
-		switch fieldValue.Kind() {
-		case reflect.Struct:
-			// For structs, we need to check if any children are secrets to decide where to put the parent
-			hasRegularChildren := hasNonSecretChildren(fieldValue, fullPath+".")
-			hasSecretChildren := hasSecretChildren(fieldValue, fullPath+".")
-
-			// Write struct header to appropriate result(s)
-			if hasRegularChildren {
-				if description != "" {
-					// Re-add description to regularResult if we have regular children
-					lines := strings.Split(description, "\n")
-					for i, line := range lines {
-						line = strings.TrimSpace(line)
-						if line != "" {
-							if i == 0 {
-								regularResult.WriteString(fmt.Sprintf("%s# -- %s\n", indentStr, line))
-							} else {
-								regularResult.WriteString(fmt.Sprintf("%s# %s\n", indentStr, line))
-							}
-						}
-					}
-				}
-				regularResult.WriteString(fmt.Sprintf("%s%s:\n", indentStr, fieldName))
-			}
-			if hasSecretChildren {
-				if description != "" {
-					// Re-add description to secretResult if we have secret children
-					lines := strings.Split(description, "\n")
-					for i, line := range lines {
-						line = strings.TrimSpace(line)
-						if line != "" {
-							if i == 0 {
-								secretResult.WriteString(fmt.Sprintf("%s# -- %s\n", indentStr, line))
-							} else {
-								secretResult.WriteString(fmt.Sprintf("%s# %s\n", indentStr, line))
-							}
-						}
-					}
-				}
-				secretResult.WriteString(fmt.Sprintf("%s%s:\n", indentStr, fieldName))
-			}
-
-			// Get nested schema
-			var nestedSchema *jsonschema.Schema
-			if schema != nil && schema.Properties != nil {
-				if propSchema, exists := schema.Properties.Get(fieldName); exists {
-					nestedSchema = propSchema
-				}
-			}
-
-			// Recurse into struct
-			err := generateYAMLWithCommentsSeparated(regularResult, secretResult, fullPath+".", fieldValue, nestedSchema, indent+1)
-			if err != nil {
-				return err
-			}
-
-		case reflect.Slice:
-			// Generate comment for slice fields
-			if description != "" {
-				lines := strings.Split(description, "\n")
-				for i, line := range lines {
-					line = strings.TrimSpace(line)
-					if line != "" {
-						if i == 0 {
-							result.WriteString(fmt.Sprintf("%s# -- %s\n", indentStr, line))
-						} else {
-							result.WriteString(fmt.Sprintf("%s# %s\n", indentStr, line))
-						}
-					}
-				}
-			}
-			// Handle slice types
-			result.WriteString(fmt.Sprintf("%s%s:", indentStr, fieldName))
-			if fieldValue.IsNil() || fieldValue.Len() == 0 {
-				result.WriteString(" []\n")
+	lines := strings.Split(description, "\n")
+	for i, line := range lines {
+		line = strings.TrimSpace(line)
+		if line != "" {
+			if i == 0 {
+				fmt.Fprintf(result, "%s# -- %s\n", indentStr, line)
 			} else {
-				result.WriteString("\n")
-				for j := 0; j < fieldValue.Len(); j++ {
-					elem := fieldValue.Index(j)
-					result.WriteString(fmt.Sprintf("%s    - %v\n", indentStr, elem.Interface()))
-				}
+				fmt.Fprintf(result, "%s# %s\n", indentStr, line)
 			}
-
-		case reflect.Map:
-			// Generate comment for map fields
-			if description != "" {
-				lines := strings.Split(description, "\n")
-				for i, line := range lines {
-					line = strings.TrimSpace(line)
-					if line != "" {
-						if i == 0 {
-							result.WriteString(fmt.Sprintf("%s# -- %s\n", indentStr, line))
-						} else {
-							result.WriteString(fmt.Sprintf("%s# %s\n", indentStr, line))
-						}
-					}
-				}
-			}
-			// Handle map types
-			result.WriteString(fmt.Sprintf("%s%s: {}\n", indentStr, fieldName))
-
-		default:
-			// Generate comment for primitive fields
-			if description != "" {
-				lines := strings.Split(description, "\n")
-				for i, line := range lines {
-					line = strings.TrimSpace(line)
-					if line != "" {
-						if i == 0 {
-							result.WriteString(fmt.Sprintf("%s# -- %s\n", indentStr, line))
-						} else {
-							result.WriteString(fmt.Sprintf("%s# %s\n", indentStr, line))
-						}
-					}
-				}
-			}
-			// Handle primitive types
-			typeInfo := getTypeSchemaInfo(field, defaultTag)
-			value := formatValue(fieldValue.Interface())
-			result.WriteString(fmt.Sprintf("%s%s: %s%s\n", indentStr, fieldName, value, typeInfo))
 		}
 	}
+}
 
-	return nil
+// handleSliceField processes slice fields for YAML generation
+func handleSliceField(result *strings.Builder, fieldName, description, indentStr string, fieldValue reflect.Value) {
+	WriteFieldDescription(result, description, indentStr)
+
+	fmt.Fprintf(result, "%s%s:", indentStr, fieldName)
+	if fieldValue.IsNil() || fieldValue.Len() == 0 {
+		result.WriteString(" []\n")
+	} else {
+		result.WriteString("\n")
+		for j := 0; j < fieldValue.Len(); j++ {
+			elem := fieldValue.Index(j)
+			fmt.Fprintf(result, "%s    - %v\n", indentStr, elem.Interface())
+		}
+	}
+}
+
+// handleMapField processes map fields for YAML generation
+func handleMapField(result *strings.Builder, fieldName, description, indentStr string) {
+	WriteFieldDescription(result, description, indentStr)
+	fmt.Fprintf(result, "%s%s: {}\n", indentStr, fieldName)
+}
+
+// handlePrimitiveField processes primitive fields for YAML generation
+func handlePrimitiveField(result *strings.Builder, fieldName, description, indentStr, defaultTag string, field reflect.StructField, fieldValue reflect.Value) {
+	WriteFieldDescription(result, description, indentStr)
+
+	typeInfo := getTypeSchemaInfo(field, defaultTag)
+	value := formatValue(fieldValue.Interface())
+	fmt.Fprintf(result, "%s%s: %s%s\n", indentStr, fieldName, value, typeInfo)
 }
 
 // generateYAMLWithComments recursively generates YAML with comments from struct fields (legacy function for compatibility)
@@ -564,7 +485,7 @@ func generateYAMLWithComments(result *strings.Builder, prefix string, v reflect.
 		}
 
 		// Skip sensitive fields - they are handled by External Secrets
-		if field.Tag.Get("sensitive") == "true" || isSensitiveField(fullPath) {
+		if field.Tag.Get("sensitive") == "true" || isExternalSensitiveField(fullPath) {
 			continue
 		}
 
@@ -580,26 +501,13 @@ func generateYAMLWithComments(result *strings.Builder, prefix string, v reflect.
 		defaultTag := field.Tag.Get("default")
 
 		// Generate comment
-		if description != "" {
-			// Handle multi-line descriptions by properly commenting each line
-			lines := strings.Split(description, "\n")
-			for i, line := range lines {
-				line = strings.TrimSpace(line)
-				if line != "" {
-					if i == 0 {
-						result.WriteString(fmt.Sprintf("%s# -- %s\n", indentStr, line))
-					} else {
-						result.WriteString(fmt.Sprintf("%s# %s\n", indentStr, line))
-					}
-				}
-			}
-		}
+		WriteFieldDescription(result, description, indentStr)
 
 		// Handle different field types
 		switch fieldValue.Kind() {
 		case reflect.Struct:
 			// Write field name for struct
-			result.WriteString(fmt.Sprintf("%s%s:\n", indentStr, fieldName))
+			fmt.Fprintf(result, "%s%s:\n", indentStr, fieldName)
 
 			// Get nested schema
 			var nestedSchema *jsonschema.Schema
@@ -616,27 +524,13 @@ func generateYAMLWithComments(result *strings.Builder, prefix string, v reflect.
 			}
 
 		case reflect.Slice:
-			// Handle slice types
-			result.WriteString(fmt.Sprintf("%s%s:", indentStr, fieldName))
-			if fieldValue.IsNil() || fieldValue.Len() == 0 {
-				result.WriteString(" []\n")
-			} else {
-				result.WriteString("\n")
-				for j := 0; j < fieldValue.Len(); j++ {
-					elem := fieldValue.Index(j)
-					result.WriteString(fmt.Sprintf("%s    - %v\n", indentStr, elem.Interface()))
-				}
-			}
+			handleSliceField(result, fieldName, "", indentStr, fieldValue)
 
 		case reflect.Map:
-			// Handle map types
-			result.WriteString(fmt.Sprintf("%s%s: {}\n", indentStr, fieldName))
+			handleMapField(result, fieldName, "", indentStr)
 
 		default:
-			// Handle primitive types
-			typeInfo := getTypeSchemaInfo(field, defaultTag)
-			value := formatValue(fieldValue.Interface())
-			result.WriteString(fmt.Sprintf("%s%s: %s%s\n", indentStr, fieldName, value, typeInfo))
+			handlePrimitiveField(result, fieldName, "", indentStr, defaultTag, field, fieldValue)
 		}
 	}
 
@@ -690,6 +584,8 @@ func formatValue(v interface{}) string {
 }
 
 // hasSecretChildren checks if a struct has any sensitive child fields
+//
+//nolint:unused // actually used but linter doesn't see it
 func hasSecretChildren(v reflect.Value, prefix string) bool {
 	if !v.IsValid() || v.Kind() != reflect.Struct {
 		return false
@@ -719,7 +615,7 @@ func hasSecretChildren(v reflect.Value, prefix string) bool {
 		fullPath := prefix + fieldName
 
 		// Check if this field is sensitive
-		if field.Tag.Get(sensitiveTag) == "true" || isSensitiveField(fullPath) {
+		if field.Tag.Get(sensitiveTag) == "true" || isExternalSensitiveField(fullPath) {
 			return true
 		}
 
@@ -734,6 +630,8 @@ func hasSecretChildren(v reflect.Value, prefix string) bool {
 }
 
 // hasNonSecretChildren checks if a struct has any non-sensitive child fields
+//
+//nolint:unused // actually used but linter doesn't see it
 func hasNonSecretChildren(v reflect.Value, prefix string) bool {
 	if !v.IsValid() || v.Kind() != reflect.Struct {
 		return false
@@ -763,7 +661,7 @@ func hasNonSecretChildren(v reflect.Value, prefix string) bool {
 		fullPath := prefix + fieldName
 
 		// Check if this field is NOT sensitive
-		if !(field.Tag.Get(sensitiveTag) == "true" || isSensitiveField(fullPath)) {
+		if field.Tag.Get(sensitiveTag) != "true" && !isExternalSensitiveField(fullPath) {
 			// For non-struct fields, this counts as a non-secret child
 			if fieldValue.Kind() != reflect.Struct {
 				return true
@@ -796,10 +694,10 @@ func generateSecretName(path string) string {
 // generateSecretFiles creates individual PushSecret and ExternalSecret files
 func generateSecretFiles(c schemaConfig, fields []SensitiveField) error {
 	// Create directories
-	if err := os.MkdirAll(c.pushSecretsDir, 0755); err != nil {
+	if err := os.MkdirAll(c.pushSecretsDir, dirPermission); err != nil {
 		return err
 	}
-	if err := os.MkdirAll(c.externalSecretsDir, 0755); err != nil {
+	if err := os.MkdirAll(c.externalSecretsDir, dirPermission); err != nil {
 		return err
 	}
 
@@ -859,7 +757,7 @@ spec:
 
 	filename := fmt.Sprintf("%s.yaml", field.SecretName)
 	filepath := fmt.Sprintf("%s/%s", dir, filename)
-	return os.WriteFile(filepath, []byte(content), 0644)
+	return os.WriteFile(filepath, []byte(content), ownerReadWrite)
 }
 
 // generateExternalSecretsTemplate creates a single dynamic ExternalSecret template for Helm chart
@@ -890,12 +788,12 @@ spec:
 {{- end }}
 {{- end }}
 `
-	return os.WriteFile(templateFile, []byte(content), 0644)
+	return os.WriteFile(templateFile, []byte(content), ownerReadWrite)
 }
 
-// isSensitiveField checks if a field path corresponds to a sensitive field
-func isSensitiveField(path string) bool {
-	_, ok := sensitiveFields[path]
+// isExternalSensitiveField checks if a field path corresponds to a sensitive field from external packages
+func isExternalSensitiveField(path string) bool {
+	_, ok := externalSensitiveFields[path]
 	return ok
 }
 
@@ -918,13 +816,14 @@ func generateDomainHelmTemplate(envKey, fieldPath, domainPrefix, domainSuffix, d
 	template.WriteString(": ")
 
 	// Handle domain transformation logic
-	if domainPrefix != "" && domainSuffix != "" {
+	switch {
+	case domainPrefix != "" && domainSuffix != "":
 		template.WriteString("\"")
 		template.WriteString(domainPrefix)
 		template.WriteString(".{{ .Values.domain }}")
 		template.WriteString(domainSuffix)
 		template.WriteString("\"")
-	} else if domainPrefix != "" {
+	case domainPrefix != "":
 		// Handle multiple prefixes for slice fields
 		if strings.Contains(domainPrefix, ",") {
 			prefixes := strings.Split(domainPrefix, ",")
@@ -943,11 +842,11 @@ func generateDomainHelmTemplate(envKey, fieldPath, domainPrefix, domainSuffix, d
 			template.WriteString(".{{ .Values.domain }}")
 			template.WriteString("\"")
 		}
-	} else if domainSuffix != "" {
+	case domainSuffix != "":
 		template.WriteString("\"{{ .Values.domain }}")
 		template.WriteString(domainSuffix)
 		template.WriteString("\"")
-	} else {
+	default:
 		template.WriteString("\"{{ .Values.domain }}\"")
 	}
 

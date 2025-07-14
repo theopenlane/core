@@ -206,12 +206,14 @@ auth:
         # -- Github contains the configuration settings for the Github Oauth Provider
         github:
             clientId: ""  # @schema type:string
+            clientSecret: ""  # @schema type:string
             clientEndpoint: "http://localhost:17608"  # @schema type:string; default:http://localhost:17608
             scopes: []
             redirectUrl: "/v1/github/callback"  # @schema type:string; default:/v1/github/callback
         # -- Google contains the configuration settings for the Google Oauth Provider
         google:
             clientId: ""  # @schema type:string
+            clientSecret: ""  # @schema type:string
             clientEndpoint: "http://localhost:17608"  # @schema type:string; default:http://localhost:17608
             scopes: []
             redirectUrl: "/v1/google/callback"  # @schema type:string; default:/v1/google/callback
@@ -244,8 +246,12 @@ authz:
     modelFile: "fga/model/model.fga"  # @schema type:string; default:fga/model/model.fga
     # -- credentials for the openFGA client
     credentials:
+        # -- api token for the openFGA client
+        apiToken: ""  # @schema type:string
         # -- client id for the openFGA client
         clientId: ""  # @schema type:string
+        # -- client secret for the openFGA client
+        clientSecret: ""  # @schema type:string
         # -- audience for the openFGA client
         audience: ""  # @schema type:string
         # -- issuer for the openFGA client
@@ -349,6 +355,7 @@ totp:
     codeLength: 6  # @schema type:integer; default:6
     issuer: ""  # @schema type:string
     redis: true  # @schema type:boolean; default:true
+    secret: ""  # @schema type:string
     recoveryCodeCount: 16  # @schema type:integer; default:16
     recoveryCodeLength: 8  # @schema type:integer; default:8
 # -- Ratelimit contains the configuration for the rate limiter

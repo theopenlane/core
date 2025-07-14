@@ -63,7 +63,7 @@ type GenericLLMConfig struct {
 	Model string `json:"model" koanf:"model"`
 
 	// APIKey contains the authentication key for the service
-	APIKey string `json:"apiKey" koanf:"apiKey"`
+	APIKey string `json:"apiKey" koanf:"apiKey" sensitive:"true"`
 }
 
 // GeminiConfig contains Google Gemini specific configuration

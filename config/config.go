@@ -217,6 +217,8 @@ func (c *Config) applyDomainOverrides() {
 	applyDomain(reflect.ValueOf(c).Elem(), c.Domain)
 }
 
+// applyDomain recursively applies the domain to all fields that are tagged with `domain:"inherit"`
+// It also handles domain prefixes and suffixes if specified in the struct tags
 func applyDomain(v reflect.Value, domain string) {
 	if !v.IsValid() {
 		return
@@ -224,14 +226,17 @@ func applyDomain(v reflect.Value, domain string) {
 
 	switch v.Kind() {
 	case reflect.Ptr:
+		// If it's a pointer, dereference and recurse
 		if !v.IsNil() {
 			applyDomain(v.Elem(), domain)
 		}
 	case reflect.Struct:
+		// Iterate over all struct fields
 		for i := 0; i < v.NumField(); i++ {
 			f := v.Field(i)
 			sf := v.Type().Field(i)
 
+			// Skip unexported fields
 			if sf.PkgPath != "" {
 				continue
 			}
@@ -242,12 +247,13 @@ func applyDomain(v reflect.Value, domain string) {
 
 				// Apply domain prefix if specified
 				if prefix := sf.Tag.Get("domainPrefix"); prefix != "" {
-					// Handle multiple prefixes separated by commas (for slices)
+					// Handle multiple prefixes for slices of strings
 					if f.Kind() == reflect.Slice && f.Type().Elem().Kind() == reflect.String {
 						prefixes := strings.Split(prefix, ",")
 
 						var values []reflect.Value
 
+						// Build slice values with prefix + domain
 						for _, p := range prefixes {
 							values = append(values, reflect.ValueOf(strings.TrimSpace(p)+"."+domain))
 						}
@@ -261,29 +267,24 @@ func applyDomain(v reflect.Value, domain string) {
 						f.Set(slice)
 
 						continue
-					} else {
-						domainValue = prefix + "." + domain
 					}
+					// For string fields, just prepend prefix
+					domainValue = prefix + "." + domain
 				}
 
 				// Apply domain suffix if specified
 				if suffix := sf.Tag.Get("domainSuffix"); suffix != "" {
-					domainValue = domainValue + suffix
+					domainValue += suffix
 				}
 
+				// Set the string field value
 				if f.Kind() == reflect.String {
 					f.SetString(domainValue)
 				}
 
 				continue
 			}
-
-			// Legacy support for Domain field name
-			if sf.Name == "Domain" && f.Kind() == reflect.String && f.CanSet() && f.String() == "" {
-				f.SetString(domain)
-				continue
-			}
-
+			// Recurse into nested structs and pointers
 			applyDomain(f, domain)
 		}
 	}
