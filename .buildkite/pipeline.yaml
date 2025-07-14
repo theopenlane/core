@@ -80,7 +80,7 @@ steps:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["/bin/sh", "-c", "chmod +x .buildkite/draft-pr-automation.sh && ./.buildkite/draft-pr-automation.sh"]
+              command: ["/bin/sh", "-c", "chmod +x .buildkite/draft-pr-automation.sh && .buildkite/draft-pr-automation.sh"]
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE
