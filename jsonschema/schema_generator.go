@@ -764,8 +764,8 @@ spec:
 func generateExternalSecretsTemplate(dir string) error {
 	templateFile := fmt.Sprintf("%s/external-secrets.yaml", dir)
 
-	content := `{{- if .Values.externalSecrets.enabled }}
-{{- range $secretName, $config := .Values.externalSecrets.secrets }}
+	content := `{{- if and .Values.externalSecrets .Values.externalSecrets.enabled }}
+{{- range $secretName, $config := .Values.externalSecrets.secrets | default dict }}
 {{- if $config.enabled }}
 ---
 apiVersion: external-secrets.io/v1
