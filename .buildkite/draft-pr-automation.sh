@@ -170,14 +170,13 @@ if git push origin "$draft_branch"; then
 This PR was automatically generated to provide visibility into configuration changes before they're finalized."
 
   echo "Creating draft pull request..."
-  if pr_url=$(gh pr create \
+  if gh pr create \
     --repo "$repo" \
     --head "$draft_branch" \
     --title "🚧 DRAFT: Config changes from core PR #${core_pr_number}" \
     --body "$pr_body" \
-    --draft \
-    --json url \
-    --jq '.url'); then
+    --draft; then
+    pr_url=$(gh pr view "$draft_branch" --repo "$repo" --json url --jq '.url' 2>/dev/null || echo "https://github.com/$repo/pull/new/$draft_branch")
     echo "✅ Draft pull request created successfully: $pr_url"
 
     # Store the draft PR URL for linking
