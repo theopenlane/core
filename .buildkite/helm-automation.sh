@@ -121,19 +121,22 @@ function merge_helm_values() {
     # The 'core' section from our generated file will be merged/replaced
     # All other sections in the target will be preserved
 
-    echo "  📋 Extracting core configuration from generated values..."
-    yq e '.core' "$source" > /tmp/core-values.yaml
-
     echo "  🔀 Merging with existing chart values..."
-    # Start with existing values, then merge in new core section
-    yq e '.core = load("/tmp/core-values.yaml")' "$target" > "$temp_merged"
+    # Copy target file as base
+    cp "$target" "$temp_merged"
+
+    # Extract core section from source and use it to replace target core section
+    echo "  📋 Replacing core section..."
+    core_section=$(yq e '.core' "$source")
+    echo "$core_section" > /tmp/core-section.yaml
+    yq e -i '.core = load("/tmp/core-section.yaml")' "$temp_merged"
 
     # Also merge any externalSecrets configuration if it exists in generated file
     if yq e '.externalSecrets' "$source" | grep -v "null" > /dev/null 2>&1; then
       echo "  🔐 Merging external secrets configuration..."
-      yq e '.externalSecrets' "$source" > /tmp/external-secrets.yaml
-      yq e '.externalSecrets = load("/tmp/external-secrets.yaml")' "$temp_merged" > "${temp_merged}.tmp"
-      mv "${temp_merged}.tmp" "$temp_merged"
+      external_secrets_section=$(yq e '.externalSecrets' "$source")
+      echo "$external_secrets_section" > /tmp/external-secrets-section.yaml
+      yq e -i '.externalSecrets = load("/tmp/external-secrets-section.yaml")' "$temp_merged"
     fi
 
   else
