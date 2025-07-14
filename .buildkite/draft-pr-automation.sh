@@ -116,8 +116,11 @@ echo "📝 Configuration changes detected, creating draft PR"
 echo -e "Summary:$change_summary"
 
 # Configure git
-git config user.email "bender@theopenlane.io"
-git config user.name "theopenlane-bender"
+git config --local user.email "bender@theopenlane.io"
+git config --local user.name "theopenlane-bender"
+
+# Configure git to use GitHub token for authentication
+git config --local url."https://x-access-token:${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
 
 # Create comprehensive commit message
 commit_message="draft: preview config changes from core PR #${core_pr_number}

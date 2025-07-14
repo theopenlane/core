@@ -281,8 +281,11 @@ echo "📝 Changes detected, proceeding with PR creation"
 echo -e "Summary:$change_summary"
 
 # Configure git
-git config user.email "bender@theopenlane.io"
-git config user.name "theopenlane-bender"
+git config --local user.email "bender@theopenlane.io"
+git config --local user.name "theopenlane-bender"
+
+# Configure git to use GitHub token for authentication
+git config --local url."https://x-access-token:${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
 
 # Increment chart version and generate changelog
 chart_file="$chart_dir/Chart.yaml"
