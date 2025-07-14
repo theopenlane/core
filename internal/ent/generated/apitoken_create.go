@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // APITokenCreate is the builder for creating a APIToken entity.
@@ -249,6 +250,12 @@ func (atc *APITokenCreate) SetNillableRevokedAt(t *time.Time) *APITokenCreate {
 	return atc
 }
 
+// SetSSOAuthorizations sets the "sso_authorizations" field.
+func (atc *APITokenCreate) SetSSOAuthorizations(mam models.SSOAuthorizationMap) *APITokenCreate {
+	atc.mutation.SetSSOAuthorizations(mam)
+	return atc
+}
+
 // SetID sets the "id" field.
 func (atc *APITokenCreate) SetID(s string) *APITokenCreate {
 	atc.mutation.SetID(s)
@@ -465,6 +472,10 @@ func (atc *APITokenCreate) createSpec() (*APIToken, *sqlgraph.CreateSpec) {
 	if value, ok := atc.mutation.RevokedAt(); ok {
 		_spec.SetField(apitoken.FieldRevokedAt, field.TypeTime, value)
 		_node.RevokedAt = &value
+	}
+	if value, ok := atc.mutation.SSOAuthorizations(); ok {
+		_spec.SetField(apitoken.FieldSSOAuthorizations, field.TypeJSON, value)
+		_node.SSOAuthorizations = value
 	}
 	if nodes := atc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

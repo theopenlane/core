@@ -234,6 +234,10 @@
         "secretManager": {
           "type": "string",
           "description": "SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key"
+        },
+        "defaultTrustCenterDomain": {
+          "type": "string",
+          "description": "DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set"
         }
       },
       "additionalProperties": false,
@@ -333,6 +337,14 @@
         "cookieHttpOnly": {
           "type": "boolean",
           "description": "CookieHTTPOnly indicates whether the CSRF cookie is HTTP only."
+        },
+        "cookieDomain": {
+          "type": "string",
+          "description": "CookieDomain specifies the domain for the CSRF cookie, default to no domain"
+        },
+        "cookiePath": {
+          "type": "string",
+          "description": "CookiePath specifies the path for the CSRF cookie, default to \"/\""
         }
       },
       "additionalProperties": false,
@@ -461,6 +473,10 @@
         "summarizer": {
           "$ref": "#/$defs/entconfig.Summarizer",
           "description": "Summarizer contains configuration for text summarization"
+        },
+        "maxPoolSize": {
+          "type": "integer",
+          "description": "MaxPoolSize is the max pond pool workers that can be used by the ent client"
         }
       },
       "additionalProperties": false,
@@ -705,6 +721,14 @@
         "enableHistory": {
           "type": "boolean",
           "description": "enable history data to be logged to the database"
+        },
+        "maxConnections": {
+          "type": "integer",
+          "description": "maximum number of connections to the database"
+        },
+        "maxIdleConnections": {
+          "type": "integer",
+          "description": "maximum number of idle connections to the database"
         }
       },
       "additionalProperties": false,
@@ -1235,6 +1259,15 @@
         },
         "maxAge": {
           "type": "integer"
+        },
+        "secure": {
+          "type": "boolean"
+        },
+        "httpOnly": {
+          "type": "boolean"
+        },
+        "sameSite": {
+          "type": "string"
         }
       },
       "additionalProperties": false,

@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -100,6 +101,8 @@ func (f File) Edges() []ent.Edge {
 		defaultEdgeFrom(f, Program{}),
 		defaultEdgeFrom(f, Evidence{}),
 		defaultEdgeToWithPagination(f, Event{}),
+		defaultEdgeFrom(f, TrustCenterSetting{}),
+		defaultEdgeFrom(f, Subprocessor{}),
 	}
 }
 
@@ -110,7 +113,7 @@ func (f File) Mixin() []ent.Mixin {
 			newObjectOwnedMixin[generated.File](f,
 				withParents(
 					Organization{}, Program{}, Control{}, Procedure{}, Template{}, Subcontrol{}, DocumentData{},
-					Contact{}, InternalPolicy{}, Narrative{}, Evidence{}), // used to create parent tuples for the file
+					Contact{}, InternalPolicy{}, Narrative{}, Evidence{}, TrustCenterSetting{}, Subprocessor{}, Export{}), // used to create parent tuples for the file
 				withHookFuncs(), // use an empty hook, file processing is handled in middleware
 			),
 		},
@@ -135,9 +138,6 @@ func (File) Interceptors() []ent.Interceptor {
 // Policy of the File
 func (File) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
-		),
 		policy.WithOnMutationRules(
 			// check permissions on delete and update operations, creation is handled by the parent object
 			ent.OpDelete|ent.OpDeleteOne|ent.OpUpdate|ent.OpUpdateOne,
@@ -147,4 +147,11 @@ func (File) Policy() ent.Policy {
 			privacy.AlwaysAllowRule(),
 		),
 	)
+}
+
+// Hooks of the File
+func (File) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookFileDelete(),
+	}
 }

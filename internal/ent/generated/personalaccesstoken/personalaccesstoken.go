@@ -41,6 +41,8 @@ const (
 	FieldDescription = "description"
 	// FieldScopes holds the string denoting the scopes field in the database.
 	FieldScopes = "scopes"
+	// FieldSSOAuthorizations holds the string denoting the sso_authorizations field in the database.
+	FieldSSOAuthorizations = "sso_authorizations"
 	// FieldLastUsedAt holds the string denoting the last_used_at field in the database.
 	FieldLastUsedAt = "last_used_at"
 	// FieldIsActive holds the string denoting the is_active field in the database.
@@ -94,6 +96,7 @@ var Columns = []string{
 	FieldExpiresAt,
 	FieldDescription,
 	FieldScopes,
+	FieldSSOAuthorizations,
 	FieldLastUsedAt,
 	FieldIsActive,
 	FieldRevokedReason,

@@ -16,6 +16,7 @@ import (
 
 func TestQueryEntity(t *testing.T) {
 	entity := (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	anonymousContext := createAnonymousTrustCenterContext("abc123", testUser1.OrganizationID)
 
 	testCases := []struct {
 		name     string
@@ -48,6 +49,13 @@ func TestQueryEntity(t *testing.T) {
 			client:   suite.client.api,
 			ctx:      testUser2.UserCtx,
 			errorMsg: "entity not found",
+		},
+		{
+			name:     "no access, anonymous user",
+			client:   suite.client.api,
+			ctx:      anonymousContext,
+			queryID:  entity.ID,
+			errorMsg: couldNotFindUser,
 		},
 	}
 

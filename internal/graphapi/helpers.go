@@ -158,8 +158,20 @@ func getUploadsFromRequest(v any) []graphql.Upload {
 	return nil
 }
 
-// withPool returns the existing pool or creates a new one if it does not exist
+// withPool returns the existing pool or creates a new one if it does not exist to be used in queries
 func (r *queryResolver) withPool() *soiree.PondPool {
+	if r.pool != nil {
+		return r.pool
+	}
+
+	r.pool = soiree.NewPondPool(soiree.WithMaxWorkers(defaultMaxWorkers))
+
+	return r.pool
+}
+
+// withPool returns the existing pool or creates a new one if it does not exist to be used in mutations
+// note that transactions can not be used when using a pool, so this is only used for non-transactional mutations
+func (r *mutationResolver) withPool() *soiree.PondPool {
 	if r.pool != nil {
 		return r.pool
 	}
@@ -287,20 +299,16 @@ func setOrganizationInAuthContextBulkRequest[T any](ctx context.Context, input [
 // if the organization is set, it returns true
 // if the user is a system admin, it also returns true
 func checkOrgInContext(ctx context.Context) (bool, error) {
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err == nil && orgID != "" {
+	// allow system admins to bypass the organization check
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err == nil && isAdmin {
+		log.Debug().Bool("isAdmin", isAdmin).Msg("user is system admin, bypassing setting organization in auth context")
+
 		return true, nil
 	}
 
-	// allow system admins to bypass the organization check
-	isAdmin, err := rule.CheckIsSystemAdmin(ctx, nil)
-	if err != nil {
-		return false, err
-	}
-
-	if isAdmin {
-		log.Debug().Bool("isAdmin", isAdmin).Msg("user is system admin, bypassing setting organization in auth context")
-
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err == nil && orgID != "" {
 		return true, nil
 	}
 

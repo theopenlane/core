@@ -29,6 +29,7 @@ var (
 		{Name: "revoked_reason", Type: field.TypeString, Nullable: true},
 		{Name: "revoked_by", Type: field.TypeString, Nullable: true},
 		{Name: "revoked_at", Type: field.TypeTime, Nullable: true},
+		{Name: "sso_authorizations", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// APITokensTable holds the schema information for the "api_tokens" table.
@@ -39,21 +40,16 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "api_tokens_organizations_api_tokens",
-				Columns:    []*schema.Column{APITokensColumns[18]},
+				Columns:    []*schema.Column{APITokensColumns[19]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "apitoken_id",
-				Unique:  true,
-				Columns: []*schema.Column{APITokensColumns[0]},
-			},
-			{
 				Name:    "apitoken_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{APITokensColumns[18]},
+				Columns: []*schema.Column{APITokensColumns[19]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -130,11 +126,6 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "actionplan_id",
-				Unique:  true,
-				Columns: []*schema.Column{ActionPlansColumns[0]},
-			},
 			{
 				Name:    "actionplan_owner_id",
 				Unique:  false,
@@ -234,11 +225,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "asset_id",
-				Unique:  true,
-				Columns: []*schema.Column{AssetsColumns[0]},
-			},
-			{
 				Name:    "asset_owner_id",
 				Unique:  false,
 				Columns: []*schema.Column{AssetsColumns[15]},
@@ -324,11 +310,6 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "contact_id",
-				Unique:  true,
-				Columns: []*schema.Column{ContactsColumns[0]},
-			},
 			{
 				Name:    "contact_owner_id",
 				Unique:  false,
@@ -441,11 +422,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "control_id",
-				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[0]},
-			},
-			{
 				Name:    "control_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{ControlsColumns[7], ControlsColumns[29]},
@@ -481,6 +457,11 @@ var (
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND owner_id is not NULL and standard_id is NULL",
 				},
+			},
+			{
+				Name:    "control_standard_id_deleted_at_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{ControlsColumns[30], ControlsColumns[5], ControlsColumns[29]},
 			},
 		},
 	}
@@ -566,11 +547,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "controlimplementation_id",
-				Unique:  true,
-				Columns: []*schema.Column{ControlImplementationsColumns[0]},
-			},
-			{
 				Name:    "controlimplementation_owner_id",
 				Unique:  false,
 				Columns: []*schema.Column{ControlImplementationsColumns[13]},
@@ -648,11 +624,6 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "controlobjective_id",
-				Unique:  true,
-				Columns: []*schema.Column{ControlObjectivesColumns[0]},
-			},
 			{
 				Name:    "controlobjective_display_id_owner_id",
 				Unique:  true,
@@ -746,11 +717,6 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "controlscheduledjob_id",
-				Unique:  true,
-				Columns: []*schema.Column{ControlScheduledJobsColumns[0]},
-			},
 			{
 				Name:    "controlscheduledjob_owner_id",
 				Unique:  false,
@@ -848,11 +814,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "customdomain_id",
-				Unique:  true,
-				Columns: []*schema.Column{CustomDomainsColumns[0]},
-			},
-			{
 				Name:    "customdomain_owner_id",
 				Unique:  false,
 				Columns: []*schema.Column{CustomDomainsColumns[13]},
@@ -936,11 +897,6 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "dnsverification_id",
-				Unique:  true,
-				Columns: []*schema.Column{DNSVerificationsColumns[0]},
-			},
 			{
 				Name:    "dnsverification_owner_id",
 				Unique:  false,
@@ -1031,11 +987,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "documentdata_id",
-				Unique:  true,
-				Columns: []*schema.Column{DocumentDataColumns[0]},
-			},
-			{
 				Name:    "documentdata_owner_id",
 				Unique:  false,
 				Columns: []*schema.Column{DocumentDataColumns[9]},
@@ -1105,11 +1056,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "emailverificationtoken_id",
-				Unique:  true,
-				Columns: []*schema.Column{EmailVerificationTokensColumns[0]},
-			},
-			{
 				Name:    "emailverificationtoken_token",
 				Unique:  true,
 				Columns: []*schema.Column{EmailVerificationTokensColumns[7]},
@@ -1178,11 +1124,6 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "entity_id",
-				Unique:  true,
-				Columns: []*schema.Column{EntitiesColumns[0]},
-			},
 			{
 				Name:    "entity_owner_id",
 				Unique:  false,
@@ -1263,11 +1204,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "entitytype_id",
-				Unique:  true,
-				Columns: []*schema.Column{EntityTypesColumns[0]},
-			},
-			{
 				Name:    "entitytype_owner_id",
 				Unique:  false,
 				Columns: []*schema.Column{EntityTypesColumns[9]},
@@ -1326,17 +1262,19 @@ var (
 		{Name: "correlation_id", Type: field.TypeString, Nullable: true},
 		{Name: "event_type", Type: field.TypeString},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "export_events", Type: field.TypeString, Nullable: true},
 	}
 	// EventsTable holds the schema information for the "events" table.
 	EventsTable = &schema.Table{
 		Name:       "events",
 		Columns:    EventsColumns,
 		PrimaryKey: []*schema.Column{EventsColumns[0]},
-		Indexes: []*schema.Index{
+		ForeignKeys: []*schema.ForeignKey{
 			{
-				Name:    "event_id",
-				Unique:  true,
-				Columns: []*schema.Column{EventsColumns[0]},
+				Symbol:     "events_exports_events",
+				Columns:    []*schema.Column{EventsColumns[10]},
+				RefColumns: []*schema.Column{ExportsColumns[0]},
+				OnDelete:   schema.SetNull,
 			},
 		},
 	}
@@ -1376,11 +1314,6 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "evidence_id",
-				Unique:  true,
-				Columns: []*schema.Column{EvidencesColumns[0]},
-			},
 			{
 				Name:    "evidence_display_id_owner_id",
 				Unique:  true,
@@ -1434,6 +1367,46 @@ var (
 			},
 		},
 	}
+	// ExportsColumns holds the columns for the "exports" table.
+	ExportsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "export_type", Type: field.TypeEnum, Enums: []string{"CONTROL", "EVIDENCE", "INTERNALPOLICY", "PROCEDURE", "RISK", "SUBSCRIBER", "TASK"}},
+		{Name: "format", Type: field.TypeEnum, Enums: []string{"CSV"}},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "FAILED", "READY", "NODATA"}, Default: "PENDING"},
+		{Name: "requestor_id", Type: field.TypeString, Nullable: true},
+		{Name: "fields", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// ExportsTable holds the schema information for the "exports" table.
+	ExportsTable = &schema.Table{
+		Name:       "exports",
+		Columns:    ExportsColumns,
+		PrimaryKey: []*schema.Column{ExportsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "exports_organizations_exports",
+				Columns:    []*schema.Column{ExportsColumns[12]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "export_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{ExportsColumns[12]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
 	// FilesColumns holds the columns for the "files" table.
 	FilesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -1458,6 +1431,7 @@ var (
 		{Name: "storage_volume", Type: field.TypeString, Nullable: true},
 		{Name: "storage_path", Type: field.TypeString, Nullable: true},
 		{Name: "file_contents", Type: field.TypeBytes, Nullable: true},
+		{Name: "export_files", Type: field.TypeString, Nullable: true},
 		{Name: "note_files", Type: field.TypeString, Nullable: true},
 	}
 	// FilesTable holds the schema information for the "files" table.
@@ -1467,17 +1441,16 @@ var (
 		PrimaryKey: []*schema.Column{FilesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "files_notes_files",
+				Symbol:     "files_exports_files",
 				Columns:    []*schema.Column{FilesColumns[22]},
-				RefColumns: []*schema.Column{NotesColumns[0]},
+				RefColumns: []*schema.Column{ExportsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
-		},
-		Indexes: []*schema.Index{
 			{
-				Name:    "file_id",
-				Unique:  true,
-				Columns: []*schema.Column{FilesColumns[0]},
+				Symbol:     "files_notes_files",
+				Columns:    []*schema.Column{FilesColumns[23]},
+				RefColumns: []*schema.Column{NotesColumns[0]},
+				OnDelete:   schema.SetNull,
 			},
 		},
 	}
@@ -1696,11 +1669,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "group_id",
-				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[0]},
-			},
-			{
 				Name:    "group_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{GroupsColumns[7], GroupsColumns[35]},
@@ -1797,11 +1765,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "groupmembership_id",
-				Unique:  true,
-				Columns: []*schema.Column{GroupMembershipsColumns[0]},
-			},
-			{
 				Name:    "groupmembership_user_id_group_id",
 				Unique:  true,
 				Columns: []*schema.Column{GroupMembershipsColumns[7], GroupMembershipsColumns[6]},
@@ -1861,13 +1824,6 @@ var (
 				Columns:    []*schema.Column{GroupSettingsColumns[11]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
-			},
-		},
-		Indexes: []*schema.Index{
-			{
-				Name:    "groupsetting_id",
-				Unique:  true,
-				Columns: []*schema.Column{GroupSettingsColumns[0]},
 			},
 		},
 	}
@@ -1932,11 +1888,6 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "hush_id",
-				Unique:  true,
-				Columns: []*schema.Column{HushesColumns[0]},
-			},
 			{
 				Name:    "hush_owner_id",
 				Unique:  false,
@@ -2015,11 +1966,6 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "integration_id",
-				Unique:  true,
-				Columns: []*schema.Column{IntegrationsColumns[0]},
-			},
 			{
 				Name:    "integration_owner_id",
 				Unique:  false,
@@ -2118,11 +2064,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "internalpolicy_id",
-				Unique:  true,
-				Columns: []*schema.Column{InternalPoliciesColumns[0]},
-			},
-			{
 				Name:    "internalpolicy_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{InternalPoliciesColumns[7], InternalPoliciesColumns[26]},
@@ -2217,11 +2158,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "invite_id",
-				Unique:  true,
-				Columns: []*schema.Column{InvitesColumns[0]},
-			},
-			{
 				Name:    "invite_owner_id",
 				Unique:  false,
 				Columns: []*schema.Column{InvitesColumns[15]},
@@ -2283,11 +2219,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "jobresult_id",
-				Unique:  true,
-				Columns: []*schema.Column{JobResultsColumns[0]},
-			},
-			{
 				Name:    "jobresult_owner_id",
 				Unique:  false,
 				Columns: []*schema.Column{JobResultsColumns[13]},
@@ -2328,11 +2259,6 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "jobrunner_id",
-				Unique:  true,
-				Columns: []*schema.Column{JobRunnersColumns[0]},
-			},
 			{
 				Name:    "jobrunner_display_id_owner_id",
 				Unique:  true,
@@ -2385,11 +2311,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "jobrunnerregistrationtoken_id",
-				Unique:  true,
-				Columns: []*schema.Column{JobRunnerRegistrationTokensColumns[0]},
-			},
-			{
 				Name:    "jobrunnerregistrationtoken_owner_id",
 				Unique:  false,
 				Columns: []*schema.Column{JobRunnerRegistrationTokensColumns[12]},
@@ -2433,11 +2354,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "jobrunnertoken_id",
-				Unique:  true,
-				Columns: []*schema.Column{JobRunnerTokensColumns[0]},
-			},
-			{
 				Name:    "jobrunnertoken_owner_id",
 				Unique:  false,
 				Columns: []*schema.Column{JobRunnerTokensColumns[15]},
@@ -2471,11 +2387,6 @@ var (
 		Columns:    MappableDomainsColumns,
 		PrimaryKey: []*schema.Column{MappableDomainsColumns[0]},
 		Indexes: []*schema.Index{
-			{
-				Name:    "mappabledomain_id",
-				Unique:  true,
-				Columns: []*schema.Column{MappableDomainsColumns[0]},
-			},
 			{
 				Name:    "mappabledomain_name",
 				Unique:  true,
@@ -2545,11 +2456,6 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "mappedcontrol_id",
-				Unique:  true,
-				Columns: []*schema.Column{MappedControlsColumns[0]},
-			},
 			{
 				Name:    "mappedcontrol_owner_id",
 				Unique:  false,
@@ -2636,11 +2542,6 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "narrative_id",
-				Unique:  true,
-				Columns: []*schema.Column{NarrativesColumns[0]},
-			},
 			{
 				Name:    "narrative_display_id_owner_id",
 				Unique:  true,
@@ -2737,11 +2638,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "note_id",
-				Unique:  true,
-				Columns: []*schema.Column{NotesColumns[0]},
-			},
-			{
 				Name:    "note_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{NotesColumns[7], NotesColumns[10]},
@@ -2810,13 +2706,6 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 		},
-		Indexes: []*schema.Index{
-			{
-				Name:    "onboarding_id",
-				Unique:  true,
-				Columns: []*schema.Column{OnboardingsColumns[0]},
-			},
-		},
 	}
 	// OrgMembershipsColumns holds the columns for the "org_memberships" table.
 	OrgMembershipsColumns = []*schema.Column{
@@ -2849,11 +2738,6 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "orgmembership_id",
-				Unique:  true,
-				Columns: []*schema.Column{OrgMembershipsColumns[0]},
-			},
 			{
 				Name:    "orgmembership_user_id_organization_id",
 				Unique:  true,
@@ -2937,11 +2821,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "orgmodule_id",
-				Unique:  true,
-				Columns: []*schema.Column{OrgModulesColumns[0]},
-			},
-			{
 				Name:    "orgmodule_owner_id",
 				Unique:  false,
 				Columns: []*schema.Column{OrgModulesColumns[18]},
@@ -2989,11 +2868,6 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "orgprice_id",
-				Unique:  true,
-				Columns: []*schema.Column{OrgPricesColumns[0]},
-			},
 			{
 				Name:    "orgprice_owner_id",
 				Unique:  false,
@@ -3050,11 +2924,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "orgproduct_id",
-				Unique:  true,
-				Columns: []*schema.Column{OrgProductsColumns[0]},
-			},
-			{
 				Name:    "orgproduct_owner_id",
 				Unique:  false,
 				Columns: []*schema.Column{OrgProductsColumns[15]},
@@ -3103,11 +2972,6 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "orgsubscription_id",
-				Unique:  true,
-				Columns: []*schema.Column{OrgSubscriptionsColumns[0]},
-			},
 			{
 				Name:    "orgsubscription_owner_id",
 				Unique:  false,
@@ -3200,11 +3064,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "organization_id",
-				Unique:  true,
-				Columns: []*schema.Column{OrganizationsColumns[0]},
-			},
-			{
 				Name:    "organization_name",
 				Unique:  true,
 				Columns: []*schema.Column{OrganizationsColumns[8]},
@@ -3292,13 +3151,6 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 		},
-		Indexes: []*schema.Index{
-			{
-				Name:    "organizationsetting_id",
-				Unique:  true,
-				Columns: []*schema.Column{OrganizationSettingsColumns[0]},
-			},
-		},
 	}
 	// OrganizationSettingHistoryColumns holds the columns for the "organization_setting_history" table.
 	OrganizationSettingHistoryColumns = []*schema.Column{
@@ -3375,11 +3227,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "passwordresettoken_id",
-				Unique:  true,
-				Columns: []*schema.Column{PasswordResetTokensColumns[0]},
-			},
-			{
 				Name:    "passwordresettoken_token",
 				Unique:  true,
 				Columns: []*schema.Column{PasswordResetTokensColumns[7]},
@@ -3404,6 +3251,7 @@ var (
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "scopes", Type: field.TypeJSON, Nullable: true},
+		{Name: "sso_authorizations", Type: field.TypeJSON, Nullable: true},
 		{Name: "last_used_at", Type: field.TypeTime, Nullable: true},
 		{Name: "is_active", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "revoked_reason", Type: field.TypeString, Nullable: true},
@@ -3419,17 +3267,12 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "personal_access_tokens_users_personal_access_tokens",
-				Columns:    []*schema.Column{PersonalAccessTokensColumns[18]},
+				Columns:    []*schema.Column{PersonalAccessTokensColumns[19]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "personalaccesstoken_id",
-				Unique:  true,
-				Columns: []*schema.Column{PersonalAccessTokensColumns[0]},
-			},
 			{
 				Name:    "personalaccesstoken_token",
 				Unique:  false,
@@ -3500,11 +3343,6 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "procedure_id",
-				Unique:  true,
-				Columns: []*schema.Column{ProceduresColumns[0]},
-			},
 			{
 				Name:    "procedure_display_id_owner_id",
 				Unique:  true,
@@ -3607,11 +3445,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "program_id",
-				Unique:  true,
-				Columns: []*schema.Column{ProgramsColumns[0]},
-			},
-			{
 				Name:    "program_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{ProgramsColumns[7], ProgramsColumns[22]},
@@ -3707,11 +3540,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "programmembership_id",
-				Unique:  true,
-				Columns: []*schema.Column{ProgramMembershipsColumns[0]},
-			},
-			{
 				Name:    "programmembership_user_id_program_id",
 				Unique:  true,
 				Columns: []*schema.Column{ProgramMembershipsColumns[7], ProgramMembershipsColumns[6]},
@@ -3803,11 +3631,6 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "risk_id",
-				Unique:  true,
-				Columns: []*schema.Column{RisksColumns[0]},
-			},
 			{
 				Name:    "risk_display_id_owner_id",
 				Unique:  true,
@@ -3916,11 +3739,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "scan_id",
-				Unique:  true,
-				Columns: []*schema.Column{ScansColumns[0]},
-			},
-			{
 				Name:    "scan_owner_id",
 				Unique:  false,
 				Columns: []*schema.Column{ScansColumns[14]},
@@ -3999,11 +3817,6 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "scheduledjob_id",
-				Unique:  true,
-				Columns: []*schema.Column{ScheduledJobsColumns[0]},
-			},
 			{
 				Name:    "scheduledjob_display_id_owner_id",
 				Unique:  true,
@@ -4101,11 +3914,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "scheduledjobrun_id",
-				Unique:  true,
-				Columns: []*schema.Column{ScheduledJobRunsColumns[0]},
-			},
-			{
 				Name:    "scheduledjobrun_owner_id",
 				Unique:  false,
 				Columns: []*schema.Column{ScheduledJobRunsColumns[10]},
@@ -4156,11 +3964,6 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "standard_id",
-				Unique:  true,
-				Columns: []*schema.Column{StandardsColumns[0]},
-			},
 			{
 				Name:    "standard_owner_id",
 				Unique:  false,
@@ -4295,11 +4098,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "subcontrol_id",
-				Unique:  true,
-				Columns: []*schema.Column{SubcontrolsColumns[0]},
-			},
-			{
 				Name:    "subcontrol_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{SubcontrolsColumns[7], SubcontrolsColumns[28]},
@@ -4316,6 +4114,14 @@ var (
 				Name:    "subcontrol_control_id_ref_code",
 				Unique:  true,
 				Columns: []*schema.Column{SubcontrolsColumns[27], SubcontrolsColumns[26]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "subcontrol_control_id_ref_code_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{SubcontrolsColumns[27], SubcontrolsColumns[26], SubcontrolsColumns[28]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4372,6 +4178,94 @@ var (
 			},
 		},
 	}
+	// SubprocessorsColumns holds the columns for the "subprocessors" table.
+	SubprocessorsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
+	}
+	// SubprocessorsTable holds the schema information for the "subprocessors" table.
+	SubprocessorsTable = &schema.Table{
+		Name:       "subprocessors",
+		Columns:    SubprocessorsColumns,
+		PrimaryKey: []*schema.Column{SubprocessorsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "subprocessors_organizations_subprocessors",
+				Columns:    []*schema.Column{SubprocessorsColumns[12]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "subprocessors_files_logo_file",
+				Columns:    []*schema.Column{SubprocessorsColumns[13]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "subprocessor_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{SubprocessorsColumns[12]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "subprocessor_name_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{SubprocessorsColumns[9], SubprocessorsColumns[12]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
+	// SubprocessorHistoryColumns holds the columns for the "subprocessor_history" table.
+	SubprocessorHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
+	}
+	// SubprocessorHistoryTable holds the schema information for the "subprocessor_history" table.
+	SubprocessorHistoryTable = &schema.Table{
+		Name:       "subprocessor_history",
+		Columns:    SubprocessorHistoryColumns,
+		PrimaryKey: []*schema.Column{SubprocessorHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "subprocessorhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{SubprocessorHistoryColumns[1]},
+			},
+		},
+	}
 	// SubscribersColumns holds the columns for the "subscribers" table.
 	SubscribersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -4408,11 +4302,6 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "subscriber_id",
-				Unique:  true,
-				Columns: []*schema.Column{SubscribersColumns[0]},
-			},
 			{
 				Name:    "subscriber_owner_id",
 				Unique:  false,
@@ -4462,11 +4351,6 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "tfasetting_id",
-				Unique:  true,
-				Columns: []*schema.Column{TfaSettingsColumns[0]},
-			},
 			{
 				Name:    "tfasetting_owner_id",
 				Unique:  true,
@@ -4524,11 +4408,6 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "task_id",
-				Unique:  true,
-				Columns: []*schema.Column{TasksColumns[0]},
-			},
 			{
 				Name:    "task_display_id_owner_id",
 				Unique:  true,
@@ -4612,11 +4491,6 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "template_id",
-				Unique:  true,
-				Columns: []*schema.Column{TemplatesColumns[0]},
-			},
 			{
 				Name:    "template_owner_id",
 				Unique:  false,
@@ -4703,11 +4577,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "trustcenter_id",
-				Unique:  true,
-				Columns: []*schema.Column{TrustCentersColumns[0]},
-			},
-			{
 				Name:    "trustcenter_owner_id",
 				Unique:  false,
 				Columns: []*schema.Column{TrustCentersColumns[9]},
@@ -4766,8 +4635,17 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString, Nullable: true, Size: 160},
 		{Name: "overview", Type: field.TypeString, Nullable: true, Size: 1024},
+		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "favicon_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "theme_mode", Type: field.TypeEnum, Nullable: true, Enums: []string{"EASY", "ADVANCED"}, Default: "EASY"},
 		{Name: "primary_color", Type: field.TypeString, Nullable: true},
+		{Name: "font", Type: field.TypeString, Nullable: true},
+		{Name: "foreground_color", Type: field.TypeString, Nullable: true},
+		{Name: "background_color", Type: field.TypeString, Nullable: true},
+		{Name: "accent_color", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "favicon_local_file_id", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterSettingsTable holds the schema information for the "trust_center_settings" table.
 	TrustCenterSettingsTable = &schema.Table{
@@ -4777,21 +4655,28 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "trust_center_settings_trust_centers_setting",
-				Columns:    []*schema.Column{TrustCenterSettingsColumns[10]},
+				Columns:    []*schema.Column{TrustCenterSettingsColumns[17]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_settings_files_logo_file",
+				Columns:    []*schema.Column{TrustCenterSettingsColumns[18]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_settings_files_favicon_file",
+				Columns:    []*schema.Column{TrustCenterSettingsColumns[19]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "trustcentersetting_id",
-				Unique:  true,
-				Columns: []*schema.Column{TrustCenterSettingsColumns[0]},
-			},
-			{
 				Name:    "trustcentersetting_trust_center_id",
 				Unique:  true,
-				Columns: []*schema.Column{TrustCenterSettingsColumns[10]},
+				Columns: []*schema.Column{TrustCenterSettingsColumns[17]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4813,7 +4698,16 @@ var (
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString, Nullable: true, Size: 160},
 		{Name: "overview", Type: field.TypeString, Nullable: true, Size: 1024},
+		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "favicon_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "favicon_local_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "theme_mode", Type: field.TypeEnum, Nullable: true, Enums: []string{"EASY", "ADVANCED"}, Default: "EASY"},
 		{Name: "primary_color", Type: field.TypeString, Nullable: true},
+		{Name: "font", Type: field.TypeString, Nullable: true},
+		{Name: "foreground_color", Type: field.TypeString, Nullable: true},
+		{Name: "background_color", Type: field.TypeString, Nullable: true},
+		{Name: "accent_color", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterSettingHistoryTable holds the schema information for the "trust_center_setting_history" table.
 	TrustCenterSettingHistoryTable = &schema.Table{
@@ -4825,6 +4719,80 @@ var (
 				Name:    "trustcentersettinghistory_history_time",
 				Unique:  false,
 				Columns: []*schema.Column{TrustCenterSettingHistoryColumns[1]},
+			},
+		},
+	}
+	// TrustCenterSubprocessorsColumns holds the columns for the "trust_center_subprocessors" table.
+	TrustCenterSubprocessorsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "countries", Type: field.TypeJSON, Nullable: true},
+		{Name: "category", Type: field.TypeString, Size: 255},
+		{Name: "subprocessor_id", Type: field.TypeString},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+	}
+	// TrustCenterSubprocessorsTable holds the schema information for the "trust_center_subprocessors" table.
+	TrustCenterSubprocessorsTable = &schema.Table{
+		Name:       "trust_center_subprocessors",
+		Columns:    TrustCenterSubprocessorsColumns,
+		PrimaryKey: []*schema.Column{TrustCenterSubprocessorsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "trust_center_subprocessors_subprocessors_trust_center_subprocessors",
+				Columns:    []*schema.Column{TrustCenterSubprocessorsColumns[9]},
+				RefColumns: []*schema.Column{SubprocessorsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "trust_center_subprocessors_trust_centers_trust_center_subprocessors",
+				Columns:    []*schema.Column{TrustCenterSubprocessorsColumns[10]},
+				RefColumns: []*schema.Column{TrustCentersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "trustcentersubprocessor_subprocessor_id_trust_center_id",
+				Unique:  true,
+				Columns: []*schema.Column{TrustCenterSubprocessorsColumns[9], TrustCenterSubprocessorsColumns[10]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
+	// TrustCenterSubprocessorHistoryColumns holds the columns for the "trust_center_subprocessor_history" table.
+	TrustCenterSubprocessorHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "subprocessor_id", Type: field.TypeString},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+		{Name: "countries", Type: field.TypeJSON, Nullable: true},
+		{Name: "category", Type: field.TypeString, Size: 255},
+	}
+	// TrustCenterSubprocessorHistoryTable holds the schema information for the "trust_center_subprocessor_history" table.
+	TrustCenterSubprocessorHistoryTable = &schema.Table{
+		Name:       "trust_center_subprocessor_history",
+		Columns:    TrustCenterSubprocessorHistoryColumns,
+		PrimaryKey: []*schema.Column{TrustCenterSubprocessorHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "trustcentersubprocessorhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterSubprocessorHistoryColumns[1]},
 			},
 		},
 	}
@@ -4846,10 +4814,10 @@ var (
 		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "avatar_updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "last_seen", Type: field.TypeTime, Nullable: true},
-		{Name: "last_login_provider", Type: field.TypeEnum, Nullable: true, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN"}},
+		{Name: "last_login_provider", Type: field.TypeEnum, Nullable: true, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN", "OIDC"}},
 		{Name: "password", Type: field.TypeString, Nullable: true},
 		{Name: "sub", Type: field.TypeString, Unique: true, Nullable: true},
-		{Name: "auth_provider", Type: field.TypeEnum, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN"}, Default: "CREDENTIALS"},
+		{Name: "auth_provider", Type: field.TypeEnum, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN", "OIDC"}, Default: "CREDENTIALS"},
 		{Name: "role", Type: field.TypeEnum, Nullable: true, Enums: []string{"ADMIN", "MEMBER", "USER"}, Default: "USER"},
 		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
 	}
@@ -4867,11 +4835,6 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
-			{
-				Name:    "user_id",
-				Unique:  true,
-				Columns: []*schema.Column{UsersColumns[0]},
-			},
 			{
 				Name:    "user_email",
 				Unique:  true,
@@ -4904,10 +4867,10 @@ var (
 		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "avatar_updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "last_seen", Type: field.TypeTime, Nullable: true},
-		{Name: "last_login_provider", Type: field.TypeEnum, Nullable: true, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN"}},
+		{Name: "last_login_provider", Type: field.TypeEnum, Nullable: true, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN", "OIDC"}},
 		{Name: "password", Type: field.TypeString, Nullable: true},
 		{Name: "sub", Type: field.TypeString, Nullable: true},
-		{Name: "auth_provider", Type: field.TypeEnum, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN"}, Default: "CREDENTIALS"},
+		{Name: "auth_provider", Type: field.TypeEnum, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN", "OIDC"}, Default: "CREDENTIALS"},
 		{Name: "role", Type: field.TypeEnum, Nullable: true, Enums: []string{"ADMIN", "MEMBER", "USER"}, Default: "USER"},
 	}
 	// UserHistoryTable holds the schema information for the "user_history" table.
@@ -4961,13 +4924,6 @@ var (
 				Columns:    []*schema.Column{UserSettingsColumns[17]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
-			},
-		},
-		Indexes: []*schema.Index{
-			{
-				Name:    "usersetting_id",
-				Unique:  true,
-				Columns: []*schema.Column{UserSettingsColumns[0]},
 			},
 		},
 	}
@@ -5038,13 +4994,6 @@ var (
 				Columns:    []*schema.Column{WebauthnsColumns[16]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
-			},
-		},
-		Indexes: []*schema.Index{
-			{
-				Name:    "webauthn_id",
-				Unique:  true,
-				Columns: []*schema.Column{WebauthnsColumns[0]},
 			},
 		},
 	}
@@ -7498,6 +7447,31 @@ var (
 			},
 		},
 	}
+	// SubprocessorFilesColumns holds the columns for the "subprocessor_files" table.
+	SubprocessorFilesColumns = []*schema.Column{
+		{Name: "subprocessor_id", Type: field.TypeString},
+		{Name: "file_id", Type: field.TypeString},
+	}
+	// SubprocessorFilesTable holds the schema information for the "subprocessor_files" table.
+	SubprocessorFilesTable = &schema.Table{
+		Name:       "subprocessor_files",
+		Columns:    SubprocessorFilesColumns,
+		PrimaryKey: []*schema.Column{SubprocessorFilesColumns[0], SubprocessorFilesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "subprocessor_files_subprocessor_id",
+				Columns:    []*schema.Column{SubprocessorFilesColumns[0]},
+				RefColumns: []*schema.Column{SubprocessorsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "subprocessor_files_file_id",
+				Columns:    []*schema.Column{SubprocessorFilesColumns[1]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// SubscriberEventsColumns holds the columns for the "subscriber_events" table.
 	SubscriberEventsColumns = []*schema.Column{
 		{Name: "subscriber_id", Type: field.TypeString},
@@ -7568,6 +7542,31 @@ var (
 			{
 				Symbol:     "template_files_file_id",
 				Columns:    []*schema.Column{TemplateFilesColumns[1]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// TrustCenterSettingFilesColumns holds the columns for the "trust_center_setting_files" table.
+	TrustCenterSettingFilesColumns = []*schema.Column{
+		{Name: "trust_center_setting_id", Type: field.TypeString},
+		{Name: "file_id", Type: field.TypeString},
+	}
+	// TrustCenterSettingFilesTable holds the schema information for the "trust_center_setting_files" table.
+	TrustCenterSettingFilesTable = &schema.Table{
+		Name:       "trust_center_setting_files",
+		Columns:    TrustCenterSettingFilesColumns,
+		PrimaryKey: []*schema.Column{TrustCenterSettingFilesColumns[0], TrustCenterSettingFilesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "trust_center_setting_files_trust_center_setting_id",
+				Columns:    []*schema.Column{TrustCenterSettingFilesColumns[0]},
+				RefColumns: []*schema.Column{TrustCenterSettingsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "trust_center_setting_files_file_id",
+				Columns:    []*schema.Column{TrustCenterSettingFilesColumns[1]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
@@ -7704,6 +7703,7 @@ var (
 		EventsTable,
 		EvidencesTable,
 		EvidenceHistoryTable,
+		ExportsTable,
 		FilesTable,
 		FileHistoryTable,
 		GroupsTable,
@@ -7762,6 +7762,8 @@ var (
 		StandardHistoryTable,
 		SubcontrolsTable,
 		SubcontrolHistoryTable,
+		SubprocessorsTable,
+		SubprocessorHistoryTable,
 		SubscribersTable,
 		TfaSettingsTable,
 		TasksTable,
@@ -7772,6 +7774,8 @@ var (
 		TrustCenterHistoryTable,
 		TrustCenterSettingsTable,
 		TrustCenterSettingHistoryTable,
+		TrustCenterSubprocessorsTable,
+		TrustCenterSubprocessorHistoryTable,
 		UsersTable,
 		UserHistoryTable,
 		UserSettingsTable,
@@ -7875,9 +7879,11 @@ var (
 		SubcontrolRisksTable,
 		SubcontrolProceduresTable,
 		SubcontrolControlImplementationsTable,
+		SubprocessorFilesTable,
 		SubscriberEventsTable,
 		TaskEvidenceTable,
 		TemplateFilesTable,
+		TrustCenterSettingFilesTable,
 		UserFilesTable,
 		UserEventsTable,
 		UserActionPlansTable,
@@ -7954,11 +7960,14 @@ func init() {
 	EntityTypeHistoryTable.Annotation = &entsql.Annotation{
 		Table: "entity_type_history",
 	}
+	EventsTable.ForeignKeys[0].RefTable = ExportsTable
 	EvidencesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	EvidenceHistoryTable.Annotation = &entsql.Annotation{
 		Table: "evidence_history",
 	}
-	FilesTable.ForeignKeys[0].RefTable = NotesTable
+	ExportsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	FilesTable.ForeignKeys[0].RefTable = ExportsTable
+	FilesTable.ForeignKeys[1].RefTable = NotesTable
 	FileHistoryTable.Annotation = &entsql.Annotation{
 		Table: "file_history",
 	}
@@ -8119,6 +8128,11 @@ func init() {
 	SubcontrolHistoryTable.Annotation = &entsql.Annotation{
 		Table: "subcontrol_history",
 	}
+	SubprocessorsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	SubprocessorsTable.ForeignKeys[1].RefTable = FilesTable
+	SubprocessorHistoryTable.Annotation = &entsql.Annotation{
+		Table: "subprocessor_history",
+	}
 	SubscribersTable.ForeignKeys[0].RefTable = OrganizationsTable
 	TfaSettingsTable.ForeignKeys[0].RefTable = UsersTable
 	TasksTable.ForeignKeys[0].RefTable = OrganizationsTable
@@ -8137,8 +8151,15 @@ func init() {
 		Table: "trust_center_history",
 	}
 	TrustCenterSettingsTable.ForeignKeys[0].RefTable = TrustCentersTable
+	TrustCenterSettingsTable.ForeignKeys[1].RefTable = FilesTable
+	TrustCenterSettingsTable.ForeignKeys[2].RefTable = FilesTable
 	TrustCenterSettingHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_setting_history",
+	}
+	TrustCenterSubprocessorsTable.ForeignKeys[0].RefTable = SubprocessorsTable
+	TrustCenterSubprocessorsTable.ForeignKeys[1].RefTable = TrustCentersTable
+	TrustCenterSubprocessorHistoryTable.Annotation = &entsql.Annotation{
+		Table: "trust_center_subprocessor_history",
 	}
 	UsersTable.ForeignKeys[0].RefTable = FilesTable
 	UserHistoryTable.Annotation = &entsql.Annotation{
@@ -8346,12 +8367,16 @@ func init() {
 	SubcontrolProceduresTable.ForeignKeys[1].RefTable = ProceduresTable
 	SubcontrolControlImplementationsTable.ForeignKeys[0].RefTable = SubcontrolsTable
 	SubcontrolControlImplementationsTable.ForeignKeys[1].RefTable = ControlImplementationsTable
+	SubprocessorFilesTable.ForeignKeys[0].RefTable = SubprocessorsTable
+	SubprocessorFilesTable.ForeignKeys[1].RefTable = FilesTable
 	SubscriberEventsTable.ForeignKeys[0].RefTable = SubscribersTable
 	SubscriberEventsTable.ForeignKeys[1].RefTable = EventsTable
 	TaskEvidenceTable.ForeignKeys[0].RefTable = TasksTable
 	TaskEvidenceTable.ForeignKeys[1].RefTable = EvidencesTable
 	TemplateFilesTable.ForeignKeys[0].RefTable = TemplatesTable
 	TemplateFilesTable.ForeignKeys[1].RefTable = FilesTable
+	TrustCenterSettingFilesTable.ForeignKeys[0].RefTable = TrustCenterSettingsTable
+	TrustCenterSettingFilesTable.ForeignKeys[1].RefTable = FilesTable
 	UserFilesTable.ForeignKeys[0].RefTable = UsersTable
 	UserFilesTable.ForeignKeys[1].RefTable = FilesTable
 	UserEventsTable.ForeignKeys[0].RefTable = UsersTable

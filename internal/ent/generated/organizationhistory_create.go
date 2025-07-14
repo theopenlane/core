@@ -284,7 +284,9 @@ func (ohc *OrganizationHistoryCreate) Mutation() *OrganizationHistoryMutation {
 
 // Save creates the OrganizationHistory in the database.
 func (ohc *OrganizationHistoryCreate) Save(ctx context.Context) (*OrganizationHistory, error) {
-	ohc.defaults()
+	if err := ohc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, ohc.sqlSave, ohc.mutation, ohc.hooks)
 }
 
@@ -311,16 +313,25 @@ func (ohc *OrganizationHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ohc *OrganizationHistoryCreate) defaults() {
+func (ohc *OrganizationHistoryCreate) defaults() error {
 	if _, ok := ohc.mutation.HistoryTime(); !ok {
+		if organizationhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized organizationhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := organizationhistory.DefaultHistoryTime()
 		ohc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := ohc.mutation.CreatedAt(); !ok {
+		if organizationhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized organizationhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := organizationhistory.DefaultCreatedAt()
 		ohc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := ohc.mutation.UpdatedAt(); !ok {
+		if organizationhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized organizationhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := organizationhistory.DefaultUpdatedAt()
 		ohc.mutation.SetUpdatedAt(v)
 	}
@@ -337,6 +348,9 @@ func (ohc *OrganizationHistoryCreate) defaults() {
 		ohc.mutation.SetPersonalOrg(v)
 	}
 	if _, ok := ohc.mutation.AvatarUpdatedAt(); !ok {
+		if organizationhistory.DefaultAvatarUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized organizationhistory.DefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := organizationhistory.DefaultAvatarUpdatedAt()
 		ohc.mutation.SetAvatarUpdatedAt(v)
 	}
@@ -345,9 +359,13 @@ func (ohc *OrganizationHistoryCreate) defaults() {
 		ohc.mutation.SetDedicatedDb(v)
 	}
 	if _, ok := ohc.mutation.ID(); !ok {
+		if organizationhistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized organizationhistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := organizationhistory.DefaultID()
 		ohc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

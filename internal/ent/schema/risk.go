@@ -11,7 +11,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -178,7 +177,7 @@ func (r Risk) Mixin() []ent.Mixin {
 			newObjectOwnedMixin[generated.Risk](r,
 				withParents(
 					Program{}, Control{}, Procedure{}, ControlObjective{}, InternalPolicy{}, Subcontrol{}),
-				withOrganizationOwner(false),
+				withOrganizationOwner(true),
 			),
 			// add groups permissions with viewer, editor, and blocked groups
 			newGroupPermissionsMixin(),
@@ -191,15 +190,13 @@ func (Risk) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.Features("compliance", "policy-management", "risk-management", "asset-management", "entity-management", "continuous-compliance-automation"),
 		entfga.SelfAccessChecks(),
+		entx.Exportable{},
 	}
 }
 
 // Policy of the Risk
 func (Risk) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
-		),
 		policy.WithMutationRules(
 			rule.CanCreateObjectsUnderParent[*generated.RiskMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),

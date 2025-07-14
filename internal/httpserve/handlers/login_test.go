@@ -7,11 +7,13 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/brianvoe/gofakeit/v7"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/utils/rout"
+	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
@@ -22,7 +24,9 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
+	sso "github.com/theopenlane/core/pkg/ssoutils"
 )
 
 func (suite *HandlerTestSuite) TestLoginHandler() {
@@ -73,16 +77,41 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 		},
 	).SaveX(ctx)
 
+	ssoorgSetting := suite.db.OrganizationSetting.Create().SetInput(
+		generated.CreateOrganizationSettingInput{
+			AllowedEmailDomains:           []string{"examples.com"}, // intentionally misspelled to ensure owner (validConfirmedUserRestrictedOrg) can still login
+			IdentityProviderLoginEnforced: func(b bool) *bool { return &b }(true),
+		},
+	).SaveX(ctx)
+
 	input := generated.CreateOrganizationInput{
-		Name:      "restricted",
+		Name:      gofakeit.AdjectiveDescriptive() + " " + gofakeit.Noun(),
 		SettingID: &orgSetting.ID,
 	}
 
+	ssoOrg := generated.CreateOrganizationInput{
+		Name:      gofakeit.AdjectiveDescriptive() + " " + gofakeit.Noun(),
+		SettingID: &ssoorgSetting.ID,
+	}
+
+	ssoMember := suite.userBuilderWithInput(ctx, &userInput{
+		email:         gofakeit.Username() + "@examples.com", // ensure the email is allowed by the org setting
+		password:      validPassword,
+		confirmedUser: true,
+	})
 	// setup allow context with the client in the context which is required for hooks that run
 	allowCtx := privacy.DecisionContext(validConfirmedUserRestrictedOrg.UserCtx, privacy.Allow)
 	allowCtx = ent.NewContext(allowCtx, suite.db)
 
 	org := suite.db.Organization.Create().SetInput(input).SaveX(allowCtx)
+	createdssoOrg := suite.db.Organization.Create().SetInput(ssoOrg).SaveX(allowCtx)
+	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+		OrganizationID: createdssoOrg.ID,
+		UserID:         ssoMember.UserInfo.ID,
+		Role:           &enums.RoleMember,
+	}).ExecX(allowCtx)
+
+	suite.db.UserSetting.UpdateOneID(ssoMember.UserInfo.Edges.Setting.ID).SetDefaultOrgID(createdssoOrg.ID).ExecX(allowCtx)
 
 	// update the user settings to have the default org set that is the domain restricted org
 	suite.db.UserSetting.UpdateOneID(validConfirmedUserRestrictedOrg.UserInfo.Edges.Setting.ID).
@@ -229,4 +258,104 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 			}
 		})
 	}
+}
+
+func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforced() {
+	t := suite.T()
+
+	// add login handler
+	suite.e.POST("login", suite.h.LoginHandler)
+
+	ctx := echocontext.NewTestEchoContext().Request().Context()
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	// Create an owner user and org (owner not used for login, but for org setup)
+	ownerUser := suite.userBuilderWithInput(ctx, &userInput{
+		password:      "0wn3rP@ssw0rd",
+		confirmedUser: true,
+	})
+	ownerCtx := privacy.DecisionContext(ownerUser.UserCtx, privacy.Allow)
+	ownerCtx = ent.NewContext(ownerCtx, suite.db)
+
+	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
+		IdentityProviderLoginEnforced: func(b bool) *bool { return &b }(true),
+	}).SaveX(ownerCtx)
+
+	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+		Name:      "ssoorg",
+		SettingID: &setting.ID,
+	}).SaveX(ownerCtx)
+
+	suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+		SetOrganizationID(org.ID).
+		ExecX(ownerCtx)
+
+	// Create a non-owner user
+	testUser := suite.userBuilderWithInput(ctx, &userInput{
+		password:      "$uper$ecretP@ssword",
+		confirmedUser: true,
+	})
+	testUserCtx := privacy.DecisionContext(testUser.UserCtx, privacy.Allow)
+	testUserCtx = ent.NewContext(testUserCtx, suite.db)
+
+	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+		OrganizationID: org.ID,
+		UserID:         testUser.UserInfo.ID,
+		Role:           &enums.RoleMember, // default to member
+	}).ExecX(testUserCtx)
+
+	suite.db.UserSetting.UpdateOneID(testUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(testUserCtx)
+
+	// Attempt login for the non-owner user (should fail due to SSO enforcement)
+	body, _ := json.Marshal(models.LoginRequest{Username: testUser.UserInfo.Email, Password: "$uper$ecretP@ssword"})
+	req := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader(string(body)))
+	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req)
+
+	require.Equal(t, http.StatusFound, rec.Code)
+	assert.Equal(t, sso.SSOLogin(suite.e, org.ID), rec.Header().Get("Location"))
+}
+
+func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforcedOwnerBypass() {
+	t := suite.T()
+
+	suite.e.POST("login", suite.h.LoginHandler)
+
+	ctx := echocontext.NewTestEchoContext().Request().Context()
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	ownerUser := suite.userBuilderWithInput(ctx, &userInput{
+		password:      "0wn3rP@ssw0rd",
+		confirmedUser: true,
+	})
+	ownerCtx := privacy.DecisionContext(ownerUser.UserCtx, privacy.Allow)
+	ownerCtx = ent.NewContext(ownerCtx, suite.db)
+
+	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
+		IdentityProviderLoginEnforced: func(b bool) *bool { return &b }(true),
+	}).SaveX(ownerCtx)
+
+	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+		Name:      ulids.New().String(),
+		SettingID: &setting.ID,
+	}).SaveX(ownerCtx)
+
+	suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+		SetOrganizationID(org.ID).
+		ExecX(ownerCtx)
+	// OrganizationCreate hook automatically adds the creating user as the organization owner
+
+	suite.db.UserSetting.UpdateOneID(ownerUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(ownerCtx)
+
+	body, _ := json.Marshal(models.LoginRequest{Username: ownerUser.UserInfo.Email, Password: "0wn3rP@ssw0rd"})
+	req := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader(string(body)))
+	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req)
+
+	require.Equal(t, http.StatusOK, rec.Code)
+	var out models.LoginReply
+	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.True(t, out.Success)
 }

@@ -29,7 +29,7 @@ func SystemOwnedStandards() privacy.StandardMutationRuleFunc {
 
 		hasAdminField := systemOwned || isPublic || freeToUse
 
-		allowAdmin, err := CheckIsSystemAdmin(ctx, m)
+		allowAdmin, err := CheckIsSystemAdminWithContext(ctx)
 		if err != nil {
 			return err
 		}
@@ -53,7 +53,7 @@ func SystemOwnedStandards() privacy.StandardMutationRuleFunc {
 				}
 
 				// we don't need to check the other fields on update, just if the standard is system owned
-				standards, err := m.Client().Standard.Query().Where(standard.IDIn(ids...)).Select("system_owned").All(ctx)
+				standards, err := m.Client().Standard.Query().Where(standard.IDIn(ids...)).Select(standard.FieldSystemOwned).All(ctx)
 				if err != nil {
 					return err
 				}

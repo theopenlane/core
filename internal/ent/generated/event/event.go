@@ -135,6 +135,12 @@ var Columns = []string{
 	FieldMetadata,
 }
 
+// ForeignKeys holds the SQL foreign-keys that are owned by the "events"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"export_events",
+}
+
 var (
 	// UsersPrimaryKey and UsersColumn2 are the table columns denoting the
 	// primary key for the users relation (M2M).
@@ -181,6 +187,11 @@ func ValidColumn(column string) bool {
 			return true
 		}
 	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
+			return true
+		}
+	}
 	return false
 }
 
@@ -190,7 +201,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks [1]ent.Hook
+	Hooks  [2]ent.Hook
+	Policy ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.

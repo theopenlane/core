@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -163,6 +164,106 @@ func (tcshu *TrustCenterSettingHistoryUpdate) ClearOverview() *TrustCenterSettin
 	return tcshu
 }
 
+// SetLogoRemoteURL sets the "logo_remote_url" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetLogoRemoteURL(s string) *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.SetLogoRemoteURL(s)
+	return tcshu
+}
+
+// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetNillableLogoRemoteURL(s *string) *TrustCenterSettingHistoryUpdate {
+	if s != nil {
+		tcshu.SetLogoRemoteURL(*s)
+	}
+	return tcshu
+}
+
+// ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) ClearLogoRemoteURL() *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.ClearLogoRemoteURL()
+	return tcshu
+}
+
+// SetLogoLocalFileID sets the "logo_local_file_id" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetLogoLocalFileID(s string) *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.SetLogoLocalFileID(s)
+	return tcshu
+}
+
+// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetNillableLogoLocalFileID(s *string) *TrustCenterSettingHistoryUpdate {
+	if s != nil {
+		tcshu.SetLogoLocalFileID(*s)
+	}
+	return tcshu
+}
+
+// ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) ClearLogoLocalFileID() *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.ClearLogoLocalFileID()
+	return tcshu
+}
+
+// SetFaviconRemoteURL sets the "favicon_remote_url" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetFaviconRemoteURL(s string) *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.SetFaviconRemoteURL(s)
+	return tcshu
+}
+
+// SetNillableFaviconRemoteURL sets the "favicon_remote_url" field if the given value is not nil.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetNillableFaviconRemoteURL(s *string) *TrustCenterSettingHistoryUpdate {
+	if s != nil {
+		tcshu.SetFaviconRemoteURL(*s)
+	}
+	return tcshu
+}
+
+// ClearFaviconRemoteURL clears the value of the "favicon_remote_url" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) ClearFaviconRemoteURL() *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.ClearFaviconRemoteURL()
+	return tcshu
+}
+
+// SetFaviconLocalFileID sets the "favicon_local_file_id" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetFaviconLocalFileID(s string) *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.SetFaviconLocalFileID(s)
+	return tcshu
+}
+
+// SetNillableFaviconLocalFileID sets the "favicon_local_file_id" field if the given value is not nil.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetNillableFaviconLocalFileID(s *string) *TrustCenterSettingHistoryUpdate {
+	if s != nil {
+		tcshu.SetFaviconLocalFileID(*s)
+	}
+	return tcshu
+}
+
+// ClearFaviconLocalFileID clears the value of the "favicon_local_file_id" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) ClearFaviconLocalFileID() *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.ClearFaviconLocalFileID()
+	return tcshu
+}
+
+// SetThemeMode sets the "theme_mode" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetThemeMode(ectm enums.TrustCenterThemeMode) *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.SetThemeMode(ectm)
+	return tcshu
+}
+
+// SetNillableThemeMode sets the "theme_mode" field if the given value is not nil.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetNillableThemeMode(ectm *enums.TrustCenterThemeMode) *TrustCenterSettingHistoryUpdate {
+	if ectm != nil {
+		tcshu.SetThemeMode(*ectm)
+	}
+	return tcshu
+}
+
+// ClearThemeMode clears the value of the "theme_mode" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) ClearThemeMode() *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.ClearThemeMode()
+	return tcshu
+}
+
 // SetPrimaryColor sets the "primary_color" field.
 func (tcshu *TrustCenterSettingHistoryUpdate) SetPrimaryColor(s string) *TrustCenterSettingHistoryUpdate {
 	tcshu.mutation.SetPrimaryColor(s)
@@ -183,6 +284,86 @@ func (tcshu *TrustCenterSettingHistoryUpdate) ClearPrimaryColor() *TrustCenterSe
 	return tcshu
 }
 
+// SetFont sets the "font" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetFont(s string) *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.SetFont(s)
+	return tcshu
+}
+
+// SetNillableFont sets the "font" field if the given value is not nil.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetNillableFont(s *string) *TrustCenterSettingHistoryUpdate {
+	if s != nil {
+		tcshu.SetFont(*s)
+	}
+	return tcshu
+}
+
+// ClearFont clears the value of the "font" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) ClearFont() *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.ClearFont()
+	return tcshu
+}
+
+// SetForegroundColor sets the "foreground_color" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetForegroundColor(s string) *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.SetForegroundColor(s)
+	return tcshu
+}
+
+// SetNillableForegroundColor sets the "foreground_color" field if the given value is not nil.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetNillableForegroundColor(s *string) *TrustCenterSettingHistoryUpdate {
+	if s != nil {
+		tcshu.SetForegroundColor(*s)
+	}
+	return tcshu
+}
+
+// ClearForegroundColor clears the value of the "foreground_color" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) ClearForegroundColor() *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.ClearForegroundColor()
+	return tcshu
+}
+
+// SetBackgroundColor sets the "background_color" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetBackgroundColor(s string) *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.SetBackgroundColor(s)
+	return tcshu
+}
+
+// SetNillableBackgroundColor sets the "background_color" field if the given value is not nil.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetNillableBackgroundColor(s *string) *TrustCenterSettingHistoryUpdate {
+	if s != nil {
+		tcshu.SetBackgroundColor(*s)
+	}
+	return tcshu
+}
+
+// ClearBackgroundColor clears the value of the "background_color" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) ClearBackgroundColor() *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.ClearBackgroundColor()
+	return tcshu
+}
+
+// SetAccentColor sets the "accent_color" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetAccentColor(s string) *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.SetAccentColor(s)
+	return tcshu
+}
+
+// SetNillableAccentColor sets the "accent_color" field if the given value is not nil.
+func (tcshu *TrustCenterSettingHistoryUpdate) SetNillableAccentColor(s *string) *TrustCenterSettingHistoryUpdate {
+	if s != nil {
+		tcshu.SetAccentColor(*s)
+	}
+	return tcshu
+}
+
+// ClearAccentColor clears the value of the "accent_color" field.
+func (tcshu *TrustCenterSettingHistoryUpdate) ClearAccentColor() *TrustCenterSettingHistoryUpdate {
+	tcshu.mutation.ClearAccentColor()
+	return tcshu
+}
+
 // Mutation returns the TrustCenterSettingHistoryMutation object of the builder.
 func (tcshu *TrustCenterSettingHistoryUpdate) Mutation() *TrustCenterSettingHistoryMutation {
 	return tcshu.mutation
@@ -190,7 +371,9 @@ func (tcshu *TrustCenterSettingHistoryUpdate) Mutation() *TrustCenterSettingHist
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (tcshu *TrustCenterSettingHistoryUpdate) Save(ctx context.Context) (int, error) {
-	tcshu.defaults()
+	if err := tcshu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, tcshu.sqlSave, tcshu.mutation, tcshu.hooks)
 }
 
@@ -217,11 +400,25 @@ func (tcshu *TrustCenterSettingHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (tcshu *TrustCenterSettingHistoryUpdate) defaults() {
+func (tcshu *TrustCenterSettingHistoryUpdate) defaults() error {
 	if _, ok := tcshu.mutation.UpdatedAt(); !ok && !tcshu.mutation.UpdatedAtCleared() {
+		if trustcentersettinghistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized trustcentersettinghistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := trustcentersettinghistory.UpdateDefaultUpdatedAt()
 		tcshu.mutation.SetUpdatedAt(v)
 	}
+	return nil
+}
+
+// check runs all checks and user-defined validators on the builder.
+func (tcshu *TrustCenterSettingHistoryUpdate) check() error {
+	if v, ok := tcshu.mutation.ThemeMode(); ok {
+		if err := trustcentersettinghistory.ThemeModeValidator(v); err != nil {
+			return &ValidationError{Name: "theme_mode", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSettingHistory.theme_mode": %w`, err)}
+		}
+	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -231,6 +428,9 @@ func (tcshu *TrustCenterSettingHistoryUpdate) Modify(modifiers ...func(u *sql.Up
 }
 
 func (tcshu *TrustCenterSettingHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := tcshu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(trustcentersettinghistory.Table, trustcentersettinghistory.Columns, sqlgraph.NewFieldSpec(trustcentersettinghistory.FieldID, field.TypeString))
 	if ps := tcshu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -290,11 +490,65 @@ func (tcshu *TrustCenterSettingHistoryUpdate) sqlSave(ctx context.Context) (n in
 	if tcshu.mutation.OverviewCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldOverview, field.TypeString)
 	}
+	if value, ok := tcshu.mutation.LogoRemoteURL(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldLogoRemoteURL, field.TypeString, value)
+	}
+	if tcshu.mutation.LogoRemoteURLCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldLogoRemoteURL, field.TypeString)
+	}
+	if value, ok := tcshu.mutation.LogoLocalFileID(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldLogoLocalFileID, field.TypeString, value)
+	}
+	if tcshu.mutation.LogoLocalFileIDCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldLogoLocalFileID, field.TypeString)
+	}
+	if value, ok := tcshu.mutation.FaviconRemoteURL(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldFaviconRemoteURL, field.TypeString, value)
+	}
+	if tcshu.mutation.FaviconRemoteURLCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldFaviconRemoteURL, field.TypeString)
+	}
+	if value, ok := tcshu.mutation.FaviconLocalFileID(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldFaviconLocalFileID, field.TypeString, value)
+	}
+	if tcshu.mutation.FaviconLocalFileIDCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldFaviconLocalFileID, field.TypeString)
+	}
+	if value, ok := tcshu.mutation.ThemeMode(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldThemeMode, field.TypeEnum, value)
+	}
+	if tcshu.mutation.ThemeModeCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldThemeMode, field.TypeEnum)
+	}
 	if value, ok := tcshu.mutation.PrimaryColor(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldPrimaryColor, field.TypeString, value)
 	}
 	if tcshu.mutation.PrimaryColorCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldPrimaryColor, field.TypeString)
+	}
+	if value, ok := tcshu.mutation.Font(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldFont, field.TypeString, value)
+	}
+	if tcshu.mutation.FontCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldFont, field.TypeString)
+	}
+	if value, ok := tcshu.mutation.ForegroundColor(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldForegroundColor, field.TypeString, value)
+	}
+	if tcshu.mutation.ForegroundColorCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldForegroundColor, field.TypeString)
+	}
+	if value, ok := tcshu.mutation.BackgroundColor(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldBackgroundColor, field.TypeString, value)
+	}
+	if tcshu.mutation.BackgroundColorCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldBackgroundColor, field.TypeString)
+	}
+	if value, ok := tcshu.mutation.AccentColor(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldAccentColor, field.TypeString, value)
+	}
+	if tcshu.mutation.AccentColorCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldAccentColor, field.TypeString)
 	}
 	_spec.Node.Schema = tcshu.schemaConfig.TrustCenterSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, tcshu.schemaConfig)
@@ -452,6 +706,106 @@ func (tcshuo *TrustCenterSettingHistoryUpdateOne) ClearOverview() *TrustCenterSe
 	return tcshuo
 }
 
+// SetLogoRemoteURL sets the "logo_remote_url" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetLogoRemoteURL(s string) *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.SetLogoRemoteURL(s)
+	return tcshuo
+}
+
+// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetNillableLogoRemoteURL(s *string) *TrustCenterSettingHistoryUpdateOne {
+	if s != nil {
+		tcshuo.SetLogoRemoteURL(*s)
+	}
+	return tcshuo
+}
+
+// ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) ClearLogoRemoteURL() *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.ClearLogoRemoteURL()
+	return tcshuo
+}
+
+// SetLogoLocalFileID sets the "logo_local_file_id" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetLogoLocalFileID(s string) *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.SetLogoLocalFileID(s)
+	return tcshuo
+}
+
+// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetNillableLogoLocalFileID(s *string) *TrustCenterSettingHistoryUpdateOne {
+	if s != nil {
+		tcshuo.SetLogoLocalFileID(*s)
+	}
+	return tcshuo
+}
+
+// ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) ClearLogoLocalFileID() *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.ClearLogoLocalFileID()
+	return tcshuo
+}
+
+// SetFaviconRemoteURL sets the "favicon_remote_url" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetFaviconRemoteURL(s string) *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.SetFaviconRemoteURL(s)
+	return tcshuo
+}
+
+// SetNillableFaviconRemoteURL sets the "favicon_remote_url" field if the given value is not nil.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetNillableFaviconRemoteURL(s *string) *TrustCenterSettingHistoryUpdateOne {
+	if s != nil {
+		tcshuo.SetFaviconRemoteURL(*s)
+	}
+	return tcshuo
+}
+
+// ClearFaviconRemoteURL clears the value of the "favicon_remote_url" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) ClearFaviconRemoteURL() *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.ClearFaviconRemoteURL()
+	return tcshuo
+}
+
+// SetFaviconLocalFileID sets the "favicon_local_file_id" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetFaviconLocalFileID(s string) *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.SetFaviconLocalFileID(s)
+	return tcshuo
+}
+
+// SetNillableFaviconLocalFileID sets the "favicon_local_file_id" field if the given value is not nil.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetNillableFaviconLocalFileID(s *string) *TrustCenterSettingHistoryUpdateOne {
+	if s != nil {
+		tcshuo.SetFaviconLocalFileID(*s)
+	}
+	return tcshuo
+}
+
+// ClearFaviconLocalFileID clears the value of the "favicon_local_file_id" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) ClearFaviconLocalFileID() *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.ClearFaviconLocalFileID()
+	return tcshuo
+}
+
+// SetThemeMode sets the "theme_mode" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetThemeMode(ectm enums.TrustCenterThemeMode) *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.SetThemeMode(ectm)
+	return tcshuo
+}
+
+// SetNillableThemeMode sets the "theme_mode" field if the given value is not nil.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetNillableThemeMode(ectm *enums.TrustCenterThemeMode) *TrustCenterSettingHistoryUpdateOne {
+	if ectm != nil {
+		tcshuo.SetThemeMode(*ectm)
+	}
+	return tcshuo
+}
+
+// ClearThemeMode clears the value of the "theme_mode" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) ClearThemeMode() *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.ClearThemeMode()
+	return tcshuo
+}
+
 // SetPrimaryColor sets the "primary_color" field.
 func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetPrimaryColor(s string) *TrustCenterSettingHistoryUpdateOne {
 	tcshuo.mutation.SetPrimaryColor(s)
@@ -469,6 +823,86 @@ func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetNillablePrimaryColor(s *str
 // ClearPrimaryColor clears the value of the "primary_color" field.
 func (tcshuo *TrustCenterSettingHistoryUpdateOne) ClearPrimaryColor() *TrustCenterSettingHistoryUpdateOne {
 	tcshuo.mutation.ClearPrimaryColor()
+	return tcshuo
+}
+
+// SetFont sets the "font" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetFont(s string) *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.SetFont(s)
+	return tcshuo
+}
+
+// SetNillableFont sets the "font" field if the given value is not nil.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetNillableFont(s *string) *TrustCenterSettingHistoryUpdateOne {
+	if s != nil {
+		tcshuo.SetFont(*s)
+	}
+	return tcshuo
+}
+
+// ClearFont clears the value of the "font" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) ClearFont() *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.ClearFont()
+	return tcshuo
+}
+
+// SetForegroundColor sets the "foreground_color" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetForegroundColor(s string) *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.SetForegroundColor(s)
+	return tcshuo
+}
+
+// SetNillableForegroundColor sets the "foreground_color" field if the given value is not nil.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetNillableForegroundColor(s *string) *TrustCenterSettingHistoryUpdateOne {
+	if s != nil {
+		tcshuo.SetForegroundColor(*s)
+	}
+	return tcshuo
+}
+
+// ClearForegroundColor clears the value of the "foreground_color" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) ClearForegroundColor() *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.ClearForegroundColor()
+	return tcshuo
+}
+
+// SetBackgroundColor sets the "background_color" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetBackgroundColor(s string) *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.SetBackgroundColor(s)
+	return tcshuo
+}
+
+// SetNillableBackgroundColor sets the "background_color" field if the given value is not nil.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetNillableBackgroundColor(s *string) *TrustCenterSettingHistoryUpdateOne {
+	if s != nil {
+		tcshuo.SetBackgroundColor(*s)
+	}
+	return tcshuo
+}
+
+// ClearBackgroundColor clears the value of the "background_color" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) ClearBackgroundColor() *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.ClearBackgroundColor()
+	return tcshuo
+}
+
+// SetAccentColor sets the "accent_color" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetAccentColor(s string) *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.SetAccentColor(s)
+	return tcshuo
+}
+
+// SetNillableAccentColor sets the "accent_color" field if the given value is not nil.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) SetNillableAccentColor(s *string) *TrustCenterSettingHistoryUpdateOne {
+	if s != nil {
+		tcshuo.SetAccentColor(*s)
+	}
+	return tcshuo
+}
+
+// ClearAccentColor clears the value of the "accent_color" field.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) ClearAccentColor() *TrustCenterSettingHistoryUpdateOne {
+	tcshuo.mutation.ClearAccentColor()
 	return tcshuo
 }
 
@@ -492,7 +926,9 @@ func (tcshuo *TrustCenterSettingHistoryUpdateOne) Select(field string, fields ..
 
 // Save executes the query and returns the updated TrustCenterSettingHistory entity.
 func (tcshuo *TrustCenterSettingHistoryUpdateOne) Save(ctx context.Context) (*TrustCenterSettingHistory, error) {
-	tcshuo.defaults()
+	if err := tcshuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, tcshuo.sqlSave, tcshuo.mutation, tcshuo.hooks)
 }
 
@@ -519,11 +955,25 @@ func (tcshuo *TrustCenterSettingHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (tcshuo *TrustCenterSettingHistoryUpdateOne) defaults() {
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) defaults() error {
 	if _, ok := tcshuo.mutation.UpdatedAt(); !ok && !tcshuo.mutation.UpdatedAtCleared() {
+		if trustcentersettinghistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized trustcentersettinghistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := trustcentersettinghistory.UpdateDefaultUpdatedAt()
 		tcshuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
+}
+
+// check runs all checks and user-defined validators on the builder.
+func (tcshuo *TrustCenterSettingHistoryUpdateOne) check() error {
+	if v, ok := tcshuo.mutation.ThemeMode(); ok {
+		if err := trustcentersettinghistory.ThemeModeValidator(v); err != nil {
+			return &ValidationError{Name: "theme_mode", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSettingHistory.theme_mode": %w`, err)}
+		}
+	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -533,6 +983,9 @@ func (tcshuo *TrustCenterSettingHistoryUpdateOne) Modify(modifiers ...func(u *sq
 }
 
 func (tcshuo *TrustCenterSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenterSettingHistory, err error) {
+	if err := tcshuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(trustcentersettinghistory.Table, trustcentersettinghistory.Columns, sqlgraph.NewFieldSpec(trustcentersettinghistory.FieldID, field.TypeString))
 	id, ok := tcshuo.mutation.ID()
 	if !ok {
@@ -609,11 +1062,65 @@ func (tcshuo *TrustCenterSettingHistoryUpdateOne) sqlSave(ctx context.Context) (
 	if tcshuo.mutation.OverviewCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldOverview, field.TypeString)
 	}
+	if value, ok := tcshuo.mutation.LogoRemoteURL(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldLogoRemoteURL, field.TypeString, value)
+	}
+	if tcshuo.mutation.LogoRemoteURLCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldLogoRemoteURL, field.TypeString)
+	}
+	if value, ok := tcshuo.mutation.LogoLocalFileID(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldLogoLocalFileID, field.TypeString, value)
+	}
+	if tcshuo.mutation.LogoLocalFileIDCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldLogoLocalFileID, field.TypeString)
+	}
+	if value, ok := tcshuo.mutation.FaviconRemoteURL(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldFaviconRemoteURL, field.TypeString, value)
+	}
+	if tcshuo.mutation.FaviconRemoteURLCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldFaviconRemoteURL, field.TypeString)
+	}
+	if value, ok := tcshuo.mutation.FaviconLocalFileID(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldFaviconLocalFileID, field.TypeString, value)
+	}
+	if tcshuo.mutation.FaviconLocalFileIDCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldFaviconLocalFileID, field.TypeString)
+	}
+	if value, ok := tcshuo.mutation.ThemeMode(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldThemeMode, field.TypeEnum, value)
+	}
+	if tcshuo.mutation.ThemeModeCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldThemeMode, field.TypeEnum)
+	}
 	if value, ok := tcshuo.mutation.PrimaryColor(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldPrimaryColor, field.TypeString, value)
 	}
 	if tcshuo.mutation.PrimaryColorCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldPrimaryColor, field.TypeString)
+	}
+	if value, ok := tcshuo.mutation.Font(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldFont, field.TypeString, value)
+	}
+	if tcshuo.mutation.FontCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldFont, field.TypeString)
+	}
+	if value, ok := tcshuo.mutation.ForegroundColor(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldForegroundColor, field.TypeString, value)
+	}
+	if tcshuo.mutation.ForegroundColorCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldForegroundColor, field.TypeString)
+	}
+	if value, ok := tcshuo.mutation.BackgroundColor(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldBackgroundColor, field.TypeString, value)
+	}
+	if tcshuo.mutation.BackgroundColorCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldBackgroundColor, field.TypeString)
+	}
+	if value, ok := tcshuo.mutation.AccentColor(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldAccentColor, field.TypeString, value)
+	}
+	if tcshuo.mutation.AccentColorCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldAccentColor, field.TypeString)
 	}
 	_spec.Node.Schema = tcshuo.schemaConfig.TrustCenterSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, tcshuo.schemaConfig)

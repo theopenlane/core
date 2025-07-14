@@ -169,3 +169,20 @@ tasks:
     cmds:
       - for: {var: MODELS, as: MODEL}
         cmd: go run main.go template create -n {{ .MODEL }} -t ROOTTEMPLATE --jsonconfig="../../jsonschema/models/{{ .MODEL }}/generate/{{ .MODEL }}.json"
+
+  orgsetting:enforce-sso:
+    desc: update the default organization to enforce SSO using the local OIDC server
+    vars:
+      CLIENT_ID: local-client
+      CLIENT_SECRET: local-client-secret
+      DISCOVERY_URL: http://localhost:5556/dex/.well-known/openid-configuration
+      SETTING_ID:
+        sh: go run main.go organization-setting get -z json | jq -r '.organizationSettings.edges[0].node.id'
+    cmds:
+      - go run main.go organization-setting update --id {{.SETTING_ID}} --client-id {{.CLIENT_ID}} --client-secret {{.CLIENT_SECRET}} --discovery-url {{.DISCOVERY_URL}} --identity-provider OKTA --enforce-sso
+
+  user:all:sso:
+    desc: run user:all and enforce SSO for the organization
+    cmds:
+      - task: user:all
+      - task: orgsetting:enforce-sso

@@ -5,8 +5,10 @@ package graphapi
 import (
 	"context"
 
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/utils/rout"
 )
 
 // bulkCreateActionPlan uses the CreateBulk function to create multiple ActionPlan entities
@@ -272,6 +274,35 @@ func (r *mutationResolver) bulkCreateEvent(ctx context.Context, input []*generat
 	// return response
 	return &model.EventBulkCreatePayload{
 		Events: res,
+	}, nil
+}
+
+// bulkDeleteExport deletes multiple Export entities by their IDs
+func (r *mutationResolver) bulkDeleteExport(ctx context.Context, ids []string) (*model.ExportBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+
+	// delete each export individually to ensure proper cleanup
+	for _, id := range ids {
+		if err := withTransactionalMutation(ctx).Export.DeleteOneID(id).Exec(ctx); err != nil {
+			log.Error().Err(err).Str("export_id", id).Msg("failed to delete export in bulk operation")
+			continue
+		}
+
+		// call edge cleanup if the function exists
+		if err := generated.ExportEdgeCleanup(ctx, id); err != nil {
+			log.Error().Err(err).Str("export_id", id).Msg("failed to cleanup export edges in bulk operation")
+			continue
+		}
+
+		deletedIDs = append(deletedIDs, id)
+	}
+
+	return &model.ExportBulkDeletePayload{
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -636,6 +667,25 @@ func (r *mutationResolver) bulkCreateSubcontrol(ctx context.Context, input []*ge
 	}, nil
 }
 
+// bulkCreateSubprocessor uses the CreateBulk function to create multiple Subprocessor entities
+func (r *mutationResolver) bulkCreateSubprocessor(ctx context.Context, input []*generated.CreateSubprocessorInput) (*model.SubprocessorBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.SubprocessorCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Subprocessor.Create().SetInput(*data)
+	}
+
+	res, err := c.Subprocessor.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "subprocessor"})
+	}
+
+	// return response
+	return &model.SubprocessorBulkCreatePayload{
+		Subprocessors: res,
+	}, nil
+}
+
 // bulkCreateSubscriber uses the CreateBulk function to create multiple Subscriber entities
 func (r *mutationResolver) bulkCreateSubscriber(ctx context.Context, input []*generated.CreateSubscriberInput) (*model.SubscriberBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -690,6 +740,25 @@ func (r *mutationResolver) bulkCreateTemplate(ctx context.Context, input []*gene
 	// return response
 	return &model.TemplateBulkCreatePayload{
 		Templates: res,
+	}, nil
+}
+
+// bulkCreateTrustCenterSubprocessor uses the CreateBulk function to create multiple TrustCenterSubprocessor entities
+func (r *mutationResolver) bulkCreateTrustCenterSubprocessor(ctx context.Context, input []*generated.CreateTrustCenterSubprocessorInput) (*model.TrustCenterSubprocessorBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.TrustCenterSubprocessorCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.TrustCenterSubprocessor.Create().SetInput(*data)
+	}
+
+	res, err := c.TrustCenterSubprocessor.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcentersubprocessor"})
+	}
+
+	// return response
+	return &model.TrustCenterSubprocessorBulkCreatePayload{
+		TrustCenterSubprocessors: res,
 	}, nil
 }
 

@@ -46,6 +46,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -99,6 +100,10 @@ func adminSearchAPITokens(ctx context.Context, query string, after *entgql.Curso
 				},
 				apitoken.RevokedReasonContainsFold(query), // search by RevokedReason
 				apitoken.RevokedByContainsFold(query),     // search by RevokedBy
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(sso_authorizations)::text LIKE $8", likeQuery)) // search by SsoAuthorizations
+				},
 			),
 		)
 
@@ -1246,6 +1251,8 @@ func adminSearchOrganizationSettings(ctx context.Context, query string, after *e
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(allowed_email_domains)::text LIKE $10", likeQuery)) // search by AllowedEmailDomains
 				},
+				organizationsetting.IdentityProviderClientIDContainsFold(query),         // search by IdentityProviderClientID
+				organizationsetting.IdentityProviderClientSecretContainsFold(query),     // search by IdentityProviderClientSecret
 				organizationsetting.IdentityProviderMetadataEndpointContainsFold(query), // search by IdentityProviderMetadataEndpoint
 				organizationsetting.IdentityProviderEntityIDContainsFold(query),         // search by IdentityProviderEntityID
 				organizationsetting.OidcDiscoveryEndpointContainsFold(query),            // search by OidcDiscoveryEndpoint
@@ -1286,6 +1293,10 @@ func adminSearchPersonalAccessTokens(ctx context.Context, query string, after *e
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(scopes)::text LIKE $4", likeQuery)) // search by Scopes
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(sso_authorizations)::text LIKE $5", likeQuery)) // search by SsoAuthorizations
 				},
 				personalaccesstoken.RevokedReasonContainsFold(query), // search by RevokedReason
 				personalaccesstoken.RevokedByContainsFold(query),     // search by RevokedBy
@@ -1666,6 +1677,44 @@ func adminSearchSubcontrols(ctx context.Context, query string, after *entgql.Cur
 				subcontrol.OwnerIDContainsFold(query),        // search by OwnerID
 				subcontrol.RefCodeContainsFold(query),        // search by RefCode
 				subcontrol.ControlIDContainsFold(query),      // search by ControlID
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchSubprocessor searches for Subprocessor based on the query string looking for matches
+func searchSubprocessors(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.SubprocessorConnection, error) {
+	request := withTransactionalMutation(ctx).Subprocessor.Query().
+		Where(
+			subprocessor.Or(
+				subprocessor.ID(query),               // search equal to ID
+				subprocessor.NameContainsFold(query), // search by Name
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchSubprocessor searches for Subprocessor based on the query string looking for matches
+func adminSearchSubprocessors(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.SubprocessorConnection, error) {
+	request := withTransactionalMutation(ctx).Subprocessor.Query().
+		Where(
+			subprocessor.Or(
+				subprocessor.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+				subprocessor.OwnerIDContainsFold(query),         // search by OwnerID
+				subprocessor.NameContainsFold(query),            // search by Name
+				subprocessor.DescriptionContainsFold(query),     // search by Description
+				subprocessor.LogoRemoteURLContainsFold(query),   // search by LogoRemoteURL
+				subprocessor.LogoLocalFileIDContainsFold(query), // search by LogoLocalFileID
 			),
 		)
 

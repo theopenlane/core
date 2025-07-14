@@ -8,7 +8,7 @@ import (
 
 	"github.com/stripe/stripe-go/v82"
 	"github.com/theopenlane/utils/cli/tables"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 
 	"github.com/theopenlane/core/pkg/entitlements"
 )
@@ -33,21 +33,19 @@ var outWriter io.Writer = os.Stdout
 // It supports dry-run mode to list what would be migrated without making changes
 // It requires the old and new price IDs, and optionally customer IDs to migrate
 // The Stripe API key can be provided via a flag or environment variable
-func migrationApp() *cli.App {
-	app := &cli.App{
+func migrationApp() *cli.Command {
+	app := &cli.Command{
 		Name:  "pricemigrate",
 		Usage: "tag and optionally migrate subscriptions to a new price",
 		Flags: []cli.Flag{
 			&cli.StringFlag{Name: "old-price", Usage: "price ID to migrate from", Required: true},
 			&cli.StringFlag{Name: "new-price", Usage: "price ID to migrate to", Required: true},
 			&cli.StringSliceFlag{Name: "customers", Usage: "comma separated customer IDs to migrate"},
-			&cli.StringFlag{Name: "stripe-key", Usage: "stripe API key", EnvVars: []string{"STRIPE_API_KEY"}},
+			&cli.StringFlag{Name: "stripe-key", Usage: "stripe API key", Sources: cli.EnvVars("STRIPE_API_KEY")},
 			&cli.BoolFlag{Name: "no-migrate", Usage: "only tag the price and do not update subscriptions"},
-			&cli.BoolFlag{Name: "dry-run", Usage: "list customers and subscriptions that would be migrated"},
+			&cli.BoolFlag{Name: "dry-run", Usage: "list customers and subscriptions that would be migrated", Value: true}, // default to true to avoid accidental migrations
 		},
-		Action: func(c *cli.Context) error {
-			ctx := c.Context
-
+		Action: func(ctx context.Context, c *cli.Command) error {
 			oldPrice := c.String("old-price")
 			newPrice := c.String("new-price")
 			apiKey := c.String("stripe-key")
@@ -118,7 +116,7 @@ func migrationApp() *cli.App {
 }
 
 func main() {
-	if err := migrationApp().Run(os.Args); err != nil {
+	if err := migrationApp().Run(context.Background(), os.Args); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}

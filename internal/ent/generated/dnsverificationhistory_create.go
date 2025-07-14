@@ -283,7 +283,9 @@ func (dvhc *DNSVerificationHistoryCreate) Mutation() *DNSVerificationHistoryMuta
 
 // Save creates the DNSVerificationHistory in the database.
 func (dvhc *DNSVerificationHistoryCreate) Save(ctx context.Context) (*DNSVerificationHistory, error) {
-	dvhc.defaults()
+	if err := dvhc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, dvhc.sqlSave, dvhc.mutation, dvhc.hooks)
 }
 
@@ -310,16 +312,25 @@ func (dvhc *DNSVerificationHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (dvhc *DNSVerificationHistoryCreate) defaults() {
+func (dvhc *DNSVerificationHistoryCreate) defaults() error {
 	if _, ok := dvhc.mutation.HistoryTime(); !ok {
+		if dnsverificationhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized dnsverificationhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := dnsverificationhistory.DefaultHistoryTime()
 		dvhc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := dvhc.mutation.CreatedAt(); !ok {
+		if dnsverificationhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized dnsverificationhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := dnsverificationhistory.DefaultCreatedAt()
 		dvhc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := dvhc.mutation.UpdatedAt(); !ok {
+		if dnsverificationhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized dnsverificationhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := dnsverificationhistory.DefaultUpdatedAt()
 		dvhc.mutation.SetUpdatedAt(v)
 	}
@@ -336,9 +347,13 @@ func (dvhc *DNSVerificationHistoryCreate) defaults() {
 		dvhc.mutation.SetAcmeChallengeStatus(v)
 	}
 	if _, ok := dvhc.mutation.ID(); !ok {
+		if dnsverificationhistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized dnsverificationhistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := dnsverificationhistory.DefaultID()
 		dvhc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

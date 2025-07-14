@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -331,6 +332,12 @@ func (thq *TemplateHistoryQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		thq.sql = prev
+	}
+	if templatehistory.Policy == nil {
+		return errors.New("generated: uninitialized templatehistory.Policy (forgotten import generated/runtime?)")
+	}
+	if err := templatehistory.Policy.EvalQuery(ctx, thq); err != nil {
+		return err
 	}
 	return nil
 }

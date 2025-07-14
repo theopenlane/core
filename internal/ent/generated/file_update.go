@@ -23,7 +23,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 
@@ -582,6 +584,36 @@ func (fu *FileUpdate) AddEvents(e ...*Event) *FileUpdate {
 	return fu.AddEventIDs(ids...)
 }
 
+// AddTrustCenterSettingIDs adds the "trust_center_setting" edge to the TrustCenterSetting entity by IDs.
+func (fu *FileUpdate) AddTrustCenterSettingIDs(ids ...string) *FileUpdate {
+	fu.mutation.AddTrustCenterSettingIDs(ids...)
+	return fu
+}
+
+// AddTrustCenterSetting adds the "trust_center_setting" edges to the TrustCenterSetting entity.
+func (fu *FileUpdate) AddTrustCenterSetting(t ...*TrustCenterSetting) *FileUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return fu.AddTrustCenterSettingIDs(ids...)
+}
+
+// AddSubprocessorIDs adds the "subprocessor" edge to the Subprocessor entity by IDs.
+func (fu *FileUpdate) AddSubprocessorIDs(ids ...string) *FileUpdate {
+	fu.mutation.AddSubprocessorIDs(ids...)
+	return fu
+}
+
+// AddSubprocessor adds the "subprocessor" edges to the Subprocessor entity.
+func (fu *FileUpdate) AddSubprocessor(s ...*Subprocessor) *FileUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return fu.AddSubprocessorIDs(ids...)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (fu *FileUpdate) Mutation() *FileMutation {
 	return fu.mutation
@@ -837,6 +869,48 @@ func (fu *FileUpdate) RemoveEvents(e ...*Event) *FileUpdate {
 		ids[i] = e[i].ID
 	}
 	return fu.RemoveEventIDs(ids...)
+}
+
+// ClearTrustCenterSetting clears all "trust_center_setting" edges to the TrustCenterSetting entity.
+func (fu *FileUpdate) ClearTrustCenterSetting() *FileUpdate {
+	fu.mutation.ClearTrustCenterSetting()
+	return fu
+}
+
+// RemoveTrustCenterSettingIDs removes the "trust_center_setting" edge to TrustCenterSetting entities by IDs.
+func (fu *FileUpdate) RemoveTrustCenterSettingIDs(ids ...string) *FileUpdate {
+	fu.mutation.RemoveTrustCenterSettingIDs(ids...)
+	return fu
+}
+
+// RemoveTrustCenterSetting removes "trust_center_setting" edges to TrustCenterSetting entities.
+func (fu *FileUpdate) RemoveTrustCenterSetting(t ...*TrustCenterSetting) *FileUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return fu.RemoveTrustCenterSettingIDs(ids...)
+}
+
+// ClearSubprocessor clears all "subprocessor" edges to the Subprocessor entity.
+func (fu *FileUpdate) ClearSubprocessor() *FileUpdate {
+	fu.mutation.ClearSubprocessor()
+	return fu
+}
+
+// RemoveSubprocessorIDs removes the "subprocessor" edge to Subprocessor entities by IDs.
+func (fu *FileUpdate) RemoveSubprocessorIDs(ids ...string) *FileUpdate {
+	fu.mutation.RemoveSubprocessorIDs(ids...)
+	return fu
+}
+
+// RemoveSubprocessor removes "subprocessor" edges to Subprocessor entities.
+func (fu *FileUpdate) RemoveSubprocessor(s ...*Subprocessor) *FileUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return fu.RemoveSubprocessorIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1612,6 +1686,102 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if fu.mutation.TrustCenterSettingCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingTable,
+			Columns: file.TrustCenterSettingPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.TrustCenterSettingFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.RemovedTrustCenterSettingIDs(); len(nodes) > 0 && !fu.mutation.TrustCenterSettingCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingTable,
+			Columns: file.TrustCenterSettingPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.TrustCenterSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.TrustCenterSettingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingTable,
+			Columns: file.TrustCenterSettingPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.TrustCenterSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fu.mutation.SubprocessorCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.SubprocessorTable,
+			Columns: file.SubprocessorPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.SubprocessorFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.RemovedSubprocessorIDs(); len(nodes) > 0 && !fu.mutation.SubprocessorCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.SubprocessorTable,
+			Columns: file.SubprocessorPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.SubprocessorFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.SubprocessorIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.SubprocessorTable,
+			Columns: file.SubprocessorPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.SubprocessorFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = fu.schemaConfig.File
 	ctx = internal.NewSchemaConfigContext(ctx, fu.schemaConfig)
 	_spec.AddModifiers(fu.modifiers...)
@@ -2174,6 +2344,36 @@ func (fuo *FileUpdateOne) AddEvents(e ...*Event) *FileUpdateOne {
 	return fuo.AddEventIDs(ids...)
 }
 
+// AddTrustCenterSettingIDs adds the "trust_center_setting" edge to the TrustCenterSetting entity by IDs.
+func (fuo *FileUpdateOne) AddTrustCenterSettingIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.AddTrustCenterSettingIDs(ids...)
+	return fuo
+}
+
+// AddTrustCenterSetting adds the "trust_center_setting" edges to the TrustCenterSetting entity.
+func (fuo *FileUpdateOne) AddTrustCenterSetting(t ...*TrustCenterSetting) *FileUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return fuo.AddTrustCenterSettingIDs(ids...)
+}
+
+// AddSubprocessorIDs adds the "subprocessor" edge to the Subprocessor entity by IDs.
+func (fuo *FileUpdateOne) AddSubprocessorIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.AddSubprocessorIDs(ids...)
+	return fuo
+}
+
+// AddSubprocessor adds the "subprocessor" edges to the Subprocessor entity.
+func (fuo *FileUpdateOne) AddSubprocessor(s ...*Subprocessor) *FileUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return fuo.AddSubprocessorIDs(ids...)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (fuo *FileUpdateOne) Mutation() *FileMutation {
 	return fuo.mutation
@@ -2429,6 +2629,48 @@ func (fuo *FileUpdateOne) RemoveEvents(e ...*Event) *FileUpdateOne {
 		ids[i] = e[i].ID
 	}
 	return fuo.RemoveEventIDs(ids...)
+}
+
+// ClearTrustCenterSetting clears all "trust_center_setting" edges to the TrustCenterSetting entity.
+func (fuo *FileUpdateOne) ClearTrustCenterSetting() *FileUpdateOne {
+	fuo.mutation.ClearTrustCenterSetting()
+	return fuo
+}
+
+// RemoveTrustCenterSettingIDs removes the "trust_center_setting" edge to TrustCenterSetting entities by IDs.
+func (fuo *FileUpdateOne) RemoveTrustCenterSettingIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.RemoveTrustCenterSettingIDs(ids...)
+	return fuo
+}
+
+// RemoveTrustCenterSetting removes "trust_center_setting" edges to TrustCenterSetting entities.
+func (fuo *FileUpdateOne) RemoveTrustCenterSetting(t ...*TrustCenterSetting) *FileUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return fuo.RemoveTrustCenterSettingIDs(ids...)
+}
+
+// ClearSubprocessor clears all "subprocessor" edges to the Subprocessor entity.
+func (fuo *FileUpdateOne) ClearSubprocessor() *FileUpdateOne {
+	fuo.mutation.ClearSubprocessor()
+	return fuo
+}
+
+// RemoveSubprocessorIDs removes the "subprocessor" edge to Subprocessor entities by IDs.
+func (fuo *FileUpdateOne) RemoveSubprocessorIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.RemoveSubprocessorIDs(ids...)
+	return fuo
+}
+
+// RemoveSubprocessor removes "subprocessor" edges to Subprocessor entities.
+func (fuo *FileUpdateOne) RemoveSubprocessor(s ...*Subprocessor) *FileUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return fuo.RemoveSubprocessorIDs(ids...)
 }
 
 // Where appends a list predicates to the FileUpdate builder.
@@ -3229,6 +3471,102 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 			},
 		}
 		edge.Schema = fuo.schemaConfig.FileEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fuo.mutation.TrustCenterSettingCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingTable,
+			Columns: file.TrustCenterSettingPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.TrustCenterSettingFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.RemovedTrustCenterSettingIDs(); len(nodes) > 0 && !fuo.mutation.TrustCenterSettingCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingTable,
+			Columns: file.TrustCenterSettingPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.TrustCenterSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.TrustCenterSettingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingTable,
+			Columns: file.TrustCenterSettingPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.TrustCenterSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fuo.mutation.SubprocessorCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.SubprocessorTable,
+			Columns: file.SubprocessorPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.SubprocessorFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.RemovedSubprocessorIDs(); len(nodes) > 0 && !fuo.mutation.SubprocessorCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.SubprocessorTable,
+			Columns: file.SubprocessorPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.SubprocessorFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.SubprocessorIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.SubprocessorTable,
+			Columns: file.SubprocessorPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.SubprocessorFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

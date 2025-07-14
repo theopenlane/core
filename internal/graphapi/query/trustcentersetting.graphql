@@ -10,6 +10,16 @@ mutation CreateTrustCenterSetting($input: CreateTrustCenterSettingInput!) {
       trustCenterID
       updatedAt
       updatedBy
+      logoFile {
+        presignedURL
+      }
+      logoRemoteURL
+      logoLocalFileID
+      themeMode
+      font
+      foregroundColor
+      backgroundColor
+      accentColor
     }
   }
 }
@@ -40,6 +50,21 @@ query GetAllTrustCenterSettings {
         trustCenterID
         updatedAt
         updatedBy
+        logoFile {
+          presignedURL
+        }
+        logoRemoteURL
+        logoLocalFileID
+        faviconFile {
+          presignedURL
+        }
+        faviconRemoteURL
+        faviconLocalFileID
+        themeMode
+        font
+        foregroundColor
+        backgroundColor
+        accentColor
       }
     }
   }
@@ -55,6 +80,21 @@ query GetTrustCenterSettingByID($trustCenterSettingId: ID!) {
     trustCenterID
     updatedAt
     updatedBy
+    logoFile {
+      presignedURL
+    }
+    logoRemoteURL
+    logoLocalFileID
+    faviconFile {
+      presignedURL
+    }
+    faviconRemoteURL
+    faviconLocalFileID
+    themeMode
+    font
+    foregroundColor
+    backgroundColor
+    accentColor
   }
 }
 
@@ -78,12 +118,27 @@ query GetTrustCenterSettings($first: Int, $last: Int, $where: TrustCenterSetting
         trustCenterID
         updatedAt
         updatedBy
+        logoFile {
+          presignedURL
+        }
+        logoRemoteURL
+        logoLocalFileID
+        faviconFile {
+          presignedURL
+        }
+        faviconRemoteURL
+        faviconLocalFileID
+        themeMode
+        font
+        foregroundColor
+        backgroundColor
+        accentColor
       }
     }
   }
 }
-mutation UpdateTrustCenterSetting($updateTrustCenterSettingId: ID!, $input: UpdateTrustCenterSettingInput!) {
-  updateTrustCenterSetting(id: $updateTrustCenterSettingId, input: $input) {
+mutation UpdateTrustCenterSetting($updateTrustCenterSettingId: ID!, $input: UpdateTrustCenterSettingInput!, $logoFile: Upload, $faviconFile: Upload) {
+  updateTrustCenterSetting(id: $updateTrustCenterSettingId, input: $input, logoFile: $logoFile, faviconFile: $faviconFile) {
     trustCenterSetting {
       createdAt
       createdBy
@@ -94,6 +149,21 @@ mutation UpdateTrustCenterSetting($updateTrustCenterSettingId: ID!, $input: Upda
       trustCenterID
       updatedAt
       updatedBy
+      logoFile {
+        presignedURL
+      }
+      logoRemoteURL
+      logoLocalFileID
+      faviconFile {
+        presignedURL
+      }
+      faviconRemoteURL
+      faviconLocalFileID
+      themeMode
+      font
+      foregroundColor
+      backgroundColor
+      accentColor
     }
   }
 }

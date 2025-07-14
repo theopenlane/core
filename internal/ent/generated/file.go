@@ -63,6 +63,7 @@ type File struct {
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the FileQuery when eager-loading is set.
 	Edges        FileEdges `json:"edges"`
+	export_files *string
 	note_files   *string
 	selectValues sql.SelectValues
 
@@ -96,11 +97,15 @@ type FileEdges struct {
 	Evidence []*Evidence `json:"evidence,omitempty"`
 	// Events holds the value of the events edge.
 	Events []*Event `json:"events,omitempty"`
+	// TrustCenterSetting holds the value of the trust_center_setting edge.
+	TrustCenterSetting []*TrustCenterSetting `json:"trust_center_setting,omitempty"`
+	// Subprocessor holds the value of the subprocessor edge.
+	Subprocessor []*Subprocessor `json:"subprocessor,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [12]bool
+	loadedTypes [14]bool
 	// totalCount holds the count of the edges above.
-	totalCount [12]map[string]int
+	totalCount [14]map[string]int
 
 	namedUser                map[string][]*User
 	namedOrganization        map[string][]*Organization
@@ -114,6 +119,8 @@ type FileEdges struct {
 	namedProgram             map[string][]*Program
 	namedEvidence            map[string][]*Evidence
 	namedEvents              map[string][]*Event
+	namedTrustCenterSetting  map[string][]*TrustCenterSetting
+	namedSubprocessor        map[string][]*Subprocessor
 }
 
 // UserOrErr returns the User value or an error if the edge
@@ -224,6 +231,24 @@ func (e FileEdges) EventsOrErr() ([]*Event, error) {
 	return nil, &NotLoadedError{edge: "events"}
 }
 
+// TrustCenterSettingOrErr returns the TrustCenterSetting value or an error if the edge
+// was not loaded in eager-loading.
+func (e FileEdges) TrustCenterSettingOrErr() ([]*TrustCenterSetting, error) {
+	if e.loadedTypes[12] {
+		return e.TrustCenterSetting, nil
+	}
+	return nil, &NotLoadedError{edge: "trust_center_setting"}
+}
+
+// SubprocessorOrErr returns the Subprocessor value or an error if the edge
+// was not loaded in eager-loading.
+func (e FileEdges) SubprocessorOrErr() ([]*Subprocessor, error) {
+	if e.loadedTypes[13] {
+		return e.Subprocessor, nil
+	}
+	return nil, &NotLoadedError{edge: "subprocessor"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*File) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -237,7 +262,9 @@ func (*File) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case file.FieldCreatedAt, file.FieldUpdatedAt, file.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case file.ForeignKeys[0]: // note_files
+		case file.ForeignKeys[0]: // export_files
+			values[i] = new(sql.NullString)
+		case file.ForeignKeys[1]: // note_files
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -390,6 +417,13 @@ func (f *File) assignValues(columns []string, values []any) error {
 			}
 		case file.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field export_files", values[i])
+			} else if value.Valid {
+				f.export_files = new(string)
+				*f.export_files = value.String
+			}
+		case file.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field note_files", values[i])
 			} else if value.Valid {
 				f.note_files = new(string)
@@ -466,6 +500,16 @@ func (f *File) QueryEvidence() *EvidenceQuery {
 // QueryEvents queries the "events" edge of the File entity.
 func (f *File) QueryEvents() *EventQuery {
 	return NewFileClient(f.config).QueryEvents(f)
+}
+
+// QueryTrustCenterSetting queries the "trust_center_setting" edge of the File entity.
+func (f *File) QueryTrustCenterSetting() *TrustCenterSettingQuery {
+	return NewFileClient(f.config).QueryTrustCenterSetting(f)
+}
+
+// QuerySubprocessor queries the "subprocessor" edge of the File entity.
+func (f *File) QuerySubprocessor() *SubprocessorQuery {
+	return NewFileClient(f.config).QuerySubprocessor(f)
 }
 
 // Update returns a builder for updating this File.
@@ -842,6 +886,54 @@ func (f *File) appendNamedEvents(name string, edges ...*Event) {
 		f.Edges.namedEvents[name] = []*Event{}
 	} else {
 		f.Edges.namedEvents[name] = append(f.Edges.namedEvents[name], edges...)
+	}
+}
+
+// NamedTrustCenterSetting returns the TrustCenterSetting named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (f *File) NamedTrustCenterSetting(name string) ([]*TrustCenterSetting, error) {
+	if f.Edges.namedTrustCenterSetting == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := f.Edges.namedTrustCenterSetting[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (f *File) appendNamedTrustCenterSetting(name string, edges ...*TrustCenterSetting) {
+	if f.Edges.namedTrustCenterSetting == nil {
+		f.Edges.namedTrustCenterSetting = make(map[string][]*TrustCenterSetting)
+	}
+	if len(edges) == 0 {
+		f.Edges.namedTrustCenterSetting[name] = []*TrustCenterSetting{}
+	} else {
+		f.Edges.namedTrustCenterSetting[name] = append(f.Edges.namedTrustCenterSetting[name], edges...)
+	}
+}
+
+// NamedSubprocessor returns the Subprocessor named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (f *File) NamedSubprocessor(name string) ([]*Subprocessor, error) {
+	if f.Edges.namedSubprocessor == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := f.Edges.namedSubprocessor[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (f *File) appendNamedSubprocessor(name string, edges ...*Subprocessor) {
+	if f.Edges.namedSubprocessor == nil {
+		f.Edges.namedSubprocessor = make(map[string][]*Subprocessor)
+	}
+	if len(edges) == 0 {
+		f.Edges.namedSubprocessor[name] = []*Subprocessor{}
+	} else {
+		f.Edges.namedSubprocessor[name] = append(f.Edges.namedSubprocessor[name], edges...)
 	}
 }
 

@@ -59,6 +59,14 @@
             "Advanced Reporting"
           ]
         },
+        "lookup_key": {
+          "type": "string",
+          "pattern": "^[a-z0-9_-]+$",
+          "description": "Stable identifier for the feature",
+          "examples": [
+            "compliance"
+          ]
+        },
         "description": {
           "type": "string",
           "description": "Optional description of the feature",
@@ -85,6 +93,18 @@
         "usage": {
           "$ref": "#/$defs/Usage",
           "description": "Usage limits granted by the feature"
+        },
+        "product_id": {
+          "type": "string",
+          "description": "Stripe product ID"
+        },
+        "personal_org": {
+          "type": "boolean",
+          "description": "Include feature in personal organizations"
+        },
+        "include_with_trial": {
+          "type": "boolean",
+          "description": "Include feature with trial subscriptions"
         }
       },
       "additionalProperties": false,

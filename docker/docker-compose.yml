@@ -1,8 +1,9 @@
 services:
   api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
     image: core:dev
-    depends_on:
-      - openfga
     command:
       - serve
       - --debug
@@ -18,5 +19,52 @@ services:
     environment:
       - CORE_REDIS_ADDRESS=redis:6379
       - CORE_AUTHZ_HOST_URL=openfga:8080
+    networks:
+      - default
+
+  localoidc:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: core:dev
+    command:
+      - localoidc
+    environment:
+      - OIDC_REDIRECT_URL=http://api:17608/v1/sso/callback
+    ports:
+      - "9998:9998"
+    networks:
+      - default
+
+  dex:
+    image: ghcr.io/dexidp/dex:v2.43.1
+    volumes:
+      - ./docker/files/dex.yaml:/etc/dex/config.yaml:ro
+    command: ["dex", "serve", "/etc/dex/config.yaml"]
+    ports:
+      - "5556:5556"
+    networks:
+      - default
+
+  sso-ui:
+    image: nginx:alpine
+    volumes:
+      - ../pkg/testutils/login/sso:/usr/share/nginx/html:ro
+    ports:
+      - "3001:80"
+    networks:
+      - default
+
+  cli:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: core:dev
+    entrypoint: ["/bin/core"]
+    command: ["cli"]
+    stdin_open: true
+    tty: true
+    depends_on:
+      - api
     networks:
       - default

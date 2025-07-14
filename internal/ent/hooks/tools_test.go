@@ -15,8 +15,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/enttest"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/entdb"
+	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/auth"
@@ -131,8 +131,8 @@ func (suite *HookTestSuite) seedSystemAdmin() *generated.User {
 	req := fgax.TupleRequest{
 		SubjectID:   newUser.ID,
 		SubjectType: auth.UserSubjectType,
-		ObjectID:    rule.SystemObjectID,
-		ObjectType:  rule.SystemObject,
+		ObjectID:    authmw.SystemObjectID,
+		ObjectType:  authmw.SystemObject,
 		Relation:    fgax.SystemAdminRelation,
 	}
 

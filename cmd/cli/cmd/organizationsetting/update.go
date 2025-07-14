@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -30,6 +31,12 @@ func init() {
 	updateCmd.Flags().StringSliceP("tags", "t", []string{}, "tags associated with the org")
 	updateCmd.Flags().StringSliceP("append-allowed-domains", "a", []string{}, "emails domains allowed to access the org")
 	updateCmd.Flags().BoolP("clear-allowed-domains", "l", false, "clear emails domains allowed to access the org")
+	updateCmd.Flags().String("identity-provider", "", "SSO provider type")
+	updateCmd.Flags().String("client-id", "", "OIDC client ID")
+	updateCmd.Flags().String("client-secret", "", "OIDC client secret")
+	updateCmd.Flags().String("metadata-url", "", "SSO metadata URL")
+	updateCmd.Flags().String("discovery-url", "", "OIDC discovery URL")
+	updateCmd.Flags().Bool("enforce-sso", false, "enforce SSO login")
 }
 
 // updateValidation validates the input flags provided by the user
@@ -73,6 +80,36 @@ func updateValidation() (id string, input openlaneclient.UpdateOrganizationSetti
 		input.AllowedEmailDomains = allowedDomains
 	} else if clearDomains {
 		input.ClearAllowedEmailDomains = &clearDomains
+	}
+
+	provider := cmd.Config.String("identity-provider")
+	if provider != "" {
+		input.IdentityProvider = enums.ToSSOProvider(provider)
+	}
+
+	clientID := cmd.Config.String("client-id")
+	if clientID != "" {
+		input.IdentityProviderClientID = &clientID
+	}
+
+	clientSecret := cmd.Config.String("client-secret")
+	if clientSecret != "" {
+		input.IdentityProviderClientSecret = &clientSecret
+	}
+
+	metadataURL := cmd.Config.String("metadata-url")
+	if metadataURL != "" {
+		input.IdentityProviderMetadataEndpoint = &metadataURL
+	}
+
+	discoveryURL := cmd.Config.String("discovery-url")
+	if discoveryURL != "" {
+		input.OidcDiscoveryEndpoint = &discoveryURL
+	}
+
+	enforce := cmd.Config.Bool("enforce-sso")
+	if enforce {
+		input.IdentityProviderLoginEnforced = &enforce
 	}
 
 	return id, input, nil

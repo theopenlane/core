@@ -1,0 +1,188 @@
+
+mutation CreateBulkCSVSubprocessor($input: Upload!) {
+  createBulkCSVSubprocessor(input: $input) {
+    subprocessors {
+      createdAt
+      createdBy
+      id
+      tags
+      updatedAt
+      updatedBy
+      name
+      description
+      logoRemoteURL
+      logoLocalFileID
+      logoFile {
+        presignedURL
+      }
+      owner {
+        id
+        name
+      }
+    }
+  }
+}
+
+mutation CreateBulkSubprocessor($input: [CreateSubprocessorInput!]) {
+  createBulkSubprocessor(input: $input) {
+    subprocessors {
+      createdAt
+      createdBy
+      id
+      tags
+      updatedAt
+      updatedBy
+      name
+      description
+      logoRemoteURL
+      logoLocalFileID
+      logoFile {
+        presignedURL
+      }
+      owner {
+        id
+        name
+      }
+    }
+  }
+}
+
+mutation CreateSubprocessor($input: CreateSubprocessorInput!, $logoFile: Upload) {
+  createSubprocessor(input: $input, logoFile: $logoFile) {
+    subprocessor {
+      createdAt
+      createdBy
+      id
+      tags
+      updatedAt
+      updatedBy
+      name
+      description
+      logoRemoteURL
+      logoLocalFileID
+      logoFile {
+        presignedURL
+      }
+      owner {
+        id
+        name
+      }
+    }
+  }
+}
+
+mutation DeleteSubprocessor($deleteSubprocessorId: ID!) {
+  deleteSubprocessor(id: $deleteSubprocessorId) {
+    deletedID
+  }
+}
+
+query GetAllSubprocessors {
+  subprocessors {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        tags
+        updatedAt
+        updatedBy
+        name
+        description
+        logoRemoteURL
+        logoLocalFileID
+        logoFile {
+          presignedURL
+        }
+        owner {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+query GetSubprocessorByID($subprocessorId: ID!) {
+  subprocessor(id: $subprocessorId) {
+    createdAt
+    createdBy
+    id
+    tags
+    updatedAt
+    updatedBy
+    name
+    description
+    logoRemoteURL
+    logoLocalFileID
+    logoFile {
+      presignedURL
+    }
+    owner {
+      id
+      name
+    }
+  }
+}
+
+query GetSubprocessors($first: Int, $last: Int, $where: SubprocessorWhereInput) {
+  subprocessors(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        tags
+        updatedAt
+        updatedBy
+        name
+        description
+        logoRemoteURL
+        logoLocalFileID
+        logoFile {
+          presignedURL
+        }
+        owner {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+mutation UpdateSubprocessor($updateSubprocessorId: ID!, $input: UpdateSubprocessorInput!, $logoFile: Upload) {
+  updateSubprocessor(id: $updateSubprocessorId, input: $input, logoFile: $logoFile) {
+    subprocessor {
+      createdAt
+      createdBy
+      id
+      tags
+      updatedAt
+      updatedBy
+      name
+      description
+      logoRemoteURL
+      logoLocalFileID
+      logoFile {
+        presignedURL
+      }
+      owner {
+        id
+        name
+      }
+    }
+  }
+}

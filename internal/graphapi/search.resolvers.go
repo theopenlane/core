@@ -58,6 +58,7 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		scheduledjobResults               *generated.ScheduledJobConnection
 		standardResults                   *generated.StandardConnection
 		subcontrolResults                 *generated.SubcontrolConnection
+		subprocessorResults               *generated.SubprocessorConnection
 		subscriberResults                 *generated.SubscriberConnection
 		taskResults                       *generated.TaskConnection
 		templateResults                   *generated.TemplateConnection
@@ -322,6 +323,13 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		},
 		func() {
 			var err error
+			subprocessorResults, err = searchSubprocessors(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
 			subscriberResults, err = searchSubscribers(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
@@ -559,6 +567,11 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		res.Subcontrols = subcontrolResults
 
 		res.TotalCount += subcontrolResults.TotalCount
+	}
+	if subprocessorResults != nil && len(subprocessorResults.Edges) > 0 {
+		res.Subprocessors = subprocessorResults
+
+		res.TotalCount += subprocessorResults.TotalCount
 	}
 	if subscriberResults != nil && len(subscriberResults.Edges) > 0 {
 		res.Subscribers = subscriberResults
@@ -957,6 +970,16 @@ func (r *queryResolver) SubcontrolSearch(ctx context.Context, query string, afte
 
 	// return the results
 	return subcontrolResults, nil
+}
+func (r *queryResolver) SubprocessorSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.SubprocessorConnection, error) {
+	subprocessorResults, err := searchSubprocessors(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return subprocessorResults, nil
 }
 func (r *queryResolver) SubscriberSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.SubscriberConnection, error) {
 	subscriberResults, err := searchSubscribers(ctx, query, after, first, before, last)

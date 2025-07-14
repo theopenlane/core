@@ -1846,6 +1846,56 @@ func (e *Evidence) Tasks(
 	return e.QueryTasks().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (e *Export) Owner(ctx context.Context) (*Organization, error) {
+	result, err := e.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = e.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (e *Export) Events(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*EventOrder, where *EventWhereInput,
+) (*EventConnection, error) {
+	opts := []EventPaginateOption{
+		WithEventOrder(orderBy),
+		WithEventFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := e.Edges.totalCount[1][alias]
+	if nodes, err := e.NamedEvents(alias); err == nil || hasTotalCount {
+		pager, err := newEventPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &EventConnection{Edges: []*EventEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return e.QueryEvents().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (e *Export) Files(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FileOrder, where *FileWhereInput,
+) (*FileConnection, error) {
+	opts := []FilePaginateOption{
+		WithFileOrder(orderBy),
+		WithFileFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := e.Edges.totalCount[2][alias]
+	if nodes, err := e.NamedFiles(alias); err == nil || hasTotalCount {
+		pager, err := newFilePager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &FileConnection{Edges: []*FileEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return e.QueryFiles().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (f *File) User(ctx context.Context) (result []*User, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = f.NamedUser(graphql.GetFieldContext(ctx).Field.Alias)
@@ -2006,6 +2056,30 @@ func (f *File) Events(
 		return conn, nil
 	}
 	return f.QueryEvents().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (f *File) TrustCenterSetting(ctx context.Context) (result []*TrustCenterSetting, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = f.NamedTrustCenterSetting(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = f.Edges.TrustCenterSettingOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = f.QueryTrustCenterSetting().All(ctx)
+	}
+	return result, err
+}
+
+func (f *File) Subprocessor(ctx context.Context) (result []*Subprocessor, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = f.NamedSubprocessor(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = f.Edges.SubprocessorOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = f.QuerySubprocessor().All(ctx)
+	}
+	return result, err
 }
 
 func (gr *Group) Owner(ctx context.Context) (*Organization, error) {
@@ -4856,6 +4930,48 @@ func (o *Organization) Scans(
 	return o.QueryScans().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (o *Organization) Subprocessors(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*SubprocessorOrder, where *SubprocessorWhereInput,
+) (*SubprocessorConnection, error) {
+	opts := []SubprocessorPaginateOption{
+		WithSubprocessorOrder(orderBy),
+		WithSubprocessorFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := o.Edges.totalCount[61][alias]
+	if nodes, err := o.NamedSubprocessors(alias); err == nil || hasTotalCount {
+		pager, err := newSubprocessorPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &SubprocessorConnection{Edges: []*SubprocessorEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return o.QuerySubprocessors().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (o *Organization) Exports(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ExportOrder, where *ExportWhereInput,
+) (*ExportConnection, error) {
+	opts := []ExportPaginateOption{
+		WithExportOrder(orderBy),
+		WithExportFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := o.Edges.totalCount[62][alias]
+	if nodes, err := o.NamedExports(alias); err == nil || hasTotalCount {
+		pager, err := newExportPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &ExportConnection{Edges: []*ExportEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return o.QueryExports().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (o *Organization) Members(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*OrgMembershipOrder, where *OrgMembershipWhereInput,
 ) (*OrgMembershipConnection, error) {
@@ -4864,7 +4980,7 @@ func (o *Organization) Members(
 		WithOrgMembershipFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := o.Edges.totalCount[61][alias]
+	totalCount, hasTotalCount := o.Edges.totalCount[63][alias]
 	if nodes, err := o.NamedMembers(alias); err == nil || hasTotalCount {
 		pager, err := newOrgMembershipPager(opts, last != nil)
 		if err != nil {
@@ -6263,6 +6379,64 @@ func (s *Subcontrol) ScheduledJobs(
 	return s.QueryScheduledJobs().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (s *Subprocessor) Owner(ctx context.Context) (*Organization, error) {
+	result, err := s.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = s.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (s *Subprocessor) Files(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FileOrder, where *FileWhereInput,
+) (*FileConnection, error) {
+	opts := []FilePaginateOption{
+		WithFileOrder(orderBy),
+		WithFileFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := s.Edges.totalCount[1][alias]
+	if nodes, err := s.NamedFiles(alias); err == nil || hasTotalCount {
+		pager, err := newFilePager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &FileConnection{Edges: []*FileEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return s.QueryFiles().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (s *Subprocessor) LogoFile(ctx context.Context) (*File, error) {
+	result, err := s.Edges.LogoFileOrErr()
+	if IsNotLoaded(err) {
+		result, err = s.QueryLogoFile().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (s *Subprocessor) TrustCenterSubprocessors(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TrustCenterSubprocessorOrder, where *TrustCenterSubprocessorWhereInput,
+) (*TrustCenterSubprocessorConnection, error) {
+	opts := []TrustCenterSubprocessorPaginateOption{
+		WithTrustCenterSubprocessorOrder(orderBy),
+		WithTrustCenterSubprocessorFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := s.Edges.totalCount[3][alias]
+	if nodes, err := s.NamedTrustCenterSubprocessors(alias); err == nil || hasTotalCount {
+		pager, err := newTrustCenterSubprocessorPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TrustCenterSubprocessorConnection{Edges: []*TrustCenterSubprocessorEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return s.QueryTrustCenterSubprocessors().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (s *Subscriber) Owner(ctx context.Context) (*Organization, error) {
 	result, err := s.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -6608,12 +6782,86 @@ func (tc *TrustCenter) Setting(ctx context.Context) (*TrustCenterSetting, error)
 	return result, MaskNotFound(err)
 }
 
+func (tc *TrustCenter) TrustCenterSubprocessors(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TrustCenterSubprocessorOrder, where *TrustCenterSubprocessorWhereInput,
+) (*TrustCenterSubprocessorConnection, error) {
+	opts := []TrustCenterSubprocessorPaginateOption{
+		WithTrustCenterSubprocessorOrder(orderBy),
+		WithTrustCenterSubprocessorFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := tc.Edges.totalCount[3][alias]
+	if nodes, err := tc.NamedTrustCenterSubprocessors(alias); err == nil || hasTotalCount {
+		pager, err := newTrustCenterSubprocessorPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TrustCenterSubprocessorConnection{Edges: []*TrustCenterSubprocessorEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return tc.QueryTrustCenterSubprocessors().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (tcs *TrustCenterSetting) TrustCenter(ctx context.Context) (*TrustCenter, error) {
 	result, err := tcs.Edges.TrustCenterOrErr()
 	if IsNotLoaded(err) {
 		result, err = tcs.QueryTrustCenter().Only(ctx)
 	}
 	return result, MaskNotFound(err)
+}
+
+func (tcs *TrustCenterSetting) Files(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FileOrder, where *FileWhereInput,
+) (*FileConnection, error) {
+	opts := []FilePaginateOption{
+		WithFileOrder(orderBy),
+		WithFileFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := tcs.Edges.totalCount[1][alias]
+	if nodes, err := tcs.NamedFiles(alias); err == nil || hasTotalCount {
+		pager, err := newFilePager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &FileConnection{Edges: []*FileEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return tcs.QueryFiles().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (tcs *TrustCenterSetting) LogoFile(ctx context.Context) (*File, error) {
+	result, err := tcs.Edges.LogoFileOrErr()
+	if IsNotLoaded(err) {
+		result, err = tcs.QueryLogoFile().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (tcs *TrustCenterSetting) FaviconFile(ctx context.Context) (*File, error) {
+	result, err := tcs.Edges.FaviconFileOrErr()
+	if IsNotLoaded(err) {
+		result, err = tcs.QueryFaviconFile().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (tcs *TrustCenterSubprocessor) TrustCenter(ctx context.Context) (*TrustCenter, error) {
+	result, err := tcs.Edges.TrustCenterOrErr()
+	if IsNotLoaded(err) {
+		result, err = tcs.QueryTrustCenter().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (tcs *TrustCenterSubprocessor) Subprocessor(ctx context.Context) (*Subprocessor, error) {
+	result, err := tcs.Edges.SubprocessorOrErr()
+	if IsNotLoaded(err) {
+		result, err = tcs.QuerySubprocessor().Only(ctx)
+	}
+	return result, err
 }
 
 func (u *User) PersonalAccessTokens(

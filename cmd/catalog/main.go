@@ -7,9 +7,10 @@ import (
 	"io"
 	"maps"
 	"os"
+	"slices"
 	"strings"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 
 	"github.com/stripe/stripe-go/v82"
 	"github.com/theopenlane/core/pkg/catalog"
@@ -37,6 +38,9 @@ type stripeClient interface {
 	ListProducts(ctx context.Context) ([]*stripe.Product, error)
 	GetPrice(ctx context.Context, id string) (*stripe.Price, error)
 	FindPriceForProduct(ctx context.Context, productID string, currency string, unitAmount int64, interval, nickname, lookupKey, metadata string, meta map[string]string) (*stripe.Price, error)
+	GetPriceByLookupKey(ctx context.Context, lookupKey string) (*stripe.Price, error)
+	GetFeatureByLookupKey(ctx context.Context, lookupKey string) (*stripe.EntitlementsFeature, error)
+	GetProduct(ctx context.Context, id string) (*stripe.Product, error)
 	UpdatePriceMetadata(ctx context.Context, priceID string, metadata map[string]string) (*stripe.Price, error)
 }
 
@@ -50,27 +54,27 @@ var outWriter io.Writer = os.Stdout
 
 // main is the entry point for the catalog CLI application
 func main() {
-	if err := catalogApp().Run(os.Args); err != nil {
+	if err := catalogApp().Run(context.Background(), os.Args); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }
 
 // catalogApp creates a CLI application for reconciling a catalog with Stripe
-func catalogApp() *cli.App {
-	app := &cli.App{
+func catalogApp() *cli.Command {
+	app := &cli.Command{
 		Name:  "catalog",
 		Usage: "reconcile catalog with Stripe",
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:  "catalog",
 				Usage: "catalog file path",
-				Value: "./pkg/catalog/catalog.yaml",
+				Value: "./pkg/catalog/catalog_sandbox.yaml", // set the value to sandbox catalog by default to avoid disasters
 			},
 			&cli.StringFlag{
 				Name:    "stripe-key",
 				Usage:   "stripe API key",
-				EnvVars: []string{"STRIPE_API_KEY"},
+				Sources: cli.EnvVars("STRIPE_API_KEY"),
 			},
 			&cli.BoolFlag{
 				Name:  "takeover",
@@ -79,9 +83,10 @@ func catalogApp() *cli.App {
 			&cli.BoolFlag{
 				Name:  "write",
 				Usage: "write price IDs back to catalog file",
+				Value: true, // default to true to ensure up to date price IDs
 			},
 		},
-		Action: func(c *cli.Context) error {
+		Action: func(ctx context.Context, c *cli.Command) error {
 			catalogFile := c.String("catalog")
 			apiKey := c.String("stripe-key")
 			takeover := c.Bool("takeover")
@@ -102,7 +107,52 @@ func catalogApp() *cli.App {
 				return fmt.Errorf("stripe client: %w", err)
 			}
 
-			ctx := c.Context
+			conflicts, err := cat.LookupKeyConflicts(ctx, sc)
+			if err != nil {
+				return fmt.Errorf("lookup keys: %w", err)
+			}
+
+			for _, c := range conflicts {
+				managed, merr := conflictManaged(ctx, sc, c)
+				if merr != nil {
+					fmt.Fprintf(os.Stderr, "lookup key %s already exists as %s %s for %s\n", c.LookupKey, c.Resource, c.ID, c.Feature)
+					continue
+				}
+
+				if !managed {
+					fmt.Fprintf(os.Stderr, "lookup key %s already exists as %s %s for %s\n", c.LookupKey, c.Resource, c.ID, c.Feature)
+					continue
+				}
+
+				parts := strings.SplitN(c.Feature, ":", 2) // nolint:mnd
+				if len(parts) != 2 {                       // nolint:mnd
+					continue
+				}
+
+				name := parts[1]
+				var feat catalog.Feature
+				var fs catalog.FeatureSet
+				if parts[0] == "module" {
+					feat = cat.Modules[name]
+					fs = cat.Modules
+				} else {
+					feat = cat.Addons[name]
+					fs = cat.Addons
+				}
+
+				switch c.Resource {
+				case "product":
+					feat.ProductID = c.ID
+				case "price":
+					for i, p := range feat.Billing.Prices {
+						if p.LookupKey == c.LookupKey {
+							feat.Billing.Prices[i].PriceID = c.ID
+						}
+					}
+				}
+
+				fs[name] = feat
+			}
 
 			// Pull all existing products from Stripe to build a lookup by name.
 			prodMap, err := buildProductMap(ctx, sc)
@@ -137,12 +187,13 @@ func catalogApp() *cli.App {
 				}
 			}
 
-			// Optionally write updated price IDs back to disk.
+			// Optionally write updated price IDs back to disk
 			if write {
 				diff, err := cat.SaveCatalog(catalogFile)
 				if err != nil {
 					return fmt.Errorf("save catalog: %w", err)
 				}
+
 				fmt.Printf("Catalog successfully written to %s\n", catalogFile)
 				if diff != "" {
 					fmt.Println("Catalog changes:\n" + diff)
@@ -179,6 +230,41 @@ func buildProductMap(ctx context.Context, sc stripeClient) (map[string]*stripe.P
 	}
 
 	return prodMap, nil
+}
+
+// conflictManaged checks whether the conflict resource is managed by module manager.
+func conflictManaged(ctx context.Context, sc stripeClient, c catalog.LookupKeyConflict) (bool, error) {
+	switch c.Resource {
+	case "product":
+		prod, err := sc.GetProduct(ctx, c.ID)
+		if err != nil {
+			return false, err
+		}
+
+		if prod != nil && prod.Metadata != nil {
+			return prod.Metadata[catalog.ManagedByKey] == catalog.ManagedByValue, nil
+		}
+	case "feature":
+		feat, err := sc.GetFeatureByLookupKey(ctx, c.LookupKey)
+		if err != nil {
+			return false, err
+		}
+
+		if feat != nil && feat.Metadata != nil {
+			return feat.Metadata[catalog.ManagedByKey] == catalog.ManagedByValue, nil
+		}
+	case "price":
+		price, err := sc.GetPrice(ctx, c.ID)
+		if err != nil {
+			return false, err
+		}
+
+		if price != nil && price.Metadata != nil {
+			return price.Metadata[catalog.ManagedByKey] == catalog.ManagedByValue, nil
+		}
+	}
+
+	return false, nil
 }
 
 // resolveProduct attempts to find the Stripe product for a feature using
@@ -270,7 +356,12 @@ func processFeatureSet(ctx context.Context, sc stripeClient, prodMap map[string]
 
 	var reports []featureReport
 
-	for name, feat := range fs {
+	names := slices.Collect(maps.Keys(fs))
+	slices.Sort(names)
+
+	for _, name := range names {
+		feat := fs[name]
+
 		var prod *stripe.Product
 
 		if entSc, ok := sc.(*entitlements.StripeClient); ok {
@@ -286,6 +377,7 @@ func processFeatureSet(ctx context.Context, sc stripeClient, prodMap map[string]
 			var t []takeoverInfo
 
 			feat, t, missingPrices = updateFeaturePrices(ctx, sc, prod, name, feat)
+			feat.ProductID = prod.ID
 
 			takeovers = append(takeovers, t...)
 		} else {
@@ -422,7 +514,7 @@ func printFeatureReports(reports []featureReport) {
 	writer := tables.NewTableWriter(outWriter, "Type", "Feature", "Product", "MissingPrices")
 
 	for _, r := range reports {
-		_ = writer.AddRow(r.kind, r.name, r.product, r.missingPrices)
+		_ = writer.AddRow(r.kind, string(r.name), r.product, r.missingPrices)
 	}
 
 	_ = writer.Render()

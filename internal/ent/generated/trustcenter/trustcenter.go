@@ -41,6 +41,8 @@ const (
 	EdgeCustomDomain = "custom_domain"
 	// EdgeSetting holds the string denoting the setting edge name in mutations.
 	EdgeSetting = "setting"
+	// EdgeTrustCenterSubprocessors holds the string denoting the trust_center_subprocessors edge name in mutations.
+	EdgeTrustCenterSubprocessors = "trust_center_subprocessors"
 	// Table holds the table name of the trustcenter in the database.
 	Table = "trust_centers"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -64,6 +66,13 @@ const (
 	SettingInverseTable = "trust_center_settings"
 	// SettingColumn is the table column denoting the setting relation/edge.
 	SettingColumn = "trust_center_id"
+	// TrustCenterSubprocessorsTable is the table that holds the trust_center_subprocessors relation/edge.
+	TrustCenterSubprocessorsTable = "trust_center_subprocessors"
+	// TrustCenterSubprocessorsInverseTable is the table name for the TrustCenterSubprocessor entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcentersubprocessor" package.
+	TrustCenterSubprocessorsInverseTable = "trust_center_subprocessors"
+	// TrustCenterSubprocessorsColumn is the table column denoting the trust_center_subprocessors relation/edge.
+	TrustCenterSubprocessorsColumn = "trust_center_id"
 )
 
 // Columns holds all SQL columns for trustcenter fields.
@@ -98,7 +107,7 @@ func ValidColumn(column string) bool {
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
 	Hooks        [6]ent.Hook
-	Interceptors [2]ent.Interceptor
+	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -189,6 +198,20 @@ func BySettingField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newSettingStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByTrustCenterSubprocessorsCount orders the results by trust_center_subprocessors count.
+func ByTrustCenterSubprocessorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterSubprocessorsStep(), opts...)
+	}
+}
+
+// ByTrustCenterSubprocessors orders the results by trust_center_subprocessors terms.
+func ByTrustCenterSubprocessors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterSubprocessorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -208,5 +231,12 @@ func newSettingStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SettingInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2O, false, SettingTable, SettingColumn),
+	)
+}
+func newTrustCenterSubprocessorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterSubprocessorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterSubprocessorsTable, TrustCenterSubprocessorsColumn),
 	)
 }

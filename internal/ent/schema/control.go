@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -127,6 +126,7 @@ func (Control) Indexes() []ent.Index {
 			Unique().Annotations(
 			entsql.IndexWhere("deleted_at is NULL AND owner_id is not NULL and standard_id is NULL"),
 		),
+		index.Fields("standard_id", "deleted_at", "owner_id"),
 	}
 }
 
@@ -161,10 +161,8 @@ func (Control) Hooks() []ent.Hook {
 // Policy of the Control
 func (Control) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
-		),
 		policy.WithMutationRules(
+			rule.AllowIfContextAllowRule(),
 			rule.CanCreateObjectsUnderParent[*generated.ControlMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ControlMutation](),
@@ -175,7 +173,8 @@ func (Control) Policy() ent.Policy {
 // Annotations of the Control
 func (Control) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "continuous-compliance-automation"),
+		entx.Features(entx.ModuleCompliance, entx.ModuleContinuousComplianceAutomation),
 		entfga.SelfAccessChecks(),
+		entx.Exportable{},
 	}
 }

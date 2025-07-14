@@ -21,7 +21,7 @@ func SystemOwnedJobRunner() privacy.JobRunnerMutationRuleFunc {
 			return privacy.Allow
 		}
 
-		isAdmin, err := CheckIsSystemAdmin(ctx, m)
+		isAdmin, err := CheckIsSystemAdminWithContext(ctx)
 		if err != nil {
 			return err
 		}

@@ -922,11 +922,6 @@ func (ipu *InternalPolicyUpdate) check() error {
 			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.revision": %w`, err)}
 		}
 	}
-	if v, ok := ipu.mutation.OwnerID(); ok {
-		if err := internalpolicy.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := ipu.mutation.Name(); ok {
 		if err := internalpolicy.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.name": %w`, err)}
@@ -2608,11 +2603,6 @@ func (ipuo *InternalPolicyUpdateOne) check() error {
 	if v, ok := ipuo.mutation.Revision(); ok {
 		if err := internalpolicy.RevisionValidator(v); err != nil {
 			return &ValidationError{Name: "revision", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.revision": %w`, err)}
-		}
-	}
-	if v, ok := ipuo.mutation.OwnerID(); ok {
-		if err := internalpolicy.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.owner_id": %w`, err)}
 		}
 	}
 	if v, ok := ipuo.mutation.Name(); ok {

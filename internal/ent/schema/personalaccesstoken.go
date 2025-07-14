@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // PersonalAccessToken holds the schema definition for the PersonalAccessToken entity.
@@ -79,6 +80,9 @@ func (PersonalAccessToken) Fields() []ent.Field {
 				entgql.Skip(entgql.SkipWhereInput),
 			),
 		field.JSON("scopes", []string{}).
+			Optional(),
+		field.JSON("sso_authorizations", models.SSOAuthorizationMap{}).
+			Comment("SSO authorization timestamps by organization id").
 			Optional(),
 		field.Time("last_used_at").
 			Annotations(
@@ -179,9 +183,6 @@ func (PersonalAccessToken) Policy() ent.Policy {
 		Mutation: privacy.MutationPolicy{
 			rule.AllowIfContextAllowRule(),
 			rule.AllowMutationAfterApplyingOwnerFilter(),
-			privacy.AlwaysAllowRule(),
-		},
-		Query: privacy.QueryPolicy{
 			privacy.AlwaysAllowRule(),
 		},
 	}

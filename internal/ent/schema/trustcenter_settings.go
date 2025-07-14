@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
@@ -8,9 +9,11 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/iam/entfga"
 )
 
@@ -49,18 +52,56 @@ func (TrustCenterSetting) Fields() []ent.Field {
 			Comment("overview of the trust center").
 			MaxLen(trustCenterDescriptionMaxLen).
 			Optional(),
-		// field.String("logo_url").
-		// 	Comment("logo url for the trust center").
-		// 	MaxLen(trustCenterURLMaxLen).
-		// 	Validate(validator.ValidateURL()).
-		// 	Optional(),
-		// field.String("favicon_url").
-		// 	Comment("favicon url for the trust center").
-		// 	MaxLen(trustCenterURLMaxLen).
-		// 	Validate(validator.ValidateURL()).
-		// 	Optional(),
+		field.String("logo_remote_url").
+			Comment("URL of the logo").
+			MaxLen(urlMaxLen).
+			Validate(validator.ValidateURL()).
+			Optional().
+			Nillable(),
+		field.String("logo_local_file_id").
+			Comment("The local logo file id, takes precedence over the logo remote URL").
+			Optional().
+			Annotations(
+				// this field is not exposed to the graphql schema, it is set by the file upload handler
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			).
+			Nillable(),
+		field.String("favicon_remote_url").
+			Comment("URL of the favicon").
+			MaxLen(urlMaxLen).
+			Validate(validator.ValidateURL()).
+			Optional().
+			Nillable(),
+		field.String("favicon_local_file_id").
+			Comment("The local favicon file id, takes precedence over the favicon remote URL").
+			Optional().
+			Annotations(
+				// this field is not exposed to the graphql schema, it is set by the file upload handler
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			).
+			Nillable(),
+		// Color/font settings
+		field.Enum("theme_mode").
+			Comment("Theme mode for the trust center").
+			GoType(enums.TrustCenterThemeMode("")).
+			Default(enums.TrustCenterThemeModeEasy.String()).
+			Optional(),
+		// Easy options
 		field.String("primary_color").
 			Comment("primary color for the trust center").
+			Optional(),
+		// Advanced options
+		field.String("font").
+			Comment("font for the trust center").
+			Optional(),
+		field.String("foreground_color").
+			Comment("foreground color for the trust center").
+			Optional(),
+		field.String("background_color").
+			Comment("background color for the trust center").
+			Optional(),
+		field.String("accent_color").
+			Comment("accent/brand color for the trust center").
 			Optional(),
 	}
 }
@@ -81,26 +122,39 @@ func (t TrustCenterSetting) Edges() []ent.Edge {
 			field:      "trust_center_id",
 			ref:        "setting",
 		}),
+		defaultEdgeToWithPagination(t, File{}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: t,
+			name:       "logo_file",
+			t:          File.Type,
+			field:      "logo_local_file_id",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: t,
+			name:       "favicon_file",
+			t:          File.Type,
+			field:      "favicon_local_file_id",
+		}),
 	}
 }
 
 // Interceptors of the TrustCenterSetting
 func (TrustCenterSetting) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.InterceptorTrustCenterSetting(),
+		interceptors.InterceptorTrustCenterChild(),
 	}
 }
 
 // Hooks of the TrustCenterSetting
 func (TrustCenterSetting) Hooks() []ent.Hook {
-	return []ent.Hook{}
+	return []ent.Hook{
+		hooks.HookTrustCenterSetting(),
+		hooks.HookTrustCenterSettingAuthz(),
+	}
 }
 
 func (TrustCenterSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			privacy.AlwaysAllowRule(),
-		),
 		policy.WithMutationRules(
 			entfga.CheckEditAccess[*generated.TrustCenterSettingMutation](),
 		),
@@ -117,5 +171,6 @@ func (TrustCenterSetting) Indexes() []ent.Index {
 func (TrustCenterSetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SettingsChecks("trust_center"),
+		entfga.SelfAccessChecks(),
 	}
 }

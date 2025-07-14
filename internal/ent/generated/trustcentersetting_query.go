@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -12,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
@@ -27,8 +29,12 @@ type TrustCenterSettingQuery struct {
 	inters          []Interceptor
 	predicates      []predicate.TrustCenterSetting
 	withTrustCenter *TrustCenterQuery
+	withFiles       *FileQuery
+	withLogoFile    *FileQuery
+	withFaviconFile *FileQuery
 	loadTotal       []func(context.Context, []*TrustCenterSetting) error
 	modifiers       []func(*sql.Selector)
+	withNamedFiles  map[string]*FileQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -83,6 +89,81 @@ func (tcsq *TrustCenterSettingQuery) QueryTrustCenter() *TrustCenterQuery {
 		)
 		schemaConfig := tcsq.schemaConfig
 		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.TrustCenterSetting
+		fromU = sqlgraph.SetNeighbors(tcsq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFiles chains the current query on the "files" edge.
+func (tcsq *TrustCenterSettingQuery) QueryFiles() *FileQuery {
+	query := (&FileClient{config: tcsq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tcsq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tcsq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentersetting.Table, trustcentersetting.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, trustcentersetting.FilesTable, trustcentersetting.FilesPrimaryKey...),
+		)
+		schemaConfig := tcsq.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterSettingFiles
+		fromU = sqlgraph.SetNeighbors(tcsq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryLogoFile chains the current query on the "logo_file" edge.
+func (tcsq *TrustCenterSettingQuery) QueryLogoFile() *FileQuery {
+	query := (&FileClient{config: tcsq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tcsq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tcsq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentersetting.Table, trustcentersetting.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcentersetting.LogoFileTable, trustcentersetting.LogoFileColumn),
+		)
+		schemaConfig := tcsq.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterSetting
+		fromU = sqlgraph.SetNeighbors(tcsq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFaviconFile chains the current query on the "favicon_file" edge.
+func (tcsq *TrustCenterSettingQuery) QueryFaviconFile() *FileQuery {
+	query := (&FileClient{config: tcsq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tcsq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tcsq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentersetting.Table, trustcentersetting.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcentersetting.FaviconFileTable, trustcentersetting.FaviconFileColumn),
+		)
+		schemaConfig := tcsq.schemaConfig
+		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.TrustCenterSetting
 		fromU = sqlgraph.SetNeighbors(tcsq.driver.Dialect(), step)
 		return fromU, nil
@@ -283,6 +364,9 @@ func (tcsq *TrustCenterSettingQuery) Clone() *TrustCenterSettingQuery {
 		inters:          append([]Interceptor{}, tcsq.inters...),
 		predicates:      append([]predicate.TrustCenterSetting{}, tcsq.predicates...),
 		withTrustCenter: tcsq.withTrustCenter.Clone(),
+		withFiles:       tcsq.withFiles.Clone(),
+		withLogoFile:    tcsq.withLogoFile.Clone(),
+		withFaviconFile: tcsq.withFaviconFile.Clone(),
 		// clone intermediate query.
 		sql:       tcsq.sql.Clone(),
 		path:      tcsq.path,
@@ -298,6 +382,39 @@ func (tcsq *TrustCenterSettingQuery) WithTrustCenter(opts ...func(*TrustCenterQu
 		opt(query)
 	}
 	tcsq.withTrustCenter = query
+	return tcsq
+}
+
+// WithFiles tells the query-builder to eager-load the nodes that are connected to
+// the "files" edge. The optional arguments are used to configure the query builder of the edge.
+func (tcsq *TrustCenterSettingQuery) WithFiles(opts ...func(*FileQuery)) *TrustCenterSettingQuery {
+	query := (&FileClient{config: tcsq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tcsq.withFiles = query
+	return tcsq
+}
+
+// WithLogoFile tells the query-builder to eager-load the nodes that are connected to
+// the "logo_file" edge. The optional arguments are used to configure the query builder of the edge.
+func (tcsq *TrustCenterSettingQuery) WithLogoFile(opts ...func(*FileQuery)) *TrustCenterSettingQuery {
+	query := (&FileClient{config: tcsq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tcsq.withLogoFile = query
+	return tcsq
+}
+
+// WithFaviconFile tells the query-builder to eager-load the nodes that are connected to
+// the "favicon_file" edge. The optional arguments are used to configure the query builder of the edge.
+func (tcsq *TrustCenterSettingQuery) WithFaviconFile(opts ...func(*FileQuery)) *TrustCenterSettingQuery {
+	query := (&FileClient{config: tcsq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tcsq.withFaviconFile = query
 	return tcsq
 }
 
@@ -385,8 +502,11 @@ func (tcsq *TrustCenterSettingQuery) sqlAll(ctx context.Context, hooks ...queryH
 	var (
 		nodes       = []*TrustCenterSetting{}
 		_spec       = tcsq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [4]bool{
 			tcsq.withTrustCenter != nil,
+			tcsq.withFiles != nil,
+			tcsq.withLogoFile != nil,
+			tcsq.withFaviconFile != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -415,6 +535,32 @@ func (tcsq *TrustCenterSettingQuery) sqlAll(ctx context.Context, hooks ...queryH
 	if query := tcsq.withTrustCenter; query != nil {
 		if err := tcsq.loadTrustCenter(ctx, query, nodes, nil,
 			func(n *TrustCenterSetting, e *TrustCenter) { n.Edges.TrustCenter = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := tcsq.withFiles; query != nil {
+		if err := tcsq.loadFiles(ctx, query, nodes,
+			func(n *TrustCenterSetting) { n.Edges.Files = []*File{} },
+			func(n *TrustCenterSetting, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := tcsq.withLogoFile; query != nil {
+		if err := tcsq.loadLogoFile(ctx, query, nodes, nil,
+			func(n *TrustCenterSetting, e *File) { n.Edges.LogoFile = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := tcsq.withFaviconFile; query != nil {
+		if err := tcsq.loadFaviconFile(ctx, query, nodes, nil,
+			func(n *TrustCenterSetting, e *File) { n.Edges.FaviconFile = e }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range tcsq.withNamedFiles {
+		if err := tcsq.loadFiles(ctx, query, nodes,
+			func(n *TrustCenterSetting) { n.appendNamedFiles(name) },
+			func(n *TrustCenterSetting, e *File) { n.appendNamedFiles(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -455,6 +601,132 @@ func (tcsq *TrustCenterSettingQuery) loadTrustCenter(ctx context.Context, query 
 	}
 	return nil
 }
+func (tcsq *TrustCenterSettingQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*TrustCenterSetting, init func(*TrustCenterSetting), assign func(*TrustCenterSetting, *File)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*TrustCenterSetting)
+	nids := make(map[string]map[*TrustCenterSetting]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(trustcentersetting.FilesTable)
+		joinT.Schema(tcsq.schemaConfig.TrustCenterSettingFiles)
+		s.Join(joinT).On(s.C(file.FieldID), joinT.C(trustcentersetting.FilesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(trustcentersetting.FilesPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(trustcentersetting.FilesPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*TrustCenterSetting]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*File](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "files" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (tcsq *TrustCenterSettingQuery) loadLogoFile(ctx context.Context, query *FileQuery, nodes []*TrustCenterSetting, init func(*TrustCenterSetting), assign func(*TrustCenterSetting, *File)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*TrustCenterSetting)
+	for i := range nodes {
+		if nodes[i].LogoLocalFileID == nil {
+			continue
+		}
+		fk := *nodes[i].LogoLocalFileID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(file.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "logo_local_file_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (tcsq *TrustCenterSettingQuery) loadFaviconFile(ctx context.Context, query *FileQuery, nodes []*TrustCenterSetting, init func(*TrustCenterSetting), assign func(*TrustCenterSetting, *File)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*TrustCenterSetting)
+	for i := range nodes {
+		if nodes[i].FaviconLocalFileID == nil {
+			continue
+		}
+		fk := *nodes[i].FaviconLocalFileID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(file.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "favicon_local_file_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 
 func (tcsq *TrustCenterSettingQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := tcsq.querySpec()
@@ -488,6 +760,12 @@ func (tcsq *TrustCenterSettingQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if tcsq.withTrustCenter != nil {
 			_spec.Node.AddColumnOnce(trustcentersetting.FieldTrustCenterID)
+		}
+		if tcsq.withLogoFile != nil {
+			_spec.Node.AddColumnOnce(trustcentersetting.FieldLogoLocalFileID)
+		}
+		if tcsq.withFaviconFile != nil {
+			_spec.Node.AddColumnOnce(trustcentersetting.FieldFaviconLocalFileID)
 		}
 	}
 	if ps := tcsq.predicates; len(ps) > 0 {
@@ -555,6 +833,20 @@ func (tcsq *TrustCenterSettingQuery) sqlQuery(ctx context.Context) *sql.Selector
 func (tcsq *TrustCenterSettingQuery) Modify(modifiers ...func(s *sql.Selector)) *TrustCenterSettingSelect {
 	tcsq.modifiers = append(tcsq.modifiers, modifiers...)
 	return tcsq.Select()
+}
+
+// WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (tcsq *TrustCenterSettingQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *TrustCenterSettingQuery {
+	query := (&FileClient{config: tcsq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if tcsq.withNamedFiles == nil {
+		tcsq.withNamedFiles = make(map[string]*FileQuery)
+	}
+	tcsq.withNamedFiles[name] = query
+	return tcsq
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs

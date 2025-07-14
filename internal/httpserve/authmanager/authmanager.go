@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
@@ -84,6 +85,41 @@ func (a *Client) GenerateUserAuthSession(ctx context.Context, w http.ResponseWri
 	return a.GenerateUserAuthSessionWithOrg(ctx, w, user, "")
 }
 
+// GenerateAnonymousTrustCenterSession creates a new auth session for the anonymous trust center user
+func (a *Client) GenerateAnonymousTrustCenterSession(ctx context.Context, w http.ResponseWriter, targetOrgID string, targetTrustCenterID string) (*models.AuthData, error) {
+	anonUserID := fmt.Sprintf("anon:%s", uuid.New().String())
+
+	// create new claims for the user
+	newClaims := &tokens.Claims{
+		RegisteredClaims: jwt.RegisteredClaims{
+			Subject: anonUserID,
+		},
+		UserID:        anonUserID,
+		OrgID:         targetOrgID,
+		TrustCenterID: targetTrustCenterID,
+	}
+
+	// create a new token pair for the user
+	access, refresh, err := a.db.TokenManager.CreateTokenPair(newClaims)
+	if err != nil {
+		return nil, err
+	}
+
+	auth := &models.AuthData{
+		AccessToken:  access,
+		RefreshToken: refresh,
+	}
+
+	auth.Session, err = a.generateUserSession(ctx, w, anonUserID)
+	if err != nil {
+		return nil, err
+	}
+
+	auth.TokenType = bearerScheme
+
+	return auth, nil
+}
+
 // GenerateOauthAuthSession creates a new auth session for the oauth user and their default organization id
 func (a *Client) GenerateOauthAuthSession(ctx context.Context, w http.ResponseWriter, user *generated.User, oauthRequest models.OauthTokenRequest) (*models.AuthData, error) {
 	auth, err := a.createTokenPair(ctx, user, "")
@@ -160,8 +196,6 @@ func (a *Client) createTokenPair(ctx context.Context, user *generated.User, targ
 			return nil, err
 		}
 
-		log.Warn().Err(err).Msg("user attempting to authenticate into an org they cannot access; switching to personal org")
-
 		targetOrgID = newTarget
 	}
 
@@ -224,17 +258,19 @@ func (a *Client) generateOauthUserSession(ctx context.Context, w http.ResponseWr
 // if the user does not have access to the target organization, the user's default org is used (or falls back)
 // to their personal org
 func (a *Client) authCheck(ctx context.Context, user *generated.User, orgID string) (string, error) {
+
+	skip := skipOrgValidation(ctx)
 	if orgID == "" {
 		// get the default org for the user to check access
 		var err error
 
 		orgID, err = a.getUserDefaultOrg(ctx, user)
-		if err != nil {
+		if err != nil && !skip {
 			return "", err
 		}
 	}
 
-	if skip := skipOrgValidation(ctx); skip {
+	if skip {
 		return orgID, nil
 	}
 

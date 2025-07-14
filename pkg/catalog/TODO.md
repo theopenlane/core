@@ -17,9 +17,8 @@ This document captures remaining tasks for completing the move from the legacy t
 - **Finalize catalog loader**
   - Ensure the catalog is loaded at start‑up and validated against `jsonschema/catalog.schema.json`.
   - Auto-create Stripe products/prices for any catalog entries missing in Stripe.
-- **Subscription creation flow**
-  - Hook organization creation events so that `FindOrCreateCustomer` also provisions the trial compliance subscription.
-  - Store resulting Stripe IDs on `org_subscription` records.
+
+
 - **Webhook handling**
   - Extend `handleSubscriptionUpdated` to map purchased module prices back to feature lookup keys.
   - Maintain OpenFGA tuples via `ensureFeatureTuples` whenever subscriptions change.

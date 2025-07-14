@@ -64,9 +64,9 @@ type OrganizationSettingHistory struct {
 	// SSO provider type for the organization
 	IdentityProvider enums.SSOProvider `json:"identity_provider,omitempty"`
 	// client ID for SSO integration
-	IdentityProviderClientID *string `json:"-"`
+	IdentityProviderClientID *string `json:"identity_provider_client_id,omitempty"`
 	// client secret for SSO integration
-	IdentityProviderClientSecret *string `json:"-"`
+	IdentityProviderClientSecret *string `json:"identity_provider_client_secret,omitempty"`
 	// metadata URL for the SSO provider
 	IdentityProviderMetadataEndpoint string `json:"identity_provider_metadata_endpoint,omitempty"`
 	// SAML entity ID for the SSO provider
@@ -393,9 +393,15 @@ func (osh *OrganizationSettingHistory) String() string {
 	builder.WriteString("identity_provider=")
 	builder.WriteString(fmt.Sprintf("%v", osh.IdentityProvider))
 	builder.WriteString(", ")
-	builder.WriteString("identity_provider_client_id=<sensitive>")
+	if v := osh.IdentityProviderClientID; v != nil {
+		builder.WriteString("identity_provider_client_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
-	builder.WriteString("identity_provider_client_secret=<sensitive>")
+	if v := osh.IdentityProviderClientSecret; v != nil {
+		builder.WriteString("identity_provider_client_secret=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("identity_provider_metadata_endpoint=")
 	builder.WriteString(osh.IdentityProviderMetadataEndpoint)

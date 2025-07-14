@@ -11,17 +11,18 @@ import (
 
 // CreateAPITokenInput represents a mutation input for creating apitokens.
 type CreateAPITokenInput struct {
-	Tags          []string
-	Name          string
-	ExpiresAt     *time.Time
-	Description   *string
-	Scopes        []string
-	LastUsedAt    *time.Time
-	IsActive      *bool
-	RevokedReason *string
-	RevokedBy     *string
-	RevokedAt     *time.Time
-	OwnerID       *string
+	Tags              []string
+	Name              string
+	ExpiresAt         *time.Time
+	Description       *string
+	Scopes            []string
+	LastUsedAt        *time.Time
+	IsActive          *bool
+	RevokedReason     *string
+	RevokedBy         *string
+	RevokedAt         *time.Time
+	SSOAuthorizations models.SSOAuthorizationMap
+	OwnerID           *string
 }
 
 // Mutate applies the CreateAPITokenInput on the APITokenMutation builder.
@@ -54,6 +55,9 @@ func (i *CreateAPITokenInput) Mutate(m *APITokenMutation) {
 	if v := i.RevokedAt; v != nil {
 		m.SetRevokedAt(*v)
 	}
+	if v := i.SSOAuthorizations; v != nil {
+		m.SetSSOAuthorizations(v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -67,27 +71,29 @@ func (c *APITokenCreate) SetInput(i CreateAPITokenInput) *APITokenCreate {
 
 // UpdateAPITokenInput represents a mutation input for updating apitokens.
 type UpdateAPITokenInput struct {
-	ClearTags          bool
-	Tags               []string
-	AppendTags         []string
-	Name               *string
-	ClearDescription   bool
-	Description        *string
-	ClearScopes        bool
-	Scopes             []string
-	AppendScopes       []string
-	ClearLastUsedAt    bool
-	LastUsedAt         *time.Time
-	ClearIsActive      bool
-	IsActive           *bool
-	ClearRevokedReason bool
-	RevokedReason      *string
-	ClearRevokedBy     bool
-	RevokedBy          *string
-	ClearRevokedAt     bool
-	RevokedAt          *time.Time
-	ClearOwner         bool
-	OwnerID            *string
+	ClearTags              bool
+	Tags                   []string
+	AppendTags             []string
+	Name                   *string
+	ClearDescription       bool
+	Description            *string
+	ClearScopes            bool
+	Scopes                 []string
+	AppendScopes           []string
+	ClearLastUsedAt        bool
+	LastUsedAt             *time.Time
+	ClearIsActive          bool
+	IsActive               *bool
+	ClearRevokedReason     bool
+	RevokedReason          *string
+	ClearRevokedBy         bool
+	RevokedBy              *string
+	ClearRevokedAt         bool
+	RevokedAt              *time.Time
+	ClearSSOAuthorizations bool
+	SSOAuthorizations      models.SSOAuthorizationMap
+	ClearOwner             bool
+	OwnerID                *string
 }
 
 // Mutate applies the UpdateAPITokenInput on the APITokenMutation builder.
@@ -148,6 +154,12 @@ func (i *UpdateAPITokenInput) Mutate(m *APITokenMutation) {
 	}
 	if v := i.RevokedAt; v != nil {
 		m.SetRevokedAt(*v)
+	}
+	if i.ClearSSOAuthorizations {
+		m.ClearSSOAuthorizations()
+	}
+	if v := i.SSOAuthorizations; v != nil {
+		m.SetSSOAuthorizations(v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -953,6 +965,7 @@ type CreateControlInput struct {
 	AuditorReferenceID       *string
 	Status                   *enums.ControlStatus
 	Source                   *enums.ControlSource
+	ReferenceFramework       *string
 	ControlType              *enums.ControlType
 	Category                 *string
 	CategoryID               *string
@@ -1006,6 +1019,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if v := i.ReferenceFramework; v != nil {
+		m.SetReferenceFramework(*v)
 	}
 	if v := i.ControlType; v != nil {
 		m.SetControlType(*v)
@@ -3363,6 +3379,96 @@ func (c *EvidenceUpdateOne) SetInput(i UpdateEvidenceInput) *EvidenceUpdateOne {
 	return c
 }
 
+// CreateExportInput represents a mutation input for creating exports.
+type CreateExportInput struct {
+	ExportType enums.ExportType
+	Format     enums.ExportFormat
+	Fields     []string
+	OwnerID    *string
+	EventIDs   []string
+	FileIDs    []string
+}
+
+// Mutate applies the CreateExportInput on the ExportMutation builder.
+func (i *CreateExportInput) Mutate(m *ExportMutation) {
+	m.SetExportType(i.ExportType)
+	m.SetFormat(i.Format)
+	if v := i.Fields; v != nil {
+		m.SetFields(v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.EventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateExportInput on the ExportCreate builder.
+func (c *ExportCreate) SetInput(i CreateExportInput) *ExportCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateExportInput represents a mutation input for updating exports.
+type UpdateExportInput struct {
+	Status         *enums.ExportStatus
+	ClearOwner     bool
+	OwnerID        *string
+	ClearEvents    bool
+	AddEventIDs    []string
+	RemoveEventIDs []string
+	ClearFiles     bool
+	AddFileIDs     []string
+	RemoveFileIDs  []string
+}
+
+// Mutate applies the UpdateExportInput on the ExportMutation builder.
+func (i *UpdateExportInput) Mutate(m *ExportMutation) {
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearEvents {
+		m.ClearEvents()
+	}
+	if v := i.AddEventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+	if v := i.RemoveEventIDs; len(v) > 0 {
+		m.RemoveEventIDs(v...)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateExportInput on the ExportUpdate builder.
+func (c *ExportUpdate) SetInput(i UpdateExportInput) *ExportUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateExportInput on the ExportUpdateOne builder.
+func (c *ExportUpdateOne) SetInput(i UpdateExportInput) *ExportUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateFileInput represents a mutation input for creating files.
 type CreateFileInput struct {
 	Tags                   []string
@@ -3391,6 +3497,8 @@ type CreateFileInput struct {
 	ProgramIDs             []string
 	EvidenceIDs            []string
 	EventIDs               []string
+	TrustCenterSettingIDs  []string
+	SubprocessorIDs        []string
 }
 
 // Mutate applies the CreateFileInput on the FileMutation builder.
@@ -3467,6 +3575,12 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	if v := i.EventIDs; len(v) > 0 {
 		m.AddEventIDs(v...)
 	}
+	if v := i.TrustCenterSettingIDs; len(v) > 0 {
+		m.AddTrustCenterSettingIDs(v...)
+	}
+	if v := i.SubprocessorIDs; len(v) > 0 {
+		m.AddSubprocessorIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateFileInput on the FileCreate builder.
@@ -3539,6 +3653,12 @@ type UpdateFileInput struct {
 	ClearEvents                  bool
 	AddEventIDs                  []string
 	RemoveEventIDs               []string
+	ClearTrustCenterSetting      bool
+	AddTrustCenterSettingIDs     []string
+	RemoveTrustCenterSettingIDs  []string
+	ClearSubprocessor            bool
+	AddSubprocessorIDs           []string
+	RemoveSubprocessorIDs        []string
 }
 
 // Mutate applies the UpdateFileInput on the FileMutation builder.
@@ -3728,6 +3848,24 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.RemoveEventIDs; len(v) > 0 {
 		m.RemoveEventIDs(v...)
+	}
+	if i.ClearTrustCenterSetting {
+		m.ClearTrustCenterSetting()
+	}
+	if v := i.AddTrustCenterSettingIDs; len(v) > 0 {
+		m.AddTrustCenterSettingIDs(v...)
+	}
+	if v := i.RemoveTrustCenterSettingIDs; len(v) > 0 {
+		m.RemoveTrustCenterSettingIDs(v...)
+	}
+	if i.ClearSubprocessor {
+		m.ClearSubprocessor()
+	}
+	if v := i.AddSubprocessorIDs; len(v) > 0 {
+		m.AddSubprocessorIDs(v...)
+	}
+	if v := i.RemoveSubprocessorIDs; len(v) > 0 {
+		m.RemoveSubprocessorIDs(v...)
 	}
 }
 
@@ -6354,6 +6492,8 @@ type CreateOrganizationInput struct {
 	TrustCenterIDs                  []string
 	AssetIDs                        []string
 	ScanIDs                         []string
+	SubprocessorIDs                 []string
+	ExportIDs                       []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -6557,6 +6697,12 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.ScanIDs; len(v) > 0 {
 		m.AddScanIDs(v...)
 	}
+	if v := i.SubprocessorIDs; len(v) > 0 {
+		m.AddSubprocessorIDs(v...)
+	}
+	if v := i.ExportIDs; len(v) > 0 {
+		m.AddExportIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -6750,6 +6896,12 @@ type UpdateOrganizationInput struct {
 	ClearScans                            bool
 	AddScanIDs                            []string
 	RemoveScanIDs                         []string
+	ClearSubprocessors                    bool
+	AddSubprocessorIDs                    []string
+	RemoveSubprocessorIDs                 []string
+	ClearExports                          bool
+	AddExportIDs                          []string
+	RemoveExportIDs                       []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -7303,6 +7455,24 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveScanIDs; len(v) > 0 {
 		m.RemoveScanIDs(v...)
 	}
+	if i.ClearSubprocessors {
+		m.ClearSubprocessors()
+	}
+	if v := i.AddSubprocessorIDs; len(v) > 0 {
+		m.AddSubprocessorIDs(v...)
+	}
+	if v := i.RemoveSubprocessorIDs; len(v) > 0 {
+		m.RemoveSubprocessorIDs(v...)
+	}
+	if i.ClearExports {
+		m.ClearExports()
+	}
+	if v := i.AddExportIDs; len(v) > 0 {
+		m.AddExportIDs(v...)
+	}
+	if v := i.RemoveExportIDs; len(v) > 0 {
+		m.RemoveExportIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateOrganizationInput on the OrganizationUpdate builder.
@@ -7601,15 +7771,16 @@ func (c *OrganizationSettingUpdateOne) SetInput(i UpdateOrganizationSettingInput
 
 // CreatePersonalAccessTokenInput represents a mutation input for creating personalaccesstokens.
 type CreatePersonalAccessTokenInput struct {
-	Tags            []string
-	Name            string
-	ExpiresAt       *time.Time
-	Description     *string
-	Scopes          []string
-	LastUsedAt      *time.Time
-	IsActive        *bool
-	OrganizationIDs []string
-	EventIDs        []string
+	Tags              []string
+	Name              string
+	ExpiresAt         *time.Time
+	Description       *string
+	Scopes            []string
+	SSOAuthorizations models.SSOAuthorizationMap
+	LastUsedAt        *time.Time
+	IsActive          *bool
+	OrganizationIDs   []string
+	EventIDs          []string
 }
 
 // Mutate applies the CreatePersonalAccessTokenInput on the PersonalAccessTokenMutation builder.
@@ -7626,6 +7797,9 @@ func (i *CreatePersonalAccessTokenInput) Mutate(m *PersonalAccessTokenMutation) 
 	}
 	if v := i.Scopes; v != nil {
 		m.SetScopes(v)
+	}
+	if v := i.SSOAuthorizations; v != nil {
+		m.SetSSOAuthorizations(v)
 	}
 	if v := i.LastUsedAt; v != nil {
 		m.SetLastUsedAt(*v)
@@ -7649,25 +7823,27 @@ func (c *PersonalAccessTokenCreate) SetInput(i CreatePersonalAccessTokenInput) *
 
 // UpdatePersonalAccessTokenInput represents a mutation input for updating personalaccesstokens.
 type UpdatePersonalAccessTokenInput struct {
-	ClearTags             bool
-	Tags                  []string
-	AppendTags            []string
-	Name                  *string
-	ClearDescription      bool
-	Description           *string
-	ClearScopes           bool
-	Scopes                []string
-	AppendScopes          []string
-	ClearLastUsedAt       bool
-	LastUsedAt            *time.Time
-	ClearIsActive         bool
-	IsActive              *bool
-	ClearOrganizations    bool
-	AddOrganizationIDs    []string
-	RemoveOrganizationIDs []string
-	ClearEvents           bool
-	AddEventIDs           []string
-	RemoveEventIDs        []string
+	ClearTags              bool
+	Tags                   []string
+	AppendTags             []string
+	Name                   *string
+	ClearDescription       bool
+	Description            *string
+	ClearScopes            bool
+	Scopes                 []string
+	AppendScopes           []string
+	ClearSSOAuthorizations bool
+	SSOAuthorizations      models.SSOAuthorizationMap
+	ClearLastUsedAt        bool
+	LastUsedAt             *time.Time
+	ClearIsActive          bool
+	IsActive               *bool
+	ClearOrganizations     bool
+	AddOrganizationIDs     []string
+	RemoveOrganizationIDs  []string
+	ClearEvents            bool
+	AddEventIDs            []string
+	RemoveEventIDs         []string
 }
 
 // Mutate applies the UpdatePersonalAccessTokenInput on the PersonalAccessTokenMutation builder.
@@ -7698,6 +7874,12 @@ func (i *UpdatePersonalAccessTokenInput) Mutate(m *PersonalAccessTokenMutation) 
 	}
 	if i.AppendScopes != nil {
 		m.AppendScopes(i.Scopes)
+	}
+	if i.ClearSSOAuthorizations {
+		m.ClearSSOAuthorizations()
+	}
+	if v := i.SSOAuthorizations; v != nil {
+		m.SetSSOAuthorizations(v)
 	}
 	if i.ClearLastUsedAt {
 		m.ClearLastUsedAt()
@@ -9677,6 +9859,7 @@ type CreateSubcontrolInput struct {
 	AuditorReferenceID       *string
 	Status                   *enums.ControlStatus
 	Source                   *enums.ControlSource
+	ReferenceFramework       *string
 	ControlType              *enums.ControlType
 	Category                 *string
 	CategoryID               *string
@@ -9724,6 +9907,9 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if v := i.ReferenceFramework; v != nil {
+		m.SetReferenceFramework(*v)
 	}
 	if v := i.ControlType; v != nil {
 		m.SetControlType(*v)
@@ -10135,6 +10321,142 @@ func (c *SubcontrolUpdate) SetInput(i UpdateSubcontrolInput) *SubcontrolUpdate {
 
 // SetInput applies the change-set in the UpdateSubcontrolInput on the SubcontrolUpdateOne builder.
 func (c *SubcontrolUpdateOne) SetInput(i UpdateSubcontrolInput) *SubcontrolUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateSubprocessorInput represents a mutation input for creating subprocessors.
+type CreateSubprocessorInput struct {
+	Tags                       []string
+	Name                       string
+	Description                *string
+	LogoRemoteURL              *string
+	OwnerID                    *string
+	FileIDs                    []string
+	LogoFileID                 *string
+	TrustCenterSubprocessorIDs []string
+}
+
+// Mutate applies the CreateSubprocessorInput on the SubprocessorMutation builder.
+func (i *CreateSubprocessorInput) Mutate(m *SubprocessorMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetName(i.Name)
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.LogoRemoteURL; v != nil {
+		m.SetLogoRemoteURL(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.LogoFileID; v != nil {
+		m.SetLogoFileID(*v)
+	}
+	if v := i.TrustCenterSubprocessorIDs; len(v) > 0 {
+		m.AddTrustCenterSubprocessorIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateSubprocessorInput on the SubprocessorCreate builder.
+func (c *SubprocessorCreate) SetInput(i CreateSubprocessorInput) *SubprocessorCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateSubprocessorInput represents a mutation input for updating subprocessors.
+type UpdateSubprocessorInput struct {
+	ClearTags                        bool
+	Tags                             []string
+	AppendTags                       []string
+	Name                             *string
+	ClearDescription                 bool
+	Description                      *string
+	ClearLogoRemoteURL               bool
+	LogoRemoteURL                    *string
+	ClearOwner                       bool
+	OwnerID                          *string
+	ClearFiles                       bool
+	AddFileIDs                       []string
+	RemoveFileIDs                    []string
+	ClearLogoFile                    bool
+	LogoFileID                       *string
+	ClearTrustCenterSubprocessors    bool
+	AddTrustCenterSubprocessorIDs    []string
+	RemoveTrustCenterSubprocessorIDs []string
+}
+
+// Mutate applies the UpdateSubprocessorInput on the SubprocessorMutation builder.
+func (i *UpdateSubprocessorInput) Mutate(m *SubprocessorMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearLogoRemoteURL {
+		m.ClearLogoRemoteURL()
+	}
+	if v := i.LogoRemoteURL; v != nil {
+		m.SetLogoRemoteURL(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
+	}
+	if i.ClearLogoFile {
+		m.ClearLogoFile()
+	}
+	if v := i.LogoFileID; v != nil {
+		m.SetLogoFileID(*v)
+	}
+	if i.ClearTrustCenterSubprocessors {
+		m.ClearTrustCenterSubprocessors()
+	}
+	if v := i.AddTrustCenterSubprocessorIDs; len(v) > 0 {
+		m.AddTrustCenterSubprocessorIDs(v...)
+	}
+	if v := i.RemoveTrustCenterSubprocessorIDs; len(v) > 0 {
+		m.RemoveTrustCenterSubprocessorIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateSubprocessorInput on the SubprocessorUpdate builder.
+func (c *SubprocessorUpdate) SetInput(i UpdateSubprocessorInput) *SubprocessorUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateSubprocessorInput on the SubprocessorUpdateOne builder.
+func (c *SubprocessorUpdateOne) SetInput(i UpdateSubprocessorInput) *SubprocessorUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -10731,10 +11053,11 @@ func (c *TemplateUpdateOne) SetInput(i UpdateTemplateInput) *TemplateUpdateOne {
 
 // CreateTrustCenterInput represents a mutation input for creating trustcenters.
 type CreateTrustCenterInput struct {
-	Tags           []string
-	OwnerID        *string
-	CustomDomainID *string
-	SettingID      *string
+	Tags                       []string
+	OwnerID                    *string
+	CustomDomainID             *string
+	SettingID                  *string
+	TrustCenterSubprocessorIDs []string
 }
 
 // Mutate applies the CreateTrustCenterInput on the TrustCenterMutation builder.
@@ -10751,6 +11074,9 @@ func (i *CreateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	if v := i.SettingID; v != nil {
 		m.SetSettingID(*v)
 	}
+	if v := i.TrustCenterSubprocessorIDs; len(v) > 0 {
+		m.AddTrustCenterSubprocessorIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateTrustCenterInput on the TrustCenterCreate builder.
@@ -10761,15 +11087,18 @@ func (c *TrustCenterCreate) SetInput(i CreateTrustCenterInput) *TrustCenterCreat
 
 // UpdateTrustCenterInput represents a mutation input for updating trustcenters.
 type UpdateTrustCenterInput struct {
-	ClearTags         bool
-	Tags              []string
-	AppendTags        []string
-	ClearOwner        bool
-	OwnerID           *string
-	ClearCustomDomain bool
-	CustomDomainID    *string
-	ClearSetting      bool
-	SettingID         *string
+	ClearTags                        bool
+	Tags                             []string
+	AppendTags                       []string
+	ClearOwner                       bool
+	OwnerID                          *string
+	ClearCustomDomain                bool
+	CustomDomainID                   *string
+	ClearSetting                     bool
+	SettingID                        *string
+	ClearTrustCenterSubprocessors    bool
+	AddTrustCenterSubprocessorIDs    []string
+	RemoveTrustCenterSubprocessorIDs []string
 }
 
 // Mutate applies the UpdateTrustCenterInput on the TrustCenterMutation builder.
@@ -10801,6 +11130,15 @@ func (i *UpdateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	if v := i.SettingID; v != nil {
 		m.SetSettingID(*v)
 	}
+	if i.ClearTrustCenterSubprocessors {
+		m.ClearTrustCenterSubprocessors()
+	}
+	if v := i.AddTrustCenterSubprocessorIDs; len(v) > 0 {
+		m.AddTrustCenterSubprocessorIDs(v...)
+	}
+	if v := i.RemoveTrustCenterSubprocessorIDs; len(v) > 0 {
+		m.RemoveTrustCenterSubprocessorIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateTrustCenterInput on the TrustCenterUpdate builder.
@@ -10817,10 +11155,20 @@ func (c *TrustCenterUpdateOne) SetInput(i UpdateTrustCenterInput) *TrustCenterUp
 
 // CreateTrustCenterSettingInput represents a mutation input for creating trustcentersettings.
 type CreateTrustCenterSettingInput struct {
-	Title         *string
-	Overview      *string
-	PrimaryColor  *string
-	TrustCenterID *string
+	Title            *string
+	Overview         *string
+	LogoRemoteURL    *string
+	FaviconRemoteURL *string
+	ThemeMode        *enums.TrustCenterThemeMode
+	PrimaryColor     *string
+	Font             *string
+	ForegroundColor  *string
+	BackgroundColor  *string
+	AccentColor      *string
+	TrustCenterID    *string
+	FileIDs          []string
+	LogoFileID       *string
+	FaviconFileID    *string
 }
 
 // Mutate applies the CreateTrustCenterSettingInput on the TrustCenterSettingMutation builder.
@@ -10831,11 +11179,41 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.Overview; v != nil {
 		m.SetOverview(*v)
 	}
+	if v := i.LogoRemoteURL; v != nil {
+		m.SetLogoRemoteURL(*v)
+	}
+	if v := i.FaviconRemoteURL; v != nil {
+		m.SetFaviconRemoteURL(*v)
+	}
+	if v := i.ThemeMode; v != nil {
+		m.SetThemeMode(*v)
+	}
 	if v := i.PrimaryColor; v != nil {
 		m.SetPrimaryColor(*v)
 	}
+	if v := i.Font; v != nil {
+		m.SetFont(*v)
+	}
+	if v := i.ForegroundColor; v != nil {
+		m.SetForegroundColor(*v)
+	}
+	if v := i.BackgroundColor; v != nil {
+		m.SetBackgroundColor(*v)
+	}
+	if v := i.AccentColor; v != nil {
+		m.SetAccentColor(*v)
+	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
+	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.LogoFileID; v != nil {
+		m.SetLogoFileID(*v)
+	}
+	if v := i.FaviconFileID; v != nil {
+		m.SetFaviconFileID(*v)
 	}
 }
 
@@ -10847,14 +11225,35 @@ func (c *TrustCenterSettingCreate) SetInput(i CreateTrustCenterSettingInput) *Tr
 
 // UpdateTrustCenterSettingInput represents a mutation input for updating trustcentersettings.
 type UpdateTrustCenterSettingInput struct {
-	ClearTitle        bool
-	Title             *string
-	ClearOverview     bool
-	Overview          *string
-	ClearPrimaryColor bool
-	PrimaryColor      *string
-	ClearTrustCenter  bool
-	TrustCenterID     *string
+	ClearTitle            bool
+	Title                 *string
+	ClearOverview         bool
+	Overview              *string
+	ClearLogoRemoteURL    bool
+	LogoRemoteURL         *string
+	ClearFaviconRemoteURL bool
+	FaviconRemoteURL      *string
+	ClearThemeMode        bool
+	ThemeMode             *enums.TrustCenterThemeMode
+	ClearPrimaryColor     bool
+	PrimaryColor          *string
+	ClearFont             bool
+	Font                  *string
+	ClearForegroundColor  bool
+	ForegroundColor       *string
+	ClearBackgroundColor  bool
+	BackgroundColor       *string
+	ClearAccentColor      bool
+	AccentColor           *string
+	ClearTrustCenter      bool
+	TrustCenterID         *string
+	ClearFiles            bool
+	AddFileIDs            []string
+	RemoveFileIDs         []string
+	ClearLogoFile         bool
+	LogoFileID            *string
+	ClearFaviconFile      bool
+	FaviconFileID         *string
 }
 
 // Mutate applies the UpdateTrustCenterSettingInput on the TrustCenterSettingMutation builder.
@@ -10871,17 +11270,80 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.Overview; v != nil {
 		m.SetOverview(*v)
 	}
+	if i.ClearLogoRemoteURL {
+		m.ClearLogoRemoteURL()
+	}
+	if v := i.LogoRemoteURL; v != nil {
+		m.SetLogoRemoteURL(*v)
+	}
+	if i.ClearFaviconRemoteURL {
+		m.ClearFaviconRemoteURL()
+	}
+	if v := i.FaviconRemoteURL; v != nil {
+		m.SetFaviconRemoteURL(*v)
+	}
+	if i.ClearThemeMode {
+		m.ClearThemeMode()
+	}
+	if v := i.ThemeMode; v != nil {
+		m.SetThemeMode(*v)
+	}
 	if i.ClearPrimaryColor {
 		m.ClearPrimaryColor()
 	}
 	if v := i.PrimaryColor; v != nil {
 		m.SetPrimaryColor(*v)
 	}
+	if i.ClearFont {
+		m.ClearFont()
+	}
+	if v := i.Font; v != nil {
+		m.SetFont(*v)
+	}
+	if i.ClearForegroundColor {
+		m.ClearForegroundColor()
+	}
+	if v := i.ForegroundColor; v != nil {
+		m.SetForegroundColor(*v)
+	}
+	if i.ClearBackgroundColor {
+		m.ClearBackgroundColor()
+	}
+	if v := i.BackgroundColor; v != nil {
+		m.SetBackgroundColor(*v)
+	}
+	if i.ClearAccentColor {
+		m.ClearAccentColor()
+	}
+	if v := i.AccentColor; v != nil {
+		m.SetAccentColor(*v)
+	}
 	if i.ClearTrustCenter {
 		m.ClearTrustCenter()
 	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
+	}
+	if i.ClearLogoFile {
+		m.ClearLogoFile()
+	}
+	if v := i.LogoFileID; v != nil {
+		m.SetLogoFileID(*v)
+	}
+	if i.ClearFaviconFile {
+		m.ClearFaviconFile()
+	}
+	if v := i.FaviconFileID; v != nil {
+		m.SetFaviconFileID(*v)
 	}
 }
 
@@ -10893,6 +11355,80 @@ func (c *TrustCenterSettingUpdate) SetInput(i UpdateTrustCenterSettingInput) *Tr
 
 // SetInput applies the change-set in the UpdateTrustCenterSettingInput on the TrustCenterSettingUpdateOne builder.
 func (c *TrustCenterSettingUpdateOne) SetInput(i UpdateTrustCenterSettingInput) *TrustCenterSettingUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateTrustCenterSubprocessorInput represents a mutation input for creating trustcentersubprocessors.
+type CreateTrustCenterSubprocessorInput struct {
+	Countries      []string
+	Category       string
+	TrustCenterID  *string
+	SubprocessorID string
+}
+
+// Mutate applies the CreateTrustCenterSubprocessorInput on the TrustCenterSubprocessorMutation builder.
+func (i *CreateTrustCenterSubprocessorInput) Mutate(m *TrustCenterSubprocessorMutation) {
+	if v := i.Countries; v != nil {
+		m.SetCountries(v)
+	}
+	m.SetCategory(i.Category)
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
+	m.SetSubprocessorID(i.SubprocessorID)
+}
+
+// SetInput applies the change-set in the CreateTrustCenterSubprocessorInput on the TrustCenterSubprocessorCreate builder.
+func (c *TrustCenterSubprocessorCreate) SetInput(i CreateTrustCenterSubprocessorInput) *TrustCenterSubprocessorCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateTrustCenterSubprocessorInput represents a mutation input for updating trustcentersubprocessors.
+type UpdateTrustCenterSubprocessorInput struct {
+	ClearCountries   bool
+	Countries        []string
+	AppendCountries  []string
+	Category         *string
+	ClearTrustCenter bool
+	TrustCenterID    *string
+	SubprocessorID   *string
+}
+
+// Mutate applies the UpdateTrustCenterSubprocessorInput on the TrustCenterSubprocessorMutation builder.
+func (i *UpdateTrustCenterSubprocessorInput) Mutate(m *TrustCenterSubprocessorMutation) {
+	if i.ClearCountries {
+		m.ClearCountries()
+	}
+	if v := i.Countries; v != nil {
+		m.SetCountries(v)
+	}
+	if i.AppendCountries != nil {
+		m.AppendCountries(i.Countries)
+	}
+	if v := i.Category; v != nil {
+		m.SetCategory(*v)
+	}
+	if i.ClearTrustCenter {
+		m.ClearTrustCenter()
+	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
+	if v := i.SubprocessorID; v != nil {
+		m.SetSubprocessorID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterSubprocessorInput on the TrustCenterSubprocessorUpdate builder.
+func (c *TrustCenterSubprocessorUpdate) SetInput(i UpdateTrustCenterSubprocessorInput) *TrustCenterSubprocessorUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterSubprocessorInput on the TrustCenterSubprocessorUpdateOne builder.
+func (c *TrustCenterSubprocessorUpdateOne) SetInput(i UpdateTrustCenterSubprocessorInput) *TrustCenterSubprocessorUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

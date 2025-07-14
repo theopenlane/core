@@ -3,7 +3,6 @@ package handlers
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"slices"
@@ -24,9 +23,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	em "github.com/theopenlane/core/internal/entitlements/entmapping"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
-	"github.com/theopenlane/core/pkg/models"
 )
 
 const (
@@ -330,7 +329,7 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 	}
 
 	// map stripe data to internal OrgSubscription
-	stripeOrgSubscription := mapStripeToOrgSubscription(subscription, entitlements.MapStripeCustomer(customer))
+	stripeOrgSubscription := em.StripeSubscriptionToOrgSubscription(subscription, entitlements.MapStripeCustomer(customer))
 
 	// Check if any fields have changed before saving the updated OrgSubscription
 	changed := false
@@ -443,52 +442,6 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 	}
 
 	return &orgSubscription.OwnerID, nil
-}
-
-// mapStripeToOrgSubscription maps a stripe.Subscription and OrganizationCustomer to an ent.OrgSubscription
-func mapStripeToOrgSubscription(subscription *stripe.Subscription, customer *entitlements.OrganizationCustomer) *ent.OrgSubscription {
-	if subscription == nil {
-		return nil
-	}
-
-	productName := ""
-	productPrice := models.Price{}
-
-	if subscription.Items != nil && len(subscription.Items.Data) == 1 {
-		item := subscription.Items.Data[0]
-		if item.Price != nil {
-			if item.Price.Product != nil {
-				productName = item.Price.Product.Name
-			}
-
-			productPrice.Amount = subscription.Items.Data[0].Price.UnitAmountDecimal
-			productPrice.Currency = string(subscription.Items.Data[0].Price.Currency)
-			productPrice.Interval = string(subscription.Items.Data[0].Price.Recurring.Interval)
-		}
-	}
-
-	return &ent.OrgSubscription{
-		StripeSubscriptionID:     subscription.ID,
-		TrialExpiresAt:           timePtr(time.Unix(subscription.TrialEnd, 0)),
-		StripeSubscriptionStatus: string(subscription.Status),
-		Active:                   entitlements.IsSubscriptionActive(subscription.Status),
-		ProductTier:              productName,
-		ProductPrice:             productPrice,
-		Features:                 customer.Features,
-		FeatureLookupKeys:        customer.FeatureNames,
-		DaysUntilDue:             int64ToStringPtr(subscription.DaysUntilDue),
-	}
-}
-
-// int64ToStringPtr converts an int64 to a *string
-func int64ToStringPtr(i int64) *string {
-	s := fmt.Sprintf("%d", i)
-	return &s
-}
-
-// timePtr returns a pointer to the given time.Time value
-func timePtr(t time.Time) *time.Time {
-	return &t
 }
 
 // ensureFeatureTuples checks that feature tuples exist for the organization and creates

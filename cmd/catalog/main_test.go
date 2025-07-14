@@ -3,11 +3,15 @@ package main
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
+	"slices"
+	"strings"
 	"testing"
 
+	"github.com/oklog/ulid/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
@@ -70,6 +74,7 @@ func captureOutput(f func()) string {
 type fakeClient struct {
 	products []*stripe.Product
 	prices   map[string]*stripe.Price
+	features map[string]*stripe.EntitlementsFeature
 	updated  []string
 }
 
@@ -81,7 +86,43 @@ func (f *fakeClient) GetPrice(ctx context.Context, id string) (*stripe.Price, er
 	return f.prices[id], nil
 }
 
+func (f *fakeClient) GetPriceByLookupKey(ctx context.Context, lookupKey string) (*stripe.Price, error) {
+	for _, p := range f.prices {
+		if p.LookupKey == lookupKey {
+			return p, nil
+		}
+	}
+
+	return nil, nil
+}
+
+func (f *fakeClient) GetFeatureByLookupKey(ctx context.Context, lookupKey string) (*stripe.EntitlementsFeature, error) {
+	for _, feat := range f.features {
+		if feat.LookupKey == lookupKey {
+			return feat, nil
+		}
+	}
+
+	return nil, nil
+}
+
+func (f *fakeClient) GetProduct(ctx context.Context, id string) (*stripe.Product, error) {
+	for _, p := range f.products {
+		if p.ID == id {
+			return p, nil
+		}
+	}
+
+	return nil, nil
+}
+
 func (f *fakeClient) FindPriceForProduct(ctx context.Context, productID string, currency string, unitAmount int64, interval, nickname, lookupKey, metadata string, meta map[string]string) (*stripe.Price, error) {
+	for _, p := range f.prices {
+		if p.Product != nil && p.Product.ID == productID && p.LookupKey == lookupKey {
+			return p, nil
+		}
+	}
+
 	return nil, nil
 }
 
@@ -95,6 +136,8 @@ func (f *fakeClient) UpdatePriceMetadata(ctx context.Context, id string, md map[
 }
 
 func TestPriceMatchesStripe(t *testing.T) {
+	t.Parallel()
+
 	prod := &stripe.Product{ID: "prod_1"}
 	sp := &stripe.Price{
 		ID:         "price_1",
@@ -121,6 +164,8 @@ func TestPriceMatchesStripe(t *testing.T) {
 }
 
 func TestBuildProductMap(t *testing.T) {
+	t.Parallel()
+
 	p1 := &stripe.Product{ID: "prod_1", Name: "Basic"}
 	p2 := &stripe.Product{ID: "prod_2", Name: "Pro"}
 	sc, _ := setupProductClient([]*stripe.Product{p1, p2}, nil)
@@ -135,6 +180,8 @@ func TestBuildProductMap(t *testing.T) {
 }
 
 func TestBuildProductMapError(t *testing.T) {
+	t.Parallel()
+
 	sc, _ := setupProductClient(nil, assert.AnError)
 	m, err := buildProductMap(context.Background(), sc)
 	assert.Error(t, err)
@@ -142,6 +189,8 @@ func TestBuildProductMapError(t *testing.T) {
 }
 
 func TestUpdateFeaturePrices(t *testing.T) {
+	t.Parallel()
+
 	prod := &stripe.Product{ID: "prod_1"}
 	priceA := &stripe.Price{
 		ID:         "priceA",
@@ -176,6 +225,8 @@ func TestUpdateFeaturePrices(t *testing.T) {
 }
 
 func TestProcessFeatureSet(t *testing.T) {
+	t.Parallel()
+
 	prod := &stripe.Product{ID: "prod_1"}
 	price := &stripe.Price{
 		ID:         "price1",
@@ -197,10 +248,18 @@ func TestProcessFeatureSet(t *testing.T) {
 	assert.True(t, missing)
 	assert.Len(t, takeovers, 1)
 	assert.Len(t, reports, 2)
+
+	slices.SortFunc(reports, func(a, b featureReport) int {
+		return strings.Compare(a.name, b.name)
+	})
+
 	assert.Equal(t, "f1", reports[0].name)
+	assert.Equal(t, "f2", reports[1].name)
 }
 
 func TestHandleTakeovers(t *testing.T) {
+	t.Parallel()
+
 	prod := &stripe.Product{ID: "prod"}
 	price := &stripe.Price{ID: "price1", Product: prod, Metadata: map[string]string{}}
 	sc, backend := setupPriceClient(price, nil)
@@ -222,6 +281,8 @@ func TestHandleTakeovers(t *testing.T) {
 }
 
 func TestPrintFeatureReports(t *testing.T) {
+	t.Parallel()
+
 	reports := []featureReport{{kind: "module", name: "m1", product: true, missingPrices: 0}}
 	out := captureOutput(func() { printFeatureReports(reports) })
 	assert.Contains(t, out, "module")
@@ -229,6 +290,8 @@ func TestPrintFeatureReports(t *testing.T) {
 }
 
 func TestPromptAndCreateMissing(t *testing.T) {
+	t.Parallel()
+
 	sc, _ := setupProductClient(nil, nil)
 	cat := &catalog.Catalog{}
 
@@ -246,7 +309,7 @@ func TestPromptAndCreateMissing(t *testing.T) {
 func writeTempCatalogFile(t *testing.T, data string) string {
 	t.Helper()
 	dir := t.TempDir()
-	p := filepath.Join(dir, "catalog.yaml")
+	p := filepath.Join(dir, fmt.Sprintf("catalog-%s.yaml", ulid.Make().String()))
 	require.NoError(t, os.WriteFile(p, []byte(data), 0o644))
 	return p
 }
@@ -257,6 +320,7 @@ sha: bad
 modules:
   mod1:
     display_name: Prod1
+    lookup_key: mod1
     description: D
     audience: public
     billing:
@@ -273,7 +337,7 @@ addons: {}`
 	prod := &stripe.Product{ID: "prod1", Name: "Prod1"}
 	price := &stripe.Price{ID: "price_1", UnitAmount: 100, Recurring: &stripe.PriceRecurring{Interval: "month"}, LookupKey: "p1_month", Product: prod, Metadata: map[string]string{catalog.ManagedByKey: catalog.ManagedByValue}}
 
-	client := &fakeClient{products: []*stripe.Product{prod}, prices: map[string]*stripe.Price{"price_1": price}}
+	client := &fakeClient{products: []*stripe.Product{prod}, prices: map[string]*stripe.Price{"price_1": price}, features: map[string]*stripe.EntitlementsFeature{}}
 	newClient = func(opts ...entitlements.StripeOptions) (stripeClient, error) { return client, nil }
 	defer func() {
 		newClient = func(opts ...entitlements.StripeOptions) (stripeClient, error) {
@@ -286,7 +350,7 @@ addons: {}`
 	defer func() { outWriter = os.Stdout }()
 
 	app := catalogApp()
-	err := app.Run([]string{"catalog", "--catalog", path, "--stripe-key", "sk", "--takeover"})
+	err := app.Run(context.Background(), []string{"catalog", "--catalog", path, "--stripe-key", "sk", "--takeover"})
 	require.NoError(t, err)
 	require.Empty(t, client.updated)
 }
@@ -297,6 +361,7 @@ sha: bad
 modules:
   mod1:
     display_name: Prod1
+    lookup_key: mod1
     description: D
     audience: public
     billing:
@@ -326,7 +391,43 @@ addons: {}`
 	defer func() { outWriter = os.Stdout }()
 
 	app := catalogApp()
-	err := app.Run([]string{"catalog", "--catalog", path, "--stripe-key", "sk", "--takeover"})
+	err := app.Run(context.Background(), []string{"catalog", "--catalog", path, "--stripe-key", "sk", "--takeover"})
 	require.NoError(t, err)
-	require.Equal(t, []string{"price_1"}, client.updated)
+	assert.Equal(t, []string{"price_1"}, client.updated)
+}
+
+func TestCatalogAppLookupKeyConflict(t *testing.T) {
+	catYAML := `version: v1
+sha: bad
+modules:
+  mod1:
+    display_name: Prod1
+    lookup_key: mod1
+    description: D
+    audience: public
+    billing:
+      prices:
+        - interval: month
+          unit_amount: 100
+          nickname: p1_month
+          lookup_key: p1_month
+addons: {}`
+
+	path := writeTempCatalogFile(t, catYAML)
+
+	prod := &stripe.Product{ID: "prod1", Name: "Prod1"}
+	price := &stripe.Price{ID: "price_conflict", UnitAmount: 200, Recurring: &stripe.PriceRecurring{Interval: "month"}, LookupKey: "p1_month", Product: prod}
+
+	client := &fakeClient{products: []*stripe.Product{prod}, prices: map[string]*stripe.Price{"price_1": price}, features: map[string]*stripe.EntitlementsFeature{}}
+	newClient = func(opts ...entitlements.StripeOptions) (stripeClient, error) { return client, nil }
+	defer func() {
+		newClient = func(opts ...entitlements.StripeOptions) (stripeClient, error) {
+			return entitlements.NewStripeClient(opts...)
+		}
+	}()
+
+	app := catalogApp()
+	err := app.Run(context.Background(), []string{"catalog", "--catalog", path, "--stripe-key", "sk", "--takeover"})
+	require.NoError(t, err)
+	assert.Equal(t, []string{"price_conflict"}, client.updated)
 }

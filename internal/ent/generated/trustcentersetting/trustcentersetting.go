@@ -3,11 +3,14 @@
 package trustcentersetting
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 const (
@@ -33,10 +36,34 @@ const (
 	FieldTitle = "title"
 	// FieldOverview holds the string denoting the overview field in the database.
 	FieldOverview = "overview"
+	// FieldLogoRemoteURL holds the string denoting the logo_remote_url field in the database.
+	FieldLogoRemoteURL = "logo_remote_url"
+	// FieldLogoLocalFileID holds the string denoting the logo_local_file_id field in the database.
+	FieldLogoLocalFileID = "logo_local_file_id"
+	// FieldFaviconRemoteURL holds the string denoting the favicon_remote_url field in the database.
+	FieldFaviconRemoteURL = "favicon_remote_url"
+	// FieldFaviconLocalFileID holds the string denoting the favicon_local_file_id field in the database.
+	FieldFaviconLocalFileID = "favicon_local_file_id"
+	// FieldThemeMode holds the string denoting the theme_mode field in the database.
+	FieldThemeMode = "theme_mode"
 	// FieldPrimaryColor holds the string denoting the primary_color field in the database.
 	FieldPrimaryColor = "primary_color"
+	// FieldFont holds the string denoting the font field in the database.
+	FieldFont = "font"
+	// FieldForegroundColor holds the string denoting the foreground_color field in the database.
+	FieldForegroundColor = "foreground_color"
+	// FieldBackgroundColor holds the string denoting the background_color field in the database.
+	FieldBackgroundColor = "background_color"
+	// FieldAccentColor holds the string denoting the accent_color field in the database.
+	FieldAccentColor = "accent_color"
 	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
 	EdgeTrustCenter = "trust_center"
+	// EdgeFiles holds the string denoting the files edge name in mutations.
+	EdgeFiles = "files"
+	// EdgeLogoFile holds the string denoting the logo_file edge name in mutations.
+	EdgeLogoFile = "logo_file"
+	// EdgeFaviconFile holds the string denoting the favicon_file edge name in mutations.
+	EdgeFaviconFile = "favicon_file"
 	// Table holds the table name of the trustcentersetting in the database.
 	Table = "trust_center_settings"
 	// TrustCenterTable is the table that holds the trust_center relation/edge.
@@ -46,6 +73,25 @@ const (
 	TrustCenterInverseTable = "trust_centers"
 	// TrustCenterColumn is the table column denoting the trust_center relation/edge.
 	TrustCenterColumn = "trust_center_id"
+	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
+	FilesTable = "trust_center_setting_files"
+	// FilesInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	FilesInverseTable = "files"
+	// LogoFileTable is the table that holds the logo_file relation/edge.
+	LogoFileTable = "trust_center_settings"
+	// LogoFileInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	LogoFileInverseTable = "files"
+	// LogoFileColumn is the table column denoting the logo_file relation/edge.
+	LogoFileColumn = "logo_local_file_id"
+	// FaviconFileTable is the table that holds the favicon_file relation/edge.
+	FaviconFileTable = "trust_center_settings"
+	// FaviconFileInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	FaviconFileInverseTable = "files"
+	// FaviconFileColumn is the table column denoting the favicon_file relation/edge.
+	FaviconFileColumn = "favicon_local_file_id"
 )
 
 // Columns holds all SQL columns for trustcentersetting fields.
@@ -60,8 +106,23 @@ var Columns = []string{
 	FieldTrustCenterID,
 	FieldTitle,
 	FieldOverview,
+	FieldLogoRemoteURL,
+	FieldLogoLocalFileID,
+	FieldFaviconRemoteURL,
+	FieldFaviconLocalFileID,
+	FieldThemeMode,
 	FieldPrimaryColor,
+	FieldFont,
+	FieldForegroundColor,
+	FieldBackgroundColor,
+	FieldAccentColor,
 }
+
+var (
+	// FilesPrimaryKey and FilesColumn2 are the table columns denoting the
+	// primary key for the files relation (M2M).
+	FilesPrimaryKey = []string{"trust_center_setting_id", "file_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -79,7 +140,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [3]ent.Hook
+	Hooks        [5]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -94,9 +155,25 @@ var (
 	TitleValidator func(string) error
 	// OverviewValidator is a validator for the "overview" field. It is called by the builders before save.
 	OverviewValidator func(string) error
+	// LogoRemoteURLValidator is a validator for the "logo_remote_url" field. It is called by the builders before save.
+	LogoRemoteURLValidator func(string) error
+	// FaviconRemoteURLValidator is a validator for the "favicon_remote_url" field. It is called by the builders before save.
+	FaviconRemoteURLValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+const DefaultThemeMode enums.TrustCenterThemeMode = "EASY"
+
+// ThemeModeValidator is a validator for the "theme_mode" field enum values. It is called by the builders before save.
+func ThemeModeValidator(tm enums.TrustCenterThemeMode) error {
+	switch tm.String() {
+	case "EASY", "ADVANCED":
+		return nil
+	default:
+		return fmt.Errorf("trustcentersetting: invalid enum value for theme_mode field: %q", tm)
+	}
+}
 
 // OrderOption defines the ordering options for the TrustCenterSetting queries.
 type OrderOption func(*sql.Selector)
@@ -151,15 +228,88 @@ func ByOverview(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOverview, opts...).ToFunc()
 }
 
+// ByLogoRemoteURL orders the results by the logo_remote_url field.
+func ByLogoRemoteURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLogoRemoteURL, opts...).ToFunc()
+}
+
+// ByLogoLocalFileID orders the results by the logo_local_file_id field.
+func ByLogoLocalFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLogoLocalFileID, opts...).ToFunc()
+}
+
+// ByFaviconRemoteURL orders the results by the favicon_remote_url field.
+func ByFaviconRemoteURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFaviconRemoteURL, opts...).ToFunc()
+}
+
+// ByFaviconLocalFileID orders the results by the favicon_local_file_id field.
+func ByFaviconLocalFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFaviconLocalFileID, opts...).ToFunc()
+}
+
+// ByThemeMode orders the results by the theme_mode field.
+func ByThemeMode(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldThemeMode, opts...).ToFunc()
+}
+
 // ByPrimaryColor orders the results by the primary_color field.
 func ByPrimaryColor(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPrimaryColor, opts...).ToFunc()
+}
+
+// ByFont orders the results by the font field.
+func ByFont(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFont, opts...).ToFunc()
+}
+
+// ByForegroundColor orders the results by the foreground_color field.
+func ByForegroundColor(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldForegroundColor, opts...).ToFunc()
+}
+
+// ByBackgroundColor orders the results by the background_color field.
+func ByBackgroundColor(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBackgroundColor, opts...).ToFunc()
+}
+
+// ByAccentColor orders the results by the accent_color field.
+func ByAccentColor(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAccentColor, opts...).ToFunc()
 }
 
 // ByTrustCenterField orders the results by trust_center field.
 func ByTrustCenterField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newTrustCenterStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByFilesCount orders the results by files count.
+func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFilesStep(), opts...)
+	}
+}
+
+// ByFiles orders the results by files terms.
+func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFilesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByLogoFileField orders the results by logo_file field.
+func ByLogoFileField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newLogoFileStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByFaviconFileField orders the results by favicon_file field.
+func ByFaviconFileField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFaviconFileStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newTrustCenterStep() *sqlgraph.Step {
@@ -169,3 +319,31 @@ func newTrustCenterStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2O, true, TrustCenterTable, TrustCenterColumn),
 	)
 }
+func newFilesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FilesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
+	)
+}
+func newLogoFileStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(LogoFileInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, LogoFileTable, LogoFileColumn),
+	)
+}
+func newFaviconFileStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FaviconFileInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, FaviconFileTable, FaviconFileColumn),
+	)
+}
+
+var (
+	// enums.TrustCenterThemeMode must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.TrustCenterThemeMode)(nil)
+	// enums.TrustCenterThemeMode must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.TrustCenterThemeMode)(nil)
+)

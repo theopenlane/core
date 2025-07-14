@@ -14,11 +14,9 @@ import (
 	"entgo.io/ent/schema/mixin"
 
 	"github.com/rs/zerolog/log"
-	"github.com/stoewer/go-strcase"
 
 	"github.com/theopenlane/iam/fgax"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
@@ -53,6 +51,8 @@ type ObjectOwnedMixin struct {
 	// InterceptorFunc is the interceptor function for the object owned mixin
 	// that will be called on all queries
 	InterceptorFuncs []InterceptorFunc
+	// AllowAnonymousTrustCenterAccess allows anonymous users from the trust center to access the object
+	AllowAnonymousTrustCenterAccess bool
 }
 
 type HookFunc func(o ObjectOwnedMixin) ent.Hook
@@ -68,7 +68,7 @@ func newObjectOwnedMixin[V any](schema any, opts ...objectOwnedOption) ObjectOwn
 	// defaults settings
 	o := ObjectOwnedMixin{
 		Ref:       sch.PluralName(),
-		HookFuncs: []HookFunc{defaultObjectHookFunc, defaultTupleUpdateFunc},
+		HookFuncs: []HookFunc{defaultTupleUpdateFunc},
 		InterceptorFuncs: []InterceptorFunc{func(_ ObjectOwnedMixin) ent.Interceptor {
 			return interceptors.FilterQueryResults[V]()
 		}},
@@ -111,6 +111,13 @@ func withHookFuncs(hookFuncs ...HookFunc) objectOwnedOption {
 func withSkipForSystemAdmin(allow bool) objectOwnedOption {
 	return func(o *ObjectOwnedMixin) {
 		o.AllowEmptyForSystemAdmin = allow
+	}
+}
+
+// withAllowAnonymousTrustCenterAccess allows anonymous users from the trust center to access the object
+func withAllowAnonymousTrustCenterAccess(allow bool) objectOwnedOption {
+	return func(o *ObjectOwnedMixin) {
+		o.AllowAnonymousTrustCenterAccess = allow
 	}
 }
 
@@ -289,52 +296,10 @@ var defaultTupleUpdateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 	)
 }
 
-// defaultObjectHookFunc is the default hook function for the object owned mixin
-var defaultObjectHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
-	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			// skip the hook if the context has the token type
-			// this is useful for tokens, where the user is not yet authenticated to
-			// a particular organization yet and auth policy allows this
-			if skip := rule.SkipTokenInContext(ctx, o.SkipTokenType); skip {
-				return next.Mutate(ctx, m)
-			}
-
-			skip, err := o.skipOrgHookForAdmins(ctx, m)
-			if err != nil {
-				return nil, err
-			}
-
-			if skip {
-				return next.Mutate(ctx, m)
-			}
-
-			objectIDs, err := interceptors.GetAuthorizedObjectIDs(ctx, strcase.SnakeCase(m.Type()), fgax.CanEdit)
-			if err != nil {
-				return nil, err
-			}
-
-			// filter by object ids on update and delete mutations
-			mx, ok := m.(interface {
-				SetOp(ent.Op)
-				Client() *generated.Client
-				WhereP(...func(*sql.Selector))
-			})
-			if !ok {
-				return nil, ErrUnexpectedMutationType
-			}
-
-			o.P(mx, objectIDs)
-
-			return next.Mutate(ctx, m)
-		})
-	}, ent.OpUpdateOne|ent.OpUpdate|ent.OpDelete|ent.OpDeleteOne)
-}
-
 // skipOrgHookForAdmins checks if the hook should be skipped for the given mutation for system admins
-func (o ObjectOwnedMixin) skipOrgHookForAdmins(ctx context.Context, m ent.Mutation) (bool, error) {
+func (o ObjectOwnedMixin) skipOrgHookForAdmins(ctx context.Context) (bool, error) {
 	if o.AllowEmptyForSystemAdmin {
-		isAdmin, err := rule.CheckIsSystemAdmin(ctx, m)
+		isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 		if err != nil {
 			return false, err
 		}

@@ -11,9 +11,11 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -164,6 +166,106 @@ func (tcsu *TrustCenterSettingUpdate) ClearOverview() *TrustCenterSettingUpdate 
 	return tcsu
 }
 
+// SetLogoRemoteURL sets the "logo_remote_url" field.
+func (tcsu *TrustCenterSettingUpdate) SetLogoRemoteURL(s string) *TrustCenterSettingUpdate {
+	tcsu.mutation.SetLogoRemoteURL(s)
+	return tcsu
+}
+
+// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
+func (tcsu *TrustCenterSettingUpdate) SetNillableLogoRemoteURL(s *string) *TrustCenterSettingUpdate {
+	if s != nil {
+		tcsu.SetLogoRemoteURL(*s)
+	}
+	return tcsu
+}
+
+// ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
+func (tcsu *TrustCenterSettingUpdate) ClearLogoRemoteURL() *TrustCenterSettingUpdate {
+	tcsu.mutation.ClearLogoRemoteURL()
+	return tcsu
+}
+
+// SetLogoLocalFileID sets the "logo_local_file_id" field.
+func (tcsu *TrustCenterSettingUpdate) SetLogoLocalFileID(s string) *TrustCenterSettingUpdate {
+	tcsu.mutation.SetLogoLocalFileID(s)
+	return tcsu
+}
+
+// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
+func (tcsu *TrustCenterSettingUpdate) SetNillableLogoLocalFileID(s *string) *TrustCenterSettingUpdate {
+	if s != nil {
+		tcsu.SetLogoLocalFileID(*s)
+	}
+	return tcsu
+}
+
+// ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
+func (tcsu *TrustCenterSettingUpdate) ClearLogoLocalFileID() *TrustCenterSettingUpdate {
+	tcsu.mutation.ClearLogoLocalFileID()
+	return tcsu
+}
+
+// SetFaviconRemoteURL sets the "favicon_remote_url" field.
+func (tcsu *TrustCenterSettingUpdate) SetFaviconRemoteURL(s string) *TrustCenterSettingUpdate {
+	tcsu.mutation.SetFaviconRemoteURL(s)
+	return tcsu
+}
+
+// SetNillableFaviconRemoteURL sets the "favicon_remote_url" field if the given value is not nil.
+func (tcsu *TrustCenterSettingUpdate) SetNillableFaviconRemoteURL(s *string) *TrustCenterSettingUpdate {
+	if s != nil {
+		tcsu.SetFaviconRemoteURL(*s)
+	}
+	return tcsu
+}
+
+// ClearFaviconRemoteURL clears the value of the "favicon_remote_url" field.
+func (tcsu *TrustCenterSettingUpdate) ClearFaviconRemoteURL() *TrustCenterSettingUpdate {
+	tcsu.mutation.ClearFaviconRemoteURL()
+	return tcsu
+}
+
+// SetFaviconLocalFileID sets the "favicon_local_file_id" field.
+func (tcsu *TrustCenterSettingUpdate) SetFaviconLocalFileID(s string) *TrustCenterSettingUpdate {
+	tcsu.mutation.SetFaviconLocalFileID(s)
+	return tcsu
+}
+
+// SetNillableFaviconLocalFileID sets the "favicon_local_file_id" field if the given value is not nil.
+func (tcsu *TrustCenterSettingUpdate) SetNillableFaviconLocalFileID(s *string) *TrustCenterSettingUpdate {
+	if s != nil {
+		tcsu.SetFaviconLocalFileID(*s)
+	}
+	return tcsu
+}
+
+// ClearFaviconLocalFileID clears the value of the "favicon_local_file_id" field.
+func (tcsu *TrustCenterSettingUpdate) ClearFaviconLocalFileID() *TrustCenterSettingUpdate {
+	tcsu.mutation.ClearFaviconLocalFileID()
+	return tcsu
+}
+
+// SetThemeMode sets the "theme_mode" field.
+func (tcsu *TrustCenterSettingUpdate) SetThemeMode(ectm enums.TrustCenterThemeMode) *TrustCenterSettingUpdate {
+	tcsu.mutation.SetThemeMode(ectm)
+	return tcsu
+}
+
+// SetNillableThemeMode sets the "theme_mode" field if the given value is not nil.
+func (tcsu *TrustCenterSettingUpdate) SetNillableThemeMode(ectm *enums.TrustCenterThemeMode) *TrustCenterSettingUpdate {
+	if ectm != nil {
+		tcsu.SetThemeMode(*ectm)
+	}
+	return tcsu
+}
+
+// ClearThemeMode clears the value of the "theme_mode" field.
+func (tcsu *TrustCenterSettingUpdate) ClearThemeMode() *TrustCenterSettingUpdate {
+	tcsu.mutation.ClearThemeMode()
+	return tcsu
+}
+
 // SetPrimaryColor sets the "primary_color" field.
 func (tcsu *TrustCenterSettingUpdate) SetPrimaryColor(s string) *TrustCenterSettingUpdate {
 	tcsu.mutation.SetPrimaryColor(s)
@@ -184,9 +286,142 @@ func (tcsu *TrustCenterSettingUpdate) ClearPrimaryColor() *TrustCenterSettingUpd
 	return tcsu
 }
 
+// SetFont sets the "font" field.
+func (tcsu *TrustCenterSettingUpdate) SetFont(s string) *TrustCenterSettingUpdate {
+	tcsu.mutation.SetFont(s)
+	return tcsu
+}
+
+// SetNillableFont sets the "font" field if the given value is not nil.
+func (tcsu *TrustCenterSettingUpdate) SetNillableFont(s *string) *TrustCenterSettingUpdate {
+	if s != nil {
+		tcsu.SetFont(*s)
+	}
+	return tcsu
+}
+
+// ClearFont clears the value of the "font" field.
+func (tcsu *TrustCenterSettingUpdate) ClearFont() *TrustCenterSettingUpdate {
+	tcsu.mutation.ClearFont()
+	return tcsu
+}
+
+// SetForegroundColor sets the "foreground_color" field.
+func (tcsu *TrustCenterSettingUpdate) SetForegroundColor(s string) *TrustCenterSettingUpdate {
+	tcsu.mutation.SetForegroundColor(s)
+	return tcsu
+}
+
+// SetNillableForegroundColor sets the "foreground_color" field if the given value is not nil.
+func (tcsu *TrustCenterSettingUpdate) SetNillableForegroundColor(s *string) *TrustCenterSettingUpdate {
+	if s != nil {
+		tcsu.SetForegroundColor(*s)
+	}
+	return tcsu
+}
+
+// ClearForegroundColor clears the value of the "foreground_color" field.
+func (tcsu *TrustCenterSettingUpdate) ClearForegroundColor() *TrustCenterSettingUpdate {
+	tcsu.mutation.ClearForegroundColor()
+	return tcsu
+}
+
+// SetBackgroundColor sets the "background_color" field.
+func (tcsu *TrustCenterSettingUpdate) SetBackgroundColor(s string) *TrustCenterSettingUpdate {
+	tcsu.mutation.SetBackgroundColor(s)
+	return tcsu
+}
+
+// SetNillableBackgroundColor sets the "background_color" field if the given value is not nil.
+func (tcsu *TrustCenterSettingUpdate) SetNillableBackgroundColor(s *string) *TrustCenterSettingUpdate {
+	if s != nil {
+		tcsu.SetBackgroundColor(*s)
+	}
+	return tcsu
+}
+
+// ClearBackgroundColor clears the value of the "background_color" field.
+func (tcsu *TrustCenterSettingUpdate) ClearBackgroundColor() *TrustCenterSettingUpdate {
+	tcsu.mutation.ClearBackgroundColor()
+	return tcsu
+}
+
+// SetAccentColor sets the "accent_color" field.
+func (tcsu *TrustCenterSettingUpdate) SetAccentColor(s string) *TrustCenterSettingUpdate {
+	tcsu.mutation.SetAccentColor(s)
+	return tcsu
+}
+
+// SetNillableAccentColor sets the "accent_color" field if the given value is not nil.
+func (tcsu *TrustCenterSettingUpdate) SetNillableAccentColor(s *string) *TrustCenterSettingUpdate {
+	if s != nil {
+		tcsu.SetAccentColor(*s)
+	}
+	return tcsu
+}
+
+// ClearAccentColor clears the value of the "accent_color" field.
+func (tcsu *TrustCenterSettingUpdate) ClearAccentColor() *TrustCenterSettingUpdate {
+	tcsu.mutation.ClearAccentColor()
+	return tcsu
+}
+
 // SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
 func (tcsu *TrustCenterSettingUpdate) SetTrustCenter(t *TrustCenter) *TrustCenterSettingUpdate {
 	return tcsu.SetTrustCenterID(t.ID)
+}
+
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (tcsu *TrustCenterSettingUpdate) AddFileIDs(ids ...string) *TrustCenterSettingUpdate {
+	tcsu.mutation.AddFileIDs(ids...)
+	return tcsu
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (tcsu *TrustCenterSettingUpdate) AddFiles(f ...*File) *TrustCenterSettingUpdate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return tcsu.AddFileIDs(ids...)
+}
+
+// SetLogoFileID sets the "logo_file" edge to the File entity by ID.
+func (tcsu *TrustCenterSettingUpdate) SetLogoFileID(id string) *TrustCenterSettingUpdate {
+	tcsu.mutation.SetLogoFileID(id)
+	return tcsu
+}
+
+// SetNillableLogoFileID sets the "logo_file" edge to the File entity by ID if the given value is not nil.
+func (tcsu *TrustCenterSettingUpdate) SetNillableLogoFileID(id *string) *TrustCenterSettingUpdate {
+	if id != nil {
+		tcsu = tcsu.SetLogoFileID(*id)
+	}
+	return tcsu
+}
+
+// SetLogoFile sets the "logo_file" edge to the File entity.
+func (tcsu *TrustCenterSettingUpdate) SetLogoFile(f *File) *TrustCenterSettingUpdate {
+	return tcsu.SetLogoFileID(f.ID)
+}
+
+// SetFaviconFileID sets the "favicon_file" edge to the File entity by ID.
+func (tcsu *TrustCenterSettingUpdate) SetFaviconFileID(id string) *TrustCenterSettingUpdate {
+	tcsu.mutation.SetFaviconFileID(id)
+	return tcsu
+}
+
+// SetNillableFaviconFileID sets the "favicon_file" edge to the File entity by ID if the given value is not nil.
+func (tcsu *TrustCenterSettingUpdate) SetNillableFaviconFileID(id *string) *TrustCenterSettingUpdate {
+	if id != nil {
+		tcsu = tcsu.SetFaviconFileID(*id)
+	}
+	return tcsu
+}
+
+// SetFaviconFile sets the "favicon_file" edge to the File entity.
+func (tcsu *TrustCenterSettingUpdate) SetFaviconFile(f *File) *TrustCenterSettingUpdate {
+	return tcsu.SetFaviconFileID(f.ID)
 }
 
 // Mutation returns the TrustCenterSettingMutation object of the builder.
@@ -197,6 +432,39 @@ func (tcsu *TrustCenterSettingUpdate) Mutation() *TrustCenterSettingMutation {
 // ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
 func (tcsu *TrustCenterSettingUpdate) ClearTrustCenter() *TrustCenterSettingUpdate {
 	tcsu.mutation.ClearTrustCenter()
+	return tcsu
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (tcsu *TrustCenterSettingUpdate) ClearFiles() *TrustCenterSettingUpdate {
+	tcsu.mutation.ClearFiles()
+	return tcsu
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (tcsu *TrustCenterSettingUpdate) RemoveFileIDs(ids ...string) *TrustCenterSettingUpdate {
+	tcsu.mutation.RemoveFileIDs(ids...)
+	return tcsu
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (tcsu *TrustCenterSettingUpdate) RemoveFiles(f ...*File) *TrustCenterSettingUpdate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return tcsu.RemoveFileIDs(ids...)
+}
+
+// ClearLogoFile clears the "logo_file" edge to the File entity.
+func (tcsu *TrustCenterSettingUpdate) ClearLogoFile() *TrustCenterSettingUpdate {
+	tcsu.mutation.ClearLogoFile()
+	return tcsu
+}
+
+// ClearFaviconFile clears the "favicon_file" edge to the File entity.
+func (tcsu *TrustCenterSettingUpdate) ClearFaviconFile() *TrustCenterSettingUpdate {
+	tcsu.mutation.ClearFaviconFile()
 	return tcsu
 }
 
@@ -257,6 +525,21 @@ func (tcsu *TrustCenterSettingUpdate) check() error {
 	if v, ok := tcsu.mutation.Overview(); ok {
 		if err := trustcentersetting.OverviewValidator(v); err != nil {
 			return &ValidationError{Name: "overview", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.overview": %w`, err)}
+		}
+	}
+	if v, ok := tcsu.mutation.LogoRemoteURL(); ok {
+		if err := trustcentersetting.LogoRemoteURLValidator(v); err != nil {
+			return &ValidationError{Name: "logo_remote_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.logo_remote_url": %w`, err)}
+		}
+	}
+	if v, ok := tcsu.mutation.FaviconRemoteURL(); ok {
+		if err := trustcentersetting.FaviconRemoteURLValidator(v); err != nil {
+			return &ValidationError{Name: "favicon_remote_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.favicon_remote_url": %w`, err)}
+		}
+	}
+	if v, ok := tcsu.mutation.ThemeMode(); ok {
+		if err := trustcentersetting.ThemeModeValidator(v); err != nil {
+			return &ValidationError{Name: "theme_mode", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.theme_mode": %w`, err)}
 		}
 	}
 	return nil
@@ -322,11 +605,53 @@ func (tcsu *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 	if tcsu.mutation.OverviewCleared() {
 		_spec.ClearField(trustcentersetting.FieldOverview, field.TypeString)
 	}
+	if value, ok := tcsu.mutation.LogoRemoteURL(); ok {
+		_spec.SetField(trustcentersetting.FieldLogoRemoteURL, field.TypeString, value)
+	}
+	if tcsu.mutation.LogoRemoteURLCleared() {
+		_spec.ClearField(trustcentersetting.FieldLogoRemoteURL, field.TypeString)
+	}
+	if value, ok := tcsu.mutation.FaviconRemoteURL(); ok {
+		_spec.SetField(trustcentersetting.FieldFaviconRemoteURL, field.TypeString, value)
+	}
+	if tcsu.mutation.FaviconRemoteURLCleared() {
+		_spec.ClearField(trustcentersetting.FieldFaviconRemoteURL, field.TypeString)
+	}
+	if value, ok := tcsu.mutation.ThemeMode(); ok {
+		_spec.SetField(trustcentersetting.FieldThemeMode, field.TypeEnum, value)
+	}
+	if tcsu.mutation.ThemeModeCleared() {
+		_spec.ClearField(trustcentersetting.FieldThemeMode, field.TypeEnum)
+	}
 	if value, ok := tcsu.mutation.PrimaryColor(); ok {
 		_spec.SetField(trustcentersetting.FieldPrimaryColor, field.TypeString, value)
 	}
 	if tcsu.mutation.PrimaryColorCleared() {
 		_spec.ClearField(trustcentersetting.FieldPrimaryColor, field.TypeString)
+	}
+	if value, ok := tcsu.mutation.Font(); ok {
+		_spec.SetField(trustcentersetting.FieldFont, field.TypeString, value)
+	}
+	if tcsu.mutation.FontCleared() {
+		_spec.ClearField(trustcentersetting.FieldFont, field.TypeString)
+	}
+	if value, ok := tcsu.mutation.ForegroundColor(); ok {
+		_spec.SetField(trustcentersetting.FieldForegroundColor, field.TypeString, value)
+	}
+	if tcsu.mutation.ForegroundColorCleared() {
+		_spec.ClearField(trustcentersetting.FieldForegroundColor, field.TypeString)
+	}
+	if value, ok := tcsu.mutation.BackgroundColor(); ok {
+		_spec.SetField(trustcentersetting.FieldBackgroundColor, field.TypeString, value)
+	}
+	if tcsu.mutation.BackgroundColorCleared() {
+		_spec.ClearField(trustcentersetting.FieldBackgroundColor, field.TypeString)
+	}
+	if value, ok := tcsu.mutation.AccentColor(); ok {
+		_spec.SetField(trustcentersetting.FieldAccentColor, field.TypeString, value)
+	}
+	if tcsu.mutation.AccentColorCleared() {
+		_spec.ClearField(trustcentersetting.FieldAccentColor, field.TypeString)
 	}
 	if tcsu.mutation.TrustCenterCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -351,6 +676,116 @@ func (tcsu *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsu.schemaConfig.TrustCenterSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tcsu.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   trustcentersetting.FilesTable,
+			Columns: trustcentersetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsu.schemaConfig.TrustCenterSettingFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tcsu.mutation.RemovedFilesIDs(); len(nodes) > 0 && !tcsu.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   trustcentersetting.FilesTable,
+			Columns: trustcentersetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsu.schemaConfig.TrustCenterSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tcsu.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   trustcentersetting.FilesTable,
+			Columns: trustcentersetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsu.schemaConfig.TrustCenterSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tcsu.mutation.LogoFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.LogoFileTable,
+			Columns: []string{trustcentersetting.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsu.schemaConfig.TrustCenterSetting
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tcsu.mutation.LogoFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.LogoFileTable,
+			Columns: []string{trustcentersetting.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsu.schemaConfig.TrustCenterSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tcsu.mutation.FaviconFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.FaviconFileTable,
+			Columns: []string{trustcentersetting.FaviconFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsu.schemaConfig.TrustCenterSetting
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tcsu.mutation.FaviconFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.FaviconFileTable,
+			Columns: []string{trustcentersetting.FaviconFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tcsu.schemaConfig.TrustCenterSetting
@@ -515,6 +950,106 @@ func (tcsuo *TrustCenterSettingUpdateOne) ClearOverview() *TrustCenterSettingUpd
 	return tcsuo
 }
 
+// SetLogoRemoteURL sets the "logo_remote_url" field.
+func (tcsuo *TrustCenterSettingUpdateOne) SetLogoRemoteURL(s string) *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.SetLogoRemoteURL(s)
+	return tcsuo
+}
+
+// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
+func (tcsuo *TrustCenterSettingUpdateOne) SetNillableLogoRemoteURL(s *string) *TrustCenterSettingUpdateOne {
+	if s != nil {
+		tcsuo.SetLogoRemoteURL(*s)
+	}
+	return tcsuo
+}
+
+// ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
+func (tcsuo *TrustCenterSettingUpdateOne) ClearLogoRemoteURL() *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.ClearLogoRemoteURL()
+	return tcsuo
+}
+
+// SetLogoLocalFileID sets the "logo_local_file_id" field.
+func (tcsuo *TrustCenterSettingUpdateOne) SetLogoLocalFileID(s string) *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.SetLogoLocalFileID(s)
+	return tcsuo
+}
+
+// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
+func (tcsuo *TrustCenterSettingUpdateOne) SetNillableLogoLocalFileID(s *string) *TrustCenterSettingUpdateOne {
+	if s != nil {
+		tcsuo.SetLogoLocalFileID(*s)
+	}
+	return tcsuo
+}
+
+// ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
+func (tcsuo *TrustCenterSettingUpdateOne) ClearLogoLocalFileID() *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.ClearLogoLocalFileID()
+	return tcsuo
+}
+
+// SetFaviconRemoteURL sets the "favicon_remote_url" field.
+func (tcsuo *TrustCenterSettingUpdateOne) SetFaviconRemoteURL(s string) *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.SetFaviconRemoteURL(s)
+	return tcsuo
+}
+
+// SetNillableFaviconRemoteURL sets the "favicon_remote_url" field if the given value is not nil.
+func (tcsuo *TrustCenterSettingUpdateOne) SetNillableFaviconRemoteURL(s *string) *TrustCenterSettingUpdateOne {
+	if s != nil {
+		tcsuo.SetFaviconRemoteURL(*s)
+	}
+	return tcsuo
+}
+
+// ClearFaviconRemoteURL clears the value of the "favicon_remote_url" field.
+func (tcsuo *TrustCenterSettingUpdateOne) ClearFaviconRemoteURL() *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.ClearFaviconRemoteURL()
+	return tcsuo
+}
+
+// SetFaviconLocalFileID sets the "favicon_local_file_id" field.
+func (tcsuo *TrustCenterSettingUpdateOne) SetFaviconLocalFileID(s string) *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.SetFaviconLocalFileID(s)
+	return tcsuo
+}
+
+// SetNillableFaviconLocalFileID sets the "favicon_local_file_id" field if the given value is not nil.
+func (tcsuo *TrustCenterSettingUpdateOne) SetNillableFaviconLocalFileID(s *string) *TrustCenterSettingUpdateOne {
+	if s != nil {
+		tcsuo.SetFaviconLocalFileID(*s)
+	}
+	return tcsuo
+}
+
+// ClearFaviconLocalFileID clears the value of the "favicon_local_file_id" field.
+func (tcsuo *TrustCenterSettingUpdateOne) ClearFaviconLocalFileID() *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.ClearFaviconLocalFileID()
+	return tcsuo
+}
+
+// SetThemeMode sets the "theme_mode" field.
+func (tcsuo *TrustCenterSettingUpdateOne) SetThemeMode(ectm enums.TrustCenterThemeMode) *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.SetThemeMode(ectm)
+	return tcsuo
+}
+
+// SetNillableThemeMode sets the "theme_mode" field if the given value is not nil.
+func (tcsuo *TrustCenterSettingUpdateOne) SetNillableThemeMode(ectm *enums.TrustCenterThemeMode) *TrustCenterSettingUpdateOne {
+	if ectm != nil {
+		tcsuo.SetThemeMode(*ectm)
+	}
+	return tcsuo
+}
+
+// ClearThemeMode clears the value of the "theme_mode" field.
+func (tcsuo *TrustCenterSettingUpdateOne) ClearThemeMode() *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.ClearThemeMode()
+	return tcsuo
+}
+
 // SetPrimaryColor sets the "primary_color" field.
 func (tcsuo *TrustCenterSettingUpdateOne) SetPrimaryColor(s string) *TrustCenterSettingUpdateOne {
 	tcsuo.mutation.SetPrimaryColor(s)
@@ -535,9 +1070,142 @@ func (tcsuo *TrustCenterSettingUpdateOne) ClearPrimaryColor() *TrustCenterSettin
 	return tcsuo
 }
 
+// SetFont sets the "font" field.
+func (tcsuo *TrustCenterSettingUpdateOne) SetFont(s string) *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.SetFont(s)
+	return tcsuo
+}
+
+// SetNillableFont sets the "font" field if the given value is not nil.
+func (tcsuo *TrustCenterSettingUpdateOne) SetNillableFont(s *string) *TrustCenterSettingUpdateOne {
+	if s != nil {
+		tcsuo.SetFont(*s)
+	}
+	return tcsuo
+}
+
+// ClearFont clears the value of the "font" field.
+func (tcsuo *TrustCenterSettingUpdateOne) ClearFont() *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.ClearFont()
+	return tcsuo
+}
+
+// SetForegroundColor sets the "foreground_color" field.
+func (tcsuo *TrustCenterSettingUpdateOne) SetForegroundColor(s string) *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.SetForegroundColor(s)
+	return tcsuo
+}
+
+// SetNillableForegroundColor sets the "foreground_color" field if the given value is not nil.
+func (tcsuo *TrustCenterSettingUpdateOne) SetNillableForegroundColor(s *string) *TrustCenterSettingUpdateOne {
+	if s != nil {
+		tcsuo.SetForegroundColor(*s)
+	}
+	return tcsuo
+}
+
+// ClearForegroundColor clears the value of the "foreground_color" field.
+func (tcsuo *TrustCenterSettingUpdateOne) ClearForegroundColor() *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.ClearForegroundColor()
+	return tcsuo
+}
+
+// SetBackgroundColor sets the "background_color" field.
+func (tcsuo *TrustCenterSettingUpdateOne) SetBackgroundColor(s string) *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.SetBackgroundColor(s)
+	return tcsuo
+}
+
+// SetNillableBackgroundColor sets the "background_color" field if the given value is not nil.
+func (tcsuo *TrustCenterSettingUpdateOne) SetNillableBackgroundColor(s *string) *TrustCenterSettingUpdateOne {
+	if s != nil {
+		tcsuo.SetBackgroundColor(*s)
+	}
+	return tcsuo
+}
+
+// ClearBackgroundColor clears the value of the "background_color" field.
+func (tcsuo *TrustCenterSettingUpdateOne) ClearBackgroundColor() *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.ClearBackgroundColor()
+	return tcsuo
+}
+
+// SetAccentColor sets the "accent_color" field.
+func (tcsuo *TrustCenterSettingUpdateOne) SetAccentColor(s string) *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.SetAccentColor(s)
+	return tcsuo
+}
+
+// SetNillableAccentColor sets the "accent_color" field if the given value is not nil.
+func (tcsuo *TrustCenterSettingUpdateOne) SetNillableAccentColor(s *string) *TrustCenterSettingUpdateOne {
+	if s != nil {
+		tcsuo.SetAccentColor(*s)
+	}
+	return tcsuo
+}
+
+// ClearAccentColor clears the value of the "accent_color" field.
+func (tcsuo *TrustCenterSettingUpdateOne) ClearAccentColor() *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.ClearAccentColor()
+	return tcsuo
+}
+
 // SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
 func (tcsuo *TrustCenterSettingUpdateOne) SetTrustCenter(t *TrustCenter) *TrustCenterSettingUpdateOne {
 	return tcsuo.SetTrustCenterID(t.ID)
+}
+
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (tcsuo *TrustCenterSettingUpdateOne) AddFileIDs(ids ...string) *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.AddFileIDs(ids...)
+	return tcsuo
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (tcsuo *TrustCenterSettingUpdateOne) AddFiles(f ...*File) *TrustCenterSettingUpdateOne {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return tcsuo.AddFileIDs(ids...)
+}
+
+// SetLogoFileID sets the "logo_file" edge to the File entity by ID.
+func (tcsuo *TrustCenterSettingUpdateOne) SetLogoFileID(id string) *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.SetLogoFileID(id)
+	return tcsuo
+}
+
+// SetNillableLogoFileID sets the "logo_file" edge to the File entity by ID if the given value is not nil.
+func (tcsuo *TrustCenterSettingUpdateOne) SetNillableLogoFileID(id *string) *TrustCenterSettingUpdateOne {
+	if id != nil {
+		tcsuo = tcsuo.SetLogoFileID(*id)
+	}
+	return tcsuo
+}
+
+// SetLogoFile sets the "logo_file" edge to the File entity.
+func (tcsuo *TrustCenterSettingUpdateOne) SetLogoFile(f *File) *TrustCenterSettingUpdateOne {
+	return tcsuo.SetLogoFileID(f.ID)
+}
+
+// SetFaviconFileID sets the "favicon_file" edge to the File entity by ID.
+func (tcsuo *TrustCenterSettingUpdateOne) SetFaviconFileID(id string) *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.SetFaviconFileID(id)
+	return tcsuo
+}
+
+// SetNillableFaviconFileID sets the "favicon_file" edge to the File entity by ID if the given value is not nil.
+func (tcsuo *TrustCenterSettingUpdateOne) SetNillableFaviconFileID(id *string) *TrustCenterSettingUpdateOne {
+	if id != nil {
+		tcsuo = tcsuo.SetFaviconFileID(*id)
+	}
+	return tcsuo
+}
+
+// SetFaviconFile sets the "favicon_file" edge to the File entity.
+func (tcsuo *TrustCenterSettingUpdateOne) SetFaviconFile(f *File) *TrustCenterSettingUpdateOne {
+	return tcsuo.SetFaviconFileID(f.ID)
 }
 
 // Mutation returns the TrustCenterSettingMutation object of the builder.
@@ -548,6 +1216,39 @@ func (tcsuo *TrustCenterSettingUpdateOne) Mutation() *TrustCenterSettingMutation
 // ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
 func (tcsuo *TrustCenterSettingUpdateOne) ClearTrustCenter() *TrustCenterSettingUpdateOne {
 	tcsuo.mutation.ClearTrustCenter()
+	return tcsuo
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (tcsuo *TrustCenterSettingUpdateOne) ClearFiles() *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.ClearFiles()
+	return tcsuo
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (tcsuo *TrustCenterSettingUpdateOne) RemoveFileIDs(ids ...string) *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.RemoveFileIDs(ids...)
+	return tcsuo
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (tcsuo *TrustCenterSettingUpdateOne) RemoveFiles(f ...*File) *TrustCenterSettingUpdateOne {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return tcsuo.RemoveFileIDs(ids...)
+}
+
+// ClearLogoFile clears the "logo_file" edge to the File entity.
+func (tcsuo *TrustCenterSettingUpdateOne) ClearLogoFile() *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.ClearLogoFile()
+	return tcsuo
+}
+
+// ClearFaviconFile clears the "favicon_file" edge to the File entity.
+func (tcsuo *TrustCenterSettingUpdateOne) ClearFaviconFile() *TrustCenterSettingUpdateOne {
+	tcsuo.mutation.ClearFaviconFile()
 	return tcsuo
 }
 
@@ -621,6 +1322,21 @@ func (tcsuo *TrustCenterSettingUpdateOne) check() error {
 	if v, ok := tcsuo.mutation.Overview(); ok {
 		if err := trustcentersetting.OverviewValidator(v); err != nil {
 			return &ValidationError{Name: "overview", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.overview": %w`, err)}
+		}
+	}
+	if v, ok := tcsuo.mutation.LogoRemoteURL(); ok {
+		if err := trustcentersetting.LogoRemoteURLValidator(v); err != nil {
+			return &ValidationError{Name: "logo_remote_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.logo_remote_url": %w`, err)}
+		}
+	}
+	if v, ok := tcsuo.mutation.FaviconRemoteURL(); ok {
+		if err := trustcentersetting.FaviconRemoteURLValidator(v); err != nil {
+			return &ValidationError{Name: "favicon_remote_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.favicon_remote_url": %w`, err)}
+		}
+	}
+	if v, ok := tcsuo.mutation.ThemeMode(); ok {
+		if err := trustcentersetting.ThemeModeValidator(v); err != nil {
+			return &ValidationError{Name: "theme_mode", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.theme_mode": %w`, err)}
 		}
 	}
 	return nil
@@ -703,11 +1419,53 @@ func (tcsuo *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *T
 	if tcsuo.mutation.OverviewCleared() {
 		_spec.ClearField(trustcentersetting.FieldOverview, field.TypeString)
 	}
+	if value, ok := tcsuo.mutation.LogoRemoteURL(); ok {
+		_spec.SetField(trustcentersetting.FieldLogoRemoteURL, field.TypeString, value)
+	}
+	if tcsuo.mutation.LogoRemoteURLCleared() {
+		_spec.ClearField(trustcentersetting.FieldLogoRemoteURL, field.TypeString)
+	}
+	if value, ok := tcsuo.mutation.FaviconRemoteURL(); ok {
+		_spec.SetField(trustcentersetting.FieldFaviconRemoteURL, field.TypeString, value)
+	}
+	if tcsuo.mutation.FaviconRemoteURLCleared() {
+		_spec.ClearField(trustcentersetting.FieldFaviconRemoteURL, field.TypeString)
+	}
+	if value, ok := tcsuo.mutation.ThemeMode(); ok {
+		_spec.SetField(trustcentersetting.FieldThemeMode, field.TypeEnum, value)
+	}
+	if tcsuo.mutation.ThemeModeCleared() {
+		_spec.ClearField(trustcentersetting.FieldThemeMode, field.TypeEnum)
+	}
 	if value, ok := tcsuo.mutation.PrimaryColor(); ok {
 		_spec.SetField(trustcentersetting.FieldPrimaryColor, field.TypeString, value)
 	}
 	if tcsuo.mutation.PrimaryColorCleared() {
 		_spec.ClearField(trustcentersetting.FieldPrimaryColor, field.TypeString)
+	}
+	if value, ok := tcsuo.mutation.Font(); ok {
+		_spec.SetField(trustcentersetting.FieldFont, field.TypeString, value)
+	}
+	if tcsuo.mutation.FontCleared() {
+		_spec.ClearField(trustcentersetting.FieldFont, field.TypeString)
+	}
+	if value, ok := tcsuo.mutation.ForegroundColor(); ok {
+		_spec.SetField(trustcentersetting.FieldForegroundColor, field.TypeString, value)
+	}
+	if tcsuo.mutation.ForegroundColorCleared() {
+		_spec.ClearField(trustcentersetting.FieldForegroundColor, field.TypeString)
+	}
+	if value, ok := tcsuo.mutation.BackgroundColor(); ok {
+		_spec.SetField(trustcentersetting.FieldBackgroundColor, field.TypeString, value)
+	}
+	if tcsuo.mutation.BackgroundColorCleared() {
+		_spec.ClearField(trustcentersetting.FieldBackgroundColor, field.TypeString)
+	}
+	if value, ok := tcsuo.mutation.AccentColor(); ok {
+		_spec.SetField(trustcentersetting.FieldAccentColor, field.TypeString, value)
+	}
+	if tcsuo.mutation.AccentColorCleared() {
+		_spec.ClearField(trustcentersetting.FieldAccentColor, field.TypeString)
 	}
 	if tcsuo.mutation.TrustCenterCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -732,6 +1490,116 @@ func (tcsuo *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *T
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsuo.schemaConfig.TrustCenterSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tcsuo.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   trustcentersetting.FilesTable,
+			Columns: trustcentersetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsuo.schemaConfig.TrustCenterSettingFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tcsuo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !tcsuo.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   trustcentersetting.FilesTable,
+			Columns: trustcentersetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsuo.schemaConfig.TrustCenterSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tcsuo.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   trustcentersetting.FilesTable,
+			Columns: trustcentersetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsuo.schemaConfig.TrustCenterSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tcsuo.mutation.LogoFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.LogoFileTable,
+			Columns: []string{trustcentersetting.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsuo.schemaConfig.TrustCenterSetting
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tcsuo.mutation.LogoFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.LogoFileTable,
+			Columns: []string{trustcentersetting.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsuo.schemaConfig.TrustCenterSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tcsuo.mutation.FaviconFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.FaviconFileTable,
+			Columns: []string{trustcentersetting.FaviconFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsuo.schemaConfig.TrustCenterSetting
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tcsuo.mutation.FaviconFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.FaviconFileTable,
+			Columns: []string{trustcentersetting.FaviconFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = tcsuo.schemaConfig.TrustCenterSetting

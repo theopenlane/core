@@ -189,7 +189,9 @@ func (tchu *TrustCenterHistoryUpdate) Mutation() *TrustCenterHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (tchu *TrustCenterHistoryUpdate) Save(ctx context.Context) (int, error) {
-	tchu.defaults()
+	if err := tchu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, tchu.sqlSave, tchu.mutation, tchu.hooks)
 }
 
@@ -216,11 +218,15 @@ func (tchu *TrustCenterHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (tchu *TrustCenterHistoryUpdate) defaults() {
+func (tchu *TrustCenterHistoryUpdate) defaults() error {
 	if _, ok := tchu.mutation.UpdatedAt(); !ok && !tchu.mutation.UpdatedAtCleared() {
+		if trustcenterhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized trustcenterhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := trustcenterhistory.UpdateDefaultUpdatedAt()
 		tchu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -494,7 +500,9 @@ func (tchuo *TrustCenterHistoryUpdateOne) Select(field string, fields ...string)
 
 // Save executes the query and returns the updated TrustCenterHistory entity.
 func (tchuo *TrustCenterHistoryUpdateOne) Save(ctx context.Context) (*TrustCenterHistory, error) {
-	tchuo.defaults()
+	if err := tchuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, tchuo.sqlSave, tchuo.mutation, tchuo.hooks)
 }
 
@@ -521,11 +529,15 @@ func (tchuo *TrustCenterHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (tchuo *TrustCenterHistoryUpdateOne) defaults() {
+func (tchuo *TrustCenterHistoryUpdateOne) defaults() error {
 	if _, ok := tchuo.mutation.UpdatedAt(); !ok && !tchuo.mutation.UpdatedAtCleared() {
+		if trustcenterhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized trustcenterhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := trustcenterhistory.UpdateDefaultUpdatedAt()
 		tchuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.

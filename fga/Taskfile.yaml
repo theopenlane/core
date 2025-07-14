@@ -5,7 +5,7 @@ vars:
   FGA_API_TOKEN: '{{ .FGA_API_TOKEN | default "QKwHEmWX99RnFh28eSRJ3GWlfb2FQkL7toh1GJpzch1mMkVeMg" }}'
   SYSTEM_OBJECT: "system:openlane_core"
   SYSTEM_ADMIN_RELATION: "system_admin"
-
+  OPENLANE_API_HOST: '{{ default "http://localhost:17608" .OPENLANE_HOST }}'
 
 tasks:
   create:
@@ -38,7 +38,7 @@ tasks:
       STORE_ID:
         sh: fga store list --api-token={{ .FGA_API_TOKEN }} |jq -r '.stores.[].id'
       LOGGED_IN_USER:
-        sh: openlane user get -z json | jq -r '.self.id'
+        sh: openlane user get -z json --host {{ .OPENLANE_API_HOST }}  | jq -r '.self.id'
       USER_ID: "{{ .USER_ID | default .LOGGED_IN_USER }}"
     cmds:
       - fga tuple write --store-id={{ .STORE_ID }} user:{{ .USER_ID }} {{ .SYSTEM_ADMIN_RELATION }} {{ .SYSTEM_OBJECT }} --api-token={{ .FGA_API_TOKEN }}

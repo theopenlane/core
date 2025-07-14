@@ -32,6 +32,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
+	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -91,6 +92,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
@@ -101,6 +104,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -115,7 +120,7 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 102)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 107)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   apitoken.Table,
@@ -127,24 +132,25 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "APIToken",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			apitoken.FieldCreatedAt:     {Type: field.TypeTime, Column: apitoken.FieldCreatedAt},
-			apitoken.FieldUpdatedAt:     {Type: field.TypeTime, Column: apitoken.FieldUpdatedAt},
-			apitoken.FieldCreatedBy:     {Type: field.TypeString, Column: apitoken.FieldCreatedBy},
-			apitoken.FieldUpdatedBy:     {Type: field.TypeString, Column: apitoken.FieldUpdatedBy},
-			apitoken.FieldDeletedAt:     {Type: field.TypeTime, Column: apitoken.FieldDeletedAt},
-			apitoken.FieldDeletedBy:     {Type: field.TypeString, Column: apitoken.FieldDeletedBy},
-			apitoken.FieldTags:          {Type: field.TypeJSON, Column: apitoken.FieldTags},
-			apitoken.FieldOwnerID:       {Type: field.TypeString, Column: apitoken.FieldOwnerID},
-			apitoken.FieldName:          {Type: field.TypeString, Column: apitoken.FieldName},
-			apitoken.FieldToken:         {Type: field.TypeString, Column: apitoken.FieldToken},
-			apitoken.FieldExpiresAt:     {Type: field.TypeTime, Column: apitoken.FieldExpiresAt},
-			apitoken.FieldDescription:   {Type: field.TypeString, Column: apitoken.FieldDescription},
-			apitoken.FieldScopes:        {Type: field.TypeJSON, Column: apitoken.FieldScopes},
-			apitoken.FieldLastUsedAt:    {Type: field.TypeTime, Column: apitoken.FieldLastUsedAt},
-			apitoken.FieldIsActive:      {Type: field.TypeBool, Column: apitoken.FieldIsActive},
-			apitoken.FieldRevokedReason: {Type: field.TypeString, Column: apitoken.FieldRevokedReason},
-			apitoken.FieldRevokedBy:     {Type: field.TypeString, Column: apitoken.FieldRevokedBy},
-			apitoken.FieldRevokedAt:     {Type: field.TypeTime, Column: apitoken.FieldRevokedAt},
+			apitoken.FieldCreatedAt:         {Type: field.TypeTime, Column: apitoken.FieldCreatedAt},
+			apitoken.FieldUpdatedAt:         {Type: field.TypeTime, Column: apitoken.FieldUpdatedAt},
+			apitoken.FieldCreatedBy:         {Type: field.TypeString, Column: apitoken.FieldCreatedBy},
+			apitoken.FieldUpdatedBy:         {Type: field.TypeString, Column: apitoken.FieldUpdatedBy},
+			apitoken.FieldDeletedAt:         {Type: field.TypeTime, Column: apitoken.FieldDeletedAt},
+			apitoken.FieldDeletedBy:         {Type: field.TypeString, Column: apitoken.FieldDeletedBy},
+			apitoken.FieldTags:              {Type: field.TypeJSON, Column: apitoken.FieldTags},
+			apitoken.FieldOwnerID:           {Type: field.TypeString, Column: apitoken.FieldOwnerID},
+			apitoken.FieldName:              {Type: field.TypeString, Column: apitoken.FieldName},
+			apitoken.FieldToken:             {Type: field.TypeString, Column: apitoken.FieldToken},
+			apitoken.FieldExpiresAt:         {Type: field.TypeTime, Column: apitoken.FieldExpiresAt},
+			apitoken.FieldDescription:       {Type: field.TypeString, Column: apitoken.FieldDescription},
+			apitoken.FieldScopes:            {Type: field.TypeJSON, Column: apitoken.FieldScopes},
+			apitoken.FieldLastUsedAt:        {Type: field.TypeTime, Column: apitoken.FieldLastUsedAt},
+			apitoken.FieldIsActive:          {Type: field.TypeBool, Column: apitoken.FieldIsActive},
+			apitoken.FieldRevokedReason:     {Type: field.TypeString, Column: apitoken.FieldRevokedReason},
+			apitoken.FieldRevokedBy:         {Type: field.TypeString, Column: apitoken.FieldRevokedBy},
+			apitoken.FieldRevokedAt:         {Type: field.TypeTime, Column: apitoken.FieldRevokedAt},
+			apitoken.FieldSSOAuthorizations: {Type: field.TypeJSON, Column: apitoken.FieldSSOAuthorizations},
 		},
 	}
 	graph.Nodes[1] = &sqlgraph.Node{
@@ -988,6 +994,31 @@ var schemaGraph = func() *sqlgraph.Schema {
 	}
 	graph.Nodes[29] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
+			Table:   export.Table,
+			Columns: export.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: export.FieldID,
+			},
+		},
+		Type: "Export",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			export.FieldCreatedAt:   {Type: field.TypeTime, Column: export.FieldCreatedAt},
+			export.FieldUpdatedAt:   {Type: field.TypeTime, Column: export.FieldUpdatedAt},
+			export.FieldCreatedBy:   {Type: field.TypeString, Column: export.FieldCreatedBy},
+			export.FieldUpdatedBy:   {Type: field.TypeString, Column: export.FieldUpdatedBy},
+			export.FieldDeletedAt:   {Type: field.TypeTime, Column: export.FieldDeletedAt},
+			export.FieldDeletedBy:   {Type: field.TypeString, Column: export.FieldDeletedBy},
+			export.FieldOwnerID:     {Type: field.TypeString, Column: export.FieldOwnerID},
+			export.FieldExportType:  {Type: field.TypeEnum, Column: export.FieldExportType},
+			export.FieldFormat:      {Type: field.TypeEnum, Column: export.FieldFormat},
+			export.FieldStatus:      {Type: field.TypeEnum, Column: export.FieldStatus},
+			export.FieldRequestorID: {Type: field.TypeString, Column: export.FieldRequestorID},
+			export.FieldFields:      {Type: field.TypeJSON, Column: export.FieldFields},
+		},
+	}
+	graph.Nodes[30] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
 			Table:   file.Table,
 			Columns: file.Columns,
 			ID: &sqlgraph.FieldSpec{
@@ -1020,7 +1051,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			file.FieldFileContents:          {Type: field.TypeBytes, Column: file.FieldFileContents},
 		},
 	}
-	graph.Nodes[30] = &sqlgraph.Node{
+	graph.Nodes[31] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   filehistory.Table,
 			Columns: filehistory.Columns,
@@ -1057,7 +1088,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			filehistory.FieldFileContents:          {Type: field.TypeBytes, Column: filehistory.FieldFileContents},
 		},
 	}
-	graph.Nodes[31] = &sqlgraph.Node{
+	graph.Nodes[32] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   group.Table,
 			Columns: group.Columns,
@@ -1085,7 +1116,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			group.FieldDisplayName:     {Type: field.TypeString, Column: group.FieldDisplayName},
 		},
 	}
-	graph.Nodes[32] = &sqlgraph.Node{
+	graph.Nodes[33] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   grouphistory.Table,
 			Columns: grouphistory.Columns,
@@ -1116,7 +1147,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			grouphistory.FieldDisplayName:     {Type: field.TypeString, Column: grouphistory.FieldDisplayName},
 		},
 	}
-	graph.Nodes[33] = &sqlgraph.Node{
+	graph.Nodes[34] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   groupmembership.Table,
 			Columns: groupmembership.Columns,
@@ -1136,7 +1167,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			groupmembership.FieldUserID:    {Type: field.TypeString, Column: groupmembership.FieldUserID},
 		},
 	}
-	graph.Nodes[34] = &sqlgraph.Node{
+	graph.Nodes[35] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   groupmembershiphistory.Table,
 			Columns: groupmembershiphistory.Columns,
@@ -1159,7 +1190,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			groupmembershiphistory.FieldUserID:      {Type: field.TypeString, Column: groupmembershiphistory.FieldUserID},
 		},
 	}
-	graph.Nodes[35] = &sqlgraph.Node{
+	graph.Nodes[36] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   groupsetting.Table,
 			Columns: groupsetting.Columns,
@@ -1183,7 +1214,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			groupsetting.FieldGroupID:      {Type: field.TypeString, Column: groupsetting.FieldGroupID},
 		},
 	}
-	graph.Nodes[36] = &sqlgraph.Node{
+	graph.Nodes[37] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   groupsettinghistory.Table,
 			Columns: groupsettinghistory.Columns,
@@ -1210,7 +1241,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			groupsettinghistory.FieldGroupID:      {Type: field.TypeString, Column: groupsettinghistory.FieldGroupID},
 		},
 	}
-	graph.Nodes[37] = &sqlgraph.Node{
+	graph.Nodes[38] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   hush.Table,
 			Columns: hush.Columns,
@@ -1235,7 +1266,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			hush.FieldSecretValue: {Type: field.TypeString, Column: hush.FieldSecretValue},
 		},
 	}
-	graph.Nodes[38] = &sqlgraph.Node{
+	graph.Nodes[39] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   hushhistory.Table,
 			Columns: hushhistory.Columns,
@@ -1263,7 +1294,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			hushhistory.FieldSecretValue: {Type: field.TypeString, Column: hushhistory.FieldSecretValue},
 		},
 	}
-	graph.Nodes[39] = &sqlgraph.Node{
+	graph.Nodes[40] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   integration.Table,
 			Columns: integration.Columns,
@@ -1287,7 +1318,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integration.FieldKind:        {Type: field.TypeString, Column: integration.FieldKind},
 		},
 	}
-	graph.Nodes[40] = &sqlgraph.Node{
+	graph.Nodes[41] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   integrationhistory.Table,
 			Columns: integrationhistory.Columns,
@@ -1314,7 +1345,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integrationhistory.FieldKind:        {Type: field.TypeString, Column: integrationhistory.FieldKind},
 		},
 	}
-	graph.Nodes[41] = &sqlgraph.Node{
+	graph.Nodes[42] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   internalpolicy.Table,
 			Columns: internalpolicy.Columns,
@@ -1353,7 +1384,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicy.FieldDismissedImprovementSuggestions: {Type: field.TypeJSON, Column: internalpolicy.FieldDismissedImprovementSuggestions},
 		},
 	}
-	graph.Nodes[42] = &sqlgraph.Node{
+	graph.Nodes[43] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   internalpolicyhistory.Table,
 			Columns: internalpolicyhistory.Columns,
@@ -1395,7 +1426,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicyhistory.FieldDismissedImprovementSuggestions: {Type: field.TypeJSON, Column: internalpolicyhistory.FieldDismissedImprovementSuggestions},
 		},
 	}
-	graph.Nodes[43] = &sqlgraph.Node{
+	graph.Nodes[44] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   invite.Table,
 			Columns: invite.Columns,
@@ -1423,7 +1454,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			invite.FieldSecret:       {Type: field.TypeBytes, Column: invite.FieldSecret},
 		},
 	}
-	graph.Nodes[44] = &sqlgraph.Node{
+	graph.Nodes[45] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   jobresult.Table,
 			Columns: jobresult.Columns,
@@ -1449,7 +1480,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			jobresult.FieldFileID:         {Type: field.TypeString, Column: jobresult.FieldFileID},
 		},
 	}
-	graph.Nodes[45] = &sqlgraph.Node{
+	graph.Nodes[46] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   jobrunner.Table,
 			Columns: jobrunner.Columns,
@@ -1475,7 +1506,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			jobrunner.FieldIPAddress:   {Type: field.TypeString, Column: jobrunner.FieldIPAddress},
 		},
 	}
-	graph.Nodes[46] = &sqlgraph.Node{
+	graph.Nodes[47] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   jobrunnerregistrationtoken.Table,
 			Columns: jobrunnerregistrationtoken.Columns,
@@ -1500,7 +1531,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			jobrunnerregistrationtoken.FieldJobRunnerID: {Type: field.TypeString, Column: jobrunnerregistrationtoken.FieldJobRunnerID},
 		},
 	}
-	graph.Nodes[47] = &sqlgraph.Node{
+	graph.Nodes[48] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   jobrunnertoken.Table,
 			Columns: jobrunnertoken.Columns,
@@ -1528,7 +1559,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			jobrunnertoken.FieldRevokedAt:     {Type: field.TypeTime, Column: jobrunnertoken.FieldRevokedAt},
 		},
 	}
-	graph.Nodes[48] = &sqlgraph.Node{
+	graph.Nodes[49] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   mappabledomain.Table,
 			Columns: mappabledomain.Columns,
@@ -1550,7 +1581,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			mappabledomain.FieldZoneID:    {Type: field.TypeString, Column: mappabledomain.FieldZoneID},
 		},
 	}
-	graph.Nodes[49] = &sqlgraph.Node{
+	graph.Nodes[50] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   mappabledomainhistory.Table,
 			Columns: mappabledomainhistory.Columns,
@@ -1575,7 +1606,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			mappabledomainhistory.FieldZoneID:      {Type: field.TypeString, Column: mappabledomainhistory.FieldZoneID},
 		},
 	}
-	graph.Nodes[50] = &sqlgraph.Node{
+	graph.Nodes[51] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   mappedcontrol.Table,
 			Columns: mappedcontrol.Columns,
@@ -1600,7 +1631,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			mappedcontrol.FieldSource:      {Type: field.TypeEnum, Column: mappedcontrol.FieldSource},
 		},
 	}
-	graph.Nodes[51] = &sqlgraph.Node{
+	graph.Nodes[52] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   mappedcontrolhistory.Table,
 			Columns: mappedcontrolhistory.Columns,
@@ -1628,7 +1659,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			mappedcontrolhistory.FieldSource:      {Type: field.TypeEnum, Column: mappedcontrolhistory.FieldSource},
 		},
 	}
-	graph.Nodes[52] = &sqlgraph.Node{
+	graph.Nodes[53] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   narrative.Table,
 			Columns: narrative.Columns,
@@ -1653,7 +1684,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			narrative.FieldDetails:     {Type: field.TypeString, Column: narrative.FieldDetails},
 		},
 	}
-	graph.Nodes[53] = &sqlgraph.Node{
+	graph.Nodes[54] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   narrativehistory.Table,
 			Columns: narrativehistory.Columns,
@@ -1681,7 +1712,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			narrativehistory.FieldDetails:     {Type: field.TypeString, Column: narrativehistory.FieldDetails},
 		},
 	}
-	graph.Nodes[54] = &sqlgraph.Node{
+	graph.Nodes[55] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   note.Table,
 			Columns: note.Columns,
@@ -1703,7 +1734,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			note.FieldText:      {Type: field.TypeString, Column: note.FieldText},
 		},
 	}
-	graph.Nodes[55] = &sqlgraph.Node{
+	graph.Nodes[56] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   notehistory.Table,
 			Columns: notehistory.Columns,
@@ -1728,7 +1759,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			notehistory.FieldText:        {Type: field.TypeString, Column: notehistory.FieldText},
 		},
 	}
-	graph.Nodes[56] = &sqlgraph.Node{
+	graph.Nodes[57] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   onboarding.Table,
 			Columns: onboarding.Columns,
@@ -1749,7 +1780,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			onboarding.FieldCompliance:     {Type: field.TypeJSON, Column: onboarding.FieldCompliance},
 		},
 	}
-	graph.Nodes[57] = &sqlgraph.Node{
+	graph.Nodes[58] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   orgmembership.Table,
 			Columns: orgmembership.Columns,
@@ -1769,7 +1800,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgmembership.FieldUserID:         {Type: field.TypeString, Column: orgmembership.FieldUserID},
 		},
 	}
-	graph.Nodes[58] = &sqlgraph.Node{
+	graph.Nodes[59] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   orgmembershiphistory.Table,
 			Columns: orgmembershiphistory.Columns,
@@ -1792,7 +1823,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgmembershiphistory.FieldUserID:         {Type: field.TypeString, Column: orgmembershiphistory.FieldUserID},
 		},
 	}
-	graph.Nodes[59] = &sqlgraph.Node{
+	graph.Nodes[60] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   orgmodule.Table,
 			Columns: orgmodule.Columns,
@@ -1822,7 +1853,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgmodule.FieldPriceID:         {Type: field.TypeString, Column: orgmodule.FieldPriceID},
 		},
 	}
-	graph.Nodes[60] = &sqlgraph.Node{
+	graph.Nodes[61] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   orgprice.Table,
 			Columns: orgprice.Columns,
@@ -1849,7 +1880,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgprice.FieldSubscriptionID: {Type: field.TypeString, Column: orgprice.FieldSubscriptionID},
 		},
 	}
-	graph.Nodes[61] = &sqlgraph.Node{
+	graph.Nodes[62] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   orgproduct.Table,
 			Columns: orgproduct.Columns,
@@ -1876,7 +1907,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgproduct.FieldPriceID:         {Type: field.TypeString, Column: orgproduct.FieldPriceID},
 		},
 	}
-	graph.Nodes[62] = &sqlgraph.Node{
+	graph.Nodes[63] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   orgsubscription.Table,
 			Columns: orgsubscription.Columns,
@@ -1910,7 +1941,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgsubscription.FieldFeatureLookupKeys:        {Type: field.TypeJSON, Column: orgsubscription.FieldFeatureLookupKeys},
 		},
 	}
-	graph.Nodes[63] = &sqlgraph.Node{
+	graph.Nodes[64] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   orgsubscriptionhistory.Table,
 			Columns: orgsubscriptionhistory.Columns,
@@ -1947,7 +1978,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgsubscriptionhistory.FieldFeatureLookupKeys:        {Type: field.TypeJSON, Column: orgsubscriptionhistory.FieldFeatureLookupKeys},
 		},
 	}
-	graph.Nodes[64] = &sqlgraph.Node{
+	graph.Nodes[65] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   organization.Table,
 			Columns: organization.Columns,
@@ -1976,7 +2007,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organization.FieldDedicatedDb:          {Type: field.TypeBool, Column: organization.FieldDedicatedDb},
 		},
 	}
-	graph.Nodes[65] = &sqlgraph.Node{
+	graph.Nodes[66] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   organizationhistory.Table,
 			Columns: organizationhistory.Columns,
@@ -2008,7 +2039,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationhistory.FieldDedicatedDb:          {Type: field.TypeBool, Column: organizationhistory.FieldDedicatedDb},
 		},
 	}
-	graph.Nodes[66] = &sqlgraph.Node{
+	graph.Nodes[67] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   organizationsetting.Table,
 			Columns: organizationsetting.Columns,
@@ -2046,7 +2077,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsetting.FieldComplianceWebhookToken:           {Type: field.TypeString, Column: organizationsetting.FieldComplianceWebhookToken},
 		},
 	}
-	graph.Nodes[67] = &sqlgraph.Node{
+	graph.Nodes[68] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   organizationsettinghistory.Table,
 			Columns: organizationsettinghistory.Columns,
@@ -2087,7 +2118,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsettinghistory.FieldComplianceWebhookToken:           {Type: field.TypeString, Column: organizationsettinghistory.FieldComplianceWebhookToken},
 		},
 	}
-	graph.Nodes[68] = &sqlgraph.Node{
+	graph.Nodes[69] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   passwordresettoken.Table,
 			Columns: passwordresettoken.Columns,
@@ -2111,7 +2142,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			passwordresettoken.FieldSecret:    {Type: field.TypeBytes, Column: passwordresettoken.FieldSecret},
 		},
 	}
-	graph.Nodes[69] = &sqlgraph.Node{
+	graph.Nodes[70] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   personalaccesstoken.Table,
 			Columns: personalaccesstoken.Columns,
@@ -2122,27 +2153,28 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "PersonalAccessToken",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			personalaccesstoken.FieldCreatedAt:     {Type: field.TypeTime, Column: personalaccesstoken.FieldCreatedAt},
-			personalaccesstoken.FieldUpdatedAt:     {Type: field.TypeTime, Column: personalaccesstoken.FieldUpdatedAt},
-			personalaccesstoken.FieldCreatedBy:     {Type: field.TypeString, Column: personalaccesstoken.FieldCreatedBy},
-			personalaccesstoken.FieldUpdatedBy:     {Type: field.TypeString, Column: personalaccesstoken.FieldUpdatedBy},
-			personalaccesstoken.FieldDeletedAt:     {Type: field.TypeTime, Column: personalaccesstoken.FieldDeletedAt},
-			personalaccesstoken.FieldDeletedBy:     {Type: field.TypeString, Column: personalaccesstoken.FieldDeletedBy},
-			personalaccesstoken.FieldTags:          {Type: field.TypeJSON, Column: personalaccesstoken.FieldTags},
-			personalaccesstoken.FieldOwnerID:       {Type: field.TypeString, Column: personalaccesstoken.FieldOwnerID},
-			personalaccesstoken.FieldName:          {Type: field.TypeString, Column: personalaccesstoken.FieldName},
-			personalaccesstoken.FieldToken:         {Type: field.TypeString, Column: personalaccesstoken.FieldToken},
-			personalaccesstoken.FieldExpiresAt:     {Type: field.TypeTime, Column: personalaccesstoken.FieldExpiresAt},
-			personalaccesstoken.FieldDescription:   {Type: field.TypeString, Column: personalaccesstoken.FieldDescription},
-			personalaccesstoken.FieldScopes:        {Type: field.TypeJSON, Column: personalaccesstoken.FieldScopes},
-			personalaccesstoken.FieldLastUsedAt:    {Type: field.TypeTime, Column: personalaccesstoken.FieldLastUsedAt},
-			personalaccesstoken.FieldIsActive:      {Type: field.TypeBool, Column: personalaccesstoken.FieldIsActive},
-			personalaccesstoken.FieldRevokedReason: {Type: field.TypeString, Column: personalaccesstoken.FieldRevokedReason},
-			personalaccesstoken.FieldRevokedBy:     {Type: field.TypeString, Column: personalaccesstoken.FieldRevokedBy},
-			personalaccesstoken.FieldRevokedAt:     {Type: field.TypeTime, Column: personalaccesstoken.FieldRevokedAt},
+			personalaccesstoken.FieldCreatedAt:         {Type: field.TypeTime, Column: personalaccesstoken.FieldCreatedAt},
+			personalaccesstoken.FieldUpdatedAt:         {Type: field.TypeTime, Column: personalaccesstoken.FieldUpdatedAt},
+			personalaccesstoken.FieldCreatedBy:         {Type: field.TypeString, Column: personalaccesstoken.FieldCreatedBy},
+			personalaccesstoken.FieldUpdatedBy:         {Type: field.TypeString, Column: personalaccesstoken.FieldUpdatedBy},
+			personalaccesstoken.FieldDeletedAt:         {Type: field.TypeTime, Column: personalaccesstoken.FieldDeletedAt},
+			personalaccesstoken.FieldDeletedBy:         {Type: field.TypeString, Column: personalaccesstoken.FieldDeletedBy},
+			personalaccesstoken.FieldTags:              {Type: field.TypeJSON, Column: personalaccesstoken.FieldTags},
+			personalaccesstoken.FieldOwnerID:           {Type: field.TypeString, Column: personalaccesstoken.FieldOwnerID},
+			personalaccesstoken.FieldName:              {Type: field.TypeString, Column: personalaccesstoken.FieldName},
+			personalaccesstoken.FieldToken:             {Type: field.TypeString, Column: personalaccesstoken.FieldToken},
+			personalaccesstoken.FieldExpiresAt:         {Type: field.TypeTime, Column: personalaccesstoken.FieldExpiresAt},
+			personalaccesstoken.FieldDescription:       {Type: field.TypeString, Column: personalaccesstoken.FieldDescription},
+			personalaccesstoken.FieldScopes:            {Type: field.TypeJSON, Column: personalaccesstoken.FieldScopes},
+			personalaccesstoken.FieldSSOAuthorizations: {Type: field.TypeJSON, Column: personalaccesstoken.FieldSSOAuthorizations},
+			personalaccesstoken.FieldLastUsedAt:        {Type: field.TypeTime, Column: personalaccesstoken.FieldLastUsedAt},
+			personalaccesstoken.FieldIsActive:          {Type: field.TypeBool, Column: personalaccesstoken.FieldIsActive},
+			personalaccesstoken.FieldRevokedReason:     {Type: field.TypeString, Column: personalaccesstoken.FieldRevokedReason},
+			personalaccesstoken.FieldRevokedBy:         {Type: field.TypeString, Column: personalaccesstoken.FieldRevokedBy},
+			personalaccesstoken.FieldRevokedAt:         {Type: field.TypeTime, Column: personalaccesstoken.FieldRevokedAt},
 		},
 	}
-	graph.Nodes[70] = &sqlgraph.Node{
+	graph.Nodes[71] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   procedure.Table,
 			Columns: procedure.Columns,
@@ -2181,7 +2213,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedure.FieldDismissedImprovementSuggestions: {Type: field.TypeJSON, Column: procedure.FieldDismissedImprovementSuggestions},
 		},
 	}
-	graph.Nodes[71] = &sqlgraph.Node{
+	graph.Nodes[72] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   procedurehistory.Table,
 			Columns: procedurehistory.Columns,
@@ -2223,7 +2255,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedurehistory.FieldDismissedImprovementSuggestions: {Type: field.TypeJSON, Column: procedurehistory.FieldDismissedImprovementSuggestions},
 		},
 	}
-	graph.Nodes[72] = &sqlgraph.Node{
+	graph.Nodes[73] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   program.Table,
 			Columns: program.Columns,
@@ -2258,7 +2290,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			program.FieldAuditorEmail:         {Type: field.TypeString, Column: program.FieldAuditorEmail},
 		},
 	}
-	graph.Nodes[73] = &sqlgraph.Node{
+	graph.Nodes[74] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   programhistory.Table,
 			Columns: programhistory.Columns,
@@ -2296,7 +2328,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			programhistory.FieldAuditorEmail:         {Type: field.TypeString, Column: programhistory.FieldAuditorEmail},
 		},
 	}
-	graph.Nodes[74] = &sqlgraph.Node{
+	graph.Nodes[75] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   programmembership.Table,
 			Columns: programmembership.Columns,
@@ -2316,7 +2348,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			programmembership.FieldUserID:    {Type: field.TypeString, Column: programmembership.FieldUserID},
 		},
 	}
-	graph.Nodes[75] = &sqlgraph.Node{
+	graph.Nodes[76] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   programmembershiphistory.Table,
 			Columns: programmembershiphistory.Columns,
@@ -2339,7 +2371,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			programmembershiphistory.FieldUserID:      {Type: field.TypeString, Column: programmembershiphistory.FieldUserID},
 		},
 	}
-	graph.Nodes[76] = &sqlgraph.Node{
+	graph.Nodes[77] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   risk.Table,
 			Columns: risk.Columns,
@@ -2373,7 +2405,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			risk.FieldDelegateID:    {Type: field.TypeString, Column: risk.FieldDelegateID},
 		},
 	}
-	graph.Nodes[77] = &sqlgraph.Node{
+	graph.Nodes[78] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   riskhistory.Table,
 			Columns: riskhistory.Columns,
@@ -2410,7 +2442,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			riskhistory.FieldDelegateID:    {Type: field.TypeString, Column: riskhistory.FieldDelegateID},
 		},
 	}
-	graph.Nodes[78] = &sqlgraph.Node{
+	graph.Nodes[79] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   scan.Table,
 			Columns: scan.Columns,
@@ -2435,7 +2467,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scan.FieldStatus:    {Type: field.TypeEnum, Column: scan.FieldStatus},
 		},
 	}
-	graph.Nodes[79] = &sqlgraph.Node{
+	graph.Nodes[80] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   scanhistory.Table,
 			Columns: scanhistory.Columns,
@@ -2463,7 +2495,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scanhistory.FieldStatus:      {Type: field.TypeEnum, Column: scanhistory.FieldStatus},
 		},
 	}
-	graph.Nodes[80] = &sqlgraph.Node{
+	graph.Nodes[81] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   scheduledjob.Table,
 			Columns: scheduledjob.Columns,
@@ -2495,7 +2527,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scheduledjob.FieldCron:          {Type: field.TypeString, Column: scheduledjob.FieldCron},
 		},
 	}
-	graph.Nodes[81] = &sqlgraph.Node{
+	graph.Nodes[82] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   scheduledjobhistory.Table,
 			Columns: scheduledjobhistory.Columns,
@@ -2530,7 +2562,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scheduledjobhistory.FieldCron:          {Type: field.TypeString, Column: scheduledjobhistory.FieldCron},
 		},
 	}
-	graph.Nodes[82] = &sqlgraph.Node{
+	graph.Nodes[83] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   scheduledjobrun.Table,
 			Columns: scheduledjobrun.Columns,
@@ -2555,7 +2587,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scheduledjobrun.FieldScript:                {Type: field.TypeString, Column: scheduledjobrun.FieldScript},
 		},
 	}
-	graph.Nodes[83] = &sqlgraph.Node{
+	graph.Nodes[84] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   standard.Table,
 			Columns: standard.Columns,
@@ -2591,7 +2623,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			standard.FieldVersion:              {Type: field.TypeString, Column: standard.FieldVersion},
 		},
 	}
-	graph.Nodes[84] = &sqlgraph.Node{
+	graph.Nodes[85] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   standardhistory.Table,
 			Columns: standardhistory.Columns,
@@ -2630,7 +2662,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			standardhistory.FieldVersion:              {Type: field.TypeString, Column: standardhistory.FieldVersion},
 		},
 	}
-	graph.Nodes[85] = &sqlgraph.Node{
+	graph.Nodes[86] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   subcontrol.Table,
 			Columns: subcontrol.Columns,
@@ -2673,7 +2705,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrol.FieldControlID:              {Type: field.TypeString, Column: subcontrol.FieldControlID},
 		},
 	}
-	graph.Nodes[86] = &sqlgraph.Node{
+	graph.Nodes[87] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   subcontrolhistory.Table,
 			Columns: subcontrolhistory.Columns,
@@ -2719,7 +2751,62 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrolhistory.FieldControlID:              {Type: field.TypeString, Column: subcontrolhistory.FieldControlID},
 		},
 	}
-	graph.Nodes[87] = &sqlgraph.Node{
+	graph.Nodes[88] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   subprocessor.Table,
+			Columns: subprocessor.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: subprocessor.FieldID,
+			},
+		},
+		Type: "Subprocessor",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			subprocessor.FieldCreatedAt:       {Type: field.TypeTime, Column: subprocessor.FieldCreatedAt},
+			subprocessor.FieldUpdatedAt:       {Type: field.TypeTime, Column: subprocessor.FieldUpdatedAt},
+			subprocessor.FieldCreatedBy:       {Type: field.TypeString, Column: subprocessor.FieldCreatedBy},
+			subprocessor.FieldUpdatedBy:       {Type: field.TypeString, Column: subprocessor.FieldUpdatedBy},
+			subprocessor.FieldDeletedAt:       {Type: field.TypeTime, Column: subprocessor.FieldDeletedAt},
+			subprocessor.FieldDeletedBy:       {Type: field.TypeString, Column: subprocessor.FieldDeletedBy},
+			subprocessor.FieldTags:            {Type: field.TypeJSON, Column: subprocessor.FieldTags},
+			subprocessor.FieldOwnerID:         {Type: field.TypeString, Column: subprocessor.FieldOwnerID},
+			subprocessor.FieldSystemOwned:     {Type: field.TypeBool, Column: subprocessor.FieldSystemOwned},
+			subprocessor.FieldName:            {Type: field.TypeString, Column: subprocessor.FieldName},
+			subprocessor.FieldDescription:     {Type: field.TypeString, Column: subprocessor.FieldDescription},
+			subprocessor.FieldLogoRemoteURL:   {Type: field.TypeString, Column: subprocessor.FieldLogoRemoteURL},
+			subprocessor.FieldLogoLocalFileID: {Type: field.TypeString, Column: subprocessor.FieldLogoLocalFileID},
+		},
+	}
+	graph.Nodes[89] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   subprocessorhistory.Table,
+			Columns: subprocessorhistory.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: subprocessorhistory.FieldID,
+			},
+		},
+		Type: "SubprocessorHistory",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			subprocessorhistory.FieldHistoryTime:     {Type: field.TypeTime, Column: subprocessorhistory.FieldHistoryTime},
+			subprocessorhistory.FieldRef:             {Type: field.TypeString, Column: subprocessorhistory.FieldRef},
+			subprocessorhistory.FieldOperation:       {Type: field.TypeEnum, Column: subprocessorhistory.FieldOperation},
+			subprocessorhistory.FieldCreatedAt:       {Type: field.TypeTime, Column: subprocessorhistory.FieldCreatedAt},
+			subprocessorhistory.FieldUpdatedAt:       {Type: field.TypeTime, Column: subprocessorhistory.FieldUpdatedAt},
+			subprocessorhistory.FieldCreatedBy:       {Type: field.TypeString, Column: subprocessorhistory.FieldCreatedBy},
+			subprocessorhistory.FieldUpdatedBy:       {Type: field.TypeString, Column: subprocessorhistory.FieldUpdatedBy},
+			subprocessorhistory.FieldDeletedAt:       {Type: field.TypeTime, Column: subprocessorhistory.FieldDeletedAt},
+			subprocessorhistory.FieldDeletedBy:       {Type: field.TypeString, Column: subprocessorhistory.FieldDeletedBy},
+			subprocessorhistory.FieldTags:            {Type: field.TypeJSON, Column: subprocessorhistory.FieldTags},
+			subprocessorhistory.FieldOwnerID:         {Type: field.TypeString, Column: subprocessorhistory.FieldOwnerID},
+			subprocessorhistory.FieldSystemOwned:     {Type: field.TypeBool, Column: subprocessorhistory.FieldSystemOwned},
+			subprocessorhistory.FieldName:            {Type: field.TypeString, Column: subprocessorhistory.FieldName},
+			subprocessorhistory.FieldDescription:     {Type: field.TypeString, Column: subprocessorhistory.FieldDescription},
+			subprocessorhistory.FieldLogoRemoteURL:   {Type: field.TypeString, Column: subprocessorhistory.FieldLogoRemoteURL},
+			subprocessorhistory.FieldLogoLocalFileID: {Type: field.TypeString, Column: subprocessorhistory.FieldLogoLocalFileID},
+		},
+	}
+	graph.Nodes[90] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   subscriber.Table,
 			Columns: subscriber.Columns,
@@ -2750,7 +2837,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subscriber.FieldSendAttempts:  {Type: field.TypeInt, Column: subscriber.FieldSendAttempts},
 		},
 	}
-	graph.Nodes[88] = &sqlgraph.Node{
+	graph.Nodes[91] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   tfasetting.Table,
 			Columns: tfasetting.Columns,
@@ -2776,7 +2863,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tfasetting.FieldTotpAllowed:     {Type: field.TypeBool, Column: tfasetting.FieldTotpAllowed},
 		},
 	}
-	graph.Nodes[89] = &sqlgraph.Node{
+	graph.Nodes[92] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   task.Table,
 			Columns: task.Columns,
@@ -2806,7 +2893,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			task.FieldAssignerID: {Type: field.TypeString, Column: task.FieldAssignerID},
 		},
 	}
-	graph.Nodes[90] = &sqlgraph.Node{
+	graph.Nodes[93] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   taskhistory.Table,
 			Columns: taskhistory.Columns,
@@ -2839,7 +2926,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			taskhistory.FieldAssignerID:  {Type: field.TypeString, Column: taskhistory.FieldAssignerID},
 		},
 	}
-	graph.Nodes[91] = &sqlgraph.Node{
+	graph.Nodes[94] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   template.Table,
 			Columns: template.Columns,
@@ -2865,7 +2952,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			template.FieldUischema:     {Type: field.TypeJSON, Column: template.FieldUischema},
 		},
 	}
-	graph.Nodes[92] = &sqlgraph.Node{
+	graph.Nodes[95] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   templatehistory.Table,
 			Columns: templatehistory.Columns,
@@ -2894,7 +2981,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			templatehistory.FieldUischema:     {Type: field.TypeJSON, Column: templatehistory.FieldUischema},
 		},
 	}
-	graph.Nodes[93] = &sqlgraph.Node{
+	graph.Nodes[96] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenter.Table,
 			Columns: trustcenter.Columns,
@@ -2917,7 +3004,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenter.FieldCustomDomainID: {Type: field.TypeString, Column: trustcenter.FieldCustomDomainID},
 		},
 	}
-	graph.Nodes[94] = &sqlgraph.Node{
+	graph.Nodes[97] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterhistory.Table,
 			Columns: trustcenterhistory.Columns,
@@ -2943,7 +3030,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterhistory.FieldCustomDomainID: {Type: field.TypeString, Column: trustcenterhistory.FieldCustomDomainID},
 		},
 	}
-	graph.Nodes[95] = &sqlgraph.Node{
+	graph.Nodes[98] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentersetting.Table,
 			Columns: trustcentersetting.Columns,
@@ -2954,19 +3041,28 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "TrustCenterSetting",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			trustcentersetting.FieldCreatedAt:     {Type: field.TypeTime, Column: trustcentersetting.FieldCreatedAt},
-			trustcentersetting.FieldUpdatedAt:     {Type: field.TypeTime, Column: trustcentersetting.FieldUpdatedAt},
-			trustcentersetting.FieldCreatedBy:     {Type: field.TypeString, Column: trustcentersetting.FieldCreatedBy},
-			trustcentersetting.FieldUpdatedBy:     {Type: field.TypeString, Column: trustcentersetting.FieldUpdatedBy},
-			trustcentersetting.FieldDeletedAt:     {Type: field.TypeTime, Column: trustcentersetting.FieldDeletedAt},
-			trustcentersetting.FieldDeletedBy:     {Type: field.TypeString, Column: trustcentersetting.FieldDeletedBy},
-			trustcentersetting.FieldTrustCenterID: {Type: field.TypeString, Column: trustcentersetting.FieldTrustCenterID},
-			trustcentersetting.FieldTitle:         {Type: field.TypeString, Column: trustcentersetting.FieldTitle},
-			trustcentersetting.FieldOverview:      {Type: field.TypeString, Column: trustcentersetting.FieldOverview},
-			trustcentersetting.FieldPrimaryColor:  {Type: field.TypeString, Column: trustcentersetting.FieldPrimaryColor},
+			trustcentersetting.FieldCreatedAt:          {Type: field.TypeTime, Column: trustcentersetting.FieldCreatedAt},
+			trustcentersetting.FieldUpdatedAt:          {Type: field.TypeTime, Column: trustcentersetting.FieldUpdatedAt},
+			trustcentersetting.FieldCreatedBy:          {Type: field.TypeString, Column: trustcentersetting.FieldCreatedBy},
+			trustcentersetting.FieldUpdatedBy:          {Type: field.TypeString, Column: trustcentersetting.FieldUpdatedBy},
+			trustcentersetting.FieldDeletedAt:          {Type: field.TypeTime, Column: trustcentersetting.FieldDeletedAt},
+			trustcentersetting.FieldDeletedBy:          {Type: field.TypeString, Column: trustcentersetting.FieldDeletedBy},
+			trustcentersetting.FieldTrustCenterID:      {Type: field.TypeString, Column: trustcentersetting.FieldTrustCenterID},
+			trustcentersetting.FieldTitle:              {Type: field.TypeString, Column: trustcentersetting.FieldTitle},
+			trustcentersetting.FieldOverview:           {Type: field.TypeString, Column: trustcentersetting.FieldOverview},
+			trustcentersetting.FieldLogoRemoteURL:      {Type: field.TypeString, Column: trustcentersetting.FieldLogoRemoteURL},
+			trustcentersetting.FieldLogoLocalFileID:    {Type: field.TypeString, Column: trustcentersetting.FieldLogoLocalFileID},
+			trustcentersetting.FieldFaviconRemoteURL:   {Type: field.TypeString, Column: trustcentersetting.FieldFaviconRemoteURL},
+			trustcentersetting.FieldFaviconLocalFileID: {Type: field.TypeString, Column: trustcentersetting.FieldFaviconLocalFileID},
+			trustcentersetting.FieldThemeMode:          {Type: field.TypeEnum, Column: trustcentersetting.FieldThemeMode},
+			trustcentersetting.FieldPrimaryColor:       {Type: field.TypeString, Column: trustcentersetting.FieldPrimaryColor},
+			trustcentersetting.FieldFont:               {Type: field.TypeString, Column: trustcentersetting.FieldFont},
+			trustcentersetting.FieldForegroundColor:    {Type: field.TypeString, Column: trustcentersetting.FieldForegroundColor},
+			trustcentersetting.FieldBackgroundColor:    {Type: field.TypeString, Column: trustcentersetting.FieldBackgroundColor},
+			trustcentersetting.FieldAccentColor:        {Type: field.TypeString, Column: trustcentersetting.FieldAccentColor},
 		},
 	}
-	graph.Nodes[96] = &sqlgraph.Node{
+	graph.Nodes[99] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentersettinghistory.Table,
 			Columns: trustcentersettinghistory.Columns,
@@ -2977,22 +3073,80 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "TrustCenterSettingHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			trustcentersettinghistory.FieldHistoryTime:   {Type: field.TypeTime, Column: trustcentersettinghistory.FieldHistoryTime},
-			trustcentersettinghistory.FieldRef:           {Type: field.TypeString, Column: trustcentersettinghistory.FieldRef},
-			trustcentersettinghistory.FieldOperation:     {Type: field.TypeEnum, Column: trustcentersettinghistory.FieldOperation},
-			trustcentersettinghistory.FieldCreatedAt:     {Type: field.TypeTime, Column: trustcentersettinghistory.FieldCreatedAt},
-			trustcentersettinghistory.FieldUpdatedAt:     {Type: field.TypeTime, Column: trustcentersettinghistory.FieldUpdatedAt},
-			trustcentersettinghistory.FieldCreatedBy:     {Type: field.TypeString, Column: trustcentersettinghistory.FieldCreatedBy},
-			trustcentersettinghistory.FieldUpdatedBy:     {Type: field.TypeString, Column: trustcentersettinghistory.FieldUpdatedBy},
-			trustcentersettinghistory.FieldDeletedAt:     {Type: field.TypeTime, Column: trustcentersettinghistory.FieldDeletedAt},
-			trustcentersettinghistory.FieldDeletedBy:     {Type: field.TypeString, Column: trustcentersettinghistory.FieldDeletedBy},
-			trustcentersettinghistory.FieldTrustCenterID: {Type: field.TypeString, Column: trustcentersettinghistory.FieldTrustCenterID},
-			trustcentersettinghistory.FieldTitle:         {Type: field.TypeString, Column: trustcentersettinghistory.FieldTitle},
-			trustcentersettinghistory.FieldOverview:      {Type: field.TypeString, Column: trustcentersettinghistory.FieldOverview},
-			trustcentersettinghistory.FieldPrimaryColor:  {Type: field.TypeString, Column: trustcentersettinghistory.FieldPrimaryColor},
+			trustcentersettinghistory.FieldHistoryTime:        {Type: field.TypeTime, Column: trustcentersettinghistory.FieldHistoryTime},
+			trustcentersettinghistory.FieldRef:                {Type: field.TypeString, Column: trustcentersettinghistory.FieldRef},
+			trustcentersettinghistory.FieldOperation:          {Type: field.TypeEnum, Column: trustcentersettinghistory.FieldOperation},
+			trustcentersettinghistory.FieldCreatedAt:          {Type: field.TypeTime, Column: trustcentersettinghistory.FieldCreatedAt},
+			trustcentersettinghistory.FieldUpdatedAt:          {Type: field.TypeTime, Column: trustcentersettinghistory.FieldUpdatedAt},
+			trustcentersettinghistory.FieldCreatedBy:          {Type: field.TypeString, Column: trustcentersettinghistory.FieldCreatedBy},
+			trustcentersettinghistory.FieldUpdatedBy:          {Type: field.TypeString, Column: trustcentersettinghistory.FieldUpdatedBy},
+			trustcentersettinghistory.FieldDeletedAt:          {Type: field.TypeTime, Column: trustcentersettinghistory.FieldDeletedAt},
+			trustcentersettinghistory.FieldDeletedBy:          {Type: field.TypeString, Column: trustcentersettinghistory.FieldDeletedBy},
+			trustcentersettinghistory.FieldTrustCenterID:      {Type: field.TypeString, Column: trustcentersettinghistory.FieldTrustCenterID},
+			trustcentersettinghistory.FieldTitle:              {Type: field.TypeString, Column: trustcentersettinghistory.FieldTitle},
+			trustcentersettinghistory.FieldOverview:           {Type: field.TypeString, Column: trustcentersettinghistory.FieldOverview},
+			trustcentersettinghistory.FieldLogoRemoteURL:      {Type: field.TypeString, Column: trustcentersettinghistory.FieldLogoRemoteURL},
+			trustcentersettinghistory.FieldLogoLocalFileID:    {Type: field.TypeString, Column: trustcentersettinghistory.FieldLogoLocalFileID},
+			trustcentersettinghistory.FieldFaviconRemoteURL:   {Type: field.TypeString, Column: trustcentersettinghistory.FieldFaviconRemoteURL},
+			trustcentersettinghistory.FieldFaviconLocalFileID: {Type: field.TypeString, Column: trustcentersettinghistory.FieldFaviconLocalFileID},
+			trustcentersettinghistory.FieldThemeMode:          {Type: field.TypeEnum, Column: trustcentersettinghistory.FieldThemeMode},
+			trustcentersettinghistory.FieldPrimaryColor:       {Type: field.TypeString, Column: trustcentersettinghistory.FieldPrimaryColor},
+			trustcentersettinghistory.FieldFont:               {Type: field.TypeString, Column: trustcentersettinghistory.FieldFont},
+			trustcentersettinghistory.FieldForegroundColor:    {Type: field.TypeString, Column: trustcentersettinghistory.FieldForegroundColor},
+			trustcentersettinghistory.FieldBackgroundColor:    {Type: field.TypeString, Column: trustcentersettinghistory.FieldBackgroundColor},
+			trustcentersettinghistory.FieldAccentColor:        {Type: field.TypeString, Column: trustcentersettinghistory.FieldAccentColor},
 		},
 	}
-	graph.Nodes[97] = &sqlgraph.Node{
+	graph.Nodes[100] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   trustcentersubprocessor.Table,
+			Columns: trustcentersubprocessor.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: trustcentersubprocessor.FieldID,
+			},
+		},
+		Type: "TrustCenterSubprocessor",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			trustcentersubprocessor.FieldCreatedAt:      {Type: field.TypeTime, Column: trustcentersubprocessor.FieldCreatedAt},
+			trustcentersubprocessor.FieldUpdatedAt:      {Type: field.TypeTime, Column: trustcentersubprocessor.FieldUpdatedAt},
+			trustcentersubprocessor.FieldCreatedBy:      {Type: field.TypeString, Column: trustcentersubprocessor.FieldCreatedBy},
+			trustcentersubprocessor.FieldUpdatedBy:      {Type: field.TypeString, Column: trustcentersubprocessor.FieldUpdatedBy},
+			trustcentersubprocessor.FieldDeletedAt:      {Type: field.TypeTime, Column: trustcentersubprocessor.FieldDeletedAt},
+			trustcentersubprocessor.FieldDeletedBy:      {Type: field.TypeString, Column: trustcentersubprocessor.FieldDeletedBy},
+			trustcentersubprocessor.FieldSubprocessorID: {Type: field.TypeString, Column: trustcentersubprocessor.FieldSubprocessorID},
+			trustcentersubprocessor.FieldTrustCenterID:  {Type: field.TypeString, Column: trustcentersubprocessor.FieldTrustCenterID},
+			trustcentersubprocessor.FieldCountries:      {Type: field.TypeJSON, Column: trustcentersubprocessor.FieldCountries},
+			trustcentersubprocessor.FieldCategory:       {Type: field.TypeString, Column: trustcentersubprocessor.FieldCategory},
+		},
+	}
+	graph.Nodes[101] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   trustcentersubprocessorhistory.Table,
+			Columns: trustcentersubprocessorhistory.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: trustcentersubprocessorhistory.FieldID,
+			},
+		},
+		Type: "TrustCenterSubprocessorHistory",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			trustcentersubprocessorhistory.FieldHistoryTime:    {Type: field.TypeTime, Column: trustcentersubprocessorhistory.FieldHistoryTime},
+			trustcentersubprocessorhistory.FieldRef:            {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldRef},
+			trustcentersubprocessorhistory.FieldOperation:      {Type: field.TypeEnum, Column: trustcentersubprocessorhistory.FieldOperation},
+			trustcentersubprocessorhistory.FieldCreatedAt:      {Type: field.TypeTime, Column: trustcentersubprocessorhistory.FieldCreatedAt},
+			trustcentersubprocessorhistory.FieldUpdatedAt:      {Type: field.TypeTime, Column: trustcentersubprocessorhistory.FieldUpdatedAt},
+			trustcentersubprocessorhistory.FieldCreatedBy:      {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldCreatedBy},
+			trustcentersubprocessorhistory.FieldUpdatedBy:      {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldUpdatedBy},
+			trustcentersubprocessorhistory.FieldDeletedAt:      {Type: field.TypeTime, Column: trustcentersubprocessorhistory.FieldDeletedAt},
+			trustcentersubprocessorhistory.FieldDeletedBy:      {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldDeletedBy},
+			trustcentersubprocessorhistory.FieldSubprocessorID: {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldSubprocessorID},
+			trustcentersubprocessorhistory.FieldTrustCenterID:  {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldTrustCenterID},
+			trustcentersubprocessorhistory.FieldCountries:      {Type: field.TypeJSON, Column: trustcentersubprocessorhistory.FieldCountries},
+			trustcentersubprocessorhistory.FieldCategory:       {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldCategory},
+		},
+	}
+	graph.Nodes[102] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   user.Table,
 			Columns: user.Columns,
@@ -3026,7 +3180,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			user.FieldRole:              {Type: field.TypeEnum, Column: user.FieldRole},
 		},
 	}
-	graph.Nodes[98] = &sqlgraph.Node{
+	graph.Nodes[103] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   userhistory.Table,
 			Columns: userhistory.Columns,
@@ -3063,7 +3217,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			userhistory.FieldRole:              {Type: field.TypeEnum, Column: userhistory.FieldRole},
 		},
 	}
-	graph.Nodes[99] = &sqlgraph.Node{
+	graph.Nodes[104] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   usersetting.Table,
 			Columns: usersetting.Columns,
@@ -3092,7 +3246,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			usersetting.FieldPhoneNumber:       {Type: field.TypeString, Column: usersetting.FieldPhoneNumber},
 		},
 	}
-	graph.Nodes[100] = &sqlgraph.Node{
+	graph.Nodes[105] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   usersettinghistory.Table,
 			Columns: usersettinghistory.Columns,
@@ -3124,7 +3278,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			usersettinghistory.FieldPhoneNumber:       {Type: field.TypeString, Column: usersettinghistory.FieldPhoneNumber},
 		},
 	}
-	graph.Nodes[101] = &sqlgraph.Node{
+	graph.Nodes[106] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   webauthn.Table,
 			Columns: webauthn.Columns,
@@ -4426,6 +4580,42 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Task",
 	)
 	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   export.OwnerTable,
+			Columns: []string{export.OwnerColumn},
+			Bidi:    false,
+		},
+		"Export",
+		"Organization",
+	)
+	graph.MustAddE(
+		"events",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   export.EventsTable,
+			Columns: []string{export.EventsColumn},
+			Bidi:    false,
+		},
+		"Export",
+		"Event",
+	)
+	graph.MustAddE(
+		"files",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   export.FilesTable,
+			Columns: []string{export.FilesColumn},
+			Bidi:    false,
+		},
+		"Export",
+		"File",
+	)
+	graph.MustAddE(
 		"user",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -4568,6 +4758,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"File",
 		"Event",
+	)
+	graph.MustAddE(
+		"trust_center_setting",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.TrustCenterSettingTable,
+			Columns: file.TrustCenterSettingPrimaryKey,
+			Bidi:    false,
+		},
+		"File",
+		"TrustCenterSetting",
+	)
+	graph.MustAddE(
+		"subprocessor",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.SubprocessorTable,
+			Columns: file.SubprocessorPrimaryKey,
+			Bidi:    false,
+		},
+		"File",
+		"Subprocessor",
 	)
 	graph.MustAddE(
 		"owner",
@@ -6646,6 +6860,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Scan",
 	)
 	graph.MustAddE(
+		"subprocessors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SubprocessorsTable,
+			Columns: []string{organization.SubprocessorsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Subprocessor",
+	)
+	graph.MustAddE(
+		"exports",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ExportsTable,
+			Columns: []string{organization.ExportsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Export",
+	)
+	graph.MustAddE(
 		"members",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -7658,6 +7896,54 @@ var schemaGraph = func() *sqlgraph.Schema {
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
+			Table:   subprocessor.OwnerTable,
+			Columns: []string{subprocessor.OwnerColumn},
+			Bidi:    false,
+		},
+		"Subprocessor",
+		"Organization",
+	)
+	graph.MustAddE(
+		"files",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subprocessor.FilesTable,
+			Columns: subprocessor.FilesPrimaryKey,
+			Bidi:    false,
+		},
+		"Subprocessor",
+		"File",
+	)
+	graph.MustAddE(
+		"logo_file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   subprocessor.LogoFileTable,
+			Columns: []string{subprocessor.LogoFileColumn},
+			Bidi:    false,
+		},
+		"Subprocessor",
+		"File",
+	)
+	graph.MustAddE(
+		"trust_center_subprocessors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   subprocessor.TrustCenterSubprocessorsTable,
+			Columns: []string{subprocessor.TrustCenterSubprocessorsColumn},
+			Bidi:    false,
+		},
+		"Subprocessor",
+		"TrustCenterSubprocessor",
+	)
+	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
 			Table:   subscriber.OwnerTable,
 			Columns: []string{subscriber.OwnerColumn},
 			Bidi:    false,
@@ -7918,6 +8204,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"TrustCenterSetting",
 	)
 	graph.MustAddE(
+		"trust_center_subprocessors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterSubprocessorsTable,
+			Columns: []string{trustcenter.TrustCenterSubprocessorsColumn},
+			Bidi:    false,
+		},
+		"TrustCenter",
+		"TrustCenterSubprocessor",
+	)
+	graph.MustAddE(
 		"trust_center",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
@@ -7928,6 +8226,66 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"TrustCenterSetting",
 		"TrustCenter",
+	)
+	graph.MustAddE(
+		"files",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   trustcentersetting.FilesTable,
+			Columns: trustcentersetting.FilesPrimaryKey,
+			Bidi:    false,
+		},
+		"TrustCenterSetting",
+		"File",
+	)
+	graph.MustAddE(
+		"logo_file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.LogoFileTable,
+			Columns: []string{trustcentersetting.LogoFileColumn},
+			Bidi:    false,
+		},
+		"TrustCenterSetting",
+		"File",
+	)
+	graph.MustAddE(
+		"favicon_file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcentersetting.FaviconFileTable,
+			Columns: []string{trustcentersetting.FaviconFileColumn},
+			Bidi:    false,
+		},
+		"TrustCenterSetting",
+		"File",
+	)
+	graph.MustAddE(
+		"trust_center",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentersubprocessor.TrustCenterTable,
+			Columns: []string{trustcentersubprocessor.TrustCenterColumn},
+			Bidi:    false,
+		},
+		"TrustCenterSubprocessor",
+		"TrustCenter",
+	)
+	graph.MustAddE(
+		"subprocessor",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentersubprocessor.SubprocessorTable,
+			Columns: []string{trustcentersubprocessor.SubprocessorColumn},
+			Bidi:    false,
+		},
+		"TrustCenterSubprocessor",
+		"Subprocessor",
 	)
 	graph.MustAddE(
 		"personal_access_tokens",
@@ -8342,6 +8700,11 @@ func (f *APITokenFilter) WhereRevokedBy(p entql.StringP) {
 // WhereRevokedAt applies the entql time.Time predicate on the revoked_at field.
 func (f *APITokenFilter) WhereRevokedAt(p entql.TimeP) {
 	f.Where(p.Field(apitoken.FieldRevokedAt))
+}
+
+// WhereSSOAuthorizations applies the entql json.RawMessage predicate on the sso_authorizations field.
+func (f *APITokenFilter) WhereSSOAuthorizations(p entql.BytesP) {
+	f.Where(p.Field(apitoken.FieldSSOAuthorizations))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -13324,6 +13687,148 @@ func (f *EvidenceHistoryFilter) WhereStatus(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
+func (eq *ExportQuery) addPredicate(pred func(s *sql.Selector)) {
+	eq.predicates = append(eq.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the ExportQuery builder.
+func (eq *ExportQuery) Filter() *ExportFilter {
+	return &ExportFilter{config: eq.config, predicateAdder: eq}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *ExportMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the ExportMutation builder.
+func (m *ExportMutation) Filter() *ExportFilter {
+	return &ExportFilter{config: m.config, predicateAdder: m}
+}
+
+// ExportFilter provides a generic filtering capability at runtime for ExportQuery.
+type ExportFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *ExportFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[29].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *ExportFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(export.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *ExportFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(export.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *ExportFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(export.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *ExportFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(export.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *ExportFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(export.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *ExportFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(export.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *ExportFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(export.FieldDeletedBy))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *ExportFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(export.FieldOwnerID))
+}
+
+// WhereExportType applies the entql string predicate on the export_type field.
+func (f *ExportFilter) WhereExportType(p entql.StringP) {
+	f.Where(p.Field(export.FieldExportType))
+}
+
+// WhereFormat applies the entql string predicate on the format field.
+func (f *ExportFilter) WhereFormat(p entql.StringP) {
+	f.Where(p.Field(export.FieldFormat))
+}
+
+// WhereStatus applies the entql string predicate on the status field.
+func (f *ExportFilter) WhereStatus(p entql.StringP) {
+	f.Where(p.Field(export.FieldStatus))
+}
+
+// WhereRequestorID applies the entql string predicate on the requestor_id field.
+func (f *ExportFilter) WhereRequestorID(p entql.StringP) {
+	f.Where(p.Field(export.FieldRequestorID))
+}
+
+// WhereFields applies the entql json.RawMessage predicate on the fields field.
+func (f *ExportFilter) WhereFields(p entql.BytesP) {
+	f.Where(p.Field(export.FieldFields))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *ExportFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *ExportFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEvents applies a predicate to check if query has an edge events.
+func (f *ExportFilter) WhereHasEvents() {
+	f.Where(entql.HasEdge("events"))
+}
+
+// WhereHasEventsWith applies a predicate to check if query has an edge events with a given conditions (other predicates).
+func (f *ExportFilter) WhereHasEventsWith(preds ...predicate.Event) {
+	f.Where(entql.HasEdgeWith("events", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFiles applies a predicate to check if query has an edge files.
+func (f *ExportFilter) WhereHasFiles() {
+	f.Where(entql.HasEdge("files"))
+}
+
+// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
+func (f *ExportFilter) WhereHasFilesWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (fq *FileQuery) addPredicate(pred func(s *sql.Selector)) {
 	fq.predicates = append(fq.predicates, pred)
 }
@@ -13352,7 +13857,7 @@ type FileFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *FileFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[29].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[30].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13636,6 +14141,34 @@ func (f *FileFilter) WhereHasEventsWith(preds ...predicate.Event) {
 	})))
 }
 
+// WhereHasTrustCenterSetting applies a predicate to check if query has an edge trust_center_setting.
+func (f *FileFilter) WhereHasTrustCenterSetting() {
+	f.Where(entql.HasEdge("trust_center_setting"))
+}
+
+// WhereHasTrustCenterSettingWith applies a predicate to check if query has an edge trust_center_setting with a given conditions (other predicates).
+func (f *FileFilter) WhereHasTrustCenterSettingWith(preds ...predicate.TrustCenterSetting) {
+	f.Where(entql.HasEdgeWith("trust_center_setting", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSubprocessor applies a predicate to check if query has an edge subprocessor.
+func (f *FileFilter) WhereHasSubprocessor() {
+	f.Where(entql.HasEdge("subprocessor"))
+}
+
+// WhereHasSubprocessorWith applies a predicate to check if query has an edge subprocessor with a given conditions (other predicates).
+func (f *FileFilter) WhereHasSubprocessorWith(preds ...predicate.Subprocessor) {
+	f.Where(entql.HasEdgeWith("subprocessor", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (fhq *FileHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	fhq.predicates = append(fhq.predicates, pred)
@@ -13665,7 +14198,7 @@ type FileHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *FileHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[30].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[31].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13825,7 +14358,7 @@ type GroupFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[31].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[32].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -14416,7 +14949,7 @@ type GroupHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[32].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[33].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -14546,7 +15079,7 @@ type GroupMembershipFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupMembershipFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[33].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[34].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -14677,7 +15210,7 @@ type GroupMembershipHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupMembershipHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[34].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[35].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -14767,7 +15300,7 @@ type GroupSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[35].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[36].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -14876,7 +15409,7 @@ type GroupSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[36].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[37].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -14986,7 +15519,7 @@ type HushFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *HushFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[37].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[38].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15128,7 +15661,7 @@ type HushHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *HushHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[38].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[39].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15243,7 +15776,7 @@ type IntegrationFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *IntegrationFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[39].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[40].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15380,7 +15913,7 @@ type IntegrationHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *IntegrationHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[40].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[41].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15490,7 +16023,7 @@ type InternalPolicyFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *InternalPolicyFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[41].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[42].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15842,7 +16375,7 @@ type InternalPolicyHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *InternalPolicyHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[42].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[43].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16027,7 +16560,7 @@ type InviteFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *InviteFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[43].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[44].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16170,7 +16703,7 @@ type JobResultFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *JobResultFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[44].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[45].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16317,7 +16850,7 @@ type JobRunnerFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *JobRunnerFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[45].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[46].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16450,7 +16983,7 @@ type JobRunnerRegistrationTokenFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *JobRunnerRegistrationTokenFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[46].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[47].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16578,7 +17111,7 @@ type JobRunnerTokenFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *JobRunnerTokenFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[47].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[48].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16721,7 +17254,7 @@ type MappableDomainFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *MappableDomainFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[48].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[49].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16820,7 +17353,7 @@ type MappableDomainHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *MappableDomainHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[49].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[50].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16920,7 +17453,7 @@ type MappedControlFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *MappedControlFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[50].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[51].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -17118,7 +17651,7 @@ type MappedControlHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *MappedControlHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[51].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[52].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -17233,7 +17766,7 @@ type NarrativeFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *NarrativeFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[52].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[53].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -17445,7 +17978,7 @@ type NarrativeHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *NarrativeHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[53].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[54].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -17560,7 +18093,7 @@ type NoteFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *NoteFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[54].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[55].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -17687,7 +18220,7 @@ type NoteHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *NoteHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[55].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[56].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -17787,7 +18320,7 @@ type OnboardingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OnboardingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[56].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[57].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -17881,7 +18414,7 @@ type OrgMembershipFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrgMembershipFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[57].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[58].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -17998,7 +18531,7 @@ type OrgMembershipHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrgMembershipHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[58].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[59].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -18088,7 +18621,7 @@ type OrgModuleFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrgModuleFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[59].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[60].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -18269,7 +18802,7 @@ type OrgPriceFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrgPriceFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[60].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[61].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -18435,7 +18968,7 @@ type OrgProductFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrgProductFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[61].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[62].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -18601,7 +19134,7 @@ type OrgSubscriptionFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrgSubscriptionFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[62].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[63].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -18816,7 +19349,7 @@ type OrgSubscriptionHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrgSubscriptionHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[63].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[64].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -18976,7 +19509,7 @@ type OrganizationFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrganizationFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[64].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[65].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -19963,6 +20496,34 @@ func (f *OrganizationFilter) WhereHasScansWith(preds ...predicate.Scan) {
 	})))
 }
 
+// WhereHasSubprocessors applies a predicate to check if query has an edge subprocessors.
+func (f *OrganizationFilter) WhereHasSubprocessors() {
+	f.Where(entql.HasEdge("subprocessors"))
+}
+
+// WhereHasSubprocessorsWith applies a predicate to check if query has an edge subprocessors with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasSubprocessorsWith(preds ...predicate.Subprocessor) {
+	f.Where(entql.HasEdgeWith("subprocessors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasExports applies a predicate to check if query has an edge exports.
+func (f *OrganizationFilter) WhereHasExports() {
+	f.Where(entql.HasEdge("exports"))
+}
+
+// WhereHasExportsWith applies a predicate to check if query has an edge exports with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasExportsWith(preds ...predicate.Export) {
+	f.Where(entql.HasEdgeWith("exports", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasMembers applies a predicate to check if query has an edge members.
 func (f *OrganizationFilter) WhereHasMembers() {
 	f.Where(entql.HasEdge("members"))
@@ -20006,7 +20567,7 @@ type OrganizationHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrganizationHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[65].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[66].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -20141,7 +20702,7 @@ type OrganizationSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrganizationSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[66].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[67].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -20334,7 +20895,7 @@ type OrganizationSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrganizationSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[67].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[68].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -20514,7 +21075,7 @@ type PasswordResetTokenFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *PasswordResetTokenFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[68].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[69].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -20623,7 +21184,7 @@ type PersonalAccessTokenFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *PersonalAccessTokenFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[69].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[70].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -20697,6 +21258,11 @@ func (f *PersonalAccessTokenFilter) WhereDescription(p entql.StringP) {
 // WhereScopes applies the entql json.RawMessage predicate on the scopes field.
 func (f *PersonalAccessTokenFilter) WhereScopes(p entql.BytesP) {
 	f.Where(p.Field(personalaccesstoken.FieldScopes))
+}
+
+// WhereSSOAuthorizations applies the entql json.RawMessage predicate on the sso_authorizations field.
+func (f *PersonalAccessTokenFilter) WhereSSOAuthorizations(p entql.BytesP) {
+	f.Where(p.Field(personalaccesstoken.FieldSSOAuthorizations))
 }
 
 // WhereLastUsedAt applies the entql time.Time predicate on the last_used_at field.
@@ -20795,7 +21361,7 @@ type ProcedureFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ProcedureFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[70].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[71].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -21133,7 +21699,7 @@ type ProcedureHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ProcedureHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[71].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[72].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -21318,7 +21884,7 @@ type ProgramFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ProgramFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[72].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[73].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -21720,7 +22286,7 @@ type ProgramHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ProgramHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[73].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[74].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -21885,7 +22451,7 @@ type ProgramMembershipFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ProgramMembershipFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[74].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[75].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -22002,7 +22568,7 @@ type ProgramMembershipHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ProgramMembershipHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[75].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[76].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -22092,7 +22658,7 @@ type RiskFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *RiskFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[76].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[77].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -22461,7 +23027,7 @@ type RiskHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *RiskHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[77].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[78].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -22621,7 +23187,7 @@ type ScanFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ScanFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[78].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[79].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -22805,7 +23371,7 @@ type ScanHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ScanHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[79].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[80].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -22920,7 +23486,7 @@ type ScheduledJobFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ScheduledJobFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[80].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[81].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -23069,7 +23635,7 @@ type ScheduledJobHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ScheduledJobHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[81].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[82].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -23219,7 +23785,7 @@ type ScheduledJobRunFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ScheduledJobRunFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[82].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[83].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -23361,7 +23927,7 @@ type StandardFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *StandardFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[83].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[84].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -23544,7 +24110,7 @@ type StandardHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *StandardHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[84].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[85].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -23714,7 +24280,7 @@ type SubcontrolFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SubcontrolFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[85].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[86].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -24128,7 +24694,7 @@ type SubcontrolHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SubcontrolHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[86].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[87].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -24305,6 +24871,287 @@ func (f *SubcontrolHistoryFilter) WhereControlID(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
+func (sq *SubprocessorQuery) addPredicate(pred func(s *sql.Selector)) {
+	sq.predicates = append(sq.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the SubprocessorQuery builder.
+func (sq *SubprocessorQuery) Filter() *SubprocessorFilter {
+	return &SubprocessorFilter{config: sq.config, predicateAdder: sq}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *SubprocessorMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the SubprocessorMutation builder.
+func (m *SubprocessorMutation) Filter() *SubprocessorFilter {
+	return &SubprocessorFilter{config: m.config, predicateAdder: m}
+}
+
+// SubprocessorFilter provides a generic filtering capability at runtime for SubprocessorQuery.
+type SubprocessorFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *SubprocessorFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[88].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *SubprocessorFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(subprocessor.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *SubprocessorFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(subprocessor.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *SubprocessorFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(subprocessor.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *SubprocessorFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(subprocessor.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *SubprocessorFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(subprocessor.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *SubprocessorFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(subprocessor.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *SubprocessorFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(subprocessor.FieldDeletedBy))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *SubprocessorFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(subprocessor.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *SubprocessorFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(subprocessor.FieldOwnerID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *SubprocessorFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(subprocessor.FieldSystemOwned))
+}
+
+// WhereName applies the entql string predicate on the name field.
+func (f *SubprocessorFilter) WhereName(p entql.StringP) {
+	f.Where(p.Field(subprocessor.FieldName))
+}
+
+// WhereDescription applies the entql string predicate on the description field.
+func (f *SubprocessorFilter) WhereDescription(p entql.StringP) {
+	f.Where(p.Field(subprocessor.FieldDescription))
+}
+
+// WhereLogoRemoteURL applies the entql string predicate on the logo_remote_url field.
+func (f *SubprocessorFilter) WhereLogoRemoteURL(p entql.StringP) {
+	f.Where(p.Field(subprocessor.FieldLogoRemoteURL))
+}
+
+// WhereLogoLocalFileID applies the entql string predicate on the logo_local_file_id field.
+func (f *SubprocessorFilter) WhereLogoLocalFileID(p entql.StringP) {
+	f.Where(p.Field(subprocessor.FieldLogoLocalFileID))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *SubprocessorFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *SubprocessorFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFiles applies a predicate to check if query has an edge files.
+func (f *SubprocessorFilter) WhereHasFiles() {
+	f.Where(entql.HasEdge("files"))
+}
+
+// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
+func (f *SubprocessorFilter) WhereHasFilesWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasLogoFile applies a predicate to check if query has an edge logo_file.
+func (f *SubprocessorFilter) WhereHasLogoFile() {
+	f.Where(entql.HasEdge("logo_file"))
+}
+
+// WhereHasLogoFileWith applies a predicate to check if query has an edge logo_file with a given conditions (other predicates).
+func (f *SubprocessorFilter) WhereHasLogoFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("logo_file", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTrustCenterSubprocessors applies a predicate to check if query has an edge trust_center_subprocessors.
+func (f *SubprocessorFilter) WhereHasTrustCenterSubprocessors() {
+	f.Where(entql.HasEdge("trust_center_subprocessors"))
+}
+
+// WhereHasTrustCenterSubprocessorsWith applies a predicate to check if query has an edge trust_center_subprocessors with a given conditions (other predicates).
+func (f *SubprocessorFilter) WhereHasTrustCenterSubprocessorsWith(preds ...predicate.TrustCenterSubprocessor) {
+	f.Where(entql.HasEdgeWith("trust_center_subprocessors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (shq *SubprocessorHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	shq.predicates = append(shq.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the SubprocessorHistoryQuery builder.
+func (shq *SubprocessorHistoryQuery) Filter() *SubprocessorHistoryFilter {
+	return &SubprocessorHistoryFilter{config: shq.config, predicateAdder: shq}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *SubprocessorHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the SubprocessorHistoryMutation builder.
+func (m *SubprocessorHistoryMutation) Filter() *SubprocessorHistoryFilter {
+	return &SubprocessorHistoryFilter{config: m.config, predicateAdder: m}
+}
+
+// SubprocessorHistoryFilter provides a generic filtering capability at runtime for SubprocessorHistoryQuery.
+type SubprocessorHistoryFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *SubprocessorHistoryFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[89].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *SubprocessorHistoryFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(subprocessorhistory.FieldID))
+}
+
+// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
+func (f *SubprocessorHistoryFilter) WhereHistoryTime(p entql.TimeP) {
+	f.Where(p.Field(subprocessorhistory.FieldHistoryTime))
+}
+
+// WhereRef applies the entql string predicate on the ref field.
+func (f *SubprocessorHistoryFilter) WhereRef(p entql.StringP) {
+	f.Where(p.Field(subprocessorhistory.FieldRef))
+}
+
+// WhereOperation applies the entql string predicate on the operation field.
+func (f *SubprocessorHistoryFilter) WhereOperation(p entql.StringP) {
+	f.Where(p.Field(subprocessorhistory.FieldOperation))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *SubprocessorHistoryFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(subprocessorhistory.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *SubprocessorHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(subprocessorhistory.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *SubprocessorHistoryFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(subprocessorhistory.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *SubprocessorHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(subprocessorhistory.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *SubprocessorHistoryFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(subprocessorhistory.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *SubprocessorHistoryFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(subprocessorhistory.FieldDeletedBy))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *SubprocessorHistoryFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(subprocessorhistory.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *SubprocessorHistoryFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(subprocessorhistory.FieldOwnerID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *SubprocessorHistoryFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(subprocessorhistory.FieldSystemOwned))
+}
+
+// WhereName applies the entql string predicate on the name field.
+func (f *SubprocessorHistoryFilter) WhereName(p entql.StringP) {
+	f.Where(p.Field(subprocessorhistory.FieldName))
+}
+
+// WhereDescription applies the entql string predicate on the description field.
+func (f *SubprocessorHistoryFilter) WhereDescription(p entql.StringP) {
+	f.Where(p.Field(subprocessorhistory.FieldDescription))
+}
+
+// WhereLogoRemoteURL applies the entql string predicate on the logo_remote_url field.
+func (f *SubprocessorHistoryFilter) WhereLogoRemoteURL(p entql.StringP) {
+	f.Where(p.Field(subprocessorhistory.FieldLogoRemoteURL))
+}
+
+// WhereLogoLocalFileID applies the entql string predicate on the logo_local_file_id field.
+func (f *SubprocessorHistoryFilter) WhereLogoLocalFileID(p entql.StringP) {
+	f.Where(p.Field(subprocessorhistory.FieldLogoLocalFileID))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (sq *SubscriberQuery) addPredicate(pred func(s *sql.Selector)) {
 	sq.predicates = append(sq.predicates, pred)
 }
@@ -24333,7 +25180,7 @@ type SubscriberFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SubscriberFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[87].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[90].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -24491,7 +25338,7 @@ type TFASettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TFASettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[88].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[91].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -24610,7 +25457,7 @@ type TaskFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TaskFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[89].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[92].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -24917,7 +25764,7 @@ type TaskHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TaskHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[90].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[93].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -25057,7 +25904,7 @@ type TemplateFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TemplateFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[91].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[94].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -25204,7 +26051,7 @@ type TemplateHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TemplateHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[92].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[95].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -25324,7 +26171,7 @@ type TrustCenterFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[93].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[96].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -25427,6 +26274,20 @@ func (f *TrustCenterFilter) WhereHasSettingWith(preds ...predicate.TrustCenterSe
 	})))
 }
 
+// WhereHasTrustCenterSubprocessors applies a predicate to check if query has an edge trust_center_subprocessors.
+func (f *TrustCenterFilter) WhereHasTrustCenterSubprocessors() {
+	f.Where(entql.HasEdge("trust_center_subprocessors"))
+}
+
+// WhereHasTrustCenterSubprocessorsWith applies a predicate to check if query has an edge trust_center_subprocessors with a given conditions (other predicates).
+func (f *TrustCenterFilter) WhereHasTrustCenterSubprocessorsWith(preds ...predicate.TrustCenterSubprocessor) {
+	f.Where(entql.HasEdgeWith("trust_center_subprocessors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (tchq *TrustCenterHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	tchq.predicates = append(tchq.predicates, pred)
@@ -25456,7 +26317,7 @@ type TrustCenterHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[94].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[97].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -25561,7 +26422,7 @@ type TrustCenterSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[95].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[98].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -25617,9 +26478,54 @@ func (f *TrustCenterSettingFilter) WhereOverview(p entql.StringP) {
 	f.Where(p.Field(trustcentersetting.FieldOverview))
 }
 
+// WhereLogoRemoteURL applies the entql string predicate on the logo_remote_url field.
+func (f *TrustCenterSettingFilter) WhereLogoRemoteURL(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldLogoRemoteURL))
+}
+
+// WhereLogoLocalFileID applies the entql string predicate on the logo_local_file_id field.
+func (f *TrustCenterSettingFilter) WhereLogoLocalFileID(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldLogoLocalFileID))
+}
+
+// WhereFaviconRemoteURL applies the entql string predicate on the favicon_remote_url field.
+func (f *TrustCenterSettingFilter) WhereFaviconRemoteURL(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldFaviconRemoteURL))
+}
+
+// WhereFaviconLocalFileID applies the entql string predicate on the favicon_local_file_id field.
+func (f *TrustCenterSettingFilter) WhereFaviconLocalFileID(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldFaviconLocalFileID))
+}
+
+// WhereThemeMode applies the entql string predicate on the theme_mode field.
+func (f *TrustCenterSettingFilter) WhereThemeMode(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldThemeMode))
+}
+
 // WherePrimaryColor applies the entql string predicate on the primary_color field.
 func (f *TrustCenterSettingFilter) WherePrimaryColor(p entql.StringP) {
 	f.Where(p.Field(trustcentersetting.FieldPrimaryColor))
+}
+
+// WhereFont applies the entql string predicate on the font field.
+func (f *TrustCenterSettingFilter) WhereFont(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldFont))
+}
+
+// WhereForegroundColor applies the entql string predicate on the foreground_color field.
+func (f *TrustCenterSettingFilter) WhereForegroundColor(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldForegroundColor))
+}
+
+// WhereBackgroundColor applies the entql string predicate on the background_color field.
+func (f *TrustCenterSettingFilter) WhereBackgroundColor(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldBackgroundColor))
+}
+
+// WhereAccentColor applies the entql string predicate on the accent_color field.
+func (f *TrustCenterSettingFilter) WhereAccentColor(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldAccentColor))
 }
 
 // WhereHasTrustCenter applies a predicate to check if query has an edge trust_center.
@@ -25630,6 +26536,48 @@ func (f *TrustCenterSettingFilter) WhereHasTrustCenter() {
 // WhereHasTrustCenterWith applies a predicate to check if query has an edge trust_center with a given conditions (other predicates).
 func (f *TrustCenterSettingFilter) WhereHasTrustCenterWith(preds ...predicate.TrustCenter) {
 	f.Where(entql.HasEdgeWith("trust_center", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFiles applies a predicate to check if query has an edge files.
+func (f *TrustCenterSettingFilter) WhereHasFiles() {
+	f.Where(entql.HasEdge("files"))
+}
+
+// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
+func (f *TrustCenterSettingFilter) WhereHasFilesWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasLogoFile applies a predicate to check if query has an edge logo_file.
+func (f *TrustCenterSettingFilter) WhereHasLogoFile() {
+	f.Where(entql.HasEdge("logo_file"))
+}
+
+// WhereHasLogoFileWith applies a predicate to check if query has an edge logo_file with a given conditions (other predicates).
+func (f *TrustCenterSettingFilter) WhereHasLogoFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("logo_file", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFaviconFile applies a predicate to check if query has an edge favicon_file.
+func (f *TrustCenterSettingFilter) WhereHasFaviconFile() {
+	f.Where(entql.HasEdge("favicon_file"))
+}
+
+// WhereHasFaviconFileWith applies a predicate to check if query has an edge favicon_file with a given conditions (other predicates).
+func (f *TrustCenterSettingFilter) WhereHasFaviconFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("favicon_file", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -25665,7 +26613,7 @@ type TrustCenterSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[96].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[99].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -25736,9 +26684,277 @@ func (f *TrustCenterSettingHistoryFilter) WhereOverview(p entql.StringP) {
 	f.Where(p.Field(trustcentersettinghistory.FieldOverview))
 }
 
+// WhereLogoRemoteURL applies the entql string predicate on the logo_remote_url field.
+func (f *TrustCenterSettingHistoryFilter) WhereLogoRemoteURL(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldLogoRemoteURL))
+}
+
+// WhereLogoLocalFileID applies the entql string predicate on the logo_local_file_id field.
+func (f *TrustCenterSettingHistoryFilter) WhereLogoLocalFileID(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldLogoLocalFileID))
+}
+
+// WhereFaviconRemoteURL applies the entql string predicate on the favicon_remote_url field.
+func (f *TrustCenterSettingHistoryFilter) WhereFaviconRemoteURL(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldFaviconRemoteURL))
+}
+
+// WhereFaviconLocalFileID applies the entql string predicate on the favicon_local_file_id field.
+func (f *TrustCenterSettingHistoryFilter) WhereFaviconLocalFileID(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldFaviconLocalFileID))
+}
+
+// WhereThemeMode applies the entql string predicate on the theme_mode field.
+func (f *TrustCenterSettingHistoryFilter) WhereThemeMode(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldThemeMode))
+}
+
 // WherePrimaryColor applies the entql string predicate on the primary_color field.
 func (f *TrustCenterSettingHistoryFilter) WherePrimaryColor(p entql.StringP) {
 	f.Where(p.Field(trustcentersettinghistory.FieldPrimaryColor))
+}
+
+// WhereFont applies the entql string predicate on the font field.
+func (f *TrustCenterSettingHistoryFilter) WhereFont(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldFont))
+}
+
+// WhereForegroundColor applies the entql string predicate on the foreground_color field.
+func (f *TrustCenterSettingHistoryFilter) WhereForegroundColor(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldForegroundColor))
+}
+
+// WhereBackgroundColor applies the entql string predicate on the background_color field.
+func (f *TrustCenterSettingHistoryFilter) WhereBackgroundColor(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldBackgroundColor))
+}
+
+// WhereAccentColor applies the entql string predicate on the accent_color field.
+func (f *TrustCenterSettingHistoryFilter) WhereAccentColor(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldAccentColor))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (tcsq *TrustCenterSubprocessorQuery) addPredicate(pred func(s *sql.Selector)) {
+	tcsq.predicates = append(tcsq.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the TrustCenterSubprocessorQuery builder.
+func (tcsq *TrustCenterSubprocessorQuery) Filter() *TrustCenterSubprocessorFilter {
+	return &TrustCenterSubprocessorFilter{config: tcsq.config, predicateAdder: tcsq}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *TrustCenterSubprocessorMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the TrustCenterSubprocessorMutation builder.
+func (m *TrustCenterSubprocessorMutation) Filter() *TrustCenterSubprocessorFilter {
+	return &TrustCenterSubprocessorFilter{config: m.config, predicateAdder: m}
+}
+
+// TrustCenterSubprocessorFilter provides a generic filtering capability at runtime for TrustCenterSubprocessorQuery.
+type TrustCenterSubprocessorFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *TrustCenterSubprocessorFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[100].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *TrustCenterSubprocessorFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessor.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *TrustCenterSubprocessorFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcentersubprocessor.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *TrustCenterSubprocessorFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcentersubprocessor.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *TrustCenterSubprocessorFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessor.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *TrustCenterSubprocessorFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessor.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *TrustCenterSubprocessorFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcentersubprocessor.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *TrustCenterSubprocessorFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessor.FieldDeletedBy))
+}
+
+// WhereSubprocessorID applies the entql string predicate on the subprocessor_id field.
+func (f *TrustCenterSubprocessorFilter) WhereSubprocessorID(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessor.FieldSubprocessorID))
+}
+
+// WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
+func (f *TrustCenterSubprocessorFilter) WhereTrustCenterID(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessor.FieldTrustCenterID))
+}
+
+// WhereCountries applies the entql json.RawMessage predicate on the countries field.
+func (f *TrustCenterSubprocessorFilter) WhereCountries(p entql.BytesP) {
+	f.Where(p.Field(trustcentersubprocessor.FieldCountries))
+}
+
+// WhereCategory applies the entql string predicate on the category field.
+func (f *TrustCenterSubprocessorFilter) WhereCategory(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessor.FieldCategory))
+}
+
+// WhereHasTrustCenter applies a predicate to check if query has an edge trust_center.
+func (f *TrustCenterSubprocessorFilter) WhereHasTrustCenter() {
+	f.Where(entql.HasEdge("trust_center"))
+}
+
+// WhereHasTrustCenterWith applies a predicate to check if query has an edge trust_center with a given conditions (other predicates).
+func (f *TrustCenterSubprocessorFilter) WhereHasTrustCenterWith(preds ...predicate.TrustCenter) {
+	f.Where(entql.HasEdgeWith("trust_center", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSubprocessor applies a predicate to check if query has an edge subprocessor.
+func (f *TrustCenterSubprocessorFilter) WhereHasSubprocessor() {
+	f.Where(entql.HasEdge("subprocessor"))
+}
+
+// WhereHasSubprocessorWith applies a predicate to check if query has an edge subprocessor with a given conditions (other predicates).
+func (f *TrustCenterSubprocessorFilter) WhereHasSubprocessorWith(preds ...predicate.Subprocessor) {
+	f.Where(entql.HasEdgeWith("subprocessor", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (tcshq *TrustCenterSubprocessorHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	tcshq.predicates = append(tcshq.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the TrustCenterSubprocessorHistoryQuery builder.
+func (tcshq *TrustCenterSubprocessorHistoryQuery) Filter() *TrustCenterSubprocessorHistoryFilter {
+	return &TrustCenterSubprocessorHistoryFilter{config: tcshq.config, predicateAdder: tcshq}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *TrustCenterSubprocessorHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the TrustCenterSubprocessorHistoryMutation builder.
+func (m *TrustCenterSubprocessorHistoryMutation) Filter() *TrustCenterSubprocessorHistoryFilter {
+	return &TrustCenterSubprocessorHistoryFilter{config: m.config, predicateAdder: m}
+}
+
+// TrustCenterSubprocessorHistoryFilter provides a generic filtering capability at runtime for TrustCenterSubprocessorHistoryQuery.
+type TrustCenterSubprocessorHistoryFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *TrustCenterSubprocessorHistoryFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[101].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldID))
+}
+
+// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereHistoryTime(p entql.TimeP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldHistoryTime))
+}
+
+// WhereRef applies the entql string predicate on the ref field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereRef(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldRef))
+}
+
+// WhereOperation applies the entql string predicate on the operation field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereOperation(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldOperation))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldDeletedBy))
+}
+
+// WhereSubprocessorID applies the entql string predicate on the subprocessor_id field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereSubprocessorID(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldSubprocessorID))
+}
+
+// WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereTrustCenterID(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldTrustCenterID))
+}
+
+// WhereCountries applies the entql json.RawMessage predicate on the countries field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereCountries(p entql.BytesP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldCountries))
+}
+
+// WhereCategory applies the entql string predicate on the category field.
+func (f *TrustCenterSubprocessorHistoryFilter) WhereCategory(p entql.StringP) {
+	f.Where(p.Field(trustcentersubprocessorhistory.FieldCategory))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -25770,7 +26986,7 @@ type UserFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[97].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[102].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -26181,7 +27397,7 @@ type UserHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[98].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[103].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -26341,7 +27557,7 @@ type UserSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[99].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[104].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -26503,7 +27719,7 @@ type UserSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[100].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[105].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -26638,7 +27854,7 @@ type WebauthnFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WebauthnFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[101].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[106].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})

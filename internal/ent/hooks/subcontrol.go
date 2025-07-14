@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 )
@@ -55,33 +56,65 @@ func HookSubcontrolUpdate() ent.Hook {
 func HookSubcontrolCreate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.SubcontrolFunc(func(ctx context.Context, m *generated.SubcontrolMutation) (generated.Value, error) {
-			// check if the subcontrol has an owner assigned
-			if _, ok := m.ControlOwnerID(); !ok {
-				// subcontrols should always have a control ID but we will let the regular validation
-				// handle this
-				controlID, ok := m.ControlID()
-				if !ok || controlID == "" {
-					return next.Mutate(ctx, m)
+			c, err := getParentControl(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			if c != nil {
+				if c.ReferenceFramework != nil {
+					m.SetReferenceFramework(*c.ReferenceFramework)
 				}
 
-				control, err := m.Client().Control.Get(ctx, controlID)
-				if err != nil {
-					return nil, err
-				}
-
-				if m.Op().Is(ent.OpCreate) {
-					// if the control has an owner, assign it to the subcontrol
-					if control.ControlOwnerID != "" {
-						m.SetControlOwnerID(control.ControlOwnerID)
-					}
-				}
-
-				if control.ReferenceFramework != nil {
-					m.SetReferenceFramework(*control.ReferenceFramework)
+				if c.ControlOwnerID != nil && *c.ControlOwnerID != "" {
+					m.SetControlOwnerID(*c.ControlOwnerID)
 				}
 			}
 
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne)
+}
+
+// getParentControl retrieves the parent control of a subcontrol mutation
+// if returns the control reference framework and control owner if they are set
+// if the control ID is not set, it returns nil
+func getParentControl(ctx context.Context, m *generated.SubcontrolMutation) (*generated.Control, error) {
+	controlID, ok := m.ControlID()
+	if !ok || controlID == "" {
+		return nil, nil
+	}
+
+	fields := []string{}
+
+	referenceFramework, ok := m.ReferenceFramework()
+	if !ok || referenceFramework == "" {
+		// if the reference framework is not set, we will get it from the parent control
+		fields = append(fields, control.FieldReferenceFramework)
+	}
+
+	controlOwnerID, ok := m.ControlOwnerID()
+	if !ok {
+		// if the control owner is not set, we will get it from the parent control
+		// this is the group that owns the control, it is used for task assignment,
+		// approval, etc.
+		fields = append(fields, control.FieldControlOwnerID)
+	}
+
+	// if the controlOwner was explicitly set to an empty string, clear it
+	// and don't check for the parent control owner
+	// this is used to eliminate an extra query when it is known the parent
+	// control has no group owner yet (e.g. on a clone operation)
+	if controlOwnerID == "" {
+		m.ClearControlOwnerID()
+	}
+
+	if len(fields) == 0 {
+		return nil, nil
+	}
+
+	return m.Client().Control.Query().
+		Where(control.ID(controlID)).
+		Select(fields...).
+		Only(ctx)
 }

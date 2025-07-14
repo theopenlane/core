@@ -9,7 +9,9 @@ import (
 	"github.com/theopenlane/entx/history"
 	emixin "github.com/theopenlane/entx/mixin"
 
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
 // Event holds the schema definition for the Event entity
@@ -85,4 +87,14 @@ func (Event) Mixin() []ent.Mixin {
 		emixin.TagMixin{},
 		mixin.GraphQLAnnotationMixin{},
 	}
+}
+
+// Policy of the Event
+func (Event) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			// allow after interceptors are properly added
+			privacy.AlwaysDenyRule(),
+		),
+	)
 }

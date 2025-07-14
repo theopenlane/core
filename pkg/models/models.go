@@ -979,3 +979,209 @@ var ExampleJobRunnerRegistrationResponse = JobRunnerRegistrationReply{
 type AcmeSolverRequest struct {
 	Path string `param:"path" description:"The path to the acme challenge" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
+
+// =========
+// SSO
+// =========
+
+// WebfingerRequest represents the query parameters accepted by the
+// `/.well-known/webfinger` endpoint
+//
+// The `resource` field must be provided and should be prefixed with
+// `org:` for organization lookups or `acct:` for user lookups
+type WebfingerRequest struct {
+	Resource string `query:"resource" description:"resource identifier prefixed with org: or acct:" example:"acct:meowmeow@kitties.com"`
+}
+
+// Validate ensures a valid resource was provided on the WebfingerRequest
+func (r *WebfingerRequest) Validate() error {
+	r.Resource = strings.TrimSpace(r.Resource)
+	switch {
+	case r.Resource == "":
+		return rout.NewMissingRequiredFieldError("resource")
+	case !strings.HasPrefix(r.Resource, "org:") && !strings.HasPrefix(r.Resource, "acct:"):
+		return rout.InvalidField("resource")
+	}
+
+	return nil
+}
+
+// ExampleWebfingerRequest is an example request for OpenAPI documentation
+var ExampleWebfingerRequest = WebfingerRequest{
+	Resource: "acct:sarah@funkyhous.info",
+}
+
+// SSOLoginRequest holds the query parameters for initiating an SSO login flow
+type SSOLoginRequest struct {
+	OrganizationID string `json:"organization_id" query:"organization_id" description:"organization id" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
+	ReturnURL      string `json:"return" query:"return" description:"return url after authentication" example:"https://app.mitb.com"`
+}
+
+// Validate ensures the required fields are set on the SSOLoginRequest
+func (r *SSOLoginRequest) Validate() error {
+	r.OrganizationID = strings.TrimSpace(r.OrganizationID)
+	r.ReturnURL = strings.TrimSpace(r.ReturnURL)
+
+	if r.OrganizationID == "" {
+		return rout.NewMissingRequiredFieldError("organization_id")
+	}
+
+	return nil
+}
+
+// ExampleSSOLoginRequest is an example request for OpenAPI documentation
+var ExampleSSOLoginRequest = SSOLoginRequest{
+	OrganizationID: ulids.New().String(),
+	ReturnURL:      "https://app.sitb.com",
+}
+
+// SSOCallbackRequest holds the query parameters for completing the SSO login flow
+type SSOCallbackRequest struct {
+	Code           string `json:"code" query:"code" description:"authorization code" example:"abc"`
+	State          string `json:"state" query:"state" description:"state value" example:"state123"`
+	OrganizationID string `json:"organization_id" query:"organization_id" description:"organization id" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
+}
+
+// Validate ensures the required fields are set on the SSOCallbackRequest
+func (r *SSOCallbackRequest) Validate() error {
+	r.Code = strings.TrimSpace(r.Code)
+	r.State = strings.TrimSpace(r.State)
+	r.OrganizationID = strings.TrimSpace(r.OrganizationID)
+
+	switch {
+	case r.Code == "":
+		return rout.NewMissingRequiredFieldError("code")
+	case r.State == "":
+		return rout.NewMissingRequiredFieldError("state")
+	case r.OrganizationID == "":
+		return rout.NewMissingRequiredFieldError("organization_id")
+	}
+
+	return nil
+}
+
+// ExampleSSOCallbackRequest is an example request for OpenAPI documentation
+var ExampleSSOCallbackRequest = SSOCallbackRequest{
+	Code:           "code",
+	State:          "state",
+	OrganizationID: ulids.New().String(),
+}
+
+// SSOTokenCallbackRequest holds the query parameters for completing token SSO authorization
+type SSOTokenCallbackRequest struct {
+	Code  string `json:"code" query:"code" description:"authorization code" example:"abc"`
+	State string `json:"state" query:"state" description:"state value" example:"state123"`
+}
+
+// Validate ensures required fields are set on the SSOTokenCallbackRequest
+func (r *SSOTokenCallbackRequest) Validate() error {
+	r.Code = strings.TrimSpace(r.Code)
+	r.State = strings.TrimSpace(r.State)
+
+	switch {
+	case r.Code == "":
+		return rout.NewMissingRequiredFieldError("code")
+	case r.State == "":
+		return rout.NewMissingRequiredFieldError("state")
+	}
+
+	return nil
+}
+
+// ExampleSSOTokenCallbackRequest is an example request for OpenAPI documentation
+var ExampleSSOTokenCallbackRequest = SSOTokenCallbackRequest{
+	Code:  "code",
+	State: "state",
+}
+
+// SSOStatusRequest is the request to check if SSO login is enforced for an organization
+type SSOStatusRequest struct {
+	Resource string `query:"resource" description:"organization or user email to check" example:"org:01J4EXD5MM60CX4YNYN0DEE3Y1"`
+}
+
+// Validate ensures the required fields are set on the SSOStatusRequest request
+func (r *SSOStatusRequest) Validate() error {
+	if r.Resource == "" {
+		return rout.NewMissingRequiredFieldError("resource")
+	}
+
+	return nil
+}
+
+// SSOStatusReply is the response for SSOStatusRequest
+type SSOStatusReply struct {
+	rout.Reply
+	Enforced       bool              `json:"enforced"`
+	Provider       enums.SSOProvider `json:"provider,omitempty"`
+	DiscoveryURL   string            `json:"discovery_url,omitempty"`
+	OrganizationID string            `json:"organization_id,omitempty"`
+}
+
+// ExampleSSOStatusRequest is an example request for OpenAPI documentation
+var ExampleSSOStatusRequest = SSOStatusRequest{
+	Resource: "acct:mitb@theopenlane.io",
+}
+
+// ExampleSSOStatusReply is an example response for OpenAPI documentation
+var ExampleSSOStatusReply = SSOStatusReply{
+	Reply:          rout.Reply{Success: true},
+	Enforced:       true,
+	Provider:       enums.SSOProviderOkta,
+	DiscoveryURL:   "https://id.example.com/.well-known/openid-configuration",
+	OrganizationID: ulids.New().String(),
+}
+
+// SSOTokenAuthorizeRequest is the request for authorizing a token for SSO use
+// with an organization
+type SSOTokenAuthorizeRequest struct {
+	OrganizationID string `json:"organization_id" query:"organization_id" description:"organization id" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
+	TokenID        string `json:"token_id" query:"token_id" description:"token id to authorize" example:"01JJFVMGENQS9ZG3GVA50QVX5E"`
+	TokenType      string `json:"token_type" query:"token_type" description:"token type: api or personal" example:"api"`
+}
+
+// Validate ensures required fields are set on the SSOTokenAuthorizeRequest
+func (r *SSOTokenAuthorizeRequest) Validate() error {
+	r.OrganizationID = strings.TrimSpace(r.OrganizationID)
+	r.TokenID = strings.TrimSpace(r.TokenID)
+	r.TokenType = strings.TrimSpace(r.TokenType)
+
+	switch {
+	case r.OrganizationID == "":
+		return rout.NewMissingRequiredFieldError("organization_id")
+	case r.TokenID == "":
+		return rout.NewMissingRequiredFieldError("token_id")
+	case r.TokenType == "":
+		return rout.NewMissingRequiredFieldError("token_type")
+	}
+
+	return nil
+}
+
+// SSOTokenAuthorizeReply is returned when a token has been successfully
+// authorized for SSO
+type SSOTokenAuthorizeReply struct {
+	rout.Reply
+	OrganizationID string `json:"organization_id"`
+	TokenID        string `json:"token_id"`
+	Message        string `json:"message,omitempty"`
+}
+
+// ExampleSSOTokenAuthorizeRequest is an example request for OpenAPI documentation
+var ExampleSSOTokenAuthorizeRequest = SSOTokenAuthorizeRequest{
+	OrganizationID: ulids.New().String(),
+	TokenID:        ulids.New().String(),
+	TokenType:      "api",
+}
+
+// ExampleSSOTokenAuthorizeReply is an example response for OpenAPI documentation
+var ExampleSSOTokenAuthorizeReply = SSOTokenAuthorizeReply{
+	Reply:          rout.Reply{Success: true},
+	OrganizationID: ulids.New().String(),
+	TokenID:        ulids.New().String(),
+	Message:        "success",
+}
+
+// CreateTrustCenterAnonymousJWTResponse is the response to a request to create a trust center anonymous JWT
+type CreateTrustCenterAnonymousJWTResponse struct {
+	AuthData
+}

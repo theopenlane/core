@@ -10,11 +10,15 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 )
 
 // InterceptorOrganizationSetting is middleware to change the org setting query
 func InterceptorOrganizationSetting() ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
+		if _, allow := privacy.DecisionFromContext(ctx); allow {
+			return nil
+		}
 		// Organization list queries should not be filtered by organization id
 		// Same with OrganizationSetting queries with the Only operation
 		ctxQuery := ent.QueryFromContext(ctx)

@@ -186,6 +186,7 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 	org1 := (&OrganizationBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
 	userCtx := auth.NewTestContextWithOrgID(testUser.ID, org1.ID)
+	personalOrgCtx := auth.NewTestContextWithOrgID(testUser.ID, testUser.PersonalOrgID)
 
 	user1 := (&UserBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 	user2 := (&UserBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
@@ -254,7 +255,7 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 			orgID:  testUser.PersonalOrgID,
 			userID: user1.ID,
 			role:   enums.RoleMember,
-			ctx:    userCtx,
+			ctx:    personalOrgCtx,
 			errMsg: hooks.ErrPersonalOrgsNoMembers.Error(),
 		},
 		{

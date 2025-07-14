@@ -6,7 +6,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v82"
 
 	"github.com/theopenlane/core/pkg/entitlements"
@@ -35,7 +34,7 @@ func TestListProducts(t *testing.T) {
 	sc, _ := setupProductClient([]*stripe.Product{product}, nil)
 
 	products, err := sc.ListProducts(ctx)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, []*stripe.Product{product}, products)
 }
 

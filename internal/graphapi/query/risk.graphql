@@ -129,8 +129,15 @@ mutation DeleteRisk($deleteRiskId: ID!) {
   }
 }
 
-query GetAllRisks {
-  risks {
+query GetAllRisks($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [RiskOrder!]) {
+  risks(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
     edges {
       node {
         businessCosts
@@ -257,8 +264,15 @@ query GetRiskByID($riskId: ID!) {
   }
 }
 
-query GetRisks($where: RiskWhereInput) {
-  risks(where: $where) {
+query GetRisks($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: RiskWhereInput, $orderBy: [RiskOrder!]) {
+  risks(first: $first, last: $last, after: $after, before: $before, where: $where, orderBy: $orderBy) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
     edges {
       node {
         businessCosts

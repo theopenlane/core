@@ -8,7 +8,7 @@ import (
 
 	"github.com/alicebob/miniredis/v2"
 	"github.com/redis/go-redis/v9"
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/assert"
 )
 
 type mockFGA struct {
@@ -47,12 +47,12 @@ func TestCheckFeatureTuple_CacheHit(t *testing.T) {
 	tuple := FeatureTuple{UserID: "u1", Feature: "f1", Context: map[string]any{"k": "v"}}
 	key := "feature:f1:user:u1:ctx:{\"k\":\"v\"}"
 	err := redisClient.Set(ctx, key, "1", 5*time.Minute).Err()
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	tc := NewTupleChecker(WithRedisClient(redisClient), WithFGAClient(&mockFGA{}))
 	ok, err := tc.CheckFeatureTuple(ctx, tuple)
-	require.NoError(t, err)
-	require.True(t, ok)
+	assert.NoError(t, err)
+	assert.True(t, ok)
 }
 
 func TestCheckFeatureTuple_FallbackToFGA(t *testing.T) {
@@ -63,12 +63,12 @@ func TestCheckFeatureTuple_FallbackToFGA(t *testing.T) {
 	mock := &mockFGA{checkResult: true}
 	tc := NewTupleChecker(WithRedisClient(redisClient), WithFGAClient(mock))
 	ok, err := tc.CheckFeatureTuple(ctx, tuple)
-	require.NoError(t, err)
-	require.True(t, ok)
+	assert.NoError(t, err)
+	assert.True(t, ok)
 	// Should be cached now
 	ok2, err := tc.CheckFeatureTuple(ctx, tuple)
-	require.NoError(t, err)
-	require.True(t, ok2)
+	assert.NoError(t, err)
+	assert.True(t, ok2)
 }
 
 func TestCreateFeatureTuple(t *testing.T) {
@@ -79,19 +79,19 @@ func TestCreateFeatureTuple(t *testing.T) {
 	mock := &mockFGA{}
 	tc := NewTupleChecker(WithRedisClient(redisClient), WithFGAClient(mock))
 	err := tc.CreateFeatureTuple(ctx, tuple)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	// Should be cached
 	ok, err := tc.CheckFeatureTuple(ctx, tuple)
-	require.NoError(t, err)
-	require.True(t, ok)
+	assert.NoError(t, err)
+	assert.True(t, ok)
 }
 
 func TestTupleChecker_NotConfigured(t *testing.T) {
 	tc := NewTupleChecker()
 	_, err := tc.CheckFeatureTuple(context.Background(), FeatureTuple{})
-	require.Error(t, err)
+	assert.Error(t, err)
 	err = tc.CreateFeatureTuple(context.Background(), FeatureTuple{})
-	require.Error(t, err)
+	assert.Error(t, err)
 }
 
 func TestCheckFeatureTuple_FGAError(t *testing.T) {
@@ -102,7 +102,7 @@ func TestCheckFeatureTuple_FGAError(t *testing.T) {
 	mock := &mockFGA{checkErr: errors.New("fga error")}
 	tc := NewTupleChecker(WithRedisClient(redisClient), WithFGAClient(mock))
 	_, err := tc.CheckFeatureTuple(ctx, tuple)
-	require.Error(t, err)
+	assert.Error(t, err)
 }
 
 func TestDeleteFeatureTuple(t *testing.T) {
@@ -116,13 +116,13 @@ func TestDeleteFeatureTuple(t *testing.T) {
 	// Pre-populate cache
 	key := tc.cacheKey(tuple)
 	err := redisClient.Set(ctx, key, "1", 5*time.Minute).Err()
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	err = tc.DeleteFeatureTuple(ctx, tuple)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	// Should be gone from cache
 	_, err = redisClient.Get(ctx, key).Result()
-	require.ErrorIs(t, err, redis.Nil)
+	assert.ErrorIs(t, err, redis.Nil)
 }
 
 func TestDeleteFeatureTuple_FGAError(t *testing.T) {
@@ -132,7 +132,7 @@ func TestDeleteFeatureTuple_FGAError(t *testing.T) {
 	mock := &mockFGA{deleteErr: errors.New("fga delete error")}
 	tc := NewTupleChecker(WithRedisClient(redisClient), WithFGAClient(mock))
 	err := tc.DeleteFeatureTuple(ctx, tuple)
-	require.Error(t, err)
+	assert.Error(t, err)
 }
 
 func TestDeleteFeatureTuple_CacheError(t *testing.T) {
@@ -145,5 +145,5 @@ func TestDeleteFeatureTuple_CacheError(t *testing.T) {
 	// Close Redis to force error
 	redisClient.Close()
 	err := tc.DeleteFeatureTuple(ctx, tuple)
-	require.Error(t, err)
+	assert.Error(t, err)
 }

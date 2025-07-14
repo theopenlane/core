@@ -357,6 +357,18 @@ func (f EvidenceHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.EvidenceHistoryMutation", m)
 }
 
+// The ExportFunc type is an adapter to allow the use of ordinary
+// function as Export mutator.
+type ExportFunc func(context.Context, *generated.ExportMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ExportFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ExportMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ExportMutation", m)
+}
+
 // The FileFunc type is an adapter to allow the use of ordinary
 // function as File mutator.
 type FileFunc func(context.Context, *generated.FileMutation) (generated.Value, error)
@@ -1053,6 +1065,30 @@ func (f SubcontrolHistoryFunc) Mutate(ctx context.Context, m generated.Mutation)
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.SubcontrolHistoryMutation", m)
 }
 
+// The SubprocessorFunc type is an adapter to allow the use of ordinary
+// function as Subprocessor mutator.
+type SubprocessorFunc func(context.Context, *generated.SubprocessorMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f SubprocessorFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.SubprocessorMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.SubprocessorMutation", m)
+}
+
+// The SubprocessorHistoryFunc type is an adapter to allow the use of ordinary
+// function as SubprocessorHistory mutator.
+type SubprocessorHistoryFunc func(context.Context, *generated.SubprocessorHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f SubprocessorHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.SubprocessorHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.SubprocessorHistoryMutation", m)
+}
+
 // The SubscriberFunc type is an adapter to allow the use of ordinary
 // function as Subscriber mutator.
 type SubscriberFunc func(context.Context, *generated.SubscriberMutation) (generated.Value, error)
@@ -1171,6 +1207,30 @@ func (f TrustCenterSettingHistoryFunc) Mutate(ctx context.Context, m generated.M
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.TrustCenterSettingHistoryMutation", m)
+}
+
+// The TrustCenterSubprocessorFunc type is an adapter to allow the use of ordinary
+// function as TrustCenterSubprocessor mutator.
+type TrustCenterSubprocessorFunc func(context.Context, *generated.TrustCenterSubprocessorMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TrustCenterSubprocessorFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.TrustCenterSubprocessorMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.TrustCenterSubprocessorMutation", m)
+}
+
+// The TrustCenterSubprocessorHistoryFunc type is an adapter to allow the use of ordinary
+// function as TrustCenterSubprocessorHistory mutator.
+type TrustCenterSubprocessorHistoryFunc func(context.Context, *generated.TrustCenterSubprocessorHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TrustCenterSubprocessorHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.TrustCenterSubprocessorHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.TrustCenterSubprocessorHistoryMutation", m)
 }
 
 // The UserFunc type is an adapter to allow the use of ordinary

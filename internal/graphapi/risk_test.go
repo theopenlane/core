@@ -22,6 +22,7 @@ func TestQueryRisk(t *testing.T) {
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program.ID,
 		UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).
 		MustNew(testUser1.UserCtx, t)
+	anonymousContext := createAnonymousTrustCenterContext("abc123", testUser1.OrganizationID)
 
 	riskIDs := []string{}
 	// add test cases for querying the Risk
@@ -65,6 +66,12 @@ func TestQueryRisk(t *testing.T) {
 			client:   suite.client.api,
 			ctx:      testUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
+		},
+		{
+			name:     "no access, anonymous user",
+			client:   suite.client.api,
+			ctx:      anonymousContext,
+			errorMsg: couldNotFindUser,
 		},
 	}
 
@@ -155,7 +162,7 @@ func TestQueryRisks(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.GetAllRisks(tc.ctx)
+			resp, err := tc.client.GetAllRisks(tc.ctx, nil, nil, nil, nil, nil)
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 

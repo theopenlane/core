@@ -1,0 +1,105 @@
+extend type Query {
+    """
+    Look up subprocessor by ID
+    """
+     subprocessor(
+        """
+        ID of the subprocessor
+        """
+        id: ID!
+    ):  Subprocessor!
+}
+
+extend type Mutation{
+    """
+    Create a new subprocessor
+    """
+    createSubprocessor(
+        """
+        values of the subprocessor
+        """
+        input: CreateSubprocessorInput!
+        logoFile: Upload
+    ): SubprocessorCreatePayload!
+    """
+    Create multiple new subprocessors
+    """
+    createBulkSubprocessor(
+        """
+        values of the subprocessor
+        """
+        input: [CreateSubprocessorInput!]
+    ): SubprocessorBulkCreatePayload!
+    """
+    Create multiple new subprocessors via file upload
+    """
+    createBulkCSVSubprocessor(
+        """
+        csv file containing values of the subprocessor
+        """
+        input: Upload!
+    ): SubprocessorBulkCreatePayload!
+    """
+    Update an existing subprocessor
+    """
+    updateSubprocessor(
+        """
+        ID of the subprocessor
+        """
+        id: ID!
+        """
+        New values for the subprocessor
+        """
+        input: UpdateSubprocessorInput!
+        logoFile: Upload
+    ): SubprocessorUpdatePayload!
+    """
+    Delete an existing subprocessor
+    """
+    deleteSubprocessor(
+        """
+        ID of the subprocessor
+        """
+        id: ID!
+    ): SubprocessorDeletePayload!
+}
+
+"""
+Return response for createSubprocessor mutation
+"""
+type SubprocessorCreatePayload {
+    """
+    Created subprocessor
+    """
+    subprocessor: Subprocessor!
+}
+
+"""
+Return response for updateSubprocessor mutation
+"""
+type SubprocessorUpdatePayload {
+    """
+    Updated subprocessor
+    """
+    subprocessor: Subprocessor!
+}
+
+"""
+Return response for deleteSubprocessor mutation
+"""
+type SubprocessorDeletePayload {
+    """
+    Deleted subprocessor ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkSubprocessor mutation
+"""
+type SubprocessorBulkCreatePayload {
+    """
+    Created subprocessors
+    """
+    subprocessors: [Subprocessor!]
+}

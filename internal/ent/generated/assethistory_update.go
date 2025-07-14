@@ -276,7 +276,9 @@ func (ahu *AssetHistoryUpdate) Mutation() *AssetHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (ahu *AssetHistoryUpdate) Save(ctx context.Context) (int, error) {
-	ahu.defaults()
+	if err := ahu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, ahu.sqlSave, ahu.mutation, ahu.hooks)
 }
 
@@ -303,11 +305,15 @@ func (ahu *AssetHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ahu *AssetHistoryUpdate) defaults() {
+func (ahu *AssetHistoryUpdate) defaults() error {
 	if _, ok := ahu.mutation.UpdatedAt(); !ok && !ahu.mutation.UpdatedAtCleared() {
+		if assethistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized assethistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := assethistory.UpdateDefaultUpdatedAt()
 		ahu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -709,7 +715,9 @@ func (ahuo *AssetHistoryUpdateOne) Select(field string, fields ...string) *Asset
 
 // Save executes the query and returns the updated AssetHistory entity.
 func (ahuo *AssetHistoryUpdateOne) Save(ctx context.Context) (*AssetHistory, error) {
-	ahuo.defaults()
+	if err := ahuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, ahuo.sqlSave, ahuo.mutation, ahuo.hooks)
 }
 
@@ -736,11 +744,15 @@ func (ahuo *AssetHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ahuo *AssetHistoryUpdateOne) defaults() {
+func (ahuo *AssetHistoryUpdateOne) defaults() error {
 	if _, ok := ahuo.mutation.UpdatedAt(); !ok && !ahuo.mutation.UpdatedAtCleared() {
+		if assethistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized assethistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := assethistory.UpdateDefaultUpdatedAt()
 		ahuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

@@ -215,7 +215,9 @@ func (csjhc *ControlScheduledJobHistoryCreate) Mutation() *ControlScheduledJobHi
 
 // Save creates the ControlScheduledJobHistory in the database.
 func (csjhc *ControlScheduledJobHistoryCreate) Save(ctx context.Context) (*ControlScheduledJobHistory, error) {
-	csjhc.defaults()
+	if err := csjhc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, csjhc.sqlSave, csjhc.mutation, csjhc.hooks)
 }
 
@@ -242,23 +244,36 @@ func (csjhc *ControlScheduledJobHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (csjhc *ControlScheduledJobHistoryCreate) defaults() {
+func (csjhc *ControlScheduledJobHistoryCreate) defaults() error {
 	if _, ok := csjhc.mutation.HistoryTime(); !ok {
+		if controlscheduledjobhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized controlscheduledjobhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := controlscheduledjobhistory.DefaultHistoryTime()
 		csjhc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := csjhc.mutation.CreatedAt(); !ok {
+		if controlscheduledjobhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized controlscheduledjobhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := controlscheduledjobhistory.DefaultCreatedAt()
 		csjhc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := csjhc.mutation.UpdatedAt(); !ok {
+		if controlscheduledjobhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized controlscheduledjobhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := controlscheduledjobhistory.DefaultUpdatedAt()
 		csjhc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := csjhc.mutation.ID(); !ok {
+		if controlscheduledjobhistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized controlscheduledjobhistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := controlscheduledjobhistory.DefaultID()
 		csjhc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

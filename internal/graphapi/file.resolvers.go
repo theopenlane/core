@@ -14,19 +14,12 @@ import (
 
 // DeleteFile is the resolver for the deleteFile field.
 func (r *mutationResolver) DeleteFile(ctx context.Context, id string) (*model.FileDeletePayload, error) {
-	f, err := withTransactionalMutation(ctx).File.Get(ctx, id)
-	if err != nil {
+	if err := withTransactionalMutation(ctx).File.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "file"})
 	}
 
 	if err := generated.FileEdgeCleanup(ctx, id); err != nil {
 		return nil, newCascadeDeleteError(err)
-	}
-
-	if r.Resolver.uploader != nil && f.StoragePath != "" {
-		if err := r.Resolver.uploader.Storage.Delete(ctx, f.StoragePath); err != nil {
-			return nil, err
-		}
 	}
 
 	return &model.FileDeletePayload{

@@ -115,7 +115,9 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
+	Hooks        [1]ent.Hook
 	Interceptors [1]ent.Interceptor
+	Policy       ent.Policy
 	// DefaultHistoryTime holds the default value on creation for the "history_time" field.
 	DefaultHistoryTime func() time.Time
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -149,7 +151,7 @@ func OperationValidator(o history.OpType) error {
 // LastLoginProviderValidator is a validator for the "last_login_provider" field enum values. It is called by the builders before save.
 func LastLoginProviderValidator(llp enums.AuthProvider) error {
 	switch llp.String() {
-	case "CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN":
+	case "CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN", "OIDC":
 		return nil
 	default:
 		return fmt.Errorf("userhistory: invalid enum value for last_login_provider field: %q", llp)
@@ -161,7 +163,7 @@ const DefaultAuthProvider enums.AuthProvider = "CREDENTIALS"
 // AuthProviderValidator is a validator for the "auth_provider" field enum values. It is called by the builders before save.
 func AuthProviderValidator(ap enums.AuthProvider) error {
 	switch ap.String() {
-	case "CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN":
+	case "CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN", "OIDC":
 		return nil
 	default:
 		return fmt.Errorf("userhistory: invalid enum value for auth_provider field: %q", ap)

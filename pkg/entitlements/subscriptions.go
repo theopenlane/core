@@ -36,49 +36,6 @@ func (sc *StripeClient) CreateSubscription(ctx context.Context, params *stripe.S
 	return subscription, nil
 }
 
-// ListStripeSubscriptions lists stripe subscriptions by customer
-func (sc *StripeClient) ListOrCreateSubscriptions(ctx context.Context, customerID string) (*Subscription, error) {
-	result := sc.Client.V1Subscriptions.List(ctx, &stripe.SubscriptionListParams{
-		Customer: stripe.String(customerID),
-	})
-
-	if seq2IsEmpty(result) {
-		sub, err := sc.CreateTrialSubscription(ctx, &stripe.Customer{ID: customerID})
-		if err != nil {
-			log.Error().Err(err).Msg("failed to create trial subscription")
-			return nil, err
-		}
-
-		return sub, nil
-	}
-
-	var customerSub *stripe.Subscription
-
-	subCount := 0
-
-	for sub, err := range result {
-		if err != nil {
-			log.Error().Err(err).Msg("failed to list subscriptions")
-
-			return nil, err
-		}
-
-		customerSub = sub
-		subCount++
-	}
-
-	if subCount > 1 {
-		log.Warn().Msg("customer has more than one subscription")
-
-		return nil, ErrMultipleSubscriptions
-	}
-
-	// assumes customer can only have 1 subscription if there are any
-	subs := sc.MapStripeSubscription(ctx, customerSub)
-
-	return subs, nil
-}
-
 // GetSubscriptionByID gets a subscription by ID
 func (sc *StripeClient) GetSubscriptionByID(ctx context.Context, id string) (*stripe.Subscription, error) {
 	start := time.Now()
@@ -106,30 +63,10 @@ func (sc *StripeClient) GetSubscriptionByID(ctx context.Context, id string) (*st
 	return subscription, nil
 }
 
-// UpdateSubscription updates a subscription
-func (sc *StripeClient) UpdateSubscription(ctx context.Context, id string, params *stripe.SubscriptionUpdateParams) (*stripe.Subscription, error) {
-	subscription, err := sc.Client.V1Subscriptions.Update(ctx, id, params)
-	if err != nil {
-		return nil, err
-	}
-
-	return subscription, nil
-}
-
-// CancelSubscription cancels a subscription
-func (sc *StripeClient) CancelSubscription(ctx context.Context, id string, params *stripe.SubscriptionCancelParams) (*stripe.Subscription, error) {
-	subscription, err := sc.Client.V1Subscriptions.Cancel(ctx, id, params)
-	if err != nil {
-		return nil, err
-	}
-
-	return subscription, nil
-}
-
 var trialdays int64 = 30
 
-// CreateTrialSubscription creates a trial subscription with the configured price
-func (sc *StripeClient) CreateTrialSubscription(ctx context.Context, cust *stripe.Customer) (*Subscription, error) {
+// CreateSubscriptionWithPrices creates a subscription using the provided prices
+func (sc *StripeClient) CreateSubscriptionWithPrices(ctx context.Context, cust *stripe.Customer, o *OrganizationCustomer) (*Subscription, error) {
 	subsMetadata := make(map[string]string)
 	if cust.Metadata != nil {
 		maps.Copy(subsMetadata, cust.Metadata)
@@ -137,50 +74,42 @@ func (sc *StripeClient) CreateTrialSubscription(ctx context.Context, cust *strip
 		subsMetadata["organization_id"] = cust.ID
 	}
 
-	baseParams := &stripe.SubscriptionCreateParams{
+	// we want 1 subscription, many prices, so we create items for each price ID
+	items := []*stripe.SubscriptionCreateItemParams{}
+	for _, price := range o.Prices {
+		if price.ID != "" {
+			items = append(items, &stripe.SubscriptionCreateItemParams{Price: stripe.String(price.ID)})
+		}
+	}
+
+	params := &stripe.SubscriptionCreateParams{
 		Customer:        stripe.String(cust.ID),
-		TrialPeriodDays: stripe.Int64(trialdays),
+		Items:           items,
+		PaymentBehavior: stripe.String(("default_incomplete")),
 		PaymentSettings: &stripe.SubscriptionCreatePaymentSettingsParams{
-			SaveDefaultPaymentMethod: stripe.String(string(stripe.SubscriptionPaymentSettingsSaveDefaultPaymentMethodOnSubscription)),
+			SaveDefaultPaymentMethod: stripe.String(stripe.SubscriptionPaymentSettingsSaveDefaultPaymentMethodOnSubscription),
 		},
 		Metadata:         subsMetadata,
 		CollectionMethod: stripe.String(string(stripe.SubscriptionCollectionMethodChargeAutomatically)),
-		TrialSettings: &stripe.SubscriptionCreateTrialSettingsParams{
+	}
+
+	if !o.PersonalOrg {
+		params.TrialPeriodDays = stripe.Int64(trialdays)
+		params.TrialSettings = &stripe.SubscriptionCreateTrialSettingsParams{
 			EndBehavior: &stripe.SubscriptionCreateTrialSettingsEndBehaviorParams{
-				MissingPaymentMethod: stripe.String(string(stripe.SubscriptionTrialSettingsEndBehaviorMissingPaymentMethodPause)),
+				MissingPaymentMethod: stripe.String(stripe.SubscriptionTrialSettingsEndBehaviorMissingPaymentMethodPause),
 			},
-		},
+		}
 	}
 
-	item := &stripe.SubscriptionCreateItemParams{Price: &sc.Config.TrialSubscriptionPriceID}
-
-	subs, err := sc.CreateSubscriptionWithOptions(ctx, baseParams, WithSubscriptionItems(item))
+	subs, err := sc.CreateSubscriptionWithOptions(ctx, params)
 	if err != nil {
-		log.Err(err).Msg("Failed to create trial subscription")
+		log.Err(err).Msg("Failed to create subscription")
+
 		return nil, err
 	}
 
-	log.Debug().Msgf("Created trial subscription with ID: %s", subs.ID)
-
-	mappedsubscription := sc.MapStripeSubscription(ctx, subs)
-
-	return mappedsubscription, nil
-}
-
-// CreatePersonalOrgFreeTierSubs creates a subscription with the configured $0 price used for personal organizations only
-func (sc *StripeClient) CreatePersonalOrgFreeTierSubs(ctx context.Context, customerID string) (*Subscription, error) {
-	baseParams := &stripe.SubscriptionCreateParams{
-		Customer:         stripe.String(customerID),
-		CollectionMethod: stripe.String(string(stripe.SubscriptionCollectionMethodChargeAutomatically)),
-	}
-
-	item := &stripe.SubscriptionCreateItemParams{Price: &sc.Config.PersonalOrgSubscriptionPriceID}
-
-	subs, err := sc.CreateSubscriptionWithOptions(ctx, baseParams, WithSubscriptionItems(item))
-	if err != nil {
-		log.Err(err).Msg("Failed to create trial subscription")
-		return nil, err
-	}
+	log.Debug().Msgf("Created subscription with ID: %s", subs.ID)
 
 	return sc.MapStripeSubscription(ctx, subs), nil
 }
@@ -314,4 +243,24 @@ func (sc *StripeClient) MigrateSubscriptionPrice(ctx context.Context, sub *strip
 	params := &stripe.SubscriptionUpdateParams{Items: updateItems}
 
 	return sc.UpdateSubscription(ctx, sub.ID, params)
+}
+
+// UpdateSubscription updates a subscription
+func (sc *StripeClient) UpdateSubscription(ctx context.Context, id string, params *stripe.SubscriptionUpdateParams) (*stripe.Subscription, error) {
+	subscription, err := sc.Client.V1Subscriptions.Update(ctx, id, params)
+	if err != nil {
+		return nil, err
+	}
+
+	return subscription, nil
+}
+
+// CancelSubscription cancels a subscription
+func (sc *StripeClient) CancelSubscription(ctx context.Context, id string, params *stripe.SubscriptionCancelParams) (*stripe.Subscription, error) {
+	subscription, err := sc.Client.V1Subscriptions.Cancel(ctx, id, params)
+	if err != nil {
+		return nil, err
+	}
+
+	return subscription, nil
 }

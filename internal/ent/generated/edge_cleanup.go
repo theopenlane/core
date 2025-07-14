@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
@@ -55,12 +56,14 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
@@ -245,6 +248,12 @@ func EvidenceEdgeCleanup(ctx context.Context, id string) error {
 
 func EvidenceHistoryEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup evidencehistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func ExportEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup export edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -805,6 +814,20 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	if exists, err := FromContext(ctx).Subprocessor.Query().Where((subprocessor.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if subprocessorCount, err := FromContext(ctx).Subprocessor.Delete().Where(subprocessor.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", subprocessorCount).Msg("deleting subprocessor")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Export.Query().Where((export.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if exportCount, err := FromContext(ctx).Export.Delete().Where(export.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", exportCount).Msg("deleting export")
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).OrgMembership.Query().Where((orgmembership.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgmembershipCount, err := FromContext(ctx).OrgMembership.Delete().Where(orgmembership.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", orgmembershipCount).Msg("deleting orgmembership")
@@ -954,6 +977,18 @@ func SubcontrolHistoryEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
+func SubprocessorEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subprocessor edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func SubprocessorHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subprocessorhistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
 func SubscriberEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subscriber edge")), entfga.DeleteTuplesFirstKey{})
 
@@ -1007,6 +1042,13 @@ func TrustCenterEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	if exists, err := FromContext(ctx).TrustCenterSubprocessor.Query().Where((trustcentersubprocessor.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
+		if trustcentersubprocessorCount, err := FromContext(ctx).TrustCenterSubprocessor.Delete().Where(trustcentersubprocessor.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", trustcentersubprocessorCount).Msg("deleting trustcentersubprocessor")
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -1024,6 +1066,18 @@ func TrustCenterSettingEdgeCleanup(ctx context.Context, id string) error {
 
 func TrustCenterSettingHistoryEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcentersettinghistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func TrustCenterSubprocessorEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcentersubprocessor edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func TrustCenterSubprocessorHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcentersubprocessorhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }

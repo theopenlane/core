@@ -9,7 +9,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -69,7 +68,7 @@ func (i InternalPolicy) Mixin() []ent.Mixin {
 		includeRevision: true,
 		additionalMixins: []ent.Mixin{
 			// all policies must be associated to an organization
-			newOrgOwnedMixin(i),
+			newOrgOwnedMixin(i, withSkipForSystemAdmin(true)),
 			// add group edit permissions to the procedure
 			newGroupPermissionsMixin(withSkipViewPermissions()),
 			// policies are documents
@@ -83,6 +82,7 @@ func (InternalPolicy) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.Features("compliance", "policy-management"),
 		entfga.SelfAccessChecks(),
+		entx.Exportable{},
 	}
 }
 
@@ -107,9 +107,6 @@ func (InternalPolicy) Interceptors() []ent.Interceptor {
 // Policy of the InternalPolicy
 func (InternalPolicy) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
-		),
 		policy.WithMutationRules(
 			rule.CanCreateObjectsUnderParent[*generated.InternalPolicyMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),

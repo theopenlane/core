@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -42,8 +43,26 @@ type TrustCenterSettingHistory struct {
 	Title string `json:"title,omitempty"`
 	// overview of the trust center
 	Overview string `json:"overview,omitempty"`
+	// URL of the logo
+	LogoRemoteURL *string `json:"logo_remote_url,omitempty"`
+	// The local logo file id, takes precedence over the logo remote URL
+	LogoLocalFileID *string `json:"logo_local_file_id,omitempty"`
+	// URL of the favicon
+	FaviconRemoteURL *string `json:"favicon_remote_url,omitempty"`
+	// The local favicon file id, takes precedence over the favicon remote URL
+	FaviconLocalFileID *string `json:"favicon_local_file_id,omitempty"`
+	// Theme mode for the trust center
+	ThemeMode enums.TrustCenterThemeMode `json:"theme_mode,omitempty"`
 	// primary color for the trust center
 	PrimaryColor string `json:"primary_color,omitempty"`
+	// font for the trust center
+	Font string `json:"font,omitempty"`
+	// foreground color for the trust center
+	ForegroundColor string `json:"foreground_color,omitempty"`
+	// background color for the trust center
+	BackgroundColor string `json:"background_color,omitempty"`
+	// accent/brand color for the trust center
+	AccentColor  string `json:"accent_color,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -54,7 +73,7 @@ func (*TrustCenterSettingHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case trustcentersettinghistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case trustcentersettinghistory.FieldID, trustcentersettinghistory.FieldRef, trustcentersettinghistory.FieldCreatedBy, trustcentersettinghistory.FieldUpdatedBy, trustcentersettinghistory.FieldDeletedBy, trustcentersettinghistory.FieldTrustCenterID, trustcentersettinghistory.FieldTitle, trustcentersettinghistory.FieldOverview, trustcentersettinghistory.FieldPrimaryColor:
+		case trustcentersettinghistory.FieldID, trustcentersettinghistory.FieldRef, trustcentersettinghistory.FieldCreatedBy, trustcentersettinghistory.FieldUpdatedBy, trustcentersettinghistory.FieldDeletedBy, trustcentersettinghistory.FieldTrustCenterID, trustcentersettinghistory.FieldTitle, trustcentersettinghistory.FieldOverview, trustcentersettinghistory.FieldLogoRemoteURL, trustcentersettinghistory.FieldLogoLocalFileID, trustcentersettinghistory.FieldFaviconRemoteURL, trustcentersettinghistory.FieldFaviconLocalFileID, trustcentersettinghistory.FieldThemeMode, trustcentersettinghistory.FieldPrimaryColor, trustcentersettinghistory.FieldFont, trustcentersettinghistory.FieldForegroundColor, trustcentersettinghistory.FieldBackgroundColor, trustcentersettinghistory.FieldAccentColor:
 			values[i] = new(sql.NullString)
 		case trustcentersettinghistory.FieldHistoryTime, trustcentersettinghistory.FieldCreatedAt, trustcentersettinghistory.FieldUpdatedAt, trustcentersettinghistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -151,11 +170,69 @@ func (tcsh *TrustCenterSettingHistory) assignValues(columns []string, values []a
 			} else if value.Valid {
 				tcsh.Overview = value.String
 			}
+		case trustcentersettinghistory.FieldLogoRemoteURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field logo_remote_url", values[i])
+			} else if value.Valid {
+				tcsh.LogoRemoteURL = new(string)
+				*tcsh.LogoRemoteURL = value.String
+			}
+		case trustcentersettinghistory.FieldLogoLocalFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field logo_local_file_id", values[i])
+			} else if value.Valid {
+				tcsh.LogoLocalFileID = new(string)
+				*tcsh.LogoLocalFileID = value.String
+			}
+		case trustcentersettinghistory.FieldFaviconRemoteURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field favicon_remote_url", values[i])
+			} else if value.Valid {
+				tcsh.FaviconRemoteURL = new(string)
+				*tcsh.FaviconRemoteURL = value.String
+			}
+		case trustcentersettinghistory.FieldFaviconLocalFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field favicon_local_file_id", values[i])
+			} else if value.Valid {
+				tcsh.FaviconLocalFileID = new(string)
+				*tcsh.FaviconLocalFileID = value.String
+			}
+		case trustcentersettinghistory.FieldThemeMode:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field theme_mode", values[i])
+			} else if value.Valid {
+				tcsh.ThemeMode = enums.TrustCenterThemeMode(value.String)
+			}
 		case trustcentersettinghistory.FieldPrimaryColor:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field primary_color", values[i])
 			} else if value.Valid {
 				tcsh.PrimaryColor = value.String
+			}
+		case trustcentersettinghistory.FieldFont:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field font", values[i])
+			} else if value.Valid {
+				tcsh.Font = value.String
+			}
+		case trustcentersettinghistory.FieldForegroundColor:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field foreground_color", values[i])
+			} else if value.Valid {
+				tcsh.ForegroundColor = value.String
+			}
+		case trustcentersettinghistory.FieldBackgroundColor:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field background_color", values[i])
+			} else if value.Valid {
+				tcsh.BackgroundColor = value.String
+			}
+		case trustcentersettinghistory.FieldAccentColor:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field accent_color", values[i])
+			} else if value.Valid {
+				tcsh.AccentColor = value.String
 			}
 		default:
 			tcsh.selectValues.Set(columns[i], values[i])
@@ -229,8 +306,43 @@ func (tcsh *TrustCenterSettingHistory) String() string {
 	builder.WriteString("overview=")
 	builder.WriteString(tcsh.Overview)
 	builder.WriteString(", ")
+	if v := tcsh.LogoRemoteURL; v != nil {
+		builder.WriteString("logo_remote_url=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := tcsh.LogoLocalFileID; v != nil {
+		builder.WriteString("logo_local_file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := tcsh.FaviconRemoteURL; v != nil {
+		builder.WriteString("favicon_remote_url=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := tcsh.FaviconLocalFileID; v != nil {
+		builder.WriteString("favicon_local_file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	builder.WriteString("theme_mode=")
+	builder.WriteString(fmt.Sprintf("%v", tcsh.ThemeMode))
+	builder.WriteString(", ")
 	builder.WriteString("primary_color=")
 	builder.WriteString(tcsh.PrimaryColor)
+	builder.WriteString(", ")
+	builder.WriteString("font=")
+	builder.WriteString(tcsh.Font)
+	builder.WriteString(", ")
+	builder.WriteString("foreground_color=")
+	builder.WriteString(tcsh.ForegroundColor)
+	builder.WriteString(", ")
+	builder.WriteString("background_color=")
+	builder.WriteString(tcsh.BackgroundColor)
+	builder.WriteString(", ")
+	builder.WriteString("accent_color=")
+	builder.WriteString(tcsh.AccentColor)
 	builder.WriteByte(')')
 	return builder.String()
 }

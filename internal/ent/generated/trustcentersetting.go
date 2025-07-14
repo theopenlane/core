@@ -9,8 +9,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // TrustCenterSetting is the model entity for the TrustCenterSetting schema.
@@ -36,8 +38,26 @@ type TrustCenterSetting struct {
 	Title string `json:"title,omitempty"`
 	// overview of the trust center
 	Overview string `json:"overview,omitempty"`
+	// URL of the logo
+	LogoRemoteURL *string `json:"logo_remote_url,omitempty"`
+	// The local logo file id, takes precedence over the logo remote URL
+	LogoLocalFileID *string `json:"logo_local_file_id,omitempty"`
+	// URL of the favicon
+	FaviconRemoteURL *string `json:"favicon_remote_url,omitempty"`
+	// The local favicon file id, takes precedence over the favicon remote URL
+	FaviconLocalFileID *string `json:"favicon_local_file_id,omitempty"`
+	// Theme mode for the trust center
+	ThemeMode enums.TrustCenterThemeMode `json:"theme_mode,omitempty"`
 	// primary color for the trust center
 	PrimaryColor string `json:"primary_color,omitempty"`
+	// font for the trust center
+	Font string `json:"font,omitempty"`
+	// foreground color for the trust center
+	ForegroundColor string `json:"foreground_color,omitempty"`
+	// background color for the trust center
+	BackgroundColor string `json:"background_color,omitempty"`
+	// accent/brand color for the trust center
+	AccentColor string `json:"accent_color,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterSettingQuery when eager-loading is set.
 	Edges        TrustCenterSettingEdges `json:"edges"`
@@ -48,11 +68,19 @@ type TrustCenterSetting struct {
 type TrustCenterSettingEdges struct {
 	// TrustCenter holds the value of the trust_center edge.
 	TrustCenter *TrustCenter `json:"trust_center,omitempty"`
+	// Files holds the value of the files edge.
+	Files []*File `json:"files,omitempty"`
+	// LogoFile holds the value of the logo_file edge.
+	LogoFile *File `json:"logo_file,omitempty"`
+	// FaviconFile holds the value of the favicon_file edge.
+	FaviconFile *File `json:"favicon_file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [4]map[string]int
+
+	namedFiles map[string][]*File
 }
 
 // TrustCenterOrErr returns the TrustCenter value or an error if the edge
@@ -66,12 +94,43 @@ func (e TrustCenterSettingEdges) TrustCenterOrErr() (*TrustCenter, error) {
 	return nil, &NotLoadedError{edge: "trust_center"}
 }
 
+// FilesOrErr returns the Files value or an error if the edge
+// was not loaded in eager-loading.
+func (e TrustCenterSettingEdges) FilesOrErr() ([]*File, error) {
+	if e.loadedTypes[1] {
+		return e.Files, nil
+	}
+	return nil, &NotLoadedError{edge: "files"}
+}
+
+// LogoFileOrErr returns the LogoFile value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterSettingEdges) LogoFileOrErr() (*File, error) {
+	if e.LogoFile != nil {
+		return e.LogoFile, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: file.Label}
+	}
+	return nil, &NotLoadedError{edge: "logo_file"}
+}
+
+// FaviconFileOrErr returns the FaviconFile value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterSettingEdges) FaviconFileOrErr() (*File, error) {
+	if e.FaviconFile != nil {
+		return e.FaviconFile, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: file.Label}
+	}
+	return nil, &NotLoadedError{edge: "favicon_file"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*TrustCenterSetting) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case trustcentersetting.FieldID, trustcentersetting.FieldCreatedBy, trustcentersetting.FieldUpdatedBy, trustcentersetting.FieldDeletedBy, trustcentersetting.FieldTrustCenterID, trustcentersetting.FieldTitle, trustcentersetting.FieldOverview, trustcentersetting.FieldPrimaryColor:
+		case trustcentersetting.FieldID, trustcentersetting.FieldCreatedBy, trustcentersetting.FieldUpdatedBy, trustcentersetting.FieldDeletedBy, trustcentersetting.FieldTrustCenterID, trustcentersetting.FieldTitle, trustcentersetting.FieldOverview, trustcentersetting.FieldLogoRemoteURL, trustcentersetting.FieldLogoLocalFileID, trustcentersetting.FieldFaviconRemoteURL, trustcentersetting.FieldFaviconLocalFileID, trustcentersetting.FieldThemeMode, trustcentersetting.FieldPrimaryColor, trustcentersetting.FieldFont, trustcentersetting.FieldForegroundColor, trustcentersetting.FieldBackgroundColor, trustcentersetting.FieldAccentColor:
 			values[i] = new(sql.NullString)
 		case trustcentersetting.FieldCreatedAt, trustcentersetting.FieldUpdatedAt, trustcentersetting.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -150,11 +209,69 @@ func (tcs *TrustCenterSetting) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				tcs.Overview = value.String
 			}
+		case trustcentersetting.FieldLogoRemoteURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field logo_remote_url", values[i])
+			} else if value.Valid {
+				tcs.LogoRemoteURL = new(string)
+				*tcs.LogoRemoteURL = value.String
+			}
+		case trustcentersetting.FieldLogoLocalFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field logo_local_file_id", values[i])
+			} else if value.Valid {
+				tcs.LogoLocalFileID = new(string)
+				*tcs.LogoLocalFileID = value.String
+			}
+		case trustcentersetting.FieldFaviconRemoteURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field favicon_remote_url", values[i])
+			} else if value.Valid {
+				tcs.FaviconRemoteURL = new(string)
+				*tcs.FaviconRemoteURL = value.String
+			}
+		case trustcentersetting.FieldFaviconLocalFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field favicon_local_file_id", values[i])
+			} else if value.Valid {
+				tcs.FaviconLocalFileID = new(string)
+				*tcs.FaviconLocalFileID = value.String
+			}
+		case trustcentersetting.FieldThemeMode:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field theme_mode", values[i])
+			} else if value.Valid {
+				tcs.ThemeMode = enums.TrustCenterThemeMode(value.String)
+			}
 		case trustcentersetting.FieldPrimaryColor:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field primary_color", values[i])
 			} else if value.Valid {
 				tcs.PrimaryColor = value.String
+			}
+		case trustcentersetting.FieldFont:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field font", values[i])
+			} else if value.Valid {
+				tcs.Font = value.String
+			}
+		case trustcentersetting.FieldForegroundColor:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field foreground_color", values[i])
+			} else if value.Valid {
+				tcs.ForegroundColor = value.String
+			}
+		case trustcentersetting.FieldBackgroundColor:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field background_color", values[i])
+			} else if value.Valid {
+				tcs.BackgroundColor = value.String
+			}
+		case trustcentersetting.FieldAccentColor:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field accent_color", values[i])
+			} else if value.Valid {
+				tcs.AccentColor = value.String
 			}
 		default:
 			tcs.selectValues.Set(columns[i], values[i])
@@ -172,6 +289,21 @@ func (tcs *TrustCenterSetting) Value(name string) (ent.Value, error) {
 // QueryTrustCenter queries the "trust_center" edge of the TrustCenterSetting entity.
 func (tcs *TrustCenterSetting) QueryTrustCenter() *TrustCenterQuery {
 	return NewTrustCenterSettingClient(tcs.config).QueryTrustCenter(tcs)
+}
+
+// QueryFiles queries the "files" edge of the TrustCenterSetting entity.
+func (tcs *TrustCenterSetting) QueryFiles() *FileQuery {
+	return NewTrustCenterSettingClient(tcs.config).QueryFiles(tcs)
+}
+
+// QueryLogoFile queries the "logo_file" edge of the TrustCenterSetting entity.
+func (tcs *TrustCenterSetting) QueryLogoFile() *FileQuery {
+	return NewTrustCenterSettingClient(tcs.config).QueryLogoFile(tcs)
+}
+
+// QueryFaviconFile queries the "favicon_file" edge of the TrustCenterSetting entity.
+func (tcs *TrustCenterSetting) QueryFaviconFile() *FileQuery {
+	return NewTrustCenterSettingClient(tcs.config).QueryFaviconFile(tcs)
 }
 
 // Update returns a builder for updating this TrustCenterSetting.
@@ -224,10 +356,69 @@ func (tcs *TrustCenterSetting) String() string {
 	builder.WriteString("overview=")
 	builder.WriteString(tcs.Overview)
 	builder.WriteString(", ")
+	if v := tcs.LogoRemoteURL; v != nil {
+		builder.WriteString("logo_remote_url=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := tcs.LogoLocalFileID; v != nil {
+		builder.WriteString("logo_local_file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := tcs.FaviconRemoteURL; v != nil {
+		builder.WriteString("favicon_remote_url=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := tcs.FaviconLocalFileID; v != nil {
+		builder.WriteString("favicon_local_file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	builder.WriteString("theme_mode=")
+	builder.WriteString(fmt.Sprintf("%v", tcs.ThemeMode))
+	builder.WriteString(", ")
 	builder.WriteString("primary_color=")
 	builder.WriteString(tcs.PrimaryColor)
+	builder.WriteString(", ")
+	builder.WriteString("font=")
+	builder.WriteString(tcs.Font)
+	builder.WriteString(", ")
+	builder.WriteString("foreground_color=")
+	builder.WriteString(tcs.ForegroundColor)
+	builder.WriteString(", ")
+	builder.WriteString("background_color=")
+	builder.WriteString(tcs.BackgroundColor)
+	builder.WriteString(", ")
+	builder.WriteString("accent_color=")
+	builder.WriteString(tcs.AccentColor)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedFiles returns the Files named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (tcs *TrustCenterSetting) NamedFiles(name string) ([]*File, error) {
+	if tcs.Edges.namedFiles == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := tcs.Edges.namedFiles[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (tcs *TrustCenterSetting) appendNamedFiles(name string, edges ...*File) {
+	if tcs.Edges.namedFiles == nil {
+		tcs.Edges.namedFiles = make(map[string][]*File)
+	}
+	if len(edges) == 0 {
+		tcs.Edges.namedFiles[name] = []*File{}
+	} else {
+		tcs.Edges.namedFiles[name] = append(tcs.Edges.namedFiles[name], edges...)
+	}
 }
 
 // TrustCenterSettings is a parsable slice of TrustCenterSetting.

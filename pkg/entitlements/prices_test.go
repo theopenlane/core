@@ -6,7 +6,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v82"
 
 	"github.com/theopenlane/core/pkg/entitlements"
@@ -34,7 +33,7 @@ func TestFindPriceForProductByLookupKey(t *testing.T) {
 	sc, _ := setupPriceClient([]*stripe.Price{price}, nil)
 
 	found, err := sc.FindPriceForProduct(ctx, "prod_1", "", 0, "", "", "", "basic", nil)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, price, found)
 }
 
@@ -53,7 +52,7 @@ func TestFindPriceForProductByAttributes(t *testing.T) {
 	sc, _ := setupPriceClient([]*stripe.Price{price}, nil)
 
 	found, err := sc.FindPriceForProduct(ctx, "prod_1", "", 1000, "usd", "month", "basic", "", map[string]string{"managed_by": "openlane"})
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, price, found)
 }
 
@@ -63,7 +62,7 @@ func TestFindPriceForProductNoMatch(t *testing.T) {
 	sc, _ := setupPriceClient([]*stripe.Price{price}, nil)
 
 	found, err := sc.FindPriceForProduct(ctx, "prod_1", "", 2000, "usd", "month", "", "", nil)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Nil(t, found)
 }
 
@@ -93,6 +92,6 @@ func TestUpdatePriceMetadata(t *testing.T) {
 	sc := entitlements.StripeClient{Client: stripe.NewClient("sk_test", stripe.WithBackends(backends))}
 
 	p, err := sc.UpdatePriceMetadata(ctx, "price_1", metadata)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, expected, p)
 }

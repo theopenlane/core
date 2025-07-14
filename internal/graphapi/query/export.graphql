@@ -1,0 +1,136 @@
+mutation CreateExport($input: CreateExportInput!) {
+  createExport(input: $input) {
+    export {
+      createdAt
+      createdBy
+      exportType
+      format
+      id
+      fields
+      ownerID
+      requestorID
+      status
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+query GetAllExports {
+  exports {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        exportType
+        id
+        format
+        fields
+        ownerID
+        requestorID
+        status
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetExportByID($exportId: ID!) {
+  export(id: $exportId) {
+    createdAt
+    createdBy
+    exportType
+    id
+    ownerID
+    requestorID
+    status
+    fields
+    updatedAt
+    format
+    updatedBy
+    files {
+      edges {
+        node {
+          id
+          storagePath
+          storageScheme
+          storageVolume
+        }
+      }
+    }
+  }
+}
+
+query GetExports($first: Int, $last: Int, $where: ExportWhereInput) {
+  exports(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        exportType
+        id
+        format
+        ownerID
+        requestorID
+        status
+        fields
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+mutation UpdateExport($id: ID!, $input: UpdateExportInput!, $exportFiles: [Upload!]) {
+  updateExport(id: $id, input: $input, exportFiles: $exportFiles) {
+    export {
+      createdAt
+      createdBy
+      exportType
+      id
+      ownerID
+      fields
+      requestorID
+      status
+      format
+      updatedAt
+      updatedBy
+      files {
+        edges {
+          node {
+            id
+            storagePath
+            storageScheme
+            storageVolume
+          }
+        }
+      }
+    }
+  }
+}
+
+mutation DeleteExport($deleteExportId: ID!) {
+  deleteExport(id: $deleteExportId) {
+    deletedID
+  }
+}
+
+mutation DeleteBulkExport($ids: [ID!]!) {
+  deleteBulkExport(ids: $ids) {
+    deletedIDs
+  }
+} 

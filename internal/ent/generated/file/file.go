@@ -81,6 +81,10 @@ const (
 	EdgeEvidence = "evidence"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
 	EdgeEvents = "events"
+	// EdgeTrustCenterSetting holds the string denoting the trust_center_setting edge name in mutations.
+	EdgeTrustCenterSetting = "trust_center_setting"
+	// EdgeSubprocessor holds the string denoting the subprocessor edge name in mutations.
+	EdgeSubprocessor = "subprocessor"
 	// Table holds the table name of the file in the database.
 	Table = "files"
 	// UserTable is the table that holds the user relation/edge. The primary key declared below.
@@ -143,6 +147,16 @@ const (
 	// EventsInverseTable is the table name for the Event entity.
 	// It exists in this package in order to avoid circular dependency with the "event" package.
 	EventsInverseTable = "events"
+	// TrustCenterSettingTable is the table that holds the trust_center_setting relation/edge. The primary key declared below.
+	TrustCenterSettingTable = "trust_center_setting_files"
+	// TrustCenterSettingInverseTable is the table name for the TrustCenterSetting entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcentersetting" package.
+	TrustCenterSettingInverseTable = "trust_center_settings"
+	// SubprocessorTable is the table that holds the subprocessor relation/edge. The primary key declared below.
+	SubprocessorTable = "subprocessor_files"
+	// SubprocessorInverseTable is the table name for the Subprocessor entity.
+	// It exists in this package in order to avoid circular dependency with the "subprocessor" package.
+	SubprocessorInverseTable = "subprocessors"
 )
 
 // Columns holds all SQL columns for file fields.
@@ -174,6 +188,7 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "files"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
+	"export_files",
 	"note_files",
 }
 
@@ -214,6 +229,12 @@ var (
 	// EventsPrimaryKey and EventsColumn2 are the table columns denoting the
 	// primary key for the events relation (M2M).
 	EventsPrimaryKey = []string{"file_id", "event_id"}
+	// TrustCenterSettingPrimaryKey and TrustCenterSettingColumn2 are the table columns denoting the
+	// primary key for the trust_center_setting relation (M2M).
+	TrustCenterSettingPrimaryKey = []string{"trust_center_setting_id", "file_id"}
+	// SubprocessorPrimaryKey and SubprocessorColumn2 are the table columns denoting the
+	// primary key for the subprocessor relation (M2M).
+	SubprocessorPrimaryKey = []string{"subprocessor_id", "file_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -237,7 +258,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [3]ent.Hook
+	Hooks        [4]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -526,6 +547,34 @@ func ByEvents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newEventsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByTrustCenterSettingCount orders the results by trust_center_setting count.
+func ByTrustCenterSettingCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterSettingStep(), opts...)
+	}
+}
+
+// ByTrustCenterSetting orders the results by trust_center_setting terms.
+func ByTrustCenterSetting(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterSettingStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// BySubprocessorCount orders the results by subprocessor count.
+func BySubprocessorCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSubprocessorStep(), opts...)
+	}
+}
+
+// BySubprocessor orders the results by subprocessor terms.
+func BySubprocessor(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubprocessorStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newUserStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -608,5 +657,19 @@ func newEventsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EventsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, EventsTable, EventsPrimaryKey...),
+	)
+}
+func newTrustCenterSettingStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterSettingInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, TrustCenterSettingTable, TrustCenterSettingPrimaryKey...),
+	)
+}
+func newSubprocessorStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubprocessorInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, SubprocessorTable, SubprocessorPrimaryKey...),
 	)
 }

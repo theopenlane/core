@@ -58,6 +58,8 @@ db:
     debug: false
     driverName: pgx
     enableHistory: false
+    maxConnections: 0
+    maxIdleConnections: 0
     migrationProvider: atlas
     multiWrite: false
     primaryDbSource: file:openlane.db
@@ -83,6 +85,7 @@ email:
     year: 0
 entConfig:
     entityTypes: null
+    maxPoolSize: 100
     summarizer:
         llm:
             anthropic:
@@ -216,11 +219,14 @@ server:
         prefixes: null
     csrfProtection:
         cookie: ol.csrf-token
+        cookieDomain: ""
         cookieHttpOnly: false
+        cookiePath: /
         enabled: false
         header: X-CSRF-Token
         sameSite: Lax
         secure: true
+    defaultTrustCenterDomain: ""
     dev: false
     enableGraphExtensions: true
     graphPool:
@@ -261,7 +267,10 @@ server:
 sessions:
     domain: ""
     encryptionKey: encryptionsecret
+    httpOnly: true
     maxAge: 3600
+    sameSite: Strict
+    secure: true
     signingKey: my-signing-secret
 slack:
     newSubscriberMessageFile: ""

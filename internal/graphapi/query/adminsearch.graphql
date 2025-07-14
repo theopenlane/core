@@ -18,6 +18,7 @@ query AdminSearch($query: String!) {
           scopes
           revokedReason
           revokedBy
+          ssoAuthorizations
         }
       }
     }
@@ -589,6 +590,8 @@ query AdminSearch($query: String!) {
           taxIdentifier
           organizationID
           allowedEmailDomains
+          identityProviderClientID
+          identityProviderClientSecret
           identityProviderMetadataEndpoint
           identityProviderEntityID
           oidcDiscoveryEndpoint
@@ -610,6 +613,7 @@ query AdminSearch($query: String!) {
           tags
           name
           scopes
+          ssoAuthorizations
           revokedReason
           revokedBy
         }
@@ -790,6 +794,26 @@ query AdminSearch($query: String!) {
           ownerID
           refCode
           controlID
+        }
+      }
+    }
+    subprocessors {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+          ownerID
+          name
+          description
+          logoRemoteURL
+          logoLocalFileID
         }
       }
     }

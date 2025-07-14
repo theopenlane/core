@@ -4,6 +4,8 @@ import (
 	"errors"
 	"sync"
 	"testing"
+
+	"github.com/cenkalti/backoff/v5"
 )
 
 const errorMessage = "On() failed with error: %v"
@@ -110,7 +112,7 @@ func TestWithPanicHandlerSync(t *testing.T) {
 	var panicHandlerInvoked bool
 
 	// Define a custom panic handler
-	customPanicHandler := func(p interface{}) {
+	customPanicHandler := func(p any) {
 		if p == "test panic" {
 			panicHandlerInvoked = true
 		}
@@ -154,7 +156,7 @@ func TestWithPanicHandlerAsync(t *testing.T) {
 	var panicHandlerMutex sync.Mutex // To safely update panicHandlerInvoked from different goroutines
 
 	// Define a custom panic handler
-	customPanicHandler := func(p interface{}) {
+	customPanicHandler := func(p any) {
 		panicHandlerMutex.Lock()
 		defer panicHandlerMutex.Unlock()
 
@@ -221,5 +223,42 @@ func TestWithIDGenerator(t *testing.T) {
 	// Check if the returned ID matches the custom ID
 	if returnedID != customID {
 		t.Fatalf("Expected ID to be '%s', but got '%s'", customID, returnedID)
+	}
+}
+
+func TestAllEventPoolOptions(t *testing.T) {
+	// Dummy implementations for required interfaces
+	dummyPool := NewPondPool(WithMaxWorkers(1))
+	dummyRedis := newTestRedis(t)
+	dummyClient := struct{}{}
+
+	// Test WithPool
+	soiree := NewEventPool(WithPool(dummyPool))
+	if soiree == nil {
+		t.Fatal("WithPool option failed")
+	}
+
+	// Test WithRedisStore
+	soiree2 := NewEventPool(WithRedisStore(dummyRedis))
+	if soiree2 == nil {
+		t.Fatal("WithRedisStore option failed")
+	}
+
+	// Test WithRetry
+	soiree3 := NewEventPool(WithRetry(2, func() backoff.BackOff { return backoff.NewConstantBackOff(1) }))
+	if soiree3 == nil {
+		t.Fatal("WithRetry option failed")
+	}
+
+	// Test WithErrChanBufferSize
+	soiree4 := NewEventPool(WithErrChanBufferSize(5))
+	if soiree4 == nil {
+		t.Fatal("WithErrChanBufferSize option failed")
+	}
+
+	// Test WithClient
+	soiree5 := NewEventPool(WithClient(dummyClient))
+	if soiree5 == nil {
+		t.Fatal("WithClient option failed")
 	}
 }

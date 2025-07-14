@@ -2,7 +2,6 @@ package schema
 
 import (
 	"entgo.io/ent"
-	"entgo.io/ent/privacy"
 	"entgo.io/ent/schema"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
@@ -66,7 +65,7 @@ func (p Procedure) Mixin() []ent.Mixin {
 		prefix:          "PRD",
 		includeRevision: true,
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(p),
+			newOrgOwnedMixin(p, withSkipForSystemAdmin(true)),
 			// add group edit permissions to the procedure
 			newGroupPermissionsMixin(withSkipViewPermissions()),
 			// all procedures are documents
@@ -80,6 +79,7 @@ func (Procedure) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.Features("compliance", "policy-management", "risk-management", "asset-management", "entity-management", "continuous-compliance-automation"),
 		entfga.SelfAccessChecks(),
+		entx.Exportable{},
 	}
 }
 
@@ -104,9 +104,6 @@ func (Procedure) Interceptors() []ent.Interceptor {
 // Policy of the Procedure
 func (Procedure) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			privacy.AlwaysAllowRule(), //  interceptor should filter out the results
-		),
 		policy.WithMutationRules(
 			rule.CanCreateObjectsUnderParent[*generated.ProcedureMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),

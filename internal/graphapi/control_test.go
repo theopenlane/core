@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/core/pkg/testutils"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -26,6 +27,7 @@ func TestQueryControl(t *testing.T) {
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program.ID,
 		UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).
 		MustNew(testUser1.UserCtx, t)
+	anonymousContext := createAnonymousTrustCenterContext("abc123", testUser1.OrganizationID)
 
 	controlIDs := []string{}
 	// add test cases for querying the control
@@ -73,6 +75,12 @@ func TestQueryControl(t *testing.T) {
 			client:   suite.client.api,
 			ctx:      testUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
+		},
+		{
+			name:     "no access, anonymous user",
+			client:   suite.client.api,
+			ctx:      anonymousContext,
+			errorMsg: couldNotFindUser,
 		},
 	}
 
@@ -213,7 +221,7 @@ func TestQueryControls(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
 			if tc.first != nil || tc.last != nil {
-				resp, err := tc.client.GetControls(tc.ctx, tc.first, tc.last, nil)
+				resp, err := tc.client.GetControls(tc.ctx, tc.first, tc.last, nil, nil, nil, nil)
 				assert.NilError(t, err)
 				assert.Check(t, resp != nil)
 
@@ -248,6 +256,56 @@ func TestQueryControls(t *testing.T) {
 	}
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: controlAnotherOrg.ID}).MustDelete(userAnotherOrg.UserCtx, t)
+}
+
+func TestQueryControlsMultipleOrgCheck(t *testing.T) {
+	// test to make sure we don't get cross org results back even if the user technically has access to them
+	testUser := suite.userBuilder(context.Background(), t)
+
+	// create controls for the test user in their org
+	control := (&ControlBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	testUserOriginalCtx := auth.NewTestContextWithOrgID(testUser.ID, testUser.OrganizationID)
+
+	// create another org and a control in that org
+	anotherOrg := (&OrganizationBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	testUserCtxUpdate := auth.NewTestContextWithOrgID(testUser.ID, anotherOrg.ID)
+
+	controlAnotherOrg := (&ControlBuilder{client: suite.client}).MustNew(testUserCtxUpdate, t)
+
+	testCases := []struct {
+		name            string
+		client          *openlaneclient.OpenlaneClient
+		first           *int64
+		last            *int64
+		ctx             context.Context
+		expectedResults int
+	}{
+		{
+			name:            "happy path",
+			client:          suite.client.api,
+			ctx:             testUserOriginalCtx,
+			expectedResults: 1,
+		},
+		{
+			name:            "happy path",
+			client:          suite.client.api,
+			ctx:             testUserCtxUpdate,
+			expectedResults: 1,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("List "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.GetAllControls(tc.ctx)
+			assert.NilError(t, err)
+			assert.Check(t, resp != nil)
+
+			assert.Check(t, is.Len(resp.Controls.Edges, tc.expectedResults))
+			assert.Check(t, is.Equal(int64(tc.expectedResults), resp.Controls.TotalCount))
+		})
+	}
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUserOriginalCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: controlAnotherOrg.ID}).MustDelete(testUserCtxUpdate, t)
 }
 
 func TestMutationCreateControl(t *testing.T) {
@@ -624,6 +682,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 	programAnotherOrg := (&ProgramBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+	publicStandard2 := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
 
 	// create standard with controls to clone
 	numControls := int64(20)
@@ -631,6 +690,10 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 	controlIDs := make([]string, 0, numControls)
 	subcontrols := []*generated.Subcontrol{}
 	subcontrolIDs := []string{}
+	controls2 := []*generated.Control{}
+	controlID2s := make([]string, 0, numControls)
+	subcontrols2 := []*generated.Subcontrol{}
+	subcontrolID2s := []string{}
 	for range numControls {
 		control := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID, AllFields: true}).MustNew(systemAdminUser.UserCtx, t)
 		controls = append(controls, control)
@@ -639,6 +702,14 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 		subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: control.ID}).MustNew(systemAdminUser.UserCtx, t)
 		subcontrols = append(subcontrols, subcontrol)
 		subcontrolIDs = append(subcontrolIDs, subcontrol.ID)
+
+		control2 := (&ControlBuilder{client: suite.client, StandardID: publicStandard2.ID, AllFields: true}).MustNew(systemAdminUser.UserCtx, t)
+		controls2 = append(controls2, control2)
+		controlID2s = append(controlID2s, control2.ID)
+		// give them all a subcontrol
+		subcontrol2 := (&SubcontrolBuilder{client: suite.client, ControlID: control2.ID}).MustNew(systemAdminUser.UserCtx, t)
+		subcontrols2 = append(subcontrols2, subcontrol2)
+		subcontrolID2s = append(subcontrolID2s, subcontrol2.ID)
 	}
 
 	// ensure the standard exists and has the correct number of controls for the non-system admin user
@@ -653,6 +724,9 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 
 	// sort controls so they are consistent
 	slices.SortFunc(controls, func(a, b *generated.Control) int {
+		return cmp.Compare(a.RefCode, b.RefCode)
+	})
+	slices.SortFunc(controls2, func(a, b *generated.Control) int {
 		return cmp.Compare(a.RefCode, b.RefCode)
 	})
 
@@ -675,6 +749,17 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			},
 			expectedStandard: lo.ToPtr(publicStandard.ShortName),
 			expectedControls: controls,
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+		},
+		{
+			name: "happy path, all controls under standard using standard id and program set",
+			request: openlaneclient.CloneControlInput{
+				StandardID: &publicStandard2.ID,
+				ProgramID:  &program.ID,
+			},
+			expectedStandard: lo.ToPtr(publicStandard2.ShortName),
+			expectedControls: controls2,
 			client:           suite.client.api,
 			ctx:              testUser1.UserCtx,
 		},
@@ -923,10 +1008,12 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 	// cleanup created controls and standards
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDsToDelete}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDsToDelete}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{publicStandard.ID, publicStandard2.ID}}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: orgStandard.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDs}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlID2s}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolID2s}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
 }
 

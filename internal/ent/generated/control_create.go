@@ -1090,7 +1090,7 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.ControlOwnerID = nodes[0]
+		_node.ControlOwnerID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := cc.mutation.DelegateIDs(); len(nodes) > 0 {

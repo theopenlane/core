@@ -299,7 +299,9 @@ func (sjhu *ScheduledJobHistoryUpdate) Mutation() *ScheduledJobHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (sjhu *ScheduledJobHistoryUpdate) Save(ctx context.Context) (int, error) {
-	sjhu.defaults()
+	if err := sjhu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, sjhu.sqlSave, sjhu.mutation, sjhu.hooks)
 }
 
@@ -326,11 +328,15 @@ func (sjhu *ScheduledJobHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (sjhu *ScheduledJobHistoryUpdate) defaults() {
+func (sjhu *ScheduledJobHistoryUpdate) defaults() error {
 	if _, ok := sjhu.mutation.UpdatedAt(); !ok && !sjhu.mutation.UpdatedAtCleared() {
+		if scheduledjobhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized scheduledjobhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := scheduledjobhistory.UpdateDefaultUpdatedAt()
 		sjhu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -770,7 +776,9 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) Select(field string, fields ...string
 
 // Save executes the query and returns the updated ScheduledJobHistory entity.
 func (sjhuo *ScheduledJobHistoryUpdateOne) Save(ctx context.Context) (*ScheduledJobHistory, error) {
-	sjhuo.defaults()
+	if err := sjhuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, sjhuo.sqlSave, sjhuo.mutation, sjhuo.hooks)
 }
 
@@ -797,11 +805,15 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (sjhuo *ScheduledJobHistoryUpdateOne) defaults() {
+func (sjhuo *ScheduledJobHistoryUpdateOne) defaults() error {
 	if _, ok := sjhuo.mutation.UpdatedAt(); !ok && !sjhuo.mutation.UpdatedAtCleared() {
+		if scheduledjobhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized scheduledjobhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := scheduledjobhistory.UpdateDefaultUpdatedAt()
 		sjhuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

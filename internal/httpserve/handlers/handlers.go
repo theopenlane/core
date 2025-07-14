@@ -61,6 +61,8 @@ type Handler struct {
 	Summarizer *summarizer.Client
 	// Windmill contains the Windmill workflow automation client
 	Windmill *windmill.Client
+	// DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set
+	DefaultTrustCenterDomain string
 }
 
 // setAuthenticatedContext is a wrapper that will set the minimal context for an authenticated user

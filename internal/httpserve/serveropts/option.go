@@ -7,8 +7,10 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
+	"net/http"
 	"os"
 	"slices"
+	"strings"
 
 	"google.golang.org/api/option"
 
@@ -169,13 +171,20 @@ func WithAuth() ServerOption {
 		s.Config.Handler.OauthProvider = s.Config.Settings.Auth.Providers
 
 		// add auth middleware
-		conf := authmw.NewAuthOptions(
+		opts := []authmw.Option{
 			authmw.WithAudience(s.Config.Settings.Auth.Token.Audience),
 			authmw.WithIssuer(s.Config.Settings.Auth.Token.Issuer),
 			authmw.WithJWKSEndpoint(s.Config.Settings.Auth.Token.JWKSEndpoint),
 			authmw.WithDBClient(s.Config.Handler.DBClient),
 			authmw.WithCookieConfig(s.Config.SessionConfig.CookieConfig),
-		)
+			authmw.WithAllowAnonymous(true),
+		}
+
+		if s.Config.Handler.RedisClient != nil {
+			opts = append(opts, authmw.WithRedisClient(s.Config.Handler.RedisClient))
+		}
+
+		conf := authmw.NewAuthOptions(opts...)
 
 		s.Config.Handler.WebAuthn = webauthn.NewWithConfig(s.Config.Settings.Auth.Providers.Webauthn)
 
@@ -224,6 +233,7 @@ func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 		// add pool to the resolver to manage the number of goroutines
 		r.WithPool(
 			s.Config.Settings.Server.GraphPool.MaxWorkers,
+			true, // include metrics collectors
 		)
 
 		handler := r.Handler(s.Config.Settings.Server.Dev)
@@ -258,6 +268,13 @@ func WithEmailConfig() ServerOption {
 	})
 }
 
+// WithDefaultTrustCenterDomain sets up the default trust center domain for the server
+func WithDefaultTrustCenterDomain() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		s.Config.Handler.DefaultTrustCenterDomain = s.Config.Settings.Server.DefaultTrustCenterDomain
+	})
+}
+
 // WithSessionManager sets up the default session manager with a 10 minute ttl
 // with persistence to redis
 func WithSessionManager(rc *redis.Client) ServerOption {
@@ -278,6 +295,22 @@ func WithSessionManager(rc *redis.Client) ServerOption {
 
 		if s.Config.Settings.Sessions.Domain != "" {
 			cc.Domain = s.Config.Settings.Sessions.Domain
+		}
+
+		cc.HTTPOnly = s.Config.Settings.Sessions.HTTPOnly
+		cc.Secure = s.Config.Settings.Sessions.Secure
+
+		if s.Config.Settings.Sessions.SameSite != "" {
+			switch strings.ToLower(s.Config.Settings.Sessions.SameSite) {
+			case "lax":
+				cc.SameSite = http.SameSiteLaxMode
+			case "strict":
+				cc.SameSite = http.SameSiteStrictMode
+			case "none":
+				cc.SameSite = http.SameSiteNoneMode
+			default:
+				cc.SameSite = http.SameSiteDefaultMode
+			}
 		}
 
 		sm := sessions.NewCookieStore[map[string]any](cc,

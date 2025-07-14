@@ -119,10 +119,6 @@ func (DNSVerification) Indexes() []ent.Index {
 // Policy of the DNSVerification
 func (DNSVerification) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			policy.CheckOrgReadAccess(),
-			rule.AllowQueryIfSystemAdmin(),
-		),
 		policy.WithMutationRules(
 			rule.AllowMutationIfSystemAdmin(),
 		),

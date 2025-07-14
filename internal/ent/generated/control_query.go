@@ -2055,7 +2055,10 @@ func (cq *ControlQuery) loadControlOwner(ctx context.Context, query *GroupQuery,
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Control)
 	for i := range nodes {
-		fk := nodes[i].ControlOwnerID
+		if nodes[i].ControlOwnerID == nil {
+			continue
+		}
+		fk := *nodes[i].ControlOwnerID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}

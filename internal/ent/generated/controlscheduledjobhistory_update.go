@@ -198,7 +198,9 @@ func (csjhu *ControlScheduledJobHistoryUpdate) Mutation() *ControlScheduledJobHi
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (csjhu *ControlScheduledJobHistoryUpdate) Save(ctx context.Context) (int, error) {
-	csjhu.defaults()
+	if err := csjhu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, csjhu.sqlSave, csjhu.mutation, csjhu.hooks)
 }
 
@@ -225,11 +227,15 @@ func (csjhu *ControlScheduledJobHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (csjhu *ControlScheduledJobHistoryUpdate) defaults() {
+func (csjhu *ControlScheduledJobHistoryUpdate) defaults() error {
 	if _, ok := csjhu.mutation.UpdatedAt(); !ok && !csjhu.mutation.UpdatedAtCleared() {
+		if controlscheduledjobhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized controlscheduledjobhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := controlscheduledjobhistory.UpdateDefaultUpdatedAt()
 		csjhu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -511,7 +517,9 @@ func (csjhuo *ControlScheduledJobHistoryUpdateOne) Select(field string, fields .
 
 // Save executes the query and returns the updated ControlScheduledJobHistory entity.
 func (csjhuo *ControlScheduledJobHistoryUpdateOne) Save(ctx context.Context) (*ControlScheduledJobHistory, error) {
-	csjhuo.defaults()
+	if err := csjhuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, csjhuo.sqlSave, csjhuo.mutation, csjhuo.hooks)
 }
 
@@ -538,11 +546,15 @@ func (csjhuo *ControlScheduledJobHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (csjhuo *ControlScheduledJobHistoryUpdateOne) defaults() {
+func (csjhuo *ControlScheduledJobHistoryUpdateOne) defaults() error {
 	if _, ok := csjhuo.mutation.UpdatedAt(); !ok && !csjhuo.mutation.UpdatedAtCleared() {
+		if controlscheduledjobhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized controlscheduledjobhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := controlscheduledjobhistory.UpdateDefaultUpdatedAt()
 		csjhuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.

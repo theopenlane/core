@@ -1,9 +1,13 @@
 package soiree
 
 import (
+	"context"
 	"fmt"
 	"sync"
 	"sync/atomic"
+	"time"
+
+	"github.com/cenkalti/backoff/v5"
 )
 
 // EventPool struct is controlling subscribing and unsubscribing listeners to topics, and emitting events to all subscribers
@@ -23,7 +27,15 @@ type EventPool struct {
 	// Size of the buffer for the error channel in Emit
 	errChanBufferSize int
 	// client is the client for the event pool
-	client interface{}
+	client any
+	// store is used to persist events and results
+	store EventStore
+	// queueCancel cancels the queue consumer when present
+	queueCancel context.CancelFunc
+	// maxRetries specifies how many times a listener should be retried on error
+	maxRetries int
+	// backOffFactory creates a backoff policy for retries
+	backOffFactory func() backoff.BackOff
 }
 
 // NewEventPool initializes a new EventPool with optional configuration options
@@ -34,6 +46,10 @@ func NewEventPool(opts ...EventPoolOption) *EventPool {
 		idGenerator:       DefaultIDGenerator,
 		panicHandler:      DefaultPanicHandler,
 		errChanBufferSize: 10, //nolint:mnd
+		maxRetries:        1,
+		backOffFactory: func() backoff.BackOff {
+			return backoff.NewExponentialBackOff()
+		},
 	}
 
 	m.closed.Store(false)
@@ -45,16 +61,20 @@ func NewEventPool(opts ...EventPoolOption) *EventPool {
 
 	register(m)
 
+	if q, ok := m.store.(EventQueue); ok {
+		m.startQueueConsumer(q)
+	}
+
 	return m
 }
 
 // SetClient sets a client that can be used as a part of the event pool
-func (m *EventPool) SetClient(client interface{}) {
+func (m *EventPool) SetClient(client any) {
 	m.client = client
 }
 
 // GetClient fetches the set client on the event pool
-func (m *EventPool) GetClient() interface{} {
+func (m *EventPool) GetClient() any {
 	return m.client
 }
 
@@ -87,7 +107,7 @@ func (m *EventPool) Off(topicName string, listenerID string) error {
 
 // Emit asynchronously dispatches an event to all the subscribers of the event's topic
 // It returns a channel that will receive any errors encountered during event handling
-func (m *EventPool) Emit(eventName string, payload interface{}) <-chan error {
+func (m *EventPool) Emit(eventName string, payload any) <-chan error {
 	errChan := make(chan error, m.errChanBufferSize)
 
 	// Before starting new goroutine, check if Soiree is closed
@@ -98,17 +118,34 @@ func (m *EventPool) Emit(eventName string, payload interface{}) <-chan error {
 		return errChan
 	}
 
+	event, ok := payload.(Event)
+	if !ok {
+		event = NewBaseEvent(eventName, payload)
+	}
+
+	if m.store != nil {
+		if err := m.store.SaveEvent(event); err != nil {
+			errChan <- err
+		}
+	}
+
+	if _, ok := m.store.(EventQueue); ok {
+		close(errChan)
+
+		return errChan
+	}
+
 	if m.pool != nil {
 		m.pool.Submit(func() {
 			defer close(errChan)
-			m.handleEvents(eventName, payload, func(err error) {
+			m.handleEvents(eventName, event, func(err error) {
 				errChan <- err
 			})
 		})
 	} else {
 		go func() {
 			defer close(errChan)
-			m.handleEvents(eventName, payload, func(err error) {
+			m.handleEvents(eventName, event, func(err error) {
 				errChan <- err
 			})
 		}()
@@ -118,14 +155,31 @@ func (m *EventPool) Emit(eventName string, payload interface{}) <-chan error {
 }
 
 // EmitSync dispatches an event synchronously to all subscribers of the event's topic; his method will block until all notifications are completed
-func (m *EventPool) EmitSync(eventName string, payload interface{}) []error {
+func (m *EventPool) EmitSync(eventName string, payload any) []error {
+	var errs []error
+
 	if m.closed.Load().(bool) {
 		return []error{ErrEmitterClosed}
 	}
 
-	var errs []error
+	event, ok := payload.(Event)
+	if !ok {
+		event = NewBaseEvent(eventName, payload)
+	}
 
-	m.handleEvents(eventName, payload, func(err error) {
+	if m.store != nil {
+		if err := m.store.SaveEvent(event); err != nil {
+			errs = append(errs, err)
+
+			return errs
+		}
+	}
+
+	if _, ok := m.store.(EventQueue); ok {
+		return nil
+	}
+
+	m.handleEvents(eventName, event, func(err error) {
 		errs = append(errs, err)
 	})
 
@@ -133,7 +187,7 @@ func (m *EventPool) EmitSync(eventName string, payload interface{}) []error {
 }
 
 // handleEvents is an internal method that processes an event and notifies all registered listeners
-func (m *EventPool) handleEvents(topicName string, payload interface{}, errorHandler func(error)) {
+func (m *EventPool) handleEvents(topicName string, payload any, errorHandler func(error)) {
 	defer func() {
 		if r := recover(); r != nil && m.panicHandler != nil {
 			m.panicHandler(r)
@@ -145,11 +199,11 @@ func (m *EventPool) handleEvents(topicName string, payload interface{}, errorHan
 		event = NewBaseEvent(topicName, payload)
 	}
 
-	m.topics.Range(func(key, value interface{}) bool {
+	m.topics.Range(func(key, value any) bool {
 		topicPattern := key.(string)
 		if matchTopicPattern(topicPattern, topicName) {
 			topic := value.(*Topic)
-			topicErrors := topic.Trigger(event)
+			topicErrors := m.triggerWithRetry(topic, event)
 			m.handleTopicErrors(event, topicErrors, errorHandler)
 		}
 
@@ -218,6 +272,87 @@ func (m *EventPool) SetErrChanBufferSize(size int) {
 	m.errChanBufferSize = size
 }
 
+// SetEventStore sets the event persistence store for the pool
+func (m *EventPool) SetEventStore(store EventStore) {
+	if m.queueCancel != nil {
+		m.queueCancel()
+		m.queueCancel = nil
+	}
+
+	m.store = store
+
+	if q, ok := m.store.(EventQueue); ok && !m.closed.Load().(bool) {
+		m.startQueueConsumer(q)
+	}
+}
+
+// SetRetry configures the retry attempts and backoff factory
+func (m *EventPool) SetRetry(retries int, factory func() backoff.BackOff) {
+	if retries > 0 {
+		m.maxRetries = retries
+	}
+
+	if factory != nil {
+		m.backOffFactory = factory
+	}
+}
+
+// triggerWithRetry executes topic listeners with retry and persistence
+func (m *EventPool) triggerWithRetry(topic *Topic, event Event) []error {
+	topic.mu.RLock()
+	defer topic.mu.RUnlock()
+
+	var errs []error
+
+	for _, id := range topic.sortedListenerIDs {
+		item, ok := topic.listeners[id]
+		if !ok {
+			continue
+		}
+
+		if err := m.runListenerWithRetry(event, id, item.listener); err != nil {
+			errs = append(errs, err)
+		}
+
+		if event.IsAborted() {
+			break
+		}
+	}
+
+	return errs
+}
+
+// runListenerWithRetry executes a listener with retry logic and persistence
+func (m *EventPool) runListenerWithRetry(event Event, id string, listener Listener) error {
+	retries := m.maxRetries
+	if retries <= 0 {
+		retries = 1
+	}
+
+	backOff := m.backOffFactory()
+	var lastErr error
+
+	for i := 0; i < retries; i++ {
+		lastErr = listener(event)
+		if m.store != nil {
+			_ = m.store.SaveHandlerResult(event, id, lastErr)
+		}
+
+		if lastErr == nil {
+			return nil
+		}
+
+		wait := backOff.NextBackOff()
+		if wait == backoff.Stop {
+			break
+		}
+
+		time.Sleep(wait)
+	}
+
+	return lastErr
+}
+
 // Close terminates the soiree, ensuring all pending events are processed; it performs cleanup and releases resources
 func (m *EventPool) Close() error {
 	if m.closed.Load().(bool) {
@@ -227,7 +362,7 @@ func (m *EventPool) Close() error {
 	m.closed.Store(true)
 
 	// tidy it up
-	m.topics.Range(func(key, _ interface{}) bool {
+	m.topics.Range(func(key, _ any) bool {
 		m.topics.Delete(key)
 		return true
 	})
@@ -236,7 +371,52 @@ func (m *EventPool) Close() error {
 		m.pool.Release()
 	}
 
+	if m.queueCancel != nil {
+		m.queueCancel()
+	}
+
 	deregister(m)
 
 	return nil
+}
+
+// startQueueConsumer starts a goroutine that continuously consumes events from the queue
+// It will stop when the context is cancelled or the event pool is closed
+// If a pool is set, it will use the pool to submit the consumer function
+func (m *EventPool) startQueueConsumer(q EventQueue) {
+	ctx, cancel := context.WithCancel(context.Background())
+	m.queueCancel = cancel
+
+	consume := func() {
+		m.consumeQueue(ctx, q)
+	}
+
+	if m.pool != nil {
+		m.pool.Submit(consume)
+	} else {
+		go consume()
+	}
+}
+
+// consumeQueue continuously dequeues events from the queue and processes them
+// It will stop when the context is cancelled or the event pool is closed
+// This method is designed to be run in a separate goroutine
+func (m *EventPool) consumeQueue(ctx context.Context, q EventQueue) {
+	for {
+		if ctx.Err() != nil || m.closed.Load().(bool) {
+			return
+		}
+
+		evt, err := q.DequeueEvent(ctx)
+		if err != nil {
+			if ctx.Err() != nil {
+				return
+			}
+
+			time.Sleep(100 * time.Millisecond) //nolint:mnd
+			continue
+		}
+
+		m.handleEvents(evt.Topic(), evt, func(error) {})
+	}
 }

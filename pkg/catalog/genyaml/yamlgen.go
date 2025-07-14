@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"go/format"
 	"os"
@@ -9,28 +10,30 @@ import (
 
 	"github.com/dave/jennifer/jen"
 	yaml "github.com/goccy/go-yaml"
-	"github.com/urfave/cli/v2"
+	"github.com/stoewer/go-strcase"
+	"github.com/urfave/cli/v3"
 
 	"github.com/theopenlane/core/pkg/catalog"
 )
 
 // main is the entry point for the gencatalog CLI application and just a // little wrapper instead of having everything in main
 func main() {
-	if err := genyamlApp().Run(os.Args); err != nil {
+	if err := genyamlApp().Run(context.Background(), os.Args); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }
 
 var repoPath = "github.com/theopenlane/core/pkg/catalog"
+var modelsPath = "github.com/theopenlane/core/pkg/models"
 
 // genyamlApp creates a CLI application for generating Go source files
 // from a catalog YAML file - the thought process behind this is that
 // it's generally easier to work with Go code than YAML, especially at
 // runtime; contantly unmarshalling YAML within our app has performance
 // and usability implications
-func genyamlApp() *cli.App {
-	app := &cli.App{
+func genyamlApp() *cli.Command {
+	app := &cli.Command{
 		Name:  "gencatalog",
 		Usage: "Generate a Go source file from a catalog YAML file",
 		Flags: []cli.Flag{
@@ -38,18 +41,25 @@ func genyamlApp() *cli.App {
 				Name:    "in",
 				Value:   "catalog.yaml",
 				Usage:   "Path to the catalog YAML file",
-				EnvVars: []string{"OPENLANE_CATALOG_FILE"},
+				Sources: cli.EnvVars("OPENLANE_CATALOG_FILE"),
 			},
 			&cli.StringFlag{
 				Name:    "out",
 				Value:   "./gencatalog/gencatalog.go",
 				Usage:   "Output Go file (stdout if empty)",
-				EnvVars: []string{"OPENLANE_CATALOG_OUTPUT"},
+				Sources: cli.EnvVars("OPENLANE_CATALOG_OUTPUT"),
+			},
+			&cli.StringFlag{
+				Name:    "modules-out",
+				Value:   "../models/orgmodule_gen.go",
+				Usage:   "Output Go file for module constants",
+				Sources: cli.EnvVars("OPENLANE_MODULE_OUTPUT"),
 			},
 		},
-		Action: func(c *cli.Context) error {
+		Action: func(_ context.Context, c *cli.Command) error {
 			input := c.String("in")
 			output := c.String("out")
+			modOut := c.String("modules-out")
 
 			data, err := os.ReadFile(input)
 			if err != nil {
@@ -86,6 +96,12 @@ func genyamlApp() *cli.App {
 				return err
 			}
 
+			if modOut != "" {
+				if err := writeModuleConstants(modOut, ct); err != nil {
+					return err
+				}
+			}
+
 			return nil
 		},
 	}
@@ -109,7 +125,7 @@ func featureSetLit(fs catalog.FeatureSet) *jen.Statement {
 	keys := make([]string, 0, len(fs))
 
 	for k := range fs {
-		keys = append(keys, k)
+		keys = append(keys, string(k))
 	}
 
 	sort.Strings(keys)
@@ -117,7 +133,8 @@ func featureSetLit(fs catalog.FeatureSet) *jen.Statement {
 	dict := jen.Dict{}
 
 	for _, k := range keys {
-		dict[jen.Lit(k)] = featureLit(fs[k])
+		name := "Catalog" + strcase.UpperCamelCase(k)
+		dict[jen.Id("string").Call(jen.Qual(modelsPath, name))] = featureLit(fs[k])
 	}
 
 	return jen.Map(jen.String()).Qual(repoPath, "Feature").Values(dict)
@@ -127,9 +144,19 @@ func featureSetLit(fs catalog.FeatureSet) *jen.Statement {
 func featureLit(f catalog.Feature) *jen.Statement {
 	dict := jen.Dict{
 		jen.Id("DisplayName"): jen.Lit(f.DisplayName),
+		jen.Id("LookupKey"):   jen.Lit(f.LookupKey),
 		jen.Id("Description"): jen.Lit(f.Description),
 		jen.Id("Audience"):    jen.Lit(f.Audience),
 	}
+
+	if f.PersonalOrg {
+		dict[jen.Id("PersonalOrg")] = jen.Lit(true)
+	}
+
+	if f.IncludeWithTrial {
+		dict[jen.Id("IncludeWithTrial")] = jen.Lit(true)
+	}
+
 	// Only emit Billing if not zero value
 	if !isBillingEmpty(f.Billing) {
 		// Make Billing a pointer in the generated struct
@@ -138,6 +165,10 @@ func featureLit(f catalog.Feature) *jen.Statement {
 	// Only emit Usage if non-nil
 	if f.Usage != nil {
 		dict[jen.Id("Usage")] = jen.Op("&").Add(usageLit(*f.Usage))
+	}
+
+	if f.ProductID != "" {
+		dict[jen.Id("ProductID")] = jen.Lit(f.ProductID)
 	}
 
 	return jen.Qual(repoPath, "Feature").Values(dict)
@@ -150,9 +181,6 @@ func isBillingEmpty(b catalog.Billing) bool {
 
 // billingLit generates a block for catalog.Billing, including Prices
 // as a slice each representing a catalog.Price
-// It uses jen.Index().Qual to create a slice of Prices
-// and jen.Dict to create the Billing struct
-// prices are sorted by their LookupKey for consistency
 func billingLit(b catalog.Billing) *jen.Statement {
 	items := make([]jen.Code, len(b.Prices))
 
@@ -165,8 +193,7 @@ func billingLit(b catalog.Billing) *jen.Statement {
 }
 
 // usageLit generates a block for catalog.Usage, currently only
-// containing EvidenceStorageGB, but can be extended in the future
-// if more fields are added to catalog.Usage
+// containing EvidenceStorageGB (records limitations / metering not yet implemented), but can be extended in the future
 func usageLit(u catalog.Usage) *jen.Statement {
 	return jen.Qual(repoPath, "Usage").Values(jen.Dict{
 		jen.Id("EvidenceStorageGB"): jen.Lit(u.EvidenceStorageGB),
@@ -210,4 +237,81 @@ func priceLit(p catalog.Price) *jen.Statement {
 	}
 
 	return jen.Qual(repoPath, "Price").Values(dict)
+}
+
+// writeModuleConstants writes OrgModule constant definitions derived from the
+// catalog file. The output is formatted Go code under pkg/models
+func writeModuleConstants(path string, c catalog.Catalog) error {
+	modKeys := make([]string, 0, len(c.Modules)+len(c.Addons))
+	personalMods := make([]string, 0, len(c.Modules)+len(c.Addons))
+	trialMods := make([]string, 0, len(c.Modules)+len(c.Addons))
+
+	for k, v := range c.Modules {
+		modKey := string(k)
+		modKeys = append(modKeys, modKey)
+		if v.PersonalOrg {
+			personalMods = append(personalMods, modKey)
+		}
+		if v.IncludeWithTrial {
+			trialMods = append(trialMods, modKey)
+		}
+	}
+
+	for k, v := range c.Addons {
+		modKey := string(k)
+		modKeys = append(modKeys, modKey)
+		if v.PersonalOrg {
+			personalMods = append(personalMods, modKey)
+		}
+		if v.IncludeWithTrial {
+			trialMods = append(trialMods, modKey)
+		}
+	}
+
+	sort.Strings(modKeys)
+	sort.Strings(personalMods)
+	sort.Strings(trialMods)
+
+	f := jen.NewFile("models")
+	f.HeaderComment("Code generated by gencatalog; DO NOT EDIT.")
+
+	f.Const().DefsFunc(func(g *jen.Group) {
+		for _, k := range modKeys {
+			name := "Catalog" + strcase.UpperCamelCase(k)
+			g.Id(name).Id("OrgModule").Op("=").Lit(k)
+		}
+	})
+
+	f.Var().Id("AllOrgModules").Op("=").Index().Id("OrgModule").ValuesFunc(func(g *jen.Group) {
+		for _, k := range modKeys {
+			name := "Catalog" + strcase.UpperCamelCase(k)
+			g.Id(name)
+		}
+	})
+
+	f.Var().Id("PersonalOrgModules").Op("=").Index().Id("OrgModule").ValuesFunc(func(g *jen.Group) {
+		for _, k := range personalMods {
+			name := "Catalog" + strcase.UpperCamelCase(k)
+			g.Id(name)
+		}
+	})
+
+	f.Var().Id("TrialModules").Op("=").Index().Id("OrgModule").ValuesFunc(func(g *jen.Group) {
+		for _, k := range trialMods {
+			name := "Catalog" + strcase.UpperCamelCase(k)
+			g.Id(name)
+		}
+	})
+
+	buf := bytes.Buffer{}
+	if err := f.Render(&buf); err != nil {
+		return err
+	}
+
+	formatted, err := format.Source(buf.Bytes())
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(path, formatted, 0o600) //nolint:mnd
 }

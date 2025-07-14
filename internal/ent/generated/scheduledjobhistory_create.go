@@ -296,7 +296,9 @@ func (sjhc *ScheduledJobHistoryCreate) Mutation() *ScheduledJobHistoryMutation {
 
 // Save creates the ScheduledJobHistory in the database.
 func (sjhc *ScheduledJobHistoryCreate) Save(ctx context.Context) (*ScheduledJobHistory, error) {
-	sjhc.defaults()
+	if err := sjhc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, sjhc.sqlSave, sjhc.mutation, sjhc.hooks)
 }
 
@@ -323,16 +325,25 @@ func (sjhc *ScheduledJobHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (sjhc *ScheduledJobHistoryCreate) defaults() {
+func (sjhc *ScheduledJobHistoryCreate) defaults() error {
 	if _, ok := sjhc.mutation.HistoryTime(); !ok {
+		if scheduledjobhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized scheduledjobhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := scheduledjobhistory.DefaultHistoryTime()
 		sjhc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := sjhc.mutation.CreatedAt(); !ok {
+		if scheduledjobhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized scheduledjobhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := scheduledjobhistory.DefaultCreatedAt()
 		sjhc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := sjhc.mutation.UpdatedAt(); !ok {
+		if scheduledjobhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized scheduledjobhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := scheduledjobhistory.DefaultUpdatedAt()
 		sjhc.mutation.SetUpdatedAt(v)
 	}
@@ -349,9 +360,13 @@ func (sjhc *ScheduledJobHistoryCreate) defaults() {
 		sjhc.mutation.SetJobType(v)
 	}
 	if _, ok := sjhc.mutation.ID(); !ok {
+		if scheduledjobhistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized scheduledjobhistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := scheduledjobhistory.DefaultID()
 		sjhc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

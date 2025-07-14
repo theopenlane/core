@@ -48,6 +48,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
+	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -106,6 +107,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
@@ -116,12 +119,15 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/core/pkg/windmill"
@@ -202,6 +208,8 @@ type Client struct {
 	Evidence *EvidenceClient
 	// EvidenceHistory is the client for interacting with the EvidenceHistory builders.
 	EvidenceHistory *EvidenceHistoryClient
+	// Export is the client for interacting with the Export builders.
+	Export *ExportClient
 	// File is the client for interacting with the File builders.
 	File *FileClient
 	// FileHistory is the client for interacting with the FileHistory builders.
@@ -318,6 +326,10 @@ type Client struct {
 	Subcontrol *SubcontrolClient
 	// SubcontrolHistory is the client for interacting with the SubcontrolHistory builders.
 	SubcontrolHistory *SubcontrolHistoryClient
+	// Subprocessor is the client for interacting with the Subprocessor builders.
+	Subprocessor *SubprocessorClient
+	// SubprocessorHistory is the client for interacting with the SubprocessorHistory builders.
+	SubprocessorHistory *SubprocessorHistoryClient
 	// Subscriber is the client for interacting with the Subscriber builders.
 	Subscriber *SubscriberClient
 	// TFASetting is the client for interacting with the TFASetting builders.
@@ -338,6 +350,10 @@ type Client struct {
 	TrustCenterSetting *TrustCenterSettingClient
 	// TrustCenterSettingHistory is the client for interacting with the TrustCenterSettingHistory builders.
 	TrustCenterSettingHistory *TrustCenterSettingHistoryClient
+	// TrustCenterSubprocessor is the client for interacting with the TrustCenterSubprocessor builders.
+	TrustCenterSubprocessor *TrustCenterSubprocessorClient
+	// TrustCenterSubprocessorHistory is the client for interacting with the TrustCenterSubprocessorHistory builders.
+	TrustCenterSubprocessorHistory *TrustCenterSubprocessorHistoryClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 	// UserHistory is the client for interacting with the UserHistory builders.
@@ -397,6 +413,7 @@ func (c *Client) init() {
 	c.Event = NewEventClient(c.config)
 	c.Evidence = NewEvidenceClient(c.config)
 	c.EvidenceHistory = NewEvidenceHistoryClient(c.config)
+	c.Export = NewExportClient(c.config)
 	c.File = NewFileClient(c.config)
 	c.FileHistory = NewFileHistoryClient(c.config)
 	c.Group = NewGroupClient(c.config)
@@ -455,6 +472,8 @@ func (c *Client) init() {
 	c.StandardHistory = NewStandardHistoryClient(c.config)
 	c.Subcontrol = NewSubcontrolClient(c.config)
 	c.SubcontrolHistory = NewSubcontrolHistoryClient(c.config)
+	c.Subprocessor = NewSubprocessorClient(c.config)
+	c.SubprocessorHistory = NewSubprocessorHistoryClient(c.config)
 	c.Subscriber = NewSubscriberClient(c.config)
 	c.TFASetting = NewTFASettingClient(c.config)
 	c.Task = NewTaskClient(c.config)
@@ -465,6 +484,8 @@ func (c *Client) init() {
 	c.TrustCenterHistory = NewTrustCenterHistoryClient(c.config)
 	c.TrustCenterSetting = NewTrustCenterSettingClient(c.config)
 	c.TrustCenterSettingHistory = NewTrustCenterSettingHistoryClient(c.config)
+	c.TrustCenterSubprocessor = NewTrustCenterSubprocessorClient(c.config)
+	c.TrustCenterSubprocessorHistory = NewTrustCenterSubprocessorHistoryClient(c.config)
 	c.User = NewUserClient(c.config)
 	c.UserHistory = NewUserHistoryClient(c.config)
 	c.UserSetting = NewUserSettingClient(c.config)
@@ -495,7 +516,12 @@ type (
 		EntitlementManager *entitlements.StripeClient
 		ObjectManager      *objects.Objects
 		Summarizer         *summarizer.Client
+<<<<<<< HEAD
 		Windmill           *windmill.Client
+||||||| cb29fc22
+=======
+		PondPool           *soiree.PondPool
+>>>>>>> origin/main
 		// Job is the job client to insert jobs into the queue.
 		Job riverqueue.JobClient
 
@@ -614,10 +640,18 @@ func Summarizer(v *summarizer.Client) Option {
 	}
 }
 
+<<<<<<< HEAD
 // Windmill configures the Windmill.
 func Windmill(v *windmill.Client) Option {
 	return func(c *config) {
 		c.Windmill = v
+||||||| cb29fc22
+=======
+// PondPool configures the PondPool.
+func PondPool(v *soiree.PondPool) Option {
+	return func(c *config) {
+		c.PondPool = v
+>>>>>>> origin/main
 	}
 }
 
@@ -653,110 +687,115 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:                          ctx,
-		config:                       cfg,
-		APIToken:                     NewAPITokenClient(cfg),
-		ActionPlan:                   NewActionPlanClient(cfg),
-		ActionPlanHistory:            NewActionPlanHistoryClient(cfg),
-		Asset:                        NewAssetClient(cfg),
-		AssetHistory:                 NewAssetHistoryClient(cfg),
-		Contact:                      NewContactClient(cfg),
-		ContactHistory:               NewContactHistoryClient(cfg),
-		Control:                      NewControlClient(cfg),
-		ControlHistory:               NewControlHistoryClient(cfg),
-		ControlImplementation:        NewControlImplementationClient(cfg),
-		ControlImplementationHistory: NewControlImplementationHistoryClient(cfg),
-		ControlObjective:             NewControlObjectiveClient(cfg),
-		ControlObjectiveHistory:      NewControlObjectiveHistoryClient(cfg),
-		ControlScheduledJob:          NewControlScheduledJobClient(cfg),
-		ControlScheduledJobHistory:   NewControlScheduledJobHistoryClient(cfg),
-		CustomDomain:                 NewCustomDomainClient(cfg),
-		CustomDomainHistory:          NewCustomDomainHistoryClient(cfg),
-		DNSVerification:              NewDNSVerificationClient(cfg),
-		DNSVerificationHistory:       NewDNSVerificationHistoryClient(cfg),
-		DocumentData:                 NewDocumentDataClient(cfg),
-		DocumentDataHistory:          NewDocumentDataHistoryClient(cfg),
-		EmailVerificationToken:       NewEmailVerificationTokenClient(cfg),
-		Entity:                       NewEntityClient(cfg),
-		EntityHistory:                NewEntityHistoryClient(cfg),
-		EntityType:                   NewEntityTypeClient(cfg),
-		EntityTypeHistory:            NewEntityTypeHistoryClient(cfg),
-		Event:                        NewEventClient(cfg),
-		Evidence:                     NewEvidenceClient(cfg),
-		EvidenceHistory:              NewEvidenceHistoryClient(cfg),
-		File:                         NewFileClient(cfg),
-		FileHistory:                  NewFileHistoryClient(cfg),
-		Group:                        NewGroupClient(cfg),
-		GroupHistory:                 NewGroupHistoryClient(cfg),
-		GroupMembership:              NewGroupMembershipClient(cfg),
-		GroupMembershipHistory:       NewGroupMembershipHistoryClient(cfg),
-		GroupSetting:                 NewGroupSettingClient(cfg),
-		GroupSettingHistory:          NewGroupSettingHistoryClient(cfg),
-		Hush:                         NewHushClient(cfg),
-		HushHistory:                  NewHushHistoryClient(cfg),
-		Integration:                  NewIntegrationClient(cfg),
-		IntegrationHistory:           NewIntegrationHistoryClient(cfg),
-		InternalPolicy:               NewInternalPolicyClient(cfg),
-		InternalPolicyHistory:        NewInternalPolicyHistoryClient(cfg),
-		Invite:                       NewInviteClient(cfg),
-		JobResult:                    NewJobResultClient(cfg),
-		JobRunner:                    NewJobRunnerClient(cfg),
-		JobRunnerRegistrationToken:   NewJobRunnerRegistrationTokenClient(cfg),
-		JobRunnerToken:               NewJobRunnerTokenClient(cfg),
-		MappableDomain:               NewMappableDomainClient(cfg),
-		MappableDomainHistory:        NewMappableDomainHistoryClient(cfg),
-		MappedControl:                NewMappedControlClient(cfg),
-		MappedControlHistory:         NewMappedControlHistoryClient(cfg),
-		Narrative:                    NewNarrativeClient(cfg),
-		NarrativeHistory:             NewNarrativeHistoryClient(cfg),
-		Note:                         NewNoteClient(cfg),
-		NoteHistory:                  NewNoteHistoryClient(cfg),
-		Onboarding:                   NewOnboardingClient(cfg),
-		OrgMembership:                NewOrgMembershipClient(cfg),
-		OrgMembershipHistory:         NewOrgMembershipHistoryClient(cfg),
-		OrgModule:                    NewOrgModuleClient(cfg),
-		OrgPrice:                     NewOrgPriceClient(cfg),
-		OrgProduct:                   NewOrgProductClient(cfg),
-		OrgSubscription:              NewOrgSubscriptionClient(cfg),
-		OrgSubscriptionHistory:       NewOrgSubscriptionHistoryClient(cfg),
-		Organization:                 NewOrganizationClient(cfg),
-		OrganizationHistory:          NewOrganizationHistoryClient(cfg),
-		OrganizationSetting:          NewOrganizationSettingClient(cfg),
-		OrganizationSettingHistory:   NewOrganizationSettingHistoryClient(cfg),
-		PasswordResetToken:           NewPasswordResetTokenClient(cfg),
-		PersonalAccessToken:          NewPersonalAccessTokenClient(cfg),
-		Procedure:                    NewProcedureClient(cfg),
-		ProcedureHistory:             NewProcedureHistoryClient(cfg),
-		Program:                      NewProgramClient(cfg),
-		ProgramHistory:               NewProgramHistoryClient(cfg),
-		ProgramMembership:            NewProgramMembershipClient(cfg),
-		ProgramMembershipHistory:     NewProgramMembershipHistoryClient(cfg),
-		Risk:                         NewRiskClient(cfg),
-		RiskHistory:                  NewRiskHistoryClient(cfg),
-		Scan:                         NewScanClient(cfg),
-		ScanHistory:                  NewScanHistoryClient(cfg),
-		ScheduledJob:                 NewScheduledJobClient(cfg),
-		ScheduledJobHistory:          NewScheduledJobHistoryClient(cfg),
-		ScheduledJobRun:              NewScheduledJobRunClient(cfg),
-		Standard:                     NewStandardClient(cfg),
-		StandardHistory:              NewStandardHistoryClient(cfg),
-		Subcontrol:                   NewSubcontrolClient(cfg),
-		SubcontrolHistory:            NewSubcontrolHistoryClient(cfg),
-		Subscriber:                   NewSubscriberClient(cfg),
-		TFASetting:                   NewTFASettingClient(cfg),
-		Task:                         NewTaskClient(cfg),
-		TaskHistory:                  NewTaskHistoryClient(cfg),
-		Template:                     NewTemplateClient(cfg),
-		TemplateHistory:              NewTemplateHistoryClient(cfg),
-		TrustCenter:                  NewTrustCenterClient(cfg),
-		TrustCenterHistory:           NewTrustCenterHistoryClient(cfg),
-		TrustCenterSetting:           NewTrustCenterSettingClient(cfg),
-		TrustCenterSettingHistory:    NewTrustCenterSettingHistoryClient(cfg),
-		User:                         NewUserClient(cfg),
-		UserHistory:                  NewUserHistoryClient(cfg),
-		UserSetting:                  NewUserSettingClient(cfg),
-		UserSettingHistory:           NewUserSettingHistoryClient(cfg),
-		Webauthn:                     NewWebauthnClient(cfg),
+		ctx:                            ctx,
+		config:                         cfg,
+		APIToken:                       NewAPITokenClient(cfg),
+		ActionPlan:                     NewActionPlanClient(cfg),
+		ActionPlanHistory:              NewActionPlanHistoryClient(cfg),
+		Asset:                          NewAssetClient(cfg),
+		AssetHistory:                   NewAssetHistoryClient(cfg),
+		Contact:                        NewContactClient(cfg),
+		ContactHistory:                 NewContactHistoryClient(cfg),
+		Control:                        NewControlClient(cfg),
+		ControlHistory:                 NewControlHistoryClient(cfg),
+		ControlImplementation:          NewControlImplementationClient(cfg),
+		ControlImplementationHistory:   NewControlImplementationHistoryClient(cfg),
+		ControlObjective:               NewControlObjectiveClient(cfg),
+		ControlObjectiveHistory:        NewControlObjectiveHistoryClient(cfg),
+		ControlScheduledJob:            NewControlScheduledJobClient(cfg),
+		ControlScheduledJobHistory:     NewControlScheduledJobHistoryClient(cfg),
+		CustomDomain:                   NewCustomDomainClient(cfg),
+		CustomDomainHistory:            NewCustomDomainHistoryClient(cfg),
+		DNSVerification:                NewDNSVerificationClient(cfg),
+		DNSVerificationHistory:         NewDNSVerificationHistoryClient(cfg),
+		DocumentData:                   NewDocumentDataClient(cfg),
+		DocumentDataHistory:            NewDocumentDataHistoryClient(cfg),
+		EmailVerificationToken:         NewEmailVerificationTokenClient(cfg),
+		Entity:                         NewEntityClient(cfg),
+		EntityHistory:                  NewEntityHistoryClient(cfg),
+		EntityType:                     NewEntityTypeClient(cfg),
+		EntityTypeHistory:              NewEntityTypeHistoryClient(cfg),
+		Event:                          NewEventClient(cfg),
+		Evidence:                       NewEvidenceClient(cfg),
+		EvidenceHistory:                NewEvidenceHistoryClient(cfg),
+		Export:                         NewExportClient(cfg),
+		File:                           NewFileClient(cfg),
+		FileHistory:                    NewFileHistoryClient(cfg),
+		Group:                          NewGroupClient(cfg),
+		GroupHistory:                   NewGroupHistoryClient(cfg),
+		GroupMembership:                NewGroupMembershipClient(cfg),
+		GroupMembershipHistory:         NewGroupMembershipHistoryClient(cfg),
+		GroupSetting:                   NewGroupSettingClient(cfg),
+		GroupSettingHistory:            NewGroupSettingHistoryClient(cfg),
+		Hush:                           NewHushClient(cfg),
+		HushHistory:                    NewHushHistoryClient(cfg),
+		Integration:                    NewIntegrationClient(cfg),
+		IntegrationHistory:             NewIntegrationHistoryClient(cfg),
+		InternalPolicy:                 NewInternalPolicyClient(cfg),
+		InternalPolicyHistory:          NewInternalPolicyHistoryClient(cfg),
+		Invite:                         NewInviteClient(cfg),
+		JobResult:                      NewJobResultClient(cfg),
+		JobRunner:                      NewJobRunnerClient(cfg),
+		JobRunnerRegistrationToken:     NewJobRunnerRegistrationTokenClient(cfg),
+		JobRunnerToken:                 NewJobRunnerTokenClient(cfg),
+		MappableDomain:                 NewMappableDomainClient(cfg),
+		MappableDomainHistory:          NewMappableDomainHistoryClient(cfg),
+		MappedControl:                  NewMappedControlClient(cfg),
+		MappedControlHistory:           NewMappedControlHistoryClient(cfg),
+		Narrative:                      NewNarrativeClient(cfg),
+		NarrativeHistory:               NewNarrativeHistoryClient(cfg),
+		Note:                           NewNoteClient(cfg),
+		NoteHistory:                    NewNoteHistoryClient(cfg),
+		Onboarding:                     NewOnboardingClient(cfg),
+		OrgMembership:                  NewOrgMembershipClient(cfg),
+		OrgMembershipHistory:           NewOrgMembershipHistoryClient(cfg),
+		OrgModule:                      NewOrgModuleClient(cfg),
+		OrgPrice:                       NewOrgPriceClient(cfg),
+		OrgProduct:                     NewOrgProductClient(cfg),
+		OrgSubscription:                NewOrgSubscriptionClient(cfg),
+		OrgSubscriptionHistory:         NewOrgSubscriptionHistoryClient(cfg),
+		Organization:                   NewOrganizationClient(cfg),
+		OrganizationHistory:            NewOrganizationHistoryClient(cfg),
+		OrganizationSetting:            NewOrganizationSettingClient(cfg),
+		OrganizationSettingHistory:     NewOrganizationSettingHistoryClient(cfg),
+		PasswordResetToken:             NewPasswordResetTokenClient(cfg),
+		PersonalAccessToken:            NewPersonalAccessTokenClient(cfg),
+		Procedure:                      NewProcedureClient(cfg),
+		ProcedureHistory:               NewProcedureHistoryClient(cfg),
+		Program:                        NewProgramClient(cfg),
+		ProgramHistory:                 NewProgramHistoryClient(cfg),
+		ProgramMembership:              NewProgramMembershipClient(cfg),
+		ProgramMembershipHistory:       NewProgramMembershipHistoryClient(cfg),
+		Risk:                           NewRiskClient(cfg),
+		RiskHistory:                    NewRiskHistoryClient(cfg),
+		Scan:                           NewScanClient(cfg),
+		ScanHistory:                    NewScanHistoryClient(cfg),
+		ScheduledJob:                   NewScheduledJobClient(cfg),
+		ScheduledJobHistory:            NewScheduledJobHistoryClient(cfg),
+		ScheduledJobRun:                NewScheduledJobRunClient(cfg),
+		Standard:                       NewStandardClient(cfg),
+		StandardHistory:                NewStandardHistoryClient(cfg),
+		Subcontrol:                     NewSubcontrolClient(cfg),
+		SubcontrolHistory:              NewSubcontrolHistoryClient(cfg),
+		Subprocessor:                   NewSubprocessorClient(cfg),
+		SubprocessorHistory:            NewSubprocessorHistoryClient(cfg),
+		Subscriber:                     NewSubscriberClient(cfg),
+		TFASetting:                     NewTFASettingClient(cfg),
+		Task:                           NewTaskClient(cfg),
+		TaskHistory:                    NewTaskHistoryClient(cfg),
+		Template:                       NewTemplateClient(cfg),
+		TemplateHistory:                NewTemplateHistoryClient(cfg),
+		TrustCenter:                    NewTrustCenterClient(cfg),
+		TrustCenterHistory:             NewTrustCenterHistoryClient(cfg),
+		TrustCenterSetting:             NewTrustCenterSettingClient(cfg),
+		TrustCenterSettingHistory:      NewTrustCenterSettingHistoryClient(cfg),
+		TrustCenterSubprocessor:        NewTrustCenterSubprocessorClient(cfg),
+		TrustCenterSubprocessorHistory: NewTrustCenterSubprocessorHistoryClient(cfg),
+		User:                           NewUserClient(cfg),
+		UserHistory:                    NewUserHistoryClient(cfg),
+		UserSetting:                    NewUserSettingClient(cfg),
+		UserSettingHistory:             NewUserSettingHistoryClient(cfg),
+		Webauthn:                       NewWebauthnClient(cfg),
 	}, nil
 }
 
@@ -774,110 +813,115 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:                          ctx,
-		config:                       cfg,
-		APIToken:                     NewAPITokenClient(cfg),
-		ActionPlan:                   NewActionPlanClient(cfg),
-		ActionPlanHistory:            NewActionPlanHistoryClient(cfg),
-		Asset:                        NewAssetClient(cfg),
-		AssetHistory:                 NewAssetHistoryClient(cfg),
-		Contact:                      NewContactClient(cfg),
-		ContactHistory:               NewContactHistoryClient(cfg),
-		Control:                      NewControlClient(cfg),
-		ControlHistory:               NewControlHistoryClient(cfg),
-		ControlImplementation:        NewControlImplementationClient(cfg),
-		ControlImplementationHistory: NewControlImplementationHistoryClient(cfg),
-		ControlObjective:             NewControlObjectiveClient(cfg),
-		ControlObjectiveHistory:      NewControlObjectiveHistoryClient(cfg),
-		ControlScheduledJob:          NewControlScheduledJobClient(cfg),
-		ControlScheduledJobHistory:   NewControlScheduledJobHistoryClient(cfg),
-		CustomDomain:                 NewCustomDomainClient(cfg),
-		CustomDomainHistory:          NewCustomDomainHistoryClient(cfg),
-		DNSVerification:              NewDNSVerificationClient(cfg),
-		DNSVerificationHistory:       NewDNSVerificationHistoryClient(cfg),
-		DocumentData:                 NewDocumentDataClient(cfg),
-		DocumentDataHistory:          NewDocumentDataHistoryClient(cfg),
-		EmailVerificationToken:       NewEmailVerificationTokenClient(cfg),
-		Entity:                       NewEntityClient(cfg),
-		EntityHistory:                NewEntityHistoryClient(cfg),
-		EntityType:                   NewEntityTypeClient(cfg),
-		EntityTypeHistory:            NewEntityTypeHistoryClient(cfg),
-		Event:                        NewEventClient(cfg),
-		Evidence:                     NewEvidenceClient(cfg),
-		EvidenceHistory:              NewEvidenceHistoryClient(cfg),
-		File:                         NewFileClient(cfg),
-		FileHistory:                  NewFileHistoryClient(cfg),
-		Group:                        NewGroupClient(cfg),
-		GroupHistory:                 NewGroupHistoryClient(cfg),
-		GroupMembership:              NewGroupMembershipClient(cfg),
-		GroupMembershipHistory:       NewGroupMembershipHistoryClient(cfg),
-		GroupSetting:                 NewGroupSettingClient(cfg),
-		GroupSettingHistory:          NewGroupSettingHistoryClient(cfg),
-		Hush:                         NewHushClient(cfg),
-		HushHistory:                  NewHushHistoryClient(cfg),
-		Integration:                  NewIntegrationClient(cfg),
-		IntegrationHistory:           NewIntegrationHistoryClient(cfg),
-		InternalPolicy:               NewInternalPolicyClient(cfg),
-		InternalPolicyHistory:        NewInternalPolicyHistoryClient(cfg),
-		Invite:                       NewInviteClient(cfg),
-		JobResult:                    NewJobResultClient(cfg),
-		JobRunner:                    NewJobRunnerClient(cfg),
-		JobRunnerRegistrationToken:   NewJobRunnerRegistrationTokenClient(cfg),
-		JobRunnerToken:               NewJobRunnerTokenClient(cfg),
-		MappableDomain:               NewMappableDomainClient(cfg),
-		MappableDomainHistory:        NewMappableDomainHistoryClient(cfg),
-		MappedControl:                NewMappedControlClient(cfg),
-		MappedControlHistory:         NewMappedControlHistoryClient(cfg),
-		Narrative:                    NewNarrativeClient(cfg),
-		NarrativeHistory:             NewNarrativeHistoryClient(cfg),
-		Note:                         NewNoteClient(cfg),
-		NoteHistory:                  NewNoteHistoryClient(cfg),
-		Onboarding:                   NewOnboardingClient(cfg),
-		OrgMembership:                NewOrgMembershipClient(cfg),
-		OrgMembershipHistory:         NewOrgMembershipHistoryClient(cfg),
-		OrgModule:                    NewOrgModuleClient(cfg),
-		OrgPrice:                     NewOrgPriceClient(cfg),
-		OrgProduct:                   NewOrgProductClient(cfg),
-		OrgSubscription:              NewOrgSubscriptionClient(cfg),
-		OrgSubscriptionHistory:       NewOrgSubscriptionHistoryClient(cfg),
-		Organization:                 NewOrganizationClient(cfg),
-		OrganizationHistory:          NewOrganizationHistoryClient(cfg),
-		OrganizationSetting:          NewOrganizationSettingClient(cfg),
-		OrganizationSettingHistory:   NewOrganizationSettingHistoryClient(cfg),
-		PasswordResetToken:           NewPasswordResetTokenClient(cfg),
-		PersonalAccessToken:          NewPersonalAccessTokenClient(cfg),
-		Procedure:                    NewProcedureClient(cfg),
-		ProcedureHistory:             NewProcedureHistoryClient(cfg),
-		Program:                      NewProgramClient(cfg),
-		ProgramHistory:               NewProgramHistoryClient(cfg),
-		ProgramMembership:            NewProgramMembershipClient(cfg),
-		ProgramMembershipHistory:     NewProgramMembershipHistoryClient(cfg),
-		Risk:                         NewRiskClient(cfg),
-		RiskHistory:                  NewRiskHistoryClient(cfg),
-		Scan:                         NewScanClient(cfg),
-		ScanHistory:                  NewScanHistoryClient(cfg),
-		ScheduledJob:                 NewScheduledJobClient(cfg),
-		ScheduledJobHistory:          NewScheduledJobHistoryClient(cfg),
-		ScheduledJobRun:              NewScheduledJobRunClient(cfg),
-		Standard:                     NewStandardClient(cfg),
-		StandardHistory:              NewStandardHistoryClient(cfg),
-		Subcontrol:                   NewSubcontrolClient(cfg),
-		SubcontrolHistory:            NewSubcontrolHistoryClient(cfg),
-		Subscriber:                   NewSubscriberClient(cfg),
-		TFASetting:                   NewTFASettingClient(cfg),
-		Task:                         NewTaskClient(cfg),
-		TaskHistory:                  NewTaskHistoryClient(cfg),
-		Template:                     NewTemplateClient(cfg),
-		TemplateHistory:              NewTemplateHistoryClient(cfg),
-		TrustCenter:                  NewTrustCenterClient(cfg),
-		TrustCenterHistory:           NewTrustCenterHistoryClient(cfg),
-		TrustCenterSetting:           NewTrustCenterSettingClient(cfg),
-		TrustCenterSettingHistory:    NewTrustCenterSettingHistoryClient(cfg),
-		User:                         NewUserClient(cfg),
-		UserHistory:                  NewUserHistoryClient(cfg),
-		UserSetting:                  NewUserSettingClient(cfg),
-		UserSettingHistory:           NewUserSettingHistoryClient(cfg),
-		Webauthn:                     NewWebauthnClient(cfg),
+		ctx:                            ctx,
+		config:                         cfg,
+		APIToken:                       NewAPITokenClient(cfg),
+		ActionPlan:                     NewActionPlanClient(cfg),
+		ActionPlanHistory:              NewActionPlanHistoryClient(cfg),
+		Asset:                          NewAssetClient(cfg),
+		AssetHistory:                   NewAssetHistoryClient(cfg),
+		Contact:                        NewContactClient(cfg),
+		ContactHistory:                 NewContactHistoryClient(cfg),
+		Control:                        NewControlClient(cfg),
+		ControlHistory:                 NewControlHistoryClient(cfg),
+		ControlImplementation:          NewControlImplementationClient(cfg),
+		ControlImplementationHistory:   NewControlImplementationHistoryClient(cfg),
+		ControlObjective:               NewControlObjectiveClient(cfg),
+		ControlObjectiveHistory:        NewControlObjectiveHistoryClient(cfg),
+		ControlScheduledJob:            NewControlScheduledJobClient(cfg),
+		ControlScheduledJobHistory:     NewControlScheduledJobHistoryClient(cfg),
+		CustomDomain:                   NewCustomDomainClient(cfg),
+		CustomDomainHistory:            NewCustomDomainHistoryClient(cfg),
+		DNSVerification:                NewDNSVerificationClient(cfg),
+		DNSVerificationHistory:         NewDNSVerificationHistoryClient(cfg),
+		DocumentData:                   NewDocumentDataClient(cfg),
+		DocumentDataHistory:            NewDocumentDataHistoryClient(cfg),
+		EmailVerificationToken:         NewEmailVerificationTokenClient(cfg),
+		Entity:                         NewEntityClient(cfg),
+		EntityHistory:                  NewEntityHistoryClient(cfg),
+		EntityType:                     NewEntityTypeClient(cfg),
+		EntityTypeHistory:              NewEntityTypeHistoryClient(cfg),
+		Event:                          NewEventClient(cfg),
+		Evidence:                       NewEvidenceClient(cfg),
+		EvidenceHistory:                NewEvidenceHistoryClient(cfg),
+		Export:                         NewExportClient(cfg),
+		File:                           NewFileClient(cfg),
+		FileHistory:                    NewFileHistoryClient(cfg),
+		Group:                          NewGroupClient(cfg),
+		GroupHistory:                   NewGroupHistoryClient(cfg),
+		GroupMembership:                NewGroupMembershipClient(cfg),
+		GroupMembershipHistory:         NewGroupMembershipHistoryClient(cfg),
+		GroupSetting:                   NewGroupSettingClient(cfg),
+		GroupSettingHistory:            NewGroupSettingHistoryClient(cfg),
+		Hush:                           NewHushClient(cfg),
+		HushHistory:                    NewHushHistoryClient(cfg),
+		Integration:                    NewIntegrationClient(cfg),
+		IntegrationHistory:             NewIntegrationHistoryClient(cfg),
+		InternalPolicy:                 NewInternalPolicyClient(cfg),
+		InternalPolicyHistory:          NewInternalPolicyHistoryClient(cfg),
+		Invite:                         NewInviteClient(cfg),
+		JobResult:                      NewJobResultClient(cfg),
+		JobRunner:                      NewJobRunnerClient(cfg),
+		JobRunnerRegistrationToken:     NewJobRunnerRegistrationTokenClient(cfg),
+		JobRunnerToken:                 NewJobRunnerTokenClient(cfg),
+		MappableDomain:                 NewMappableDomainClient(cfg),
+		MappableDomainHistory:          NewMappableDomainHistoryClient(cfg),
+		MappedControl:                  NewMappedControlClient(cfg),
+		MappedControlHistory:           NewMappedControlHistoryClient(cfg),
+		Narrative:                      NewNarrativeClient(cfg),
+		NarrativeHistory:               NewNarrativeHistoryClient(cfg),
+		Note:                           NewNoteClient(cfg),
+		NoteHistory:                    NewNoteHistoryClient(cfg),
+		Onboarding:                     NewOnboardingClient(cfg),
+		OrgMembership:                  NewOrgMembershipClient(cfg),
+		OrgMembershipHistory:           NewOrgMembershipHistoryClient(cfg),
+		OrgModule:                      NewOrgModuleClient(cfg),
+		OrgPrice:                       NewOrgPriceClient(cfg),
+		OrgProduct:                     NewOrgProductClient(cfg),
+		OrgSubscription:                NewOrgSubscriptionClient(cfg),
+		OrgSubscriptionHistory:         NewOrgSubscriptionHistoryClient(cfg),
+		Organization:                   NewOrganizationClient(cfg),
+		OrganizationHistory:            NewOrganizationHistoryClient(cfg),
+		OrganizationSetting:            NewOrganizationSettingClient(cfg),
+		OrganizationSettingHistory:     NewOrganizationSettingHistoryClient(cfg),
+		PasswordResetToken:             NewPasswordResetTokenClient(cfg),
+		PersonalAccessToken:            NewPersonalAccessTokenClient(cfg),
+		Procedure:                      NewProcedureClient(cfg),
+		ProcedureHistory:               NewProcedureHistoryClient(cfg),
+		Program:                        NewProgramClient(cfg),
+		ProgramHistory:                 NewProgramHistoryClient(cfg),
+		ProgramMembership:              NewProgramMembershipClient(cfg),
+		ProgramMembershipHistory:       NewProgramMembershipHistoryClient(cfg),
+		Risk:                           NewRiskClient(cfg),
+		RiskHistory:                    NewRiskHistoryClient(cfg),
+		Scan:                           NewScanClient(cfg),
+		ScanHistory:                    NewScanHistoryClient(cfg),
+		ScheduledJob:                   NewScheduledJobClient(cfg),
+		ScheduledJobHistory:            NewScheduledJobHistoryClient(cfg),
+		ScheduledJobRun:                NewScheduledJobRunClient(cfg),
+		Standard:                       NewStandardClient(cfg),
+		StandardHistory:                NewStandardHistoryClient(cfg),
+		Subcontrol:                     NewSubcontrolClient(cfg),
+		SubcontrolHistory:              NewSubcontrolHistoryClient(cfg),
+		Subprocessor:                   NewSubprocessorClient(cfg),
+		SubprocessorHistory:            NewSubprocessorHistoryClient(cfg),
+		Subscriber:                     NewSubscriberClient(cfg),
+		TFASetting:                     NewTFASettingClient(cfg),
+		Task:                           NewTaskClient(cfg),
+		TaskHistory:                    NewTaskHistoryClient(cfg),
+		Template:                       NewTemplateClient(cfg),
+		TemplateHistory:                NewTemplateHistoryClient(cfg),
+		TrustCenter:                    NewTrustCenterClient(cfg),
+		TrustCenterHistory:             NewTrustCenterHistoryClient(cfg),
+		TrustCenterSetting:             NewTrustCenterSettingClient(cfg),
+		TrustCenterSettingHistory:      NewTrustCenterSettingHistoryClient(cfg),
+		TrustCenterSubprocessor:        NewTrustCenterSubprocessorClient(cfg),
+		TrustCenterSubprocessorHistory: NewTrustCenterSubprocessorHistoryClient(cfg),
+		User:                           NewUserClient(cfg),
+		UserHistory:                    NewUserHistoryClient(cfg),
+		UserSetting:                    NewUserSettingClient(cfg),
+		UserSettingHistory:             NewUserSettingHistoryClient(cfg),
+		Webauthn:                       NewWebauthnClient(cfg),
 	}, nil
 }
 
@@ -914,7 +958,7 @@ func (c *Client) Use(hooks ...Hook) {
 		c.CustomDomain, c.CustomDomainHistory, c.DNSVerification,
 		c.DNSVerificationHistory, c.DocumentData, c.DocumentDataHistory,
 		c.EmailVerificationToken, c.Entity, c.EntityHistory, c.EntityType,
-		c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory, c.File,
+		c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory, c.Export, c.File,
 		c.FileHistory, c.Group, c.GroupHistory, c.GroupMembership,
 		c.GroupMembershipHistory, c.GroupSetting, c.GroupSettingHistory, c.Hush,
 		c.HushHistory, c.Integration, c.IntegrationHistory, c.InternalPolicy,
@@ -929,10 +973,12 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Program, c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory,
 		c.Risk, c.RiskHistory, c.Scan, c.ScanHistory, c.ScheduledJob,
 		c.ScheduledJobHistory, c.ScheduledJobRun, c.Standard, c.StandardHistory,
-		c.Subcontrol, c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task,
-		c.TaskHistory, c.Template, c.TemplateHistory, c.TrustCenter,
-		c.TrustCenterHistory, c.TrustCenterSetting, c.TrustCenterSettingHistory,
-		c.User, c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn,
+		c.Subcontrol, c.SubcontrolHistory, c.Subprocessor, c.SubprocessorHistory,
+		c.Subscriber, c.TFASetting, c.Task, c.TaskHistory, c.Template,
+		c.TemplateHistory, c.TrustCenter, c.TrustCenterHistory, c.TrustCenterSetting,
+		c.TrustCenterSettingHistory, c.TrustCenterSubprocessor,
+		c.TrustCenterSubprocessorHistory, c.User, c.UserHistory, c.UserSetting,
+		c.UserSettingHistory, c.Webauthn,
 	} {
 		n.Use(hooks...)
 	}
@@ -949,7 +995,7 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.CustomDomain, c.CustomDomainHistory, c.DNSVerification,
 		c.DNSVerificationHistory, c.DocumentData, c.DocumentDataHistory,
 		c.EmailVerificationToken, c.Entity, c.EntityHistory, c.EntityType,
-		c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory, c.File,
+		c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory, c.Export, c.File,
 		c.FileHistory, c.Group, c.GroupHistory, c.GroupMembership,
 		c.GroupMembershipHistory, c.GroupSetting, c.GroupSettingHistory, c.Hush,
 		c.HushHistory, c.Integration, c.IntegrationHistory, c.InternalPolicy,
@@ -964,10 +1010,12 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Program, c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory,
 		c.Risk, c.RiskHistory, c.Scan, c.ScanHistory, c.ScheduledJob,
 		c.ScheduledJobHistory, c.ScheduledJobRun, c.Standard, c.StandardHistory,
-		c.Subcontrol, c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task,
-		c.TaskHistory, c.Template, c.TemplateHistory, c.TrustCenter,
-		c.TrustCenterHistory, c.TrustCenterSetting, c.TrustCenterSettingHistory,
-		c.User, c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn,
+		c.Subcontrol, c.SubcontrolHistory, c.Subprocessor, c.SubprocessorHistory,
+		c.Subscriber, c.TFASetting, c.Task, c.TaskHistory, c.Template,
+		c.TemplateHistory, c.TrustCenter, c.TrustCenterHistory, c.TrustCenterSetting,
+		c.TrustCenterSettingHistory, c.TrustCenterSubprocessor,
+		c.TrustCenterSubprocessorHistory, c.User, c.UserHistory, c.UserSetting,
+		c.UserSettingHistory, c.Webauthn,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -1106,6 +1154,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Evidence.mutate(ctx, m)
 	case *EvidenceHistoryMutation:
 		return c.EvidenceHistory.mutate(ctx, m)
+	case *ExportMutation:
+		return c.Export.mutate(ctx, m)
 	case *FileMutation:
 		return c.File.mutate(ctx, m)
 	case *FileHistoryMutation:
@@ -1222,6 +1272,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Subcontrol.mutate(ctx, m)
 	case *SubcontrolHistoryMutation:
 		return c.SubcontrolHistory.mutate(ctx, m)
+	case *SubprocessorMutation:
+		return c.Subprocessor.mutate(ctx, m)
+	case *SubprocessorHistoryMutation:
+		return c.SubprocessorHistory.mutate(ctx, m)
 	case *SubscriberMutation:
 		return c.Subscriber.mutate(ctx, m)
 	case *TFASettingMutation:
@@ -1242,6 +1296,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.TrustCenterSetting.mutate(ctx, m)
 	case *TrustCenterSettingHistoryMutation:
 		return c.TrustCenterSettingHistory.mutate(ctx, m)
+	case *TrustCenterSubprocessorMutation:
+		return c.TrustCenterSubprocessor.mutate(ctx, m)
+	case *TrustCenterSubprocessorHistoryMutation:
+		return c.TrustCenterSubprocessorHistory.mutate(ctx, m)
 	case *UserMutation:
 		return c.User.mutate(ctx, m)
 	case *UserHistoryMutation:
@@ -1789,7 +1847,8 @@ func (c *ActionPlanHistoryClient) GetX(ctx context.Context, id string) *ActionPl
 
 // Hooks returns the client hooks.
 func (c *ActionPlanHistoryClient) Hooks() []Hook {
-	return c.hooks.ActionPlanHistory
+	hooks := c.hooks.ActionPlanHistory
+	return append(hooks[:len(hooks):len(hooks)], actionplanhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -2191,7 +2250,8 @@ func (c *AssetHistoryClient) GetX(ctx context.Context, id string) *AssetHistory 
 
 // Hooks returns the client hooks.
 func (c *AssetHistoryClient) Hooks() []Hook {
-	return c.hooks.AssetHistory
+	hooks := c.hooks.AssetHistory
+	return append(hooks[:len(hooks):len(hooks)], assethistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -2517,7 +2577,8 @@ func (c *ContactHistoryClient) GetX(ctx context.Context, id string) *ContactHist
 
 // Hooks returns the client hooks.
 func (c *ContactHistoryClient) Hooks() []Hook {
-	return c.hooks.ContactHistory
+	hooks := c.hooks.ContactHistory
+	return append(hooks[:len(hooks):len(hooks)], contacthistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -3204,7 +3265,8 @@ func (c *ControlHistoryClient) GetX(ctx context.Context, id string) *ControlHist
 
 // Hooks returns the client hooks.
 func (c *ControlHistoryClient) Hooks() []Hook {
-	return c.hooks.ControlHistory
+	hooks := c.hooks.ControlHistory
+	return append(hooks[:len(hooks):len(hooks)], controlhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -3587,7 +3649,8 @@ func (c *ControlImplementationHistoryClient) GetX(ctx context.Context, id string
 
 // Hooks returns the client hooks.
 func (c *ControlImplementationHistoryClient) Hooks() []Hook {
-	return c.hooks.ControlImplementationHistory
+	hooks := c.hooks.ControlImplementationHistory
+	return append(hooks[:len(hooks):len(hooks)], controlimplementationhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -4103,7 +4166,8 @@ func (c *ControlObjectiveHistoryClient) GetX(ctx context.Context, id string) *Co
 
 // Hooks returns the client hooks.
 func (c *ControlObjectiveHistoryClient) Hooks() []Hook {
-	return c.hooks.ControlObjectiveHistory
+	hooks := c.hooks.ControlObjectiveHistory
+	return append(hooks[:len(hooks):len(hooks)], controlobjectivehistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -4467,7 +4531,8 @@ func (c *ControlScheduledJobHistoryClient) GetX(ctx context.Context, id string) 
 
 // Hooks returns the client hooks.
 func (c *ControlScheduledJobHistoryClient) Hooks() []Hook {
-	return c.hooks.ControlScheduledJobHistory
+	hooks := c.hooks.ControlScheduledJobHistory
+	return append(hooks[:len(hooks):len(hooks)], controlscheduledjobhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -4793,7 +4858,8 @@ func (c *CustomDomainHistoryClient) GetX(ctx context.Context, id string) *Custom
 
 // Hooks returns the client hooks.
 func (c *CustomDomainHistoryClient) Hooks() []Hook {
-	return c.hooks.CustomDomainHistory
+	hooks := c.hooks.CustomDomainHistory
+	return append(hooks[:len(hooks):len(hooks)], customdomainhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -5100,7 +5166,8 @@ func (c *DNSVerificationHistoryClient) GetX(ctx context.Context, id string) *DNS
 
 // Hooks returns the client hooks.
 func (c *DNSVerificationHistoryClient) Hooks() []Hook {
-	return c.hooks.DNSVerificationHistory
+	hooks := c.hooks.DNSVerificationHistory
+	return append(hooks[:len(hooks):len(hooks)], dnsverificationhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -5445,7 +5512,8 @@ func (c *DocumentDataHistoryClient) GetX(ctx context.Context, id string) *Docume
 
 // Hooks returns the client hooks.
 func (c *DocumentDataHistoryClient) Hooks() []Hook {
-	return c.hooks.DocumentDataHistory
+	hooks := c.hooks.DocumentDataHistory
+	return append(hooks[:len(hooks):len(hooks)], documentdatahistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -6077,7 +6145,8 @@ func (c *EntityHistoryClient) GetX(ctx context.Context, id string) *EntityHistor
 
 // Hooks returns the client hooks.
 func (c *EntityHistoryClient) Hooks() []Hook {
-	return c.hooks.EntityHistory
+	hooks := c.hooks.EntityHistory
+	return append(hooks[:len(hooks):len(hooks)], entityhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -6384,7 +6453,8 @@ func (c *EntityTypeHistoryClient) GetX(ctx context.Context, id string) *EntityTy
 
 // Hooks returns the client hooks.
 func (c *EntityTypeHistoryClient) Hooks() []Hook {
-	return c.hooks.EntityTypeHistory
+	hooks := c.hooks.EntityTypeHistory
+	return append(hooks[:len(hooks):len(hooks)], entitytypehistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -7148,7 +7218,8 @@ func (c *EvidenceHistoryClient) GetX(ctx context.Context, id string) *EvidenceHi
 
 // Hooks returns the client hooks.
 func (c *EvidenceHistoryClient) Hooks() []Hook {
-	return c.hooks.EvidenceHistory
+	hooks := c.hooks.EvidenceHistory
+	return append(hooks[:len(hooks):len(hooks)], evidencehistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -7169,6 +7240,198 @@ func (c *EvidenceHistoryClient) mutate(ctx context.Context, m *EvidenceHistoryMu
 		return (&EvidenceHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown EvidenceHistory mutation op: %q", m.Op())
+	}
+}
+
+// ExportClient is a client for the Export schema.
+type ExportClient struct {
+	config
+}
+
+// NewExportClient returns a client for the Export from the given config.
+func NewExportClient(c config) *ExportClient {
+	return &ExportClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `export.Hooks(f(g(h())))`.
+func (c *ExportClient) Use(hooks ...Hook) {
+	c.hooks.Export = append(c.hooks.Export, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `export.Intercept(f(g(h())))`.
+func (c *ExportClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Export = append(c.inters.Export, interceptors...)
+}
+
+// Create returns a builder for creating a Export entity.
+func (c *ExportClient) Create() *ExportCreate {
+	mutation := newExportMutation(c.config, OpCreate)
+	return &ExportCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Export entities.
+func (c *ExportClient) CreateBulk(builders ...*ExportCreate) *ExportCreateBulk {
+	return &ExportCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ExportClient) MapCreateBulk(slice any, setFunc func(*ExportCreate, int)) *ExportCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ExportCreateBulk{err: fmt.Errorf("calling to ExportClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ExportCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ExportCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Export.
+func (c *ExportClient) Update() *ExportUpdate {
+	mutation := newExportMutation(c.config, OpUpdate)
+	return &ExportUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ExportClient) UpdateOne(e *Export) *ExportUpdateOne {
+	mutation := newExportMutation(c.config, OpUpdateOne, withExport(e))
+	return &ExportUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ExportClient) UpdateOneID(id string) *ExportUpdateOne {
+	mutation := newExportMutation(c.config, OpUpdateOne, withExportID(id))
+	return &ExportUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Export.
+func (c *ExportClient) Delete() *ExportDelete {
+	mutation := newExportMutation(c.config, OpDelete)
+	return &ExportDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ExportClient) DeleteOne(e *Export) *ExportDeleteOne {
+	return c.DeleteOneID(e.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ExportClient) DeleteOneID(id string) *ExportDeleteOne {
+	builder := c.Delete().Where(export.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ExportDeleteOne{builder}
+}
+
+// Query returns a query builder for Export.
+func (c *ExportClient) Query() *ExportQuery {
+	return &ExportQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeExport},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Export entity by its id.
+func (c *ExportClient) Get(ctx context.Context, id string) (*Export, error) {
+	return c.Query().Where(export.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ExportClient) GetX(ctx context.Context, id string) *Export {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a Export.
+func (c *ExportClient) QueryOwner(e *Export) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(export.Table, export.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, export.OwnerTable, export.OwnerColumn),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Export
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvents queries the events edge of a Export.
+func (c *ExportClient) QueryEvents(e *Export) *EventQuery {
+	query := (&EventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(export.Table, export.FieldID, id),
+			sqlgraph.To(event.Table, event.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, export.EventsTable, export.EventsColumn),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.Event
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFiles queries the files edge of a Export.
+func (c *ExportClient) QueryFiles(e *Export) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(export.Table, export.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, export.FilesTable, export.FilesColumn),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ExportClient) Hooks() []Hook {
+	hooks := c.hooks.Export
+	return append(hooks[:len(hooks):len(hooks)], export.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *ExportClient) Interceptors() []Interceptor {
+	inters := c.inters.Export
+	return append(inters[:len(inters):len(inters)], export.Interceptors[:]...)
+}
+
+func (c *ExportClient) mutate(ctx context.Context, m *ExportMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ExportCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ExportUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ExportUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ExportDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown Export mutation op: %q", m.Op())
 	}
 }
 
@@ -7508,6 +7771,44 @@ func (c *FileClient) QueryEvents(f *File) *EventQuery {
 	return query
 }
 
+// QueryTrustCenterSetting queries the trust_center_setting edge of a File.
+func (c *FileClient) QueryTrustCenterSetting(f *File) *TrustCenterSettingQuery {
+	query := (&TrustCenterSettingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(trustcentersetting.Table, trustcentersetting.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.TrustCenterSettingTable, file.TrustCenterSettingPrimaryKey...),
+		)
+		schemaConfig := f.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterSetting
+		step.Edge.Schema = schemaConfig.TrustCenterSettingFiles
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubprocessor queries the subprocessor edge of a File.
+func (c *FileClient) QuerySubprocessor(f *File) *SubprocessorQuery {
+	query := (&SubprocessorClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(subprocessor.Table, subprocessor.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.SubprocessorTable, file.SubprocessorPrimaryKey...),
+		)
+		schemaConfig := f.schemaConfig
+		step.To.Schema = schemaConfig.Subprocessor
+		step.Edge.Schema = schemaConfig.SubprocessorFiles
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *FileClient) Hooks() []Hook {
 	hooks := c.hooks.File
@@ -7645,7 +7946,8 @@ func (c *FileHistoryClient) GetX(ctx context.Context, id string) *FileHistory {
 
 // Hooks returns the client hooks.
 func (c *FileHistoryClient) Hooks() []Hook {
-	return c.hooks.FileHistory
+	hooks := c.hooks.FileHistory
+	return append(hooks[:len(hooks):len(hooks)], filehistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -8560,7 +8862,8 @@ func (c *GroupHistoryClient) GetX(ctx context.Context, id string) *GroupHistory 
 
 // Hooks returns the client hooks.
 func (c *GroupHistoryClient) Hooks() []Hook {
-	return c.hooks.GroupHistory
+	hooks := c.hooks.GroupHistory
+	return append(hooks[:len(hooks):len(hooks)], grouphistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -8905,7 +9208,8 @@ func (c *GroupMembershipHistoryClient) GetX(ctx context.Context, id string) *Gro
 
 // Hooks returns the client hooks.
 func (c *GroupMembershipHistoryClient) Hooks() []Hook {
-	return c.hooks.GroupMembershipHistory
+	hooks := c.hooks.GroupMembershipHistory
+	return append(hooks[:len(hooks):len(hooks)], groupmembershiphistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -9193,7 +9497,8 @@ func (c *GroupSettingHistoryClient) GetX(ctx context.Context, id string) *GroupS
 
 // Hooks returns the client hooks.
 func (c *GroupSettingHistoryClient) Hooks() []Hook {
-	return c.hooks.GroupSettingHistory
+	hooks := c.hooks.GroupSettingHistory
+	return append(hooks[:len(hooks):len(hooks)], groupsettinghistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -9844,7 +10149,8 @@ func (c *IntegrationHistoryClient) GetX(ctx context.Context, id string) *Integra
 
 // Hooks returns the client hooks.
 func (c *IntegrationHistoryClient) Hooks() []Hook {
-	return c.hooks.IntegrationHistory
+	hooks := c.hooks.IntegrationHistory
+	return append(hooks[:len(hooks):len(hooks)], integrationhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -10360,7 +10666,8 @@ func (c *InternalPolicyHistoryClient) GetX(ctx context.Context, id string) *Inte
 
 // Hooks returns the client hooks.
 func (c *InternalPolicyHistoryClient) Hooks() []Hook {
-	return c.hooks.InternalPolicyHistory
+	hooks := c.hooks.InternalPolicyHistory
+	return append(hooks[:len(hooks):len(hooks)], internalpolicyhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -11532,7 +11839,8 @@ func (c *MappableDomainHistoryClient) GetX(ctx context.Context, id string) *Mapp
 
 // Hooks returns the client hooks.
 func (c *MappableDomainHistoryClient) Hooks() []Hook {
-	return c.hooks.MappableDomainHistory
+	hooks := c.hooks.MappableDomainHistory
+	return append(hooks[:len(hooks):len(hooks)], mappabledomainhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -11934,7 +12242,8 @@ func (c *MappedControlHistoryClient) GetX(ctx context.Context, id string) *Mappe
 
 // Hooks returns the client hooks.
 func (c *MappedControlHistoryClient) Hooks() []Hook {
-	return c.hooks.MappedControlHistory
+	hooks := c.hooks.MappedControlHistory
+	return append(hooks[:len(hooks):len(hooks)], mappedcontrolhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -12355,7 +12664,8 @@ func (c *NarrativeHistoryClient) GetX(ctx context.Context, id string) *Narrative
 
 // Hooks returns the client hooks.
 func (c *NarrativeHistoryClient) Hooks() []Hook {
-	return c.hooks.NarrativeHistory
+	hooks := c.hooks.NarrativeHistory
+	return append(hooks[:len(hooks):len(hooks)], narrativehistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -12681,7 +12991,8 @@ func (c *NoteHistoryClient) GetX(ctx context.Context, id string) *NoteHistory {
 
 // Hooks returns the client hooks.
 func (c *NoteHistoryClient) Hooks() []Hook {
-	return c.hooks.NoteHistory
+	hooks := c.hooks.NoteHistory
+	return append(hooks[:len(hooks):len(hooks)], notehistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -13161,7 +13472,8 @@ func (c *OrgMembershipHistoryClient) GetX(ctx context.Context, id string) *OrgMe
 
 // Hooks returns the client hooks.
 func (c *OrgMembershipHistoryClient) Hooks() []Hook {
-	return c.hooks.OrgMembershipHistory
+	hooks := c.hooks.OrgMembershipHistory
+	return append(hooks[:len(hooks):len(hooks)], orgmembershiphistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -15505,6 +15817,44 @@ func (c *OrganizationClient) QueryScans(o *Organization) *ScanQuery {
 	return query
 }
 
+// QuerySubprocessors queries the subprocessors edge of a Organization.
+func (c *OrganizationClient) QuerySubprocessors(o *Organization) *SubprocessorQuery {
+	query := (&SubprocessorClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(subprocessor.Table, subprocessor.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.SubprocessorsTable, organization.SubprocessorsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Subprocessor
+		step.Edge.Schema = schemaConfig.Subprocessor
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryExports queries the exports edge of a Organization.
+func (c *OrganizationClient) QueryExports(o *Organization) *ExportQuery {
+	query := (&ExportClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(export.Table, export.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ExportsTable, organization.ExportsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Export
+		step.Edge.Schema = schemaConfig.Export
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(o *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -15661,7 +16011,8 @@ func (c *OrganizationHistoryClient) GetX(ctx context.Context, id string) *Organi
 
 // Hooks returns the client hooks.
 func (c *OrganizationHistoryClient) Hooks() []Hook {
-	return c.hooks.OrganizationHistory
+	hooks := c.hooks.OrganizationHistory
+	return append(hooks[:len(hooks):len(hooks)], organizationhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -15968,7 +16319,8 @@ func (c *OrganizationSettingHistoryClient) GetX(ctx context.Context, id string) 
 
 // Hooks returns the client hooks.
 func (c *OrganizationSettingHistoryClient) Hooks() []Hook {
-	return c.hooks.OrganizationSettingHistory
+	hooks := c.hooks.OrganizationSettingHistory
+	return append(hooks[:len(hooks):len(hooks)], organizationsettinghistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -16811,7 +17163,8 @@ func (c *ProcedureHistoryClient) GetX(ctx context.Context, id string) *Procedure
 
 // Hooks returns the client hooks.
 func (c *ProcedureHistoryClient) Hooks() []Hook {
-	return c.hooks.ProcedureHistory
+	hooks := c.hooks.ProcedureHistory
+	return append(hooks[:len(hooks):len(hooks)], procedurehistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -17422,7 +17775,8 @@ func (c *ProgramHistoryClient) GetX(ctx context.Context, id string) *ProgramHist
 
 // Hooks returns the client hooks.
 func (c *ProgramHistoryClient) Hooks() []Hook {
-	return c.hooks.ProgramHistory
+	hooks := c.hooks.ProgramHistory
+	return append(hooks[:len(hooks):len(hooks)], programhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -17748,7 +18102,8 @@ func (c *ProgramMembershipHistoryClient) GetX(ctx context.Context, id string) *P
 
 // Hooks returns the client hooks.
 func (c *ProgramMembershipHistoryClient) Hooks() []Hook {
-	return c.hooks.ProgramMembershipHistory
+	hooks := c.hooks.ProgramMembershipHistory
+	return append(hooks[:len(hooks):len(hooks)], programmembershiphistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -18321,7 +18676,8 @@ func (c *RiskHistoryClient) GetX(ctx context.Context, id string) *RiskHistory {
 
 // Hooks returns the client hooks.
 func (c *RiskHistoryClient) Hooks() []Hook {
-	return c.hooks.RiskHistory
+	hooks := c.hooks.RiskHistory
+	return append(hooks[:len(hooks):len(hooks)], riskhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -18704,7 +19060,8 @@ func (c *ScanHistoryClient) GetX(ctx context.Context, id string) *ScanHistory {
 
 // Hooks returns the client hooks.
 func (c *ScanHistoryClient) Hooks() []Hook {
-	return c.hooks.ScanHistory
+	hooks := c.hooks.ScanHistory
+	return append(hooks[:len(hooks):len(hooks)], scanhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -18992,7 +19349,8 @@ func (c *ScheduledJobHistoryClient) GetX(ctx context.Context, id string) *Schedu
 
 // Hooks returns the client hooks.
 func (c *ScheduledJobHistoryClient) Hooks() []Hook {
-	return c.hooks.ScheduledJobHistory
+	hooks := c.hooks.ScheduledJobHistory
+	return append(hooks[:len(hooks):len(hooks)], scheduledjobhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -19491,7 +19849,8 @@ func (c *StandardHistoryClient) GetX(ctx context.Context, id string) *StandardHi
 
 // Hooks returns the client hooks.
 func (c *StandardHistoryClient) Hooks() []Hook {
-	return c.hooks.StandardHistory
+	hooks := c.hooks.StandardHistory
+	return append(hooks[:len(hooks):len(hooks)], standardhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -20064,7 +20423,8 @@ func (c *SubcontrolHistoryClient) GetX(ctx context.Context, id string) *Subcontr
 
 // Hooks returns the client hooks.
 func (c *SubcontrolHistoryClient) Hooks() []Hook {
-	return c.hooks.SubcontrolHistory
+	hooks := c.hooks.SubcontrolHistory
+	return append(hooks[:len(hooks):len(hooks)], subcontrolhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -20085,6 +20445,352 @@ func (c *SubcontrolHistoryClient) mutate(ctx context.Context, m *SubcontrolHisto
 		return (&SubcontrolHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown SubcontrolHistory mutation op: %q", m.Op())
+	}
+}
+
+// SubprocessorClient is a client for the Subprocessor schema.
+type SubprocessorClient struct {
+	config
+}
+
+// NewSubprocessorClient returns a client for the Subprocessor from the given config.
+func NewSubprocessorClient(c config) *SubprocessorClient {
+	return &SubprocessorClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `subprocessor.Hooks(f(g(h())))`.
+func (c *SubprocessorClient) Use(hooks ...Hook) {
+	c.hooks.Subprocessor = append(c.hooks.Subprocessor, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `subprocessor.Intercept(f(g(h())))`.
+func (c *SubprocessorClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Subprocessor = append(c.inters.Subprocessor, interceptors...)
+}
+
+// Create returns a builder for creating a Subprocessor entity.
+func (c *SubprocessorClient) Create() *SubprocessorCreate {
+	mutation := newSubprocessorMutation(c.config, OpCreate)
+	return &SubprocessorCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Subprocessor entities.
+func (c *SubprocessorClient) CreateBulk(builders ...*SubprocessorCreate) *SubprocessorCreateBulk {
+	return &SubprocessorCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *SubprocessorClient) MapCreateBulk(slice any, setFunc func(*SubprocessorCreate, int)) *SubprocessorCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &SubprocessorCreateBulk{err: fmt.Errorf("calling to SubprocessorClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*SubprocessorCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &SubprocessorCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Subprocessor.
+func (c *SubprocessorClient) Update() *SubprocessorUpdate {
+	mutation := newSubprocessorMutation(c.config, OpUpdate)
+	return &SubprocessorUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *SubprocessorClient) UpdateOne(s *Subprocessor) *SubprocessorUpdateOne {
+	mutation := newSubprocessorMutation(c.config, OpUpdateOne, withSubprocessor(s))
+	return &SubprocessorUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *SubprocessorClient) UpdateOneID(id string) *SubprocessorUpdateOne {
+	mutation := newSubprocessorMutation(c.config, OpUpdateOne, withSubprocessorID(id))
+	return &SubprocessorUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Subprocessor.
+func (c *SubprocessorClient) Delete() *SubprocessorDelete {
+	mutation := newSubprocessorMutation(c.config, OpDelete)
+	return &SubprocessorDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *SubprocessorClient) DeleteOne(s *Subprocessor) *SubprocessorDeleteOne {
+	return c.DeleteOneID(s.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *SubprocessorClient) DeleteOneID(id string) *SubprocessorDeleteOne {
+	builder := c.Delete().Where(subprocessor.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &SubprocessorDeleteOne{builder}
+}
+
+// Query returns a query builder for Subprocessor.
+func (c *SubprocessorClient) Query() *SubprocessorQuery {
+	return &SubprocessorQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeSubprocessor},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Subprocessor entity by its id.
+func (c *SubprocessorClient) Get(ctx context.Context, id string) (*Subprocessor, error) {
+	return c.Query().Where(subprocessor.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *SubprocessorClient) GetX(ctx context.Context, id string) *Subprocessor {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a Subprocessor.
+func (c *SubprocessorClient) QueryOwner(s *Subprocessor) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subprocessor.Table, subprocessor.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, subprocessor.OwnerTable, subprocessor.OwnerColumn),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Subprocessor
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFiles queries the files edge of a Subprocessor.
+func (c *SubprocessorClient) QueryFiles(s *Subprocessor) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subprocessor.Table, subprocessor.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, subprocessor.FilesTable, subprocessor.FilesPrimaryKey...),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.SubprocessorFiles
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryLogoFile queries the logo_file edge of a Subprocessor.
+func (c *SubprocessorClient) QueryLogoFile(s *Subprocessor) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subprocessor.Table, subprocessor.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, subprocessor.LogoFileTable, subprocessor.LogoFileColumn),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.Subprocessor
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTrustCenterSubprocessors queries the trust_center_subprocessors edge of a Subprocessor.
+func (c *SubprocessorClient) QueryTrustCenterSubprocessors(s *Subprocessor) *TrustCenterSubprocessorQuery {
+	query := (&TrustCenterSubprocessorClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subprocessor.Table, subprocessor.FieldID, id),
+			sqlgraph.To(trustcentersubprocessor.Table, trustcentersubprocessor.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, subprocessor.TrustCenterSubprocessorsTable, subprocessor.TrustCenterSubprocessorsColumn),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterSubprocessor
+		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *SubprocessorClient) Hooks() []Hook {
+	hooks := c.hooks.Subprocessor
+	return append(hooks[:len(hooks):len(hooks)], subprocessor.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *SubprocessorClient) Interceptors() []Interceptor {
+	inters := c.inters.Subprocessor
+	return append(inters[:len(inters):len(inters)], subprocessor.Interceptors[:]...)
+}
+
+func (c *SubprocessorClient) mutate(ctx context.Context, m *SubprocessorMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&SubprocessorCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&SubprocessorUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&SubprocessorUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&SubprocessorDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown Subprocessor mutation op: %q", m.Op())
+	}
+}
+
+// SubprocessorHistoryClient is a client for the SubprocessorHistory schema.
+type SubprocessorHistoryClient struct {
+	config
+}
+
+// NewSubprocessorHistoryClient returns a client for the SubprocessorHistory from the given config.
+func NewSubprocessorHistoryClient(c config) *SubprocessorHistoryClient {
+	return &SubprocessorHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `subprocessorhistory.Hooks(f(g(h())))`.
+func (c *SubprocessorHistoryClient) Use(hooks ...Hook) {
+	c.hooks.SubprocessorHistory = append(c.hooks.SubprocessorHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `subprocessorhistory.Intercept(f(g(h())))`.
+func (c *SubprocessorHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.SubprocessorHistory = append(c.inters.SubprocessorHistory, interceptors...)
+}
+
+// Create returns a builder for creating a SubprocessorHistory entity.
+func (c *SubprocessorHistoryClient) Create() *SubprocessorHistoryCreate {
+	mutation := newSubprocessorHistoryMutation(c.config, OpCreate)
+	return &SubprocessorHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of SubprocessorHistory entities.
+func (c *SubprocessorHistoryClient) CreateBulk(builders ...*SubprocessorHistoryCreate) *SubprocessorHistoryCreateBulk {
+	return &SubprocessorHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *SubprocessorHistoryClient) MapCreateBulk(slice any, setFunc func(*SubprocessorHistoryCreate, int)) *SubprocessorHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &SubprocessorHistoryCreateBulk{err: fmt.Errorf("calling to SubprocessorHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*SubprocessorHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &SubprocessorHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for SubprocessorHistory.
+func (c *SubprocessorHistoryClient) Update() *SubprocessorHistoryUpdate {
+	mutation := newSubprocessorHistoryMutation(c.config, OpUpdate)
+	return &SubprocessorHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *SubprocessorHistoryClient) UpdateOne(sh *SubprocessorHistory) *SubprocessorHistoryUpdateOne {
+	mutation := newSubprocessorHistoryMutation(c.config, OpUpdateOne, withSubprocessorHistory(sh))
+	return &SubprocessorHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *SubprocessorHistoryClient) UpdateOneID(id string) *SubprocessorHistoryUpdateOne {
+	mutation := newSubprocessorHistoryMutation(c.config, OpUpdateOne, withSubprocessorHistoryID(id))
+	return &SubprocessorHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for SubprocessorHistory.
+func (c *SubprocessorHistoryClient) Delete() *SubprocessorHistoryDelete {
+	mutation := newSubprocessorHistoryMutation(c.config, OpDelete)
+	return &SubprocessorHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *SubprocessorHistoryClient) DeleteOne(sh *SubprocessorHistory) *SubprocessorHistoryDeleteOne {
+	return c.DeleteOneID(sh.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *SubprocessorHistoryClient) DeleteOneID(id string) *SubprocessorHistoryDeleteOne {
+	builder := c.Delete().Where(subprocessorhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &SubprocessorHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for SubprocessorHistory.
+func (c *SubprocessorHistoryClient) Query() *SubprocessorHistoryQuery {
+	return &SubprocessorHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeSubprocessorHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a SubprocessorHistory entity by its id.
+func (c *SubprocessorHistoryClient) Get(ctx context.Context, id string) (*SubprocessorHistory, error) {
+	return c.Query().Where(subprocessorhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *SubprocessorHistoryClient) GetX(ctx context.Context, id string) *SubprocessorHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *SubprocessorHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.SubprocessorHistory
+	return append(hooks[:len(hooks):len(hooks)], subprocessorhistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *SubprocessorHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.SubprocessorHistory
+	return append(inters[:len(inters):len(inters)], subprocessorhistory.Interceptors[:]...)
+}
+
+func (c *SubprocessorHistoryClient) mutate(ctx context.Context, m *SubprocessorHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&SubprocessorHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&SubprocessorHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&SubprocessorHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&SubprocessorHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown SubprocessorHistory mutation op: %q", m.Op())
 	}
 }
 
@@ -20907,7 +21613,8 @@ func (c *TaskHistoryClient) GetX(ctx context.Context, id string) *TaskHistory {
 
 // Hooks returns the client hooks.
 func (c *TaskHistoryClient) Hooks() []Hook {
-	return c.hooks.TaskHistory
+	hooks := c.hooks.TaskHistory
+	return append(hooks[:len(hooks):len(hooks)], taskhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -21233,7 +21940,8 @@ func (c *TemplateHistoryClient) GetX(ctx context.Context, id string) *TemplateHi
 
 // Hooks returns the client hooks.
 func (c *TemplateHistoryClient) Hooks() []Hook {
-	return c.hooks.TemplateHistory
+	hooks := c.hooks.TemplateHistory
+	return append(hooks[:len(hooks):len(hooks)], templatehistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -21422,6 +22130,25 @@ func (c *TrustCenterClient) QuerySetting(tc *TrustCenter) *TrustCenterSettingQue
 	return query
 }
 
+// QueryTrustCenterSubprocessors queries the trust_center_subprocessors edge of a TrustCenter.
+func (c *TrustCenterClient) QueryTrustCenterSubprocessors(tc *TrustCenter) *TrustCenterSubprocessorQuery {
+	query := (&TrustCenterSubprocessorClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := tc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, id),
+			sqlgraph.To(trustcentersubprocessor.Table, trustcentersubprocessor.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.TrustCenterSubprocessorsTable, trustcenter.TrustCenterSubprocessorsColumn),
+		)
+		schemaConfig := tc.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterSubprocessor
+		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
+		fromV = sqlgraph.Neighbors(tc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *TrustCenterClient) Hooks() []Hook {
 	hooks := c.hooks.TrustCenter
@@ -21559,7 +22286,8 @@ func (c *TrustCenterHistoryClient) GetX(ctx context.Context, id string) *TrustCe
 
 // Hooks returns the client hooks.
 func (c *TrustCenterHistoryClient) Hooks() []Hook {
-	return c.hooks.TrustCenterHistory
+	hooks := c.hooks.TrustCenterHistory
+	return append(hooks[:len(hooks):len(hooks)], trustcenterhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -21710,6 +22438,63 @@ func (c *TrustCenterSettingClient) QueryTrustCenter(tcs *TrustCenterSetting) *Tr
 	return query
 }
 
+// QueryFiles queries the files edge of a TrustCenterSetting.
+func (c *TrustCenterSettingClient) QueryFiles(tcs *TrustCenterSetting) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := tcs.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentersetting.Table, trustcentersetting.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, trustcentersetting.FilesTable, trustcentersetting.FilesPrimaryKey...),
+		)
+		schemaConfig := tcs.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterSettingFiles
+		fromV = sqlgraph.Neighbors(tcs.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryLogoFile queries the logo_file edge of a TrustCenterSetting.
+func (c *TrustCenterSettingClient) QueryLogoFile(tcs *TrustCenterSetting) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := tcs.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentersetting.Table, trustcentersetting.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcentersetting.LogoFileTable, trustcentersetting.LogoFileColumn),
+		)
+		schemaConfig := tcs.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterSetting
+		fromV = sqlgraph.Neighbors(tcs.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFaviconFile queries the favicon_file edge of a TrustCenterSetting.
+func (c *TrustCenterSettingClient) QueryFaviconFile(tcs *TrustCenterSetting) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := tcs.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentersetting.Table, trustcentersetting.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcentersetting.FaviconFileTable, trustcentersetting.FaviconFileColumn),
+		)
+		schemaConfig := tcs.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterSetting
+		fromV = sqlgraph.Neighbors(tcs.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *TrustCenterSettingClient) Hooks() []Hook {
 	hooks := c.hooks.TrustCenterSetting
@@ -21847,7 +22632,8 @@ func (c *TrustCenterSettingHistoryClient) GetX(ctx context.Context, id string) *
 
 // Hooks returns the client hooks.
 func (c *TrustCenterSettingHistoryClient) Hooks() []Hook {
-	return c.hooks.TrustCenterSettingHistory
+	hooks := c.hooks.TrustCenterSettingHistory
+	return append(hooks[:len(hooks):len(hooks)], trustcentersettinghistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -21868,6 +22654,314 @@ func (c *TrustCenterSettingHistoryClient) mutate(ctx context.Context, m *TrustCe
 		return (&TrustCenterSettingHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown TrustCenterSettingHistory mutation op: %q", m.Op())
+	}
+}
+
+// TrustCenterSubprocessorClient is a client for the TrustCenterSubprocessor schema.
+type TrustCenterSubprocessorClient struct {
+	config
+}
+
+// NewTrustCenterSubprocessorClient returns a client for the TrustCenterSubprocessor from the given config.
+func NewTrustCenterSubprocessorClient(c config) *TrustCenterSubprocessorClient {
+	return &TrustCenterSubprocessorClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `trustcentersubprocessor.Hooks(f(g(h())))`.
+func (c *TrustCenterSubprocessorClient) Use(hooks ...Hook) {
+	c.hooks.TrustCenterSubprocessor = append(c.hooks.TrustCenterSubprocessor, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `trustcentersubprocessor.Intercept(f(g(h())))`.
+func (c *TrustCenterSubprocessorClient) Intercept(interceptors ...Interceptor) {
+	c.inters.TrustCenterSubprocessor = append(c.inters.TrustCenterSubprocessor, interceptors...)
+}
+
+// Create returns a builder for creating a TrustCenterSubprocessor entity.
+func (c *TrustCenterSubprocessorClient) Create() *TrustCenterSubprocessorCreate {
+	mutation := newTrustCenterSubprocessorMutation(c.config, OpCreate)
+	return &TrustCenterSubprocessorCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of TrustCenterSubprocessor entities.
+func (c *TrustCenterSubprocessorClient) CreateBulk(builders ...*TrustCenterSubprocessorCreate) *TrustCenterSubprocessorCreateBulk {
+	return &TrustCenterSubprocessorCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TrustCenterSubprocessorClient) MapCreateBulk(slice any, setFunc func(*TrustCenterSubprocessorCreate, int)) *TrustCenterSubprocessorCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TrustCenterSubprocessorCreateBulk{err: fmt.Errorf("calling to TrustCenterSubprocessorClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TrustCenterSubprocessorCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TrustCenterSubprocessorCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for TrustCenterSubprocessor.
+func (c *TrustCenterSubprocessorClient) Update() *TrustCenterSubprocessorUpdate {
+	mutation := newTrustCenterSubprocessorMutation(c.config, OpUpdate)
+	return &TrustCenterSubprocessorUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TrustCenterSubprocessorClient) UpdateOne(tcs *TrustCenterSubprocessor) *TrustCenterSubprocessorUpdateOne {
+	mutation := newTrustCenterSubprocessorMutation(c.config, OpUpdateOne, withTrustCenterSubprocessor(tcs))
+	return &TrustCenterSubprocessorUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TrustCenterSubprocessorClient) UpdateOneID(id string) *TrustCenterSubprocessorUpdateOne {
+	mutation := newTrustCenterSubprocessorMutation(c.config, OpUpdateOne, withTrustCenterSubprocessorID(id))
+	return &TrustCenterSubprocessorUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for TrustCenterSubprocessor.
+func (c *TrustCenterSubprocessorClient) Delete() *TrustCenterSubprocessorDelete {
+	mutation := newTrustCenterSubprocessorMutation(c.config, OpDelete)
+	return &TrustCenterSubprocessorDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TrustCenterSubprocessorClient) DeleteOne(tcs *TrustCenterSubprocessor) *TrustCenterSubprocessorDeleteOne {
+	return c.DeleteOneID(tcs.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TrustCenterSubprocessorClient) DeleteOneID(id string) *TrustCenterSubprocessorDeleteOne {
+	builder := c.Delete().Where(trustcentersubprocessor.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TrustCenterSubprocessorDeleteOne{builder}
+}
+
+// Query returns a query builder for TrustCenterSubprocessor.
+func (c *TrustCenterSubprocessorClient) Query() *TrustCenterSubprocessorQuery {
+	return &TrustCenterSubprocessorQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTrustCenterSubprocessor},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a TrustCenterSubprocessor entity by its id.
+func (c *TrustCenterSubprocessorClient) Get(ctx context.Context, id string) (*TrustCenterSubprocessor, error) {
+	return c.Query().Where(trustcentersubprocessor.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TrustCenterSubprocessorClient) GetX(ctx context.Context, id string) *TrustCenterSubprocessor {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryTrustCenter queries the trust_center edge of a TrustCenterSubprocessor.
+func (c *TrustCenterSubprocessorClient) QueryTrustCenter(tcs *TrustCenterSubprocessor) *TrustCenterQuery {
+	query := (&TrustCenterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := tcs.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentersubprocessor.Table, trustcentersubprocessor.FieldID, id),
+			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, trustcentersubprocessor.TrustCenterTable, trustcentersubprocessor.TrustCenterColumn),
+		)
+		schemaConfig := tcs.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
+		fromV = sqlgraph.Neighbors(tcs.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubprocessor queries the subprocessor edge of a TrustCenterSubprocessor.
+func (c *TrustCenterSubprocessorClient) QuerySubprocessor(tcs *TrustCenterSubprocessor) *SubprocessorQuery {
+	query := (&SubprocessorClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := tcs.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentersubprocessor.Table, trustcentersubprocessor.FieldID, id),
+			sqlgraph.To(subprocessor.Table, subprocessor.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, trustcentersubprocessor.SubprocessorTable, trustcentersubprocessor.SubprocessorColumn),
+		)
+		schemaConfig := tcs.schemaConfig
+		step.To.Schema = schemaConfig.Subprocessor
+		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
+		fromV = sqlgraph.Neighbors(tcs.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *TrustCenterSubprocessorClient) Hooks() []Hook {
+	hooks := c.hooks.TrustCenterSubprocessor
+	return append(hooks[:len(hooks):len(hooks)], trustcentersubprocessor.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *TrustCenterSubprocessorClient) Interceptors() []Interceptor {
+	inters := c.inters.TrustCenterSubprocessor
+	return append(inters[:len(inters):len(inters)], trustcentersubprocessor.Interceptors[:]...)
+}
+
+func (c *TrustCenterSubprocessorClient) mutate(ctx context.Context, m *TrustCenterSubprocessorMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TrustCenterSubprocessorCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TrustCenterSubprocessorUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TrustCenterSubprocessorUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TrustCenterSubprocessorDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown TrustCenterSubprocessor mutation op: %q", m.Op())
+	}
+}
+
+// TrustCenterSubprocessorHistoryClient is a client for the TrustCenterSubprocessorHistory schema.
+type TrustCenterSubprocessorHistoryClient struct {
+	config
+}
+
+// NewTrustCenterSubprocessorHistoryClient returns a client for the TrustCenterSubprocessorHistory from the given config.
+func NewTrustCenterSubprocessorHistoryClient(c config) *TrustCenterSubprocessorHistoryClient {
+	return &TrustCenterSubprocessorHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `trustcentersubprocessorhistory.Hooks(f(g(h())))`.
+func (c *TrustCenterSubprocessorHistoryClient) Use(hooks ...Hook) {
+	c.hooks.TrustCenterSubprocessorHistory = append(c.hooks.TrustCenterSubprocessorHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `trustcentersubprocessorhistory.Intercept(f(g(h())))`.
+func (c *TrustCenterSubprocessorHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.TrustCenterSubprocessorHistory = append(c.inters.TrustCenterSubprocessorHistory, interceptors...)
+}
+
+// Create returns a builder for creating a TrustCenterSubprocessorHistory entity.
+func (c *TrustCenterSubprocessorHistoryClient) Create() *TrustCenterSubprocessorHistoryCreate {
+	mutation := newTrustCenterSubprocessorHistoryMutation(c.config, OpCreate)
+	return &TrustCenterSubprocessorHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of TrustCenterSubprocessorHistory entities.
+func (c *TrustCenterSubprocessorHistoryClient) CreateBulk(builders ...*TrustCenterSubprocessorHistoryCreate) *TrustCenterSubprocessorHistoryCreateBulk {
+	return &TrustCenterSubprocessorHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TrustCenterSubprocessorHistoryClient) MapCreateBulk(slice any, setFunc func(*TrustCenterSubprocessorHistoryCreate, int)) *TrustCenterSubprocessorHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TrustCenterSubprocessorHistoryCreateBulk{err: fmt.Errorf("calling to TrustCenterSubprocessorHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TrustCenterSubprocessorHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TrustCenterSubprocessorHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for TrustCenterSubprocessorHistory.
+func (c *TrustCenterSubprocessorHistoryClient) Update() *TrustCenterSubprocessorHistoryUpdate {
+	mutation := newTrustCenterSubprocessorHistoryMutation(c.config, OpUpdate)
+	return &TrustCenterSubprocessorHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TrustCenterSubprocessorHistoryClient) UpdateOne(tcsh *TrustCenterSubprocessorHistory) *TrustCenterSubprocessorHistoryUpdateOne {
+	mutation := newTrustCenterSubprocessorHistoryMutation(c.config, OpUpdateOne, withTrustCenterSubprocessorHistory(tcsh))
+	return &TrustCenterSubprocessorHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TrustCenterSubprocessorHistoryClient) UpdateOneID(id string) *TrustCenterSubprocessorHistoryUpdateOne {
+	mutation := newTrustCenterSubprocessorHistoryMutation(c.config, OpUpdateOne, withTrustCenterSubprocessorHistoryID(id))
+	return &TrustCenterSubprocessorHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for TrustCenterSubprocessorHistory.
+func (c *TrustCenterSubprocessorHistoryClient) Delete() *TrustCenterSubprocessorHistoryDelete {
+	mutation := newTrustCenterSubprocessorHistoryMutation(c.config, OpDelete)
+	return &TrustCenterSubprocessorHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TrustCenterSubprocessorHistoryClient) DeleteOne(tcsh *TrustCenterSubprocessorHistory) *TrustCenterSubprocessorHistoryDeleteOne {
+	return c.DeleteOneID(tcsh.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TrustCenterSubprocessorHistoryClient) DeleteOneID(id string) *TrustCenterSubprocessorHistoryDeleteOne {
+	builder := c.Delete().Where(trustcentersubprocessorhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TrustCenterSubprocessorHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for TrustCenterSubprocessorHistory.
+func (c *TrustCenterSubprocessorHistoryClient) Query() *TrustCenterSubprocessorHistoryQuery {
+	return &TrustCenterSubprocessorHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTrustCenterSubprocessorHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a TrustCenterSubprocessorHistory entity by its id.
+func (c *TrustCenterSubprocessorHistoryClient) Get(ctx context.Context, id string) (*TrustCenterSubprocessorHistory, error) {
+	return c.Query().Where(trustcentersubprocessorhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TrustCenterSubprocessorHistoryClient) GetX(ctx context.Context, id string) *TrustCenterSubprocessorHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *TrustCenterSubprocessorHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.TrustCenterSubprocessorHistory
+	return append(hooks[:len(hooks):len(hooks)], trustcentersubprocessorhistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *TrustCenterSubprocessorHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.TrustCenterSubprocessorHistory
+	return append(inters[:len(inters):len(inters)], trustcentersubprocessorhistory.Interceptors[:]...)
+}
+
+func (c *TrustCenterSubprocessorHistoryClient) mutate(ctx context.Context, m *TrustCenterSubprocessorHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TrustCenterSubprocessorHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TrustCenterSubprocessorHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TrustCenterSubprocessorHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TrustCenterSubprocessorHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown TrustCenterSubprocessorHistory mutation op: %q", m.Op())
 	}
 }
 
@@ -22477,7 +23571,8 @@ func (c *UserHistoryClient) GetX(ctx context.Context, id string) *UserHistory {
 
 // Hooks returns the client hooks.
 func (c *UserHistoryClient) Hooks() []Hook {
-	return c.hooks.UserHistory
+	hooks := c.hooks.UserHistory
+	return append(hooks[:len(hooks):len(hooks)], userhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -22803,7 +23898,8 @@ func (c *UserSettingHistoryClient) GetX(ctx context.Context, id string) *UserSet
 
 // Hooks returns the client hooks.
 func (c *UserSettingHistoryClient) Hooks() []Hook {
-	return c.hooks.UserSettingHistory
+	hooks := c.hooks.UserSettingHistory
+	return append(hooks[:len(hooks):len(hooks)], usersettinghistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
@@ -22990,8 +24086,8 @@ type (
 		ControlScheduledJob, ControlScheduledJobHistory, CustomDomain,
 		CustomDomainHistory, DNSVerification, DNSVerificationHistory, DocumentData,
 		DocumentDataHistory, EmailVerificationToken, Entity, EntityHistory, EntityType,
-		EntityTypeHistory, Event, Evidence, EvidenceHistory, File, FileHistory, Group,
-		GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
+		EntityTypeHistory, Event, Evidence, EvidenceHistory, Export, File, FileHistory,
+		Group, GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
 		GroupSettingHistory, Hush, HushHistory, Integration, IntegrationHistory,
 		InternalPolicy, InternalPolicyHistory, Invite, JobResult, JobRunner,
 		JobRunnerRegistrationToken, JobRunnerToken, MappableDomain,
@@ -23003,10 +24099,11 @@ type (
 		ProcedureHistory, Program, ProgramHistory, ProgramMembership,
 		ProgramMembershipHistory, Risk, RiskHistory, Scan, ScanHistory, ScheduledJob,
 		ScheduledJobHistory, ScheduledJobRun, Standard, StandardHistory, Subcontrol,
-		SubcontrolHistory, Subscriber, TFASetting, Task, TaskHistory, Template,
-		TemplateHistory, TrustCenter, TrustCenterHistory, TrustCenterSetting,
-		TrustCenterSettingHistory, User, UserHistory, UserSetting, UserSettingHistory,
-		Webauthn []ent.Hook
+		SubcontrolHistory, Subprocessor, SubprocessorHistory, Subscriber, TFASetting,
+		Task, TaskHistory, Template, TemplateHistory, TrustCenter, TrustCenterHistory,
+		TrustCenterSetting, TrustCenterSettingHistory, TrustCenterSubprocessor,
+		TrustCenterSubprocessorHistory, User, UserHistory, UserSetting,
+		UserSettingHistory, Webauthn []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, ActionPlanHistory, Asset, AssetHistory, Contact,
@@ -23015,8 +24112,8 @@ type (
 		ControlScheduledJob, ControlScheduledJobHistory, CustomDomain,
 		CustomDomainHistory, DNSVerification, DNSVerificationHistory, DocumentData,
 		DocumentDataHistory, EmailVerificationToken, Entity, EntityHistory, EntityType,
-		EntityTypeHistory, Event, Evidence, EvidenceHistory, File, FileHistory, Group,
-		GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
+		EntityTypeHistory, Event, Evidence, EvidenceHistory, Export, File, FileHistory,
+		Group, GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
 		GroupSettingHistory, Hush, HushHistory, Integration, IntegrationHistory,
 		InternalPolicy, InternalPolicyHistory, Invite, JobResult, JobRunner,
 		JobRunnerRegistrationToken, JobRunnerToken, MappableDomain,
@@ -23028,10 +24125,11 @@ type (
 		ProcedureHistory, Program, ProgramHistory, ProgramMembership,
 		ProgramMembershipHistory, Risk, RiskHistory, Scan, ScanHistory, ScheduledJob,
 		ScheduledJobHistory, ScheduledJobRun, Standard, StandardHistory, Subcontrol,
-		SubcontrolHistory, Subscriber, TFASetting, Task, TaskHistory, Template,
-		TemplateHistory, TrustCenter, TrustCenterHistory, TrustCenterSetting,
-		TrustCenterSettingHistory, User, UserHistory, UserSetting, UserSettingHistory,
-		Webauthn []ent.Interceptor
+		SubcontrolHistory, Subprocessor, SubprocessorHistory, Subscriber, TFASetting,
+		Task, TaskHistory, Template, TemplateHistory, TrustCenter, TrustCenterHistory,
+		TrustCenterSetting, TrustCenterSettingHistory, TrustCenterSubprocessor,
+		TrustCenterSubprocessorHistory, User, UserHistory, UserSetting,
+		UserSettingHistory, Webauthn []ent.Interceptor
 	}
 )
 

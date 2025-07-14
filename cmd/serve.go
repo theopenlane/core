@@ -110,6 +110,15 @@ func serve(ctx context.Context) error {
 
 	defer redisClient.Close()
 
+	// Setup Pond Pool if max workers is greater than 0
+	var pool *soiree.PondPool
+	if so.Config.Settings.EntConfig.MaxPoolSize > 0 {
+		pool = soiree.NewPondPool(
+			soiree.WithMaxWorkers(so.Config.Settings.EntConfig.MaxPoolSize),
+			soiree.WithName("ent_client_pool"),
+		)
+	}
+
 	// add session manager
 	so.AddServerOptions(
 		serveropts.WithSessionManager(redisClient),
@@ -133,6 +142,7 @@ func serve(ctx context.Context) error {
 		ent.ObjectManager(so.Config.ObjectManager),
 		ent.Summarizer(so.Config.Handler.Summarizer),
 		ent.Windmill(so.Config.Handler.Windmill),
+		ent.PondPool(pool),
 	)
 
 	// Setup DB connection
@@ -176,6 +186,11 @@ func serve(ctx context.Context) error {
 	// set the logging config options based on flags
 	so.Config.Settings.Server.Debug = k.Bool("debug")
 	so.Config.Settings.Server.Pretty = k.Bool("pretty")
+
+	// add default trust center domain
+	so.AddServerOptions(
+		serveropts.WithDefaultTrustCenterDomain(),
+	)
 
 	// add ready checks
 	so.AddServerOptions(

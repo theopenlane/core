@@ -286,7 +286,9 @@ func (dvhu *DNSVerificationHistoryUpdate) Mutation() *DNSVerificationHistoryMuta
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (dvhu *DNSVerificationHistoryUpdate) Save(ctx context.Context) (int, error) {
-	dvhu.defaults()
+	if err := dvhu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, dvhu.sqlSave, dvhu.mutation, dvhu.hooks)
 }
 
@@ -313,11 +315,15 @@ func (dvhu *DNSVerificationHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (dvhu *DNSVerificationHistoryUpdate) defaults() {
+func (dvhu *DNSVerificationHistoryUpdate) defaults() error {
 	if _, ok := dvhu.mutation.UpdatedAt(); !ok && !dvhu.mutation.UpdatedAtCleared() {
+		if dnsverificationhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized dnsverificationhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := dnsverificationhistory.UpdateDefaultUpdatedAt()
 		dvhu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -729,7 +735,9 @@ func (dvhuo *DNSVerificationHistoryUpdateOne) Select(field string, fields ...str
 
 // Save executes the query and returns the updated DNSVerificationHistory entity.
 func (dvhuo *DNSVerificationHistoryUpdateOne) Save(ctx context.Context) (*DNSVerificationHistory, error) {
-	dvhuo.defaults()
+	if err := dvhuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, dvhuo.sqlSave, dvhuo.mutation, dvhuo.hooks)
 }
 
@@ -756,11 +764,15 @@ func (dvhuo *DNSVerificationHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (dvhuo *DNSVerificationHistoryUpdateOne) defaults() {
+func (dvhuo *DNSVerificationHistoryUpdateOne) defaults() error {
 	if _, ok := dvhuo.mutation.UpdatedAt(); !ok && !dvhuo.mutation.UpdatedAtCleared() {
+		if dnsverificationhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized dnsverificationhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := dnsverificationhistory.UpdateDefaultUpdatedAt()
 		dvhuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

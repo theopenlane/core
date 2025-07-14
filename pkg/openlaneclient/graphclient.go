@@ -58,9 +58,10 @@ type OpenlaneGraphClient interface {
 	DeleteControl(ctx context.Context, deleteControlID string, interceptors ...clientv2.RequestInterceptor) (*DeleteControl, error)
 	GetAllControls(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllControls, error)
 	GetControlByID(ctx context.Context, controlID string, interceptors ...clientv2.RequestInterceptor) (*GetControlByID, error)
-	GetControls(ctx context.Context, first *int64, last *int64, where *ControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControls, error)
+	GetControls(ctx context.Context, first *int64, last *int64, after *string, before *string, where *ControlWhereInput, orderBy []*ControlOrder, interceptors ...clientv2.RequestInterceptor) (*GetControls, error)
 	UpdateControl(ctx context.Context, updateControlID string, input UpdateControlInput, interceptors ...clientv2.RequestInterceptor) (*UpdateControl, error)
 	CreateControlsByClone(ctx context.Context, input CloneControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateControlsByClone, error)
+	CreateControlsByCloneReturnID(ctx context.Context, input CloneControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateControlsByCloneReturnID, error)
 	GetControlCategories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetControlCategories, error)
 	GetControlSubcategories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetControlSubcategories, error)
 	GetAllControlHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllControlHistories, error)
@@ -157,6 +158,13 @@ type OpenlaneGraphClient interface {
 	UpdateEvidence(ctx context.Context, updateEvidenceID string, input UpdateEvidenceInput, evidenceFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateEvidence, error)
 	GetAllEvidenceHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllEvidenceHistories, error)
 	GetEvidenceHistories(ctx context.Context, where *EvidenceHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetEvidenceHistories, error)
+	CreateExport(ctx context.Context, input CreateExportInput, interceptors ...clientv2.RequestInterceptor) (*CreateExport, error)
+	GetAllExports(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllExports, error)
+	GetExportByID(ctx context.Context, exportID string, interceptors ...clientv2.RequestInterceptor) (*GetExportByID, error)
+	GetExports(ctx context.Context, first *int64, last *int64, where *ExportWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetExports, error)
+	UpdateExport(ctx context.Context, id string, input UpdateExportInput, exportFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateExport, error)
+	DeleteExport(ctx context.Context, deleteExportID string, interceptors ...clientv2.RequestInterceptor) (*DeleteExport, error)
+	DeleteBulkExport(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkExport, error)
 	DeleteFile(ctx context.Context, deleteFileID string, interceptors ...clientv2.RequestInterceptor) (*DeleteFile, error)
 	GetAllFiles(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllFiles, error)
 	GetFileByID(ctx context.Context, fileID string, interceptors ...clientv2.RequestInterceptor) (*GetFileByID, error)
@@ -213,8 +221,8 @@ type OpenlaneGraphClient interface {
 	CreateBulkInternalPolicy(ctx context.Context, input []*CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkInternalPolicy, error)
 	CreateInternalPolicy(ctx context.Context, input CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateInternalPolicy, error)
 	DeleteInternalPolicy(ctx context.Context, deleteInternalPolicyID string, interceptors ...clientv2.RequestInterceptor) (*DeleteInternalPolicy, error)
-	GetAllInternalPolicies(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllInternalPolicies, error)
-	GetInternalPolicies(ctx context.Context, where *InternalPolicyWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicies, error)
+	GetAllInternalPolicies(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*InternalPolicyOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllInternalPolicies, error)
+	GetInternalPolicies(ctx context.Context, first *int64, last *int64, after *string, before *string, where *InternalPolicyWhereInput, orderBy []*InternalPolicyOrder, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicies, error)
 	GetInternalPolicyByID(ctx context.Context, internalPolicyID string, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicyByID, error)
 	UpdateInternalPolicy(ctx context.Context, updateInternalPolicyID string, input UpdateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*UpdateInternalPolicy, error)
 	GetAllInternalPolicyHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllInternalPolicyHistories, error)
@@ -326,6 +334,7 @@ type OpenlaneGraphClient interface {
 	CreateBulkProgram(ctx context.Context, input []*CreateProgramInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkProgram, error)
 	CreateControlWithSubcontrols(ctx context.Context, input CreateControlWithSubcontrolsInput, interceptors ...clientv2.RequestInterceptor) (*CreateControlWithSubcontrols, error)
 	CreateFullProgram(ctx context.Context, input CreateFullProgramInput, interceptors ...clientv2.RequestInterceptor) (*CreateFullProgram, error)
+	CreateFullProgramReturnIDs(ctx context.Context, input CreateFullProgramInput, interceptors ...clientv2.RequestInterceptor) (*CreateFullProgramReturnIDs, error)
 	CreateProgram(ctx context.Context, input CreateProgramInput, interceptors ...clientv2.RequestInterceptor) (*CreateProgram, error)
 	CreateProgramWithMembers(ctx context.Context, input CreateProgramWithMembersInput, interceptors ...clientv2.RequestInterceptor) (*CreateProgramWithMembers, error)
 	DeleteProgram(ctx context.Context, deleteProgramID string, interceptors ...clientv2.RequestInterceptor) (*DeleteProgram, error)
@@ -355,9 +364,9 @@ type OpenlaneGraphClient interface {
 	CreateBulkRisk(ctx context.Context, input []*CreateRiskInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkRisk, error)
 	CreateRisk(ctx context.Context, input CreateRiskInput, interceptors ...clientv2.RequestInterceptor) (*CreateRisk, error)
 	DeleteRisk(ctx context.Context, deleteRiskID string, interceptors ...clientv2.RequestInterceptor) (*DeleteRisk, error)
-	GetAllRisks(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllRisks, error)
+	GetAllRisks(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*RiskOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllRisks, error)
 	GetRiskByID(ctx context.Context, riskID string, interceptors ...clientv2.RequestInterceptor) (*GetRiskByID, error)
-	GetRisks(ctx context.Context, where *RiskWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetRisks, error)
+	GetRisks(ctx context.Context, first *int64, last *int64, after *string, before *string, where *RiskWhereInput, orderBy []*RiskOrder, interceptors ...clientv2.RequestInterceptor) (*GetRisks, error)
 	UpdateRisk(ctx context.Context, updateRiskID string, input UpdateRiskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateRisk, error)
 	GetAllRiskHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllRiskHistories, error)
 	GetRiskHistories(ctx context.Context, where *RiskHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetRiskHistories, error)
@@ -403,19 +412,29 @@ type OpenlaneGraphClient interface {
 	UpdateSubcontrol(ctx context.Context, updateSubcontrolID string, input UpdateSubcontrolInput, interceptors ...clientv2.RequestInterceptor) (*UpdateSubcontrol, error)
 	GetAllSubcontrolHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllSubcontrolHistories, error)
 	GetSubcontrolHistories(ctx context.Context, where *SubcontrolHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetSubcontrolHistories, error)
+	CreateBulkCSVSubprocessor(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVSubprocessor, error)
+	CreateBulkSubprocessor(ctx context.Context, input []*CreateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkSubprocessor, error)
+	CreateSubprocessor(ctx context.Context, input CreateSubprocessorInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateSubprocessor, error)
+	DeleteSubprocessor(ctx context.Context, deleteSubprocessorID string, interceptors ...clientv2.RequestInterceptor) (*DeleteSubprocessor, error)
+	GetAllSubprocessors(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllSubprocessors, error)
+	GetSubprocessorByID(ctx context.Context, subprocessorID string, interceptors ...clientv2.RequestInterceptor) (*GetSubprocessorByID, error)
+	GetSubprocessors(ctx context.Context, first *int64, last *int64, where *SubprocessorWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetSubprocessors, error)
+	UpdateSubprocessor(ctx context.Context, updateSubprocessorID string, input UpdateSubprocessorInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateSubprocessor, error)
+	GetAllSubprocessorHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllSubprocessorHistories, error)
+	GetSubprocessorHistories(ctx context.Context, first *int64, last *int64, where *SubprocessorHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetSubprocessorHistories, error)
 	CreateBulkCSVSubscriber(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVSubscriber, error)
 	CreateBulkSubscriber(ctx context.Context, input []*CreateSubscriberInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkSubscriber, error)
 	CreateSubscriber(ctx context.Context, input CreateSubscriberInput, interceptors ...clientv2.RequestInterceptor) (*CreateSubscriber, error)
 	DeleteSubscriber(ctx context.Context, deleteSubscriberEmail string, subscriberOrganization *string, interceptors ...clientv2.RequestInterceptor) (*DeleteSubscriber, error)
-	GetAllSubscribers(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllSubscribers, error)
+	GetAllSubscribers(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*SubscriberOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllSubscribers, error)
 	GetSubscriberByEmail(ctx context.Context, email string, interceptors ...clientv2.RequestInterceptor) (*GetSubscriberByEmail, error)
-	GetSubscribers(ctx context.Context, where *SubscriberWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetSubscribers, error)
+	GetSubscribers(ctx context.Context, first *int64, last *int64, after *string, before *string, where *SubscriberWhereInput, orderBy []*SubscriberOrder, interceptors ...clientv2.RequestInterceptor) (*GetSubscribers, error)
 	UpdateSubscriber(ctx context.Context, email string, input UpdateSubscriberInput, interceptors ...clientv2.RequestInterceptor) (*UpdateSubscriber, error)
 	CreateBulkCSVTask(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTask, error)
 	CreateBulkTask(ctx context.Context, input []*CreateTaskInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTask, error)
 	CreateTask(ctx context.Context, input CreateTaskInput, interceptors ...clientv2.RequestInterceptor) (*CreateTask, error)
 	DeleteTask(ctx context.Context, deleteTaskID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTask, error)
-	GetAllTasks(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTasks, error)
+	GetAllTasks(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*TaskOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllTasks, error)
 	GetTaskByID(ctx context.Context, taskID string, interceptors ...clientv2.RequestInterceptor) (*GetTaskByID, error)
 	GetTasks(ctx context.Context, first *int64, last *int64, after *string, before *string, where *TaskWhereInput, orderBy []*TaskOrder, interceptors ...clientv2.RequestInterceptor) (*GetTasks, error)
 	UpdateTask(ctx context.Context, updateTaskID string, input UpdateTaskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTask, error)
@@ -447,9 +466,19 @@ type OpenlaneGraphClient interface {
 	GetAllTrustCenterSettings(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterSettings, error)
 	GetTrustCenterSettingByID(ctx context.Context, trustCenterSettingID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterSettingByID, error)
 	GetTrustCenterSettings(ctx context.Context, first *int64, last *int64, where *TrustCenterSettingWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterSettings, error)
-	UpdateTrustCenterSetting(ctx context.Context, updateTrustCenterSettingID string, input UpdateTrustCenterSettingInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterSetting, error)
+	UpdateTrustCenterSetting(ctx context.Context, updateTrustCenterSettingID string, input UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterSetting, error)
 	GetAllTrustCenterSettingHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterSettingHistories, error)
 	GetTrustCenterSettingHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterSettingHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterSettingHistories, error)
+	CreateBulkCSVTrustCenterSubprocessor(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTrustCenterSubprocessor, error)
+	CreateBulkTrustCenterSubprocessor(ctx context.Context, input []*CreateTrustCenterSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTrustCenterSubprocessor, error)
+	CreateTrustCenterSubprocessor(ctx context.Context, input CreateTrustCenterSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterSubprocessor, error)
+	DeleteTrustCenterSubprocessor(ctx context.Context, deleteTrustCenterSubprocessorID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTrustCenterSubprocessor, error)
+	GetAllTrustCenterSubprocessors(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterSubprocessors, error)
+	GetTrustCenterSubprocessorByID(ctx context.Context, trustCenterSubprocessorID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterSubprocessorByID, error)
+	GetTrustCenterSubprocessors(ctx context.Context, first *int64, last *int64, where *TrustCenterSubprocessorWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterSubprocessors, error)
+	UpdateTrustCenterSubprocessor(ctx context.Context, updateTrustCenterSubprocessorID string, input UpdateTrustCenterSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterSubprocessor, error)
+	GetAllTrustCenterSubprocessorHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterSubprocessorHistories, error)
+	GetTrustCenterSubprocessorHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterSubprocessorHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterSubprocessorHistories, error)
 	CreateUser(ctx context.Context, input CreateUserInput, avatarFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateUser, error)
 	DeleteUser(ctx context.Context, deleteUserID string, interceptors ...clientv2.RequestInterceptor) (*DeleteUser, error)
 	GetAllUsers(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllUsers, error)
@@ -1802,13 +1831,14 @@ func (t *AdminSearch_AdminSearch_APITokens_PageInfo) GetStartCursor() *string {
 }
 
 type AdminSearch_AdminSearch_APITokens_Edges_Node struct {
-	ID            string   "json:\"id\" graphql:\"id\""
-	Name          string   "json:\"name\" graphql:\"name\""
-	OwnerID       *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RevokedBy     *string  "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
-	RevokedReason *string  "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
-	Scopes        []string "json:\"scopes,omitempty\" graphql:\"scopes\""
-	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
+	ID                string   "json:\"id\" graphql:\"id\""
+	Name              string   "json:\"name\" graphql:\"name\""
+	OwnerID           *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RevokedBy         *string  "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason     *string  "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes            []string "json:\"scopes,omitempty\" graphql:\"scopes\""
+	SsoAuthorizations *string  "json:\"ssoAuthorizations,omitempty\" graphql:\"ssoAuthorizations\""
+	Tags              []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *AdminSearch_AdminSearch_APITokens_Edges_Node) GetID() string {
@@ -1846,6 +1876,12 @@ func (t *AdminSearch_AdminSearch_APITokens_Edges_Node) GetScopes() []string {
 		t = &AdminSearch_AdminSearch_APITokens_Edges_Node{}
 	}
 	return t.Scopes
+}
+func (t *AdminSearch_AdminSearch_APITokens_Edges_Node) GetSsoAuthorizations() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_APITokens_Edges_Node{}
+	}
+	return t.SsoAuthorizations
 }
 func (t *AdminSearch_AdminSearch_APITokens_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -5273,6 +5309,8 @@ type AdminSearch_AdminSearch_OrganizationSettings_Edges_Node struct {
 	ComplianceWebhookToken           *string         "json:\"complianceWebhookToken,omitempty\" graphql:\"complianceWebhookToken\""
 	Domains                          []string        "json:\"domains,omitempty\" graphql:\"domains\""
 	ID                               string          "json:\"id\" graphql:\"id\""
+	IdentityProviderClientID         *string         "json:\"identityProviderClientID,omitempty\" graphql:\"identityProviderClientID\""
+	IdentityProviderClientSecret     *string         "json:\"identityProviderClientSecret,omitempty\" graphql:\"identityProviderClientSecret\""
 	IdentityProviderEntityID         *string         "json:\"identityProviderEntityID,omitempty\" graphql:\"identityProviderEntityID\""
 	IdentityProviderMetadataEndpoint *string         "json:\"identityProviderMetadataEndpoint,omitempty\" graphql:\"identityProviderMetadataEndpoint\""
 	OidcDiscoveryEndpoint            *string         "json:\"oidcDiscoveryEndpoint,omitempty\" graphql:\"oidcDiscoveryEndpoint\""
@@ -5328,6 +5366,18 @@ func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetID() string
 		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetIdentityProviderClientID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProviderClientID
+}
+func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetIdentityProviderClientSecret() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProviderClientSecret
 }
 func (t *AdminSearch_AdminSearch_OrganizationSettings_Edges_Node) GetIdentityProviderEntityID() *string {
 	if t == nil {
@@ -5435,12 +5485,13 @@ func (t *AdminSearch_AdminSearch_PersonalAccessTokens_PageInfo) GetStartCursor()
 }
 
 type AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node struct {
-	ID            string   "json:\"id\" graphql:\"id\""
-	Name          string   "json:\"name\" graphql:\"name\""
-	RevokedBy     *string  "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
-	RevokedReason *string  "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
-	Scopes        []string "json:\"scopes,omitempty\" graphql:\"scopes\""
-	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
+	ID                string   "json:\"id\" graphql:\"id\""
+	Name              string   "json:\"name\" graphql:\"name\""
+	RevokedBy         *string  "json:\"revokedBy,omitempty\" graphql:\"revokedBy\""
+	RevokedReason     *string  "json:\"revokedReason,omitempty\" graphql:\"revokedReason\""
+	Scopes            []string "json:\"scopes,omitempty\" graphql:\"scopes\""
+	SsoAuthorizations *string  "json:\"ssoAuthorizations,omitempty\" graphql:\"ssoAuthorizations\""
+	Tags              []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node) GetID() string {
@@ -5472,6 +5523,12 @@ func (t *AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node) GetScopes() []
 		t = &AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node{}
 	}
 	return t.Scopes
+}
+func (t *AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node) GetSsoAuthorizations() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node{}
+	}
+	return t.SsoAuthorizations
 }
 func (t *AdminSearch_AdminSearch_PersonalAccessTokens_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -6629,6 +6686,127 @@ func (t *AdminSearch_AdminSearch_Subcontrols) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type AdminSearch_AdminSearch_Subprocessors_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_Subprocessors_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_Subprocessors_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_Subprocessors_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_Subprocessors_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_Subprocessors_Edges_Node struct {
+	Description     *string  "json:\"description,omitempty\" graphql:\"description\""
+	ID              string   "json:\"id\" graphql:\"id\""
+	LogoLocalFileID *string  "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string  "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name            string   "json:\"name\" graphql:\"name\""
+	OwnerID         *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags            []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *AdminSearch_AdminSearch_Subprocessors_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *AdminSearch_AdminSearch_Subprocessors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Subprocessors_Edges_Node) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors_Edges_Node{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *AdminSearch_AdminSearch_Subprocessors_Edges_Node) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors_Edges_Node{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *AdminSearch_AdminSearch_Subprocessors_Edges_Node) GetName() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *AdminSearch_AdminSearch_Subprocessors_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_Subprocessors_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type AdminSearch_AdminSearch_Subprocessors_Edges struct {
+	Node *AdminSearch_AdminSearch_Subprocessors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *AdminSearch_AdminSearch_Subprocessors_Edges) GetNode() *AdminSearch_AdminSearch_Subprocessors_Edges_Node {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors_Edges{}
+	}
+	return t.Node
+}
+
+type AdminSearch_AdminSearch_Subprocessors struct {
+	Edges      []*AdminSearch_AdminSearch_Subprocessors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_Subprocessors_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                          "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_Subprocessors) GetEdges() []*AdminSearch_AdminSearch_Subprocessors_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_Subprocessors) GetPageInfo() *AdminSearch_AdminSearch_Subprocessors_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_Subprocessors) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Subprocessors{}
+	}
+	return t.TotalCount
+}
+
 type AdminSearch_AdminSearch_Subscribers_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -7457,6 +7635,7 @@ type AdminSearch_AdminSearch struct {
 	ScheduledJobs               *AdminSearch_AdminSearch_ScheduledJobs               "json:\"scheduledJobs,omitempty\" graphql:\"scheduledJobs\""
 	Standards                   *AdminSearch_AdminSearch_Standards                   "json:\"standards,omitempty\" graphql:\"standards\""
 	Subcontrols                 *AdminSearch_AdminSearch_Subcontrols                 "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
+	Subprocessors               *AdminSearch_AdminSearch_Subprocessors               "json:\"subprocessors,omitempty\" graphql:\"subprocessors\""
 	Subscribers                 *AdminSearch_AdminSearch_Subscribers                 "json:\"subscribers,omitempty\" graphql:\"subscribers\""
 	Tasks                       *AdminSearch_AdminSearch_Tasks                       "json:\"tasks,omitempty\" graphql:\"tasks\""
 	Templates                   *AdminSearch_AdminSearch_Templates                   "json:\"templates,omitempty\" graphql:\"templates\""
@@ -7682,6 +7861,12 @@ func (t *AdminSearch_AdminSearch) GetSubcontrols() *AdminSearch_AdminSearch_Subc
 		t = &AdminSearch_AdminSearch{}
 	}
 	return t.Subcontrols
+}
+func (t *AdminSearch_AdminSearch) GetSubprocessors() *AdminSearch_AdminSearch_Subprocessors {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.Subprocessors
 }
 func (t *AdminSearch_AdminSearch) GetSubscribers() *AdminSearch_AdminSearch_Subscribers {
 	if t == nil {
@@ -14309,6 +14494,28 @@ type CreateControlsByClone_CreateControlsByClone struct {
 func (t *CreateControlsByClone_CreateControlsByClone) GetControls() []*CreateControlsByClone_CreateControlsByClone_Controls {
 	if t == nil {
 		t = &CreateControlsByClone_CreateControlsByClone{}
+	}
+	return t.Controls
+}
+
+type CreateControlsByCloneReturnID_CreateControlsByClone_Controls struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateControlsByCloneReturnID_CreateControlsByClone_Controls) GetID() string {
+	if t == nil {
+		t = &CreateControlsByCloneReturnID_CreateControlsByClone_Controls{}
+	}
+	return t.ID
+}
+
+type CreateControlsByCloneReturnID_CreateControlsByClone struct {
+	Controls []*CreateControlsByCloneReturnID_CreateControlsByClone_Controls "json:\"controls,omitempty\" graphql:\"controls\""
+}
+
+func (t *CreateControlsByCloneReturnID_CreateControlsByClone) GetControls() []*CreateControlsByCloneReturnID_CreateControlsByClone_Controls {
+	if t == nil {
+		t = &CreateControlsByCloneReturnID_CreateControlsByClone{}
 	}
 	return t.Controls
 }
@@ -28529,6 +28736,713 @@ func (t *GetEvidenceHistories_EvidenceHistories) GetEdges() []*GetEvidenceHistor
 	return t.Edges
 }
 
+type CreateExport_CreateExport_Export struct {
+	CreatedAt   *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExportType  enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
+	Fields      []string           "json:\"fields,omitempty\" graphql:\"fields\""
+	Format      enums.ExportFormat "json:\"format\" graphql:\"format\""
+	ID          string             "json:\"id\" graphql:\"id\""
+	OwnerID     *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RequestorID *string            "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status      enums.ExportStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt   *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateExport_CreateExport_Export) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateExport_CreateExport_Export) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateExport_CreateExport_Export) GetExportType() *enums.ExportType {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return &t.ExportType
+}
+func (t *CreateExport_CreateExport_Export) GetFields() []string {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return t.Fields
+}
+func (t *CreateExport_CreateExport_Export) GetFormat() *enums.ExportFormat {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return &t.Format
+}
+func (t *CreateExport_CreateExport_Export) GetID() string {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return t.ID
+}
+func (t *CreateExport_CreateExport_Export) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return t.OwnerID
+}
+func (t *CreateExport_CreateExport_Export) GetRequestorID() *string {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return t.RequestorID
+}
+func (t *CreateExport_CreateExport_Export) GetStatus() *enums.ExportStatus {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return &t.Status
+}
+func (t *CreateExport_CreateExport_Export) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateExport_CreateExport_Export) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateExport_CreateExport struct {
+	Export CreateExport_CreateExport_Export "json:\"export\" graphql:\"export\""
+}
+
+func (t *CreateExport_CreateExport) GetExport() *CreateExport_CreateExport_Export {
+	if t == nil {
+		t = &CreateExport_CreateExport{}
+	}
+	return &t.Export
+}
+
+type GetAllExports_Exports_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllExports_Exports_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllExports_Exports_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllExports_Exports_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllExports_Exports_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllExports_Exports_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllExports_Exports_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllExports_Exports_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllExports_Exports_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllExports_Exports_Edges_Node struct {
+	CreatedAt   *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExportType  enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
+	Fields      []string           "json:\"fields,omitempty\" graphql:\"fields\""
+	Format      enums.ExportFormat "json:\"format\" graphql:\"format\""
+	ID          string             "json:\"id\" graphql:\"id\""
+	OwnerID     *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RequestorID *string            "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status      enums.ExportStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt   *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllExports_Exports_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllExports_Exports_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllExports_Exports_Edges_Node) GetExportType() *enums.ExportType {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return &t.ExportType
+}
+func (t *GetAllExports_Exports_Edges_Node) GetFields() []string {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return t.Fields
+}
+func (t *GetAllExports_Exports_Edges_Node) GetFormat() *enums.ExportFormat {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return &t.Format
+}
+func (t *GetAllExports_Exports_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllExports_Exports_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllExports_Exports_Edges_Node) GetRequestorID() *string {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return t.RequestorID
+}
+func (t *GetAllExports_Exports_Edges_Node) GetStatus() *enums.ExportStatus {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAllExports_Exports_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllExports_Exports_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllExports_Exports_Edges struct {
+	Node *GetAllExports_Exports_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllExports_Exports_Edges) GetNode() *GetAllExports_Exports_Edges_Node {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllExports_Exports struct {
+	Edges      []*GetAllExports_Exports_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllExports_Exports_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                          "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllExports_Exports) GetEdges() []*GetAllExports_Exports_Edges {
+	if t == nil {
+		t = &GetAllExports_Exports{}
+	}
+	return t.Edges
+}
+func (t *GetAllExports_Exports) GetPageInfo() *GetAllExports_Exports_PageInfo {
+	if t == nil {
+		t = &GetAllExports_Exports{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllExports_Exports) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllExports_Exports{}
+	}
+	return t.TotalCount
+}
+
+type GetExportByID_Export_Files_Edges_Node struct {
+	ID            string  "json:\"id\" graphql:\"id\""
+	StoragePath   *string "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageScheme *string "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume *string "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+}
+
+func (t *GetExportByID_Export_Files_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetExportByID_Export_Files_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetExportByID_Export_Files_Edges_Node) GetStoragePath() *string {
+	if t == nil {
+		t = &GetExportByID_Export_Files_Edges_Node{}
+	}
+	return t.StoragePath
+}
+func (t *GetExportByID_Export_Files_Edges_Node) GetStorageScheme() *string {
+	if t == nil {
+		t = &GetExportByID_Export_Files_Edges_Node{}
+	}
+	return t.StorageScheme
+}
+func (t *GetExportByID_Export_Files_Edges_Node) GetStorageVolume() *string {
+	if t == nil {
+		t = &GetExportByID_Export_Files_Edges_Node{}
+	}
+	return t.StorageVolume
+}
+
+type GetExportByID_Export_Files_Edges struct {
+	Node *GetExportByID_Export_Files_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetExportByID_Export_Files_Edges) GetNode() *GetExportByID_Export_Files_Edges_Node {
+	if t == nil {
+		t = &GetExportByID_Export_Files_Edges{}
+	}
+	return t.Node
+}
+
+type GetExportByID_Export_Files struct {
+	Edges []*GetExportByID_Export_Files_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetExportByID_Export_Files) GetEdges() []*GetExportByID_Export_Files_Edges {
+	if t == nil {
+		t = &GetExportByID_Export_Files{}
+	}
+	return t.Edges
+}
+
+type GetExportByID_Export struct {
+	CreatedAt   *time.Time                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExportType  enums.ExportType           "json:\"exportType\" graphql:\"exportType\""
+	Fields      []string                   "json:\"fields,omitempty\" graphql:\"fields\""
+	Files       GetExportByID_Export_Files "json:\"files\" graphql:\"files\""
+	Format      enums.ExportFormat         "json:\"format\" graphql:\"format\""
+	ID          string                     "json:\"id\" graphql:\"id\""
+	OwnerID     *string                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RequestorID *string                    "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status      enums.ExportStatus         "json:\"status\" graphql:\"status\""
+	UpdatedAt   *time.Time                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetExportByID_Export) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return t.CreatedAt
+}
+func (t *GetExportByID_Export) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return t.CreatedBy
+}
+func (t *GetExportByID_Export) GetExportType() *enums.ExportType {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return &t.ExportType
+}
+func (t *GetExportByID_Export) GetFields() []string {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return t.Fields
+}
+func (t *GetExportByID_Export) GetFiles() *GetExportByID_Export_Files {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return &t.Files
+}
+func (t *GetExportByID_Export) GetFormat() *enums.ExportFormat {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return &t.Format
+}
+func (t *GetExportByID_Export) GetID() string {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return t.ID
+}
+func (t *GetExportByID_Export) GetOwnerID() *string {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return t.OwnerID
+}
+func (t *GetExportByID_Export) GetRequestorID() *string {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return t.RequestorID
+}
+func (t *GetExportByID_Export) GetStatus() *enums.ExportStatus {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return &t.Status
+}
+func (t *GetExportByID_Export) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetExportByID_Export) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return t.UpdatedBy
+}
+
+type GetExports_Exports_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetExports_Exports_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetExports_Exports_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetExports_Exports_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetExports_Exports_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetExports_Exports_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetExports_Exports_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetExports_Exports_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetExports_Exports_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetExports_Exports_Edges_Node struct {
+	CreatedAt   *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExportType  enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
+	Fields      []string           "json:\"fields,omitempty\" graphql:\"fields\""
+	Format      enums.ExportFormat "json:\"format\" graphql:\"format\""
+	ID          string             "json:\"id\" graphql:\"id\""
+	OwnerID     *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RequestorID *string            "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status      enums.ExportStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt   *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetExports_Exports_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetExports_Exports_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetExports_Exports_Edges_Node) GetExportType() *enums.ExportType {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return &t.ExportType
+}
+func (t *GetExports_Exports_Edges_Node) GetFields() []string {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return t.Fields
+}
+func (t *GetExports_Exports_Edges_Node) GetFormat() *enums.ExportFormat {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return &t.Format
+}
+func (t *GetExports_Exports_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetExports_Exports_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetExports_Exports_Edges_Node) GetRequestorID() *string {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return t.RequestorID
+}
+func (t *GetExports_Exports_Edges_Node) GetStatus() *enums.ExportStatus {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetExports_Exports_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetExports_Exports_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetExports_Exports_Edges struct {
+	Node *GetExports_Exports_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetExports_Exports_Edges) GetNode() *GetExports_Exports_Edges_Node {
+	if t == nil {
+		t = &GetExports_Exports_Edges{}
+	}
+	return t.Node
+}
+
+type GetExports_Exports struct {
+	Edges      []*GetExports_Exports_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetExports_Exports_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                       "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetExports_Exports) GetEdges() []*GetExports_Exports_Edges {
+	if t == nil {
+		t = &GetExports_Exports{}
+	}
+	return t.Edges
+}
+func (t *GetExports_Exports) GetPageInfo() *GetExports_Exports_PageInfo {
+	if t == nil {
+		t = &GetExports_Exports{}
+	}
+	return &t.PageInfo
+}
+func (t *GetExports_Exports) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetExports_Exports{}
+	}
+	return t.TotalCount
+}
+
+type UpdateExport_UpdateExport_Export_Files_Edges_Node struct {
+	ID            string  "json:\"id\" graphql:\"id\""
+	StoragePath   *string "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageScheme *string "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume *string "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+}
+
+func (t *UpdateExport_UpdateExport_Export_Files_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export_Files_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateExport_UpdateExport_Export_Files_Edges_Node) GetStoragePath() *string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export_Files_Edges_Node{}
+	}
+	return t.StoragePath
+}
+func (t *UpdateExport_UpdateExport_Export_Files_Edges_Node) GetStorageScheme() *string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export_Files_Edges_Node{}
+	}
+	return t.StorageScheme
+}
+func (t *UpdateExport_UpdateExport_Export_Files_Edges_Node) GetStorageVolume() *string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export_Files_Edges_Node{}
+	}
+	return t.StorageVolume
+}
+
+type UpdateExport_UpdateExport_Export_Files_Edges struct {
+	Node *UpdateExport_UpdateExport_Export_Files_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateExport_UpdateExport_Export_Files_Edges) GetNode() *UpdateExport_UpdateExport_Export_Files_Edges_Node {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export_Files_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateExport_UpdateExport_Export_Files struct {
+	Edges []*UpdateExport_UpdateExport_Export_Files_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateExport_UpdateExport_Export_Files) GetEdges() []*UpdateExport_UpdateExport_Export_Files_Edges {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export_Files{}
+	}
+	return t.Edges
+}
+
+type UpdateExport_UpdateExport_Export struct {
+	CreatedAt   *time.Time                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ExportType  enums.ExportType                       "json:\"exportType\" graphql:\"exportType\""
+	Fields      []string                               "json:\"fields,omitempty\" graphql:\"fields\""
+	Files       UpdateExport_UpdateExport_Export_Files "json:\"files\" graphql:\"files\""
+	Format      enums.ExportFormat                     "json:\"format\" graphql:\"format\""
+	ID          string                                 "json:\"id\" graphql:\"id\""
+	OwnerID     *string                                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RequestorID *string                                "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status      enums.ExportStatus                     "json:\"status\" graphql:\"status\""
+	UpdatedAt   *time.Time                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateExport_UpdateExport_Export) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateExport_UpdateExport_Export) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateExport_UpdateExport_Export) GetExportType() *enums.ExportType {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return &t.ExportType
+}
+func (t *UpdateExport_UpdateExport_Export) GetFields() []string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return t.Fields
+}
+func (t *UpdateExport_UpdateExport_Export) GetFiles() *UpdateExport_UpdateExport_Export_Files {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return &t.Files
+}
+func (t *UpdateExport_UpdateExport_Export) GetFormat() *enums.ExportFormat {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return &t.Format
+}
+func (t *UpdateExport_UpdateExport_Export) GetID() string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return t.ID
+}
+func (t *UpdateExport_UpdateExport_Export) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateExport_UpdateExport_Export) GetRequestorID() *string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return t.RequestorID
+}
+func (t *UpdateExport_UpdateExport_Export) GetStatus() *enums.ExportStatus {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return &t.Status
+}
+func (t *UpdateExport_UpdateExport_Export) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateExport_UpdateExport_Export) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateExport_UpdateExport struct {
+	Export UpdateExport_UpdateExport_Export "json:\"export\" graphql:\"export\""
+}
+
+func (t *UpdateExport_UpdateExport) GetExport() *UpdateExport_UpdateExport_Export {
+	if t == nil {
+		t = &UpdateExport_UpdateExport{}
+	}
+	return &t.Export
+}
+
+type DeleteExport_DeleteExport struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteExport_DeleteExport) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteExport_DeleteExport{}
+	}
+	return t.DeletedID
+}
+
+type DeleteBulkExport_DeleteBulkExport struct {
+	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+}
+
+func (t *DeleteBulkExport_DeleteBulkExport) GetDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkExport_DeleteBulkExport{}
+	}
+	return t.DeletedIDs
+}
+
 type DeleteFile_DeleteFile struct {
 	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
 }
@@ -36333,6 +37247,38 @@ func (t *DeleteInternalPolicy_DeleteInternalPolicy) GetDeletedID() string {
 	return t.DeletedID
 }
 
+type GetAllInternalPolicies_InternalPolicies_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllInternalPolicies_InternalPolicies_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllInternalPolicies_InternalPolicies_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllInternalPolicies_InternalPolicies_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllInternalPolicies_InternalPolicies_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies_PageInfo{}
+	}
+	return t.StartCursor
+}
+
 type GetAllInternalPolicies_InternalPolicies_Edges_Node_Editors_Edges_Node struct {
 	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
@@ -36612,7 +37558,9 @@ func (t *GetAllInternalPolicies_InternalPolicies_Edges) GetNode() *GetAllInterna
 }
 
 type GetAllInternalPolicies_InternalPolicies struct {
-	Edges []*GetAllInternalPolicies_InternalPolicies_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetAllInternalPolicies_InternalPolicies_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllInternalPolicies_InternalPolicies_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                            "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetAllInternalPolicies_InternalPolicies) GetEdges() []*GetAllInternalPolicies_InternalPolicies_Edges {
@@ -36620,6 +37568,50 @@ func (t *GetAllInternalPolicies_InternalPolicies) GetEdges() []*GetAllInternalPo
 		t = &GetAllInternalPolicies_InternalPolicies{}
 	}
 	return t.Edges
+}
+func (t *GetAllInternalPolicies_InternalPolicies) GetPageInfo() *GetAllInternalPolicies_InternalPolicies_PageInfo {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllInternalPolicies_InternalPolicies) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies{}
+	}
+	return t.TotalCount
+}
+
+type GetInternalPolicies_InternalPolicies_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetInternalPolicies_InternalPolicies_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetInternalPolicies_InternalPolicies_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetInternalPolicies_InternalPolicies_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetInternalPolicies_InternalPolicies_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_PageInfo{}
+	}
+	return t.StartCursor
 }
 
 type GetInternalPolicies_InternalPolicies_Edges_Node_Editors_Edges_Node struct {
@@ -36894,7 +37886,9 @@ func (t *GetInternalPolicies_InternalPolicies_Edges) GetNode() *GetInternalPolic
 }
 
 type GetInternalPolicies_InternalPolicies struct {
-	Edges []*GetInternalPolicies_InternalPolicies_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetInternalPolicies_InternalPolicies_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetInternalPolicies_InternalPolicies_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                         "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetInternalPolicies_InternalPolicies) GetEdges() []*GetInternalPolicies_InternalPolicies_Edges {
@@ -36902,6 +37896,18 @@ func (t *GetInternalPolicies_InternalPolicies) GetEdges() []*GetInternalPolicies
 		t = &GetInternalPolicies_InternalPolicies{}
 	}
 	return t.Edges
+}
+func (t *GetInternalPolicies_InternalPolicies) GetPageInfo() *GetInternalPolicies_InternalPolicies_PageInfo {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies{}
+	}
+	return &t.PageInfo
+}
+func (t *GetInternalPolicies_InternalPolicies) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies{}
+	}
+	return t.TotalCount
 }
 
 type GetInternalPolicyByID_InternalPolicy_Editors_Edges_Node struct {
@@ -48325,21 +49331,28 @@ func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node_Organization
 }
 
 type GetAllOrganizationSettings_OrganizationSettings_Edges_Node struct {
-	AllowedEmailDomains []string                                                                 "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
-	BillingAddress      *models.Address                                                          "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
-	BillingContact      *string                                                                  "json:\"billingContact,omitempty\" graphql:\"billingContact\""
-	BillingEmail        *string                                                                  "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
-	BillingPhone        *string                                                                  "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	CreatedAt           *time.Time                                                               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy           *string                                                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Domains             []string                                                                 "json:\"domains,omitempty\" graphql:\"domains\""
-	GeoLocation         *enums.Region                                                            "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
-	ID                  string                                                                   "json:\"id\" graphql:\"id\""
-	Organization        *GetAllOrganizationSettings_OrganizationSettings_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	Tags                []string                                                                 "json:\"tags,omitempty\" graphql:\"tags\""
-	TaxIdentifier       *string                                                                  "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
-	UpdatedAt           *time.Time                                                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy           *string                                                                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AllowedEmailDomains              []string                                                                 "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
+	BillingAddress                   *models.Address                                                          "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	BillingContact                   *string                                                                  "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail                     *string                                                                  "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone                     *string                                                                  "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	ComplianceWebhookToken           *string                                                                  "json:\"complianceWebhookToken,omitempty\" graphql:\"complianceWebhookToken\""
+	CreatedAt                        *time.Time                                                               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                        *string                                                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Domains                          []string                                                                 "json:\"domains,omitempty\" graphql:\"domains\""
+	GeoLocation                      *enums.Region                                                            "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
+	ID                               string                                                                   "json:\"id\" graphql:\"id\""
+	IdentityProvider                 *enums.SSOProvider                                                       "json:\"identityProvider,omitempty\" graphql:\"identityProvider\""
+	IdentityProviderClientSecret     *string                                                                  "json:\"identityProviderClientSecret,omitempty\" graphql:\"identityProviderClientSecret\""
+	IdentityProviderEntityID         *string                                                                  "json:\"identityProviderEntityID,omitempty\" graphql:\"identityProviderEntityID\""
+	IdentityProviderLoginEnforced    bool                                                                     "json:\"identityProviderLoginEnforced\" graphql:\"identityProviderLoginEnforced\""
+	IdentityProviderMetadataEndpoint *string                                                                  "json:\"identityProviderMetadataEndpoint,omitempty\" graphql:\"identityProviderMetadataEndpoint\""
+	OidcDiscoveryEndpoint            *string                                                                  "json:\"oidcDiscoveryEndpoint,omitempty\" graphql:\"oidcDiscoveryEndpoint\""
+	Organization                     *GetAllOrganizationSettings_OrganizationSettings_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
+	Tags                             []string                                                                 "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIdentifier                    *string                                                                  "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	UpdatedAt                        *time.Time                                                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                        *string                                                                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetAllowedEmailDomains() []string {
@@ -48372,6 +49385,12 @@ func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetBillingP
 	}
 	return t.BillingPhone
 }
+func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetComplianceWebhookToken() *string {
+	if t == nil {
+		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.ComplianceWebhookToken
+}
 func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
@@ -48401,6 +49420,42 @@ func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetID() str
 		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProvider() *enums.SSOProvider {
+	if t == nil {
+		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProvider
+}
+func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProviderClientSecret() *string {
+	if t == nil {
+		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProviderClientSecret
+}
+func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProviderEntityID() *string {
+	if t == nil {
+		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProviderEntityID
+}
+func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProviderLoginEnforced() bool {
+	if t == nil {
+		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProviderLoginEnforced
+}
+func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProviderMetadataEndpoint() *string {
+	if t == nil {
+		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProviderMetadataEndpoint
+}
+func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetOidcDiscoveryEndpoint() *string {
+	if t == nil {
+		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.OidcDiscoveryEndpoint
 }
 func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetOrganization() *GetAllOrganizationSettings_OrganizationSettings_Edges_Node_Organization {
 	if t == nil {
@@ -48474,21 +49529,28 @@ func (t *GetOrganizationSettingByID_OrganizationSetting_Organization) GetID() st
 }
 
 type GetOrganizationSettingByID_OrganizationSetting struct {
-	AllowedEmailDomains []string                                                     "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
-	BillingAddress      *models.Address                                              "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
-	BillingContact      *string                                                      "json:\"billingContact,omitempty\" graphql:\"billingContact\""
-	BillingEmail        *string                                                      "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
-	BillingPhone        *string                                                      "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	CreatedAt           *time.Time                                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy           *string                                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Domains             []string                                                     "json:\"domains,omitempty\" graphql:\"domains\""
-	GeoLocation         *enums.Region                                                "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
-	ID                  string                                                       "json:\"id\" graphql:\"id\""
-	Organization        *GetOrganizationSettingByID_OrganizationSetting_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	Tags                []string                                                     "json:\"tags,omitempty\" graphql:\"tags\""
-	TaxIdentifier       *string                                                      "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
-	UpdatedAt           *time.Time                                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy           *string                                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AllowedEmailDomains              []string                                                     "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
+	BillingAddress                   *models.Address                                              "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	BillingContact                   *string                                                      "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail                     *string                                                      "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone                     *string                                                      "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	ComplianceWebhookToken           *string                                                      "json:\"complianceWebhookToken,omitempty\" graphql:\"complianceWebhookToken\""
+	CreatedAt                        *time.Time                                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                        *string                                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Domains                          []string                                                     "json:\"domains,omitempty\" graphql:\"domains\""
+	GeoLocation                      *enums.Region                                                "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
+	ID                               string                                                       "json:\"id\" graphql:\"id\""
+	IdentityProvider                 *enums.SSOProvider                                           "json:\"identityProvider,omitempty\" graphql:\"identityProvider\""
+	IdentityProviderClientSecret     *string                                                      "json:\"identityProviderClientSecret,omitempty\" graphql:\"identityProviderClientSecret\""
+	IdentityProviderEntityID         *string                                                      "json:\"identityProviderEntityID,omitempty\" graphql:\"identityProviderEntityID\""
+	IdentityProviderLoginEnforced    bool                                                         "json:\"identityProviderLoginEnforced\" graphql:\"identityProviderLoginEnforced\""
+	IdentityProviderMetadataEndpoint *string                                                      "json:\"identityProviderMetadataEndpoint,omitempty\" graphql:\"identityProviderMetadataEndpoint\""
+	OidcDiscoveryEndpoint            *string                                                      "json:\"oidcDiscoveryEndpoint,omitempty\" graphql:\"oidcDiscoveryEndpoint\""
+	Organization                     *GetOrganizationSettingByID_OrganizationSetting_Organization "json:\"organization,omitempty\" graphql:\"organization\""
+	Tags                             []string                                                     "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIdentifier                    *string                                                      "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	UpdatedAt                        *time.Time                                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                        *string                                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetOrganizationSettingByID_OrganizationSetting) GetAllowedEmailDomains() []string {
@@ -48521,6 +49583,12 @@ func (t *GetOrganizationSettingByID_OrganizationSetting) GetBillingPhone() *stri
 	}
 	return t.BillingPhone
 }
+func (t *GetOrganizationSettingByID_OrganizationSetting) GetComplianceWebhookToken() *string {
+	if t == nil {
+		t = &GetOrganizationSettingByID_OrganizationSetting{}
+	}
+	return t.ComplianceWebhookToken
+}
 func (t *GetOrganizationSettingByID_OrganizationSetting) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetOrganizationSettingByID_OrganizationSetting{}
@@ -48550,6 +49618,42 @@ func (t *GetOrganizationSettingByID_OrganizationSetting) GetID() string {
 		t = &GetOrganizationSettingByID_OrganizationSetting{}
 	}
 	return t.ID
+}
+func (t *GetOrganizationSettingByID_OrganizationSetting) GetIdentityProvider() *enums.SSOProvider {
+	if t == nil {
+		t = &GetOrganizationSettingByID_OrganizationSetting{}
+	}
+	return t.IdentityProvider
+}
+func (t *GetOrganizationSettingByID_OrganizationSetting) GetIdentityProviderClientSecret() *string {
+	if t == nil {
+		t = &GetOrganizationSettingByID_OrganizationSetting{}
+	}
+	return t.IdentityProviderClientSecret
+}
+func (t *GetOrganizationSettingByID_OrganizationSetting) GetIdentityProviderEntityID() *string {
+	if t == nil {
+		t = &GetOrganizationSettingByID_OrganizationSetting{}
+	}
+	return t.IdentityProviderEntityID
+}
+func (t *GetOrganizationSettingByID_OrganizationSetting) GetIdentityProviderLoginEnforced() bool {
+	if t == nil {
+		t = &GetOrganizationSettingByID_OrganizationSetting{}
+	}
+	return t.IdentityProviderLoginEnforced
+}
+func (t *GetOrganizationSettingByID_OrganizationSetting) GetIdentityProviderMetadataEndpoint() *string {
+	if t == nil {
+		t = &GetOrganizationSettingByID_OrganizationSetting{}
+	}
+	return t.IdentityProviderMetadataEndpoint
+}
+func (t *GetOrganizationSettingByID_OrganizationSetting) GetOidcDiscoveryEndpoint() *string {
+	if t == nil {
+		t = &GetOrganizationSettingByID_OrganizationSetting{}
+	}
+	return t.OidcDiscoveryEndpoint
 }
 func (t *GetOrganizationSettingByID_OrganizationSetting) GetOrganization() *GetOrganizationSettingByID_OrganizationSetting_Organization {
 	if t == nil {
@@ -48601,21 +49705,28 @@ func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node_Organization) G
 }
 
 type GetOrganizationSettings_OrganizationSettings_Edges_Node struct {
-	AllowedEmailDomains []string                                                              "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
-	BillingAddress      *models.Address                                                       "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
-	BillingContact      *string                                                               "json:\"billingContact,omitempty\" graphql:\"billingContact\""
-	BillingEmail        *string                                                               "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
-	BillingPhone        *string                                                               "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	CreatedAt           *time.Time                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy           *string                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Domains             []string                                                              "json:\"domains,omitempty\" graphql:\"domains\""
-	GeoLocation         *enums.Region                                                         "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
-	ID                  string                                                                "json:\"id\" graphql:\"id\""
-	Organization        *GetOrganizationSettings_OrganizationSettings_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	Tags                []string                                                              "json:\"tags,omitempty\" graphql:\"tags\""
-	TaxIdentifier       *string                                                               "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
-	UpdatedAt           *time.Time                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy           *string                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AllowedEmailDomains              []string                                                              "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
+	BillingAddress                   *models.Address                                                       "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	BillingContact                   *string                                                               "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail                     *string                                                               "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone                     *string                                                               "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	ComplianceWebhookToken           *string                                                               "json:\"complianceWebhookToken,omitempty\" graphql:\"complianceWebhookToken\""
+	CreatedAt                        *time.Time                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                        *string                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Domains                          []string                                                              "json:\"domains,omitempty\" graphql:\"domains\""
+	GeoLocation                      *enums.Region                                                         "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
+	ID                               string                                                                "json:\"id\" graphql:\"id\""
+	IdentityProvider                 *enums.SSOProvider                                                    "json:\"identityProvider,omitempty\" graphql:\"identityProvider\""
+	IdentityProviderClientSecret     *string                                                               "json:\"identityProviderClientSecret,omitempty\" graphql:\"identityProviderClientSecret\""
+	IdentityProviderEntityID         *string                                                               "json:\"identityProviderEntityID,omitempty\" graphql:\"identityProviderEntityID\""
+	IdentityProviderLoginEnforced    bool                                                                  "json:\"identityProviderLoginEnforced\" graphql:\"identityProviderLoginEnforced\""
+	IdentityProviderMetadataEndpoint *string                                                               "json:\"identityProviderMetadataEndpoint,omitempty\" graphql:\"identityProviderMetadataEndpoint\""
+	OidcDiscoveryEndpoint            *string                                                               "json:\"oidcDiscoveryEndpoint,omitempty\" graphql:\"oidcDiscoveryEndpoint\""
+	Organization                     *GetOrganizationSettings_OrganizationSettings_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
+	Tags                             []string                                                              "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIdentifier                    *string                                                               "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	UpdatedAt                        *time.Time                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                        *string                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetAllowedEmailDomains() []string {
@@ -48648,6 +49759,12 @@ func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetBillingPhon
 	}
 	return t.BillingPhone
 }
+func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetComplianceWebhookToken() *string {
+	if t == nil {
+		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.ComplianceWebhookToken
+}
 func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
@@ -48677,6 +49794,42 @@ func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetID() string
 		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProvider() *enums.SSOProvider {
+	if t == nil {
+		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProvider
+}
+func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProviderClientSecret() *string {
+	if t == nil {
+		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProviderClientSecret
+}
+func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProviderEntityID() *string {
+	if t == nil {
+		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProviderEntityID
+}
+func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProviderLoginEnforced() bool {
+	if t == nil {
+		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProviderLoginEnforced
+}
+func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProviderMetadataEndpoint() *string {
+	if t == nil {
+		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.IdentityProviderMetadataEndpoint
+}
+func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetOidcDiscoveryEndpoint() *string {
+	if t == nil {
+		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
+	}
+	return t.OidcDiscoveryEndpoint
 }
 func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetOrganization() *GetOrganizationSettings_OrganizationSettings_Edges_Node_Organization {
 	if t == nil {
@@ -48750,21 +49903,28 @@ func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting
 }
 
 type UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting struct {
-	AllowedEmailDomains []string                                                                              "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
-	BillingAddress      *models.Address                                                                       "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
-	BillingContact      *string                                                                               "json:\"billingContact,omitempty\" graphql:\"billingContact\""
-	BillingEmail        *string                                                                               "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
-	BillingPhone        *string                                                                               "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	CreatedAt           *time.Time                                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy           *string                                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Domains             []string                                                                              "json:\"domains,omitempty\" graphql:\"domains\""
-	GeoLocation         *enums.Region                                                                         "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
-	ID                  string                                                                                "json:\"id\" graphql:\"id\""
-	Organization        *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	Tags                []string                                                                              "json:\"tags,omitempty\" graphql:\"tags\""
-	TaxIdentifier       *string                                                                               "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
-	UpdatedAt           *time.Time                                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy           *string                                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AllowedEmailDomains              []string                                                                              "json:\"allowedEmailDomains,omitempty\" graphql:\"allowedEmailDomains\""
+	BillingAddress                   *models.Address                                                                       "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	BillingContact                   *string                                                                               "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail                     *string                                                                               "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone                     *string                                                                               "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	ComplianceWebhookToken           *string                                                                               "json:\"complianceWebhookToken,omitempty\" graphql:\"complianceWebhookToken\""
+	CreatedAt                        *time.Time                                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                        *string                                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Domains                          []string                                                                              "json:\"domains,omitempty\" graphql:\"domains\""
+	GeoLocation                      *enums.Region                                                                         "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
+	ID                               string                                                                                "json:\"id\" graphql:\"id\""
+	IdentityProvider                 *enums.SSOProvider                                                                    "json:\"identityProvider,omitempty\" graphql:\"identityProvider\""
+	IdentityProviderClientSecret     *string                                                                               "json:\"identityProviderClientSecret,omitempty\" graphql:\"identityProviderClientSecret\""
+	IdentityProviderEntityID         *string                                                                               "json:\"identityProviderEntityID,omitempty\" graphql:\"identityProviderEntityID\""
+	IdentityProviderLoginEnforced    bool                                                                                  "json:\"identityProviderLoginEnforced\" graphql:\"identityProviderLoginEnforced\""
+	IdentityProviderMetadataEndpoint *string                                                                               "json:\"identityProviderMetadataEndpoint,omitempty\" graphql:\"identityProviderMetadataEndpoint\""
+	OidcDiscoveryEndpoint            *string                                                                               "json:\"oidcDiscoveryEndpoint,omitempty\" graphql:\"oidcDiscoveryEndpoint\""
+	Organization                     *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_Organization "json:\"organization,omitempty\" graphql:\"organization\""
+	Tags                             []string                                                                              "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIdentifier                    *string                                                                               "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	UpdatedAt                        *time.Time                                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                        *string                                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetAllowedEmailDomains() []string {
@@ -48797,6 +49957,12 @@ func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting
 	}
 	return t.BillingPhone
 }
+func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetComplianceWebhookToken() *string {
+	if t == nil {
+		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
+	}
+	return t.ComplianceWebhookToken
+}
 func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
@@ -48826,6 +49992,42 @@ func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting
 		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
 	}
 	return t.ID
+}
+func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetIdentityProvider() *enums.SSOProvider {
+	if t == nil {
+		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
+	}
+	return t.IdentityProvider
+}
+func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetIdentityProviderClientSecret() *string {
+	if t == nil {
+		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
+	}
+	return t.IdentityProviderClientSecret
+}
+func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetIdentityProviderEntityID() *string {
+	if t == nil {
+		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
+	}
+	return t.IdentityProviderEntityID
+}
+func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetIdentityProviderLoginEnforced() bool {
+	if t == nil {
+		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
+	}
+	return t.IdentityProviderLoginEnforced
+}
+func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetIdentityProviderMetadataEndpoint() *string {
+	if t == nil {
+		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
+	}
+	return t.IdentityProviderMetadataEndpoint
+}
+func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetOidcDiscoveryEndpoint() *string {
+	if t == nil {
+		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
+	}
+	return t.OidcDiscoveryEndpoint
 }
 func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetOrganization() *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting_Organization {
 	if t == nil {
@@ -54196,6 +55398,68 @@ type CreateFullProgram_CreateFullProgram struct {
 func (t *CreateFullProgram_CreateFullProgram) GetProgram() *CreateFullProgram_CreateFullProgram_Program {
 	if t == nil {
 		t = &CreateFullProgram_CreateFullProgram{}
+	}
+	return &t.Program
+}
+
+type CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls_Edges_Node struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls_Edges_Node{}
+	}
+	return t.ID
+}
+
+type CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls_Edges struct {
+	Node *CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls_Edges) GetNode() *CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls_Edges_Node {
+	if t == nil {
+		t = &CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls_Edges{}
+	}
+	return t.Node
+}
+
+type CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls struct {
+	Edges []*CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls) GetEdges() []*CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls_Edges {
+	if t == nil {
+		t = &CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls{}
+	}
+	return t.Edges
+}
+
+type CreateFullProgramReturnIDs_CreateFullProgram_Program struct {
+	Controls CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls "json:\"controls\" graphql:\"controls\""
+	ID       string                                                        "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateFullProgramReturnIDs_CreateFullProgram_Program) GetControls() *CreateFullProgramReturnIDs_CreateFullProgram_Program_Controls {
+	if t == nil {
+		t = &CreateFullProgramReturnIDs_CreateFullProgram_Program{}
+	}
+	return &t.Controls
+}
+func (t *CreateFullProgramReturnIDs_CreateFullProgram_Program) GetID() string {
+	if t == nil {
+		t = &CreateFullProgramReturnIDs_CreateFullProgram_Program{}
+	}
+	return t.ID
+}
+
+type CreateFullProgramReturnIDs_CreateFullProgram struct {
+	Program CreateFullProgramReturnIDs_CreateFullProgram_Program "json:\"program\" graphql:\"program\""
+}
+
+func (t *CreateFullProgramReturnIDs_CreateFullProgram) GetProgram() *CreateFullProgramReturnIDs_CreateFullProgram_Program {
+	if t == nil {
+		t = &CreateFullProgramReturnIDs_CreateFullProgram{}
 	}
 	return &t.Program
 }
@@ -59682,6 +60946,38 @@ func (t *DeleteRisk_DeleteRisk) GetDeletedID() string {
 	return t.DeletedID
 }
 
+type GetAllRisks_Risks_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllRisks_Risks_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllRisks_Risks_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllRisks_Risks_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllRisks_Risks_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllRisks_Risks_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllRisks_Risks_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllRisks_Risks_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllRisks_Risks_PageInfo{}
+	}
+	return t.StartCursor
+}
+
 type GetAllRisks_Risks_Edges_Node_Programs_Edges_Node struct {
 	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
@@ -60048,7 +61344,9 @@ func (t *GetAllRisks_Risks_Edges) GetNode() *GetAllRisks_Risks_Edges_Node {
 }
 
 type GetAllRisks_Risks struct {
-	Edges []*GetAllRisks_Risks_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetAllRisks_Risks_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllRisks_Risks_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                      "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetAllRisks_Risks) GetEdges() []*GetAllRisks_Risks_Edges {
@@ -60056,6 +61354,18 @@ func (t *GetAllRisks_Risks) GetEdges() []*GetAllRisks_Risks_Edges {
 		t = &GetAllRisks_Risks{}
 	}
 	return t.Edges
+}
+func (t *GetAllRisks_Risks) GetPageInfo() *GetAllRisks_Risks_PageInfo {
+	if t == nil {
+		t = &GetAllRisks_Risks{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllRisks_Risks) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllRisks_Risks{}
+	}
+	return t.TotalCount
 }
 
 type GetRiskByID_Risk_Programs_Edges_Node struct {
@@ -60410,6 +61720,38 @@ func (t *GetRiskByID_Risk) GetViewers() *GetRiskByID_Risk_Viewers {
 		t = &GetRiskByID_Risk{}
 	}
 	return &t.Viewers
+}
+
+type GetRisks_Risks_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetRisks_Risks_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetRisks_Risks_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetRisks_Risks_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetRisks_Risks_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetRisks_Risks_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetRisks_Risks_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetRisks_Risks_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetRisks_Risks_PageInfo{}
+	}
+	return t.StartCursor
 }
 
 type GetRisks_Risks_Edges_Node_Programs_Edges_Node struct {
@@ -60778,7 +62120,9 @@ func (t *GetRisks_Risks_Edges) GetNode() *GetRisks_Risks_Edges_Node {
 }
 
 type GetRisks_Risks struct {
-	Edges []*GetRisks_Risks_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetRisks_Risks_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetRisks_Risks_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                   "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetRisks_Risks) GetEdges() []*GetRisks_Risks_Edges {
@@ -60786,6 +62130,18 @@ func (t *GetRisks_Risks) GetEdges() []*GetRisks_Risks_Edges {
 		t = &GetRisks_Risks{}
 	}
 	return t.Edges
+}
+func (t *GetRisks_Risks) GetPageInfo() *GetRisks_Risks_PageInfo {
+	if t == nil {
+		t = &GetRisks_Risks{}
+	}
+	return &t.PageInfo
+}
+func (t *GetRisks_Risks) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetRisks_Risks{}
+	}
+	return t.TotalCount
 }
 
 type UpdateRisk_UpdateRisk_Risk_Programs_Edges_Node struct {
@@ -67835,6 +69191,99 @@ func (t *GlobalSearch_Search_Subcontrols) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type GlobalSearch_Search_Subprocessors_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Subprocessors_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Subprocessors_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Subprocessors_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Subprocessors_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Subprocessors_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Subprocessors_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Subprocessors_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Subprocessors_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Subprocessors_Edges_Node struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Name string   "json:\"name\" graphql:\"name\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Subprocessors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Subprocessors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Subprocessors_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Subprocessors_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GlobalSearch_Search_Subprocessors_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Subprocessors_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Subprocessors_Edges struct {
+	Node *GlobalSearch_Search_Subprocessors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GlobalSearch_Search_Subprocessors_Edges) GetNode() *GlobalSearch_Search_Subprocessors_Edges_Node {
+	if t == nil {
+		t = &GlobalSearch_Search_Subprocessors_Edges{}
+	}
+	return t.Node
+}
+
+type GlobalSearch_Search_Subprocessors struct {
+	Edges      []*GlobalSearch_Search_Subprocessors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Subprocessors_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                      "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Subprocessors) GetEdges() []*GlobalSearch_Search_Subprocessors_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Subprocessors{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Subprocessors) GetPageInfo() *GlobalSearch_Search_Subprocessors_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Subprocessors{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Subprocessors) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Subprocessors{}
+	}
+	return t.TotalCount
+}
+
 type GlobalSearch_Search_Subscribers_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -68516,6 +69965,7 @@ type GlobalSearch_Search struct {
 	ScheduledJobs               *GlobalSearch_Search_ScheduledJobs               "json:\"scheduledJobs,omitempty\" graphql:\"scheduledJobs\""
 	Standards                   *GlobalSearch_Search_Standards                   "json:\"standards,omitempty\" graphql:\"standards\""
 	Subcontrols                 *GlobalSearch_Search_Subcontrols                 "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
+	Subprocessors               *GlobalSearch_Search_Subprocessors               "json:\"subprocessors,omitempty\" graphql:\"subprocessors\""
 	Subscribers                 *GlobalSearch_Search_Subscribers                 "json:\"subscribers,omitempty\" graphql:\"subscribers\""
 	Tasks                       *GlobalSearch_Search_Tasks                       "json:\"tasks,omitempty\" graphql:\"tasks\""
 	Templates                   *GlobalSearch_Search_Templates                   "json:\"templates,omitempty\" graphql:\"templates\""
@@ -68741,6 +70191,12 @@ func (t *GlobalSearch_Search) GetSubcontrols() *GlobalSearch_Search_Subcontrols 
 		t = &GlobalSearch_Search{}
 	}
 	return t.Subcontrols
+}
+func (t *GlobalSearch_Search) GetSubprocessors() *GlobalSearch_Search_Subprocessors {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Subprocessors
 }
 func (t *GlobalSearch_Search) GetSubscribers() *GlobalSearch_Search_Subscribers {
 	if t == nil {
@@ -72926,6 +74382,1286 @@ func (t *GetSubcontrolHistories_SubcontrolHistories) GetEdges() []*GetSubcontrol
 	return t.Edges
 }
 
+type CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors_Owner struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors_Owner) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors_Owner{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors_Owner) GetName() string {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors_Owner{}
+	}
+	return t.Name
+}
+
+type CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors struct {
+	CreatedAt       *time.Time                                                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                                                     "json:\"description,omitempty\" graphql:\"description\""
+	ID              string                                                                      "json:\"id\" graphql:\"id\""
+	LogoFile        *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                                     "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                                     "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name            string                                                                      "json:\"name\" graphql:\"name\""
+	Owner           *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors_Owner    "json:\"owner,omitempty\" graphql:\"owner\""
+	Tags            []string                                                                    "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time                                                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
+	}
+	return t.Description
+}
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetLogoFile() *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors_LogoFile {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
+	}
+	return t.LogoFile
+}
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetName() string {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
+	}
+	return t.Name
+}
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetOwner() *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors_Owner {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
+	}
+	return t.Owner
+}
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor struct {
+	Subprocessors []*CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors "json:\"subprocessors,omitempty\" graphql:\"subprocessors\""
+}
+
+func (t *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor) GetSubprocessors() []*CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor_Subprocessors {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor{}
+	}
+	return t.Subprocessors
+}
+
+type CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors_Owner struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors_Owner) GetID() string {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors_Owner{}
+	}
+	return t.ID
+}
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors_Owner) GetName() string {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors_Owner{}
+	}
+	return t.Name
+}
+
+type CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors struct {
+	CreatedAt       *time.Time                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                                               "json:\"description,omitempty\" graphql:\"description\""
+	ID              string                                                                "json:\"id\" graphql:\"id\""
+	LogoFile        *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                               "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                               "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name            string                                                                "json:\"name\" graphql:\"name\""
+	Owner           *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors_Owner    "json:\"owner,omitempty\" graphql:\"owner\""
+	Tags            []string                                                              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
+	}
+	return t.Description
+}
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetID() string {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
+	}
+	return t.ID
+}
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetLogoFile() *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors_LogoFile {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
+	}
+	return t.LogoFile
+}
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetName() string {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
+	}
+	return t.Name
+}
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetOwner() *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors_Owner {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
+	}
+	return t.Owner
+}
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkSubprocessor_CreateBulkSubprocessor struct {
+	Subprocessors []*CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors "json:\"subprocessors,omitempty\" graphql:\"subprocessors\""
+}
+
+func (t *CreateBulkSubprocessor_CreateBulkSubprocessor) GetSubprocessors() []*CreateBulkSubprocessor_CreateBulkSubprocessor_Subprocessors {
+	if t == nil {
+		t = &CreateBulkSubprocessor_CreateBulkSubprocessor{}
+	}
+	return t.Subprocessors
+}
+
+type CreateSubprocessor_CreateSubprocessor_Subprocessor_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type CreateSubprocessor_CreateSubprocessor_Subprocessor_Owner struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor_Owner) GetID() string {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor_Owner{}
+	}
+	return t.ID
+}
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor_Owner) GetName() string {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor_Owner{}
+	}
+	return t.Name
+}
+
+type CreateSubprocessor_CreateSubprocessor_Subprocessor struct {
+	CreatedAt       *time.Time                                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                                      "json:\"description,omitempty\" graphql:\"description\""
+	ID              string                                                       "json:\"id\" graphql:\"id\""
+	LogoFile        *CreateSubprocessor_CreateSubprocessor_Subprocessor_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                      "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                      "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name            string                                                       "json:\"name\" graphql:\"name\""
+	Owner           *CreateSubprocessor_CreateSubprocessor_Subprocessor_Owner    "json:\"owner,omitempty\" graphql:\"owner\""
+	Tags            []string                                                     "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time                                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetDescription() *string {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
+	}
+	return t.Description
+}
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetID() string {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
+	}
+	return t.ID
+}
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetLogoFile() *CreateSubprocessor_CreateSubprocessor_Subprocessor_LogoFile {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
+	}
+	return t.LogoFile
+}
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetName() string {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
+	}
+	return t.Name
+}
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetOwner() *CreateSubprocessor_CreateSubprocessor_Subprocessor_Owner {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
+	}
+	return t.Owner
+}
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetTags() []string {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
+	}
+	return t.Tags
+}
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateSubprocessor_CreateSubprocessor_Subprocessor) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor_Subprocessor{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateSubprocessor_CreateSubprocessor struct {
+	Subprocessor CreateSubprocessor_CreateSubprocessor_Subprocessor "json:\"subprocessor\" graphql:\"subprocessor\""
+}
+
+func (t *CreateSubprocessor_CreateSubprocessor) GetSubprocessor() *CreateSubprocessor_CreateSubprocessor_Subprocessor {
+	if t == nil {
+		t = &CreateSubprocessor_CreateSubprocessor{}
+	}
+	return &t.Subprocessor
+}
+
+type DeleteSubprocessor_DeleteSubprocessor struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteSubprocessor_DeleteSubprocessor) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteSubprocessor_DeleteSubprocessor{}
+	}
+	return t.DeletedID
+}
+
+type GetAllSubprocessors_Subprocessors_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllSubprocessors_Subprocessors_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllSubprocessors_Subprocessors_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllSubprocessors_Subprocessors_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllSubprocessors_Subprocessors_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllSubprocessors_Subprocessors_Edges_Node_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetAllSubprocessors_Subprocessors_Edges_Node_Owner struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node_Owner) GetID() string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node_Owner{}
+	}
+	return t.ID
+}
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node_Owner) GetName() string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node_Owner{}
+	}
+	return t.Name
+}
+
+type GetAllSubprocessors_Subprocessors_Edges_Node struct {
+	CreatedAt       *time.Time                                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                                "json:\"description,omitempty\" graphql:\"description\""
+	ID              string                                                 "json:\"id\" graphql:\"id\""
+	LogoFile        *GetAllSubprocessors_Subprocessors_Edges_Node_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name            string                                                 "json:\"name\" graphql:\"name\""
+	Owner           *GetAllSubprocessors_Subprocessors_Edges_Node_Owner    "json:\"owner,omitempty\" graphql:\"owner\""
+	Tags            []string                                               "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time                                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetLogoFile() *GetAllSubprocessors_Subprocessors_Edges_Node_LogoFile {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.LogoFile
+}
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetOwner() *GetAllSubprocessors_Subprocessors_Edges_Node_Owner {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.Owner
+}
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllSubprocessors_Subprocessors_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllSubprocessors_Subprocessors_Edges struct {
+	Node *GetAllSubprocessors_Subprocessors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllSubprocessors_Subprocessors_Edges) GetNode() *GetAllSubprocessors_Subprocessors_Edges_Node {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllSubprocessors_Subprocessors struct {
+	Edges      []*GetAllSubprocessors_Subprocessors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllSubprocessors_Subprocessors_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                      "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllSubprocessors_Subprocessors) GetEdges() []*GetAllSubprocessors_Subprocessors_Edges {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors{}
+	}
+	return t.Edges
+}
+func (t *GetAllSubprocessors_Subprocessors) GetPageInfo() *GetAllSubprocessors_Subprocessors_PageInfo {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllSubprocessors_Subprocessors) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllSubprocessors_Subprocessors{}
+	}
+	return t.TotalCount
+}
+
+type GetSubprocessorByID_Subprocessor_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetSubprocessorByID_Subprocessor_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetSubprocessorByID_Subprocessor_Owner struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetSubprocessorByID_Subprocessor_Owner) GetID() string {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor_Owner{}
+	}
+	return t.ID
+}
+func (t *GetSubprocessorByID_Subprocessor_Owner) GetName() string {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor_Owner{}
+	}
+	return t.Name
+}
+
+type GetSubprocessorByID_Subprocessor struct {
+	CreatedAt       *time.Time                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                    "json:\"description,omitempty\" graphql:\"description\""
+	ID              string                                     "json:\"id\" graphql:\"id\""
+	LogoFile        *GetSubprocessorByID_Subprocessor_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                    "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                    "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name            string                                     "json:\"name\" graphql:\"name\""
+	Owner           *GetSubprocessorByID_Subprocessor_Owner    "json:\"owner,omitempty\" graphql:\"owner\""
+	Tags            []string                                   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetSubprocessorByID_Subprocessor) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor{}
+	}
+	return t.CreatedAt
+}
+func (t *GetSubprocessorByID_Subprocessor) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor{}
+	}
+	return t.CreatedBy
+}
+func (t *GetSubprocessorByID_Subprocessor) GetDescription() *string {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor{}
+	}
+	return t.Description
+}
+func (t *GetSubprocessorByID_Subprocessor) GetID() string {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor{}
+	}
+	return t.ID
+}
+func (t *GetSubprocessorByID_Subprocessor) GetLogoFile() *GetSubprocessorByID_Subprocessor_LogoFile {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor{}
+	}
+	return t.LogoFile
+}
+func (t *GetSubprocessorByID_Subprocessor) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *GetSubprocessorByID_Subprocessor) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *GetSubprocessorByID_Subprocessor) GetName() string {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor{}
+	}
+	return t.Name
+}
+func (t *GetSubprocessorByID_Subprocessor) GetOwner() *GetSubprocessorByID_Subprocessor_Owner {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor{}
+	}
+	return t.Owner
+}
+func (t *GetSubprocessorByID_Subprocessor) GetTags() []string {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor{}
+	}
+	return t.Tags
+}
+func (t *GetSubprocessorByID_Subprocessor) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetSubprocessorByID_Subprocessor) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetSubprocessorByID_Subprocessor{}
+	}
+	return t.UpdatedBy
+}
+
+type GetSubprocessors_Subprocessors_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetSubprocessors_Subprocessors_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetSubprocessors_Subprocessors_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetSubprocessors_Subprocessors_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetSubprocessors_Subprocessors_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetSubprocessors_Subprocessors_Edges_Node_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetSubprocessors_Subprocessors_Edges_Node_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetSubprocessors_Subprocessors_Edges_Node_Owner struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetSubprocessors_Subprocessors_Edges_Node_Owner) GetID() string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node_Owner{}
+	}
+	return t.ID
+}
+func (t *GetSubprocessors_Subprocessors_Edges_Node_Owner) GetName() string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node_Owner{}
+	}
+	return t.Name
+}
+
+type GetSubprocessors_Subprocessors_Edges_Node struct {
+	CreatedAt       *time.Time                                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                             "json:\"description,omitempty\" graphql:\"description\""
+	ID              string                                              "json:\"id\" graphql:\"id\""
+	LogoFile        *GetSubprocessors_Subprocessors_Edges_Node_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                             "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                             "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name            string                                              "json:\"name\" graphql:\"name\""
+	Owner           *GetSubprocessors_Subprocessors_Edges_Node_Owner    "json:\"owner,omitempty\" graphql:\"owner\""
+	Tags            []string                                            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetSubprocessors_Subprocessors_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetSubprocessors_Subprocessors_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetSubprocessors_Subprocessors_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetSubprocessors_Subprocessors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetSubprocessors_Subprocessors_Edges_Node) GetLogoFile() *GetSubprocessors_Subprocessors_Edges_Node_LogoFile {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.LogoFile
+}
+func (t *GetSubprocessors_Subprocessors_Edges_Node) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *GetSubprocessors_Subprocessors_Edges_Node) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *GetSubprocessors_Subprocessors_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetSubprocessors_Subprocessors_Edges_Node) GetOwner() *GetSubprocessors_Subprocessors_Edges_Node_Owner {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.Owner
+}
+func (t *GetSubprocessors_Subprocessors_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetSubprocessors_Subprocessors_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetSubprocessors_Subprocessors_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetSubprocessors_Subprocessors_Edges struct {
+	Node *GetSubprocessors_Subprocessors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetSubprocessors_Subprocessors_Edges) GetNode() *GetSubprocessors_Subprocessors_Edges_Node {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors_Edges{}
+	}
+	return t.Node
+}
+
+type GetSubprocessors_Subprocessors struct {
+	Edges      []*GetSubprocessors_Subprocessors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetSubprocessors_Subprocessors_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                   "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetSubprocessors_Subprocessors) GetEdges() []*GetSubprocessors_Subprocessors_Edges {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors{}
+	}
+	return t.Edges
+}
+func (t *GetSubprocessors_Subprocessors) GetPageInfo() *GetSubprocessors_Subprocessors_PageInfo {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors{}
+	}
+	return &t.PageInfo
+}
+func (t *GetSubprocessors_Subprocessors) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetSubprocessors_Subprocessors{}
+	}
+	return t.TotalCount
+}
+
+type UpdateSubprocessor_UpdateSubprocessor_Subprocessor_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type UpdateSubprocessor_UpdateSubprocessor_Subprocessor_Owner struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor_Owner) GetID() string {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor_Owner{}
+	}
+	return t.ID
+}
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor_Owner) GetName() string {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor_Owner{}
+	}
+	return t.Name
+}
+
+type UpdateSubprocessor_UpdateSubprocessor_Subprocessor struct {
+	CreatedAt       *time.Time                                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                                      "json:\"description,omitempty\" graphql:\"description\""
+	ID              string                                                       "json:\"id\" graphql:\"id\""
+	LogoFile        *UpdateSubprocessor_UpdateSubprocessor_Subprocessor_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                      "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                      "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name            string                                                       "json:\"name\" graphql:\"name\""
+	Owner           *UpdateSubprocessor_UpdateSubprocessor_Subprocessor_Owner    "json:\"owner,omitempty\" graphql:\"owner\""
+	Tags            []string                                                     "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time                                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetDescription() *string {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
+	}
+	return t.Description
+}
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetID() string {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
+	}
+	return t.ID
+}
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetLogoFile() *UpdateSubprocessor_UpdateSubprocessor_Subprocessor_LogoFile {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
+	}
+	return t.LogoFile
+}
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetName() string {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
+	}
+	return t.Name
+}
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetOwner() *UpdateSubprocessor_UpdateSubprocessor_Subprocessor_Owner {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
+	}
+	return t.Owner
+}
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetTags() []string {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
+	}
+	return t.Tags
+}
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateSubprocessor_UpdateSubprocessor_Subprocessor) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor_Subprocessor{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateSubprocessor_UpdateSubprocessor struct {
+	Subprocessor UpdateSubprocessor_UpdateSubprocessor_Subprocessor "json:\"subprocessor\" graphql:\"subprocessor\""
+}
+
+func (t *UpdateSubprocessor_UpdateSubprocessor) GetSubprocessor() *UpdateSubprocessor_UpdateSubprocessor_Subprocessor {
+	if t == nil {
+		t = &UpdateSubprocessor_UpdateSubprocessor{}
+	}
+	return &t.Subprocessor
+}
+
+type GetAllSubprocessorHistories_SubprocessorHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node struct {
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllSubprocessorHistories_SubprocessorHistories_Edges struct {
+	Node *GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllSubprocessorHistories_SubprocessorHistories_Edges) GetNode() *GetAllSubprocessorHistories_SubprocessorHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllSubprocessorHistories_SubprocessorHistories struct {
+	Edges      []*GetAllSubprocessorHistories_SubprocessorHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllSubprocessorHistories_SubprocessorHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                      "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllSubprocessorHistories_SubprocessorHistories) GetEdges() []*GetAllSubprocessorHistories_SubprocessorHistories_Edges {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories) GetPageInfo() *GetAllSubprocessorHistories_SubprocessorHistories_PageInfo {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllSubprocessorHistories_SubprocessorHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllSubprocessorHistories_SubprocessorHistories{}
+	}
+	return t.TotalCount
+}
+
+type GetSubprocessorHistories_SubprocessorHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetSubprocessorHistories_SubprocessorHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetSubprocessorHistories_SubprocessorHistories_Edges_Node struct {
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetSubprocessorHistories_SubprocessorHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetSubprocessorHistories_SubprocessorHistories_Edges struct {
+	Node *GetSubprocessorHistories_SubprocessorHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetSubprocessorHistories_SubprocessorHistories_Edges) GetNode() *GetSubprocessorHistories_SubprocessorHistories_Edges_Node {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetSubprocessorHistories_SubprocessorHistories struct {
+	Edges      []*GetSubprocessorHistories_SubprocessorHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetSubprocessorHistories_SubprocessorHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                   "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetSubprocessorHistories_SubprocessorHistories) GetEdges() []*GetSubprocessorHistories_SubprocessorHistories_Edges {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories{}
+	}
+	return t.Edges
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories) GetPageInfo() *GetSubprocessorHistories_SubprocessorHistories_PageInfo {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetSubprocessorHistories_SubprocessorHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetSubprocessorHistories_SubprocessorHistories{}
+	}
+	return t.TotalCount
+}
+
 type CreateBulkCSVSubscriber_CreateBulkCSVSubscriber_Subscribers struct {
 	Active        bool   "json:\"active\" graphql:\"active\""
 	Email         string "json:\"email\" graphql:\"email\""
@@ -73115,6 +75851,38 @@ func (t *DeleteSubscriber_DeleteSubscriber) GetEmail() string {
 	return t.Email
 }
 
+type GetAllSubscribers_Subscribers_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllSubscribers_Subscribers_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllSubscribers_Subscribers_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllSubscribers_Subscribers_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllSubscribers_Subscribers_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllSubscribers_Subscribers_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllSubscribers_Subscribers_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllSubscribers_Subscribers_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllSubscribers_Subscribers_PageInfo{}
+	}
+	return t.StartCursor
+}
+
 type GetAllSubscribers_Subscribers_Edges_Node struct {
 	Active        bool    "json:\"active\" graphql:\"active\""
 	Email         string  "json:\"email\" graphql:\"email\""
@@ -73180,7 +75948,9 @@ func (t *GetAllSubscribers_Subscribers_Edges) GetNode() *GetAllSubscribers_Subsc
 }
 
 type GetAllSubscribers_Subscribers struct {
-	Edges []*GetAllSubscribers_Subscribers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetAllSubscribers_Subscribers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllSubscribers_Subscribers_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                  "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetAllSubscribers_Subscribers) GetEdges() []*GetAllSubscribers_Subscribers_Edges {
@@ -73188,6 +75958,18 @@ func (t *GetAllSubscribers_Subscribers) GetEdges() []*GetAllSubscribers_Subscrib
 		t = &GetAllSubscribers_Subscribers{}
 	}
 	return t.Edges
+}
+func (t *GetAllSubscribers_Subscribers) GetPageInfo() *GetAllSubscribers_Subscribers_PageInfo {
+	if t == nil {
+		t = &GetAllSubscribers_Subscribers{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllSubscribers_Subscribers) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllSubscribers_Subscribers{}
+	}
+	return t.TotalCount
 }
 
 type GetSubscriberByEmail_Subscriber struct {
@@ -73241,6 +76023,38 @@ func (t *GetSubscriberByEmail_Subscriber) GetVerifiedEmail() bool {
 		t = &GetSubscriberByEmail_Subscriber{}
 	}
 	return t.VerifiedEmail
+}
+
+type GetSubscribers_Subscribers_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetSubscribers_Subscribers_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetSubscribers_Subscribers_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetSubscribers_Subscribers_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetSubscribers_Subscribers_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetSubscribers_Subscribers_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetSubscribers_Subscribers_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetSubscribers_Subscribers_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetSubscribers_Subscribers_PageInfo{}
+	}
+	return t.StartCursor
 }
 
 type GetSubscribers_Subscribers_Edges_Node struct {
@@ -73308,7 +76122,9 @@ func (t *GetSubscribers_Subscribers_Edges) GetNode() *GetSubscribers_Subscribers
 }
 
 type GetSubscribers_Subscribers struct {
-	Edges []*GetSubscribers_Subscribers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	Edges      []*GetSubscribers_Subscribers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetSubscribers_Subscribers_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                               "json:\"totalCount\" graphql:\"totalCount\""
 }
 
 func (t *GetSubscribers_Subscribers) GetEdges() []*GetSubscribers_Subscribers_Edges {
@@ -73316,6 +76132,18 @@ func (t *GetSubscribers_Subscribers) GetEdges() []*GetSubscribers_Subscribers_Ed
 		t = &GetSubscribers_Subscribers{}
 	}
 	return t.Edges
+}
+func (t *GetSubscribers_Subscribers) GetPageInfo() *GetSubscribers_Subscribers_PageInfo {
+	if t == nil {
+		t = &GetSubscribers_Subscribers{}
+	}
+	return &t.PageInfo
+}
+func (t *GetSubscribers_Subscribers) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetSubscribers_Subscribers{}
+	}
+	return t.TotalCount
 }
 
 type UpdateSubscriber_UpdateSubscriber_Subscriber struct {
@@ -77055,18 +79883,79 @@ func (t *UpdateTFASetting_UpdateTFASetting) GetTfaSetting() *UpdateTFASetting_Up
 	return &t.TfaSetting
 }
 
-type CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting struct {
-	ID           string  "json:\"id\" graphql:\"id\""
-	Overview     *string "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor *string "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	Title        *string "json:\"title,omitempty\" graphql:\"title\""
+type CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
 }
 
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting struct {
+	AccentColor     *string                                                           "json:\"accentColor,omitempty\" graphql:\"accentColor\""
+	BackgroundColor *string                                                           "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
+	Font            *string                                                           "json:\"font,omitempty\" graphql:\"font\""
+	ForegroundColor *string                                                           "json:\"foregroundColor,omitempty\" graphql:\"foregroundColor\""
+	ID              string                                                            "json:\"id\" graphql:\"id\""
+	LogoFile        *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                           "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                           "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview        *string                                                           "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor    *string                                                           "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	ThemeMode       *enums.TrustCenterThemeMode                                       "json:\"themeMode,omitempty\" graphql:\"themeMode\""
+	Title           *string                                                           "json:\"title,omitempty\" graphql:\"title\""
+}
+
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetAccentColor() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.AccentColor
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetBackgroundColor() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.BackgroundColor
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetFont() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.Font
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetForegroundColor() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.ForegroundColor
+}
 func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetID() string {
 	if t == nil {
 		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
 	}
 	return t.ID
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetLogoFile() *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting_LogoFile {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.LogoFile
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.LogoRemoteURL
 }
 func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetOverview() *string {
 	if t == nil {
@@ -77079,6 +79968,12 @@ func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetPrimaryColo
 		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
 	}
 	return t.PrimaryColor
+}
+func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetThemeMode() *enums.TrustCenterThemeMode {
+	if t == nil {
+		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.ThemeMode
 }
 func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter_Setting) GetTitle() *string {
 	if t == nil {
@@ -77215,18 +80110,79 @@ func (t *GetAllTrustCenters_TrustCenters_PageInfo) GetStartCursor() *string {
 	return t.StartCursor
 }
 
-type GetAllTrustCenters_TrustCenters_Edges_Node_Setting struct {
-	ID           string  "json:\"id\" graphql:\"id\""
-	Overview     *string "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor *string "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	Title        *string "json:\"title,omitempty\" graphql:\"title\""
+type GetAllTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
 }
 
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetAllTrustCenters_TrustCenters_Edges_Node_Setting struct {
+	AccentColor     *string                                                      "json:\"accentColor,omitempty\" graphql:\"accentColor\""
+	BackgroundColor *string                                                      "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
+	Font            *string                                                      "json:\"font,omitempty\" graphql:\"font\""
+	ForegroundColor *string                                                      "json:\"foregroundColor,omitempty\" graphql:\"foregroundColor\""
+	ID              string                                                       "json:\"id\" graphql:\"id\""
+	LogoFile        *GetAllTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                      "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                      "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview        *string                                                      "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor    *string                                                      "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	ThemeMode       *enums.TrustCenterThemeMode                                  "json:\"themeMode,omitempty\" graphql:\"themeMode\""
+	Title           *string                                                      "json:\"title,omitempty\" graphql:\"title\""
+}
+
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetAccentColor() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.AccentColor
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetBackgroundColor() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.BackgroundColor
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetFont() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.Font
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetForegroundColor() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.ForegroundColor
+}
 func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetID() string {
 	if t == nil {
 		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
 	}
 	return t.ID
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetLogoFile() *GetAllTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.LogoFile
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.LogoRemoteURL
 }
 func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetOverview() *string {
 	if t == nil {
@@ -77239,6 +80195,12 @@ func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetPrimaryColor() *
 		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
 	}
 	return t.PrimaryColor
+}
+func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetThemeMode() *enums.TrustCenterThemeMode {
+	if t == nil {
+		t = &GetAllTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.ThemeMode
 }
 func (t *GetAllTrustCenters_TrustCenters_Edges_Node_Setting) GetTitle() *string {
 	if t == nil {
@@ -77357,18 +80319,79 @@ func (t *GetAllTrustCenters_TrustCenters) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
-type GetTrustCenterByID_TrustCenter_Setting struct {
-	ID           string  "json:\"id\" graphql:\"id\""
-	Overview     *string "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor *string "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	Title        *string "json:\"title,omitempty\" graphql:\"title\""
+type GetTrustCenterByID_TrustCenter_Setting_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
 }
 
+func (t *GetTrustCenterByID_TrustCenter_Setting_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter_Setting_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetTrustCenterByID_TrustCenter_Setting struct {
+	AccentColor     *string                                          "json:\"accentColor,omitempty\" graphql:\"accentColor\""
+	BackgroundColor *string                                          "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
+	Font            *string                                          "json:\"font,omitempty\" graphql:\"font\""
+	ForegroundColor *string                                          "json:\"foregroundColor,omitempty\" graphql:\"foregroundColor\""
+	ID              string                                           "json:\"id\" graphql:\"id\""
+	LogoFile        *GetTrustCenterByID_TrustCenter_Setting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                          "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                          "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview        *string                                          "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor    *string                                          "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	ThemeMode       *enums.TrustCenterThemeMode                      "json:\"themeMode,omitempty\" graphql:\"themeMode\""
+	Title           *string                                          "json:\"title,omitempty\" graphql:\"title\""
+}
+
+func (t *GetTrustCenterByID_TrustCenter_Setting) GetAccentColor() *string {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter_Setting{}
+	}
+	return t.AccentColor
+}
+func (t *GetTrustCenterByID_TrustCenter_Setting) GetBackgroundColor() *string {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter_Setting{}
+	}
+	return t.BackgroundColor
+}
+func (t *GetTrustCenterByID_TrustCenter_Setting) GetFont() *string {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter_Setting{}
+	}
+	return t.Font
+}
+func (t *GetTrustCenterByID_TrustCenter_Setting) GetForegroundColor() *string {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter_Setting{}
+	}
+	return t.ForegroundColor
+}
 func (t *GetTrustCenterByID_TrustCenter_Setting) GetID() string {
 	if t == nil {
 		t = &GetTrustCenterByID_TrustCenter_Setting{}
 	}
 	return t.ID
+}
+func (t *GetTrustCenterByID_TrustCenter_Setting) GetLogoFile() *GetTrustCenterByID_TrustCenter_Setting_LogoFile {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter_Setting{}
+	}
+	return t.LogoFile
+}
+func (t *GetTrustCenterByID_TrustCenter_Setting) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter_Setting{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *GetTrustCenterByID_TrustCenter_Setting) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter_Setting{}
+	}
+	return t.LogoRemoteURL
 }
 func (t *GetTrustCenterByID_TrustCenter_Setting) GetOverview() *string {
 	if t == nil {
@@ -77381,6 +80404,12 @@ func (t *GetTrustCenterByID_TrustCenter_Setting) GetPrimaryColor() *string {
 		t = &GetTrustCenterByID_TrustCenter_Setting{}
 	}
 	return t.PrimaryColor
+}
+func (t *GetTrustCenterByID_TrustCenter_Setting) GetThemeMode() *enums.TrustCenterThemeMode {
+	if t == nil {
+		t = &GetTrustCenterByID_TrustCenter_Setting{}
+	}
+	return t.ThemeMode
 }
 func (t *GetTrustCenterByID_TrustCenter_Setting) GetTitle() *string {
 	if t == nil {
@@ -77495,18 +80524,79 @@ func (t *GetTrustCenters_TrustCenters_PageInfo) GetStartCursor() *string {
 	return t.StartCursor
 }
 
-type GetTrustCenters_TrustCenters_Edges_Node_Setting struct {
-	ID           string  "json:\"id\" graphql:\"id\""
-	Overview     *string "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor *string "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	Title        *string "json:\"title,omitempty\" graphql:\"title\""
+type GetTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
 }
 
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetTrustCenters_TrustCenters_Edges_Node_Setting struct {
+	AccentColor     *string                                                   "json:\"accentColor,omitempty\" graphql:\"accentColor\""
+	BackgroundColor *string                                                   "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
+	Font            *string                                                   "json:\"font,omitempty\" graphql:\"font\""
+	ForegroundColor *string                                                   "json:\"foregroundColor,omitempty\" graphql:\"foregroundColor\""
+	ID              string                                                    "json:\"id\" graphql:\"id\""
+	LogoFile        *GetTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                   "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                   "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview        *string                                                   "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor    *string                                                   "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	ThemeMode       *enums.TrustCenterThemeMode                               "json:\"themeMode,omitempty\" graphql:\"themeMode\""
+	Title           *string                                                   "json:\"title,omitempty\" graphql:\"title\""
+}
+
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetAccentColor() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.AccentColor
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetBackgroundColor() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.BackgroundColor
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetFont() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.Font
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetForegroundColor() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.ForegroundColor
+}
 func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetID() string {
 	if t == nil {
 		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
 	}
 	return t.ID
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetLogoFile() *GetTrustCenters_TrustCenters_Edges_Node_Setting_LogoFile {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.LogoFile
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.LogoRemoteURL
 }
 func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetOverview() *string {
 	if t == nil {
@@ -77519,6 +80609,12 @@ func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetPrimaryColor() *str
 		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
 	}
 	return t.PrimaryColor
+}
+func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetThemeMode() *enums.TrustCenterThemeMode {
+	if t == nil {
+		t = &GetTrustCenters_TrustCenters_Edges_Node_Setting{}
+	}
+	return t.ThemeMode
 }
 func (t *GetTrustCenters_TrustCenters_Edges_Node_Setting) GetTitle() *string {
 	if t == nil {
@@ -77637,18 +80733,79 @@ func (t *GetTrustCenters_TrustCenters) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
-type UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting struct {
-	ID           string  "json:\"id\" graphql:\"id\""
-	Overview     *string "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor *string "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	Title        *string "json:\"title,omitempty\" graphql:\"title\""
+type UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
 }
 
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting struct {
+	AccentColor     *string                                                           "json:\"accentColor,omitempty\" graphql:\"accentColor\""
+	BackgroundColor *string                                                           "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
+	Font            *string                                                           "json:\"font,omitempty\" graphql:\"font\""
+	ForegroundColor *string                                                           "json:\"foregroundColor,omitempty\" graphql:\"foregroundColor\""
+	ID              string                                                            "json:\"id\" graphql:\"id\""
+	LogoFile        *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                           "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                           "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview        *string                                                           "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor    *string                                                           "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	ThemeMode       *enums.TrustCenterThemeMode                                       "json:\"themeMode,omitempty\" graphql:\"themeMode\""
+	Title           *string                                                           "json:\"title,omitempty\" graphql:\"title\""
+}
+
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetAccentColor() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.AccentColor
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetBackgroundColor() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.BackgroundColor
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetFont() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.Font
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetForegroundColor() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.ForegroundColor
+}
 func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetID() string {
 	if t == nil {
 		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
 	}
 	return t.ID
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetLogoFile() *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting_LogoFile {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.LogoFile
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.LogoRemoteURL
 }
 func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetOverview() *string {
 	if t == nil {
@@ -77661,6 +80818,12 @@ func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetPrimaryColo
 		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
 	}
 	return t.PrimaryColor
+}
+func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetThemeMode() *enums.TrustCenterThemeMode {
+	if t == nil {
+		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting{}
+	}
+	return t.ThemeMode
 }
 func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_Setting) GetTitle() *string {
 	if t == nil {
@@ -78066,18 +81229,49 @@ func (t *GetTrustCenterHistories_TrustCenterHistories) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
-type CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting struct {
-	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID            string     "json:\"id\" graphql:\"id\""
-	Overview      *string    "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor  *string    "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	Title         *string    "json:\"title,omitempty\" graphql:\"title\""
-	TrustCenterID *string    "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
-	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+type CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
 }
 
+func (t *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting struct {
+	AccentColor     *string                                                                        "json:\"accentColor,omitempty\" graphql:\"accentColor\""
+	BackgroundColor *string                                                                        "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
+	CreatedAt       *time.Time                                                                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                                                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Font            *string                                                                        "json:\"font,omitempty\" graphql:\"font\""
+	ForegroundColor *string                                                                        "json:\"foregroundColor,omitempty\" graphql:\"foregroundColor\""
+	ID              string                                                                         "json:\"id\" graphql:\"id\""
+	LogoFile        *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID *string                                                                        "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL   *string                                                                        "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview        *string                                                                        "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor    *string                                                                        "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	ThemeMode       *enums.TrustCenterThemeMode                                                    "json:\"themeMode,omitempty\" graphql:\"themeMode\""
+	Title           *string                                                                        "json:\"title,omitempty\" graphql:\"title\""
+	TrustCenterID   *string                                                                        "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt       *time.Time                                                                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                                                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting) GetAccentColor() *string {
+	if t == nil {
+		t = &CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.AccentColor
+}
+func (t *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting) GetBackgroundColor() *string {
+	if t == nil {
+		t = &CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.BackgroundColor
+}
 func (t *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting{}
@@ -78090,11 +81284,41 @@ func (t *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting) G
 	}
 	return t.CreatedBy
 }
+func (t *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting) GetFont() *string {
+	if t == nil {
+		t = &CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.Font
+}
+func (t *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting) GetForegroundColor() *string {
+	if t == nil {
+		t = &CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.ForegroundColor
+}
 func (t *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting) GetID() string {
 	if t == nil {
 		t = &CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting{}
 	}
 	return t.ID
+}
+func (t *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting) GetLogoFile() *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting_LogoFile {
+	if t == nil {
+		t = &CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.LogoFile
+}
+func (t *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.LogoRemoteURL
 }
 func (t *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting) GetOverview() *string {
 	if t == nil {
@@ -78107,6 +81331,12 @@ func (t *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting) G
 		t = &CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting{}
 	}
 	return t.PrimaryColor
+}
+func (t *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting) GetThemeMode() *enums.TrustCenterThemeMode {
+	if t == nil {
+		t = &CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.ThemeMode
 }
 func (t *CreateTrustCenterSetting_CreateTrustCenterSetting_TrustCenterSetting) GetTitle() *string {
 	if t == nil {
@@ -78187,18 +81417,63 @@ func (t *GetAllTrustCenterSettings_TrustCenterSettings_PageInfo) GetStartCursor(
 	return t.StartCursor
 }
 
-type GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node struct {
-	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID            string     "json:\"id\" graphql:\"id\""
-	Overview      *string    "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor  *string    "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	Title         *string    "json:\"title,omitempty\" graphql:\"title\""
-	TrustCenterID *string    "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
-	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+type GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
 }
 
+func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node_FaviconFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node_FaviconFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node_FaviconFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node struct {
+	AccentColor        *string                                                               "json:\"accentColor,omitempty\" graphql:\"accentColor\""
+	BackgroundColor    *string                                                               "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
+	CreatedAt          *time.Time                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	FaviconFile        *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node_FaviconFile "json:\"faviconFile,omitempty\" graphql:\"faviconFile\""
+	FaviconLocalFileID *string                                                               "json:\"faviconLocalFileID,omitempty\" graphql:\"faviconLocalFileID\""
+	FaviconRemoteURL   *string                                                               "json:\"faviconRemoteURL,omitempty\" graphql:\"faviconRemoteURL\""
+	Font               *string                                                               "json:\"font,omitempty\" graphql:\"font\""
+	ForegroundColor    *string                                                               "json:\"foregroundColor,omitempty\" graphql:\"foregroundColor\""
+	ID                 string                                                                "json:\"id\" graphql:\"id\""
+	LogoFile           *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile    "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID    *string                                                               "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL      *string                                                               "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview           *string                                                               "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor       *string                                                               "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	ThemeMode          *enums.TrustCenterThemeMode                                           "json:\"themeMode,omitempty\" graphql:\"themeMode\""
+	Title              *string                                                               "json:\"title,omitempty\" graphql:\"title\""
+	TrustCenterID      *string                                                               "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt          *time.Time                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetAccentColor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.AccentColor
+}
+func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetBackgroundColor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.BackgroundColor
+}
 func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node{}
@@ -78211,11 +81486,59 @@ func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetCreatedBy(
 	}
 	return t.CreatedBy
 }
+func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetFaviconFile() *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node_FaviconFile {
+	if t == nil {
+		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.FaviconFile
+}
+func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetFaviconLocalFileID() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.FaviconLocalFileID
+}
+func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetFaviconRemoteURL() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.FaviconRemoteURL
+}
+func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetFont() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.Font
+}
+func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetForegroundColor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.ForegroundColor
+}
 func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetLogoFile() *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile {
+	if t == nil {
+		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.LogoFile
+}
+func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.LogoRemoteURL
 }
 func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetOverview() *string {
 	if t == nil {
@@ -78228,6 +81551,12 @@ func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetPrimaryCol
 		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node{}
 	}
 	return t.PrimaryColor
+}
+func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetThemeMode() *enums.TrustCenterThemeMode {
+	if t == nil {
+		t = &GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.ThemeMode
 }
 func (t *GetAllTrustCenterSettings_TrustCenterSettings_Edges_Node) GetTitle() *string {
 	if t == nil {
@@ -78290,18 +81619,63 @@ func (t *GetAllTrustCenterSettings_TrustCenterSettings) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
-type GetTrustCenterSettingByID_TrustCenterSetting struct {
-	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID            string     "json:\"id\" graphql:\"id\""
-	Overview      *string    "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor  *string    "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	Title         *string    "json:\"title,omitempty\" graphql:\"title\""
-	TrustCenterID *string    "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
-	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+type GetTrustCenterSettingByID_TrustCenterSetting_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
 }
 
+func (t *GetTrustCenterSettingByID_TrustCenterSetting_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetTrustCenterSettingByID_TrustCenterSetting_FaviconFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetTrustCenterSettingByID_TrustCenterSetting_FaviconFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting_FaviconFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetTrustCenterSettingByID_TrustCenterSetting struct {
+	AccentColor        *string                                                   "json:\"accentColor,omitempty\" graphql:\"accentColor\""
+	BackgroundColor    *string                                                   "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
+	CreatedAt          *time.Time                                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string                                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	FaviconFile        *GetTrustCenterSettingByID_TrustCenterSetting_FaviconFile "json:\"faviconFile,omitempty\" graphql:\"faviconFile\""
+	FaviconLocalFileID *string                                                   "json:\"faviconLocalFileID,omitempty\" graphql:\"faviconLocalFileID\""
+	FaviconRemoteURL   *string                                                   "json:\"faviconRemoteURL,omitempty\" graphql:\"faviconRemoteURL\""
+	Font               *string                                                   "json:\"font,omitempty\" graphql:\"font\""
+	ForegroundColor    *string                                                   "json:\"foregroundColor,omitempty\" graphql:\"foregroundColor\""
+	ID                 string                                                    "json:\"id\" graphql:\"id\""
+	LogoFile           *GetTrustCenterSettingByID_TrustCenterSetting_LogoFile    "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID    *string                                                   "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL      *string                                                   "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview           *string                                                   "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor       *string                                                   "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	ThemeMode          *enums.TrustCenterThemeMode                               "json:\"themeMode,omitempty\" graphql:\"themeMode\""
+	Title              *string                                                   "json:\"title,omitempty\" graphql:\"title\""
+	TrustCenterID      *string                                                   "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt          *time.Time                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetAccentColor() *string {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.AccentColor
+}
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetBackgroundColor() *string {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.BackgroundColor
+}
 func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
@@ -78314,11 +81688,59 @@ func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetFaviconFile() *GetTrustCenterSettingByID_TrustCenterSetting_FaviconFile {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.FaviconFile
+}
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetFaviconLocalFileID() *string {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.FaviconLocalFileID
+}
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetFaviconRemoteURL() *string {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.FaviconRemoteURL
+}
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetFont() *string {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.Font
+}
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetForegroundColor() *string {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.ForegroundColor
+}
 func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetID() string {
 	if t == nil {
 		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
 	}
 	return t.ID
+}
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetLogoFile() *GetTrustCenterSettingByID_TrustCenterSetting_LogoFile {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.LogoFile
+}
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.LogoRemoteURL
 }
 func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetOverview() *string {
 	if t == nil {
@@ -78331,6 +81753,12 @@ func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetPrimaryColor() *string
 		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
 	}
 	return t.PrimaryColor
+}
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetThemeMode() *enums.TrustCenterThemeMode {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.ThemeMode
 }
 func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetTitle() *string {
 	if t == nil {
@@ -78389,18 +81817,63 @@ func (t *GetTrustCenterSettings_TrustCenterSettings_PageInfo) GetStartCursor() *
 	return t.StartCursor
 }
 
-type GetTrustCenterSettings_TrustCenterSettings_Edges_Node struct {
-	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID            string     "json:\"id\" graphql:\"id\""
-	Overview      *string    "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor  *string    "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	Title         *string    "json:\"title,omitempty\" graphql:\"title\""
-	TrustCenterID *string    "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
-	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+type GetTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
 }
 
+func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetTrustCenterSettings_TrustCenterSettings_Edges_Node_FaviconFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node_FaviconFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node_FaviconFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetTrustCenterSettings_TrustCenterSettings_Edges_Node struct {
+	AccentColor        *string                                                            "json:\"accentColor,omitempty\" graphql:\"accentColor\""
+	BackgroundColor    *string                                                            "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
+	CreatedAt          *time.Time                                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string                                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	FaviconFile        *GetTrustCenterSettings_TrustCenterSettings_Edges_Node_FaviconFile "json:\"faviconFile,omitempty\" graphql:\"faviconFile\""
+	FaviconLocalFileID *string                                                            "json:\"faviconLocalFileID,omitempty\" graphql:\"faviconLocalFileID\""
+	FaviconRemoteURL   *string                                                            "json:\"faviconRemoteURL,omitempty\" graphql:\"faviconRemoteURL\""
+	Font               *string                                                            "json:\"font,omitempty\" graphql:\"font\""
+	ForegroundColor    *string                                                            "json:\"foregroundColor,omitempty\" graphql:\"foregroundColor\""
+	ID                 string                                                             "json:\"id\" graphql:\"id\""
+	LogoFile           *GetTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile    "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID    *string                                                            "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL      *string                                                            "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview           *string                                                            "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor       *string                                                            "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	ThemeMode          *enums.TrustCenterThemeMode                                        "json:\"themeMode,omitempty\" graphql:\"themeMode\""
+	Title              *string                                                            "json:\"title,omitempty\" graphql:\"title\""
+	TrustCenterID      *string                                                            "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt          *time.Time                                                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string                                                            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetAccentColor() *string {
+	if t == nil {
+		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.AccentColor
+}
+func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetBackgroundColor() *string {
+	if t == nil {
+		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.BackgroundColor
+}
 func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node{}
@@ -78413,11 +81886,59 @@ func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetCreatedBy() *
 	}
 	return t.CreatedBy
 }
+func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetFaviconFile() *GetTrustCenterSettings_TrustCenterSettings_Edges_Node_FaviconFile {
+	if t == nil {
+		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.FaviconFile
+}
+func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetFaviconLocalFileID() *string {
+	if t == nil {
+		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.FaviconLocalFileID
+}
+func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetFaviconRemoteURL() *string {
+	if t == nil {
+		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.FaviconRemoteURL
+}
+func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetFont() *string {
+	if t == nil {
+		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.Font
+}
+func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetForegroundColor() *string {
+	if t == nil {
+		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.ForegroundColor
+}
 func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node{}
 	}
 	return t.ID
+}
+func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetLogoFile() *GetTrustCenterSettings_TrustCenterSettings_Edges_Node_LogoFile {
+	if t == nil {
+		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.LogoFile
+}
+func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.LogoRemoteURL
 }
 func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetOverview() *string {
 	if t == nil {
@@ -78430,6 +81951,12 @@ func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetPrimaryColor(
 		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node{}
 	}
 	return t.PrimaryColor
+}
+func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetThemeMode() *enums.TrustCenterThemeMode {
+	if t == nil {
+		t = &GetTrustCenterSettings_TrustCenterSettings_Edges_Node{}
+	}
+	return t.ThemeMode
 }
 func (t *GetTrustCenterSettings_TrustCenterSettings_Edges_Node) GetTitle() *string {
 	if t == nil {
@@ -78492,18 +82019,63 @@ func (t *GetTrustCenterSettings_TrustCenterSettings) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
-type UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting struct {
-	CreatedAt     *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ID            string     "json:\"id\" graphql:\"id\""
-	Overview      *string    "json:\"overview,omitempty\" graphql:\"overview\""
-	PrimaryColor  *string    "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
-	Title         *string    "json:\"title,omitempty\" graphql:\"title\""
-	TrustCenterID *string    "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
-	UpdatedAt     *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+type UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
 }
 
+func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting_FaviconFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting_FaviconFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting_FaviconFile{}
+	}
+	return t.PresignedURL
+}
+
+type UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting struct {
+	AccentColor        *string                                                                           "json:\"accentColor,omitempty\" graphql:\"accentColor\""
+	BackgroundColor    *string                                                                           "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
+	CreatedAt          *time.Time                                                                        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy          *string                                                                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	FaviconFile        *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting_FaviconFile "json:\"faviconFile,omitempty\" graphql:\"faviconFile\""
+	FaviconLocalFileID *string                                                                           "json:\"faviconLocalFileID,omitempty\" graphql:\"faviconLocalFileID\""
+	FaviconRemoteURL   *string                                                                           "json:\"faviconRemoteURL,omitempty\" graphql:\"faviconRemoteURL\""
+	Font               *string                                                                           "json:\"font,omitempty\" graphql:\"font\""
+	ForegroundColor    *string                                                                           "json:\"foregroundColor,omitempty\" graphql:\"foregroundColor\""
+	ID                 string                                                                            "json:\"id\" graphql:\"id\""
+	LogoFile           *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting_LogoFile    "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoLocalFileID    *string                                                                           "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
+	LogoRemoteURL      *string                                                                           "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Overview           *string                                                                           "json:\"overview,omitempty\" graphql:\"overview\""
+	PrimaryColor       *string                                                                           "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	ThemeMode          *enums.TrustCenterThemeMode                                                       "json:\"themeMode,omitempty\" graphql:\"themeMode\""
+	Title              *string                                                                           "json:\"title,omitempty\" graphql:\"title\""
+	TrustCenterID      *string                                                                           "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt          *time.Time                                                                        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy          *string                                                                           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetAccentColor() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.AccentColor
+}
+func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetBackgroundColor() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.BackgroundColor
+}
 func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting{}
@@ -78516,11 +82088,59 @@ func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) G
 	}
 	return t.CreatedBy
 }
+func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetFaviconFile() *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting_FaviconFile {
+	if t == nil {
+		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.FaviconFile
+}
+func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetFaviconLocalFileID() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.FaviconLocalFileID
+}
+func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetFaviconRemoteURL() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.FaviconRemoteURL
+}
+func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetFont() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.Font
+}
+func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetForegroundColor() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.ForegroundColor
+}
 func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetID() string {
 	if t == nil {
 		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting{}
 	}
 	return t.ID
+}
+func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetLogoFile() *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting_LogoFile {
+	if t == nil {
+		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.LogoFile
+}
+func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetLogoLocalFileID() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.LogoLocalFileID
+}
+func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.LogoRemoteURL
 }
 func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetOverview() *string {
 	if t == nil {
@@ -78533,6 +82153,12 @@ func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) G
 		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting{}
 	}
 	return t.PrimaryColor
+}
+func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetThemeMode() *enums.TrustCenterThemeMode {
+	if t == nil {
+		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.ThemeMode
 }
 func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetTitle() *string {
 	if t == nil {
@@ -78878,6 +82504,1081 @@ func (t *GetTrustCenterSettingHistories_TrustCenterSettingHistories) GetPageInfo
 func (t *GetTrustCenterSettingHistories_TrustCenterSettingHistories) GetTotalCount() int64 {
 	if t == nil {
 		t = &GetTrustCenterSettingHistories_TrustCenterSettingHistories{}
+	}
+	return t.TotalCount
+}
+
+type CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor struct {
+	TrustCenterSubprocessors []*CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors "json:\"trustCenterSubprocessors,omitempty\" graphql:\"trustCenterSubprocessors\""
+}
+
+func (t *CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor) GetTrustCenterSubprocessors() []*CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor_TrustCenterSubprocessors {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor{}
+	}
+	return t.TrustCenterSubprocessors
+}
+
+type CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors) GetID() string {
+	if t == nil {
+		t = &CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors{}
+	}
+	return t.ID
+}
+func (t *CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor struct {
+	TrustCenterSubprocessors []*CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors "json:\"trustCenterSubprocessors,omitempty\" graphql:\"trustCenterSubprocessors\""
+}
+
+func (t *CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor) GetTrustCenterSubprocessors() []*CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor_TrustCenterSubprocessors {
+	if t == nil {
+		t = &CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor{}
+	}
+	return t.TrustCenterSubprocessors
+}
+
+type CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor struct {
+	Description   *string                                                                                                    "json:\"description,omitempty\" graphql:\"description\""
+	LogoFile      *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoRemoteURL *string                                                                                                    "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name          string                                                                                                     "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor) GetDescription() *string {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor{}
+	}
+	return t.Description
+}
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor) GetLogoFile() *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor_LogoFile {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor{}
+	}
+	return t.LogoFile
+}
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor) GetName() string {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor{}
+	}
+	return t.Name
+}
+
+type CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor struct {
+	Category      string                                                                                           "json:\"category\" graphql:\"category\""
+	Countries     []string                                                                                         "json:\"countries,omitempty\" graphql:\"countries\""
+	CreatedAt     *time.Time                                                                                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                                                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID            string                                                                                           "json:\"id\" graphql:\"id\""
+	Subprocessor  CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor "json:\"subprocessor\" graphql:\"subprocessor\""
+	TrustCenterID *string                                                                                          "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time                                                                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                                                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor) GetCategory() string {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.Category
+}
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor) GetCountries() []string {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.Countries
+}
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor) GetID() string {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.ID
+}
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor) GetSubprocessor() *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return &t.Subprocessor
+}
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor) GetTrustCenterID() *string {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.TrustCenterID
+}
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor struct {
+	TrustCenterSubprocessor CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor "json:\"trustCenterSubprocessor\" graphql:\"trustCenterSubprocessor\""
+}
+
+func (t *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor) GetTrustCenterSubprocessor() *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor_TrustCenterSubprocessor {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor{}
+	}
+	return &t.TrustCenterSubprocessor
+}
+
+type DeleteTrustCenterSubprocessor_DeleteTrustCenterSubprocessor struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteTrustCenterSubprocessor_DeleteTrustCenterSubprocessor) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteTrustCenterSubprocessor_DeleteTrustCenterSubprocessor{}
+	}
+	return t.DeletedID
+}
+
+type GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor struct {
+	Description   *string                                                                                   "json:\"description,omitempty\" graphql:\"description\""
+	LogoFile      *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoRemoteURL *string                                                                                   "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name          string                                                                                    "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor) GetDescription() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor{}
+	}
+	return t.Description
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor) GetLogoFile() *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor_LogoFile {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor{}
+	}
+	return t.LogoFile
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor) GetName() string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor{}
+	}
+	return t.Name
+}
+
+type GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node struct {
+	Category      string                                                                          "json:\"category\" graphql:\"category\""
+	Countries     []string                                                                        "json:\"countries,omitempty\" graphql:\"countries\""
+	CreatedAt     *time.Time                                                                      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                                         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID            string                                                                          "json:\"id\" graphql:\"id\""
+	Subprocessor  GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor "json:\"subprocessor\" graphql:\"subprocessor\""
+	TrustCenterID *string                                                                         "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time                                                                      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                                                         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetCategory() string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.Category
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetCountries() []string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.Countries
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetSubprocessor() *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return &t.Subprocessor
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetTrustCenterID() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.TrustCenterID
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges struct {
+	Node *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges) GetNode() *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllTrustCenterSubprocessors_TrustCenterSubprocessors struct {
+	Edges      []*GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                            "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors) GetEdges() []*GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_Edges {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors{}
+	}
+	return t.Edges
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors) GetPageInfo() *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors_TrustCenterSubprocessors{}
+	}
+	return t.TotalCount
+}
+
+type GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor struct {
+	Description   *string                                                                       "json:\"description,omitempty\" graphql:\"description\""
+	LogoFile      *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoRemoteURL *string                                                                       "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name          string                                                                        "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor) GetDescription() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor{}
+	}
+	return t.Description
+}
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor) GetLogoFile() *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor_LogoFile {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor{}
+	}
+	return t.LogoFile
+}
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor) GetName() string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor{}
+	}
+	return t.Name
+}
+
+type GetTrustCenterSubprocessorByID_TrustCenterSubprocessor struct {
+	Category      string                                                              "json:\"category\" graphql:\"category\""
+	Countries     []string                                                            "json:\"countries,omitempty\" graphql:\"countries\""
+	CreatedAt     *time.Time                                                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID            string                                                              "json:\"id\" graphql:\"id\""
+	Subprocessor  GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor "json:\"subprocessor\" graphql:\"subprocessor\""
+	TrustCenterID *string                                                             "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time                                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor) GetCategory() string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor{}
+	}
+	return t.Category
+}
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor) GetCountries() []string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor{}
+	}
+	return t.Countries
+}
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor) GetID() string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor) GetSubprocessor() *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor_Subprocessor {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor{}
+	}
+	return &t.Subprocessor
+}
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor) GetTrustCenterID() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor{}
+	}
+	return t.TrustCenterID
+}
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID_TrustCenterSubprocessor{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor struct {
+	Description   *string                                                                                "json:\"description,omitempty\" graphql:\"description\""
+	LogoFile      *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoRemoteURL *string                                                                                "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name          string                                                                                 "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor) GetDescription() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor{}
+	}
+	return t.Description
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor) GetLogoFile() *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor_LogoFile {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor{}
+	}
+	return t.LogoFile
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor) GetName() string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor{}
+	}
+	return t.Name
+}
+
+type GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node struct {
+	Category      string                                                                       "json:\"category\" graphql:\"category\""
+	Countries     []string                                                                     "json:\"countries,omitempty\" graphql:\"countries\""
+	CreatedAt     *time.Time                                                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID            string                                                                       "json:\"id\" graphql:\"id\""
+	Subprocessor  GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor "json:\"subprocessor\" graphql:\"subprocessor\""
+	TrustCenterID *string                                                                      "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time                                                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetCategory() string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.Category
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetCountries() []string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.Countries
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetSubprocessor() *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node_Subprocessor {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return &t.Subprocessor
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetTrustCenterID() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.TrustCenterID
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges struct {
+	Node *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges) GetNode() *GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges{}
+	}
+	return t.Node
+}
+
+type GetTrustCenterSubprocessors_TrustCenterSubprocessors struct {
+	Edges      []*GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                         "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors) GetEdges() []*GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors{}
+	}
+	return t.Edges
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors) GetPageInfo() *GetTrustCenterSubprocessors_TrustCenterSubprocessors_PageInfo {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors{}
+	}
+	return &t.PageInfo
+}
+func (t *GetTrustCenterSubprocessors_TrustCenterSubprocessors) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors_TrustCenterSubprocessors{}
+	}
+	return t.TotalCount
+}
+
+type UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor_LogoFile struct {
+	PresignedURL *string "json:\"presignedURL,omitempty\" graphql:\"presignedURL\""
+}
+
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor_LogoFile) GetPresignedURL() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor_LogoFile{}
+	}
+	return t.PresignedURL
+}
+
+type UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor struct {
+	Description   *string                                                                                                    "json:\"description,omitempty\" graphql:\"description\""
+	LogoFile      *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor_LogoFile "json:\"logoFile,omitempty\" graphql:\"logoFile\""
+	LogoRemoteURL *string                                                                                                    "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name          string                                                                                                     "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor) GetDescription() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor{}
+	}
+	return t.Description
+}
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor) GetLogoFile() *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor_LogoFile {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor{}
+	}
+	return t.LogoFile
+}
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor) GetName() string {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor{}
+	}
+	return t.Name
+}
+
+type UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor struct {
+	Category      string                                                                                           "json:\"category\" graphql:\"category\""
+	Countries     []string                                                                                         "json:\"countries,omitempty\" graphql:\"countries\""
+	CreatedAt     *time.Time                                                                                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                                                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID            string                                                                                           "json:\"id\" graphql:\"id\""
+	Subprocessor  UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor "json:\"subprocessor\" graphql:\"subprocessor\""
+	TrustCenterID *string                                                                                          "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt     *time.Time                                                                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                                                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor) GetCategory() string {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.Category
+}
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor) GetCountries() []string {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.Countries
+}
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor) GetID() string {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.ID
+}
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor) GetSubprocessor() *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor_Subprocessor {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return &t.Subprocessor
+}
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor) GetTrustCenterID() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.TrustCenterID
+}
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor struct {
+	TrustCenterSubprocessor UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor "json:\"trustCenterSubprocessor\" graphql:\"trustCenterSubprocessor\""
+}
+
+func (t *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor) GetTrustCenterSubprocessor() *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor_TrustCenterSubprocessor {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor{}
+	}
+	return &t.TrustCenterSubprocessor
+}
+
+type GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node struct {
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges struct {
+	Node *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges) GetNode() *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories struct {
+	Edges      []*GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                                            "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories) GetEdges() []*GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories) GetPageInfo() *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories{}
+	}
+	return t.TotalCount
+}
+
+type GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node struct {
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges struct {
+	Node *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges) GetNode() *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges_Node {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories struct {
+	Edges      []*GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                                         "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories) GetEdges() []*GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_Edges {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories{}
+	}
+	return t.Edges
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories) GetPageInfo() *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories_PageInfo {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories{}
 	}
 	return t.TotalCount
 }
@@ -82429,6 +87130,17 @@ func (t *CreateControlsByClone) GetCreateControlsByClone() *CreateControlsByClon
 	return &t.CreateControlsByClone
 }
 
+type CreateControlsByCloneReturnID struct {
+	CreateControlsByClone CreateControlsByCloneReturnID_CreateControlsByClone "json:\"createControlsByClone\" graphql:\"createControlsByClone\""
+}
+
+func (t *CreateControlsByCloneReturnID) GetCreateControlsByClone() *CreateControlsByCloneReturnID_CreateControlsByClone {
+	if t == nil {
+		t = &CreateControlsByCloneReturnID{}
+	}
+	return &t.CreateControlsByClone
+}
+
 type GetControlCategories struct {
 	ControlCategories []string "json:\"controlCategories,omitempty\" graphql:\"controlCategories\""
 }
@@ -83483,6 +88195,83 @@ func (t *GetEvidenceHistories) GetEvidenceHistories() *GetEvidenceHistories_Evid
 		t = &GetEvidenceHistories{}
 	}
 	return &t.EvidenceHistories
+}
+
+type CreateExport struct {
+	CreateExport CreateExport_CreateExport "json:\"createExport\" graphql:\"createExport\""
+}
+
+func (t *CreateExport) GetCreateExport() *CreateExport_CreateExport {
+	if t == nil {
+		t = &CreateExport{}
+	}
+	return &t.CreateExport
+}
+
+type GetAllExports struct {
+	Exports GetAllExports_Exports "json:\"exports\" graphql:\"exports\""
+}
+
+func (t *GetAllExports) GetExports() *GetAllExports_Exports {
+	if t == nil {
+		t = &GetAllExports{}
+	}
+	return &t.Exports
+}
+
+type GetExportByID struct {
+	Export GetExportByID_Export "json:\"export\" graphql:\"export\""
+}
+
+func (t *GetExportByID) GetExport() *GetExportByID_Export {
+	if t == nil {
+		t = &GetExportByID{}
+	}
+	return &t.Export
+}
+
+type GetExports struct {
+	Exports GetExports_Exports "json:\"exports\" graphql:\"exports\""
+}
+
+func (t *GetExports) GetExports() *GetExports_Exports {
+	if t == nil {
+		t = &GetExports{}
+	}
+	return &t.Exports
+}
+
+type UpdateExport struct {
+	UpdateExport UpdateExport_UpdateExport "json:\"updateExport\" graphql:\"updateExport\""
+}
+
+func (t *UpdateExport) GetUpdateExport() *UpdateExport_UpdateExport {
+	if t == nil {
+		t = &UpdateExport{}
+	}
+	return &t.UpdateExport
+}
+
+type DeleteExport struct {
+	DeleteExport DeleteExport_DeleteExport "json:\"deleteExport\" graphql:\"deleteExport\""
+}
+
+func (t *DeleteExport) GetDeleteExport() *DeleteExport_DeleteExport {
+	if t == nil {
+		t = &DeleteExport{}
+	}
+	return &t.DeleteExport
+}
+
+type DeleteBulkExport struct {
+	DeleteBulkExport DeleteBulkExport_DeleteBulkExport "json:\"deleteBulkExport\" graphql:\"deleteBulkExport\""
+}
+
+func (t *DeleteBulkExport) GetDeleteBulkExport() *DeleteBulkExport_DeleteBulkExport {
+	if t == nil {
+		t = &DeleteBulkExport{}
+	}
+	return &t.DeleteBulkExport
 }
 
 type DeleteFile struct {
@@ -85344,6 +90133,17 @@ func (t *CreateFullProgram) GetCreateFullProgram() *CreateFullProgram_CreateFull
 	return &t.CreateFullProgram
 }
 
+type CreateFullProgramReturnIDs struct {
+	CreateFullProgram CreateFullProgramReturnIDs_CreateFullProgram "json:\"createFullProgram\" graphql:\"createFullProgram\""
+}
+
+func (t *CreateFullProgramReturnIDs) GetCreateFullProgram() *CreateFullProgramReturnIDs_CreateFullProgram {
+	if t == nil {
+		t = &CreateFullProgramReturnIDs{}
+	}
+	return &t.CreateFullProgram
+}
+
 type CreateProgram struct {
 	CreateProgram CreateProgram_CreateProgram "json:\"createProgram\" graphql:\"createProgram\""
 }
@@ -86191,6 +90991,116 @@ func (t *GetSubcontrolHistories) GetSubcontrolHistories() *GetSubcontrolHistorie
 	return &t.SubcontrolHistories
 }
 
+type CreateBulkCSVSubprocessor struct {
+	CreateBulkCSVSubprocessor CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor "json:\"createBulkCSVSubprocessor\" graphql:\"createBulkCSVSubprocessor\""
+}
+
+func (t *CreateBulkCSVSubprocessor) GetCreateBulkCSVSubprocessor() *CreateBulkCSVSubprocessor_CreateBulkCSVSubprocessor {
+	if t == nil {
+		t = &CreateBulkCSVSubprocessor{}
+	}
+	return &t.CreateBulkCSVSubprocessor
+}
+
+type CreateBulkSubprocessor struct {
+	CreateBulkSubprocessor CreateBulkSubprocessor_CreateBulkSubprocessor "json:\"createBulkSubprocessor\" graphql:\"createBulkSubprocessor\""
+}
+
+func (t *CreateBulkSubprocessor) GetCreateBulkSubprocessor() *CreateBulkSubprocessor_CreateBulkSubprocessor {
+	if t == nil {
+		t = &CreateBulkSubprocessor{}
+	}
+	return &t.CreateBulkSubprocessor
+}
+
+type CreateSubprocessor struct {
+	CreateSubprocessor CreateSubprocessor_CreateSubprocessor "json:\"createSubprocessor\" graphql:\"createSubprocessor\""
+}
+
+func (t *CreateSubprocessor) GetCreateSubprocessor() *CreateSubprocessor_CreateSubprocessor {
+	if t == nil {
+		t = &CreateSubprocessor{}
+	}
+	return &t.CreateSubprocessor
+}
+
+type DeleteSubprocessor struct {
+	DeleteSubprocessor DeleteSubprocessor_DeleteSubprocessor "json:\"deleteSubprocessor\" graphql:\"deleteSubprocessor\""
+}
+
+func (t *DeleteSubprocessor) GetDeleteSubprocessor() *DeleteSubprocessor_DeleteSubprocessor {
+	if t == nil {
+		t = &DeleteSubprocessor{}
+	}
+	return &t.DeleteSubprocessor
+}
+
+type GetAllSubprocessors struct {
+	Subprocessors GetAllSubprocessors_Subprocessors "json:\"subprocessors\" graphql:\"subprocessors\""
+}
+
+func (t *GetAllSubprocessors) GetSubprocessors() *GetAllSubprocessors_Subprocessors {
+	if t == nil {
+		t = &GetAllSubprocessors{}
+	}
+	return &t.Subprocessors
+}
+
+type GetSubprocessorByID struct {
+	Subprocessor GetSubprocessorByID_Subprocessor "json:\"subprocessor\" graphql:\"subprocessor\""
+}
+
+func (t *GetSubprocessorByID) GetSubprocessor() *GetSubprocessorByID_Subprocessor {
+	if t == nil {
+		t = &GetSubprocessorByID{}
+	}
+	return &t.Subprocessor
+}
+
+type GetSubprocessors struct {
+	Subprocessors GetSubprocessors_Subprocessors "json:\"subprocessors\" graphql:\"subprocessors\""
+}
+
+func (t *GetSubprocessors) GetSubprocessors() *GetSubprocessors_Subprocessors {
+	if t == nil {
+		t = &GetSubprocessors{}
+	}
+	return &t.Subprocessors
+}
+
+type UpdateSubprocessor struct {
+	UpdateSubprocessor UpdateSubprocessor_UpdateSubprocessor "json:\"updateSubprocessor\" graphql:\"updateSubprocessor\""
+}
+
+func (t *UpdateSubprocessor) GetUpdateSubprocessor() *UpdateSubprocessor_UpdateSubprocessor {
+	if t == nil {
+		t = &UpdateSubprocessor{}
+	}
+	return &t.UpdateSubprocessor
+}
+
+type GetAllSubprocessorHistories struct {
+	SubprocessorHistories GetAllSubprocessorHistories_SubprocessorHistories "json:\"subprocessorHistories\" graphql:\"subprocessorHistories\""
+}
+
+func (t *GetAllSubprocessorHistories) GetSubprocessorHistories() *GetAllSubprocessorHistories_SubprocessorHistories {
+	if t == nil {
+		t = &GetAllSubprocessorHistories{}
+	}
+	return &t.SubprocessorHistories
+}
+
+type GetSubprocessorHistories struct {
+	SubprocessorHistories GetSubprocessorHistories_SubprocessorHistories "json:\"subprocessorHistories\" graphql:\"subprocessorHistories\""
+}
+
+func (t *GetSubprocessorHistories) GetSubprocessorHistories() *GetSubprocessorHistories_SubprocessorHistories {
+	if t == nil {
+		t = &GetSubprocessorHistories{}
+	}
+	return &t.SubprocessorHistories
+}
+
 type CreateBulkCSVSubscriber struct {
 	CreateBulkCSVSubscriber CreateBulkCSVSubscriber_CreateBulkCSVSubscriber "json:\"createBulkCSVSubscriber\" graphql:\"createBulkCSVSubscriber\""
 }
@@ -86706,6 +91616,116 @@ func (t *GetTrustCenterSettingHistories) GetTrustCenterSettingHistories() *GetTr
 		t = &GetTrustCenterSettingHistories{}
 	}
 	return &t.TrustCenterSettingHistories
+}
+
+type CreateBulkCSVTrustCenterSubprocessor struct {
+	CreateBulkCSVTrustCenterSubprocessor CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor "json:\"createBulkCSVTrustCenterSubprocessor\" graphql:\"createBulkCSVTrustCenterSubprocessor\""
+}
+
+func (t *CreateBulkCSVTrustCenterSubprocessor) GetCreateBulkCSVTrustCenterSubprocessor() *CreateBulkCSVTrustCenterSubprocessor_CreateBulkCSVTrustCenterSubprocessor {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterSubprocessor{}
+	}
+	return &t.CreateBulkCSVTrustCenterSubprocessor
+}
+
+type CreateBulkTrustCenterSubprocessor struct {
+	CreateBulkTrustCenterSubprocessor CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor "json:\"createBulkTrustCenterSubprocessor\" graphql:\"createBulkTrustCenterSubprocessor\""
+}
+
+func (t *CreateBulkTrustCenterSubprocessor) GetCreateBulkTrustCenterSubprocessor() *CreateBulkTrustCenterSubprocessor_CreateBulkTrustCenterSubprocessor {
+	if t == nil {
+		t = &CreateBulkTrustCenterSubprocessor{}
+	}
+	return &t.CreateBulkTrustCenterSubprocessor
+}
+
+type CreateTrustCenterSubprocessor struct {
+	CreateTrustCenterSubprocessor CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor "json:\"createTrustCenterSubprocessor\" graphql:\"createTrustCenterSubprocessor\""
+}
+
+func (t *CreateTrustCenterSubprocessor) GetCreateTrustCenterSubprocessor() *CreateTrustCenterSubprocessor_CreateTrustCenterSubprocessor {
+	if t == nil {
+		t = &CreateTrustCenterSubprocessor{}
+	}
+	return &t.CreateTrustCenterSubprocessor
+}
+
+type DeleteTrustCenterSubprocessor struct {
+	DeleteTrustCenterSubprocessor DeleteTrustCenterSubprocessor_DeleteTrustCenterSubprocessor "json:\"deleteTrustCenterSubprocessor\" graphql:\"deleteTrustCenterSubprocessor\""
+}
+
+func (t *DeleteTrustCenterSubprocessor) GetDeleteTrustCenterSubprocessor() *DeleteTrustCenterSubprocessor_DeleteTrustCenterSubprocessor {
+	if t == nil {
+		t = &DeleteTrustCenterSubprocessor{}
+	}
+	return &t.DeleteTrustCenterSubprocessor
+}
+
+type GetAllTrustCenterSubprocessors struct {
+	TrustCenterSubprocessors GetAllTrustCenterSubprocessors_TrustCenterSubprocessors "json:\"trustCenterSubprocessors\" graphql:\"trustCenterSubprocessors\""
+}
+
+func (t *GetAllTrustCenterSubprocessors) GetTrustCenterSubprocessors() *GetAllTrustCenterSubprocessors_TrustCenterSubprocessors {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessors{}
+	}
+	return &t.TrustCenterSubprocessors
+}
+
+type GetTrustCenterSubprocessorByID struct {
+	TrustCenterSubprocessor GetTrustCenterSubprocessorByID_TrustCenterSubprocessor "json:\"trustCenterSubprocessor\" graphql:\"trustCenterSubprocessor\""
+}
+
+func (t *GetTrustCenterSubprocessorByID) GetTrustCenterSubprocessor() *GetTrustCenterSubprocessorByID_TrustCenterSubprocessor {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorByID{}
+	}
+	return &t.TrustCenterSubprocessor
+}
+
+type GetTrustCenterSubprocessors struct {
+	TrustCenterSubprocessors GetTrustCenterSubprocessors_TrustCenterSubprocessors "json:\"trustCenterSubprocessors\" graphql:\"trustCenterSubprocessors\""
+}
+
+func (t *GetTrustCenterSubprocessors) GetTrustCenterSubprocessors() *GetTrustCenterSubprocessors_TrustCenterSubprocessors {
+	if t == nil {
+		t = &GetTrustCenterSubprocessors{}
+	}
+	return &t.TrustCenterSubprocessors
+}
+
+type UpdateTrustCenterSubprocessor struct {
+	UpdateTrustCenterSubprocessor UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor "json:\"updateTrustCenterSubprocessor\" graphql:\"updateTrustCenterSubprocessor\""
+}
+
+func (t *UpdateTrustCenterSubprocessor) GetUpdateTrustCenterSubprocessor() *UpdateTrustCenterSubprocessor_UpdateTrustCenterSubprocessor {
+	if t == nil {
+		t = &UpdateTrustCenterSubprocessor{}
+	}
+	return &t.UpdateTrustCenterSubprocessor
+}
+
+type GetAllTrustCenterSubprocessorHistories struct {
+	TrustCenterSubprocessorHistories GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories "json:\"trustCenterSubprocessorHistories\" graphql:\"trustCenterSubprocessorHistories\""
+}
+
+func (t *GetAllTrustCenterSubprocessorHistories) GetTrustCenterSubprocessorHistories() *GetAllTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories {
+	if t == nil {
+		t = &GetAllTrustCenterSubprocessorHistories{}
+	}
+	return &t.TrustCenterSubprocessorHistories
+}
+
+type GetTrustCenterSubprocessorHistories struct {
+	TrustCenterSubprocessorHistories GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories "json:\"trustCenterSubprocessorHistories\" graphql:\"trustCenterSubprocessorHistories\""
+}
+
+func (t *GetTrustCenterSubprocessorHistories) GetTrustCenterSubprocessorHistories() *GetTrustCenterSubprocessorHistories_TrustCenterSubprocessorHistories {
+	if t == nil {
+		t = &GetTrustCenterSubprocessorHistories{}
+	}
+	return &t.TrustCenterSubprocessorHistories
 }
 
 type CreateUser struct {
@@ -87326,6 +92346,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					scopes
 					revokedReason
 					revokedBy
+					ssoAuthorizations
 				}
 			}
 		}
@@ -87897,6 +92918,8 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					taxIdentifier
 					organizationID
 					allowedEmailDomains
+					identityProviderClientID
+					identityProviderClientSecret
 					identityProviderMetadataEndpoint
 					identityProviderEntityID
 					oidcDiscoveryEndpoint
@@ -87918,6 +92941,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					tags
 					name
 					scopes
+					ssoAuthorizations
 					revokedReason
 					revokedBy
 				}
@@ -88098,6 +93122,26 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					ownerID
 					refCode
 					controlID
+				}
+			}
+		}
+		subprocessors {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					tags
+					ownerID
+					name
+					description
+					logoRemoteURL
+					logoLocalFileID
 				}
 			}
 		}
@@ -89772,8 +94816,8 @@ func (c *Client) GetControlByID(ctx context.Context, controlID string, intercept
 	return &res, nil
 }
 
-const GetControlsDocument = `query GetControls ($first: Int, $last: Int, $where: ControlWhereInput) {
-	controls(first: $first, last: $last, where: $where) {
+const GetControlsDocument = `query GetControls ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: ControlWhereInput, $orderBy: [ControlOrder!]) {
+	controls(first: $first, last: $last, after: $after, before: $before, where: $where, orderBy: $orderBy) {
 		totalCount
 		pageInfo {
 			startCursor
@@ -89871,11 +94915,14 @@ const GetControlsDocument = `query GetControls ($first: Int, $last: Int, $where:
 }
 `
 
-func (c *Client) GetControls(ctx context.Context, first *int64, last *int64, where *ControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControls, error) {
+func (c *Client) GetControls(ctx context.Context, first *int64, last *int64, after *string, before *string, where *ControlWhereInput, orderBy []*ControlOrder, interceptors ...clientv2.RequestInterceptor) (*GetControls, error) {
 	vars := map[string]any{
-		"first": first,
-		"last":  last,
-		"where": where,
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"where":   where,
+		"orderBy": orderBy,
 	}
 
 	var res GetControls
@@ -90055,6 +95102,32 @@ func (c *Client) CreateControlsByClone(ctx context.Context, input CloneControlIn
 
 	var res CreateControlsByClone
 	if err := c.Client.Post(ctx, "CreateControlsByClone", CreateControlsByCloneDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateControlsByCloneReturnIDDocument = `mutation CreateControlsByCloneReturnID ($input: CloneControlInput!) {
+	createControlsByClone(input: $input) {
+		controls {
+			id
+		}
+	}
+}
+`
+
+func (c *Client) CreateControlsByCloneReturnID(ctx context.Context, input CloneControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateControlsByCloneReturnID, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateControlsByCloneReturnID
+	if err := c.Client.Post(ctx, "CreateControlsByCloneReturnID", CreateControlsByCloneReturnIDDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -94389,6 +99462,272 @@ func (c *Client) GetEvidenceHistories(ctx context.Context, where *EvidenceHistor
 	return &res, nil
 }
 
+const CreateExportDocument = `mutation CreateExport ($input: CreateExportInput!) {
+	createExport(input: $input) {
+		export {
+			createdAt
+			createdBy
+			exportType
+			format
+			id
+			fields
+			ownerID
+			requestorID
+			status
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateExport(ctx context.Context, input CreateExportInput, interceptors ...clientv2.RequestInterceptor) (*CreateExport, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateExport
+	if err := c.Client.Post(ctx, "CreateExport", CreateExportDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllExportsDocument = `query GetAllExports {
+	exports {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				exportType
+				id
+				format
+				fields
+				ownerID
+				requestorID
+				status
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllExports(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllExports, error) {
+	vars := map[string]any{}
+
+	var res GetAllExports
+	if err := c.Client.Post(ctx, "GetAllExports", GetAllExportsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetExportByIDDocument = `query GetExportByID ($exportId: ID!) {
+	export(id: $exportId) {
+		createdAt
+		createdBy
+		exportType
+		id
+		ownerID
+		requestorID
+		status
+		fields
+		updatedAt
+		format
+		updatedBy
+		files {
+			edges {
+				node {
+					id
+					storagePath
+					storageScheme
+					storageVolume
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetExportByID(ctx context.Context, exportID string, interceptors ...clientv2.RequestInterceptor) (*GetExportByID, error) {
+	vars := map[string]any{
+		"exportId": exportID,
+	}
+
+	var res GetExportByID
+	if err := c.Client.Post(ctx, "GetExportByID", GetExportByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetExportsDocument = `query GetExports ($first: Int, $last: Int, $where: ExportWhereInput) {
+	exports(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				exportType
+				id
+				format
+				ownerID
+				requestorID
+				status
+				fields
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetExports(ctx context.Context, first *int64, last *int64, where *ExportWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetExports, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetExports
+	if err := c.Client.Post(ctx, "GetExports", GetExportsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateExportDocument = `mutation UpdateExport ($id: ID!, $input: UpdateExportInput!, $exportFiles: [Upload!]) {
+	updateExport(id: $id, input: $input, exportFiles: $exportFiles) {
+		export {
+			createdAt
+			createdBy
+			exportType
+			id
+			ownerID
+			fields
+			requestorID
+			status
+			format
+			updatedAt
+			updatedBy
+			files {
+				edges {
+					node {
+						id
+						storagePath
+						storageScheme
+						storageVolume
+					}
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) UpdateExport(ctx context.Context, id string, input UpdateExportInput, exportFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateExport, error) {
+	vars := map[string]any{
+		"id":          id,
+		"input":       input,
+		"exportFiles": exportFiles,
+	}
+
+	var res UpdateExport
+	if err := c.Client.Post(ctx, "UpdateExport", UpdateExportDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteExportDocument = `mutation DeleteExport ($deleteExportId: ID!) {
+	deleteExport(id: $deleteExportId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteExport(ctx context.Context, deleteExportID string, interceptors ...clientv2.RequestInterceptor) (*DeleteExport, error) {
+	vars := map[string]any{
+		"deleteExportId": deleteExportID,
+	}
+
+	var res DeleteExport
+	if err := c.Client.Post(ctx, "DeleteExport", DeleteExportDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteBulkExportDocument = `mutation DeleteBulkExport ($ids: [ID!]!) {
+	deleteBulkExport(ids: $ids) {
+		deletedIDs
+	}
+}
+`
+
+func (c *Client) DeleteBulkExport(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkExport, error) {
+	vars := map[string]any{
+		"ids": ids,
+	}
+
+	var res DeleteBulkExport
+	if err := c.Client.Post(ctx, "DeleteBulkExport", DeleteBulkExportDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const DeleteFileDocument = `mutation DeleteFile ($deleteFileId: ID!) {
 	deleteFile(id: $deleteFileId) {
 		deletedID
@@ -96838,8 +102177,15 @@ func (c *Client) DeleteInternalPolicy(ctx context.Context, deleteInternalPolicyI
 	return &res, nil
 }
 
-const GetAllInternalPoliciesDocument = `query GetAllInternalPolicies {
-	internalPolicies {
+const GetAllInternalPoliciesDocument = `query GetAllInternalPolicies ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [InternalPolicyOrder!]) {
+	internalPolicies(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
 				approvalRequired
@@ -96889,8 +102235,14 @@ const GetAllInternalPoliciesDocument = `query GetAllInternalPolicies {
 }
 `
 
-func (c *Client) GetAllInternalPolicies(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllInternalPolicies, error) {
-	vars := map[string]any{}
+func (c *Client) GetAllInternalPolicies(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*InternalPolicyOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllInternalPolicies, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"orderBy": orderBy,
+	}
 
 	var res GetAllInternalPolicies
 	if err := c.Client.Post(ctx, "GetAllInternalPolicies", GetAllInternalPoliciesDocument, &res, vars, interceptors...); err != nil {
@@ -96904,8 +102256,15 @@ func (c *Client) GetAllInternalPolicies(ctx context.Context, interceptors ...cli
 	return &res, nil
 }
 
-const GetInternalPoliciesDocument = `query GetInternalPolicies ($where: InternalPolicyWhereInput) {
-	internalPolicies(where: $where) {
+const GetInternalPoliciesDocument = `query GetInternalPolicies ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: InternalPolicyWhereInput, $orderBy: [InternalPolicyOrder!]) {
+	internalPolicies(first: $first, last: $last, after: $after, before: $before, where: $where, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
 				approvalRequired
@@ -96954,9 +102313,14 @@ const GetInternalPoliciesDocument = `query GetInternalPolicies ($where: Internal
 }
 `
 
-func (c *Client) GetInternalPolicies(ctx context.Context, where *InternalPolicyWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicies, error) {
+func (c *Client) GetInternalPolicies(ctx context.Context, first *int64, last *int64, after *string, before *string, where *InternalPolicyWhereInput, orderBy []*InternalPolicyOrder, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicies, error) {
 	vars := map[string]any{
-		"where": where,
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"where":   where,
+		"orderBy": orderBy,
 	}
 
 	var res GetInternalPolicies
@@ -100370,6 +105734,13 @@ const GetAllOrganizationSettingsDocument = `query GetAllOrganizationSettings {
 				taxIdentifier
 				updatedAt
 				updatedBy
+				identityProvider
+				identityProviderEntityID
+				identityProviderLoginEnforced
+				oidcDiscoveryEndpoint
+				identityProviderClientSecret
+				identityProviderMetadataEndpoint
+				complianceWebhookToken
 				organization {
 					id
 					displayName
@@ -100411,6 +105782,13 @@ const GetOrganizationSettingByIDDocument = `query GetOrganizationSettingByID ($o
 		taxIdentifier
 		updatedAt
 		updatedBy
+		identityProvider
+		identityProviderEntityID
+		identityProviderLoginEnforced
+		oidcDiscoveryEndpoint
+		identityProviderClientSecret
+		identityProviderMetadataEndpoint
+		complianceWebhookToken
 		organization {
 			id
 			displayName
@@ -100454,6 +105832,13 @@ const GetOrganizationSettingsDocument = `query GetOrganizationSettings ($where: 
 				taxIdentifier
 				updatedAt
 				updatedBy
+				identityProvider
+				identityProviderEntityID
+				identityProviderLoginEnforced
+				oidcDiscoveryEndpoint
+				identityProviderClientSecret
+				identityProviderMetadataEndpoint
+				complianceWebhookToken
 				organization {
 					id
 					displayName
@@ -100498,6 +105883,13 @@ const UpdateOrganizationSettingDocument = `mutation UpdateOrganizationSetting ($
 			taxIdentifier
 			updatedAt
 			updatedBy
+			identityProvider
+			identityProviderEntityID
+			identityProviderLoginEnforced
+			oidcDiscoveryEndpoint
+			identityProviderClientSecret
+			identityProviderMetadataEndpoint
+			complianceWebhookToken
 			organization {
 				id
 				displayName
@@ -102115,6 +107507,39 @@ func (c *Client) CreateFullProgram(ctx context.Context, input CreateFullProgramI
 	return &res, nil
 }
 
+const CreateFullProgramReturnIDsDocument = `mutation CreateFullProgramReturnIDs ($input: CreateFullProgramInput!) {
+	createFullProgram(input: $input) {
+		program {
+			id
+			controls {
+				edges {
+					node {
+						id
+					}
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateFullProgramReturnIDs(ctx context.Context, input CreateFullProgramInput, interceptors ...clientv2.RequestInterceptor) (*CreateFullProgramReturnIDs, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateFullProgramReturnIDs
+	if err := c.Client.Post(ctx, "CreateFullProgramReturnIDs", CreateFullProgramReturnIDsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateProgramDocument = `mutation CreateProgram ($input: CreateProgramInput!) {
 	createProgram(input: $input) {
 		program {
@@ -103610,8 +109035,15 @@ func (c *Client) DeleteRisk(ctx context.Context, deleteRiskID string, intercepto
 	return &res, nil
 }
 
-const GetAllRisksDocument = `query GetAllRisks {
-	risks {
+const GetAllRisksDocument = `query GetAllRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [RiskOrder!]) {
+	risks(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
 				businessCosts
@@ -103677,8 +109109,14 @@ const GetAllRisksDocument = `query GetAllRisks {
 }
 `
 
-func (c *Client) GetAllRisks(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllRisks, error) {
-	vars := map[string]any{}
+func (c *Client) GetAllRisks(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*RiskOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllRisks, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"orderBy": orderBy,
+	}
 
 	var res GetAllRisks
 	if err := c.Client.Post(ctx, "GetAllRisks", GetAllRisksDocument, &res, vars, interceptors...); err != nil {
@@ -103772,8 +109210,15 @@ func (c *Client) GetRiskByID(ctx context.Context, riskID string, interceptors ..
 	return &res, nil
 }
 
-const GetRisksDocument = `query GetRisks ($where: RiskWhereInput) {
-	risks(where: $where) {
+const GetRisksDocument = `query GetRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: RiskWhereInput, $orderBy: [RiskOrder!]) {
+	risks(first: $first, last: $last, after: $after, before: $before, where: $where, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
 				businessCosts
@@ -103839,9 +109284,14 @@ const GetRisksDocument = `query GetRisks ($where: RiskWhereInput) {
 }
 `
 
-func (c *Client) GetRisks(ctx context.Context, where *RiskWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetRisks, error) {
+func (c *Client) GetRisks(ctx context.Context, first *int64, last *int64, after *string, before *string, where *RiskWhereInput, orderBy []*RiskOrder, interceptors ...clientv2.RequestInterceptor) (*GetRisks, error) {
 	vars := map[string]any{
-		"where": where,
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"where":   where,
+		"orderBy": orderBy,
 	}
 
 	var res GetRisks
@@ -105573,6 +111023,22 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 				}
 			}
 		}
+		subprocessors {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					name
+					tags
+				}
+			}
+		}
 		subscribers {
 			totalCount
 			pageInfo {
@@ -106722,6 +112188,429 @@ func (c *Client) GetSubcontrolHistories(ctx context.Context, where *SubcontrolHi
 	return &res, nil
 }
 
+const CreateBulkCSVSubprocessorDocument = `mutation CreateBulkCSVSubprocessor ($input: Upload!) {
+	createBulkCSVSubprocessor(input: $input) {
+		subprocessors {
+			createdAt
+			createdBy
+			id
+			tags
+			updatedAt
+			updatedBy
+			name
+			description
+			logoRemoteURL
+			logoLocalFileID
+			logoFile {
+				presignedURL
+			}
+			owner {
+				id
+				name
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVSubprocessor(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVSubprocessor, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVSubprocessor
+	if err := c.Client.Post(ctx, "CreateBulkCSVSubprocessor", CreateBulkCSVSubprocessorDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkSubprocessorDocument = `mutation CreateBulkSubprocessor ($input: [CreateSubprocessorInput!]) {
+	createBulkSubprocessor(input: $input) {
+		subprocessors {
+			createdAt
+			createdBy
+			id
+			tags
+			updatedAt
+			updatedBy
+			name
+			description
+			logoRemoteURL
+			logoLocalFileID
+			logoFile {
+				presignedURL
+			}
+			owner {
+				id
+				name
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkSubprocessor(ctx context.Context, input []*CreateSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkSubprocessor, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkSubprocessor
+	if err := c.Client.Post(ctx, "CreateBulkSubprocessor", CreateBulkSubprocessorDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateSubprocessorDocument = `mutation CreateSubprocessor ($input: CreateSubprocessorInput!, $logoFile: Upload) {
+	createSubprocessor(input: $input, logoFile: $logoFile) {
+		subprocessor {
+			createdAt
+			createdBy
+			id
+			tags
+			updatedAt
+			updatedBy
+			name
+			description
+			logoRemoteURL
+			logoLocalFileID
+			logoFile {
+				presignedURL
+			}
+			owner {
+				id
+				name
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateSubprocessor(ctx context.Context, input CreateSubprocessorInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateSubprocessor, error) {
+	vars := map[string]any{
+		"input":    input,
+		"logoFile": logoFile,
+	}
+
+	var res CreateSubprocessor
+	if err := c.Client.Post(ctx, "CreateSubprocessor", CreateSubprocessorDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteSubprocessorDocument = `mutation DeleteSubprocessor ($deleteSubprocessorId: ID!) {
+	deleteSubprocessor(id: $deleteSubprocessorId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteSubprocessor(ctx context.Context, deleteSubprocessorID string, interceptors ...clientv2.RequestInterceptor) (*DeleteSubprocessor, error) {
+	vars := map[string]any{
+		"deleteSubprocessorId": deleteSubprocessorID,
+	}
+
+	var res DeleteSubprocessor
+	if err := c.Client.Post(ctx, "DeleteSubprocessor", DeleteSubprocessorDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllSubprocessorsDocument = `query GetAllSubprocessors {
+	subprocessors {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				tags
+				updatedAt
+				updatedBy
+				name
+				description
+				logoRemoteURL
+				logoLocalFileID
+				logoFile {
+					presignedURL
+				}
+				owner {
+					id
+					name
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllSubprocessors(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllSubprocessors, error) {
+	vars := map[string]any{}
+
+	var res GetAllSubprocessors
+	if err := c.Client.Post(ctx, "GetAllSubprocessors", GetAllSubprocessorsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetSubprocessorByIDDocument = `query GetSubprocessorByID ($subprocessorId: ID!) {
+	subprocessor(id: $subprocessorId) {
+		createdAt
+		createdBy
+		id
+		tags
+		updatedAt
+		updatedBy
+		name
+		description
+		logoRemoteURL
+		logoLocalFileID
+		logoFile {
+			presignedURL
+		}
+		owner {
+			id
+			name
+		}
+	}
+}
+`
+
+func (c *Client) GetSubprocessorByID(ctx context.Context, subprocessorID string, interceptors ...clientv2.RequestInterceptor) (*GetSubprocessorByID, error) {
+	vars := map[string]any{
+		"subprocessorId": subprocessorID,
+	}
+
+	var res GetSubprocessorByID
+	if err := c.Client.Post(ctx, "GetSubprocessorByID", GetSubprocessorByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetSubprocessorsDocument = `query GetSubprocessors ($first: Int, $last: Int, $where: SubprocessorWhereInput) {
+	subprocessors(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				tags
+				updatedAt
+				updatedBy
+				name
+				description
+				logoRemoteURL
+				logoLocalFileID
+				logoFile {
+					presignedURL
+				}
+				owner {
+					id
+					name
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetSubprocessors(ctx context.Context, first *int64, last *int64, where *SubprocessorWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetSubprocessors, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetSubprocessors
+	if err := c.Client.Post(ctx, "GetSubprocessors", GetSubprocessorsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateSubprocessorDocument = `mutation UpdateSubprocessor ($updateSubprocessorId: ID!, $input: UpdateSubprocessorInput!, $logoFile: Upload) {
+	updateSubprocessor(id: $updateSubprocessorId, input: $input, logoFile: $logoFile) {
+		subprocessor {
+			createdAt
+			createdBy
+			id
+			tags
+			updatedAt
+			updatedBy
+			name
+			description
+			logoRemoteURL
+			logoLocalFileID
+			logoFile {
+				presignedURL
+			}
+			owner {
+				id
+				name
+			}
+		}
+	}
+}
+`
+
+func (c *Client) UpdateSubprocessor(ctx context.Context, updateSubprocessorID string, input UpdateSubprocessorInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateSubprocessor, error) {
+	vars := map[string]any{
+		"updateSubprocessorId": updateSubprocessorID,
+		"input":                input,
+		"logoFile":             logoFile,
+	}
+
+	var res UpdateSubprocessor
+	if err := c.Client.Post(ctx, "UpdateSubprocessor", UpdateSubprocessorDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllSubprocessorHistoriesDocument = `query GetAllSubprocessorHistories {
+	subprocessorHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				operation
+				ref
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllSubprocessorHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllSubprocessorHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllSubprocessorHistories
+	if err := c.Client.Post(ctx, "GetAllSubprocessorHistories", GetAllSubprocessorHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetSubprocessorHistoriesDocument = `query GetSubprocessorHistories ($first: Int, $last: Int, $where: SubprocessorHistoryWhereInput) {
+	subprocessorHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				operation
+				ref
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetSubprocessorHistories(ctx context.Context, first *int64, last *int64, where *SubprocessorHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetSubprocessorHistories, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetSubprocessorHistories
+	if err := c.Client.Post(ctx, "GetSubprocessorHistories", GetSubprocessorHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateBulkCSVSubscriberDocument = `mutation CreateBulkCSVSubscriber ($input: Upload!) {
 	createBulkCSVSubscriber(input: $input) {
 		subscribers {
@@ -106841,8 +112730,15 @@ func (c *Client) DeleteSubscriber(ctx context.Context, deleteSubscriberEmail str
 	return &res, nil
 }
 
-const GetAllSubscribersDocument = `query GetAllSubscribers {
-	subscribers {
+const GetAllSubscribersDocument = `query GetAllSubscribers ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [SubscriberOrder!]) {
+	subscribers(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
 				active
@@ -106858,8 +112754,14 @@ const GetAllSubscribersDocument = `query GetAllSubscribers {
 }
 `
 
-func (c *Client) GetAllSubscribers(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllSubscribers, error) {
-	vars := map[string]any{}
+func (c *Client) GetAllSubscribers(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*SubscriberOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllSubscribers, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"orderBy": orderBy,
+	}
 
 	var res GetAllSubscribers
 	if err := c.Client.Post(ctx, "GetAllSubscribers", GetAllSubscribersDocument, &res, vars, interceptors...); err != nil {
@@ -106903,8 +112805,15 @@ func (c *Client) GetSubscriberByEmail(ctx context.Context, email string, interce
 	return &res, nil
 }
 
-const GetSubscribersDocument = `query GetSubscribers ($where: SubscriberWhereInput) {
-	subscribers(where: $where) {
+const GetSubscribersDocument = `query GetSubscribers ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: SubscriberWhereInput, $orderBy: [SubscriberOrder!]) {
+	subscribers(first: $first, last: $last, after: $after, before: $before, where: $where, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
 		edges {
 			node {
 				active
@@ -106920,9 +112829,14 @@ const GetSubscribersDocument = `query GetSubscribers ($where: SubscriberWhereInp
 }
 `
 
-func (c *Client) GetSubscribers(ctx context.Context, where *SubscriberWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetSubscribers, error) {
+func (c *Client) GetSubscribers(ctx context.Context, first *int64, last *int64, after *string, before *string, where *SubscriberWhereInput, orderBy []*SubscriberOrder, interceptors ...clientv2.RequestInterceptor) (*GetSubscribers, error) {
 	vars := map[string]any{
-		"where": where,
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"where":   where,
+		"orderBy": orderBy,
 	}
 
 	var res GetSubscribers
@@ -107182,8 +113096,8 @@ func (c *Client) DeleteTask(ctx context.Context, deleteTaskID string, intercepto
 	return &res, nil
 }
 
-const GetAllTasksDocument = `query GetAllTasks {
-	tasks {
+const GetAllTasksDocument = `query GetAllTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [TaskOrder!]) {
+	tasks(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
 		totalCount
 		pageInfo {
 			startCursor
@@ -107249,8 +113163,14 @@ const GetAllTasksDocument = `query GetAllTasks {
 }
 `
 
-func (c *Client) GetAllTasks(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTasks, error) {
-	vars := map[string]any{}
+func (c *Client) GetAllTasks(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*TaskOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllTasks, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"orderBy": orderBy,
+	}
 
 	var res GetAllTasks
 	if err := c.Client.Post(ctx, "GetAllTasks", GetAllTasksDocument, &res, vars, interceptors...); err != nil {
@@ -108064,6 +113984,16 @@ const CreateTrustCenterDocument = `mutation CreateTrustCenter ($input: CreateTru
 				overview
 				title
 				primaryColor
+				logoRemoteURL
+				logoLocalFileID
+				logoFile {
+					presignedURL
+				}
+				themeMode
+				font
+				foregroundColor
+				backgroundColor
+				accentColor
 			}
 		}
 	}
@@ -108136,6 +114066,16 @@ const GetAllTrustCentersDocument = `query GetAllTrustCenters {
 					overview
 					title
 					primaryColor
+					logoRemoteURL
+					logoLocalFileID
+					logoFile {
+						presignedURL
+					}
+					themeMode
+					font
+					foregroundColor
+					backgroundColor
+					accentColor
 				}
 			}
 		}
@@ -108174,6 +114114,16 @@ const GetTrustCenterByIDDocument = `query GetTrustCenterByID ($trustCenterId: ID
 			overview
 			title
 			primaryColor
+			logoRemoteURL
+			logoLocalFileID
+			logoFile {
+				presignedURL
+			}
+			themeMode
+			font
+			foregroundColor
+			backgroundColor
+			accentColor
 		}
 	}
 }
@@ -108221,6 +114171,16 @@ const GetTrustCentersDocument = `query GetTrustCenters ($first: Int, $last: Int,
 					overview
 					title
 					primaryColor
+					logoRemoteURL
+					logoLocalFileID
+					logoFile {
+						presignedURL
+					}
+					themeMode
+					font
+					foregroundColor
+					backgroundColor
+					accentColor
 				}
 			}
 		}
@@ -108264,6 +114224,16 @@ const UpdateTrustCenterDocument = `mutation UpdateTrustCenter ($updateTrustCente
 				overview
 				title
 				primaryColor
+				logoRemoteURL
+				logoLocalFileID
+				logoFile {
+					presignedURL
+				}
+				themeMode
+				font
+				foregroundColor
+				backgroundColor
+				accentColor
 			}
 		}
 	}
@@ -108392,6 +114362,16 @@ const CreateTrustCenterSettingDocument = `mutation CreateTrustCenterSetting ($in
 			trustCenterID
 			updatedAt
 			updatedBy
+			logoFile {
+				presignedURL
+			}
+			logoRemoteURL
+			logoLocalFileID
+			themeMode
+			font
+			foregroundColor
+			backgroundColor
+			accentColor
 		}
 	}
 }
@@ -108458,6 +114438,21 @@ const GetAllTrustCenterSettingsDocument = `query GetAllTrustCenterSettings {
 				trustCenterID
 				updatedAt
 				updatedBy
+				logoFile {
+					presignedURL
+				}
+				logoRemoteURL
+				logoLocalFileID
+				faviconFile {
+					presignedURL
+				}
+				faviconRemoteURL
+				faviconLocalFileID
+				themeMode
+				font
+				foregroundColor
+				backgroundColor
+				accentColor
 			}
 		}
 	}
@@ -108490,6 +114485,21 @@ const GetTrustCenterSettingByIDDocument = `query GetTrustCenterSettingByID ($tru
 		trustCenterID
 		updatedAt
 		updatedBy
+		logoFile {
+			presignedURL
+		}
+		logoRemoteURL
+		logoLocalFileID
+		faviconFile {
+			presignedURL
+		}
+		faviconRemoteURL
+		faviconLocalFileID
+		themeMode
+		font
+		foregroundColor
+		backgroundColor
+		accentColor
 	}
 }
 `
@@ -108531,6 +114541,21 @@ const GetTrustCenterSettingsDocument = `query GetTrustCenterSettings ($first: In
 				trustCenterID
 				updatedAt
 				updatedBy
+				logoFile {
+					presignedURL
+				}
+				logoRemoteURL
+				logoLocalFileID
+				faviconFile {
+					presignedURL
+				}
+				faviconRemoteURL
+				faviconLocalFileID
+				themeMode
+				font
+				foregroundColor
+				backgroundColor
+				accentColor
 			}
 		}
 	}
@@ -108556,8 +114581,8 @@ func (c *Client) GetTrustCenterSettings(ctx context.Context, first *int64, last 
 	return &res, nil
 }
 
-const UpdateTrustCenterSettingDocument = `mutation UpdateTrustCenterSetting ($updateTrustCenterSettingId: ID!, $input: UpdateTrustCenterSettingInput!) {
-	updateTrustCenterSetting(id: $updateTrustCenterSettingId, input: $input) {
+const UpdateTrustCenterSettingDocument = `mutation UpdateTrustCenterSetting ($updateTrustCenterSettingId: ID!, $input: UpdateTrustCenterSettingInput!, $logoFile: Upload, $faviconFile: Upload) {
+	updateTrustCenterSetting(id: $updateTrustCenterSettingId, input: $input, logoFile: $logoFile, faviconFile: $faviconFile) {
 		trustCenterSetting {
 			createdAt
 			createdBy
@@ -108568,15 +114593,32 @@ const UpdateTrustCenterSettingDocument = `mutation UpdateTrustCenterSetting ($up
 			trustCenterID
 			updatedAt
 			updatedBy
+			logoFile {
+				presignedURL
+			}
+			logoRemoteURL
+			logoLocalFileID
+			faviconFile {
+				presignedURL
+			}
+			faviconRemoteURL
+			faviconLocalFileID
+			themeMode
+			font
+			foregroundColor
+			backgroundColor
+			accentColor
 		}
 	}
 }
 `
 
-func (c *Client) UpdateTrustCenterSetting(ctx context.Context, updateTrustCenterSettingID string, input UpdateTrustCenterSettingInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterSetting, error) {
+func (c *Client) UpdateTrustCenterSetting(ctx context.Context, updateTrustCenterSettingID string, input UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterSetting, error) {
 	vars := map[string]any{
 		"updateTrustCenterSettingId": updateTrustCenterSettingID,
 		"input":                      input,
+		"logoFile":                   logoFile,
+		"faviconFile":                faviconFile,
 	}
 
 	var res UpdateTrustCenterSetting
@@ -108673,6 +114715,396 @@ func (c *Client) GetTrustCenterSettingHistories(ctx context.Context, first *int6
 
 	var res GetTrustCenterSettingHistories
 	if err := c.Client.Post(ctx, "GetTrustCenterSettingHistories", GetTrustCenterSettingHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVTrustCenterSubprocessorDocument = `mutation CreateBulkCSVTrustCenterSubprocessor ($input: Upload!) {
+	createBulkCSVTrustCenterSubprocessor(input: $input) {
+		trustCenterSubprocessors {
+			createdAt
+			createdBy
+			id
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVTrustCenterSubprocessor(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTrustCenterSubprocessor, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVTrustCenterSubprocessor
+	if err := c.Client.Post(ctx, "CreateBulkCSVTrustCenterSubprocessor", CreateBulkCSVTrustCenterSubprocessorDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkTrustCenterSubprocessorDocument = `mutation CreateBulkTrustCenterSubprocessor ($input: [CreateTrustCenterSubprocessorInput!]) {
+	createBulkTrustCenterSubprocessor(input: $input) {
+		trustCenterSubprocessors {
+			createdAt
+			createdBy
+			id
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkTrustCenterSubprocessor(ctx context.Context, input []*CreateTrustCenterSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTrustCenterSubprocessor, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkTrustCenterSubprocessor
+	if err := c.Client.Post(ctx, "CreateBulkTrustCenterSubprocessor", CreateBulkTrustCenterSubprocessorDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateTrustCenterSubprocessorDocument = `mutation CreateTrustCenterSubprocessor ($input: CreateTrustCenterSubprocessorInput!) {
+	createTrustCenterSubprocessor(input: $input) {
+		trustCenterSubprocessor {
+			createdAt
+			createdBy
+			id
+			updatedAt
+			updatedBy
+			trustCenterID
+			countries
+			category
+			subprocessor {
+				name
+				description
+				logoFile {
+					presignedURL
+				}
+				logoRemoteURL
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateTrustCenterSubprocessor(ctx context.Context, input CreateTrustCenterSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterSubprocessor, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateTrustCenterSubprocessor
+	if err := c.Client.Post(ctx, "CreateTrustCenterSubprocessor", CreateTrustCenterSubprocessorDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteTrustCenterSubprocessorDocument = `mutation DeleteTrustCenterSubprocessor ($deleteTrustCenterSubprocessorId: ID!) {
+	deleteTrustCenterSubprocessor(id: $deleteTrustCenterSubprocessorId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteTrustCenterSubprocessor(ctx context.Context, deleteTrustCenterSubprocessorID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTrustCenterSubprocessor, error) {
+	vars := map[string]any{
+		"deleteTrustCenterSubprocessorId": deleteTrustCenterSubprocessorID,
+	}
+
+	var res DeleteTrustCenterSubprocessor
+	if err := c.Client.Post(ctx, "DeleteTrustCenterSubprocessor", DeleteTrustCenterSubprocessorDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllTrustCenterSubprocessorsDocument = `query GetAllTrustCenterSubprocessors {
+	trustCenterSubprocessors {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				updatedAt
+				updatedBy
+				trustCenterID
+				countries
+				category
+				subprocessor {
+					name
+					description
+					logoFile {
+						presignedURL
+					}
+					logoRemoteURL
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllTrustCenterSubprocessors(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterSubprocessors, error) {
+	vars := map[string]any{}
+
+	var res GetAllTrustCenterSubprocessors
+	if err := c.Client.Post(ctx, "GetAllTrustCenterSubprocessors", GetAllTrustCenterSubprocessorsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTrustCenterSubprocessorByIDDocument = `query GetTrustCenterSubprocessorByID ($trustCenterSubprocessorId: ID!) {
+	trustCenterSubprocessor(id: $trustCenterSubprocessorId) {
+		createdAt
+		createdBy
+		id
+		updatedAt
+		updatedBy
+		trustCenterID
+		countries
+		category
+		subprocessor {
+			name
+			description
+			logoFile {
+				presignedURL
+			}
+			logoRemoteURL
+		}
+	}
+}
+`
+
+func (c *Client) GetTrustCenterSubprocessorByID(ctx context.Context, trustCenterSubprocessorID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterSubprocessorByID, error) {
+	vars := map[string]any{
+		"trustCenterSubprocessorId": trustCenterSubprocessorID,
+	}
+
+	var res GetTrustCenterSubprocessorByID
+	if err := c.Client.Post(ctx, "GetTrustCenterSubprocessorByID", GetTrustCenterSubprocessorByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTrustCenterSubprocessorsDocument = `query GetTrustCenterSubprocessors ($first: Int, $last: Int, $where: TrustCenterSubprocessorWhereInput) {
+	trustCenterSubprocessors(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				updatedAt
+				updatedBy
+				trustCenterID
+				countries
+				category
+				subprocessor {
+					name
+					description
+					logoFile {
+						presignedURL
+					}
+					logoRemoteURL
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetTrustCenterSubprocessors(ctx context.Context, first *int64, last *int64, where *TrustCenterSubprocessorWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterSubprocessors, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetTrustCenterSubprocessors
+	if err := c.Client.Post(ctx, "GetTrustCenterSubprocessors", GetTrustCenterSubprocessorsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateTrustCenterSubprocessorDocument = `mutation UpdateTrustCenterSubprocessor ($updateTrustCenterSubprocessorId: ID!, $input: UpdateTrustCenterSubprocessorInput!) {
+	updateTrustCenterSubprocessor(id: $updateTrustCenterSubprocessorId, input: $input) {
+		trustCenterSubprocessor {
+			createdAt
+			createdBy
+			id
+			updatedAt
+			updatedBy
+			trustCenterID
+			countries
+			category
+			subprocessor {
+				name
+				description
+				logoFile {
+					presignedURL
+				}
+				logoRemoteURL
+			}
+		}
+	}
+}
+`
+
+func (c *Client) UpdateTrustCenterSubprocessor(ctx context.Context, updateTrustCenterSubprocessorID string, input UpdateTrustCenterSubprocessorInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterSubprocessor, error) {
+	vars := map[string]any{
+		"updateTrustCenterSubprocessorId": updateTrustCenterSubprocessorID,
+		"input":                           input,
+	}
+
+	var res UpdateTrustCenterSubprocessor
+	if err := c.Client.Post(ctx, "UpdateTrustCenterSubprocessor", UpdateTrustCenterSubprocessorDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllTrustCenterSubprocessorHistoriesDocument = `query GetAllTrustCenterSubprocessorHistories {
+	trustCenterSubprocessorHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				operation
+				ref
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllTrustCenterSubprocessorHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterSubprocessorHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllTrustCenterSubprocessorHistories
+	if err := c.Client.Post(ctx, "GetAllTrustCenterSubprocessorHistories", GetAllTrustCenterSubprocessorHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTrustCenterSubprocessorHistoriesDocument = `query GetTrustCenterSubprocessorHistories ($first: Int, $last: Int, $where: TrustCenterSubprocessorHistoryWhereInput) {
+	trustCenterSubprocessorHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				operation
+				ref
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetTrustCenterSubprocessorHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterSubprocessorHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterSubprocessorHistories, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetTrustCenterSubprocessorHistories
+	if err := c.Client.Post(ctx, "GetTrustCenterSubprocessorHistories", GetTrustCenterSubprocessorHistoriesDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -109518,457 +115950,486 @@ func (c *Client) GetAllWebauthns(ctx context.Context, interceptors ...clientv2.R
 }
 
 var DocumentOperationNames = map[string]string{
-	CreateBulkCSVActionPlanDocument:              "CreateBulkCSVActionPlan",
-	CreateBulkActionPlanDocument:                 "CreateBulkActionPlan",
-	CreateActionPlanDocument:                     "CreateActionPlan",
-	DeleteActionPlanDocument:                     "DeleteActionPlan",
-	GetAllActionPlansDocument:                    "GetAllActionPlans",
-	GetActionPlanByIDDocument:                    "GetActionPlanByID",
-	GetActionPlansDocument:                       "GetActionPlans",
-	UpdateActionPlanDocument:                     "UpdateActionPlan",
-	GetAllActionPlanHistoriesDocument:            "GetAllActionPlanHistories",
-	GetActionPlanHistoriesDocument:               "GetActionPlanHistories",
-	AdminSearchDocument:                          "AdminSearch",
-	CreateAPITokenDocument:                       "CreateAPIToken",
-	DeleteAPITokenDocument:                       "DeleteAPIToken",
-	GetAllAPITokensDocument:                      "GetAllAPITokens",
-	GetAPITokenByIDDocument:                      "GetAPITokenByID",
-	GetAPITokensDocument:                         "GetAPITokens",
-	UpdateAPITokenDocument:                       "UpdateAPIToken",
-	CreateBulkCSVAssetDocument:                   "CreateBulkCSVAsset",
-	CreateBulkAssetDocument:                      "CreateBulkAsset",
-	CreateAssetDocument:                          "CreateAsset",
-	DeleteAssetDocument:                          "DeleteAsset",
-	GetAllAssetsDocument:                         "GetAllAssets",
-	GetAssetByIDDocument:                         "GetAssetByID",
-	GetAssetsDocument:                            "GetAssets",
-	UpdateAssetDocument:                          "UpdateAsset",
-	GetAllAssetHistoriesDocument:                 "GetAllAssetHistories",
-	GetAssetHistoriesDocument:                    "GetAssetHistories",
-	AuditLogsDocument:                            "AuditLogs",
-	CreateBulkContactDocument:                    "CreateBulkContact",
-	CreateBulkCSVContactDocument:                 "CreateBulkCSVContact",
-	CreateContactDocument:                        "CreateContact",
-	DeleteContactDocument:                        "DeleteContact",
-	GetAllContactsDocument:                       "GetAllContacts",
-	GetContactByIDDocument:                       "GetContactByID",
-	GetContactsDocument:                          "GetContacts",
-	UpdateContactDocument:                        "UpdateContact",
-	GetAllContactHistoriesDocument:               "GetAllContactHistories",
-	GetContactHistoriesDocument:                  "GetContactHistories",
-	CreateBulkControlDocument:                    "CreateBulkControl",
-	CreateBulkCSVControlDocument:                 "CreateBulkCSVControl",
-	CreateControlDocument:                        "CreateControl",
-	DeleteControlDocument:                        "DeleteControl",
-	GetAllControlsDocument:                       "GetAllControls",
-	GetControlByIDDocument:                       "GetControlByID",
-	GetControlsDocument:                          "GetControls",
-	UpdateControlDocument:                        "UpdateControl",
-	CreateControlsByCloneDocument:                "CreateControlsByClone",
-	GetControlCategoriesDocument:                 "GetControlCategories",
-	GetControlSubcategoriesDocument:              "GetControlSubcategories",
-	GetAllControlHistoriesDocument:               "GetAllControlHistories",
-	GetControlHistoriesDocument:                  "GetControlHistories",
-	CreateBulkControlImplementationDocument:      "CreateBulkControlImplementation",
-	CreateBulkCSVControlImplementationDocument:   "CreateBulkCSVControlImplementation",
-	CreateControlImplementationDocument:          "CreateControlImplementation",
-	DeleteControlImplementationDocument:          "DeleteControlImplementation",
-	GetAllControlImplementationsDocument:         "GetAllControlImplementations",
-	GetControlImplementationByIDDocument:         "GetControlImplementationByID",
-	GetControlImplementationsDocument:            "GetControlImplementations",
-	UpdateControlImplementationDocument:          "UpdateControlImplementation",
-	GetAllControlImplementationHistoriesDocument: "GetAllControlImplementationHistories",
-	GetControlImplementationHistoriesDocument:    "GetControlImplementationHistories",
-	CreateBulkCSVControlObjectiveDocument:        "CreateBulkCSVControlObjective",
-	CreateBulkControlObjectiveDocument:           "CreateBulkControlObjective",
-	CreateControlObjectiveDocument:               "CreateControlObjective",
-	DeleteControlObjectiveDocument:               "DeleteControlObjective",
-	GetAllControlObjectivesDocument:              "GetAllControlObjectives",
-	GetControlObjectiveByIDDocument:              "GetControlObjectiveByID",
-	GetControlObjectivesDocument:                 "GetControlObjectives",
-	UpdateControlObjectiveDocument:               "UpdateControlObjective",
-	GetAllControlObjectiveHistoriesDocument:      "GetAllControlObjectiveHistories",
-	GetControlObjectiveHistoriesDocument:         "GetControlObjectiveHistories",
-	CreateBulkCSVControlScheduledJobDocument:     "CreateBulkCSVControlScheduledJob",
-	CreateBulkControlScheduledJobDocument:        "CreateBulkControlScheduledJob",
-	CreateControlScheduledJobDocument:            "CreateControlScheduledJob",
-	DeleteControlScheduledJobDocument:            "DeleteControlScheduledJob",
-	GetAllControlScheduledJobsDocument:           "GetAllControlScheduledJobs",
-	GetControlScheduledJobByIDDocument:           "GetControlScheduledJobByID",
-	GetControlScheduledJobsDocument:              "GetControlScheduledJobs",
-	UpdateControlScheduledJobDocument:            "UpdateControlScheduledJob",
-	GetAllControlScheduledJobHistoriesDocument:   "GetAllControlScheduledJobHistories",
-	GetControlScheduledJobHistoriesDocument:      "GetControlScheduledJobHistories",
-	CreateBulkCSVCustomDomainDocument:            "CreateBulkCSVCustomDomain",
-	CreateBulkCustomDomainDocument:               "CreateBulkCustomDomain",
-	CreateCustomDomainDocument:                   "CreateCustomDomain",
-	DeleteCustomDomainDocument:                   "DeleteCustomDomain",
-	GetAllCustomDomainsDocument:                  "GetAllCustomDomains",
-	GetCustomDomainByIDDocument:                  "GetCustomDomainByID",
-	GetCustomDomainsDocument:                     "GetCustomDomains",
-	UpdateCustomDomainDocument:                   "UpdateCustomDomain",
-	GetAllCustomDomainHistoriesDocument:          "GetAllCustomDomainHistories",
-	GetCustomDomainHistoriesDocument:             "GetCustomDomainHistories",
-	CreateBulkCSVDNSVerificationDocument:         "CreateBulkCSVDNSVerification",
-	CreateBulkDNSVerificationDocument:            "CreateBulkDNSVerification",
-	CreateDNSVerificationDocument:                "CreateDNSVerification",
-	DeleteDNSVerificationDocument:                "DeleteDNSVerification",
-	GetAllDNSVerificationsDocument:               "GetAllDNSVerifications",
-	GetDNSVerificationByIDDocument:               "GetDNSVerificationByID",
-	GetDNSVerificationsDocument:                  "GetDNSVerifications",
-	UpdateDNSVerificationDocument:                "UpdateDNSVerification",
-	GetAllDNSVerificationHistoriesDocument:       "GetAllDNSVerificationHistories",
-	GetDNSVerificationHistoriesDocument:          "GetDNSVerificationHistories",
-	CreateDocumentDataDocument:                   "CreateDocumentData",
-	DeleteDocumentDataDocument:                   "DeleteDocumentData",
-	GetDocumentDataByIDDocument:                  "GetDocumentDataByID",
-	UpdateDocumentDataDocument:                   "UpdateDocumentData",
-	GetAllDocumentDataHistoriesDocument:          "GetAllDocumentDataHistories",
-	GetDocumentDataHistoriesDocument:             "GetDocumentDataHistories",
-	CreateBulkCSVEntityDocument:                  "CreateBulkCSVEntity",
-	CreateBulkEntityDocument:                     "CreateBulkEntity",
-	CreateEntityDocument:                         "CreateEntity",
-	DeleteEntityDocument:                         "DeleteEntity",
-	GetAllEntitiesDocument:                       "GetAllEntities",
-	GetEntitiesDocument:                          "GetEntities",
-	GetEntityByIDDocument:                        "GetEntityByID",
-	UpdateEntityDocument:                         "UpdateEntity",
-	GetAllEntityHistoriesDocument:                "GetAllEntityHistories",
-	GetEntityHistoriesDocument:                   "GetEntityHistories",
-	CreateBulkCSVEntityTypeDocument:              "CreateBulkCSVEntityType",
-	CreateBulkEntityTypeDocument:                 "CreateBulkEntityType",
-	CreateEntityTypeDocument:                     "CreateEntityType",
-	DeleteEntityTypeDocument:                     "DeleteEntityType",
-	GetAllEntityTypesDocument:                    "GetAllEntityTypes",
-	GetEntityTypeByIDDocument:                    "GetEntityTypeByID",
-	GetEntityTypesDocument:                       "GetEntityTypes",
-	UpdateEntityTypeDocument:                     "UpdateEntityType",
-	GetAllEntityTypeHistoriesDocument:            "GetAllEntityTypeHistories",
-	GetEntityTypeHistoriesDocument:               "GetEntityTypeHistories",
-	CreateBulkCSVEventDocument:                   "CreateBulkCSVEvent",
-	CreateBulkEventDocument:                      "CreateBulkEvent",
-	CreateEventDocument:                          "CreateEvent",
-	DeleteEventDocument:                          "DeleteEvent",
-	GetAllEventsDocument:                         "GetAllEvents",
-	GetEventByIDDocument:                         "GetEventByID",
-	GetEventsDocument:                            "GetEvents",
-	UpdateEventDocument:                          "UpdateEvent",
-	CreateEvidenceDocument:                       "CreateEvidence",
-	DeleteEvidenceDocument:                       "DeleteEvidence",
-	GetAllEvidencesDocument:                      "GetAllEvidences",
-	GetEvidenceByIDDocument:                      "GetEvidenceByID",
-	GetEvidencesDocument:                         "GetEvidences",
-	UpdateEvidenceDocument:                       "UpdateEvidence",
-	GetAllEvidenceHistoriesDocument:              "GetAllEvidenceHistories",
-	GetEvidenceHistoriesDocument:                 "GetEvidenceHistories",
-	DeleteFileDocument:                           "DeleteFile",
-	GetAllFilesDocument:                          "GetAllFiles",
-	GetFileByIDDocument:                          "GetFileByID",
-	GetFilesDocument:                             "GetFiles",
-	GetAllFileHistoriesDocument:                  "GetAllFileHistories",
-	GetFileHistoriesDocument:                     "GetFileHistories",
-	CreateBulkCSVGroupDocument:                   "CreateBulkCSVGroup",
-	CreateBulkGroupDocument:                      "CreateBulkGroup",
-	CreateGroupDocument:                          "CreateGroup",
-	CreateGroupByCloneDocument:                   "CreateGroupByClone",
-	CreateGroupWithMembersDocument:               "CreateGroupWithMembers",
-	DeleteGroupDocument:                          "DeleteGroup",
-	GetAllGroupsDocument:                         "GetAllGroups",
-	GetGroupByIDDocument:                         "GetGroupByID",
-	GetGroupInfoDocument:                         "GetGroupInfo",
-	GetGroupsDocument:                            "GetGroups",
-	UpdateGroupDocument:                          "UpdateGroup",
-	GetAllGroupHistoriesDocument:                 "GetAllGroupHistories",
-	GetGroupHistoriesDocument:                    "GetGroupHistories",
-	AddUserToGroupWithRoleDocument:               "AddUserToGroupWithRole",
-	CreateBulkCSVGroupMembersDocument:            "CreateBulkCSVGroupMembers",
-	CreateBulkGroupMembersDocument:               "CreateBulkGroupMembers",
-	GetGroupMembersByGroupIDDocument:             "GetGroupMembersByGroupID",
-	RemoveUserFromGroupDocument:                  "RemoveUserFromGroup",
-	UpdateUserRoleInGroupDocument:                "UpdateUserRoleInGroup",
-	GetAllGroupMembershipHistoriesDocument:       "GetAllGroupMembershipHistories",
-	GetGroupMembershipHistoriesDocument:          "GetGroupMembershipHistories",
-	GetAllGroupSettingsDocument:                  "GetAllGroupSettings",
-	GetGroupSettingByIDDocument:                  "GetGroupSettingByID",
-	GetGroupSettingsDocument:                     "GetGroupSettings",
-	UpdateGroupSettingDocument:                   "UpdateGroupSetting",
-	GetAllGroupSettingHistoriesDocument:          "GetAllGroupSettingHistories",
-	GetGroupSettingHistoriesDocument:             "GetGroupSettingHistories",
-	CreateBulkCSVHushDocument:                    "CreateBulkCSVHush",
-	CreateBulkHushDocument:                       "CreateBulkHush",
-	CreateHushDocument:                           "CreateHush",
-	GetAllHushesDocument:                         "GetAllHushes",
-	GetHushByIDDocument:                          "GetHushByID",
-	GetHushesDocument:                            "GetHushes",
-	UpdateHushDocument:                           "UpdateHush",
-	GetAllHushHistoriesDocument:                  "GetAllHushHistories",
-	GetHushHistoriesDocument:                     "GetHushHistories",
-	CreateBulkCSVIntegrationDocument:             "CreateBulkCSVIntegration",
-	CreateBulkIntegrationDocument:                "CreateBulkIntegration",
-	CreateIntegrationDocument:                    "CreateIntegration",
-	DeleteIntegrationDocument:                    "DeleteIntegration",
-	GetAllIntegrationsDocument:                   "GetAllIntegrations",
-	GetIntegrationByIDDocument:                   "GetIntegrationByID",
-	GetIntegrationsDocument:                      "GetIntegrations",
-	UpdateIntegrationDocument:                    "UpdateIntegration",
-	GetAllIntegrationHistoriesDocument:           "GetAllIntegrationHistories",
-	GetIntegrationHistoriesDocument:              "GetIntegrationHistories",
-	CreateBulkCSVInternalPolicyDocument:          "CreateBulkCSVInternalPolicy",
-	CreateBulkInternalPolicyDocument:             "CreateBulkInternalPolicy",
-	CreateInternalPolicyDocument:                 "CreateInternalPolicy",
-	DeleteInternalPolicyDocument:                 "DeleteInternalPolicy",
-	GetAllInternalPoliciesDocument:               "GetAllInternalPolicies",
-	GetInternalPoliciesDocument:                  "GetInternalPolicies",
-	GetInternalPolicyByIDDocument:                "GetInternalPolicyByID",
-	UpdateInternalPolicyDocument:                 "UpdateInternalPolicy",
-	GetAllInternalPolicyHistoriesDocument:        "GetAllInternalPolicyHistories",
-	GetInternalPolicyHistoriesDocument:           "GetInternalPolicyHistories",
-	CreateBulkCSVInviteDocument:                  "CreateBulkCSVInvite",
-	CreateBulkInviteDocument:                     "CreateBulkInvite",
-	CreateInviteDocument:                         "CreateInvite",
-	DeleteInviteDocument:                         "DeleteInvite",
-	GetAllInvitesDocument:                        "GetAllInvites",
-	GetInviteByIDDocument:                        "GetInviteByID",
-	InvitesByOrgIDDocument:                       "InvitesByOrgID",
-	GetAllJobResultsDocument:                     "GetAllJobResults",
-	GetJobResultByIDDocument:                     "GetJobResultByID",
-	GetJobResultsDocument:                        "GetJobResults",
-	DeleteJobRunnerDocument:                      "DeleteJobRunner",
-	GetAllJobRunnersDocument:                     "GetAllJobRunners",
-	GetJobRunnerByIDDocument:                     "GetJobRunnerByID",
-	GetJobRunnersDocument:                        "GetJobRunners",
-	UpdateJobRunnerDocument:                      "UpdateJobRunner",
-	CreateJobRunnerRegistrationTokenDocument:     "CreateJobRunnerRegistrationToken",
-	DeleteJobRunnerRegistrationTokenDocument:     "DeleteJobRunnerRegistrationToken",
-	GetAllJobRunnerRegistrationTokensDocument:    "GetAllJobRunnerRegistrationTokens",
-	GetJobRunnerRegistrationTokenByIDDocument:    "GetJobRunnerRegistrationTokenByID",
-	GetJobRunnerRegistrationTokensDocument:       "GetJobRunnerRegistrationTokens",
-	CreateJobRunnerTokenDocument:                 "CreateJobRunnerToken",
-	DeleteJobRunnerTokenDocument:                 "DeleteJobRunnerToken",
-	GetAllJobRunnerTokensDocument:                "GetAllJobRunnerTokens",
-	GetJobRunnerTokenByIDDocument:                "GetJobRunnerTokenByID",
-	GetJobRunnerTokensDocument:                   "GetJobRunnerTokens",
-	CreateBulkCSVMappableDomainDocument:          "CreateBulkCSVMappableDomain",
-	CreateBulkMappableDomainDocument:             "CreateBulkMappableDomain",
-	CreateMappableDomainDocument:                 "CreateMappableDomain",
-	DeleteMappableDomainDocument:                 "DeleteMappableDomain",
-	GetAllMappableDomainsDocument:                "GetAllMappableDomains",
-	GetMappableDomainByIDDocument:                "GetMappableDomainByID",
-	GetMappableDomainsDocument:                   "GetMappableDomains",
-	UpdateMappableDomainDocument:                 "UpdateMappableDomain",
-	GetAllMappableDomainHistoriesDocument:        "GetAllMappableDomainHistories",
-	GetMappableDomainHistoriesDocument:           "GetMappableDomainHistories",
-	CreateBulkCSVMappedControlDocument:           "CreateBulkCSVMappedControl",
-	CreateBulkMappedControlDocument:              "CreateBulkMappedControl",
-	CreateMappedControlDocument:                  "CreateMappedControl",
-	DeleteMappedControlDocument:                  "DeleteMappedControl",
-	GetAllMappedControlsDocument:                 "GetAllMappedControls",
-	GetMappedControlByIDDocument:                 "GetMappedControlByID",
-	GetMappedControlsDocument:                    "GetMappedControls",
-	UpdateMappedControlDocument:                  "UpdateMappedControl",
-	GetAllMappedControlHistoriesDocument:         "GetAllMappedControlHistories",
-	GetMappedControlHistoriesDocument:            "GetMappedControlHistories",
-	CreateBulkCSVNarrativeDocument:               "CreateBulkCSVNarrative",
-	CreateBulkNarrativeDocument:                  "CreateBulkNarrative",
-	CreateNarrativeDocument:                      "CreateNarrative",
-	DeleteNarrativeDocument:                      "DeleteNarrative",
-	GetAllNarrativesDocument:                     "GetAllNarratives",
-	GetNarrativeByIDDocument:                     "GetNarrativeByID",
-	GetNarrativesDocument:                        "GetNarratives",
-	UpdateNarrativeDocument:                      "UpdateNarrative",
-	GetAllNarrativeHistoriesDocument:             "GetAllNarrativeHistories",
-	GetNarrativeHistoriesDocument:                "GetNarrativeHistories",
-	GetNoteByIDDocument:                          "GetNoteByID",
-	GetAllNoteHistoriesDocument:                  "GetAllNoteHistories",
-	GetNoteHistoriesDocument:                     "GetNoteHistories",
-	CreateOnboardingDocument:                     "CreateOnboarding",
-	CreateOrganizationDocument:                   "CreateOrganization",
-	CreateOrganizationWithMembersDocument:        "CreateOrganizationWithMembers",
-	DeleteOrganizationDocument:                   "DeleteOrganization",
-	GetAllOrganizationsDocument:                  "GetAllOrganizations",
-	GetOrganizationByIDDocument:                  "GetOrganizationByID",
-	GetOrganizationsDocument:                     "GetOrganizations",
-	UpdateOrganizationDocument:                   "UpdateOrganization",
-	GetAllOrganizationHistoriesDocument:          "GetAllOrganizationHistories",
-	GetOrganizationHistoriesDocument:             "GetOrganizationHistories",
-	GetAllOrganizationSettingsDocument:           "GetAllOrganizationSettings",
-	GetOrganizationSettingByIDDocument:           "GetOrganizationSettingByID",
-	GetOrganizationSettingsDocument:              "GetOrganizationSettings",
-	UpdateOrganizationSettingDocument:            "UpdateOrganizationSetting",
-	GetAllOrganizationSettingHistoriesDocument:   "GetAllOrganizationSettingHistories",
-	GetOrganizationSettingHistoriesDocument:      "GetOrganizationSettingHistories",
-	AddUserToOrgWithRoleDocument:                 "AddUserToOrgWithRole",
-	CreateBulkCSVOrgMembersDocument:              "CreateBulkCSVOrgMembers",
-	CreateBulkOrgMembersDocument:                 "CreateBulkOrgMembers",
-	GetOrgMembersByOrgIDDocument:                 "GetOrgMembersByOrgID",
-	RemoveUserFromOrgDocument:                    "RemoveUserFromOrg",
-	UpdateUserRoleInOrgDocument:                  "UpdateUserRoleInOrg",
-	GetAllOrgMembershipHistoriesDocument:         "GetAllOrgMembershipHistories",
-	GetOrgMembershipHistoriesDocument:            "GetOrgMembershipHistories",
-	GetAllOrgSubscriptionsDocument:               "GetAllOrgSubscriptions",
-	GetOrgSubscriptionByIDDocument:               "GetOrgSubscriptionByID",
-	GetOrgSubscriptionsDocument:                  "GetOrgSubscriptions",
-	GetAllOrgSubscriptionHistoriesDocument:       "GetAllOrgSubscriptionHistories",
-	GetOrgSubscriptionHistoriesDocument:          "GetOrgSubscriptionHistories",
-	CreatePersonalAccessTokenDocument:            "CreatePersonalAccessToken",
-	DeletePersonalAccessTokenDocument:            "DeletePersonalAccessToken",
-	GetAllPersonalAccessTokensDocument:           "GetAllPersonalAccessTokens",
-	GetPersonalAccessTokenByIDDocument:           "GetPersonalAccessTokenByID",
-	GetPersonalAccessTokensDocument:              "GetPersonalAccessTokens",
-	UpdatePersonalAccessTokenDocument:            "UpdatePersonalAccessToken",
-	CreateBulkCSVProcedureDocument:               "CreateBulkCSVProcedure",
-	CreateBulkProcedureDocument:                  "CreateBulkProcedure",
-	CreateProcedureDocument:                      "CreateProcedure",
-	DeleteProcedureDocument:                      "DeleteProcedure",
-	GetAllProceduresDocument:                     "GetAllProcedures",
-	GetProcedureByIDDocument:                     "GetProcedureByID",
-	GetProceduresDocument:                        "GetProcedures",
-	UpdateProcedureDocument:                      "UpdateProcedure",
-	GetAllProcedureHistoriesDocument:             "GetAllProcedureHistories",
-	GetProcedureHistoriesDocument:                "GetProcedureHistories",
-	CreateBulkCSVProgramDocument:                 "CreateBulkCSVProgram",
-	CreateBulkProgramDocument:                    "CreateBulkProgram",
-	CreateControlWithSubcontrolsDocument:         "CreateControlWithSubcontrols",
-	CreateFullProgramDocument:                    "CreateFullProgram",
-	CreateProgramDocument:                        "CreateProgram",
-	CreateProgramWithMembersDocument:             "CreateProgramWithMembers",
-	DeleteProgramDocument:                        "DeleteProgram",
-	GetAllProgramsDocument:                       "GetAllPrograms",
-	GetProgramByIDDocument:                       "GetProgramByID",
-	GetProgramsDocument:                          "GetPrograms",
-	UpdateProgramDocument:                        "UpdateProgram",
-	AddUserToProgramWithRoleDocument:             "AddUserToProgramWithRole",
-	CreateBulkCSVProgramMembersDocument:          "CreateBulkCSVProgramMembers",
-	CreateBulkProgramMembersDocument:             "CreateBulkProgramMembers",
-	GetProgramMembersByProgramIDDocument:         "GetProgramMembersByProgramID",
-	RemoveUserFromProgramDocument:                "RemoveUserFromProgram",
-	UpdateUserRoleInProgramDocument:              "UpdateUserRoleInProgram",
-	GetAllProgramHistoriesDocument:               "GetAllProgramHistories",
-	GetProgramHistoriesDocument:                  "GetProgramHistories",
-	CreateBulkCSVProgramMembershipDocument:       "CreateBulkCSVProgramMembership",
-	CreateBulkProgramMembershipDocument:          "CreateBulkProgramMembership",
-	CreateProgramMembershipDocument:              "CreateProgramMembership",
-	DeleteProgramMembershipDocument:              "DeleteProgramMembership",
-	GetAllProgramMembershipsDocument:             "GetAllProgramMemberships",
-	GetProgramMembershipByIDDocument:             "GetProgramMembershipByID",
-	GetProgramMembershipsDocument:                "GetProgramMemberships",
-	UpdateProgramMembershipDocument:              "UpdateProgramMembership",
-	GetAllProgramMembershipHistoriesDocument:     "GetAllProgramMembershipHistories",
-	GetProgramMembershipHistoriesDocument:        "GetProgramMembershipHistories",
-	CreateBulkCSVRiskDocument:                    "CreateBulkCSVRisk",
-	CreateBulkRiskDocument:                       "CreateBulkRisk",
-	CreateRiskDocument:                           "CreateRisk",
-	DeleteRiskDocument:                           "DeleteRisk",
-	GetAllRisksDocument:                          "GetAllRisks",
-	GetRiskByIDDocument:                          "GetRiskByID",
-	GetRisksDocument:                             "GetRisks",
-	UpdateRiskDocument:                           "UpdateRisk",
-	GetAllRiskHistoriesDocument:                  "GetAllRiskHistories",
-	GetRiskHistoriesDocument:                     "GetRiskHistories",
-	CreateBulkCSVScanDocument:                    "CreateBulkCSVScan",
-	CreateBulkScanDocument:                       "CreateBulkScan",
-	CreateScanDocument:                           "CreateScan",
-	DeleteScanDocument:                           "DeleteScan",
-	GetAllScansDocument:                          "GetAllScans",
-	GetScanByIDDocument:                          "GetScanByID",
-	GetScansDocument:                             "GetScans",
-	UpdateScanDocument:                           "UpdateScan",
-	GetAllScanHistoriesDocument:                  "GetAllScanHistories",
-	GetScanHistoriesDocument:                     "GetScanHistories",
-	CreateBulkCSVScheduledJobDocument:            "CreateBulkCSVScheduledJob",
-	CreateBulkScheduledJobDocument:               "CreateBulkScheduledJob",
-	CreateScheduledJobDocument:                   "CreateScheduledJob",
-	DeleteScheduledJobDocument:                   "DeleteScheduledJob",
-	GetAllScheduledJobsDocument:                  "GetAllScheduledJobs",
-	GetScheduledJobByIDDocument:                  "GetScheduledJobByID",
-	GetScheduledJobsDocument:                     "GetScheduledJobs",
-	UpdateScheduledJobDocument:                   "UpdateScheduledJob",
-	GetAllScheduledJobHistoriesDocument:          "GetAllScheduledJobHistories",
-	GetScheduledJobHistoriesDocument:             "GetScheduledJobHistories",
-	GetAllScheduledJobRunsDocument:               "GetAllScheduledJobRuns",
-	GetScheduledJobRunByIDDocument:               "GetScheduledJobRunByID",
-	GetScheduledJobRunsDocument:                  "GetScheduledJobRuns",
-	GlobalSearchDocument:                         "GlobalSearch",
-	CreateStandardDocument:                       "CreateStandard",
-	DeleteStandardDocument:                       "DeleteStandard",
-	GetAllStandardsDocument:                      "GetAllStandards",
-	GetStandardByIDDocument:                      "GetStandardByID",
-	GetStandardsDocument:                         "GetStandards",
-	UpdateStandardDocument:                       "UpdateStandard",
-	GetAllStandardHistoriesDocument:              "GetAllStandardHistories",
-	GetStandardHistoriesDocument:                 "GetStandardHistories",
-	CreateBulkCSVSubcontrolDocument:              "CreateBulkCSVSubcontrol",
-	CreateBulkSubcontrolDocument:                 "CreateBulkSubcontrol",
-	CreateSubcontrolDocument:                     "CreateSubcontrol",
-	DeleteSubcontrolDocument:                     "DeleteSubcontrol",
-	GetAllSubcontrolsDocument:                    "GetAllSubcontrols",
-	GetSubcontrolByIDDocument:                    "GetSubcontrolByID",
-	GetSubcontrolsDocument:                       "GetSubcontrols",
-	UpdateSubcontrolDocument:                     "UpdateSubcontrol",
-	GetAllSubcontrolHistoriesDocument:            "GetAllSubcontrolHistories",
-	GetSubcontrolHistoriesDocument:               "GetSubcontrolHistories",
-	CreateBulkCSVSubscriberDocument:              "CreateBulkCSVSubscriber",
-	CreateBulkSubscriberDocument:                 "CreateBulkSubscriber",
-	CreateSubscriberDocument:                     "CreateSubscriber",
-	DeleteSubscriberDocument:                     "DeleteSubscriber",
-	GetAllSubscribersDocument:                    "GetAllSubscribers",
-	GetSubscriberByEmailDocument:                 "GetSubscriberByEmail",
-	GetSubscribersDocument:                       "GetSubscribers",
-	UpdateSubscriberDocument:                     "UpdateSubscriber",
-	CreateBulkCSVTaskDocument:                    "CreateBulkCSVTask",
-	CreateBulkTaskDocument:                       "CreateBulkTask",
-	CreateTaskDocument:                           "CreateTask",
-	DeleteTaskDocument:                           "DeleteTask",
-	GetAllTasksDocument:                          "GetAllTasks",
-	GetTaskByIDDocument:                          "GetTaskByID",
-	GetTasksDocument:                             "GetTasks",
-	UpdateTaskDocument:                           "UpdateTask",
-	UpdateTaskCommentDocument:                    "UpdateTaskComment",
-	GetAllTaskHistoriesDocument:                  "GetAllTaskHistories",
-	GetTaskHistoriesDocument:                     "GetTaskHistories",
-	CreateBulkCSVTemplateDocument:                "CreateBulkCSVTemplate",
-	CreateBulkTemplateDocument:                   "CreateBulkTemplate",
-	CreateTemplateDocument:                       "CreateTemplate",
-	GetAllTemplatesDocument:                      "GetAllTemplates",
-	GetTemplateByIDDocument:                      "GetTemplateByID",
-	UpdateTemplateDocument:                       "UpdateTemplate",
-	GetAllTemplateHistoriesDocument:              "GetAllTemplateHistories",
-	GetTemplateHistoriesDocument:                 "GetTemplateHistories",
-	CreateTFASettingDocument:                     "CreateTFASetting",
-	GetAllTFASettingsDocument:                    "GetAllTFASettings",
-	GetTFASettingDocument:                        "GetTFASetting",
-	UpdateTFASettingDocument:                     "UpdateTFASetting",
-	CreateTrustCenterDocument:                    "CreateTrustCenter",
-	DeleteTrustCenterDocument:                    "DeleteTrustCenter",
-	GetAllTrustCentersDocument:                   "GetAllTrustCenters",
-	GetTrustCenterByIDDocument:                   "GetTrustCenterByID",
-	GetTrustCentersDocument:                      "GetTrustCenters",
-	UpdateTrustCenterDocument:                    "UpdateTrustCenter",
-	GetAllTrustCenterHistoriesDocument:           "GetAllTrustCenterHistories",
-	GetTrustCenterHistoriesDocument:              "GetTrustCenterHistories",
-	CreateTrustCenterSettingDocument:             "CreateTrustCenterSetting",
-	DeleteTrustCenterSettingDocument:             "DeleteTrustCenterSetting",
-	GetAllTrustCenterSettingsDocument:            "GetAllTrustCenterSettings",
-	GetTrustCenterSettingByIDDocument:            "GetTrustCenterSettingByID",
-	GetTrustCenterSettingsDocument:               "GetTrustCenterSettings",
-	UpdateTrustCenterSettingDocument:             "UpdateTrustCenterSetting",
-	GetAllTrustCenterSettingHistoriesDocument:    "GetAllTrustCenterSettingHistories",
-	GetTrustCenterSettingHistoriesDocument:       "GetTrustCenterSettingHistories",
-	CreateUserDocument:                           "CreateUser",
-	DeleteUserDocument:                           "DeleteUser",
-	GetAllUsersDocument:                          "GetAllUsers",
-	GetSelfDocument:                              "GetSelf",
-	GetUserByIDDocument:                          "GetUserByID",
-	GetUserByIDWithOrgsDocument:                  "GetUserByIDWithOrgs",
-	UpdateUserDocument:                           "UpdateUser",
-	GetAllUserHistoriesDocument:                  "GetAllUserHistories",
-	GetUserHistoriesDocument:                     "GetUserHistories",
-	GetAllUserSettingsDocument:                   "GetAllUserSettings",
-	GetUserSettingByIDDocument:                   "GetUserSettingByID",
-	GetUserSettingsDocument:                      "GetUserSettings",
-	UpdateUserSettingDocument:                    "UpdateUserSetting",
-	GetAllUserSettingHistoriesDocument:           "GetAllUserSettingHistories",
-	GetUserSettingHistoriesDocument:              "GetUserSettingHistories",
-	DeleteWebauthnDocument:                       "DeleteWebauthn",
-	GetAllWebauthnsDocument:                      "GetAllWebauthns",
+	CreateBulkCSVActionPlanDocument:                "CreateBulkCSVActionPlan",
+	CreateBulkActionPlanDocument:                   "CreateBulkActionPlan",
+	CreateActionPlanDocument:                       "CreateActionPlan",
+	DeleteActionPlanDocument:                       "DeleteActionPlan",
+	GetAllActionPlansDocument:                      "GetAllActionPlans",
+	GetActionPlanByIDDocument:                      "GetActionPlanByID",
+	GetActionPlansDocument:                         "GetActionPlans",
+	UpdateActionPlanDocument:                       "UpdateActionPlan",
+	GetAllActionPlanHistoriesDocument:              "GetAllActionPlanHistories",
+	GetActionPlanHistoriesDocument:                 "GetActionPlanHistories",
+	AdminSearchDocument:                            "AdminSearch",
+	CreateAPITokenDocument:                         "CreateAPIToken",
+	DeleteAPITokenDocument:                         "DeleteAPIToken",
+	GetAllAPITokensDocument:                        "GetAllAPITokens",
+	GetAPITokenByIDDocument:                        "GetAPITokenByID",
+	GetAPITokensDocument:                           "GetAPITokens",
+	UpdateAPITokenDocument:                         "UpdateAPIToken",
+	CreateBulkCSVAssetDocument:                     "CreateBulkCSVAsset",
+	CreateBulkAssetDocument:                        "CreateBulkAsset",
+	CreateAssetDocument:                            "CreateAsset",
+	DeleteAssetDocument:                            "DeleteAsset",
+	GetAllAssetsDocument:                           "GetAllAssets",
+	GetAssetByIDDocument:                           "GetAssetByID",
+	GetAssetsDocument:                              "GetAssets",
+	UpdateAssetDocument:                            "UpdateAsset",
+	GetAllAssetHistoriesDocument:                   "GetAllAssetHistories",
+	GetAssetHistoriesDocument:                      "GetAssetHistories",
+	AuditLogsDocument:                              "AuditLogs",
+	CreateBulkContactDocument:                      "CreateBulkContact",
+	CreateBulkCSVContactDocument:                   "CreateBulkCSVContact",
+	CreateContactDocument:                          "CreateContact",
+	DeleteContactDocument:                          "DeleteContact",
+	GetAllContactsDocument:                         "GetAllContacts",
+	GetContactByIDDocument:                         "GetContactByID",
+	GetContactsDocument:                            "GetContacts",
+	UpdateContactDocument:                          "UpdateContact",
+	GetAllContactHistoriesDocument:                 "GetAllContactHistories",
+	GetContactHistoriesDocument:                    "GetContactHistories",
+	CreateBulkControlDocument:                      "CreateBulkControl",
+	CreateBulkCSVControlDocument:                   "CreateBulkCSVControl",
+	CreateControlDocument:                          "CreateControl",
+	DeleteControlDocument:                          "DeleteControl",
+	GetAllControlsDocument:                         "GetAllControls",
+	GetControlByIDDocument:                         "GetControlByID",
+	GetControlsDocument:                            "GetControls",
+	UpdateControlDocument:                          "UpdateControl",
+	CreateControlsByCloneDocument:                  "CreateControlsByClone",
+	CreateControlsByCloneReturnIDDocument:          "CreateControlsByCloneReturnID",
+	GetControlCategoriesDocument:                   "GetControlCategories",
+	GetControlSubcategoriesDocument:                "GetControlSubcategories",
+	GetAllControlHistoriesDocument:                 "GetAllControlHistories",
+	GetControlHistoriesDocument:                    "GetControlHistories",
+	CreateBulkControlImplementationDocument:        "CreateBulkControlImplementation",
+	CreateBulkCSVControlImplementationDocument:     "CreateBulkCSVControlImplementation",
+	CreateControlImplementationDocument:            "CreateControlImplementation",
+	DeleteControlImplementationDocument:            "DeleteControlImplementation",
+	GetAllControlImplementationsDocument:           "GetAllControlImplementations",
+	GetControlImplementationByIDDocument:           "GetControlImplementationByID",
+	GetControlImplementationsDocument:              "GetControlImplementations",
+	UpdateControlImplementationDocument:            "UpdateControlImplementation",
+	GetAllControlImplementationHistoriesDocument:   "GetAllControlImplementationHistories",
+	GetControlImplementationHistoriesDocument:      "GetControlImplementationHistories",
+	CreateBulkCSVControlObjectiveDocument:          "CreateBulkCSVControlObjective",
+	CreateBulkControlObjectiveDocument:             "CreateBulkControlObjective",
+	CreateControlObjectiveDocument:                 "CreateControlObjective",
+	DeleteControlObjectiveDocument:                 "DeleteControlObjective",
+	GetAllControlObjectivesDocument:                "GetAllControlObjectives",
+	GetControlObjectiveByIDDocument:                "GetControlObjectiveByID",
+	GetControlObjectivesDocument:                   "GetControlObjectives",
+	UpdateControlObjectiveDocument:                 "UpdateControlObjective",
+	GetAllControlObjectiveHistoriesDocument:        "GetAllControlObjectiveHistories",
+	GetControlObjectiveHistoriesDocument:           "GetControlObjectiveHistories",
+	CreateBulkCSVControlScheduledJobDocument:       "CreateBulkCSVControlScheduledJob",
+	CreateBulkControlScheduledJobDocument:          "CreateBulkControlScheduledJob",
+	CreateControlScheduledJobDocument:              "CreateControlScheduledJob",
+	DeleteControlScheduledJobDocument:              "DeleteControlScheduledJob",
+	GetAllControlScheduledJobsDocument:             "GetAllControlScheduledJobs",
+	GetControlScheduledJobByIDDocument:             "GetControlScheduledJobByID",
+	GetControlScheduledJobsDocument:                "GetControlScheduledJobs",
+	UpdateControlScheduledJobDocument:              "UpdateControlScheduledJob",
+	GetAllControlScheduledJobHistoriesDocument:     "GetAllControlScheduledJobHistories",
+	GetControlScheduledJobHistoriesDocument:        "GetControlScheduledJobHistories",
+	CreateBulkCSVCustomDomainDocument:              "CreateBulkCSVCustomDomain",
+	CreateBulkCustomDomainDocument:                 "CreateBulkCustomDomain",
+	CreateCustomDomainDocument:                     "CreateCustomDomain",
+	DeleteCustomDomainDocument:                     "DeleteCustomDomain",
+	GetAllCustomDomainsDocument:                    "GetAllCustomDomains",
+	GetCustomDomainByIDDocument:                    "GetCustomDomainByID",
+	GetCustomDomainsDocument:                       "GetCustomDomains",
+	UpdateCustomDomainDocument:                     "UpdateCustomDomain",
+	GetAllCustomDomainHistoriesDocument:            "GetAllCustomDomainHistories",
+	GetCustomDomainHistoriesDocument:               "GetCustomDomainHistories",
+	CreateBulkCSVDNSVerificationDocument:           "CreateBulkCSVDNSVerification",
+	CreateBulkDNSVerificationDocument:              "CreateBulkDNSVerification",
+	CreateDNSVerificationDocument:                  "CreateDNSVerification",
+	DeleteDNSVerificationDocument:                  "DeleteDNSVerification",
+	GetAllDNSVerificationsDocument:                 "GetAllDNSVerifications",
+	GetDNSVerificationByIDDocument:                 "GetDNSVerificationByID",
+	GetDNSVerificationsDocument:                    "GetDNSVerifications",
+	UpdateDNSVerificationDocument:                  "UpdateDNSVerification",
+	GetAllDNSVerificationHistoriesDocument:         "GetAllDNSVerificationHistories",
+	GetDNSVerificationHistoriesDocument:            "GetDNSVerificationHistories",
+	CreateDocumentDataDocument:                     "CreateDocumentData",
+	DeleteDocumentDataDocument:                     "DeleteDocumentData",
+	GetDocumentDataByIDDocument:                    "GetDocumentDataByID",
+	UpdateDocumentDataDocument:                     "UpdateDocumentData",
+	GetAllDocumentDataHistoriesDocument:            "GetAllDocumentDataHistories",
+	GetDocumentDataHistoriesDocument:               "GetDocumentDataHistories",
+	CreateBulkCSVEntityDocument:                    "CreateBulkCSVEntity",
+	CreateBulkEntityDocument:                       "CreateBulkEntity",
+	CreateEntityDocument:                           "CreateEntity",
+	DeleteEntityDocument:                           "DeleteEntity",
+	GetAllEntitiesDocument:                         "GetAllEntities",
+	GetEntitiesDocument:                            "GetEntities",
+	GetEntityByIDDocument:                          "GetEntityByID",
+	UpdateEntityDocument:                           "UpdateEntity",
+	GetAllEntityHistoriesDocument:                  "GetAllEntityHistories",
+	GetEntityHistoriesDocument:                     "GetEntityHistories",
+	CreateBulkCSVEntityTypeDocument:                "CreateBulkCSVEntityType",
+	CreateBulkEntityTypeDocument:                   "CreateBulkEntityType",
+	CreateEntityTypeDocument:                       "CreateEntityType",
+	DeleteEntityTypeDocument:                       "DeleteEntityType",
+	GetAllEntityTypesDocument:                      "GetAllEntityTypes",
+	GetEntityTypeByIDDocument:                      "GetEntityTypeByID",
+	GetEntityTypesDocument:                         "GetEntityTypes",
+	UpdateEntityTypeDocument:                       "UpdateEntityType",
+	GetAllEntityTypeHistoriesDocument:              "GetAllEntityTypeHistories",
+	GetEntityTypeHistoriesDocument:                 "GetEntityTypeHistories",
+	CreateBulkCSVEventDocument:                     "CreateBulkCSVEvent",
+	CreateBulkEventDocument:                        "CreateBulkEvent",
+	CreateEventDocument:                            "CreateEvent",
+	DeleteEventDocument:                            "DeleteEvent",
+	GetAllEventsDocument:                           "GetAllEvents",
+	GetEventByIDDocument:                           "GetEventByID",
+	GetEventsDocument:                              "GetEvents",
+	UpdateEventDocument:                            "UpdateEvent",
+	CreateEvidenceDocument:                         "CreateEvidence",
+	DeleteEvidenceDocument:                         "DeleteEvidence",
+	GetAllEvidencesDocument:                        "GetAllEvidences",
+	GetEvidenceByIDDocument:                        "GetEvidenceByID",
+	GetEvidencesDocument:                           "GetEvidences",
+	UpdateEvidenceDocument:                         "UpdateEvidence",
+	GetAllEvidenceHistoriesDocument:                "GetAllEvidenceHistories",
+	GetEvidenceHistoriesDocument:                   "GetEvidenceHistories",
+	CreateExportDocument:                           "CreateExport",
+	GetAllExportsDocument:                          "GetAllExports",
+	GetExportByIDDocument:                          "GetExportByID",
+	GetExportsDocument:                             "GetExports",
+	UpdateExportDocument:                           "UpdateExport",
+	DeleteExportDocument:                           "DeleteExport",
+	DeleteBulkExportDocument:                       "DeleteBulkExport",
+	DeleteFileDocument:                             "DeleteFile",
+	GetAllFilesDocument:                            "GetAllFiles",
+	GetFileByIDDocument:                            "GetFileByID",
+	GetFilesDocument:                               "GetFiles",
+	GetAllFileHistoriesDocument:                    "GetAllFileHistories",
+	GetFileHistoriesDocument:                       "GetFileHistories",
+	CreateBulkCSVGroupDocument:                     "CreateBulkCSVGroup",
+	CreateBulkGroupDocument:                        "CreateBulkGroup",
+	CreateGroupDocument:                            "CreateGroup",
+	CreateGroupByCloneDocument:                     "CreateGroupByClone",
+	CreateGroupWithMembersDocument:                 "CreateGroupWithMembers",
+	DeleteGroupDocument:                            "DeleteGroup",
+	GetAllGroupsDocument:                           "GetAllGroups",
+	GetGroupByIDDocument:                           "GetGroupByID",
+	GetGroupInfoDocument:                           "GetGroupInfo",
+	GetGroupsDocument:                              "GetGroups",
+	UpdateGroupDocument:                            "UpdateGroup",
+	GetAllGroupHistoriesDocument:                   "GetAllGroupHistories",
+	GetGroupHistoriesDocument:                      "GetGroupHistories",
+	AddUserToGroupWithRoleDocument:                 "AddUserToGroupWithRole",
+	CreateBulkCSVGroupMembersDocument:              "CreateBulkCSVGroupMembers",
+	CreateBulkGroupMembersDocument:                 "CreateBulkGroupMembers",
+	GetGroupMembersByGroupIDDocument:               "GetGroupMembersByGroupID",
+	RemoveUserFromGroupDocument:                    "RemoveUserFromGroup",
+	UpdateUserRoleInGroupDocument:                  "UpdateUserRoleInGroup",
+	GetAllGroupMembershipHistoriesDocument:         "GetAllGroupMembershipHistories",
+	GetGroupMembershipHistoriesDocument:            "GetGroupMembershipHistories",
+	GetAllGroupSettingsDocument:                    "GetAllGroupSettings",
+	GetGroupSettingByIDDocument:                    "GetGroupSettingByID",
+	GetGroupSettingsDocument:                       "GetGroupSettings",
+	UpdateGroupSettingDocument:                     "UpdateGroupSetting",
+	GetAllGroupSettingHistoriesDocument:            "GetAllGroupSettingHistories",
+	GetGroupSettingHistoriesDocument:               "GetGroupSettingHistories",
+	CreateBulkCSVHushDocument:                      "CreateBulkCSVHush",
+	CreateBulkHushDocument:                         "CreateBulkHush",
+	CreateHushDocument:                             "CreateHush",
+	GetAllHushesDocument:                           "GetAllHushes",
+	GetHushByIDDocument:                            "GetHushByID",
+	GetHushesDocument:                              "GetHushes",
+	UpdateHushDocument:                             "UpdateHush",
+	GetAllHushHistoriesDocument:                    "GetAllHushHistories",
+	GetHushHistoriesDocument:                       "GetHushHistories",
+	CreateBulkCSVIntegrationDocument:               "CreateBulkCSVIntegration",
+	CreateBulkIntegrationDocument:                  "CreateBulkIntegration",
+	CreateIntegrationDocument:                      "CreateIntegration",
+	DeleteIntegrationDocument:                      "DeleteIntegration",
+	GetAllIntegrationsDocument:                     "GetAllIntegrations",
+	GetIntegrationByIDDocument:                     "GetIntegrationByID",
+	GetIntegrationsDocument:                        "GetIntegrations",
+	UpdateIntegrationDocument:                      "UpdateIntegration",
+	GetAllIntegrationHistoriesDocument:             "GetAllIntegrationHistories",
+	GetIntegrationHistoriesDocument:                "GetIntegrationHistories",
+	CreateBulkCSVInternalPolicyDocument:            "CreateBulkCSVInternalPolicy",
+	CreateBulkInternalPolicyDocument:               "CreateBulkInternalPolicy",
+	CreateInternalPolicyDocument:                   "CreateInternalPolicy",
+	DeleteInternalPolicyDocument:                   "DeleteInternalPolicy",
+	GetAllInternalPoliciesDocument:                 "GetAllInternalPolicies",
+	GetInternalPoliciesDocument:                    "GetInternalPolicies",
+	GetInternalPolicyByIDDocument:                  "GetInternalPolicyByID",
+	UpdateInternalPolicyDocument:                   "UpdateInternalPolicy",
+	GetAllInternalPolicyHistoriesDocument:          "GetAllInternalPolicyHistories",
+	GetInternalPolicyHistoriesDocument:             "GetInternalPolicyHistories",
+	CreateBulkCSVInviteDocument:                    "CreateBulkCSVInvite",
+	CreateBulkInviteDocument:                       "CreateBulkInvite",
+	CreateInviteDocument:                           "CreateInvite",
+	DeleteInviteDocument:                           "DeleteInvite",
+	GetAllInvitesDocument:                          "GetAllInvites",
+	GetInviteByIDDocument:                          "GetInviteByID",
+	InvitesByOrgIDDocument:                         "InvitesByOrgID",
+	GetAllJobResultsDocument:                       "GetAllJobResults",
+	GetJobResultByIDDocument:                       "GetJobResultByID",
+	GetJobResultsDocument:                          "GetJobResults",
+	DeleteJobRunnerDocument:                        "DeleteJobRunner",
+	GetAllJobRunnersDocument:                       "GetAllJobRunners",
+	GetJobRunnerByIDDocument:                       "GetJobRunnerByID",
+	GetJobRunnersDocument:                          "GetJobRunners",
+	UpdateJobRunnerDocument:                        "UpdateJobRunner",
+	CreateJobRunnerRegistrationTokenDocument:       "CreateJobRunnerRegistrationToken",
+	DeleteJobRunnerRegistrationTokenDocument:       "DeleteJobRunnerRegistrationToken",
+	GetAllJobRunnerRegistrationTokensDocument:      "GetAllJobRunnerRegistrationTokens",
+	GetJobRunnerRegistrationTokenByIDDocument:      "GetJobRunnerRegistrationTokenByID",
+	GetJobRunnerRegistrationTokensDocument:         "GetJobRunnerRegistrationTokens",
+	CreateJobRunnerTokenDocument:                   "CreateJobRunnerToken",
+	DeleteJobRunnerTokenDocument:                   "DeleteJobRunnerToken",
+	GetAllJobRunnerTokensDocument:                  "GetAllJobRunnerTokens",
+	GetJobRunnerTokenByIDDocument:                  "GetJobRunnerTokenByID",
+	GetJobRunnerTokensDocument:                     "GetJobRunnerTokens",
+	CreateBulkCSVMappableDomainDocument:            "CreateBulkCSVMappableDomain",
+	CreateBulkMappableDomainDocument:               "CreateBulkMappableDomain",
+	CreateMappableDomainDocument:                   "CreateMappableDomain",
+	DeleteMappableDomainDocument:                   "DeleteMappableDomain",
+	GetAllMappableDomainsDocument:                  "GetAllMappableDomains",
+	GetMappableDomainByIDDocument:                  "GetMappableDomainByID",
+	GetMappableDomainsDocument:                     "GetMappableDomains",
+	UpdateMappableDomainDocument:                   "UpdateMappableDomain",
+	GetAllMappableDomainHistoriesDocument:          "GetAllMappableDomainHistories",
+	GetMappableDomainHistoriesDocument:             "GetMappableDomainHistories",
+	CreateBulkCSVMappedControlDocument:             "CreateBulkCSVMappedControl",
+	CreateBulkMappedControlDocument:                "CreateBulkMappedControl",
+	CreateMappedControlDocument:                    "CreateMappedControl",
+	DeleteMappedControlDocument:                    "DeleteMappedControl",
+	GetAllMappedControlsDocument:                   "GetAllMappedControls",
+	GetMappedControlByIDDocument:                   "GetMappedControlByID",
+	GetMappedControlsDocument:                      "GetMappedControls",
+	UpdateMappedControlDocument:                    "UpdateMappedControl",
+	GetAllMappedControlHistoriesDocument:           "GetAllMappedControlHistories",
+	GetMappedControlHistoriesDocument:              "GetMappedControlHistories",
+	CreateBulkCSVNarrativeDocument:                 "CreateBulkCSVNarrative",
+	CreateBulkNarrativeDocument:                    "CreateBulkNarrative",
+	CreateNarrativeDocument:                        "CreateNarrative",
+	DeleteNarrativeDocument:                        "DeleteNarrative",
+	GetAllNarrativesDocument:                       "GetAllNarratives",
+	GetNarrativeByIDDocument:                       "GetNarrativeByID",
+	GetNarrativesDocument:                          "GetNarratives",
+	UpdateNarrativeDocument:                        "UpdateNarrative",
+	GetAllNarrativeHistoriesDocument:               "GetAllNarrativeHistories",
+	GetNarrativeHistoriesDocument:                  "GetNarrativeHistories",
+	GetNoteByIDDocument:                            "GetNoteByID",
+	GetAllNoteHistoriesDocument:                    "GetAllNoteHistories",
+	GetNoteHistoriesDocument:                       "GetNoteHistories",
+	CreateOnboardingDocument:                       "CreateOnboarding",
+	CreateOrganizationDocument:                     "CreateOrganization",
+	CreateOrganizationWithMembersDocument:          "CreateOrganizationWithMembers",
+	DeleteOrganizationDocument:                     "DeleteOrganization",
+	GetAllOrganizationsDocument:                    "GetAllOrganizations",
+	GetOrganizationByIDDocument:                    "GetOrganizationByID",
+	GetOrganizationsDocument:                       "GetOrganizations",
+	UpdateOrganizationDocument:                     "UpdateOrganization",
+	GetAllOrganizationHistoriesDocument:            "GetAllOrganizationHistories",
+	GetOrganizationHistoriesDocument:               "GetOrganizationHistories",
+	GetAllOrganizationSettingsDocument:             "GetAllOrganizationSettings",
+	GetOrganizationSettingByIDDocument:             "GetOrganizationSettingByID",
+	GetOrganizationSettingsDocument:                "GetOrganizationSettings",
+	UpdateOrganizationSettingDocument:              "UpdateOrganizationSetting",
+	GetAllOrganizationSettingHistoriesDocument:     "GetAllOrganizationSettingHistories",
+	GetOrganizationSettingHistoriesDocument:        "GetOrganizationSettingHistories",
+	AddUserToOrgWithRoleDocument:                   "AddUserToOrgWithRole",
+	CreateBulkCSVOrgMembersDocument:                "CreateBulkCSVOrgMembers",
+	CreateBulkOrgMembersDocument:                   "CreateBulkOrgMembers",
+	GetOrgMembersByOrgIDDocument:                   "GetOrgMembersByOrgID",
+	RemoveUserFromOrgDocument:                      "RemoveUserFromOrg",
+	UpdateUserRoleInOrgDocument:                    "UpdateUserRoleInOrg",
+	GetAllOrgMembershipHistoriesDocument:           "GetAllOrgMembershipHistories",
+	GetOrgMembershipHistoriesDocument:              "GetOrgMembershipHistories",
+	GetAllOrgSubscriptionsDocument:                 "GetAllOrgSubscriptions",
+	GetOrgSubscriptionByIDDocument:                 "GetOrgSubscriptionByID",
+	GetOrgSubscriptionsDocument:                    "GetOrgSubscriptions",
+	GetAllOrgSubscriptionHistoriesDocument:         "GetAllOrgSubscriptionHistories",
+	GetOrgSubscriptionHistoriesDocument:            "GetOrgSubscriptionHistories",
+	CreatePersonalAccessTokenDocument:              "CreatePersonalAccessToken",
+	DeletePersonalAccessTokenDocument:              "DeletePersonalAccessToken",
+	GetAllPersonalAccessTokensDocument:             "GetAllPersonalAccessTokens",
+	GetPersonalAccessTokenByIDDocument:             "GetPersonalAccessTokenByID",
+	GetPersonalAccessTokensDocument:                "GetPersonalAccessTokens",
+	UpdatePersonalAccessTokenDocument:              "UpdatePersonalAccessToken",
+	CreateBulkCSVProcedureDocument:                 "CreateBulkCSVProcedure",
+	CreateBulkProcedureDocument:                    "CreateBulkProcedure",
+	CreateProcedureDocument:                        "CreateProcedure",
+	DeleteProcedureDocument:                        "DeleteProcedure",
+	GetAllProceduresDocument:                       "GetAllProcedures",
+	GetProcedureByIDDocument:                       "GetProcedureByID",
+	GetProceduresDocument:                          "GetProcedures",
+	UpdateProcedureDocument:                        "UpdateProcedure",
+	GetAllProcedureHistoriesDocument:               "GetAllProcedureHistories",
+	GetProcedureHistoriesDocument:                  "GetProcedureHistories",
+	CreateBulkCSVProgramDocument:                   "CreateBulkCSVProgram",
+	CreateBulkProgramDocument:                      "CreateBulkProgram",
+	CreateControlWithSubcontrolsDocument:           "CreateControlWithSubcontrols",
+	CreateFullProgramDocument:                      "CreateFullProgram",
+	CreateFullProgramReturnIDsDocument:             "CreateFullProgramReturnIDs",
+	CreateProgramDocument:                          "CreateProgram",
+	CreateProgramWithMembersDocument:               "CreateProgramWithMembers",
+	DeleteProgramDocument:                          "DeleteProgram",
+	GetAllProgramsDocument:                         "GetAllPrograms",
+	GetProgramByIDDocument:                         "GetProgramByID",
+	GetProgramsDocument:                            "GetPrograms",
+	UpdateProgramDocument:                          "UpdateProgram",
+	AddUserToProgramWithRoleDocument:               "AddUserToProgramWithRole",
+	CreateBulkCSVProgramMembersDocument:            "CreateBulkCSVProgramMembers",
+	CreateBulkProgramMembersDocument:               "CreateBulkProgramMembers",
+	GetProgramMembersByProgramIDDocument:           "GetProgramMembersByProgramID",
+	RemoveUserFromProgramDocument:                  "RemoveUserFromProgram",
+	UpdateUserRoleInProgramDocument:                "UpdateUserRoleInProgram",
+	GetAllProgramHistoriesDocument:                 "GetAllProgramHistories",
+	GetProgramHistoriesDocument:                    "GetProgramHistories",
+	CreateBulkCSVProgramMembershipDocument:         "CreateBulkCSVProgramMembership",
+	CreateBulkProgramMembershipDocument:            "CreateBulkProgramMembership",
+	CreateProgramMembershipDocument:                "CreateProgramMembership",
+	DeleteProgramMembershipDocument:                "DeleteProgramMembership",
+	GetAllProgramMembershipsDocument:               "GetAllProgramMemberships",
+	GetProgramMembershipByIDDocument:               "GetProgramMembershipByID",
+	GetProgramMembershipsDocument:                  "GetProgramMemberships",
+	UpdateProgramMembershipDocument:                "UpdateProgramMembership",
+	GetAllProgramMembershipHistoriesDocument:       "GetAllProgramMembershipHistories",
+	GetProgramMembershipHistoriesDocument:          "GetProgramMembershipHistories",
+	CreateBulkCSVRiskDocument:                      "CreateBulkCSVRisk",
+	CreateBulkRiskDocument:                         "CreateBulkRisk",
+	CreateRiskDocument:                             "CreateRisk",
+	DeleteRiskDocument:                             "DeleteRisk",
+	GetAllRisksDocument:                            "GetAllRisks",
+	GetRiskByIDDocument:                            "GetRiskByID",
+	GetRisksDocument:                               "GetRisks",
+	UpdateRiskDocument:                             "UpdateRisk",
+	GetAllRiskHistoriesDocument:                    "GetAllRiskHistories",
+	GetRiskHistoriesDocument:                       "GetRiskHistories",
+	CreateBulkCSVScanDocument:                      "CreateBulkCSVScan",
+	CreateBulkScanDocument:                         "CreateBulkScan",
+	CreateScanDocument:                             "CreateScan",
+	DeleteScanDocument:                             "DeleteScan",
+	GetAllScansDocument:                            "GetAllScans",
+	GetScanByIDDocument:                            "GetScanByID",
+	GetScansDocument:                               "GetScans",
+	UpdateScanDocument:                             "UpdateScan",
+	GetAllScanHistoriesDocument:                    "GetAllScanHistories",
+	GetScanHistoriesDocument:                       "GetScanHistories",
+	CreateBulkCSVScheduledJobDocument:              "CreateBulkCSVScheduledJob",
+	CreateBulkScheduledJobDocument:                 "CreateBulkScheduledJob",
+	CreateScheduledJobDocument:                     "CreateScheduledJob",
+	DeleteScheduledJobDocument:                     "DeleteScheduledJob",
+	GetAllScheduledJobsDocument:                    "GetAllScheduledJobs",
+	GetScheduledJobByIDDocument:                    "GetScheduledJobByID",
+	GetScheduledJobsDocument:                       "GetScheduledJobs",
+	UpdateScheduledJobDocument:                     "UpdateScheduledJob",
+	GetAllScheduledJobHistoriesDocument:            "GetAllScheduledJobHistories",
+	GetScheduledJobHistoriesDocument:               "GetScheduledJobHistories",
+	GetAllScheduledJobRunsDocument:                 "GetAllScheduledJobRuns",
+	GetScheduledJobRunByIDDocument:                 "GetScheduledJobRunByID",
+	GetScheduledJobRunsDocument:                    "GetScheduledJobRuns",
+	GlobalSearchDocument:                           "GlobalSearch",
+	CreateStandardDocument:                         "CreateStandard",
+	DeleteStandardDocument:                         "DeleteStandard",
+	GetAllStandardsDocument:                        "GetAllStandards",
+	GetStandardByIDDocument:                        "GetStandardByID",
+	GetStandardsDocument:                           "GetStandards",
+	UpdateStandardDocument:                         "UpdateStandard",
+	GetAllStandardHistoriesDocument:                "GetAllStandardHistories",
+	GetStandardHistoriesDocument:                   "GetStandardHistories",
+	CreateBulkCSVSubcontrolDocument:                "CreateBulkCSVSubcontrol",
+	CreateBulkSubcontrolDocument:                   "CreateBulkSubcontrol",
+	CreateSubcontrolDocument:                       "CreateSubcontrol",
+	DeleteSubcontrolDocument:                       "DeleteSubcontrol",
+	GetAllSubcontrolsDocument:                      "GetAllSubcontrols",
+	GetSubcontrolByIDDocument:                      "GetSubcontrolByID",
+	GetSubcontrolsDocument:                         "GetSubcontrols",
+	UpdateSubcontrolDocument:                       "UpdateSubcontrol",
+	GetAllSubcontrolHistoriesDocument:              "GetAllSubcontrolHistories",
+	GetSubcontrolHistoriesDocument:                 "GetSubcontrolHistories",
+	CreateBulkCSVSubprocessorDocument:              "CreateBulkCSVSubprocessor",
+	CreateBulkSubprocessorDocument:                 "CreateBulkSubprocessor",
+	CreateSubprocessorDocument:                     "CreateSubprocessor",
+	DeleteSubprocessorDocument:                     "DeleteSubprocessor",
+	GetAllSubprocessorsDocument:                    "GetAllSubprocessors",
+	GetSubprocessorByIDDocument:                    "GetSubprocessorByID",
+	GetSubprocessorsDocument:                       "GetSubprocessors",
+	UpdateSubprocessorDocument:                     "UpdateSubprocessor",
+	GetAllSubprocessorHistoriesDocument:            "GetAllSubprocessorHistories",
+	GetSubprocessorHistoriesDocument:               "GetSubprocessorHistories",
+	CreateBulkCSVSubscriberDocument:                "CreateBulkCSVSubscriber",
+	CreateBulkSubscriberDocument:                   "CreateBulkSubscriber",
+	CreateSubscriberDocument:                       "CreateSubscriber",
+	DeleteSubscriberDocument:                       "DeleteSubscriber",
+	GetAllSubscribersDocument:                      "GetAllSubscribers",
+	GetSubscriberByEmailDocument:                   "GetSubscriberByEmail",
+	GetSubscribersDocument:                         "GetSubscribers",
+	UpdateSubscriberDocument:                       "UpdateSubscriber",
+	CreateBulkCSVTaskDocument:                      "CreateBulkCSVTask",
+	CreateBulkTaskDocument:                         "CreateBulkTask",
+	CreateTaskDocument:                             "CreateTask",
+	DeleteTaskDocument:                             "DeleteTask",
+	GetAllTasksDocument:                            "GetAllTasks",
+	GetTaskByIDDocument:                            "GetTaskByID",
+	GetTasksDocument:                               "GetTasks",
+	UpdateTaskDocument:                             "UpdateTask",
+	UpdateTaskCommentDocument:                      "UpdateTaskComment",
+	GetAllTaskHistoriesDocument:                    "GetAllTaskHistories",
+	GetTaskHistoriesDocument:                       "GetTaskHistories",
+	CreateBulkCSVTemplateDocument:                  "CreateBulkCSVTemplate",
+	CreateBulkTemplateDocument:                     "CreateBulkTemplate",
+	CreateTemplateDocument:                         "CreateTemplate",
+	GetAllTemplatesDocument:                        "GetAllTemplates",
+	GetTemplateByIDDocument:                        "GetTemplateByID",
+	UpdateTemplateDocument:                         "UpdateTemplate",
+	GetAllTemplateHistoriesDocument:                "GetAllTemplateHistories",
+	GetTemplateHistoriesDocument:                   "GetTemplateHistories",
+	CreateTFASettingDocument:                       "CreateTFASetting",
+	GetAllTFASettingsDocument:                      "GetAllTFASettings",
+	GetTFASettingDocument:                          "GetTFASetting",
+	UpdateTFASettingDocument:                       "UpdateTFASetting",
+	CreateTrustCenterDocument:                      "CreateTrustCenter",
+	DeleteTrustCenterDocument:                      "DeleteTrustCenter",
+	GetAllTrustCentersDocument:                     "GetAllTrustCenters",
+	GetTrustCenterByIDDocument:                     "GetTrustCenterByID",
+	GetTrustCentersDocument:                        "GetTrustCenters",
+	UpdateTrustCenterDocument:                      "UpdateTrustCenter",
+	GetAllTrustCenterHistoriesDocument:             "GetAllTrustCenterHistories",
+	GetTrustCenterHistoriesDocument:                "GetTrustCenterHistories",
+	CreateTrustCenterSettingDocument:               "CreateTrustCenterSetting",
+	DeleteTrustCenterSettingDocument:               "DeleteTrustCenterSetting",
+	GetAllTrustCenterSettingsDocument:              "GetAllTrustCenterSettings",
+	GetTrustCenterSettingByIDDocument:              "GetTrustCenterSettingByID",
+	GetTrustCenterSettingsDocument:                 "GetTrustCenterSettings",
+	UpdateTrustCenterSettingDocument:               "UpdateTrustCenterSetting",
+	GetAllTrustCenterSettingHistoriesDocument:      "GetAllTrustCenterSettingHistories",
+	GetTrustCenterSettingHistoriesDocument:         "GetTrustCenterSettingHistories",
+	CreateBulkCSVTrustCenterSubprocessorDocument:   "CreateBulkCSVTrustCenterSubprocessor",
+	CreateBulkTrustCenterSubprocessorDocument:      "CreateBulkTrustCenterSubprocessor",
+	CreateTrustCenterSubprocessorDocument:          "CreateTrustCenterSubprocessor",
+	DeleteTrustCenterSubprocessorDocument:          "DeleteTrustCenterSubprocessor",
+	GetAllTrustCenterSubprocessorsDocument:         "GetAllTrustCenterSubprocessors",
+	GetTrustCenterSubprocessorByIDDocument:         "GetTrustCenterSubprocessorByID",
+	GetTrustCenterSubprocessorsDocument:            "GetTrustCenterSubprocessors",
+	UpdateTrustCenterSubprocessorDocument:          "UpdateTrustCenterSubprocessor",
+	GetAllTrustCenterSubprocessorHistoriesDocument: "GetAllTrustCenterSubprocessorHistories",
+	GetTrustCenterSubprocessorHistoriesDocument:    "GetTrustCenterSubprocessorHistories",
+	CreateUserDocument:                             "CreateUser",
+	DeleteUserDocument:                             "DeleteUser",
+	GetAllUsersDocument:                            "GetAllUsers",
+	GetSelfDocument:                                "GetSelf",
+	GetUserByIDDocument:                            "GetUserByID",
+	GetUserByIDWithOrgsDocument:                    "GetUserByIDWithOrgs",
+	UpdateUserDocument:                             "UpdateUser",
+	GetAllUserHistoriesDocument:                    "GetAllUserHistories",
+	GetUserHistoriesDocument:                       "GetUserHistories",
+	GetAllUserSettingsDocument:                     "GetAllUserSettings",
+	GetUserSettingByIDDocument:                     "GetUserSettingByID",
+	GetUserSettingsDocument:                        "GetUserSettings",
+	UpdateUserSettingDocument:                      "UpdateUserSetting",
+	GetAllUserSettingHistoriesDocument:             "GetAllUserSettingHistories",
+	GetUserSettingHistoriesDocument:                "GetUserSettingHistories",
+	DeleteWebauthnDocument:                         "DeleteWebauthn",
+	GetAllWebauthnsDocument:                        "GetAllWebauthns",
 }

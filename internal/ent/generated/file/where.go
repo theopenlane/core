@@ -1845,6 +1845,64 @@ func HasEventsWith(preds ...predicate.Event) predicate.File {
 	})
 }
 
+// HasTrustCenterSetting applies the HasEdge predicate on the "trust_center_setting" edge.
+func HasTrustCenterSetting() predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, TrustCenterSettingTable, TrustCenterSettingPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenterSetting
+		step.Edge.Schema = schemaConfig.TrustCenterSettingFiles
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTrustCenterSettingWith applies the HasEdge predicate on the "trust_center_setting" edge with a given conditions (other predicates).
+func HasTrustCenterSettingWith(preds ...predicate.TrustCenterSetting) predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := newTrustCenterSettingStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenterSetting
+		step.Edge.Schema = schemaConfig.TrustCenterSettingFiles
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSubprocessor applies the HasEdge predicate on the "subprocessor" edge.
+func HasSubprocessor() predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, SubprocessorTable, SubprocessorPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subprocessor
+		step.Edge.Schema = schemaConfig.SubprocessorFiles
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSubprocessorWith applies the HasEdge predicate on the "subprocessor" edge with a given conditions (other predicates).
+func HasSubprocessorWith(preds ...predicate.Subprocessor) predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := newSubprocessorStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subprocessor
+		step.Edge.Schema = schemaConfig.SubprocessorFiles
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.File) predicate.File {
 	return predicate.File(sql.AndPredicates(predicates...))

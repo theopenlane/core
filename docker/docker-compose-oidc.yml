@@ -1,0 +1,28 @@
+services:
+  dex:
+    image: ghcr.io/dexidp/dex:v2.43.1
+    volumes:
+      - ./files/dex.yaml:/etc/dex/config.yaml:ro
+    command: ["dex", "serve", "/etc/dex/config.yaml"]
+    ports:
+      - "5556:5556"
+    networks:
+      - default
+
+  sso-ui:
+    image: nginx:alpine
+    volumes:
+      - ../pkg/testutils/login/sso:/usr/share/nginx/html:ro
+    ports:
+      - "3001:80"
+    networks:
+      - default
+
+  tokens-ui:
+    image: nginx:alpine
+    volumes:
+      - ../pkg/testutils/tokensso:/usr/share/nginx/html:ro
+    ports:
+      - "3002:80"
+    networks:
+      - default

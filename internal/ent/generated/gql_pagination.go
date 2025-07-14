@@ -42,6 +42,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
+	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -96,6 +97,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
@@ -106,6 +109,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -11478,6 +11483,413 @@ func (eh *EvidenceHistory) ToEdge(order *EvidenceHistoryOrder) *EvidenceHistoryE
 	return &EvidenceHistoryEdge{
 		Node:   eh,
 		Cursor: order.Field.toCursor(eh),
+	}
+}
+
+// ExportEdge is the edge representation of Export.
+type ExportEdge struct {
+	Node   *Export `json:"node"`
+	Cursor Cursor  `json:"cursor"`
+}
+
+// ExportConnection is the connection containing edges to Export.
+type ExportConnection struct {
+	Edges      []*ExportEdge `json:"edges"`
+	PageInfo   PageInfo      `json:"pageInfo"`
+	TotalCount int           `json:"totalCount"`
+}
+
+func (c *ExportConnection) build(nodes []*Export, pager *exportPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *Export
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Export {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Export {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*ExportEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &ExportEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// ExportPaginateOption enables pagination customization.
+type ExportPaginateOption func(*exportPager) error
+
+// WithExportOrder configures pagination ordering.
+func WithExportOrder(order []*ExportOrder) ExportPaginateOption {
+	return func(pager *exportPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithExportFilter configures pagination filter.
+func WithExportFilter(filter func(*ExportQuery) (*ExportQuery, error)) ExportPaginateOption {
+	return func(pager *exportPager) error {
+		if filter == nil {
+			return errors.New("ExportQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type exportPager struct {
+	reverse bool
+	order   []*ExportOrder
+	filter  func(*ExportQuery) (*ExportQuery, error)
+}
+
+func newExportPager(opts []ExportPaginateOption, reverse bool) (*exportPager, error) {
+	pager := &exportPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *exportPager) applyFilter(query *ExportQuery) (*ExportQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *exportPager) toCursor(e *Export) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(e).Value)
+	}
+	return Cursor{ID: e.ID, Value: cs_}
+}
+
+func (p *exportPager) applyCursors(query *ExportQuery, after, before *Cursor) (*ExportQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultExportOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
+	}
+	return query, nil
+}
+
+func (p *exportPager) applyOrder(query *ExportQuery) *ExportQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultExportOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultExportOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *exportPager) orderExpr(query *ExportQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultExportOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Export.
+func (e *ExportQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...ExportPaginateOption,
+) (*ExportConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newExportPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if e, err = pager.applyFilter(e); err != nil {
+		return nil, err
+	}
+	conn := &ExportConnection{Edges: []*ExportEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := e.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if e, err = pager.applyCursors(e, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		e.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := e.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	e = pager.applyOrder(e)
+	nodes, err := e.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// ExportOrderFieldCreatedAt orders Export by created_at.
+	ExportOrderFieldCreatedAt = &ExportOrderField{
+		Value: func(e *Export) (ent.Value, error) {
+			return e.CreatedAt, nil
+		},
+		column: export.FieldCreatedAt,
+		toTerm: export.ByCreatedAt,
+		toCursor: func(e *Export) Cursor {
+			return Cursor{
+				ID:    e.ID,
+				Value: e.CreatedAt,
+			}
+		},
+	}
+	// ExportOrderFieldUpdatedAt orders Export by updated_at.
+	ExportOrderFieldUpdatedAt = &ExportOrderField{
+		Value: func(e *Export) (ent.Value, error) {
+			return e.UpdatedAt, nil
+		},
+		column: export.FieldUpdatedAt,
+		toTerm: export.ByUpdatedAt,
+		toCursor: func(e *Export) Cursor {
+			return Cursor{
+				ID:    e.ID,
+				Value: e.UpdatedAt,
+			}
+		},
+	}
+	// ExportOrderFieldExportType orders Export by export_type.
+	ExportOrderFieldExportType = &ExportOrderField{
+		Value: func(e *Export) (ent.Value, error) {
+			return e.ExportType, nil
+		},
+		column: export.FieldExportType,
+		toTerm: export.ByExportType,
+		toCursor: func(e *Export) Cursor {
+			return Cursor{
+				ID:    e.ID,
+				Value: e.ExportType,
+			}
+		},
+	}
+	// ExportOrderFieldFormat orders Export by format.
+	ExportOrderFieldFormat = &ExportOrderField{
+		Value: func(e *Export) (ent.Value, error) {
+			return e.Format, nil
+		},
+		column: export.FieldFormat,
+		toTerm: export.ByFormat,
+		toCursor: func(e *Export) Cursor {
+			return Cursor{
+				ID:    e.ID,
+				Value: e.Format,
+			}
+		},
+	}
+	// ExportOrderFieldStatus orders Export by status.
+	ExportOrderFieldStatus = &ExportOrderField{
+		Value: func(e *Export) (ent.Value, error) {
+			return e.Status, nil
+		},
+		column: export.FieldStatus,
+		toTerm: export.ByStatus,
+		toCursor: func(e *Export) Cursor {
+			return Cursor{
+				ID:    e.ID,
+				Value: e.Status,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f ExportOrderField) String() string {
+	var str string
+	switch f.column {
+	case ExportOrderFieldCreatedAt.column:
+		str = "created_at"
+	case ExportOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case ExportOrderFieldExportType.column:
+		str = "export_type"
+	case ExportOrderFieldFormat.column:
+		str = "format"
+	case ExportOrderFieldStatus.column:
+		str = "status"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f ExportOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *ExportOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("ExportOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *ExportOrderFieldCreatedAt
+	case "updated_at":
+		*f = *ExportOrderFieldUpdatedAt
+	case "export_type":
+		*f = *ExportOrderFieldExportType
+	case "format":
+		*f = *ExportOrderFieldFormat
+	case "status":
+		*f = *ExportOrderFieldStatus
+	default:
+		return fmt.Errorf("%s is not a valid ExportOrderField", str)
+	}
+	return nil
+}
+
+// ExportOrderField defines the ordering field of Export.
+type ExportOrderField struct {
+	// Value extracts the ordering value from the given Export.
+	Value    func(*Export) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) export.OrderOption
+	toCursor func(*Export) Cursor
+}
+
+// ExportOrder defines the ordering of Export.
+type ExportOrder struct {
+	Direction OrderDirection    `json:"direction"`
+	Field     *ExportOrderField `json:"field"`
+}
+
+// DefaultExportOrder is the default ordering of Export.
+var DefaultExportOrder = &ExportOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &ExportOrderField{
+		Value: func(e *Export) (ent.Value, error) {
+			return e.ID, nil
+		},
+		column: export.FieldID,
+		toTerm: export.ByID,
+		toCursor: func(e *Export) Cursor {
+			return Cursor{ID: e.ID}
+		},
+	},
+}
+
+// ToEdge converts Export into ExportEdge.
+func (e *Export) ToEdge(order *ExportOrder) *ExportEdge {
+	if order == nil {
+		order = DefaultExportOrder
+	}
+	return &ExportEdge{
+		Node:   e,
+		Cursor: order.Field.toCursor(e),
 	}
 }
 
@@ -32674,6 +33086,727 @@ func (sh *SubcontrolHistory) ToEdge(order *SubcontrolHistoryOrder) *SubcontrolHi
 	}
 }
 
+// SubprocessorEdge is the edge representation of Subprocessor.
+type SubprocessorEdge struct {
+	Node   *Subprocessor `json:"node"`
+	Cursor Cursor        `json:"cursor"`
+}
+
+// SubprocessorConnection is the connection containing edges to Subprocessor.
+type SubprocessorConnection struct {
+	Edges      []*SubprocessorEdge `json:"edges"`
+	PageInfo   PageInfo            `json:"pageInfo"`
+	TotalCount int                 `json:"totalCount"`
+}
+
+func (c *SubprocessorConnection) build(nodes []*Subprocessor, pager *subprocessorPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *Subprocessor
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Subprocessor {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Subprocessor {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*SubprocessorEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &SubprocessorEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// SubprocessorPaginateOption enables pagination customization.
+type SubprocessorPaginateOption func(*subprocessorPager) error
+
+// WithSubprocessorOrder configures pagination ordering.
+func WithSubprocessorOrder(order []*SubprocessorOrder) SubprocessorPaginateOption {
+	return func(pager *subprocessorPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithSubprocessorFilter configures pagination filter.
+func WithSubprocessorFilter(filter func(*SubprocessorQuery) (*SubprocessorQuery, error)) SubprocessorPaginateOption {
+	return func(pager *subprocessorPager) error {
+		if filter == nil {
+			return errors.New("SubprocessorQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type subprocessorPager struct {
+	reverse bool
+	order   []*SubprocessorOrder
+	filter  func(*SubprocessorQuery) (*SubprocessorQuery, error)
+}
+
+func newSubprocessorPager(opts []SubprocessorPaginateOption, reverse bool) (*subprocessorPager, error) {
+	pager := &subprocessorPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *subprocessorPager) applyFilter(query *SubprocessorQuery) (*SubprocessorQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *subprocessorPager) toCursor(s *Subprocessor) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(s).Value)
+	}
+	return Cursor{ID: s.ID, Value: cs_}
+}
+
+func (p *subprocessorPager) applyCursors(query *SubprocessorQuery, after, before *Cursor) (*SubprocessorQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultSubprocessorOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
+	}
+	return query, nil
+}
+
+func (p *subprocessorPager) applyOrder(query *SubprocessorQuery) *SubprocessorQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultSubprocessorOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultSubprocessorOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *subprocessorPager) orderExpr(query *SubprocessorQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultSubprocessorOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Subprocessor.
+func (s *SubprocessorQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...SubprocessorPaginateOption,
+) (*SubprocessorConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newSubprocessorPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if s, err = pager.applyFilter(s); err != nil {
+		return nil, err
+	}
+	conn := &SubprocessorConnection{Edges: []*SubprocessorEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := s.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if s, err = pager.applyCursors(s, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		s.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := s.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	s = pager.applyOrder(s)
+	nodes, err := s.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// SubprocessorOrderFieldCreatedAt orders Subprocessor by created_at.
+	SubprocessorOrderFieldCreatedAt = &SubprocessorOrderField{
+		Value: func(s *Subprocessor) (ent.Value, error) {
+			return s.CreatedAt, nil
+		},
+		column: subprocessor.FieldCreatedAt,
+		toTerm: subprocessor.ByCreatedAt,
+		toCursor: func(s *Subprocessor) Cursor {
+			return Cursor{
+				ID:    s.ID,
+				Value: s.CreatedAt,
+			}
+		},
+	}
+	// SubprocessorOrderFieldUpdatedAt orders Subprocessor by updated_at.
+	SubprocessorOrderFieldUpdatedAt = &SubprocessorOrderField{
+		Value: func(s *Subprocessor) (ent.Value, error) {
+			return s.UpdatedAt, nil
+		},
+		column: subprocessor.FieldUpdatedAt,
+		toTerm: subprocessor.ByUpdatedAt,
+		toCursor: func(s *Subprocessor) Cursor {
+			return Cursor{
+				ID:    s.ID,
+				Value: s.UpdatedAt,
+			}
+		},
+	}
+	// SubprocessorOrderFieldName orders Subprocessor by name.
+	SubprocessorOrderFieldName = &SubprocessorOrderField{
+		Value: func(s *Subprocessor) (ent.Value, error) {
+			return s.Name, nil
+		},
+		column: subprocessor.FieldName,
+		toTerm: subprocessor.ByName,
+		toCursor: func(s *Subprocessor) Cursor {
+			return Cursor{
+				ID:    s.ID,
+				Value: s.Name,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f SubprocessorOrderField) String() string {
+	var str string
+	switch f.column {
+	case SubprocessorOrderFieldCreatedAt.column:
+		str = "created_at"
+	case SubprocessorOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case SubprocessorOrderFieldName.column:
+		str = "name"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f SubprocessorOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *SubprocessorOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("SubprocessorOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *SubprocessorOrderFieldCreatedAt
+	case "updated_at":
+		*f = *SubprocessorOrderFieldUpdatedAt
+	case "name":
+		*f = *SubprocessorOrderFieldName
+	default:
+		return fmt.Errorf("%s is not a valid SubprocessorOrderField", str)
+	}
+	return nil
+}
+
+// SubprocessorOrderField defines the ordering field of Subprocessor.
+type SubprocessorOrderField struct {
+	// Value extracts the ordering value from the given Subprocessor.
+	Value    func(*Subprocessor) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) subprocessor.OrderOption
+	toCursor func(*Subprocessor) Cursor
+}
+
+// SubprocessorOrder defines the ordering of Subprocessor.
+type SubprocessorOrder struct {
+	Direction OrderDirection          `json:"direction"`
+	Field     *SubprocessorOrderField `json:"field"`
+}
+
+// DefaultSubprocessorOrder is the default ordering of Subprocessor.
+var DefaultSubprocessorOrder = &SubprocessorOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &SubprocessorOrderField{
+		Value: func(s *Subprocessor) (ent.Value, error) {
+			return s.ID, nil
+		},
+		column: subprocessor.FieldID,
+		toTerm: subprocessor.ByID,
+		toCursor: func(s *Subprocessor) Cursor {
+			return Cursor{ID: s.ID}
+		},
+	},
+}
+
+// ToEdge converts Subprocessor into SubprocessorEdge.
+func (s *Subprocessor) ToEdge(order *SubprocessorOrder) *SubprocessorEdge {
+	if order == nil {
+		order = DefaultSubprocessorOrder
+	}
+	return &SubprocessorEdge{
+		Node:   s,
+		Cursor: order.Field.toCursor(s),
+	}
+}
+
+// SubprocessorHistoryEdge is the edge representation of SubprocessorHistory.
+type SubprocessorHistoryEdge struct {
+	Node   *SubprocessorHistory `json:"node"`
+	Cursor Cursor               `json:"cursor"`
+}
+
+// SubprocessorHistoryConnection is the connection containing edges to SubprocessorHistory.
+type SubprocessorHistoryConnection struct {
+	Edges      []*SubprocessorHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                   `json:"pageInfo"`
+	TotalCount int                        `json:"totalCount"`
+}
+
+func (c *SubprocessorHistoryConnection) build(nodes []*SubprocessorHistory, pager *subprocessorhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *SubprocessorHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *SubprocessorHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *SubprocessorHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*SubprocessorHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &SubprocessorHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// SubprocessorHistoryPaginateOption enables pagination customization.
+type SubprocessorHistoryPaginateOption func(*subprocessorhistoryPager) error
+
+// WithSubprocessorHistoryOrder configures pagination ordering.
+func WithSubprocessorHistoryOrder(order *SubprocessorHistoryOrder) SubprocessorHistoryPaginateOption {
+	if order == nil {
+		order = DefaultSubprocessorHistoryOrder
+	}
+	o := *order
+	return func(pager *subprocessorhistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultSubprocessorHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithSubprocessorHistoryFilter configures pagination filter.
+func WithSubprocessorHistoryFilter(filter func(*SubprocessorHistoryQuery) (*SubprocessorHistoryQuery, error)) SubprocessorHistoryPaginateOption {
+	return func(pager *subprocessorhistoryPager) error {
+		if filter == nil {
+			return errors.New("SubprocessorHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type subprocessorhistoryPager struct {
+	reverse bool
+	order   *SubprocessorHistoryOrder
+	filter  func(*SubprocessorHistoryQuery) (*SubprocessorHistoryQuery, error)
+}
+
+func newSubprocessorHistoryPager(opts []SubprocessorHistoryPaginateOption, reverse bool) (*subprocessorhistoryPager, error) {
+	pager := &subprocessorhistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultSubprocessorHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *subprocessorhistoryPager) applyFilter(query *SubprocessorHistoryQuery) (*SubprocessorHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *subprocessorhistoryPager) toCursor(sh *SubprocessorHistory) Cursor {
+	return p.order.Field.toCursor(sh)
+}
+
+func (p *subprocessorhistoryPager) applyCursors(query *SubprocessorHistoryQuery, after, before *Cursor) (*SubprocessorHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultSubprocessorHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *subprocessorhistoryPager) applyOrder(query *SubprocessorHistoryQuery) *SubprocessorHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultSubprocessorHistoryOrder.Field {
+		query = query.Order(DefaultSubprocessorHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *subprocessorhistoryPager) orderExpr(query *SubprocessorHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultSubprocessorHistoryOrder.Field {
+			b.Comma().Ident(DefaultSubprocessorHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to SubprocessorHistory.
+func (sh *SubprocessorHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...SubprocessorHistoryPaginateOption,
+) (*SubprocessorHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newSubprocessorHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if sh, err = pager.applyFilter(sh); err != nil {
+		return nil, err
+	}
+	conn := &SubprocessorHistoryConnection{Edges: []*SubprocessorHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := sh.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if sh, err = pager.applyCursors(sh, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		sh.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := sh.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	sh = pager.applyOrder(sh)
+	nodes, err := sh.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// SubprocessorHistoryOrderFieldHistoryTime orders SubprocessorHistory by history_time.
+	SubprocessorHistoryOrderFieldHistoryTime = &SubprocessorHistoryOrderField{
+		Value: func(sh *SubprocessorHistory) (ent.Value, error) {
+			return sh.HistoryTime, nil
+		},
+		column: subprocessorhistory.FieldHistoryTime,
+		toTerm: subprocessorhistory.ByHistoryTime,
+		toCursor: func(sh *SubprocessorHistory) Cursor {
+			return Cursor{
+				ID:    sh.ID,
+				Value: sh.HistoryTime,
+			}
+		},
+	}
+	// SubprocessorHistoryOrderFieldCreatedAt orders SubprocessorHistory by created_at.
+	SubprocessorHistoryOrderFieldCreatedAt = &SubprocessorHistoryOrderField{
+		Value: func(sh *SubprocessorHistory) (ent.Value, error) {
+			return sh.CreatedAt, nil
+		},
+		column: subprocessorhistory.FieldCreatedAt,
+		toTerm: subprocessorhistory.ByCreatedAt,
+		toCursor: func(sh *SubprocessorHistory) Cursor {
+			return Cursor{
+				ID:    sh.ID,
+				Value: sh.CreatedAt,
+			}
+		},
+	}
+	// SubprocessorHistoryOrderFieldUpdatedAt orders SubprocessorHistory by updated_at.
+	SubprocessorHistoryOrderFieldUpdatedAt = &SubprocessorHistoryOrderField{
+		Value: func(sh *SubprocessorHistory) (ent.Value, error) {
+			return sh.UpdatedAt, nil
+		},
+		column: subprocessorhistory.FieldUpdatedAt,
+		toTerm: subprocessorhistory.ByUpdatedAt,
+		toCursor: func(sh *SubprocessorHistory) Cursor {
+			return Cursor{
+				ID:    sh.ID,
+				Value: sh.UpdatedAt,
+			}
+		},
+	}
+	// SubprocessorHistoryOrderFieldName orders SubprocessorHistory by name.
+	SubprocessorHistoryOrderFieldName = &SubprocessorHistoryOrderField{
+		Value: func(sh *SubprocessorHistory) (ent.Value, error) {
+			return sh.Name, nil
+		},
+		column: subprocessorhistory.FieldName,
+		toTerm: subprocessorhistory.ByName,
+		toCursor: func(sh *SubprocessorHistory) Cursor {
+			return Cursor{
+				ID:    sh.ID,
+				Value: sh.Name,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f SubprocessorHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case SubprocessorHistoryOrderFieldHistoryTime.column:
+		str = "history_time"
+	case SubprocessorHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case SubprocessorHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case SubprocessorHistoryOrderFieldName.column:
+		str = "name"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f SubprocessorHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *SubprocessorHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("SubprocessorHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "history_time":
+		*f = *SubprocessorHistoryOrderFieldHistoryTime
+	case "created_at":
+		*f = *SubprocessorHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *SubprocessorHistoryOrderFieldUpdatedAt
+	case "name":
+		*f = *SubprocessorHistoryOrderFieldName
+	default:
+		return fmt.Errorf("%s is not a valid SubprocessorHistoryOrderField", str)
+	}
+	return nil
+}
+
+// SubprocessorHistoryOrderField defines the ordering field of SubprocessorHistory.
+type SubprocessorHistoryOrderField struct {
+	// Value extracts the ordering value from the given SubprocessorHistory.
+	Value    func(*SubprocessorHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) subprocessorhistory.OrderOption
+	toCursor func(*SubprocessorHistory) Cursor
+}
+
+// SubprocessorHistoryOrder defines the ordering of SubprocessorHistory.
+type SubprocessorHistoryOrder struct {
+	Direction OrderDirection                 `json:"direction"`
+	Field     *SubprocessorHistoryOrderField `json:"field"`
+}
+
+// DefaultSubprocessorHistoryOrder is the default ordering of SubprocessorHistory.
+var DefaultSubprocessorHistoryOrder = &SubprocessorHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &SubprocessorHistoryOrderField{
+		Value: func(sh *SubprocessorHistory) (ent.Value, error) {
+			return sh.ID, nil
+		},
+		column: subprocessorhistory.FieldID,
+		toTerm: subprocessorhistory.ByID,
+		toCursor: func(sh *SubprocessorHistory) Cursor {
+			return Cursor{ID: sh.ID}
+		},
+	},
+}
+
+// ToEdge converts SubprocessorHistory into SubprocessorHistoryEdge.
+func (sh *SubprocessorHistory) ToEdge(order *SubprocessorHistoryOrder) *SubprocessorHistoryEdge {
+	if order == nil {
+		order = DefaultSubprocessorHistoryOrder
+	}
+	return &SubprocessorHistoryEdge{
+		Node:   sh,
+		Cursor: order.Field.toCursor(sh),
+	}
+}
+
 // SubscriberEdge is the edge representation of Subscriber.
 type SubscriberEdge struct {
 	Node   *Subscriber `json:"node"`
@@ -36491,6 +37624,691 @@ func (tcsh *TrustCenterSettingHistory) ToEdge(order *TrustCenterSettingHistoryOr
 		order = DefaultTrustCenterSettingHistoryOrder
 	}
 	return &TrustCenterSettingHistoryEdge{
+		Node:   tcsh,
+		Cursor: order.Field.toCursor(tcsh),
+	}
+}
+
+// TrustCenterSubprocessorEdge is the edge representation of TrustCenterSubprocessor.
+type TrustCenterSubprocessorEdge struct {
+	Node   *TrustCenterSubprocessor `json:"node"`
+	Cursor Cursor                   `json:"cursor"`
+}
+
+// TrustCenterSubprocessorConnection is the connection containing edges to TrustCenterSubprocessor.
+type TrustCenterSubprocessorConnection struct {
+	Edges      []*TrustCenterSubprocessorEdge `json:"edges"`
+	PageInfo   PageInfo                       `json:"pageInfo"`
+	TotalCount int                            `json:"totalCount"`
+}
+
+func (c *TrustCenterSubprocessorConnection) build(nodes []*TrustCenterSubprocessor, pager *trustcentersubprocessorPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *TrustCenterSubprocessor
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *TrustCenterSubprocessor {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *TrustCenterSubprocessor {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*TrustCenterSubprocessorEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &TrustCenterSubprocessorEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// TrustCenterSubprocessorPaginateOption enables pagination customization.
+type TrustCenterSubprocessorPaginateOption func(*trustcentersubprocessorPager) error
+
+// WithTrustCenterSubprocessorOrder configures pagination ordering.
+func WithTrustCenterSubprocessorOrder(order []*TrustCenterSubprocessorOrder) TrustCenterSubprocessorPaginateOption {
+	return func(pager *trustcentersubprocessorPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithTrustCenterSubprocessorFilter configures pagination filter.
+func WithTrustCenterSubprocessorFilter(filter func(*TrustCenterSubprocessorQuery) (*TrustCenterSubprocessorQuery, error)) TrustCenterSubprocessorPaginateOption {
+	return func(pager *trustcentersubprocessorPager) error {
+		if filter == nil {
+			return errors.New("TrustCenterSubprocessorQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type trustcentersubprocessorPager struct {
+	reverse bool
+	order   []*TrustCenterSubprocessorOrder
+	filter  func(*TrustCenterSubprocessorQuery) (*TrustCenterSubprocessorQuery, error)
+}
+
+func newTrustCenterSubprocessorPager(opts []TrustCenterSubprocessorPaginateOption, reverse bool) (*trustcentersubprocessorPager, error) {
+	pager := &trustcentersubprocessorPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *trustcentersubprocessorPager) applyFilter(query *TrustCenterSubprocessorQuery) (*TrustCenterSubprocessorQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *trustcentersubprocessorPager) toCursor(tcs *TrustCenterSubprocessor) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(tcs).Value)
+	}
+	return Cursor{ID: tcs.ID, Value: cs_}
+}
+
+func (p *trustcentersubprocessorPager) applyCursors(query *TrustCenterSubprocessorQuery, after, before *Cursor) (*TrustCenterSubprocessorQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultTrustCenterSubprocessorOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
+	}
+	return query, nil
+}
+
+func (p *trustcentersubprocessorPager) applyOrder(query *TrustCenterSubprocessorQuery) *TrustCenterSubprocessorQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultTrustCenterSubprocessorOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultTrustCenterSubprocessorOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *trustcentersubprocessorPager) orderExpr(query *TrustCenterSubprocessorQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultTrustCenterSubprocessorOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to TrustCenterSubprocessor.
+func (tcs *TrustCenterSubprocessorQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...TrustCenterSubprocessorPaginateOption,
+) (*TrustCenterSubprocessorConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newTrustCenterSubprocessorPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if tcs, err = pager.applyFilter(tcs); err != nil {
+		return nil, err
+	}
+	conn := &TrustCenterSubprocessorConnection{Edges: []*TrustCenterSubprocessorEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := tcs.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if tcs, err = pager.applyCursors(tcs, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		tcs.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := tcs.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	tcs = pager.applyOrder(tcs)
+	nodes, err := tcs.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// TrustCenterSubprocessorOrderFieldCreatedAt orders TrustCenterSubprocessor by created_at.
+	TrustCenterSubprocessorOrderFieldCreatedAt = &TrustCenterSubprocessorOrderField{
+		Value: func(tcs *TrustCenterSubprocessor) (ent.Value, error) {
+			return tcs.CreatedAt, nil
+		},
+		column: trustcentersubprocessor.FieldCreatedAt,
+		toTerm: trustcentersubprocessor.ByCreatedAt,
+		toCursor: func(tcs *TrustCenterSubprocessor) Cursor {
+			return Cursor{
+				ID:    tcs.ID,
+				Value: tcs.CreatedAt,
+			}
+		},
+	}
+	// TrustCenterSubprocessorOrderFieldUpdatedAt orders TrustCenterSubprocessor by updated_at.
+	TrustCenterSubprocessorOrderFieldUpdatedAt = &TrustCenterSubprocessorOrderField{
+		Value: func(tcs *TrustCenterSubprocessor) (ent.Value, error) {
+			return tcs.UpdatedAt, nil
+		},
+		column: trustcentersubprocessor.FieldUpdatedAt,
+		toTerm: trustcentersubprocessor.ByUpdatedAt,
+		toCursor: func(tcs *TrustCenterSubprocessor) Cursor {
+			return Cursor{
+				ID:    tcs.ID,
+				Value: tcs.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f TrustCenterSubprocessorOrderField) String() string {
+	var str string
+	switch f.column {
+	case TrustCenterSubprocessorOrderFieldCreatedAt.column:
+		str = "created_at"
+	case TrustCenterSubprocessorOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f TrustCenterSubprocessorOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *TrustCenterSubprocessorOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("TrustCenterSubprocessorOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *TrustCenterSubprocessorOrderFieldCreatedAt
+	case "updated_at":
+		*f = *TrustCenterSubprocessorOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid TrustCenterSubprocessorOrderField", str)
+	}
+	return nil
+}
+
+// TrustCenterSubprocessorOrderField defines the ordering field of TrustCenterSubprocessor.
+type TrustCenterSubprocessorOrderField struct {
+	// Value extracts the ordering value from the given TrustCenterSubprocessor.
+	Value    func(*TrustCenterSubprocessor) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) trustcentersubprocessor.OrderOption
+	toCursor func(*TrustCenterSubprocessor) Cursor
+}
+
+// TrustCenterSubprocessorOrder defines the ordering of TrustCenterSubprocessor.
+type TrustCenterSubprocessorOrder struct {
+	Direction OrderDirection                     `json:"direction"`
+	Field     *TrustCenterSubprocessorOrderField `json:"field"`
+}
+
+// DefaultTrustCenterSubprocessorOrder is the default ordering of TrustCenterSubprocessor.
+var DefaultTrustCenterSubprocessorOrder = &TrustCenterSubprocessorOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &TrustCenterSubprocessorOrderField{
+		Value: func(tcs *TrustCenterSubprocessor) (ent.Value, error) {
+			return tcs.ID, nil
+		},
+		column: trustcentersubprocessor.FieldID,
+		toTerm: trustcentersubprocessor.ByID,
+		toCursor: func(tcs *TrustCenterSubprocessor) Cursor {
+			return Cursor{ID: tcs.ID}
+		},
+	},
+}
+
+// ToEdge converts TrustCenterSubprocessor into TrustCenterSubprocessorEdge.
+func (tcs *TrustCenterSubprocessor) ToEdge(order *TrustCenterSubprocessorOrder) *TrustCenterSubprocessorEdge {
+	if order == nil {
+		order = DefaultTrustCenterSubprocessorOrder
+	}
+	return &TrustCenterSubprocessorEdge{
+		Node:   tcs,
+		Cursor: order.Field.toCursor(tcs),
+	}
+}
+
+// TrustCenterSubprocessorHistoryEdge is the edge representation of TrustCenterSubprocessorHistory.
+type TrustCenterSubprocessorHistoryEdge struct {
+	Node   *TrustCenterSubprocessorHistory `json:"node"`
+	Cursor Cursor                          `json:"cursor"`
+}
+
+// TrustCenterSubprocessorHistoryConnection is the connection containing edges to TrustCenterSubprocessorHistory.
+type TrustCenterSubprocessorHistoryConnection struct {
+	Edges      []*TrustCenterSubprocessorHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                              `json:"pageInfo"`
+	TotalCount int                                   `json:"totalCount"`
+}
+
+func (c *TrustCenterSubprocessorHistoryConnection) build(nodes []*TrustCenterSubprocessorHistory, pager *trustcentersubprocessorhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *TrustCenterSubprocessorHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *TrustCenterSubprocessorHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *TrustCenterSubprocessorHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*TrustCenterSubprocessorHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &TrustCenterSubprocessorHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// TrustCenterSubprocessorHistoryPaginateOption enables pagination customization.
+type TrustCenterSubprocessorHistoryPaginateOption func(*trustcentersubprocessorhistoryPager) error
+
+// WithTrustCenterSubprocessorHistoryOrder configures pagination ordering.
+func WithTrustCenterSubprocessorHistoryOrder(order *TrustCenterSubprocessorHistoryOrder) TrustCenterSubprocessorHistoryPaginateOption {
+	if order == nil {
+		order = DefaultTrustCenterSubprocessorHistoryOrder
+	}
+	o := *order
+	return func(pager *trustcentersubprocessorhistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultTrustCenterSubprocessorHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithTrustCenterSubprocessorHistoryFilter configures pagination filter.
+func WithTrustCenterSubprocessorHistoryFilter(filter func(*TrustCenterSubprocessorHistoryQuery) (*TrustCenterSubprocessorHistoryQuery, error)) TrustCenterSubprocessorHistoryPaginateOption {
+	return func(pager *trustcentersubprocessorhistoryPager) error {
+		if filter == nil {
+			return errors.New("TrustCenterSubprocessorHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type trustcentersubprocessorhistoryPager struct {
+	reverse bool
+	order   *TrustCenterSubprocessorHistoryOrder
+	filter  func(*TrustCenterSubprocessorHistoryQuery) (*TrustCenterSubprocessorHistoryQuery, error)
+}
+
+func newTrustCenterSubprocessorHistoryPager(opts []TrustCenterSubprocessorHistoryPaginateOption, reverse bool) (*trustcentersubprocessorhistoryPager, error) {
+	pager := &trustcentersubprocessorhistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultTrustCenterSubprocessorHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *trustcentersubprocessorhistoryPager) applyFilter(query *TrustCenterSubprocessorHistoryQuery) (*TrustCenterSubprocessorHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *trustcentersubprocessorhistoryPager) toCursor(tcsh *TrustCenterSubprocessorHistory) Cursor {
+	return p.order.Field.toCursor(tcsh)
+}
+
+func (p *trustcentersubprocessorhistoryPager) applyCursors(query *TrustCenterSubprocessorHistoryQuery, after, before *Cursor) (*TrustCenterSubprocessorHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultTrustCenterSubprocessorHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *trustcentersubprocessorhistoryPager) applyOrder(query *TrustCenterSubprocessorHistoryQuery) *TrustCenterSubprocessorHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultTrustCenterSubprocessorHistoryOrder.Field {
+		query = query.Order(DefaultTrustCenterSubprocessorHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *trustcentersubprocessorhistoryPager) orderExpr(query *TrustCenterSubprocessorHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultTrustCenterSubprocessorHistoryOrder.Field {
+			b.Comma().Ident(DefaultTrustCenterSubprocessorHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to TrustCenterSubprocessorHistory.
+func (tcsh *TrustCenterSubprocessorHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...TrustCenterSubprocessorHistoryPaginateOption,
+) (*TrustCenterSubprocessorHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newTrustCenterSubprocessorHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if tcsh, err = pager.applyFilter(tcsh); err != nil {
+		return nil, err
+	}
+	conn := &TrustCenterSubprocessorHistoryConnection{Edges: []*TrustCenterSubprocessorHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := tcsh.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if tcsh, err = pager.applyCursors(tcsh, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		tcsh.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := tcsh.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	tcsh = pager.applyOrder(tcsh)
+	nodes, err := tcsh.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// TrustCenterSubprocessorHistoryOrderFieldHistoryTime orders TrustCenterSubprocessorHistory by history_time.
+	TrustCenterSubprocessorHistoryOrderFieldHistoryTime = &TrustCenterSubprocessorHistoryOrderField{
+		Value: func(tcsh *TrustCenterSubprocessorHistory) (ent.Value, error) {
+			return tcsh.HistoryTime, nil
+		},
+		column: trustcentersubprocessorhistory.FieldHistoryTime,
+		toTerm: trustcentersubprocessorhistory.ByHistoryTime,
+		toCursor: func(tcsh *TrustCenterSubprocessorHistory) Cursor {
+			return Cursor{
+				ID:    tcsh.ID,
+				Value: tcsh.HistoryTime,
+			}
+		},
+	}
+	// TrustCenterSubprocessorHistoryOrderFieldCreatedAt orders TrustCenterSubprocessorHistory by created_at.
+	TrustCenterSubprocessorHistoryOrderFieldCreatedAt = &TrustCenterSubprocessorHistoryOrderField{
+		Value: func(tcsh *TrustCenterSubprocessorHistory) (ent.Value, error) {
+			return tcsh.CreatedAt, nil
+		},
+		column: trustcentersubprocessorhistory.FieldCreatedAt,
+		toTerm: trustcentersubprocessorhistory.ByCreatedAt,
+		toCursor: func(tcsh *TrustCenterSubprocessorHistory) Cursor {
+			return Cursor{
+				ID:    tcsh.ID,
+				Value: tcsh.CreatedAt,
+			}
+		},
+	}
+	// TrustCenterSubprocessorHistoryOrderFieldUpdatedAt orders TrustCenterSubprocessorHistory by updated_at.
+	TrustCenterSubprocessorHistoryOrderFieldUpdatedAt = &TrustCenterSubprocessorHistoryOrderField{
+		Value: func(tcsh *TrustCenterSubprocessorHistory) (ent.Value, error) {
+			return tcsh.UpdatedAt, nil
+		},
+		column: trustcentersubprocessorhistory.FieldUpdatedAt,
+		toTerm: trustcentersubprocessorhistory.ByUpdatedAt,
+		toCursor: func(tcsh *TrustCenterSubprocessorHistory) Cursor {
+			return Cursor{
+				ID:    tcsh.ID,
+				Value: tcsh.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f TrustCenterSubprocessorHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case TrustCenterSubprocessorHistoryOrderFieldHistoryTime.column:
+		str = "history_time"
+	case TrustCenterSubprocessorHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case TrustCenterSubprocessorHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f TrustCenterSubprocessorHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *TrustCenterSubprocessorHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("TrustCenterSubprocessorHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "history_time":
+		*f = *TrustCenterSubprocessorHistoryOrderFieldHistoryTime
+	case "created_at":
+		*f = *TrustCenterSubprocessorHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *TrustCenterSubprocessorHistoryOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid TrustCenterSubprocessorHistoryOrderField", str)
+	}
+	return nil
+}
+
+// TrustCenterSubprocessorHistoryOrderField defines the ordering field of TrustCenterSubprocessorHistory.
+type TrustCenterSubprocessorHistoryOrderField struct {
+	// Value extracts the ordering value from the given TrustCenterSubprocessorHistory.
+	Value    func(*TrustCenterSubprocessorHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) trustcentersubprocessorhistory.OrderOption
+	toCursor func(*TrustCenterSubprocessorHistory) Cursor
+}
+
+// TrustCenterSubprocessorHistoryOrder defines the ordering of TrustCenterSubprocessorHistory.
+type TrustCenterSubprocessorHistoryOrder struct {
+	Direction OrderDirection                            `json:"direction"`
+	Field     *TrustCenterSubprocessorHistoryOrderField `json:"field"`
+}
+
+// DefaultTrustCenterSubprocessorHistoryOrder is the default ordering of TrustCenterSubprocessorHistory.
+var DefaultTrustCenterSubprocessorHistoryOrder = &TrustCenterSubprocessorHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &TrustCenterSubprocessorHistoryOrderField{
+		Value: func(tcsh *TrustCenterSubprocessorHistory) (ent.Value, error) {
+			return tcsh.ID, nil
+		},
+		column: trustcentersubprocessorhistory.FieldID,
+		toTerm: trustcentersubprocessorhistory.ByID,
+		toCursor: func(tcsh *TrustCenterSubprocessorHistory) Cursor {
+			return Cursor{ID: tcsh.ID}
+		},
+	},
+}
+
+// ToEdge converts TrustCenterSubprocessorHistory into TrustCenterSubprocessorHistoryEdge.
+func (tcsh *TrustCenterSubprocessorHistory) ToEdge(order *TrustCenterSubprocessorHistoryOrder) *TrustCenterSubprocessorHistoryEdge {
+	if order == nil {
+		order = DefaultTrustCenterSubprocessorHistoryOrder
+	}
+	return &TrustCenterSubprocessorHistoryEdge{
 		Node:   tcsh,
 		Cursor: order.Field.toCursor(tcsh),
 	}
