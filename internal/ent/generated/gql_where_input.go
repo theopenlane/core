@@ -63704,6 +63704,12 @@ type ScheduledJobWhereInput struct {
 	JobTypeIn    []enums.JobType `json:"jobTypeIn,omitempty"`
 	JobTypeNotIn []enums.JobType `json:"jobTypeNotIn,omitempty"`
 
+	// "platform" field predicates.
+	Platform      *enums.JobPlatformType  `json:"platform,omitempty"`
+	PlatformNEQ   *enums.JobPlatformType  `json:"platformNEQ,omitempty"`
+	PlatformIn    []enums.JobPlatformType `json:"platformIn,omitempty"`
+	PlatformNotIn []enums.JobPlatformType `json:"platformNotIn,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -64152,6 +64158,18 @@ func (i *ScheduledJobWhereInput) P() (predicate.ScheduledJob, error) {
 	if len(i.JobTypeNotIn) > 0 {
 		predicates = append(predicates, scheduledjob.JobTypeNotIn(i.JobTypeNotIn...))
 	}
+	if i.Platform != nil {
+		predicates = append(predicates, scheduledjob.PlatformEQ(*i.Platform))
+	}
+	if i.PlatformNEQ != nil {
+		predicates = append(predicates, scheduledjob.PlatformNEQ(*i.PlatformNEQ))
+	}
+	if len(i.PlatformIn) > 0 {
+		predicates = append(predicates, scheduledjob.PlatformIn(i.PlatformIn...))
+	}
+	if len(i.PlatformNotIn) > 0 {
+		predicates = append(predicates, scheduledjob.PlatformNotIn(i.PlatformNotIn...))
+	}
 
 	if i.HasOwner != nil {
 		p := scheduledjob.HasOwner()
@@ -64366,6 +64384,12 @@ type ScheduledJobHistoryWhereInput struct {
 	JobTypeNEQ   *enums.JobType  `json:"jobTypeNEQ,omitempty"`
 	JobTypeIn    []enums.JobType `json:"jobTypeIn,omitempty"`
 	JobTypeNotIn []enums.JobType `json:"jobTypeNotIn,omitempty"`
+
+	// "platform" field predicates.
+	Platform      *enums.JobPlatformType  `json:"platform,omitempty"`
+	PlatformNEQ   *enums.JobPlatformType  `json:"platformNEQ,omitempty"`
+	PlatformIn    []enums.JobPlatformType `json:"platformIn,omitempty"`
+	PlatformNotIn []enums.JobPlatformType `json:"platformNotIn,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -64891,6 +64915,18 @@ func (i *ScheduledJobHistoryWhereInput) P() (predicate.ScheduledJobHistory, erro
 	}
 	if len(i.JobTypeNotIn) > 0 {
 		predicates = append(predicates, scheduledjobhistory.JobTypeNotIn(i.JobTypeNotIn...))
+	}
+	if i.Platform != nil {
+		predicates = append(predicates, scheduledjobhistory.PlatformEQ(*i.Platform))
+	}
+	if i.PlatformNEQ != nil {
+		predicates = append(predicates, scheduledjobhistory.PlatformNEQ(*i.PlatformNEQ))
+	}
+	if len(i.PlatformIn) > 0 {
+		predicates = append(predicates, scheduledjobhistory.PlatformIn(i.PlatformIn...))
+	}
+	if len(i.PlatformNotIn) > 0 {
+		predicates = append(predicates, scheduledjobhistory.PlatformNotIn(i.PlatformNotIn...))
 	}
 
 	switch len(predicates) {

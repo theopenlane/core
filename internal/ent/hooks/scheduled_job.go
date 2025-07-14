@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/core/pkg/windmill"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/utils/ulids"
-	"gopkg.in/yaml.v3"
 )
 
 // HookScheduledJobCreate verifies a scheduled job has
@@ -30,7 +29,7 @@ func HookScheduledJobCreate() ent.Hook {
 				return next.Mutate(ctx, mutation)
 			}
 
-			// Validate download URL if provided
+			// validate download URL if provided
 			downloadURL, hasDownloadURL := mutation.DownloadURL()
 			if hasDownloadURL && downloadURL != "" {
 				if _, err := models.ValidateURL(downloadURL); err != nil {
@@ -44,7 +43,6 @@ func HookScheduledJobCreate() ent.Hook {
 				return nil, err
 			}
 
-			// Create Windmill flow if client is available and we're creating a new job
 			if mutation.Op() == ent.OpCreate {
 				if err := createWindmillFlow(ctx, mutation); err != nil {
 					return nil, fmt.Errorf("failed to create windmill flow: %w", err)
@@ -75,7 +73,7 @@ func createWindmillFlow(ctx context.Context, mutation *generated.ScheduledJobMut
 		return errors.New("download_url is required for windmill flow creation") // nolint:err113
 	}
 
-	flowValue, err := getFlowValue(ctx, downloadURL)
+	rawCode, err := downloadRawCode(ctx, downloadURL)
 	if err != nil {
 		return err
 	}
@@ -86,10 +84,13 @@ func createWindmillFlow(ctx context.Context, mutation *generated.ScheduledJobMut
 		summary = fmt.Sprintf("%s - %s", title, description)
 	}
 
+	platform, _ := mutation.Platform()
+
 	flowReq := windmill.CreateFlowRequest{
-		Path:    flowPath,
-		Summary: summary,
-		Value:   flowValue,
+		Path:     flowPath,
+		Summary:  summary,
+		Value:    []any{rawCode},
+		Language: platform,
 	}
 
 	resp, err := windmillClient.CreateFlow(ctx, flowReq)
@@ -101,62 +102,37 @@ func createWindmillFlow(ctx context.Context, mutation *generated.ScheduledJobMut
 	return nil
 }
 
-// getFlowValue returns the appropriate flow value based on downloadURL
-func getFlowValue(ctx context.Context, downloadURL string) ([]any, error) {
+// downloadRawCode downloads raw code from a URL that will be wrapped into a Windmill flow
+func downloadRawCode(ctx context.Context, downloadURL string) (string, error) {
 	if downloadURL == "" {
-		return nil, errors.New("download_url is required for windmill flow creation") // nolint:err113
+		return "", errors.New("download_url is required for raw code download") // nolint:err113
 	}
 
-	return downloadFlowDefinition(ctx, downloadURL)
-}
-
-// downloadFlowDefinition downloads and parses a Windmill flow definition from a URL
-func downloadFlowDefinition(ctx context.Context, downloadURL string) ([]any, error) {
 	client := &http.Client{
 		Timeout: 30 * time.Second,
 	}
 
 	req, err := http.NewRequestWithContext(ctx, "GET", downloadURL, nil)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create request: %w", err)
+		return "", fmt.Errorf("failed to create request: %w", err)
 	}
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("failed to download flow definition: %w", err)
+		return "", fmt.Errorf("failed to download raw code: %w", err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to download flow definition, status: %d", resp.StatusCode)
+		return "", fmt.Errorf("failed to download raw code, status: %d", resp.StatusCode)
 	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read response body: %w", err)
+		return "", fmt.Errorf("failed to read response body: %w", err)
 	}
 
-	var flowDef map[string]any
-	if err := yaml.Unmarshal(body, &flowDef); err != nil {
-		return nil, fmt.Errorf("failed to parse flow definition YAML: %w", err)
-	}
-
-	if value, ok := flowDef["value"]; ok {
-		if modules, ok := value.([]any); ok {
-			return modules, nil
-		}
-		if valueMap, ok := value.(map[string]any); ok {
-			if modules, ok := valueMap["modules"].([]any); ok {
-				return modules, nil
-			}
-		}
-	}
-
-	if modules, ok := flowDef["modules"].([]any); ok {
-		return modules, nil
-	}
-
-	return nil, fmt.Errorf("invalid flow definition format: missing modules/value array")
+	return string(body), nil
 }
 
 // generateFlowPath generates a unique random flow path
@@ -180,7 +156,6 @@ func HookControlScheduledJobCreate() ent.Hook {
 				return nil, err
 			}
 
-			// Create Windmill scheduled job if client is available and we're creating a new job
 			if mutation.Op() == ent.OpCreate && hasCron && cron != "" {
 				if err := createWindmillScheduledJob(ctx, mutation); err != nil {
 					return nil, fmt.Errorf("failed to create windmill scheduled job: %w", err)
@@ -193,7 +168,6 @@ func HookControlScheduledJobCreate() ent.Hook {
 }
 
 func validateCron(cron models.Cron, hasCron bool) error {
-	// Only validate cron now, cadence is no longer supported
 	if !hasCron || cron == "" {
 		return nil
 	}
@@ -219,7 +193,6 @@ func createWindmillScheduledJob(ctx context.Context, mutation *generated.Control
 		return errors.New("cron is required for windmill scheduled job creation") // nolint:err113
 	}
 
-	// Get config for timezone, on_failure, on_success from ent configuration
 	entConfig := mutation.Client().EntConfig
 	if entConfig == nil {
 		return errors.New("ent config is required") // nolint:err113
@@ -227,7 +200,6 @@ func createWindmillScheduledJob(ctx context.Context, mutation *generated.Control
 
 	scheduledJobPath := fmt.Sprintf("s/openlane/control_scheduled_job_%s", generateFlowPath())
 
-	// Create the scheduled job request
 	enabled := true
 	scheduleReq := windmill.CreateScheduledJobRequest{
 		Path:     scheduledJobPath,
@@ -242,8 +214,6 @@ func createWindmillScheduledJob(ctx context.Context, mutation *generated.Control
 		return err
 	}
 
-	// Store the scheduled job path back to the mutation if needed
-	// Note: ControlScheduledJob might need a windmill_schedule_path field
 	_ = resp.Path
 
 	return nil

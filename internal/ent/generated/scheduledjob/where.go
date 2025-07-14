@@ -859,6 +859,36 @@ func JobTypeNotIn(vs ...enums.JobType) predicate.ScheduledJob {
 	return predicate.ScheduledJob(sql.FieldNotIn(FieldJobType, v...))
 }
 
+// PlatformEQ applies the EQ predicate on the "platform" field.
+func PlatformEQ(v enums.JobPlatformType) predicate.ScheduledJob {
+	vc := v
+	return predicate.ScheduledJob(sql.FieldEQ(FieldPlatform, vc))
+}
+
+// PlatformNEQ applies the NEQ predicate on the "platform" field.
+func PlatformNEQ(v enums.JobPlatformType) predicate.ScheduledJob {
+	vc := v
+	return predicate.ScheduledJob(sql.FieldNEQ(FieldPlatform, vc))
+}
+
+// PlatformIn applies the In predicate on the "platform" field.
+func PlatformIn(vs ...enums.JobPlatformType) predicate.ScheduledJob {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ScheduledJob(sql.FieldIn(FieldPlatform, v...))
+}
+
+// PlatformNotIn applies the NotIn predicate on the "platform" field.
+func PlatformNotIn(vs ...enums.JobPlatformType) predicate.ScheduledJob {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ScheduledJob(sql.FieldNotIn(FieldPlatform, v...))
+}
+
 // ScriptEQ applies the EQ predicate on the "script" field.
 func ScriptEQ(v string) predicate.ScheduledJob {
 	return predicate.ScheduledJob(sql.FieldEQ(FieldScript, v))

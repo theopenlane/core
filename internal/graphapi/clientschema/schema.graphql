@@ -9463,6 +9463,10 @@ input CreateScheduledJobInput {
 	"""
 	jobType: ScheduledJobJobType
 	"""
+	the platform to use to execute this job
+	"""
+	platform: ScheduledJobJobPlatformType!
+	"""
 	the script to run
 	"""
 	script: String
@@ -46210,6 +46214,10 @@ type ScheduledJob implements Node {
 	"""
 	jobType: ScheduledJobJobType!
 	"""
+	the platform to use to execute this job
+	"""
+	platform: ScheduledJobJobPlatformType!
+	"""
 	the script to run
 	"""
 	script: String
@@ -46330,6 +46338,10 @@ type ScheduledJobHistory implements Node {
 	"""
 	jobType: ScheduledJobHistoryJobType!
 	"""
+	the platform to use to execute this job
+	"""
+	platform: ScheduledJobHistoryJobPlatformType!
+	"""
 	the script to run
 	"""
 	script: String
@@ -46385,6 +46397,13 @@ type ScheduledJobHistoryEdge {
 	cursor: Cursor!
 }
 """
+ScheduledJobHistoryJobPlatformType is enum for the field platform
+"""
+enum ScheduledJobHistoryJobPlatformType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobPlatformType") {
+	GO
+	TS
+}
+"""
 ScheduledJobHistoryJobType is enum for the field job_type
 """
 enum ScheduledJobHistoryJobType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobType") {
@@ -46420,6 +46439,7 @@ enum ScheduledJobHistoryOrderField {
 	updated_at
 	title
 	JOB_TYPE
+	platform
 }
 """
 ScheduledJobHistoryWhereInput is used for filtering ScheduledJobHistory objects.
@@ -46622,6 +46642,20 @@ input ScheduledJobHistoryWhereInput {
 	jobTypeNEQ: ScheduledJobHistoryJobType
 	jobTypeIn: [ScheduledJobHistoryJobType!]
 	jobTypeNotIn: [ScheduledJobHistoryJobType!]
+	"""
+	platform field predicates
+	"""
+	platform: ScheduledJobHistoryJobPlatformType
+	platformNEQ: ScheduledJobHistoryJobPlatformType
+	platformIn: [ScheduledJobHistoryJobPlatformType!]
+	platformNotIn: [ScheduledJobHistoryJobPlatformType!]
+}
+"""
+ScheduledJobJobPlatformType is enum for the field platform
+"""
+enum ScheduledJobJobPlatformType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobPlatformType") {
+	GO
+	TS
 }
 """
 ScheduledJobJobType is enum for the field job_type
@@ -46650,6 +46684,7 @@ enum ScheduledJobOrderField {
 	updated_at
 	title
 	JOB_TYPE
+	platform
 }
 type ScheduledJobRun implements Node {
 	id: ID!
@@ -47101,6 +47136,13 @@ input ScheduledJobWhereInput {
 	jobTypeNEQ: ScheduledJobJobType
 	jobTypeIn: [ScheduledJobJobType!]
 	jobTypeNotIn: [ScheduledJobJobType!]
+	"""
+	platform field predicates
+	"""
+	platform: ScheduledJobJobPlatformType
+	platformNEQ: ScheduledJobJobPlatformType
+	platformIn: [ScheduledJobJobPlatformType!]
+	platformNotIn: [ScheduledJobJobPlatformType!]
 	"""
 	owner edge predicates
 	"""

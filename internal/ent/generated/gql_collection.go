@@ -36982,6 +36982,11 @@ func (sj *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, scheduledjob.FieldJobType)
 				fieldSeen[scheduledjob.FieldJobType] = struct{}{}
 			}
+		case "platform":
+			if _, ok := fieldSeen[scheduledjob.FieldPlatform]; !ok {
+				selectedFields = append(selectedFields, scheduledjob.FieldPlatform)
+				fieldSeen[scheduledjob.FieldPlatform] = struct{}{}
+			}
 		case "script":
 			if _, ok := fieldSeen[scheduledjob.FieldScript]; !ok {
 				selectedFields = append(selectedFields, scheduledjob.FieldScript)
@@ -37171,6 +37176,11 @@ func (sjh *ScheduledJobHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[scheduledjobhistory.FieldJobType]; !ok {
 				selectedFields = append(selectedFields, scheduledjobhistory.FieldJobType)
 				fieldSeen[scheduledjobhistory.FieldJobType] = struct{}{}
+			}
+		case "platform":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldPlatform]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldPlatform)
+				fieldSeen[scheduledjobhistory.FieldPlatform] = struct{}{}
 			}
 		case "script":
 			if _, ok := fieldSeen[scheduledjobhistory.FieldScript]; !ok {

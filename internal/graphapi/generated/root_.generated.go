@@ -3799,6 +3799,7 @@ type ComplexityRoot struct {
 		JobType       func(childComplexity int) int
 		Owner         func(childComplexity int) int
 		OwnerID       func(childComplexity int) int
+		Platform      func(childComplexity int) int
 		Script        func(childComplexity int) int
 		SystemOwned   func(childComplexity int) int
 		Tags          func(childComplexity int) int
@@ -3845,6 +3846,7 @@ type ComplexityRoot struct {
 		JobType       func(childComplexity int) int
 		Operation     func(childComplexity int) int
 		OwnerID       func(childComplexity int) int
+		Platform      func(childComplexity int) int
 		Ref           func(childComplexity int) int
 		Script        func(childComplexity int) int
 		SystemOwned   func(childComplexity int) int
@@ -26695,6 +26697,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJob.OwnerID(childComplexity), true
 
+	case "ScheduledJob.platform":
+		if e.complexity.ScheduledJob.Platform == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.Platform(childComplexity), true
+
 	case "ScheduledJob.script":
 		if e.complexity.ScheduledJob.Script == nil {
 			break
@@ -26890,6 +26899,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScheduledJobHistory.OwnerID(childComplexity), true
+
+	case "ScheduledJobHistory.platform":
+		if e.complexity.ScheduledJobHistory.Platform == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.Platform(childComplexity), true
 
 	case "ScheduledJobHistory.ref":
 		if e.complexity.ScheduledJobHistory.Ref == nil {
@@ -43815,6 +43831,10 @@ input CreateScheduledJobInput {
   the type of this job
   """
   jobType: ScheduledJobJobType
+  """
+  the platform to use to execute this job
+  """
+  platform: ScheduledJobJobPlatformType!
   """
   the script to run
   """
@@ -73672,6 +73692,10 @@ type ScheduledJob implements Node {
   """
   jobType: ScheduledJobJobType!
   """
+  the platform to use to execute this job
+  """
+  platform: ScheduledJobJobPlatformType!
+  """
   the script to run
   """
   script: String
@@ -73765,6 +73789,10 @@ type ScheduledJobHistory implements Node {
   """
   jobType: ScheduledJobHistoryJobType!
   """
+  the platform to use to execute this job
+  """
+  platform: ScheduledJobHistoryJobPlatformType!
+  """
   the script to run
   """
   script: String
@@ -73820,6 +73848,13 @@ type ScheduledJobHistoryEdge {
   cursor: Cursor!
 }
 """
+ScheduledJobHistoryJobPlatformType is enum for the field platform
+"""
+enum ScheduledJobHistoryJobPlatformType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobPlatformType") {
+  GO
+  TS
+}
+"""
 ScheduledJobHistoryJobType is enum for the field job_type
 """
 enum ScheduledJobHistoryJobType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobType") {
@@ -73855,6 +73890,7 @@ enum ScheduledJobHistoryOrderField {
   updated_at
   title
   JOB_TYPE
+  platform
 }
 """
 ScheduledJobHistoryWhereInput is used for filtering ScheduledJobHistory objects.
@@ -74057,6 +74093,20 @@ input ScheduledJobHistoryWhereInput {
   jobTypeNEQ: ScheduledJobHistoryJobType
   jobTypeIn: [ScheduledJobHistoryJobType!]
   jobTypeNotIn: [ScheduledJobHistoryJobType!]
+  """
+  platform field predicates
+  """
+  platform: ScheduledJobHistoryJobPlatformType
+  platformNEQ: ScheduledJobHistoryJobPlatformType
+  platformIn: [ScheduledJobHistoryJobPlatformType!]
+  platformNotIn: [ScheduledJobHistoryJobPlatformType!]
+}
+"""
+ScheduledJobJobPlatformType is enum for the field platform
+"""
+enum ScheduledJobJobPlatformType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobPlatformType") {
+  GO
+  TS
 }
 """
 ScheduledJobJobType is enum for the field job_type
@@ -74085,6 +74135,7 @@ enum ScheduledJobOrderField {
   updated_at
   title
   JOB_TYPE
+  platform
 }
 type ScheduledJobRun implements Node {
   id: ID!
@@ -74527,6 +74578,13 @@ input ScheduledJobWhereInput {
   jobTypeNEQ: ScheduledJobJobType
   jobTypeIn: [ScheduledJobJobType!]
   jobTypeNotIn: [ScheduledJobJobType!]
+  """
+  platform field predicates
+  """
+  platform: ScheduledJobJobPlatformType
+  platformNEQ: ScheduledJobJobPlatformType
+  platformIn: [ScheduledJobJobPlatformType!]
+  platformNotIn: [ScheduledJobJobPlatformType!]
   """
   owner edge predicates
   """

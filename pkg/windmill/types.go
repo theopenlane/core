@@ -1,20 +1,26 @@
 package windmill
 
-import "time"
+import (
+	"time"
+
+	"github.com/theopenlane/core/pkg/enums"
+)
 
 // CreateFlowRequest represents the request structure for creating a new flow
 type CreateFlowRequest struct {
-	Path    string `json:"path"`
-	Summary string `json:"summary,omitempty"`
-	Value   []any  `json:"value"` // Array of modules that make up the flow
-	Schema  any    `json:"schema,omitempty"`
+	Path     string                `json:"path"`
+	Summary  string                `json:"summary,omitempty"`
+	Value    []any                 `json:"value"` // Array of modules that make up the flow
+	Schema   any                   `json:"schema,omitempty"`
+	Language enums.JobPlatformType `json:"language"` // Programming language for the flow
 }
 
 // UpdateFlowRequest represents the request structure for updating an existing flow
 type UpdateFlowRequest struct {
-	Summary string `json:"summary,omitempty"`
-	Value   []any  `json:"value"` // Array of modules that make up the flow
-	Schema  any    `json:"schema,omitempty"`
+	Summary  string                `json:"summary,omitempty"`
+	Value    []any                 `json:"value"` // Array of modules that make up the flow
+	Schema   any                   `json:"schema,omitempty"`
+	Language enums.JobPlatformType `json:"language"` // Programming language for the flow
 }
 
 // CreateFlowResponse represents the response after creating a flow

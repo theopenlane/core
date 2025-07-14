@@ -30343,6 +30343,20 @@ var (
 			}
 		},
 	}
+	// ScheduledJobOrderFieldPlatform orders ScheduledJob by platform.
+	ScheduledJobOrderFieldPlatform = &ScheduledJobOrderField{
+		Value: func(sj *ScheduledJob) (ent.Value, error) {
+			return sj.Platform, nil
+		},
+		column: scheduledjob.FieldPlatform,
+		toTerm: scheduledjob.ByPlatform,
+		toCursor: func(sj *ScheduledJob) Cursor {
+			return Cursor{
+				ID:    sj.ID,
+				Value: sj.Platform,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -30357,6 +30371,8 @@ func (f ScheduledJobOrderField) String() string {
 		str = "title"
 	case ScheduledJobOrderFieldJobType.column:
 		str = "JOB_TYPE"
+	case ScheduledJobOrderFieldPlatform.column:
+		str = "platform"
 	}
 	return str
 }
@@ -30381,6 +30397,8 @@ func (f *ScheduledJobOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ScheduledJobOrderFieldTitle
 	case "JOB_TYPE":
 		*f = *ScheduledJobOrderFieldJobType
+	case "platform":
+		*f = *ScheduledJobOrderFieldPlatform
 	default:
 		return fmt.Errorf("%s is not a valid ScheduledJobOrderField", str)
 	}
@@ -30707,6 +30725,20 @@ var (
 			}
 		},
 	}
+	// ScheduledJobHistoryOrderFieldPlatform orders ScheduledJobHistory by platform.
+	ScheduledJobHistoryOrderFieldPlatform = &ScheduledJobHistoryOrderField{
+		Value: func(sjh *ScheduledJobHistory) (ent.Value, error) {
+			return sjh.Platform, nil
+		},
+		column: scheduledjobhistory.FieldPlatform,
+		toTerm: scheduledjobhistory.ByPlatform,
+		toCursor: func(sjh *ScheduledJobHistory) Cursor {
+			return Cursor{
+				ID:    sjh.ID,
+				Value: sjh.Platform,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -30723,6 +30755,8 @@ func (f ScheduledJobHistoryOrderField) String() string {
 		str = "title"
 	case ScheduledJobHistoryOrderFieldJobType.column:
 		str = "JOB_TYPE"
+	case ScheduledJobHistoryOrderFieldPlatform.column:
+		str = "platform"
 	}
 	return str
 }
@@ -30749,6 +30783,8 @@ func (f *ScheduledJobHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ScheduledJobHistoryOrderFieldTitle
 	case "JOB_TYPE":
 		*f = *ScheduledJobHistoryOrderFieldJobType
+	case "platform":
+		*f = *ScheduledJobHistoryOrderFieldPlatform
 	default:
 		return fmt.Errorf("%s is not a valid ScheduledJobHistoryOrderField", str)
 	}

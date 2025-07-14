@@ -215,6 +215,12 @@ func (sjhc *ScheduledJobHistoryCreate) SetNillableJobType(et *enums.JobType) *Sc
 	return sjhc
 }
 
+// SetPlatform sets the "platform" field.
+func (sjhc *ScheduledJobHistoryCreate) SetPlatform(ept enums.JobPlatformType) *ScheduledJobHistoryCreate {
+	sjhc.mutation.SetPlatform(ept)
+	return sjhc
+}
+
 // SetScript sets the "script" field.
 func (sjhc *ScheduledJobHistoryCreate) SetScript(s string) *ScheduledJobHistoryCreate {
 	sjhc.mutation.SetScript(s)
@@ -396,6 +402,14 @@ func (sjhc *ScheduledJobHistoryCreate) check() error {
 			return &ValidationError{Name: "job_type", err: fmt.Errorf(`generated: validator failed for field "ScheduledJobHistory.job_type": %w`, err)}
 		}
 	}
+	if _, ok := sjhc.mutation.Platform(); !ok {
+		return &ValidationError{Name: "platform", err: errors.New(`generated: missing required field "ScheduledJobHistory.platform"`)}
+	}
+	if v, ok := sjhc.mutation.Platform(); ok {
+		if err := scheduledjobhistory.PlatformValidator(v); err != nil {
+			return &ValidationError{Name: "platform", err: fmt.Errorf(`generated: validator failed for field "ScheduledJobHistory.platform": %w`, err)}
+		}
+	}
 	if _, ok := sjhc.mutation.WindmillPath(); !ok {
 		return &ValidationError{Name: "windmill_path", err: errors.New(`generated: missing required field "ScheduledJobHistory.windmill_path"`)}
 	}
@@ -514,6 +528,10 @@ func (sjhc *ScheduledJobHistoryCreate) createSpec() (*ScheduledJobHistory, *sqlg
 	if value, ok := sjhc.mutation.JobType(); ok {
 		_spec.SetField(scheduledjobhistory.FieldJobType, field.TypeEnum, value)
 		_node.JobType = value
+	}
+	if value, ok := sjhc.mutation.Platform(); ok {
+		_spec.SetField(scheduledjobhistory.FieldPlatform, field.TypeEnum, value)
+		_node.Platform = value
 	}
 	if value, ok := sjhc.mutation.Script(); ok {
 		_spec.SetField(scheduledjobhistory.FieldScript, field.TypeString, value)

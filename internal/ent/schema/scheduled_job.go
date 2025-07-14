@@ -61,6 +61,14 @@ func (ScheduledJob) Fields() []ent.Field {
 			).
 			Comment("the type of this job"),
 
+		field.Enum("platform").
+			GoType(enums.JobPlatformType("")).
+			Immutable().
+			Annotations(
+				entgql.OrderField("platform"),
+			).
+			Comment("the platform to use to execute this job"),
+
 		field.String("script").
 			Annotations(
 				entgql.Skip(
@@ -91,8 +99,8 @@ func (ScheduledJob) Fields() []ent.Field {
 			).
 			Comment("the url from where to download the script from"),
 
-		// Default config values
 		field.JSON("configuration", models.JobConfiguration{}).
+			Optional().
 			Comment("the configuration to run this job"),
 
 		field.JSON("cadence", models.JobCadence{}).

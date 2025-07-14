@@ -5691,6 +5691,8 @@ type CreateScheduledJobInput struct {
 	Description *string `json:"description,omitempty"`
 	// the type of this job
 	JobType *enums.JobType `json:"jobType,omitempty"`
+	// the programming language for this job
+	Language *enums.JobPlatformType `json:"language,omitempty"`
 	// the script to run
 	Script *string `json:"script,omitempty"`
 	// the url from where to download the script from
@@ -21451,6 +21453,8 @@ type ScheduledJob struct {
 	Description *string `json:"description,omitempty"`
 	// the type of this job
 	JobType enums.JobType `json:"jobType"`
+	// the programming language for this job
+	Language enums.JobPlatformType `json:"language"`
 	// the script to run
 	Script *string `json:"script,omitempty"`
 	// Windmill path
@@ -21527,6 +21531,8 @@ type ScheduledJobHistory struct {
 	Description *string `json:"description,omitempty"`
 	// the type of this job
 	JobType enums.JobType `json:"jobType"`
+	// the programming language for this job
+	Language enums.JobPlatformType `json:"language"`
 	// the script to run
 	Script *string `json:"script,omitempty"`
 	// Windmill path
@@ -21740,6 +21746,11 @@ type ScheduledJobHistoryWhereInput struct {
 	JobTypeNeq   *enums.JobType  `json:"jobTypeNEQ,omitempty"`
 	JobTypeIn    []enums.JobType `json:"jobTypeIn,omitempty"`
 	JobTypeNotIn []enums.JobType `json:"jobTypeNotIn,omitempty"`
+	// language field predicates
+	Language      *enums.JobPlatformType  `json:"language,omitempty"`
+	LanguageNeq   *enums.JobPlatformType  `json:"languageNEQ,omitempty"`
+	LanguageIn    []enums.JobPlatformType `json:"languageIn,omitempty"`
+	LanguageNotIn []enums.JobPlatformType `json:"languageNotIn,omitempty"`
 }
 
 // Ordering options for ScheduledJob connections
@@ -22104,6 +22115,11 @@ type ScheduledJobWhereInput struct {
 	JobTypeNeq   *enums.JobType  `json:"jobTypeNEQ,omitempty"`
 	JobTypeIn    []enums.JobType `json:"jobTypeIn,omitempty"`
 	JobTypeNotIn []enums.JobType `json:"jobTypeNotIn,omitempty"`
+	// language field predicates
+	Language      *enums.JobPlatformType  `json:"language,omitempty"`
+	LanguageNeq   *enums.JobPlatformType  `json:"languageNEQ,omitempty"`
+	LanguageIn    []enums.JobPlatformType `json:"languageIn,omitempty"`
+	LanguageNotIn []enums.JobPlatformType `json:"languageNotIn,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -29103,6 +29119,8 @@ type UpdateScheduledJobInput struct {
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
 	// the type of this job
 	JobType *enums.JobType `json:"jobType,omitempty"`
+	// the programming language for this job
+	Language *enums.JobPlatformType `json:"language,omitempty"`
 	// the script to run
 	Script      *string `json:"script,omitempty"`
 	ClearScript *bool   `json:"clearScript,omitempty"`
@@ -35690,6 +35708,7 @@ const (
 	ScheduledJobHistoryOrderFieldUpdatedAt   ScheduledJobHistoryOrderField = "updated_at"
 	ScheduledJobHistoryOrderFieldTitle       ScheduledJobHistoryOrderField = "title"
 	ScheduledJobHistoryOrderFieldJobType     ScheduledJobHistoryOrderField = "JOB_TYPE"
+	ScheduledJobHistoryOrderFieldLanguage    ScheduledJobHistoryOrderField = "language"
 )
 
 var AllScheduledJobHistoryOrderField = []ScheduledJobHistoryOrderField{
@@ -35698,11 +35717,12 @@ var AllScheduledJobHistoryOrderField = []ScheduledJobHistoryOrderField{
 	ScheduledJobHistoryOrderFieldUpdatedAt,
 	ScheduledJobHistoryOrderFieldTitle,
 	ScheduledJobHistoryOrderFieldJobType,
+	ScheduledJobHistoryOrderFieldLanguage,
 }
 
 func (e ScheduledJobHistoryOrderField) IsValid() bool {
 	switch e {
-	case ScheduledJobHistoryOrderFieldHistoryTime, ScheduledJobHistoryOrderFieldCreatedAt, ScheduledJobHistoryOrderFieldUpdatedAt, ScheduledJobHistoryOrderFieldTitle, ScheduledJobHistoryOrderFieldJobType:
+	case ScheduledJobHistoryOrderFieldHistoryTime, ScheduledJobHistoryOrderFieldCreatedAt, ScheduledJobHistoryOrderFieldUpdatedAt, ScheduledJobHistoryOrderFieldTitle, ScheduledJobHistoryOrderFieldJobType, ScheduledJobHistoryOrderFieldLanguage:
 		return true
 	}
 	return false
@@ -35751,6 +35771,7 @@ const (
 	ScheduledJobOrderFieldUpdatedAt ScheduledJobOrderField = "updated_at"
 	ScheduledJobOrderFieldTitle     ScheduledJobOrderField = "title"
 	ScheduledJobOrderFieldJobType   ScheduledJobOrderField = "JOB_TYPE"
+	ScheduledJobOrderFieldLanguage  ScheduledJobOrderField = "language"
 )
 
 var AllScheduledJobOrderField = []ScheduledJobOrderField{
@@ -35758,11 +35779,12 @@ var AllScheduledJobOrderField = []ScheduledJobOrderField{
 	ScheduledJobOrderFieldUpdatedAt,
 	ScheduledJobOrderFieldTitle,
 	ScheduledJobOrderFieldJobType,
+	ScheduledJobOrderFieldLanguage,
 }
 
 func (e ScheduledJobOrderField) IsValid() bool {
 	switch e {
-	case ScheduledJobOrderFieldCreatedAt, ScheduledJobOrderFieldUpdatedAt, ScheduledJobOrderFieldTitle, ScheduledJobOrderFieldJobType:
+	case ScheduledJobOrderFieldCreatedAt, ScheduledJobOrderFieldUpdatedAt, ScheduledJobOrderFieldTitle, ScheduledJobOrderFieldJobType, ScheduledJobOrderFieldLanguage:
 		return true
 	}
 	return false

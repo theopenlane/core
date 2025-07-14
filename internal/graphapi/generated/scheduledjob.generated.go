@@ -89,6 +89,8 @@ func (ec *executionContext) fieldContext_ScheduledJobBulkCreatePayload_scheduled
 				return ec.fieldContext_ScheduledJob_description(ctx, field)
 			case "jobType":
 				return ec.fieldContext_ScheduledJob_jobType(ctx, field)
+			case "platform":
+				return ec.fieldContext_ScheduledJob_platform(ctx, field)
 			case "script":
 				return ec.fieldContext_ScheduledJob_script(ctx, field)
 			case "windmillPath":
@@ -173,6 +175,8 @@ func (ec *executionContext) fieldContext_ScheduledJobCreatePayload_scheduledJob(
 				return ec.fieldContext_ScheduledJob_description(ctx, field)
 			case "jobType":
 				return ec.fieldContext_ScheduledJob_jobType(ctx, field)
+			case "platform":
+				return ec.fieldContext_ScheduledJob_platform(ctx, field)
 			case "script":
 				return ec.fieldContext_ScheduledJob_script(ctx, field)
 			case "windmillPath":
@@ -301,6 +305,8 @@ func (ec *executionContext) fieldContext_ScheduledJobUpdatePayload_scheduledJob(
 				return ec.fieldContext_ScheduledJob_description(ctx, field)
 			case "jobType":
 				return ec.fieldContext_ScheduledJob_jobType(ctx, field)
+			case "platform":
+				return ec.fieldContext_ScheduledJob_platform(ctx, field)
 			case "script":
 				return ec.fieldContext_ScheduledJob_script(ctx, field)
 			case "windmillPath":

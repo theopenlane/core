@@ -9401,6 +9401,7 @@ type CreateScheduledJobInput struct {
 	Title         string
 	Description   *string
 	JobType       *enums.JobType
+	Platform      enums.JobPlatformType
 	Script        *string
 	DownloadURL   string
 	Configuration models.JobConfiguration
@@ -9421,6 +9422,7 @@ func (i *CreateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
 	if v := i.JobType; v != nil {
 		m.SetJobType(*v)
 	}
+	m.SetPlatform(i.Platform)
 	if v := i.Script; v != nil {
 		m.SetScript(*v)
 	}

@@ -8709,6 +8709,10 @@ func (m *ScheduledJobMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetJobType(jobType)
 	}
 
+	if platform, exists := m.Platform(); exists {
+		create = create.SetPlatform(platform)
+	}
+
 	if script, exists := m.Script(); exists {
 		create = create.SetScript(script)
 	}
@@ -8842,6 +8846,12 @@ func (m *ScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetJobType(scheduledjob.JobType)
 		}
 
+		if platform, exists := m.Platform(); exists {
+			create = create.SetPlatform(platform)
+		} else {
+			create = create.SetPlatform(scheduledjob.Platform)
+		}
+
 		if script, exists := m.Script(); exists {
 			create = create.SetScript(script)
 		} else {
@@ -8926,6 +8936,7 @@ func (m *ScheduledJobMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetTitle(scheduledjob.Title).
 			SetDescription(scheduledjob.Description).
 			SetJobType(scheduledjob.JobType).
+			SetPlatform(scheduledjob.Platform).
 			SetScript(scheduledjob.Script).
 			SetWindmillPath(scheduledjob.WindmillPath).
 			SetDownloadURL(scheduledjob.DownloadURL).
