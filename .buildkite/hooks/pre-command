@@ -2,6 +2,65 @@
 
 set -euo pipefail
 
+echo "🔧 Setting up build environment..."
+
+# Go build cache directories
 mkdir -p $HOME/.cache/go-build
 mkdir -p $HOME/.cache/golangci-lint
 mkdir -p $HOME/.cache/go/pkg/mod
+
+# Docker layer caching setup
+if command -v docker >/dev/null 2>&1; then
+    echo "🐳 Docker available - enabling layer caching"
+    export DOCKER_BUILDKIT=1
+    export COMPOSE_DOCKER_CLI_BUILD=1
+fi
+
+# Build tool availability checks
+echo "🔍 Checking build tools..."
+if ! command -v go >/dev/null 2>&1; then
+    echo "❌ Go not found in PATH"
+    exit 1
+fi
+
+if ! command -v git >/dev/null 2>&1; then
+    echo "❌ Git not found in PATH"
+    exit 1
+fi
+
+# Common environment validation
+if [[ -z "${BUILDKITE_BUILD_ID:-}" ]]; then
+    echo "⚠️  Not running in Buildkite environment"
+fi
+
+# Create temporary directories for build artifacts
+mkdir -p "${BUILDKITE_BUILD_PATH:-/tmp}/artifacts"
+mkdir -p "${BUILDKITE_BUILD_PATH:-/tmp}/test-results"
+
+# Check disk space before starting build
+disk_usage=$(df -h . | tail -1 | awk '{print $5}' | sed 's/%//')
+echo "📊 Current disk usage: ${disk_usage}%"
+
+if [[ $disk_usage -gt 90 ]]; then
+    echo "🚨 CRITICAL: Disk usage is ${disk_usage}% - build may fail due to lack of space!"
+    echo "🧹 Running emergency Docker cleanup..."
+
+    if command -v docker >/dev/null 2>&1; then
+        # Emergency cleanup - remove everything possible
+        docker system prune -a -f --volumes >/dev/null 2>&1 || true
+
+        # Check if cleanup helped
+        new_usage=$(df -h . | tail -1 | awk '{print $5}' | sed 's/%//')
+        echo "📊 Disk usage after emergency cleanup: ${new_usage}%"
+
+        if [[ $new_usage -gt 85 ]]; then
+            echo "❌ Disk usage still critically high after cleanup - build may fail"
+        else
+            echo "✅ Emergency cleanup successful"
+        fi
+    fi
+elif [[ $disk_usage -gt 80 ]]; then
+    echo "⚠️  WARNING: Disk usage is ${disk_usage}% - cleanup recommended"
+fi
+
+echo "✅ Build environment setup complete"

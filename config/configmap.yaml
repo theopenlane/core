@@ -2,14 +2,16 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "common.names.fullname" . -}}-config
-  {{ $labels := include "common.tplvalues.merge" (dict "values" ( list .Values.api.commonLabels (include "common.labels.standard" .) ) "context" . ) }}
-  labels: {{- include "common.tplvalues.render" ( dict "value" $labels "context" $) | nindent 4 }}
-  {{- if .Values.api.commonAnnotations }}
-  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.api.commonAnnotations ) "context" . ) }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
-  {{- end }}
+  name: openlane-config
+  namespace: openlane
+  labels:
+    app: openlane
+    component: config
+  annotations:
+    # This checksum will trigger deployment restarts when the ConfigMap changes
+    checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
 data:
+  CORE_DOMAIN: {{ .Values.core.domain }}
   CORE_REFRESHINTERVAL: {{ .Values.core.refreshInterval | default "10m" }}
   CORE_SERVER_DEV: {{ .Values.core.server.dev | default false }}
   CORE_SERVER_LISTEN: {{ .Values.core.server.listen | default ":17608" }}
@@ -25,7 +27,13 @@ data:
   CORE_SERVER_TLS_AUTOCERT: {{ .Values.core.server.tls.autoCert | default false }}
   CORE_SERVER_CORS_ENABLED: {{ .Values.core.server.cors.enabled | default true }}
   CORE_SERVER_CORS_PREFIXES: {{ .Values.core.server.cors.prefixes }}
+{{- if .Values.core.server.cors.allowOrigins }}
   CORE_SERVER_CORS_ALLOWORIGINS: {{ .Values.core.server.cors.allowOrigins }}
+{{- else if .Values.domain }}
+  CORE_SERVER_CORS_ALLOWORIGINS: "https://console.{{ .Values.domain }},https://docs.{{ .Values.domain }},https://www.{{ .Values.domain }}"
+{{- else }}
+  CORE_SERVER_CORS_ALLOWORIGINS: ""
+{{- end }}
   CORE_SERVER_CORS_COOKIEINSECURE: {{ .Values.core.server.cors.cookieInsecure }}
   CORE_SERVER_SECURE_ENABLED: {{ .Values.core.server.secure.enabled | default true }}
   CORE_SERVER_SECURE_XSSPROTECTION: {{ .Values.core.server.secure.xssprotection | default "1; mode=block" }}
@@ -57,8 +65,13 @@ data:
   CORE_SERVER_CSRFPROTECTION_COOKIEHTTPONLY: {{ .Values.core.server.csrfProtection.cookieHttpOnly | default false }}
   CORE_SERVER_CSRFPROTECTION_COOKIEDOMAIN: {{ .Values.core.server.csrfProtection.cookieDomain }}
   CORE_SERVER_CSRFPROTECTION_COOKIEPATH: {{ .Values.core.server.csrfProtection.cookiePath | default "/" }}
-  CORE_SERVER_SECRETMANAGER: {{ .Values.core.server.secretManager }}
+{{- if .Values.core.server.defaultTrustCenterDomain }}
   CORE_SERVER_DEFAULTTRUSTCENTERDOMAIN: {{ .Values.core.server.defaultTrustCenterDomain }}
+{{- else if .Values.domain }}
+  CORE_SERVER_DEFAULTTRUSTCENTERDOMAIN: "{{ .Values.domain }}"
+{{- else }}
+  CORE_SERVER_DEFAULTTRUSTCENTERDOMAIN: ""
+{{- end }}
   CORE_ENTCONFIG_ENTITYTYPES: {{ .Values.core.entConfig.entityTypes }}
   CORE_ENTCONFIG_SUMMARIZER_TYPE: {{ .Values.core.entConfig.summarizer.type | default "lexrank" }}
   CORE_ENTCONFIG_SUMMARIZER_LLM_PROVIDER: {{ .Values.core.entConfig.summarizer.llm.provider }}
@@ -67,7 +80,6 @@ data:
   CORE_ENTCONFIG_SUMMARIZER_LLM_ANTHROPIC_BASEURL: {{ .Values.core.entConfig.summarizer.llm.anthropic.baseURL }}
   CORE_ENTCONFIG_SUMMARIZER_LLM_MISTRAL_URL: {{ .Values.core.entConfig.summarizer.llm.mistral.url }}
   CORE_ENTCONFIG_SUMMARIZER_LLM_GEMINI_CREDENTIALSPATH: {{ .Values.core.entConfig.summarizer.llm.gemini.credentialsPath }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_GEMINI_CREDENTIALSJSON: {{ .Values.core.entConfig.summarizer.llm.gemini.credentialsJSON }}
   CORE_ENTCONFIG_SUMMARIZER_LLM_GEMINI_MAXTOKENS: {{ .Values.core.entConfig.summarizer.llm.gemini.maxTokens }}
   CORE_ENTCONFIG_SUMMARIZER_LLM_HUGGINGFACE_URL: {{ .Values.core.entConfig.summarizer.llm.huggingFace.url }}
   CORE_ENTCONFIG_SUMMARIZER_LLM_OLLAMA_MODEL: {{ .Values.core.entConfig.summarizer.llm.ollama.model }}
@@ -197,10 +209,7 @@ data:
   CORE_RATELIMIT_EXPIRES: {{ .Values.core.ratelimit.expires | default "10m" }}
   CORE_OBJECTSTORAGE_ENABLED: {{ .Values.core.objectStorage.enabled | default true }}
   CORE_OBJECTSTORAGE_PROVIDER: {{ .Values.core.objectStorage.provider }}
-  CORE_OBJECTSTORAGE_ACCESSKEY: {{ .Values.core.objectStorage.accessKey }}
   CORE_OBJECTSTORAGE_REGION: {{ .Values.core.objectStorage.region }}
-  CORE_OBJECTSTORAGE_SECRETKEY: {{ .Values.core.objectStorage.secretKey }}
-  CORE_OBJECTSTORAGE_CREDENTIALSJSON: {{ .Values.core.objectStorage.credentialsJSON }}
   CORE_OBJECTSTORAGE_DEFAULTBUCKET: {{ .Values.core.objectStorage.defaultBucket | default "file_uploads" }}
   CORE_OBJECTSTORAGE_LOCALURL: {{ .Values.core.objectStorage.localURL | default "http://localhost:17608/files/" }}
   CORE_OBJECTSTORAGE_KEYS: {{ .Values.core.objectStorage.keys | default "uploadFile" }}
@@ -208,18 +217,32 @@ data:
   CORE_OBJECTSTORAGE_MAXMEMORYMB: {{ .Values.core.objectStorage.maxMemoryMB }}
   CORE_SUBSCRIPTION_ENABLED: {{ .Values.core.subscription.enabled | default false }}
   CORE_SUBSCRIPTION_PUBLICSTRIPEKEY: {{ .Values.core.subscription.publicStripeKey }}
-  CORE_SUBSCRIPTION_PRIVATESTRIPEKEY: {{ .Values.core.subscription.privateStripeKey }}
-  CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRET: {{ .Values.core.subscription.stripeWebhookSecret }}
   CORE_SUBSCRIPTION_TRIALSUBSCRIPTIONPRICEID: {{ .Values.core.subscription.trialSubscriptionPriceID | default "price_1QKLyeBvxky1R7SvaZYGWyQb" }}
   CORE_SUBSCRIPTION_PERSONALORGSUBSCRIPTIONPRICEID: {{ .Values.core.subscription.personalOrgSubscriptionPriceID | default "price_1QycPyBvxky1R7Svz0gOWnNh" }}
-  CORE_SUBSCRIPTION_STRIPEWEBHOOKURL: {{ .Values.core.subscription.stripeWebhookURL | default "https://api.openlane.com/v1/stripe/webhook" }}
-  CORE_SUBSCRIPTION_STRIPEBILLINGPORTALSUCCESSURL: {{ .Values.core.subscription.stripeBillingPortalSuccessURL | default "https://console.openlane.com/billing" }}
-  CORE_SUBSCRIPTION_STRIPECANCELLATIONRETURNURL: {{ .Values.core.subscription.stripeCancellationReturnURL | default "https://console.theopenlane.io/organization-settings/billing/subscription_canceled" }}
+{{- if .Values.core.subscription.stripeWebhookURL }}
+  CORE_SUBSCRIPTION_STRIPEWEBHOOKURL: {{ .Values.core.subscription.stripeWebhookURL }}
+{{- else if .Values.domain }}
+  CORE_SUBSCRIPTION_STRIPEWEBHOOKURL: "https://api.{{ .Values.domain }}/v1/stripe/webhook"
+{{- else }}
+  CORE_SUBSCRIPTION_STRIPEWEBHOOKURL: "https://api.openlane.com/v1/stripe/webhook"
+{{- end }}
+{{- if .Values.core.subscription.stripeBillingPortalSuccessURL }}
+  CORE_SUBSCRIPTION_STRIPEBILLINGPORTALSUCCESSURL: {{ .Values.core.subscription.stripeBillingPortalSuccessURL }}
+{{- else if .Values.domain }}
+  CORE_SUBSCRIPTION_STRIPEBILLINGPORTALSUCCESSURL: "https://console.{{ .Values.domain }}/billing"
+{{- else }}
+  CORE_SUBSCRIPTION_STRIPEBILLINGPORTALSUCCESSURL: "https://console.openlane.com/billing"
+{{- end }}
+{{- if .Values.core.subscription.stripeCancellationReturnURL }}
+  CORE_SUBSCRIPTION_STRIPECANCELLATIONRETURNURL: {{ .Values.core.subscription.stripeCancellationReturnURL }}
+{{- else if .Values.domain }}
+  CORE_SUBSCRIPTION_STRIPECANCELLATIONRETURNURL: "https://console.{{ .Values.domain }}/organization-settings/billing/subscription_canceled"
+{{- else }}
+  CORE_SUBSCRIPTION_STRIPECANCELLATIONRETURNURL: "https://console.theopenlane.io/organization-settings/billing/subscription_canceled"
+{{- end }}
   CORE_SUBSCRIPTION_STRIPEWEBHOOKEVENTS: {{ .Values.core.subscription.stripeWebhookEvents }}
   CORE_KEYWATCHER_ENABLED: {{ .Values.core.keywatcher.enabled | default false }}
   CORE_KEYWATCHER_KEYDIR: {{ .Values.core.keywatcher.keyDir | default "./keys" }}
   CORE_KEYWATCHER_EXTERNALSECRETSINTEGRATION: {{ .Values.core.keywatcher.externalSecretsIntegration | default false }}
-  CORE_KEYWATCHER_SECRETMANAGER: {{ .Values.core.keywatcher.secretManager }}
-  CORE_SLACK_WEBHOOKURL: {{ .Values.core.slack.webhookURL }}
   CORE_SLACK_NEWSUBSCRIBERMESSAGEFILE: {{ .Values.core.slack.newSubscriberMessageFile }}
   CORE_SLACK_NEWUSERMESSAGEFILE: {{ .Values.core.slack.newUserMessageFile }}

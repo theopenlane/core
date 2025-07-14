@@ -74,7 +74,7 @@ type GeminiConfig struct {
 	CredentialsPath string `json:"credentialsPath" koanf:"credentialsPath"`
 
 	// CredentialsJSON contains Google Cloud credentials as JSON string
-	CredentialsJSON string `json:"credentialsJSON" koanf:"credentialsJSON"`
+	CredentialsJSON string `json:"credentialsJSON" koanf:"credentialsJSON" sensitive:"true"`
 
 	// MaxTokens specifies the maximum tokens for response
 	MaxTokens int `json:"maxTokens" koanf:"maxTokens"`

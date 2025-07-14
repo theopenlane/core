@@ -3,6 +3,7 @@ package config
 import (
 	"crypto/tls"
 	"os"
+	"reflect"
 
 	"strings"
 	"time"
@@ -39,6 +40,8 @@ import (
 
 // Config contains the configuration for the core server
 type Config struct {
+	// Domain provides a global domain value for other modules to inherit
+	Domain string `json:"domain" koanf:"domain" default:""`
 	// RefreshInterval determines how often to reload the config
 	RefreshInterval time.Duration `json:"refreshInterval" koanf:"refreshInterval" default:"10m"`
 	// Server contains the echo server settings
@@ -120,9 +123,9 @@ type Server struct {
 	// CSRFProtection enables CSRF protection for the server
 	CSRFProtection csrf.Config `json:"csrfProtection" koanf:"csrfProtection"`
 	// SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key
-	SecretManagerSecret string `json:"secretManager" koanf:"secretManager" default:""`
+	SecretManagerSecret string `json:"secretManager" koanf:"secretManager" default:"" sensitive:"true"`
 	// DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set
-	DefaultTrustCenterDomain string `json:"defaultTrustCenterDomain" koanf:"defaultTrustCenterDomain" default:""`
+	DefaultTrustCenterDomain string `json:"defaultTrustCenterDomain" koanf:"defaultTrustCenterDomain" default:"" domain:"inherit"`
 }
 
 // KeyWatcher contains settings for the key watcher that manages JWT signing keys
@@ -134,7 +137,7 @@ type KeyWatcher struct {
 	// ExternalSecretsIntegration enables integration with external secret management systems (specifically GCP secret manager today)
 	ExternalSecretsIntegration bool `json:"externalSecretsIntegration" koanf:"externalSecretsIntegration" default:"false"`
 	// SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key
-	SecretManagerSecret string `json:"secretManager" koanf:"secretManager" default:""`
+	SecretManagerSecret string `json:"secretManager" koanf:"secretManager" default:"" sensitive:"true"`
 }
 
 // Auth settings including oauth2 providers and token configuration
@@ -172,7 +175,7 @@ type PondPool struct {
 // Slack contains settings for Slack notifications
 type Slack struct {
 	// WebhookURL is the Slack webhook to post messages to
-	WebhookURL string `json:"webhookURL" koanf:"webhookURL"`
+	WebhookURL string `json:"webhookURL" koanf:"webhookURL" sensitive:"true"`
 	// NewSubscriberMessageFile is the path to the template used for new subscriber notifications
 	NewSubscriberMessageFile string `json:"newSubscriberMessageFile" koanf:"newSubscriberMessageFile"`
 	// NewUserMessageFile is the path to the template used for new user notifications
@@ -182,6 +185,109 @@ type Slack struct {
 var (
 	defaultConfigFilePath = "./config/.config.yaml"
 )
+
+// Option configures the Config
+type Option func(*Config)
+
+// New creates a Config with the supplied options applied
+func New(opts ...Option) *Config {
+	cfg := &Config{}
+	defaults.SetDefaults(cfg)
+
+	for _, opt := range opts {
+		opt(cfg)
+	}
+
+	return cfg
+}
+
+// WithDomain sets a global domain value
+func WithDomain(domain string) Option {
+	return func(c *Config) {
+		c.Domain = domain
+	}
+}
+
+// applyDomainOverrides sets related domain values when unset
+func (c *Config) applyDomainOverrides() {
+	if c.Domain == "" {
+		return
+	}
+
+	applyDomain(reflect.ValueOf(c).Elem(), c.Domain)
+}
+
+func applyDomain(v reflect.Value, domain string) {
+	if !v.IsValid() {
+		return
+	}
+
+	switch v.Kind() {
+	case reflect.Ptr:
+		if !v.IsNil() {
+			applyDomain(v.Elem(), domain)
+		}
+	case reflect.Struct:
+		for i := 0; i < v.NumField(); i++ {
+			f := v.Field(i)
+			sf := v.Type().Field(i)
+
+			if sf.PkgPath != "" {
+				continue
+			}
+
+			// Handle domain inheritance with prefix and suffix support
+			if sf.Tag.Get("domain") == "inherit" && f.CanSet() && f.String() == "" {
+				domainValue := domain
+
+				// Apply domain prefix if specified
+				if prefix := sf.Tag.Get("domainPrefix"); prefix != "" {
+					// Handle multiple prefixes separated by commas (for slices)
+					if f.Kind() == reflect.Slice && f.Type().Elem().Kind() == reflect.String {
+						prefixes := strings.Split(prefix, ",")
+
+						var values []reflect.Value
+
+						for _, p := range prefixes {
+							values = append(values, reflect.ValueOf(strings.TrimSpace(p)+"."+domain))
+						}
+
+						slice := reflect.MakeSlice(f.Type(), len(values), len(values))
+
+						for i, val := range values {
+							slice.Index(i).Set(val)
+						}
+
+						f.Set(slice)
+
+						continue
+					} else {
+						domainValue = prefix + "." + domain
+					}
+				}
+
+				// Apply domain suffix if specified
+				if suffix := sf.Tag.Get("domainSuffix"); suffix != "" {
+					domainValue = domainValue + suffix
+				}
+
+				if f.Kind() == reflect.String {
+					f.SetString(domainValue)
+				}
+
+				continue
+			}
+
+			// Legacy support for Domain field name
+			if sf.Name == "Domain" && f.Kind() == reflect.String && f.CanSet() && f.String() == "" {
+				f.SetString(domain)
+				continue
+			}
+
+			applyDomain(f, domain)
+		}
+	}
+}
 
 // Load is responsible for loading the configuration from a YAML file and environment variables.
 // If the `cfgFile` is empty or nil, it sets the default configuration file path.
@@ -200,9 +306,7 @@ func Load(cfgFile *string) (*Config, error) {
 		}
 	}
 
-	// load defaults
-	conf := &Config{}
-	defaults.SetDefaults(conf)
+	conf := New()
 
 	// parse yaml config
 	if err := k.Load(file.Provider(*cfgFile), yaml.Parser()); err != nil {
@@ -231,6 +335,8 @@ func Load(cfgFile *string) (*Config, error) {
 	if err := k.Unmarshal("", &conf); err != nil {
 		log.Fatal().Err(err).Msg("failed to unmarshal env vars")
 	}
+
+	conf.applyDomainOverrides()
 
 	return conf, nil
 }

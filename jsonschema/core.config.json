@@ -1384,6 +1384,10 @@
     }
   },
   "properties": {
+    "domain": {
+      "type": "string",
+      "description": "Domain provides a global domain value for other modules to inherit"
+    },
     "refreshInterval": {
       "type": "integer",
       "description": "RefreshInterval determines how often to reload the config"

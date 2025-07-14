@@ -65,6 +65,7 @@ db:
     primaryDbSource: file:openlane.db
     runMigrations: true
     secondaryDbSource: file:backup.db
+domain: ""
 email:
     companyAddress: ""
     companyName: ""

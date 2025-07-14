@@ -1,0 +1,141 @@
+#!/bin/bash
+
+set -euo pipefail
+
+echo "🧹 Running post-command cleanup..."
+
+# Check if command succeeded or failed
+if [[ "${BUILDKITE_COMMAND_EXIT_STATUS:-0}" -ne 0 ]]; then
+    echo "⚠️  Command failed with exit status: ${BUILDKITE_COMMAND_EXIT_STATUS}"
+fi
+
+# Clean up temporary files from this build step
+if [[ -n "${BUILDKITE_BUILD_PATH:-}" ]]; then
+    # Clean up any temp files that might have been created
+    find "${BUILDKITE_BUILD_PATH}" -name "*.tmp" -type f -delete 2>/dev/null || true
+    find "${BUILDKITE_BUILD_PATH}" -name "*.temp" -type f -delete 2>/dev/null || true
+fi
+
+# Prune Go module cache if it gets too large (keep last 7 days)
+if [[ -d "$HOME/.cache/go/pkg/mod" ]]; then
+    cache_size=$(du -sh "$HOME/.cache/go/pkg/mod" 2>/dev/null | cut -f1 || echo "0")
+    echo "📦 Go module cache size: $cache_size"
+
+    # Clean up old cache entries (older than 7 days)
+    find "$HOME/.cache/go/pkg/mod" -type f -mtime +7 -delete 2>/dev/null || true
+fi
+
+# Prune golangci-lint cache if it gets too large
+if [[ -d "$HOME/.cache/golangci-lint" ]]; then
+    cache_size=$(du -sh "$HOME/.cache/golangci-lint" 2>/dev/null | cut -f1 || echo "0")
+    echo "🔍 Golangci-lint cache size: $cache_size"
+
+    # Clean up old cache entries (older than 7 days)
+    find "$HOME/.cache/golangci-lint" -type f -mtime +7 -delete 2>/dev/null || true
+fi
+
+# Archive build artifacts if they exist
+if [[ -d "${BUILDKITE_BUILD_PATH:-/tmp}/artifacts" ]]; then
+    artifact_count=$(find "${BUILDKITE_BUILD_PATH:-/tmp}/artifacts" -type f | wc -l)
+    if [[ $artifact_count -gt 0 ]]; then
+        echo "📁 Found $artifact_count build artifacts"
+        # Upload artifacts if buildkite-agent is available
+        if command -v buildkite-agent >/dev/null 2>&1; then
+            buildkite-agent artifact upload "${BUILDKITE_BUILD_PATH:-/tmp}/artifacts/*" || true
+        fi
+    fi
+fi
+
+# Archive test results if they exist
+if [[ -d "${BUILDKITE_BUILD_PATH:-/tmp}/test-results" ]]; then
+    test_file_count=$(find "${BUILDKITE_BUILD_PATH:-/tmp}/test-results" -type f | wc -l)
+    if [[ $test_file_count -gt 0 ]]; then
+        echo "📋 Found $test_file_count test result files"
+        # Upload test results if buildkite-agent is available
+        if command -v buildkite-agent >/dev/null 2>&1; then
+            buildkite-agent artifact upload "${BUILDKITE_BUILD_PATH:-/tmp}/test-results/*" || true
+        fi
+    fi
+fi
+
+# Docker cleanup (if Docker is available)
+if command -v docker >/dev/null 2>&1; then
+    echo "🐳 Running Docker cleanup to prevent disk space issues..."
+
+    # Get initial disk usage
+    initial_usage=$(df -h . | tail -1 | awk '{print $5}' | sed 's/%//')
+    echo "📊 Initial disk usage: ${initial_usage}%"
+
+    # Stop all running containers (be aggressive about cleanup)
+    running_containers=$(docker ps -q)
+    if [[ -n "$running_containers" ]]; then
+        echo "🛑 Stopping running containers..."
+        docker stop $running_containers >/dev/null 2>&1 || true
+    fi
+
+    # Remove all stopped containers
+    stopped_containers=$(docker ps -aq --filter "status=exited")
+    if [[ -n "$stopped_containers" ]]; then
+        echo "🗑️  Removing stopped containers..."
+        docker rm $stopped_containers >/dev/null 2>&1 || true
+    fi
+
+    # Remove dangling images (untagged images)
+    dangling_images=$(docker images -f "dangling=true" -q)
+    if [[ -n "$dangling_images" ]]; then
+        echo "🖼️  Removing dangling images..."
+        docker rmi $dangling_images >/dev/null 2>&1 || true
+    fi
+
+    # Remove unused images older than 24 hours
+    echo "🖼️  Removing unused images older than 24 hours..."
+    docker image prune -f --filter "until=24h" >/dev/null 2>&1 || true
+
+    # Remove all unused networks
+    echo "🌐 Removing unused networks..."
+    docker network prune -f >/dev/null 2>&1 || true
+
+    # Remove ALL unused volumes (this is often the biggest space saver)
+    echo "💾 Removing ALL unused volumes..."
+    docker volume prune -f >/dev/null 2>&1 || true
+
+    # Remove build cache older than 24 hours
+    echo "🏗️  Removing build cache older than 24 hours..."
+    docker builder prune -f --filter "until=24h" >/dev/null 2>&1 || true
+
+    # If disk usage is still high, do more aggressive cleanup
+    current_usage=$(df -h . | tail -1 | awk '{print $5}' | sed 's/%//')
+    echo "📊 Current disk usage: ${current_usage}%"
+
+    if [[ $current_usage -gt 80 ]]; then
+        echo "⚠️  Disk usage still high (${current_usage}%), running aggressive cleanup..."
+
+        # Remove ALL unused images (not just dangling)
+        echo "🖼️  Removing ALL unused images..."
+        docker image prune -a -f >/dev/null 2>&1 || true
+
+        # Remove ALL build cache
+        echo "🏗️  Removing ALL build cache..."
+        docker builder prune -a -f >/dev/null 2>&1 || true
+
+        # Full system prune (everything unused)
+        echo "🧹 Running full system prune..."
+        docker system prune -a -f --volumes >/dev/null 2>&1 || true
+    fi
+
+    # Final disk usage check
+    final_usage=$(df -h . | tail -1 | awk '{print $5}' | sed 's/%//')
+    echo "📊 Final disk usage: ${final_usage}%"
+
+    # Calculate space freed
+    space_freed=$((initial_usage - final_usage))
+    if [[ $space_freed -gt 0 ]]; then
+        echo "✨ Freed ${space_freed}% disk space"
+    fi
+
+    # Show Docker space usage summary
+    echo "🐳 Docker space usage summary:"
+    docker system df 2>/dev/null || true
+fi
+
+echo "✅ Post-command cleanup complete"
