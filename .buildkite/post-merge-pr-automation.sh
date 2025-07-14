@@ -11,47 +11,25 @@ set -euo pipefail
 # Converts draft infra PRs to ready for review after core PR is merged
 # Updates the final infra PR with any additional changes from the merge
 
-# Check required tools are available in container
-check_required_tools() {
-    local missing_tools=()
-
-    for tool in git gh docker jq buildkite-agent; do
-        if ! command -v "$tool" >/dev/null 2>&1; then
-            missing_tools+=("$tool")
-        fi
-    done
-
-    if [[ ${#missing_tools[@]} -gt 0 ]]; then
-        echo "❌ Missing required tools: ${missing_tools[*]}"
-        echo "This script must run in a container with these tools installed"
-        echo "Expected to run via Buildkite pipeline with ghcr.io/theopenlane/build-image:latest"
-        exit 1
-    fi
-}
-
-# Verify environment variables are set
-check_environment() {
-    local missing_vars=()
-
-    for var in HELM_CHART_REPO BUILDKITE_BRANCH; do
-        if [[ -z "${!var:-}" ]]; then
-            missing_vars+=("$var")
-        fi
-    done
-
-    if [[ ${#missing_vars[@]} -gt 0 ]]; then
-        echo "❌ Missing required environment variables: ${missing_vars[*]}"
-        exit 1
-    fi
-}
-
-# Run checks
-check_required_tools
-check_environment
 
 YQ_VERSION=${YQ_VERSION:-4.9.6}
 repo="${HELM_CHART_REPO}"
 chart_dir="${HELM_CHART_PATH:-charts/openlane}"
+
+# Install yq if not available (since we're in a container, can't use docker run)
+if ! command -v yq >/dev/null 2>&1; then
+    echo "Installing yq..."
+    YQ_BINARY="yq_linux_amd64"
+    wget -qO /tmp/yq https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/${YQ_BINARY}
+    chmod +x /tmp/yq
+    mv /tmp/yq /usr/local/bin/yq
+fi
+
+# Install gh if not available
+if ! command -v gh >/dev/null 2>&1; then
+    echo "Installing gh..."
+    apk add --no-cache github-cli
+fi
 
 echo "=== Post-Merge PR Automation ==="
 echo "Repository: $repo"
@@ -130,16 +108,16 @@ while IFS=':' read -r pr_number branch_name; do
 
       if [[ -f "$target" ]]; then
         echo "  📋 Extracting core configuration from generated values..."
-        docker run --rm -v "${PWD}":/workdir mikefarah/yq:"${YQ_VERSION}" e '.core' "$source" > /tmp/core-values.yaml
+        yq e '.core' "$source" > /tmp/core-values.yaml
 
         echo "  🔀 Merging with existing chart values..."
-        docker run --rm -v "${PWD}":/workdir mikefarah/yq:"${YQ_VERSION}" e '. as $target | load("/tmp/core-values.yaml") as $core | $target | .core = $core' "$target" > "$temp_merged"
+        yq e '. as $target | load("/tmp/core-values.yaml") as $core | $target | .core = $core' "$target" > "$temp_merged"
 
         # Also merge any externalSecrets configuration if it exists
-        if docker run --rm -v "${PWD}":/workdir mikefarah/yq:"${YQ_VERSION}" e '.externalSecrets' "$source" | grep -v "null" > /dev/null 2>&1; then
+        if yq e '.externalSecrets' "$source" | grep -v "null" > /dev/null 2>&1; then
           echo "  🔐 Merging external secrets configuration..."
-          docker run --rm -v "${PWD}":/workdir mikefarah/yq:"${YQ_VERSION}" e '.externalSecrets' "$source" > /tmp/external-secrets.yaml
-          docker run --rm -v "${PWD}":/workdir mikefarah/yq:"${YQ_VERSION}" e '. as $target | load("/tmp/external-secrets.yaml") as $secrets | $target | .externalSecrets = $secrets' "$temp_merged" > "${temp_merged}.tmp"
+          yq e '.externalSecrets' "$source" > /tmp/external-secrets.yaml
+          yq e '. as $target | load("/tmp/external-secrets.yaml") as $secrets | $target | .externalSecrets = $secrets' "$temp_merged" > "${temp_merged}.tmp"
           mv "${temp_merged}.tmp" "$temp_merged"
         fi
       else

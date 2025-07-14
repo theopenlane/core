@@ -10,47 +10,25 @@ set -euo pipefail
 # Unified Helm automation script for updating charts from core config changes
 # Consolidates functionality from helmpr.sh, pr.sh, and helm-values-pr.sh
 
-# Check required tools are available in container
-check_required_tools() {
-    local missing_tools=()
-
-    for tool in git gh docker jq buildkite-agent; do
-        if ! command -v "$tool" >/dev/null 2>&1; then
-            missing_tools+=("$tool")
-        fi
-    done
-
-    if [[ ${#missing_tools[@]} -gt 0 ]]; then
-        echo "❌ Missing required tools: ${missing_tools[*]}"
-        echo "This script must run in a container with these tools installed"
-        echo "Expected to run via Buildkite pipeline with ghcr.io/theopenlane/build-image:latest"
-        exit 1
-    fi
-}
-
-# Verify environment variables are set
-check_environment() {
-    local missing_vars=()
-
-    for var in HELM_CHART_REPO BUILDKITE_BUILD_NUMBER; do
-        if [[ -z "${!var:-}" ]]; then
-            missing_vars+=("$var")
-        fi
-    done
-
-    if [[ ${#missing_vars[@]} -gt 0 ]]; then
-        echo "❌ Missing required environment variables: ${missing_vars[*]}"
-        exit 1
-    fi
-}
-
-# Run checks
-check_required_tools
-check_environment
 
 YQ_VERSION=${YQ_VERSION:-4.9.6}
 repo="${HELM_CHART_REPO}"
 chart_dir="${HELM_CHART_PATH:-charts/openlane}"
+
+# Install yq if not available (since we're in a container, can't use docker run)
+if ! command -v yq >/dev/null 2>&1; then
+    echo "Installing yq..."
+    YQ_BINARY="yq_linux_amd64"
+    wget -qO /tmp/yq https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/${YQ_BINARY}
+    chmod +x /tmp/yq
+    mv /tmp/yq /usr/local/bin/yq
+fi
+
+# Install gh if not available
+if ! command -v gh >/dev/null 2>&1; then
+    echo "Installing gh..."
+    apk add --no-cache github-cli
+fi
 
 work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT
@@ -107,7 +85,7 @@ function update_yaml_values() {
 
     if [[ -n "$field_value" ]]; then
       echo "Updating $field_name to $field_value in $file_path"
-      docker run --rm -v "${PWD}":/workdir mikefarah/yq:"${YQ_VERSION}" e -i "${field_name} = \"${field_value}\"" "$file_path"
+      yq e -i "${field_name} = \"${field_value}\"" "$file_path"
       changes_made=true
       change_summary+="\n- Updated $field_name in $(basename "$file_path")"
     fi
@@ -141,17 +119,17 @@ function merge_helm_values() {
     # All other sections in the target will be preserved
 
     echo "  📋 Extracting core configuration from generated values..."
-    docker run --rm -v "${PWD}":/workdir mikefarah/yq:"${YQ_VERSION}" e '.core' "$source" > /tmp/core-values.yaml
+    yq e '.core' "$source" > /tmp/core-values.yaml
 
     echo "  🔀 Merging with existing chart values..."
     # Start with existing values, then merge in new core section
-    docker run --rm -v "${PWD}":/workdir mikefarah/yq:"${YQ_VERSION}" e '. as $target | load("/tmp/core-values.yaml") as $core | $target | .core = $core' "$target" > "$temp_merged"
+    yq e '. as $target | load("/tmp/core-values.yaml") as $core | $target | .core = $core' "$target" > "$temp_merged"
 
     # Also merge any externalSecrets configuration if it exists in generated file
-    if docker run --rm -v "${PWD}":/workdir mikefarah/yq:"${YQ_VERSION}" e '.externalSecrets' "$source" | grep -v "null" > /dev/null 2>&1; then
+    if yq e '.externalSecrets' "$source" | grep -v "null" > /dev/null 2>&1; then
       echo "  🔐 Merging external secrets configuration..."
-      docker run --rm -v "${PWD}":/workdir mikefarah/yq:"${YQ_VERSION}" e '.externalSecrets' "$source" > /tmp/external-secrets.yaml
-      docker run --rm -v "${PWD}":/workdir mikefarah/yq:"${YQ_VERSION}" e '. as $target | load("/tmp/external-secrets.yaml") as $secrets | $target | .externalSecrets = $secrets' "$temp_merged" > "${temp_merged}.tmp"
+      yq e '.externalSecrets' "$source" > /tmp/external-secrets.yaml
+      yq e '. as $target | load("/tmp/external-secrets.yaml") as $secrets | $target | .externalSecrets = $secrets' "$temp_merged" > "${temp_merged}.tmp"
       mv "${temp_merged}.tmp" "$temp_merged"
     fi
 
@@ -173,8 +151,8 @@ function merge_helm_values() {
     echo "  📊 Analyzing changes..."
 
     # Compare core section changes
-    if docker run --rm -v "${PWD}":/workdir mikefarah/yq:"${YQ_VERSION}" e '.core' "$target" > /tmp/old-core.yaml 2>/dev/null; then
-      local core_changes=$(docker run --rm -v "${PWD}":/workdir mikefarah/yq:"${YQ_VERSION}" e 'diff("/tmp/old-core.yaml")' /tmp/core-values.yaml 2>/dev/null | grep -E '^\+\+\+|^---' | wc -l || echo "0")
+    if yq e '.core' "$target" > /tmp/old-core.yaml 2>/dev/null; then
+      local core_changes=$(yq e 'diff("/tmp/old-core.yaml")' /tmp/core-values.yaml 2>/dev/null | grep -E '^\+\+\+|^---' | wc -l || echo "0")
       if [[ "$core_changes" -gt 0 ]]; then
         changes_detail+="\n    • Core configuration updated ($core_changes changes)"
       fi

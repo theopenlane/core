@@ -8,6 +8,12 @@ YQ_VERSION=${YQ_VERSION:-4.9.6}
 repo="${HELM_CHART_REPO}"
 chart_dir="${HELM_CHART_PATH:-charts/openlane}"
 
+# Install gh if not available
+if ! command -v gh >/dev/null 2>&1; then
+    echo "Installing gh..."
+    apk add --no-cache github-cli
+fi
+
 work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT
 

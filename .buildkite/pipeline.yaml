@@ -98,6 +98,7 @@ steps:
               environment:
                 - "GITHUB_TOKEN"
                 - "SLACK_WEBHOOK_URL"
+                - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
       - label: ":helm: update helm chart"
         key: "helm_automation"
         depends_on: "generate_config"
@@ -120,6 +121,7 @@ steps:
                 - "HELM_CHART_REPO"
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
+                - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
       - label: ":arrows_counterclockwise: finalize config PRs"
         key: "post_merge_automation"
         depends_on: "helm_automation"
@@ -142,6 +144,7 @@ steps:
                 - "HELM_CHART_REPO"
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
+                - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
   - group: ":test_tube: Tests"
     key: "tests"
     steps:
