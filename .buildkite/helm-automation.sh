@@ -15,14 +15,12 @@ YQ_VERSION=${YQ_VERSION:-4.45.4}
 repo="${HELM_CHART_REPO}"
 chart_dir="${HELM_CHART_PATH:-charts/openlane}"
 
-# Install yq if not available (since we're in a container, can't use docker run)
-if ! command -v yq >/dev/null 2>&1; then
-    echo "Installing yq..."
-    YQ_BINARY="yq_linux_amd64"
-    wget -qO /tmp/yq https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/${YQ_BINARY}
-    chmod +x /tmp/yq
-    mv /tmp/yq /usr/local/bin/yq
-fi
+# Install/upgrade yq to newer version (since we're in a container, can't use docker run)
+echo "Installing yq v${YQ_VERSION}..."
+YQ_BINARY="yq_linux_amd64"
+wget -qO /tmp/yq https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/${YQ_BINARY}
+chmod +x /tmp/yq
+mv /tmp/yq /usr/local/bin/yq
 
 # Check yq version for debugging
 echo "yq version: $(yq --version)"

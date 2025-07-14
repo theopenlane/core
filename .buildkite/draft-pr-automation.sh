@@ -4,7 +4,7 @@ set -euo pipefail
 # Draft PR automation for config changes
 # Creates draft PRs in openlane-infra when config changes are detected in core repo
 
-YQ_VERSION=${YQ_VERSION:-4.9.6}
+YQ_VERSION=${YQ_VERSION:-4.45.4}
 repo="${HELM_CHART_REPO}"
 chart_dir="${HELM_CHART_PATH:-charts/openlane}"
 
