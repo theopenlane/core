@@ -1,0 +1,722 @@
+<!doctype html>
+<!--
+OAuth Integration Testing Interface
+
+SECURITY NOTE: This HTML file contains NO OAuth credentials.
+It works by making API calls to the local server (localhost:17608) which
+handles OAuth using your existing GitHub OAuth app configuration.
+
+Prerequisites:
+1. Update your existing GitHub OAuth App (used for social login) to include:
+   - http://localhost:17608/v1/github/callback              (existing)
+   - http://localhost:17608/v1/integrations/oauth/callback  (add this)
+2. Your existing config.yaml already has the OAuth credentials
+3. Start server with: task run-dev
+4. Access via: http://localhost:17608/pkg/testutils/integrations/index.html
+
+DO NOT serve this file locally (file://) - it requires server API access.
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OAuth Integration Testing</title>
+    <link href="../login/webauthn/bootstrap.min.css" rel="stylesheet" />
+    <style>
+      .integration-card {
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        background: #f8f9fa;
+      }
+      .status-badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.875rem;
+        font-weight: bold;
+      }
+      .status-connected { background: #d4edda; color: #155724; }
+      .status-expired { background: #fff3cd; color: #856404; }
+      .status-invalid { background: #f8d7da; color: #721c24; }
+      .status-disconnected { background: #e2e3e5; color: #6c757d; }
+      .token-display {
+        background: #f1f3f4;
+        border: 1px solid #dadce0;
+        border-radius: 4px;
+        padding: 10px;
+        font-family: monospace;
+        font-size: 0.875rem;
+        max-height: 200px;
+        overflow-y: auto;
+        word-break: break-all;
+      }
+      .log-entry {
+        padding: 8px;
+        margin: 4px 0;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 0.875rem;
+      }
+      .log-success { background: #d4edda; color: #155724; }
+      .log-error { background: #f8d7da; color: #721c24; }
+      .log-info { background: #d1ecf1; color: #0c5460; }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-4">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="mb-4 text-center">OAuth Integration Testing</h1>
+
+          <!-- Authentication Status -->
+          <div class="alert alert-info" id="authStatus">
+            <strong>Authentication Status:</strong> <span id="authStatusText">Checking...</span>
+          </div>
+
+          <!-- Integration Management -->
+          <div class="row">
+            <div class="col-md-6">
+              <!-- GitHub Integration -->
+              <div class="integration-card">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h3>GitHub Integration</h3>
+                  <span class="status-badge" id="githubStatus">Disconnected</span>
+                </div>
+                <div class="mb-3">
+                  <label for="githubScopes" class="form-label">Additional Scopes (optional):</label>
+                  <input type="text" class="form-control" id="githubScopes"
+                         placeholder="e.g., public_repo,gist" />
+                  <small class="form-text text-muted">
+                    Default scopes: read:user, user:email, repo
+                  </small>
+                </div>
+                <div class="d-grid gap-2">
+                  <button class="btn btn-dark" id="connectGithub">
+                    <i class="fab fa-github"></i> Connect GitHub
+                  </button>
+                  <button class="btn btn-outline-secondary" id="checkGithubStatus" disabled>
+                    Check Status
+                  </button>
+                  <button class="btn btn-outline-success" id="getGithubToken" disabled>
+                    Get Token
+                  </button>
+                  <button class="btn btn-outline-warning" id="refreshGithubToken" disabled>
+                    Refresh Token
+                  </button>
+                  <button class="btn btn-outline-danger" id="disconnectGithub" disabled>
+                    Disconnect
+                  </button>
+                </div>
+                <div class="mt-3">
+                  <h6>Token Information:</h6>
+                  <div class="token-display" id="githubTokenDisplay">No token available</div>
+                </div>
+                <div class="mt-3">
+                  <h6>Test GitHub API:</h6>
+                  <button class="btn btn-sm btn-primary" id="testGithubAPI" disabled>
+                    Test /user API Call
+                  </button>
+                  <div class="mt-2">
+                    <small id="githubAPIResult" class="text-muted"></small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <!-- Slack Integration -->
+              <div class="integration-card">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h3>Slack Integration</h3>
+                  <span class="status-badge" id="slackStatus">Disconnected</span>
+                </div>
+                <div class="mb-3">
+                  <label for="slackScopes" class="form-label">Additional Scopes (optional):</label>
+                  <input type="text" class="form-control" id="slackScopes"
+                         placeholder="e.g., files:write,pins:read" />
+                  <small class="form-text text-muted">
+                    Default scopes: channels:read, chat:write, users:read
+                  </small>
+                </div>
+                <div class="d-grid gap-2">
+                  <button class="btn btn-success" id="connectSlack">
+                    <i class="fab fa-slack"></i> Connect Slack
+                  </button>
+                  <button class="btn btn-outline-secondary" id="checkSlackStatus" disabled>
+                    Check Status
+                  </button>
+                  <button class="btn btn-outline-success" id="getSlackToken" disabled>
+                    Get Token
+                  </button>
+                  <button class="btn btn-outline-warning" id="refreshSlackToken" disabled>
+                    Refresh Token
+                  </button>
+                  <button class="btn btn-outline-danger" id="disconnectSlack" disabled>
+                    Disconnect
+                  </button>
+                </div>
+                <div class="mt-3">
+                  <h6>Token Information:</h6>
+                  <div class="token-display" id="slackTokenDisplay">No token available</div>
+                </div>
+                <div class="mt-3">
+                  <h6>Test Slack API:</h6>
+                  <button class="btn btn-sm btn-primary" id="testSlackAPI" disabled>
+                    Test /auth.test API Call
+                  </button>
+                  <div class="mt-2">
+                    <small id="slackAPIResult" class="text-muted"></small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Integration List -->
+          <div class="mt-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h3>All Integrations</h3>
+              <button class="btn btn-outline-primary" id="refreshIntegrations">
+                Refresh List
+              </button>
+            </div>
+            <div id="integrationsList">
+              <div class="text-center text-muted">Loading integrations...</div>
+            </div>
+          </div>
+
+          <!-- Activity Log -->
+          <div class="mt-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h3>Activity Log</h3>
+              <button class="btn btn-outline-secondary btn-sm" id="clearLog">
+                Clear Log
+              </button>
+            </div>
+            <div id="activityLog" style="max-height: 300px; overflow-y: auto;">
+              <!-- Log entries will be added here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const apiBase = "http://localhost:17608";
+      let authToken = null;
+      let userInfo = null;
+
+      // Utility functions
+      function log(message, type = 'info') {
+        const logContainer = document.getElementById('activityLog');
+        const entry = document.createElement('div');
+        entry.className = `log-entry log-${type}`;
+        entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+        logContainer.appendChild(entry);
+        logContainer.scrollTop = logContainer.scrollHeight;
+      }
+
+      function getCSRFToken() {
+        const cookieName = 'ol.csrf-token';
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+          const [name, value] = cookie.trim().split('=');
+          if (name === cookieName) {
+            return decodeURIComponent(value);
+          }
+        }
+        return null;
+      }
+
+      function updateStatus(provider, status, tokenValid = false, tokenExpired = false) {
+        const statusElement = document.getElementById(`${provider}Status`);
+        const buttons = {
+          connect: document.getElementById(`connect${provider.charAt(0).toUpperCase() + provider.slice(1)}`),
+          check: document.getElementById(`check${provider.charAt(0).toUpperCase() + provider.slice(1)}Status`),
+          getToken: document.getElementById(`get${provider.charAt(0).toUpperCase() + provider.slice(1)}Token`),
+          refresh: document.getElementById(`refresh${provider.charAt(0).toUpperCase() + provider.slice(1)}Token`),
+          disconnect: document.getElementById(`disconnect${provider.charAt(0).toUpperCase() + provider.slice(1)}`),
+          testAPI: document.getElementById(`test${provider.charAt(0).toUpperCase() + provider.slice(1)}API`)
+        };
+
+        // Update status badge
+        statusElement.className = 'status-badge';
+        if (status === 'connected') {
+          statusElement.className += ' status-connected';
+          statusElement.textContent = 'Connected';
+        } else if (status === 'expired') {
+          statusElement.className += ' status-expired';
+          statusElement.textContent = 'Token Expired';
+        } else if (status === 'invalid') {
+          statusElement.className += ' status-invalid';
+          statusElement.textContent = 'Invalid Token';
+        } else {
+          statusElement.className += ' status-disconnected';
+          statusElement.textContent = 'Disconnected';
+        }
+
+        // Update button states
+        const connected = status === 'connected' && tokenValid && !tokenExpired;
+        buttons.connect.disabled = connected;
+        buttons.check.disabled = false;
+        buttons.getToken.disabled = !connected;
+        buttons.refresh.disabled = !connected;
+        buttons.disconnect.disabled = status === 'disconnected';
+        buttons.testAPI.disabled = !connected;
+      }
+
+      function displayToken(provider, tokenData) {
+        const display = document.getElementById(`${provider}TokenDisplay`);
+        if (tokenData) {
+          const formatted = {
+            provider: tokenData.provider,
+            hasAccessToken: !!tokenData.accessToken,
+            accessTokenPreview: tokenData.accessToken ? tokenData.accessToken.substring(0, 20) + '...' : null,
+            hasRefreshToken: !!tokenData.refreshToken,
+            expiresAt: tokenData.expiresAt,
+            providerUserId: tokenData.providerUserId,
+            providerUsername: tokenData.providerUsername,
+            providerEmail: tokenData.providerEmail
+          };
+          display.textContent = JSON.stringify(formatted, null, 2);
+        } else {
+          display.textContent = 'No token available';
+        }
+      }
+
+      async function makeAuthenticatedRequest(url, options = {}) {
+        const headers = {
+          'Content-Type': 'application/json',
+          ...options.headers
+        };
+
+        if (authToken) {
+          headers['Authorization'] = `Bearer ${authToken}`;
+        }
+
+        // Add CSRF token for non-GET requests (but not for login)
+        const method = options.method || 'GET';
+        if (method !== 'GET' && !url.includes('/login')) {
+          const csrfToken = getCSRFToken();
+          if (csrfToken) {
+            headers['X-CSRF-Token'] = csrfToken;
+          }
+        }
+
+        return fetch(url, {
+          ...options,
+          headers,
+          credentials: 'include'
+        });
+      }
+
+      // Initialize CSRF token - not needed for this flow
+      async function initCSRF() {
+        // CSRF tokens are automatically handled by the login flow
+        // No need to explicitly initialize
+        log('CSRF handling ready', 'info');
+      }
+
+      // Login with test credentials
+      async function loginWithTestCredentials() {
+        try {
+          log('Attempting login with test credentials...', 'info');
+
+          const loginRequest = {
+            username: 'mitb@theopenlane.io',
+            password: 'mattisthebest1234'
+          };
+
+          const response = await fetch(`${apiBase}/v1/login`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify(loginRequest)
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            if (data.success && data.access_token) {
+              authToken = data.access_token;
+              log('Login successful!', 'success');
+              return true;
+            } else {
+              log('Login failed: Invalid response format', 'error');
+              return false;
+            }
+          } else {
+            const errorText = await response.text();
+            log(`Login failed: ${errorText}`, 'error');
+            return false;
+          }
+        } catch (error) {
+          log(`Login error: ${error.message}`, 'error');
+          return false;
+        }
+      }
+
+      // Authentication functions
+      async function checkAuthStatus() {
+        try {
+          // Check for session token in URL params first
+          const params = new URLSearchParams(window.location.search);
+          const sessionToken = params.get('session');
+          if (sessionToken) {
+            authToken = sessionToken;
+            log('Found session token in URL', 'success');
+          }
+
+          // If no token, try to login with test credentials
+          if (!authToken) {
+            const loginSuccess = await loginWithTestCredentials();
+            if (!loginSuccess) {
+              document.getElementById('authStatusText').innerHTML =
+                'Authentication failed. <button onclick="loginWithTestCredentials()" class="btn btn-sm btn-primary">Try Login</button>';
+              document.getElementById('authStatus').className = 'alert alert-warning';
+              return false;
+            }
+          }
+
+          // Test the token by making a GraphQL request
+          if (authToken) {
+            const response = await makeAuthenticatedRequest(`${apiBase}/query`, {
+              method: 'POST',
+              body: JSON.stringify({
+                query: '{ self { id displayName email organizations { edges { node { id displayName } } } } }'
+              })
+            });
+
+            if (response.ok) {
+              const data = await response.json();
+              if (data.data && data.data.self) {
+                userInfo = data.data.self;
+                document.getElementById('authStatusText').innerHTML =
+                  `Authenticated as <strong>${userInfo.displayName}</strong> (${userInfo.email})`;
+                document.getElementById('authStatus').className = 'alert alert-success';
+                log(`Authenticated as ${userInfo.displayName}`, 'success');
+                return true;
+              }
+            }
+          }
+
+          document.getElementById('authStatusText').innerHTML =
+            'Not authenticated. <button onclick="loginWithTestCredentials()" class="btn btn-sm btn-primary">Login</button>';
+          document.getElementById('authStatus').className = 'alert alert-warning';
+          log('Not authenticated', 'error');
+          return false;
+        } catch (error) {
+          log(`Auth check failed: ${error.message}`, 'error');
+          document.getElementById('authStatusText').innerHTML =
+            'Authentication failed. <button onclick="loginWithTestCredentials()" class="btn btn-sm btn-primary">Retry Login</button>';
+          document.getElementById('authStatus').className = 'alert alert-danger';
+          return false;
+        }
+      }
+
+      // Integration functions
+      async function startOAuthFlow(provider) {
+        try {
+          const scopes = document.getElementById(`${provider}Scopes`).value;
+          const requestBody = { provider };
+          if (scopes) {
+            requestBody.scopes = scopes.split(',').map(s => s.trim()).filter(s => s);
+          }
+
+          log(`Starting ${provider} OAuth flow...`, 'info');
+          const response = await makeAuthenticatedRequest(`${apiBase}/v1/integrations/oauth/start`, {
+            method: 'POST',
+            body: JSON.stringify(requestBody)
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            if (data.requiresLogin) {
+              log(`Authentication required for ${provider} OAuth`, 'info');
+              log(`Redirecting to login: ${data.authUrl}`, 'info');
+              window.location.href = data.authUrl;
+            } else {
+              log(`Got OAuth URL for ${provider}`, 'success');
+              window.location.href = data.authUrl;
+            }
+          } else {
+            const error = await response.text();
+            log(`Failed to start ${provider} OAuth: ${error}`, 'error');
+          }
+        } catch (error) {
+          log(`Error starting ${provider} OAuth: ${error.message}`, 'error');
+        }
+      }
+
+      async function checkIntegrationStatus(provider) {
+        try {
+          log(`Checking ${provider} status...`, 'info');
+          const response = await makeAuthenticatedRequest(`${apiBase}/v1/integrations/${provider}/status`);
+
+          if (response.ok) {
+            const data = await response.json();
+            log(`${provider} status: ${data.status || 'disconnected'}`, 'success');
+            updateStatus(provider, data.status || 'disconnected', data.tokenValid, data.tokenExpired);
+            return data;
+          } else {
+            log(`Failed to check ${provider} status`, 'error');
+            updateStatus(provider, 'disconnected');
+          }
+        } catch (error) {
+          log(`Error checking ${provider} status: ${error.message}`, 'error');
+          updateStatus(provider, 'disconnected');
+        }
+      }
+
+      async function getIntegrationToken(provider) {
+        try {
+          log(`Getting ${provider} token...`, 'info');
+          const response = await makeAuthenticatedRequest(`${apiBase}/v1/integrations/${provider}/token`);
+
+          if (response.ok) {
+            const data = await response.json();
+            log(`Retrieved ${provider} token`, 'success');
+            displayToken(provider, data.token);
+            return data.token;
+          } else {
+            log(`Failed to get ${provider} token`, 'error');
+            displayToken(provider, null);
+          }
+        } catch (error) {
+          log(`Error getting ${provider} token: ${error.message}`, 'error');
+          displayToken(provider, null);
+        }
+      }
+
+      async function refreshIntegrationToken(provider) {
+        try {
+          log(`Refreshing ${provider} token...`, 'info');
+          const response = await makeAuthenticatedRequest(`${apiBase}/v1/integrations/${provider}/refresh`, {
+            method: 'POST'
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            log(`Refreshed ${provider} token`, 'success');
+            displayToken(provider, data.token);
+            await checkIntegrationStatus(provider);
+          } else {
+            log(`Failed to refresh ${provider} token`, 'error');
+          }
+        } catch (error) {
+          log(`Error refreshing ${provider} token: ${error.message}`, 'error');
+        }
+      }
+
+      async function disconnectIntegration(provider) {
+        try {
+          // First get the integration to find its ID
+          const integrations = await listIntegrations();
+          const integration = integrations.find(i => i.kind === provider);
+
+          if (!integration) {
+            log(`No ${provider} integration found to disconnect`, 'error');
+            return;
+          }
+
+          log(`Disconnecting ${provider} integration...`, 'info');
+          const response = await makeAuthenticatedRequest(`${apiBase}/v1/integrations/${integration.id}`, {
+            method: 'DELETE'
+          });
+
+          if (response.ok) {
+            log(`Disconnected ${provider} integration`, 'success');
+            updateStatus(provider, 'disconnected');
+            displayToken(provider, null);
+            await loadIntegrationsList();
+          } else {
+            log(`Failed to disconnect ${provider} integration`, 'error');
+          }
+        } catch (error) {
+          log(`Error disconnecting ${provider}: ${error.message}`, 'error');
+        }
+      }
+
+      async function listIntegrations() {
+        try {
+          const response = await makeAuthenticatedRequest(`${apiBase}/v1/integrations`);
+          if (response.ok) {
+            const data = await response.json();
+            return data.integrations || [];
+          }
+          return [];
+        } catch (error) {
+          log(`Error listing integrations: ${error.message}`, 'error');
+          return [];
+        }
+      }
+
+      async function loadIntegrationsList() {
+        try {
+          const integrations = await listIntegrations();
+          const container = document.getElementById('integrationsList');
+
+          if (integrations.length === 0) {
+            container.innerHTML = '<div class="text-center text-muted">No integrations configured</div>';
+            return;
+          }
+
+          container.innerHTML = integrations.map(integration => `
+            <div class="card mb-2">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="card-title mb-1">${integration.name}</h6>
+                    <small class="text-muted">Provider: ${integration.kind}</small>
+                  </div>
+                  <div>
+                    <small class="text-muted">ID: ${integration.id}</small>
+                  </div>
+                </div>
+                <p class="card-text mt-2">${integration.description || 'No description'}</p>
+              </div>
+            </div>
+          `).join('');
+
+          log(`Loaded ${integrations.length} integration(s)`, 'info');
+        } catch (error) {
+          log(`Error loading integrations list: ${error.message}`, 'error');
+        }
+      }
+
+      // API testing functions
+      async function testGitHubAPI() {
+        try {
+          const token = await getIntegrationToken('github');
+          if (!token || !token.accessToken) {
+            document.getElementById('githubAPIResult').textContent = 'No token available';
+            return;
+          }
+
+          log('Testing GitHub API...', 'info');
+          const response = await fetch('https://api.github.com/user', {
+            headers: {
+              'Authorization': `token ${token.accessToken}`,
+              'Accept': 'application/vnd.github.v3+json'
+            }
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            document.getElementById('githubAPIResult').innerHTML =
+              `✅ Success: ${data.login} (${data.name})`;
+            log('GitHub API test successful', 'success');
+          } else {
+            document.getElementById('githubAPIResult').innerHTML =
+              `❌ Failed: ${response.status} ${response.statusText}`;
+            log('GitHub API test failed', 'error');
+          }
+        } catch (error) {
+          document.getElementById('githubAPIResult').innerHTML = `❌ Error: ${error.message}`;
+          log(`GitHub API test error: ${error.message}`, 'error');
+        }
+      }
+
+      async function testSlackAPI() {
+        try {
+          const token = await getIntegrationToken('slack');
+          if (!token || !token.accessToken) {
+            document.getElementById('slackAPIResult').textContent = 'No token available';
+            return;
+          }
+
+          log('Testing Slack API...', 'info');
+          const response = await fetch('https://slack.com/api/auth.test', {
+            headers: {
+              'Authorization': `Bearer ${token.accessToken}`,
+              'Content-Type': 'application/json'
+            }
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            if (data.ok) {
+              document.getElementById('slackAPIResult').innerHTML =
+                `✅ Success: ${data.user} in ${data.team}`;
+              log('Slack API test successful', 'success');
+            } else {
+              document.getElementById('slackAPIResult').innerHTML =
+                `❌ Slack Error: ${data.error}`;
+              log('Slack API test failed', 'error');
+            }
+          } else {
+            document.getElementById('slackAPIResult').innerHTML =
+              `❌ Failed: ${response.status} ${response.statusText}`;
+            log('Slack API test failed', 'error');
+          }
+        } catch (error) {
+          document.getElementById('slackAPIResult').innerHTML = `❌ Error: ${error.message}`;
+          log(`Slack API test error: ${error.message}`, 'error');
+        }
+      }
+
+      // Event listeners
+      document.getElementById('connectGithub').addEventListener('click', () => startOAuthFlow('github'));
+      document.getElementById('connectSlack').addEventListener('click', () => startOAuthFlow('slack'));
+
+      document.getElementById('checkGithubStatus').addEventListener('click', () => checkIntegrationStatus('github'));
+      document.getElementById('checkSlackStatus').addEventListener('click', () => checkIntegrationStatus('slack'));
+
+      document.getElementById('getGithubToken').addEventListener('click', () => getIntegrationToken('github'));
+      document.getElementById('getSlackToken').addEventListener('click', () => getIntegrationToken('slack'));
+
+      document.getElementById('refreshGithubToken').addEventListener('click', () => refreshIntegrationToken('github'));
+      document.getElementById('refreshSlackToken').addEventListener('click', () => refreshIntegrationToken('slack'));
+
+      document.getElementById('disconnectGithub').addEventListener('click', () => disconnectIntegration('github'));
+      document.getElementById('disconnectSlack').addEventListener('click', () => disconnectIntegration('slack'));
+
+      document.getElementById('testGithubAPI').addEventListener('click', testGitHubAPI);
+      document.getElementById('testSlackAPI').addEventListener('click', testSlackAPI);
+
+      document.getElementById('refreshIntegrations').addEventListener('click', loadIntegrationsList);
+      document.getElementById('clearLog').addEventListener('click', () => {
+        document.getElementById('activityLog').innerHTML = '';
+      });
+
+      // Initialize
+      async function initialize() {
+        log('Initializing OAuth Integration Testing Interface', 'info');
+
+        // Initialize CSRF token first
+        await initCSRF();
+
+        const isAuthenticated = await checkAuthStatus();
+        if (isAuthenticated) {
+          // Check status of both providers
+          await Promise.all([
+            checkIntegrationStatus('github'),
+            checkIntegrationStatus('slack')
+          ]);
+
+          // Load integrations list
+          await loadIntegrationsList();
+        }
+
+        log('Initialization complete', 'success');
+      }
+
+      // Make login function globally accessible for button clicks
+      window.loginWithTestCredentials = loginWithTestCredentials;
+
+      // Start initialization when page loads
+      document.addEventListener('DOMContentLoaded', initialize);
+
+      // Handle OAuth callback
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('session')) {
+        log('OAuth callback detected, refreshing status...', 'info');
+        // Give a small delay for the backend to process the callback
+        setTimeout(initialize, 1000);
+      }
+    </script>
+  </body>
+</html>

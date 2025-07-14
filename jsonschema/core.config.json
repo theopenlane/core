@@ -919,6 +919,48 @@
         "redirectUrl"
       ]
     },
+    "handlers.IntegrationOauthProviderConfig": {
+      "properties": {
+        "redirectUrl": {
+          "type": "string",
+          "description": "RedirectURL is the base URL for integration OAuth callbacks"
+        },
+        "github": {
+          "$ref": "#/$defs/handlers.IntegrationProviderConfig",
+          "description": "Github contains the configuration settings for GitHub integrations"
+        },
+        "slack": {
+          "$ref": "#/$defs/handlers.IntegrationProviderConfig",
+          "description": "Slack contains the configuration settings for Slack integrations"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations"
+    },
+    "handlers.IntegrationProviderConfig": {
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "description": "ClientID is the OAuth2 client ID"
+        },
+        "clientSecret": {
+          "type": "string",
+          "description": "ClientSecret is the OAuth2 client secret"
+        },
+        "clientEndpoint": {
+          "type": "string",
+          "description": "ClientEndpoint is the base URL for the OAuth endpoints"
+        },
+        "scopes": {
+          "$ref": "#/$defs/[]string",
+          "description": "Scopes are the OAuth2 scopes to request"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "IntegrationProviderConfig contains OAuth configuration for a specific integration provider"
+    },
     "handlers.OauthProviderConfig": {
       "properties": {
         "redirectUrl": {
@@ -1508,6 +1550,10 @@
     "slack": {
       "$ref": "#/$defs/config.Slack",
       "description": "Slack contains settings for Slack notifications"
+    },
+    "integrationOauthProvider": {
+      "$ref": "#/$defs/handlers.IntegrationOauthProviderConfig",
+      "description": "IntegrationOauthProvider contains the OAuth provider configuration for integrations (separate from auth.providers)"
     }
   },
   "additionalProperties": false,

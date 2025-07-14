@@ -25,6 +25,7 @@ Config contains the configuration for the core server
 |[**subscription**](#subscription)|`object`|||
 |[**keywatcher**](#keywatcher)|`object`|KeyWatcher contains settings for the key watcher that manages JWT signing keys<br/>||
 |[**slack**](#slack)|`object`|Slack contains settings for Slack notifications<br/>||
+|[**integrationOauthProvider**](#integrationoauthprovider)|`object`|IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations<br/>||
 
 **Additional Properties:** not allowed  
 <a name="server"></a>
@@ -959,4 +960,63 @@ Slack contains settings for Slack notifications
 |**newUserMessageFile**|`string`|NewUserMessageFile is the path to the template used for new user notifications<br/>||
 
 **Additional Properties:** not allowed  
+<a name="integrationoauthprovider"></a>
+## integrationOauthProvider: object
+
+IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**redirectUrl**|`string`|RedirectURL is the base URL for integration OAuth callbacks<br/>||
+|[**github**](#integrationoauthprovidergithub)|`object`|IntegrationProviderConfig contains OAuth configuration for a specific integration provider<br/>||
+|[**slack**](#integrationoauthproviderslack)|`object`|IntegrationProviderConfig contains OAuth configuration for a specific integration provider<br/>||
+
+**Additional Properties:** not allowed  
+<a name="integrationoauthprovidergithub"></a>
+### integrationOauthProvider\.github: object
+
+IntegrationProviderConfig contains OAuth configuration for a specific integration provider
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**clientId**|`string`|ClientID is the OAuth2 client ID<br/>||
+|**clientSecret**|`string`|ClientSecret is the OAuth2 client secret<br/>||
+|**clientEndpoint**|`string`|ClientEndpoint is the base URL for the OAuth endpoints<br/>||
+|[**scopes**](#integrationoauthprovidergithubscopes)|`string[]`|||
+
+**Additional Properties:** not allowed  
+<a name="integrationoauthprovidergithubscopes"></a>
+#### integrationOauthProvider\.github\.scopes: array
+
+**Items**
+
+**Item Type:** `string`  
+<a name="integrationoauthproviderslack"></a>
+### integrationOauthProvider\.slack: object
+
+IntegrationProviderConfig contains OAuth configuration for a specific integration provider
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**clientId**|`string`|ClientID is the OAuth2 client ID<br/>||
+|**clientSecret**|`string`|ClientSecret is the OAuth2 client secret<br/>||
+|**clientEndpoint**|`string`|ClientEndpoint is the base URL for the OAuth endpoints<br/>||
+|[**scopes**](#integrationoauthproviderslackscopes)|`string[]`|||
+
+**Additional Properties:** not allowed  
+<a name="integrationoauthproviderslackscopes"></a>
+#### integrationOauthProvider\.slack\.scopes: array
+
+**Items**
+
+**Item Type:** `string`  
 
