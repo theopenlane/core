@@ -281,6 +281,12 @@ fi
 echo "📝 Configuration changes detected, proceeding with PR creation"
 echo -e "Summary:$change_summary"
 
+# Source helm documentation utilities
+source "${SCRIPT_DIR}/helm-docs-utils.sh"
+
+# Generate documentation before committing
+generate_docs_and_commit
+
 # Configure git
 git config --local user.email "bender@theopenlane.io"
 git config --local user.name "theopenlane-bender"

@@ -142,6 +142,13 @@ fi
 echo "📝 Release changes detected, creating PR"
 echo -e "Summary:$change_summary"
 
+# Source helm documentation utilities
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/helm-docs-utils.sh"
+
+# Generate documentation before committing
+generate_docs_and_commit
+
 # Configure git
 git config --local user.email "bender@theopenlane.io"
 git config --local user.name "theopenlane-bender"

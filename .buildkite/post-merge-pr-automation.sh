@@ -237,6 +237,13 @@ while IFS=':' read -r pr_number branch_name; do
       change_summary+="\\n- 📈 Bumped chart version to $new_version"
     fi
 
+    # Source helm documentation utilities
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    source "${SCRIPT_DIR}/helm-docs-utils.sh"
+
+    # Generate documentation before committing
+    generate_docs_and_commit
+
     # Configure git
     git config user.email "bender@theopenlane.io"
     git config user.name "theopenlane-bender"
