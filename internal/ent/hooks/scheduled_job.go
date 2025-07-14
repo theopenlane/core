@@ -124,12 +124,12 @@ func downloadRawCode(ctx context.Context, downloadURL string) (string, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("failed to download raw code, status: %d", resp.StatusCode)
+		return "", fmt.Errorf("failed to download raw code, status: %d", resp.StatusCode) //nolint:err113
 	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return "", fmt.Errorf("failed to read response body: %w", err)
+		return "", err
 	}
 
 	return string(body), nil
@@ -158,7 +158,7 @@ func HookControlScheduledJobCreate() ent.Hook {
 
 			if mutation.Op() == ent.OpCreate && hasCron && cron != "" {
 				if err := createWindmillScheduledJob(ctx, mutation); err != nil {
-					return nil, fmt.Errorf("failed to create windmill scheduled job: %w", err)
+					return nil, fmt.Errorf("failed to create windmill scheduled job: %w", err) //nolint:err113
 				}
 			}
 
@@ -182,7 +182,6 @@ func createWindmillScheduledJob(ctx context.Context, mutation *generated.Control
 		return nil
 	}
 
-	// Get job details
 	jobID, hasJobID := mutation.JobID()
 	if !hasJobID {
 		return errors.New("job_id is required for windmill scheduled job creation") // nolint:err113

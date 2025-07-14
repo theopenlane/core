@@ -1523,11 +1523,7 @@ type ScheduledJobBuilder struct {
 func (w *ScheduledJobBuilder) MustNew(ctx context.Context, t *testing.T) *ent.ScheduledJob {
 	ctx = setContext(ctx, w.client.db)
 	wn, err := w.client.db.ScheduledJob.Create().
-		SetConfiguration(models.JobConfiguration{
-			SSL: models.SSLJobConfig{
-				URL: "https://google.com",
-			},
-		}).
+		SetConfiguration(models.JobConfiguration{}).
 		SetTitle("SSL checks").
 		SetDescription("Check and verify a tls certificate is valid").
 		SetScript(`
@@ -1559,11 +1555,7 @@ func (b *ControlScheduledJobBuilder) MustNew(ctx context.Context, t *testing.T) 
 
 	job := b.client.db.ControlScheduledJob.Create().
 		SetJobID(b.JobID).
-		SetConfiguration(b.Configuration).
-		SetCadence(models.JobCadence{
-			Time:      "15:09",
-			Frequency: enums.JobCadenceFrequencyDaily,
-		})
+		SetConfiguration(b.Configuration)
 
 	if b.JobRunnerID != "" {
 		job.SetJobRunnerID(b.JobRunnerID)

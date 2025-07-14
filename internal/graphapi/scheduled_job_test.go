@@ -18,38 +18,26 @@ func TestQueryScheduledJob(t *testing.T) {
 	runner := (&JobRunnerBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 
 	firstScheduledJob := (&ControlScheduledJobBuilder{
-		client: suite.client,
-		JobID:  job.ID,
-		Configuration: models.JobConfiguration{
-			SSL: models.SSLJobConfig{
-				URL: "https://google.com",
-			},
-		},
-		JobRunnerID: runner.ID,
+		client:        suite.client,
+		JobID:         job.ID,
+		Configuration: models.JobConfiguration{},
+		JobRunnerID:   runner.ID,
 	}).MustNew(testUser1.UserCtx, t)
 
 	secondScheduledJob := (&ControlScheduledJobBuilder{
-		client: suite.client,
-		JobID:  job.ID,
-		Configuration: models.JobConfiguration{
-			SSL: models.SSLJobConfig{
-				URL: "https://google.com",
-			},
-		},
-		JobRunnerID: runner.ID,
+		client:        suite.client,
+		JobID:         job.ID,
+		Configuration: models.JobConfiguration{},
+		JobRunnerID:   runner.ID,
 	}).MustNew(testUser1.UserCtx, t)
 
 	secondJob := (&ScheduledJobBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	thirdScheduledJob := (&ControlScheduledJobBuilder{
-		client: suite.client,
-		JobID:  secondJob.ID,
-		Configuration: models.JobConfiguration{
-			SSL: models.SSLJobConfig{
-				URL: "https://google.com",
-			},
-		},
-		JobRunnerID: runner.ID,
+		client:        suite.client,
+		JobID:         secondJob.ID,
+		Configuration: models.JobConfiguration{},
+		JobRunnerID:   runner.ID,
 	}).MustNew(testUser2.UserCtx, t)
 
 	testCases := []struct {
@@ -137,15 +125,11 @@ func TestControlScheduledJob(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 			client: suite.client.api,
 			jobBuilder: ControlScheduledJobBuilder{
-				client: suite.client,
-				JobID:  job.ID,
-				Configuration: models.JobConfiguration{
-					SSL: models.SSLJobConfig{
-						URL: "https://google.com",
-					},
-				},
-				JobRunnerID: runner.ID,
-				ControlIDs:  []string{control.ID},
+				client:        suite.client,
+				JobID:         job.ID,
+				Configuration: models.JobConfiguration{},
+				JobRunnerID:   runner.ID,
+				ControlIDs:    []string{control.ID},
 			},
 		},
 	}
