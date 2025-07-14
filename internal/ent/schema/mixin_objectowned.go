@@ -167,7 +167,7 @@ func withOrganizationOwner(skipSystemAdmin bool) objectOwnedOption {
 }
 
 // withListObjectsFilter allows to use the list objects filter for the object owned mixin instead of batch checks
-func withListObjectsFilter() objectOwnedOption {
+func withListObjectsFilter() objectOwnedOption { //nolint:unused
 	return func(o *ObjectOwnedMixin) {
 		o.UseListObjectsFilter = true
 	}

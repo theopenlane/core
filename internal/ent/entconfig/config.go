@@ -64,7 +64,7 @@ type GenericLLMConfig struct {
 	Model string `json:"model" koanf:"model"`
 
 	// APIKey contains the authentication key for the service
-	APIKey string `json:"apiKey" koanf:"apiKey"`
+	APIKey string `json:"apiKey" koanf:"apiKey" sensitive:"true"`
 }
 
 // GeminiConfig contains Google Gemini specific configuration
@@ -75,7 +75,7 @@ type GeminiConfig struct {
 	CredentialsPath string `json:"credentialsPath" koanf:"credentialsPath"`
 
 	// CredentialsJSON contains Google Cloud credentials as JSON string
-	CredentialsJSON string `json:"credentialsJSON" koanf:"credentialsJSON"`
+	CredentialsJSON string `json:"credentialsJSON" koanf:"credentialsJSON" sensitive:"true"`
 
 	// MaxTokens specifies the maximum tokens for response
 	MaxTokens int `json:"maxTokens" koanf:"maxTokens"`

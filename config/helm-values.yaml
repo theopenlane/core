@@ -1,0 +1,513 @@
+# Helm values.yaml for Openlane
+# This file is auto-generated from the core config structure
+# Manual changes may be overwritten when regenerated
+#
+# Domain Inheritance:
+# Set 'domain' to enable automatic domain inheritance for fields tagged with domain:"inherit"
+# Fields with domainPrefix will be prefixed (e.g., "https://api" becomes "https://api.yourdomain.com")
+# Fields with domainSuffix will be suffixed (e.g., "/.well-known/jwks.json" becomes "yourdomain.com/.well-known/jwks.json")
+# Individual fields can still be overridden by setting them explicitly
+
+coreConfiguration:
+    # -- Domain provides a global domain value for other modules to inherit
+    domain: ""  # @schema type:string
+    # -- RefreshInterval determines how often to reload the config
+    refreshInterval: 10m0s  # @schema type:integer; default:10m
+    # -- Server contains the echo server settings
+    server:
+        # -- Dev enables echo's dev mode options
+        dev: false  # @schema type:boolean; default:false
+        # -- Listen sets the listen address to serve the echo server on
+        listen: ":17608"  # @schema type:string; default::17608
+        # -- MetricsPort sets the port for the metrics endpoint
+        metricsPort: ":17609"  # @schema type:string; default::17609
+        # -- ShutdownGracePeriod sets the grace period for in flight requests before shutting down
+        shutdownGracePeriod: 10s  # @schema type:integer; default:10s
+        # -- ReadTimeout sets the maximum duration for reading the entire request including the body
+        readTimeout: 15s  # @schema type:integer; default:15s
+        # -- WriteTimeout sets the maximum duration before timing out writes of the response
+        writeTimeout: 15s  # @schema type:integer; default:15s
+        # -- IdleTimeout sets the maximum amount of time to wait for the next request when keep-alives are enabled
+        idleTimeout: 30s  # @schema type:integer; default:30s
+        # -- ReadHeaderTimeout sets the amount of time allowed to read request headers
+        readHeaderTimeout: 2s  # @schema type:integer; default:2s
+        # -- TLS contains the tls configuration settings
+        tls:
+            config: <nil>
+            # -- Enabled turns on TLS settings for the server
+            enabled: false  # @schema type:boolean; default:false
+            # -- CertFile location for the TLS server
+            certFile: "server.crt"  # @schema type:string; default:server.crt
+            # -- CertKey file location for the TLS server
+            certKey: "server.key"  # @schema type:string; default:server.key
+            # -- AutoCert generates the cert with letsencrypt, this does not work on localhost
+            autoCert: false  # @schema type:boolean; default:false
+        # -- CORS contains settings to allow cross origin settings and insecure cookies
+        cors:
+            # -- Enable or disable the CORS middleware
+            enabled: true  # @schema type:boolean; default:true
+            # -- Prefixes is a map of prefixes to allowed origins
+            prefixes: {}
+            # -- AllowOrigins is a list of allowed origins
+            allowOrigins: []
+            # -- CookieInsecure sets the cookie to be insecure
+            cookieInsecure: false  # @schema type:boolean
+        # -- Secure contains settings for the secure middleware
+        secure:
+            # -- Enabled indicates if the secure middleware should be enabled
+            enabled: true  # @schema type:boolean; default:true
+            # -- XSSProtection is the value to set the X-XSS-Protection header to - default is 1; mode=block
+            xssprotection: "1; mode=block"  # @schema type:string; default:1; mode=block
+            # -- ContentTypeNosniff is the value to set the X-Content-Type-Options header to - default is nosniff
+            contenttypenosniff: "nosniff"  # @schema type:string; default:nosniff
+            # -- XFrameOptions is the value to set the X-Frame-Options header to - default is SAMEORIGIN
+            xframeoptions: "SAMEORIGIN"  # @schema type:string; default:SAMEORIGIN
+            # -- HSTSPreloadEnabled is a boolean to enable HSTS preloading - default is false
+            hstspreloadenabled: false  # @schema type:boolean; default:false
+            # -- HSTSMaxAge is the max age to set the HSTS header to - default is 31536000
+            hstsmaxage: 31536000  # @schema type:integer; default:31536000
+            # -- ContentSecurityPolicy is the value to set the Content-Security-Policy header to - default is default-src 'self'
+            contentsecuritypolicy: "default-src 'self'"  # @schema type:string; default:default-src 'self'
+            # -- ReferrerPolicy is the value to set the Referrer-Policy header to - default is same-origin
+            referrerpolicy: "same-origin"  # @schema type:string; default:same-origin
+            # -- CSPReportOnly is a boolean to enable the Content-Security-Policy-Report-Only header - default is false
+            cspreportonly: false  # @schema type:boolean; default:false
+        # -- Redirect contains settings for the redirect middleware
+        redirects:
+            # -- Enabled indicates if the redirect middleware should be enabled
+            enabled: true  # @schema type:boolean; default:true
+            # -- Redirects is a map of paths to redirect to
+            redirects: {}
+            # -- Code is the HTTP status code to use for the redirect
+            code: 0  # @schema type:integer
+        # -- CacheControl contains settings for the cache control middleware
+        cacheControl:
+            enabled: true  # @schema type:boolean; default:true
+            # -- noCacheHeaders is the header <-> match map pair to match in http for entity headers to remove
+            noCacheHeaders: {}
+            # -- etagHeaders is the string of entity headers to remove
+            etagHeaders: []
+        # -- Mime contains settings for the mime middleware
+        mime:
+            # -- Enabled indicates if the mime middleware should be enabled
+            enabled: true  # @schema type:boolean; default:true
+            # -- MimeTypesFile is the file to load mime types from
+            mimeTypesFile: ""  # @schema type:string
+            # -- DefaultContentType is the default content type to set if no mime type is found
+            defaultContentType: "application/data"  # @schema type:string; default:application/data
+        # -- GraphPool contains settings for the goroutine pool used by the graph resolvers
+        graphPool:
+            # -- MaxWorkers is the maximum number of workers in the pool
+            maxWorkers: 100  # @schema type:integer; default:100
+        # -- EnableGraphExtensions enables the graph extensions for the graph resolvers
+        enableGraphExtensions: true  # @schema type:boolean; default:true
+        # -- ComplexityLimit sets the maximum complexity allowed for a query
+        complexityLimit: 100  # @schema type:integer; default:100
+        # -- MaxResultLimit sets the maximum number of results allowed for a query
+        maxResultLimit: 100  # @schema type:integer; default:100
+        # -- CSRFProtection enables CSRF protection for the server
+        csrfProtection:
+            # -- Enabled indicates whether CSRF protection is enabled.
+            enabled: false  # @schema type:boolean; default:false
+            # -- Header specifies the header name to look for the CSRF token.
+            header: "X-CSRF-Token"  # @schema type:string; default:X-CSRF-Token
+            # -- Cookie specifies the cookie name used to store the CSRF token.
+            cookie: "ol.csrf-token"  # @schema type:string; default:ol.csrf-token
+            # -- Secure sets the Secure flag on the CSRF cookie.
+            secure: true  # @schema type:boolean; default:true
+            # -- SameSite configures the SameSite attribute on the CSRF cookie. Valid
+            # values are "Lax", "Strict", "None" and "Default".
+            sameSite: "Lax"  # @schema type:string; default:Lax
+            # -- CookieHTTPOnly indicates whether the CSRF cookie is HTTP only.
+            cookieHttpOnly: false  # @schema type:boolean; default:false
+            # -- CookieDomain specifies the domain for the CSRF cookie, default to no domain
+            cookieDomain: ""  # @schema type:string
+            # -- CookiePath specifies the path for the CSRF cookie, default to "/"
+            cookiePath: "/"  # @schema type:string; default:/
+        # -- DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set
+        defaultTrustCenterDomain: ""  # @schema type:string
+    # -- EntConfig contains the ent configuration used by the ent middleware
+    entConfig:
+        # -- EntityTypes is the list of entity types to create by default for the organization
+        entityTypes: []
+        # -- Summarizer contains configuration for text summarization
+        summarizer:
+            # -- Type specifies the summarization algorithm to use
+            type: lexrank  # @schema type:string; default:lexrank
+            # -- LLM contains configuration for large language model based summarization
+            llm:
+                # -- Provider specifies which LLM service to use
+                provider:   # @schema type:string
+                # -- Anthropic contains configuration for Anthropic's API
+                anthropic:
+                    # -- BetaHeader specifies the beta API features to enable
+                    betaHeader: ""  # @schema type:string
+                    # -- LegacyTextCompletion enables legacy text completion API
+                    legacyTextCompletion: false  # @schema type:boolean
+                    # -- BaseURL specifies the API endpoint
+                    baseURL: ""  # @schema type:string
+                # -- Mistral contains configuration for Mistral's API
+                mistral:
+                    # -- URL specifies the API endpoint
+                    url: ""  # @schema type:string
+                # -- Gemini contains configuration for Google's Gemini API
+                gemini:
+                    # -- CredentialsPath is the path to Google Cloud credentials file
+                    credentialsPath: ""  # @schema type:string
+                    # -- MaxTokens specifies the maximum tokens for response
+                    maxTokens: 0  # @schema type:integer
+                # -- HuggingFace contains configuration for HuggingFace's API
+                huggingFace:
+                    # -- URL specifies the API endpoint
+                    url: ""  # @schema type:string
+                # -- Ollama contains configuration for Ollama's API
+                ollama:
+                    # -- Model specifies the model to use
+                    model: ""  # @schema type:string
+                    # -- URL specifies the API endpoint
+                    url: ""  # @schema type:string
+                # -- Cloudflare contains configuration for Cloudflare's API
+                cloudflare:
+                    # -- AccountID specifies the Cloudflare account ID
+                    accountID: ""  # @schema type:string
+                    # -- ServerURL specifies the API endpoint
+                    serverURL: ""  # @schema type:string
+                # -- OpenAI contains configuration for OpenAI's API
+                openai:
+                    # -- URL specifies the API endpoint
+                    url: ""  # @schema type:string
+                    # -- OrganizationID specifies the OpenAI organization ID
+                    organizationID: ""  # @schema type:string
+            # -- MaximumSentences specifies the maximum number of sentences in the summary
+            maximumSentences: 60  # @schema type:integer; default:60
+        # -- Windmill contains configuration for Windmill workflow automation
+        windmill:
+            # -- Enabled specifies whether Windmill integration is enabled
+            enabled: false  # @schema type:boolean; default:false
+            # -- BaseURL is the base URL of the Windmill instance
+            baseURL: "https://app.windmill.dev"  # @schema type:string; default:https://app.windmill.dev
+            # -- Workspace is the Windmill workspace to use
+            workspace: ""  # @schema type:string
+            # -- Token is the API token for authentication with Windmill
+            token: ""  # @schema type:string
+            # -- DefaultTimeout is the default timeout for API requests
+            defaultTimeout: "30s"  # @schema type:string; default:30s
+            # -- Timezone for scheduled jobs
+            timezone: "UTC"  # @schema type:string; default:UTC
+            # -- OnFailureScript script to run when a scheduled job fails
+            onFailureScript: ""  # @schema type:string
+            # -- OnSuccessScript script to run when a scheduled job succeeds
+            onSuccessScript: ""  # @schema type:string
+            # -- FolderName identifies the storage path of flows and scripts in Windmill, you'd want to use
+            folderName: "openlane"  # @schema type:string; default:openlane
+        # -- MaxPoolSize is the max pond pool workers that can be used by the ent client
+        maxPoolSize: 100  # @schema type:integer; default:100
+    # -- Auth contains the authentication token settings and provider(s)
+    auth:
+        # -- Enabled authentication on the server, not recommended to disable
+        enabled: true  # @schema type:boolean; default:true
+        # -- Token contains the token config settings for the issued tokens
+        token:
+            kid: ""  # @schema type:string
+            audience: "https://theopenlane.io"  # @schema type:string; default:https://theopenlane.io
+            refreshAudience: ""  # @schema type:string
+            issuer: "https://auth.theopenlane.io"  # @schema type:string; default:https://auth.theopenlane.io
+            accessDuration: 1h0m0s  # @schema type:integer; default:1h
+            refreshDuration: 2h0m0s  # @schema type:integer; default:2h
+            refreshOverlap: -15m0s  # @schema type:integer; default:-15m
+            jwksEndpoint: "https://api.theopenlane.io/.well-known/jwks.json"  # @schema type:string; default:https://api.theopenlane.io/.well-known/jwks.json
+            keys: {}
+            generateKeys: true  # @schema type:boolean; default:true
+        # -- SupportedProviders are the supported oauth providers that have been configured
+        supportedProviders: []
+        # -- Providers contains supported oauth2 providers configuration
+        providers:
+            # -- RedirectURL is the URL that the OAuth2 client will redirect to after authentication is complete
+            redirectUrl: "http://localhost:3001/api/auth/callback/theopenlane"  # @schema type:string; default:http://localhost:3001/api/auth/callback/theopenlane
+            # -- Github contains the configuration settings for the Github Oauth Provider
+            github:
+                clientId: ""  # @schema type:string
+                clientSecret: ""  # @schema type:string
+                clientEndpoint: "http://localhost:17608"  # @schema type:string; default:http://localhost:17608
+                scopes: []
+                redirectUrl: "/v1/github/callback"  # @schema type:string; default:/v1/github/callback
+            # -- Google contains the configuration settings for the Google Oauth Provider
+            google:
+                clientId: ""  # @schema type:string
+                clientSecret: ""  # @schema type:string
+                clientEndpoint: "http://localhost:17608"  # @schema type:string; default:http://localhost:17608
+                scopes: []
+                redirectUrl: "/v1/google/callback"  # @schema type:string; default:/v1/google/callback
+            # -- Webauthn contains the configuration settings for the Webauthn Oauth Provider
+            webauthn:
+                enabled: true  # @schema type:boolean; default:true
+                displayName: ""  # @schema type:string
+                relyingPartyId: "localhost"  # @schema type:string; default:localhost
+                requestOrigins:
+                    - http://localhost:3001
+                maxDevices: 10  # @schema type:integer; default:10
+                enforceTimeout: true  # @schema type:boolean; default:true
+                timeout: 1m0s  # @schema type:integer; default:60s
+                debug: false  # @schema type:boolean; default:false
+    # -- Authz contains the authorization settings for fine grained access control
+    authz:
+        # -- enables authorization checks with openFGA
+        enabled: true  # @schema type:boolean; default:true
+        # -- name of openFGA store
+        storeName: "openlane"  # @schema type:string; default:openlane
+        # -- host url with scheme of the openFGA API
+        hostUrl: "https://authz.theopenlane.io"  # @schema type:string; default:https://authz.theopenlane.io
+        # -- id of openFGA store
+        storeId: ""  # @schema type:string
+        # -- id of openFGA model
+        modelId: ""  # @schema type:string
+        # -- force create a new model
+        createNewModel: false  # @schema type:boolean; default:false
+        # -- path to the fga model file
+        modelFile: "fga/model/model.fga"  # @schema type:string; default:fga/model/model.fga
+        # -- credentials for the openFGA client
+        credentials:
+            # -- api token for the openFGA client
+            apiToken: ""  # @schema type:string
+            # -- client id for the openFGA client
+            clientId: ""  # @schema type:string
+            # -- client secret for the openFGA client
+            clientSecret: ""  # @schema type:string
+            # -- audience for the openFGA client
+            audience: ""  # @schema type:string
+            # -- issuer for the openFGA client
+            issuer: ""  # @schema type:string
+            # -- scopes for the openFGA client
+            scopes: ""  # @schema type:string
+        # -- ignore duplicate key error
+        ignoreDuplicateKeyError: true  # @schema type:boolean; default:true
+    # -- DB contains the database configuration for the ent client
+    db:
+        # -- debug enables printing the debug database logs
+        debug: false  # @schema type:boolean; default:false
+        # -- the name of the database to use with otel tracing
+        databaseName: "openlane"  # @schema type:string; default:openlane
+        # -- sql driver name
+        driverName: "pgx"  # @schema type:string; default:pgx
+        # -- enables writing to two databases simultaneously
+        multiWrite: false  # @schema type:boolean; default:false
+        # -- dsn of the primary database
+        primaryDbSource: "file:openlane.db"  # @schema type:string; default:file:openlane.db
+        # -- dsn of the secondary database if multi-write is enabled
+        secondaryDbSource: "file:backup.db"  # @schema type:string; default:file:backup.db
+        # -- cache results for subsequent requests
+        cacheTTL: 1s  # @schema type:integer; default:1s
+        # -- run migrations on startup
+        runMigrations: true  # @schema type:boolean; default:true
+        # -- migration provider to use for running migrations
+        migrationProvider: "atlas"  # @schema type:string; default:atlas
+        # -- enable history data to be logged to the database
+        enableHistory: false  # @schema type:boolean; default:false
+        # -- maximum number of connections to the database
+        maxConnections: 0  # @schema type:integer; default:0
+        # -- maximum number of idle connections to the database
+        maxIdleConnections: 0  # @schema type:integer; default:0
+    # -- JobQueue contains the configuration for the job queue (river) client
+    jobQueue:
+        connectionURI: "postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable"  # @schema type:string; default:postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
+        runMigrations: false  # @schema type:boolean; default:false
+        riverConf:
+    # -- Redis contains the redis configuration for the key-value store
+    redis:
+        enabled: true  # @schema type:boolean; default:true
+        address: "localhost:6379"  # @schema type:string; default:localhost:6379
+        name: ""  # @schema type:string
+        username: ""  # @schema type:string
+        password: ""  # @schema type:string
+        db: 0  # @schema type:integer; default:0
+        dialTimeout: 5s  # @schema type:integer; default:5s
+        readTimeout: 0s  # @schema type:integer; default:0
+        writeTimeout: 0s  # @schema type:integer; default:0
+        maxRetries: 3  # @schema type:integer; default:3
+        minIdleConns: 0  # @schema type:integer; default:0
+        maxIdleConns: 0  # @schema type:integer; default:0
+        maxActiveConns: 0  # @schema type:integer; default:0
+    # -- Tracer contains the tracing config for opentelemetry
+    tracer:
+        enabled: false  # @schema type:boolean; default:false
+        provider: "stdout"  # @schema type:string; default:stdout
+        environment: "development"  # @schema type:string; default:development
+        stdout:
+            pretty: true  # @schema type:boolean; default:true
+            disableTimestamp: false  # @schema type:boolean; default:false
+        otlp:
+            endpoint: "localhost:4317"  # @schema type:string; default:localhost:4317
+            insecure: true  # @schema type:boolean; default:true
+            certificate: ""  # @schema type:string
+            headers: []
+            compression: ""  # @schema type:string
+            timeout: 10s  # @schema type:integer; default:10s
+    # -- Email contains email sending configuration for the server
+    email:
+        companyName: ""  # @schema type:string
+        companyAddress: ""  # @schema type:string
+        corporation: ""  # @schema type:string
+        year: 0  # @schema type:integer
+        fromEmail: ""  # @schema type:string
+        supportEmail: ""  # @schema type:string
+        logoURL: ""  # @schema type:string
+        urls:
+            root: ""  # @schema type:string
+            product: ""  # @schema type:string
+            docs: ""  # @schema type:string
+            verify: ""  # @schema type:string
+            invite: ""  # @schema type:string
+            reset: ""  # @schema type:string
+            verifySubscriber: ""  # @schema type:string
+            verifyBilling: ""  # @schema type:string
+        templatesPath: ""  # @schema type:string
+    # -- Sessions config for user sessions and cookies
+    sessions:
+        signingKey: "my-signing-secret"  # @schema type:string; default:my-signing-secret
+        encryptionKey: "encryptionsecret"  # @schema type:string; default:encryptionsecret
+        domain: ""  # @schema type:string
+        maxAge: 3600  # @schema type:integer; default:3600
+        secure: true  # @schema type:boolean; default:true
+        httpOnly: true  # @schema type:boolean; default:true
+        sameSite: "Strict"  # @schema type:string; default:Strict
+    # -- TOTP contains the configuration for the TOTP provider
+    totp:
+        enabled: true  # @schema type:boolean; default:true
+        codeLength: 6  # @schema type:integer; default:6
+        issuer: ""  # @schema type:string
+        redis: true  # @schema type:boolean; default:true
+        secret: ""  # @schema type:string
+        recoveryCodeCount: 16  # @schema type:integer; default:16
+        recoveryCodeLength: 8  # @schema type:integer; default:8
+    # -- Ratelimit contains the configuration for the rate limiter
+    ratelimit:
+        enabled: false  # @schema type:boolean; default:false
+        limit: 10  # @schema type:number; default:10
+        burst: 30  # @schema type:integer; default:30
+        expires: 10m0s  # @schema type:integer; default:10m
+    # -- ObjectStorage contains the configuration for the object storage backend
+    objectStorage:
+        # -- Enabled indicates if the store is enabled
+        enabled: true  # @schema type:boolean; default:true
+        # -- Provider is the name of the provider, eg. disk, s3, will default to disk if nothing is set
+        provider: ""  # @schema type:string
+        # -- Region is the region for the storage provider
+        region: ""  # @schema type:string
+        # -- DefaultBucket is the default bucket name for the storage provider, if not set, it will use the default
+        # this is the local path for disk storage or the bucket name for S3
+        defaultBucket: "file_uploads"  # @schema type:string; default:file_uploads
+        # -- LocalURL is the URL to use for the "presigned" URL for the file when using local storage
+        # e.g for local development, this can be http://localhost:17608/files/
+        localURL: "http://localhost:17608/files/"  # @schema type:string; default:http://localhost:17608/files/
+        # -- Keys is a list of keys to look for in the multipart form on the REST request
+        # if the keys are not found, the request upload will be skipped
+        # this is not used when uploading files with gqlgen and the graphql handler
+        keys:
+            - uploadFile
+        # -- MaxUploadSizeMB is the maximum size of file uploads to accept in megabytes
+        maxSizeMB: 0  # @schema type:integer
+        # -- MaxUploadMemoryMB is the maximum memory in megabytes to use when parsing a multipart form
+        maxMemoryMB: 0  # @schema type:integer
+    # -- Entitlements contains the configuration for the entitlements service
+    subscription:
+        enabled: false  # @schema type:boolean; default:false
+        publicStripeKey: ""  # @schema type:string
+        trialSubscriptionPriceID: "price_1QKLyeBvxky1R7SvaZYGWyQb"  # @schema type:string; default:price_1QKLyeBvxky1R7SvaZYGWyQb
+        personalOrgSubscriptionPriceID: "price_1QycPyBvxky1R7Svz0gOWnNh"  # @schema type:string; default:price_1QycPyBvxky1R7Svz0gOWnNh
+        stripeWebhookURL: "https://api.openlane.com/v1/stripe/webhook"  # @schema type:string; default:https://api.openlane.com/v1/stripe/webhook
+        stripeBillingPortalSuccessURL: "https://console.openlane.com/billing"  # @schema type:string; default:https://console.openlane.com/billing
+        stripeCancellationReturnURL: "https://console.theopenlane.io/organization-settings/billing/subscription_canceled"  # @schema type:string; default:https://console.theopenlane.io/organization-settings/billing/subscription_canceled
+        stripeWebhookEvents: []
+    # -- Keywatcher contains the configuration for the key watcher that manages JWT signing keys
+    keywatcher:
+        # -- Enabled indicates whether the key watcher is enabled
+        enabled: false  # @schema type:boolean; default:false
+        # -- KeyDir is the path to the directory containing PEM keys for JWT signing
+        keyDir: "./keys"  # @schema type:string; default:./keys
+        # -- ExternalSecretsIntegration enables integration with external secret management systems (specifically GCP secret manager today)
+        externalSecretsIntegration: false  # @schema type:boolean; default:false
+    # -- Slack contains settings for Slack notifications
+    slack:
+        # -- NewSubscriberMessageFile is the path to the template used for new subscriber notifications
+        newSubscriberMessageFile: ""  # @schema type:string
+        # -- NewUserMessageFile is the path to the template used for new user notifications
+        newUserMessageFile: ""  # @schema type:string
+
+# -- External Secrets configuration
+externalSecrets:
+  # -- Enable external secrets integration
+  enabled: true  # @schema type:boolean; default:true
+  # -- List of external secrets to create
+  secrets:
+    # -- core-server-secretmanager secret configuration
+    core-server-secretmanager:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for server.secretManager
+      secretKey: "CORE_SERVER_SECRETMANAGER"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-server-secretmanager"  # @schema type:string
+    # -- core-entconfig-summarizer-llm-gemini-credentialsjson secret configuration
+    core-entconfig-summarizer-llm-gemini-credentialsjson:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for entConfig.summarizer.llm.gemini.credentialsJSON
+      secretKey: "CORE_ENTCONFIG_SUMMARIZER_LLM_GEMINI_CREDENTIALSJSON"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-entconfig-summarizer-llm-gemini-credentialsjson"  # @schema type:string
+    # -- core-objectstorage-accesskey secret configuration
+    core-objectstorage-accesskey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.accessKey
+      secretKey: "CORE_OBJECTSTORAGE_ACCESSKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-accesskey"  # @schema type:string
+    # -- core-objectstorage-secretkey secret configuration
+    core-objectstorage-secretkey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.secretKey
+      secretKey: "CORE_OBJECTSTORAGE_SECRETKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-secretkey"  # @schema type:string
+    # -- core-objectstorage-credentialsjson secret configuration
+    core-objectstorage-credentialsjson:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectStorage.credentialsJSON
+      secretKey: "CORE_OBJECTSTORAGE_CREDENTIALSJSON"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-credentialsjson"  # @schema type:string
+    # -- core-subscription-privatestripekey secret configuration
+    core-subscription-privatestripekey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for subscription.privateStripeKey
+      secretKey: "CORE_SUBSCRIPTION_PRIVATESTRIPEKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-subscription-privatestripekey"  # @schema type:string
+    # -- core-subscription-stripewebhooksecret secret configuration
+    core-subscription-stripewebhooksecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for subscription.stripeWebhookSecret
+      secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-subscription-stripewebhooksecret"  # @schema type:string
+    # -- core-keywatcher-secretmanager secret configuration
+    core-keywatcher-secretmanager:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for keywatcher.secretManager
+      secretKey: "CORE_KEYWATCHER_SECRETMANAGER"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-keywatcher-secretmanager"  # @schema type:string
+    # -- core-slack-webhookurl secret configuration
+    core-slack-webhookurl:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for slack.webhookURL
+      secretKey: "CORE_SLACK_WEBHOOKURL"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-slack-webhookurl"  # @schema type:string
