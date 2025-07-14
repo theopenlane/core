@@ -156,6 +156,12 @@ func (csju *ControlScheduledJobUpdate) AppendConfiguration(mc models.JobConfigur
 	return csju
 }
 
+// ClearConfiguration clears the value of the "configuration" field.
+func (csju *ControlScheduledJobUpdate) ClearConfiguration() *ControlScheduledJobUpdate {
+	csju.mutation.ClearConfiguration()
+	return csju
+}
+
 // SetCron sets the "cron" field.
 func (csju *ControlScheduledJobUpdate) SetCron(m models.Cron) *ControlScheduledJobUpdate {
 	csju.mutation.SetCron(m)
@@ -421,6 +427,9 @@ func (csju *ControlScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err 
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, controlscheduledjob.FieldConfiguration, value)
 		})
+	}
+	if csju.mutation.ConfigurationCleared() {
+		_spec.ClearField(controlscheduledjob.FieldConfiguration, field.TypeJSON)
 	}
 	if value, ok := csju.mutation.Cron(); ok {
 		_spec.SetField(controlscheduledjob.FieldCron, field.TypeString, value)
@@ -759,6 +768,12 @@ func (csjuo *ControlScheduledJobUpdateOne) AppendConfiguration(mc models.JobConf
 	return csjuo
 }
 
+// ClearConfiguration clears the value of the "configuration" field.
+func (csjuo *ControlScheduledJobUpdateOne) ClearConfiguration() *ControlScheduledJobUpdateOne {
+	csjuo.mutation.ClearConfiguration()
+	return csjuo
+}
+
 // SetCron sets the "cron" field.
 func (csjuo *ControlScheduledJobUpdateOne) SetCron(m models.Cron) *ControlScheduledJobUpdateOne {
 	csjuo.mutation.SetCron(m)
@@ -1054,6 +1069,9 @@ func (csjuo *ControlScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, controlscheduledjob.FieldConfiguration, value)
 		})
+	}
+	if csjuo.mutation.ConfigurationCleared() {
+		_spec.ClearField(controlscheduledjob.FieldConfiguration, field.TypeJSON)
 	}
 	if value, ok := csjuo.mutation.Cron(); ok {
 		_spec.SetField(controlscheduledjob.FieldCron, field.TypeString, value)

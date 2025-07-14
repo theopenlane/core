@@ -45,6 +45,7 @@ func (ControlScheduledJob) Fields() []ent.Field {
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput | entgql.SkipOrderField),
 			).
+			Optional().
 			Comment("the configuration to run this job"),
 
 		field.String("cron").

@@ -151,6 +151,12 @@ func (csjhu *ControlScheduledJobHistoryUpdate) AppendConfiguration(mc models.Job
 	return csjhu
 }
 
+// ClearConfiguration clears the value of the "configuration" field.
+func (csjhu *ControlScheduledJobHistoryUpdate) ClearConfiguration() *ControlScheduledJobHistoryUpdate {
+	csjhu.mutation.ClearConfiguration()
+	return csjhu
+}
+
 // SetCron sets the "cron" field.
 func (csjhu *ControlScheduledJobHistoryUpdate) SetCron(m models.Cron) *ControlScheduledJobHistoryUpdate {
 	csjhu.mutation.SetCron(m)
@@ -303,6 +309,9 @@ func (csjhu *ControlScheduledJobHistoryUpdate) sqlSave(ctx context.Context) (n i
 			sqljson.Append(u, controlscheduledjobhistory.FieldConfiguration, value)
 		})
 	}
+	if csjhu.mutation.ConfigurationCleared() {
+		_spec.ClearField(controlscheduledjobhistory.FieldConfiguration, field.TypeJSON)
+	}
 	if value, ok := csjhu.mutation.Cron(); ok {
 		_spec.SetField(controlscheduledjobhistory.FieldCron, field.TypeString, value)
 	}
@@ -454,6 +463,12 @@ func (csjhuo *ControlScheduledJobHistoryUpdateOne) SetConfiguration(mc models.Jo
 // AppendConfiguration appends mc to the "configuration" field.
 func (csjhuo *ControlScheduledJobHistoryUpdateOne) AppendConfiguration(mc models.JobConfiguration) *ControlScheduledJobHistoryUpdateOne {
 	csjhuo.mutation.AppendConfiguration(mc)
+	return csjhuo
+}
+
+// ClearConfiguration clears the value of the "configuration" field.
+func (csjhuo *ControlScheduledJobHistoryUpdateOne) ClearConfiguration() *ControlScheduledJobHistoryUpdateOne {
+	csjhuo.mutation.ClearConfiguration()
 	return csjhuo
 }
 
@@ -638,6 +653,9 @@ func (csjhuo *ControlScheduledJobHistoryUpdateOne) sqlSave(ctx context.Context) 
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, controlscheduledjobhistory.FieldConfiguration, value)
 		})
+	}
+	if csjhuo.mutation.ConfigurationCleared() {
+		_spec.ClearField(controlscheduledjobhistory.FieldConfiguration, field.TypeJSON)
 	}
 	if value, ok := csjhuo.mutation.Cron(); ok {
 		_spec.SetField(controlscheduledjobhistory.FieldCron, field.TypeString, value)

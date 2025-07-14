@@ -203,7 +203,6 @@ func createWindmillScheduledJob(ctx context.Context, mutation *generated.Control
 	scheduleReq := windmill.CreateScheduledJobRequest{
 		Path:     scheduledJobPath,
 		Schedule: string(cron),
-		FlowPath: "", // This would need to be set based on the job configuration
 		Enabled:  &enabled,
 		Summary:  fmt.Sprintf("Control scheduled job %s", jobID),
 	}

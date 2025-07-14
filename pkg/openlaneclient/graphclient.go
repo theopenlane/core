@@ -6206,7 +6206,7 @@ func (t *AdminSearch_AdminSearch_ScheduledJobs_PageInfo) GetStartCursor() *strin
 
 type AdminSearch_AdminSearch_ScheduledJobs_Edges_Node struct {
 	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	ID            string                  "json:\"id\" graphql:\"id\""
@@ -19325,7 +19325,7 @@ func (t *GetControlObjectiveHistories_ControlObjectiveHistories) GetEdges() []*G
 }
 
 type CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs struct {
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -19410,7 +19410,7 @@ func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob) GetC
 }
 
 type CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs struct {
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -19495,7 +19495,7 @@ func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob) GetControl
 }
 
 type CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob struct {
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -19623,7 +19623,7 @@ func (t *GetAllControlScheduledJobs_ControlScheduledJobs_PageInfo) GetStartCurso
 }
 
 type GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node struct {
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -19733,7 +19733,7 @@ func (t *GetAllControlScheduledJobs_ControlScheduledJobs) GetTotalCount() int64 
 }
 
 type GetControlScheduledJobByID_ControlScheduledJob struct {
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -19839,7 +19839,7 @@ func (t *GetControlScheduledJobs_ControlScheduledJobs_PageInfo) GetStartCursor()
 }
 
 type GetControlScheduledJobs_ControlScheduledJobs_Edges_Node struct {
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -19949,7 +19949,7 @@ func (t *GetControlScheduledJobs_ControlScheduledJobs) GetTotalCount() int64 {
 }
 
 type UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob struct {
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -20066,7 +20066,7 @@ func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_PageInf
 }
 
 type GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node struct {
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -20229,7 +20229,7 @@ func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo) 
 }
 
 type GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node struct {
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -64058,7 +64058,7 @@ func (t *GetScanHistories_ScanHistories) GetTotalCount() int64 {
 
 type CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs struct {
 	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -64185,7 +64185,7 @@ func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob) GetScheduledJobs()
 
 type CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs struct {
 	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -64312,7 +64312,7 @@ func (t *CreateBulkScheduledJob_CreateBulkScheduledJob) GetScheduledJobs() []*Cr
 
 type CreateScheduledJob_CreateScheduledJob_ScheduledJob struct {
 	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -64482,7 +64482,7 @@ func (t *GetAllScheduledJobs_ScheduledJobs_PageInfo) GetStartCursor() *string {
 
 type GetAllScheduledJobs_ScheduledJobs_Edges_Node struct {
 	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -64634,7 +64634,7 @@ func (t *GetAllScheduledJobs_ScheduledJobs) GetTotalCount() int64 {
 
 type GetScheduledJobByID_ScheduledJob struct {
 	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -64782,7 +64782,7 @@ func (t *GetScheduledJobs_ScheduledJobs_PageInfo) GetStartCursor() *string {
 
 type GetScheduledJobs_ScheduledJobs_Edges_Node struct {
 	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -64934,7 +64934,7 @@ func (t *GetScheduledJobs_ScheduledJobs) GetTotalCount() int64 {
 
 type UpdateScheduledJob_UpdateScheduledJob_ScheduledJob struct {
 	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -65093,7 +65093,7 @@ func (t *GetAllScheduledJobHistories_ScheduledJobHistories_PageInfo) GetStartCur
 
 type GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node struct {
 	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -65298,7 +65298,7 @@ func (t *GetScheduledJobHistories_ScheduledJobHistories_PageInfo) GetStartCursor
 
 type GetScheduledJobHistories_ScheduledJobHistories_Edges_Node struct {
 	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""

@@ -2105,6 +2105,7 @@ func (c *ControlScheduledJobCreate) SetInput(i CreateControlScheduledJobInput) *
 
 // UpdateControlScheduledJobInput represents a mutation input for updating controlscheduledjobs.
 type UpdateControlScheduledJobInput struct {
+	ClearConfiguration  bool
 	Configuration       models.JobConfiguration
 	AppendConfiguration models.JobConfiguration
 	ClearCron           bool
@@ -2124,6 +2125,9 @@ type UpdateControlScheduledJobInput struct {
 
 // Mutate applies the UpdateControlScheduledJobInput on the ControlScheduledJobMutation builder.
 func (i *UpdateControlScheduledJobInput) Mutate(m *ControlScheduledJobMutation) {
+	if i.ClearConfiguration {
+		m.ClearConfiguration()
+	}
 	if v := i.Configuration; v != nil {
 		m.SetConfiguration(v)
 	}
@@ -9459,6 +9463,7 @@ type UpdateScheduledJobInput struct {
 	ClearScript         bool
 	Script              *string
 	DownloadURL         *string
+	ClearConfiguration  bool
 	Configuration       models.JobConfiguration
 	AppendConfiguration models.JobConfiguration
 	ClearCadence        bool
@@ -9500,6 +9505,9 @@ func (i *UpdateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
 	}
 	if v := i.DownloadURL; v != nil {
 		m.SetDownloadURL(*v)
+	}
+	if i.ClearConfiguration {
+		m.ClearConfiguration()
 	}
 	if v := i.Configuration; v != nil {
 		m.SetConfiguration(v)

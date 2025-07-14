@@ -416,9 +416,6 @@ func (sjhc *ScheduledJobHistoryCreate) check() error {
 	if _, ok := sjhc.mutation.DownloadURL(); !ok {
 		return &ValidationError{Name: "download_url", err: errors.New(`generated: missing required field "ScheduledJobHistory.download_url"`)}
 	}
-	if _, ok := sjhc.mutation.Configuration(); !ok {
-		return &ValidationError{Name: "configuration", err: errors.New(`generated: missing required field "ScheduledJobHistory.configuration"`)}
-	}
 	if v, ok := sjhc.mutation.Cadence(); ok {
 		if err := v.Validate(); err != nil {
 			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ScheduledJobHistory.cadence": %w`, err)}

@@ -1521,18 +1521,22 @@ type ScheduledJobBuilder struct {
 }
 
 func (w *ScheduledJobBuilder) MustNew(ctx context.Context, t *testing.T) *ent.ScheduledJob {
+	const testScriptURL = "https://gist.githubusercontent.com/adelowo/5559b84fabf87f02502166a6467e345e/raw/b317494adde0f9ba16e09dd019681d1dac8d4d05/test.go"
+
 	ctx = setContext(ctx, w.client.db)
 	wn, err := w.client.db.ScheduledJob.Create().
-		SetConfiguration(models.JobConfiguration{}).
 		SetTitle("SSL checks").
 		SetDescription("Check and verify a tls certificate is valid").
+		SetPlatform(enums.JobPlatformTypeGo).
 		SetScript(`
 echo | openssl s_client -servername {{ .URL }} -connect {{ .URL }}:443 2>/dev/null | openssl x509 -noout -dates -issuer -subject
 		`).
+		SetWindmillPath("u/admin/gifted_script").
 		SetCadence(models.JobCadence{
 			Frequency: enums.JobCadenceFrequencyDaily,
 			Time:      "15:09",
 		}).
+		SetDownloadURL(testScriptURL).
 		Save(ctx)
 	assert.NilError(t, err)
 
@@ -1554,8 +1558,7 @@ func (b *ControlScheduledJobBuilder) MustNew(ctx context.Context, t *testing.T) 
 	ctx = setContext(ctx, b.client.db)
 
 	job := b.client.db.ControlScheduledJob.Create().
-		SetJobID(b.JobID).
-		SetConfiguration(b.Configuration)
+		SetJobID(b.JobID)
 
 	if b.JobRunnerID != "" {
 		job.SetJobRunnerID(b.JobRunnerID)

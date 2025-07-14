@@ -10,17 +10,17 @@ import (
 type CreateFlowRequest struct {
 	Path     string                `json:"path"`
 	Summary  string                `json:"summary,omitempty"`
-	Value    []any                 `json:"value"` // Array of modules that make up the flow
+	Value    []any                 `json:"value"`
 	Schema   any                   `json:"schema,omitempty"`
-	Language enums.JobPlatformType `json:"language"` // Programming language for the flow
+	Language enums.JobPlatformType `json:"language"`
 }
 
 // UpdateFlowRequest represents the request structure for updating an existing flow
 type UpdateFlowRequest struct {
 	Summary  string                `json:"summary,omitempty"`
-	Value    []any                 `json:"value"` // Array of modules that make up the flow
+	Value    []any                 `json:"value"`
 	Schema   any                   `json:"schema,omitempty"`
-	Language enums.JobPlatformType `json:"language"` // Programming language for the flow
+	Language enums.JobPlatformType `json:"language"`
 }
 
 // CreateFlowResponse represents the response after creating a flow
@@ -41,11 +41,11 @@ type Flow struct {
 // CreateScheduledJobRequest represents the request structure for creating a scheduled job
 type CreateScheduledJobRequest struct {
 	Path     string `json:"path"`
-	Schedule string `json:"schedule"`          // Cron expression
-	FlowPath string `json:"script_path"`       // Path to the flow to execute
-	Args     any    `json:"args,omitempty"`    // Arguments to pass to the flow
-	Summary  string `json:"summary,omitempty"` // Description of the scheduled job
-	Enabled  *bool  `json:"enabled,omitempty"` // Whether the scheduled job is enabled
+	Schedule string `json:"schedule"`
+	FlowPath string `json:"script_path"`
+	Args     any    `json:"args,omitempty"`
+	Summary  string `json:"summary,omitempty"`
+	Enabled  *bool  `json:"enabled,omitempty"`
 }
 
 // CreateScheduledJobResponse represents the response after creating a scheduled job

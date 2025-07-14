@@ -294,9 +294,6 @@ func (csjc *ControlScheduledJobCreate) check() error {
 	if _, ok := csjc.mutation.JobID(); !ok {
 		return &ValidationError{Name: "job_id", err: errors.New(`generated: missing required field "ControlScheduledJob.job_id"`)}
 	}
-	if _, ok := csjc.mutation.Configuration(); !ok {
-		return &ValidationError{Name: "configuration", err: errors.New(`generated: missing required field "ControlScheduledJob.configuration"`)}
-	}
 	if v, ok := csjc.mutation.Cron(); ok {
 		if err := v.Validate(); err != nil {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJob.cron": %w`, err)}

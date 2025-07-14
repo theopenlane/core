@@ -252,6 +252,12 @@ func (sjhu *ScheduledJobHistoryUpdate) AppendConfiguration(mc models.JobConfigur
 	return sjhu
 }
 
+// ClearConfiguration clears the value of the "configuration" field.
+func (sjhu *ScheduledJobHistoryUpdate) ClearConfiguration() *ScheduledJobHistoryUpdate {
+	sjhu.mutation.ClearConfiguration()
+	return sjhu
+}
+
 // SetCadence sets the "cadence" field.
 func (sjhu *ScheduledJobHistoryUpdate) SetCadence(mc models.JobCadence) *ScheduledJobHistoryUpdate {
 	sjhu.mutation.SetCadence(mc)
@@ -461,6 +467,9 @@ func (sjhu *ScheduledJobHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, scheduledjobhistory.FieldConfiguration, value)
 		})
+	}
+	if sjhu.mutation.ConfigurationCleared() {
+		_spec.ClearField(scheduledjobhistory.FieldConfiguration, field.TypeJSON)
 	}
 	if value, ok := sjhu.mutation.Cadence(); ok {
 		_spec.SetField(scheduledjobhistory.FieldCadence, field.TypeJSON, value)
@@ -716,6 +725,12 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) AppendConfiguration(mc models.JobConf
 	return sjhuo
 }
 
+// ClearConfiguration clears the value of the "configuration" field.
+func (sjhuo *ScheduledJobHistoryUpdateOne) ClearConfiguration() *ScheduledJobHistoryUpdateOne {
+	sjhuo.mutation.ClearConfiguration()
+	return sjhuo
+}
+
 // SetCadence sets the "cadence" field.
 func (sjhuo *ScheduledJobHistoryUpdateOne) SetCadence(mc models.JobCadence) *ScheduledJobHistoryUpdateOne {
 	sjhuo.mutation.SetCadence(mc)
@@ -955,6 +970,9 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, scheduledjobhistory.FieldConfiguration, value)
 		})
+	}
+	if sjhuo.mutation.ConfigurationCleared() {
+		_spec.ClearField(scheduledjobhistory.FieldConfiguration, field.TypeJSON)
 	}
 	if value, ok := sjhuo.mutation.Cadence(); ok {
 		_spec.SetField(scheduledjobhistory.FieldCadence, field.TypeJSON, value)

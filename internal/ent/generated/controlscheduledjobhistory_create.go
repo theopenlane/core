@@ -292,9 +292,6 @@ func (csjhc *ControlScheduledJobHistoryCreate) check() error {
 	if _, ok := csjhc.mutation.JobID(); !ok {
 		return &ValidationError{Name: "job_id", err: errors.New(`generated: missing required field "ControlScheduledJobHistory.job_id"`)}
 	}
-	if _, ok := csjhc.mutation.Configuration(); !ok {
-		return &ValidationError{Name: "configuration", err: errors.New(`generated: missing required field "ControlScheduledJobHistory.configuration"`)}
-	}
 	if v, ok := csjhc.mutation.Cron(); ok {
 		if err := v.Validate(); err != nil {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJobHistory.cron": %w`, err)}

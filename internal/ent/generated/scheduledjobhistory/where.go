@@ -1237,6 +1237,16 @@ func DownloadURLContainsFold(v string) predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldContainsFold(FieldDownloadURL, v))
 }
 
+// ConfigurationIsNil applies the IsNil predicate on the "configuration" field.
+func ConfigurationIsNil() predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldIsNull(FieldConfiguration))
+}
+
+// ConfigurationNotNil applies the NotNil predicate on the "configuration" field.
+func ConfigurationNotNil() predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldNotNull(FieldConfiguration))
+}
+
 // CadenceIsNil applies the IsNil predicate on the "cadence" field.
 func CadenceIsNil() predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldIsNull(FieldCadence))

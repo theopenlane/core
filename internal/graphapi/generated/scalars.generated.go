@@ -122,22 +122,6 @@ func (ec *executionContext) marshalNImplementationGuidance2githubᚗcomᚋtheope
 	return v
 }
 
-func (ec *executionContext) unmarshalNJobConfiguration2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐJobConfiguration(ctx context.Context, v any) (models.JobConfiguration, error) {
-	var res models.JobConfiguration
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNJobConfiguration2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐJobConfiguration(ctx context.Context, sel ast.SelectionSet, v models.JobConfiguration) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return v
-}
-
 func (ec *executionContext) unmarshalNReference2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐReference(ctx context.Context, v any) (models.Reference, error) {
 	var res models.Reference
 	err := res.UnmarshalGQL(v)

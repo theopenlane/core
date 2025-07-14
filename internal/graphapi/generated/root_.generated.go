@@ -41572,7 +41572,7 @@ type ControlScheduledJob implements Node {
   """
   the configuration to run this job
   """
-  configuration: JobConfiguration!
+  configuration: JobConfiguration
   """
   cron syntax. If not provided, it would inherit the cron of the parent job
   """
@@ -41697,7 +41697,7 @@ type ControlScheduledJobHistory implements Node {
   """
   the configuration to run this job
   """
-  configuration: JobConfiguration!
+  configuration: JobConfiguration
   """
   cron syntax. If not provided, it would inherit the cron of the parent job
   """
@@ -42974,7 +42974,7 @@ input CreateControlScheduledJobInput {
   """
   the configuration to run this job
   """
-  configuration: JobConfiguration!
+  configuration: JobConfiguration
   """
   cron syntax. If not provided, it would inherit the cron of the parent job
   """
@@ -44277,7 +44277,7 @@ input CreateScheduledJobInput {
   """
   the configuration to run this job
   """
-  configuration: JobConfiguration!
+  configuration: JobConfiguration
   """
   the schedule to run this job
   """
@@ -74213,7 +74213,7 @@ type ScheduledJob implements Node {
   """
   the configuration to run this job
   """
-  configuration: JobConfiguration!
+  configuration: JobConfiguration
   """
   the schedule to run this job
   """
@@ -74310,7 +74310,7 @@ type ScheduledJobHistory implements Node {
   """
   the configuration to run this job
   """
-  configuration: JobConfiguration!
+  configuration: JobConfiguration
   """
   the schedule to run this job
   """
@@ -83337,6 +83337,7 @@ input UpdateControlScheduledJobInput {
   """
   configuration: JobConfiguration
   appendConfiguration: JobConfiguration
+  clearConfiguration: Boolean
   """
   cron syntax. If not provided, it would inherit the cron of the parent job
   """
@@ -85176,6 +85177,7 @@ input UpdateScheduledJobInput {
   """
   configuration: JobConfiguration
   appendConfiguration: JobConfiguration
+  clearConfiguration: Boolean
   """
   the schedule to run this job
   """

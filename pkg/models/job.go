@@ -64,7 +64,6 @@ func ValidateURL(s string) (string, error) {
 
 	u, err := url.Parse(s)
 	if err != nil {
-		panic(err)
 		return "", ErrInvalidURL
 	}
 
