@@ -125,14 +125,14 @@ entConfig:
         maximumSentences: 60
         type: lexrank
     windmill:
+        baseURL: https://app.windmill.dev
+        defaultTimeout: 30s
         enabled: false
-        baseURL: "https://app.windmill.dev"
-        workspace: ""
-        token: ""
-        defaultTimeout: "30s"
-        timezone: "UTC"
         onFailureScript: ""
         onSuccessScript: ""
+        timezone: UTC
+        token: ""
+        workspace: ""
 jobQueue:
     connectionURI: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
     riverConf:
