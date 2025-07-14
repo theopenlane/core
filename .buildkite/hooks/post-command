@@ -16,23 +16,18 @@ if [[ -n "${BUILDKITE_BUILD_PATH:-}" ]]; then
     find "${BUILDKITE_BUILD_PATH}" -name "*.temp" -type f -delete 2>/dev/null || true
 fi
 
-# Prune Go module cache if it gets too large (keep last 7 days)
-# Note: Go tools run in containers, but cache may persist on host
+# Prune Go module cache (keep last 14 days)
 if [[ -d "$HOME/.cache/go/pkg/mod" ]]; then
     cache_size=$(du -sh "$HOME/.cache/go/pkg/mod" 2>/dev/null | cut -f1 || echo "unknown")
     echo "📦 Go module cache size: $cache_size"
-
-    # Clean up old cache entries (older than 7 days)
-    find "$HOME/.cache/go/pkg/mod" -type f -mtime +7 -delete 2>/dev/null || true
+    find "$HOME/.cache/go/pkg/mod" -type f -mtime +14 -delete 2>/dev/null || true
 fi
 
-# Prune golangci-lint cache if it gets too large
+# Prune golangci-lint cache (keep last 14 days)
 if [[ -d "$HOME/.cache/golangci-lint" ]]; then
     cache_size=$(du -sh "$HOME/.cache/golangci-lint" 2>/dev/null | cut -f1 || echo "unknown")
     echo "🔍 Golangci-lint cache size: $cache_size"
-
-    # Clean up old cache entries (older than 7 days)
-    find "$HOME/.cache/golangci-lint" -type f -mtime +7 -delete 2>/dev/null || true
+    find "$HOME/.cache/golangci-lint" -type f -mtime +14 -delete 2>/dev/null || true
 fi
 
 # Archive build artifacts if they exist
@@ -59,10 +54,9 @@ if [[ -d "${BUILDKITE_BUILD_PATH:-/tmp}/test-results" ]]; then
     fi
 fi
 
-# Docker cleanup (Docker handled via plugins, but cleanup runs on host)
-# Note: Docker commands may not be available in hook context, but containers/images persist on host
+# Docker cleanup
 if command -v docker >/dev/null 2>&1; then
-    echo "🐳 Running Docker cleanup to prevent disk space issues..."
+    echo "🐳 Running Docker cleanup..."
 
     # Get initial disk usage
     if initial_usage=$(df -h . 2>/dev/null | tail -1 | awk '{print $5}' 2>/dev/null | sed 's/%//' 2>/dev/null) && [[ -n "$initial_usage" ]] && [[ "$initial_usage" =~ ^[0-9]+$ ]]; then
@@ -72,17 +66,10 @@ if command -v docker >/dev/null 2>&1; then
         initial_usage=0
     fi
 
-    # Stop all running containers (be aggressive about cleanup)
-    running_containers=$(docker ps -q)
-    if [[ -n "$running_containers" ]]; then
-        echo "🛑 Stopping running containers..."
-        docker stop $running_containers >/dev/null 2>&1 || true
-    fi
-
-    # Remove all stopped containers
-    stopped_containers=$(docker ps -aq --filter "status=exited")
+    # Remove stopped/dead containers only
+    stopped_containers=$(docker ps -aq --filter "status=exited" --filter "status=dead")
     if [[ -n "$stopped_containers" ]]; then
-        echo "🗑️  Removing stopped containers..."
+        echo "🗑️  Removing stopped/dead containers..."
         docker rm $stopped_containers >/dev/null 2>&1 || true
     fi
 
@@ -93,21 +80,20 @@ if command -v docker >/dev/null 2>&1; then
         docker rmi $dangling_images >/dev/null 2>&1 || true
     fi
 
-    # Remove unused images older than 24 hours
-    echo "🖼️  Removing unused images older than 24 hours..."
-    docker image prune -f --filter "until=24h" >/dev/null 2>&1 || true
+    # Remove unused images older than 7 days
+    echo "🖼️  Removing unused images older than 7 days..."
+    docker image prune -f --filter "until=168h" >/dev/null 2>&1 || true
 
-    # Remove all unused networks
-    echo "🌐 Removing unused networks..."
-    docker network prune -f >/dev/null 2>&1 || true
+    # Skip network cleanup to avoid interfering with concurrent builds
+    echo "🌐 Skipping network cleanup"
 
-    # Remove ALL unused volumes (this is often the biggest space saver)
-    echo "💾 Removing ALL unused volumes..."
-    docker volume prune -f >/dev/null 2>&1 || true
+    # Remove volumes unused for 7+ days
+    echo "💾 Removing volumes unused for 7+ days..."
+    docker volume prune -f --filter "until=168h" >/dev/null 2>&1 || true
 
-    # Remove build cache older than 24 hours
-    echo "🏗️  Removing build cache older than 24 hours..."
-    docker builder prune -f --filter "until=24h" >/dev/null 2>&1 || true
+    # Remove build cache older than 7 days
+    echo "🏗️  Removing build cache older than 7 days..."
+    docker builder prune -f --filter "until=168h" >/dev/null 2>&1 || true
 
     # If disk usage is still high, do more aggressive cleanup
     if current_usage=$(df -h . 2>/dev/null | tail -1 | awk '{print $5}' 2>/dev/null | sed 's/%//' 2>/dev/null) && [[ -n "$current_usage" ]] && [[ "$current_usage" =~ ^[0-9]+$ ]]; then
@@ -117,20 +103,13 @@ if command -v docker >/dev/null 2>&1; then
         current_usage=0
     fi
 
-    if [[ $current_usage -gt 80 ]]; then
-        echo "⚠️  Disk usage still high (${current_usage}%), running aggressive cleanup..."
-
-        # Remove ALL unused images (not just dangling)
-        echo "🖼️  Removing ALL unused images..."
-        docker image prune -a -f >/dev/null 2>&1 || true
-
-        # Remove ALL build cache
-        echo "🏗️  Removing ALL build cache..."
-        docker builder prune -a -f >/dev/null 2>&1 || true
-
-        # Full system prune (everything unused)
-        echo "🧹 Running full system prune..."
-        docker system prune -a -f --volumes >/dev/null 2>&1 || true
+    # Warn if disk usage is still high after cleanup
+    if [[ $current_usage -gt 85 ]]; then
+        echo "⚠️  WARNING: Disk usage is critically high (${current_usage}%)"
+        echo "💡 Recommend running docker-cleanup.sh during maintenance"
+    elif [[ $current_usage -gt 80 ]]; then
+        echo "⚠️  WARNING: Disk usage is high (${current_usage}%)"
+        echo "💡 Consider running docker-cleanup.sh during off-peak hours"
     fi
 
     # Final disk usage check

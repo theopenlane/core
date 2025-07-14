@@ -39,15 +39,18 @@ if disk_usage=$(df -h . 2>/dev/null | tail -1 | awk '{print $5}' 2>/dev/null | s
         echo "🧹 Running emergency Docker cleanup..."
 
         if command -v docker >/dev/null 2>&1; then
-            # Emergency cleanup - remove everything possible
-            docker system prune -a -f --volumes >/dev/null 2>&1 || true
+            # Emergency cleanup - remove stopped containers and dangling images only
+            echo "🧹 Emergency cleanup..."
+            docker container prune -f >/dev/null 2>&1 || true
+            docker image prune -f >/dev/null 2>&1 || true
 
             # Check if cleanup helped
             if new_usage=$(df -h . 2>/dev/null | tail -1 | awk '{print $5}' 2>/dev/null | sed 's/%//' 2>/dev/null) && [[ -n "$new_usage" ]] && [[ "$new_usage" =~ ^[0-9]+$ ]]; then
                 echo "📊 Disk usage after emergency cleanup: ${new_usage}%"
 
                 if [[ $new_usage -gt 85 ]]; then
-                    echo "❌ Disk usage still critically high after cleanup - build may fail"
+                    echo "❌ Disk usage still critically high after cleanup"
+                    echo "⚠️  Build may fail due to insufficient disk space"
                 else
                     echo "✅ Emergency cleanup successful"
                 fi

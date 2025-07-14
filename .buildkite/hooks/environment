@@ -4,7 +4,7 @@ set -euo pipefail
 
 echo "🌍 Setting up dynamic environment..."
 
-# Set Go environment variables (for when Go tools run in containers)
+# Set Go environment variables
 export GOPROXY=https://proxy.golang.org,direct
 export GOSUMDB=sum.golang.org
 export GOMODCACHE=$HOME/.cache/go/pkg/mod
@@ -48,11 +48,11 @@ export COVERAGE_DIR="${BUILDKITE_BUILD_PATH:-/tmp}/coverage"
 # Create coverage directory
 mkdir -p "${COVERAGE_DIR}"
 
-# Docker environment (handled via plugins, but set env vars)
+# Docker environment
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
 
-# Set up Docker layer caching directory (may be used by plugins)
+# Set up Docker layer caching directory
 export DOCKER_LAYER_CACHE_DIR="${HOME}/.cache/docker"
 mkdir -p "${DOCKER_LAYER_CACHE_DIR}" 2>/dev/null || true
 
