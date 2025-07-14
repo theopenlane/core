@@ -55,22 +55,9 @@ steps:
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
                 - "GOTOOLCHAIN=auto"
-      - label: ":mag: diagnostic check"
-        key: "diagnostic_check"
-        depends_on: "generate_config"
-        if: build.pull_request.id != null
-        plugins:
-          - docker#v5.13.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
-              always_pull: true
-              command: ["/bin/sh", "-c", "echo '=== DIAGNOSTIC ===' && pwd && echo '--- Files in current dir ---' && ls -la && echo '--- .buildkite dir ---' && ls -la .buildkite/ && echo '--- Script check ---' && ls -la .buildkite/draft-pr-automation.sh 2>/dev/null || echo 'Script not found' && echo '--- End diagnostic ---'"]
-              propagate-environment: true
-              volumes:
-                - $GOCACHE:$GOCACHE
-                - $GOMODCACHE:$GOMODCACHE
       - label: ":construction: create draft config PR"
         key: "draft_pr_automation"
-        depends_on: "diagnostic_check"
+        depends_on: "generate_config"
         if: build.pull_request.id != null
         plugins:
           - cluster-secrets#v1.0.0:
@@ -80,7 +67,7 @@ steps:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["/bin/sh", "-c", "chmod +x .buildkite/draft-pr-automation.sh && .buildkite/draft-pr-automation.sh"]
+              command: ["bash", ".buildkite/draft-pr-automation.sh"]
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE
@@ -102,7 +89,7 @@ steps:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["/bin/sh", "-c", "chmod +x .buildkite/link-pr-automation.sh && ./.buildkite/link-pr-automation.sh"]
+              command: ["bash", ".buildkite/link-pr-automation.sh"]
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE
@@ -122,7 +109,7 @@ steps:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["/bin/sh", "-c", "chmod +x .buildkite/helm-automation.sh && ./.buildkite/helm-automation.sh"]
+              command: ["bash", ".buildkite/helm-automation.sh"]
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE
@@ -144,7 +131,7 @@ steps:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["/bin/sh", "-c", "chmod +x .buildkite/post-merge-pr-automation.sh && ./.buildkite/post-merge-pr-automation.sh"]
+              command: ["bash", ".buildkite/post-merge-pr-automation.sh"]
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE
