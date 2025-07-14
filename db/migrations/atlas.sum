@@ -1,4 +1,4 @@
-h1:d509+rSaFG+JiOofhHhh4SRe5e5rpaVNo7NMy5NJDZc=
+h1:3VyQF+nb/8Pb3YhkkkExowbTFD8HbblUTmxRWNl48/c=
 20250414203514_init.sql h1:NmCV8ML7NQDnzWVgI8QwOPofl3cp1WGzZWzPQhilEbY=
 20250418204249_control_objective.sql h1:NVX8qKq77/54YdYSQZMyI+HS5RXNahqyyDtNHf9oMnQ=
 20250421141003_aauid_not_unique_per_machine.sql h1:/ZFOjmdeEiPZl23+/MIjK1sxFWSi8PrMvV3kJ4iqbW4=
@@ -36,4 +36,5 @@ h1:d509+rSaFG+JiOofhHhh4SRe5e5rpaVNo7NMy5NJDZc=
 20250709104209_exports.sql h1:wabQTIUBBiRufYPEmSbAfXcuzbKDy4yzTxDdB1dHVQ8=
 20250710201028_field_exports.sql h1:/RMiH/DbTDlvHkURtlg0dGHR96ilDoqMg1/lGhvj21s=
 20250711233624_trustcenter_subprocessors_impl.sql h1:Xu0cdQ8aVPFXzS8XAPpowy0ftam/P3Ly0JTYxCR8bGQ=
-20250714155747_windmill_execution_platform.sql h1:jBEmuRsK9npZfNi9hcp2HttiPM3HFWIv2CJroug2HvQ=
+20250713164146_trustcenter_compliance_init.sql h1:Q6BvJqTnm3Moy4G7GlhPsvYh4QJCgIUJoGliatlH8f8=
+20250714155747_windmill_execution_platform.sql h1:4vneeglkKATdBXg3U7+hScE6fw+S7ZyDwqeq7lOJXOc=

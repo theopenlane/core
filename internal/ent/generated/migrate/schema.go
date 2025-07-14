@@ -4596,6 +4596,50 @@ var (
 			},
 		},
 	}
+	// TrustCenterCompliancesColumns holds the columns for the "trust_center_compliances" table.
+	TrustCenterCompliancesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+	}
+	// TrustCenterCompliancesTable holds the schema information for the "trust_center_compliances" table.
+	TrustCenterCompliancesTable = &schema.Table{
+		Name:       "trust_center_compliances",
+		Columns:    TrustCenterCompliancesColumns,
+		PrimaryKey: []*schema.Column{TrustCenterCompliancesColumns[0]},
+	}
+	// TrustCenterComplianceHistoryColumns holds the columns for the "trust_center_compliance_history" table.
+	TrustCenterComplianceHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+	}
+	// TrustCenterComplianceHistoryTable holds the schema information for the "trust_center_compliance_history" table.
+	TrustCenterComplianceHistoryTable = &schema.Table{
+		Name:       "trust_center_compliance_history",
+		Columns:    TrustCenterComplianceHistoryColumns,
+		PrimaryKey: []*schema.Column{TrustCenterComplianceHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "trustcentercompliancehistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterComplianceHistoryColumns[1]},
+			},
+		},
+	}
 	// TrustCenterHistoryColumns holds the columns for the "trust_center_history" table.
 	TrustCenterHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -7773,6 +7817,8 @@ var (
 		TemplatesTable,
 		TemplateHistoryTable,
 		TrustCentersTable,
+		TrustCenterCompliancesTable,
+		TrustCenterComplianceHistoryTable,
 		TrustCenterHistoryTable,
 		TrustCenterSettingsTable,
 		TrustCenterSettingHistoryTable,
@@ -8149,6 +8195,9 @@ func init() {
 	}
 	TrustCentersTable.ForeignKeys[0].RefTable = OrganizationsTable
 	TrustCentersTable.ForeignKeys[1].RefTable = CustomDomainsTable
+	TrustCenterComplianceHistoryTable.Annotation = &entsql.Annotation{
+		Table: "trust_center_compliance_history",
+	}
 	TrustCenterHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_history",
 	}

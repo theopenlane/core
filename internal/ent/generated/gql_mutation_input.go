@@ -11155,6 +11155,56 @@ func (c *TrustCenterUpdateOne) SetInput(i UpdateTrustCenterInput) *TrustCenterUp
 	return c
 }
 
+// CreateTrustCenterComplianceInput represents a mutation input for creating trustcentercompliances.
+type CreateTrustCenterComplianceInput struct {
+	Tags []string
+}
+
+// Mutate applies the CreateTrustCenterComplianceInput on the TrustCenterComplianceMutation builder.
+func (i *CreateTrustCenterComplianceInput) Mutate(m *TrustCenterComplianceMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+}
+
+// SetInput applies the change-set in the CreateTrustCenterComplianceInput on the TrustCenterComplianceCreate builder.
+func (c *TrustCenterComplianceCreate) SetInput(i CreateTrustCenterComplianceInput) *TrustCenterComplianceCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateTrustCenterComplianceInput represents a mutation input for updating trustcentercompliances.
+type UpdateTrustCenterComplianceInput struct {
+	ClearTags  bool
+	Tags       []string
+	AppendTags []string
+}
+
+// Mutate applies the UpdateTrustCenterComplianceInput on the TrustCenterComplianceMutation builder.
+func (i *UpdateTrustCenterComplianceInput) Mutate(m *TrustCenterComplianceMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterComplianceInput on the TrustCenterComplianceUpdate builder.
+func (c *TrustCenterComplianceUpdate) SetInput(i UpdateTrustCenterComplianceInput) *TrustCenterComplianceUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterComplianceInput on the TrustCenterComplianceUpdateOne builder.
+func (c *TrustCenterComplianceUpdateOne) SetInput(i UpdateTrustCenterComplianceInput) *TrustCenterComplianceUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateTrustCenterSettingInput represents a mutation input for creating trustcentersettings.
 type CreateTrustCenterSettingInput struct {
 	Title            *string

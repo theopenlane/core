@@ -47,7 +47,7 @@ func (h *Handler) AccountRolesHandler(ctx echo.Context) error {
 
 	roles, err := h.DBClient.Authz.ListRelations(reqCtx, req)
 	if err != nil {
-		zerolog.Ctx(reqCtx).Error().Err(err).Msg("error checking access")
+		zerolog.Ctx(reqCtx).Error().Err(err).Interface("access_request", req).Msg("error checking access")
 
 		return h.BadRequest(ctx, ErrInvalidInput)
 	}
