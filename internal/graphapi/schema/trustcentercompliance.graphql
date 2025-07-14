@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up trustCenterCompliance by ID
+    """
+     trustCenterCompliance(
+        """
+        ID of the trustCenterCompliance
+        """
+        id: ID!
+    ):  TrustCenterCompliance!
+}
+
+extend type Mutation{
+    """
+    Create a new trustCenterCompliance
+    """
+    createTrustCenterCompliance(
+        """
+        values of the trustCenterCompliance
+        """
+        input: CreateTrustCenterComplianceInput!
+    ): TrustCenterComplianceCreatePayload!
+    """
+    Create multiple new trustCenterCompliances
+    """
+    createBulkTrustCenterCompliance(
+        """
+        values of the trustCenterCompliance
+        """
+        input: [CreateTrustCenterComplianceInput!]
+    ): TrustCenterComplianceBulkCreatePayload!
+    """
+    Create multiple new trustCenterCompliances via file upload
+    """
+    createBulkCSVTrustCenterCompliance(
+        """
+        csv file containing values of the trustCenterCompliance
+        """
+        input: Upload!
+    ): TrustCenterComplianceBulkCreatePayload!
+    """
+    Update an existing trustCenterCompliance
+    """
+    updateTrustCenterCompliance(
+        """
+        ID of the trustCenterCompliance
+        """
+        id: ID!
+        """
+        New values for the trustCenterCompliance
+        """
+        input: UpdateTrustCenterComplianceInput!
+    ): TrustCenterComplianceUpdatePayload!
+    """
+    Delete an existing trustCenterCompliance
+    """
+    deleteTrustCenterCompliance(
+        """
+        ID of the trustCenterCompliance
+        """
+        id: ID!
+    ): TrustCenterComplianceDeletePayload!
+}
+
+"""
+Return response for createTrustCenterCompliance mutation
+"""
+type TrustCenterComplianceCreatePayload {
+    """
+    Created trustCenterCompliance
+    """
+    trustCenterCompliance: TrustCenterCompliance!
+}
+
+"""
+Return response for updateTrustCenterCompliance mutation
+"""
+type TrustCenterComplianceUpdatePayload {
+    """
+    Updated trustCenterCompliance
+    """
+    trustCenterCompliance: TrustCenterCompliance!
+}
+
+"""
+Return response for deleteTrustCenterCompliance mutation
+"""
+type TrustCenterComplianceDeletePayload {
+    """
+    Deleted trustCenterCompliance ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkTrustCenterCompliance mutation
+"""
+type TrustCenterComplianceBulkCreatePayload {
+    """
+    Created trustCenterCompliances
+    """
+    trustCenterCompliances: [TrustCenterCompliance!]
+}
