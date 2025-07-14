@@ -147,6 +147,8 @@ func main() {
 		entc.Dependency(
 			entc.DependencyName("Windmill"),
 			entc.DependencyType(&windmill.Client{}),
+		),
+		entc.Dependency(
 			entc.DependencyName("PondPool"),
 			entc.DependencyType(&soiree.PondPool{}),
 		),

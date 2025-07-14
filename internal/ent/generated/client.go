@@ -516,12 +516,8 @@ type (
 		EntitlementManager *entitlements.StripeClient
 		ObjectManager      *objects.Objects
 		Summarizer         *summarizer.Client
-<<<<<<< HEAD
 		Windmill           *windmill.Client
-||||||| cb29fc22
-=======
 		PondPool           *soiree.PondPool
->>>>>>> origin/main
 		// Job is the job client to insert jobs into the queue.
 		Job riverqueue.JobClient
 
@@ -640,18 +636,17 @@ func Summarizer(v *summarizer.Client) Option {
 	}
 }
 
-<<<<<<< HEAD
 // Windmill configures the Windmill.
 func Windmill(v *windmill.Client) Option {
 	return func(c *config) {
 		c.Windmill = v
-||||||| cb29fc22
-=======
+	}
+}
+
 // PondPool configures the PondPool.
 func PondPool(v *soiree.PondPool) Option {
 	return func(c *config) {
 		c.PondPool = v
->>>>>>> origin/main
 	}
 }
 
