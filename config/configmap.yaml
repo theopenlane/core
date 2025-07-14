@@ -9,7 +9,7 @@ metadata:
     component: config
   annotations:
     # This checksum will trigger deployment restarts when the ConfigMap changes
-    checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+    checksum/config: {{ .Values | toYaml | sha256sum }}
 data:
   CORE_DOMAIN: {{ .Values.core.domain }}
   CORE_REFRESHINTERVAL: {{ .Values.core.refreshInterval | default "10m" }}

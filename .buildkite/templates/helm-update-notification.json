@@ -19,7 +19,7 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "*Changes Made:*{{CHANGE_SUMMARY}}"
+        "text": "*Changes Made:*\n{{CHANGE_SUMMARY}}"
       }
     },
     {
@@ -27,19 +27,19 @@
       "fields": [
         {
           "type": "mrkdwn",
-          "text": "*Build:*\\n{{BUILD_NUMBER}}"
+          "text": "*Build:*\n<{{BUILD_URL}}|#{{BUILD_NUMBER}}>"
         },
         {
           "type": "mrkdwn",
-          "text": "*Source Branch:*\\n`{{SOURCE_BRANCH}}`"
+          "text": "*Source Branch:*\n`{{SOURCE_BRANCH}}`"
         },
         {
           "type": "mrkdwn",
-          "text": "*Pipeline:*\\n{{PIPELINE_NAME}}"
+          "text": "*Pipeline:*\n{{PIPELINE_NAME}}"
         },
         {
           "type": "mrkdwn",
-          "text": "*Triggered by:*\\n{{BUILD_CREATOR}}"
+          "text": "*Triggered by:*\n{{BUILD_CREATOR}}"
         }
       ]
     },
@@ -47,7 +47,7 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "*Next Steps:*\\n• Review the PR for configuration changes\\n• Approve and merge to enable deployment\\n• Contact DevOps if you have questions"
+        "text": "*Next Steps:*\n• Review the PR for configuration changes\n• Approve and merge to enable deployment\n• Contact DevOps if you have questions"
       }
     },
     {

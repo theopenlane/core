@@ -49,8 +49,46 @@ git checkout -b "$draft_branch"
 changes_made=false
 change_summary=""
 
-# Use the helm-automation.sh functions by sourcing it
-source "${BUILDKITE_BUILD_CHECKOUT_PATH}/.buildkite/helm-automation.sh"
+# Import only the merge function from helm-automation.sh, not the full script
+merge_helm_values() {
+  local source="$1"
+  local target="$2"
+  local description="$3"
+
+  if [[ ! -f "$source" ]]; then
+    echo "  ⚠️  Source file not found: $source"
+    return 1
+  fi
+
+  if [[ ! -f "$target" ]]; then
+    echo "  ⚠️  Target file not found: $target"
+    return 1
+  fi
+
+  local temp_merged=$(mktemp)
+
+  echo "  🔀 Merging $description..."
+  # Copy target file as base
+  cp "$target" "$temp_merged"
+
+  # Extract core section from source and use it to replace target core section
+  echo "  📋 Replacing core section..."
+  core_section=$(yq e '.core' "$source")
+  echo "$core_section" > /tmp/core-section.yaml
+  yq e -i '.core = load("/tmp/core-section.yaml")' "$temp_merged"
+
+  # Also merge any externalSecrets configuration if it exists in generated file
+  if yq e '.externalSecrets' "$source" | grep -v "null" > /dev/null 2>&1; then
+    echo "  🔐 Merging external secrets configuration..."
+    external_secrets_section=$(yq e '.externalSecrets' "$source")
+    echo "$external_secrets_section" > /tmp/external-secrets-section.yaml
+    yq e -i '.externalSecrets = load("/tmp/external-secrets-section.yaml")' "$temp_merged"
+  fi
+
+  # Replace target with merged content
+  mv "$temp_merged" "$target"
+  return 0
+}
 
 echo "🔍 Checking for configuration changes..."
 
@@ -60,7 +98,7 @@ if merge_helm_values \
   "$chart_dir/values.yaml" \
   "Helm values.yaml"; then
   changes_made=true
-  change_summary+="\n- 🔄 Merged Helm values.yaml"
+  change_summary+="<br/>- 🔄 Merged Helm values.yaml"
 fi
 
 # Update external secrets directory
@@ -73,7 +111,7 @@ if [[ -d "$BUILDKITE_BUILD_CHECKOUT_PATH/config/external-secrets" ]]; then
       cp -r "$BUILDKITE_BUILD_CHECKOUT_PATH/config/external-secrets" "$chart_dir/templates/external-secrets"
       git add "$chart_dir/templates/external-secrets"
       changes_made=true
-      change_summary+="\n- 🔐 Updated External Secrets templates"
+      change_summary+="<br/>- 🔐 Updated External Secrets templates"
     fi
   else
     echo "Creating External Secrets templates"
@@ -81,7 +119,7 @@ if [[ -d "$BUILDKITE_BUILD_CHECKOUT_PATH/config/external-secrets" ]]; then
     cp -r "$BUILDKITE_BUILD_CHECKOUT_PATH/config/external-secrets" "$chart_dir/templates/external-secrets"
     git add "$chart_dir/templates/external-secrets"
     changes_made=true
-    change_summary+="\n- 🆕 Created External Secrets templates"
+    change_summary+="<br/>- 🆕 Created External Secrets templates"
   fi
 fi
 
@@ -94,7 +132,7 @@ if [[ -f "$BUILDKITE_BUILD_CHECKOUT_PATH/config/configmap.yaml" ]]; then
       cp "$BUILDKITE_BUILD_CHECKOUT_PATH/config/configmap.yaml" "$target"
       git add "$target"
       changes_made=true
-      change_summary+="\n- ✅ Updated ConfigMap template"
+      change_summary+="<br/>- ✅ Updated ConfigMap template"
     fi
   else
     echo "Creating ConfigMap template"
@@ -102,7 +140,7 @@ if [[ -f "$BUILDKITE_BUILD_CHECKOUT_PATH/config/configmap.yaml" ]]; then
     cp "$BUILDKITE_BUILD_CHECKOUT_PATH/config/configmap.yaml" "$target"
     git add "$target"
     changes_made=true
-    change_summary+="\n- ✨ Created ConfigMap template"
+    change_summary+="<br/>- ✨ Created ConfigMap template"
   fi
 fi
 
@@ -148,13 +186,11 @@ if git push origin "$draft_branch"; then
 
 ### 🔗 Related Core PR
 - **Core PR**: [#${core_pr_number}](https://github.com/theopenlane/core/pull/${core_pr_number})
-- **Core Branch**: \`${BUILDKITE_BRANCH}\`
-
-### 📋 Proposed Changes:$change_summary
-
-### 🔧 Build Information:
-- **Build Number**: ${BUILDKITE_BUILD_NUMBER}
+- **Source Branch**: [\`${BUILDKITE_BRANCH}\`](https://github.com/theopenlane/core/tree/${BUILDKITE_BRANCH})
 - **Source Commit**: [\`${BUILDKITE_COMMIT:0:8}\`](https://github.com/theopenlane/core/commit/${BUILDKITE_COMMIT})
+
+### 📋 Proposed Changes:
+$change_summary
 
 ### 🔍 What This Shows:
 - **Helm Values**: How configuration schema and defaults will change

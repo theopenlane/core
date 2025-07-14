@@ -67,9 +67,12 @@ function send_helm_update_notification() {
 
   local template_file="${BASH_SOURCE[0]%/*}/templates/helm-update-notification.json"
 
+  # Format change summary for Slack (convert <br/> or \n to actual newlines)
+  local formatted_summary=$(echo "$change_summary" | sed 's/<br\/>/\n/g' | sed 's/\\n/\n/g')
+
   send_slack_notification_from_template "$template_file" \
     "PR_URL=$pr_url" \
-    "CHANGE_SUMMARY=$change_summary" \
+    "CHANGE_SUMMARY=$formatted_summary" \
     "BUILD_NUMBER=${BUILDKITE_BUILD_NUMBER:-unknown}" \
     "SOURCE_BRANCH=${BUILDKITE_BRANCH:-unknown}" \
     "PIPELINE_NAME=${BUILDKITE_PIPELINE_NAME:-unknown}" \

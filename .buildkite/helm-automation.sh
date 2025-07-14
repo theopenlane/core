@@ -156,7 +156,7 @@ function merge_helm_values() {
 
     # Compare core section changes
     if yq e '.core' "$target" > /tmp/old-core.yaml 2>/dev/null; then
-      local core_changes=$(yq e 'diff("/tmp/old-core.yaml")' /tmp/core-values.yaml 2>/dev/null | grep -E '^\+\+\+|^---' | wc -l || echo "0")
+      local core_changes=$(yq e 'diff("/tmp/old-core.yaml")' /tmp/core-values.yaml 2>/dev/null | grep -E '^\+\+\+|^---' | wc -l | tr -d ' \n' || echo "0")
       if [[ "$core_changes" -gt 0 ]]; then
         changes_detail+="\n    • Core configuration updated ($core_changes changes)"
       fi
