@@ -67,7 +67,7 @@ steps:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["bash", ".buildkite/draft-pr-automation.sh"]
+              command: ["sh", ".buildkite/draft-pr-automation.sh"]
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE
@@ -89,7 +89,7 @@ steps:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["bash", ".buildkite/link-pr-automation.sh"]
+              command: ["sh", ".buildkite/link-pr-automation.sh"]
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE
@@ -109,7 +109,7 @@ steps:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["bash", ".buildkite/helm-automation.sh"]
+              command: ["sh", ".buildkite/helm-automation.sh"]
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE
@@ -131,7 +131,7 @@ steps:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["bash", ".buildkite/post-merge-pr-automation.sh"]
+              command: ["sh", ".buildkite/post-merge-pr-automation.sh"]
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE
