@@ -47,13 +47,18 @@ func HookScheduledJobCreate() ent.Hook {
 				return nil, err
 			}
 
+                        retVal, err := next.Mutate(ctx, mutation)
+                        if err != nil {
+                            return err
+                         }
+                          
 			if mutation.Op() == ent.OpCreate {
 				if err := createWindmillFlow(ctx, mutation); err != nil {
 					return nil, fmt.Errorf("failed to create windmill flow: %w", err)
 				}
 			}
 
-			return next.Mutate(ctx, mutation)
+			return retVal, err
 		})
 	}, ent.OpUpdate|ent.OpUpdateOne|ent.OpCreate)
 }
