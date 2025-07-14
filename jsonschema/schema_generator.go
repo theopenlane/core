@@ -260,17 +260,20 @@ func generateConfigMapEntry(field envparse.VarInfo, defaultVal string) string {
 
 	if domainTag == "inherit" {
 		// Generate Helm template logic for domain inheritance
-		return generateDomainHelmTemplate(field.Key, field.FullPath, domainPrefix, domainSuffix, defaultVal)
+		helmPath := fmt.Sprintf("openlane.%s", strings.TrimPrefix(field.FullPath, "core."))
+		return generateDomainHelmTemplate(field.Key, helmPath, domainPrefix, domainSuffix, defaultVal)
 	}
 
 	// Standard non-domain field processing
+	// Prefix with openlane for Helm chart compatibility (remove 'core.' prefix since it's already under openlane)
+	helmPath := fmt.Sprintf("openlane.%s", strings.TrimPrefix(field.FullPath, "core."))
 	if defaultVal == "" {
-		return fmt.Sprintf("  %s: {{ .Values.%s }}\n", field.Key, field.FullPath)
+		return fmt.Sprintf("  %s: {{ .Values.%s }}\n", field.Key, helmPath)
 	}
 
 	// Format default value based on type
 	formattedDefault := formatDefaultValue(defaultVal, field.Type.Kind())
-	return fmt.Sprintf("  %s: {{ .Values.%s | default %s }}\n", field.Key, field.FullPath, formattedDefault)
+	return fmt.Sprintf("  %s: {{ .Values.%s | default %s }}\n", field.Key, helmPath, formattedDefault)
 }
 
 // formatDefaultValue formats a default value based on its type

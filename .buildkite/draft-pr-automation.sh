@@ -42,15 +42,20 @@ cd "$work"
 core_pr_number="${BUILDKITE_PULL_REQUEST}"
 draft_branch="draft-core-pr-${core_pr_number}"
 
-# Check if draft branch already exists (from previous builds)
-echo "Checking for existing draft branch: $draft_branch"
-if git ls-remote --heads origin "$draft_branch" | grep -q "$draft_branch"; then
-  echo "📄 Existing draft branch found, updating it..."
-  git fetch origin "$draft_branch"
-  git checkout "$draft_branch"
-  git reset --hard "origin/$draft_branch"
+# Check if there's already a draft PR for this core PR number
+echo "Checking for existing draft PR for core PR #${core_pr_number}..."
+existing_pr_number=$(gh pr list --repo "$repo" --state open --draft --json title,number --jq ".[] | select(.title | contains(\"core PR #${core_pr_number}\")) | .number" | head -1)
+
+if [[ -n "$existing_pr_number" ]]; then
+  echo "📄 Found existing draft PR #${existing_pr_number} for core PR #${core_pr_number}"
+  # Get the branch name from the existing PR
+  existing_branch=$(gh pr view "$existing_pr_number" --repo "$repo" --json headRefName --jq '.headRefName')
+  echo "📄 Using existing branch: $existing_branch"
+  git fetch origin "$existing_branch"
+  git checkout "$existing_branch"
+  draft_branch="$existing_branch"  # Use the existing branch name
 else
-  echo "🆕 Creating new draft branch: $draft_branch"
+  echo "🆕 No existing draft PR found, creating new branch: $draft_branch"
   git checkout -b "$draft_branch"
 fi
 
@@ -82,7 +87,25 @@ merge_helm_values() {
 
   # Perform deep merge of all sections from source into target
   echo "  📋 Performing deep merge of all configuration sections..."
-  yq e -i '. *= load("'"$source"'")' "$temp_merged"
+  if ! yq e -i '. *= load("'"$source"'")' "$temp_merged"; then
+    echo "  ❌ Deep merge failed, falling back to individual section merge"
+    # Fallback: merge core section specifically
+    if yq e '.core' "$source" | grep -v "null" > /dev/null 2>&1; then
+      echo "  📋 Merging core section..."
+      core_section=$(yq e '.core' "$source")
+      echo "$core_section" > /tmp/core-section.yaml
+      yq e -i '.core = load("/tmp/core-section.yaml")' "$temp_merged"
+    fi
+    # Merge externalSecrets section if it exists
+    if yq e '.externalSecrets' "$source" | grep -v "null" > /dev/null 2>&1; then
+      echo "  🔐 Merging external secrets configuration..."
+      external_secrets_section=$(yq e '.externalSecrets' "$source")
+      echo "$external_secrets_section" > /tmp/external-secrets-section.yaml
+      yq e -i '.externalSecrets = load("/tmp/external-secrets-section.yaml")' "$temp_merged"
+    fi
+  else
+    echo "  ✅ Deep merge completed successfully"
+  fi
 
   # Replace target with merged content
   mv "$temp_merged" "$target"
@@ -191,22 +214,17 @@ $change_summary
 - **Branch**: [\`${BUILDKITE_BRANCH}\`](https://github.com/theopenlane/core/tree/${BUILDKITE_BRANCH})
 - **Commit**: [\`${BUILDKITE_COMMIT:0:8}\`](https://github.com/theopenlane/core/commit/${BUILDKITE_COMMIT})"
 
-  # Check if PR already exists for this branch
-  echo "Checking for existing draft PR..."
-  existing_pr_url=$(gh pr view "$draft_branch" --repo "$repo" --json url --jq '.url' 2>/dev/null || echo "")
-
-  if [[ -n "$existing_pr_url" ]]; then
-    echo "📝 Updating existing draft PR: $existing_pr_url"
-    # Update the existing PR's body
-    if gh pr edit "$draft_branch" \
+  # Create or update the PR
+  if [[ -n "$existing_pr_number" ]]; then
+    echo "📝 Updating existing draft PR #${existing_pr_number}..."
+    pr_url=$(gh pr view "$existing_pr_number" --repo "$repo" --json url --jq '.url')
+    if gh pr edit "$existing_pr_number" \
       --repo "$repo" \
       --title "🚧 DRAFT: Config changes from core PR #${core_pr_number}" \
       --body "$pr_body"; then
-      pr_url="$existing_pr_url"
       echo "✅ Draft pull request updated successfully: $pr_url"
     else
       echo "⚠️  Failed to update existing PR, but push succeeded"
-      pr_url="$existing_pr_url"
     fi
   else
     echo "Creating new draft pull request..."

@@ -11,233 +11,233 @@ metadata:
     # This checksum will trigger deployment restarts when the ConfigMap changes
     checksum/config: {{ .Values | toYaml | sha256sum }}
 data:
-  CORE_DOMAIN: {{ .Values.core.domain }}
-  CORE_REFRESHINTERVAL: {{ .Values.core.refreshInterval | default "10m" }}
-  CORE_SERVER_DEV: {{ .Values.core.server.dev | default "false" }}
-  CORE_SERVER_LISTEN: {{ .Values.core.server.listen | default ":17608" }}
-  CORE_SERVER_METRICSPORT: {{ .Values.core.server.metricsPort | default ":17609" }}
-  CORE_SERVER_SHUTDOWNGRACEPERIOD: {{ .Values.core.server.shutdownGracePeriod | default "10s" }}
-  CORE_SERVER_READTIMEOUT: {{ .Values.core.server.readTimeout | default "15s" }}
-  CORE_SERVER_WRITETIMEOUT: {{ .Values.core.server.writeTimeout | default "15s" }}
-  CORE_SERVER_IDLETIMEOUT: {{ .Values.core.server.idleTimeout | default "30s" }}
-  CORE_SERVER_READHEADERTIMEOUT: {{ .Values.core.server.readHeaderTimeout | default "2s" }}
-  CORE_SERVER_TLS_ENABLED: {{ .Values.core.server.tls.enabled | default "false" }}
-  CORE_SERVER_TLS_CERTFILE: {{ .Values.core.server.tls.certFile | default "server.crt" }}
-  CORE_SERVER_TLS_CERTKEY: {{ .Values.core.server.tls.certKey | default "server.key" }}
-  CORE_SERVER_TLS_AUTOCERT: {{ .Values.core.server.tls.autoCert | default "false" }}
-  CORE_SERVER_CORS_ENABLED: {{ .Values.core.server.cors.enabled | default "true" }}
-  CORE_SERVER_CORS_PREFIXES: {{ .Values.core.server.cors.prefixes }}
-{{- if .Values.core.server.cors.allowOrigins }}
-  CORE_SERVER_CORS_ALLOWORIGINS: {{ .Values.core.server.cors.allowOrigins }}
+  CORE_DOMAIN: {{ .Values.openlane.domain }}
+  CORE_REFRESHINTERVAL: {{ .Values.openlane.refreshInterval | default "10m" }}
+  CORE_SERVER_DEV: {{ .Values.openlane.server.dev | default "false" }}
+  CORE_SERVER_LISTEN: {{ .Values.openlane.server.listen | default ":17608" }}
+  CORE_SERVER_METRICSPORT: {{ .Values.openlane.server.metricsPort | default ":17609" }}
+  CORE_SERVER_SHUTDOWNGRACEPERIOD: {{ .Values.openlane.server.shutdownGracePeriod | default "10s" }}
+  CORE_SERVER_READTIMEOUT: {{ .Values.openlane.server.readTimeout | default "15s" }}
+  CORE_SERVER_WRITETIMEOUT: {{ .Values.openlane.server.writeTimeout | default "15s" }}
+  CORE_SERVER_IDLETIMEOUT: {{ .Values.openlane.server.idleTimeout | default "30s" }}
+  CORE_SERVER_READHEADERTIMEOUT: {{ .Values.openlane.server.readHeaderTimeout | default "2s" }}
+  CORE_SERVER_TLS_ENABLED: {{ .Values.openlane.server.tls.enabled | default "false" }}
+  CORE_SERVER_TLS_CERTFILE: {{ .Values.openlane.server.tls.certFile | default "server.crt" }}
+  CORE_SERVER_TLS_CERTKEY: {{ .Values.openlane.server.tls.certKey | default "server.key" }}
+  CORE_SERVER_TLS_AUTOCERT: {{ .Values.openlane.server.tls.autoCert | default "false" }}
+  CORE_SERVER_CORS_ENABLED: {{ .Values.openlane.server.cors.enabled | default "true" }}
+  CORE_SERVER_CORS_PREFIXES: {{ .Values.openlane.server.cors.prefixes }}
+{{- if .Values.openlane.server.cors.allowOrigins }}
+  CORE_SERVER_CORS_ALLOWORIGINS: {{ .Values.openlane.server.cors.allowOrigins }}
 {{- else if .Values.domain }}
   CORE_SERVER_CORS_ALLOWORIGINS: "https://console.{{ .Values.domain }},https://docs.{{ .Values.domain }},https://www.{{ .Values.domain }}"
 {{- else }}
   CORE_SERVER_CORS_ALLOWORIGINS: ""
 {{- end }}
-  CORE_SERVER_CORS_COOKIEINSECURE: {{ .Values.core.server.cors.cookieInsecure }}
-  CORE_SERVER_SECURE_ENABLED: {{ .Values.core.server.secure.enabled | default "true" }}
-  CORE_SERVER_SECURE_XSSPROTECTION: {{ .Values.core.server.secure.xssprotection | default "1; mode=block" }}
-  CORE_SERVER_SECURE_CONTENTTYPENOSNIFF: {{ .Values.core.server.secure.contenttypenosniff | default "nosniff" }}
-  CORE_SERVER_SECURE_XFRAMEOPTIONS: {{ .Values.core.server.secure.xframeoptions | default "SAMEORIGIN" }}
-  CORE_SERVER_SECURE_HSTSPRELOADENABLED: {{ .Values.core.server.secure.hstspreloadenabled | default "false" }}
-  CORE_SERVER_SECURE_HSTSMAXAGE: {{ .Values.core.server.secure.hstsmaxage | default "31536000" }}
-  CORE_SERVER_SECURE_CONTENTSECURITYPOLICY: {{ .Values.core.server.secure.contentsecuritypolicy | default "default-src 'self'" }}
-  CORE_SERVER_SECURE_REFERRERPOLICY: {{ .Values.core.server.secure.referrerpolicy | default "same-origin" }}
-  CORE_SERVER_SECURE_CSPREPORTONLY: {{ .Values.core.server.secure.cspreportonly | default "false" }}
-  CORE_SERVER_REDIRECTS_ENABLED: {{ .Values.core.server.redirects.enabled | default "true" }}
-  CORE_SERVER_REDIRECTS_REDIRECTS: {{ .Values.core.server.redirects.redirects }}
-  CORE_SERVER_REDIRECTS_CODE: {{ .Values.core.server.redirects.code }}
-  CORE_SERVER_CACHECONTROL_ENABLED: {{ .Values.core.server.cacheControl.enabled | default "true" }}
-  CORE_SERVER_CACHECONTROL_NOCACHEHEADERS: {{ .Values.core.server.cacheControl.noCacheHeaders }}
-  CORE_SERVER_CACHECONTROL_ETAGHEADERS: {{ .Values.core.server.cacheControl.etagHeaders }}
-  CORE_SERVER_MIME_ENABLED: {{ .Values.core.server.mime.enabled | default "true" }}
-  CORE_SERVER_MIME_MIMETYPESFILE: {{ .Values.core.server.mime.mimeTypesFile }}
-  CORE_SERVER_MIME_DEFAULTCONTENTTYPE: {{ .Values.core.server.mime.defaultContentType | default "application/data" }}
-  CORE_SERVER_GRAPHPOOL_MAXWORKERS: {{ .Values.core.server.graphPool.maxWorkers | default "100" }}
-  CORE_SERVER_ENABLEGRAPHEXTENSIONS: {{ .Values.core.server.enableGraphExtensions | default "true" }}
-  CORE_SERVER_COMPLEXITYLIMIT: {{ .Values.core.server.complexityLimit | default "100" }}
-  CORE_SERVER_MAXRESULTLIMIT: {{ .Values.core.server.maxResultLimit | default "100" }}
-  CORE_SERVER_CSRFPROTECTION_ENABLED: {{ .Values.core.server.csrfProtection.enabled | default "false" }}
-  CORE_SERVER_CSRFPROTECTION_HEADER: {{ .Values.core.server.csrfProtection.header | default "X-CSRF-Token" }}
-  CORE_SERVER_CSRFPROTECTION_COOKIE: {{ .Values.core.server.csrfProtection.cookie | default "ol.csrf-token" }}
-  CORE_SERVER_CSRFPROTECTION_SECURE: {{ .Values.core.server.csrfProtection.secure | default "true" }}
-  CORE_SERVER_CSRFPROTECTION_SAMESITE: {{ .Values.core.server.csrfProtection.sameSite | default "Lax" }}
-  CORE_SERVER_CSRFPROTECTION_COOKIEHTTPONLY: {{ .Values.core.server.csrfProtection.cookieHttpOnly | default "false" }}
-  CORE_SERVER_CSRFPROTECTION_COOKIEDOMAIN: {{ .Values.core.server.csrfProtection.cookieDomain }}
-  CORE_SERVER_CSRFPROTECTION_COOKIEPATH: {{ .Values.core.server.csrfProtection.cookiePath | default "/" }}
-{{- if .Values.core.server.defaultTrustCenterDomain }}
-  CORE_SERVER_DEFAULTTRUSTCENTERDOMAIN: {{ .Values.core.server.defaultTrustCenterDomain }}
+  CORE_SERVER_CORS_COOKIEINSECURE: {{ .Values.openlane.server.cors.cookieInsecure }}
+  CORE_SERVER_SECURE_ENABLED: {{ .Values.openlane.server.secure.enabled | default "true" }}
+  CORE_SERVER_SECURE_XSSPROTECTION: {{ .Values.openlane.server.secure.xssprotection | default "1; mode=block" }}
+  CORE_SERVER_SECURE_CONTENTTYPENOSNIFF: {{ .Values.openlane.server.secure.contenttypenosniff | default "nosniff" }}
+  CORE_SERVER_SECURE_XFRAMEOPTIONS: {{ .Values.openlane.server.secure.xframeoptions | default "SAMEORIGIN" }}
+  CORE_SERVER_SECURE_HSTSPRELOADENABLED: {{ .Values.openlane.server.secure.hstspreloadenabled | default "false" }}
+  CORE_SERVER_SECURE_HSTSMAXAGE: {{ .Values.openlane.server.secure.hstsmaxage | default "31536000" }}
+  CORE_SERVER_SECURE_CONTENTSECURITYPOLICY: {{ .Values.openlane.server.secure.contentsecuritypolicy | default "default-src 'self'" }}
+  CORE_SERVER_SECURE_REFERRERPOLICY: {{ .Values.openlane.server.secure.referrerpolicy | default "same-origin" }}
+  CORE_SERVER_SECURE_CSPREPORTONLY: {{ .Values.openlane.server.secure.cspreportonly | default "false" }}
+  CORE_SERVER_REDIRECTS_ENABLED: {{ .Values.openlane.server.redirects.enabled | default "true" }}
+  CORE_SERVER_REDIRECTS_REDIRECTS: {{ .Values.openlane.server.redirects.redirects }}
+  CORE_SERVER_REDIRECTS_CODE: {{ .Values.openlane.server.redirects.code }}
+  CORE_SERVER_CACHECONTROL_ENABLED: {{ .Values.openlane.server.cacheControl.enabled | default "true" }}
+  CORE_SERVER_CACHECONTROL_NOCACHEHEADERS: {{ .Values.openlane.server.cacheControl.noCacheHeaders }}
+  CORE_SERVER_CACHECONTROL_ETAGHEADERS: {{ .Values.openlane.server.cacheControl.etagHeaders }}
+  CORE_SERVER_MIME_ENABLED: {{ .Values.openlane.server.mime.enabled | default "true" }}
+  CORE_SERVER_MIME_MIMETYPESFILE: {{ .Values.openlane.server.mime.mimeTypesFile }}
+  CORE_SERVER_MIME_DEFAULTCONTENTTYPE: {{ .Values.openlane.server.mime.defaultContentType | default "application/data" }}
+  CORE_SERVER_GRAPHPOOL_MAXWORKERS: {{ .Values.openlane.server.graphPool.maxWorkers | default "100" }}
+  CORE_SERVER_ENABLEGRAPHEXTENSIONS: {{ .Values.openlane.server.enableGraphExtensions | default "true" }}
+  CORE_SERVER_COMPLEXITYLIMIT: {{ .Values.openlane.server.complexityLimit | default "100" }}
+  CORE_SERVER_MAXRESULTLIMIT: {{ .Values.openlane.server.maxResultLimit | default "100" }}
+  CORE_SERVER_CSRFPROTECTION_ENABLED: {{ .Values.openlane.server.csrfProtection.enabled | default "false" }}
+  CORE_SERVER_CSRFPROTECTION_HEADER: {{ .Values.openlane.server.csrfProtection.header | default "X-CSRF-Token" }}
+  CORE_SERVER_CSRFPROTECTION_COOKIE: {{ .Values.openlane.server.csrfProtection.cookie | default "ol.csrf-token" }}
+  CORE_SERVER_CSRFPROTECTION_SECURE: {{ .Values.openlane.server.csrfProtection.secure | default "true" }}
+  CORE_SERVER_CSRFPROTECTION_SAMESITE: {{ .Values.openlane.server.csrfProtection.sameSite | default "Lax" }}
+  CORE_SERVER_CSRFPROTECTION_COOKIEHTTPONLY: {{ .Values.openlane.server.csrfProtection.cookieHttpOnly | default "false" }}
+  CORE_SERVER_CSRFPROTECTION_COOKIEDOMAIN: {{ .Values.openlane.server.csrfProtection.cookieDomain }}
+  CORE_SERVER_CSRFPROTECTION_COOKIEPATH: {{ .Values.openlane.server.csrfProtection.cookiePath | default "/" }}
+{{- if .Values.openlane.server.defaultTrustCenterDomain }}
+  CORE_SERVER_DEFAULTTRUSTCENTERDOMAIN: {{ .Values.openlane.server.defaultTrustCenterDomain }}
 {{- else if .Values.domain }}
   CORE_SERVER_DEFAULTTRUSTCENTERDOMAIN: "{{ .Values.domain }}"
 {{- else }}
   CORE_SERVER_DEFAULTTRUSTCENTERDOMAIN: ""
 {{- end }}
-  CORE_ENTCONFIG_ENTITYTYPES: {{ .Values.core.entConfig.entityTypes }}
-  CORE_ENTCONFIG_SUMMARIZER_TYPE: {{ .Values.core.entConfig.summarizer.type | default "lexrank" }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_PROVIDER: {{ .Values.core.entConfig.summarizer.llm.provider }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_ANTHROPIC_BETAHEADER: {{ .Values.core.entConfig.summarizer.llm.anthropic.betaHeader }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_ANTHROPIC_LEGACYTEXTCOMPLETION: {{ .Values.core.entConfig.summarizer.llm.anthropic.legacyTextCompletion }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_ANTHROPIC_BASEURL: {{ .Values.core.entConfig.summarizer.llm.anthropic.baseURL }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_MISTRAL_URL: {{ .Values.core.entConfig.summarizer.llm.mistral.url }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_GEMINI_CREDENTIALSPATH: {{ .Values.core.entConfig.summarizer.llm.gemini.credentialsPath }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_GEMINI_MAXTOKENS: {{ .Values.core.entConfig.summarizer.llm.gemini.maxTokens }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_HUGGINGFACE_URL: {{ .Values.core.entConfig.summarizer.llm.huggingFace.url }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_OLLAMA_MODEL: {{ .Values.core.entConfig.summarizer.llm.ollama.model }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_OLLAMA_URL: {{ .Values.core.entConfig.summarizer.llm.ollama.url }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_CLOUDFLARE_ACCOUNTID: {{ .Values.core.entConfig.summarizer.llm.cloudflare.accountID }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_CLOUDFLARE_SERVERURL: {{ .Values.core.entConfig.summarizer.llm.cloudflare.serverURL }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_OPENAI_URL: {{ .Values.core.entConfig.summarizer.llm.openai.url }}
-  CORE_ENTCONFIG_SUMMARIZER_LLM_OPENAI_ORGANIZATIONID: {{ .Values.core.entConfig.summarizer.llm.openai.organizationID }}
-  CORE_ENTCONFIG_SUMMARIZER_MAXIMUMSENTENCES: {{ .Values.core.entConfig.summarizer.maximumSentences | default "60" }}
-  CORE_ENTCONFIG_MAXPOOLSIZE: {{ .Values.core.entConfig.maxPoolSize | default "100" }}
-  CORE_AUTH_ENABLED: {{ .Values.core.auth.enabled | default "true" }}
-  CORE_AUTH_TOKEN_KID: {{ .Values.core.auth.token.kid }}
-  CORE_AUTH_TOKEN_AUDIENCE: {{ .Values.core.auth.token.audience | default "https://theopenlane.io" }}
-  CORE_AUTH_TOKEN_REFRESHAUDIENCE: {{ .Values.core.auth.token.refreshAudience }}
-  CORE_AUTH_TOKEN_ISSUER: {{ .Values.core.auth.token.issuer | default "https://auth.theopenlane.io" }}
-  CORE_AUTH_TOKEN_ACCESSDURATION: {{ .Values.core.auth.token.accessDuration | default "1h" }}
-  CORE_AUTH_TOKEN_REFRESHDURATION: {{ .Values.core.auth.token.refreshDuration | default "2h" }}
-  CORE_AUTH_TOKEN_REFRESHOVERLAP: {{ .Values.core.auth.token.refreshOverlap | default "-15m" }}
-  CORE_AUTH_TOKEN_JWKSENDPOINT: {{ .Values.core.auth.token.jwksEndpoint | default "https://api.theopenlane.io/.well-known/jwks.json" }}
-  CORE_AUTH_TOKEN_KEYS: {{ .Values.core.auth.token.keys }}
-  CORE_AUTH_TOKEN_GENERATEKEYS: {{ .Values.core.auth.token.generateKeys | default "true" }}
-  CORE_AUTH_SUPPORTEDPROVIDERS: {{ .Values.core.auth.supportedProviders }}
-  CORE_AUTH_PROVIDERS_REDIRECTURL: {{ .Values.core.auth.providers.redirectUrl | default "http://localhost:3001/api/auth/callback/theopenlane" }}
-  CORE_AUTH_PROVIDERS_GITHUB_CLIENTID: {{ .Values.core.auth.providers.github.clientId }}
-  CORE_AUTH_PROVIDERS_GITHUB_CLIENTENDPOINT: {{ .Values.core.auth.providers.github.clientEndpoint | default "http://localhost:17608" }}
-  CORE_AUTH_PROVIDERS_GITHUB_SCOPES: {{ .Values.core.auth.providers.github.scopes }}
-  CORE_AUTH_PROVIDERS_GITHUB_REDIRECTURL: {{ .Values.core.auth.providers.github.redirectUrl | default "/v1/github/callback" }}
-  CORE_AUTH_PROVIDERS_GOOGLE_CLIENTID: {{ .Values.core.auth.providers.google.clientId }}
-  CORE_AUTH_PROVIDERS_GOOGLE_CLIENTENDPOINT: {{ .Values.core.auth.providers.google.clientEndpoint | default "http://localhost:17608" }}
-  CORE_AUTH_PROVIDERS_GOOGLE_SCOPES: {{ .Values.core.auth.providers.google.scopes }}
-  CORE_AUTH_PROVIDERS_GOOGLE_REDIRECTURL: {{ .Values.core.auth.providers.google.redirectUrl | default "/v1/google/callback" }}
-  CORE_AUTH_PROVIDERS_WEBAUTHN_ENABLED: {{ .Values.core.auth.providers.webauthn.enabled | default "true" }}
-  CORE_AUTH_PROVIDERS_WEBAUTHN_DISPLAYNAME: {{ .Values.core.auth.providers.webauthn.displayName }}
-  CORE_AUTH_PROVIDERS_WEBAUTHN_RELYINGPARTYID: {{ .Values.core.auth.providers.webauthn.relyingPartyId | default "localhost" }}
-  CORE_AUTH_PROVIDERS_WEBAUTHN_REQUESTORIGINS: {{ .Values.core.auth.providers.webauthn.requestOrigins | default "http://localhost:3001" }}
-  CORE_AUTH_PROVIDERS_WEBAUTHN_MAXDEVICES: {{ .Values.core.auth.providers.webauthn.maxDevices | default "10" }}
-  CORE_AUTH_PROVIDERS_WEBAUTHN_ENFORCETIMEOUT: {{ .Values.core.auth.providers.webauthn.enforceTimeout | default "true" }}
-  CORE_AUTH_PROVIDERS_WEBAUTHN_TIMEOUT: {{ .Values.core.auth.providers.webauthn.timeout | default "60s" }}
-  CORE_AUTH_PROVIDERS_WEBAUTHN_DEBUG: {{ .Values.core.auth.providers.webauthn.debug | default "false" }}
-  CORE_AUTHZ_ENABLED: {{ .Values.core.authz.enabled | default "true" }}
-  CORE_AUTHZ_STORENAME: {{ .Values.core.authz.storeName | default "openlane" }}
-  CORE_AUTHZ_HOSTURL: {{ .Values.core.authz.hostUrl | default "https://authz.theopenlane.io" }}
-  CORE_AUTHZ_STOREID: {{ .Values.core.authz.storeId }}
-  CORE_AUTHZ_MODELID: {{ .Values.core.authz.modelId }}
-  CORE_AUTHZ_CREATENEWMODEL: {{ .Values.core.authz.createNewModel | default "false" }}
-  CORE_AUTHZ_MODELFILE: {{ .Values.core.authz.modelFile | default "fga/model/model.fga" }}
-  CORE_AUTHZ_CREDENTIALS_CLIENTID: {{ .Values.core.authz.credentials.clientId }}
-  CORE_AUTHZ_CREDENTIALS_AUDIENCE: {{ .Values.core.authz.credentials.audience }}
-  CORE_AUTHZ_CREDENTIALS_ISSUER: {{ .Values.core.authz.credentials.issuer }}
-  CORE_AUTHZ_CREDENTIALS_SCOPES: {{ .Values.core.authz.credentials.scopes }}
-  CORE_AUTHZ_IGNOREDUPLICATEKEYERROR: {{ .Values.core.authz.ignoreDuplicateKeyError | default "true" }}
-  CORE_DB_DEBUG: {{ .Values.core.db.debug | default "false" }}
-  CORE_DB_DATABASENAME: {{ .Values.core.db.databaseName | default "openlane" }}
-  CORE_DB_DRIVERNAME: {{ .Values.core.db.driverName | default "pgx" }}
-  CORE_DB_MULTIWRITE: {{ .Values.core.db.multiWrite | default "false" }}
-  CORE_DB_PRIMARYDBSOURCE: {{ .Values.core.db.primaryDbSource | default "file:openlane.db" }}
-  CORE_DB_SECONDARYDBSOURCE: {{ .Values.core.db.secondaryDbSource | default "file:backup.db" }}
-  CORE_DB_CACHETTL: {{ .Values.core.db.cacheTTL | default "1s" }}
-  CORE_DB_RUNMIGRATIONS: {{ .Values.core.db.runMigrations | default "true" }}
-  CORE_DB_MIGRATIONPROVIDER: {{ .Values.core.db.migrationProvider | default "atlas" }}
-  CORE_DB_ENABLEHISTORY: {{ .Values.core.db.enableHistory | default "false" }}
-  CORE_DB_MAXCONNECTIONS: {{ .Values.core.db.maxConnections | default "0" }}
-  CORE_DB_MAXIDLECONNECTIONS: {{ .Values.core.db.maxIdleConnections | default "0" }}
-  CORE_JOBQUEUE_CONNECTIONURI: {{ .Values.core.jobQueue.connectionURI | default "postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable" }}
-  CORE_JOBQUEUE_RUNMIGRATIONS: {{ .Values.core.jobQueue.runMigrations | default "false" }}
-  CORE_REDIS_ENABLED: {{ .Values.core.redis.enabled | default "true" }}
-  CORE_REDIS_ADDRESS: {{ .Values.core.redis.address | default "localhost:6379" }}
-  CORE_REDIS_NAME: {{ .Values.core.redis.name }}
-  CORE_REDIS_USERNAME: {{ .Values.core.redis.username }}
-  CORE_REDIS_PASSWORD: {{ .Values.core.redis.password }}
-  CORE_REDIS_DB: {{ .Values.core.redis.db | default "0" }}
-  CORE_REDIS_DIALTIMEOUT: {{ .Values.core.redis.dialTimeout | default "5s" }}
-  CORE_REDIS_READTIMEOUT: {{ .Values.core.redis.readTimeout | default "0" }}
-  CORE_REDIS_WRITETIMEOUT: {{ .Values.core.redis.writeTimeout | default "0" }}
-  CORE_REDIS_MAXRETRIES: {{ .Values.core.redis.maxRetries | default "3" }}
-  CORE_REDIS_MINIDLECONNS: {{ .Values.core.redis.minIdleConns | default "0" }}
-  CORE_REDIS_MAXIDLECONNS: {{ .Values.core.redis.maxIdleConns | default "0" }}
-  CORE_REDIS_MAXACTIVECONNS: {{ .Values.core.redis.maxActiveConns | default "0" }}
-  CORE_TRACER_ENABLED: {{ .Values.core.tracer.enabled | default "false" }}
-  CORE_TRACER_PROVIDER: {{ .Values.core.tracer.provider | default "stdout" }}
-  CORE_TRACER_ENVIRONMENT: {{ .Values.core.tracer.environment | default "development" }}
-  CORE_TRACER_STDOUT_PRETTY: {{ .Values.core.tracer.stdout.pretty | default "true" }}
-  CORE_TRACER_STDOUT_DISABLETIMESTAMP: {{ .Values.core.tracer.stdout.disableTimestamp | default "false" }}
-  CORE_TRACER_OTLP_ENDPOINT: {{ .Values.core.tracer.otlp.endpoint | default "localhost:4317" }}
-  CORE_TRACER_OTLP_INSECURE: {{ .Values.core.tracer.otlp.insecure | default "true" }}
-  CORE_TRACER_OTLP_CERTIFICATE: {{ .Values.core.tracer.otlp.certificate }}
-  CORE_TRACER_OTLP_HEADERS: {{ .Values.core.tracer.otlp.headers }}
-  CORE_TRACER_OTLP_COMPRESSION: {{ .Values.core.tracer.otlp.compression }}
-  CORE_TRACER_OTLP_TIMEOUT: {{ .Values.core.tracer.otlp.timeout | default "10s" }}
-  CORE_EMAIL_COMPANYNAME: {{ .Values.core.email.companyName }}
-  CORE_EMAIL_COMPANYADDRESS: {{ .Values.core.email.companyAddress }}
-  CORE_EMAIL_CORPORATION: {{ .Values.core.email.corporation }}
-  CORE_EMAIL_YEAR: {{ .Values.core.email.year }}
-  CORE_EMAIL_FROMEMAIL: {{ .Values.core.email.fromEmail }}
-  CORE_EMAIL_SUPPORTEMAIL: {{ .Values.core.email.supportEmail }}
-  CORE_EMAIL_LOGOURL: {{ .Values.core.email.logoURL }}
-  CORE_EMAIL_URLS_ROOT: {{ .Values.core.email.urls.root }}
-  CORE_EMAIL_URLS_PRODUCT: {{ .Values.core.email.urls.product }}
-  CORE_EMAIL_URLS_DOCS: {{ .Values.core.email.urls.docs }}
-  CORE_EMAIL_URLS_VERIFY: {{ .Values.core.email.urls.verify }}
-  CORE_EMAIL_URLS_INVITE: {{ .Values.core.email.urls.invite }}
-  CORE_EMAIL_URLS_RESET: {{ .Values.core.email.urls.reset }}
-  CORE_EMAIL_URLS_VERIFYSUBSCRIBER: {{ .Values.core.email.urls.verifySubscriber }}
-  CORE_EMAIL_URLS_VERIFYBILLING: {{ .Values.core.email.urls.verifyBilling }}
-  CORE_EMAIL_TEMPLATESPATH: {{ .Values.core.email.templatesPath }}
-  CORE_SESSIONS_SIGNINGKEY: {{ .Values.core.sessions.signingKey | default "my-signing-secret" }}
-  CORE_SESSIONS_ENCRYPTIONKEY: {{ .Values.core.sessions.encryptionKey | default "encryptionsecret" }}
-  CORE_SESSIONS_DOMAIN: {{ .Values.core.sessions.domain }}
-  CORE_SESSIONS_MAXAGE: {{ .Values.core.sessions.maxAge | default "3600" }}
-  CORE_SESSIONS_SECURE: {{ .Values.core.sessions.secure | default "true" }}
-  CORE_SESSIONS_HTTPONLY: {{ .Values.core.sessions.httpOnly | default "true" }}
-  CORE_SESSIONS_SAMESITE: {{ .Values.core.sessions.sameSite | default "Strict" }}
-  CORE_TOTP_ENABLED: {{ .Values.core.totp.enabled | default "true" }}
-  CORE_TOTP_CODELENGTH: {{ .Values.core.totp.codeLength | default "6" }}
-  CORE_TOTP_ISSUER: {{ .Values.core.totp.issuer }}
-  CORE_TOTP_REDIS: {{ .Values.core.totp.redis | default "true" }}
-  CORE_TOTP_RECOVERYCODECOUNT: {{ .Values.core.totp.recoveryCodeCount | default "16" }}
-  CORE_TOTP_RECOVERYCODELENGTH: {{ .Values.core.totp.recoveryCodeLength | default "8" }}
-  CORE_RATELIMIT_ENABLED: {{ .Values.core.ratelimit.enabled | default "false" }}
-  CORE_RATELIMIT_LIMIT: {{ .Values.core.ratelimit.limit | default "10" }}
-  CORE_RATELIMIT_BURST: {{ .Values.core.ratelimit.burst | default "30" }}
-  CORE_RATELIMIT_EXPIRES: {{ .Values.core.ratelimit.expires | default "10m" }}
-  CORE_OBJECTSTORAGE_ENABLED: {{ .Values.core.objectStorage.enabled | default "true" }}
-  CORE_OBJECTSTORAGE_PROVIDER: {{ .Values.core.objectStorage.provider }}
-  CORE_OBJECTSTORAGE_REGION: {{ .Values.core.objectStorage.region }}
-  CORE_OBJECTSTORAGE_DEFAULTBUCKET: {{ .Values.core.objectStorage.defaultBucket | default "file_uploads" }}
-  CORE_OBJECTSTORAGE_LOCALURL: {{ .Values.core.objectStorage.localURL | default "http://localhost:17608/files/" }}
-  CORE_OBJECTSTORAGE_KEYS: {{ .Values.core.objectStorage.keys | default "uploadFile" }}
-  CORE_OBJECTSTORAGE_MAXSIZEMB: {{ .Values.core.objectStorage.maxSizeMB }}
-  CORE_OBJECTSTORAGE_MAXMEMORYMB: {{ .Values.core.objectStorage.maxMemoryMB }}
-  CORE_SUBSCRIPTION_ENABLED: {{ .Values.core.subscription.enabled | default "false" }}
-  CORE_SUBSCRIPTION_PUBLICSTRIPEKEY: {{ .Values.core.subscription.publicStripeKey }}
-  CORE_SUBSCRIPTION_TRIALSUBSCRIPTIONPRICEID: {{ .Values.core.subscription.trialSubscriptionPriceID | default "price_1QKLyeBvxky1R7SvaZYGWyQb" }}
-  CORE_SUBSCRIPTION_PERSONALORGSUBSCRIPTIONPRICEID: {{ .Values.core.subscription.personalOrgSubscriptionPriceID | default "price_1QycPyBvxky1R7Svz0gOWnNh" }}
-{{- if .Values.core.subscription.stripeWebhookURL }}
-  CORE_SUBSCRIPTION_STRIPEWEBHOOKURL: {{ .Values.core.subscription.stripeWebhookURL }}
+  CORE_ENTCONFIG_ENTITYTYPES: {{ .Values.openlane.entConfig.entityTypes }}
+  CORE_ENTCONFIG_SUMMARIZER_TYPE: {{ .Values.openlane.entConfig.summarizer.type | default "lexrank" }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_PROVIDER: {{ .Values.openlane.entConfig.summarizer.llm.provider }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_ANTHROPIC_BETAHEADER: {{ .Values.openlane.entConfig.summarizer.llm.anthropic.betaHeader }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_ANTHROPIC_LEGACYTEXTCOMPLETION: {{ .Values.openlane.entConfig.summarizer.llm.anthropic.legacyTextCompletion }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_ANTHROPIC_BASEURL: {{ .Values.openlane.entConfig.summarizer.llm.anthropic.baseURL }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_MISTRAL_URL: {{ .Values.openlane.entConfig.summarizer.llm.mistral.url }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_GEMINI_CREDENTIALSPATH: {{ .Values.openlane.entConfig.summarizer.llm.gemini.credentialsPath }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_GEMINI_MAXTOKENS: {{ .Values.openlane.entConfig.summarizer.llm.gemini.maxTokens }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_HUGGINGFACE_URL: {{ .Values.openlane.entConfig.summarizer.llm.huggingFace.url }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_OLLAMA_MODEL: {{ .Values.openlane.entConfig.summarizer.llm.ollama.model }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_OLLAMA_URL: {{ .Values.openlane.entConfig.summarizer.llm.ollama.url }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_CLOUDFLARE_ACCOUNTID: {{ .Values.openlane.entConfig.summarizer.llm.cloudflare.accountID }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_CLOUDFLARE_SERVERURL: {{ .Values.openlane.entConfig.summarizer.llm.cloudflare.serverURL }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_OPENAI_URL: {{ .Values.openlane.entConfig.summarizer.llm.openai.url }}
+  CORE_ENTCONFIG_SUMMARIZER_LLM_OPENAI_ORGANIZATIONID: {{ .Values.openlane.entConfig.summarizer.llm.openai.organizationID }}
+  CORE_ENTCONFIG_SUMMARIZER_MAXIMUMSENTENCES: {{ .Values.openlane.entConfig.summarizer.maximumSentences | default "60" }}
+  CORE_ENTCONFIG_MAXPOOLSIZE: {{ .Values.openlane.entConfig.maxPoolSize | default "100" }}
+  CORE_AUTH_ENABLED: {{ .Values.openlane.auth.enabled | default "true" }}
+  CORE_AUTH_TOKEN_KID: {{ .Values.openlane.auth.token.kid }}
+  CORE_AUTH_TOKEN_AUDIENCE: {{ .Values.openlane.auth.token.audience | default "https://theopenlane.io" }}
+  CORE_AUTH_TOKEN_REFRESHAUDIENCE: {{ .Values.openlane.auth.token.refreshAudience }}
+  CORE_AUTH_TOKEN_ISSUER: {{ .Values.openlane.auth.token.issuer | default "https://auth.theopenlane.io" }}
+  CORE_AUTH_TOKEN_ACCESSDURATION: {{ .Values.openlane.auth.token.accessDuration | default "1h" }}
+  CORE_AUTH_TOKEN_REFRESHDURATION: {{ .Values.openlane.auth.token.refreshDuration | default "2h" }}
+  CORE_AUTH_TOKEN_REFRESHOVERLAP: {{ .Values.openlane.auth.token.refreshOverlap | default "-15m" }}
+  CORE_AUTH_TOKEN_JWKSENDPOINT: {{ .Values.openlane.auth.token.jwksEndpoint | default "https://api.theopenlane.io/.well-known/jwks.json" }}
+  CORE_AUTH_TOKEN_KEYS: {{ .Values.openlane.auth.token.keys }}
+  CORE_AUTH_TOKEN_GENERATEKEYS: {{ .Values.openlane.auth.token.generateKeys | default "true" }}
+  CORE_AUTH_SUPPORTEDPROVIDERS: {{ .Values.openlane.auth.supportedProviders }}
+  CORE_AUTH_PROVIDERS_REDIRECTURL: {{ .Values.openlane.auth.providers.redirectUrl | default "http://localhost:3001/api/auth/callback/theopenlane" }}
+  CORE_AUTH_PROVIDERS_GITHUB_CLIENTID: {{ .Values.openlane.auth.providers.github.clientId }}
+  CORE_AUTH_PROVIDERS_GITHUB_CLIENTENDPOINT: {{ .Values.openlane.auth.providers.github.clientEndpoint | default "http://localhost:17608" }}
+  CORE_AUTH_PROVIDERS_GITHUB_SCOPES: {{ .Values.openlane.auth.providers.github.scopes }}
+  CORE_AUTH_PROVIDERS_GITHUB_REDIRECTURL: {{ .Values.openlane.auth.providers.github.redirectUrl | default "/v1/github/callback" }}
+  CORE_AUTH_PROVIDERS_GOOGLE_CLIENTID: {{ .Values.openlane.auth.providers.google.clientId }}
+  CORE_AUTH_PROVIDERS_GOOGLE_CLIENTENDPOINT: {{ .Values.openlane.auth.providers.google.clientEndpoint | default "http://localhost:17608" }}
+  CORE_AUTH_PROVIDERS_GOOGLE_SCOPES: {{ .Values.openlane.auth.providers.google.scopes }}
+  CORE_AUTH_PROVIDERS_GOOGLE_REDIRECTURL: {{ .Values.openlane.auth.providers.google.redirectUrl | default "/v1/google/callback" }}
+  CORE_AUTH_PROVIDERS_WEBAUTHN_ENABLED: {{ .Values.openlane.auth.providers.webauthn.enabled | default "true" }}
+  CORE_AUTH_PROVIDERS_WEBAUTHN_DISPLAYNAME: {{ .Values.openlane.auth.providers.webauthn.displayName }}
+  CORE_AUTH_PROVIDERS_WEBAUTHN_RELYINGPARTYID: {{ .Values.openlane.auth.providers.webauthn.relyingPartyId | default "localhost" }}
+  CORE_AUTH_PROVIDERS_WEBAUTHN_REQUESTORIGINS: {{ .Values.openlane.auth.providers.webauthn.requestOrigins | default "http://localhost:3001" }}
+  CORE_AUTH_PROVIDERS_WEBAUTHN_MAXDEVICES: {{ .Values.openlane.auth.providers.webauthn.maxDevices | default "10" }}
+  CORE_AUTH_PROVIDERS_WEBAUTHN_ENFORCETIMEOUT: {{ .Values.openlane.auth.providers.webauthn.enforceTimeout | default "true" }}
+  CORE_AUTH_PROVIDERS_WEBAUTHN_TIMEOUT: {{ .Values.openlane.auth.providers.webauthn.timeout | default "60s" }}
+  CORE_AUTH_PROVIDERS_WEBAUTHN_DEBUG: {{ .Values.openlane.auth.providers.webauthn.debug | default "false" }}
+  CORE_AUTHZ_ENABLED: {{ .Values.openlane.authz.enabled | default "true" }}
+  CORE_AUTHZ_STORENAME: {{ .Values.openlane.authz.storeName | default "openlane" }}
+  CORE_AUTHZ_HOSTURL: {{ .Values.openlane.authz.hostUrl | default "https://authz.theopenlane.io" }}
+  CORE_AUTHZ_STOREID: {{ .Values.openlane.authz.storeId }}
+  CORE_AUTHZ_MODELID: {{ .Values.openlane.authz.modelId }}
+  CORE_AUTHZ_CREATENEWMODEL: {{ .Values.openlane.authz.createNewModel | default "false" }}
+  CORE_AUTHZ_MODELFILE: {{ .Values.openlane.authz.modelFile | default "fga/model/model.fga" }}
+  CORE_AUTHZ_CREDENTIALS_CLIENTID: {{ .Values.openlane.authz.credentials.clientId }}
+  CORE_AUTHZ_CREDENTIALS_AUDIENCE: {{ .Values.openlane.authz.credentials.audience }}
+  CORE_AUTHZ_CREDENTIALS_ISSUER: {{ .Values.openlane.authz.credentials.issuer }}
+  CORE_AUTHZ_CREDENTIALS_SCOPES: {{ .Values.openlane.authz.credentials.scopes }}
+  CORE_AUTHZ_IGNOREDUPLICATEKEYERROR: {{ .Values.openlane.authz.ignoreDuplicateKeyError | default "true" }}
+  CORE_DB_DEBUG: {{ .Values.openlane.db.debug | default "false" }}
+  CORE_DB_DATABASENAME: {{ .Values.openlane.db.databaseName | default "openlane" }}
+  CORE_DB_DRIVERNAME: {{ .Values.openlane.db.driverName | default "pgx" }}
+  CORE_DB_MULTIWRITE: {{ .Values.openlane.db.multiWrite | default "false" }}
+  CORE_DB_PRIMARYDBSOURCE: {{ .Values.openlane.db.primaryDbSource | default "file:openlane.db" }}
+  CORE_DB_SECONDARYDBSOURCE: {{ .Values.openlane.db.secondaryDbSource | default "file:backup.db" }}
+  CORE_DB_CACHETTL: {{ .Values.openlane.db.cacheTTL | default "1s" }}
+  CORE_DB_RUNMIGRATIONS: {{ .Values.openlane.db.runMigrations | default "true" }}
+  CORE_DB_MIGRATIONPROVIDER: {{ .Values.openlane.db.migrationProvider | default "atlas" }}
+  CORE_DB_ENABLEHISTORY: {{ .Values.openlane.db.enableHistory | default "false" }}
+  CORE_DB_MAXCONNECTIONS: {{ .Values.openlane.db.maxConnections | default "0" }}
+  CORE_DB_MAXIDLECONNECTIONS: {{ .Values.openlane.db.maxIdleConnections | default "0" }}
+  CORE_JOBQUEUE_CONNECTIONURI: {{ .Values.openlane.jobQueue.connectionURI | default "postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable" }}
+  CORE_JOBQUEUE_RUNMIGRATIONS: {{ .Values.openlane.jobQueue.runMigrations | default "false" }}
+  CORE_REDIS_ENABLED: {{ .Values.openlane.redis.enabled | default "true" }}
+  CORE_REDIS_ADDRESS: {{ .Values.openlane.redis.address | default "localhost:6379" }}
+  CORE_REDIS_NAME: {{ .Values.openlane.redis.name }}
+  CORE_REDIS_USERNAME: {{ .Values.openlane.redis.username }}
+  CORE_REDIS_PASSWORD: {{ .Values.openlane.redis.password }}
+  CORE_REDIS_DB: {{ .Values.openlane.redis.db | default "0" }}
+  CORE_REDIS_DIALTIMEOUT: {{ .Values.openlane.redis.dialTimeout | default "5s" }}
+  CORE_REDIS_READTIMEOUT: {{ .Values.openlane.redis.readTimeout | default "0" }}
+  CORE_REDIS_WRITETIMEOUT: {{ .Values.openlane.redis.writeTimeout | default "0" }}
+  CORE_REDIS_MAXRETRIES: {{ .Values.openlane.redis.maxRetries | default "3" }}
+  CORE_REDIS_MINIDLECONNS: {{ .Values.openlane.redis.minIdleConns | default "0" }}
+  CORE_REDIS_MAXIDLECONNS: {{ .Values.openlane.redis.maxIdleConns | default "0" }}
+  CORE_REDIS_MAXACTIVECONNS: {{ .Values.openlane.redis.maxActiveConns | default "0" }}
+  CORE_TRACER_ENABLED: {{ .Values.openlane.tracer.enabled | default "false" }}
+  CORE_TRACER_PROVIDER: {{ .Values.openlane.tracer.provider | default "stdout" }}
+  CORE_TRACER_ENVIRONMENT: {{ .Values.openlane.tracer.environment | default "development" }}
+  CORE_TRACER_STDOUT_PRETTY: {{ .Values.openlane.tracer.stdout.pretty | default "true" }}
+  CORE_TRACER_STDOUT_DISABLETIMESTAMP: {{ .Values.openlane.tracer.stdout.disableTimestamp | default "false" }}
+  CORE_TRACER_OTLP_ENDPOINT: {{ .Values.openlane.tracer.otlp.endpoint | default "localhost:4317" }}
+  CORE_TRACER_OTLP_INSECURE: {{ .Values.openlane.tracer.otlp.insecure | default "true" }}
+  CORE_TRACER_OTLP_CERTIFICATE: {{ .Values.openlane.tracer.otlp.certificate }}
+  CORE_TRACER_OTLP_HEADERS: {{ .Values.openlane.tracer.otlp.headers }}
+  CORE_TRACER_OTLP_COMPRESSION: {{ .Values.openlane.tracer.otlp.compression }}
+  CORE_TRACER_OTLP_TIMEOUT: {{ .Values.openlane.tracer.otlp.timeout | default "10s" }}
+  CORE_EMAIL_COMPANYNAME: {{ .Values.openlane.email.companyName }}
+  CORE_EMAIL_COMPANYADDRESS: {{ .Values.openlane.email.companyAddress }}
+  CORE_EMAIL_CORPORATION: {{ .Values.openlane.email.corporation }}
+  CORE_EMAIL_YEAR: {{ .Values.openlane.email.year }}
+  CORE_EMAIL_FROMEMAIL: {{ .Values.openlane.email.fromEmail }}
+  CORE_EMAIL_SUPPORTEMAIL: {{ .Values.openlane.email.supportEmail }}
+  CORE_EMAIL_LOGOURL: {{ .Values.openlane.email.logoURL }}
+  CORE_EMAIL_URLS_ROOT: {{ .Values.openlane.email.urls.root }}
+  CORE_EMAIL_URLS_PRODUCT: {{ .Values.openlane.email.urls.product }}
+  CORE_EMAIL_URLS_DOCS: {{ .Values.openlane.email.urls.docs }}
+  CORE_EMAIL_URLS_VERIFY: {{ .Values.openlane.email.urls.verify }}
+  CORE_EMAIL_URLS_INVITE: {{ .Values.openlane.email.urls.invite }}
+  CORE_EMAIL_URLS_RESET: {{ .Values.openlane.email.urls.reset }}
+  CORE_EMAIL_URLS_VERIFYSUBSCRIBER: {{ .Values.openlane.email.urls.verifySubscriber }}
+  CORE_EMAIL_URLS_VERIFYBILLING: {{ .Values.openlane.email.urls.verifyBilling }}
+  CORE_EMAIL_TEMPLATESPATH: {{ .Values.openlane.email.templatesPath }}
+  CORE_SESSIONS_SIGNINGKEY: {{ .Values.openlane.sessions.signingKey | default "my-signing-secret" }}
+  CORE_SESSIONS_ENCRYPTIONKEY: {{ .Values.openlane.sessions.encryptionKey | default "encryptionsecret" }}
+  CORE_SESSIONS_DOMAIN: {{ .Values.openlane.sessions.domain }}
+  CORE_SESSIONS_MAXAGE: {{ .Values.openlane.sessions.maxAge | default "3600" }}
+  CORE_SESSIONS_SECURE: {{ .Values.openlane.sessions.secure | default "true" }}
+  CORE_SESSIONS_HTTPONLY: {{ .Values.openlane.sessions.httpOnly | default "true" }}
+  CORE_SESSIONS_SAMESITE: {{ .Values.openlane.sessions.sameSite | default "Strict" }}
+  CORE_TOTP_ENABLED: {{ .Values.openlane.totp.enabled | default "true" }}
+  CORE_TOTP_CODELENGTH: {{ .Values.openlane.totp.codeLength | default "6" }}
+  CORE_TOTP_ISSUER: {{ .Values.openlane.totp.issuer }}
+  CORE_TOTP_REDIS: {{ .Values.openlane.totp.redis | default "true" }}
+  CORE_TOTP_RECOVERYCODECOUNT: {{ .Values.openlane.totp.recoveryCodeCount | default "16" }}
+  CORE_TOTP_RECOVERYCODELENGTH: {{ .Values.openlane.totp.recoveryCodeLength | default "8" }}
+  CORE_RATELIMIT_ENABLED: {{ .Values.openlane.ratelimit.enabled | default "false" }}
+  CORE_RATELIMIT_LIMIT: {{ .Values.openlane.ratelimit.limit | default "10" }}
+  CORE_RATELIMIT_BURST: {{ .Values.openlane.ratelimit.burst | default "30" }}
+  CORE_RATELIMIT_EXPIRES: {{ .Values.openlane.ratelimit.expires | default "10m" }}
+  CORE_OBJECTSTORAGE_ENABLED: {{ .Values.openlane.objectStorage.enabled | default "true" }}
+  CORE_OBJECTSTORAGE_PROVIDER: {{ .Values.openlane.objectStorage.provider }}
+  CORE_OBJECTSTORAGE_REGION: {{ .Values.openlane.objectStorage.region }}
+  CORE_OBJECTSTORAGE_DEFAULTBUCKET: {{ .Values.openlane.objectStorage.defaultBucket | default "file_uploads" }}
+  CORE_OBJECTSTORAGE_LOCALURL: {{ .Values.openlane.objectStorage.localURL | default "http://localhost:17608/files/" }}
+  CORE_OBJECTSTORAGE_KEYS: {{ .Values.openlane.objectStorage.keys | default "uploadFile" }}
+  CORE_OBJECTSTORAGE_MAXSIZEMB: {{ .Values.openlane.objectStorage.maxSizeMB }}
+  CORE_OBJECTSTORAGE_MAXMEMORYMB: {{ .Values.openlane.objectStorage.maxMemoryMB }}
+  CORE_SUBSCRIPTION_ENABLED: {{ .Values.openlane.subscription.enabled | default "false" }}
+  CORE_SUBSCRIPTION_PUBLICSTRIPEKEY: {{ .Values.openlane.subscription.publicStripeKey }}
+  CORE_SUBSCRIPTION_TRIALSUBSCRIPTIONPRICEID: {{ .Values.openlane.subscription.trialSubscriptionPriceID | default "price_1QKLyeBvxky1R7SvaZYGWyQb" }}
+  CORE_SUBSCRIPTION_PERSONALORGSUBSCRIPTIONPRICEID: {{ .Values.openlane.subscription.personalOrgSubscriptionPriceID | default "price_1QycPyBvxky1R7Svz0gOWnNh" }}
+{{- if .Values.openlane.subscription.stripeWebhookURL }}
+  CORE_SUBSCRIPTION_STRIPEWEBHOOKURL: {{ .Values.openlane.subscription.stripeWebhookURL }}
 {{- else if .Values.domain }}
   CORE_SUBSCRIPTION_STRIPEWEBHOOKURL: "https://api.{{ .Values.domain }}/v1/stripe/webhook"
 {{- else }}
   CORE_SUBSCRIPTION_STRIPEWEBHOOKURL: "https://api.openlane.com/v1/stripe/webhook"
 {{- end }}
-{{- if .Values.core.subscription.stripeBillingPortalSuccessURL }}
-  CORE_SUBSCRIPTION_STRIPEBILLINGPORTALSUCCESSURL: {{ .Values.core.subscription.stripeBillingPortalSuccessURL }}
+{{- if .Values.openlane.subscription.stripeBillingPortalSuccessURL }}
+  CORE_SUBSCRIPTION_STRIPEBILLINGPORTALSUCCESSURL: {{ .Values.openlane.subscription.stripeBillingPortalSuccessURL }}
 {{- else if .Values.domain }}
   CORE_SUBSCRIPTION_STRIPEBILLINGPORTALSUCCESSURL: "https://console.{{ .Values.domain }}/billing"
 {{- else }}
   CORE_SUBSCRIPTION_STRIPEBILLINGPORTALSUCCESSURL: "https://console.openlane.com/billing"
 {{- end }}
-{{- if .Values.core.subscription.stripeCancellationReturnURL }}
-  CORE_SUBSCRIPTION_STRIPECANCELLATIONRETURNURL: {{ .Values.core.subscription.stripeCancellationReturnURL }}
+{{- if .Values.openlane.subscription.stripeCancellationReturnURL }}
+  CORE_SUBSCRIPTION_STRIPECANCELLATIONRETURNURL: {{ .Values.openlane.subscription.stripeCancellationReturnURL }}
 {{- else if .Values.domain }}
   CORE_SUBSCRIPTION_STRIPECANCELLATIONRETURNURL: "https://console.{{ .Values.domain }}/organization-settings/billing/subscription_canceled"
 {{- else }}
   CORE_SUBSCRIPTION_STRIPECANCELLATIONRETURNURL: "https://console.theopenlane.io/organization-settings/billing/subscription_canceled"
 {{- end }}
-  CORE_SUBSCRIPTION_STRIPEWEBHOOKEVENTS: {{ .Values.core.subscription.stripeWebhookEvents }}
-  CORE_KEYWATCHER_ENABLED: {{ .Values.core.keywatcher.enabled | default "false" }}
-  CORE_KEYWATCHER_KEYDIR: {{ .Values.core.keywatcher.keyDir | default "./keys" }}
-  CORE_KEYWATCHER_EXTERNALSECRETSINTEGRATION: {{ .Values.core.keywatcher.externalSecretsIntegration | default "false" }}
-  CORE_SLACK_NEWSUBSCRIBERMESSAGEFILE: {{ .Values.core.slack.newSubscriberMessageFile }}
-  CORE_SLACK_NEWUSERMESSAGEFILE: {{ .Values.core.slack.newUserMessageFile }}
+  CORE_SUBSCRIPTION_STRIPEWEBHOOKEVENTS: {{ .Values.openlane.subscription.stripeWebhookEvents }}
+  CORE_KEYWATCHER_ENABLED: {{ .Values.openlane.keywatcher.enabled | default "false" }}
+  CORE_KEYWATCHER_KEYDIR: {{ .Values.openlane.keywatcher.keyDir | default "./keys" }}
+  CORE_KEYWATCHER_EXTERNALSECRETSINTEGRATION: {{ .Values.openlane.keywatcher.externalSecretsIntegration | default "false" }}
+  CORE_SLACK_NEWSUBSCRIBERMESSAGEFILE: {{ .Values.openlane.slack.newSubscriberMessageFile }}
+  CORE_SLACK_NEWUSERMESSAGEFILE: {{ .Values.openlane.slack.newUserMessageFile }}
