@@ -237,9 +237,8 @@ while IFS=':' read -r pr_number branch_name; do
       change_summary+="\\n- 📈 Bumped chart version to $new_version"
     fi
 
-    # Source helm documentation utilities
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    source "${SCRIPT_DIR}/helm-docs-utils.sh"
+    # Source helm documentation utilities from core repo
+    source "${BUILDKITE_BUILD_CHECKOUT_PATH}/.buildkite/helm-docs-utils.sh"
 
     # Generate documentation before committing
     generate_docs_and_commit

@@ -182,9 +182,8 @@ fi
 echo "📝 Configuration changes detected, creating draft PR"
 echo -e "Summary:$change_summary"
 
-# Source helm documentation utilities
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "${SCRIPT_DIR}/helm-docs-utils.sh"
+# Source helm documentation utilities from core repo
+source "${BUILDKITE_BUILD_CHECKOUT_PATH}/.buildkite/helm-docs-utils.sh"
 
 # Generate documentation before committing
 generate_docs_and_commit
