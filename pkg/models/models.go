@@ -1217,9 +1217,9 @@ func (t *IntegrationToken) HasValidToken() bool {
 // IntegrationTokenResponse is the response for getting integration tokens
 type IntegrationTokenResponse struct {
 	rout.Reply
-	Provider  string             `json:"provider"`
-	Token     *IntegrationToken  `json:"token"`
-	ExpiresAt *time.Time         `json:"expiresAt,omitempty"`
+	Provider  string            `json:"provider"`
+	Token     *IntegrationToken `json:"token"`
+	ExpiresAt *time.Time        `json:"expiresAt,omitempty"`
 }
 
 // ListIntegrationsResponse is the response for listing integrations

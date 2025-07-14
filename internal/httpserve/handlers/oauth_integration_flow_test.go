@@ -16,6 +16,7 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/iam/auth"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -607,4 +608,239 @@ func (suite *HandlerTestSuite) createTestTokens(ctx context.Context, integration
 		SetSecretValue("testuser").
 		AddIntegrations(integration).
 		SaveX(ctx)
+}
+
+// TestStartOAuthFlowCookieHandling tests that the OAuth start flow properly sets cookies with SameSiteNone
+func (suite *HandlerTestSuite) TestStartOAuthFlowCookieHandling() {
+	t := suite.T()
+
+	suite.e.POST("oauth/start", suite.h.StartOAuthFlow)
+
+	ctx := echocontext.NewTestEchoContext().Request().Context()
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	// Create test user with organization
+	testUser := suite.userBuilderWithInput(ctx, &userInput{
+		password:      "0p3nl@n3rocks!",
+		confirmedUser: true,
+	})
+
+	t.Run("sets OAuth cookies with SameSiteNone", func(t *testing.T) {
+		request := models.OAuthFlowRequest{
+			Provider: "github",
+		}
+
+		body, err := json.Marshal(request)
+		require.NoError(t, err)
+
+		req := httptest.NewRequest(http.MethodPost, "/oauth/start", strings.NewReader(string(body)))
+		req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+
+		// Add existing auth cookies to simulate authenticated user
+		req.AddCookie(&http.Cookie{
+			Name:  auth.AccessTokenCookie,
+			Value: "test_access_token",
+		})
+		req.AddCookie(&http.Cookie{
+			Name:  auth.RefreshTokenCookie,
+			Value: "test_refresh_token",
+		})
+
+		rec := httptest.NewRecorder()
+		suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
+
+		assert.Equal(t, http.StatusOK, rec.Code)
+
+		// Parse response to get cookies
+		cookies := rec.Result().Cookies()
+
+		// Verify OAuth-specific cookies are set with SameSiteNone
+		var oauthStateCookie, oauthOrgCookie, oauthUserCookie *http.Cookie
+		var authAccessCookie, authRefreshCookie *http.Cookie
+
+		for _, cookie := range cookies {
+			switch cookie.Name {
+			case "oauth_state":
+				oauthStateCookie = cookie
+			case "oauth_org_id":
+				oauthOrgCookie = cookie
+			case "oauth_user_id":
+				oauthUserCookie = cookie
+			case auth.AccessTokenCookie:
+				authAccessCookie = cookie
+			case auth.RefreshTokenCookie:
+				authRefreshCookie = cookie
+			}
+		}
+
+		// Verify OAuth cookies are set with proper SameSite policy
+		require.NotNil(t, oauthStateCookie, "oauth_state cookie should be set")
+		assert.Equal(t, http.SameSiteNoneMode, oauthStateCookie.SameSite, "oauth_state should have SameSiteNone")
+		assert.True(t, oauthStateCookie.HttpOnly, "oauth_state should be HttpOnly")
+		assert.False(t, oauthStateCookie.Secure, "oauth_state should not be Secure in test mode")
+
+		require.NotNil(t, oauthOrgCookie, "oauth_org_id cookie should be set")
+		assert.Equal(t, http.SameSiteNoneMode, oauthOrgCookie.SameSite, "oauth_org_id should have SameSiteNone")
+		assert.Equal(t, testUser.OrganizationID, oauthOrgCookie.Value, "oauth_org_id should match user's org")
+
+		require.NotNil(t, oauthUserCookie, "oauth_user_id cookie should be set")
+		assert.Equal(t, http.SameSiteNoneMode, oauthUserCookie.SameSite, "oauth_user_id should have SameSiteNone")
+		assert.Equal(t, testUser.UserInfo.ID, oauthUserCookie.Value, "oauth_user_id should match user's ID")
+
+		// Verify auth cookies are re-set with SameSiteNone for OAuth compatibility
+		require.NotNil(t, authAccessCookie, "access token cookie should be re-set")
+		assert.Equal(t, http.SameSiteNoneMode, authAccessCookie.SameSite, "access token should have SameSiteNone for OAuth")
+		assert.Equal(t, "test_access_token", authAccessCookie.Value, "access token value should be preserved")
+
+		require.NotNil(t, authRefreshCookie, "refresh token cookie should be re-set")
+		assert.Equal(t, http.SameSiteNoneMode, authRefreshCookie.SameSite, "refresh token should have SameSiteNone for OAuth")
+		assert.Equal(t, "test_refresh_token", authRefreshCookie.Value, "refresh token value should be preserved")
+	})
+
+	t.Run("handles missing auth cookies gracefully", func(t *testing.T) {
+		request := models.OAuthFlowRequest{
+			Provider: "github",
+		}
+
+		body, err := json.Marshal(request)
+		require.NoError(t, err)
+
+		req := httptest.NewRequest(http.MethodPost, "/oauth/start", strings.NewReader(string(body)))
+		req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+		// Don't add auth cookies
+
+		rec := httptest.NewRecorder()
+		suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
+
+		assert.Equal(t, http.StatusOK, rec.Code)
+
+		// Should still set OAuth cookies even without existing auth cookies
+		cookies := rec.Result().Cookies()
+		var oauthStateCookie *http.Cookie
+
+		for _, cookie := range cookies {
+			if cookie.Name == "oauth_state" {
+				oauthStateCookie = cookie
+				break
+			}
+		}
+
+		require.NotNil(t, oauthStateCookie, "oauth_state cookie should be set even without auth cookies")
+		assert.Equal(t, http.SameSiteNoneMode, oauthStateCookie.SameSite, "oauth_state should have SameSiteNone")
+	})
+}
+
+// TestOAuthCallbackWithCookies tests that the OAuth callback works with proper cookie setup
+func (suite *HandlerTestSuite) TestOAuthCallbackWithCookies() {
+	t := suite.T()
+
+	suite.e.GET("oauth/callback", suite.h.HandleOAuthCallback)
+
+	ctx := echocontext.NewTestEchoContext().Request().Context()
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	// Create test user with organization
+	testUser := suite.userBuilderWithInput(ctx, &userInput{
+		password:      "0p3nl@n3rocks!",
+		confirmedUser: true,
+	})
+
+	// Generate valid state for testing
+	orgID := testUser.OrganizationID
+	provider := "github"
+	validState, err := generateTestOAuthState(orgID, provider)
+	require.NoError(t, err)
+
+	t.Run("callback works with proper cookies", func(t *testing.T) {
+		// Create a request with proper OAuth cookies set (simulating successful OAuth start)
+		req := httptest.NewRequest(http.MethodGet,
+			fmt.Sprintf("/oauth/callback?code=test_code&state=%s", validState), nil)
+
+		// Add OAuth cookies that would be set by the start flow
+		req.AddCookie(&http.Cookie{
+			Name:     "oauth_state",
+			Value:    validState,
+			SameSite: http.SameSiteNoneMode,
+		})
+		req.AddCookie(&http.Cookie{
+			Name:     "oauth_org_id",
+			Value:    orgID,
+			SameSite: http.SameSiteNoneMode,
+		})
+		req.AddCookie(&http.Cookie{
+			Name:     "oauth_user_id",
+			Value:    testUser.UserInfo.ID,
+			SameSite: http.SameSiteNoneMode,
+		})
+
+		rec := httptest.NewRecorder()
+		suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
+
+		// Should not get a 401 anymore - the authentication context should be properly set
+		// Note: This might still fail due to missing OAuth provider validation or other issues,
+		// but it should NOT fail with a 401 due to missing authentication
+		assert.NotEqual(t, http.StatusUnauthorized, rec.Code,
+			"Should not get 401 - authentication context should be available")
+
+		// Check that OAuth cookies get cleaned up on successful callback
+		if rec.Code == http.StatusOK {
+			cookies := rec.Result().Cookies()
+			for _, cookie := range cookies {
+				if strings.HasPrefix(cookie.Name, "oauth_") {
+					// OAuth cookies should be removed/expired
+					assert.True(t, cookie.MaxAge < 0 || cookie.Expires.Before(time.Now()),
+						"OAuth cookie %s should be removed after successful callback", cookie.Name)
+				}
+			}
+		}
+	})
+
+	t.Run("callback fails without proper cookies", func(t *testing.T) {
+		// Create a request without OAuth cookies
+		req := httptest.NewRequest(http.MethodGet,
+			fmt.Sprintf("/oauth/callback?code=test_code&state=%s", validState), nil)
+
+		rec := httptest.NewRecorder()
+		suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
+
+		// Should fail due to missing OAuth state cookie
+		assert.Equal(t, http.StatusBadRequest, rec.Code)
+		assert.Contains(t, rec.Body.String(), "state")
+	})
+}
+
+// TestOAuthStateValidation tests OAuth state generation and validation
+func (suite *HandlerTestSuite) TestOAuthStateValidation() {
+	t := suite.T()
+
+	orgID := "test-org-123"
+	provider := "github"
+
+	t.Run("state generation and validation", func(t *testing.T) {
+		// Generate a state
+		state, err := generateTestOAuthState(orgID, provider)
+		require.NoError(t, err)
+		assert.NotEmpty(t, state)
+
+		// Validate the state format
+		stateBytes, err := base64.URLEncoding.DecodeString(state)
+		require.NoError(t, err)
+
+		parts := strings.Split(string(stateBytes), ":")
+		assert.Len(t, parts, 3, "State should have 3 parts: orgID:provider:random")
+		assert.Equal(t, orgID, parts[0], "First part should be orgID")
+		assert.Equal(t, provider, parts[1], "Second part should be provider")
+		assert.NotEmpty(t, parts[2], "Third part should be random data")
+	})
+
+	t.Run("different states for different inputs", func(t *testing.T) {
+		state1, err := generateTestOAuthState(orgID, provider)
+		require.NoError(t, err)
+
+		state2, err := generateTestOAuthState(orgID, provider)
+		require.NoError(t, err)
+
+		// States should be different due to random component
+		assert.NotEqual(t, state1, state2, "Different calls should generate different states")
+	})
 }
