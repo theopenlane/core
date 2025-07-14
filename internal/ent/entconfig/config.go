@@ -169,5 +169,5 @@ type Windmill struct {
 	OnSuccessScript string `json:"onSuccessScript,omitempty" koanf:"onSuccessScript"`
 
 	// FolderName identifies the storage path of flows and scripts in Windmill, you'd want to use
-	FolderName string `json:"folderName,omitempty" koanf:"folderName" default:"openlane" description="an example would be openlane, your flows and scripts will then be saved in f/openlane as an example"`
+	FolderName string `json:"folderName,omitempty" koanf:"folderName" default:"openlane" description:"an example would be openlane, your flows and scripts will then be saved in f/openlane as an example"`
 }
