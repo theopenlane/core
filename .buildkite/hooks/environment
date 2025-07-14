@@ -1,0 +1,105 @@
+#!/bin/bash
+
+set -euo pipefail
+
+echo "🌍 Setting up dynamic environment..."
+
+# Set Go environment variables
+export GOPROXY=https://proxy.golang.org,direct
+export GOSUMDB=sum.golang.org
+export GOMODCACHE=$HOME/.cache/go/pkg/mod
+export GOCACHE=$HOME/.cache/go-build
+
+# Set build-specific environment variables
+export BUILD_TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+export BUILD_VERSION=${BUILDKITE_BUILD_NUMBER:-dev}
+export BUILD_COMMIT=${BUILDKITE_COMMIT:-$(git rev-parse HEAD 2>/dev/null || echo "unknown")}
+export BUILD_BRANCH=${BUILDKITE_BRANCH:-$(git branch --show-current 2>/dev/null || echo "unknown")}
+
+# CI vs non-CI context
+if [[ -n "${BUILDKITE_BUILD_ID:-}" ]]; then
+    export IS_CI="true"
+    # Enable Helm automation only on main branch in CI
+    if [[ "${BUILD_BRANCH}" == "main" ]]; then
+        export HELM_AUTOMATION_ENABLED="true"
+    else
+        export HELM_AUTOMATION_ENABLED="false"
+    fi
+else
+    export IS_CI="false"
+    export HELM_AUTOMATION_ENABLED="false"
+fi
+
+# PR-specific environment variables
+if [[ -n "${BUILDKITE_PULL_REQUEST:-}" && "${BUILDKITE_PULL_REQUEST}" != "false" ]]; then
+    export IS_PULL_REQUEST="true"
+    export PR_NUMBER="${BUILDKITE_PULL_REQUEST}"
+    export DRAFT_PR_AUTOMATION_ENABLED="true"
+else
+    export IS_PULL_REQUEST="false"
+    export DRAFT_PR_AUTOMATION_ENABLED="false"
+fi
+
+# Set up test environment variables
+export TEST_RESULTS_DIR="${BUILDKITE_BUILD_PATH:-/tmp}/test-results"
+export ARTIFACTS_DIR="${BUILDKITE_BUILD_PATH:-/tmp}/artifacts"
+export COVERAGE_DIR="${BUILDKITE_BUILD_PATH:-/tmp}/coverage"
+
+# Create coverage directory
+mkdir -p "${COVERAGE_DIR}"
+
+# Docker environment
+export DOCKER_BUILDKIT=1
+export COMPOSE_DOCKER_CLI_BUILD=1
+
+# Set up Docker layer caching directory
+export DOCKER_LAYER_CACHE_DIR="${HOME}/.cache/docker"
+mkdir -p "${DOCKER_LAYER_CACHE_DIR}" 2>/dev/null || true
+
+# Tool-specific environment variables
+export GOLANGCI_LINT_CACHE="${HOME}/.cache/golangci-lint"
+export CGO_ENABLED=1
+
+# Set resource limits for build processes
+export GOMAXPROCS=${GOMAXPROCS:-$(nproc 2>/dev/null || echo "4")}
+
+# Security environment variables
+export GOSEC_SEVERITY="medium"
+export GOSEC_CONFIDENCE="medium"
+
+# Slack notification environment (if configured)
+if [[ -n "${SLACK_WEBHOOK_URL:-}" ]]; then
+    export SLACK_NOTIFICATIONS_ENABLED="true"
+else
+    export SLACK_NOTIFICATIONS_ENABLED="false"
+fi
+
+# GitHub API environment (if configured)
+if [[ -n "${GITHUB_TOKEN:-}" ]]; then
+    export GITHUB_API_ENABLED="true"
+else
+    export GITHUB_API_ENABLED="false"
+fi
+
+# Debugging environment
+if [[ "${BUILDKITE_AGENT_DEBUG:-false}" == "true" ]]; then
+    export DEBUG_MODE="true"
+    export VERBOSE_LOGGING="true"
+    set -x
+else
+    export DEBUG_MODE="false"
+    export VERBOSE_LOGGING="false"
+fi
+
+echo "✅ Dynamic environment setup complete"
+echo "🏗️ Is CI: ${IS_CI}"
+echo "🔢 Build Version: ${BUILD_VERSION}"
+echo "📝 Build Commit: ${BUILD_COMMIT:0:8}"
+echo "🌿 Build Branch: ${BUILD_BRANCH}"
+echo "🔀 Is PR: ${IS_PULL_REQUEST}"
+
+# Export all environment variables for debugging (only if debug mode is enabled)
+if [[ "${DEBUG_MODE}" == "true" ]]; then
+    echo "🐛 Debug mode enabled - environment variables:"
+    env | grep -E "^(BUILD_|GO|DOCKER_|HELM_|DRAFT_|IS_|PR_|TEST_|ARTIFACTS_|COVERAGE_|SLACK_|GITHUB_|DEBUG_|VERBOSE_)" | sort
+fi

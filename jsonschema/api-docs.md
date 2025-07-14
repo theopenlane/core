@@ -7,6 +7,7 @@ Config contains the configuration for the core server
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|**domain**|`string`|Domain provides a global domain value for other modules to inherit<br/>||
 |**refreshInterval**|`integer`|RefreshInterval determines how often to reload the config<br/>||
 |[**server**](#server)|`object`|Server settings for the echo server<br/>|yes|
 |[**entConfig**](#entconfig)|`object`|Config holds the configuration for the ent server<br/>||

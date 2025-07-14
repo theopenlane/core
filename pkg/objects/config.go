@@ -16,13 +16,13 @@ type Config struct {
 	// Provider is the name of the provider, eg. disk, s3, will default to disk if nothing is set
 	Provider string `json:"provider" koanf:"provider" `
 	// AccessKey is the access key for the storage provider
-	AccessKey string `json:"accessKey" koanf:"accessKey"`
+	AccessKey string `json:"accessKey" koanf:"accessKey" sensitive:"true"`
 	// Region is the region for the storage provider
 	Region string `json:"region" koanf:"region"`
 	// SecretKey is the secret key for the storage provider
-	SecretKey string `json:"secretKey" koanf:"secretKey"`
+	SecretKey string `json:"secretKey" koanf:"secretKey" sensitive:"true"`
 	// CredentialsJSON is the credentials JSON for the storage provider
-	CredentialsJSON string `json:"credentialsJSON" koanf:"credentialsJSON"`
+	CredentialsJSON string `json:"credentialsJSON" koanf:"credentialsJSON" sensitive:"true"`
 	// DefaultBucket is the default bucket name for the storage provider, if not set, it will use the default
 	// this is the local path for disk storage or the bucket name for S3
 	DefaultBucket string `json:"defaultBucket" koanf:"defaultBucket" default:"file_uploads"`

@@ -1,0 +1,68 @@
+{
+  "text": "🚀 New Release Ready for Deployment",
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": "🚀 New Release Ready for Deployment"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "A new core release has been published and is ready for infrastructure deployment."
+      }
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "*Release Version:*\n`{{RELEASE_TAG}}`"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Docker Image:*\n`ghcr.io/theopenlane/core:{{RELEASE_TAG}}`"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*Changes Made:*{{CHANGE_SUMMARY}}"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*Deployment Process:*\n• Review the infrastructure PR\n• Verify image tag and chart version\n• Approve and merge to deploy to production\n• Monitor deployment status"
+      }
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "🚀 Deploy Release"
+          },
+          "url": "{{PR_URL}}",
+          "style": "primary"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "📋 Release Notes"
+          },
+          "url": "{{RELEASE_URL}}"
+        }
+      ]
+    }
+  ]
+}

@@ -6,19 +6,19 @@ type Config struct {
 	// PublicStripeKey is the key for the stripe service
 	PublicStripeKey string `json:"publicStripeKey" koanf:"publicStripeKey" default:""`
 	// PrivateStripeKey is the key for the stripe service
-	PrivateStripeKey string `json:"privateStripeKey" koanf:"privateStripeKey" default:""`
+	PrivateStripeKey string `json:"privateStripeKey" koanf:"privateStripeKey" default:"" sensitive:"true"`
 	// StripeWebhookSecret is the secret for the stripe service
-	StripeWebhookSecret string `json:"stripeWebhookSecret" koanf:"stripeWebhookSecret" default:""`
+	StripeWebhookSecret string `json:"stripeWebhookSecret" koanf:"stripeWebhookSecret" default:"" sensitive:"true"`
 	// TrialSubscriptionPriceID is the price ID for the trial subscription
 	TrialSubscriptionPriceID string `json:"trialSubscriptionPriceID" koanf:"trialSubscriptionPriceID" default:"price_1QKLyeBvxky1R7SvaZYGWyQb"`
 	// PersonalOrgSubscriptionPriceID is the price ID for the personal org subscription
 	PersonalOrgSubscriptionPriceID string `json:"personalOrgSubscriptionPriceID" koanf:"personalOrgSubscriptionPriceID" default:"price_1QycPyBvxky1R7Svz0gOWnNh"`
 	// StripeWebhookURL is the URL for the stripe webhook
-	StripeWebhookURL string `json:"stripeWebhookURL" koanf:"stripeWebhookURL" default:"https://api.openlane.com/v1/stripe/webhook"`
+	StripeWebhookURL string `json:"stripeWebhookURL" koanf:"stripeWebhookURL" default:"https://api.openlane.com/v1/stripe/webhook" domain:"inherit" domainPrefix:"https://api" domainSuffix:"/v1/stripe/webhook"`
 	// StripeBillingPortalSuccessURL
-	StripeBillingPortalSuccessURL string `json:"stripeBillingPortalSuccessURL" koanf:"stripeBillingPortalSuccessURL" default:"https://console.openlane.com/billing"`
+	StripeBillingPortalSuccessURL string `json:"stripeBillingPortalSuccessURL" koanf:"stripeBillingPortalSuccessURL" default:"https://console.openlane.com/billing" domain:"inherit" domainPrefix:"https://console" domainSuffix:"/billing"`
 	// StripeCancellationReturnURL is the URL for the stripe cancellation return
-	StripeCancellationReturnURL string `json:"stripeCancellationReturnURL" koanf:"stripeCancellationReturnURL" default:"https://console.theopenlane.io/organization-settings/billing/subscription_canceled"`
+	StripeCancellationReturnURL string `json:"stripeCancellationReturnURL" koanf:"stripeCancellationReturnURL" default:"https://console.theopenlane.io/organization-settings/billing/subscription_canceled" domain:"inherit" domainPrefix:"https://console" domainSuffix:"/organization-settings/billing/subscription_canceled"`
 	// StripeWebhookEvents is the list of events to register when creating a webhook endpoint
 	StripeWebhookEvents []string `json:"stripeWebhookEvents" koanf:"stripeWebhookEvents"`
 }
