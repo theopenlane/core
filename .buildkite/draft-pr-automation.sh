@@ -44,8 +44,7 @@ changes_made=false
 change_summary=""
 
 # Use the helm-automation.sh functions by sourcing it
-CHECKOUT_PATH="${BUILDKITE_BUILD_CHECKOUT_PATH:-$(pwd)}"
-source "${CHECKOUT_PATH}/.buildkite/helm-automation.sh"
+source "${BUILDKITE_BUILD_CHECKOUT_PATH}/.buildkite/helm-automation.sh"
 
 echo "🔍 Checking for configuration changes..."
 
