@@ -124,6 +124,18 @@ entConfig:
             provider: ""
         maximumSentences: 60
         type: lexrank
+integrationOauthProvider:
+    github:
+        clientEndpoint: http://localhost:17608
+        clientId: ""
+        clientSecret: ""
+        scopes: null
+    redirectUrl: http://localhost:17608
+    slack:
+        clientEndpoint: http://localhost:17608
+        clientId: ""
+        clientSecret: ""
+        scopes: null
 jobQueue:
     connectionURI: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
     riverConf:

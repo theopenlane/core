@@ -73,6 +73,8 @@ type Config struct {
 	Keywatcher KeyWatcher `json:"keywatcher" koanf:"keywatcher"`
 	// Slack contains settings for Slack notifications
 	Slack Slack `json:"slack" koanf:"slack"`
+	// IntegrationOauthProvider contains the OAuth provider configuration for integrations (separate from auth.providers)
+	IntegrationOauthProvider handlers.IntegrationOauthProviderConfig `json:"integrationOauthProvider" koanf:"integrationOauthProvider"`
 }
 
 // Server settings for the echo server

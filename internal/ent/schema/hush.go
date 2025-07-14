@@ -10,6 +10,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/entx"
 )
 
@@ -115,4 +116,13 @@ func (Hush) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorHush(),
 	}
+}
+
+// Policy of the Hush - restricts access to organization members with write access
+func (Hush) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithMutationRules(
+			policy.CheckOrgWriteAccess(),
+		),
+	)
 }

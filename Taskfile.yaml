@@ -257,6 +257,16 @@ tasks:
     cmds:
       - go run main.go serve --debug --pretty
 
+  oauth-test-ui:
+    desc: runs the OAuth integration test UI on port 3004
+    cmds:
+      - docker compose -f ./docker/docker-compose-oauth-test.yml up -d
+
+  oauth-test-ui:down:
+    desc: stops the OAuth integration test UI
+    cmds:
+      - docker compose -f ./docker/docker-compose-oauth-test.yml down
+
   pr:
     desc: runs the comprehensive roll-up tasks required to ensure all files are being committed / pushed as a part of opening a PR
     cmds:

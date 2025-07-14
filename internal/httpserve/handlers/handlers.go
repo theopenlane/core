@@ -41,8 +41,10 @@ type Handler struct {
 	JWTKeys jwk.Set
 	// SessionConfig to handle sessions
 	SessionConfig *sessions.SessionConfig
-	// OauthProvider contains the configuration settings for all supported Oauth2 providers
+	// OauthProvider contains the configuration settings for all supported Oauth2 providers (for social login)
 	OauthProvider OauthProviderConfig
+	// IntegrationOauthProvider contains the configuration settings for integration Oauth2 providers
+	IntegrationOauthProvider IntegrationOauthProviderConfig
 	// AuthMiddleware contains the middleware to be used for authenticated endpoints
 	AuthMiddleware []echo.MiddlewareFunc
 	// AdditionalMiddleware contains the additional middleware to be used for all endpoints
