@@ -71,7 +71,6 @@ steps:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["/bin/bash", "-c"]
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE
@@ -97,7 +96,6 @@ steps:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["/bin/bash", "-c"]
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE
@@ -121,7 +119,6 @@ steps:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["/bin/bash", "-c"]
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE
@@ -147,7 +144,6 @@ steps:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["/bin/bash", "-c"]
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE
