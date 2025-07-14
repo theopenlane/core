@@ -23,15 +23,13 @@ install_task() {
 install_helm_docs() {
   if ! command -v helm-docs >/dev/null 2>&1; then
     echo "Installing helm-docs..."
-    local helm_docs_version="1.15.0"
-    local download_url="https://github.com/norwoodj/helm-docs/releases/download/v${helm_docs_version}/helm-docs_${helm_docs_version}_Linux_x86_64.tar.gz"
-
-    wget -q "$download_url" -O /tmp/helm-docs.tar.gz
-    tar -xzf /tmp/helm-docs.tar.gz -C /tmp
-    mv /tmp/helm-docs /usr/local/bin/helm-docs
-    chmod +x /usr/local/bin/helm-docs
-    rm -f /tmp/helm-docs.tar.gz
-    echo "✅ helm-docs v${helm_docs_version} installed"
+    if command -v go >/dev/null 2>&1; then
+      go install github.com/norwoodj/helm-docs/cmd/helm-docs@latest
+      echo "✅ helm-docs installed via go install"
+    else
+      echo "⚠️  Go not found, helm-docs installation skipped"
+      return 1
+    fi
   else
     echo "✅ helm-docs already available"
   fi
