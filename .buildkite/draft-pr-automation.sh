@@ -93,26 +93,24 @@ merge_helm_values() {
   # Copy target file as base
   cp "$target" "$temp_merged"
 
-  # Perform deep merge of all sections from source into target
-  echo "  📋 Performing deep merge of all configuration sections..."
-  if ! yq e -i '. *= load("'"$source"'")' "$temp_merged"; then
-    echo "  ❌ Deep merge failed, falling back to individual section merge"
-    # Fallback: merge core section specifically
-    if yq e '.core' "$source" | grep -v "null" > /dev/null 2>&1; then
-      echo "  📋 Merging core section..."
-      core_section=$(yq e '.core' "$source")
-      echo "$core_section" > /tmp/core-section.yaml
-      yq e -i '.core = load("/tmp/core-section.yaml")' "$temp_merged"
-    fi
-    # Merge externalSecrets section if it exists
-    if yq e '.externalSecrets' "$source" | grep -v "null" > /dev/null 2>&1; then
-      echo "  🔐 Merging external secrets configuration..."
-      external_secrets_section=$(yq e '.externalSecrets' "$source")
-      echo "$external_secrets_section" > /tmp/external-secrets-section.yaml
-      yq e -i '.externalSecrets = load("/tmp/external-secrets-section.yaml")' "$temp_merged"
-    fi
+  # Merge coreConfiguration section specifically into openlane.coreConfiguration
+  echo "  📋 Merging coreConfiguration section..."
+  if yq e '.coreConfiguration' "$source" | grep -v "null" > /dev/null 2>&1; then
+    core_config_section=$(yq e '.coreConfiguration' "$source")
+    echo "$core_config_section" > /tmp/core-config-section.yaml
+    yq e -i '.openlane.coreConfiguration = load("/tmp/core-config-section.yaml")' "$temp_merged"
+    echo "  ✅ coreConfiguration merged successfully"
   else
-    echo "  ✅ Deep merge completed successfully"
+    echo "  ⚠️  No coreConfiguration section found in source"
+  fi
+
+  # Merge externalSecrets section if it exists
+  if yq e '.externalSecrets' "$source" | grep -v "null" > /dev/null 2>&1; then
+    echo "  🔐 Merging external secrets configuration..."
+    external_secrets_section=$(yq e '.externalSecrets' "$source")
+    echo "$external_secrets_section" > /tmp/external-secrets-section.yaml
+    yq e -i '.externalSecrets = load("/tmp/external-secrets-section.yaml")' "$temp_merged"
+    echo "  ✅ externalSecrets merged successfully"
   fi
 
   # Replace target with merged content

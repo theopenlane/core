@@ -265,8 +265,8 @@ func generateConfigMapEntry(field envparse.VarInfo, defaultVal string) string {
 	}
 
 	// Standard non-domain field processing
-	// Prefix with openlane for Helm chart compatibility (remove 'core.' prefix since it's already under openlane)
-	helmPath := fmt.Sprintf("openlane.%s", strings.TrimPrefix(field.FullPath, "core."))
+	// Prefix with openlane.coreConfiguration for Helm chart compatibility
+	helmPath := fmt.Sprintf("openlane.coreConfiguration.%s", strings.TrimPrefix(field.FullPath, "core."))
 	if defaultVal == "" {
 		return fmt.Sprintf("  %s: {{ .Values.%s }}\n", field.Key, helmPath)
 	}
@@ -371,7 +371,9 @@ func generateHelmValues(structure interface{}) (string, error) {
 `)
 
 	// Generate YAML with comments recursively, excluding sensitive values
-	err := generateYAMLWithComments(&regularResult, "", reflect.ValueOf(structure).Elem(), schema, 0)
+	// Nest under coreConfiguration key to be merged into openlane.coreConfiguration
+	regularResult.WriteString("coreConfiguration:\n")
+	err := generateYAMLWithComments(&regularResult, "", reflect.ValueOf(structure).Elem(), schema, 1)
 	if err != nil {
 		return "", err
 	}
