@@ -4592,6 +4592,50 @@ var (
 			},
 		},
 	}
+	// TrustCenterCompliancesColumns holds the columns for the "trust_center_compliances" table.
+	TrustCenterCompliancesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+	}
+	// TrustCenterCompliancesTable holds the schema information for the "trust_center_compliances" table.
+	TrustCenterCompliancesTable = &schema.Table{
+		Name:       "trust_center_compliances",
+		Columns:    TrustCenterCompliancesColumns,
+		PrimaryKey: []*schema.Column{TrustCenterCompliancesColumns[0]},
+	}
+	// TrustCenterComplianceHistoryColumns holds the columns for the "trust_center_compliance_history" table.
+	TrustCenterComplianceHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+	}
+	// TrustCenterComplianceHistoryTable holds the schema information for the "trust_center_compliance_history" table.
+	TrustCenterComplianceHistoryTable = &schema.Table{
+		Name:       "trust_center_compliance_history",
+		Columns:    TrustCenterComplianceHistoryColumns,
+		PrimaryKey: []*schema.Column{TrustCenterComplianceHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "trustcentercompliancehistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterComplianceHistoryColumns[1]},
+			},
+		},
+	}
 	// TrustCenterHistoryColumns holds the columns for the "trust_center_history" table.
 	TrustCenterHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -4729,13 +4773,40 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "countries", Type: field.TypeJSON, Nullable: true},
+		{Name: "category", Type: field.TypeString, Size: 255},
+		{Name: "subprocessor_id", Type: field.TypeString},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterSubprocessorsTable holds the schema information for the "trust_center_subprocessors" table.
 	TrustCenterSubprocessorsTable = &schema.Table{
 		Name:       "trust_center_subprocessors",
 		Columns:    TrustCenterSubprocessorsColumns,
 		PrimaryKey: []*schema.Column{TrustCenterSubprocessorsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "trust_center_subprocessors_subprocessors_trust_center_subprocessors",
+				Columns:    []*schema.Column{TrustCenterSubprocessorsColumns[9]},
+				RefColumns: []*schema.Column{SubprocessorsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "trust_center_subprocessors_trust_centers_trust_center_subprocessors",
+				Columns:    []*schema.Column{TrustCenterSubprocessorsColumns[10]},
+				RefColumns: []*schema.Column{TrustCentersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "trustcentersubprocessor_subprocessor_id_trust_center_id",
+				Unique:  true,
+				Columns: []*schema.Column{TrustCenterSubprocessorsColumns[9], TrustCenterSubprocessorsColumns[10]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
 	}
 	// TrustCenterSubprocessorHistoryColumns holds the columns for the "trust_center_subprocessor_history" table.
 	TrustCenterSubprocessorHistoryColumns = []*schema.Column{
@@ -4749,7 +4820,10 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "subprocessor_id", Type: field.TypeString},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+		{Name: "countries", Type: field.TypeJSON, Nullable: true},
+		{Name: "category", Type: field.TypeString, Size: 255},
 	}
 	// TrustCenterSubprocessorHistoryTable holds the schema information for the "trust_center_subprocessor_history" table.
 	TrustCenterSubprocessorHistoryTable = &schema.Table{
@@ -7739,6 +7813,8 @@ var (
 		TemplatesTable,
 		TemplateHistoryTable,
 		TrustCentersTable,
+		TrustCenterCompliancesTable,
+		TrustCenterComplianceHistoryTable,
 		TrustCenterHistoryTable,
 		TrustCenterSettingsTable,
 		TrustCenterSettingHistoryTable,
@@ -8115,6 +8191,9 @@ func init() {
 	}
 	TrustCentersTable.ForeignKeys[0].RefTable = OrganizationsTable
 	TrustCentersTable.ForeignKeys[1].RefTable = CustomDomainsTable
+	TrustCenterComplianceHistoryTable.Annotation = &entsql.Annotation{
+		Table: "trust_center_compliance_history",
+	}
 	TrustCenterHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_history",
 	}
@@ -8124,6 +8203,8 @@ func init() {
 	TrustCenterSettingHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_setting_history",
 	}
+	TrustCenterSubprocessorsTable.ForeignKeys[0].RefTable = SubprocessorsTable
+	TrustCenterSubprocessorsTable.ForeignKeys[1].RefTable = TrustCentersTable
 	TrustCenterSubprocessorHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_subprocessor_history",
 	}

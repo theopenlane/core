@@ -678,7 +678,7 @@ query GlobalSearch($query: String!) {
         }
       }
     }
-    trustCenterSubprocessors {
+    trustCenterCompliances {
       totalCount
       pageInfo {
         hasNextPage

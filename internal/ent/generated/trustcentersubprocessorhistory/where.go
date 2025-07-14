@@ -105,6 +105,21 @@ func DeletedBy(v string) predicate.TrustCenterSubprocessorHistory {
 	return predicate.TrustCenterSubprocessorHistory(sql.FieldEQ(FieldDeletedBy, v))
 }
 
+// SubprocessorID applies equality check predicate on the "subprocessor_id" field. It's identical to SubprocessorIDEQ.
+func SubprocessorID(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldEQ(FieldSubprocessorID, v))
+}
+
+// TrustCenterID applies equality check predicate on the "trust_center_id" field. It's identical to TrustCenterIDEQ.
+func TrustCenterID(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldEQ(FieldTrustCenterID, v))
+}
+
+// Category applies equality check predicate on the "category" field. It's identical to CategoryEQ.
+func Category(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldEQ(FieldCategory, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.TrustCenterSubprocessorHistory {
 	return predicate.TrustCenterSubprocessorHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -615,14 +630,219 @@ func DeletedByContainsFold(v string) predicate.TrustCenterSubprocessorHistory {
 	return predicate.TrustCenterSubprocessorHistory(sql.FieldContainsFold(FieldDeletedBy, v))
 }
 
-// TagsIsNil applies the IsNil predicate on the "tags" field.
-func TagsIsNil() predicate.TrustCenterSubprocessorHistory {
-	return predicate.TrustCenterSubprocessorHistory(sql.FieldIsNull(FieldTags))
+// SubprocessorIDEQ applies the EQ predicate on the "subprocessor_id" field.
+func SubprocessorIDEQ(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldEQ(FieldSubprocessorID, v))
 }
 
-// TagsNotNil applies the NotNil predicate on the "tags" field.
-func TagsNotNil() predicate.TrustCenterSubprocessorHistory {
-	return predicate.TrustCenterSubprocessorHistory(sql.FieldNotNull(FieldTags))
+// SubprocessorIDNEQ applies the NEQ predicate on the "subprocessor_id" field.
+func SubprocessorIDNEQ(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldNEQ(FieldSubprocessorID, v))
+}
+
+// SubprocessorIDIn applies the In predicate on the "subprocessor_id" field.
+func SubprocessorIDIn(vs ...string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldIn(FieldSubprocessorID, vs...))
+}
+
+// SubprocessorIDNotIn applies the NotIn predicate on the "subprocessor_id" field.
+func SubprocessorIDNotIn(vs ...string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldNotIn(FieldSubprocessorID, vs...))
+}
+
+// SubprocessorIDGT applies the GT predicate on the "subprocessor_id" field.
+func SubprocessorIDGT(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldGT(FieldSubprocessorID, v))
+}
+
+// SubprocessorIDGTE applies the GTE predicate on the "subprocessor_id" field.
+func SubprocessorIDGTE(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldGTE(FieldSubprocessorID, v))
+}
+
+// SubprocessorIDLT applies the LT predicate on the "subprocessor_id" field.
+func SubprocessorIDLT(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldLT(FieldSubprocessorID, v))
+}
+
+// SubprocessorIDLTE applies the LTE predicate on the "subprocessor_id" field.
+func SubprocessorIDLTE(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldLTE(FieldSubprocessorID, v))
+}
+
+// SubprocessorIDContains applies the Contains predicate on the "subprocessor_id" field.
+func SubprocessorIDContains(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldContains(FieldSubprocessorID, v))
+}
+
+// SubprocessorIDHasPrefix applies the HasPrefix predicate on the "subprocessor_id" field.
+func SubprocessorIDHasPrefix(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldHasPrefix(FieldSubprocessorID, v))
+}
+
+// SubprocessorIDHasSuffix applies the HasSuffix predicate on the "subprocessor_id" field.
+func SubprocessorIDHasSuffix(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldHasSuffix(FieldSubprocessorID, v))
+}
+
+// SubprocessorIDEqualFold applies the EqualFold predicate on the "subprocessor_id" field.
+func SubprocessorIDEqualFold(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldEqualFold(FieldSubprocessorID, v))
+}
+
+// SubprocessorIDContainsFold applies the ContainsFold predicate on the "subprocessor_id" field.
+func SubprocessorIDContainsFold(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldContainsFold(FieldSubprocessorID, v))
+}
+
+// TrustCenterIDEQ applies the EQ predicate on the "trust_center_id" field.
+func TrustCenterIDEQ(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldEQ(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDNEQ applies the NEQ predicate on the "trust_center_id" field.
+func TrustCenterIDNEQ(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldNEQ(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDIn applies the In predicate on the "trust_center_id" field.
+func TrustCenterIDIn(vs ...string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldIn(FieldTrustCenterID, vs...))
+}
+
+// TrustCenterIDNotIn applies the NotIn predicate on the "trust_center_id" field.
+func TrustCenterIDNotIn(vs ...string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldNotIn(FieldTrustCenterID, vs...))
+}
+
+// TrustCenterIDGT applies the GT predicate on the "trust_center_id" field.
+func TrustCenterIDGT(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldGT(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDGTE applies the GTE predicate on the "trust_center_id" field.
+func TrustCenterIDGTE(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldGTE(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDLT applies the LT predicate on the "trust_center_id" field.
+func TrustCenterIDLT(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldLT(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDLTE applies the LTE predicate on the "trust_center_id" field.
+func TrustCenterIDLTE(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldLTE(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDContains applies the Contains predicate on the "trust_center_id" field.
+func TrustCenterIDContains(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldContains(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDHasPrefix applies the HasPrefix predicate on the "trust_center_id" field.
+func TrustCenterIDHasPrefix(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldHasPrefix(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDHasSuffix applies the HasSuffix predicate on the "trust_center_id" field.
+func TrustCenterIDHasSuffix(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldHasSuffix(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDIsNil applies the IsNil predicate on the "trust_center_id" field.
+func TrustCenterIDIsNil() predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldIsNull(FieldTrustCenterID))
+}
+
+// TrustCenterIDNotNil applies the NotNil predicate on the "trust_center_id" field.
+func TrustCenterIDNotNil() predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldNotNull(FieldTrustCenterID))
+}
+
+// TrustCenterIDEqualFold applies the EqualFold predicate on the "trust_center_id" field.
+func TrustCenterIDEqualFold(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldEqualFold(FieldTrustCenterID, v))
+}
+
+// TrustCenterIDContainsFold applies the ContainsFold predicate on the "trust_center_id" field.
+func TrustCenterIDContainsFold(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldContainsFold(FieldTrustCenterID, v))
+}
+
+// CountriesIsNil applies the IsNil predicate on the "countries" field.
+func CountriesIsNil() predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldIsNull(FieldCountries))
+}
+
+// CountriesNotNil applies the NotNil predicate on the "countries" field.
+func CountriesNotNil() predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldNotNull(FieldCountries))
+}
+
+// CategoryEQ applies the EQ predicate on the "category" field.
+func CategoryEQ(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldEQ(FieldCategory, v))
+}
+
+// CategoryNEQ applies the NEQ predicate on the "category" field.
+func CategoryNEQ(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldNEQ(FieldCategory, v))
+}
+
+// CategoryIn applies the In predicate on the "category" field.
+func CategoryIn(vs ...string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldIn(FieldCategory, vs...))
+}
+
+// CategoryNotIn applies the NotIn predicate on the "category" field.
+func CategoryNotIn(vs ...string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldNotIn(FieldCategory, vs...))
+}
+
+// CategoryGT applies the GT predicate on the "category" field.
+func CategoryGT(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldGT(FieldCategory, v))
+}
+
+// CategoryGTE applies the GTE predicate on the "category" field.
+func CategoryGTE(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldGTE(FieldCategory, v))
+}
+
+// CategoryLT applies the LT predicate on the "category" field.
+func CategoryLT(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldLT(FieldCategory, v))
+}
+
+// CategoryLTE applies the LTE predicate on the "category" field.
+func CategoryLTE(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldLTE(FieldCategory, v))
+}
+
+// CategoryContains applies the Contains predicate on the "category" field.
+func CategoryContains(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldContains(FieldCategory, v))
+}
+
+// CategoryHasPrefix applies the HasPrefix predicate on the "category" field.
+func CategoryHasPrefix(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldHasPrefix(FieldCategory, v))
+}
+
+// CategoryHasSuffix applies the HasSuffix predicate on the "category" field.
+func CategoryHasSuffix(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldHasSuffix(FieldCategory, v))
+}
+
+// CategoryEqualFold applies the EqualFold predicate on the "category" field.
+func CategoryEqualFold(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldEqualFold(FieldCategory, v))
+}
+
+// CategoryContainsFold applies the ContainsFold predicate on the "category" field.
+func CategoryContainsFold(v string) predicate.TrustCenterSubprocessorHistory {
+	return predicate.TrustCenterSubprocessorHistory(sql.FieldContainsFold(FieldCategory, v))
 }
 
 // And groups predicates with the AND operator between them.

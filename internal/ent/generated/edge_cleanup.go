@@ -63,6 +63,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
@@ -1040,6 +1041,25 @@ func TrustCenterEdgeCleanup(ctx context.Context, id string) error {
 			return err
 		}
 	}
+
+	if exists, err := FromContext(ctx).TrustCenterSubprocessor.Query().Where((trustcentersubprocessor.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
+		if trustcentersubprocessorCount, err := FromContext(ctx).TrustCenterSubprocessor.Delete().Where(trustcentersubprocessor.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", trustcentersubprocessorCount).Msg("deleting trustcentersubprocessor")
+			return err
+		}
+	}
+
+	return nil
+}
+
+func TrustCenterComplianceEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcentercompliance edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func TrustCenterComplianceHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcentercompliancehistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }

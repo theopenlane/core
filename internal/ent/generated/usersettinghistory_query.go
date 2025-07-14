@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -331,6 +332,12 @@ func (ushq *UserSettingHistoryQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		ushq.sql = prev
+	}
+	if usersettinghistory.Policy == nil {
+		return errors.New("generated: uninitialized usersettinghistory.Policy (forgotten import generated/runtime?)")
+	}
+	if err := usersettinghistory.Policy.EvalQuery(ctx, ushq); err != nil {
+		return err
 	}
 	return nil
 }

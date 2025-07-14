@@ -2137,8 +2137,8 @@ func (ec *executionContext) fieldContext_SearchResults_trustCenters(_ context.Co
 	return fc, nil
 }
 
-func (ec *executionContext) _SearchResults_trustCenterSubprocessors(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SearchResults_trustCenterSubprocessors(ctx, field)
+func (ec *executionContext) _SearchResults_trustCenterCompliances(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SearchResults_trustCenterCompliances(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -2151,7 +2151,7 @@ func (ec *executionContext) _SearchResults_trustCenterSubprocessors(ctx context.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.TrustCenterSubprocessors, nil
+		return obj.TrustCenterCompliances, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2160,12 +2160,12 @@ func (ec *executionContext) _SearchResults_trustCenterSubprocessors(ctx context.
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*generated.TrustCenterSubprocessorConnection)
+	res := resTmp.(*generated.TrustCenterComplianceConnection)
 	fc.Result = res
-	return ec.marshalOTrustCenterSubprocessorConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessorConnection(ctx, field.Selections, res)
+	return ec.marshalOTrustCenterComplianceConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterComplianceConnection(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_SearchResults_trustCenterSubprocessors(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_SearchResults_trustCenterCompliances(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
 		Field:      field,
@@ -2174,13 +2174,13 @@ func (ec *executionContext) fieldContext_SearchResults_trustCenterSubprocessors(
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "edges":
-				return ec.fieldContext_TrustCenterSubprocessorConnection_edges(ctx, field)
+				return ec.fieldContext_TrustCenterComplianceConnection_edges(ctx, field)
 			case "pageInfo":
-				return ec.fieldContext_TrustCenterSubprocessorConnection_pageInfo(ctx, field)
+				return ec.fieldContext_TrustCenterComplianceConnection_pageInfo(ctx, field)
 			case "totalCount":
-				return ec.fieldContext_TrustCenterSubprocessorConnection_totalCount(ctx, field)
+				return ec.fieldContext_TrustCenterComplianceConnection_totalCount(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustCenterSubprocessorConnection", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type TrustCenterComplianceConnection", field.Name)
 		},
 	}
 	return fc, nil
@@ -2448,8 +2448,8 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			out.Values[i] = ec._SearchResults_templates(ctx, field, obj)
 		case "trustCenters":
 			out.Values[i] = ec._SearchResults_trustCenters(ctx, field, obj)
-		case "trustCenterSubprocessors":
-			out.Values[i] = ec._SearchResults_trustCenterSubprocessors(ctx, field, obj)
+		case "trustCenterCompliances":
+			out.Values[i] = ec._SearchResults_trustCenterCompliances(ctx, field, obj)
 		case "users":
 			out.Values[i] = ec._SearchResults_users(ctx, field, obj)
 		case "userSettings":

@@ -27,6 +27,9 @@ func TestAPITokenSSOAuthorization(t *testing.T) {
 		return tok, nil
 	}
 	isSSOEnforcedFunc = func(context.Context, *generated.Client, string) (bool, error) { return true, nil }
+	isSystemAdminFunc = func(context.Context, *generated.Client, string, string) (bool, error) {
+		return false, nil
+	}
 
 	_, _, err := isValidAPIToken(context.Background(), (*generated.Client)(nil), tok.Token)
 	assert.ErrorIs(t, err, ErrTokenSSORequired)
@@ -71,6 +74,9 @@ func TestPATTokenSSOAuthorization(t *testing.T) {
 		}
 		_, ok := pat.SSOAuthorizations[org.ID]
 		return ok, nil
+	}
+	isSystemAdminFunc = func(context.Context, *generated.Client, string, string) (bool, error) {
+		return false, nil
 	}
 
 	_, _, err := isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token)

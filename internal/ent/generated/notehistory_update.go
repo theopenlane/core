@@ -124,7 +124,9 @@ func (nhu *NoteHistoryUpdate) Mutation() *NoteHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (nhu *NoteHistoryUpdate) Save(ctx context.Context) (int, error) {
-	nhu.defaults()
+	if err := nhu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, nhu.sqlSave, nhu.mutation, nhu.hooks)
 }
 
@@ -151,11 +153,15 @@ func (nhu *NoteHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (nhu *NoteHistoryUpdate) defaults() {
+func (nhu *NoteHistoryUpdate) defaults() error {
 	if _, ok := nhu.mutation.UpdatedAt(); !ok && !nhu.mutation.UpdatedAtCleared() {
+		if notehistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized notehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := notehistory.UpdateDefaultUpdatedAt()
 		nhu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -342,7 +348,9 @@ func (nhuo *NoteHistoryUpdateOne) Select(field string, fields ...string) *NoteHi
 
 // Save executes the query and returns the updated NoteHistory entity.
 func (nhuo *NoteHistoryUpdateOne) Save(ctx context.Context) (*NoteHistory, error) {
-	nhuo.defaults()
+	if err := nhuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, nhuo.sqlSave, nhuo.mutation, nhuo.hooks)
 }
 
@@ -369,11 +377,15 @@ func (nhuo *NoteHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (nhuo *NoteHistoryUpdateOne) defaults() {
+func (nhuo *NoteHistoryUpdateOne) defaults() error {
 	if _, ok := nhuo.mutation.UpdatedAt(); !ok && !nhuo.mutation.UpdatedAtCleared() {
+		if notehistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized notehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := notehistory.UpdateDefaultUpdatedAt()
 		nhuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.

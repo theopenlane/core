@@ -1145,7 +1145,7 @@ type SearchResults struct {
 	Tasks                       *generated.TaskConnection                       `json:"tasks,omitempty"`
 	Templates                   *generated.TemplateConnection                   `json:"templates,omitempty"`
 	TrustCenters                *generated.TrustCenterConnection                `json:"trustCenters,omitempty"`
-	TrustCenterSubprocessors    *generated.TrustCenterSubprocessorConnection    `json:"trustCenterSubprocessors,omitempty"`
+	TrustCenterCompliances      *generated.TrustCenterComplianceConnection      `json:"trustCenterCompliances,omitempty"`
 	Users                       *generated.UserConnection                       `json:"users,omitempty"`
 	UserSettings                *generated.UserSettingConnection                `json:"userSettings,omitempty"`
 	Webauthns                   *generated.WebauthnConnection                   `json:"webauthns,omitempty"`
@@ -1310,6 +1310,30 @@ type TemplateDeletePayload struct {
 type TemplateUpdatePayload struct {
 	// Updated template
 	Template *generated.Template `json:"template"`
+}
+
+// Return response for createBulkTrustCenterCompliance mutation
+type TrustCenterComplianceBulkCreatePayload struct {
+	// Created trustCenterCompliances
+	TrustCenterCompliances []*generated.TrustCenterCompliance `json:"trustCenterCompliances,omitempty"`
+}
+
+// Return response for createTrustCenterCompliance mutation
+type TrustCenterComplianceCreatePayload struct {
+	// Created trustCenterCompliance
+	TrustCenterCompliance *generated.TrustCenterCompliance `json:"trustCenterCompliance"`
+}
+
+// Return response for deleteTrustCenterCompliance mutation
+type TrustCenterComplianceDeletePayload struct {
+	// Deleted trustCenterCompliance ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateTrustCenterCompliance mutation
+type TrustCenterComplianceUpdatePayload struct {
+	// Updated trustCenterCompliance
+	TrustCenterCompliance *generated.TrustCenterCompliance `json:"trustCenterCompliance"`
 }
 
 // Return response for createTrustCenter mutation

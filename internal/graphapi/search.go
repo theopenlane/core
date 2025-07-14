@@ -51,7 +51,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
@@ -1884,12 +1884,12 @@ func adminSearchTrustCenters(ctx context.Context, query string, after *entgql.Cu
 	return request.Paginate(ctx, after, first, before, last)
 }
 
-// searchTrustCenterSubprocessor searches for TrustCenterSubprocessor based on the query string looking for matches
-func searchTrustCenterSubprocessors(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterSubprocessorConnection, error) {
-	request := withTransactionalMutation(ctx).TrustCenterSubprocessor.Query().
+// searchTrustCenterCompliance searches for TrustCenterCompliance based on the query string looking for matches
+func searchTrustCenterCompliances(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterComplianceConnection, error) {
+	request := withTransactionalMutation(ctx).TrustCenterCompliance.Query().
 		Where(
-			trustcentersubprocessor.Or(
-				trustcentersubprocessor.ID(query), // search equal to ID
+			trustcentercompliance.Or(
+				trustcentercompliance.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
@@ -1900,12 +1900,12 @@ func searchTrustCenterSubprocessors(ctx context.Context, query string, after *en
 	return request.Paginate(ctx, after, first, before, last)
 }
 
-// searchTrustCenterSubprocessor searches for TrustCenterSubprocessor based on the query string looking for matches
-func adminSearchTrustCenterSubprocessors(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterSubprocessorConnection, error) {
-	request := withTransactionalMutation(ctx).TrustCenterSubprocessor.Query().
+// searchTrustCenterCompliance searches for TrustCenterCompliance based on the query string looking for matches
+func adminSearchTrustCenterCompliances(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterComplianceConnection, error) {
+	request := withTransactionalMutation(ctx).TrustCenterCompliance.Query().
 		Where(
-			trustcentersubprocessor.Or(
-				trustcentersubprocessor.ID(query), // search equal to ID
+			trustcentercompliance.Or(
+				trustcentercompliance.ID(query), // search equal to ID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags

@@ -298,7 +298,9 @@ func (ehu *EvidenceHistoryUpdate) Mutation() *EvidenceHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (ehu *EvidenceHistoryUpdate) Save(ctx context.Context) (int, error) {
-	ehu.defaults()
+	if err := ehu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, ehu.sqlSave, ehu.mutation, ehu.hooks)
 }
 
@@ -325,11 +327,15 @@ func (ehu *EvidenceHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ehu *EvidenceHistoryUpdate) defaults() {
+func (ehu *EvidenceHistoryUpdate) defaults() error {
 	if _, ok := ehu.mutation.UpdatedAt(); !ok && !ehu.mutation.UpdatedAtCleared() {
+		if evidencehistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized evidencehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := evidencehistory.UpdateDefaultUpdatedAt()
 		ehu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -757,7 +763,9 @@ func (ehuo *EvidenceHistoryUpdateOne) Select(field string, fields ...string) *Ev
 
 // Save executes the query and returns the updated EvidenceHistory entity.
 func (ehuo *EvidenceHistoryUpdateOne) Save(ctx context.Context) (*EvidenceHistory, error) {
-	ehuo.defaults()
+	if err := ehuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, ehuo.sqlSave, ehuo.mutation, ehuo.hooks)
 }
 
@@ -784,11 +792,15 @@ func (ehuo *EvidenceHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (ehuo *EvidenceHistoryUpdateOne) defaults() {
+func (ehuo *EvidenceHistoryUpdateOne) defaults() error {
 	if _, ok := ehuo.mutation.UpdatedAt(); !ok && !ehuo.mutation.UpdatedAtCleared() {
+		if evidencehistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized evidencehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := evidencehistory.UpdateDefaultUpdatedAt()
 		ehuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

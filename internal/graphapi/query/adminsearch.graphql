@@ -895,7 +895,7 @@ query AdminSearch($query: String!) {
         }
       }
     }
-    trustCenterSubprocessors {
+    trustCenterCompliances {
       totalCount
       pageInfo {
         hasNextPage

@@ -9,7 +9,6 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -81,6 +80,7 @@ func (t Subprocessor) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(t,
 				withSkipForSystemAdmin(true), // allow empty owner_id for system admin
+				withAllowAnonymousTrustCenterAccess(true),
 			),
 			mixin.SystemOwnedMixin{},
 		},
@@ -97,6 +97,10 @@ func (t Subprocessor) Edges() []ent.Edge {
 			t:          File.Type,
 			field:      "logo_local_file_id",
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: TrustCenterSubprocessor{},
+		}),
 	}
 }
 
@@ -110,9 +114,6 @@ func (Subprocessor) Hooks() []ent.Hook {
 // Policy of the Subprocessor
 func (Subprocessor) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			privacy.AlwaysAllowRule(), // access is filtered by the traversal interceptor
-		),
 		policy.WithMutationRules(
 			rule.SystemOwnedSubprocessor(),
 			policy.CheckOrgWriteAccess(),

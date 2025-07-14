@@ -4,11 +4,14 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 )
 
@@ -103,9 +106,35 @@ func (tcsc *TrustCenterSubprocessorCreate) SetNillableDeletedBy(s *string) *Trus
 	return tcsc
 }
 
-// SetTags sets the "tags" field.
-func (tcsc *TrustCenterSubprocessorCreate) SetTags(s []string) *TrustCenterSubprocessorCreate {
-	tcsc.mutation.SetTags(s)
+// SetSubprocessorID sets the "subprocessor_id" field.
+func (tcsc *TrustCenterSubprocessorCreate) SetSubprocessorID(s string) *TrustCenterSubprocessorCreate {
+	tcsc.mutation.SetSubprocessorID(s)
+	return tcsc
+}
+
+// SetTrustCenterID sets the "trust_center_id" field.
+func (tcsc *TrustCenterSubprocessorCreate) SetTrustCenterID(s string) *TrustCenterSubprocessorCreate {
+	tcsc.mutation.SetTrustCenterID(s)
+	return tcsc
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (tcsc *TrustCenterSubprocessorCreate) SetNillableTrustCenterID(s *string) *TrustCenterSubprocessorCreate {
+	if s != nil {
+		tcsc.SetTrustCenterID(*s)
+	}
+	return tcsc
+}
+
+// SetCountries sets the "countries" field.
+func (tcsc *TrustCenterSubprocessorCreate) SetCountries(s []string) *TrustCenterSubprocessorCreate {
+	tcsc.mutation.SetCountries(s)
+	return tcsc
+}
+
+// SetCategory sets the "category" field.
+func (tcsc *TrustCenterSubprocessorCreate) SetCategory(s string) *TrustCenterSubprocessorCreate {
+	tcsc.mutation.SetCategory(s)
 	return tcsc
 }
 
@@ -121,6 +150,16 @@ func (tcsc *TrustCenterSubprocessorCreate) SetNillableID(s *string) *TrustCenter
 		tcsc.SetID(*s)
 	}
 	return tcsc
+}
+
+// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
+func (tcsc *TrustCenterSubprocessorCreate) SetTrustCenter(t *TrustCenter) *TrustCenterSubprocessorCreate {
+	return tcsc.SetTrustCenterID(t.ID)
+}
+
+// SetSubprocessor sets the "subprocessor" edge to the Subprocessor entity.
+func (tcsc *TrustCenterSubprocessorCreate) SetSubprocessor(s *Subprocessor) *TrustCenterSubprocessorCreate {
+	return tcsc.SetSubprocessorID(s.ID)
 }
 
 // Mutation returns the TrustCenterSubprocessorMutation object of the builder.
@@ -174,10 +213,6 @@ func (tcsc *TrustCenterSubprocessorCreate) defaults() error {
 		v := trustcentersubprocessor.DefaultUpdatedAt()
 		tcsc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := tcsc.mutation.Tags(); !ok {
-		v := trustcentersubprocessor.DefaultTags
-		tcsc.mutation.SetTags(v)
-	}
 	if _, ok := tcsc.mutation.ID(); !ok {
 		if trustcentersubprocessor.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized trustcentersubprocessor.DefaultID (forgotten import generated/runtime?)")
@@ -190,6 +225,30 @@ func (tcsc *TrustCenterSubprocessorCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (tcsc *TrustCenterSubprocessorCreate) check() error {
+	if _, ok := tcsc.mutation.SubprocessorID(); !ok {
+		return &ValidationError{Name: "subprocessor_id", err: errors.New(`generated: missing required field "TrustCenterSubprocessor.subprocessor_id"`)}
+	}
+	if v, ok := tcsc.mutation.SubprocessorID(); ok {
+		if err := trustcentersubprocessor.SubprocessorIDValidator(v); err != nil {
+			return &ValidationError{Name: "subprocessor_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSubprocessor.subprocessor_id": %w`, err)}
+		}
+	}
+	if v, ok := tcsc.mutation.TrustCenterID(); ok {
+		if err := trustcentersubprocessor.TrustCenterIDValidator(v); err != nil {
+			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSubprocessor.trust_center_id": %w`, err)}
+		}
+	}
+	if _, ok := tcsc.mutation.Category(); !ok {
+		return &ValidationError{Name: "category", err: errors.New(`generated: missing required field "TrustCenterSubprocessor.category"`)}
+	}
+	if v, ok := tcsc.mutation.Category(); ok {
+		if err := trustcentersubprocessor.CategoryValidator(v); err != nil {
+			return &ValidationError{Name: "category", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSubprocessor.category": %w`, err)}
+		}
+	}
+	if len(tcsc.mutation.SubprocessorIDs()) == 0 {
+		return &ValidationError{Name: "subprocessor", err: errors.New(`generated: missing required edge "TrustCenterSubprocessor.subprocessor"`)}
+	}
 	return nil
 }
 
@@ -250,9 +309,49 @@ func (tcsc *TrustCenterSubprocessorCreate) createSpec() (*TrustCenterSubprocesso
 		_spec.SetField(trustcentersubprocessor.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
-	if value, ok := tcsc.mutation.Tags(); ok {
-		_spec.SetField(trustcentersubprocessor.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
+	if value, ok := tcsc.mutation.Countries(); ok {
+		_spec.SetField(trustcentersubprocessor.FieldCountries, field.TypeJSON, value)
+		_node.Countries = value
+	}
+	if value, ok := tcsc.mutation.Category(); ok {
+		_spec.SetField(trustcentersubprocessor.FieldCategory, field.TypeString, value)
+		_node.Category = value
+	}
+	if nodes := tcsc.mutation.TrustCenterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentersubprocessor.TrustCenterTable,
+			Columns: []string{trustcentersubprocessor.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsc.schemaConfig.TrustCenterSubprocessor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.TrustCenterID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tcsc.mutation.SubprocessorIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcentersubprocessor.SubprocessorTable,
+			Columns: []string{trustcentersubprocessor.SubprocessorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tcsc.schemaConfig.TrustCenterSubprocessor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.SubprocessorID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

@@ -1025,9 +1025,9 @@ extend type Query{
         last: Int
     ): TrustCenterConnection
     """
-    Search across TrustCenterSubprocessor objects
+    Search across TrustCenterCompliance objects
     """
-    adminTrustCenterSubprocessorSearch(
+    adminTrustCenterComplianceSearch(
         """
         Query string to search across objects
         """
@@ -1048,7 +1048,7 @@ extend type Query{
         Returns the last _n_ elements from the list.
         """
         last: Int
-    ): TrustCenterSubprocessorConnection
+    ): TrustCenterComplianceConnection
     """
     Search across User objects
     """

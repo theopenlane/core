@@ -69,7 +69,7 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		taskResults                       *generated.TaskConnection
 		templateResults                   *generated.TemplateConnection
 		trustcenterResults                *generated.TrustCenterConnection
-		trustcentersubprocessorResults    *generated.TrustCenterSubprocessorConnection
+		trustcentercomplianceResults      *generated.TrustCenterComplianceConnection
 		userResults                       *generated.UserConnection
 		usersettingResults                *generated.UserSettingConnection
 		webauthnResults                   *generated.WebauthnConnection
@@ -365,7 +365,7 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		},
 		func() {
 			var err error
-			trustcentersubprocessorResults, err = searchTrustCenterSubprocessors(ctx, query, after, first, before, last)
+			trustcentercomplianceResults, err = searchTrustCenterCompliances(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
@@ -607,10 +607,10 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 
 		res.TotalCount += trustcenterResults.TotalCount
 	}
-	if trustcentersubprocessorResults != nil && len(trustcentersubprocessorResults.Edges) > 0 {
-		res.TrustCenterSubprocessors = trustcentersubprocessorResults
+	if trustcentercomplianceResults != nil && len(trustcentercomplianceResults.Edges) > 0 {
+		res.TrustCenterCompliances = trustcentercomplianceResults
 
-		res.TotalCount += trustcentersubprocessorResults.TotalCount
+		res.TotalCount += trustcentercomplianceResults.TotalCount
 	}
 	if userResults != nil && len(userResults.Edges) > 0 {
 		res.Users = userResults
@@ -1368,7 +1368,7 @@ func (r *queryResolver) AdminTrustCenterSearch(ctx context.Context, query string
 	// return the results
 	return trustcenterResults, nil
 }
-func (r *queryResolver) AdminTrustCenterSubprocessorSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterSubprocessorConnection, error) {
+func (r *queryResolver) AdminTrustCenterComplianceSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterComplianceConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
 	if err != nil || !isAdmin {
@@ -1377,14 +1377,14 @@ func (r *queryResolver) AdminTrustCenterSubprocessorSearch(ctx context.Context, 
 
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
-	trustcentersubprocessorResults, err := adminSearchTrustCenterSubprocessors(ctx, query, after, first, before, last)
+	trustcentercomplianceResults, err := adminSearchTrustCenterCompliances(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, ErrSearchFailed
 	}
 
 	// return the results
-	return trustcentersubprocessorResults, nil
+	return trustcentercomplianceResults, nil
 }
 func (r *queryResolver) AdminUserSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.UserConnection, error) {
 	// ensure the user is a system admin

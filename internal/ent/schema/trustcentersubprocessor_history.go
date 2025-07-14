@@ -12,8 +12,10 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/theopenlane/core/internal/ent/interceptors"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/iam/entfga"
 )
 
 // TrustCenterSubprocessorHistory holds the schema definition for the TrustCenterSubprocessorHistory entity.
@@ -35,6 +37,11 @@ func (TrustCenterSubprocessorHistory) Annotations() []schema.Annotation {
 		},
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entfga.Annotations{
+			ObjectType:   "trust_center",
+			IDField:      "TrustCenterID",
+			IncludeHooks: false,
+		},
 	}
 }
 
@@ -94,9 +101,19 @@ func (TrustCenterSubprocessorHistory) Indexes() []ent.Index {
 	}
 }
 
+// Policy of the TrustCenterSubprocessorHistory.
+// ensure history.AllowIfHistoryRequest() is already added to the base policy
+func (TrustCenterSubprocessorHistory) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithMutationRules(
+			history.AllowIfHistoryRequest(),
+		),
+	)
+}
+
 // Interceptors of the TrustCenterSubprocessorHistory
 func (TrustCenterSubprocessorHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", false, false, ""),
+		interceptors.HistoryAccess("audit_log_viewer", false, false, "trust_center"),
 	}
 }

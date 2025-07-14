@@ -183,7 +183,9 @@ func (nhu *NarrativeHistoryUpdate) Mutation() *NarrativeHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (nhu *NarrativeHistoryUpdate) Save(ctx context.Context) (int, error) {
-	nhu.defaults()
+	if err := nhu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, nhu.sqlSave, nhu.mutation, nhu.hooks)
 }
 
@@ -210,11 +212,15 @@ func (nhu *NarrativeHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (nhu *NarrativeHistoryUpdate) defaults() {
+func (nhu *NarrativeHistoryUpdate) defaults() error {
 	if _, ok := nhu.mutation.UpdatedAt(); !ok && !nhu.mutation.UpdatedAtCleared() {
+		if narrativehistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized narrativehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := narrativehistory.UpdateDefaultUpdatedAt()
 		nhu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -482,7 +488,9 @@ func (nhuo *NarrativeHistoryUpdateOne) Select(field string, fields ...string) *N
 
 // Save executes the query and returns the updated NarrativeHistory entity.
 func (nhuo *NarrativeHistoryUpdateOne) Save(ctx context.Context) (*NarrativeHistory, error) {
-	nhuo.defaults()
+	if err := nhuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, nhuo.sqlSave, nhuo.mutation, nhuo.hooks)
 }
 
@@ -509,11 +517,15 @@ func (nhuo *NarrativeHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (nhuo *NarrativeHistoryUpdateOne) defaults() {
+func (nhuo *NarrativeHistoryUpdateOne) defaults() error {
 	if _, ok := nhuo.mutation.UpdatedAt(); !ok && !nhuo.mutation.UpdatedAtCleared() {
+		if narrativehistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized narrativehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := narrativehistory.UpdateDefaultUpdatedAt()
 		nhuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.

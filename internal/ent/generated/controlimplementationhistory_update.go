@@ -230,7 +230,9 @@ func (cihu *ControlImplementationHistoryUpdate) Mutation() *ControlImplementatio
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (cihu *ControlImplementationHistoryUpdate) Save(ctx context.Context) (int, error) {
-	cihu.defaults()
+	if err := cihu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, cihu.sqlSave, cihu.mutation, cihu.hooks)
 }
 
@@ -257,11 +259,15 @@ func (cihu *ControlImplementationHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (cihu *ControlImplementationHistoryUpdate) defaults() {
+func (cihu *ControlImplementationHistoryUpdate) defaults() error {
 	if _, ok := cihu.mutation.UpdatedAt(); !ok && !cihu.mutation.UpdatedAtCleared() {
+		if controlimplementationhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized controlimplementationhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := controlimplementationhistory.UpdateDefaultUpdatedAt()
 		cihu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -603,7 +609,9 @@ func (cihuo *ControlImplementationHistoryUpdateOne) Select(field string, fields 
 
 // Save executes the query and returns the updated ControlImplementationHistory entity.
 func (cihuo *ControlImplementationHistoryUpdateOne) Save(ctx context.Context) (*ControlImplementationHistory, error) {
-	cihuo.defaults()
+	if err := cihuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, cihuo.sqlSave, cihuo.mutation, cihuo.hooks)
 }
 
@@ -630,11 +638,15 @@ func (cihuo *ControlImplementationHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (cihuo *ControlImplementationHistoryUpdateOne) defaults() {
+func (cihuo *ControlImplementationHistoryUpdateOne) defaults() error {
 	if _, ok := cihuo.mutation.UpdatedAt(); !ok && !cihuo.mutation.UpdatedAtCleared() {
+		if controlimplementationhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized controlimplementationhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := controlimplementationhistory.UpdateDefaultUpdatedAt()
 		cihuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

@@ -9,7 +9,6 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -93,6 +92,12 @@ func (t TrustCenter) Edges() []ent.Edge {
 				entx.CascadeAnnotationField("TrustCenter"),
 			},
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:    t,
+			name:          "subprocessors",
+			edgeSchema:    TrustCenterSubprocessor{},
+			cascadeDelete: "TrustCenter",
+		}),
 	}
 }
 
@@ -107,9 +112,6 @@ func (TrustCenter) Hooks() []ent.Hook {
 // Policy of the TrustCenter
 func (TrustCenter) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			privacy.AlwaysAllowRule(),
-		),
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
 		),

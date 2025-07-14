@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -26,10 +27,34 @@ const (
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
-	// FieldTags holds the string denoting the tags field in the database.
-	FieldTags = "tags"
+	// FieldSubprocessorID holds the string denoting the subprocessor_id field in the database.
+	FieldSubprocessorID = "subprocessor_id"
+	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
+	FieldTrustCenterID = "trust_center_id"
+	// FieldCountries holds the string denoting the countries field in the database.
+	FieldCountries = "countries"
+	// FieldCategory holds the string denoting the category field in the database.
+	FieldCategory = "category"
+	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
+	EdgeTrustCenter = "trust_center"
+	// EdgeSubprocessor holds the string denoting the subprocessor edge name in mutations.
+	EdgeSubprocessor = "subprocessor"
 	// Table holds the table name of the trustcentersubprocessor in the database.
 	Table = "trust_center_subprocessors"
+	// TrustCenterTable is the table that holds the trust_center relation/edge.
+	TrustCenterTable = "trust_center_subprocessors"
+	// TrustCenterInverseTable is the table name for the TrustCenter entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcenter" package.
+	TrustCenterInverseTable = "trust_centers"
+	// TrustCenterColumn is the table column denoting the trust_center relation/edge.
+	TrustCenterColumn = "trust_center_id"
+	// SubprocessorTable is the table that holds the subprocessor relation/edge.
+	SubprocessorTable = "trust_center_subprocessors"
+	// SubprocessorInverseTable is the table name for the Subprocessor entity.
+	// It exists in this package in order to avoid circular dependency with the "subprocessor" package.
+	SubprocessorInverseTable = "subprocessors"
+	// SubprocessorColumn is the table column denoting the subprocessor relation/edge.
+	SubprocessorColumn = "subprocessor_id"
 )
 
 // Columns holds all SQL columns for trustcentersubprocessor fields.
@@ -41,7 +66,10 @@ var Columns = []string{
 	FieldUpdatedBy,
 	FieldDeletedAt,
 	FieldDeletedBy,
-	FieldTags,
+	FieldSubprocessorID,
+	FieldTrustCenterID,
+	FieldCountries,
+	FieldCategory,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -61,7 +89,7 @@ func ValidColumn(column string) bool {
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
 	Hooks        [3]ent.Hook
-	Interceptors [1]ent.Interceptor
+	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -69,8 +97,12 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
-	// DefaultTags holds the default value on creation for the "tags" field.
-	DefaultTags []string
+	// SubprocessorIDValidator is a validator for the "subprocessor_id" field. It is called by the builders before save.
+	SubprocessorIDValidator func(string) error
+	// TrustCenterIDValidator is a validator for the "trust_center_id" field. It is called by the builders before save.
+	TrustCenterIDValidator func(string) error
+	// CategoryValidator is a validator for the "category" field. It is called by the builders before save.
+	CategoryValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -111,4 +143,47 @@ func ByDeletedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByDeletedBy orders the results by the deleted_by field.
 func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
+}
+
+// BySubprocessorID orders the results by the subprocessor_id field.
+func BySubprocessorID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSubprocessorID, opts...).ToFunc()
+}
+
+// ByTrustCenterID orders the results by the trust_center_id field.
+func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
+}
+
+// ByCategory orders the results by the category field.
+func ByCategory(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCategory, opts...).ToFunc()
+}
+
+// ByTrustCenterField orders the results by trust_center field.
+func ByTrustCenterField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// BySubprocessorField orders the results by subprocessor field.
+func BySubprocessorField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubprocessorStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newTrustCenterStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, TrustCenterTable, TrustCenterColumn),
+	)
+}
+func newSubprocessorStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubprocessorInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, SubprocessorTable, SubprocessorColumn),
+	)
 }

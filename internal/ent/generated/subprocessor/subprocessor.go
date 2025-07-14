@@ -47,6 +47,8 @@ const (
 	EdgeFiles = "files"
 	// EdgeLogoFile holds the string denoting the logo_file edge name in mutations.
 	EdgeLogoFile = "logo_file"
+	// EdgeTrustCenterSubprocessors holds the string denoting the trust_center_subprocessors edge name in mutations.
+	EdgeTrustCenterSubprocessors = "trust_center_subprocessors"
 	// Table holds the table name of the subprocessor in the database.
 	Table = "subprocessors"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -68,6 +70,13 @@ const (
 	LogoFileInverseTable = "files"
 	// LogoFileColumn is the table column denoting the logo_file relation/edge.
 	LogoFileColumn = "logo_local_file_id"
+	// TrustCenterSubprocessorsTable is the table that holds the trust_center_subprocessors relation/edge.
+	TrustCenterSubprocessorsTable = "trust_center_subprocessors"
+	// TrustCenterSubprocessorsInverseTable is the table name for the TrustCenterSubprocessor entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcentersubprocessor" package.
+	TrustCenterSubprocessorsInverseTable = "trust_center_subprocessors"
+	// TrustCenterSubprocessorsColumn is the table column denoting the trust_center_subprocessors relation/edge.
+	TrustCenterSubprocessorsColumn = "subprocessor_id"
 )
 
 // Columns holds all SQL columns for subprocessor fields.
@@ -226,6 +235,20 @@ func ByLogoFileField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newLogoFileStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByTrustCenterSubprocessorsCount orders the results by trust_center_subprocessors count.
+func ByTrustCenterSubprocessorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterSubprocessorsStep(), opts...)
+	}
+}
+
+// ByTrustCenterSubprocessors orders the results by trust_center_subprocessors terms.
+func ByTrustCenterSubprocessors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterSubprocessorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -245,5 +268,12 @@ func newLogoFileStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(LogoFileInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, LogoFileTable, LogoFileColumn),
+	)
+}
+func newTrustCenterSubprocessorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterSubprocessorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterSubprocessorsTable, TrustCenterSubprocessorsColumn),
 	)
 }
