@@ -101,14 +101,14 @@ const (
 )
 
 // paginateLimit calculates the limit for pagination based on the first and last arguments.
-// and returns the limit multiplied by 2.
+// and returns the limit multiplied by 10.
 // This is to ensure we overfetch the data to get the number of requested results.
 func paginateLimit(first, last *int) int {
 	var limit int
 	if first != nil {
-		limit = *first * 2
+		limit = *first * 10
 	} else if last != nil {
-		limit = *last * 2
+		limit = *last * 10
 	}
 	return limit
 }
