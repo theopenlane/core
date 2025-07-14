@@ -273,11 +273,12 @@ fi
 
 # Check if we have any changes to commit
 if git diff --staged --quiet; then
-  echo "ℹ️  No changes detected, skipping PR creation"
+  echo "ℹ️  No configuration changes detected, skipping PR creation"
+  echo "ℹ️  This prevents unnecessary PRs when only code changes without config changes"
   exit 0
 fi
 
-echo "📝 Changes detected, proceeding with PR creation"
+echo "📝 Configuration changes detected, proceeding with PR creation"
 echo -e "Summary:$change_summary"
 
 # Configure git

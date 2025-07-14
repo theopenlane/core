@@ -97,3 +97,20 @@ function send_pr_ready_notification() {
     "BUILD_NUMBER=${BUILDKITE_BUILD_NUMBER:-unknown}" \
     "BUILD_URL=${BUILDKITE_BUILD_URL:-unknown}"
 }
+
+# Function to send release notification (for tagged releases)
+function send_release_notification() {
+  local pr_url="$1"
+  local release_tag="$2"
+  local change_summary="$3"
+
+  local template_file="${BASH_SOURCE[0]%/*}/templates/release-notification.json"
+
+  send_slack_notification_from_template "$template_file" \
+    "PR_URL=$pr_url" \
+    "RELEASE_TAG=$release_tag" \
+    "CHANGE_SUMMARY=$change_summary" \
+    "BUILD_NUMBER=${BUILDKITE_BUILD_NUMBER:-unknown}" \
+    "BUILD_URL=${BUILDKITE_BUILD_URL:-unknown}" \
+    "RELEASE_URL=https://github.com/theopenlane/core/releases/tag/$release_tag"
+}

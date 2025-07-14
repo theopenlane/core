@@ -145,6 +145,29 @@ steps:
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
+      - label: ":rocket: update image tag for release"
+        key: "image_tag_automation"
+        depends_on: "docker-build-and-tag"
+        if: build.tag != null
+        plugins:
+          - cluster-secrets#v1.0.0:
+              variables:
+                GITHUB_TOKEN: GITHUB_TOKEN
+                SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
+          - docker#v5.13.0:
+              image: "ghcr.io/theopenlane/build-image:latest"
+              always_pull: true
+              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/image-tag-automation.sh"]
+              propagate-environment: true
+              volumes:
+                - $GOCACHE:$GOCACHE
+                - $GOMODCACHE:$GOMODCACHE
+              environment:
+                - "GITHUB_TOKEN"
+                - "HELM_CHART_REPO"
+                - "HELM_CHART_PATH"
+                - "SLACK_WEBHOOK_URL"
+                - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
   - group: ":test_tube: Tests"
     key: "tests"
     steps:

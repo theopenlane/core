@@ -14,6 +14,14 @@ if ! command -v gh >/dev/null 2>&1; then
     apk add --no-cache github-cli
 fi
 
+# Install yq if not available
+if ! command -v yq >/dev/null 2>&1; then
+    echo "Installing yq version ${YQ_VERSION}..."
+    wget -q "https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_amd64" -O /usr/local/bin/yq
+    chmod +x /usr/local/bin/yq
+    echo "✅ yq installed successfully"
+fi
+
 work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT
 
