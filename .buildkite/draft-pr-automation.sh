@@ -38,12 +38,21 @@ fi
 
 cd "$work"
 
-# Create a draft branch name based on the core PR
+# Create a draft branch name based on the core PR (consistent naming)
 core_pr_number="${BUILDKITE_PULL_REQUEST}"
-draft_branch="draft-core-pr-${core_pr_number}-${BUILDKITE_BUILD_NUMBER}"
+draft_branch="draft-core-pr-${core_pr_number}"
 
-echo "Creating draft branch: $draft_branch"
-git checkout -b "$draft_branch"
+# Check if draft branch already exists (from previous builds)
+echo "Checking for existing draft branch: $draft_branch"
+if git ls-remote --heads origin "$draft_branch" | grep -q "$draft_branch"; then
+  echo "📄 Existing draft branch found, updating it..."
+  git fetch origin "$draft_branch"
+  git checkout "$draft_branch"
+  git reset --hard "origin/$draft_branch"
+else
+  echo "🆕 Creating new draft branch: $draft_branch"
+  git checkout -b "$draft_branch"
+fi
 
 # Track what changes we make
 changes_made=false
@@ -71,19 +80,9 @@ merge_helm_values() {
   # Copy target file as base
   cp "$target" "$temp_merged"
 
-  # Extract core section from source and use it to replace target core section
-  echo "  📋 Replacing core section..."
-  core_section=$(yq e '.core' "$source")
-  echo "$core_section" > /tmp/core-section.yaml
-  yq e -i '.core = load("/tmp/core-section.yaml")' "$temp_merged"
-
-  # Also merge any externalSecrets configuration if it exists in generated file
-  if yq e '.externalSecrets' "$source" | grep -v "null" > /dev/null 2>&1; then
-    echo "  🔐 Merging external secrets configuration..."
-    external_secrets_section=$(yq e '.externalSecrets' "$source")
-    echo "$external_secrets_section" > /tmp/external-secrets-section.yaml
-    yq e -i '.externalSecrets = load("/tmp/external-secrets-section.yaml")' "$temp_merged"
-  fi
+  # Perform deep merge of all sections from source into target
+  echo "  📋 Performing deep merge of all configuration sections..."
+  yq e -i '. *= load("'"$source"'")' "$temp_merged"
 
   # Replace target with merged content
   mv "$temp_merged" "$target"
@@ -177,60 +176,86 @@ Build Information:
 
 git commit -m "$commit_message"
 
-# Push and create draft PR
-echo "🚀 Pushing draft branch and creating draft PR..."
-if git push origin "$draft_branch"; then
-  pr_body="## 🚧 DRAFT: Preview Config Changes from Core PR
+# Push and create/update draft PR
+echo "🚀 Pushing draft branch..."
+if git push -f origin "$draft_branch"; then
+  pr_body="## 🚧 DRAFT: Config Changes from Core PR #${core_pr_number}
 
-⚠️ **This is a DRAFT PR** - DO NOT MERGE until core PR #${core_pr_number} is merged first.
+⚠️ **This is a DRAFT PR** - automatically converts to ready for review once [core PR #${core_pr_number}](https://github.com/theopenlane/core/pull/${core_pr_number}) is merged.
 
-### 🔗 Related Core PR
-- **Core PR**: [#${core_pr_number}](https://github.com/theopenlane/core/pull/${core_pr_number})
-- **Source Branch**: [\`${BUILDKITE_BRANCH}\`](https://github.com/theopenlane/core/tree/${BUILDKITE_BRANCH})
-- **Source Commit**: [\`${BUILDKITE_COMMIT:0:8}\`](https://github.com/theopenlane/core/commit/${BUILDKITE_COMMIT})
-
-### 📋 Proposed Changes:
+### Changes:
 $change_summary
 
-### 🔍 What This Shows:
-- **Helm Values**: How configuration schema and defaults will change
-- **External Secrets**: How secret management templates will be updated
-- **ConfigMaps**: How non-sensitive configuration templates will change
+### Source:
+- **Core PR**: [#${core_pr_number}](https://github.com/theopenlane/core/pull/${core_pr_number})
+- **Branch**: [\`${BUILDKITE_BRANCH}\`](https://github.com/theopenlane/core/tree/${BUILDKITE_BRANCH})
+- **Commit**: [\`${BUILDKITE_COMMIT:0:8}\`](https://github.com/theopenlane/core/commit/${BUILDKITE_COMMIT})"
 
-### 📋 Next Steps:
-1. **Review**: Review the proposed changes in this PR
-2. **Core PR Review**: Complete review and merge of core PR #${core_pr_number}
-3. **Auto-Update**: This PR will automatically convert from draft to ready after core merge
-4. **Final Review**: Conduct final review and merge this PR
+  # Check if PR already exists for this branch
+  echo "Checking for existing draft PR..."
+  existing_pr_url=$(gh pr view "$draft_branch" --repo "$repo" --json url --jq '.url' 2>/dev/null || echo "")
 
-This PR was automatically generated to provide visibility into configuration changes before they're finalized."
+  if [[ -n "$existing_pr_url" ]]; then
+    echo "📝 Updating existing draft PR: $existing_pr_url"
+    # Update the existing PR's body
+    if gh pr edit "$draft_branch" \
+      --repo "$repo" \
+      --title "🚧 DRAFT: Config changes from core PR #${core_pr_number}" \
+      --body "$pr_body"; then
+      pr_url="$existing_pr_url"
+      echo "✅ Draft pull request updated successfully: $pr_url"
+    else
+      echo "⚠️  Failed to update existing PR, but push succeeded"
+      pr_url="$existing_pr_url"
+    fi
+  else
+    echo "Creating new draft pull request..."
+    if gh pr create \
+      --repo "$repo" \
+      --head "$draft_branch" \
+      --title "🚧 DRAFT: Config changes from core PR #${core_pr_number}" \
+      --body "$pr_body" \
+      --draft; then
+      pr_url=$(gh pr view "$draft_branch" --repo "$repo" --json url --jq '.url' 2>/dev/null || echo "https://github.com/$repo/pull/new/$draft_branch")
+      echo "✅ Draft pull request created successfully: $pr_url"
+    else
+      echo "❌ Failed to create draft pull request"
+      exit 1
+    fi
+  fi
 
-  echo "Creating draft pull request..."
-  if gh pr create \
-    --repo "$repo" \
-    --head "$draft_branch" \
-    --title "🚧 DRAFT: Config changes from core PR #${core_pr_number}" \
-    --body "$pr_body" \
-    --draft; then
-    pr_url=$(gh pr view "$draft_branch" --repo "$repo" --json url --jq '.url' 2>/dev/null || echo "https://github.com/$repo/pull/new/$draft_branch")
-    echo "✅ Draft pull request created successfully: $pr_url"
+  # Store the draft PR URL for linking
+  echo "$pr_url" > "${BUILDKITE_BUILD_CHECKOUT_PATH}/.draft_pr_url"
 
-    # Store the draft PR URL for linking
-    echo "$pr_url" > "${BUILDKITE_BUILD_CHECKOUT_PATH}/.draft_pr_url"
-
-    # Store metadata for later use
-    cat > "${BUILDKITE_BUILD_CHECKOUT_PATH}/.draft_pr_metadata" << EOF
+  # Store metadata for later use
+  cat > "${BUILDKITE_BUILD_CHECKOUT_PATH}/.draft_pr_metadata" << EOF
 DRAFT_PR_URL=$pr_url
 DRAFT_BRANCH=$draft_branch
 CORE_PR_NUMBER=$core_pr_number
 INFRA_REPO=$repo
 EOF
 
-    echo "📝 Draft PR metadata saved for linking and post-merge processing"
+  echo "📝 Draft PR metadata saved for linking and post-merge processing"
 
+  # Add comment to core PR linking to the draft infrastructure PR
+  echo "💬 Adding comment to core PR #${core_pr_number}..."
+  comment_body="## 🔧 Configuration Changes Detected
+
+This PR contains changes that will affect the Helm chart configuration. A draft infrastructure PR has been automatically created to preview these changes:
+
+**📋 Draft PR**: $pr_url
+
+### Changes Preview:
+$change_summary
+
+The infrastructure PR will automatically convert from draft to ready for review once this core PR is merged."
+
+  if gh pr comment "${core_pr_number}" \
+    --repo "theopenlane/core" \
+    --body "$comment_body"; then
+    echo "✅ Comment added to core PR successfully"
   else
-    echo "❌ Failed to create draft pull request"
-    exit 1
+    echo "⚠️  Failed to add comment to core PR (this won't affect the automation)"
   fi
 else
   echo "❌ Failed to push draft branch"
