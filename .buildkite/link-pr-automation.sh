@@ -1,10 +1,38 @@
 #!/bin/bash
 set -euo pipefail
 
+#
+# EXECUTION CONTEXT: Docker container (with git, gh, docker, jq, buildkite-agent)
+# REQUIRED TOOLS: gh
+# ASSUMPTIONS: GitHub token available
+#
+
 # PR linking automation
 # Adds comments to core PR linking to draft infra PR and vice versa
 
+# Check required tools are available in container
+check_required_tools() {
+    local missing_tools=()
+
+    for tool in gh; do
+        if ! command -v "$tool" >/dev/null 2>&1; then
+            missing_tools+=("$tool")
+        fi
+    done
+
+    if [[ ${#missing_tools[@]} -gt 0 ]]; then
+        echo "❌ Missing required tools: ${missing_tools[*]}"
+        echo "This script must run in a container with these tools installed"
+        echo "Expected to run via Buildkite pipeline with ghcr.io/theopenlane/build-image:latest"
+        exit 1
+    fi
+}
+
+# Run checks
+check_required_tools
+
 echo "=== PR Linking Automation ==="
+echo "Tools verified: ✅"
 
 # Check if we're in a PR context
 if [[ -z "${BUILDKITE_PULL_REQUEST:-}" || "${BUILDKITE_PULL_REQUEST}" == "false" ]]; then

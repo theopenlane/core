@@ -1,11 +1,55 @@
 #!/bin/bash
 set -euo pipefail
 
+#
+# EXECUTION CONTEXT: Docker container (with git, gh, docker, jq, buildkite-agent)
+# REQUIRED TOOLS: git, gh, docker, jq, buildkite-agent
+# ASSUMPTIONS: GitHub token available, Docker daemon accessible
+#
+
 # Draft PR automation for config changes
 # Creates draft PRs in openlane-infra when config changes are detected in core repo
 # Links PRs together with comments for better visibility
 
-YQ_VERSION=4.9.6
+# Check required tools are available in container
+check_required_tools() {
+    local missing_tools=()
+
+    for tool in git gh docker jq buildkite-agent; do
+        if ! command -v "$tool" >/dev/null 2>&1; then
+            missing_tools+=("$tool")
+        fi
+    done
+
+    if [[ ${#missing_tools[@]} -gt 0 ]]; then
+        echo "❌ Missing required tools: ${missing_tools[*]}"
+        echo "This script must run in a container with these tools installed"
+        echo "Expected to run via Buildkite pipeline with ghcr.io/theopenlane/build-image:latest"
+        exit 1
+    fi
+}
+
+# Verify environment variables are set
+check_environment() {
+    local missing_vars=()
+
+    for var in HELM_CHART_REPO BUILDKITE_BRANCH; do
+        if [[ -z "${!var:-}" ]]; then
+            missing_vars+=("$var")
+        fi
+    done
+
+    if [[ ${#missing_vars[@]} -gt 0 ]]; then
+        echo "❌ Missing required environment variables: ${missing_vars[*]}"
+        exit 1
+    fi
+}
+
+# Run checks
+check_required_tools
+check_environment
+
+YQ_VERSION=${YQ_VERSION:-4.9.6}
 repo="${HELM_CHART_REPO}"
 chart_dir="${HELM_CHART_PATH:-charts/openlane}"
 
@@ -17,6 +61,7 @@ echo "Repository: $repo"
 echo "Chart directory: $chart_dir"
 echo "Core PR: ${BUILDKITE_PULL_REQUEST:-none}"
 echo "Core Branch: ${BUILDKITE_BRANCH}"
+echo "Tools verified: ✅"
 
 # Check if we're in a PR context
 if [[ -z "${BUILDKITE_PULL_REQUEST:-}" || "${BUILDKITE_PULL_REQUEST}" == "false" ]]; then

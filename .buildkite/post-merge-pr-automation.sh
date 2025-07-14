@@ -1,11 +1,55 @@
 #!/bin/bash
 set -euo pipefail
 
+#
+# EXECUTION CONTEXT: Docker container (with git, gh, docker, jq, buildkite-agent)
+# REQUIRED TOOLS: git, gh, docker, jq, buildkite-agent
+# ASSUMPTIONS: GitHub token available, Docker daemon accessible
+#
+
 # Post-merge PR automation
 # Converts draft infra PRs to ready for review after core PR is merged
 # Updates the final infra PR with any additional changes from the merge
 
-YQ_VERSION=4.9.6
+# Check required tools are available in container
+check_required_tools() {
+    local missing_tools=()
+
+    for tool in git gh docker jq buildkite-agent; do
+        if ! command -v "$tool" >/dev/null 2>&1; then
+            missing_tools+=("$tool")
+        fi
+    done
+
+    if [[ ${#missing_tools[@]} -gt 0 ]]; then
+        echo "❌ Missing required tools: ${missing_tools[*]}"
+        echo "This script must run in a container with these tools installed"
+        echo "Expected to run via Buildkite pipeline with ghcr.io/theopenlane/build-image:latest"
+        exit 1
+    fi
+}
+
+# Verify environment variables are set
+check_environment() {
+    local missing_vars=()
+
+    for var in HELM_CHART_REPO BUILDKITE_BRANCH; do
+        if [[ -z "${!var:-}" ]]; then
+            missing_vars+=("$var")
+        fi
+    done
+
+    if [[ ${#missing_vars[@]} -gt 0 ]]; then
+        echo "❌ Missing required environment variables: ${missing_vars[*]}"
+        exit 1
+    fi
+}
+
+# Run checks
+check_required_tools
+check_environment
+
+YQ_VERSION=${YQ_VERSION:-4.9.6}
 repo="${HELM_CHART_REPO}"
 chart_dir="${HELM_CHART_PATH:-charts/openlane}"
 
@@ -13,6 +57,7 @@ echo "=== Post-Merge PR Automation ==="
 echo "Repository: $repo"
 echo "Chart directory: $chart_dir"
 echo "Branch: ${BUILDKITE_BRANCH}"
+echo "Tools verified: ✅"
 
 # Import slack utility functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

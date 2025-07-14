@@ -17,8 +17,9 @@ if [[ -n "${BUILDKITE_BUILD_PATH:-}" ]]; then
 fi
 
 # Prune Go module cache if it gets too large (keep last 7 days)
+# Note: Go tools run in containers, but cache may persist on host
 if [[ -d "$HOME/.cache/go/pkg/mod" ]]; then
-    cache_size=$(du -sh "$HOME/.cache/go/pkg/mod" 2>/dev/null | cut -f1 || echo "0")
+    cache_size=$(du -sh "$HOME/.cache/go/pkg/mod" 2>/dev/null | cut -f1 || echo "unknown")
     echo "📦 Go module cache size: $cache_size"
 
     # Clean up old cache entries (older than 7 days)
@@ -27,7 +28,7 @@ fi
 
 # Prune golangci-lint cache if it gets too large
 if [[ -d "$HOME/.cache/golangci-lint" ]]; then
-    cache_size=$(du -sh "$HOME/.cache/golangci-lint" 2>/dev/null | cut -f1 || echo "0")
+    cache_size=$(du -sh "$HOME/.cache/golangci-lint" 2>/dev/null | cut -f1 || echo "unknown")
     echo "🔍 Golangci-lint cache size: $cache_size"
 
     # Clean up old cache entries (older than 7 days)
@@ -58,13 +59,18 @@ if [[ -d "${BUILDKITE_BUILD_PATH:-/tmp}/test-results" ]]; then
     fi
 fi
 
-# Docker cleanup (if Docker is available)
+# Docker cleanup (Docker handled via plugins, but cleanup runs on host)
+# Note: Docker commands may not be available in hook context, but containers/images persist on host
 if command -v docker >/dev/null 2>&1; then
     echo "🐳 Running Docker cleanup to prevent disk space issues..."
 
     # Get initial disk usage
-    initial_usage=$(df -h . | tail -1 | awk '{print $5}' | sed 's/%//')
-    echo "📊 Initial disk usage: ${initial_usage}%"
+    if initial_usage=$(df -h . 2>/dev/null | tail -1 | awk '{print $5}' 2>/dev/null | sed 's/%//' 2>/dev/null) && [[ -n "$initial_usage" ]] && [[ "$initial_usage" =~ ^[0-9]+$ ]]; then
+        echo "📊 Initial disk usage: ${initial_usage}%"
+    else
+        echo "⚠️  Could not determine initial disk usage, running cleanup anyway"
+        initial_usage=0
+    fi
 
     # Stop all running containers (be aggressive about cleanup)
     running_containers=$(docker ps -q)
@@ -104,8 +110,12 @@ if command -v docker >/dev/null 2>&1; then
     docker builder prune -f --filter "until=24h" >/dev/null 2>&1 || true
 
     # If disk usage is still high, do more aggressive cleanup
-    current_usage=$(df -h . | tail -1 | awk '{print $5}' | sed 's/%//')
-    echo "📊 Current disk usage: ${current_usage}%"
+    if current_usage=$(df -h . 2>/dev/null | tail -1 | awk '{print $5}' 2>/dev/null | sed 's/%//' 2>/dev/null) && [[ -n "$current_usage" ]] && [[ "$current_usage" =~ ^[0-9]+$ ]]; then
+        echo "📊 Current disk usage: ${current_usage}%"
+    else
+        echo "⚠️  Could not determine current disk usage"
+        current_usage=0
+    fi
 
     if [[ $current_usage -gt 80 ]]; then
         echo "⚠️  Disk usage still high (${current_usage}%), running aggressive cleanup..."
@@ -124,13 +134,18 @@ if command -v docker >/dev/null 2>&1; then
     fi
 
     # Final disk usage check
-    final_usage=$(df -h . | tail -1 | awk '{print $5}' | sed 's/%//')
-    echo "📊 Final disk usage: ${final_usage}%"
+    if final_usage=$(df -h . 2>/dev/null | tail -1 | awk '{print $5}' 2>/dev/null | sed 's/%//' 2>/dev/null) && [[ -n "$final_usage" ]] && [[ "$final_usage" =~ ^[0-9]+$ ]]; then
+        echo "📊 Final disk usage: ${final_usage}%"
 
-    # Calculate space freed
-    space_freed=$((initial_usage - final_usage))
-    if [[ $space_freed -gt 0 ]]; then
-        echo "✨ Freed ${space_freed}% disk space"
+        # Calculate space freed (only if we have valid numbers)
+        if [[ $initial_usage -gt 0 ]]; then
+            space_freed=$((initial_usage - final_usage))
+            if [[ $space_freed -gt 0 ]]; then
+                echo "✨ Freed ${space_freed}% disk space"
+            fi
+        fi
+    else
+        echo "⚠️  Could not determine final disk usage"
     fi
 
     # Show Docker space usage summary
