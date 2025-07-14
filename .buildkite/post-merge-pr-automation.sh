@@ -12,7 +12,7 @@ set -euo pipefail
 # Updates the final infra PR with any additional changes from the merge
 
 
-YQ_VERSION=${YQ_VERSION:-4.9.6}
+YQ_VERSION=${YQ_VERSION:-4.45.4}
 repo="${HELM_CHART_REPO}"
 chart_dir="${HELM_CHART_PATH:-charts/openlane}"
 

@@ -11,7 +11,7 @@ set -euo pipefail
 # Consolidates functionality from helmpr.sh, pr.sh, and helm-values-pr.sh
 
 
-YQ_VERSION=${YQ_VERSION:-4.9.6}
+YQ_VERSION=${YQ_VERSION:-4.45.4}
 repo="${HELM_CHART_REPO}"
 chart_dir="${HELM_CHART_PATH:-charts/openlane}"
 
@@ -23,6 +23,9 @@ if ! command -v yq >/dev/null 2>&1; then
     chmod +x /tmp/yq
     mv /tmp/yq /usr/local/bin/yq
 fi
+
+# Check yq version for debugging
+echo "yq version: $(yq --version)"
 
 # Install gh if not available
 if ! command -v gh >/dev/null 2>&1; then
@@ -122,14 +125,14 @@ function merge_helm_values() {
     yq e '.core' "$source" > /tmp/core-values.yaml
 
     echo "  🔀 Merging with existing chart values..."
-    # Start with existing values, then merge in new core section using eval-all
-    yq eval-all 'select(fileIndex == 0) * {"core": (select(fileIndex == 1))}' "$target" /tmp/core-values.yaml > "$temp_merged"
+    # Start with existing values, then merge in new core section
+    yq e '.core = load("/tmp/core-values.yaml")' "$target" > "$temp_merged"
 
     # Also merge any externalSecrets configuration if it exists in generated file
     if yq e '.externalSecrets' "$source" | grep -v "null" > /dev/null 2>&1; then
       echo "  🔐 Merging external secrets configuration..."
       yq e '.externalSecrets' "$source" > /tmp/external-secrets.yaml
-      yq eval-all 'select(fileIndex == 0) * {"externalSecrets": (select(fileIndex == 1))}' "$temp_merged" /tmp/external-secrets.yaml > "${temp_merged}.tmp"
+      yq e '.externalSecrets = load("/tmp/external-secrets.yaml")' "$temp_merged" > "${temp_merged}.tmp"
       mv "${temp_merged}.tmp" "$temp_merged"
     fi
 
