@@ -681,6 +681,10 @@
         "onSuccessScript": {
           "type": "string",
           "description": "OnSuccessScript script to run when a scheduled job succeeds"
+        },
+        "folderName": {
+          "type": "string",
+          "description": "FolderName identifies the storage path of flows and scripts in Windmill, you'd want to use"
         }
       },
       "additionalProperties": false,

@@ -167,35 +167,21 @@ func (c *Client) UpdateFlow(ctx context.Context, path string, req UpdateFlowRequ
 	flowValue := createFlowValue(req.Value, req.Language)
 
 	apiReq := struct {
-		Summary string `json:"summary"`
-		Value   struct {
-			Path    string `json:"path"`
-			Summary string `json:"summary"`
-			Value   struct {
-				Modules    []any `json:"modules"`
-				SameWorker bool  `json:"same_worker"`
-			} `json:"value"`
+		Path        string `json:"path"`
+		Summary     string `json:"summary"`
+		Description string `json:"description"`
+		Value       struct {
+			Modules []any `json:"modules"`
 		} `json:"value"`
 		Schema any `json:"schema,omitempty"`
 	}{
-		Summary: req.Summary,
+		Path:        path,
+		Summary:     req.Summary,
+		Description: req.Summary,
 		Value: struct {
-			Path    string `json:"path"`
-			Summary string `json:"summary"`
-			Value   struct {
-				Modules    []any `json:"modules"`
-				SameWorker bool  `json:"same_worker"`
-			} `json:"value"`
+			Modules []any `json:"modules"`
 		}{
-			Path:    path,
-			Summary: req.Summary,
-			Value: struct {
-				Modules    []any `json:"modules"`
-				SameWorker bool  `json:"same_worker"`
-			}{
-				Modules:    flowValue,
-				SameWorker: false,
-			},
+			Modules: flowValue,
 		},
 	}
 

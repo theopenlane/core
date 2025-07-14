@@ -47,18 +47,18 @@ func HookScheduledJobCreate() ent.Hook {
 				return nil, err
 			}
 
-                        retVal, err := next.Mutate(ctx, mutation)
-                        if err != nil {
-                            return err
-                         }
-                          
-			if mutation.Op() == ent.OpCreate {
+			switch mutation.Op() {
+			case ent.OpCreate:
 				if err := createWindmillFlow(ctx, mutation); err != nil {
 					return nil, fmt.Errorf("failed to create windmill flow: %w", err)
 				}
+			case ent.OpUpdate, ent.OpUpdateOne:
+				if err := updateWindmillFlow(ctx, mutation); err != nil {
+					return nil, fmt.Errorf("failed to update windmill flow: %w", err)
+				}
 			}
 
-			return retVal, err
+			return next.Mutate(ctx, mutation)
 		})
 	}, ent.OpUpdate|ent.OpUpdateOne|ent.OpCreate)
 }
@@ -70,11 +70,12 @@ func createWindmillFlow(ctx context.Context, mutation *generated.ScheduledJobMut
 		return nil
 	}
 
-	// Get job details
-	title, hasTitle := mutation.Title()
-	if !hasTitle {
-		return errors.New("title is required for windmill flow creation") // nolint:err113
+	entConfig := mutation.Client().EntConfig
+	if entConfig == nil {
+		return errors.New("ent config is required") // nolint:err113
 	}
+
+	title, _ := mutation.Title()
 
 	downloadURL, _ := mutation.DownloadURL()
 
@@ -87,7 +88,7 @@ func createWindmillFlow(ctx context.Context, mutation *generated.ScheduledJobMut
 		return err
 	}
 
-	flowPath := fmt.Sprintf("f/openlane/scheduled_job_%s", generateFlowPath())
+	flowPath := fmt.Sprintf("f/%s/scheduled_job_%s", entConfig.Windmill.FolderName, generateFlowPath())
 	summary := title
 	if description, _ := mutation.Description(); description != "" {
 		summary = fmt.Sprintf("%s - %s", title, description)
@@ -109,6 +110,48 @@ func createWindmillFlow(ctx context.Context, mutation *generated.ScheduledJobMut
 
 	mutation.SetWindmillPath(resp.Path)
 	return nil
+}
+
+func updateWindmillFlow(ctx context.Context, mutation *generated.ScheduledJobMutation) error {
+	windmillClient := mutation.Client().Windmill
+	if windmillClient == nil {
+		return nil
+	}
+
+	oldWindmillPath, err := mutation.OldWindmillPath(ctx)
+	if err != nil {
+		return err
+	}
+
+	oldDownloadURL, err := mutation.OldDownloadURL(ctx)
+	if err != nil {
+		return err
+	}
+
+	downloadURL, hasDownloadURL := mutation.DownloadURL()
+
+	platform, hasPlatform := mutation.Platform()
+
+	var rawCode string
+	if hasDownloadURL && downloadURL != "" && downloadURL != oldDownloadURL {
+		var err error
+		rawCode, err = downloadRawCode(ctx, downloadURL)
+		if err != nil {
+			return err
+		}
+	}
+
+	flowReq := windmill.UpdateFlowRequest{}
+
+	if rawCode != "" {
+		flowReq.Value = []any{rawCode}
+	}
+
+	if hasPlatform {
+		flowReq.Language = platform
+	}
+
+	return windmillClient.UpdateFlow(ctx, oldWindmillPath, flowReq)
 }
 
 // downloadRawCode downloads raw code from a URL that will be wrapped into a Windmill flow
@@ -184,7 +227,6 @@ func validateCron(cron models.Cron, hasCron bool) error {
 	return cron.Validate()
 }
 
-// createWindmillScheduledJob creates a Windmill scheduled job for the control scheduled job
 func createWindmillScheduledJob(ctx context.Context, mutation *generated.ControlScheduledJobMutation) error {
 	windmillClient := mutation.Client().Windmill
 	if windmillClient == nil {
@@ -206,7 +248,7 @@ func createWindmillScheduledJob(ctx context.Context, mutation *generated.Control
 		return errors.New("ent config is required") // nolint:err113
 	}
 
-	scheduledJobPath := fmt.Sprintf("s/openlane/control_scheduled_job_%s", generateFlowPath())
+	scheduledJobPath := fmt.Sprintf("s/%s/control_scheduled_job_%s", entConfig.Windmill.FolderName, generateFlowPath())
 
 	enabled := true
 	scheduleReq := windmill.CreateScheduledJobRequest{
@@ -216,12 +258,6 @@ func createWindmillScheduledJob(ctx context.Context, mutation *generated.Control
 		Summary:  fmt.Sprintf("Control scheduled job %s", jobID),
 	}
 
-	resp, err := windmillClient.CreateScheduledJob(ctx, scheduleReq)
-	if err != nil {
-		return err
-	}
-
-	_ = resp.Path
-
-	return nil
+	_, err := windmillClient.CreateScheduledJob(ctx, scheduleReq)
+	return err
 }

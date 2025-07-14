@@ -127,12 +127,8 @@ entConfig:
     windmill:
         baseURL: https://app.windmill.dev
         defaultTimeout: 30s
-        enabled: false
-        onFailureScript: ""
-        onSuccessScript: ""
+        folderName: openlane
         timezone: UTC
-        token: ""
-        workspace: ""
 jobQueue:
     connectionURI: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
     riverConf:

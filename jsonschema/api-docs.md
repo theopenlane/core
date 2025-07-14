@@ -420,6 +420,7 @@ Windmill holds configuration for the Windmill workflow automation platform
 |**timezone**|`string`|Timezone for scheduled jobs<br/>||
 |**onFailureScript**|`string`|OnFailureScript script to run when a scheduled job fails<br/>||
 |**onSuccessScript**|`string`|OnSuccessScript script to run when a scheduled job succeeds<br/>||
+|**folderName**|`string`|FolderName identifies the storage path of flows and scripts in Windmill, you'd want to use<br/>||
 
 **Additional Properties:** not allowed  
 <a name="auth"></a>

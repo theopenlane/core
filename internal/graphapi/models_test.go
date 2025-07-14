@@ -1521,7 +1521,7 @@ type ScheduledJobBuilder struct {
 }
 
 func (w *ScheduledJobBuilder) MustNew(ctx context.Context, t *testing.T) *ent.ScheduledJob {
-	const testScriptURL = "https://gist.githubusercontent.com/adelowo/5559b84fabf87f02502166a6467e345e/raw/b317494adde0f9ba16e09dd019681d1dac8d4d05/test.go"
+	const testScriptURL = "https://raw.githubusercontent.com/theopenlane/jobs-examples/refs/heads/main/basic/print.go"
 
 	ctx = setContext(ctx, w.client.db)
 	wn, err := w.client.db.ScheduledJob.Create().
