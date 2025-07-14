@@ -39,7 +39,7 @@ func registerIntegrationOAuthCallbackHandler(router *Router) error {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: mw, // No auth required for callback
+		Middlewares: authMW, // Use authMW
 		Handler: func(c echo.Context) error {
 			return router.Handler.HandleOAuthCallback(c)
 		},

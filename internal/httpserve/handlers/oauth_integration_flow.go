@@ -12,6 +12,8 @@ import (
 	"golang.org/x/oauth2"
 	githubOAuth2 "golang.org/x/oauth2/github"
 	slackOAuth2 "golang.org/x/oauth2/slack"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog/log"
@@ -20,12 +22,12 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/sessions"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	hushschema "github.com/theopenlane/core/internal/ent/generated/hush"
 	integrationschema "github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -70,10 +72,20 @@ var (
 	ErrInvalidState = fmt.Errorf("invalid OAuth state parameter")
 	// ErrMissingCode is returned when OAuth authorization code is missing
 	ErrMissingCode = fmt.Errorf("missing OAuth authorization code")
-)
-
-const (
-	slackProvider = "slack"
+	// ErrExchangeAuthCode is returned when OAuth code exchange fails
+	ErrExchangeAuthCode = fmt.Errorf("failed to exchange authorization code")
+	// ErrValidateToken is returned when OAuth token validation fails
+	ErrValidateToken = fmt.Errorf("failed to validate OAuth token")
+	// ErrInvalidStateFormat is returned when OAuth state format is invalid
+	ErrInvalidStateFormat = fmt.Errorf("invalid state format")
+	// ErrProviderRequired is returned when provider parameter is missing
+	ErrProviderRequired = fmt.Errorf("provider parameter is required")
+	// ErrIntegrationIDRequired is returned when integration ID is missing
+	ErrIntegrationIDRequired = fmt.Errorf("integration ID is required")
+	// ErrIntegrationNotFound is returned when integration is not found
+	ErrIntegrationNotFound = fmt.Errorf("integration not found")
+	// ErrDeleteSecrets is returned when deleting integration secrets fails
+	ErrDeleteSecrets = fmt.Errorf("failed to delete integration secrets")
 )
 
 // getIntegrationProviders returns available OAuth providers for integrations
@@ -157,23 +169,69 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrInvalidProvider)
 	}
 
+	// Set up cookie config with SameSiteNoneMode for OAuth flow to work with external redirects
+	cfg := sessions.CookieConfig{
+		Path:     "/",
+		HTTPOnly: true,
+		SameSite: http.SameSiteNoneMode, // Required for OAuth redirects from external providers
+		Secure:   !h.IsTest,             // Must be true with SameSiteNone in production
+	}
+
+	// Also need to set auth session cookies with SameSiteNone for OAuth redirect compatibility
+	authCfg := *h.SessionConfig.CookieConfig
+	authCfg.SameSite = http.SameSiteNoneMode
+	authCfg.Secure = !h.IsTest
+
+	// Get current auth tokens from cookies and re-set them with OAuth-compatible SameSite policy
+	if accessTokenCookie, err := ctx.Request().Cookie(auth.AccessTokenCookie); err == nil {
+		accessToken := accessTokenCookie.Value
+		refreshToken := ""
+
+		// Get refresh token if available
+		if refreshTokenCookie, err := ctx.Request().Cookie(auth.RefreshTokenCookie); err == nil {
+			refreshToken = refreshTokenCookie.Value
+		}
+
+		// Re-set the auth cookies with SameSiteNone for OAuth compatibility
+		auth.SetAuthCookies(ctx.Response().Writer, accessToken, refreshToken, authCfg)
+
+		log.Info().
+			Str("access_token_length", fmt.Sprintf("%d", len(accessToken))).
+			Str("refresh_token_length", fmt.Sprintf("%d", len(refreshToken))).
+			Msg("Re-set authentication cookies with SameSiteNone for OAuth compatibility")
+	}
+
+	// Set the org ID and user ID as cookies for the OAuth flow
+	sessions.SetCookie(ctx.Response().Writer, orgID, "oauth_org_id", cfg)
+	sessions.SetCookie(ctx.Response().Writer, user.SubjectID, "oauth_user_id", cfg)
+
 	// Generate state parameter for security
 	state, err := h.generateOAuthState(orgID, in.Provider)
 	if err != nil {
 		return h.InternalServerError(ctx, err)
 	}
 
+	// Set the state as a cookie for validation in callback
+	sessions.SetCookie(ctx.Response().Writer, state, "oauth_state", cfg)
+
+	// Debug logging
+	log.Info().
+		Str("org_id", orgID).
+		Str("user_id", user.SubjectID).
+		Str("state", state).
+		Str("provider", in.Provider).
+		Msg("OAuth flow started - cookies set")
+
 	// Build OAuth authorization URL
 	config := provider.Config
 	if len(in.Scopes) > 0 {
 		// Add additional scopes if requested
-		allScopes := append(config.Scopes, in.Scopes...)
 		config = &oauth2.Config{
 			ClientID:     config.ClientID,
 			ClientSecret: config.ClientSecret,
 			RedirectURL:  config.RedirectURL,
 			Endpoint:     config.Endpoint,
-			Scopes:       allScopes,
+			Scopes:       append(config.Scopes, in.Scopes...),
 		}
 	}
 
@@ -199,8 +257,62 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context) error {
 		return h.InvalidInput(ctx, err)
 	}
 
-	// Validate state and extract organization ID and provider
-	orgID, provider, err := h.validateOAuthState(in.State)
+	// Debug logging - check what cookies we have
+	log.Info().
+		Str("callback_state", in.State).
+		Str("callback_code", in.Code).
+		Msg("OAuth callback received")
+
+	// Validate state matches what was set in the cookie (like SSO handler)
+	stateCookie, err := sessions.GetCookie(ctx.Request(), "oauth_state")
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to get oauth_state cookie")
+		return h.BadRequest(ctx, ErrInvalidState)
+	}
+	if in.State != stateCookie.Value {
+		log.Error().
+			Str("expected_state", stateCookie.Value).
+			Str("received_state", in.State).
+			Msg("OAuth state mismatch")
+		return h.BadRequest(ctx, ErrInvalidState)
+	}
+	log.Info().Str("state", in.State).Msg("OAuth state validated successfully")
+
+	// Get org ID and user ID from cookies (like SSO handler)
+	orgCookie, err := sessions.GetCookie(ctx.Request(), "oauth_org_id")
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to get oauth_org_id cookie")
+		return h.BadRequest(ctx, fmt.Errorf("missing organization context: %w", ErrInvalidState))
+	}
+	orgID := orgCookie.Value
+
+	userCookie, err := sessions.GetCookie(ctx.Request(), "oauth_user_id")
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to get oauth_user_id cookie")
+		return h.BadRequest(ctx, fmt.Errorf("missing user context: %w", ErrInvalidState))
+	}
+	userID := userCookie.Value
+
+	log.Info().
+		Str("org_id", orgID).
+		Str("user_id", userID).
+		Msg("OAuth cookies validated successfully")
+
+	// Get the user from database to set authenticated context (like SSO handler)
+	reqCtx := ctx.Request().Context()
+	systemCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
+
+	user, err := h.DBClient.User.Get(systemCtx, userID)
+	if err != nil {
+		log.Error().Err(err).Str("user_id", userID).Msg("Failed to get user from database")
+		return h.InternalServerError(ctx, fmt.Errorf("failed to get user: %w", err))
+	}
+
+	// Set authenticated context for database operations (like SSO handler)
+	authenticatedCtx := setAuthenticatedContext(systemCtx, user)
+
+	// Validate state and extract provider from state
+	_, provider, err := h.validateOAuthState(in.State)
 	if err != nil {
 		return h.BadRequest(ctx, ErrInvalidState)
 	}
@@ -219,32 +331,35 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context) error {
 	oauthToken, err := providerConfig.Config.Exchange(ctx.Request().Context(), in.Code)
 	if err != nil {
 		log.Error().Err(err).Str("provider", provider).Msg("failed to exchange OAuth code for token")
-		return h.InternalServerError(ctx, fmt.Errorf("failed to exchange authorization code"))
+		return h.InternalServerError(ctx, ErrExchangeAuthCode)
 	}
 
 	// Validate token and get user info
 	userInfo, err := providerConfig.Validate(ctx.Request().Context(), oauthToken)
 	if err != nil {
 		log.Error().Err(err).Str("provider", provider).Msg("failed to validate OAuth token")
-		return h.InternalServerError(ctx, fmt.Errorf("failed to validate OAuth token"))
+		return h.InternalServerError(ctx, ErrValidateToken)
 	}
 
-	// Store integration and tokens (use system context since this is a callback from external provider)
-	reqCtx := ctx.Request().Context()
-	systemCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
-	log.Info().Str("provider", provider).Str("org_id", orgID).Msg("attempting to store integration tokens")
-	integration, err := h.storeIntegrationTokens(systemCtx, orgID, provider, userInfo, oauthToken)
+	// Store integration and tokens (use authenticated context)
+	log.Info().Str("provider", provider).Str("org_id", orgID).Str("user_id", userID).Msg("attempting to store integration tokens")
+	integration, err := h.storeIntegrationTokens(authenticatedCtx, orgID, provider, userInfo, oauthToken)
 	if err != nil {
 		log.Error().Err(err).Str("provider", provider).Str("org_id", orgID).Msg("failed to store integration tokens")
 		return h.InternalServerError(ctx, err)
 	}
 	log.Info().Str("provider", provider).Str("org_id", orgID).Msg("successfully stored integration tokens")
 
+	// Clean up the OAuth cookies after successful completion (like SSO handler)
+	sessions.RemoveCookie(ctx.Response().Writer, "oauth_state", sessions.CookieConfig{Path: "/"})
+	sessions.RemoveCookie(ctx.Response().Writer, "oauth_org_id", sessions.CookieConfig{Path: "/"})
+	sessions.RemoveCookie(ctx.Response().Writer, "oauth_user_id", sessions.CookieConfig{Path: "/"})
+
 	out := models.OAuthCallbackResponse{
 		Reply:       rout.Reply{Success: true},
 		Success:     true,
 		Integration: integration,
-		Message:     fmt.Sprintf("Successfully connected %s integration", strings.Title(provider)),
+		Message:     fmt.Sprintf("Successfully connected %s integration", cases.Title(language.English).String(provider)),
 	}
 
 	return h.Success(ctx, out)
@@ -253,7 +368,8 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context) error {
 // generateOAuthState creates a secure state parameter containing org ID and provider
 func (h *Handler) generateOAuthState(orgID, provider string) (string, error) {
 	// Create random bytes for security
-	randomBytes := make([]byte, 16)
+	const stateRandomBytesLength = 16
+	randomBytes := make([]byte, stateRandomBytesLength)
 	if _, err := rand.Read(randomBytes); err != nil {
 		return "", err
 	}
@@ -273,8 +389,9 @@ func (h *Handler) validateOAuthState(state string) (orgID, provider string, err 
 
 	// Split by colons
 	parts := strings.Split(string(stateBytes), ":")
-	if len(parts) != 3 {
-		return "", "", fmt.Errorf("invalid state format")
+	const expectedStateParts = 3
+	if len(parts) != expectedStateParts {
+		return "", "", ErrInvalidStateFormat
 	}
 
 	return parts[0], parts[1], nil
@@ -285,7 +402,7 @@ func (h *Handler) storeIntegrationTokens(ctx context.Context, orgID, provider st
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	// Check if integration already exists for this org/provider
-	integration, err := transaction.FromContext(systemCtx).Integration.Query().
+	integration, err := h.DBClient.Integration.Query().
 		Where(
 			integrationschema.And(
 				integrationschema.OwnerID(orgID),
@@ -306,7 +423,7 @@ func (h *Handler) storeIntegrationTokens(ctx context.Context, orgID, provider st
 	// Create or update integration
 	if ent.IsNotFound(err) {
 		// Create new integration
-		integration, err = transaction.FromContext(systemCtx).Integration.Create().
+		integration, err = h.DBClient.Integration.Create().
 			SetOwnerID(orgID).
 			SetName(integrationName).
 			SetDescription(fmt.Sprintf("OAuth integration with %s for %s", provider, userInfo.Username)).
@@ -369,7 +486,7 @@ func (h *Handler) storeSecretForIntegration(ctx context.Context, integration *en
 
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	// Check if secret already exists
-	existing, err := transaction.FromContext(systemCtx).Hush.Query().
+	existing, err := h.DBClient.Hush.Query().
 		Where(
 			hushschema.And(
 				hushschema.OwnerID(integration.OwnerID),
@@ -377,7 +494,7 @@ func (h *Handler) storeSecretForIntegration(ctx context.Context, integration *en
 				hushschema.SecretName(secretName),
 			),
 		).
-		Only(ctx)
+		Only(systemCtx)
 
 	if err != nil && !ent.IsNotFound(err) {
 		return err
@@ -385,35 +502,35 @@ func (h *Handler) storeSecretForIntegration(ctx context.Context, integration *en
 
 	if ent.IsNotFound(err) {
 		// Create new secret
-		_, err = transaction.FromContext(systemCtx).Hush.Create().
+		_, err = h.DBClient.Hush.Create().
 			SetOwnerID(integration.OwnerID).
-			SetName(fmt.Sprintf("%s %s", integration.Name, strings.Replace(name, "_", " ", -1))).
-			SetDescription(fmt.Sprintf("%s for %s integration", strings.Title(strings.Replace(name, "_", " ", -1)), integration.Kind)).
+			SetName(fmt.Sprintf("%s %s", integration.Name, strings.ReplaceAll(name, "_", " "))).
+			SetDescription(fmt.Sprintf("%s for %s integration", cases.Title(language.English).String(strings.ReplaceAll(name, "_", " ")), integration.Kind)).
 			SetKind("oauth_token").
 			SetSecretName(secretName).
 			SetSecretValue(value).
 			AddIntegrations(integration).
-			Save(ctx)
-		return err
-	} else {
-		// Secret value is immutable, so delete and recreate
-		err = transaction.FromContext(systemCtx).Hush.DeleteOne(existing).Exec(ctx)
-		if err != nil {
-			return fmt.Errorf("failed to delete existing secret: %w", err)
-		}
-
-		// Create new secret with updated value
-		_, err = transaction.FromContext(systemCtx).Hush.Create().
-			SetOwnerID(integration.OwnerID).
-			SetName(fmt.Sprintf("%s %s", integration.Name, strings.Replace(name, "_", " ", -1))).
-			SetDescription(fmt.Sprintf("%s for %s integration", strings.Title(strings.Replace(name, "_", " ", -1)), integration.Kind)).
-			SetKind("oauth_token").
-			SetSecretName(secretName).
-			SetSecretValue(value).
-			AddIntegrations(integration).
-			Save(ctx)
+			Save(systemCtx)
 		return err
 	}
+
+	// Secret value is immutable, so delete and recreate
+	err = h.DBClient.Hush.DeleteOne(existing).Exec(systemCtx)
+	if err != nil {
+		return fmt.Errorf("failed to delete existing secret: %w", err)
+	}
+
+	// Create new secret with updated value
+	_, err = h.DBClient.Hush.Create().
+		SetOwnerID(integration.OwnerID).
+		SetName(fmt.Sprintf("%s %s", integration.Name, strings.ReplaceAll(name, "_", " "))).
+		SetDescription(fmt.Sprintf("%s for %s integration", cases.Title(language.English).String(strings.ReplaceAll(name, "_", " ")), integration.Kind)).
+		SetKind("oauth_token").
+		SetSecretName(secretName).
+		SetSecretValue(value).
+		AddIntegrations(integration).
+		Save(systemCtx)
+	return err
 }
 
 // validateGithubIntegrationToken validates GitHub token and returns user info
@@ -437,8 +554,8 @@ func (h *Handler) validateGithubIntegrationToken(ctx context.Context, token *oau
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("GitHub API returned status %d", resp.StatusCode)
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("GitHub API returned status %d: %w", resp.StatusCode, ErrValidateToken)
 	}
 
 	// For now, return basic validated info
@@ -451,7 +568,7 @@ func (h *Handler) validateGithubIntegrationToken(ctx context.Context, token *oau
 }
 
 // validateSlackIntegrationToken validates Slack token and returns user info
-func (h *Handler) validateSlackIntegrationToken(ctx context.Context, token *oauth2.Token) (*IntegrationUserInfo, error) {
+func (h *Handler) validateSlackIntegrationToken(_ context.Context, _ *oauth2.Token) (*IntegrationUserInfo, error) {
 	// Placeholder implementation - would need actual Slack API client
 	// For now, return basic info
 	return &IntegrationUserInfo{
@@ -465,7 +582,7 @@ func (h *Handler) validateSlackIntegrationToken(ctx context.Context, token *oaut
 func (h *Handler) GetIntegrationToken(ctx echo.Context) error {
 	provider := ctx.PathParam("provider")
 	if provider == "" {
-		return h.BadRequest(ctx, fmt.Errorf("provider parameter is required"))
+		return h.BadRequest(ctx, ErrProviderRequired)
 	}
 
 	// Get the authenticated user and organization
@@ -481,7 +598,7 @@ func (h *Handler) GetIntegrationToken(ctx echo.Context) error {
 	tokenData, err := h.retrieveIntegrationToken(userCtx, orgID, provider)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			return h.NotFound(ctx, fmt.Errorf("integration not found for provider %s", provider))
+			return h.NotFound(ctx, fmt.Errorf("integration not found for provider %s: %w", provider, ErrIntegrationNotFound))
 		}
 		return h.InternalServerError(ctx, err)
 	}
@@ -527,7 +644,7 @@ func (h *Handler) ListIntegrations(ctx echo.Context) error {
 func (h *Handler) DeleteIntegration(ctx echo.Context) error {
 	integrationID := ctx.PathParam("id")
 	if integrationID == "" {
-		return h.BadRequest(ctx, fmt.Errorf("integration ID is required"))
+		return h.BadRequest(ctx, ErrIntegrationIDRequired)
 	}
 
 	// Get the authenticated user and organization
@@ -550,7 +667,7 @@ func (h *Handler) DeleteIntegration(ctx echo.Context) error {
 		Only(userCtx)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			return h.NotFound(ctx, fmt.Errorf("integration not found"))
+			return h.NotFound(ctx, ErrIntegrationNotFound)
 		}
 		return h.InternalServerError(ctx, err)
 	}
@@ -569,7 +686,7 @@ func (h *Handler) DeleteIntegration(ctx echo.Context) error {
 		Exec(systemCtx)
 	if err != nil {
 		log.Error().Err(err).Str("integration_id", integrationID).Msg("failed to delete integration secrets")
-		return h.InternalServerError(ctx, fmt.Errorf("failed to delete integration secrets"))
+		return h.InternalServerError(ctx, ErrDeleteSecrets)
 	}
 
 	// Delete integration
@@ -643,7 +760,7 @@ func (h *Handler) retrieveIntegrationToken(ctx context.Context, orgID, provider 
 	}
 
 	if tokenData.AccessToken == "" {
-		return nil, fmt.Errorf("no access token found for provider %s", provider)
+		return nil, fmt.Errorf("no access token found for provider %s: %w", provider, ErrIntegrationNotFound)
 	}
 
 	return tokenData, nil
@@ -658,7 +775,7 @@ func (h *Handler) RefreshIntegrationToken(ctx context.Context, orgID, provider s
 	}
 
 	if tokenData.RefreshToken == "" {
-		return nil, fmt.Errorf("no refresh token available for provider %s", provider)
+		return nil, fmt.Errorf("no refresh token available for provider %s: %w", provider, ErrIntegrationNotFound)
 	}
 
 	// Get provider configuration
@@ -730,7 +847,7 @@ func (h *Handler) RefreshIntegrationToken(ctx context.Context, orgID, provider s
 func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context) error {
 	provider := ctx.PathParam("provider")
 	if provider == "" {
-		return h.BadRequest(ctx, fmt.Errorf("provider parameter is required"))
+		return h.BadRequest(ctx, ErrProviderRequired)
 	}
 
 	// Get the authenticated user and organization
@@ -746,7 +863,7 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context) error {
 	tokenData, err := h.RefreshIntegrationToken(userCtx, orgID, provider)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			return h.NotFound(ctx, fmt.Errorf("integration not found for provider %s", provider))
+			return h.NotFound(ctx, fmt.Errorf("integration not found for provider %s: %w", provider, ErrIntegrationNotFound))
 		}
 		return h.InternalServerError(ctx, fmt.Errorf("failed to refresh token: %w", err))
 	}
@@ -765,7 +882,7 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context) error {
 func (h *Handler) GetIntegrationStatus(ctx echo.Context) error {
 	provider := ctx.PathParam("provider")
 	if provider == "" {
-		return h.BadRequest(ctx, fmt.Errorf("provider parameter is required"))
+		return h.BadRequest(ctx, ErrProviderRequired)
 	}
 
 	// Get the authenticated user and organization
@@ -811,14 +928,14 @@ func (h *Handler) GetIntegrationStatus(ctx echo.Context) error {
 	}
 
 	status := "connected"
-	message := fmt.Sprintf("%s integration is connected and active", strings.Title(provider))
+	message := fmt.Sprintf("%s integration is connected and active", cases.Title(language.English).String(provider))
 
 	if !tokenValid {
 		status = "invalid"
-		message = fmt.Sprintf("%s integration exists but has invalid tokens", strings.Title(provider))
+		message = fmt.Sprintf("%s integration exists but has invalid tokens", cases.Title(language.English).String(provider))
 	} else if tokenExpired {
 		status = "expired"
-		message = fmt.Sprintf("%s integration tokens have expired", strings.Title(provider))
+		message = fmt.Sprintf("%s integration tokens have expired", cases.Title(language.English).String(provider))
 	}
 
 	out := models.IntegrationStatusResponse{

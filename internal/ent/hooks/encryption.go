@@ -16,6 +16,15 @@ import (
 	"gocloud.dev/secrets"
 )
 
+var (
+	// ErrFieldNotString is returned when a field is not a string type
+	ErrFieldNotString = fmt.Errorf("field is not a string")
+	// ErrSetterNotFound is returned when no setter method is found for a field
+	ErrSetterNotFound = fmt.Errorf("no setter found for field")
+	// ErrCiphertextTooShort is returned when ciphertext is too short to decrypt
+	ErrCiphertextTooShort = fmt.Errorf("ciphertext too short")
+)
+
 // EncryptionManager handles field-level encryption for any entity
 type EncryptionManager struct {
 	secrets *secrets.Keeper
@@ -308,7 +317,7 @@ func getFieldValue(m ent.Mutation, fieldName string) (string, error) {
 		return str, nil
 	}
 
-	return "", fmt.Errorf("field %s is not a string", fieldName)
+	return "", fmt.Errorf("field %s: %w", fieldName, ErrFieldNotString)
 }
 
 // setFieldValue sets the value of a field in a mutation
@@ -327,7 +336,7 @@ func setFieldValue(m ent.Mutation, fieldName string, value string) error {
 		return nil
 	}
 
-	return fmt.Errorf("no setter found for field %s", fieldName)
+	return fmt.Errorf("no setter found for field %s: %w", fieldName, ErrSetterNotFound)
 }
 
 // convertFieldName converts snake_case to PascalCase
@@ -386,7 +395,7 @@ func decryptAES(ciphertext, key []byte) ([]byte, error) {
 
 	nonceSize := gcm.NonceSize()
 	if len(ciphertext) < nonceSize {
-		return nil, fmt.Errorf("ciphertext too short")
+		return nil, ErrCiphertextTooShort
 	}
 
 	nonce, ciphertext := ciphertext[:nonceSize], ciphertext[nonceSize:]
