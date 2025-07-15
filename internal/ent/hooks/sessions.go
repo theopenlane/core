@@ -49,7 +49,7 @@ func updateUserAuthSession(ctx context.Context, am *authmanager.Client, newOrgID
 	}
 
 	// add the organization ID to the authenticated user context
-	ctx, err = auth.SetOrganizationIDInAuthContext(ctx, newOrgID)
+	err = auth.SetOrganizationIDInAuthContext(ctx, newOrgID)
 	if err != nil {
 		return err
 	}
