@@ -3,8 +3,7 @@
 
 # Global variables
 YQ_VERSION=${YQ_VERSION:-4.45.4}
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+COMMON_LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Function to install yq if not available
 install_yq() {
@@ -188,7 +187,7 @@ log_execution_context() {
     echo "Branch: ${BUILDKITE_BRANCH:-unknown}"
     echo "Build Number: ${BUILDKITE_BUILD_NUMBER:-unknown}"
     echo "Commit: ${BUILDKITE_COMMIT:-unknown}"
-    echo "Script Directory: ${SCRIPT_DIR}"
+    echo "Script Directory: ${COMMON_LIB_DIR}"
     echo "=========================="
 }
 

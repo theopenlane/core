@@ -2,8 +2,8 @@
 # GitHub-specific utility functions for Buildkite automation scripts
 
 # Source common utilities
-LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "${LIB_DIR}/common.sh"
+GITHUB_LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${GITHUB_LIB_DIR}/common.sh"
 
 # Function to create a PR comment
 create_pr_comment() {

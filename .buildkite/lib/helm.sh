@@ -2,8 +2,8 @@
 # Helm-specific utility functions for Buildkite automation scripts
 
 # Source common utilities
-LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "${LIB_DIR}/common.sh"
+HELM_LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${HELM_LIB_DIR}/common.sh"
 
 # Function to merge Helm values with existing chart values
 merge_helm_values() {
