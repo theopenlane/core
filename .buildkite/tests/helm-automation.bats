@@ -22,6 +22,9 @@ setup() {
 
     # Source the script functions (extract functions for testing)
     create_test_functions
+
+    # Ensure required tools are available for tests
+    bash -c '. .buildkite/lib/common.sh && install_yq >/dev/null'
 }
 
 teardown() {
@@ -161,4 +164,24 @@ EOF
     [ -f "config/helm-values.yaml" ]
     [ -f ".buildkite/helm-automation.sh" ]
 }
+
+@test "merge_helm_values updates openlane coreConfiguration" {
+    git -C "$TEST_TEMP_DIR" init -q
+
+    cat > "$TEST_TEMP_DIR/chart-values.yaml" <<EOF
+openlane:
+  coreConfiguration:
+    domain: old.example.com
 EOF
+
+    cat > "$TEST_TEMP_DIR/source-values.yaml" <<EOF
+coreConfiguration:
+  domain: new.example.com
+EOF
+
+    run bash -c '. .buildkite/lib/helm.sh && merge_helm_values "$TEST_TEMP_DIR/source-values.yaml" "$TEST_TEMP_DIR/chart-values.yaml" "test-values"'
+
+    [ "$status" -eq 0 ]
+    grep -q "new.example.com" "$TEST_TEMP_DIR/chart-values.yaml"
+
+}
