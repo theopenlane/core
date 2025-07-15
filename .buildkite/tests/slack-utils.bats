@@ -1,6 +1,7 @@
 #!/usr/bin/env bats
 
 setup() {
+    source .buildkite/slack-utils.sh
     export TEST_TEMP_DIR="$(mktemp -d)"
     export PATH="$TEST_TEMP_DIR:$PATH"
     unset SLACK_WEBHOOK_URL
@@ -46,4 +47,14 @@ SCRIPT
     [[ "$output" == *"Slack notification sent successfully"* ]]
     cat "$TEST_TEMP_DIR/payload"
     grep -q 'hello World' "$TEST_TEMP_DIR/payload"
+}
+
+@test "format_summary replaces <br/> and \\n with real newlines" {
+  input="foo<br/>bar\\nbaz"
+  expected=$'foo\nbar\nbaz'
+
+  run format_summary "$input"
+
+  [ "$status" -eq 0 ]
+  [ "$output" = "$expected" ]
 }
