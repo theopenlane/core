@@ -1,0 +1,20 @@
+version: "3"
+
+vars:
+  BATSTESTS:
+    sh: ls .buildkite/tests/*.bats
+
+tasks:
+  default:
+    silent: true
+    cmds:
+      - task --list
+
+  test:
+    desc: Install dependencies
+    cmds:
+      - pwd
+      - for: {var: BATSTESTS, as: BATS}
+        cmd: bats {{.BATS}}
+    preconditions:
+      - which bats

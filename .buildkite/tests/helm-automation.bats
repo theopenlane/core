@@ -175,8 +175,9 @@ openlane:
 EOF
 
     cat > "$TEST_TEMP_DIR/source-values.yaml" <<EOF
-coreConfiguration:
-  domain: new.example.com
+openlane:
+  coreConfiguration:
+    domain: new.example.com
 EOF
 
     run bash -c '. .buildkite/lib/helm.sh && merge_helm_values "$TEST_TEMP_DIR/source-values.yaml" "$TEST_TEMP_DIR/chart-values.yaml" "test-values"'
