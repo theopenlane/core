@@ -694,34 +694,44 @@
     "entitlements.Config": {
       "properties": {
         "enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Enabled determines if the entitlements service is enabled"
         },
         "publicStripeKey": {
-          "type": "string"
+          "type": "string",
+          "description": "PublicStripeKey is the key for the stripe service"
         },
         "privateStripeKey": {
-          "type": "string"
+          "type": "string",
+          "description": "PrivateStripeKey is the key for the stripe service"
         },
         "stripeWebhookSecret": {
-          "type": "string"
+          "type": "string",
+          "description": "StripeWebhookSecret is the secret for the stripe service"
         },
         "trialSubscriptionPriceID": {
-          "type": "string"
+          "type": "string",
+          "description": "TrialSubscriptionPriceID is the price ID for the trial subscription"
         },
         "personalOrgSubscriptionPriceID": {
-          "type": "string"
+          "type": "string",
+          "description": "PersonalOrgSubscriptionPriceID is the price ID for the personal org subscription"
         },
         "stripeWebhookURL": {
-          "type": "string"
+          "type": "string",
+          "description": "StripeWebhookURL is the URL for the stripe webhook"
         },
         "stripeBillingPortalSuccessURL": {
-          "type": "string"
+          "type": "string",
+          "description": "StripeBillingPortalSuccessURL"
         },
         "stripeCancellationReturnURL": {
-          "type": "string"
+          "type": "string",
+          "description": "StripeCancellationReturnURL is the URL for the stripe cancellation return"
         },
         "stripeWebhookEvents": {
-          "$ref": "#/$defs/[]string"
+          "$ref": "#/$defs/[]string",
+          "description": "StripeWebhookEvents is the list of events to register when creating a webhook endpoint"
         }
       },
       "additionalProperties": false,
