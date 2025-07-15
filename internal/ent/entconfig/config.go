@@ -145,29 +145,29 @@ type OpenAIConfig struct {
 // Windmill holds configuration for the Windmill workflow automation platform
 type Windmill struct {
 	// Enabled specifies whether Windmill integration is enabled
-	Enabled bool `json:"enabled,omitempty" koanf:"enabled" default:"false"`
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
 
 	// BaseURL is the base URL of the Windmill instance
-	BaseURL string `json:"baseURL,omitempty" koanf:"baseURL" default:"https://app.windmill.dev"`
+	BaseURL string `json:"baseURL" koanf:"baseURL" default:"https://app.windmill.dev"`
 
 	// Workspace is the Windmill workspace to use
-	Workspace string `json:"workspace,omitempty" koanf:"workspace"`
+	Workspace string `json:"workspace" koanf:"workspace"`
 
 	// Token is the API token for authentication with Windmill
-	Token string `json:"token,omitempty" koanf:"token" sensitive:"true"`
+	Token string `json:"token" koanf:"token" sensitive:"true"`
 
 	// DefaultTimeout is the default timeout for API requests
-	DefaultTimeout string `json:"defaultTimeout,omitempty" koanf:"defaultTimeout" default:"30s"`
+	DefaultTimeout string `json:"defaultTimeout" koanf:"defaultTimeout" default:"30s"`
 
 	// Timezone for scheduled jobs
-	Timezone string `json:"timezone,omitempty" koanf:"timezone" default:"UTC"`
+	Timezone string `json:"timezone" koanf:"timezone" default:"UTC"`
 
 	// OnFailureScript script to run when a scheduled job fails
-	OnFailureScript string `json:"onFailureScript,omitempty" koanf:"onFailureScript"`
+	OnFailureScript string `json:"onFailureScrip" koanf:"onFailureScript"`
 
 	// OnSuccessScript script to run when a scheduled job succeeds
-	OnSuccessScript string `json:"onSuccessScript,omitempty" koanf:"onSuccessScript"`
+	OnSuccessScript string `json:"onSuccessScript," koanf:"onSuccessScript"`
 
 	// FolderName identifies the storage path of flows and scripts in Windmill, you'd want to use
-	FolderName string `json:"folderName,omitempty" koanf:"folderName" default:"openlane" description:"an example would be openlane, your flows and scripts will then be saved in f/openlane as an example"`
+	FolderName string `json:"folderName" koanf:"folderName" default:"openlane" description:"an example would be openlane, your flows and scripts will then be saved in f/openlane as an example"`
 }
