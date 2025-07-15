@@ -86,6 +86,9 @@ func HookInvite() ent.Hook {
 	}, ent.OpCreate)
 }
 
+// HookInviteGroups checks the user has access to the groups specified in the invite mutation
+// before allowing the mutation to proceed
+// users must have edit access to the group to be able to add an invite
 func HookInviteGroups() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.InviteFunc(func(ctx context.Context, m *generated.InviteMutation) (generated.Value, error) {
@@ -130,6 +133,7 @@ func HookInviteGroups() ent.Hook {
 }
 
 // HookInviteAccepted adds the user to the organization when the status is accepted
+// and any groups specified in the invite
 func HookInviteAccepted() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.InviteFunc(func(ctx context.Context, m *generated.InviteMutation) (generated.Value, error) {
@@ -162,7 +166,7 @@ func HookInviteAccepted() ent.Hook {
 			}
 
 			// add the org to the authenticated context for querying
-			ctx, err := auth.AddOrganizationIDToContext(ctx, ownerID)
+			err := auth.AddOrganizationIDToContext(ctx, ownerID)
 			if err != nil {
 				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to add organization ID to context")
 				return nil, err
