@@ -7,8 +7,8 @@ tasks:
     cmds:
       - task: :go:build
         vars:
-          GOOS: 'GOOS=linux'
-          GOARCH: 'GOARCH=amd64'
+          GOOS: "GOOS=linux"
+          GOARCH: "GOARCH=amd64"
       - "docker build -f docker/Dockerfile . -t core:dev"
 
   build:aio:
@@ -121,3 +121,51 @@ tasks:
     desc: launches the Dex IdP and test UI for SSO development
     cmds:
       - "docker compose -f ./docker/docker-compose-oidc.yml up -d dex sso-ui tokens-ui"
+
+  windmill:
+    dir: ..
+    desc: brings up the compose environment for windmill development (enterprise by default)
+    env:
+      WM_IMAGE: "{{.WM_IMAGE}}"
+    vars:
+      ENTERPRISE: '{{.ENTERPRISE | default "true"}}'
+      WM_IMAGE:
+        sh: |
+          if [ "{{.ENTERPRISE}}" = "false" ]; then
+            echo "ghcr.io/windmill-labs/windmill:main"
+          else
+            echo "ghcr.io/windmill-labs/windmill-ee:main"
+          fi
+    cmds:
+      - "docker compose -f ./docker/docker-compose-windmill.yml up -d"
+
+  windmill:down:
+    dir: ..
+    desc: brings the windmill compose environment down
+    cmds:
+      - docker compose down
+
+  windmill:open:
+    dir: ..
+    desc: opens the windmill interface in a browser
+    cmds:
+      - 'open "http://localhost:8090"'
+
+  windmill:up:
+    dir: ..
+    desc: brings the windmill compose environment up and opens the windmill interface (enterprise by default)
+    aliases: [windmillup]
+    env:
+      WM_IMAGE: "{{.WM_IMAGE}}"
+    vars:
+      ENTERPRISE: '{{.ENTERPRISE | default "true"}}'
+      WM_IMAGE:
+        sh: |
+          if [ "{{.ENTERPRISE}}" = "false" ]; then
+            echo "ghcr.io/windmill-labs/windmill:main"
+          else
+            echo "ghcr.io/windmill-labs/windmill-ee:main"
+          fi
+    cmds:
+      - task: windmill
+      - task: windmill:open
