@@ -131,7 +131,7 @@ entConfig:
 
 windmill:
   enabled: true
-  baseURL: "http://localhost"
+  baseURL: "http://localhost:8090"
   workspace: "test"
   token: "token_here"
   defaultTimeout: "30s"
