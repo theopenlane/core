@@ -53,6 +53,13 @@ function send_slack_notification_from_template() {
   fi
 }
 
+format_summary() {
+  local summary="$1"
+
+  local escaped=$(echo "$summary" | sed 's/<br\/>/\\n/g' | sed 's/\\\\n/\\n/g')
+  printf "%b\n" "$escaped"
+}
+
 # Function to send helm update notification
 function send_helm_update_notification() {
   local pr_url="$1"
@@ -61,7 +68,7 @@ function send_helm_update_notification() {
   local template_file="${BASH_SOURCE[0]%/*}/templates/helm-update-notification.json"
 
   # Format change summary for Slack (convert <br/> or \n to actual newlines)
-  local formatted_summary=$(echo "$change_summary" | sed 's/<br\/>/\n/g' | sed 's/\\n/\n/g')
+  local formatted_summary=$(format_summary "$change_summary")
 
   send_slack_notification_from_template "$template_file" \
     "PR_URL=$pr_url" \
