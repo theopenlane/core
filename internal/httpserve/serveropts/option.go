@@ -6,6 +6,7 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/pem"
+	"errors"
 	"fmt"
 	"net/http"
 	"os"
@@ -574,6 +575,11 @@ func WithWindmill() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		client, err := windmill.NewWindmill(s.Config.Settings.EntConfig)
 		if err != nil {
+			if errors.Is(err, windmill.ErrWindmillDisabled) {
+				log.Info().Msg("Windmill is not enabled, skipping Windmill client setup")
+				return
+			}
+
 			log.Panic().Err(err).Msg("error creating Windmill client")
 		}
 
