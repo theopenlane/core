@@ -1,6 +1,10 @@
 #!/bin/bash
 # Shared utilities for Helm documentation generation
 
+# Source common utilities
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/lib/common.sh"
+
 # Function to install task if not available
 install_task() {
   if ! command -v task >/dev/null 2>&1; then
@@ -53,6 +57,8 @@ generate_docs_and_commit() {
     return 0
   else
     echo "⚠️  Documentation generation failed, continuing without docs"
-    return 1
+    # Don't return 1 here as it causes the entire script to fail with set -euo pipefail
+    # Documentation generation failure should not be fatal
+    return 0
   fi
 }

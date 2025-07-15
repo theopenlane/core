@@ -4,32 +4,24 @@ set -euo pipefail
 # Draft PR automation for config changes
 # Creates draft PRs in openlane-infra when config changes are detected in core repo
 
-YQ_VERSION=${YQ_VERSION:-4.45.4}
+# Source shared libraries
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/lib/common.sh"
+source "${SCRIPT_DIR}/lib/helm.sh"
+source "${SCRIPT_DIR}/lib/github.sh"
+
+# Configuration
 repo="${HELM_CHART_REPO}"
 chart_dir="${HELM_CHART_PATH:-charts/openlane}"
 
-# Install gh if not available
-if ! command -v gh >/dev/null 2>&1; then
-    echo "Installing gh..."
-    apk add --no-cache github-cli
-fi
+# Install dependencies
+install_dependencies
 
-# Install yq if not available
-if ! command -v yq >/dev/null 2>&1; then
-    echo "Installing yq version ${YQ_VERSION}..."
-    wget -q "https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_amd64" -O /usr/local/bin/yq
-    chmod +x /usr/local/bin/yq
-    echo "✅ yq installed successfully"
-fi
+# Create workspace
+work=$(create_temp_workspace)
 
-work=$(mktemp -d)
-trap 'rm -rf "$work"' EXIT
-
-echo "=== Draft PR Automation ===="
-echo "Repository: $repo"
-echo "Chart directory: $chart_dir"
-echo "Core PR: ${BUILDKITE_PULL_REQUEST:-none}"
-echo "Core Branch: ${BUILDKITE_BRANCH}"
+# Log execution context
+log_execution_context "Draft PR Automation"
 
 # Check if we're in a PR context
 if [[ -z "${BUILDKITE_PULL_REQUEST:-}" || "${BUILDKITE_PULL_REQUEST}" == "false" ]]; then
@@ -52,12 +44,12 @@ draft_branch="draft-core-pr-${core_pr_number}"
 
 # Check if there's already a draft PR for this core PR number
 echo "Checking for existing draft PR for core PR #${core_pr_number}..."
-existing_pr_number=$(gh pr list --repo "$repo" --state open --draft --json title,number --jq ".[] | select(.title | contains(\"core PR #${core_pr_number}\")) | .number" | head -1)
+existing_pr_number=$(find_existing_draft_pr "$repo" "$core_pr_number")
 
 if [[ -n "$existing_pr_number" ]]; then
   echo "📄 Found existing draft PR #${existing_pr_number} for core PR #${core_pr_number}"
   # Get the branch name from the existing PR
-  existing_branch=$(gh pr view "$existing_pr_number" --repo "$repo" --json headRefName --jq '.headRefName')
+  existing_branch=$(get_pr_branch "$existing_pr_number" "$repo")
   echo "📄 Using existing branch: $existing_branch"
   git fetch origin "$existing_branch"
   git checkout "$existing_branch"
@@ -71,106 +63,17 @@ fi
 changes_made=false
 change_summary=""
 
-# Import only the merge function from helm-automation.sh, not the full script
-merge_helm_values() {
-  local source="$1"
-  local target="$2"
-  local description="$3"
-
-  if [[ ! -f "$source" ]]; then
-    echo "  ⚠️  Source file not found: $source"
-    return 1
-  fi
-
-  if [[ ! -f "$target" ]]; then
-    echo "  ⚠️  Target file not found: $target"
-    return 1
-  fi
-
-  local temp_merged=$(mktemp)
-
-  echo "  🔀 Merging $description..."
-  # Copy target file as base
-  cp "$target" "$temp_merged"
-
-  # Merge coreConfiguration section specifically into openlane.coreConfiguration
-  echo "  📋 Merging coreConfiguration section..."
-  if yq e '.coreConfiguration' "$source" | grep -v "null" > /dev/null 2>&1; then
-    core_config_section=$(yq e '.coreConfiguration' "$source")
-    echo "$core_config_section" > /tmp/core-config-section.yaml
-    yq e -i '.openlane.coreConfiguration = load("/tmp/core-config-section.yaml")' "$temp_merged"
-    echo "  ✅ coreConfiguration merged successfully"
-  else
-    echo "  ⚠️  No coreConfiguration section found in source"
-  fi
-
-  # Merge externalSecrets section if it exists
-  if yq e '.externalSecrets' "$source" | grep -v "null" > /dev/null 2>&1; then
-    echo "  🔐 Merging external secrets configuration..."
-    external_secrets_section=$(yq e '.externalSecrets' "$source")
-    echo "$external_secrets_section" > /tmp/external-secrets-section.yaml
-    yq e -i '.externalSecrets = load("/tmp/external-secrets-section.yaml")' "$temp_merged"
-    echo "  ✅ externalSecrets merged successfully"
-  fi
-
-  # Replace target with merged content
-  mv "$temp_merged" "$target"
-  git add "$target"
-  return 0
-}
-
 echo "🔍 Checking for configuration changes..."
 
-# Update Helm values.yaml using the function from helm-automation.sh
-if merge_helm_values \
-  "$BUILDKITE_BUILD_CHECKOUT_PATH/config/helm-values.yaml" \
-  "$chart_dir/values.yaml" \
-  "Helm values.yaml"; then
+# Apply configuration changes using library functions
+config_changes=$(apply_helm_config_changes \
+  "$BUILDKITE_BUILD_CHECKOUT_PATH/config" \
+  "$chart_dir")
+
+if [[ -n "$config_changes" ]]; then
   changes_made=true
-  change_summary+="<br/>- 🔄 Merged Helm values.yaml"
-fi
-
-# Update external secrets directory
-if [[ -d "$BUILDKITE_BUILD_CHECKOUT_PATH/config/external-secrets" ]]; then
-  if [[ -d "$chart_dir/templates/external-secrets" ]]; then
-    if ! diff -r "$BUILDKITE_BUILD_CHECKOUT_PATH/config/external-secrets" "$chart_dir/templates/external-secrets" > /dev/null 2>&1; then
-      echo "Updating External Secrets templates"
-      rm -rf "$chart_dir/templates/external-secrets"
-      mkdir -p "$(dirname "$chart_dir/templates/external-secrets")"
-      cp -r "$BUILDKITE_BUILD_CHECKOUT_PATH/config/external-secrets" "$chart_dir/templates/external-secrets"
-      git add "$chart_dir/templates/external-secrets"
-      changes_made=true
-      change_summary+="<br/>- 🔐 Updated External Secrets templates"
-    fi
-  else
-    echo "Creating External Secrets templates"
-    mkdir -p "$(dirname "$chart_dir/templates/external-secrets")"
-    cp -r "$BUILDKITE_BUILD_CHECKOUT_PATH/config/external-secrets" "$chart_dir/templates/external-secrets"
-    git add "$chart_dir/templates/external-secrets"
-    changes_made=true
-    change_summary+="<br/>- 🆕 Created External Secrets templates"
-  fi
-fi
-
-# Legacy configmap support (for backward compatibility)
-if [[ -f "$BUILDKITE_BUILD_CHECKOUT_PATH/config/configmap.yaml" ]]; then
-  target="$chart_dir/templates/core-configmap.yaml"
-  if [[ -f "$target" ]]; then
-    if ! diff -q "$BUILDKITE_BUILD_CHECKOUT_PATH/config/configmap.yaml" "$target" > /dev/null 2>&1; then
-      echo "Updating ConfigMap template"
-      cp "$BUILDKITE_BUILD_CHECKOUT_PATH/config/configmap.yaml" "$target"
-      git add "$target"
-      changes_made=true
-      change_summary+="<br/>- ✅ Updated ConfigMap template"
-    fi
-  else
-    echo "Creating ConfigMap template"
-    mkdir -p "$(dirname "$target")"
-    cp "$BUILDKITE_BUILD_CHECKOUT_PATH/config/configmap.yaml" "$target"
-    git add "$target"
-    changes_made=true
-    change_summary+="<br/>- ✨ Created ConfigMap template"
-  fi
+  # Convert newlines to <br/> for HTML formatting in PR body
+  change_summary=$(echo "$config_changes" | sed 's/$/\\n/g' | tr '\n' ' ' | sed 's/\\n/<br\/>/g')
 fi
 
 # Check if we have any changes to commit
@@ -188,66 +91,39 @@ source "${BUILDKITE_BUILD_CHECKOUT_PATH}/.buildkite/helm-docs-utils.sh"
 # Generate documentation before committing
 generate_docs_and_commit
 
-# Configure git
-git config --local user.email "bender@theopenlane.io"
-git config --local user.name "theopenlane-bender"
-
-# Configure git to use GitHub token for authentication
-git config --local url."https://x-access-token:${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
+# Setup git configuration
+setup_git_user
 
 # Create comprehensive commit message
-commit_message="draft: preview config changes from core PR #${core_pr_number}
-
-This is a DRAFT PR showing proposed changes from core repository PR #${core_pr_number}.
-
-⚠️  DO NOT MERGE until the core PR is merged first.
-
-Changes made:$change_summary
-
-Build Information:
-- Core PR: #${core_pr_number}
+build_info="- Core PR: #${core_pr_number}
 - Core Branch: ${BUILDKITE_BRANCH}
 - Build Number: ${BUILDKITE_BUILD_NUMBER}
 - Source Commit: ${BUILDKITE_COMMIT:0:8}"
 
-git commit -m "$commit_message"
+change_details="Changes made:$change_summary
+
+⚠️  DO NOT MERGE until the core PR is merged first."
+
+create_commit "draft" "preview config changes from core PR #${core_pr_number}" "$change_details" "$build_info"
 
 # Push and create/update draft PR
 echo "🚀 Pushing draft branch..."
-if git push -f origin "$draft_branch"; then
-  pr_body="## 🚧 DRAFT: Config Changes from Core PR #${core_pr_number}
-
-⚠️ **This is a DRAFT PR** - automatically converts to ready for review once [core PR #${core_pr_number}](https://github.com/theopenlane/core/pull/${core_pr_number}) is merged.
-
-### Changes:
-$change_summary
-
-### Source:
-- **Core PR**: [#${core_pr_number}](https://github.com/theopenlane/core/pull/${core_pr_number})
-- **Branch**: [\`${BUILDKITE_BRANCH}\`](https://github.com/theopenlane/core/tree/${BUILDKITE_BRANCH})
-- **Commit**: [\`${BUILDKITE_COMMIT:0:8}\`](https://github.com/theopenlane/core/commit/${BUILDKITE_COMMIT})"
+if safe_push_branch "$draft_branch" true; then
+  pr_body=$(generate_draft_pr_body "$core_pr_number" "$change_summary")
 
   # Create or update the PR
   if [[ -n "$existing_pr_number" ]]; then
     echo "📝 Updating existing draft PR #${existing_pr_number}..."
-    pr_url=$(gh pr view "$existing_pr_number" --repo "$repo" --json url --jq '.url')
-    if gh pr edit "$existing_pr_number" \
-      --repo "$repo" \
-      --title "🚧 DRAFT: Config changes from core PR #${core_pr_number}" \
-      --body "$pr_body"; then
+    pr_url=$(get_pr_url "$existing_pr_number" "$repo")
+    if update_pr "$existing_pr_number" "$repo" "🚧 DRAFT: Config changes from core PR #${core_pr_number}" "$pr_body"; then
       echo "✅ Draft pull request updated successfully: $pr_url"
     else
       echo "⚠️  Failed to update existing PR, but push succeeded"
     fi
   else
     echo "Creating new draft pull request..."
-    if gh pr create \
-      --repo "$repo" \
-      --head "$draft_branch" \
-      --title "🚧 DRAFT: Config changes from core PR #${core_pr_number}" \
-      --body "$pr_body" \
-      --draft; then
-      pr_url=$(gh pr view "$draft_branch" --repo "$repo" --json url --jq '.url' 2>/dev/null || echo "https://github.com/$repo/pull/new/$draft_branch")
+    if create_draft_pr "$repo" "$draft_branch" "🚧 DRAFT: Config changes from core PR #${core_pr_number}" "$pr_body"; then
+      pr_url=$(get_pr_url "$draft_branch" "$repo")
       echo "✅ Draft pull request created successfully: $pr_url"
     else
       echo "❌ Failed to create draft pull request"
