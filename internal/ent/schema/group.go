@@ -123,6 +123,13 @@ func (g Group) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(g, Integration{}),
 		defaultEdgeToWithPagination(g, File{}),
 		defaultEdgeToWithPagination(g, Task{}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: g,
+			edgeSchema: Invite{},
+			annotations: []schema.Annotation{
+				entgql.Skip(entgql.SkipAll),
+			},
+		}),
 	}
 }
 

@@ -1930,6 +1930,7 @@ type ComplexityRoot struct {
 		CreatedBy    func(childComplexity int) int
 		Events       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		Expires      func(childComplexity int) int
+		Groups       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID           func(childComplexity int) int
 		Owner        func(childComplexity int) int
 		OwnerID      func(childComplexity int) int
@@ -13990,6 +13991,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Invite.Expires(childComplexity), true
+
+	case "Invite.groups":
+		if e.complexity.Invite.Groups == nil {
+			break
+		}
+
+		args, err := ec.field_Invite_groups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Invite.Groups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Invite.id":
 		if e.complexity.Invite.ID == nil {
@@ -43521,6 +43534,7 @@ input CreateInviteInput {
   requestorID: String
   ownerID: ID
   eventIDs: [ID!]
+  groupIDs: [ID!]
 }
 """
 CreateJobResultInput is used for create JobResult object.
@@ -56161,6 +56175,37 @@ type Invite implements Node {
     """
     where: EventWhereInput
   ): EventConnection!
+  groups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
 }
 """
 A connection to a list of items.
@@ -56414,6 +56459,11 @@ input InviteWhereInput {
   """
   hasEvents: Boolean
   hasEventsWith: [EventWhereInput!]
+  """
+  groups edge predicates
+  """
+  hasGroups: Boolean
+  hasGroupsWith: [GroupWhereInput!]
 }
 """
 A valid JSON string.
@@ -84077,6 +84127,9 @@ input UpdateInviteInput {
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean
+  addGroupIDs: [ID!]
+  removeGroupIDs: [ID!]
+  clearGroups: Boolean
 }
 """
 UpdateJobResultInput is used for update JobResult object.

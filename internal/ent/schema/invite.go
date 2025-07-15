@@ -130,6 +130,7 @@ func (Invite) Indexes() []ent.Index {
 func (i Invite) Edges() []ent.Edge {
 	return []ent.Edge{
 		defaultEdgeToWithPagination(i, Event{}),
+		defaultEdgeToWithPagination(i, Group{}),
 	}
 }
 
@@ -147,6 +148,7 @@ func (Invite) Annotations() []schema.Annotation {
 func (Invite) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookInvite(),
+		hooks.HookInviteGroups(),
 		hooks.HookInviteAccepted(),
 	}
 }

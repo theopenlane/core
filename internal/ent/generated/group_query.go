@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -77,6 +78,7 @@ type GroupQuery struct {
 	withIntegrations                            *IntegrationQuery
 	withFiles                                   *FileQuery
 	withTasks                                   *TaskQuery
+	withInvites                                 *InviteQuery
 	withMembers                                 *GroupMembershipQuery
 	withFKs                                     bool
 	loadTotal                                   []func(context.Context, []*Group) error
@@ -112,6 +114,7 @@ type GroupQuery struct {
 	withNamedIntegrations                       map[string]*IntegrationQuery
 	withNamedFiles                              map[string]*FileQuery
 	withNamedTasks                              map[string]*TaskQuery
+	withNamedInvites                            map[string]*InviteQuery
 	withNamedMembers                            map[string]*GroupMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -974,6 +977,31 @@ func (gq *GroupQuery) QueryTasks() *TaskQuery {
 	return query
 }
 
+// QueryInvites chains the current query on the "invites" edge.
+func (gq *GroupQuery) QueryInvites() *InviteQuery {
+	query := (&InviteClient{config: gq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := gq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := gq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(invite.Table, invite.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.InvitesTable, group.InvitesPrimaryKey...),
+		)
+		schemaConfig := gq.schemaConfig
+		step.To.Schema = schemaConfig.Invite
+		step.Edge.Schema = schemaConfig.InviteGroups
+		fromU = sqlgraph.SetNeighbors(gq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (gq *GroupQuery) QueryMembers() *GroupMembershipQuery {
 	query := (&GroupMembershipClient{config: gq.config}).Query()
@@ -1224,6 +1252,7 @@ func (gq *GroupQuery) Clone() *GroupQuery {
 		withIntegrations:                       gq.withIntegrations.Clone(),
 		withFiles:                              gq.withFiles.Clone(),
 		withTasks:                              gq.withTasks.Clone(),
+		withInvites:                            gq.withInvites.Clone(),
 		withMembers:                            gq.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       gq.sql.Clone(),
@@ -1595,6 +1624,17 @@ func (gq *GroupQuery) WithTasks(opts ...func(*TaskQuery)) *GroupQuery {
 	return gq
 }
 
+// WithInvites tells the query-builder to eager-load the nodes that are connected to
+// the "invites" edge. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithInvites(opts ...func(*InviteQuery)) *GroupQuery {
+	query := (&InviteClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	gq.withInvites = query
+	return gq
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (gq *GroupQuery) WithMembers(opts ...func(*GroupMembershipQuery)) *GroupQuery {
@@ -1691,7 +1731,7 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 		nodes       = []*Group{}
 		withFKs     = gq.withFKs
 		_spec       = gq.querySpec()
-		loadedTypes = [34]bool{
+		loadedTypes = [35]bool{
 			gq.withOwner != nil,
 			gq.withProgramEditors != nil,
 			gq.withProgramBlockedGroups != nil,
@@ -1725,6 +1765,7 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 			gq.withIntegrations != nil,
 			gq.withFiles != nil,
 			gq.withTasks != nil,
+			gq.withInvites != nil,
 			gq.withMembers != nil,
 		}
 	)
@@ -2007,6 +2048,13 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 			return nil, err
 		}
 	}
+	if query := gq.withInvites; query != nil {
+		if err := gq.loadInvites(ctx, query, nodes,
+			func(n *Group) { n.Edges.Invites = []*Invite{} },
+			func(n *Group, e *Invite) { n.Edges.Invites = append(n.Edges.Invites, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := gq.withMembers; query != nil {
 		if err := gq.loadMembers(ctx, query, nodes,
 			func(n *Group) { n.Edges.Members = []*GroupMembership{} },
@@ -2228,6 +2276,13 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 		if err := gq.loadTasks(ctx, query, nodes,
 			func(n *Group) { n.appendNamedTasks(name) },
 			func(n *Group, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range gq.withNamedInvites {
+		if err := gq.loadInvites(ctx, query, nodes,
+			func(n *Group) { n.appendNamedInvites(name) },
+			func(n *Group, e *Invite) { n.appendNamedInvites(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -4193,6 +4248,68 @@ func (gq *GroupQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*
 	}
 	return nil
 }
+func (gq *GroupQuery) loadInvites(ctx context.Context, query *InviteQuery, nodes []*Group, init func(*Group), assign func(*Group, *Invite)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.InvitesTable)
+		joinT.Schema(gq.schemaConfig.InviteGroups)
+		s.Join(joinT).On(s.C(invite.FieldID), joinT.C(group.InvitesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.InvitesPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.InvitesPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Invite](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "invites" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (gq *GroupQuery) loadMembers(ctx context.Context, query *GroupMembershipQuery, nodes []*Group, init func(*Group), assign func(*Group, *GroupMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Group)
@@ -4757,6 +4874,20 @@ func (gq *GroupQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *Gro
 		gq.withNamedTasks = make(map[string]*TaskQuery)
 	}
 	gq.withNamedTasks[name] = query
+	return gq
+}
+
+// WithNamedInvites tells the query-builder to eager-load the nodes that are connected to the "invites"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithNamedInvites(name string, opts ...func(*InviteQuery)) *GroupQuery {
+	query := (&InviteClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if gq.withNamedInvites == nil {
+		gq.withNamedInvites = make(map[string]*InviteQuery)
+	}
+	gq.withNamedInvites[name] = query
 	return gq
 }
 

@@ -5309,6 +5309,7 @@ type CreateInviteInput struct {
 	RequestorID  *string
 	OwnerID      *string
 	EventIDs     []string
+	GroupIDs     []string
 }
 
 // Mutate applies the CreateInviteInput on the InviteMutation builder.
@@ -5335,6 +5336,9 @@ func (i *CreateInviteInput) Mutate(m *InviteMutation) {
 	if v := i.EventIDs; len(v) > 0 {
 		m.AddEventIDs(v...)
 	}
+	if v := i.GroupIDs; len(v) > 0 {
+		m.AddGroupIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateInviteInput on the InviteCreate builder.
@@ -5355,6 +5359,9 @@ type UpdateInviteInput struct {
 	ClearEvents    bool
 	AddEventIDs    []string
 	RemoveEventIDs []string
+	ClearGroups    bool
+	AddGroupIDs    []string
+	RemoveGroupIDs []string
 }
 
 // Mutate applies the UpdateInviteInput on the InviteMutation builder.
@@ -5388,6 +5395,15 @@ func (i *UpdateInviteInput) Mutate(m *InviteMutation) {
 	}
 	if v := i.RemoveEventIDs; len(v) > 0 {
 		m.RemoveEventIDs(v...)
+	}
+	if i.ClearGroups {
+		m.ClearGroups()
+	}
+	if v := i.AddGroupIDs; len(v) > 0 {
+		m.AddGroupIDs(v...)
+	}
+	if v := i.RemoveGroupIDs; len(v) > 0 {
+		m.RemoveGroupIDs(v...)
 	}
 }
 

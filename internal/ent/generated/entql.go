@@ -5223,6 +5223,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Task",
 	)
 	graph.MustAddE(
+		"invites",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InvitesTable,
+			Columns: group.InvitesPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"Invite",
+	)
+	graph.MustAddE(
 		"members",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -5545,6 +5557,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Invite",
 		"Event",
+	)
+	graph.MustAddE(
+		"groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   invite.GroupsTable,
+			Columns: invite.GroupsPrimaryKey,
+			Bidi:    false,
+		},
+		"Invite",
+		"Group",
 	)
 	graph.MustAddE(
 		"owner",
@@ -14959,6 +14983,20 @@ func (f *GroupFilter) WhereHasTasksWith(preds ...predicate.Task) {
 	})))
 }
 
+// WhereHasInvites applies a predicate to check if query has an edge invites.
+func (f *GroupFilter) WhereHasInvites() {
+	f.Where(entql.HasEdge("invites"))
+}
+
+// WhereHasInvitesWith applies a predicate to check if query has an edge invites with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasInvitesWith(preds ...predicate.Invite) {
+	f.Where(entql.HasEdgeWith("invites", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasMembers applies a predicate to check if query has an edge members.
 func (f *GroupFilter) WhereHasMembers() {
 	f.Where(entql.HasEdge("members"))
@@ -16721,6 +16759,20 @@ func (f *InviteFilter) WhereHasEvents() {
 // WhereHasEventsWith applies a predicate to check if query has an edge events with a given conditions (other predicates).
 func (f *InviteFilter) WhereHasEventsWith(preds ...predicate.Event) {
 	f.Where(entql.HasEdgeWith("events", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasGroups applies a predicate to check if query has an edge groups.
+func (f *InviteFilter) WhereHasGroups() {
+	f.Where(entql.HasEdge("groups"))
+}
+
+// WhereHasGroupsWith applies a predicate to check if query has an edge groups with a given conditions (other predicates).
+func (f *InviteFilter) WhereHasGroupsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

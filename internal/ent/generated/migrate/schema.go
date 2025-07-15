@@ -6214,6 +6214,31 @@ var (
 			},
 		},
 	}
+	// InviteGroupsColumns holds the columns for the "invite_groups" table.
+	InviteGroupsColumns = []*schema.Column{
+		{Name: "invite_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// InviteGroupsTable holds the schema information for the "invite_groups" table.
+	InviteGroupsTable = &schema.Table{
+		Name:       "invite_groups",
+		Columns:    InviteGroupsColumns,
+		PrimaryKey: []*schema.Column{InviteGroupsColumns[0], InviteGroupsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "invite_groups_invite_id",
+				Columns:    []*schema.Column{InviteGroupsColumns[0]},
+				RefColumns: []*schema.Column{InvitesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "invite_groups_group_id",
+				Columns:    []*schema.Column{InviteGroupsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// JobRunnerJobRunnerTokensColumns holds the columns for the "job_runner_job_runner_tokens" table.
 	JobRunnerJobRunnerTokensColumns = []*schema.Column{
 		{Name: "job_runner_id", Type: field.TypeString},
@@ -7872,6 +7897,7 @@ var (
 		InternalPolicyTasksTable,
 		InternalPolicyRisksTable,
 		InviteEventsTable,
+		InviteGroupsTable,
 		JobRunnerJobRunnerTokensTable,
 		MappedControlBlockedGroupsTable,
 		MappedControlEditorsTable,
@@ -8312,6 +8338,8 @@ func init() {
 	InternalPolicyRisksTable.ForeignKeys[1].RefTable = RisksTable
 	InviteEventsTable.ForeignKeys[0].RefTable = InvitesTable
 	InviteEventsTable.ForeignKeys[1].RefTable = EventsTable
+	InviteGroupsTable.ForeignKeys[0].RefTable = InvitesTable
+	InviteGroupsTable.ForeignKeys[1].RefTable = GroupsTable
 	JobRunnerJobRunnerTokensTable.ForeignKeys[0].RefTable = JobRunnersTable
 	JobRunnerJobRunnerTokensTable.ForeignKeys[1].RefTable = JobRunnerTokensTable
 	MappedControlBlockedGroupsTable.ForeignKeys[0].RefTable = MappedControlsTable

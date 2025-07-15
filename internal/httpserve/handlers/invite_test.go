@@ -32,17 +32,25 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 	ctx := context.Background()
 	ctx = privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 
+	group, err := suite.db.Group.Create().
+		SetName("Test Group").
+		SetDescription("This is a test group").
+		SetOwnerID(testUser1.OrganizationID).
+		Save(ctx)
+	require.NoError(t, err)
+
 	var groot = "groot@theopenlane.io"
 
 	// recipient test data
-	recipient := suite.db.User.Create().
+	recipient, err := suite.db.User.Create().
 		SetEmail(groot).
 		SetFirstName("Groot").
 		SetLastName("JustGroot").
 		SetAuthProvider(enums.AuthProviderGoogle).
 		SetLastLoginProvider(enums.AuthProviderCredentials).
 		SetLastSeen(time.Now()).
-		SaveX(ctx)
+		Save(ctx)
+	require.NoError(t, err)
 
 	userSetting, err := recipient.Setting(ctx)
 	require.NoError(t, err)
@@ -83,12 +91,15 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 
 			ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 
-			invite := suite.db.Invite.Create().
-				SetRecipient(tc.email).SaveX(ctx)
+			inv, err := suite.db.Invite.Create().
+				SetRecipient(tc.email).
+				AddGroupIDs(group.ID).
+				Save(ctx)
+			require.NoError(t, err)
 
 			target := "/invite"
 			if tc.tokenSet {
-				target = fmt.Sprintf("/invite?token=%s", invite.Token)
+				target = fmt.Sprintf("/invite?token=%s", inv.Token)
 			}
 
 			req := httptest.NewRequest(http.MethodGet, target, nil)
@@ -128,6 +139,21 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 			require.NotNil(t, user.User.Setting.DefaultOrg)
 
 			assert.Equal(t, testUser1.OrganizationID, user.User.Setting.DefaultOrg.ID)
+
+			// Test the user was added to the group
+			group, err := suite.api.GetGroupByID(recipientCtx, group.ID)
+			require.NoError(t, err)
+			assert.NotNil(t, group)
+
+			foundMember := false
+			for _, member := range group.Group.Members.Edges {
+				if member.Node.User.ID == recipient.ID {
+					foundMember = true
+					break
+				}
+			}
+
+			assert.True(t, foundMember, "expected user to be a member of the group")
 
 			// ensure the email jobs are created
 			// there will be two because the first is the invite email
