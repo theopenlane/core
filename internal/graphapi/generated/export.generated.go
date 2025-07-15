@@ -87,6 +87,10 @@ func (ec *executionContext) fieldContext_ExportBulkCreatePayload_exports(_ conte
 				return ec.fieldContext_Export_requestorID(ctx, field)
 			case "fields":
 				return ec.fieldContext_Export_fields(ctx, field)
+			case "filters":
+				return ec.fieldContext_Export_filters(ctx, field)
+			case "errorMessage":
+				return ec.fieldContext_Export_errorMessage(ctx, field)
 			case "owner":
 				return ec.fieldContext_Export_owner(ctx, field)
 			case "events":
@@ -205,6 +209,10 @@ func (ec *executionContext) fieldContext_ExportCreatePayload_export(_ context.Co
 				return ec.fieldContext_Export_requestorID(ctx, field)
 			case "fields":
 				return ec.fieldContext_Export_fields(ctx, field)
+			case "filters":
+				return ec.fieldContext_Export_filters(ctx, field)
+			case "errorMessage":
+				return ec.fieldContext_Export_errorMessage(ctx, field)
 			case "owner":
 				return ec.fieldContext_Export_owner(ctx, field)
 			case "events":
@@ -323,6 +331,10 @@ func (ec *executionContext) fieldContext_ExportUpdatePayload_export(_ context.Co
 				return ec.fieldContext_Export_requestorID(ctx, field)
 			case "fields":
 				return ec.fieldContext_Export_fields(ctx, field)
+			case "filters":
+				return ec.fieldContext_Export_filters(ctx, field)
+			case "errorMessage":
+				return ec.fieldContext_Export_errorMessage(ctx, field)
 			case "owner":
 				return ec.fieldContext_Export_owner(ctx, field)
 			case "events":

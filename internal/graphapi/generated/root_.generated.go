@@ -1275,20 +1275,22 @@ type ComplexityRoot struct {
 	}
 
 	Export struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		Events      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
-		ExportType  func(childComplexity int) int
-		Fields      func(childComplexity int) int
-		Files       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		Format      func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Owner       func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		RequestorID func(childComplexity int) int
-		Status      func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		ErrorMessage func(childComplexity int) int
+		Events       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		ExportType   func(childComplexity int) int
+		Fields       func(childComplexity int) int
+		Files        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Filters      func(childComplexity int) int
+		Format       func(childComplexity int) int
+		ID           func(childComplexity int) int
+		Owner        func(childComplexity int) int
+		OwnerID      func(childComplexity int) int
+		RequestorID  func(childComplexity int) int
+		Status       func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
 	}
 
 	ExportBulkCreatePayload struct {
@@ -3807,7 +3809,6 @@ type ComplexityRoot struct {
 		DisplayID     func(childComplexity int) int
 		DownloadURL   func(childComplexity int) int
 		ID            func(childComplexity int) int
-		JobType       func(childComplexity int) int
 		Owner         func(childComplexity int) int
 		OwnerID       func(childComplexity int) int
 		Platform      func(childComplexity int) int
@@ -3854,7 +3855,6 @@ type ComplexityRoot struct {
 		DownloadURL   func(childComplexity int) int
 		HistoryTime   func(childComplexity int) int
 		ID            func(childComplexity int) int
-		JobType       func(childComplexity int) int
 		Operation     func(childComplexity int) int
 		OwnerID       func(childComplexity int) int
 		Platform      func(childComplexity int) int
@@ -10798,6 +10798,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Export.CreatedBy(childComplexity), true
 
+	case "Export.errorMessage":
+		if e.complexity.Export.ErrorMessage == nil {
+			break
+		}
+
+		return e.complexity.Export.ErrorMessage(childComplexity), true
+
 	case "Export.events":
 		if e.complexity.Export.Events == nil {
 			break
@@ -10835,6 +10842,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Export.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
+
+	case "Export.filters":
+		if e.complexity.Export.Filters == nil {
+			break
+		}
+
+		return e.complexity.Export.Filters(childComplexity), true
 
 	case "Export.format":
 		if e.complexity.Export.Format == nil {
@@ -26879,13 +26893,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJob.ID(childComplexity), true
 
-	case "ScheduledJob.jobType":
-		if e.complexity.ScheduledJob.JobType == nil {
-			break
-		}
-
-		return e.complexity.ScheduledJob.JobType(childComplexity), true
-
 	case "ScheduledJob.owner":
 		if e.complexity.ScheduledJob.Owner == nil {
 			break
@@ -27081,13 +27088,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScheduledJobHistory.ID(childComplexity), true
-
-	case "ScheduledJobHistory.jobType":
-		if e.complexity.ScheduledJobHistory.JobType == nil {
-			break
-		}
-
-		return e.complexity.ScheduledJobHistory.JobType(childComplexity), true
 
 	case "ScheduledJobHistory.operation":
 		if e.complexity.ScheduledJobHistory.Operation == nil {
@@ -43228,6 +43228,14 @@ input CreateExportInput {
   the specific fields to include in the export (defaults to only the id if not provided)
   """
   fields: [String!]
+  """
+  the specific filters to run agains the exported data. This should be a well formatted graphql query
+  """
+  filters: String
+  """
+  if we try to export and it fails, the error message will be stored here
+  """
+  errorMessage: String
   ownerID: ID
   eventIDs: [ID!]
   fileIDs: [ID!]
@@ -44272,10 +44280,6 @@ input CreateScheduledJobInput {
   the description of the job
   """
   description: String
-  """
-  the type of this job
-  """
-  jobType: ScheduledJobJobType
   """
   the platform to use to execute this job
   """
@@ -49763,6 +49767,14 @@ type Export implements Node {
   the specific fields to include in the export (defaults to only the id if not provided)
   """
   fields: [String!]
+  """
+  the specific filters to run agains the exported data. This should be a well formatted graphql query
+  """
+  filters: String
+  """
+  if we try to export and it fails, the error message will be stored here
+  """
+  errorMessage: String
   owner: Organization
   events(
     """
@@ -50047,6 +50059,42 @@ input ExportWhereInput {
   requestorIDNotNil: Boolean
   requestorIDEqualFold: String
   requestorIDContainsFold: String
+  """
+  filters field predicates
+  """
+  filters: String
+  filtersNEQ: String
+  filtersIn: [String!]
+  filtersNotIn: [String!]
+  filtersGT: String
+  filtersGTE: String
+  filtersLT: String
+  filtersLTE: String
+  filtersContains: String
+  filtersHasPrefix: String
+  filtersHasSuffix: String
+  filtersIsNil: Boolean
+  filtersNotNil: Boolean
+  filtersEqualFold: String
+  filtersContainsFold: String
+  """
+  error_message field predicates
+  """
+  errorMessage: String
+  errorMessageNEQ: String
+  errorMessageIn: [String!]
+  errorMessageNotIn: [String!]
+  errorMessageGT: String
+  errorMessageGTE: String
+  errorMessageLT: String
+  errorMessageLTE: String
+  errorMessageContains: String
+  errorMessageHasPrefix: String
+  errorMessageHasSuffix: String
+  errorMessageIsNil: Boolean
+  errorMessageNotNil: Boolean
+  errorMessageEqualFold: String
+  errorMessageContainsFold: String
   """
   owner edge predicates
   """
@@ -74241,10 +74289,6 @@ type ScheduledJob implements Node {
   """
   description: String
   """
-  the type of this job
-  """
-  jobType: ScheduledJobJobType!
-  """
   the platform to use to execute this job
   """
   platform: ScheduledJobJobPlatformType!
@@ -74338,10 +74382,6 @@ type ScheduledJobHistory implements Node {
   """
   description: String
   """
-  the type of this job
-  """
-  jobType: ScheduledJobHistoryJobType!
-  """
   the platform to use to execute this job
   """
   platform: ScheduledJobHistoryJobPlatformType!
@@ -74408,12 +74448,6 @@ enum ScheduledJobHistoryJobPlatformType @goModel(model: "github.com/theopenlane/
   TS
 }
 """
-ScheduledJobHistoryJobType is enum for the field job_type
-"""
-enum ScheduledJobHistoryJobType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobType") {
-  SSL
-}
-"""
 ScheduledJobHistoryOpType is enum for the field operation
 """
 enum ScheduledJobHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
@@ -74442,7 +74476,6 @@ enum ScheduledJobHistoryOrderField {
   created_at
   updated_at
   title
-  JOB_TYPE
   platform
 }
 """
@@ -74640,13 +74673,6 @@ input ScheduledJobHistoryWhereInput {
   descriptionEqualFold: String
   descriptionContainsFold: String
   """
-  job_type field predicates
-  """
-  jobType: ScheduledJobHistoryJobType
-  jobTypeNEQ: ScheduledJobHistoryJobType
-  jobTypeIn: [ScheduledJobHistoryJobType!]
-  jobTypeNotIn: [ScheduledJobHistoryJobType!]
-  """
   platform field predicates
   """
   platform: ScheduledJobHistoryJobPlatformType
@@ -74660,12 +74686,6 @@ ScheduledJobJobPlatformType is enum for the field platform
 enum ScheduledJobJobPlatformType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobPlatformType") {
   GO
   TS
-}
-"""
-ScheduledJobJobType is enum for the field job_type
-"""
-enum ScheduledJobJobType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobType") {
-  SSL
 }
 """
 Ordering options for ScheduledJob connections
@@ -74687,7 +74707,6 @@ enum ScheduledJobOrderField {
   created_at
   updated_at
   title
-  JOB_TYPE
   platform
 }
 type ScheduledJobRun implements Node {
@@ -75124,13 +75143,6 @@ input ScheduledJobWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
-  """
-  job_type field predicates
-  """
-  jobType: ScheduledJobJobType
-  jobTypeNEQ: ScheduledJobJobType
-  jobTypeIn: [ScheduledJobJobType!]
-  jobTypeNotIn: [ScheduledJobJobType!]
   """
   platform field predicates
   """
@@ -83718,6 +83730,11 @@ input UpdateExportInput {
   the status of the export, e.g., pending, ready, failed
   """
   status: ExportExportStatus
+  """
+  if we try to export and it fails, the error message will be stored here
+  """
+  errorMessage: String
+  clearErrorMessage: Boolean
   ownerID: ID
   clearOwner: Boolean
   addEventIDs: [ID!]
@@ -85212,10 +85229,6 @@ input UpdateScheduledJobInput {
   """
   description: String
   clearDescription: Boolean
-  """
-  the type of this job
-  """
-  jobType: ScheduledJobJobType
   """
   the script to run
   """

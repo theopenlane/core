@@ -201,20 +201,6 @@ func (sjhc *ScheduledJobHistoryCreate) SetNillableDescription(s *string) *Schedu
 	return sjhc
 }
 
-// SetJobType sets the "job_type" field.
-func (sjhc *ScheduledJobHistoryCreate) SetJobType(et enums.JobType) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetJobType(et)
-	return sjhc
-}
-
-// SetNillableJobType sets the "job_type" field if the given value is not nil.
-func (sjhc *ScheduledJobHistoryCreate) SetNillableJobType(et *enums.JobType) *ScheduledJobHistoryCreate {
-	if et != nil {
-		sjhc.SetJobType(*et)
-	}
-	return sjhc
-}
-
 // SetPlatform sets the "platform" field.
 func (sjhc *ScheduledJobHistoryCreate) SetPlatform(ept enums.JobPlatformType) *ScheduledJobHistoryCreate {
 	sjhc.mutation.SetPlatform(ept)
@@ -361,10 +347,6 @@ func (sjhc *ScheduledJobHistoryCreate) defaults() error {
 		v := scheduledjobhistory.DefaultSystemOwned
 		sjhc.mutation.SetSystemOwned(v)
 	}
-	if _, ok := sjhc.mutation.JobType(); !ok {
-		v := scheduledjobhistory.DefaultJobType
-		sjhc.mutation.SetJobType(v)
-	}
 	if _, ok := sjhc.mutation.ID(); !ok {
 		if scheduledjobhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized scheduledjobhistory.DefaultID (forgotten import generated/runtime?)")
@@ -393,14 +375,6 @@ func (sjhc *ScheduledJobHistoryCreate) check() error {
 	}
 	if _, ok := sjhc.mutation.Title(); !ok {
 		return &ValidationError{Name: "title", err: errors.New(`generated: missing required field "ScheduledJobHistory.title"`)}
-	}
-	if _, ok := sjhc.mutation.JobType(); !ok {
-		return &ValidationError{Name: "job_type", err: errors.New(`generated: missing required field "ScheduledJobHistory.job_type"`)}
-	}
-	if v, ok := sjhc.mutation.JobType(); ok {
-		if err := scheduledjobhistory.JobTypeValidator(v); err != nil {
-			return &ValidationError{Name: "job_type", err: fmt.Errorf(`generated: validator failed for field "ScheduledJobHistory.job_type": %w`, err)}
-		}
 	}
 	if _, ok := sjhc.mutation.Platform(); !ok {
 		return &ValidationError{Name: "platform", err: errors.New(`generated: missing required field "ScheduledJobHistory.platform"`)}
@@ -521,10 +495,6 @@ func (sjhc *ScheduledJobHistoryCreate) createSpec() (*ScheduledJobHistory, *sqlg
 	if value, ok := sjhc.mutation.Description(); ok {
 		_spec.SetField(scheduledjobhistory.FieldDescription, field.TypeString, value)
 		_node.Description = value
-	}
-	if value, ok := sjhc.mutation.JobType(); ok {
-		_spec.SetField(scheduledjobhistory.FieldJobType, field.TypeEnum, value)
-		_node.JobType = value
 	}
 	if value, ok := sjhc.mutation.Platform(); ok {
 		_spec.SetField(scheduledjobhistory.FieldPlatform, field.TypeEnum, value)

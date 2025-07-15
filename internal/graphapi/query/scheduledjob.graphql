@@ -10,7 +10,6 @@ mutation CreateBulkCSVScheduledJob($input: Upload!) {
       description
       displayID
       id
-      jobType
       ownerID
       script
       systemOwned
@@ -33,7 +32,6 @@ mutation CreateBulkScheduledJob($input: [CreateScheduledJobInput!]) {
       description
       displayID
       id
-      jobType
       ownerID
       script
       systemOwned
@@ -56,7 +54,6 @@ mutation CreateScheduledJob($input: CreateScheduledJobInput!) {
       description
       displayID
       id
-      jobType
       ownerID
       script
       systemOwned
@@ -93,7 +90,6 @@ query GetAllScheduledJobs {
         description
         displayID
         id
-        jobType
         ownerID
         script
         systemOwned
@@ -115,7 +111,6 @@ query GetScheduledJobByID($scheduledJobId: ID!) {
     description
     displayID
     id
-    jobType
     ownerID
     script
     systemOwned
@@ -145,7 +140,6 @@ query GetScheduledJobs($first: Int, $last: Int, $where: ScheduledJobWhereInput) 
         description
         displayID
         id
-        jobType
         ownerID
         script
         systemOwned
@@ -168,7 +162,6 @@ mutation UpdateScheduledJob($updateScheduledJobId: ID!, $input: UpdateScheduledJ
       description
       displayID
       id
-      jobType
       ownerID
       script
       systemOwned

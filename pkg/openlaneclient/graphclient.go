@@ -28840,17 +28840,19 @@ func (t *GetEvidenceHistories_EvidenceHistories) GetEdges() []*GetEvidenceHistor
 }
 
 type CreateExport_CreateExport_Export struct {
-	CreatedAt   *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ExportType  enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
-	Fields      []string           "json:\"fields,omitempty\" graphql:\"fields\""
-	Format      enums.ExportFormat "json:\"format\" graphql:\"format\""
-	ID          string             "json:\"id\" graphql:\"id\""
-	OwnerID     *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RequestorID *string            "json:\"requestorID,omitempty\" graphql:\"requestorID\""
-	Status      enums.ExportStatus "json:\"status\" graphql:\"status\""
-	UpdatedAt   *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ErrorMessage *string            "json:\"errorMessage,omitempty\" graphql:\"errorMessage\""
+	ExportType   enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
+	Fields       []string           "json:\"fields,omitempty\" graphql:\"fields\""
+	Filters      *string            "json:\"filters,omitempty\" graphql:\"filters\""
+	Format       enums.ExportFormat "json:\"format\" graphql:\"format\""
+	ID           string             "json:\"id\" graphql:\"id\""
+	OwnerID      *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RequestorID  *string            "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status       enums.ExportStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt    *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateExport_CreateExport_Export) GetCreatedAt() *time.Time {
@@ -28865,6 +28867,12 @@ func (t *CreateExport_CreateExport_Export) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
+func (t *CreateExport_CreateExport_Export) GetErrorMessage() *string {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return t.ErrorMessage
+}
 func (t *CreateExport_CreateExport_Export) GetExportType() *enums.ExportType {
 	if t == nil {
 		t = &CreateExport_CreateExport_Export{}
@@ -28876,6 +28884,12 @@ func (t *CreateExport_CreateExport_Export) GetFields() []string {
 		t = &CreateExport_CreateExport_Export{}
 	}
 	return t.Fields
+}
+func (t *CreateExport_CreateExport_Export) GetFilters() *string {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return t.Filters
 }
 func (t *CreateExport_CreateExport_Export) GetFormat() *enums.ExportFormat {
 	if t == nil {
@@ -28964,17 +28978,19 @@ func (t *GetAllExports_Exports_PageInfo) GetStartCursor() *string {
 }
 
 type GetAllExports_Exports_Edges_Node struct {
-	CreatedAt   *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ExportType  enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
-	Fields      []string           "json:\"fields,omitempty\" graphql:\"fields\""
-	Format      enums.ExportFormat "json:\"format\" graphql:\"format\""
-	ID          string             "json:\"id\" graphql:\"id\""
-	OwnerID     *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RequestorID *string            "json:\"requestorID,omitempty\" graphql:\"requestorID\""
-	Status      enums.ExportStatus "json:\"status\" graphql:\"status\""
-	UpdatedAt   *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ErrorMessage *string            "json:\"errorMessage,omitempty\" graphql:\"errorMessage\""
+	ExportType   enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
+	Fields       []string           "json:\"fields,omitempty\" graphql:\"fields\""
+	Filters      *string            "json:\"filters,omitempty\" graphql:\"filters\""
+	Format       enums.ExportFormat "json:\"format\" graphql:\"format\""
+	ID           string             "json:\"id\" graphql:\"id\""
+	OwnerID      *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RequestorID  *string            "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status       enums.ExportStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt    *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllExports_Exports_Edges_Node) GetCreatedAt() *time.Time {
@@ -28989,6 +29005,12 @@ func (t *GetAllExports_Exports_Edges_Node) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
+func (t *GetAllExports_Exports_Edges_Node) GetErrorMessage() *string {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return t.ErrorMessage
+}
 func (t *GetAllExports_Exports_Edges_Node) GetExportType() *enums.ExportType {
 	if t == nil {
 		t = &GetAllExports_Exports_Edges_Node{}
@@ -29000,6 +29022,12 @@ func (t *GetAllExports_Exports_Edges_Node) GetFields() []string {
 		t = &GetAllExports_Exports_Edges_Node{}
 	}
 	return t.Fields
+}
+func (t *GetAllExports_Exports_Edges_Node) GetFilters() *string {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return t.Filters
 }
 func (t *GetAllExports_Exports_Edges_Node) GetFormat() *enums.ExportFormat {
 	if t == nil {
@@ -29135,18 +29163,20 @@ func (t *GetExportByID_Export_Files) GetEdges() []*GetExportByID_Export_Files_Ed
 }
 
 type GetExportByID_Export struct {
-	CreatedAt   *time.Time                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ExportType  enums.ExportType           "json:\"exportType\" graphql:\"exportType\""
-	Fields      []string                   "json:\"fields,omitempty\" graphql:\"fields\""
-	Files       GetExportByID_Export_Files "json:\"files\" graphql:\"files\""
-	Format      enums.ExportFormat         "json:\"format\" graphql:\"format\""
-	ID          string                     "json:\"id\" graphql:\"id\""
-	OwnerID     *string                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RequestorID *string                    "json:\"requestorID,omitempty\" graphql:\"requestorID\""
-	Status      enums.ExportStatus         "json:\"status\" graphql:\"status\""
-	UpdatedAt   *time.Time                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ErrorMessage *string                    "json:\"errorMessage,omitempty\" graphql:\"errorMessage\""
+	ExportType   enums.ExportType           "json:\"exportType\" graphql:\"exportType\""
+	Fields       []string                   "json:\"fields,omitempty\" graphql:\"fields\""
+	Files        GetExportByID_Export_Files "json:\"files\" graphql:\"files\""
+	Filters      *string                    "json:\"filters,omitempty\" graphql:\"filters\""
+	Format       enums.ExportFormat         "json:\"format\" graphql:\"format\""
+	ID           string                     "json:\"id\" graphql:\"id\""
+	OwnerID      *string                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RequestorID  *string                    "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status       enums.ExportStatus         "json:\"status\" graphql:\"status\""
+	UpdatedAt    *time.Time                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetExportByID_Export) GetCreatedAt() *time.Time {
@@ -29160,6 +29190,12 @@ func (t *GetExportByID_Export) GetCreatedBy() *string {
 		t = &GetExportByID_Export{}
 	}
 	return t.CreatedBy
+}
+func (t *GetExportByID_Export) GetErrorMessage() *string {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return t.ErrorMessage
 }
 func (t *GetExportByID_Export) GetExportType() *enums.ExportType {
 	if t == nil {
@@ -29178,6 +29214,12 @@ func (t *GetExportByID_Export) GetFiles() *GetExportByID_Export_Files {
 		t = &GetExportByID_Export{}
 	}
 	return &t.Files
+}
+func (t *GetExportByID_Export) GetFilters() *string {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return t.Filters
 }
 func (t *GetExportByID_Export) GetFormat() *enums.ExportFormat {
 	if t == nil {
@@ -29255,17 +29297,19 @@ func (t *GetExports_Exports_PageInfo) GetStartCursor() *string {
 }
 
 type GetExports_Exports_Edges_Node struct {
-	CreatedAt   *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ExportType  enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
-	Fields      []string           "json:\"fields,omitempty\" graphql:\"fields\""
-	Format      enums.ExportFormat "json:\"format\" graphql:\"format\""
-	ID          string             "json:\"id\" graphql:\"id\""
-	OwnerID     *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RequestorID *string            "json:\"requestorID,omitempty\" graphql:\"requestorID\""
-	Status      enums.ExportStatus "json:\"status\" graphql:\"status\""
-	UpdatedAt   *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ErrorMessage *string            "json:\"errorMessage,omitempty\" graphql:\"errorMessage\""
+	ExportType   enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
+	Fields       []string           "json:\"fields,omitempty\" graphql:\"fields\""
+	Filters      *string            "json:\"filters,omitempty\" graphql:\"filters\""
+	Format       enums.ExportFormat "json:\"format\" graphql:\"format\""
+	ID           string             "json:\"id\" graphql:\"id\""
+	OwnerID      *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RequestorID  *string            "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status       enums.ExportStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt    *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetExports_Exports_Edges_Node) GetCreatedAt() *time.Time {
@@ -29280,6 +29324,12 @@ func (t *GetExports_Exports_Edges_Node) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
+func (t *GetExports_Exports_Edges_Node) GetErrorMessage() *string {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return t.ErrorMessage
+}
 func (t *GetExports_Exports_Edges_Node) GetExportType() *enums.ExportType {
 	if t == nil {
 		t = &GetExports_Exports_Edges_Node{}
@@ -29291,6 +29341,12 @@ func (t *GetExports_Exports_Edges_Node) GetFields() []string {
 		t = &GetExports_Exports_Edges_Node{}
 	}
 	return t.Fields
+}
+func (t *GetExports_Exports_Edges_Node) GetFilters() *string {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return t.Filters
 }
 func (t *GetExports_Exports_Edges_Node) GetFormat() *enums.ExportFormat {
 	if t == nil {
@@ -29426,18 +29482,20 @@ func (t *UpdateExport_UpdateExport_Export_Files) GetEdges() []*UpdateExport_Upda
 }
 
 type UpdateExport_UpdateExport_Export struct {
-	CreatedAt   *time.Time                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ExportType  enums.ExportType                       "json:\"exportType\" graphql:\"exportType\""
-	Fields      []string                               "json:\"fields,omitempty\" graphql:\"fields\""
-	Files       UpdateExport_UpdateExport_Export_Files "json:\"files\" graphql:\"files\""
-	Format      enums.ExportFormat                     "json:\"format\" graphql:\"format\""
-	ID          string                                 "json:\"id\" graphql:\"id\""
-	OwnerID     *string                                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RequestorID *string                                "json:\"requestorID,omitempty\" graphql:\"requestorID\""
-	Status      enums.ExportStatus                     "json:\"status\" graphql:\"status\""
-	UpdatedAt   *time.Time                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ErrorMessage *string                                "json:\"errorMessage,omitempty\" graphql:\"errorMessage\""
+	ExportType   enums.ExportType                       "json:\"exportType\" graphql:\"exportType\""
+	Fields       []string                               "json:\"fields,omitempty\" graphql:\"fields\""
+	Files        UpdateExport_UpdateExport_Export_Files "json:\"files\" graphql:\"files\""
+	Filters      *string                                "json:\"filters,omitempty\" graphql:\"filters\""
+	Format       enums.ExportFormat                     "json:\"format\" graphql:\"format\""
+	ID           string                                 "json:\"id\" graphql:\"id\""
+	OwnerID      *string                                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RequestorID  *string                                "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status       enums.ExportStatus                     "json:\"status\" graphql:\"status\""
+	UpdatedAt    *time.Time                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *UpdateExport_UpdateExport_Export) GetCreatedAt() *time.Time {
@@ -29451,6 +29509,12 @@ func (t *UpdateExport_UpdateExport_Export) GetCreatedBy() *string {
 		t = &UpdateExport_UpdateExport_Export{}
 	}
 	return t.CreatedBy
+}
+func (t *UpdateExport_UpdateExport_Export) GetErrorMessage() *string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return t.ErrorMessage
 }
 func (t *UpdateExport_UpdateExport_Export) GetExportType() *enums.ExportType {
 	if t == nil {
@@ -29469,6 +29533,12 @@ func (t *UpdateExport_UpdateExport_Export) GetFiles() *UpdateExport_UpdateExport
 		t = &UpdateExport_UpdateExport_Export{}
 	}
 	return &t.Files
+}
+func (t *UpdateExport_UpdateExport_Export) GetFilters() *string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return t.Filters
 }
 func (t *UpdateExport_UpdateExport_Export) GetFormat() *enums.ExportFormat {
 	if t == nil {
@@ -64145,7 +64215,6 @@ type CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs struct {
 	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	ID            string                  "json:\"id\" graphql:\"id\""
-	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
@@ -64202,12 +64271,6 @@ func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetI
 		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
 	}
 	return t.ID
-}
-func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetJobType() *enums.JobType {
-	if t == nil {
-		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
-	}
-	return &t.JobType
 }
 func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetOwnerID() *string {
 	if t == nil {
@@ -64272,7 +64335,6 @@ type CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs struct {
 	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	ID            string                  "json:\"id\" graphql:\"id\""
-	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
@@ -64329,12 +64391,6 @@ func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetID() st
 		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
 	}
 	return t.ID
-}
-func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetJobType() *enums.JobType {
-	if t == nil {
-		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
-	}
-	return &t.JobType
 }
 func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetOwnerID() *string {
 	if t == nil {
@@ -64399,7 +64455,6 @@ type CreateScheduledJob_CreateScheduledJob_ScheduledJob struct {
 	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	ID            string                  "json:\"id\" graphql:\"id\""
-	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
@@ -64456,12 +64511,6 @@ func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetID() string {
 		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
 	}
 	return t.ID
-}
-func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetJobType() *enums.JobType {
-	if t == nil {
-		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
-	}
-	return &t.JobType
 }
 func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetOwnerID() *string {
 	if t == nil {
@@ -64569,7 +64618,6 @@ type GetAllScheduledJobs_ScheduledJobs_Edges_Node struct {
 	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	ID            string                  "json:\"id\" graphql:\"id\""
-	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
@@ -64626,12 +64674,6 @@ func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetID() string {
 		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetJobType() *enums.JobType {
-	if t == nil {
-		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
-	}
-	return &t.JobType
 }
 func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetOwnerID() *string {
 	if t == nil {
@@ -64721,7 +64763,6 @@ type GetScheduledJobByID_ScheduledJob struct {
 	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	ID            string                  "json:\"id\" graphql:\"id\""
-	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
@@ -64778,12 +64819,6 @@ func (t *GetScheduledJobByID_ScheduledJob) GetID() string {
 		t = &GetScheduledJobByID_ScheduledJob{}
 	}
 	return t.ID
-}
-func (t *GetScheduledJobByID_ScheduledJob) GetJobType() *enums.JobType {
-	if t == nil {
-		t = &GetScheduledJobByID_ScheduledJob{}
-	}
-	return &t.JobType
 }
 func (t *GetScheduledJobByID_ScheduledJob) GetOwnerID() *string {
 	if t == nil {
@@ -64869,7 +64904,6 @@ type GetScheduledJobs_ScheduledJobs_Edges_Node struct {
 	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	ID            string                  "json:\"id\" graphql:\"id\""
-	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
@@ -64926,12 +64960,6 @@ func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetID() string {
 		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetJobType() *enums.JobType {
-	if t == nil {
-		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
-	}
-	return &t.JobType
 }
 func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetOwnerID() *string {
 	if t == nil {
@@ -65021,7 +65049,6 @@ type UpdateScheduledJob_UpdateScheduledJob_ScheduledJob struct {
 	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	ID            string                  "json:\"id\" graphql:\"id\""
-	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
@@ -65078,12 +65105,6 @@ func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetID() string {
 		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
 	}
 	return t.ID
-}
-func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetJobType() *enums.JobType {
-	if t == nil {
-		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
-	}
-	return &t.JobType
 }
 func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetOwnerID() *string {
 	if t == nil {
@@ -65181,7 +65202,6 @@ type GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node struct {
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	HistoryTime   time.Time               "json:\"historyTime\" graphql:\"historyTime\""
 	ID            string                  "json:\"id\" graphql:\"id\""
-	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	Operation     history.OpType          "json:\"operation\" graphql:\"operation\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Ref           *string                 "json:\"ref,omitempty\" graphql:\"ref\""
@@ -65246,12 +65266,6 @@ func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetID() s
 		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetJobType() *enums.JobType {
-	if t == nil {
-		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
-	}
-	return &t.JobType
 }
 func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
@@ -65386,7 +65400,6 @@ type GetScheduledJobHistories_ScheduledJobHistories_Edges_Node struct {
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	HistoryTime   time.Time               "json:\"historyTime\" graphql:\"historyTime\""
 	ID            string                  "json:\"id\" graphql:\"id\""
-	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	Operation     history.OpType          "json:\"operation\" graphql:\"operation\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Ref           *string                 "json:\"ref,omitempty\" graphql:\"ref\""
@@ -65451,12 +65464,6 @@ func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetID() stri
 		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetJobType() *enums.JobType {
-	if t == nil {
-		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
-	}
-	return &t.JobType
 }
 func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
@@ -100655,8 +100662,10 @@ const CreateExportDocument = `mutation CreateExport ($input: CreateExportInput!)
 			format
 			id
 			fields
+			filters
 			ownerID
 			requestorID
+			errorMessage
 			status
 			updatedAt
 			updatedBy
@@ -100701,6 +100710,8 @@ const GetAllExportsDocument = `query GetAllExports {
 				fields
 				ownerID
 				requestorID
+				errorMessage
+				filters
 				status
 				updatedAt
 				updatedBy
@@ -100731,7 +100742,9 @@ const GetExportByIDDocument = `query GetExportByID ($exportId: ID!) {
 		createdBy
 		exportType
 		id
+		errorMessage
 		ownerID
+		filters
 		requestorID
 		status
 		fields
@@ -100783,7 +100796,9 @@ const GetExportsDocument = `query GetExports ($first: Int, $last: Int, $where: E
 				createdAt
 				createdBy
 				exportType
+				errorMessage
 				id
+				filters
 				format
 				ownerID
 				requestorID
@@ -100823,7 +100838,9 @@ const UpdateExportDocument = `mutation UpdateExport ($id: ID!, $input: UpdateExp
 			createdBy
 			exportType
 			id
+			errorMessage
 			ownerID
+			filters
 			fields
 			requestorID
 			status
@@ -111081,7 +111098,6 @@ const CreateBulkCSVScheduledJobDocument = `mutation CreateBulkCSVScheduledJob ($
 			description
 			displayID
 			id
-			jobType
 			ownerID
 			script
 			systemOwned
@@ -111122,7 +111138,6 @@ const CreateBulkScheduledJobDocument = `mutation CreateBulkScheduledJob ($input:
 			description
 			displayID
 			id
-			jobType
 			ownerID
 			script
 			systemOwned
@@ -111163,7 +111178,6 @@ const CreateScheduledJobDocument = `mutation CreateScheduledJob ($input: CreateS
 			description
 			displayID
 			id
-			jobType
 			ownerID
 			script
 			systemOwned
@@ -111236,7 +111250,6 @@ const GetAllScheduledJobsDocument = `query GetAllScheduledJobs {
 				description
 				displayID
 				id
-				jobType
 				ownerID
 				script
 				systemOwned
@@ -111275,7 +111288,6 @@ const GetScheduledJobByIDDocument = `query GetScheduledJobByID ($scheduledJobId:
 		description
 		displayID
 		id
-		jobType
 		ownerID
 		script
 		systemOwned
@@ -111323,7 +111335,6 @@ const GetScheduledJobsDocument = `query GetScheduledJobs ($first: Int, $last: In
 				description
 				displayID
 				id
-				jobType
 				ownerID
 				script
 				systemOwned
@@ -111367,7 +111378,6 @@ const UpdateScheduledJobDocument = `mutation UpdateScheduledJob ($updateSchedule
 			description
 			displayID
 			id
-			jobType
 			ownerID
 			script
 			systemOwned
@@ -111418,7 +111428,6 @@ const GetAllScheduledJobHistoriesDocument = `query GetAllScheduledJobHistories {
 				displayID
 				historyTime
 				id
-				jobType
 				operation
 				ownerID
 				ref
@@ -111469,7 +111478,6 @@ const GetScheduledJobHistoriesDocument = `query GetScheduledJobHistories ($first
 				displayID
 				historyTime
 				id
-				jobType
 				operation
 				ownerID
 				ref

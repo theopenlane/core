@@ -66,6 +66,15 @@ func (Export) Fields() []ent.Field {
 			Default([]string{"id"}).
 			Optional().
 			Immutable(),
+
+		field.String("filters").
+			Comment("the specific filters to run against the exported data. This should be a well formatted graphql query").
+			Optional().
+			Immutable(),
+
+		field.String("error_message").
+			Optional().
+			Comment("if we try to export and it fails, the error message will be stored here"),
 	}
 }
 

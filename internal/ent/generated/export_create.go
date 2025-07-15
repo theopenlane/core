@@ -168,6 +168,34 @@ func (ec *ExportCreate) SetFields(s []string) *ExportCreate {
 	return ec
 }
 
+// SetFilters sets the "filters" field.
+func (ec *ExportCreate) SetFilters(s string) *ExportCreate {
+	ec.mutation.SetFilters(s)
+	return ec
+}
+
+// SetNillableFilters sets the "filters" field if the given value is not nil.
+func (ec *ExportCreate) SetNillableFilters(s *string) *ExportCreate {
+	if s != nil {
+		ec.SetFilters(*s)
+	}
+	return ec
+}
+
+// SetErrorMessage sets the "error_message" field.
+func (ec *ExportCreate) SetErrorMessage(s string) *ExportCreate {
+	ec.mutation.SetErrorMessage(s)
+	return ec
+}
+
+// SetNillableErrorMessage sets the "error_message" field if the given value is not nil.
+func (ec *ExportCreate) SetNillableErrorMessage(s *string) *ExportCreate {
+	if s != nil {
+		ec.SetErrorMessage(*s)
+	}
+	return ec
+}
+
 // SetID sets the "id" field.
 func (ec *ExportCreate) SetID(s string) *ExportCreate {
 	ec.mutation.SetID(s)
@@ -396,6 +424,14 @@ func (ec *ExportCreate) createSpec() (*Export, *sqlgraph.CreateSpec) {
 	if value, ok := ec.mutation.GetFields(); ok {
 		_spec.SetField(export.FieldFields, field.TypeJSON, value)
 		_node.Fields = value
+	}
+	if value, ok := ec.mutation.Filters(); ok {
+		_spec.SetField(export.FieldFilters, field.TypeString, value)
+		_node.Filters = value
+	}
+	if value, ok := ec.mutation.ErrorMessage(); ok {
+		_spec.SetField(export.FieldErrorMessage, field.TypeString, value)
+		_node.ErrorMessage = value
 	}
 	if nodes := ec.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

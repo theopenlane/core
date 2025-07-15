@@ -53,13 +53,6 @@ func (ScheduledJob) Fields() []ent.Field {
 			).
 			Comment("the description of the job").
 			Optional(),
-		field.Enum("job_type").
-			GoType(enums.JobType("")).
-			Default(enums.JobTypeSsl.String()).
-			Annotations(
-				entgql.OrderField("JOB_TYPE"),
-			).
-			Comment("the type of this job"),
 
 		field.Enum("platform").
 			GoType(enums.JobPlatformType("")).

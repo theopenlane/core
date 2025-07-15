@@ -42,6 +42,10 @@ const (
 	FieldRequestorID = "requestor_id"
 	// FieldFields holds the string denoting the fields field in the database.
 	FieldFields = "fields"
+	// FieldFilters holds the string denoting the filters field in the database.
+	FieldFilters = "filters"
+	// FieldErrorMessage holds the string denoting the error_message field in the database.
+	FieldErrorMessage = "error_message"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
@@ -88,6 +92,8 @@ var Columns = []string{
 	FieldStatus,
 	FieldRequestorID,
 	FieldFields,
+	FieldFilters,
+	FieldErrorMessage,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -216,6 +222,16 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 // ByRequestorID orders the results by the requestor_id field.
 func ByRequestorID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRequestorID, opts...).ToFunc()
+}
+
+// ByFilters orders the results by the filters field.
+func ByFilters(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFilters, opts...).ToFunc()
+}
+
+// ByErrorMessage orders the results by the error_message field.
+func ByErrorMessage(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldErrorMessage, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

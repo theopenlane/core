@@ -200,6 +200,10 @@ func skipFilter(ctx context.Context) bool {
 		return true
 	}
 
+	if ok := auth.IsSystemAdminFromContext(ctx); ok {
+		return true
+	}
+
 	if ok := history.IsHistoryRequest(ctx); ok {
 		// skip filtering for history requests
 		return true

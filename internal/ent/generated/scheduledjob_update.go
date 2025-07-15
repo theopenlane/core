@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -176,20 +175,6 @@ func (sju *ScheduledJobUpdate) SetNillableDescription(s *string) *ScheduledJobUp
 // ClearDescription clears the value of the "description" field.
 func (sju *ScheduledJobUpdate) ClearDescription() *ScheduledJobUpdate {
 	sju.mutation.ClearDescription()
-	return sju
-}
-
-// SetJobType sets the "job_type" field.
-func (sju *ScheduledJobUpdate) SetJobType(et enums.JobType) *ScheduledJobUpdate {
-	sju.mutation.SetJobType(et)
-	return sju
-}
-
-// SetNillableJobType sets the "job_type" field if the given value is not nil.
-func (sju *ScheduledJobUpdate) SetNillableJobType(et *enums.JobType) *ScheduledJobUpdate {
-	if et != nil {
-		sju.SetJobType(*et)
-	}
 	return sju
 }
 
@@ -364,11 +349,6 @@ func (sju *ScheduledJobUpdate) check() error {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.title": %w`, err)}
 		}
 	}
-	if v, ok := sju.mutation.JobType(); ok {
-		if err := scheduledjob.JobTypeValidator(v); err != nil {
-			return &ValidationError{Name: "job_type", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.job_type": %w`, err)}
-		}
-	}
 	if v, ok := sju.mutation.Cadence(); ok {
 		if err := v.Validate(); err != nil {
 			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.cadence": %w`, err)}
@@ -452,9 +432,6 @@ func (sju *ScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if sju.mutation.DescriptionCleared() {
 		_spec.ClearField(scheduledjob.FieldDescription, field.TypeString)
-	}
-	if value, ok := sju.mutation.JobType(); ok {
-		_spec.SetField(scheduledjob.FieldJobType, field.TypeEnum, value)
 	}
 	if value, ok := sju.mutation.Script(); ok {
 		_spec.SetField(scheduledjob.FieldScript, field.TypeString, value)
@@ -690,20 +667,6 @@ func (sjuo *ScheduledJobUpdateOne) ClearDescription() *ScheduledJobUpdateOne {
 	return sjuo
 }
 
-// SetJobType sets the "job_type" field.
-func (sjuo *ScheduledJobUpdateOne) SetJobType(et enums.JobType) *ScheduledJobUpdateOne {
-	sjuo.mutation.SetJobType(et)
-	return sjuo
-}
-
-// SetNillableJobType sets the "job_type" field if the given value is not nil.
-func (sjuo *ScheduledJobUpdateOne) SetNillableJobType(et *enums.JobType) *ScheduledJobUpdateOne {
-	if et != nil {
-		sjuo.SetJobType(*et)
-	}
-	return sjuo
-}
-
 // SetScript sets the "script" field.
 func (sjuo *ScheduledJobUpdateOne) SetScript(s string) *ScheduledJobUpdateOne {
 	sjuo.mutation.SetScript(s)
@@ -888,11 +851,6 @@ func (sjuo *ScheduledJobUpdateOne) check() error {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.title": %w`, err)}
 		}
 	}
-	if v, ok := sjuo.mutation.JobType(); ok {
-		if err := scheduledjob.JobTypeValidator(v); err != nil {
-			return &ValidationError{Name: "job_type", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.job_type": %w`, err)}
-		}
-	}
 	if v, ok := sjuo.mutation.Cadence(); ok {
 		if err := v.Validate(); err != nil {
 			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.cadence": %w`, err)}
@@ -993,9 +951,6 @@ func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *Schedule
 	}
 	if sjuo.mutation.DescriptionCleared() {
 		_spec.ClearField(scheduledjob.FieldDescription, field.TypeString)
-	}
-	if value, ok := sjuo.mutation.JobType(); ok {
-		_spec.SetField(scheduledjob.FieldJobType, field.TypeEnum, value)
 	}
 	if value, ok := sjuo.mutation.Script(); ok {
 		_spec.SetField(scheduledjob.FieldScript, field.TypeString, value)

@@ -141,6 +141,26 @@ func (eu *ExportUpdate) SetNillableStatus(es *enums.ExportStatus) *ExportUpdate 
 	return eu
 }
 
+// SetErrorMessage sets the "error_message" field.
+func (eu *ExportUpdate) SetErrorMessage(s string) *ExportUpdate {
+	eu.mutation.SetErrorMessage(s)
+	return eu
+}
+
+// SetNillableErrorMessage sets the "error_message" field if the given value is not nil.
+func (eu *ExportUpdate) SetNillableErrorMessage(s *string) *ExportUpdate {
+	if s != nil {
+		eu.SetErrorMessage(*s)
+	}
+	return eu
+}
+
+// ClearErrorMessage clears the value of the "error_message" field.
+func (eu *ExportUpdate) ClearErrorMessage() *ExportUpdate {
+	eu.mutation.ClearErrorMessage()
+	return eu
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (eu *ExportUpdate) SetOwner(o *Organization) *ExportUpdate {
 	return eu.SetOwnerID(o.ID)
@@ -337,6 +357,15 @@ func (eu *ExportUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if eu.mutation.FieldsCleared() {
 		_spec.ClearField(export.FieldFields, field.TypeJSON)
+	}
+	if eu.mutation.FiltersCleared() {
+		_spec.ClearField(export.FieldFilters, field.TypeString)
+	}
+	if value, ok := eu.mutation.ErrorMessage(); ok {
+		_spec.SetField(export.FieldErrorMessage, field.TypeString, value)
+	}
+	if eu.mutation.ErrorMessageCleared() {
+		_spec.ClearField(export.FieldErrorMessage, field.TypeString)
 	}
 	if eu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -595,6 +624,26 @@ func (euo *ExportUpdateOne) SetNillableStatus(es *enums.ExportStatus) *ExportUpd
 	return euo
 }
 
+// SetErrorMessage sets the "error_message" field.
+func (euo *ExportUpdateOne) SetErrorMessage(s string) *ExportUpdateOne {
+	euo.mutation.SetErrorMessage(s)
+	return euo
+}
+
+// SetNillableErrorMessage sets the "error_message" field if the given value is not nil.
+func (euo *ExportUpdateOne) SetNillableErrorMessage(s *string) *ExportUpdateOne {
+	if s != nil {
+		euo.SetErrorMessage(*s)
+	}
+	return euo
+}
+
+// ClearErrorMessage clears the value of the "error_message" field.
+func (euo *ExportUpdateOne) ClearErrorMessage() *ExportUpdateOne {
+	euo.mutation.ClearErrorMessage()
+	return euo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (euo *ExportUpdateOne) SetOwner(o *Organization) *ExportUpdateOne {
 	return euo.SetOwnerID(o.ID)
@@ -821,6 +870,15 @@ func (euo *ExportUpdateOne) sqlSave(ctx context.Context) (_node *Export, err err
 	}
 	if euo.mutation.FieldsCleared() {
 		_spec.ClearField(export.FieldFields, field.TypeJSON)
+	}
+	if euo.mutation.FiltersCleared() {
+		_spec.ClearField(export.FieldFilters, field.TypeString)
+	}
+	if value, ok := euo.mutation.ErrorMessage(); ok {
+		_spec.SetField(export.FieldErrorMessage, field.TypeString, value)
+	}
+	if euo.mutation.ErrorMessageCleared() {
+		_spec.ClearField(export.FieldErrorMessage, field.TypeString)
 	}
 	if euo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

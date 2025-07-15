@@ -1005,18 +1005,20 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Export",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			export.FieldCreatedAt:   {Type: field.TypeTime, Column: export.FieldCreatedAt},
-			export.FieldUpdatedAt:   {Type: field.TypeTime, Column: export.FieldUpdatedAt},
-			export.FieldCreatedBy:   {Type: field.TypeString, Column: export.FieldCreatedBy},
-			export.FieldUpdatedBy:   {Type: field.TypeString, Column: export.FieldUpdatedBy},
-			export.FieldDeletedAt:   {Type: field.TypeTime, Column: export.FieldDeletedAt},
-			export.FieldDeletedBy:   {Type: field.TypeString, Column: export.FieldDeletedBy},
-			export.FieldOwnerID:     {Type: field.TypeString, Column: export.FieldOwnerID},
-			export.FieldExportType:  {Type: field.TypeEnum, Column: export.FieldExportType},
-			export.FieldFormat:      {Type: field.TypeEnum, Column: export.FieldFormat},
-			export.FieldStatus:      {Type: field.TypeEnum, Column: export.FieldStatus},
-			export.FieldRequestorID: {Type: field.TypeString, Column: export.FieldRequestorID},
-			export.FieldFields:      {Type: field.TypeJSON, Column: export.FieldFields},
+			export.FieldCreatedAt:    {Type: field.TypeTime, Column: export.FieldCreatedAt},
+			export.FieldUpdatedAt:    {Type: field.TypeTime, Column: export.FieldUpdatedAt},
+			export.FieldCreatedBy:    {Type: field.TypeString, Column: export.FieldCreatedBy},
+			export.FieldUpdatedBy:    {Type: field.TypeString, Column: export.FieldUpdatedBy},
+			export.FieldDeletedAt:    {Type: field.TypeTime, Column: export.FieldDeletedAt},
+			export.FieldDeletedBy:    {Type: field.TypeString, Column: export.FieldDeletedBy},
+			export.FieldOwnerID:      {Type: field.TypeString, Column: export.FieldOwnerID},
+			export.FieldExportType:   {Type: field.TypeEnum, Column: export.FieldExportType},
+			export.FieldFormat:       {Type: field.TypeEnum, Column: export.FieldFormat},
+			export.FieldStatus:       {Type: field.TypeEnum, Column: export.FieldStatus},
+			export.FieldRequestorID:  {Type: field.TypeString, Column: export.FieldRequestorID},
+			export.FieldFields:       {Type: field.TypeJSON, Column: export.FieldFields},
+			export.FieldFilters:      {Type: field.TypeString, Column: export.FieldFilters},
+			export.FieldErrorMessage: {Type: field.TypeString, Column: export.FieldErrorMessage},
 		},
 	}
 	graph.Nodes[30] = &sqlgraph.Node{
@@ -2520,7 +2522,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scheduledjob.FieldSystemOwned:   {Type: field.TypeBool, Column: scheduledjob.FieldSystemOwned},
 			scheduledjob.FieldTitle:         {Type: field.TypeString, Column: scheduledjob.FieldTitle},
 			scheduledjob.FieldDescription:   {Type: field.TypeString, Column: scheduledjob.FieldDescription},
-			scheduledjob.FieldJobType:       {Type: field.TypeEnum, Column: scheduledjob.FieldJobType},
 			scheduledjob.FieldPlatform:      {Type: field.TypeEnum, Column: scheduledjob.FieldPlatform},
 			scheduledjob.FieldScript:        {Type: field.TypeString, Column: scheduledjob.FieldScript},
 			scheduledjob.FieldWindmillPath:  {Type: field.TypeString, Column: scheduledjob.FieldWindmillPath},
@@ -2556,7 +2557,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scheduledjobhistory.FieldSystemOwned:   {Type: field.TypeBool, Column: scheduledjobhistory.FieldSystemOwned},
 			scheduledjobhistory.FieldTitle:         {Type: field.TypeString, Column: scheduledjobhistory.FieldTitle},
 			scheduledjobhistory.FieldDescription:   {Type: field.TypeString, Column: scheduledjobhistory.FieldDescription},
-			scheduledjobhistory.FieldJobType:       {Type: field.TypeEnum, Column: scheduledjobhistory.FieldJobType},
 			scheduledjobhistory.FieldPlatform:      {Type: field.TypeEnum, Column: scheduledjobhistory.FieldPlatform},
 			scheduledjobhistory.FieldScript:        {Type: field.TypeString, Column: scheduledjobhistory.FieldScript},
 			scheduledjobhistory.FieldWindmillPath:  {Type: field.TypeString, Column: scheduledjobhistory.FieldWindmillPath},
@@ -13857,6 +13857,16 @@ func (f *ExportFilter) WhereFields(p entql.BytesP) {
 	f.Where(p.Field(export.FieldFields))
 }
 
+// WhereFilters applies the entql string predicate on the filters field.
+func (f *ExportFilter) WhereFilters(p entql.StringP) {
+	f.Where(p.Field(export.FieldFilters))
+}
+
+// WhereErrorMessage applies the entql string predicate on the error_message field.
+func (f *ExportFilter) WhereErrorMessage(p entql.StringP) {
+	f.Where(p.Field(export.FieldErrorMessage))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *ExportFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -23656,11 +23666,6 @@ func (f *ScheduledJobFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(scheduledjob.FieldDescription))
 }
 
-// WhereJobType applies the entql string predicate on the job_type field.
-func (f *ScheduledJobFilter) WhereJobType(p entql.StringP) {
-	f.Where(p.Field(scheduledjob.FieldJobType))
-}
-
 // WherePlatform applies the entql string predicate on the platform field.
 func (f *ScheduledJobFilter) WherePlatform(p entql.StringP) {
 	f.Where(p.Field(scheduledjob.FieldPlatform))
@@ -23823,11 +23828,6 @@ func (f *ScheduledJobHistoryFilter) WhereTitle(p entql.StringP) {
 // WhereDescription applies the entql string predicate on the description field.
 func (f *ScheduledJobHistoryFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(scheduledjobhistory.FieldDescription))
-}
-
-// WhereJobType applies the entql string predicate on the job_type field.
-func (f *ScheduledJobHistoryFilter) WhereJobType(p entql.StringP) {
-	f.Where(p.Field(scheduledjobhistory.FieldJobType))
 }
 
 // WherePlatform applies the entql string predicate on the platform field.

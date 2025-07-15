@@ -3385,12 +3385,14 @@ func (c *EvidenceUpdateOne) SetInput(i UpdateEvidenceInput) *EvidenceUpdateOne {
 
 // CreateExportInput represents a mutation input for creating exports.
 type CreateExportInput struct {
-	ExportType enums.ExportType
-	Format     enums.ExportFormat
-	Fields     []string
-	OwnerID    *string
-	EventIDs   []string
-	FileIDs    []string
+	ExportType   enums.ExportType
+	Format       enums.ExportFormat
+	Fields       []string
+	Filters      *string
+	ErrorMessage *string
+	OwnerID      *string
+	EventIDs     []string
+	FileIDs      []string
 }
 
 // Mutate applies the CreateExportInput on the ExportMutation builder.
@@ -3399,6 +3401,12 @@ func (i *CreateExportInput) Mutate(m *ExportMutation) {
 	m.SetFormat(i.Format)
 	if v := i.Fields; v != nil {
 		m.SetFields(v)
+	}
+	if v := i.Filters; v != nil {
+		m.SetFilters(*v)
+	}
+	if v := i.ErrorMessage; v != nil {
+		m.SetErrorMessage(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -3419,21 +3427,29 @@ func (c *ExportCreate) SetInput(i CreateExportInput) *ExportCreate {
 
 // UpdateExportInput represents a mutation input for updating exports.
 type UpdateExportInput struct {
-	Status         *enums.ExportStatus
-	ClearOwner     bool
-	OwnerID        *string
-	ClearEvents    bool
-	AddEventIDs    []string
-	RemoveEventIDs []string
-	ClearFiles     bool
-	AddFileIDs     []string
-	RemoveFileIDs  []string
+	Status            *enums.ExportStatus
+	ClearErrorMessage bool
+	ErrorMessage      *string
+	ClearOwner        bool
+	OwnerID           *string
+	ClearEvents       bool
+	AddEventIDs       []string
+	RemoveEventIDs    []string
+	ClearFiles        bool
+	AddFileIDs        []string
+	RemoveFileIDs     []string
 }
 
 // Mutate applies the UpdateExportInput on the ExportMutation builder.
 func (i *UpdateExportInput) Mutate(m *ExportMutation) {
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearErrorMessage {
+		m.ClearErrorMessage()
+	}
+	if v := i.ErrorMessage; v != nil {
+		m.SetErrorMessage(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -9420,7 +9436,6 @@ type CreateScheduledJobInput struct {
 	Tags          []string
 	Title         string
 	Description   *string
-	JobType       *enums.JobType
 	Platform      enums.JobPlatformType
 	Script        *string
 	DownloadURL   string
@@ -9438,9 +9453,6 @@ func (i *CreateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
 	m.SetTitle(i.Title)
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
-	}
-	if v := i.JobType; v != nil {
-		m.SetJobType(*v)
 	}
 	m.SetPlatform(i.Platform)
 	if v := i.Script; v != nil {
@@ -9475,7 +9487,6 @@ type UpdateScheduledJobInput struct {
 	Title               *string
 	ClearDescription    bool
 	Description         *string
-	JobType             *enums.JobType
 	ClearScript         bool
 	Script              *string
 	DownloadURL         *string
@@ -9509,9 +9520,6 @@ func (i *UpdateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
-	}
-	if v := i.JobType; v != nil {
-		m.SetJobType(*v)
 	}
 	if i.ClearScript {
 		m.ClearScript()

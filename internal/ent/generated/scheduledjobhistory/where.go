@@ -972,36 +972,6 @@ func DescriptionContainsFold(v string) predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldContainsFold(FieldDescription, v))
 }
 
-// JobTypeEQ applies the EQ predicate on the "job_type" field.
-func JobTypeEQ(v enums.JobType) predicate.ScheduledJobHistory {
-	vc := v
-	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldJobType, vc))
-}
-
-// JobTypeNEQ applies the NEQ predicate on the "job_type" field.
-func JobTypeNEQ(v enums.JobType) predicate.ScheduledJobHistory {
-	vc := v
-	return predicate.ScheduledJobHistory(sql.FieldNEQ(FieldJobType, vc))
-}
-
-// JobTypeIn applies the In predicate on the "job_type" field.
-func JobTypeIn(vs ...enums.JobType) predicate.ScheduledJobHistory {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.ScheduledJobHistory(sql.FieldIn(FieldJobType, v...))
-}
-
-// JobTypeNotIn applies the NotIn predicate on the "job_type" field.
-func JobTypeNotIn(vs ...enums.JobType) predicate.ScheduledJobHistory {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.ScheduledJobHistory(sql.FieldNotIn(FieldJobType, v...))
-}
-
 // PlatformEQ applies the EQ predicate on the "platform" field.
 func PlatformEQ(v enums.JobPlatformType) predicate.ScheduledJobHistory {
 	vc := v

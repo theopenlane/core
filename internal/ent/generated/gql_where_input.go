@@ -24240,6 +24240,40 @@ type ExportWhereInput struct {
 	RequestorIDEqualFold    *string  `json:"requestorIDEqualFold,omitempty"`
 	RequestorIDContainsFold *string  `json:"requestorIDContainsFold,omitempty"`
 
+	// "filters" field predicates.
+	Filters             *string  `json:"filters,omitempty"`
+	FiltersNEQ          *string  `json:"filtersNEQ,omitempty"`
+	FiltersIn           []string `json:"filtersIn,omitempty"`
+	FiltersNotIn        []string `json:"filtersNotIn,omitempty"`
+	FiltersGT           *string  `json:"filtersGT,omitempty"`
+	FiltersGTE          *string  `json:"filtersGTE,omitempty"`
+	FiltersLT           *string  `json:"filtersLT,omitempty"`
+	FiltersLTE          *string  `json:"filtersLTE,omitempty"`
+	FiltersContains     *string  `json:"filtersContains,omitempty"`
+	FiltersHasPrefix    *string  `json:"filtersHasPrefix,omitempty"`
+	FiltersHasSuffix    *string  `json:"filtersHasSuffix,omitempty"`
+	FiltersIsNil        bool     `json:"filtersIsNil,omitempty"`
+	FiltersNotNil       bool     `json:"filtersNotNil,omitempty"`
+	FiltersEqualFold    *string  `json:"filtersEqualFold,omitempty"`
+	FiltersContainsFold *string  `json:"filtersContainsFold,omitempty"`
+
+	// "error_message" field predicates.
+	ErrorMessage             *string  `json:"errorMessage,omitempty"`
+	ErrorMessageNEQ          *string  `json:"errorMessageNEQ,omitempty"`
+	ErrorMessageIn           []string `json:"errorMessageIn,omitempty"`
+	ErrorMessageNotIn        []string `json:"errorMessageNotIn,omitempty"`
+	ErrorMessageGT           *string  `json:"errorMessageGT,omitempty"`
+	ErrorMessageGTE          *string  `json:"errorMessageGTE,omitempty"`
+	ErrorMessageLT           *string  `json:"errorMessageLT,omitempty"`
+	ErrorMessageLTE          *string  `json:"errorMessageLTE,omitempty"`
+	ErrorMessageContains     *string  `json:"errorMessageContains,omitempty"`
+	ErrorMessageHasPrefix    *string  `json:"errorMessageHasPrefix,omitempty"`
+	ErrorMessageHasSuffix    *string  `json:"errorMessageHasSuffix,omitempty"`
+	ErrorMessageIsNil        bool     `json:"errorMessageIsNil,omitempty"`
+	ErrorMessageNotNil       bool     `json:"errorMessageNotNil,omitempty"`
+	ErrorMessageEqualFold    *string  `json:"errorMessageEqualFold,omitempty"`
+	ErrorMessageContainsFold *string  `json:"errorMessageContainsFold,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -24629,6 +24663,96 @@ func (i *ExportWhereInput) P() (predicate.Export, error) {
 	}
 	if i.RequestorIDContainsFold != nil {
 		predicates = append(predicates, export.RequestorIDContainsFold(*i.RequestorIDContainsFold))
+	}
+	if i.Filters != nil {
+		predicates = append(predicates, export.FiltersEQ(*i.Filters))
+	}
+	if i.FiltersNEQ != nil {
+		predicates = append(predicates, export.FiltersNEQ(*i.FiltersNEQ))
+	}
+	if len(i.FiltersIn) > 0 {
+		predicates = append(predicates, export.FiltersIn(i.FiltersIn...))
+	}
+	if len(i.FiltersNotIn) > 0 {
+		predicates = append(predicates, export.FiltersNotIn(i.FiltersNotIn...))
+	}
+	if i.FiltersGT != nil {
+		predicates = append(predicates, export.FiltersGT(*i.FiltersGT))
+	}
+	if i.FiltersGTE != nil {
+		predicates = append(predicates, export.FiltersGTE(*i.FiltersGTE))
+	}
+	if i.FiltersLT != nil {
+		predicates = append(predicates, export.FiltersLT(*i.FiltersLT))
+	}
+	if i.FiltersLTE != nil {
+		predicates = append(predicates, export.FiltersLTE(*i.FiltersLTE))
+	}
+	if i.FiltersContains != nil {
+		predicates = append(predicates, export.FiltersContains(*i.FiltersContains))
+	}
+	if i.FiltersHasPrefix != nil {
+		predicates = append(predicates, export.FiltersHasPrefix(*i.FiltersHasPrefix))
+	}
+	if i.FiltersHasSuffix != nil {
+		predicates = append(predicates, export.FiltersHasSuffix(*i.FiltersHasSuffix))
+	}
+	if i.FiltersIsNil {
+		predicates = append(predicates, export.FiltersIsNil())
+	}
+	if i.FiltersNotNil {
+		predicates = append(predicates, export.FiltersNotNil())
+	}
+	if i.FiltersEqualFold != nil {
+		predicates = append(predicates, export.FiltersEqualFold(*i.FiltersEqualFold))
+	}
+	if i.FiltersContainsFold != nil {
+		predicates = append(predicates, export.FiltersContainsFold(*i.FiltersContainsFold))
+	}
+	if i.ErrorMessage != nil {
+		predicates = append(predicates, export.ErrorMessageEQ(*i.ErrorMessage))
+	}
+	if i.ErrorMessageNEQ != nil {
+		predicates = append(predicates, export.ErrorMessageNEQ(*i.ErrorMessageNEQ))
+	}
+	if len(i.ErrorMessageIn) > 0 {
+		predicates = append(predicates, export.ErrorMessageIn(i.ErrorMessageIn...))
+	}
+	if len(i.ErrorMessageNotIn) > 0 {
+		predicates = append(predicates, export.ErrorMessageNotIn(i.ErrorMessageNotIn...))
+	}
+	if i.ErrorMessageGT != nil {
+		predicates = append(predicates, export.ErrorMessageGT(*i.ErrorMessageGT))
+	}
+	if i.ErrorMessageGTE != nil {
+		predicates = append(predicates, export.ErrorMessageGTE(*i.ErrorMessageGTE))
+	}
+	if i.ErrorMessageLT != nil {
+		predicates = append(predicates, export.ErrorMessageLT(*i.ErrorMessageLT))
+	}
+	if i.ErrorMessageLTE != nil {
+		predicates = append(predicates, export.ErrorMessageLTE(*i.ErrorMessageLTE))
+	}
+	if i.ErrorMessageContains != nil {
+		predicates = append(predicates, export.ErrorMessageContains(*i.ErrorMessageContains))
+	}
+	if i.ErrorMessageHasPrefix != nil {
+		predicates = append(predicates, export.ErrorMessageHasPrefix(*i.ErrorMessageHasPrefix))
+	}
+	if i.ErrorMessageHasSuffix != nil {
+		predicates = append(predicates, export.ErrorMessageHasSuffix(*i.ErrorMessageHasSuffix))
+	}
+	if i.ErrorMessageIsNil {
+		predicates = append(predicates, export.ErrorMessageIsNil())
+	}
+	if i.ErrorMessageNotNil {
+		predicates = append(predicates, export.ErrorMessageNotNil())
+	}
+	if i.ErrorMessageEqualFold != nil {
+		predicates = append(predicates, export.ErrorMessageEqualFold(*i.ErrorMessageEqualFold))
+	}
+	if i.ErrorMessageContainsFold != nil {
+		predicates = append(predicates, export.ErrorMessageContainsFold(*i.ErrorMessageContainsFold))
 	}
 
 	if i.HasOwner != nil {
@@ -63722,12 +63846,6 @@ type ScheduledJobWhereInput struct {
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 
-	// "job_type" field predicates.
-	JobType      *enums.JobType  `json:"jobType,omitempty"`
-	JobTypeNEQ   *enums.JobType  `json:"jobTypeNEQ,omitempty"`
-	JobTypeIn    []enums.JobType `json:"jobTypeIn,omitempty"`
-	JobTypeNotIn []enums.JobType `json:"jobTypeNotIn,omitempty"`
-
 	// "platform" field predicates.
 	Platform      *enums.JobPlatformType  `json:"platform,omitempty"`
 	PlatformNEQ   *enums.JobPlatformType  `json:"platformNEQ,omitempty"`
@@ -64170,18 +64288,6 @@ func (i *ScheduledJobWhereInput) P() (predicate.ScheduledJob, error) {
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, scheduledjob.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
-	if i.JobType != nil {
-		predicates = append(predicates, scheduledjob.JobTypeEQ(*i.JobType))
-	}
-	if i.JobTypeNEQ != nil {
-		predicates = append(predicates, scheduledjob.JobTypeNEQ(*i.JobTypeNEQ))
-	}
-	if len(i.JobTypeIn) > 0 {
-		predicates = append(predicates, scheduledjob.JobTypeIn(i.JobTypeIn...))
-	}
-	if len(i.JobTypeNotIn) > 0 {
-		predicates = append(predicates, scheduledjob.JobTypeNotIn(i.JobTypeNotIn...))
-	}
 	if i.Platform != nil {
 		predicates = append(predicates, scheduledjob.PlatformEQ(*i.Platform))
 	}
@@ -64402,12 +64508,6 @@ type ScheduledJobHistoryWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
-
-	// "job_type" field predicates.
-	JobType      *enums.JobType  `json:"jobType,omitempty"`
-	JobTypeNEQ   *enums.JobType  `json:"jobTypeNEQ,omitempty"`
-	JobTypeIn    []enums.JobType `json:"jobTypeIn,omitempty"`
-	JobTypeNotIn []enums.JobType `json:"jobTypeNotIn,omitempty"`
 
 	// "platform" field predicates.
 	Platform      *enums.JobPlatformType  `json:"platform,omitempty"`
@@ -64927,18 +65027,6 @@ func (i *ScheduledJobHistoryWhereInput) P() (predicate.ScheduledJobHistory, erro
 	}
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, scheduledjobhistory.DescriptionContainsFold(*i.DescriptionContainsFold))
-	}
-	if i.JobType != nil {
-		predicates = append(predicates, scheduledjobhistory.JobTypeEQ(*i.JobType))
-	}
-	if i.JobTypeNEQ != nil {
-		predicates = append(predicates, scheduledjobhistory.JobTypeNEQ(*i.JobTypeNEQ))
-	}
-	if len(i.JobTypeIn) > 0 {
-		predicates = append(predicates, scheduledjobhistory.JobTypeIn(i.JobTypeIn...))
-	}
-	if len(i.JobTypeNotIn) > 0 {
-		predicates = append(predicates, scheduledjobhistory.JobTypeNotIn(i.JobTypeNotIn...))
 	}
 	if i.Platform != nil {
 		predicates = append(predicates, scheduledjobhistory.PlatformEQ(*i.Platform))
