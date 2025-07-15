@@ -41,8 +41,6 @@ const (
 	FieldJobID = "job_id"
 	// FieldConfiguration holds the string denoting the configuration field in the database.
 	FieldConfiguration = "configuration"
-	// FieldCadence holds the string denoting the cadence field in the database.
-	FieldCadence = "cadence"
 	// FieldCron holds the string denoting the cron field in the database.
 	FieldCron = "cron"
 	// FieldJobRunnerID holds the string denoting the job_runner_id field in the database.
@@ -66,7 +64,6 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldJobID,
 	FieldConfiguration,
-	FieldCadence,
 	FieldCron,
 	FieldJobRunnerID,
 }

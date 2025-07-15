@@ -44,8 +44,6 @@ type ControlScheduledJobHistory struct {
 	JobID string `json:"job_id,omitempty"`
 	// the configuration to run this job
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
-	// the schedule to run this job. If not provided, it would inherit the cadence of the parent job
-	Cadence models.JobCadence `json:"cadence,omitempty"`
 	// cron syntax. If not provided, it would inherit the cron of the parent job
 	Cron *models.Cron `json:"cron,omitempty"`
 	// the runner that this job will run on. If not set, it will scheduled on a general runner instead
@@ -60,7 +58,7 @@ func (*ControlScheduledJobHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case controlscheduledjobhistory.FieldCron:
 			values[i] = &sql.NullScanner{S: new(models.Cron)}
-		case controlscheduledjobhistory.FieldConfiguration, controlscheduledjobhistory.FieldCadence:
+		case controlscheduledjobhistory.FieldConfiguration:
 			values[i] = new([]byte)
 		case controlscheduledjobhistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -163,14 +161,6 @@ func (csjh *ControlScheduledJobHistory) assignValues(columns []string, values []
 					return fmt.Errorf("unmarshal field configuration: %w", err)
 				}
 			}
-		case controlscheduledjobhistory.FieldCadence:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field cadence", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &csjh.Cadence); err != nil {
-					return fmt.Errorf("unmarshal field cadence: %w", err)
-				}
-			}
 		case controlscheduledjobhistory.FieldCron:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field cron", values[i])
@@ -255,9 +245,6 @@ func (csjh *ControlScheduledJobHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("configuration=")
 	builder.WriteString(fmt.Sprintf("%v", csjh.Configuration))
-	builder.WriteString(", ")
-	builder.WriteString("cadence=")
-	builder.WriteString(fmt.Sprintf("%v", csjh.Cadence))
 	builder.WriteString(", ")
 	if v := csjh.Cron; v != nil {
 		builder.WriteString("cron=")

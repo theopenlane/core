@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/summarizer"
+	"github.com/theopenlane/core/pkg/windmill"
 )
 
 // Handler contains configuration options for handlers
@@ -58,6 +59,8 @@ type Handler struct {
 	Entitlements *entitlements.StripeClient
 	// Summarizer contains the summarizing client
 	Summarizer *summarizer.Client
+	// Windmill contains the Windmill workflow automation client
+	Windmill *windmill.Client
 	// DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set
 	DefaultTrustCenterDomain string
 }

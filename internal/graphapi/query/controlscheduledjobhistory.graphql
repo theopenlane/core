@@ -11,7 +11,6 @@ query GetAllControlScheduledJobHistories {
     }
     edges {
       node {
-        cadence
         configuration
         createdAt
         createdBy
@@ -41,7 +40,6 @@ query GetControlScheduledJobHistories($first: Int, $last: Int, $where: ControlSc
     }
     edges {
       node {
-        cadence
         configuration
         createdAt
         createdBy

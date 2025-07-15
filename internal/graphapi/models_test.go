@@ -1521,22 +1521,22 @@ type ScheduledJobBuilder struct {
 }
 
 func (w *ScheduledJobBuilder) MustNew(ctx context.Context, t *testing.T) *ent.ScheduledJob {
+	const testScriptURL = "https://raw.githubusercontent.com/theopenlane/jobs-examples/refs/heads/main/basic/print.go"
+
 	ctx = setContext(ctx, w.client.db)
 	wn, err := w.client.db.ScheduledJob.Create().
-		SetConfiguration(models.JobConfiguration{
-			SSL: models.SSLJobConfig{
-				URL: "https://google.com",
-			},
-		}).
 		SetTitle("SSL checks").
 		SetDescription("Check and verify a tls certificate is valid").
+		SetPlatform(enums.JobPlatformTypeGo).
 		SetScript(`
 echo | openssl s_client -servername {{ .URL }} -connect {{ .URL }}:443 2>/dev/null | openssl x509 -noout -dates -issuer -subject
 		`).
+		SetWindmillPath("u/admin/gifted_script").
 		SetCadence(models.JobCadence{
 			Frequency: enums.JobCadenceFrequencyDaily,
 			Time:      "15:09",
 		}).
+		SetDownloadURL(testScriptURL).
 		Save(ctx)
 	assert.NilError(t, err)
 
@@ -1558,12 +1558,7 @@ func (b *ControlScheduledJobBuilder) MustNew(ctx context.Context, t *testing.T) 
 	ctx = setContext(ctx, b.client.db)
 
 	job := b.client.db.ControlScheduledJob.Create().
-		SetJobID(b.JobID).
-		SetConfiguration(b.Configuration).
-		SetCadence(models.JobCadence{
-			Time:      "15:09",
-			Frequency: enums.JobCadenceFrequencyDaily,
-		})
+		SetJobID(b.JobID)
 
 	if b.JobRunnerID != "" {
 		job.SetJobRunnerID(b.JobRunnerID)

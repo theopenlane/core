@@ -61,6 +61,14 @@ func (ScheduledJob) Fields() []ent.Field {
 			).
 			Comment("the type of this job"),
 
+		field.Enum("platform").
+			GoType(enums.JobPlatformType("")).
+			Immutable().
+			Annotations(
+				entgql.OrderField("platform"),
+			).
+			Comment("the platform to use to execute this job"),
+
 		field.String("script").
 			Annotations(
 				entgql.Skip(
@@ -71,8 +79,28 @@ func (ScheduledJob) Fields() []ent.Field {
 			Optional().
 			Comment("the script to run"),
 
-		// Default config values
+		field.String("windmill_path").
+			Annotations(
+				entgql.Skip(
+					entgql.SkipOrderField |
+						entgql.SkipWhereInput |
+						entgql.SkipMutationCreateInput |
+						entgql.SkipMutationUpdateInput,
+				),
+			).
+			Comment("Windmill path"),
+
+		field.String("download_url").
+			Annotations(
+				entgql.Skip(
+					entgql.SkipOrderField |
+						entgql.SkipWhereInput,
+				),
+			).
+			Comment("the url from where to download the script from"),
+
 		field.JSON("configuration", models.JobConfiguration{}).
+			Optional().
 			Comment("the configuration to run this job"),
 
 		field.JSON("cadence", models.JobCadence{}).

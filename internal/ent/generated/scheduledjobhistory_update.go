@@ -212,17 +212,49 @@ func (sjhu *ScheduledJobHistoryUpdate) ClearScript() *ScheduledJobHistoryUpdate 
 	return sjhu
 }
 
+// SetWindmillPath sets the "windmill_path" field.
+func (sjhu *ScheduledJobHistoryUpdate) SetWindmillPath(s string) *ScheduledJobHistoryUpdate {
+	sjhu.mutation.SetWindmillPath(s)
+	return sjhu
+}
+
+// SetNillableWindmillPath sets the "windmill_path" field if the given value is not nil.
+func (sjhu *ScheduledJobHistoryUpdate) SetNillableWindmillPath(s *string) *ScheduledJobHistoryUpdate {
+	if s != nil {
+		sjhu.SetWindmillPath(*s)
+	}
+	return sjhu
+}
+
+// SetDownloadURL sets the "download_url" field.
+func (sjhu *ScheduledJobHistoryUpdate) SetDownloadURL(s string) *ScheduledJobHistoryUpdate {
+	sjhu.mutation.SetDownloadURL(s)
+	return sjhu
+}
+
+// SetNillableDownloadURL sets the "download_url" field if the given value is not nil.
+func (sjhu *ScheduledJobHistoryUpdate) SetNillableDownloadURL(s *string) *ScheduledJobHistoryUpdate {
+	if s != nil {
+		sjhu.SetDownloadURL(*s)
+	}
+	return sjhu
+}
+
 // SetConfiguration sets the "configuration" field.
 func (sjhu *ScheduledJobHistoryUpdate) SetConfiguration(mc models.JobConfiguration) *ScheduledJobHistoryUpdate {
 	sjhu.mutation.SetConfiguration(mc)
 	return sjhu
 }
 
-// SetNillableConfiguration sets the "configuration" field if the given value is not nil.
-func (sjhu *ScheduledJobHistoryUpdate) SetNillableConfiguration(mc *models.JobConfiguration) *ScheduledJobHistoryUpdate {
-	if mc != nil {
-		sjhu.SetConfiguration(*mc)
-	}
+// AppendConfiguration appends mc to the "configuration" field.
+func (sjhu *ScheduledJobHistoryUpdate) AppendConfiguration(mc models.JobConfiguration) *ScheduledJobHistoryUpdate {
+	sjhu.mutation.AppendConfiguration(mc)
+	return sjhu
+}
+
+// ClearConfiguration clears the value of the "configuration" field.
+func (sjhu *ScheduledJobHistoryUpdate) ClearConfiguration() *ScheduledJobHistoryUpdate {
+	sjhu.mutation.ClearConfiguration()
 	return sjhu
 }
 
@@ -422,8 +454,22 @@ func (sjhu *ScheduledJobHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	if sjhu.mutation.ScriptCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldScript, field.TypeString)
 	}
+	if value, ok := sjhu.mutation.WindmillPath(); ok {
+		_spec.SetField(scheduledjobhistory.FieldWindmillPath, field.TypeString, value)
+	}
+	if value, ok := sjhu.mutation.DownloadURL(); ok {
+		_spec.SetField(scheduledjobhistory.FieldDownloadURL, field.TypeString, value)
+	}
 	if value, ok := sjhu.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjobhistory.FieldConfiguration, field.TypeJSON, value)
+	}
+	if value, ok := sjhu.mutation.AppendedConfiguration(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, scheduledjobhistory.FieldConfiguration, value)
+		})
+	}
+	if sjhu.mutation.ConfigurationCleared() {
+		_spec.ClearField(scheduledjobhistory.FieldConfiguration, field.TypeJSON)
 	}
 	if value, ok := sjhu.mutation.Cadence(); ok {
 		_spec.SetField(scheduledjobhistory.FieldCadence, field.TypeJSON, value)
@@ -639,17 +685,49 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) ClearScript() *ScheduledJobHistoryUpd
 	return sjhuo
 }
 
+// SetWindmillPath sets the "windmill_path" field.
+func (sjhuo *ScheduledJobHistoryUpdateOne) SetWindmillPath(s string) *ScheduledJobHistoryUpdateOne {
+	sjhuo.mutation.SetWindmillPath(s)
+	return sjhuo
+}
+
+// SetNillableWindmillPath sets the "windmill_path" field if the given value is not nil.
+func (sjhuo *ScheduledJobHistoryUpdateOne) SetNillableWindmillPath(s *string) *ScheduledJobHistoryUpdateOne {
+	if s != nil {
+		sjhuo.SetWindmillPath(*s)
+	}
+	return sjhuo
+}
+
+// SetDownloadURL sets the "download_url" field.
+func (sjhuo *ScheduledJobHistoryUpdateOne) SetDownloadURL(s string) *ScheduledJobHistoryUpdateOne {
+	sjhuo.mutation.SetDownloadURL(s)
+	return sjhuo
+}
+
+// SetNillableDownloadURL sets the "download_url" field if the given value is not nil.
+func (sjhuo *ScheduledJobHistoryUpdateOne) SetNillableDownloadURL(s *string) *ScheduledJobHistoryUpdateOne {
+	if s != nil {
+		sjhuo.SetDownloadURL(*s)
+	}
+	return sjhuo
+}
+
 // SetConfiguration sets the "configuration" field.
 func (sjhuo *ScheduledJobHistoryUpdateOne) SetConfiguration(mc models.JobConfiguration) *ScheduledJobHistoryUpdateOne {
 	sjhuo.mutation.SetConfiguration(mc)
 	return sjhuo
 }
 
-// SetNillableConfiguration sets the "configuration" field if the given value is not nil.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetNillableConfiguration(mc *models.JobConfiguration) *ScheduledJobHistoryUpdateOne {
-	if mc != nil {
-		sjhuo.SetConfiguration(*mc)
-	}
+// AppendConfiguration appends mc to the "configuration" field.
+func (sjhuo *ScheduledJobHistoryUpdateOne) AppendConfiguration(mc models.JobConfiguration) *ScheduledJobHistoryUpdateOne {
+	sjhuo.mutation.AppendConfiguration(mc)
+	return sjhuo
+}
+
+// ClearConfiguration clears the value of the "configuration" field.
+func (sjhuo *ScheduledJobHistoryUpdateOne) ClearConfiguration() *ScheduledJobHistoryUpdateOne {
+	sjhuo.mutation.ClearConfiguration()
 	return sjhuo
 }
 
@@ -879,8 +957,22 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	if sjhuo.mutation.ScriptCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldScript, field.TypeString)
 	}
+	if value, ok := sjhuo.mutation.WindmillPath(); ok {
+		_spec.SetField(scheduledjobhistory.FieldWindmillPath, field.TypeString, value)
+	}
+	if value, ok := sjhuo.mutation.DownloadURL(); ok {
+		_spec.SetField(scheduledjobhistory.FieldDownloadURL, field.TypeString, value)
+	}
 	if value, ok := sjhuo.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjobhistory.FieldConfiguration, field.TypeJSON, value)
+	}
+	if value, ok := sjhuo.mutation.AppendedConfiguration(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, scheduledjobhistory.FieldConfiguration, value)
+		})
+	}
+	if sjhuo.mutation.ConfigurationCleared() {
+		_spec.ClearField(scheduledjobhistory.FieldConfiguration, field.TypeJSON)
 	}
 	if value, ok := sjhuo.mutation.Cadence(); ok {
 		_spec.SetField(scheduledjobhistory.FieldCadence, field.TypeJSON, value)

@@ -690,7 +690,6 @@ type ComplexityRoot struct {
 	}
 
 	ControlScheduledJob struct {
-		Cadence       func(childComplexity int) int
 		Configuration func(childComplexity int) int
 		Controls      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt     func(childComplexity int) int
@@ -732,7 +731,6 @@ type ComplexityRoot struct {
 	}
 
 	ControlScheduledJobHistory struct {
-		Cadence       func(childComplexity int) int
 		Configuration func(childComplexity int) int
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
@@ -3807,16 +3805,19 @@ type ComplexityRoot struct {
 		Cron          func(childComplexity int) int
 		Description   func(childComplexity int) int
 		DisplayID     func(childComplexity int) int
+		DownloadURL   func(childComplexity int) int
 		ID            func(childComplexity int) int
 		JobType       func(childComplexity int) int
 		Owner         func(childComplexity int) int
 		OwnerID       func(childComplexity int) int
+		Platform      func(childComplexity int) int
 		Script        func(childComplexity int) int
 		SystemOwned   func(childComplexity int) int
 		Tags          func(childComplexity int) int
 		Title         func(childComplexity int) int
 		UpdatedAt     func(childComplexity int) int
 		UpdatedBy     func(childComplexity int) int
+		WindmillPath  func(childComplexity int) int
 	}
 
 	ScheduledJobBulkCreatePayload struct {
@@ -3850,11 +3851,13 @@ type ComplexityRoot struct {
 		Cron          func(childComplexity int) int
 		Description   func(childComplexity int) int
 		DisplayID     func(childComplexity int) int
+		DownloadURL   func(childComplexity int) int
 		HistoryTime   func(childComplexity int) int
 		ID            func(childComplexity int) int
 		JobType       func(childComplexity int) int
 		Operation     func(childComplexity int) int
 		OwnerID       func(childComplexity int) int
+		Platform      func(childComplexity int) int
 		Ref           func(childComplexity int) int
 		Script        func(childComplexity int) int
 		SystemOwned   func(childComplexity int) int
@@ -3862,6 +3865,7 @@ type ComplexityRoot struct {
 		Title         func(childComplexity int) int
 		UpdatedAt     func(childComplexity int) int
 		UpdatedBy     func(childComplexity int) int
+		WindmillPath  func(childComplexity int) int
 	}
 
 	ScheduledJobHistoryConnection struct {
@@ -8158,13 +8162,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlObjectiveUpdatePayload.ControlObjective(childComplexity), true
 
-	case "ControlScheduledJob.cadence":
-		if e.complexity.ControlScheduledJob.Cadence == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJob.Cadence(childComplexity), true
-
 	case "ControlScheduledJob.configuration":
 		if e.complexity.ControlScheduledJob.Configuration == nil {
 			break
@@ -8335,13 +8332,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlScheduledJobEdge.Node(childComplexity), true
-
-	case "ControlScheduledJobHistory.cadence":
-		if e.complexity.ControlScheduledJobHistory.Cadence == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobHistory.Cadence(childComplexity), true
 
 	case "ControlScheduledJobHistory.configuration":
 		if e.complexity.ControlScheduledJobHistory.Configuration == nil {
@@ -26875,6 +26865,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJob.DisplayID(childComplexity), true
 
+	case "ScheduledJob.downloadURL":
+		if e.complexity.ScheduledJob.DownloadURL == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.DownloadURL(childComplexity), true
+
 	case "ScheduledJob.id":
 		if e.complexity.ScheduledJob.ID == nil {
 			break
@@ -26902,6 +26899,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScheduledJob.OwnerID(childComplexity), true
+
+	case "ScheduledJob.platform":
+		if e.complexity.ScheduledJob.Platform == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.Platform(childComplexity), true
 
 	case "ScheduledJob.script":
 		if e.complexity.ScheduledJob.Script == nil {
@@ -26944,6 +26948,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScheduledJob.UpdatedBy(childComplexity), true
+
+	case "ScheduledJob.windmillPath":
+		if e.complexity.ScheduledJob.WindmillPath == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.WindmillPath(childComplexity), true
 
 	case "ScheduledJobBulkCreatePayload.scheduledJobs":
 		if e.complexity.ScheduledJobBulkCreatePayload.ScheduledJobs == nil {
@@ -27050,6 +27061,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJobHistory.DisplayID(childComplexity), true
 
+	case "ScheduledJobHistory.downloadURL":
+		if e.complexity.ScheduledJobHistory.DownloadURL == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.DownloadURL(childComplexity), true
+
 	case "ScheduledJobHistory.historyTime":
 		if e.complexity.ScheduledJobHistory.HistoryTime == nil {
 			break
@@ -27084,6 +27102,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScheduledJobHistory.OwnerID(childComplexity), true
+
+	case "ScheduledJobHistory.platform":
+		if e.complexity.ScheduledJobHistory.Platform == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.Platform(childComplexity), true
 
 	case "ScheduledJobHistory.ref":
 		if e.complexity.ScheduledJobHistory.Ref == nil {
@@ -27133,6 +27158,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScheduledJobHistory.UpdatedBy(childComplexity), true
+
+	case "ScheduledJobHistory.windmillPath":
+		if e.complexity.ScheduledJobHistory.WindmillPath == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.WindmillPath(childComplexity), true
 
 	case "ScheduledJobHistoryConnection.edges":
 		if e.complexity.ScheduledJobHistoryConnection.Edges == nil {
@@ -41553,11 +41585,7 @@ type ControlScheduledJob implements Node {
   """
   the configuration to run this job
   """
-  configuration: JobConfiguration!
-  """
-  the schedule to run this job. If not provided, it would inherit the cadence of the parent job
-  """
-  cadence: JobCadence
+  configuration: JobConfiguration
   """
   cron syntax. If not provided, it would inherit the cron of the parent job
   """
@@ -41682,11 +41710,7 @@ type ControlScheduledJobHistory implements Node {
   """
   the configuration to run this job
   """
-  configuration: JobConfiguration!
-  """
-  the schedule to run this job. If not provided, it would inherit the cadence of the parent job
-  """
-  cadence: JobCadence
+  configuration: JobConfiguration
   """
   cron syntax. If not provided, it would inherit the cron of the parent job
   """
@@ -42963,11 +42987,7 @@ input CreateControlScheduledJobInput {
   """
   the configuration to run this job
   """
-  configuration: JobConfiguration!
-  """
-  the schedule to run this job. If not provided, it would inherit the cadence of the parent job
-  """
-  cadence: JobCadence
+  configuration: JobConfiguration
   """
   cron syntax. If not provided, it would inherit the cron of the parent job
   """
@@ -44257,13 +44277,21 @@ input CreateScheduledJobInput {
   """
   jobType: ScheduledJobJobType
   """
+  the platform to use to execute this job
+  """
+  platform: ScheduledJobJobPlatformType!
+  """
   the script to run
   """
   script: String
   """
+  the url from where to download the script from
+  """
+  downloadURL: String!
+  """
   the configuration to run this job
   """
-  configuration: JobConfiguration!
+  configuration: JobConfiguration
   """
   the schedule to run this job
   """
@@ -74217,13 +74245,25 @@ type ScheduledJob implements Node {
   """
   jobType: ScheduledJobJobType!
   """
+  the platform to use to execute this job
+  """
+  platform: ScheduledJobJobPlatformType!
+  """
   the script to run
   """
   script: String
   """
+  Windmill path
+  """
+  windmillPath: String!
+  """
+  the url from where to download the script from
+  """
+  downloadURL: String!
+  """
   the configuration to run this job
   """
-  configuration: JobConfiguration!
+  configuration: JobConfiguration
   """
   the schedule to run this job
   """
@@ -74302,13 +74342,25 @@ type ScheduledJobHistory implements Node {
   """
   jobType: ScheduledJobHistoryJobType!
   """
+  the platform to use to execute this job
+  """
+  platform: ScheduledJobHistoryJobPlatformType!
+  """
   the script to run
   """
   script: String
   """
+  Windmill path
+  """
+  windmillPath: String!
+  """
+  the url from where to download the script from
+  """
+  downloadURL: String!
+  """
   the configuration to run this job
   """
-  configuration: JobConfiguration!
+  configuration: JobConfiguration
   """
   the schedule to run this job
   """
@@ -74349,6 +74401,13 @@ type ScheduledJobHistoryEdge {
   cursor: Cursor!
 }
 """
+ScheduledJobHistoryJobPlatformType is enum for the field platform
+"""
+enum ScheduledJobHistoryJobPlatformType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobPlatformType") {
+  GO
+  TS
+}
+"""
 ScheduledJobHistoryJobType is enum for the field job_type
 """
 enum ScheduledJobHistoryJobType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobType") {
@@ -74384,6 +74443,7 @@ enum ScheduledJobHistoryOrderField {
   updated_at
   title
   JOB_TYPE
+  platform
 }
 """
 ScheduledJobHistoryWhereInput is used for filtering ScheduledJobHistory objects.
@@ -74586,6 +74646,20 @@ input ScheduledJobHistoryWhereInput {
   jobTypeNEQ: ScheduledJobHistoryJobType
   jobTypeIn: [ScheduledJobHistoryJobType!]
   jobTypeNotIn: [ScheduledJobHistoryJobType!]
+  """
+  platform field predicates
+  """
+  platform: ScheduledJobHistoryJobPlatformType
+  platformNEQ: ScheduledJobHistoryJobPlatformType
+  platformIn: [ScheduledJobHistoryJobPlatformType!]
+  platformNotIn: [ScheduledJobHistoryJobPlatformType!]
+}
+"""
+ScheduledJobJobPlatformType is enum for the field platform
+"""
+enum ScheduledJobJobPlatformType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobPlatformType") {
+  GO
+  TS
 }
 """
 ScheduledJobJobType is enum for the field job_type
@@ -74614,6 +74688,7 @@ enum ScheduledJobOrderField {
   updated_at
   title
   JOB_TYPE
+  platform
 }
 type ScheduledJobRun implements Node {
   id: ID!
@@ -75056,6 +75131,13 @@ input ScheduledJobWhereInput {
   jobTypeNEQ: ScheduledJobJobType
   jobTypeIn: [ScheduledJobJobType!]
   jobTypeNotIn: [ScheduledJobJobType!]
+  """
+  platform field predicates
+  """
+  platform: ScheduledJobJobPlatformType
+  platformNEQ: ScheduledJobJobPlatformType
+  platformIn: [ScheduledJobJobPlatformType!]
+  platformNotIn: [ScheduledJobJobPlatformType!]
   """
   owner edge predicates
   """
@@ -83304,11 +83386,8 @@ input UpdateControlScheduledJobInput {
   the configuration to run this job
   """
   configuration: JobConfiguration
-  """
-  the schedule to run this job. If not provided, it would inherit the cadence of the parent job
-  """
-  cadence: JobCadence
-  clearCadence: Boolean
+  appendConfiguration: JobConfiguration
+  clearConfiguration: Boolean
   """
   cron syntax. If not provided, it would inherit the cron of the parent job
   """
@@ -85143,9 +85222,15 @@ input UpdateScheduledJobInput {
   script: String
   clearScript: Boolean
   """
+  the url from where to download the script from
+  """
+  downloadURL: String
+  """
   the configuration to run this job
   """
   configuration: JobConfiguration
+  appendConfiguration: JobConfiguration
+  clearConfiguration: Boolean
   """
   the schedule to run this job
   """

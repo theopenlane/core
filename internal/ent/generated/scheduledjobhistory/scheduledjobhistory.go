@@ -50,8 +50,14 @@ const (
 	FieldDescription = "description"
 	// FieldJobType holds the string denoting the job_type field in the database.
 	FieldJobType = "job_type"
+	// FieldPlatform holds the string denoting the platform field in the database.
+	FieldPlatform = "platform"
 	// FieldScript holds the string denoting the script field in the database.
 	FieldScript = "script"
+	// FieldWindmillPath holds the string denoting the windmill_path field in the database.
+	FieldWindmillPath = "windmill_path"
+	// FieldDownloadURL holds the string denoting the download_url field in the database.
+	FieldDownloadURL = "download_url"
 	// FieldConfiguration holds the string denoting the configuration field in the database.
 	FieldConfiguration = "configuration"
 	// FieldCadence holds the string denoting the cadence field in the database.
@@ -81,7 +87,10 @@ var Columns = []string{
 	FieldTitle,
 	FieldDescription,
 	FieldJobType,
+	FieldPlatform,
 	FieldScript,
+	FieldWindmillPath,
+	FieldDownloadURL,
 	FieldConfiguration,
 	FieldCadence,
 	FieldCron,
@@ -141,6 +150,16 @@ func JobTypeValidator(jt enums.JobType) error {
 		return nil
 	default:
 		return fmt.Errorf("scheduledjobhistory: invalid enum value for job_type field: %q", jt)
+	}
+}
+
+// PlatformValidator is a validator for the "platform" field enum values. It is called by the builders before save.
+func PlatformValidator(pl enums.JobPlatformType) error {
+	switch pl.String() {
+	case "GO", "TS":
+		return nil
+	default:
+		return fmt.Errorf("scheduledjobhistory: invalid enum value for platform field: %q", pl)
 	}
 }
 
@@ -227,9 +246,24 @@ func ByJobType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldJobType, opts...).ToFunc()
 }
 
+// ByPlatform orders the results by the platform field.
+func ByPlatform(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPlatform, opts...).ToFunc()
+}
+
 // ByScript orders the results by the script field.
 func ByScript(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScript, opts...).ToFunc()
+}
+
+// ByWindmillPath orders the results by the windmill_path field.
+func ByWindmillPath(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWindmillPath, opts...).ToFunc()
+}
+
+// ByDownloadURL orders the results by the download_url field.
+func ByDownloadURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDownloadURL, opts...).ToFunc()
 }
 
 // ByCron orders the results by the cron field.
@@ -249,4 +283,11 @@ var (
 	_ graphql.Marshaler = (*enums.JobType)(nil)
 	// enums.JobType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.JobType)(nil)
+)
+
+var (
+	// enums.JobPlatformType must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.JobPlatformType)(nil)
+	// enums.JobPlatformType must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.JobPlatformType)(nil)
 )

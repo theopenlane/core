@@ -685,8 +685,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "configuration", Type: field.TypeJSON},
-		{Name: "cadence", Type: field.TypeJSON, Nullable: true},
+		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
 		{Name: "job_id", Type: field.TypeString},
 		{Name: "job_runner_id", Type: field.TypeString, Nullable: true},
@@ -700,19 +699,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "control_scheduled_jobs_scheduled_jobs_job",
-				Columns:    []*schema.Column{ControlScheduledJobsColumns[10]},
+				Columns:    []*schema.Column{ControlScheduledJobsColumns[9]},
 				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "control_scheduled_jobs_job_runners_job_runner",
-				Columns:    []*schema.Column{ControlScheduledJobsColumns[11]},
+				Columns:    []*schema.Column{ControlScheduledJobsColumns[10]},
 				RefColumns: []*schema.Column{JobRunnersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "control_scheduled_jobs_organizations_scheduled_jobs",
-				Columns:    []*schema.Column{ControlScheduledJobsColumns[12]},
+				Columns:    []*schema.Column{ControlScheduledJobsColumns[11]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -721,7 +720,7 @@ var (
 			{
 				Name:    "controlscheduledjob_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ControlScheduledJobsColumns[12]},
+				Columns: []*schema.Column{ControlScheduledJobsColumns[11]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -742,8 +741,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "job_id", Type: field.TypeString},
-		{Name: "configuration", Type: field.TypeJSON},
-		{Name: "cadence", Type: field.TypeJSON, Nullable: true},
+		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
 		{Name: "job_runner_id", Type: field.TypeString, Nullable: true},
 	}
@@ -3797,8 +3795,11 @@ var (
 		{Name: "title", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "job_type", Type: field.TypeEnum, Enums: []string{"SSL"}, Default: "SSL"},
+		{Name: "platform", Type: field.TypeEnum, Enums: []string{"GO", "TS"}},
 		{Name: "script", Type: field.TypeString, Nullable: true},
-		{Name: "configuration", Type: field.TypeJSON},
+		{Name: "windmill_path", Type: field.TypeString},
+		{Name: "download_url", Type: field.TypeString},
+		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
 		{Name: "cadence", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -3811,7 +3812,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "scheduled_jobs_organizations_jobs",
-				Columns:    []*schema.Column{ScheduledJobsColumns[17]},
+				Columns:    []*schema.Column{ScheduledJobsColumns[20]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3820,12 +3821,12 @@ var (
 			{
 				Name:    "scheduledjob_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ScheduledJobsColumns[7], ScheduledJobsColumns[17]},
+				Columns: []*schema.Column{ScheduledJobsColumns[7], ScheduledJobsColumns[20]},
 			},
 			{
 				Name:    "scheduledjob_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduledJobsColumns[17]},
+				Columns: []*schema.Column{ScheduledJobsColumns[20]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3851,8 +3852,11 @@ var (
 		{Name: "title", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "job_type", Type: field.TypeEnum, Enums: []string{"SSL"}, Default: "SSL"},
+		{Name: "platform", Type: field.TypeEnum, Enums: []string{"GO", "TS"}},
 		{Name: "script", Type: field.TypeString, Nullable: true},
-		{Name: "configuration", Type: field.TypeJSON},
+		{Name: "windmill_path", Type: field.TypeString},
+		{Name: "download_url", Type: field.TypeString},
+		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
 		{Name: "cadence", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
 	}

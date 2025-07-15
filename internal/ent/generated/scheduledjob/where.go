@@ -129,6 +129,16 @@ func Script(v string) predicate.ScheduledJob {
 	return predicate.ScheduledJob(sql.FieldEQ(FieldScript, v))
 }
 
+// WindmillPath applies equality check predicate on the "windmill_path" field. It's identical to WindmillPathEQ.
+func WindmillPath(v string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldEQ(FieldWindmillPath, v))
+}
+
+// DownloadURL applies equality check predicate on the "download_url" field. It's identical to DownloadURLEQ.
+func DownloadURL(v string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldEQ(FieldDownloadURL, v))
+}
+
 // Cron applies equality check predicate on the "cron" field. It's identical to CronEQ.
 func Cron(v models.Cron) predicate.ScheduledJob {
 	return predicate.ScheduledJob(sql.FieldEQ(FieldCron, v))
@@ -849,6 +859,36 @@ func JobTypeNotIn(vs ...enums.JobType) predicate.ScheduledJob {
 	return predicate.ScheduledJob(sql.FieldNotIn(FieldJobType, v...))
 }
 
+// PlatformEQ applies the EQ predicate on the "platform" field.
+func PlatformEQ(v enums.JobPlatformType) predicate.ScheduledJob {
+	vc := v
+	return predicate.ScheduledJob(sql.FieldEQ(FieldPlatform, vc))
+}
+
+// PlatformNEQ applies the NEQ predicate on the "platform" field.
+func PlatformNEQ(v enums.JobPlatformType) predicate.ScheduledJob {
+	vc := v
+	return predicate.ScheduledJob(sql.FieldNEQ(FieldPlatform, vc))
+}
+
+// PlatformIn applies the In predicate on the "platform" field.
+func PlatformIn(vs ...enums.JobPlatformType) predicate.ScheduledJob {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ScheduledJob(sql.FieldIn(FieldPlatform, v...))
+}
+
+// PlatformNotIn applies the NotIn predicate on the "platform" field.
+func PlatformNotIn(vs ...enums.JobPlatformType) predicate.ScheduledJob {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ScheduledJob(sql.FieldNotIn(FieldPlatform, v...))
+}
+
 // ScriptEQ applies the EQ predicate on the "script" field.
 func ScriptEQ(v string) predicate.ScheduledJob {
 	return predicate.ScheduledJob(sql.FieldEQ(FieldScript, v))
@@ -922,6 +962,146 @@ func ScriptEqualFold(v string) predicate.ScheduledJob {
 // ScriptContainsFold applies the ContainsFold predicate on the "script" field.
 func ScriptContainsFold(v string) predicate.ScheduledJob {
 	return predicate.ScheduledJob(sql.FieldContainsFold(FieldScript, v))
+}
+
+// WindmillPathEQ applies the EQ predicate on the "windmill_path" field.
+func WindmillPathEQ(v string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldEQ(FieldWindmillPath, v))
+}
+
+// WindmillPathNEQ applies the NEQ predicate on the "windmill_path" field.
+func WindmillPathNEQ(v string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldNEQ(FieldWindmillPath, v))
+}
+
+// WindmillPathIn applies the In predicate on the "windmill_path" field.
+func WindmillPathIn(vs ...string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldIn(FieldWindmillPath, vs...))
+}
+
+// WindmillPathNotIn applies the NotIn predicate on the "windmill_path" field.
+func WindmillPathNotIn(vs ...string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldNotIn(FieldWindmillPath, vs...))
+}
+
+// WindmillPathGT applies the GT predicate on the "windmill_path" field.
+func WindmillPathGT(v string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldGT(FieldWindmillPath, v))
+}
+
+// WindmillPathGTE applies the GTE predicate on the "windmill_path" field.
+func WindmillPathGTE(v string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldGTE(FieldWindmillPath, v))
+}
+
+// WindmillPathLT applies the LT predicate on the "windmill_path" field.
+func WindmillPathLT(v string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldLT(FieldWindmillPath, v))
+}
+
+// WindmillPathLTE applies the LTE predicate on the "windmill_path" field.
+func WindmillPathLTE(v string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldLTE(FieldWindmillPath, v))
+}
+
+// WindmillPathContains applies the Contains predicate on the "windmill_path" field.
+func WindmillPathContains(v string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldContains(FieldWindmillPath, v))
+}
+
+// WindmillPathHasPrefix applies the HasPrefix predicate on the "windmill_path" field.
+func WindmillPathHasPrefix(v string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldHasPrefix(FieldWindmillPath, v))
+}
+
+// WindmillPathHasSuffix applies the HasSuffix predicate on the "windmill_path" field.
+func WindmillPathHasSuffix(v string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldHasSuffix(FieldWindmillPath, v))
+}
+
+// WindmillPathEqualFold applies the EqualFold predicate on the "windmill_path" field.
+func WindmillPathEqualFold(v string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldEqualFold(FieldWindmillPath, v))
+}
+
+// WindmillPathContainsFold applies the ContainsFold predicate on the "windmill_path" field.
+func WindmillPathContainsFold(v string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldContainsFold(FieldWindmillPath, v))
+}
+
+// DownloadURLEQ applies the EQ predicate on the "download_url" field.
+func DownloadURLEQ(v string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldEQ(FieldDownloadURL, v))
+}
+
+// DownloadURLNEQ applies the NEQ predicate on the "download_url" field.
+func DownloadURLNEQ(v string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldNEQ(FieldDownloadURL, v))
+}
+
+// DownloadURLIn applies the In predicate on the "download_url" field.
+func DownloadURLIn(vs ...string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldIn(FieldDownloadURL, vs...))
+}
+
+// DownloadURLNotIn applies the NotIn predicate on the "download_url" field.
+func DownloadURLNotIn(vs ...string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldNotIn(FieldDownloadURL, vs...))
+}
+
+// DownloadURLGT applies the GT predicate on the "download_url" field.
+func DownloadURLGT(v string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldGT(FieldDownloadURL, v))
+}
+
+// DownloadURLGTE applies the GTE predicate on the "download_url" field.
+func DownloadURLGTE(v string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldGTE(FieldDownloadURL, v))
+}
+
+// DownloadURLLT applies the LT predicate on the "download_url" field.
+func DownloadURLLT(v string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldLT(FieldDownloadURL, v))
+}
+
+// DownloadURLLTE applies the LTE predicate on the "download_url" field.
+func DownloadURLLTE(v string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldLTE(FieldDownloadURL, v))
+}
+
+// DownloadURLContains applies the Contains predicate on the "download_url" field.
+func DownloadURLContains(v string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldContains(FieldDownloadURL, v))
+}
+
+// DownloadURLHasPrefix applies the HasPrefix predicate on the "download_url" field.
+func DownloadURLHasPrefix(v string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldHasPrefix(FieldDownloadURL, v))
+}
+
+// DownloadURLHasSuffix applies the HasSuffix predicate on the "download_url" field.
+func DownloadURLHasSuffix(v string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldHasSuffix(FieldDownloadURL, v))
+}
+
+// DownloadURLEqualFold applies the EqualFold predicate on the "download_url" field.
+func DownloadURLEqualFold(v string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldEqualFold(FieldDownloadURL, v))
+}
+
+// DownloadURLContainsFold applies the ContainsFold predicate on the "download_url" field.
+func DownloadURLContainsFold(v string) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldContainsFold(FieldDownloadURL, v))
+}
+
+// ConfigurationIsNil applies the IsNil predicate on the "configuration" field.
+func ConfigurationIsNil() predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldIsNull(FieldConfiguration))
+}
+
+// ConfigurationNotNil applies the NotNil predicate on the "configuration" field.
+func ConfigurationNotNil() predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldNotNull(FieldConfiguration))
 }
 
 // CadenceIsNil applies the IsNil predicate on the "cadence" field.

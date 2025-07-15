@@ -213,17 +213,49 @@ func (sju *ScheduledJobUpdate) ClearScript() *ScheduledJobUpdate {
 	return sju
 }
 
+// SetWindmillPath sets the "windmill_path" field.
+func (sju *ScheduledJobUpdate) SetWindmillPath(s string) *ScheduledJobUpdate {
+	sju.mutation.SetWindmillPath(s)
+	return sju
+}
+
+// SetNillableWindmillPath sets the "windmill_path" field if the given value is not nil.
+func (sju *ScheduledJobUpdate) SetNillableWindmillPath(s *string) *ScheduledJobUpdate {
+	if s != nil {
+		sju.SetWindmillPath(*s)
+	}
+	return sju
+}
+
+// SetDownloadURL sets the "download_url" field.
+func (sju *ScheduledJobUpdate) SetDownloadURL(s string) *ScheduledJobUpdate {
+	sju.mutation.SetDownloadURL(s)
+	return sju
+}
+
+// SetNillableDownloadURL sets the "download_url" field if the given value is not nil.
+func (sju *ScheduledJobUpdate) SetNillableDownloadURL(s *string) *ScheduledJobUpdate {
+	if s != nil {
+		sju.SetDownloadURL(*s)
+	}
+	return sju
+}
+
 // SetConfiguration sets the "configuration" field.
 func (sju *ScheduledJobUpdate) SetConfiguration(mc models.JobConfiguration) *ScheduledJobUpdate {
 	sju.mutation.SetConfiguration(mc)
 	return sju
 }
 
-// SetNillableConfiguration sets the "configuration" field if the given value is not nil.
-func (sju *ScheduledJobUpdate) SetNillableConfiguration(mc *models.JobConfiguration) *ScheduledJobUpdate {
-	if mc != nil {
-		sju.SetConfiguration(*mc)
-	}
+// AppendConfiguration appends mc to the "configuration" field.
+func (sju *ScheduledJobUpdate) AppendConfiguration(mc models.JobConfiguration) *ScheduledJobUpdate {
+	sju.mutation.AppendConfiguration(mc)
+	return sju
+}
+
+// ClearConfiguration clears the value of the "configuration" field.
+func (sju *ScheduledJobUpdate) ClearConfiguration() *ScheduledJobUpdate {
+	sju.mutation.ClearConfiguration()
 	return sju
 }
 
@@ -430,8 +462,22 @@ func (sju *ScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if sju.mutation.ScriptCleared() {
 		_spec.ClearField(scheduledjob.FieldScript, field.TypeString)
 	}
+	if value, ok := sju.mutation.WindmillPath(); ok {
+		_spec.SetField(scheduledjob.FieldWindmillPath, field.TypeString, value)
+	}
+	if value, ok := sju.mutation.DownloadURL(); ok {
+		_spec.SetField(scheduledjob.FieldDownloadURL, field.TypeString, value)
+	}
 	if value, ok := sju.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjob.FieldConfiguration, field.TypeJSON, value)
+	}
+	if value, ok := sju.mutation.AppendedConfiguration(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, scheduledjob.FieldConfiguration, value)
+		})
+	}
+	if sju.mutation.ConfigurationCleared() {
+		_spec.ClearField(scheduledjob.FieldConfiguration, field.TypeJSON)
 	}
 	if value, ok := sju.mutation.Cadence(); ok {
 		_spec.SetField(scheduledjob.FieldCadence, field.TypeJSON, value)
@@ -678,17 +724,49 @@ func (sjuo *ScheduledJobUpdateOne) ClearScript() *ScheduledJobUpdateOne {
 	return sjuo
 }
 
+// SetWindmillPath sets the "windmill_path" field.
+func (sjuo *ScheduledJobUpdateOne) SetWindmillPath(s string) *ScheduledJobUpdateOne {
+	sjuo.mutation.SetWindmillPath(s)
+	return sjuo
+}
+
+// SetNillableWindmillPath sets the "windmill_path" field if the given value is not nil.
+func (sjuo *ScheduledJobUpdateOne) SetNillableWindmillPath(s *string) *ScheduledJobUpdateOne {
+	if s != nil {
+		sjuo.SetWindmillPath(*s)
+	}
+	return sjuo
+}
+
+// SetDownloadURL sets the "download_url" field.
+func (sjuo *ScheduledJobUpdateOne) SetDownloadURL(s string) *ScheduledJobUpdateOne {
+	sjuo.mutation.SetDownloadURL(s)
+	return sjuo
+}
+
+// SetNillableDownloadURL sets the "download_url" field if the given value is not nil.
+func (sjuo *ScheduledJobUpdateOne) SetNillableDownloadURL(s *string) *ScheduledJobUpdateOne {
+	if s != nil {
+		sjuo.SetDownloadURL(*s)
+	}
+	return sjuo
+}
+
 // SetConfiguration sets the "configuration" field.
 func (sjuo *ScheduledJobUpdateOne) SetConfiguration(mc models.JobConfiguration) *ScheduledJobUpdateOne {
 	sjuo.mutation.SetConfiguration(mc)
 	return sjuo
 }
 
-// SetNillableConfiguration sets the "configuration" field if the given value is not nil.
-func (sjuo *ScheduledJobUpdateOne) SetNillableConfiguration(mc *models.JobConfiguration) *ScheduledJobUpdateOne {
-	if mc != nil {
-		sjuo.SetConfiguration(*mc)
-	}
+// AppendConfiguration appends mc to the "configuration" field.
+func (sjuo *ScheduledJobUpdateOne) AppendConfiguration(mc models.JobConfiguration) *ScheduledJobUpdateOne {
+	sjuo.mutation.AppendConfiguration(mc)
+	return sjuo
+}
+
+// ClearConfiguration clears the value of the "configuration" field.
+func (sjuo *ScheduledJobUpdateOne) ClearConfiguration() *ScheduledJobUpdateOne {
+	sjuo.mutation.ClearConfiguration()
 	return sjuo
 }
 
@@ -925,8 +1003,22 @@ func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *Schedule
 	if sjuo.mutation.ScriptCleared() {
 		_spec.ClearField(scheduledjob.FieldScript, field.TypeString)
 	}
+	if value, ok := sjuo.mutation.WindmillPath(); ok {
+		_spec.SetField(scheduledjob.FieldWindmillPath, field.TypeString, value)
+	}
+	if value, ok := sjuo.mutation.DownloadURL(); ok {
+		_spec.SetField(scheduledjob.FieldDownloadURL, field.TypeString, value)
+	}
 	if value, ok := sjuo.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjob.FieldConfiguration, field.TypeJSON, value)
+	}
+	if value, ok := sjuo.mutation.AppendedConfiguration(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, scheduledjob.FieldConfiguration, value)
+		})
+	}
+	if sjuo.mutation.ConfigurationCleared() {
+		_spec.ClearField(scheduledjob.FieldConfiguration, field.TypeJSON)
 	}
 	if value, ok := sjuo.mutation.Cadence(); ok {
 		_spec.SetField(scheduledjob.FieldCadence, field.TypeJSON, value)
