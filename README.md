@@ -22,9 +22,10 @@ the heart of the [Openlane](https://www.theopenlane.io) cloud service, which is 
 - Questionnaire creation, customization, and automation for easier internal and external interactions with your staff, auditors, and vendors
 - Notification customizations, channel definitions, comments and histories on all your objects
 - Easy to use documentation editors and storage for Policies and Procedures, or whatever documentation is needed
-.... and more!
+  .... and more!
 
 We have our sights set on additional features such as:
+
 - Trust Center and vanity domains
 - Automated Evidence collection
 - Continuous GRC features
@@ -98,7 +99,7 @@ See the [README](/config/README.md) in the `config` directory.
 The server enforces CSRF protection on all mutating requests. Clients must
 include a valid token in the `X-CSRF-Token` header. Existing client code can
 create a client with the CSRF Token using the following function. This function
-will grab a valid CSRF token from the `/livez` endpoint  and send it for subsequent requests.
+will grab a valid CSRF token from the `/livez` endpoint and send it for subsequent requests.
 
 ```go
  client.ClientWithCSRFToken(ctx, opts...)
@@ -137,6 +138,7 @@ server:
 ```
 
 In the apollo settings you will need to configure your connection settings:
+
 1. Endpoint: `http://localhost:17608/query`
 1. Shared Headers: `Authorization` `Bearer tolp_REDCATED`
 
@@ -157,6 +159,12 @@ These are also created automatically when you setup the test user using `task cl
 You can load up a local openFGA environment with the compose setup in this
 repository; `task fga:up` - this will launch an interactive playground where you
 can model permissions model(s) or changes to the models
+
+### Windill
+
+We use Windmill to run automated scripts periodically amongst others. You can
+load up a local instance by running `task docker:windmill:up`. This will
+launch the Windmill UI console where you can manage your tokens and/or workspaces
 
 ### Creating a new Schema
 
