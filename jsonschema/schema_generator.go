@@ -459,7 +459,7 @@ func generateYAMLWithComments(result *strings.Builder, prefix string, v reflect.
 	}
 
 	t := v.Type()
-	indentStr := strings.Repeat("    ", indent)
+	indentStr := strings.Repeat("  ", indent)
 
 	for i := 0; i < v.NumField(); i++ {
 		field := t.Field(i)
