@@ -148,6 +148,7 @@ func (Invite) Annotations() []schema.Annotation {
 func (Invite) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookInvite(),
+		hooks.HookInviteGroups(),
 		hooks.HookInviteAccepted(),
 	}
 }

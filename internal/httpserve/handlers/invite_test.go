@@ -12,11 +12,13 @@ import (
 
 	"github.com/riverqueue/river/riverdriver/riverpgxv5"
 	"github.com/riverqueue/river/rivertest"
+	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
+	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -91,15 +93,23 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 
 			ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 
-			invite, err := suite.db.Invite.Create().
+			inv, err := suite.db.Invite.Create().
 				SetRecipient(tc.email).
 				AddGroupIDs(group.ID).
 				Save(ctx)
 			require.NoError(t, err)
 
+			resp, err := suite.db.Invite.Query().
+				Where(invite.ID(inv.ID)).
+				WithGroups().
+				Only(ctx)
+			require.NoError(t, err)
+
+			log.Debug().Interface("invite", resp).Msg("created invite")
+
 			target := "/invite"
 			if tc.tokenSet {
-				target = fmt.Sprintf("/invite?token=%s", invite.Token)
+				target = fmt.Sprintf("/invite?token=%s", inv.Token)
 			}
 
 			req := httptest.NewRequest(http.MethodGet, target, nil)

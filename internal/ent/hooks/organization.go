@@ -298,7 +298,8 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 	originalOrg, _ := auth.GetOrganizationIDFromContext(ctx) // nolint: errcheck
 
 	// set the new org id in the auth context to process the rest of the post creation steps
-	if err := auth.SetOrganizationIDInAuthContext(ctx, orgCreated.ID); err != nil {
+	ctx, err := auth.SetOrganizationIDInAuthContext(ctx, orgCreated.ID)
+	if err != nil {
 		return err
 	}
 
@@ -335,7 +336,8 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 
 	// reset the original org id in the auth context if it was previously set
 	if originalOrg != "" {
-		if err := auth.SetOrganizationIDInAuthContext(ctx, originalOrg); err != nil {
+		_, err := auth.SetOrganizationIDInAuthContext(ctx, originalOrg)
+		if err != nil {
 			return err
 		}
 	}

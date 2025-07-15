@@ -2732,6 +2732,8 @@ func init() {
 	invite.Hooks[4] = inviteHooks[0]
 
 	invite.Hooks[5] = inviteHooks[1]
+
+	invite.Hooks[6] = inviteHooks[2]
 	inviteMixinInters1 := inviteMixin[1].Interceptors()
 	inviteMixinInters4 := inviteMixin[4].Interceptors()
 	invite.Interceptors[0] = inviteMixinInters1[0]
