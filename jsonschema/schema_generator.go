@@ -46,6 +46,8 @@ var includedPackages = []string{
 	"./internal/httpserve/handlers",
 	"./pkg/middleware",
 	"./pkg/objects",
+	"./internal/ent/entconfig",
+	"./pkg/entitlements",
 }
 
 // sensitiveFields lists configuration paths that are sensitive but reside in external packages
@@ -260,7 +262,7 @@ func generateConfigMapEntry(field envparse.VarInfo, defaultVal string) string {
 
 	if domainTag == "inherit" {
 		// Generate Helm template logic for domain inheritance
-		helmPath := fmt.Sprintf("openlane.%s", strings.TrimPrefix(field.FullPath, "core."))
+		helmPath := fmt.Sprintf("openlane.coreConfiguration.%s", strings.TrimPrefix(field.FullPath, "core."))
 		return generateDomainHelmTemplate(field.Key, helmPath, domainPrefix, domainSuffix, defaultVal)
 	}
 
@@ -459,7 +461,7 @@ func generateYAMLWithComments(result *strings.Builder, prefix string, v reflect.
 	}
 
 	t := v.Type()
-	indentStr := strings.Repeat("    ", indent)
+	indentStr := strings.Repeat("  ", indent)
 
 	for i := 0; i < v.NumField(); i++ {
 		field := t.Field(i)
