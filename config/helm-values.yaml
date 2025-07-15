@@ -193,7 +193,7 @@ coreConfiguration:
       # -- Timezone for scheduled jobs
       timezone: "UTC"  # @schema type:string; default:UTC
       # -- OnFailureScript script to run when a scheduled job fails
-      onFailureScript: ""  # @schema type:string
+      onFailureScrip: ""  # @schema type:string
       # -- OnSuccessScript script to run when a scheduled job succeeds
       onSuccessScript: ""  # @schema type:string
       # -- FolderName identifies the storage path of flows and scripts in Windmill, you'd want to use
