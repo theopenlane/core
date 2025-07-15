@@ -1,16 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-#
-# EXECUTION CONTEXT: Docker container (with git, gh, docker, jq, buildkite-agent)
-# REQUIRED TOOLS: git, gh, docker, jq, buildkite-agent
-# ASSUMPTIONS: GitHub token available, Docker daemon accessible
-# TRIGGER: build.tag != null (when a release is tagged)
-#
-
-# Image tag automation for releases
-# Creates PRs in openlane-infra to update image tags when new releases are cut
-
 YQ_VERSION=${YQ_VERSION:-4.45.4}
 repo="${HELM_CHART_REPO}"
 chart_dir="${HELM_CHART_PATH:-charts/openlane}"
