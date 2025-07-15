@@ -62,10 +62,8 @@ var (
 	ErrEmailDomainNotAllowed = errors.New("email domain not allowed in organization")
 	// ErrUserNotFound is returned when a user is not found in the system
 	ErrUserNotFound = errors.New("user not found")
-	// ErrCadenceOrCronRequired is returned when a user does not provide either a cadence or cron
-	ErrCadenceOrCronRequired = errors.New("either cadence or cron must be specified")
-	// ErrEitherCadenceOrCron is returned when both a cadence and cron is specified
-	ErrEitherCadenceOrCron = errors.New("only one of cadence or cron must be specified")
+	// ErrCronRequired is returned when a user does not provide a cron expression
+	ErrCronRequired = errors.New("cron expression must be specified")
 	// ErrZeroTimeNotAllowed is returned when you try to set a non usable time value
 	ErrZeroTimeNotAllowed = errors.New("time cannot be empty. Provide a valid time/date")
 	// ErrFutureTimeNotAllowed is returned when you try to set a time into the future.

@@ -81,8 +81,6 @@ func (ec *executionContext) fieldContext_ControlScheduledJobBulkCreatePayload_co
 				return ec.fieldContext_ControlScheduledJob_jobID(ctx, field)
 			case "configuration":
 				return ec.fieldContext_ControlScheduledJob_configuration(ctx, field)
-			case "cadence":
-				return ec.fieldContext_ControlScheduledJob_cadence(ctx, field)
 			case "cron":
 				return ec.fieldContext_ControlScheduledJob_cron(ctx, field)
 			case "jobRunnerID":
@@ -159,8 +157,6 @@ func (ec *executionContext) fieldContext_ControlScheduledJobCreatePayload_contro
 				return ec.fieldContext_ControlScheduledJob_jobID(ctx, field)
 			case "configuration":
 				return ec.fieldContext_ControlScheduledJob_configuration(ctx, field)
-			case "cadence":
-				return ec.fieldContext_ControlScheduledJob_cadence(ctx, field)
 			case "cron":
 				return ec.fieldContext_ControlScheduledJob_cron(ctx, field)
 			case "jobRunnerID":
@@ -281,8 +277,6 @@ func (ec *executionContext) fieldContext_ControlScheduledJobUpdatePayload_contro
 				return ec.fieldContext_ControlScheduledJob_jobID(ctx, field)
 			case "configuration":
 				return ec.fieldContext_ControlScheduledJob_configuration(ctx, field)
-			case "cadence":
-				return ec.fieldContext_ControlScheduledJob_cadence(ctx, field)
 			case "cron":
 				return ec.fieldContext_ControlScheduledJob_cron(ctx, field)
 			case "jobRunnerID":

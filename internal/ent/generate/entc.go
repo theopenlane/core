@@ -36,6 +36,7 @@ import (
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/summarizer"
+	"github.com/theopenlane/core/pkg/windmill"
 
 	"github.com/theopenlane/core/internal/genhelpers"
 )
@@ -142,6 +143,10 @@ func main() {
 		entc.Dependency(
 			entc.DependencyName("Summarizer"),
 			entc.DependencyType(&summarizer.Client{}),
+		),
+		entc.Dependency(
+			entc.DependencyName("Windmill"),
+			entc.DependencyType(&windmill.Client{}),
 		),
 		entc.Dependency(
 			entc.DependencyName("PondPool"),

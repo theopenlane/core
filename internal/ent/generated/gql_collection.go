@@ -7105,11 +7105,6 @@ func (csj *ControlScheduledJobQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, controlscheduledjob.FieldConfiguration)
 				fieldSeen[controlscheduledjob.FieldConfiguration] = struct{}{}
 			}
-		case "cadence":
-			if _, ok := fieldSeen[controlscheduledjob.FieldCadence]; !ok {
-				selectedFields = append(selectedFields, controlscheduledjob.FieldCadence)
-				fieldSeen[controlscheduledjob.FieldCadence] = struct{}{}
-			}
 		case "cron":
 			if _, ok := fieldSeen[controlscheduledjob.FieldCron]; !ok {
 				selectedFields = append(selectedFields, controlscheduledjob.FieldCron)
@@ -7259,11 +7254,6 @@ func (csjh *ControlScheduledJobHistoryQuery) collectField(ctx context.Context, o
 			if _, ok := fieldSeen[controlscheduledjobhistory.FieldConfiguration]; !ok {
 				selectedFields = append(selectedFields, controlscheduledjobhistory.FieldConfiguration)
 				fieldSeen[controlscheduledjobhistory.FieldConfiguration] = struct{}{}
-			}
-		case "cadence":
-			if _, ok := fieldSeen[controlscheduledjobhistory.FieldCadence]; !ok {
-				selectedFields = append(selectedFields, controlscheduledjobhistory.FieldCadence)
-				fieldSeen[controlscheduledjobhistory.FieldCadence] = struct{}{}
 			}
 		case "cron":
 			if _, ok := fieldSeen[controlscheduledjobhistory.FieldCron]; !ok {
@@ -37087,10 +37077,25 @@ func (sj *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, scheduledjob.FieldJobType)
 				fieldSeen[scheduledjob.FieldJobType] = struct{}{}
 			}
+		case "platform":
+			if _, ok := fieldSeen[scheduledjob.FieldPlatform]; !ok {
+				selectedFields = append(selectedFields, scheduledjob.FieldPlatform)
+				fieldSeen[scheduledjob.FieldPlatform] = struct{}{}
+			}
 		case "script":
 			if _, ok := fieldSeen[scheduledjob.FieldScript]; !ok {
 				selectedFields = append(selectedFields, scheduledjob.FieldScript)
 				fieldSeen[scheduledjob.FieldScript] = struct{}{}
+			}
+		case "windmillPath":
+			if _, ok := fieldSeen[scheduledjob.FieldWindmillPath]; !ok {
+				selectedFields = append(selectedFields, scheduledjob.FieldWindmillPath)
+				fieldSeen[scheduledjob.FieldWindmillPath] = struct{}{}
+			}
+		case "downloadURL":
+			if _, ok := fieldSeen[scheduledjob.FieldDownloadURL]; !ok {
+				selectedFields = append(selectedFields, scheduledjob.FieldDownloadURL)
+				fieldSeen[scheduledjob.FieldDownloadURL] = struct{}{}
 			}
 		case "configuration":
 			if _, ok := fieldSeen[scheduledjob.FieldConfiguration]; !ok {
@@ -37267,10 +37272,25 @@ func (sjh *ScheduledJobHistoryQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, scheduledjobhistory.FieldJobType)
 				fieldSeen[scheduledjobhistory.FieldJobType] = struct{}{}
 			}
+		case "platform":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldPlatform]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldPlatform)
+				fieldSeen[scheduledjobhistory.FieldPlatform] = struct{}{}
+			}
 		case "script":
 			if _, ok := fieldSeen[scheduledjobhistory.FieldScript]; !ok {
 				selectedFields = append(selectedFields, scheduledjobhistory.FieldScript)
 				fieldSeen[scheduledjobhistory.FieldScript] = struct{}{}
+			}
+		case "windmillPath":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldWindmillPath]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldWindmillPath)
+				fieldSeen[scheduledjobhistory.FieldWindmillPath] = struct{}{}
+			}
+		case "downloadURL":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldDownloadURL]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldDownloadURL)
+				fieldSeen[scheduledjobhistory.FieldDownloadURL] = struct{}{}
 			}
 		case "configuration":
 			if _, ok := fieldSeen[scheduledjobhistory.FieldConfiguration]; !ok {

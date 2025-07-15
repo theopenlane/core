@@ -248,6 +248,7 @@ Config holds the configuration for the ent server
 |----|----|-----------|--------|
 |[**entityTypes**](#entconfigentitytypes)|`string[]`|||
 |[**summarizer**](#entconfigsummarizer)|`object`|Summarizer holds configuration for the text summarization functionality<br/>||
+|[**windmill**](#entconfigwindmill)|`object`|Windmill holds configuration for the Windmill workflow automation platform<br/>||
 |**maxPoolSize**|`integer`|MaxPoolSize is the max pond pool workers that can be used by the ent client<br/>||
 
 **Additional Properties:** not allowed  
@@ -400,6 +401,27 @@ OpenAIConfig contains OpenAI specific configuration
 |**apiKey**|`string`|APIKey contains the authentication key for the service<br/>||
 |**url**|`string`|URL specifies the API endpoint<br/>||
 |**organizationID**|`string`|OrganizationID specifies the OpenAI organization ID<br/>||
+
+**Additional Properties:** not allowed  
+<a name="entconfigwindmill"></a>
+### entConfig\.windmill: object
+
+Windmill holds configuration for the Windmill workflow automation platform
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled specifies whether Windmill integration is enabled<br/>||
+|**baseURL**|`string`|BaseURL is the base URL of the Windmill instance<br/>||
+|**workspace**|`string`|Workspace is the Windmill workspace to use<br/>||
+|**token**|`string`|Token is the API token for authentication with Windmill<br/>||
+|**defaultTimeout**|`string`|DefaultTimeout is the default timeout for API requests<br/>||
+|**timezone**|`string`|Timezone for scheduled jobs<br/>||
+|**onFailureScript**|`string`|OnFailureScript script to run when a scheduled job fails<br/>||
+|**onSuccessScript**|`string`|OnSuccessScript script to run when a scheduled job succeeds<br/>||
+|**folderName**|`string`|FolderName identifies the storage path of flows and scripts in Windmill, you'd want to use<br/>||
 
 **Additional Properties:** not allowed  
 <a name="auth"></a>

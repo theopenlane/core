@@ -1,13 +1,12 @@
 package models
 
 import (
+	"encoding/json"
 	"errors"
 	"io"
 	"net"
 	"net/url"
 	"strings"
-
-	"github.com/theopenlane/core/pkg/enums"
 )
 
 var (
@@ -21,17 +20,29 @@ var (
 	ErrUnsupportedJobConfig = errors.New("we do not support this job type")
 	// ErrHTTPSOnlyURL defines an error where a non https url is being used for a ssl check
 	ErrHTTPSOnlyURL = errors.New("you can only check ssl of a domain with https")
-)
 
-// SSLJobConfig defines the configuration for the ssl job
-type SSLJobConfig struct {
-	URL string `json:"url"`
-}
+	errNilJobConfiguration = errors.New("JobConfiguration: UnmarshalJSON on nil pointer")
+)
 
 // JobConfiguration allows users configure the parameters that will be
 // templated into their scripts that runs in the automated jobs
-type JobConfiguration struct {
-	SSL SSLJobConfig `json:"ssl"`
+type JobConfiguration json.RawMessage
+
+// MarshalJSON implements the json.Marshaler interface
+func (job JobConfiguration) MarshalJSON() ([]byte, error) {
+	if job == nil {
+		return []byte("null"), nil
+	}
+	return []byte(job), nil
+}
+
+// UnmarshalJSON implements the json.Unmarshaler interface
+func (job *JobConfiguration) UnmarshalJSON(data []byte) error {
+	if job == nil {
+		return errNilJobConfiguration
+	}
+	*job = append((*job)[0:0], data...)
+	return nil
 }
 
 // MarshalGQL implement the Marshaler interface for gqlgen
@@ -42,23 +53,6 @@ func (job JobConfiguration) MarshalGQL(w io.Writer) {
 // UnmarshalGQL implement the Unmarshaler interface for gqlgen
 func (job *JobConfiguration) UnmarshalGQL(v interface{}) error {
 	return unmarshalGQLJSON(v, job)
-}
-
-// Validate validates the job configuration based on the supported job types
-func (job *JobConfiguration) Validate(typ enums.JobType) error {
-	switch typ {
-	case enums.JobTypeSsl:
-		return job.SSL.Validate()
-
-	default:
-		return ErrUnsupportedJobConfig
-	}
-}
-
-// Validate validates the ssl job configuration
-func (s SSLJobConfig) Validate() error {
-	_, err := ValidateURL(s.URL)
-	return err
 }
 
 // ValidateURL takes in url and makes sure it is a valid url

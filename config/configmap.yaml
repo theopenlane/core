@@ -89,6 +89,15 @@ data:
   CORE_ENTCONFIG_SUMMARIZER_LLM_OPENAI_URL: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.openai.url }}
   CORE_ENTCONFIG_SUMMARIZER_LLM_OPENAI_ORGANIZATIONID: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.openai.organizationID }}
   CORE_ENTCONFIG_SUMMARIZER_MAXIMUMSENTENCES: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.maximumSentences | default "60" }}
+  CORE_ENTCONFIG_WINDMILL_ENABLED: {{ .Values.openlane.coreConfiguration.entConfig.windmill.enabled | default "false" }}
+  CORE_ENTCONFIG_WINDMILL_BASEURL: {{ .Values.openlane.coreConfiguration.entConfig.windmill.baseURL | default "https://app.windmill.dev" }}
+  CORE_ENTCONFIG_WINDMILL_WORKSPACE: {{ .Values.openlane.coreConfiguration.entConfig.windmill.workspace }}
+  CORE_ENTCONFIG_WINDMILL_TOKEN: {{ .Values.openlane.coreConfiguration.entConfig.windmill.token }}
+  CORE_ENTCONFIG_WINDMILL_DEFAULTTIMEOUT: {{ .Values.openlane.coreConfiguration.entConfig.windmill.defaultTimeout | default "30s" }}
+  CORE_ENTCONFIG_WINDMILL_TIMEZONE: {{ .Values.openlane.coreConfiguration.entConfig.windmill.timezone | default "UTC" }}
+  CORE_ENTCONFIG_WINDMILL_ONFAILURESCRIPT: {{ .Values.openlane.coreConfiguration.entConfig.windmill.onFailureScript }}
+  CORE_ENTCONFIG_WINDMILL_ONSUCCESSSCRIPT: {{ .Values.openlane.coreConfiguration.entConfig.windmill.onSuccessScript }}
+  CORE_ENTCONFIG_WINDMILL_FOLDERNAME: {{ .Values.openlane.coreConfiguration.entConfig.windmill.folderName | default "openlane" }}
   CORE_ENTCONFIG_MAXPOOLSIZE: {{ .Values.openlane.coreConfiguration.entConfig.maxPoolSize | default "100" }}
   CORE_AUTH_ENABLED: {{ .Values.openlane.coreConfiguration.auth.enabled | default "true" }}
   CORE_AUTH_TOKEN_KID: {{ .Values.openlane.coreConfiguration.auth.token.kid }}

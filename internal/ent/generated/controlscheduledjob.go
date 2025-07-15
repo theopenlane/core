@@ -40,8 +40,6 @@ type ControlScheduledJob struct {
 	JobID string `json:"job_id,omitempty"`
 	// the configuration to run this job
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
-	// the schedule to run this job. If not provided, it would inherit the cadence of the parent job
-	Cadence models.JobCadence `json:"cadence,omitempty"`
 	// cron syntax. If not provided, it would inherit the cron of the parent job
 	Cron *models.Cron `json:"cron,omitempty"`
 	// the runner that this job will run on. If not set, it will scheduled on a general runner instead
@@ -132,7 +130,7 @@ func (*ControlScheduledJob) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case controlscheduledjob.FieldCron:
 			values[i] = &sql.NullScanner{S: new(models.Cron)}
-		case controlscheduledjob.FieldConfiguration, controlscheduledjob.FieldCadence:
+		case controlscheduledjob.FieldConfiguration:
 			values[i] = new([]byte)
 		case controlscheduledjob.FieldID, controlscheduledjob.FieldCreatedBy, controlscheduledjob.FieldUpdatedBy, controlscheduledjob.FieldDeletedBy, controlscheduledjob.FieldOwnerID, controlscheduledjob.FieldJobID, controlscheduledjob.FieldJobRunnerID:
 			values[i] = new(sql.NullString)
@@ -213,14 +211,6 @@ func (csj *ControlScheduledJob) assignValues(columns []string, values []any) err
 			} else if value != nil && len(*value) > 0 {
 				if err := json.Unmarshal(*value, &csj.Configuration); err != nil {
 					return fmt.Errorf("unmarshal field configuration: %w", err)
-				}
-			}
-		case controlscheduledjob.FieldCadence:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field cadence", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &csj.Cadence); err != nil {
-					return fmt.Errorf("unmarshal field cadence: %w", err)
 				}
 			}
 		case controlscheduledjob.FieldCron:
@@ -323,9 +313,6 @@ func (csj *ControlScheduledJob) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("configuration=")
 	builder.WriteString(fmt.Sprintf("%v", csj.Configuration))
-	builder.WriteString(", ")
-	builder.WriteString("cadence=")
-	builder.WriteString(fmt.Sprintf("%v", csj.Cadence))
 	builder.WriteString(", ")
 	if v := csj.Cron; v != nil {
 		builder.WriteString("cron=")

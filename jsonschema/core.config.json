@@ -474,6 +474,10 @@
           "$ref": "#/$defs/entconfig.Summarizer",
           "description": "Summarizer contains configuration for text summarization"
         },
+        "windmill": {
+          "$ref": "#/$defs/entconfig.Windmill",
+          "description": "Windmill contains configuration for Windmill workflow automation"
+        },
         "maxPoolSize": {
           "type": "integer",
           "description": "MaxPoolSize is the max pond pool workers that can be used by the ent client"
@@ -643,6 +647,49 @@
       "additionalProperties": false,
       "type": "object",
       "description": "SummarizerLLM contains configuration for multiple LLM providers"
+    },
+    "entconfig.Windmill": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled specifies whether Windmill integration is enabled"
+        },
+        "baseURL": {
+          "type": "string",
+          "description": "BaseURL is the base URL of the Windmill instance"
+        },
+        "workspace": {
+          "type": "string",
+          "description": "Workspace is the Windmill workspace to use"
+        },
+        "token": {
+          "type": "string",
+          "description": "Token is the API token for authentication with Windmill"
+        },
+        "defaultTimeout": {
+          "type": "string",
+          "description": "DefaultTimeout is the default timeout for API requests"
+        },
+        "timezone": {
+          "type": "string",
+          "description": "Timezone for scheduled jobs"
+        },
+        "onFailureScript": {
+          "type": "string",
+          "description": "OnFailureScript script to run when a scheduled job fails"
+        },
+        "onSuccessScript": {
+          "type": "string",
+          "description": "OnSuccessScript script to run when a scheduled job succeeds"
+        },
+        "folderName": {
+          "type": "string",
+          "description": "FolderName identifies the storage path of flows and scripts in Windmill, you'd want to use"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Windmill holds configuration for the Windmill workflow automation platform"
     },
     "entitlements.Config": {
       "properties": {

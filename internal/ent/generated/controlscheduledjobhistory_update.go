@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -144,31 +145,15 @@ func (csjhu *ControlScheduledJobHistoryUpdate) SetConfiguration(mc models.JobCon
 	return csjhu
 }
 
-// SetNillableConfiguration sets the "configuration" field if the given value is not nil.
-func (csjhu *ControlScheduledJobHistoryUpdate) SetNillableConfiguration(mc *models.JobConfiguration) *ControlScheduledJobHistoryUpdate {
-	if mc != nil {
-		csjhu.SetConfiguration(*mc)
-	}
+// AppendConfiguration appends mc to the "configuration" field.
+func (csjhu *ControlScheduledJobHistoryUpdate) AppendConfiguration(mc models.JobConfiguration) *ControlScheduledJobHistoryUpdate {
+	csjhu.mutation.AppendConfiguration(mc)
 	return csjhu
 }
 
-// SetCadence sets the "cadence" field.
-func (csjhu *ControlScheduledJobHistoryUpdate) SetCadence(mc models.JobCadence) *ControlScheduledJobHistoryUpdate {
-	csjhu.mutation.SetCadence(mc)
-	return csjhu
-}
-
-// SetNillableCadence sets the "cadence" field if the given value is not nil.
-func (csjhu *ControlScheduledJobHistoryUpdate) SetNillableCadence(mc *models.JobCadence) *ControlScheduledJobHistoryUpdate {
-	if mc != nil {
-		csjhu.SetCadence(*mc)
-	}
-	return csjhu
-}
-
-// ClearCadence clears the value of the "cadence" field.
-func (csjhu *ControlScheduledJobHistoryUpdate) ClearCadence() *ControlScheduledJobHistoryUpdate {
-	csjhu.mutation.ClearCadence()
+// ClearConfiguration clears the value of the "configuration" field.
+func (csjhu *ControlScheduledJobHistoryUpdate) ClearConfiguration() *ControlScheduledJobHistoryUpdate {
+	csjhu.mutation.ClearConfiguration()
 	return csjhu
 }
 
@@ -319,11 +304,13 @@ func (csjhu *ControlScheduledJobHistoryUpdate) sqlSave(ctx context.Context) (n i
 	if value, ok := csjhu.mutation.Configuration(); ok {
 		_spec.SetField(controlscheduledjobhistory.FieldConfiguration, field.TypeJSON, value)
 	}
-	if value, ok := csjhu.mutation.Cadence(); ok {
-		_spec.SetField(controlscheduledjobhistory.FieldCadence, field.TypeJSON, value)
+	if value, ok := csjhu.mutation.AppendedConfiguration(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, controlscheduledjobhistory.FieldConfiguration, value)
+		})
 	}
-	if csjhu.mutation.CadenceCleared() {
-		_spec.ClearField(controlscheduledjobhistory.FieldCadence, field.TypeJSON)
+	if csjhu.mutation.ConfigurationCleared() {
+		_spec.ClearField(controlscheduledjobhistory.FieldConfiguration, field.TypeJSON)
 	}
 	if value, ok := csjhu.mutation.Cron(); ok {
 		_spec.SetField(controlscheduledjobhistory.FieldCron, field.TypeString, value)
@@ -473,31 +460,15 @@ func (csjhuo *ControlScheduledJobHistoryUpdateOne) SetConfiguration(mc models.Jo
 	return csjhuo
 }
 
-// SetNillableConfiguration sets the "configuration" field if the given value is not nil.
-func (csjhuo *ControlScheduledJobHistoryUpdateOne) SetNillableConfiguration(mc *models.JobConfiguration) *ControlScheduledJobHistoryUpdateOne {
-	if mc != nil {
-		csjhuo.SetConfiguration(*mc)
-	}
+// AppendConfiguration appends mc to the "configuration" field.
+func (csjhuo *ControlScheduledJobHistoryUpdateOne) AppendConfiguration(mc models.JobConfiguration) *ControlScheduledJobHistoryUpdateOne {
+	csjhuo.mutation.AppendConfiguration(mc)
 	return csjhuo
 }
 
-// SetCadence sets the "cadence" field.
-func (csjhuo *ControlScheduledJobHistoryUpdateOne) SetCadence(mc models.JobCadence) *ControlScheduledJobHistoryUpdateOne {
-	csjhuo.mutation.SetCadence(mc)
-	return csjhuo
-}
-
-// SetNillableCadence sets the "cadence" field if the given value is not nil.
-func (csjhuo *ControlScheduledJobHistoryUpdateOne) SetNillableCadence(mc *models.JobCadence) *ControlScheduledJobHistoryUpdateOne {
-	if mc != nil {
-		csjhuo.SetCadence(*mc)
-	}
-	return csjhuo
-}
-
-// ClearCadence clears the value of the "cadence" field.
-func (csjhuo *ControlScheduledJobHistoryUpdateOne) ClearCadence() *ControlScheduledJobHistoryUpdateOne {
-	csjhuo.mutation.ClearCadence()
+// ClearConfiguration clears the value of the "configuration" field.
+func (csjhuo *ControlScheduledJobHistoryUpdateOne) ClearConfiguration() *ControlScheduledJobHistoryUpdateOne {
+	csjhuo.mutation.ClearConfiguration()
 	return csjhuo
 }
 
@@ -678,11 +649,13 @@ func (csjhuo *ControlScheduledJobHistoryUpdateOne) sqlSave(ctx context.Context) 
 	if value, ok := csjhuo.mutation.Configuration(); ok {
 		_spec.SetField(controlscheduledjobhistory.FieldConfiguration, field.TypeJSON, value)
 	}
-	if value, ok := csjhuo.mutation.Cadence(); ok {
-		_spec.SetField(controlscheduledjobhistory.FieldCadence, field.TypeJSON, value)
+	if value, ok := csjhuo.mutation.AppendedConfiguration(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, controlscheduledjobhistory.FieldConfiguration, value)
+		})
 	}
-	if csjhuo.mutation.CadenceCleared() {
-		_spec.ClearField(controlscheduledjobhistory.FieldCadence, field.TypeJSON)
+	if csjhuo.mutation.ConfigurationCleared() {
+		_spec.ClearField(controlscheduledjobhistory.FieldConfiguration, field.TypeJSON)
 	}
 	if value, ok := csjhuo.mutation.Cron(); ok {
 		_spec.SetField(controlscheduledjobhistory.FieldCron, field.TypeString, value)

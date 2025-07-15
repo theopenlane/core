@@ -136,20 +136,6 @@ func (csjc *ControlScheduledJobCreate) SetConfiguration(mc models.JobConfigurati
 	return csjc
 }
 
-// SetCadence sets the "cadence" field.
-func (csjc *ControlScheduledJobCreate) SetCadence(mc models.JobCadence) *ControlScheduledJobCreate {
-	csjc.mutation.SetCadence(mc)
-	return csjc
-}
-
-// SetNillableCadence sets the "cadence" field if the given value is not nil.
-func (csjc *ControlScheduledJobCreate) SetNillableCadence(mc *models.JobCadence) *ControlScheduledJobCreate {
-	if mc != nil {
-		csjc.SetCadence(*mc)
-	}
-	return csjc
-}
-
 // SetCron sets the "cron" field.
 func (csjc *ControlScheduledJobCreate) SetCron(m models.Cron) *ControlScheduledJobCreate {
 	csjc.mutation.SetCron(m)
@@ -308,14 +294,6 @@ func (csjc *ControlScheduledJobCreate) check() error {
 	if _, ok := csjc.mutation.JobID(); !ok {
 		return &ValidationError{Name: "job_id", err: errors.New(`generated: missing required field "ControlScheduledJob.job_id"`)}
 	}
-	if _, ok := csjc.mutation.Configuration(); !ok {
-		return &ValidationError{Name: "configuration", err: errors.New(`generated: missing required field "ControlScheduledJob.configuration"`)}
-	}
-	if v, ok := csjc.mutation.Cadence(); ok {
-		if err := v.Validate(); err != nil {
-			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJob.cadence": %w`, err)}
-		}
-	}
 	if v, ok := csjc.mutation.Cron(); ok {
 		if err := v.Validate(); err != nil {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJob.cron": %w`, err)}
@@ -387,10 +365,6 @@ func (csjc *ControlScheduledJobCreate) createSpec() (*ControlScheduledJob, *sqlg
 	if value, ok := csjc.mutation.Configuration(); ok {
 		_spec.SetField(controlscheduledjob.FieldConfiguration, field.TypeJSON, value)
 		_node.Configuration = value
-	}
-	if value, ok := csjc.mutation.Cadence(); ok {
-		_spec.SetField(controlscheduledjob.FieldCadence, field.TypeJSON, value)
-		_node.Cadence = value
 	}
 	if value, ok := csjc.mutation.Cron(); ok {
 		_spec.SetField(controlscheduledjob.FieldCron, field.TypeString, value)

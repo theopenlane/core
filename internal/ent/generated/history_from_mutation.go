@@ -1924,10 +1924,6 @@ func (m *ControlScheduledJobMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetConfiguration(configuration)
 	}
 
-	if cadence, exists := m.Cadence(); exists {
-		create = create.SetCadence(cadence)
-	}
-
 	if cron, exists := m.Cron(); exists {
 		create = create.SetNillableCron(&cron)
 	}
@@ -2021,12 +2017,6 @@ func (m *ControlScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetConfiguration(controlscheduledjob.Configuration)
 		}
 
-		if cadence, exists := m.Cadence(); exists {
-			create = create.SetCadence(cadence)
-		} else {
-			create = create.SetCadence(controlscheduledjob.Cadence)
-		}
-
 		if cron, exists := m.Cron(); exists {
 			create = create.SetNillableCron(&cron)
 		} else {
@@ -2083,7 +2073,6 @@ func (m *ControlScheduledJobMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetOwnerID(controlscheduledjob.OwnerID).
 			SetJobID(controlscheduledjob.JobID).
 			SetConfiguration(controlscheduledjob.Configuration).
-			SetCadence(controlscheduledjob.Cadence).
 			SetNillableCron(controlscheduledjob.Cron).
 			SetJobRunnerID(controlscheduledjob.JobRunnerID).
 			Save(ctx)
@@ -8720,8 +8709,20 @@ func (m *ScheduledJobMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetJobType(jobType)
 	}
 
+	if platform, exists := m.Platform(); exists {
+		create = create.SetPlatform(platform)
+	}
+
 	if script, exists := m.Script(); exists {
 		create = create.SetScript(script)
+	}
+
+	if windmillPath, exists := m.WindmillPath(); exists {
+		create = create.SetWindmillPath(windmillPath)
+	}
+
+	if downloadURL, exists := m.DownloadURL(); exists {
+		create = create.SetDownloadURL(downloadURL)
 	}
 
 	if configuration, exists := m.Configuration(); exists {
@@ -8845,10 +8846,28 @@ func (m *ScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetJobType(scheduledjob.JobType)
 		}
 
+		if platform, exists := m.Platform(); exists {
+			create = create.SetPlatform(platform)
+		} else {
+			create = create.SetPlatform(scheduledjob.Platform)
+		}
+
 		if script, exists := m.Script(); exists {
 			create = create.SetScript(script)
 		} else {
 			create = create.SetScript(scheduledjob.Script)
+		}
+
+		if windmillPath, exists := m.WindmillPath(); exists {
+			create = create.SetWindmillPath(windmillPath)
+		} else {
+			create = create.SetWindmillPath(scheduledjob.WindmillPath)
+		}
+
+		if downloadURL, exists := m.DownloadURL(); exists {
+			create = create.SetDownloadURL(downloadURL)
+		} else {
+			create = create.SetDownloadURL(scheduledjob.DownloadURL)
 		}
 
 		if configuration, exists := m.Configuration(); exists {
@@ -8917,7 +8936,10 @@ func (m *ScheduledJobMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetTitle(scheduledjob.Title).
 			SetDescription(scheduledjob.Description).
 			SetJobType(scheduledjob.JobType).
+			SetPlatform(scheduledjob.Platform).
 			SetScript(scheduledjob.Script).
+			SetWindmillPath(scheduledjob.WindmillPath).
+			SetDownloadURL(scheduledjob.DownloadURL).
 			SetConfiguration(scheduledjob.Configuration).
 			SetCadence(scheduledjob.Cadence).
 			SetNillableCron(scheduledjob.Cron).

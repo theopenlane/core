@@ -2,7 +2,6 @@
 mutation CreateBulkCSVControlScheduledJob($input: Upload!) {
   createBulkCSVControlScheduledJob(input: $input) {
     controlScheduledJobs {
-      cadence
       configuration
       createdAt
       createdBy
@@ -20,7 +19,6 @@ mutation CreateBulkCSVControlScheduledJob($input: Upload!) {
 mutation CreateBulkControlScheduledJob($input: [CreateControlScheduledJobInput!]) {
   createBulkControlScheduledJob(input: $input) {
     controlScheduledJobs {
-      cadence
       configuration
       createdAt
       createdBy
@@ -38,7 +36,6 @@ mutation CreateBulkControlScheduledJob($input: [CreateControlScheduledJobInput!]
 mutation CreateControlScheduledJob($input: CreateControlScheduledJobInput!) {
   createControlScheduledJob(input: $input) {
     controlScheduledJob {
-      cadence
       configuration
       createdAt
       createdBy
@@ -70,7 +67,6 @@ query GetAllControlScheduledJobs {
     }
     edges {
       node {
-        cadence
         configuration
         createdAt
         createdBy
@@ -87,7 +83,6 @@ query GetAllControlScheduledJobs {
 }
 query GetControlScheduledJobByID($controlScheduledJobId: ID!) {
   controlScheduledJob(id: $controlScheduledJobId) {
-    cadence
     configuration
     createdAt
     createdBy
@@ -112,7 +107,6 @@ query GetControlScheduledJobs($first: Int, $last: Int, $where: ControlScheduledJ
     }
     edges {
       node {
-        cadence
         configuration
         createdAt
         createdBy
@@ -130,7 +124,6 @@ query GetControlScheduledJobs($first: Int, $last: Int, $where: ControlScheduledJ
 mutation UpdateControlScheduledJob($updateControlScheduledJobId: ID!, $input: UpdateControlScheduledJobInput!) {
   updateControlScheduledJob(id: $updateControlScheduledJobId, input: $input) {
     controlScheduledJob {
-      cadence
       configuration
       createdAt
       createdBy
