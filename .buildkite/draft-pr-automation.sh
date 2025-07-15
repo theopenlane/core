@@ -29,6 +29,13 @@ if [[ -z "${BUILDKITE_PULL_REQUEST:-}" || "${BUILDKITE_PULL_REQUEST}" == "false"
   exit 0
 fi
 
+# Exit early if this PR does not modify configuration
+base_branch="${BUILDKITE_PULL_REQUEST_BASE_BRANCH:-main}"
+if ! pr_has_config_changes "$base_branch" "$BUILDKITE_BUILD_CHECKOUT_PATH" "config"; then
+  echo "ℹ️  No configuration changes detected in this PR compared to $base_branch"
+  exit 0
+fi
+
 # Clone the target repository
 echo "Cloning repository..."
 if ! git clone "$repo" "$work"; then
@@ -62,8 +69,6 @@ fi
 # Track what changes we make
 changes_made=false
 change_summary=""
-
-echo "🔍 Checking for configuration changes..."
 
 # Apply configuration changes using library functions
 config_changes=$(apply_helm_config_changes \

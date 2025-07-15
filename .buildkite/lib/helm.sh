@@ -16,8 +16,6 @@ merge_helm_values() {
         return 1
     fi
 
-    echo "🔄 Merging $description"
-
     # Create backup of existing values
     if [[ -f "$target" ]]; then
         cp "$target" "${target}.backup"
@@ -28,29 +26,24 @@ merge_helm_values() {
 
     if [[ -f "$target" ]]; then
         # Merge strategy: Use yq to merge the generated core values with existing values
-        # The 'core' section from our generated file will be merged/replaced
+        # The 'openlane.coreConfiguration' section from our generated file will be merged/replaced
         # All other sections in the target will be preserved
 
-        echo "  🔀 Merging with existing chart values..."
-        # Copy target file as base
         cp "$target" "$temp_merged"
 
         # Extract core section from source and use it to replace target core section
-        echo "  📋 Replacing core section..."
-        core_section=$(yq e '.core' "$source")
+        core_section=$(yq e '.openlane.coreConfiguration' "$source")
         echo "$core_section" > /tmp/core-section.yaml
-        yq e -i '.core = load("/tmp/core-section.yaml")' "$temp_merged"
+        yq e -i '.openlane.coreConfiguration = load("/tmp/core-section.yaml")' "$temp_merged"
 
         # Also merge any externalSecrets configuration if it exists in generated file
         if yq e '.externalSecrets' "$source" | grep -v "null" > /dev/null 2>&1; then
-            echo "  🔐 Merging external secrets configuration..."
             external_secrets_section=$(yq e '.externalSecrets' "$source")
             echo "$external_secrets_section" > /tmp/external-secrets-section.yaml
             yq e -i '.externalSecrets = load("/tmp/external-secrets-section.yaml")' "$temp_merged"
         fi
 
     else
-        echo "  ✨ Creating new values file..."
         cp "$source" "$temp_merged"
     fi
 
@@ -64,22 +57,21 @@ merge_helm_values() {
     # Calculate detailed changes for changelog
     local changes_detail=""
     if [[ -f "$target" ]]; then
-        echo "  📊 Analyzing changes..."
 
         # Compare core section changes
-        if yq e '.core' "$target" > /tmp/old-core.yaml 2>/dev/null; then
+        if yq e '.openlane.coreConfiguration' "$target" > /tmp/old-core.yaml 2>/dev/null; then
             local core_changes=$(yq e 'diff("/tmp/old-core.yaml")' /tmp/core-section.yaml 2>/dev/null | grep -E '^\+\+\+|^---' | wc -l | tr -d ' \n' || echo "0")
             if [[ "$core_changes" -gt 0 ]]; then
-                changes_detail+="\n    • Core configuration updated ($core_changes changes)"
+                changes_detail+="\n- ✅ Core configuration updated ($core_changes changes)"
             fi
         fi
 
         # Check for new/modified external secrets
         if [[ -f /tmp/external-secrets-section.yaml ]]; then
-            changes_detail+="\n    • External secrets configuration updated"
+            changes_detail+="\n- 🔐 External secrets configuration updated"
         fi
     else
-        changes_detail+="\n    • Initial values file created"
+        changes_detail+="\n- ✅ Initial values file created"
     fi
 
     # Apply the merged changes
@@ -103,14 +95,12 @@ copy_and_track() {
         # Check if target exists and has differences
         if [[ -f "$target" ]]; then
             if ! diff -q "$source" "$target" > /dev/null 2>&1; then
-                echo "Updating $description"
                 cp "$source" "$target"
                 git add "$target"
                 echo "✅ Updated $description"
                 return 0
             fi
         else
-            echo "Creating $description"
             mkdir -p "$(dirname "$target")"
             cp "$source" "$target"
             git add "$target"
@@ -131,7 +121,6 @@ copy_directory_and_track() {
         # Check if target exists and has differences
         if [[ -d "$target" ]]; then
             if ! diff -r "$source" "$target" > /dev/null 2>&1; then
-                echo "Updating $description"
                 rm -rf "$target"
                 mkdir -p "$(dirname "$target")"
                 cp -r "$source" "$target"
@@ -140,7 +129,6 @@ copy_directory_and_track() {
                 return 0
             fi
         else
-            echo "Creating $description"
             mkdir -p "$(dirname "$target")"
             cp -r "$source" "$target"
             git add "$target"
@@ -181,7 +169,6 @@ increment_chart_version() {
             ;;
     esac
 
-    echo "📈 Bumping chart version: $current -> $new_version"
     sed -i -E "s/^version:.*/version: $new_version/" "$chart_file"
     git add "$chart_file"
 
@@ -247,8 +234,6 @@ apply_helm_config_changes() {
     local changes_made=false
     local change_summary=""
 
-    echo "🔧 Applying Helm configuration changes..."
-
     # Update Helm values.yaml (intelligent merging approach)
     local values_changes=""
     if values_changes=$(merge_helm_values \
@@ -285,6 +270,6 @@ apply_helm_config_changes() {
         return 0
     else
         echo ""
-        return 1
+        return 0
     fi
 }
