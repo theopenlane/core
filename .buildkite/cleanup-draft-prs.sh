@@ -9,6 +9,11 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/lib/common.sh"
 source "${SCRIPT_DIR}/lib/github.sh"
 
+# Allow tests to override functions
+if [[ -n "${CLEANUP_PR_STUB:-}" && -f "${CLEANUP_PR_STUB}" ]]; then
+    source "${CLEANUP_PR_STUB}"
+fi
+
 # Configuration
 repo="${HELM_CHART_REPO}"
 
@@ -56,7 +61,12 @@ while IFS=':' read -r pr_number branch_name title; do
   core_pr_info=$(check_core_pr_status "$core_pr_number")
 
   if [[ -z "$core_pr_info" ]]; then
-    echo "⚠️  Could not fetch core PR #$core_pr_number information, skipping"
+    echo "⚠️  Core PR #$core_pr_number not found, closing draft PR #$pr_number"
+
+    closing_comment=$(generate_closure_comment "$core_pr_number" "closed")
+    if close_pr "$pr_number" "$repo" "$closing_comment"; then
+      safe_delete_branch "$branch_name"
+    fi
     continue
   fi
 
@@ -66,36 +76,24 @@ while IFS=':' read -r pr_number branch_name title; do
 
   echo "📋 Core PR #$core_pr_number: '$core_pr_title' (State: $core_pr_state, Updated: $core_pr_updated)"
 
+  if [[ "$core_pr_state" == "OPEN" ]]; then
+    echo "ℹ️  Core PR #$core_pr_number is still open, keeping draft PR #$pr_number"
+    continue
+  fi
+
   if [[ "$core_pr_state" == "MERGED" ]]; then
-    # Additional safety check: only close if the core PR was merged relatively recently
-    if is_recent_pr_activity "$core_pr_updated"; then
-      echo "✅ Core PR #$core_pr_number was recently merged ($core_pr_updated), closing draft PR #$pr_number"
-
+      echo "✅ Core PR #$core_pr_number was merged ($core_pr_updated), closing draft PR #$pr_number"
       closing_comment=$(generate_closure_comment "$core_pr_number" "merged")
-      if close_pr "$pr_number" "$repo" "$closing_comment"; then
-        safe_delete_branch "$branch_name"
-      fi
-    else
-      echo "⚠️  Core PR #$core_pr_number was merged too long ago ($core_pr_updated), skipping cleanup for safety"
-      continue
-    fi
-
   elif [[ "$core_pr_state" == "CLOSED" ]]; then
-    # Additional safety check: only close if the core PR was closed relatively recently
-    if is_recent_pr_activity "$core_pr_updated"; then
-      echo "🗑️  Core PR #$core_pr_number was recently closed ($core_pr_updated), closing draft PR #$pr_number"
-
+      echo "🗑️  Core PR #$core_pr_number was closed ($core_pr_updated), closing draft PR #$pr_number"
       closing_comment=$(generate_closure_comment "$core_pr_number" "closed")
-      if close_pr "$pr_number" "$repo" "$closing_comment"; then
-        safe_delete_branch "$branch_name"
-      fi
-    else
-      echo "⚠️  Core PR #$core_pr_number was closed too long ago ($core_pr_updated), skipping cleanup for safety"
-      continue
-    fi
-
   else
-    echo "ℹ️  Core PR #$core_pr_number is still open (state: $core_pr_state), keeping draft PR #$pr_number"
+    echo "⚠️  Core PR #$core_pr_number has unexpected state $core_pr_state, closing draft PR #$pr_number"
+    closing_comment=$(generate_closure_comment "$core_pr_number" "closed")
+  fi
+
+  if close_pr "$pr_number" "$repo" "$closing_comment"; then
+    safe_delete_branch "$branch_name"
   fi
 
 done <<< "$draft_prs"

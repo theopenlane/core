@@ -198,3 +198,22 @@ install_dependencies() {
     install_gh
     echo "✅ All dependencies installed"
 }
+
+# Function to determine if the current PR introduces configuration changes
+# Arguments:
+#   $1 - base branch to diff against (default: main)
+#   $2 - repository directory (default: $BUILDKITE_BUILD_CHECKOUT_PATH)
+#   $3 - path containing configuration files (default: config)
+pr_has_config_changes() {
+    local base_branch="${1:-main}"
+    local repo_dir="${2:-${BUILDKITE_BUILD_CHECKOUT_PATH}}"
+    local config_path="${3:-config}"
+
+    git -C "$repo_dir" fetch origin "$base_branch" >/dev/null 2>&1 || return 1
+
+    if git -C "$repo_dir" diff --quiet "origin/${base_branch}...HEAD" -- "$config_path"; then
+        return 1
+    fi
+
+    return 0
+}

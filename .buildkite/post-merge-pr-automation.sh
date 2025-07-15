@@ -129,8 +129,6 @@ while IFS=':' read -r pr_number branch_name title; do
         return 1
       fi
 
-      echo "🔄 Merging $description"
-
       # Create backup of existing values
       if [[ -f "$target" ]]; then
         cp "$target" "${target}.backup"
@@ -140,21 +138,17 @@ while IFS=':' read -r pr_number branch_name title; do
       local temp_merged="${target}.merged"
 
       if [[ -f "$target" ]]; then
-        echo "  📋 Extracting core configuration from generated values..."
         yq e '.core' "$source" > /tmp/core-values.yaml
 
-        echo "  🔀 Merging with existing chart values..."
         yq e '. as $target | load("/tmp/core-values.yaml") as $core | $target | .core = $core' "$target" > "$temp_merged"
 
         # Also merge any externalSecrets configuration if it exists
         if yq e '.externalSecrets' "$source" | grep -v "null" > /dev/null 2>&1; then
-          echo "  🔐 Merging external secrets configuration..."
           yq e '.externalSecrets' "$source" > /tmp/external-secrets.yaml
           yq e '. as $target | load("/tmp/external-secrets.yaml") as $secrets | $target | .externalSecrets = $secrets' "$temp_merged" > "${temp_merged}.tmp"
           mv "${temp_merged}.tmp" "$temp_merged"
         fi
       else
-        echo "  ✨ Creating new values file..."
         cp "$source" "$temp_merged"
       fi
 
@@ -186,7 +180,6 @@ while IFS=':' read -r pr_number branch_name title; do
         # Check if target exists and has differences
         if [[ -f "$target" ]]; then
           if ! diff -q "$source" "$target" > /dev/null 2>&1; then
-            echo "Updating $description"
             cp "$source" "$target"
             git add "$target"
             changes_made=true
@@ -194,7 +187,6 @@ while IFS=':' read -r pr_number branch_name title; do
             return 0
           fi
         else
-          echo "Creating $description"
           mkdir -p "$(dirname "$target")"
           cp "$source" "$target"
           git add "$target"
@@ -215,7 +207,6 @@ while IFS=':' read -r pr_number branch_name title; do
         # Check if target exists and has differences
         if [[ -d "$target" ]]; then
           if ! diff -r "$source" "$target" > /dev/null 2>&1; then
-            echo "Updating $description"
             rm -rf "$target"
             mkdir -p "$(dirname "$target")"
             cp -r "$source" "$target"
@@ -225,7 +216,6 @@ while IFS=':' read -r pr_number branch_name title; do
             return 0
           fi
         else
-          echo "Creating $description"
           mkdir -p "$(dirname "$target")"
           cp -r "$source" "$target"
           git add "$target"
@@ -263,7 +253,6 @@ while IFS=':' read -r pr_number branch_name title; do
       new_patch=$((patch+1))
       new_version="$major.$minor.$new_patch"
 
-      echo "📈 Bumping chart version: $current -> $new_version"
       sed -i -E "s/^version:.*/version: $new_version/" "$chart_file"
       git add "$chart_file"
       changes_made=true
@@ -296,7 +285,6 @@ Build Information:
       git commit -m "$commit_message"
 
       # Push the updated branch
-      echo "🚀 Pushing updated branch..."
       if git push origin "$branch_name"; then
         echo "✅ Branch updated successfully"
       else

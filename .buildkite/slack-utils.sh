@@ -4,17 +4,7 @@
 # Function to send slack notification using template file
 function send_slack_notification_from_template() {
   local template_file="$1"
-  local -A substitutions
-
-  # Parse additional arguments as key=value pairs
   shift
-  for arg in "$@"; do
-    if [[ "$arg" == *"="* ]]; then
-      key="${arg%%=*}"
-      value="${arg#*=}"
-      substitutions["$key"]="$value"
-    fi
-  done
 
   # Check if slack webhook is configured
   if [[ -z "${SLACK_WEBHOOK_URL:-}" ]]; then
@@ -30,16 +20,19 @@ function send_slack_notification_from_template() {
 
   echo "📨 Sending slack notification from template: $(basename "$template_file")"
 
-  # Read template and perform substitutions
+  # Read template
   local message_content
   message_content=$(cat "$template_file")
 
-  # Perform all substitutions
-  for key in "${!substitutions[@]}"; do
-    local value="${substitutions[$key]}"
-    # Escape special characters for JSON
-    value=$(echo "$value" | sed 's/\\/\\\\/g' | sed 's/"/\\"/g')
-    message_content="${message_content//\{\{$key\}\}/$value}"
+  # Perform substitutions (portable for Bash 3.x)
+  for arg in "$@"; do
+    if [[ "$arg" == *"="* ]]; then
+      key="${arg%%=*}"
+      value="${arg#*=}"
+      # Escape special characters for JSON
+      value=$(echo "$value" | sed 's/\\/\\\\/g' | sed 's/"/\\"/g')
+      message_content=$(echo "$message_content" | sed "s/{{${key}}}/$value/g")
+    fi
   done
 
   # Send to slack using webhook
