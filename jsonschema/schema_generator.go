@@ -260,7 +260,7 @@ func generateConfigMapEntry(field envparse.VarInfo, defaultVal string) string {
 
 	if domainTag == "inherit" {
 		// Generate Helm template logic for domain inheritance
-		helmPath := fmt.Sprintf("openlane.%s", strings.TrimPrefix(field.FullPath, "core."))
+		helmPath := fmt.Sprintf("openlane.coreConfiguration.%s", strings.TrimPrefix(field.FullPath, "core."))
 		return generateDomainHelmTemplate(field.Key, helmPath, domainPrefix, domainSuffix, defaultVal)
 	}
 

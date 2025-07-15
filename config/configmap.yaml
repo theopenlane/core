@@ -27,8 +27,8 @@ data:
   CORE_SERVER_TLS_AUTOCERT: {{ .Values.openlane.coreConfiguration.server.tls.autoCert | default "false" }}
   CORE_SERVER_CORS_ENABLED: {{ .Values.openlane.coreConfiguration.server.cors.enabled | default "true" }}
   CORE_SERVER_CORS_PREFIXES: {{ .Values.openlane.coreConfiguration.server.cors.prefixes }}
-{{- if .Values.openlane.server.cors.allowOrigins }}
-  CORE_SERVER_CORS_ALLOWORIGINS: {{ .Values.openlane.server.cors.allowOrigins }}
+{{- if .Values.openlane.coreConfiguration.server.cors.allowOrigins }}
+  CORE_SERVER_CORS_ALLOWORIGINS: {{ .Values.openlane.coreConfiguration.server.cors.allowOrigins }}
 {{- else if .Values.domain }}
   CORE_SERVER_CORS_ALLOWORIGINS: "https://console.{{ .Values.domain }},https://docs.{{ .Values.domain }},https://www.{{ .Values.domain }}"
 {{- else }}
@@ -65,8 +65,8 @@ data:
   CORE_SERVER_CSRFPROTECTION_COOKIEHTTPONLY: {{ .Values.openlane.coreConfiguration.server.csrfProtection.cookieHttpOnly | default "false" }}
   CORE_SERVER_CSRFPROTECTION_COOKIEDOMAIN: {{ .Values.openlane.coreConfiguration.server.csrfProtection.cookieDomain }}
   CORE_SERVER_CSRFPROTECTION_COOKIEPATH: {{ .Values.openlane.coreConfiguration.server.csrfProtection.cookiePath | default "/" }}
-{{- if .Values.openlane.server.defaultTrustCenterDomain }}
-  CORE_SERVER_DEFAULTTRUSTCENTERDOMAIN: {{ .Values.openlane.server.defaultTrustCenterDomain }}
+{{- if .Values.openlane.coreConfiguration.server.defaultTrustCenterDomain }}
+  CORE_SERVER_DEFAULTTRUSTCENTERDOMAIN: {{ .Values.openlane.coreConfiguration.server.defaultTrustCenterDomain }}
 {{- else if .Values.domain }}
   CORE_SERVER_DEFAULTTRUSTCENTERDOMAIN: "{{ .Values.domain }}"
 {{- else }}
@@ -214,22 +214,22 @@ data:
   CORE_SUBSCRIPTION_PUBLICSTRIPEKEY: {{ .Values.openlane.coreConfiguration.subscription.publicStripeKey }}
   CORE_SUBSCRIPTION_TRIALSUBSCRIPTIONPRICEID: {{ .Values.openlane.coreConfiguration.subscription.trialSubscriptionPriceID | default "price_1QKLyeBvxky1R7SvaZYGWyQb" }}
   CORE_SUBSCRIPTION_PERSONALORGSUBSCRIPTIONPRICEID: {{ .Values.openlane.coreConfiguration.subscription.personalOrgSubscriptionPriceID | default "price_1QycPyBvxky1R7Svz0gOWnNh" }}
-{{- if .Values.openlane.subscription.stripeWebhookURL }}
-  CORE_SUBSCRIPTION_STRIPEWEBHOOKURL: {{ .Values.openlane.subscription.stripeWebhookURL }}
+{{- if .Values.openlane.coreConfiguration.subscription.stripeWebhookURL }}
+  CORE_SUBSCRIPTION_STRIPEWEBHOOKURL: {{ .Values.openlane.coreConfiguration.subscription.stripeWebhookURL }}
 {{- else if .Values.domain }}
   CORE_SUBSCRIPTION_STRIPEWEBHOOKURL: "https://api.{{ .Values.domain }}/v1/stripe/webhook"
 {{- else }}
   CORE_SUBSCRIPTION_STRIPEWEBHOOKURL: "https://api.openlane.com/v1/stripe/webhook"
 {{- end }}
-{{- if .Values.openlane.subscription.stripeBillingPortalSuccessURL }}
-  CORE_SUBSCRIPTION_STRIPEBILLINGPORTALSUCCESSURL: {{ .Values.openlane.subscription.stripeBillingPortalSuccessURL }}
+{{- if .Values.openlane.coreConfiguration.subscription.stripeBillingPortalSuccessURL }}
+  CORE_SUBSCRIPTION_STRIPEBILLINGPORTALSUCCESSURL: {{ .Values.openlane.coreConfiguration.subscription.stripeBillingPortalSuccessURL }}
 {{- else if .Values.domain }}
   CORE_SUBSCRIPTION_STRIPEBILLINGPORTALSUCCESSURL: "https://console.{{ .Values.domain }}/billing"
 {{- else }}
   CORE_SUBSCRIPTION_STRIPEBILLINGPORTALSUCCESSURL: "https://console.openlane.com/billing"
 {{- end }}
-{{- if .Values.openlane.subscription.stripeCancellationReturnURL }}
-  CORE_SUBSCRIPTION_STRIPECANCELLATIONRETURNURL: {{ .Values.openlane.subscription.stripeCancellationReturnURL }}
+{{- if .Values.openlane.coreConfiguration.subscription.stripeCancellationReturnURL }}
+  CORE_SUBSCRIPTION_STRIPECANCELLATIONRETURNURL: {{ .Values.openlane.coreConfiguration.subscription.stripeCancellationReturnURL }}
 {{- else if .Values.domain }}
   CORE_SUBSCRIPTION_STRIPECANCELLATIONRETURNURL: "https://console.{{ .Values.domain }}/organization-settings/billing/subscription_canceled"
 {{- else }}
