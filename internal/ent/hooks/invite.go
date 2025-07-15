@@ -91,33 +91,35 @@ func HookInviteGroups() ent.Hook {
 		return hook.InviteFunc(func(ctx context.Context, m *generated.InviteMutation) (generated.Value, error) {
 			// ensure user has access to any group IDs set
 			groupIDs := m.GroupsIDs()
-			if len(groupIDs) > 0 {
-				// get the user ID from the context
-				userID, err := auth.GetSubjectIDFromContext(ctx)
+			if len(groupIDs) == 0 {
+				return next.Mutate(ctx, m)
+			}
+
+			// get the user ID from the context
+			userID, err := auth.GetSubjectIDFromContext(ctx)
+			if err != nil {
+				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get user ID from context")
+				return nil, err
+			}
+
+			// check if the user has access to the groups
+			for _, groupID := range groupIDs {
+				// check if the user has access to the group
+				ok, err := m.Authz.CheckGroupAccess(ctx, fgax.AccessCheck{
+					SubjectID:   userID,
+					SubjectType: auth.GetAuthzSubjectType(ctx),
+					Relation:    fgax.CanEdit,
+					ObjectID:    groupID,
+				})
 				if err != nil {
-					zerolog.Ctx(ctx).Error().Err(err).Msg("unable to get user ID from context")
+					zerolog.Ctx(ctx).Error().Err(err).Msg("unable to check group access")
+
 					return nil, err
-				}
+				} else if !ok {
+					// user does not have access to the group, return an error
+					zerolog.Ctx(ctx).Info().Msgf("user %s does not have access to group %s", userID, groupID)
 
-				// check if the user has access to the groups
-				for _, groupID := range groupIDs {
-					// check if the user has access to the group
-					ok, err := m.Authz.CheckGroupAccess(ctx, fgax.AccessCheck{
-						SubjectID:   userID,
-						SubjectType: auth.GetAuthzSubjectType(ctx),
-						Relation:    fgax.CanEdit,
-						ObjectID:    groupID,
-					})
-					if err != nil {
-						zerolog.Ctx(ctx).Error().Err(err).Msg("unable to check group access")
-
-						return nil, err
-					} else if !ok {
-						// user does not have access to the group, return an error
-						zerolog.Ctx(ctx).Info().Msgf("user %s does not have access to group %s", userID, groupID)
-
-						return nil, generated.ErrPermissionDenied
-					}
+					return nil, generated.ErrPermissionDenied
 				}
 			}
 
@@ -159,7 +161,7 @@ func HookInviteAccepted() ent.Hook {
 				recipient = invite.Recipient
 			}
 
-			// add the org to the authenticated context
+			// add the org to the authenticated context for querying
 			ctx, err := auth.AddOrganizationIDToContext(ctx, ownerID)
 			if err != nil {
 				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to add organization ID to context")
@@ -202,18 +204,16 @@ func HookInviteAccepted() ent.Hook {
 			}
 
 			// add the user to the group as member if any were specified
-			for _, groupID := range groupIDs {
-				input := generated.CreateGroupMembershipInput{
-					UserID:  userID,
-					GroupID: groupID,
-				}
+			builders := make([]*generated.GroupMembershipCreate, len(groupIDs))
+			for i, groupID := range groupIDs {
+				builders[i] = m.Client().GroupMembership.Create().SetUserID(userID).SetGroupID(groupID)
+			}
 
-				// add user to the group, allow the context to bypass privacy checks
-				if err := m.Client().GroupMembership.Create().SetInput(input).Exec(allowCtx); err != nil {
-					zerolog.Ctx(ctx).Error().Err(err).Msg("unable to add user to group")
+			// add user to the group, allow the context to bypass privacy checks
+			if err := m.Client().GroupMembership.CreateBulk(builders...).Exec(allowCtx); err != nil {
+				zerolog.Ctx(ctx).Error().Err(err).Msg("unable to add user to group")
 
-					return nil, err
-				}
+				return nil, err
 			}
 
 			// finish the mutation

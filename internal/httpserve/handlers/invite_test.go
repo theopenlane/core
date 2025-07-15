@@ -12,13 +12,11 @@ import (
 
 	"github.com/riverqueue/river/riverdriver/riverpgxv5"
 	"github.com/riverqueue/river/rivertest"
-	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
-	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -98,14 +96,6 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 				AddGroupIDs(group.ID).
 				Save(ctx)
 			require.NoError(t, err)
-
-			resp, err := suite.db.Invite.Query().
-				Where(invite.ID(inv.ID)).
-				WithGroups().
-				Only(ctx)
-			require.NoError(t, err)
-
-			log.Debug().Interface("invite", resp).Msg("created invite")
 
 			target := "/invite"
 			if tc.tokenSet {
