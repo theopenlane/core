@@ -130,7 +130,7 @@ entConfig:
         defaultTimeout: 30s
         enabled: false
         folderName: openlane
-        onFailureScrip: ""
+        onFailureScript: ""
         onSuccessScript: ""
         timezone: UTC
         token: ""

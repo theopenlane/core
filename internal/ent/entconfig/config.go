@@ -163,7 +163,7 @@ type Windmill struct {
 	Timezone string `json:"timezone" koanf:"timezone" default:"UTC"`
 
 	// OnFailureScript script to run when a scheduled job fails
-	OnFailureScript string `json:"onFailureScrip" koanf:"onFailureScript"`
+	OnFailureScript string `json:"onFailureScript" koanf:"onFailureScript"`
 
 	// OnSuccessScript script to run when a scheduled job succeeds
 	OnSuccessScript string `json:"onSuccessScript," koanf:"onSuccessScript"`
