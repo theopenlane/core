@@ -5,12 +5,56 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 )
+
+// HookStandardDelete cascades the deletion of all controls that have a standard linked/connected
+func HookStandardDelete() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.StandardFunc(func(ctx context.Context, m *generated.StandardMutation) (generated.Value, error) {
+			if !entx.CheckIsSoftDelete(ctx) && !auth.IsSystemAdminFromContext(ctx) {
+				return next.Mutate(ctx, m)
+			}
+
+			id, _ := m.ID()
+			var err error
+
+			ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+			// remove standard_id mapping from org owned controls
+			err = m.Client().Control.Update().ClearStandardID().Where(
+				control.And(
+					control.StandardID(id),
+					control.OwnerIDNotNil(),
+				),
+			).Exec(ctx)
+			if err != nil {
+				return nil, err
+			}
+
+			// delete all controls not linked to an org (system-owned controls)
+			_, err = m.Client().Control.Delete().Where(
+				control.And(
+					control.StandardID(id),
+					control.OwnerIDIsNil(),
+				),
+			).Exec(ctx)
+			if err != nil {
+				return nil, err
+			}
+
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne|ent.OpUpdate)
+}
 
 // HookStandardCreate sets default values on creation, such as setting the short name to the name if it's not provided
 func HookStandardCreate() ent.Hook {

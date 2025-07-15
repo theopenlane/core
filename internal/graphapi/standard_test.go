@@ -733,6 +733,18 @@ func TestMutationDeleteStandard(t *testing.T) {
 
 	standardSystemOwned := (&StandardBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 
+	const numberOfControls = 4
+
+	for range numberOfControls {
+		(&ControlBuilder{client: suite.client, StandardID: standardSystemOwned.ID}).MustNew(systemAdminUser.UserCtx, t)
+	}
+
+	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+
+	for range numberOfControls {
+		(&ControlBuilder{client: suite.client, StandardID: publicStandard.ID}).MustNew(systemAdminUser.UserCtx, t)
+	}
+
 	testCases := []struct {
 		name        string
 		idToDelete  string
@@ -759,6 +771,12 @@ func TestMutationDeleteStandard(t *testing.T) {
 			idToDelete: standardOrgOwned1.ID,
 			client:     suite.client.api,
 			ctx:        testUser1.UserCtx,
+		},
+		{
+			name:       "happy path, delete public",
+			idToDelete: publicStandard.ID,
+			client:     suite.client.api,
+			ctx:        systemAdminUser.UserCtx,
 		},
 		{
 			name:       "happy path, delete system owned",
@@ -816,4 +834,9 @@ func TestMutationDeleteStandard(t *testing.T) {
 			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteStandard.DeletedID))
 		})
 	}
+
+	controlsResp, err := suite.client.api.GetAllControls(systemAdminUser.UserCtx)
+	assert.NilError(t, err)
+	assert.Assert(t, controlsResp != nil)
+	assert.Check(t, is.Equal(int64(0), controlsResp.Controls.TotalCount))
 }
