@@ -180,6 +180,24 @@ coreConfiguration:
           organizationID: ""  # @schema type:string
       # -- MaximumSentences specifies the maximum number of sentences in the summary
       maximumSentences: 60  # @schema type:integer; default:60
+    # -- Windmill contains configuration for Windmill workflow automation
+    windmill:
+      # -- Enabled specifies whether Windmill integration is enabled
+      enabled: false  # @schema type:boolean; default:false
+      # -- BaseURL is the base URL of the Windmill instance
+      baseURL: "https://app.windmill.dev"  # @schema type:string; default:https://app.windmill.dev
+      # -- Workspace is the Windmill workspace to use
+      workspace: ""  # @schema type:string
+      # -- DefaultTimeout is the default timeout for API requests
+      defaultTimeout: "30s"  # @schema type:string; default:30s
+      # -- Timezone for scheduled jobs
+      timezone: "UTC"  # @schema type:string; default:UTC
+      # -- OnFailureScript script to run when a scheduled job fails
+      onFailureScript: ""  # @schema type:string
+      # -- OnSuccessScript script to run when a scheduled job succeeds
+      onSuccessScript: ""  # @schema type:string
+      # -- FolderName identifies the storage path of flows and scripts in Windmill, you'd want to use
+      folderName: "openlane"  # @schema type:string; default:openlane
     # -- MaxPoolSize is the max pond pool workers that can be used by the ent client
     maxPoolSize: 100  # @schema type:integer; default:100
   # -- Auth contains the authentication token settings and provider(s)
@@ -390,13 +408,21 @@ coreConfiguration:
     maxMemoryMB: 0  # @schema type:integer
   # -- Entitlements contains the configuration for the entitlements service
   subscription:
+    # -- Enabled determines if the entitlements service is enabled
     enabled: false  # @schema type:boolean; default:false
+    # -- PublicStripeKey is the key for the stripe service
     publicStripeKey: ""  # @schema type:string
+    # -- TrialSubscriptionPriceID is the price ID for the trial subscription
     trialSubscriptionPriceID: "price_1QKLyeBvxky1R7SvaZYGWyQb"  # @schema type:string; default:price_1QKLyeBvxky1R7SvaZYGWyQb
+    # -- PersonalOrgSubscriptionPriceID is the price ID for the personal org subscription
     personalOrgSubscriptionPriceID: "price_1QycPyBvxky1R7Svz0gOWnNh"  # @schema type:string; default:price_1QycPyBvxky1R7Svz0gOWnNh
+    # -- StripeWebhookURL is the URL for the stripe webhook
     stripeWebhookURL: "https://api.openlane.com/v1/stripe/webhook"  # @schema type:string; default:https://api.openlane.com/v1/stripe/webhook
+    # -- StripeBillingPortalSuccessURL
     stripeBillingPortalSuccessURL: "https://console.openlane.com/billing"  # @schema type:string; default:https://console.openlane.com/billing
+    # -- StripeCancellationReturnURL is the URL for the stripe cancellation return
     stripeCancellationReturnURL: "https://console.theopenlane.io/organization-settings/billing/subscription_canceled"  # @schema type:string; default:https://console.theopenlane.io/organization-settings/billing/subscription_canceled
+    # -- StripeWebhookEvents is the list of events to register when creating a webhook endpoint
     stripeWebhookEvents: []
   # -- Keywatcher contains the configuration for the key watcher that manages JWT signing keys
   keywatcher:
@@ -435,6 +461,14 @@ externalSecrets:
       secretKey: "CORE_ENTCONFIG_SUMMARIZER_LLM_GEMINI_CREDENTIALSJSON"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-entconfig-summarizer-llm-gemini-credentialsjson"  # @schema type:string
+    # -- core-entconfig-windmill-token secret configuration
+    core-entconfig-windmill-token:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for entConfig.windmill.token
+      secretKey: "CORE_ENTCONFIG_WINDMILL_TOKEN"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-entconfig-windmill-token"  # @schema type:string
     # -- core-objectstorage-accesskey secret configuration
     core-objectstorage-accesskey:
       # -- Enable this external secret

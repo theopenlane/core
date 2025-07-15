@@ -46,6 +46,8 @@ var includedPackages = []string{
 	"./internal/httpserve/handlers",
 	"./pkg/middleware",
 	"./pkg/objects",
+	"./internal/ent/entconfig",
+	"./pkg/entitlements",
 }
 
 // sensitiveFields lists configuration paths that are sensitive but reside in external packages

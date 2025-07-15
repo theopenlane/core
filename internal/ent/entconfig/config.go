@@ -154,7 +154,7 @@ type Windmill struct {
 	Workspace string `json:"workspace,omitempty" koanf:"workspace"`
 
 	// Token is the API token for authentication with Windmill
-	Token string `json:"token,omitempty" koanf:"token"`
+	Token string `json:"token,omitempty" koanf:"token" sensitive:"true"`
 
 	// DefaultTimeout is the default timeout for API requests
 	DefaultTimeout string `json:"defaultTimeout,omitempty" koanf:"defaultTimeout" default:"30s"`

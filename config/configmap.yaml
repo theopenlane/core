@@ -92,7 +92,6 @@ data:
   CORE_ENTCONFIG_WINDMILL_ENABLED: {{ .Values.openlane.coreConfiguration.entConfig.windmill.enabled | default "false" }}
   CORE_ENTCONFIG_WINDMILL_BASEURL: {{ .Values.openlane.coreConfiguration.entConfig.windmill.baseURL | default "https://app.windmill.dev" }}
   CORE_ENTCONFIG_WINDMILL_WORKSPACE: {{ .Values.openlane.coreConfiguration.entConfig.windmill.workspace }}
-  CORE_ENTCONFIG_WINDMILL_TOKEN: {{ .Values.openlane.coreConfiguration.entConfig.windmill.token }}
   CORE_ENTCONFIG_WINDMILL_DEFAULTTIMEOUT: {{ .Values.openlane.coreConfiguration.entConfig.windmill.defaultTimeout | default "30s" }}
   CORE_ENTCONFIG_WINDMILL_TIMEZONE: {{ .Values.openlane.coreConfiguration.entConfig.windmill.timezone | default "UTC" }}
   CORE_ENTCONFIG_WINDMILL_ONFAILURESCRIPT: {{ .Values.openlane.coreConfiguration.entConfig.windmill.onFailureScript }}
