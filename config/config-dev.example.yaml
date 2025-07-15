@@ -129,6 +129,15 @@ entConfig:
     - vendor
     - account
 
+windmill:
+  enabled: true
+  baseURL: "http://localhost"
+  workspace: "test"
+  token: "token_here"
+  defaultTimeout: "30s"
+  onFailureScript: "u/admin/glimmering_script"
+  onSuccessScript: "u/admin/glimmering_script"
+
 objectStorage:
   # when using local storage, we serve the files up on a static handler
   # if switching to s3, be sure to use the below defaultBucket instead
