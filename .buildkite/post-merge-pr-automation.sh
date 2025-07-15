@@ -57,9 +57,33 @@ cd "$work"
 # Find draft PRs that match our pattern and are still open
 echo "🔍 Looking for draft PRs to convert..."
 
+# Try to determine which core PR was just merged by checking recent commits
+echo "🔍 Attempting to identify recently merged core PR..."
+merged_core_pr=""
+
+# Check if we can find the merged PR from the commit message or branch name
+recent_commit_msg=$(git log --oneline -1 2>/dev/null || echo "")
+if [[ "$recent_commit_msg" =~ \#([0-9]+) ]]; then
+  potential_pr="${BASH_REMATCH[1]}"
+  echo "🔍 Found potential PR number in commit message: #$potential_pr"
+
+  # Verify this PR is actually merged
+  pr_state=$(gh pr view "$potential_pr" --repo "theopenlane/core" --json state --jq '.state' 2>/dev/null || echo "NOT_FOUND")
+  if [[ "$pr_state" == "MERGED" ]]; then
+    merged_core_pr="$potential_pr"
+    echo "✅ Confirmed recently merged core PR: #$merged_core_pr"
+  fi
+fi
+
 # Get list of open draft PRs with our naming pattern
 draft_prs=$(gh pr list --repo "$repo" --state open --draft --json number,title,headRefName \
-  | jq -r '.[] | select(.title | test("^🚧 DRAFT: Config changes from core PR")) | "\(.number):\(.headRefName)"')
+  | jq -r '.[] | select(.title | test("^🚧 DRAFT: Config changes from core PR")) | "\(.number):\(.headRefName):\(.title)"')
+
+# If we identified a specific merged core PR, filter to only process that one
+if [[ -n "$merged_core_pr" ]]; then
+  echo "🎯 Filtering draft PRs to only process core PR #$merged_core_pr"
+  draft_prs=$(echo "$draft_prs" | grep "core PR #$merged_core_pr" || echo "")
+fi
 
 if [[ -z "$draft_prs" ]]; then
   echo "ℹ️  No draft PRs found to convert"
@@ -70,9 +94,18 @@ echo "Found draft PRs to process:"
 echo "$draft_prs"
 
 # Process each draft PR
-while IFS=':' read -r pr_number branch_name; do
+while IFS=':' read -r pr_number branch_name title; do
   echo ""
   echo "📝 Processing draft PR #$pr_number (branch: $branch_name)"
+
+  # Extract core PR number from title for verification
+  core_pr_from_title=$(echo "$title" | grep -o 'core PR #[0-9]*' | grep -o '[0-9]*' || echo "")
+
+  # If we have a specific merged core PR, double-check this PR matches
+  if [[ -n "$merged_core_pr" && "$core_pr_from_title" != "$merged_core_pr" ]]; then
+    echo "⚠️  Draft PR #$pr_number is for core PR #$core_pr_from_title, not the recently merged #$merged_core_pr, skipping"
+    continue
+  fi
 
   # Check out the draft branch
   if git checkout "$branch_name"; then
@@ -273,18 +306,20 @@ Build Information:
       echo "ℹ️  No additional changes needed"
     fi
 
-    # Convert from draft to ready for review
-    echo "🔄 Converting draft PR #$pr_number to ready for review..."
+    # Decide whether to convert to ready or close based on changes
+    if [[ "$changes_made" == "true" ]]; then
+      # Convert from draft to ready for review
+      echo "🔄 Converting draft PR #$pr_number to ready for review..."
 
-    if gh pr ready "$pr_number" --repo "$repo"; then
-      echo "✅ PR #$pr_number converted from draft to ready"
+      if gh pr ready "$pr_number" --repo "$repo"; then
+        echo "✅ PR #$pr_number converted from draft to ready"
 
-      # Update the PR title to remove draft indicator
-      new_title=$(gh pr view "$pr_number" --repo "$repo" --json title --jq '.title' | sed 's/^🚧 DRAFT: /🔄 /')
-      gh pr edit "$pr_number" --repo "$repo" --title "$new_title"
+        # Update the PR title to remove draft indicator
+        new_title=$(gh pr view "$pr_number" --repo "$repo" --json title --jq '.title' | sed 's/^🚧 DRAFT: /🔄 /')
+        gh pr edit "$pr_number" --repo "$repo" --title "$new_title"
 
-      # Add a comment about the conversion
-      conversion_comment="## ✅ PR Ready for Review
+        # Add a comment about the conversion
+        conversion_comment="## ✅ PR Ready for Review
 
 This PR has been automatically converted from draft to ready for review because the related core repository changes have been merged.
 
@@ -303,19 +338,56 @@ This PR has been automatically converted from draft to ready for review because 
 ---
 *This PR was automatically updated after the core repository merge.*"
 
-      gh pr comment "$pr_number" --repo "$repo" --body "$conversion_comment"
+        gh pr comment "$pr_number" --repo "$repo" --body "$conversion_comment"
 
-      # Send Slack notification that PR is ready for review
-      infra_pr_url=$(gh pr view "$pr_number" --repo "$repo" --json url --jq '.url')
-      core_pr_url="https://github.com/theopenlane/core/pull/$(echo "$branch_name" | grep -o 'core-pr-[0-9]*' | cut -d'-' -f3)"
+        # Send Slack notification that PR is ready for review
+        infra_pr_url=$(gh pr view "$pr_number" --repo "$repo" --json url --jq '.url')
+        core_pr_url="https://github.com/theopenlane/core/pull/$(echo "$branch_name" | grep -o 'core-pr-[0-9]*' | cut -d'-' -f3)"
+        core_pr_number=$(echo "$branch_name" | grep -o 'core-pr-[0-9]*' | cut -d'-' -f3)
+
+        send_pr_ready_notification "$infra_pr_url" "$core_pr_url" "$core_pr_number" "$change_summary"
+
+        echo "✅ PR #$pr_number updated and ready for final review"
+
+      else
+        echo "⚠️  Failed to convert PR #$pr_number from draft to ready"
+      fi
+    else
+      # Close the draft PR since there are no meaningful changes
+      echo "🗑️  Closing draft PR #$pr_number - no configuration changes needed"
+
+      # Extract core PR number from branch name
       core_pr_number=$(echo "$branch_name" | grep -o 'core-pr-[0-9]*' | cut -d'-' -f3)
 
-      send_pr_ready_notification "$infra_pr_url" "$core_pr_url" "$core_pr_number" "$change_summary"
+      # Add closing comment
+      closing_comment="## 🗑️ Closing Draft PR - No Configuration Changes Needed
 
-      echo "✅ PR #$pr_number updated and ready for final review"
+This draft PR is being automatically closed because the related core repository changes did not require any infrastructure configuration updates.
 
-    else
-      echo "⚠️  Failed to convert PR #$pr_number from draft to ready"
+### 📋 Summary:
+- ✅ Core PR #${core_pr_number} has been merged successfully
+- ℹ️  No Helm chart configuration changes were needed
+- ℹ️  No external secrets updates were required
+- ℹ️  No infrastructure deployment changes necessary
+
+### 🔄 What This Means:
+The core repository changes were code-only modifications that don't affect the infrastructure configuration. Therefore, no infrastructure PR is needed.
+
+---
+*This PR was automatically closed after the core repository merge.*"
+
+      gh pr comment "$pr_number" --repo "$repo" --body "$closing_comment"
+
+      if gh pr close "$pr_number" --repo "$repo"; then
+        echo "✅ Draft PR #$pr_number closed successfully"
+
+        # Optionally delete the branch since it's no longer needed
+        echo "🗑️  Deleting unused branch $branch_name"
+        git push origin --delete "$branch_name" || echo "⚠️  Failed to delete branch $branch_name"
+
+      else
+        echo "⚠️  Failed to close draft PR #$pr_number"
+      fi
     fi
 
   else
