@@ -10,28 +10,36 @@ This HTML interface provides comprehensive end-to-end testing for OAuth integrat
 
 #### GitHub OAuth App Setup
 
-**⚠️ Important**: OAuth integrations use your **existing GitHub OAuth app** (configured for social login).
+**⚠️ Important**: OAuth integrations use **separate configuration** from social login.
 
-1. **Update Existing OAuth App**: Go to your existing GitHub OAuth app settings
-2. **Add Integration Callback URL**: Ensure your app has BOTH callback URLs:
+1. **Create or Update GitHub OAuth App**: You can either:
+   - Create a new OAuth app specifically for integrations
+   - Update your existing OAuth app (used for social login) to include both callback URLs
+
+2. **Add Integration Callback URL**: Ensure your OAuth app has the integration callback URL:
    ```
-   http://localhost:17608/v1/github/callback              # For social login (existing)
-   http://localhost:17608/v1/integrations/oauth/callback  # For integrations (add this)
+   http://localhost:17608/v1/integrations/oauth/callback  # For integrations
+   # And optionally (if sharing with social login):
+   http://localhost:17608/v1/github/callback              # For social login
    ```
-3. **No New Configuration Needed**: Your existing `config.yaml` already has the credentials:
+
+3. **Configure Integration OAuth Settings**: Add the integration OAuth configuration:
 
 ```yaml
-# config.yaml (your existing social login config works!)
-auth:
-  providers:
-    github:
-      clientId: "your_github_client_id"        # ← Already configured
-      clientSecret: "your_github_client_secret" # ← Already configured
-      clientEndpoint: "http://localhost:17608" # ← Already configured
-      redirectUrl: "/v1/github/callback"       # ← For social login
+# config.yaml - Integration OAuth configuration (separate from social login)
+integrationOauthProvider:
+  github:
+    clientId: "your_github_client_id"        # Can be same as social login
+    clientSecret: "your_github_client_secret" # Can be same as social login
+    clientEndpoint: "http://localhost:17608" # Base URL for callbacks
+    scopes: ["read:user", "user:email", "repo"] # Extended scopes for API access
 ```
 
-The integration system automatically uses this existing configuration.
+**Key Differences from Social Login:**
+- ✅ **Separate configuration section**: `integrationOauthProvider` vs `auth.providers`
+- ✅ **Different callback URL**: `/v1/integrations/oauth/callback` vs `/v1/github/callback`
+- ✅ **Extended scopes**: Includes `repo` for API access
+- ✅ **Different token storage**: Organization-scoped in Hush vs session-based
 
 ### 1. Start the Local Development Environment
 
@@ -152,12 +160,12 @@ The interface tests these OAuth integration endpoints:
 ## Configuration Requirements
 
 ### GitHub Integration:
-- Requires `OauthProvider.Github` configuration in your settings
+- Requires `integrationOauthProvider.github` configuration in your settings
 - OAuth app configured with callback URL: `http://localhost:17608/v1/integrations/oauth/callback`
 
 ### Slack Integration:
-- Requires Slack app configuration (currently placeholder)
-- When implemented, needs `OauthProvider.Slack` configuration
+- Requires `integrationOauthProvider.slack` configuration in your settings
+- Slack app configured with callback URL: `http:s//localhost:17608/v1/integrations/oauth/callback`
 
 ## Troubleshooting
 

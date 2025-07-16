@@ -1301,10 +1301,10 @@ github.com/theopenlane/echox v0.2.4 h1:bocz1Dfs7d2fkNa8foQqdmeTtkMTQNwe1v20bIGID
 github.com/theopenlane/echox v0.2.4/go.mod h1:0cPOHe4SSQHmqP0/n2LsIEzRSogkxSX653bE+PIOVZ8=
 github.com/theopenlane/emailtemplates v0.2.3 h1:SUj2LNeFWZCjm37vjZCxNUGAicnw64XQ9nwTSFWdisc=
 github.com/theopenlane/emailtemplates v0.2.3/go.mod h1:Ee3twHeJKb2RWR2yDXHeVzqn7APdCkfOjSl2DnV1HDw=
-github.com/theopenlane/gqlgen-plugins v0.6.3 h1:Fvw9Y66MTNeh6vx4ydMclCjjkH7IMpYegDHKoVRHcgM=
-github.com/theopenlane/gqlgen-plugins v0.6.3/go.mod h1:2yuIlMZaaKyy9E8j6qQztXlh05EAIcTARcy1IFvEWGg=
 github.com/theopenlane/entx v0.11.1 h1:fMGIeKP2oXYzL77TThLBHHt3PFae6LVVGdTDGBPdBBY=
 github.com/theopenlane/entx v0.11.1/go.mod h1:UhGfPpKSrdcCJTWQJI2KetkRf0DgzpENkzU47g5Qn50=
+github.com/theopenlane/gqlgen-plugins v0.6.3 h1:Fvw9Y66MTNeh6vx4ydMclCjjkH7IMpYegDHKoVRHcgM=
+github.com/theopenlane/gqlgen-plugins v0.6.3/go.mod h1:2yuIlMZaaKyy9E8j6qQztXlh05EAIcTARcy1IFvEWGg=
 github.com/theopenlane/httpsling v0.2.2 h1:QqJo/VsjeiM6/RnWZpRQX3I7T62j5u9WdXo52zUWyi0=
 github.com/theopenlane/httpsling v0.2.2/go.mod h1:mrSaIZs4lhcBsOJCv/n67N7eDZ/skD6vA8l8y9MDrKk=
 github.com/theopenlane/iam v0.14.2 h1:5c89C14gqAFUBtJ1AGxol3/uqm2wABZ6qLcolS98ZFQ=
@@ -1346,6 +1346,8 @@ github.com/timakin/bodyclose v0.0.0-20241222091800-1db5c5ca4d67 h1:9LPGD+jzxMlnk
 github.com/timakin/bodyclose v0.0.0-20241222091800-1db5c5ca4d67/go.mod h1:mkjARE7Yr8qU23YcGMSALbIxTQ9r9QBVahQOBRfU460=
 github.com/timonwong/loggercheck v0.10.1 h1:uVZYClxQFpw55eh+PIoqM7uAOHMrhVcDoWDery9R8Lg=
 github.com/timonwong/loggercheck v0.10.1/go.mod h1:HEAWU8djynujaAVX7QI65Myb8qgfcZ1uKbdpg3ZzKl8=
+github.com/tink-crypto/tink-go/v2 v2.4.0 h1:8VPZeZI4EeZ8P/vB6SIkhlStrJfivTJn+cQ4dtyHNh0=
+github.com/tink-crypto/tink-go/v2 v2.4.0/go.mod h1:l//evrF2Y3MjdbpNDNGnKgCpo5zSmvUvnQ4MU+yE2sw=
 github.com/tklauser/go-sysconf v0.3.15 h1:VE89k0criAymJ/Os65CSn1IXaol+1wrsFHEB8Ol49K4=
 github.com/tklauser/go-sysconf v0.3.15/go.mod h1:Dmjwr6tYFIseJw7a3dRLJfsHAMXZ3nEnL/aZY+0IuI4=
 github.com/tklauser/numcpus v0.10.0 h1:18njr6LDBk1zuna922MgdjQuJFjrdppsZG60sHGfjso=

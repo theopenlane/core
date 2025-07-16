@@ -1,127 +1,131 @@
 package hooks
 
 import (
-	"context"
-	"encoding/base64"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"gocloud.dev/secrets"
-	_ "gocloud.dev/secrets/localsecrets" // For local testing
 )
 
-func TestAESEncryptionDecryption(t *testing.T) {
-	key := GetEncryptionKey()
+func TestTinkEncryptionDecryption(t *testing.T) {
 	plaintext := "sensitive-data-12345"
 
 	// Test encryption
-	encrypted, err := EncryptAESHelper([]byte(plaintext), key)
+	encrypted, err := Encrypt([]byte(plaintext))
 	require.NoError(t, err)
 	assert.NotEmpty(t, encrypted)
-	assert.NotEqual(t, plaintext, string(encrypted))
+	assert.NotEqual(t, plaintext, encrypted)
 
 	// Test decryption
-	decrypted, err := DecryptAESHelper(encrypted, key)
+	decrypted, err := Decrypt(encrypted)
 	require.NoError(t, err)
 	assert.Equal(t, plaintext, string(decrypted))
 }
 
-func TestAESEncryptionConsistency(t *testing.T) {
-	key := GetEncryptionKey()
+func TestTinkEncryptionConsistency(t *testing.T) {
 	plaintext := "test-consistency"
 
 	// Encrypt multiple times
-	encrypted1, err := EncryptAESHelper([]byte(plaintext), key)
+	encrypted1, err := Encrypt([]byte(plaintext))
 	require.NoError(t, err)
 
-	encrypted2, err := EncryptAESHelper([]byte(plaintext), key)
+	encrypted2, err := Encrypt([]byte(plaintext))
 	require.NoError(t, err)
 
 	// Should produce different ciphertexts (due to random nonce)
 	assert.NotEqual(t, encrypted1, encrypted2)
 
 	// But both should decrypt to same plaintext
-	decrypted1, err := DecryptAESHelper(encrypted1, key)
+	decrypted1, err := Decrypt(encrypted1)
 	require.NoError(t, err)
 
-	decrypted2, err := DecryptAESHelper(encrypted2, key)
+	decrypted2, err := Decrypt(encrypted2)
 	require.NoError(t, err)
 
 	assert.Equal(t, plaintext, string(decrypted1))
 	assert.Equal(t, plaintext, string(decrypted2))
 }
 
-func TestAESEncryptionEmpty(t *testing.T) {
-	key := GetEncryptionKey()
-
+func TestTinkEncryptionEmpty(t *testing.T) {
 	// Test empty string
-	encrypted, err := EncryptAESHelper([]byte(""), key)
+	encrypted, err := Encrypt([]byte(""))
 	require.NoError(t, err)
 
-	decrypted, err := DecryptAESHelper(encrypted, key)
+	decrypted, err := Decrypt(encrypted)
 	require.NoError(t, err)
 	assert.Equal(t, "", string(decrypted))
 }
 
-func TestAESEncryptionLargeData(t *testing.T) {
-	key := GetEncryptionKey()
-
+func TestTinkEncryptionLargeData(t *testing.T) {
 	// Test with large data
 	largeData := make([]byte, 10*1024) // 10KB
 	for i := range largeData {
 		largeData[i] = byte(i % 256)
 	}
 
-	encrypted, err := EncryptAESHelper(largeData, key)
+	encrypted, err := Encrypt(largeData)
 	require.NoError(t, err)
 
-	decrypted, err := DecryptAESHelper(encrypted, key)
+	decrypted, err := Decrypt(encrypted)
 	require.NoError(t, err)
 	assert.Equal(t, largeData, decrypted)
 }
 
-func TestAESDecryptionInvalidData(t *testing.T) {
-	key := GetEncryptionKey()
-
+func TestTinkDecryptionInvalidData(t *testing.T) {
 	// Test with invalid encrypted data
-	_, err := DecryptAESHelper([]byte("invalid-encrypted-data"), key)
+	_, err := Decrypt("invalid-encrypted-data")
 	assert.Error(t, err)
 
-	// Test with too short data
-	_, err = DecryptAESHelper([]byte("short"), key)
+	// Test with invalid base64
+	_, err = Decrypt("invalid-base64-!@#")
 	assert.Error(t, err)
 }
 
-func TestAESEncryptionDifferentKeys(t *testing.T) {
-	plaintext := "secret-message"
+func TestTinkKeysetGeneration(t *testing.T) {
+	// Test keyset generation
+	keyset1, err := GenerateTinkKeyset()
+	require.NoError(t, err)
+	assert.NotEmpty(t, keyset1)
 
-	// Create two different keys
-	key1 := GetEncryptionKey()
-	key2 := make([]byte, 32)
-	copy(key2, key1)
-	key2[0] = key2[0] ^ 0xFF // Flip some bits to make it different
+	keyset2, err := GenerateTinkKeyset()
+	require.NoError(t, err)
+	assert.NotEmpty(t, keyset2)
 
-	// Encrypt with key1
-	encrypted, err := EncryptAESHelper([]byte(plaintext), key1)
+	// Different keysets should be generated
+	assert.NotEqual(t, keyset1, keyset2)
+}
+
+func TestTinkWithEnvironmentKeyset(t *testing.T) {
+	// Generate a test keyset
+	testKeyset, err := GenerateTinkKeyset()
 	require.NoError(t, err)
 
-	// Try to decrypt with key2 (should fail)
-	_, err = DecryptAESHelper(encrypted, key2)
-	assert.Error(t, err)
+	// Save original environment
+	originalKeyset := os.Getenv("OPENLANE_TINK_KEYSET")
+	defer func() {
+		if originalKeyset != "" {
+			os.Setenv("OPENLANE_TINK_KEYSET", originalKeyset)
+		} else {
+			os.Unsetenv("OPENLANE_TINK_KEYSET")
+		}
+	}()
 
-	// Decrypt with correct key1 (should succeed)
-	decrypted, err := DecryptAESHelper(encrypted, key1)
+	// Set test keyset
+	os.Setenv("OPENLANE_TINK_KEYSET", testKeyset)
+
+	// Reset tink state to force re-initialization
+	tinkAEAD = nil
+
+	plaintext := "test-with-env-keyset"
+
+	// Test encryption/decryption with environment keyset
+	encrypted, err := Encrypt([]byte(plaintext))
+	require.NoError(t, err)
+
+	decrypted, err := Decrypt(encrypted)
 	require.NoError(t, err)
 	assert.Equal(t, plaintext, string(decrypted))
-}
-
-func TestEncryptionKeyConsistency(t *testing.T) {
-	// Multiple calls should return the same key
-	key1 := GetEncryptionKey()
-	key2 := GetEncryptionKey()
-	assert.Equal(t, key1, key2)
-	assert.Len(t, key1, 32) // 256-bit key
 }
 
 func TestConvertFieldName(t *testing.T) {
@@ -147,6 +151,29 @@ func TestConvertFieldName(t *testing.T) {
 	}
 }
 
+func TestIsEncrypted(t *testing.T) {
+	tests := []struct {
+		name     string
+		value    string
+		expected bool
+	}{
+		{"empty string", "", false},
+		{"short string", "abc", false},
+		{"plaintext", "hello world", false},
+		{"valid base64 but short", "dGVzdA==", false}, // "test" in base64
+		{"valid encrypted value", "YWJjZGVmZ2hpams=", true}, // longer base64
+		{"invalid base64", "invalid-base64-!@#", false},
+		{"too short encrypted", "abc", false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := isEncrypted(tt.value)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
 // Mock entity for testing field encryption/decryption
 type MockEntity struct {
 	ClientSecret string
@@ -157,33 +184,27 @@ type MockEntity struct {
 	PlainField   string
 }
 
-func TestDecryptEntityFieldsAES(t *testing.T) {
-	key := GetEncryptionKey()
-
+func TestDecryptEntityFields(t *testing.T) {
 	// Create test data
 	clientSecret := "client-secret-123"
 	secretValue := "secret-value-456"
 
 	// Encrypt the values
-	encryptedClient, err := EncryptAESHelper([]byte(clientSecret), key)
+	encryptedClient, err := Encrypt([]byte(clientSecret))
 	require.NoError(t, err)
 
-	encryptedSecret, err := EncryptAESHelper([]byte(secretValue), key)
+	encryptedSecret, err := Encrypt([]byte(secretValue))
 	require.NoError(t, err)
 
-	// Create mock entity with encrypted values (base64 encoded)
+	// Create mock entity with encrypted values
 	entity := &MockEntity{
-		ClientSecret: "dGVzdA==", // base64 for "test" (will be replaced)
-		SecretValue:  "dGVzdA==", // base64 for "test" (will be replaced)
+		ClientSecret: encryptedClient,
+		SecretValue:  encryptedSecret,
 		PlainField:   "plain-text",
 	}
 
-	// Manually set encrypted values (base64 encoded)
-	entity.ClientSecret = base64.StdEncoding.EncodeToString(encryptedClient)
-	entity.SecretValue = base64.StdEncoding.EncodeToString(encryptedSecret)
-
 	// Test decryption
-	err = DecryptEntityFieldsAES(entity, key, []string{"client_secret", "secret_value"})
+	err = DecryptEntityFields(entity, []string{"client_secret", "secret_value"})
 	require.NoError(t, err)
 
 	// Verify decryption
@@ -192,16 +213,14 @@ func TestDecryptEntityFieldsAES(t *testing.T) {
 	assert.Equal(t, "plain-text", entity.PlainField) // Should remain unchanged
 }
 
-func TestDecryptEntityFieldsAESInvalidData(t *testing.T) {
-	key := GetEncryptionKey()
-
+func TestDecryptEntityFieldsInvalidData(t *testing.T) {
 	entity := &MockEntity{
 		ClientSecret: "invalid-base64-!@#",
 		SecretValue:  "also-invalid",
 	}
 
 	// Should not fail, just skip invalid fields
-	err := DecryptEntityFieldsAES(entity, key, []string{"client_secret", "secret_value"})
+	err := DecryptEntityFields(entity, []string{"client_secret", "secret_value"})
 	assert.NoError(t, err)
 
 	// Values should remain unchanged
@@ -209,23 +228,4 @@ func TestDecryptEntityFieldsAESInvalidData(t *testing.T) {
 	assert.Equal(t, "also-invalid", entity.SecretValue)
 }
 
-func TestEncryptionWithSecretsKeeper(t *testing.T) {
-	ctx := context.Background()
 
-	// Create a local secrets keeper for testing
-	keeper, err := secrets.OpenKeeper(ctx, "base64key://smGbjm71Nxd1Ig5FS0wj9SlbzAIrnolCz9bQQ6uAhl4=")
-	require.NoError(t, err)
-	defer keeper.Close()
-
-	plaintext := "test-secret-value"
-
-	// Test encryption with secrets keeper
-	encrypted, err := keeper.Encrypt(ctx, []byte(plaintext))
-	require.NoError(t, err)
-	assert.NotEqual(t, plaintext, string(encrypted))
-
-	// Test decryption with secrets keeper
-	decrypted, err := keeper.Decrypt(ctx, encrypted)
-	require.NoError(t, err)
-	assert.Equal(t, plaintext, string(decrypted))
-}

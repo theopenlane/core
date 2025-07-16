@@ -16,9 +16,11 @@ import (
 	"golang.org/x/text/language"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
+	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/iam/auth"
@@ -156,8 +158,20 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context) error {
 	userCtx := ctx.Request().Context()
 	user, err := auth.GetAuthenticatedUserFromContext(userCtx)
 	if err != nil {
+		// Debug: log authentication failure details
+		log.Error().
+			Err(err).
+			Str("provider", in.Provider).
+			Msg("Failed to get authenticated user from context for OAuth integration")
 		return h.Unauthorized(ctx, err)
 	}
+
+	// Debug: log successful authentication
+	log.Info().
+		Str("user_id", user.SubjectID).
+		Str("org_id", user.OrganizationID).
+		Str("provider", in.Provider).
+		Msg("Starting OAuth integration flow for authenticated user")
 
 	// Get user's current organization
 	orgID := user.OrganizationID
@@ -177,33 +191,17 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context) error {
 		Secure:   !h.IsTest,             // Must be true with SameSiteNone in production
 	}
 
-	// Also need to set auth session cookies with SameSiteNone for OAuth redirect compatibility
-	authCfg := *h.SessionConfig.CookieConfig
-	authCfg.SameSite = http.SameSiteNoneMode
-	authCfg.Secure = !h.IsTest
-
-	// Get current auth tokens from cookies and re-set them with OAuth-compatible SameSite policy
-	if accessTokenCookie, err := ctx.Request().Cookie(auth.AccessTokenCookie); err == nil {
-		accessToken := accessTokenCookie.Value
-		refreshToken := ""
-
-		// Get refresh token if available
-		if refreshTokenCookie, err := ctx.Request().Cookie(auth.RefreshTokenCookie); err == nil {
-			refreshToken = refreshTokenCookie.Value
-		}
-
-		// Re-set the auth cookies with SameSiteNone for OAuth compatibility
-		auth.SetAuthCookies(ctx.Response().Writer, accessToken, refreshToken, authCfg)
-
-		log.Info().
-			Str("access_token_length", fmt.Sprintf("%d", len(accessToken))).
-			Str("refresh_token_length", fmt.Sprintf("%d", len(refreshToken))).
-			Msg("Re-set authentication cookies with SameSiteNone for OAuth compatibility")
-	}
-
 	// Set the org ID and user ID as cookies for the OAuth flow
 	sessions.SetCookie(ctx.Response().Writer, orgID, "oauth_org_id", cfg)
 	sessions.SetCookie(ctx.Response().Writer, user.SubjectID, "oauth_user_id", cfg)
+
+	// Re-set existing auth cookies with SameSiteNone for OAuth compatibility
+	if accessCookie, err := sessions.GetCookie(ctx.Request(), auth.AccessTokenCookie); err == nil {
+		sessions.SetCookie(ctx.Response().Writer, accessCookie.Value, auth.AccessTokenCookie, cfg)
+	}
+	if refreshCookie, err := sessions.GetCookie(ctx.Request(), auth.RefreshTokenCookie); err == nil {
+		sessions.SetCookie(ctx.Response().Writer, refreshCookie.Value, auth.RefreshTokenCookie, cfg)
+	}
 
 	// Generate state parameter for security
 	state, err := h.generateOAuthState(orgID, in.Provider)
@@ -213,14 +211,6 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context) error {
 
 	// Set the state as a cookie for validation in callback
 	sessions.SetCookie(ctx.Response().Writer, state, "oauth_state", cfg)
-
-	// Debug logging
-	log.Info().
-		Str("org_id", orgID).
-		Str("user_id", user.SubjectID).
-		Str("state", state).
-		Str("provider", in.Provider).
-		Msg("OAuth flow started - cookies set")
 
 	// Build OAuth authorization URL
 	config := provider.Config
@@ -257,12 +247,6 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context) error {
 		return h.InvalidInput(ctx, err)
 	}
 
-	// Debug logging - check what cookies we have
-	log.Info().
-		Str("callback_state", in.State).
-		Str("callback_code", in.Code).
-		Msg("OAuth callback received")
-
 	// Validate state matches what was set in the cookie (like SSO handler)
 	stateCookie, err := sessions.GetCookie(ctx.Request(), "oauth_state")
 	if err != nil {
@@ -276,7 +260,6 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context) error {
 			Msg("OAuth state mismatch")
 		return h.BadRequest(ctx, ErrInvalidState)
 	}
-	log.Info().Str("state", in.State).Msg("OAuth state validated successfully")
 
 	// Get org ID and user ID from cookies (like SSO handler)
 	orgCookie, err := sessions.GetCookie(ctx.Request(), "oauth_org_id")
@@ -291,25 +274,11 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context) error {
 		log.Error().Err(err).Msg("Failed to get oauth_user_id cookie")
 		return h.BadRequest(ctx, fmt.Errorf("missing user context: %w", ErrInvalidState))
 	}
-	userID := userCookie.Value
-
-	log.Info().
-		Str("org_id", orgID).
-		Str("user_id", userID).
-		Msg("OAuth cookies validated successfully")
+	_ = userCookie.Value
 
 	// Get the user from database to set authenticated context (like SSO handler)
 	reqCtx := ctx.Request().Context()
 	systemCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
-
-	user, err := h.DBClient.User.Get(systemCtx, userID)
-	if err != nil {
-		log.Error().Err(err).Str("user_id", userID).Msg("Failed to get user from database")
-		return h.InternalServerError(ctx, fmt.Errorf("failed to get user: %w", err))
-	}
-
-	// Set authenticated context for database operations (like SSO handler)
-	authenticatedCtx := setAuthenticatedContext(systemCtx, user)
 
 	// Validate state and extract provider from state
 	_, provider, err := h.validateOAuthState(in.State)
@@ -342,27 +311,23 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context) error {
 	}
 
 	// Store integration and tokens (use authenticated context)
-	log.Info().Str("provider", provider).Str("org_id", orgID).Str("user_id", userID).Msg("attempting to store integration tokens")
-	integration, err := h.storeIntegrationTokens(authenticatedCtx, orgID, provider, userInfo, oauthToken)
+	_, err = h.storeIntegrationTokens(systemCtx, orgID, provider, userInfo, oauthToken)
 	if err != nil {
 		log.Error().Err(err).Str("provider", provider).Str("org_id", orgID).Msg("failed to store integration tokens")
 		return h.InternalServerError(ctx, err)
 	}
-	log.Info().Str("provider", provider).Str("org_id", orgID).Msg("successfully stored integration tokens")
 
 	// Clean up the OAuth cookies after successful completion (like SSO handler)
 	sessions.RemoveCookie(ctx.Response().Writer, "oauth_state", sessions.CookieConfig{Path: "/"})
 	sessions.RemoveCookie(ctx.Response().Writer, "oauth_org_id", sessions.CookieConfig{Path: "/"})
 	sessions.RemoveCookie(ctx.Response().Writer, "oauth_user_id", sessions.CookieConfig{Path: "/"})
 
-	out := models.OAuthCallbackResponse{
-		Reply:       rout.Reply{Success: true},
-		Success:     true,
-		Integration: integration,
-		Message:     fmt.Sprintf("Successfully connected %s integration", cases.Title(language.English).String(provider)),
-	}
+	// Redirect back to the HTML interface with success message
+	redirectURL := fmt.Sprintf("/pkg/testutils/integrations/index.html?provider=%s&status=success&message=%s",
+		provider,
+		fmt.Sprintf("Successfully connected %s integration", cases.Title(language.English).String(provider)))
 
-	return h.Success(ctx, out)
+	return ctx.Redirect(http.StatusFound, redirectURL)
 }
 
 // generateOAuthState creates a secure state parameter containing org ID and provider
@@ -400,6 +365,7 @@ func (h *Handler) validateOAuthState(state string) (orgID, provider string, err 
 // storeIntegrationTokens creates/updates integration and stores OAuth tokens securely
 func (h *Handler) storeIntegrationTokens(ctx context.Context, orgID, provider string, userInfo *IntegrationUserInfo, oauthToken *oauth2.Token) (*ent.Integration, error) {
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	systemCtx = contextx.With(systemCtx, auth.OrgSubscriptionContextKey{})
 
 	// Check if integration already exists for this org/provider
 	integration, err := h.DBClient.Integration.Query().
@@ -411,7 +377,20 @@ func (h *Handler) storeIntegrationTokens(ctx context.Context, orgID, provider st
 		).
 		Only(systemCtx)
 
-	if err != nil && !ent.IsNotFound(err) {
+	if ent.IsNotFound(err) {
+		// Create new integration if not found
+		integration, err = h.DBClient.Integration.Create().
+			SetOwnerID(orgID).
+			SetName(fmt.Sprintf("%s Integration", provider)).
+			SetDescription(fmt.Sprintf("OAuth integration with %s", provider)).
+			SetKind(provider).
+			Save(systemCtx)
+		if err != nil {
+			zerolog.Ctx(systemCtx).Error().Msgf("Failed to create integration for org %s and provider %s: %v", orgID, provider, err)
+			return nil, err
+		}
+	} else if err != nil {
+		zerolog.Ctx(systemCtx).Error().Err(err).Msgf("Failed to query integration for org %s and provider %s", orgID, provider)
 		return nil, err
 	}
 
@@ -430,6 +409,7 @@ func (h *Handler) storeIntegrationTokens(ctx context.Context, orgID, provider st
 			SetKind(provider).
 			Save(systemCtx)
 		if err != nil {
+			zerolog.Ctx(systemCtx).Error().Msgf("Failed to create integration for org %s and provider %s: %v", orgID, provider, err)
 			return nil, fmt.Errorf("failed to create integration: %w", err)
 		}
 	} else {
@@ -439,6 +419,7 @@ func (h *Handler) storeIntegrationTokens(ctx context.Context, orgID, provider st
 			SetDescription(fmt.Sprintf("OAuth integration with %s for %s", provider, userInfo.Username)).
 			Save(systemCtx)
 		if err != nil {
+			zerolog.Ctx(systemCtx).Error().Msgf("Failed to update integration for org %s and provider %s: %v", orgID, provider, err)
 			return nil, fmt.Errorf("failed to update integration: %w", err)
 		}
 	}

@@ -40,6 +40,9 @@ linters:
       - pkg/entitlements/mocks/*
       - pkg/events/soiree/examples/*
       - pkg/middleware/ratelimiter/examples/*
+      - internal/ent/hush/examples/*
+      - cmd/hush-demo/*
+      - cmd/generate-tink-keyset/*
 formatters:
   enable:
     - gofmt
@@ -54,3 +57,6 @@ formatters:
       - cmd/cli/cmd/*
       - pkg/events/soiree/examples/*
       - pkg/sleuth/dnsx/* # this should be fixed in the future
+      - internal/ent/hush/examples/*
+      - cmd/hush-demo/*
+      - cmd/generate-tink-keyset/*

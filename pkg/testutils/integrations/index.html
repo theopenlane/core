@@ -21,7 +21,7 @@ DO NOT serve this file locally (file://) - it requires server API access.
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>OAuth Integration Testing</title>
-    <link href="../login/webauthn/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous" />
     <style>
       .integration-card {
         border: 1px solid #dee2e6;
@@ -716,6 +716,35 @@ DO NOT serve this file locally (file://) - it requires server API access.
         log('OAuth callback detected, refreshing status...', 'info');
         // Give a small delay for the backend to process the callback
         setTimeout(initialize, 1000);
+      }
+
+      // Handle OAuth success callback
+      if (params.get('provider') && params.get('status') === 'success') {
+        const provider = params.get('provider');
+        const message = params.get('message') || `Successfully connected ${provider} integration`;
+
+        // Show success message
+        const successAlert = document.createElement('div');
+        successAlert.className = 'alert alert-success alert-dismissible fade show';
+        successAlert.innerHTML = `
+          <strong>Success!</strong> ${decodeURIComponent(message)}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+
+        const container = document.querySelector('.container');
+        container.insertBefore(successAlert, container.firstChild);
+
+        log(`OAuth success: ${message}`, 'success');
+
+        // Clean up URL parameters
+        const cleanUrl = window.location.origin + window.location.pathname;
+        window.history.replaceState({}, document.title, cleanUrl);
+
+        // Refresh the status after a short delay
+        setTimeout(async () => {
+          await checkIntegrationStatus(provider);
+          await loadIntegrationsList();
+        }, 1000);
       }
     </script>
   </body>

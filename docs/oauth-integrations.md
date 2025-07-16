@@ -1,6 +1,6 @@
 # OAuth Integration System
 
-This document describes the OAuth integration system that enables secure connections between OpenLane and third-party services like GitHub, Slack, and other OAuth providers.
+This document describes the OAuth integration system that enables secure connections between Openlane and third-party services like GitHub, Slack, and other OAuth providers.
 
 ## Table of Contents
 
@@ -18,7 +18,7 @@ This document describes the OAuth integration system that enables secure connect
 
 ## Overview
 
-The OAuth integration system provides a secure, organization-scoped mechanism for users to authorize OpenLane to access their third-party accounts (GitHub, Slack, etc.). This enables features like:
+The OAuth integration system provides a secure, organization-scoped mechanism for users to authorize Openlane to access their third-party accounts (GitHub, Slack, etc.). This enables features like:
 
 - Repository access and management via GitHub
 - Team communication through Slack
@@ -27,47 +27,88 @@ The OAuth integration system provides a secure, organization-scoped mechanism fo
 
 ### Key Features
 
-- **Organization-Scoped**: All tokens are stored per organization, ensuring proper data isolation
-- **Secure Token Storage**: OAuth tokens encrypted and stored using the Hush secrets management system
-- **Token Lifecycle Management**: Automatic refresh handling and expiry detection
-- **Invalidation Detection**: Proactive detection of revoked authorizations
-- **Provider Extensibility**: Easy addition of new OAuth providers
+* Organization-Scoped: All tokens are stored per organization, ensuring proper data isolation
+* Secure Token Storage: OAuth tokens encrypted and stored using the Hush secrets management system
+* Token Lifecycle Management: Automatic refresh handling and expiry detection
+* Invalidation Detection: Proactive detection of revoked authorizations
+* Provider Extensibility: Easy addition of new OAuth providers
 
 ## Architecture
 
-### Components
+### System Components
 
+```mermaid
+graph TB
+    subgraph "Frontend Layer"
+        UI[OAuth Testing Interface]
+    end
+
+    subgraph "API Layer"
+        AUTH[Authentication Middleware]
+        OAUTH[OAuth Flow Handlers]
+        MGMT[Token Management]
+    end
+
+    subgraph "Storage Layer"
+        DB[(Core Database)]
+        HUSH[(Hush Secrets)]
+    end
+
+    subgraph "External Services"
+        GITHUB[GitHub OAuth]
+        SLACK[Slack OAuth]
+    end
+
+    UI --> AUTH
+    AUTH --> OAUTH
+    OAUTH --> MGMT
+    MGMT --> DB
+    MGMT --> HUSH
+    OAUTH --> GITHUB
+    OAUTH --> SLACK
 ```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Frontend UI   │    │   OAuth Flow    │    │  Token Storage  │
-│                 │    │   Handlers      │    │   (Hush)        │
-├─────────────────┤    ├─────────────────┤    ├─────────────────┤
-│ • Start flows   │◄──►│ • State mgmt    │◄──►│ • Encrypted     │
-│ • Handle status │    │ • Code exchange │    │ • Org-scoped    │
-│ • Show errors   │    │ • Token refresh │    │ • Audit trail   │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-         │                       │                       │
-         │                       │                       │
-         ▼                       ▼                       ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                    Core Database                                │
-├─────────────────────────────────────────────────────────────────┤
-│ • Integration entities (metadata)                               │
-│ • Organization relationships                                    │
-│ • User permissions and access                                   │
-└─────────────────────────────────────────────────────────────────┘
+
+### OAuth Flow Sequence
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant UI as Frontend UI
+    participant API as OAuth Handler
+    participant Provider as OAuth Provider
+    participant DB as Database
+    participant Hush as Hush Secrets
+
+    User->>UI: Click "Connect GitHub"
+    UI->>API: POST /v1/integrations/oauth/start
+    API->>API: Generate secure state
+    API->>API: Set OAuth cookies
+    API-->>UI: Return OAuth URL
+    UI->>Provider: Redirect to OAuth URL
+    Provider->>User: Show authorization page
+    User->>Provider: Grant permissions
+    Provider->>API: Redirect to callback with code
+    API->>API: Validate state parameter
+    API->>Provider: Exchange code for tokens
+    Provider-->>API: Return access/refresh tokens
+    API->>Provider: Validate tokens with API call
+    Provider-->>API: Return user info
+    API->>DB: Create integration entity
+    API->>Hush: Store encrypted tokens
+    API-->>UI: Redirect with success
+    UI->>User: Show connected status
 ```
 
 ### Data Flow
 
-1. **Authorization Request**: User initiates OAuth flow through UI
-2. **State Generation**: Server creates secure state parameter with org context
-3. **Provider Redirect**: User redirected to OAuth provider (GitHub, Slack)
-4. **User Authorization**: User grants permissions on provider's site
-5. **Callback Processing**: Provider redirects back with authorization code
-6. **Token Exchange**: Server exchanges code for access/refresh tokens
-7. **Secure Storage**: Tokens encrypted and stored with organization scope
-8. **API Access**: Stored tokens used for subsequent API calls
+1. Authorization Request: User initiates OAuth flow through UI
+1. State Generation: Server creates secure state parameter with org context
+1. Provider Redirect: User redirected to OAuth provider (GitHub, Slack)
+1. User Authorization: User grants permissions on provider's site
+1. Callback Processing: Provider redirects back with authorization code
+1. Token Exchange: Server exchanges code for access/refresh tokens
+1. Secure Storage: Tokens encrypted and stored with organization scope
+1. API Access: Stored tokens used for subsequent API calls
 
 ## OAuth Flow
 
@@ -85,26 +126,26 @@ The OAuth integration system provides a secure, organization-scoped mechanism fo
 
 **Process**:
 1. Validate authenticated user and organization context
-2. Generate cryptographically secure state parameter containing:
-   - Organization ID
-   - Provider name
-   - Random entropy (16 bytes)
-   - Base64 URL-encoded for safety
-3. Build OAuth authorization URL with appropriate scopes
-4. Return authorization URL for client redirect
+1. Generate cryptographically secure state parameter containing:
+   * Organization ID
+   * Provider name
+   * Random entropy (16 bytes)
+   * Base64 URL-encoded for safety
+1. Build OAuth authorization URL with appropriate scopes
+1. Return authorization URL for client redirect
 
 **Security Considerations**:
-- State parameter prevents CSRF attacks
-- Organization context embedded in state ensures proper scoping
-- Random entropy prevents state guessing attacks
-- HTTPS required for all redirects
+* State parameter prevents CSRF attacks
+* Organization context embedded in state ensures proper scoping
+* Random entropy prevents state guessing attacks
+* HTTPS required for all redirects
 
 ### 2. OAuth Provider Authorization
 
 User is redirected to the OAuth provider (e.g., `github.com/login/oauth/authorize`) where they:
 1. Review requested permissions
-2. Grant or deny authorization
-3. Are redirected back to OpenLane with authorization code
+1. Grant or deny authorization
+1. Are redirected back to Openlane with authorization code
 
 ### 3. Handle OAuth Callback
 
@@ -120,41 +161,41 @@ User is redirected to the OAuth provider (e.g., `github.com/login/oauth/authoriz
 
 **Process**:
 1. **State Validation**: Decode and verify state parameter
-   - Extract organization ID and provider
-   - Validate format and authenticity
-2. **Code Exchange**: Exchange authorization code for tokens
-   - Use provider's token endpoint
-   - Obtain access token, refresh token, and expiry
-3. **Token Validation**: Verify token with provider API
-   - Make test API call to validate token
-   - Extract user information from provider
-4. **Secure Storage**: Store tokens in Hush secrets system
-   - Encrypt tokens at rest
-   - Associate with integration entity
-   - Store provider user metadata
+   * Extract organization ID and provider
+   * Validate format and authenticity
+1. **Code Exchange**: Exchange authorization code for tokens
+   * Use provider's token endpoint
+   * Obtain access token, refresh token, and expiry
+1. **Token Validation**: Verify token with provider API
+   * Make test API call to validate token
+   * Extract user information from provider
+1. **Secure Storage**: Store tokens in Hush secrets system
+   * Encrypt tokens at rest
+   * Associate with integration entity
+   * Store provider user metadata
 
 ## Security Model
 
 ### Authentication & Authorization
 
-- **User Authentication**: All OAuth flows require authenticated OpenLane users
-- **Organization Scoping**: Tokens are always associated with user's current organization
-- **Privacy Bypass**: System operations use privacy bypass for secure token storage
-- **Audit Trail**: All token operations logged for security monitoring
+* **User Authentication**: All OAuth flows require authenticated Openlane users
+* **Organization Scoping**: Tokens are always associated with user's current organization
+* **Privacy Bypass**: System operations use privacy bypass for secure token storage
+* **Audit Trail**: All token operations logged for security monitoring
 
 ### Token Security
 
 #### Storage Security
-- **Encryption at Rest**: All tokens encrypted using Hush secrets system
-- **Access Control**: Tokens only accessible by organization members
-- **Immutable Updates**: Token updates require delete/recreate pattern
-- **Secret Rotation**: Support for token refresh and rotation
+* **Encryption at Rest**: All tokens encrypted using Hush secrets system
+* **Access Control**: Tokens only accessible by organization members
+* **Immutable Updates**: Token updates require delete/recreate pattern
+* **Secret Rotation**: Support for token refresh and rotation
 
 #### Transmission Security
-- **HTTPS Only**: All OAuth communications over TLS
-- **State Parameters**: CSRF protection through cryptographic state
-- **Secure Redirects**: Validated redirect URIs prevent open redirect attacks
-- **Token Masking**: Tokens never exposed in logs or error messages
+* **HTTPS Only**: All OAuth communications over TLS
+* **State Parameters**: CSRF protection through cryptographic state
+* **Secure Redirects**: Validated redirect URIs prevent open redirect attacks
+* **Token Masking**: Tokens never exposed in logs or error messages
 
 #### Provider-Specific Security
 
@@ -513,10 +554,11 @@ Authorization: Bearer {user_session_token}
 
 #### Configuration
 ```go
-type GitHubConfig struct {
-    ClientID     string `mapstructure:"client_id"`
-    ClientSecret string `mapstructure:"client_secret"`
-    Endpoint     string `mapstructure:"endpoint"`
+type IntegrationProviderConfig struct {
+    ClientID     string `json:"clientId" koanf:"clientId"`
+    ClientSecret string `json:"clientSecret" koanf:"clientSecret"`
+    ClientEndpoint string `json:"clientEndpoint" koanf:"clientEndpoint"`
+    Scopes       []string `json:"scopes" koanf:"scopes"`
 }
 ```
 
@@ -551,14 +593,15 @@ func (g *GitHubClient) CreateWebhook(token, repo, webhookURL string) error {
 }
 ```
 
-### Slack Integration (Future)
+### Slack Integration
 
 #### Configuration
 ```go
-type SlackConfig struct {
-    ClientID     string `mapstructure:"client_id"`
-    ClientSecret string `mapstructure:"client_secret"`
-    SigningSecret string `mapstructure:"signing_secret"`
+type IntegrationProviderConfig struct {
+    ClientID     string `json:"clientId" koanf:"clientId"`
+    ClientSecret string `json:"clientSecret" koanf:"clientSecret"`
+    ClientEndpoint string `json:"clientEndpoint" koanf:"clientEndpoint"`
+    Scopes       []string `json:"scopes" koanf:"scopes"`
 }
 ```
 
@@ -573,11 +616,10 @@ To add a new OAuth provider:
 
 1. **Add Provider Configuration**:
 ```go
-// Add to OauthProviderConfig
-type NewProviderConfig struct {
-    ClientID     string
-    ClientSecret string
-    Endpoint     string
+// Add to IntegrationOauthProviderConfig
+type IntegrationOauthProviderConfig struct {
+    // ... existing providers
+    NewProvider IntegrationProviderConfig `json:"newprovider" koanf:"newprovider"`
 }
 ```
 
@@ -585,17 +627,17 @@ type NewProviderConfig struct {
 ```go
 func (h *Handler) getNewProviderConfig() *oauth2.Config {
     return &oauth2.Config{
-        ClientID:     h.OauthProvider.NewProvider.ClientID,
-        ClientSecret: h.OauthProvider.NewProvider.ClientSecret,
+        ClientID:     h.IntegrationOauthProvider.NewProvider.ClientID,
+        ClientSecret: h.IntegrationOauthProvider.NewProvider.ClientSecret,
         RedirectURL:  fmt.Sprintf("%s/v1/integrations/oauth/callback",
-                       h.OauthProvider.NewProvider.Endpoint),
+                       h.IntegrationOauthProvider.NewProvider.ClientEndpoint),
         Endpoint:     newprovider.Endpoint,
-        Scopes:       []string{"scope1", "scope2"},
+        Scopes:       h.IntegrationOauthProvider.NewProvider.Scopes,
     }
 }
 
 func (h *Handler) validateNewProviderToken(ctx context.Context, token *oauth2.Token) (*IntegrationUserInfo, error) {
-    // Implementation for token validation
+    // Implementation for token validation with provider API
 }
 ```
 
@@ -624,49 +666,58 @@ Before using the OAuth integration system, you must create OAuth applications wi
 
 #### GitHub App Configuration
 
-**⚠️ Important**: The OAuth integration system **reuses your existing GitHub OAuth app** configured for social login.
+**⚠️ Important**: The OAuth integration system uses **separate OAuth configuration** from social login.
 
-1. **Update Existing GitHub OAuth App**:
+1. **Create or Update GitHub OAuth App**:
    - Go to GitHub Settings → Developer settings → OAuth Apps
-   - Edit your existing OAuth app (used for social login)
-   - **Authorization callback URLs** should include BOTH:
+   - You can either:
+     - **Option A**: Create a new OAuth app specifically for integrations
+     - **Option B**: Update your existing OAuth app (used for social login) to include both callback URLs
+   - **Authorization callback URLs** should include:
      ```
-     http://localhost:17608/v1/github/callback              # For social login
      http://localhost:17608/v1/integrations/oauth/callback  # For integrations
+     # And if sharing with social login:
+     http://localhost:17608/v1/github/callback              # For social login
      ```
-   - Your existing Client ID and Client Secret work for both
 
-2. **Existing Configuration**:
-The system uses your existing `config.yaml` configuration:
+1. **Integration-Specific Configuration**:
+
+The system uses a **separate configuration section** for integrations:
 ```yaml
-# config.yaml (existing social login config)
-auth:
-  providers:
-    github:
-      clientId: "your_github_client_id"        # ← Shared
-      clientSecret: "your_github_client_secret" # ← Shared
-      clientEndpoint: "http://localhost:17608" # ← Shared
-      redirectUrl: "/v1/github/callback"       # ← For social login
-      scopes: null
+# config.yaml - Integration OAuth configuration (separate from social login)
+integrationOauthProvider:
+  github:
+    clientId: "your_github_client_id"        # Can be same as social login
+    clientSecret: "your_github_client_secret" # Can be same as social login
+    clientEndpoint: "http://localhost:17608" # Base URL for callbacks
+    scopes: ["read:user", "user:email", "repo"] # Extended scopes for API access
+  slack:
+    clientId: "your_slack_client_id"         # Slack app configuration
+    clientSecret: "your_slack_client_secret"
+    clientEndpoint: "http://localhost:17608"
+    scopes: ["channels:read", "chat:write", "users:read"]
 ```
 
-**No additional OAuth app or configuration needed!** The integration system:
-- ✅ Uses the same Client ID/Secret
-- ✅ Uses a different callback URL (`/v1/integrations/oauth/callback`)
-- ✅ Requests different scopes (includes `repo` for API access)
-- ✅ Stores tokens differently (organization-scoped vs session-based)
+**Key Differences from Social Login**:
+
+- **Separate configuration section**: `integrationOauthProvider` vs `auth.providers`
+- **Different callback URL**: `/v1/integrations/oauth/callback` vs `/v1/github/callback`
+- **Extended scopes**: Includes `repo` for API access vs basic profile scopes
+- **Different token storage**: Organization-scoped in Hush vs session-based
+- **Different use case**: Long-term API access vs short-term user authentication
 
 #### Environment Variables (Alternative)
-```bash
-# OAuth Provider Configuration
-OAUTH_GITHUB_CLIENT_ID=your_github_client_id
-OAUTH_GITHUB_CLIENT_SECRET=your_github_client_secret
-OAUTH_GITHUB_ENDPOINT=http://localhost:17608
 
-# Slack (future)
-OAUTH_SLACK_CLIENT_ID=your_slack_client_id
-OAUTH_SLACK_CLIENT_SECRET=your_slack_client_secret
-OAUTH_SLACK_SIGNING_SECRET=your_slack_signing_secret
+```bash
+# Integration OAuth Provider Configuration (separate from social login)
+INTEGRATION_OAUTH_GITHUB_CLIENT_ID=your_github_client_id
+INTEGRATION_OAUTH_GITHUB_CLIENT_SECRET=your_github_client_secret
+INTEGRATION_OAUTH_GITHUB_CLIENT_ENDPOINT=http://localhost:17608
+
+# Slack Integration
+INTEGRATION_OAUTH_SLACK_CLIENT_ID=your_slack_client_id
+INTEGRATION_OAUTH_SLACK_CLIENT_SECRET=your_slack_client_secret
+INTEGRATION_OAUTH_SLACK_CLIENT_ENDPOINT=http://localhost:17608
 
 # Security Settings
 OAUTH_STATE_EXPIRY=300  # State parameter expiry in seconds
@@ -678,16 +729,16 @@ OAUTH_TOKEN_VALIDATION_INTERVAL=14400  # 4 hours
 **OAuth client secrets are NEVER exposed to the frontend**. The HTML testing interface works by:
 
 1. **Frontend calls server**: `POST /v1/integrations/oauth/start`
-2. **Server uses stored credentials**: Creates OAuth URL with server-side client ID
-3. **Server returns OAuth URL**: Frontend redirects user to provider
-4. **Provider redirects back**: With authorization code to server callback
-5. **Server exchanges code**: Using server-side client secret
+1. **Server uses stored credentials**: Creates OAuth URL with server-side client ID
+1. **Server returns OAuth URL**: Frontend redirects user to provider
+1. **Provider redirects back**: With authorization code to server callback
+1. **Server exchanges code**: Using server-side client secret
 
 This ensures that:
-- ✅ Client secrets remain secure on the server
-- ✅ Credentials can be rotated without frontend changes
-- ✅ No sensitive data transmitted to browsers
-- ✅ Proper separation of concerns
+- Client secrets remain secure on the server
+- Credentials can be rotated without frontend changes
+- No sensitive data transmitted to browsers
+- Proper separation of concerns
 
 ### Database Schema
 
@@ -730,20 +781,32 @@ Before testing OAuth integrations, you need:
 
 1. **GitHub OAuth App** (for GitHub integration testing):
    - Create at: https://github.com/settings/applications/new
-   - Application name: "OpenLane Local Development"
+   - Application name: "Openlane Local Development - Integrations"
    - Homepage URL: `http://localhost:17608`
    - Authorization callback URL: `http://localhost:17608/v1/integrations/oauth/callback`
    - Copy the Client ID and Client Secret
 
 2. **Server Configuration**:
+
 ```bash
-# Set environment variables or update config
-export OAUTH_GITHUB_CLIENT_ID="your_github_client_id"
-export OAUTH_GITHUB_CLIENT_SECRET="your_github_client_secret"
-export OAUTH_GITHUB_ENDPOINT="http://localhost:17608"
+# Set environment variables or update config.yaml
+export INTEGRATION_OAUTH_GITHUB_CLIENT_ID="your_github_client_id"
+export INTEGRATION_OAUTH_GITHUB_CLIENT_SECRET="your_github_client_secret"
+export INTEGRATION_OAUTH_GITHUB_CLIENT_ENDPOINT="http://localhost:17608"
+```
+
+Or in your `config.yaml`:
+
+```yaml
+integrationOauthProvider:
+  github:
+    clientId: "your_github_client_id"
+    clientSecret: "your_github_client_secret"
+    clientEndpoint: "http://localhost:17608"
 ```
 
 #### Start Development Environment
+
 ```bash
 # Start full development stack with OAuth configuration
 task run-dev
@@ -756,28 +819,33 @@ task run-dev
 ```
 
 #### OAuth Testing Interface
+
 Navigate to: `http://localhost:17608/pkg/testutils/integrations/index.html`
 
 **Important**: The testing interface does NOT contain OAuth credentials. It works by:
+
 1. Making API calls to your local server (`localhost:17608`)
-2. Server uses its configured OAuth credentials
-3. Server returns OAuth URLs for redirection
-4. No sensitive credentials exposed to browser
+1. Server uses its configured OAuth credentials
+1. Server returns OAuth URLs for redirection
+1. No sensitive credentials exposed to browser
 
 Features:
+
 - **Authentication Status**: Shows current user login state
 - **Integration Management**: Start OAuth flows, check status, get tokens
 - **API Testing**: Test GitHub/Slack API calls with stored tokens
 - **Activity Logging**: Real-time log of all actions and responses
 
 #### Testing Workflow
-1. **Authenticate**: Login to your local OpenLane instance
+
+1. **Authenticate**: Login to your local Openlane instance
 2. **Configure OAuth App**: Ensure GitHub OAuth app is configured on server
 3. **Test Integration**: Click "Connect GitHub" to start OAuth flow
 4. **Verify Storage**: Check that tokens are stored and accessible
 5. **Test API Calls**: Use stored tokens for GitHub API calls
 
 #### Unit Tests
+
 ```bash
 # Run OAuth integration tests
 go test ./internal/httpserve/handlers/ -run TestOAuth
@@ -792,6 +860,7 @@ go test ./internal/httpserve/handlers/ -run TestBind.*OAuth
 ### Test Coverage
 
 The test suite covers:
+
 - **Input Validation**: All request validation scenarios
 - **Error Handling**: OAuth errors, token invalidation, network failures
 - **State Management**: CSRF protection, state validation
@@ -803,28 +872,32 @@ The test suite covers:
 
 ### Common Issues
 
-#### 1. "Invalid OAuth State Parameter"
+#### "Invalid OAuth State Parameter"
+
 **Cause**: State parameter validation failed
 **Solutions**:
 - Check that state hasn't expired (5 minute default)
 - Verify organization context hasn't changed
 - Ensure HTTPS is used for all redirects
 
-#### 2. "Provider Not Configured"
+#### "Provider Not Configured"
+
 **Cause**: OAuth provider configuration missing
 **Solutions**:
 - Verify environment variables are set
 - Check OAuth app configuration in provider settings
 - Ensure redirect URIs match exactly
 
-#### 3. "Token Validation Failed"
+#### "Token Validation Failed"
+
 **Cause**: Provider rejected the token
 **Solutions**:
 - Check if user revoked access in provider settings
 - Verify OAuth app hasn't been deleted/suspended
 - Attempt token refresh if refresh token available
 
-#### 4. "Integration Not Found"
+#### "Integration Not Found"
+
 **Cause**: Integration deleted or organization mismatch
 **Solutions**:
 - Verify user is in correct organization
@@ -834,6 +907,7 @@ The test suite covers:
 ### Security Monitoring
 
 #### Audit Events to Monitor
+
 - Multiple failed OAuth attempts
 - Token validation failures
 - Unusual API access patterns
@@ -841,6 +915,7 @@ The test suite covers:
 - Token refresh failures
 
 #### Alert Conditions
+
 ```yaml
 # Example monitoring rules
 alerts:
@@ -859,7 +934,8 @@ alerts:
 
 ### Debugging Tools
 
-#### 1. OAuth Flow Debugging
+#### OAuth Flow Debugging
+
 ```bash
 # Enable OAuth debug logging
 export OAUTH_DEBUG=true
@@ -868,14 +944,16 @@ export OAUTH_DEBUG=true
 tail -f logs/oauth.log | grep "oauth_flow"
 ```
 
-#### 2. Token Validation Testing
+#### Token Validation Testing
+
 ```bash
 # Test token manually
 curl -H "Authorization: token $GITHUB_TOKEN" \
      https://api.github.com/user
 ```
 
-#### 3. Integration Status Check
+#### Integration Status Check
+
 ```bash
 # Check integration status via API
 curl -H "Authorization: Bearer $SESSION_TOKEN" \
@@ -885,16 +963,14 @@ curl -H "Authorization: Bearer $SESSION_TOKEN" \
 ### Support and Maintenance
 
 #### Regular Maintenance Tasks
+
 1. **Token Cleanup**: Remove expired/invalid tokens monthly
-2. **Provider Updates**: Monitor OAuth provider API changes
-3. **Security Review**: Quarterly review of OAuth configurations
-4. **Performance Monitoring**: Track API call success rates
+1. **Provider Updates**: Monitor OAuth provider API changes
+1. **Security Review**: Quarterly review of OAuth configurations
+1. **Performance Monitoring**: Track API call success rates
 
 #### Emergency Procedures
+
 1. **Mass Token Invalidation**: If provider security breach detected
-2. **Service Degradation**: Fallback procedures for provider outages
-3. **Data Breach Response**: Token rotation and user notification procedures
-
----
-
-For additional support or questions about the OAuth integration system, please refer to the development team or create an issue in the repository.
+1. **Service Degradation**: Fallback procedures for provider outages
+1. **Data Breach Response**: Token rotation and user notification procedures

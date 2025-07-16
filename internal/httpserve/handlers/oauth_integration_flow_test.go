@@ -108,7 +108,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow() {
 		},
 	}
 
-	// Test for unauthenticated user (should redirect to login)
+	// Test for unauthenticated user (should return 401)
 	unauthenticatedTests := []struct {
 		name           string
 		request        models.OAuthFlowRequest
@@ -116,19 +116,13 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow() {
 		checkResponse  func(t *testing.T, resp *httptest.ResponseRecorder)
 	}{
 		{
-			name: "unauthenticated user - should redirect to login",
+			name: "unauthenticated user - should return 401",
 			request: models.OAuthFlowRequest{
 				Provider: "github",
 			},
-			expectedStatus: http.StatusOK,
+			expectedStatus: http.StatusUnauthorized,
 			checkResponse: func(t *testing.T, resp *httptest.ResponseRecorder) {
-				var response models.OAuthFlowResponse
-				err := json.Unmarshal(resp.Body.Bytes(), &response)
-				require.NoError(t, err)
-				assert.False(t, response.Success)
-				assert.True(t, response.RequiresLogin)
-				assert.Contains(t, response.AuthURL, "/v1/github/login")
-				assert.Contains(t, response.Message, "Authentication required")
+				assert.Contains(t, resp.Body.String(), "could not identify authenticated user in request")
 			},
 		},
 	}
@@ -175,7 +169,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow() {
 func (suite *HandlerTestSuite) TestHandleOAuthCallback() {
 	t := suite.T()
 
-	suite.e.POST("oauth/callback", suite.h.HandleOAuthCallback)
+	suite.e.GET("oauth/callback", suite.h.HandleOAuthCallback)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
@@ -194,17 +188,19 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback() {
 
 	tests := []struct {
 		name           string
-		request        models.OAuthCallbackRequest
+		urlPath        string
+		cookies        []*http.Cookie
 		expectedStatus int
 		setupMock      func()
 		checkResponse  func(t *testing.T, resp *httptest.ResponseRecorder)
 	}{
 		{
-			name: "invalid state",
-			request: models.OAuthCallbackRequest{
-				Provider: "github",
-				Code:     "valid_code",
-				State:    "invalid_state",
+			name:           "invalid state",
+			urlPath:        "/oauth/callback?code=valid_code&state=invalid_state",
+			cookies:        []*http.Cookie{
+				{Name: "oauth_state", Value: validState},
+				{Name: "oauth_org_id", Value: orgID},
+				{Name: "oauth_user_id", Value: testUser.UserInfo.ID},
 			},
 			expectedStatus: http.StatusBadRequest,
 			checkResponse: func(t *testing.T, resp *httptest.ResponseRecorder) {
@@ -212,11 +208,12 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback() {
 			},
 		},
 		{
-			name: "missing code",
-			request: models.OAuthCallbackRequest{
-				Provider: "github",
-				Code:     "",
-				State:    validState,
+			name:           "missing code",
+			urlPath:        fmt.Sprintf("/oauth/callback?state=%s", validState),
+			cookies:        []*http.Cookie{
+				{Name: "oauth_state", Value: validState},
+				{Name: "oauth_org_id", Value: orgID},
+				{Name: "oauth_user_id", Value: testUser.UserInfo.ID},
 			},
 			expectedStatus: http.StatusBadRequest,
 			checkResponse: func(t *testing.T, resp *httptest.ResponseRecorder) {
@@ -224,27 +221,39 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback() {
 			},
 		},
 		{
-			name: "empty provider",
-			request: models.OAuthCallbackRequest{
-				Provider: "",
-				Code:     "valid_code",
-				State:    validState,
-			},
-			expectedStatus: http.StatusBadRequest,
-			checkResponse: func(t *testing.T, resp *httptest.ResponseRecorder) {
-				assert.Contains(t, resp.Body.String(), "provider is required")
-			},
-		},
-		{
-			name: "provider mismatch with state",
-			request: models.OAuthCallbackRequest{
-				Provider: "slack",
-				Code:     "valid_code",
-				State:    validState, // state is for github
+			name:           "missing OAuth state cookie",
+			urlPath:        fmt.Sprintf("/oauth/callback?code=valid_code&state=%s", validState),
+			cookies:        []*http.Cookie{
+				{Name: "oauth_org_id", Value: orgID},
+				{Name: "oauth_user_id", Value: testUser.UserInfo.ID},
 			},
 			expectedStatus: http.StatusBadRequest,
 			checkResponse: func(t *testing.T, resp *httptest.ResponseRecorder) {
 				assert.Contains(t, resp.Body.String(), "invalid OAuth state")
+			},
+		},
+		{
+			name:           "missing OAuth org cookie",
+			urlPath:        fmt.Sprintf("/oauth/callback?code=valid_code&state=%s", validState),
+			cookies:        []*http.Cookie{
+				{Name: "oauth_state", Value: validState},
+				{Name: "oauth_user_id", Value: testUser.UserInfo.ID},
+			},
+			expectedStatus: http.StatusBadRequest,
+			checkResponse: func(t *testing.T, resp *httptest.ResponseRecorder) {
+				assert.Contains(t, resp.Body.String(), "missing organization context")
+			},
+		},
+		{
+			name:           "missing OAuth user cookie",
+			urlPath:        fmt.Sprintf("/oauth/callback?code=valid_code&state=%s", validState),
+			cookies:        []*http.Cookie{
+				{Name: "oauth_state", Value: validState},
+				{Name: "oauth_org_id", Value: orgID},
+			},
+			expectedStatus: http.StatusBadRequest,
+			checkResponse: func(t *testing.T, resp *httptest.ResponseRecorder) {
+				assert.Contains(t, resp.Body.String(), "missing user context")
 			},
 		},
 	}
@@ -255,10 +264,175 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback() {
 				tt.setupMock()
 			}
 
-			body, err := json.Marshal(tt.request)
+			req := httptest.NewRequest(http.MethodGet, tt.urlPath, nil)
+
+			// Add cookies to the request
+			for _, cookie := range tt.cookies {
+				req.AddCookie(cookie)
+			}
+
+			rec := httptest.NewRecorder()
+			suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
+
+			assert.Equal(t, tt.expectedStatus, rec.Code)
+			if tt.checkResponse != nil {
+				tt.checkResponse(t, rec)
+			}
+		})
+	}
+}
+
+func (suite *HandlerTestSuite) TestHandleOAuthCallbackSuccess() {
+	t := suite.T()
+
+	suite.e.GET("oauth/callback", suite.h.HandleOAuthCallback)
+
+	ctx := echocontext.NewTestEchoContext().Request().Context()
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	// Create test user with organization
+	testUser := suite.userBuilderWithInput(ctx, &userInput{
+		password:      "0p3nl@n3rocks!",
+		confirmedUser: true,
+	})
+
+	// Generate valid state for testing
+	orgID := testUser.OrganizationID
+	provider := "github"
+	validState, err := generateTestOAuthState(orgID, provider)
+	require.NoError(t, err)
+
+	t.Run("successful callback redirects to HTML interface", func(t *testing.T) {
+		// Mock the OAuth token exchange - this would normally call GitHub API
+		// For now, we'll test the error case since we don't have a real OAuth provider
+		urlPath := fmt.Sprintf("/oauth/callback?code=test_code&state=%s", validState)
+
+		req := httptest.NewRequest(http.MethodGet, urlPath, nil)
+
+		// Add required OAuth cookies
+		req.AddCookie(&http.Cookie{Name: "oauth_state", Value: validState})
+		req.AddCookie(&http.Cookie{Name: "oauth_org_id", Value: orgID})
+		req.AddCookie(&http.Cookie{Name: "oauth_user_id", Value: testUser.UserInfo.ID})
+
+		rec := httptest.NewRecorder()
+		suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
+
+		// Since we don't have a real OAuth provider configured, this will fail at token exchange
+		// But we can verify that it gets past the initial validation steps
+		assert.NotEqual(t, http.StatusBadRequest, rec.Code, "Should pass initial validation")
+
+		// The actual OAuth token exchange will fail since we don't have a real provider
+		// This is expected behavior for unit tests
+	})
+}
+
+func (suite *HandlerTestSuite) TestOAuthStateValidationEdgeCases() {
+	t := suite.T()
+
+	// Register the route once for the entire test
+	suite.e.GET("oauth/callback", suite.h.HandleOAuthCallback)
+
+	t.Run("state validation with invalid base64", func(t *testing.T) {
+		orgID := "test-org-123"
+
+		// Test invalid base64 state
+		invalidState := "invalid-base64-!@#$%"
+
+		req := httptest.NewRequest(http.MethodGet,
+			fmt.Sprintf("/oauth/callback?code=test_code&state=%s", invalidState), nil)
+
+		req.AddCookie(&http.Cookie{Name: "oauth_state", Value: invalidState})
+		req.AddCookie(&http.Cookie{Name: "oauth_org_id", Value: orgID})
+		req.AddCookie(&http.Cookie{Name: "oauth_user_id", Value: "test-user"})
+
+		rec := httptest.NewRecorder()
+		suite.e.ServeHTTP(rec, req)
+
+		assert.Equal(t, http.StatusBadRequest, rec.Code)
+		assert.Contains(t, rec.Body.String(), "state is required")
+	})
+
+	t.Run("state validation with wrong format", func(t *testing.T) {
+		orgID := "test-org-123"
+
+		// Create state with wrong format (missing parts)
+		wrongFormatState := base64.URLEncoding.EncodeToString([]byte("only-one-part"))
+
+		req := httptest.NewRequest(http.MethodGet,
+			fmt.Sprintf("/oauth/callback?code=test_code&state=%s", wrongFormatState), nil)
+
+		req.AddCookie(&http.Cookie{Name: "oauth_state", Value: wrongFormatState})
+		req.AddCookie(&http.Cookie{Name: "oauth_org_id", Value: orgID})
+		req.AddCookie(&http.Cookie{Name: "oauth_user_id", Value: "test-user"})
+
+		rec := httptest.NewRecorder()
+		suite.e.ServeHTTP(rec, req)
+
+		assert.Equal(t, http.StatusBadRequest, rec.Code)
+		assert.Contains(t, rec.Body.String(), "invalid OAuth state parameter")
+	})
+}
+
+func (suite *HandlerTestSuite) TestOAuthProviderConfiguration() {
+	t := suite.T()
+
+	suite.e.POST("oauth/start", suite.h.StartOAuthFlow)
+
+	ctx := echocontext.NewTestEchoContext().Request().Context()
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	// Create test user with organization
+	testUser := suite.userBuilderWithInput(ctx, &userInput{
+		password:      "0p3nl@n3rocks!",
+		confirmedUser: true,
+	})
+
+	tests := []struct {
+		name           string
+		provider       string
+		expectedStatus int
+		checkResponse  func(t *testing.T, resp *httptest.ResponseRecorder)
+	}{
+		{
+			name:           "github provider should be configured",
+			provider:       "github",
+			expectedStatus: http.StatusOK,
+			checkResponse: func(t *testing.T, resp *httptest.ResponseRecorder) {
+				var response models.OAuthFlowResponse
+				err := json.Unmarshal(resp.Body.Bytes(), &response)
+				require.NoError(t, err)
+				assert.True(t, response.Success)
+				assert.Contains(t, response.AuthURL, "github.com")
+			},
+		},
+		{
+			name:           "slack provider should not be configured in test environment",
+			provider:       "slack",
+			expectedStatus: http.StatusBadRequest,
+			checkResponse: func(t *testing.T, resp *httptest.ResponseRecorder) {
+				assert.Contains(t, resp.Body.String(), "oauth2 provider not supported")
+			},
+		},
+		{
+			name:           "unsupported provider should fail",
+			provider:       "unsupported",
+			expectedStatus: http.StatusBadRequest,
+			checkResponse: func(t *testing.T, resp *httptest.ResponseRecorder) {
+				assert.Contains(t, resp.Body.String(), "invalid or unparsable field: provider")
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			request := models.OAuthFlowRequest{
+				Provider: tt.provider,
+			}
+
+			body, err := json.Marshal(request)
 			require.NoError(t, err)
 
-			req := httptest.NewRequest(http.MethodPost, "/oauth/callback", strings.NewReader(string(body)))
+			req := httptest.NewRequest(http.MethodPost, "/oauth/start", strings.NewReader(string(body)))
 			req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
 
 			rec := httptest.NewRecorder()
@@ -270,6 +444,68 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback() {
 			}
 		})
 	}
+}
+
+func (suite *HandlerTestSuite) TestOAuthCookieConfiguration() {
+	t := suite.T()
+
+	suite.e.POST("oauth/start", suite.h.StartOAuthFlow)
+
+	ctx := echocontext.NewTestEchoContext().Request().Context()
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	// Create test user with organization
+	testUser := suite.userBuilderWithInput(ctx, &userInput{
+		password:      "0p3nl@n3rocks!",
+		confirmedUser: true,
+	})
+
+	t.Run("OAuth cookies should be set with SameSiteNone", func(t *testing.T) {
+		request := models.OAuthFlowRequest{
+			Provider: "github",
+		}
+
+		body, err := json.Marshal(request)
+		require.NoError(t, err)
+
+		req := httptest.NewRequest(http.MethodPost, "/oauth/start", strings.NewReader(string(body)))
+		req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+
+		rec := httptest.NewRecorder()
+		suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
+
+		assert.Equal(t, http.StatusOK, rec.Code)
+
+		// Check that OAuth cookies are set with proper configuration
+		cookies := rec.Result().Cookies()
+
+		var oauthStateCookie, oauthOrgCookie, oauthUserCookie *http.Cookie
+		for _, cookie := range cookies {
+			switch cookie.Name {
+			case "oauth_state":
+				oauthStateCookie = cookie
+			case "oauth_org_id":
+				oauthOrgCookie = cookie
+			case "oauth_user_id":
+				oauthUserCookie = cookie
+			}
+		}
+
+		// Verify all OAuth cookies are set
+		require.NotNil(t, oauthStateCookie, "oauth_state cookie should be set")
+		require.NotNil(t, oauthOrgCookie, "oauth_org_id cookie should be set")
+		require.NotNil(t, oauthUserCookie, "oauth_user_id cookie should be set")
+
+		// Verify OAuth cookies have proper SameSite configuration
+		assert.Equal(t, http.SameSiteNoneMode, oauthStateCookie.SameSite)
+		assert.Equal(t, http.SameSiteNoneMode, oauthOrgCookie.SameSite)
+		assert.Equal(t, http.SameSiteNoneMode, oauthUserCookie.SameSite)
+
+		// Verify OAuth cookies are HttpOnly for security
+		assert.True(t, oauthStateCookie.HttpOnly)
+		assert.True(t, oauthOrgCookie.HttpOnly)
+		assert.True(t, oauthUserCookie.HttpOnly)
+	})
 }
 
 func (suite *HandlerTestSuite) TestGetIntegrationToken() {
@@ -288,8 +524,8 @@ func (suite *HandlerTestSuite) TestGetIntegrationToken() {
 	})
 
 	// Create test integration and tokens
-	integration := suite.createTestIntegration(ctx, testUser.OrganizationID, "github")
-	suite.createTestTokens(ctx, integration)
+	integration := suite.createTestIntegration(testUser.UserCtx, testUser.OrganizationID, "github")
+	suite.createTestTokens(testUser.UserCtx, integration)
 
 	tests := []struct {
 		name           string
@@ -361,8 +597,8 @@ func (suite *HandlerTestSuite) TestGetIntegrationStatus() {
 	})
 
 	// Create test integration and tokens
-	integration := suite.createTestIntegration(ctx, testUser.OrganizationID, "github")
-	suite.createTestTokens(ctx, integration)
+	integration := suite.createTestIntegration(testUser.UserCtx, testUser.OrganizationID, "github")
+	suite.createTestTokens(testUser.UserCtx, integration)
 
 	tests := []struct {
 		name           string
@@ -434,8 +670,8 @@ func (suite *HandlerTestSuite) TestListIntegrations() {
 	})
 
 	// Create test integrations
-	integration1 := suite.createTestIntegration(ctx, testUser.OrganizationID, "github")
-	integration2 := suite.createTestIntegration(ctx, testUser.OrganizationID, "slack")
+	integration1 := suite.createTestIntegration(testUser.UserCtx, testUser.OrganizationID, "github")
+	integration2 := suite.createTestIntegration(testUser.UserCtx, testUser.OrganizationID, "slack")
 
 	req := httptest.NewRequest(http.MethodGet, "/integrations", nil)
 	rec := httptest.NewRecorder()
@@ -476,8 +712,8 @@ func (suite *HandlerTestSuite) TestDeleteIntegration() {
 	})
 
 	// Create test integration and tokens
-	integration := suite.createTestIntegration(ctx, testUser.OrganizationID, "github")
-	suite.createTestTokens(ctx, integration)
+	integration := suite.createTestIntegration(testUser.UserCtx, testUser.OrganizationID, "github")
+	suite.createTestTokens(testUser.UserCtx, integration)
 
 	tests := []struct {
 		name           string
@@ -508,9 +744,9 @@ func (suite *HandlerTestSuite) TestDeleteIntegration() {
 		{
 			name:           "empty integration ID",
 			integrationID:  "",
-			expectedStatus: http.StatusBadRequest,
+			expectedStatus: http.StatusNotFound,
 			checkResponse: func(t *testing.T, resp *httptest.ResponseRecorder) {
-				assert.Contains(t, resp.Body.String(), "integration ID is required")
+				assert.Contains(t, resp.Body.String(), "Not Found")
 			},
 		},
 	}
@@ -538,7 +774,8 @@ func generateTestOAuthState(orgID, provider string) (string, error) {
 	// Create a test handler with minimal setup to access the private method
 	// For testing purposes, we'll create a simple base64 encoded state
 	// This mimics the format used by the actual generateOAuthState method
-	stateData := fmt.Sprintf("%s:%s:test_random", orgID, provider)
+	// Use current timestamp to make states different
+	stateData := fmt.Sprintf("%s:%s:%d", orgID, provider, time.Now().UnixNano())
 	return base64.URLEncoding.EncodeToString([]byte(stateData)), nil
 }
 

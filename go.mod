@@ -394,6 +394,7 @@ require (
 	github.com/tidwall/tinyqueue v0.1.1 // indirect
 	github.com/timakin/bodyclose v0.0.0-20241222091800-1db5c5ca4d67 // indirect
 	github.com/timonwong/loggercheck v0.10.1 // indirect
+	github.com/tink-crypto/tink-go/v2 v2.4.0 // indirect
 	github.com/tklauser/go-sysconf v0.3.15 // indirect
 	github.com/tklauser/numcpus v0.10.0 // indirect
 	github.com/tomarrell/wrapcheck/v2 v2.10.0 // indirect

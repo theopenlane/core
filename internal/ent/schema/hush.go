@@ -8,8 +8,7 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
+	"github.com/theopenlane/core/internal/ent/hush"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/entx"
 )
@@ -69,6 +68,7 @@ func (Hush) Fields() []ent.Field {
 			Sensitive().
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput),
+				hush.EncryptField(), // Automatically encrypt this field
 			).
 			Optional().
 			Immutable(),
@@ -100,22 +100,37 @@ func (h Hush) Mixin() []ent.Mixin {
 		excludeTags: true,
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(h),
+			// Encryption is now automatically handled - no manual mixin needed!
 		},
 	}.getMixins()
 }
 
 // Hooks of the Hush
-func (Hush) Hooks() []ent.Hook {
-	return []ent.Hook{
-		hooks.HookHush(),
+// Automatically detects and applies encryption hooks for annotated fields
+func (h Hush) Hooks() []ent.Hook {
+	// Auto-detect and return encryption hooks for fields with hush.EncryptField() annotations
+	autoHooks := hush.AutoEncryptionHook(h)
+
+	// Add any additional non-encryption hooks here if needed
+	additionalHooks := []ent.Hook{
+		// Add non-encryption hooks here
 	}
+
+	return append(autoHooks, additionalHooks...)
 }
 
 // Interceptors of the Hush
-func (Hush) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorHush(),
+// Automatically detects and applies decryption interceptors for annotated fields
+func (h Hush) Interceptors() []ent.Interceptor {
+	// Auto-detect and return decryption interceptors for fields with hush.EncryptField() annotations
+	autoInterceptors := hush.AutoDecryptionInterceptor(h)
+
+	// Add any additional non-encryption interceptors here if needed
+	additionalInterceptors := []ent.Interceptor{
+		// Add non-encryption interceptors here
 	}
+
+	return append(autoInterceptors, additionalInterceptors...)
 }
 
 // Policy of the Hush - restricts access to organization members with write access

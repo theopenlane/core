@@ -128,8 +128,7 @@ func TestOAuthCallbackRequest_Validate(t *testing.T) {
 				Code:     "4/0AQlEz8xY...",
 				State:    "eyJvcmdJRCI6IjAxSE...",
 			},
-			wantErr: true,
-			errMsg:  "provider is required",
+			wantErr: false,
 		},
 		{
 			name: "empty code",
@@ -158,8 +157,7 @@ func TestOAuthCallbackRequest_Validate(t *testing.T) {
 				Code:     "4/0AQlEz8xY...",
 				State:    "eyJvcmdJRCI6IjAxSE...",
 			},
-			wantErr: true,
-			errMsg:  "provider is required",
+			wantErr: false,
 		},
 		{
 			name: "whitespace only code",
