@@ -455,6 +455,21 @@ type ComplexityRoot struct {
 		Controls func(childComplexity int) int
 	}
 
+	ControlCategory struct {
+		Name               func(childComplexity int) int
+		ReferenceFramework func(childComplexity int) int
+	}
+
+	ControlCategoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	ControlCategoryEdge struct {
+		Node func(childComplexity int) int
+	}
+
 	ControlConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -472,6 +487,20 @@ type ComplexityRoot struct {
 	ControlEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
+	}
+
+	ControlGroup struct {
+		Category func(childComplexity int) int
+		Controls func(childComplexity int) int
+	}
+
+	ControlGroupConnection struct {
+		Edges func(childComplexity int) int
+	}
+
+	ControlGroupEdge struct {
+		Node     func(childComplexity int) int
+		PageInfo func(childComplexity int) int
 	}
 
 	ControlHistory struct {
@@ -3422,7 +3451,7 @@ type ComplexityRoot struct {
 		ContactSearch                         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Contacts                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
 		Control                               func(childComplexity int, id string) int
-		ControlCategories                     func(childComplexity int) int
+		ControlCategories                     func(childComplexity int, orderBy []*model.ControlCategoryOrder, where *generated.ControlWhereInput) int
 		ControlHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlHistoryOrder, where *generated.ControlHistoryWhereInput) int
 		ControlImplementation                 func(childComplexity int, id string) int
 		ControlImplementationHistories        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlImplementationHistoryOrder, where *generated.ControlImplementationHistoryWhereInput) int
@@ -3436,8 +3465,9 @@ type ComplexityRoot struct {
 		ControlScheduledJobHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlScheduledJobHistoryOrder, where *generated.ControlScheduledJobHistoryWhereInput) int
 		ControlScheduledJobs                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlScheduledJobOrder, where *generated.ControlScheduledJobWhereInput) int
 		ControlSearch                         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		ControlSubcategories                  func(childComplexity int) int
+		ControlSubcategories                  func(childComplexity int, orderBy []*model.ControlCategoryOrder, where *generated.ControlWhereInput) int
 		Controls                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		ControlsGroupByCategory               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput, category *string) int
 		CustomDomain                          func(childComplexity int, id string) int
 		CustomDomainHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.CustomDomainHistoryOrder, where *generated.CustomDomainHistoryWhereInput) int
 		CustomDomainSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -7006,6 +7036,48 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlBulkCreatePayload.Controls(childComplexity), true
 
+	case "ControlCategory.name":
+		if e.complexity.ControlCategory.Name == nil {
+			break
+		}
+
+		return e.complexity.ControlCategory.Name(childComplexity), true
+
+	case "ControlCategory.referenceFramework":
+		if e.complexity.ControlCategory.ReferenceFramework == nil {
+			break
+		}
+
+		return e.complexity.ControlCategory.ReferenceFramework(childComplexity), true
+
+	case "ControlCategoryConnection.edges":
+		if e.complexity.ControlCategoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.ControlCategoryConnection.Edges(childComplexity), true
+
+	case "ControlCategoryConnection.pageInfo":
+		if e.complexity.ControlCategoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.ControlCategoryConnection.PageInfo(childComplexity), true
+
+	case "ControlCategoryConnection.totalCount":
+		if e.complexity.ControlCategoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.ControlCategoryConnection.TotalCount(childComplexity), true
+
+	case "ControlCategoryEdge.node":
+		if e.complexity.ControlCategoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.ControlCategoryEdge.Node(childComplexity), true
+
 	case "ControlConnection.edges":
 		if e.complexity.ControlConnection.Edges == nil {
 			break
@@ -7054,6 +7126,41 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlEdge.Node(childComplexity), true
+
+	case "ControlGroup.category":
+		if e.complexity.ControlGroup.Category == nil {
+			break
+		}
+
+		return e.complexity.ControlGroup.Category(childComplexity), true
+
+	case "ControlGroup.controls":
+		if e.complexity.ControlGroup.Controls == nil {
+			break
+		}
+
+		return e.complexity.ControlGroup.Controls(childComplexity), true
+
+	case "ControlGroupConnection.edges":
+		if e.complexity.ControlGroupConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.ControlGroupConnection.Edges(childComplexity), true
+
+	case "ControlGroupEdge.node":
+		if e.complexity.ControlGroupEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.ControlGroupEdge.Node(childComplexity), true
+
+	case "ControlGroupEdge.pageInfo":
+		if e.complexity.ControlGroupEdge.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.ControlGroupEdge.PageInfo(childComplexity), true
 
 	case "ControlHistory.assessmentMethods":
 		if e.complexity.ControlHistory.AssessmentMethods == nil {
@@ -23580,7 +23687,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Query.ControlCategories(childComplexity), true
+		args, err := ec.field_Query_controlCategories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ControlCategories(childComplexity, args["orderBy"].([]*model.ControlCategoryOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "Query.controlHistories":
 		if e.complexity.Query.ControlHistories == nil {
@@ -23743,7 +23855,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		return e.complexity.Query.ControlSubcategories(childComplexity), true
+		args, err := ec.field_Query_controlSubcategories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ControlSubcategories(childComplexity, args["orderBy"].([]*model.ControlCategoryOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "Query.controls":
 		if e.complexity.Query.Controls == nil {
@@ -23756,6 +23873,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
+
+	case "Query.controlsGroupByCategory":
+		if e.complexity.Query.ControlsGroupByCategory == nil {
+			break
+		}
+
+		args, err := ec.field_Query_controlsGroupByCategory_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.ControlsGroupByCategory(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput), args["category"].(*string)), true
 
 	case "Query.customDomain":
 		if e.complexity.Query.CustomDomain == nil {
@@ -32424,6 +32553,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputContactHistoryWhereInput,
 		ec.unmarshalInputContactOrder,
 		ec.unmarshalInputContactWhereInput,
+		ec.unmarshalInputControlCategoryOrder,
 		ec.unmarshalInputControlHistoryOrder,
 		ec.unmarshalInputControlHistoryWhereInput,
 		ec.unmarshalInputControlImplementationHistoryOrder,
@@ -34634,11 +34764,135 @@ extend type Query {
     """
     Existing categories or domains for controls used in the organization
     """
-    controlCategories: [String!]
+    controlCategories(
+        """
+        Ordering options for APITokens returned from the connection.
+        """
+        orderBy: [ControlCategoryOrder!]
+
+        """
+        Filtering options for APITokens returned from the connection.
+        """
+        where: ControlWhereInput
+    ): [ControlCategoryEdge!]
     """
     Existing subcategories or subdomains for controls used in the organization
     """
-    controlSubcategories: [String!]
+    controlSubcategories(
+        """
+        Ordering options for APITokens returned from the connection.
+        """
+        orderBy: [ControlCategoryOrder!]
+        """
+        Filtering options for APITokens returned from the connection.
+        """
+        where: ControlWhereInput
+    ): [ControlCategoryEdge!]
+    
+    """
+    Get controls grouped by category
+    """
+    controlsGroupByCategory(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Control returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+    """
+    Filter by category, used for paginated requests to pull more data per category
+    """
+    category: String
+  ): ControlGroupConnection!
+}
+
+type ControlCategory {
+  name: String!
+  referenceFramework: String
+}
+
+type ControlGroupConnection {
+  edges: [ControlGroupEdge!]!
+}
+
+type ControlGroupEdge {
+  pageInfo: PageInfo!
+  node: ControlGroup!
+}
+
+type ControlGroup {
+  category: String!
+  controls: ControlConnection!
+}
+
+"""
+A connection to a list of items.
+"""
+type ControlCategoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [ControlCategoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ControlCategoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: ControlCategory!
+}
+"""
+Ordering options for ControlCategory connections
+"""
+input ControlCategoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ControlCategories.
+  """
+  field: ControlCategoryOrderField!
+}
+"""
+Properties by which ControlCategory connections can be ordered.
+"""
+enum ControlCategoryOrderField {
+  category
+  referenceFramework
 }`, BuiltIn: false},
 	{Name: "../schema/controlimplementation.graphql", Input: `extend type Query {
     """

@@ -6,13 +6,15 @@ package graphapi
 
 import (
 	"context"
-	"slices"
+	"fmt"
 
+	"entgo.io/contrib/entgql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -64,80 +66,100 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 }
 
 // ControlCategories is the resolver for the controlCategories field.
-func (r *queryResolver) ControlCategories(ctx context.Context) ([]string, error) {
-	categories, err := withTransactionalMutation(ctx).Control.Query().Select(control.FieldCategory).
-		Where(control.CategoryNEQ("")).
-		Unique(true).
-		GroupBy(control.FieldCategory).
-		Strings(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "categories"})
-	}
-
-	subcontrolCategories, err := withTransactionalMutation(ctx).Subcontrol.Query().Select(control.FieldCategory).
-		Where(subcontrol.CategoryNEQ("")).
-		Unique(true).
-		GroupBy(control.FieldCategory).
-		Strings(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "categories"})
-	}
-
-	for _, subcontrolCategory := range subcontrolCategories {
-		// check if the subcontrol category already exists in the main categories
-		if !slices.Contains(categories, subcontrolCategory) {
-			// if not, append it to the main categories
-			categories = append(categories, subcontrolCategory)
-		}
-	}
-
-	// sort the categories to ensure consistent order
-	slices.Sort(categories)
-
-	if categories == nil {
-		// if no subcategories are found, return an empty slice
-		categories = []string{}
-	}
-
-	return categories, nil
+func (r *queryResolver) ControlCategories(ctx context.Context, orderBy []*model.ControlCategoryOrder, where *generated.ControlWhereInput) ([]*model.ControlCategoryEdge, error) {
+	return r.getAllCategories(ctx, control.FieldCategory, where)
 }
 
 // ControlSubcategories is the resolver for the controlSubcategories field.
-func (r *queryResolver) ControlSubcategories(ctx context.Context) ([]string, error) {
-	subcategories, err := withTransactionalMutation(ctx).Control.Query().Select(control.FieldSubcategory).
-		Where(control.SubcategoryNEQ("")).
-		Unique(true).
-		GroupBy(control.FieldSubcategory).
-		Strings(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "subcategories"})
+func (r *queryResolver) ControlSubcategories(ctx context.Context, orderBy []*model.ControlCategoryOrder, where *generated.ControlWhereInput) ([]*model.ControlCategoryEdge, error) {
+	return r.getAllCategories(ctx, control.FieldSubcategory, where)
+}
+
+// ControlsGroupByCategory is the resolver for the controlsGroupByCategory field.
+func (r *queryResolver) ControlsGroupByCategory(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput, category *string) (*model.ControlGroupConnection, error) {
+	if category == nil && after != nil || before != nil {
+		log.Info().Msg("category must be provided when using pagination with after or before")
+
+		return nil, fmt.Errorf("%w: category must be provided when using pagination with after or before", rout.ErrBadRequest)
 	}
 
-	subcontrolCategories, err := withTransactionalMutation(ctx).Subcontrol.Query().Select(control.FieldSubcategory).
-		Where(subcontrol.SubcategoryNEQ("")).
-		Unique(true).
-		GroupBy(control.FieldSubcategory).
-		Strings(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "subcategories"})
-	}
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
-	// append the subcontrol categories to the main categories
-	for _, subcontrolCategory := range subcontrolCategories {
-		// check if the subcontrol category already exists in the main subcategories
-		if !slices.Contains(subcategories, subcontrolCategory) {
-			// if not, append it to the main subcategories
-			subcategories = append(subcategories, subcontrolCategory)
+	if orderBy == nil {
+		orderBy = []*generated.ControlOrder{
+			{
+				Field:     generated.ControlOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
 		}
 	}
 
-	// sort the subcategories to ensure consistent order
-	slices.Sort(subcategories)
-
-	if subcategories == nil {
-		// if no subcategories are found, return an empty slice
-		subcategories = []string{}
+	whereP, err := getControlWherePredicate(where)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "control"})
 	}
 
-	return subcategories, nil
+	categories := []string{}
+	if category == nil {
+		whereFilter := control.CategoryNEQ("")
+
+		if whereP != nil {
+			whereFilter = control.And(
+				append([]predicate.Control{control.CategoryNEQ("")}, whereP)...,
+			)
+
+		}
+		// get all distinct categories from controls
+		var err error
+		categories, err = withTransactionalMutation(ctx).Control.Query().
+			Select(control.FieldCategory).
+			Where(whereFilter).
+			Unique(true).
+			GroupBy(control.FieldCategory).
+			Strings(ctx)
+		if err != nil {
+			return nil, parseRequestError(err, action{action: ActionGet, object: "control"})
+		}
+	} else {
+		categories = []string{*category}
+	}
+
+	// for each category, query the controls and return a connection
+	result := &model.ControlGroupConnection{
+		Edges: []*model.ControlGroupEdge{},
+	}
+
+	for _, category := range categories {
+		query, err := withTransactionalMutation(ctx).Control.Query().Where(
+			control.Category(category),
+		).CollectFields(ctx)
+		if err != nil {
+			return nil, parseRequestError(err, action{action: ActionGet, object: "control"})
+		}
+
+		resp, err := query.Paginate(
+			ctx,
+			after,
+			first,
+			before,
+			last,
+			generated.WithControlOrder(orderBy),
+			generated.WithControlFilter(where.Filter))
+		if err != nil {
+			return nil, parseRequestError(err, action{action: ActionGet, object: "control"})
+		}
+
+		controlGroupEdge := &model.ControlGroupEdge{
+			Node: &model.ControlGroup{
+				Category: category,
+				Controls: resp,
+			},
+			PageInfo: &resp.PageInfo,
+		}
+
+		result.Edges = append(result.Edges, controlGroupEdge)
+	}
+
+	return result, nil
 }

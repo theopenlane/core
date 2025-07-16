@@ -134,6 +134,35 @@ type ControlBulkCreatePayload struct {
 	Controls []*generated.Control `json:"controls,omitempty"`
 }
 
+type ControlCategory struct {
+	Name               string  `json:"name"`
+	ReferenceFramework *string `json:"referenceFramework,omitempty"`
+}
+
+// A connection to a list of items.
+type ControlCategoryConnection struct {
+	// A list of edges.
+	Edges []*ControlCategoryEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *entgql.PageInfo[string] `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int `json:"totalCount"`
+}
+
+// An edge in a connection.
+type ControlCategoryEdge struct {
+	// The item at the end of the edge.
+	Node *ControlCategory `json:"node"`
+}
+
+// Ordering options for ControlCategory connections
+type ControlCategoryOrder struct {
+	// The ordering direction.
+	Direction entgql.OrderDirection `json:"direction"`
+	// The field by which to order ControlCategories.
+	Field ControlCategoryOrderField `json:"field"`
+}
+
 // Return response for createControl mutation
 type ControlCreatePayload struct {
 	// Created control
@@ -144,6 +173,20 @@ type ControlCreatePayload struct {
 type ControlDeletePayload struct {
 	// Deleted control ID
 	DeletedID string `json:"deletedID"`
+}
+
+type ControlGroup struct {
+	Category string                       `json:"category"`
+	Controls *generated.ControlConnection `json:"controls"`
+}
+
+type ControlGroupConnection struct {
+	Edges []*ControlGroupEdge `json:"edges"`
+}
+
+type ControlGroupEdge struct {
+	PageInfo *entgql.PageInfo[string] `json:"pageInfo"`
+	Node     *ControlGroup            `json:"node"`
 }
 
 // Return response for createBulkControlImplementation mutation
@@ -1448,6 +1491,62 @@ type UserUpdatePayload struct {
 type WebauthnDeletePayload struct {
 	// Deleted webauthn ID
 	DeletedID string `json:"deletedID"`
+}
+
+// Properties by which ControlCategory connections can be ordered.
+type ControlCategoryOrderField string
+
+const (
+	ControlCategoryOrderFieldCategory           ControlCategoryOrderField = "category"
+	ControlCategoryOrderFieldReferenceFramework ControlCategoryOrderField = "referenceFramework"
+)
+
+var AllControlCategoryOrderField = []ControlCategoryOrderField{
+	ControlCategoryOrderFieldCategory,
+	ControlCategoryOrderFieldReferenceFramework,
+}
+
+func (e ControlCategoryOrderField) IsValid() bool {
+	switch e {
+	case ControlCategoryOrderFieldCategory, ControlCategoryOrderFieldReferenceFramework:
+		return true
+	}
+	return false
+}
+
+func (e ControlCategoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *ControlCategoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ControlCategoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ControlCategoryOrderField", str)
+	}
+	return nil
+}
+
+func (e ControlCategoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *ControlCategoryOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e ControlCategoryOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 // Properties by which GroupPermission connections can be ordered.

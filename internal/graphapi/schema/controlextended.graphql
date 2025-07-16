@@ -34,9 +34,133 @@ extend type Query {
     """
     Existing categories or domains for controls used in the organization
     """
-    controlCategories: [String!]
+    controlCategories(
+        """
+        Ordering options for APITokens returned from the connection.
+        """
+        orderBy: [ControlCategoryOrder!]
+
+        """
+        Filtering options for APITokens returned from the connection.
+        """
+        where: ControlWhereInput
+    ): [ControlCategoryEdge!]
     """
     Existing subcategories or subdomains for controls used in the organization
     """
-    controlSubcategories: [String!]
+    controlSubcategories(
+        """
+        Ordering options for APITokens returned from the connection.
+        """
+        orderBy: [ControlCategoryOrder!]
+        """
+        Filtering options for APITokens returned from the connection.
+        """
+        where: ControlWhereInput
+    ): [ControlCategoryEdge!]
+
+    """
+    Get controls grouped by category
+    """
+    controlsGroupByCategory(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Control returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+    """
+    Filter by category, used for paginated requests to pull more data per category
+    """
+    category: String
+  ): ControlGroupConnection!
+}
+
+type ControlCategory {
+  name: String!
+  referenceFramework: String
+}
+
+type ControlGroupConnection {
+  edges: [ControlGroupEdge!]!
+}
+
+type ControlGroupEdge {
+  pageInfo: PageInfo!
+  node: ControlGroup!
+}
+
+type ControlGroup {
+  category: String!
+  controls: ControlConnection!
+}
+
+"""
+A connection to a list of items.
+"""
+type ControlCategoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [ControlCategoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ControlCategoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: ControlCategory!
+}
+"""
+Ordering options for ControlCategory connections
+"""
+input ControlCategoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ControlCategories.
+  """
+  field: ControlCategoryOrderField!
+}
+"""
+Properties by which ControlCategory connections can be ordered.
+"""
+enum ControlCategoryOrderField {
+  category
+  referenceFramework
 }
