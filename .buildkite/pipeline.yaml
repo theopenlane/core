@@ -51,18 +51,11 @@ steps:
                 - "go.sum"
               config:
                 group: ":test_tube: Go Tests & Builds"
-                key: "go-pipeline"
                 steps:
                   - label: ":golangci-lint: lint"
-                    key: "lint"
-                    if: build.branch !~ /^renovate\//
-                    depends_on: "generate"
                     agents:
                       queue: $LARGE_RUNNER_QUEUE
                       size: $RUNNER_LARGE
-                      location: "NYC"
-                    cancel_on_build_failing: true
-                    timeout_in_minutes: 20
                     plugins:
                       - docker#v5.13.0:
                           image: "ghcr.io/theopenlane/build-image:latest"
@@ -77,15 +70,13 @@ steps:
                             - "GOTOOLCHAIN=auto"
 
                   - label: ":golang: go test"
-                    key: "go_test"
-                    depends_on: "generate"
                     agents:
                       queue: $LARGE_RUNNER_QUEUE
                       size: $RUNNER_LARGE
-                      location: "NYC"
-                    cancel_on_build_failing: true
                     env:
                       TEST_DB_URL: "docker://postgres:17-alpine"
+                    artifacts:
+                      upload: ["coverage.out", "junit.xml"]
                     plugins:
                       - docker#v5.13.0:
                           image: ghcr.io/theopenlane/build-image:latest
@@ -103,17 +94,13 @@ steps:
                             - "TEST_DB_URL"
                             - "TEST_DB_CONTAINER_EXPIRY=20"
                             - "TEST_DB_HOST=172.17.0.1"
-                    artifact_paths: ["coverage.out", "junit.xml"]
 
                   - label: ":golang: build server"
-                    key: "gobuild-server"
-                    if: build.branch !~ /^renovate\//
-                    depends_on: ["generate", "go_test"]
-                    cancel_on_build_failing: true
-                    artifact_paths: "bin/${APP_NAME}"
                     agents:
                       queue: $LARGE_RUNNER_QUEUE
                       size: $RUNNER_LARGE
+                    artifacts:
+                      upload: "bin/${APP_NAME}"
                     plugins:
                       - docker#v5.13.0:
                           image: "ghcr.io/theopenlane/build-image:latest"
@@ -129,14 +116,11 @@ steps:
                           command: ["task", "go:build:ci"]
 
                   - label: ":terminal: build cli"
-                    key: "gobuild-cli"
-                    if: build.branch !~ /^renovate\//
-                    depends_on: ["generate", "go_test"]
                     agents:
                       queue: $LARGE_RUNNER_QUEUE
                       size: $RUNNER_LARGE
-                    cancel_on_build_failing: true
-                    artifact_paths: "bin/openlane-cli"
+                    artifacts:
+                      upload: "bin/openlane-cli"
                     plugins:
                       - docker#v5.13.0:
                           image: "ghcr.io/theopenlane/build-image:latest"
@@ -152,10 +136,6 @@ steps:
                           command: ["task", "go:build-cli:ci"]
 
                   - label: ":buildkite: upload test analytics"
-                    key: "test-analytics"
-                    if: build.branch !~ /^renovate\//
-                    cancel_on_build_failing: false
-                    depends_on: ["go_test"]
                     commands: |
                       #!/bin/bash
                       curl \
@@ -177,25 +157,12 @@ steps:
                       - cluster-secrets#v1.0.0:
                           variables:
                             ANALYTICS_KEY: ANALYTICS_KEY
-                      - artifacts#v1.9.4:
-                          download: "junit.xml"
-                          step: "go_test"
 
                   - label: ":github: upload PR reports"
-                    key: "scan-upload-pr"
-                    cancel_on_build_failing: true
-                    if: build.pull_request.id != null
-                    depends_on: ["go_test"]
                     plugins:
                       - cluster-secrets#v1.0.0:
                           variables:
                             SONAR_TOKEN: SONAR_TOKEN
-                      - artifacts#v1.9.4:
-                          download: "coverage.out"
-                          step: "go_test"
-                      - artifacts#v1.9.4:
-                          download: "junit.xml"
-                          step: "go_test"
                       - docker#v5.13.0:
                           image: "sonarsource/sonar-scanner-cli:11.2"
                           propagate-environment: true
@@ -209,20 +176,10 @@ steps:
                             - "SONAR_SCANNER_OPTS=-Dsonar.pullrequest.branch=$BUILDKITE_BRANCH -Dsonar.pullrequest.base=$BUILDKITE_PULL_REQUEST_BASE_BRANCH -Dsonar.pullrequest.key=$BUILDKITE_PULL_REQUEST"
 
                   - label: ":github: upload reports"
-                    key: "scan-upload"
-                    cancel_on_build_failing: true
-                    if: build.branch == "main" && build.tag == null
-                    depends_on: ["go_test"]
                     plugins:
                       - cluster-secrets#v1.0.0:
                           variables:
                             SONAR_TOKEN: SONAR_TOKEN
-                      - artifacts#v1.9.4:
-                          download: coverage.out
-                          step: "go_test"
-                      - artifacts#v1.9.4:
-                          download: "junit.xml"
-                          step: "go_test"
                       - docker#v5.13.0:
                           image: "sonarsource/sonar-scanner-cli:11.2"
                           propagate-environment: true
@@ -235,22 +192,13 @@ steps:
                             - "SONAR_HOST_URL=$SONAR_HOST"
 
                   - label: ":docker: docker pr build"
-                    key: "docker-pr-build"
-                    if: build.branch != "main" && build.tag == null && build.branch !~ /^renovate\//
-                    depends_on: ["gobuild-server"]
                     agents:
                       queue: $LARGE_RUNNER_QUEUE
                       size: $RUNNER_LARGE
-                    cancel_on_build_failing: true
                     commands: |
                       #!/bin/bash
                       chmod +x ${APP_NAME}
                     plugins:
-                      - artifacts#v1.9.4:
-                          download:
-                            - from: "bin/${APP_NAME}"
-                              to: "${APP_NAME}"
-                          step: "gobuild-server"
                       - cluster-secrets#v1.0.0:
                           variables:
                             SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
@@ -279,12 +227,8 @@ steps:
             - path: "db/migrations/**/*.sql"
               config:
                 group: ":database: Database Changes"
-                key: "database"
-                if: build.branch !~ /^renovate\//
                 steps:
                   - label: ":postgres: atlas lint"
-                    key: "atlas_lint"
-                    depends_on: "generate"
                     soft_fail:
                       - exit_status: 1
                     plugins:
@@ -302,15 +246,11 @@ steps:
             - path: "fga/**"
               config:
                 group: ":auth0: FGA Changes"
-                key: "fga-tests"
-                if: build.branch !~ /^renovate\//
                 steps:
                   - label: ":auth0: fga model test"
-                    depends_on: "generate"
                     agents:
                       queue: $SMALL_RUNNER_QUEUE
                       size: $RUNNER_SMALL
-                    key: "fga_test"
                     plugins:
                       - docker#v5.13.0:
                           image: openfga/cli:v0.5.1
@@ -322,12 +262,8 @@ steps:
                 - ".buildkite/**"
               config:
                 group: ":gear: Config Changes"
-                key: "config-automation"
                 steps:
                   - label: ":yaml: generate config"
-                    key: "generate_config"
-                    depends_on: "generate"
-                    cancel_on_build_failing: true
                     plugins:
                       - docker#v5.13.0:
                           image: "ghcr.io/theopenlane/build-image:latest"
@@ -342,9 +278,6 @@ steps:
                             - "GOTOOLCHAIN=auto"
 
                   - label: ":construction: create draft config PR"
-                    key: "draft_pr_automation"
-                    depends_on: "generate_config"
-                    if: build.pull_request.id != null
                     plugins:
                       - cluster-secrets#v1.0.0:
                           variables:
