@@ -63,10 +63,10 @@ type OpenlaneGraphClient interface {
 	CreateControlsByClone(ctx context.Context, input CloneControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateControlsByClone, error)
 	CreateControlsByCloneReturnID(ctx context.Context, input CloneControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateControlsByCloneReturnID, error)
 	GetControlCategories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetControlCategories, error)
-	GetControlSubcategories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetControlSubcategories, error)
 	GetControlCategoriesWithFramework(ctx context.Context, where *ControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControlCategoriesWithFramework, error)
-	GetControlSubcategoriesWithFramework(ctx context.Context, where *ControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControlSubcategoriesWithFramework, error)
 	GetControlsGroupByCategory(ctx context.Context, first *int64, last *int64, after *string, before *string, where *ControlWhereInput, orderBy []*ControlOrder, category *string, interceptors ...clientv2.RequestInterceptor) (*GetControlsGroupByCategory, error)
+	GetControlSubcategories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetControlSubcategories, error)
+	GetControlSubcategoriesWithFramework(ctx context.Context, where *ControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControlSubcategoriesWithFramework, error)
 	GetAllControlHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllControlHistories, error)
 	GetControlHistories(ctx context.Context, where *ControlHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControlHistories, error)
 	CreateBulkControlImplementation(ctx context.Context, input []*CreateControlImplementationInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkControlImplementation, error)
@@ -14655,35 +14655,6 @@ func (t *GetControlCategoriesWithFramework_ControlCategoriesByFramework) GetNode
 	return &t.Node
 }
 
-type GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node struct {
-	Name               string  "json:\"name\" graphql:\"name\""
-	ReferenceFramework *string "json:\"referenceFramework,omitempty\" graphql:\"referenceFramework\""
-}
-
-func (t *GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node) GetName() string {
-	if t == nil {
-		t = &GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node{}
-	}
-	return t.Name
-}
-func (t *GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node) GetReferenceFramework() *string {
-	if t == nil {
-		t = &GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node{}
-	}
-	return t.ReferenceFramework
-}
-
-type GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework struct {
-	Node GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node "json:\"node\" graphql:\"node\""
-}
-
-func (t *GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework) GetNode() *GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node {
-	if t == nil {
-		t = &GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework{}
-	}
-	return &t.Node
-}
-
 type GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_Edges_Node struct {
 	ID                 string  "json:\"id\" graphql:\"id\""
 	OwnerID            *string "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -14822,6 +14793,35 @@ func (t *GetControlsGroupByCategory_ControlsGroupByCategory) GetEdges() []*GetCo
 		t = &GetControlsGroupByCategory_ControlsGroupByCategory{}
 	}
 	return t.Edges
+}
+
+type GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node struct {
+	Name               string  "json:\"name\" graphql:\"name\""
+	ReferenceFramework *string "json:\"referenceFramework,omitempty\" graphql:\"referenceFramework\""
+}
+
+func (t *GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node) GetName() string {
+	if t == nil {
+		t = &GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node{}
+	}
+	return t.Name
+}
+func (t *GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node) GetReferenceFramework() *string {
+	if t == nil {
+		t = &GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node{}
+	}
+	return t.ReferenceFramework
+}
+
+type GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework struct {
+	Node GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node "json:\"node\" graphql:\"node\""
+}
+
+func (t *GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework) GetNode() *GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node {
+	if t == nil {
+		t = &GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework{}
+	}
+	return &t.Node
 }
 
 type GetAllControlHistories_ControlHistories_Edges_Node struct {
@@ -88412,17 +88412,6 @@ func (t *GetControlCategories) GetControlCategories() []string {
 	return t.ControlCategories
 }
 
-type GetControlSubcategories struct {
-	ControlSubcategories []string "json:\"controlSubcategories,omitempty\" graphql:\"controlSubcategories\""
-}
-
-func (t *GetControlSubcategories) GetControlSubcategories() []string {
-	if t == nil {
-		t = &GetControlSubcategories{}
-	}
-	return t.ControlSubcategories
-}
-
 type GetControlCategoriesWithFramework struct {
 	ControlCategoriesByFramework []*GetControlCategoriesWithFramework_ControlCategoriesByFramework "json:\"controlCategoriesByFramework,omitempty\" graphql:\"controlCategoriesByFramework\""
 }
@@ -88434,17 +88423,6 @@ func (t *GetControlCategoriesWithFramework) GetControlCategoriesByFramework() []
 	return t.ControlCategoriesByFramework
 }
 
-type GetControlSubcategoriesWithFramework struct {
-	ControlSubcategoriesByFramework []*GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework "json:\"controlSubcategoriesByFramework,omitempty\" graphql:\"controlSubcategoriesByFramework\""
-}
-
-func (t *GetControlSubcategoriesWithFramework) GetControlSubcategoriesByFramework() []*GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework {
-	if t == nil {
-		t = &GetControlSubcategoriesWithFramework{}
-	}
-	return t.ControlSubcategoriesByFramework
-}
-
 type GetControlsGroupByCategory struct {
 	ControlsGroupByCategory GetControlsGroupByCategory_ControlsGroupByCategory "json:\"controlsGroupByCategory\" graphql:\"controlsGroupByCategory\""
 }
@@ -88454,6 +88432,28 @@ func (t *GetControlsGroupByCategory) GetControlsGroupByCategory() *GetControlsGr
 		t = &GetControlsGroupByCategory{}
 	}
 	return &t.ControlsGroupByCategory
+}
+
+type GetControlSubcategories struct {
+	ControlSubcategories []string "json:\"controlSubcategories,omitempty\" graphql:\"controlSubcategories\""
+}
+
+func (t *GetControlSubcategories) GetControlSubcategories() []string {
+	if t == nil {
+		t = &GetControlSubcategories{}
+	}
+	return t.ControlSubcategories
+}
+
+type GetControlSubcategoriesWithFramework struct {
+	ControlSubcategoriesByFramework []*GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework "json:\"controlSubcategoriesByFramework,omitempty\" graphql:\"controlSubcategoriesByFramework\""
+}
+
+func (t *GetControlSubcategoriesWithFramework) GetControlSubcategoriesByFramework() []*GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework {
+	if t == nil {
+		t = &GetControlSubcategoriesWithFramework{}
+	}
+	return t.ControlSubcategoriesByFramework
 }
 
 type GetAllControlHistories struct {
@@ -96576,26 +96576,6 @@ func (c *Client) GetControlCategories(ctx context.Context, interceptors ...clien
 	return &res, nil
 }
 
-const GetControlSubcategoriesDocument = `query GetControlSubcategories {
-	controlSubcategories
-}
-`
-
-func (c *Client) GetControlSubcategories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetControlSubcategories, error) {
-	vars := map[string]any{}
-
-	var res GetControlSubcategories
-	if err := c.Client.Post(ctx, "GetControlSubcategories", GetControlSubcategoriesDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const GetControlCategoriesWithFrameworkDocument = `query GetControlCategoriesWithFramework ($where: ControlWhereInput) {
 	controlCategoriesByFramework(where: $where) {
 		node {
@@ -96613,33 +96593,6 @@ func (c *Client) GetControlCategoriesWithFramework(ctx context.Context, where *C
 
 	var res GetControlCategoriesWithFramework
 	if err := c.Client.Post(ctx, "GetControlCategoriesWithFramework", GetControlCategoriesWithFrameworkDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const GetControlSubcategoriesWithFrameworkDocument = `query GetControlSubcategoriesWithFramework ($where: ControlWhereInput) {
-	controlSubcategoriesByFramework(where: $where) {
-		node {
-			name
-			referenceFramework
-		}
-	}
-}
-`
-
-func (c *Client) GetControlSubcategoriesWithFramework(ctx context.Context, where *ControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControlSubcategoriesWithFramework, error) {
-	vars := map[string]any{
-		"where": where,
-	}
-
-	var res GetControlSubcategoriesWithFramework
-	if err := c.Client.Post(ctx, "GetControlSubcategoriesWithFramework", GetControlSubcategoriesWithFrameworkDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -96691,6 +96644,53 @@ func (c *Client) GetControlsGroupByCategory(ctx context.Context, first *int64, l
 
 	var res GetControlsGroupByCategory
 	if err := c.Client.Post(ctx, "GetControlsGroupByCategory", GetControlsGroupByCategoryDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetControlSubcategoriesDocument = `query GetControlSubcategories {
+	controlSubcategories
+}
+`
+
+func (c *Client) GetControlSubcategories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetControlSubcategories, error) {
+	vars := map[string]any{}
+
+	var res GetControlSubcategories
+	if err := c.Client.Post(ctx, "GetControlSubcategories", GetControlSubcategoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetControlSubcategoriesWithFrameworkDocument = `query GetControlSubcategoriesWithFramework ($where: ControlWhereInput) {
+	controlSubcategoriesByFramework(where: $where) {
+		node {
+			name
+			referenceFramework
+		}
+	}
+}
+`
+
+func (c *Client) GetControlSubcategoriesWithFramework(ctx context.Context, where *ControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControlSubcategoriesWithFramework, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetControlSubcategoriesWithFramework
+	if err := c.Client.Post(ctx, "GetControlSubcategoriesWithFramework", GetControlSubcategoriesWithFrameworkDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -117895,10 +117895,10 @@ var DocumentOperationNames = map[string]string{
 	CreateControlsByCloneDocument:                  "CreateControlsByClone",
 	CreateControlsByCloneReturnIDDocument:          "CreateControlsByCloneReturnID",
 	GetControlCategoriesDocument:                   "GetControlCategories",
-	GetControlSubcategoriesDocument:                "GetControlSubcategories",
 	GetControlCategoriesWithFrameworkDocument:      "GetControlCategoriesWithFramework",
-	GetControlSubcategoriesWithFrameworkDocument:   "GetControlSubcategoriesWithFramework",
 	GetControlsGroupByCategoryDocument:             "GetControlsGroupByCategory",
+	GetControlSubcategoriesDocument:                "GetControlSubcategories",
+	GetControlSubcategoriesWithFrameworkDocument:   "GetControlSubcategoriesWithFramework",
 	GetAllControlHistoriesDocument:                 "GetAllControlHistories",
 	GetControlHistoriesDocument:                    "GetControlHistories",
 	CreateBulkControlImplementationDocument:        "CreateBulkControlImplementation",
