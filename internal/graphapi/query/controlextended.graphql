@@ -59,6 +59,59 @@ query GetControlCategories {
   controlCategories
 }
 
+query GetControlCategoriesWithFramework($where: ControlWhereInput) {
+  controlCategoriesByFramework(where: $where) {
+    node {
+      name
+      referenceFramework
+    }
+  }
+}
+
+query GetControlsGroupByCategory($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: ControlWhereInput, $orderBy: [ControlOrder!], $category: String) {
+  controlsGroupByCategory(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    where: $where
+    orderBy: $orderBy
+    category: $category
+  ) {
+    edges {
+      node {
+        category
+        controls {
+          edges {
+            node {
+              id
+              refCode
+              referenceFramework
+              ownerID
+            }
+          }
+          totalCount
+          pageInfo {
+            endCursor
+            hasNextPage
+            hasPreviousPage
+            startCursor
+          }
+        }
+      }
+    }
+  }
+}
+
 query GetControlSubcategories {
   controlSubcategories
+}
+
+query GetControlSubcategoriesWithFramework($where: ControlWhereInput) {
+  controlSubcategoriesByFramework(where: $where) {
+    node {
+      name
+      referenceFramework
+    }
+  }
 }

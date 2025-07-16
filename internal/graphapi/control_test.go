@@ -1515,3 +1515,362 @@ func TestQueryControlSubcategories(t *testing.T) {
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID, control4.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: subcontrol.ID}).MustDelete(testUser1.UserCtx, t)
 }
+
+func TestQueryControlCategoriesByFramework(t *testing.T) {
+	customFramework := "Custom"
+	// create controls with categories and subcategories
+	control1 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
+
+	// create one without a category
+	control3 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	// create one with a duplicate category
+	control4 := (&ControlBuilder{client: suite.client, Category: control1.Category}).MustNew(testUser1.UserCtx, t)
+
+	// create one with a different framework
+	standard := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	control5 := (&ControlBuilder{client: suite.client, Category: "Meow", StandardID: standard.ID}).MustNew(testUser1.UserCtx, t)
+	// create another with the another category
+	control6 := (&ControlBuilder{client: suite.client, Category: "Woof", StandardID: standard.ID}).MustNew(testUser1.UserCtx, t)
+	// create one with with duplicate category
+	control7 := (&ControlBuilder{client: suite.client, Category: "Meow", StandardID: standard.ID}).MustNew(testUser1.UserCtx, t)
+
+	testCases := []struct {
+		name           string
+		client         *openlaneclient.OpenlaneClient
+		where          *openlaneclient.ControlWhereInput
+		ctx            context.Context
+		expectedErr    string
+		expectedResult []*openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework
+	}{
+		{
+			name:   "happy path, get control categories",
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+			expectedResult: []*openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework{
+				{
+					Node: openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{
+						Name:               control1.Category,
+						ReferenceFramework: &customFramework,
+					},
+				},
+				{
+					Node: openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{
+						Name:               control2.Category,
+						ReferenceFramework: &customFramework,
+					},
+				},
+				{
+					Node: openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{
+						Name:               control5.Category,
+						ReferenceFramework: &standard.ShortName,
+					},
+				},
+				{
+					Node: openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{
+						Name:               control6.Category,
+						ReferenceFramework: &standard.ShortName,
+					},
+				},
+			},
+		},
+		{
+			name:   "filter by standard, two results expected",
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+			where: &openlaneclient.ControlWhereInput{
+				StandardID: &standard.ID,
+			},
+			expectedResult: []*openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework{
+				{
+					Node: openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{
+						Name:               control5.Category,
+						ReferenceFramework: &standard.ShortName,
+					},
+				},
+				{
+					Node: openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{
+						Name:               control6.Category,
+						ReferenceFramework: &standard.ShortName,
+					},
+				},
+			},
+		},
+		{
+			name:           "no controls, no results",
+			client:         suite.client.api,
+			ctx:            testUser2.UserCtx,
+			expectedResult: []*openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework{},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Get Categories "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.GetControlCategoriesWithFramework(tc.ctx, tc.where)
+			if tc.expectedErr != "" {
+
+				assert.ErrorContains(t, err, tc.expectedErr)
+				assert.Check(t, is.Nil(resp))
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			assert.Check(t, is.Len(resp.ControlCategoriesByFramework, len(tc.expectedResult)))
+
+			// sort the categories so they are consistent
+			slices.SortFunc(tc.expectedResult, func(a, b *openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework) int {
+				return cmp.Compare(a.Node.Name, b.Node.Name)
+			})
+
+			assert.Check(t, is.DeepEqual(tc.expectedResult, resp.ControlCategoriesByFramework))
+
+			for _, category := range resp.ControlCategoriesByFramework {
+				// check for empty categories
+				assert.Check(t, category.Node.Name != "")
+				assert.Check(t, category.Node.ReferenceFramework != nil)
+			}
+		})
+	}
+
+	// cleanup created controls
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID, control4.ID, control5.ID, control6.ID, control7.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(testUser1.UserCtx, t)
+}
+
+func TestQueryControlSubcategoriesByFramework(t *testing.T) {
+	customFramework := "Custom"
+
+	// create controls with categories and subcategories
+	control1 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
+
+	// create one without a subcategory
+	control3 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	// create one with a duplicate subcategory
+	control4 := (&ControlBuilder{client: suite.client, Subcategory: control1.Subcategory}).MustNew(testUser1.UserCtx, t)
+
+	// create one with a different framework
+	standard := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	control5 := (&ControlBuilder{client: suite.client, AllFields: true, StandardID: standard.ID}).MustNew(testUser1.UserCtx, t)
+
+	testCases := []struct {
+		name           string
+		client         *openlaneclient.OpenlaneClient
+		where          *openlaneclient.ControlWhereInput
+		ctx            context.Context
+		expectedErr    string
+		expectedResult []*openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework
+	}{
+		{
+			name:   "happy path, get control subcategories",
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+			expectedResult: []*openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework{
+				{
+					Node: openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node{
+						Name:               control1.Subcategory,
+						ReferenceFramework: &customFramework,
+					},
+				},
+				{
+					Node: openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node{
+						Name:               control2.Subcategory,
+						ReferenceFramework: &customFramework,
+					},
+				},
+				{
+					Node: openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node{
+						Name:               control5.Subcategory,
+						ReferenceFramework: &standard.ShortName,
+					},
+				},
+			},
+		},
+		{
+			name:   "filter by standard, one result expected",
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+			where: &openlaneclient.ControlWhereInput{
+				StandardID: &standard.ID,
+			},
+			expectedResult: []*openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework{
+				{
+					Node: openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node{
+						Name:               control5.Subcategory,
+						ReferenceFramework: &standard.ShortName,
+					},
+				},
+			},
+		},
+		{
+			name:           "no controls, no results",
+			client:         suite.client.api,
+			ctx:            testUser2.UserCtx,
+			expectedResult: []*openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework{},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Get Subcategories "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.GetControlSubcategoriesWithFramework(tc.ctx, tc.where)
+			if tc.expectedErr != "" {
+
+				assert.ErrorContains(t, err, tc.expectedErr)
+				assert.Check(t, is.Nil(resp))
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			assert.Check(t, is.Len(resp.ControlSubcategoriesByFramework, len(tc.expectedResult)))
+
+			// sort the categories so they are consistent
+			slices.SortFunc(tc.expectedResult, func(a, b *openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework) int {
+				return cmp.Compare(a.Node.Name, b.Node.Name)
+			})
+			assert.Check(t, is.DeepEqual(tc.expectedResult, resp.ControlSubcategoriesByFramework))
+
+			for _, category := range resp.ControlSubcategoriesByFramework {
+				// check for empty categories
+				assert.Check(t, category.Node.Name != "")
+			}
+		})
+	}
+
+	// cleanup created controls
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID, control4.ID, control5.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(testUser1.UserCtx, t)
+}
+
+func TestQueryControlGroupsByCategory(t *testing.T) {
+	// create controls with categories and subcategories
+	control1 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
+
+	// create one without a category
+	control3 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	// create one with a duplicate category
+	control4 := (&ControlBuilder{client: suite.client, Category: control1.Category}).MustNew(testUser1.UserCtx, t)
+
+	// create one with a different framework
+	standard := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	category := "Meow"
+	control5 := (&ControlBuilder{client: suite.client, Category: category, StandardID: standard.ID}).MustNew(testUser1.UserCtx, t)
+	// create another with the another category
+	control6 := (&ControlBuilder{client: suite.client, Category: "Woof", StandardID: standard.ID}).MustNew(testUser1.UserCtx, t)
+	// create one with with duplicate category
+	control7 := (&ControlBuilder{client: suite.client, Category: category, StandardID: standard.ID}).MustNew(testUser1.UserCtx, t)
+
+	cursor := ""
+	testCases := []struct {
+		name                 string
+		client               *openlaneclient.OpenlaneClient
+		first                *int64
+		after                *string
+		where                *openlaneclient.ControlWhereInput
+		category             *string
+		ctx                  context.Context
+		expectedErr          string
+		expectedCountResults int
+	}{
+		{
+			name:                 "happy path, get control categories",
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedCountResults: 4, // 4 unique categories expected
+		},
+		{
+			name:                 "happy path, get control categories",
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedCountResults: 4,                  // 4 unique categories still expected
+			first:                lo.ToPtr(int64(1)), // test pagination
+		},
+		{
+			name:                 "happy path, get control categories",
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedCountResults: 4,                                                 // 4 unique categories still expected
+			first:                lo.ToPtr(int64(1)),                                // test pagination
+			after:                &cursor,                                           // use the cursor from the previous test
+			expectedErr:          "category must be provided when using pagination", // required when using pagination
+		},
+		{
+			name:                 "happy path, get control for specific category",
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedCountResults: 1,                  // 1 unique categories expected because of the filter
+			first:                lo.ToPtr(int64(1)), // test pagination
+			after:                &cursor,            // use the cursor from the previous test
+			category:             &category,          // filter by category
+		},
+		{
+			name:                 "happy path, get next result for specific category",
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedCountResults: 1,                  // 1 unique categories expected because of the filter
+			first:                lo.ToPtr(int64(1)), // test pagination
+			after:                &cursor,            // use the cursor from the previous test
+			category:             &category,          // filter by category
+		},
+		{
+			name:                 "happy path, get next result for specific category, no more results",
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedCountResults: 1,                  // 1 unique categories expected because of the filter
+			first:                lo.ToPtr(int64(1)), // test pagination
+			after:                &cursor,            // use the cursor from the previous test
+			category:             &category,          // filter by category
+		},
+		{
+			name:   "filter by standard, two results expected",
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+			where: &openlaneclient.ControlWhereInput{
+				StandardID: &standard.ID,
+			},
+			expectedCountResults: 2, // 2 unique categories expected for the standard
+		},
+		{
+			name:   "no controls, no results",
+			client: suite.client.api,
+			ctx:    testUser2.UserCtx,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Get Controls By Categories "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.GetControlsGroupByCategory(tc.ctx, tc.first, nil, tc.after, nil, tc.where, nil, tc.category)
+			if tc.expectedErr != "" {
+
+				assert.ErrorContains(t, err, tc.expectedErr)
+				assert.Check(t, is.Nil(resp))
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			assert.Check(t, is.Len(resp.ControlsGroupByCategory.Edges, tc.expectedCountResults))
+
+			if tc.first != nil {
+				if resp.ControlsGroupByCategory.Edges[0].Node.Controls.PageInfo.HasNextPage {
+					cursor = *resp.ControlsGroupByCategory.Edges[0].Node.Controls.PageInfo.EndCursor
+				}
+			}
+		})
+	}
+
+	// cleanup created controls
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID, control4.ID, control5.ID, control6.ID, control7.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(testUser1.UserCtx, t)
+}
