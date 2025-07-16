@@ -15,7 +15,9 @@ set -euo pipefail
 YQ_VERSION=${YQ_VERSION:-4.45.4}
 repo="${HELM_CHART_REPO}"
 chart_dir="${HELM_CHART_PATH:-charts/openlane}"
-
+# Source shared libraries
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/lib/common.sh"
 # Install dependencies using shared library function
 install_dependencies
 
@@ -25,8 +27,6 @@ echo "Chart directory: $chart_dir"
 echo "Branch: ${BUILDKITE_BRANCH}"
 echo "Tools verified: ✅"
 
-# Import slack utility functions
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/slack-utils.sh"
 source "${SCRIPT_DIR}/lib/templates.sh"
 
@@ -74,7 +74,6 @@ while IFS=':' read -r pr_number branch_name title; do
     echo "🔄 Updating draft PR with latest config changes..."
 
     # Source shared libraries to use the correct functions
-    source "${SCRIPT_DIR}/lib/common.sh"
     source "${SCRIPT_DIR}/lib/helm.sh"
 
     # Apply latest config changes using the shared library functions
