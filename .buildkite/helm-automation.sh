@@ -6,6 +6,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/lib/common.sh"
 source "${SCRIPT_DIR}/lib/helm.sh"
 source "${SCRIPT_DIR}/lib/github.sh"
+source "${SCRIPT_DIR}/lib/templates.sh"
 
 # Configuration
 repo="${HELM_CHART_REPO}"
@@ -64,7 +65,6 @@ function update_yaml_values() {
     fi
 
     if [[ -n "$field_value" ]]; then
-      echo "Updating $field_name to $field_value in $file_path"
       yq e -i "${field_name} = \"${field_value}\"" "$file_path"
       changes_made=true
       change_summary+="\n- Updated $field_name in $(basename "$file_path")"
@@ -73,7 +73,6 @@ function update_yaml_values() {
 }
 
 # Apply configuration changes using library functions
-echo "🔧 Applying configuration changes..."
 config_changes=$(apply_helm_config_changes \
   "$BUILDKITE_BUILD_CHECKOUT_PATH/config" \
   "$chart_dir")
@@ -151,4 +150,3 @@ else
 fi
 
 echo "🎉 Helm automation completed successfully"
-

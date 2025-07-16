@@ -4,17 +4,7 @@
 # Function to send slack notification using template file
 function send_slack_notification_from_template() {
   local template_file="$1"
-  local -A substitutions
-
-  # Parse additional arguments as key=value pairs
   shift
-  for arg in "$@"; do
-    if [[ "$arg" == *"="* ]]; then
-      key="${arg%%=*}"
-      value="${arg#*=}"
-      substitutions["$key"]="$value"
-    fi
-  done
 
   # Check if slack webhook is configured
   if [[ -z "${SLACK_WEBHOOK_URL:-}" ]]; then
@@ -30,16 +20,21 @@ function send_slack_notification_from_template() {
 
   echo "📨 Sending slack notification from template: $(basename "$template_file")"
 
-  # Read template and perform substitutions
+  # Read template
   local message_content
   message_content=$(cat "$template_file")
 
-  # Perform all substitutions
-  for key in "${!substitutions[@]}"; do
-    local value="${substitutions[$key]}"
-    # Escape special characters for JSON
-    value=$(echo "$value" | sed 's/\\/\\\\/g' | sed 's/"/\\"/g')
-    message_content="${message_content//\{\{$key\}\}/$value}"
+  # Perform substitutions (portable for Bash 3.x)
+  for arg in "$@"; do
+    if [[ "$arg" == *"="* ]]; then
+      key="${arg%%=*}"
+      value="${arg#*=}"
+      # Escape special characters for JSON
+      # First escape backslashes, then quotes, then convert newlines to \n for JSON
+      value=$(echo "$value" | sed 's/\\/\\\\/g' | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
+      # Use a delimiter that won't appear in the content
+      message_content=$(echo "$message_content" | sed "s|{{${key}}}|$value|g")
+    fi
   done
 
   # Send to slack using webhook
@@ -60,15 +55,23 @@ function send_slack_notification_from_template() {
   fi
 }
 
+format_summary() {
+  local summary="$1"
+
+  # Replace literal \n with actual newlines for slack formatting
+  # Use printf to properly interpret the escape sequences
+  printf "%b" "$summary" | sed 's/\\n/\n/g'
+}
+
 # Function to send helm update notification
 function send_helm_update_notification() {
   local pr_url="$1"
   local change_summary="$2"
 
-  local template_file="${BASH_SOURCE[0]%/*}/templates/helm-update-notification.json"
+  local template_file="${BASH_SOURCE[0]%/*}/templates/slack/helm-update-notification.json"
 
   # Format change summary for Slack (convert <br/> or \n to actual newlines)
-  local formatted_summary=$(echo "$change_summary" | sed 's/<br\/>/\n/g' | sed 's/\\n/\n/g')
+  local formatted_summary=$(format_summary "$change_summary")
 
   send_slack_notification_from_template "$template_file" \
     "PR_URL=$pr_url" \
@@ -87,7 +90,7 @@ function send_pr_ready_notification() {
   local core_pr_number="$3"
   local change_summary="$4"
 
-  local template_file="${BASH_SOURCE[0]%/*}/templates/pr-ready-notification.json"
+  local template_file="${BASH_SOURCE[0]%/*}/templates/slack/pr-ready-notification.json"
 
   send_slack_notification_from_template "$template_file" \
     "INFRA_PR_URL=$infra_pr_url" \
@@ -104,7 +107,7 @@ function send_release_notification() {
   local release_tag="$2"
   local change_summary="$3"
 
-  local template_file="${BASH_SOURCE[0]%/*}/templates/release-notification.json"
+  local template_file="${BASH_SOURCE[0]%/*}/templates/slack/release-notification.json"
 
   send_slack_notification_from_template "$template_file" \
     "PR_URL=$pr_url" \
