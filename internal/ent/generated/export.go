@@ -44,7 +44,7 @@ type Export struct {
 	RequestorID string `json:"requestor_id,omitempty"`
 	// the specific fields to include in the export (defaults to only the id if not provided)
 	Fields []string `json:"fields,omitempty"`
-	// the specific filters to run agains the exported data. This should be a well formatted graphql query
+	// the specific filters to run against the exported data. This should be a well formatted graphql query
 	Filters string `json:"filters,omitempty"`
 	// if we try to export and it fails, the error message will be stored here
 	ErrorMessage string `json:"error_message,omitempty"`

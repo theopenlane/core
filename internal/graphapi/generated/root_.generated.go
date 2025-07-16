@@ -43507,7 +43507,7 @@ input CreateExportInput {
   """
   fields: [String!]
   """
-  the specific filters to run agains the exported data. This should be a well formatted graphql query
+  the specific filters to run against the exported data. This should be a well formatted graphql query
   """
   filters: String
   """
@@ -50046,7 +50046,7 @@ type Export implements Node {
   """
   fields: [String!]
   """
-  the specific filters to run agains the exported data. This should be a well formatted graphql query
+  the specific filters to run against the exported data. This should be a well formatted graphql query
   """
   filters: String
   """

@@ -5017,8 +5017,8 @@ type CreateExportInput struct {
 	Format enums.ExportFormat `json:"format"`
 	// the specific fields to include in the export (defaults to only the id if not provided)
 	Fields []string `json:"fields,omitempty"`
-	// the specific filters to run agains the exported data
-	Filters []string `json:"filters,omitempty"`
+	// the specific filters to run against the exported data. This should be a well formatted graphql query
+	Filters *string `json:"filters,omitempty"`
 	// if we try to export and it fails, the error message will be stored here
 	ErrorMessage *string  `json:"errorMessage,omitempty"`
 	OwnerID      *string  `json:"ownerID,omitempty"`
@@ -9207,8 +9207,8 @@ type Export struct {
 	RequestorID *string `json:"requestorID,omitempty"`
 	// the specific fields to include in the export (defaults to only the id if not provided)
 	Fields []string `json:"fields,omitempty"`
-	// the specific filters to run agains the exported data
-	Filters []string `json:"filters,omitempty"`
+	// the specific filters to run against the exported data. This should be a well formatted graphql query
+	Filters *string `json:"filters,omitempty"`
 	// if we try to export and it fails, the error message will be stored here
 	ErrorMessage *string          `json:"errorMessage,omitempty"`
 	Owner        *Organization    `json:"owner,omitempty"`
@@ -9392,6 +9392,22 @@ type ExportWhereInput struct {
 	RequestorIDNotNil       *bool    `json:"requestorIDNotNil,omitempty"`
 	RequestorIDEqualFold    *string  `json:"requestorIDEqualFold,omitempty"`
 	RequestorIDContainsFold *string  `json:"requestorIDContainsFold,omitempty"`
+	// filters field predicates
+	Filters             *string  `json:"filters,omitempty"`
+	FiltersNeq          *string  `json:"filtersNEQ,omitempty"`
+	FiltersIn           []string `json:"filtersIn,omitempty"`
+	FiltersNotIn        []string `json:"filtersNotIn,omitempty"`
+	FiltersGt           *string  `json:"filtersGT,omitempty"`
+	FiltersGte          *string  `json:"filtersGTE,omitempty"`
+	FiltersLt           *string  `json:"filtersLT,omitempty"`
+	FiltersLte          *string  `json:"filtersLTE,omitempty"`
+	FiltersContains     *string  `json:"filtersContains,omitempty"`
+	FiltersHasPrefix    *string  `json:"filtersHasPrefix,omitempty"`
+	FiltersHasSuffix    *string  `json:"filtersHasSuffix,omitempty"`
+	FiltersIsNil        *bool    `json:"filtersIsNil,omitempty"`
+	FiltersNotNil       *bool    `json:"filtersNotNil,omitempty"`
+	FiltersEqualFold    *string  `json:"filtersEqualFold,omitempty"`
+	FiltersContainsFold *string  `json:"filtersContainsFold,omitempty"`
 	// error_message field predicates
 	ErrorMessage             *string  `json:"errorMessage,omitempty"`
 	ErrorMessageNeq          *string  `json:"errorMessageNEQ,omitempty"`
