@@ -51,8 +51,6 @@ type ScheduledJobHistory struct {
 	Title string `json:"title,omitempty"`
 	// the description of the job
 	Description string `json:"description,omitempty"`
-	// the type of this job
-	JobType enums.JobType `json:"job_type,omitempty"`
 	// the platform to use to execute this job
 	Platform enums.JobPlatformType `json:"platform,omitempty"`
 	// the script to run
@@ -83,7 +81,7 @@ func (*ScheduledJobHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case scheduledjobhistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case scheduledjobhistory.FieldID, scheduledjobhistory.FieldRef, scheduledjobhistory.FieldCreatedBy, scheduledjobhistory.FieldUpdatedBy, scheduledjobhistory.FieldDeletedBy, scheduledjobhistory.FieldDisplayID, scheduledjobhistory.FieldOwnerID, scheduledjobhistory.FieldTitle, scheduledjobhistory.FieldDescription, scheduledjobhistory.FieldJobType, scheduledjobhistory.FieldPlatform, scheduledjobhistory.FieldScript, scheduledjobhistory.FieldWindmillPath, scheduledjobhistory.FieldDownloadURL:
+		case scheduledjobhistory.FieldID, scheduledjobhistory.FieldRef, scheduledjobhistory.FieldCreatedBy, scheduledjobhistory.FieldUpdatedBy, scheduledjobhistory.FieldDeletedBy, scheduledjobhistory.FieldDisplayID, scheduledjobhistory.FieldOwnerID, scheduledjobhistory.FieldTitle, scheduledjobhistory.FieldDescription, scheduledjobhistory.FieldPlatform, scheduledjobhistory.FieldScript, scheduledjobhistory.FieldWindmillPath, scheduledjobhistory.FieldDownloadURL:
 			values[i] = new(sql.NullString)
 		case scheduledjobhistory.FieldHistoryTime, scheduledjobhistory.FieldCreatedAt, scheduledjobhistory.FieldUpdatedAt, scheduledjobhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -199,12 +197,6 @@ func (sjh *ScheduledJobHistory) assignValues(columns []string, values []any) err
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
 				sjh.Description = value.String
-			}
-		case scheduledjobhistory.FieldJobType:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field job_type", values[i])
-			} else if value.Valid {
-				sjh.JobType = enums.JobType(value.String)
 			}
 		case scheduledjobhistory.FieldPlatform:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -333,9 +325,6 @@ func (sjh *ScheduledJobHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(sjh.Description)
-	builder.WriteString(", ")
-	builder.WriteString("job_type=")
-	builder.WriteString(fmt.Sprintf("%v", sjh.JobType))
 	builder.WriteString(", ")
 	builder.WriteString("platform=")
 	builder.WriteString(fmt.Sprintf("%v", sjh.Platform))

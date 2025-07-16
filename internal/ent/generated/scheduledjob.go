@@ -45,8 +45,6 @@ type ScheduledJob struct {
 	Title string `json:"title,omitempty"`
 	// the description of the job
 	Description string `json:"description,omitempty"`
-	// the type of this job
-	JobType enums.JobType `json:"job_type,omitempty"`
 	// the platform to use to execute this job
 	Platform enums.JobPlatformType `json:"platform,omitempty"`
 	// the script to run
@@ -100,7 +98,7 @@ func (*ScheduledJob) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case scheduledjob.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case scheduledjob.FieldID, scheduledjob.FieldCreatedBy, scheduledjob.FieldUpdatedBy, scheduledjob.FieldDeletedBy, scheduledjob.FieldDisplayID, scheduledjob.FieldOwnerID, scheduledjob.FieldTitle, scheduledjob.FieldDescription, scheduledjob.FieldJobType, scheduledjob.FieldPlatform, scheduledjob.FieldScript, scheduledjob.FieldWindmillPath, scheduledjob.FieldDownloadURL:
+		case scheduledjob.FieldID, scheduledjob.FieldCreatedBy, scheduledjob.FieldUpdatedBy, scheduledjob.FieldDeletedBy, scheduledjob.FieldDisplayID, scheduledjob.FieldOwnerID, scheduledjob.FieldTitle, scheduledjob.FieldDescription, scheduledjob.FieldPlatform, scheduledjob.FieldScript, scheduledjob.FieldWindmillPath, scheduledjob.FieldDownloadURL:
 			values[i] = new(sql.NullString)
 		case scheduledjob.FieldCreatedAt, scheduledjob.FieldUpdatedAt, scheduledjob.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -198,12 +196,6 @@ func (sj *ScheduledJob) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
 				sj.Description = value.String
-			}
-		case scheduledjob.FieldJobType:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field job_type", values[i])
-			} else if value.Valid {
-				sj.JobType = enums.JobType(value.String)
 			}
 		case scheduledjob.FieldPlatform:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -328,9 +320,6 @@ func (sj *ScheduledJob) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(sj.Description)
-	builder.WriteString(", ")
-	builder.WriteString("job_type=")
-	builder.WriteString(fmt.Sprintf("%v", sj.JobType))
 	builder.WriteString(", ")
 	builder.WriteString("platform=")
 	builder.WriteString(fmt.Sprintf("%v", sj.Platform))

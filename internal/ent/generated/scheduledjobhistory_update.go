@@ -14,7 +14,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -178,20 +177,6 @@ func (sjhu *ScheduledJobHistoryUpdate) ClearDescription() *ScheduledJobHistoryUp
 	return sjhu
 }
 
-// SetJobType sets the "job_type" field.
-func (sjhu *ScheduledJobHistoryUpdate) SetJobType(et enums.JobType) *ScheduledJobHistoryUpdate {
-	sjhu.mutation.SetJobType(et)
-	return sjhu
-}
-
-// SetNillableJobType sets the "job_type" field if the given value is not nil.
-func (sjhu *ScheduledJobHistoryUpdate) SetNillableJobType(et *enums.JobType) *ScheduledJobHistoryUpdate {
-	if et != nil {
-		sjhu.SetJobType(*et)
-	}
-	return sjhu
-}
-
 // SetScript sets the "script" field.
 func (sjhu *ScheduledJobHistoryUpdate) SetScript(s string) *ScheduledJobHistoryUpdate {
 	sjhu.mutation.SetScript(s)
@@ -345,26 +330,6 @@ func (sjhu *ScheduledJobHistoryUpdate) defaults() error {
 	return nil
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (sjhu *ScheduledJobHistoryUpdate) check() error {
-	if v, ok := sjhu.mutation.JobType(); ok {
-		if err := scheduledjobhistory.JobTypeValidator(v); err != nil {
-			return &ValidationError{Name: "job_type", err: fmt.Errorf(`generated: validator failed for field "ScheduledJobHistory.job_type": %w`, err)}
-		}
-	}
-	if v, ok := sjhu.mutation.Cadence(); ok {
-		if err := v.Validate(); err != nil {
-			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ScheduledJobHistory.cadence": %w`, err)}
-		}
-	}
-	if v, ok := sjhu.mutation.Cron(); ok {
-		if err := v.Validate(); err != nil {
-			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ScheduledJobHistory.cron": %w`, err)}
-		}
-	}
-	return nil
-}
-
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (sjhu *ScheduledJobHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ScheduledJobHistoryUpdate {
 	sjhu.modifiers = append(sjhu.modifiers, modifiers...)
@@ -372,9 +337,6 @@ func (sjhu *ScheduledJobHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBui
 }
 
 func (sjhu *ScheduledJobHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := sjhu.check(); err != nil {
-		return n, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(scheduledjobhistory.Table, scheduledjobhistory.Columns, sqlgraph.NewFieldSpec(scheduledjobhistory.FieldID, field.TypeString))
 	if ps := sjhu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -444,9 +406,6 @@ func (sjhu *ScheduledJobHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	}
 	if sjhu.mutation.DescriptionCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldDescription, field.TypeString)
-	}
-	if value, ok := sjhu.mutation.JobType(); ok {
-		_spec.SetField(scheduledjobhistory.FieldJobType, field.TypeEnum, value)
 	}
 	if value, ok := sjhu.mutation.Script(); ok {
 		_spec.SetField(scheduledjobhistory.FieldScript, field.TypeString, value)
@@ -651,20 +610,6 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) ClearDescription() *ScheduledJobHisto
 	return sjhuo
 }
 
-// SetJobType sets the "job_type" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetJobType(et enums.JobType) *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.SetJobType(et)
-	return sjhuo
-}
-
-// SetNillableJobType sets the "job_type" field if the given value is not nil.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetNillableJobType(et *enums.JobType) *ScheduledJobHistoryUpdateOne {
-	if et != nil {
-		sjhuo.SetJobType(*et)
-	}
-	return sjhuo
-}
-
 // SetScript sets the "script" field.
 func (sjhuo *ScheduledJobHistoryUpdateOne) SetScript(s string) *ScheduledJobHistoryUpdateOne {
 	sjhuo.mutation.SetScript(s)
@@ -831,26 +776,6 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) defaults() error {
 	return nil
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (sjhuo *ScheduledJobHistoryUpdateOne) check() error {
-	if v, ok := sjhuo.mutation.JobType(); ok {
-		if err := scheduledjobhistory.JobTypeValidator(v); err != nil {
-			return &ValidationError{Name: "job_type", err: fmt.Errorf(`generated: validator failed for field "ScheduledJobHistory.job_type": %w`, err)}
-		}
-	}
-	if v, ok := sjhuo.mutation.Cadence(); ok {
-		if err := v.Validate(); err != nil {
-			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ScheduledJobHistory.cadence": %w`, err)}
-		}
-	}
-	if v, ok := sjhuo.mutation.Cron(); ok {
-		if err := v.Validate(); err != nil {
-			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ScheduledJobHistory.cron": %w`, err)}
-		}
-	}
-	return nil
-}
-
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (sjhuo *ScheduledJobHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ScheduledJobHistoryUpdateOne {
 	sjhuo.modifiers = append(sjhuo.modifiers, modifiers...)
@@ -858,9 +783,6 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) Modify(modifiers ...func(u *sql.Updat
 }
 
 func (sjhuo *ScheduledJobHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ScheduledJobHistory, err error) {
-	if err := sjhuo.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(scheduledjobhistory.Table, scheduledjobhistory.Columns, sqlgraph.NewFieldSpec(scheduledjobhistory.FieldID, field.TypeString))
 	id, ok := sjhuo.mutation.ID()
 	if !ok {
@@ -947,9 +869,6 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	if sjhuo.mutation.DescriptionCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldDescription, field.TypeString)
-	}
-	if value, ok := sjhuo.mutation.JobType(); ok {
-		_spec.SetField(scheduledjobhistory.FieldJobType, field.TypeEnum, value)
 	}
 	if value, ok := sjhuo.mutation.Script(); ok {
 		_spec.SetField(scheduledjobhistory.FieldScript, field.TypeString, value)

@@ -1381,6 +1381,8 @@ var (
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "FAILED", "READY", "NODATA"}, Default: "PENDING"},
 		{Name: "requestor_id", Type: field.TypeString, Nullable: true},
 		{Name: "fields", Type: field.TypeJSON, Nullable: true},
+		{Name: "filters", Type: field.TypeString, Nullable: true},
+		{Name: "error_message", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// ExportsTable holds the schema information for the "exports" table.
@@ -1391,7 +1393,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "exports_organizations_exports",
-				Columns:    []*schema.Column{ExportsColumns[12]},
+				Columns:    []*schema.Column{ExportsColumns[14]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1400,7 +1402,7 @@ var (
 			{
 				Name:    "export_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ExportsColumns[12]},
+				Columns: []*schema.Column{ExportsColumns[14]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3794,7 +3796,6 @@ var (
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "title", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "job_type", Type: field.TypeEnum, Enums: []string{"SSL"}, Default: "SSL"},
 		{Name: "platform", Type: field.TypeEnum, Enums: []string{"GO", "TS"}},
 		{Name: "script", Type: field.TypeString, Nullable: true},
 		{Name: "windmill_path", Type: field.TypeString},
@@ -3812,7 +3813,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "scheduled_jobs_organizations_jobs",
-				Columns:    []*schema.Column{ScheduledJobsColumns[20]},
+				Columns:    []*schema.Column{ScheduledJobsColumns[19]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3821,12 +3822,12 @@ var (
 			{
 				Name:    "scheduledjob_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ScheduledJobsColumns[7], ScheduledJobsColumns[20]},
+				Columns: []*schema.Column{ScheduledJobsColumns[7], ScheduledJobsColumns[19]},
 			},
 			{
 				Name:    "scheduledjob_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduledJobsColumns[20]},
+				Columns: []*schema.Column{ScheduledJobsColumns[19]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3851,7 +3852,6 @@ var (
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "title", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "job_type", Type: field.TypeEnum, Enums: []string{"SSL"}, Default: "SSL"},
 		{Name: "platform", Type: field.TypeEnum, Enums: []string{"GO", "TS"}},
 		{Name: "script", Type: field.TypeString, Nullable: true},
 		{Name: "windmill_path", Type: field.TypeString},

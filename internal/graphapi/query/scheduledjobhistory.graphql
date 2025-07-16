@@ -20,7 +20,6 @@ query GetAllScheduledJobHistories {
         displayID
         historyTime
         id
-        jobType
         operation
         ownerID
         ref
@@ -55,7 +54,6 @@ query GetScheduledJobHistories($first: Int, $last: Int, $where: ScheduledJobHist
         displayID
         historyTime
         id
-        jobType
         operation
         ownerID
         ref

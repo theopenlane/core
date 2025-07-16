@@ -48,8 +48,6 @@ const (
 	FieldTitle = "title"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
-	// FieldJobType holds the string denoting the job_type field in the database.
-	FieldJobType = "job_type"
 	// FieldPlatform holds the string denoting the platform field in the database.
 	FieldPlatform = "platform"
 	// FieldScript holds the string denoting the script field in the database.
@@ -86,7 +84,6 @@ var Columns = []string{
 	FieldSystemOwned,
 	FieldTitle,
 	FieldDescription,
-	FieldJobType,
 	FieldPlatform,
 	FieldScript,
 	FieldWindmillPath,
@@ -138,18 +135,6 @@ func OperationValidator(o history.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("scheduledjobhistory: invalid enum value for operation field: %q", o)
-	}
-}
-
-const DefaultJobType enums.JobType = "SSL"
-
-// JobTypeValidator is a validator for the "job_type" field enum values. It is called by the builders before save.
-func JobTypeValidator(jt enums.JobType) error {
-	switch jt.String() {
-	case "SSL":
-		return nil
-	default:
-		return fmt.Errorf("scheduledjobhistory: invalid enum value for job_type field: %q", jt)
 	}
 }
 
@@ -241,11 +226,6 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
 }
 
-// ByJobType orders the results by the job_type field.
-func ByJobType(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldJobType, opts...).ToFunc()
-}
-
 // ByPlatform orders the results by the platform field.
 func ByPlatform(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPlatform, opts...).ToFunc()
@@ -276,13 +256,6 @@ var (
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
-)
-
-var (
-	// enums.JobType must implement graphql.Marshaler.
-	_ graphql.Marshaler = (*enums.JobType)(nil)
-	// enums.JobType must implement graphql.Unmarshaler.
-	_ graphql.Unmarshaler = (*enums.JobType)(nil)
 )
 
 var (

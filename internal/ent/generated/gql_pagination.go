@@ -30331,20 +30331,6 @@ var (
 			}
 		},
 	}
-	// ScheduledJobOrderFieldJobType orders ScheduledJob by job_type.
-	ScheduledJobOrderFieldJobType = &ScheduledJobOrderField{
-		Value: func(sj *ScheduledJob) (ent.Value, error) {
-			return sj.JobType, nil
-		},
-		column: scheduledjob.FieldJobType,
-		toTerm: scheduledjob.ByJobType,
-		toCursor: func(sj *ScheduledJob) Cursor {
-			return Cursor{
-				ID:    sj.ID,
-				Value: sj.JobType,
-			}
-		},
-	}
 	// ScheduledJobOrderFieldPlatform orders ScheduledJob by platform.
 	ScheduledJobOrderFieldPlatform = &ScheduledJobOrderField{
 		Value: func(sj *ScheduledJob) (ent.Value, error) {
@@ -30371,8 +30357,6 @@ func (f ScheduledJobOrderField) String() string {
 		str = "updated_at"
 	case ScheduledJobOrderFieldTitle.column:
 		str = "title"
-	case ScheduledJobOrderFieldJobType.column:
-		str = "JOB_TYPE"
 	case ScheduledJobOrderFieldPlatform.column:
 		str = "platform"
 	}
@@ -30397,8 +30381,6 @@ func (f *ScheduledJobOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ScheduledJobOrderFieldUpdatedAt
 	case "title":
 		*f = *ScheduledJobOrderFieldTitle
-	case "JOB_TYPE":
-		*f = *ScheduledJobOrderFieldJobType
 	case "platform":
 		*f = *ScheduledJobOrderFieldPlatform
 	default:
@@ -30713,20 +30695,6 @@ var (
 			}
 		},
 	}
-	// ScheduledJobHistoryOrderFieldJobType orders ScheduledJobHistory by job_type.
-	ScheduledJobHistoryOrderFieldJobType = &ScheduledJobHistoryOrderField{
-		Value: func(sjh *ScheduledJobHistory) (ent.Value, error) {
-			return sjh.JobType, nil
-		},
-		column: scheduledjobhistory.FieldJobType,
-		toTerm: scheduledjobhistory.ByJobType,
-		toCursor: func(sjh *ScheduledJobHistory) Cursor {
-			return Cursor{
-				ID:    sjh.ID,
-				Value: sjh.JobType,
-			}
-		},
-	}
 	// ScheduledJobHistoryOrderFieldPlatform orders ScheduledJobHistory by platform.
 	ScheduledJobHistoryOrderFieldPlatform = &ScheduledJobHistoryOrderField{
 		Value: func(sjh *ScheduledJobHistory) (ent.Value, error) {
@@ -30755,8 +30723,6 @@ func (f ScheduledJobHistoryOrderField) String() string {
 		str = "updated_at"
 	case ScheduledJobHistoryOrderFieldTitle.column:
 		str = "title"
-	case ScheduledJobHistoryOrderFieldJobType.column:
-		str = "JOB_TYPE"
 	case ScheduledJobHistoryOrderFieldPlatform.column:
 		str = "platform"
 	}
@@ -30783,8 +30749,6 @@ func (f *ScheduledJobHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ScheduledJobHistoryOrderFieldUpdatedAt
 	case "title":
 		*f = *ScheduledJobHistoryOrderFieldTitle
-	case "JOB_TYPE":
-		*f = *ScheduledJobHistoryOrderFieldJobType
 	case "platform":
 		*f = *ScheduledJobHistoryOrderFieldPlatform
 	default:

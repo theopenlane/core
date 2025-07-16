@@ -167,20 +167,6 @@ func (sjc *ScheduledJobCreate) SetNillableDescription(s *string) *ScheduledJobCr
 	return sjc
 }
 
-// SetJobType sets the "job_type" field.
-func (sjc *ScheduledJobCreate) SetJobType(et enums.JobType) *ScheduledJobCreate {
-	sjc.mutation.SetJobType(et)
-	return sjc
-}
-
-// SetNillableJobType sets the "job_type" field if the given value is not nil.
-func (sjc *ScheduledJobCreate) SetNillableJobType(et *enums.JobType) *ScheduledJobCreate {
-	if et != nil {
-		sjc.SetJobType(*et)
-	}
-	return sjc
-}
-
 // SetPlatform sets the "platform" field.
 func (sjc *ScheduledJobCreate) SetPlatform(ept enums.JobPlatformType) *ScheduledJobCreate {
 	sjc.mutation.SetPlatform(ept)
@@ -325,10 +311,6 @@ func (sjc *ScheduledJobCreate) defaults() error {
 		v := scheduledjob.DefaultSystemOwned
 		sjc.mutation.SetSystemOwned(v)
 	}
-	if _, ok := sjc.mutation.JobType(); !ok {
-		v := scheduledjob.DefaultJobType
-		sjc.mutation.SetJobType(v)
-	}
 	if _, ok := sjc.mutation.ID(); !ok {
 		if scheduledjob.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized scheduledjob.DefaultID (forgotten import generated/runtime?)")
@@ -355,14 +337,6 @@ func (sjc *ScheduledJobCreate) check() error {
 	if v, ok := sjc.mutation.Title(); ok {
 		if err := scheduledjob.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.title": %w`, err)}
-		}
-	}
-	if _, ok := sjc.mutation.JobType(); !ok {
-		return &ValidationError{Name: "job_type", err: errors.New(`generated: missing required field "ScheduledJob.job_type"`)}
-	}
-	if v, ok := sjc.mutation.JobType(); ok {
-		if err := scheduledjob.JobTypeValidator(v); err != nil {
-			return &ValidationError{Name: "job_type", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.job_type": %w`, err)}
 		}
 	}
 	if _, ok := sjc.mutation.Platform(); !ok {
@@ -468,10 +442,6 @@ func (sjc *ScheduledJobCreate) createSpec() (*ScheduledJob, *sqlgraph.CreateSpec
 	if value, ok := sjc.mutation.Description(); ok {
 		_spec.SetField(scheduledjob.FieldDescription, field.TypeString, value)
 		_node.Description = value
-	}
-	if value, ok := sjc.mutation.JobType(); ok {
-		_spec.SetField(scheduledjob.FieldJobType, field.TypeEnum, value)
-		_node.JobType = value
 	}
 	if value, ok := sjc.mutation.Platform(); ok {
 		_spec.SetField(scheduledjob.FieldPlatform, field.TypeEnum, value)

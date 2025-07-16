@@ -7,8 +7,10 @@ mutation CreateExport($input: CreateExportInput!) {
       format
       id
       fields
+      filters
       ownerID
       requestorID
+      errorMessage
       status
       updatedAt
       updatedBy
@@ -35,6 +37,8 @@ query GetAllExports {
         fields
         ownerID
         requestorID
+        errorMessage
+        filters
         status
         updatedAt
         updatedBy
@@ -48,7 +52,9 @@ query GetExportByID($exportId: ID!) {
     createdBy
     exportType
     id
+    errorMessage
     ownerID
+    filters
     requestorID
     status
     fields
@@ -82,7 +88,9 @@ query GetExports($first: Int, $last: Int, $where: ExportWhereInput) {
         createdAt
         createdBy
         exportType
+        errorMessage
         id
+        filters
         format
         ownerID
         requestorID
@@ -102,7 +110,9 @@ mutation UpdateExport($id: ID!, $input: UpdateExportInput!, $exportFiles: [Uploa
       createdBy
       exportType
       id
+      errorMessage
       ownerID
+      filters
       fields
       requestorID
       status

@@ -12536,6 +12536,16 @@ func (e *ExportQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				selectedFields = append(selectedFields, export.FieldFields)
 				fieldSeen[export.FieldFields] = struct{}{}
 			}
+		case "filters":
+			if _, ok := fieldSeen[export.FieldFilters]; !ok {
+				selectedFields = append(selectedFields, export.FieldFilters)
+				fieldSeen[export.FieldFilters] = struct{}{}
+			}
+		case "errorMessage":
+			if _, ok := fieldSeen[export.FieldErrorMessage]; !ok {
+				selectedFields = append(selectedFields, export.FieldErrorMessage)
+				fieldSeen[export.FieldErrorMessage] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -37072,11 +37082,6 @@ func (sj *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, scheduledjob.FieldDescription)
 				fieldSeen[scheduledjob.FieldDescription] = struct{}{}
 			}
-		case "jobType":
-			if _, ok := fieldSeen[scheduledjob.FieldJobType]; !ok {
-				selectedFields = append(selectedFields, scheduledjob.FieldJobType)
-				fieldSeen[scheduledjob.FieldJobType] = struct{}{}
-			}
 		case "platform":
 			if _, ok := fieldSeen[scheduledjob.FieldPlatform]; !ok {
 				selectedFields = append(selectedFields, scheduledjob.FieldPlatform)
@@ -37266,11 +37271,6 @@ func (sjh *ScheduledJobHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[scheduledjobhistory.FieldDescription]; !ok {
 				selectedFields = append(selectedFields, scheduledjobhistory.FieldDescription)
 				fieldSeen[scheduledjobhistory.FieldDescription] = struct{}{}
-			}
-		case "jobType":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldJobType]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldJobType)
-				fieldSeen[scheduledjobhistory.FieldJobType] = struct{}{}
 			}
 		case "platform":
 			if _, ok := fieldSeen[scheduledjobhistory.FieldPlatform]; !ok {

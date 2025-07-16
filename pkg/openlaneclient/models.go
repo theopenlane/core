@@ -5016,7 +5016,9 @@ type CreateExportInput struct {
 	// the format of export, e.g., csv and others
 	Format enums.ExportFormat `json:"format"`
 	// the specific fields to include in the export (defaults to only the id if not provided)
-	Fields   []string `json:"fields,omitempty"`
+	Fields []string `json:"fields,omitempty"`
+	// the specific filters to run against the exported data. This should be a well formatted graphql query
+	Filters  *string  `json:"filters,omitempty"`
 	OwnerID  *string  `json:"ownerID,omitempty"`
 	EventIDs []string `json:"eventIDs,omitempty"`
 	FileIDs  []string `json:"fileIDs,omitempty"`
@@ -5733,8 +5735,6 @@ type CreateScheduledJobInput struct {
 	Title string `json:"title"`
 	// the description of the job
 	Description *string `json:"description,omitempty"`
-	// the type of this job
-	JobType *enums.JobType `json:"jobType,omitempty"`
 	// the platform to use to execute this job
 	Platform enums.JobPlatformType `json:"platform"`
 	// the script to run
@@ -9204,10 +9204,14 @@ type Export struct {
 	// the user who initiated the export
 	RequestorID *string `json:"requestorID,omitempty"`
 	// the specific fields to include in the export (defaults to only the id if not provided)
-	Fields []string         `json:"fields,omitempty"`
-	Owner  *Organization    `json:"owner,omitempty"`
-	Events *EventConnection `json:"events"`
-	Files  *FileConnection  `json:"files"`
+	Fields []string `json:"fields,omitempty"`
+	// the specific filters to run against the exported data. This should be a well formatted graphql query
+	Filters *string `json:"filters,omitempty"`
+	// if we try to export and it fails, the error message will be stored here
+	ErrorMessage *string          `json:"errorMessage,omitempty"`
+	Owner        *Organization    `json:"owner,omitempty"`
+	Events       *EventConnection `json:"events"`
+	Files        *FileConnection  `json:"files"`
 }
 
 func (Export) IsNode() {}
@@ -9386,6 +9390,38 @@ type ExportWhereInput struct {
 	RequestorIDNotNil       *bool    `json:"requestorIDNotNil,omitempty"`
 	RequestorIDEqualFold    *string  `json:"requestorIDEqualFold,omitempty"`
 	RequestorIDContainsFold *string  `json:"requestorIDContainsFold,omitempty"`
+	// filters field predicates
+	Filters             *string  `json:"filters,omitempty"`
+	FiltersNeq          *string  `json:"filtersNEQ,omitempty"`
+	FiltersIn           []string `json:"filtersIn,omitempty"`
+	FiltersNotIn        []string `json:"filtersNotIn,omitempty"`
+	FiltersGt           *string  `json:"filtersGT,omitempty"`
+	FiltersGte          *string  `json:"filtersGTE,omitempty"`
+	FiltersLt           *string  `json:"filtersLT,omitempty"`
+	FiltersLte          *string  `json:"filtersLTE,omitempty"`
+	FiltersContains     *string  `json:"filtersContains,omitempty"`
+	FiltersHasPrefix    *string  `json:"filtersHasPrefix,omitempty"`
+	FiltersHasSuffix    *string  `json:"filtersHasSuffix,omitempty"`
+	FiltersIsNil        *bool    `json:"filtersIsNil,omitempty"`
+	FiltersNotNil       *bool    `json:"filtersNotNil,omitempty"`
+	FiltersEqualFold    *string  `json:"filtersEqualFold,omitempty"`
+	FiltersContainsFold *string  `json:"filtersContainsFold,omitempty"`
+	// error_message field predicates
+	ErrorMessage             *string  `json:"errorMessage,omitempty"`
+	ErrorMessageNeq          *string  `json:"errorMessageNEQ,omitempty"`
+	ErrorMessageIn           []string `json:"errorMessageIn,omitempty"`
+	ErrorMessageNotIn        []string `json:"errorMessageNotIn,omitempty"`
+	ErrorMessageGt           *string  `json:"errorMessageGT,omitempty"`
+	ErrorMessageGte          *string  `json:"errorMessageGTE,omitempty"`
+	ErrorMessageLt           *string  `json:"errorMessageLT,omitempty"`
+	ErrorMessageLte          *string  `json:"errorMessageLTE,omitempty"`
+	ErrorMessageContains     *string  `json:"errorMessageContains,omitempty"`
+	ErrorMessageHasPrefix    *string  `json:"errorMessageHasPrefix,omitempty"`
+	ErrorMessageHasSuffix    *string  `json:"errorMessageHasSuffix,omitempty"`
+	ErrorMessageIsNil        *bool    `json:"errorMessageIsNil,omitempty"`
+	ErrorMessageNotNil       *bool    `json:"errorMessageNotNil,omitempty"`
+	ErrorMessageEqualFold    *string  `json:"errorMessageEqualFold,omitempty"`
+	ErrorMessageContainsFold *string  `json:"errorMessageContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -21506,8 +21542,6 @@ type ScheduledJob struct {
 	Title string `json:"title"`
 	// the description of the job
 	Description *string `json:"description,omitempty"`
-	// the type of this job
-	JobType enums.JobType `json:"jobType"`
 	// the platform to use to execute this job
 	Platform enums.JobPlatformType `json:"platform"`
 	// the script to run
@@ -21584,8 +21618,6 @@ type ScheduledJobHistory struct {
 	Title string `json:"title"`
 	// the description of the job
 	Description *string `json:"description,omitempty"`
-	// the type of this job
-	JobType enums.JobType `json:"jobType"`
 	// the platform to use to execute this job
 	Platform enums.JobPlatformType `json:"platform"`
 	// the script to run
@@ -21796,11 +21828,6 @@ type ScheduledJobHistoryWhereInput struct {
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
-	// job_type field predicates
-	JobType      *enums.JobType  `json:"jobType,omitempty"`
-	JobTypeNeq   *enums.JobType  `json:"jobTypeNEQ,omitempty"`
-	JobTypeIn    []enums.JobType `json:"jobTypeIn,omitempty"`
-	JobTypeNotIn []enums.JobType `json:"jobTypeNotIn,omitempty"`
 	// platform field predicates
 	Platform      *enums.JobPlatformType  `json:"platform,omitempty"`
 	PlatformNeq   *enums.JobPlatformType  `json:"platformNEQ,omitempty"`
@@ -22165,11 +22192,6 @@ type ScheduledJobWhereInput struct {
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
-	// job_type field predicates
-	JobType      *enums.JobType  `json:"jobType,omitempty"`
-	JobTypeNeq   *enums.JobType  `json:"jobTypeNEQ,omitempty"`
-	JobTypeIn    []enums.JobType `json:"jobTypeIn,omitempty"`
-	JobTypeNotIn []enums.JobType `json:"jobTypeNotIn,omitempty"`
 	// platform field predicates
 	Platform      *enums.JobPlatformType  `json:"platform,omitempty"`
 	PlatformNeq   *enums.JobPlatformType  `json:"platformNEQ,omitempty"`
@@ -28260,15 +28282,18 @@ type UpdateEvidenceInput struct {
 // Input was generated by ent.
 type UpdateExportInput struct {
 	// the status of the export, e.g., pending, ready, failed
-	Status         *enums.ExportStatus `json:"status,omitempty"`
-	OwnerID        *string             `json:"ownerID,omitempty"`
-	ClearOwner     *bool               `json:"clearOwner,omitempty"`
-	AddEventIDs    []string            `json:"addEventIDs,omitempty"`
-	RemoveEventIDs []string            `json:"removeEventIDs,omitempty"`
-	ClearEvents    *bool               `json:"clearEvents,omitempty"`
-	AddFileIDs     []string            `json:"addFileIDs,omitempty"`
-	RemoveFileIDs  []string            `json:"removeFileIDs,omitempty"`
-	ClearFiles     *bool               `json:"clearFiles,omitempty"`
+	Status *enums.ExportStatus `json:"status,omitempty"`
+	// if we try to export and it fails, the error message will be stored here
+	ErrorMessage      *string  `json:"errorMessage,omitempty"`
+	ClearErrorMessage *bool    `json:"clearErrorMessage,omitempty"`
+	OwnerID           *string  `json:"ownerID,omitempty"`
+	ClearOwner        *bool    `json:"clearOwner,omitempty"`
+	AddEventIDs       []string `json:"addEventIDs,omitempty"`
+	RemoveEventIDs    []string `json:"removeEventIDs,omitempty"`
+	ClearEvents       *bool    `json:"clearEvents,omitempty"`
+	AddFileIDs        []string `json:"addFileIDs,omitempty"`
+	RemoveFileIDs     []string `json:"removeFileIDs,omitempty"`
+	ClearFiles        *bool    `json:"clearFiles,omitempty"`
 }
 
 // UpdateFileInput is used for update File object.
@@ -29456,8 +29481,6 @@ type UpdateScheduledJobInput struct {
 	// the description of the job
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
-	// the type of this job
-	JobType *enums.JobType `json:"jobType,omitempty"`
 	// the script to run
 	Script      *string `json:"script,omitempty"`
 	ClearScript *bool   `json:"clearScript,omitempty"`
@@ -36110,7 +36133,6 @@ const (
 	ScheduledJobHistoryOrderFieldCreatedAt   ScheduledJobHistoryOrderField = "created_at"
 	ScheduledJobHistoryOrderFieldUpdatedAt   ScheduledJobHistoryOrderField = "updated_at"
 	ScheduledJobHistoryOrderFieldTitle       ScheduledJobHistoryOrderField = "title"
-	ScheduledJobHistoryOrderFieldJobType     ScheduledJobHistoryOrderField = "JOB_TYPE"
 	ScheduledJobHistoryOrderFieldPlatform    ScheduledJobHistoryOrderField = "platform"
 )
 
@@ -36119,13 +36141,12 @@ var AllScheduledJobHistoryOrderField = []ScheduledJobHistoryOrderField{
 	ScheduledJobHistoryOrderFieldCreatedAt,
 	ScheduledJobHistoryOrderFieldUpdatedAt,
 	ScheduledJobHistoryOrderFieldTitle,
-	ScheduledJobHistoryOrderFieldJobType,
 	ScheduledJobHistoryOrderFieldPlatform,
 }
 
 func (e ScheduledJobHistoryOrderField) IsValid() bool {
 	switch e {
-	case ScheduledJobHistoryOrderFieldHistoryTime, ScheduledJobHistoryOrderFieldCreatedAt, ScheduledJobHistoryOrderFieldUpdatedAt, ScheduledJobHistoryOrderFieldTitle, ScheduledJobHistoryOrderFieldJobType, ScheduledJobHistoryOrderFieldPlatform:
+	case ScheduledJobHistoryOrderFieldHistoryTime, ScheduledJobHistoryOrderFieldCreatedAt, ScheduledJobHistoryOrderFieldUpdatedAt, ScheduledJobHistoryOrderFieldTitle, ScheduledJobHistoryOrderFieldPlatform:
 		return true
 	}
 	return false
@@ -36173,7 +36194,6 @@ const (
 	ScheduledJobOrderFieldCreatedAt ScheduledJobOrderField = "created_at"
 	ScheduledJobOrderFieldUpdatedAt ScheduledJobOrderField = "updated_at"
 	ScheduledJobOrderFieldTitle     ScheduledJobOrderField = "title"
-	ScheduledJobOrderFieldJobType   ScheduledJobOrderField = "JOB_TYPE"
 	ScheduledJobOrderFieldPlatform  ScheduledJobOrderField = "platform"
 )
 
@@ -36181,13 +36201,12 @@ var AllScheduledJobOrderField = []ScheduledJobOrderField{
 	ScheduledJobOrderFieldCreatedAt,
 	ScheduledJobOrderFieldUpdatedAt,
 	ScheduledJobOrderFieldTitle,
-	ScheduledJobOrderFieldJobType,
 	ScheduledJobOrderFieldPlatform,
 }
 
 func (e ScheduledJobOrderField) IsValid() bool {
 	switch e {
-	case ScheduledJobOrderFieldCreatedAt, ScheduledJobOrderFieldUpdatedAt, ScheduledJobOrderFieldTitle, ScheduledJobOrderFieldJobType, ScheduledJobOrderFieldPlatform:
+	case ScheduledJobOrderFieldCreatedAt, ScheduledJobOrderFieldUpdatedAt, ScheduledJobOrderFieldTitle, ScheduledJobOrderFieldPlatform:
 		return true
 	}
 	return false
