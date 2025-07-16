@@ -16,7 +16,7 @@ func registerIntegrationOAuthStartHandler(router *Router) error {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: authMW, // Require authentication
+		Middlewares: authMW, // Require authentication for OAuth integration flow
 		Handler: func(c echo.Context) error {
 			return router.Handler.StartOAuthFlow(c)
 		},
@@ -39,7 +39,7 @@ func registerIntegrationOAuthCallbackHandler(router *Router) error {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: authMW, // Use authMW
+		Middlewares: mw, // Use authMW
 		Handler: func(c echo.Context) error {
 			return router.Handler.HandleOAuthCallback(c)
 		},

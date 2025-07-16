@@ -5,7 +5,6 @@ import (
 	"reflect"
 
 	"entgo.io/ent"
-	"gocloud.dev/secrets"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
 )
@@ -20,58 +19,23 @@ func InterceptorEncryption(fieldNames ...string) ent.Interceptor {
 				return nil, err
 			}
 
-			// Get the secrets keeper from the query
-			secretsKeeper := getSecretsKeeperFromQuery(q)
-			if secretsKeeper == nil {
-				// Use fallback AES decryption
-				return decryptQueryResultAES(result, fieldNames)
-			}
-
-			// Decrypt the specified fields
-			if err := decryptQueryResult(ctx, secretsKeeper, result, fieldNames); err != nil {
-				return nil, err
-			}
-
-			return result, nil
+			// Decrypt the specified fields using Tink
+			return decryptQueryResult(result, fieldNames)
 		})
 	})
 }
 
-// decryptQueryResult decrypts specified fields in query results
-func decryptQueryResult(ctx context.Context, keeper *secrets.Keeper, result ent.Value, fieldNames []string) error {
-	if result == nil {
-		return nil
-	}
-
-	v := reflect.ValueOf(result)
-	if v.Kind() == reflect.Ptr {
-		v = v.Elem()
-	}
-
-	// Handle slice of results
-	if v.Kind() == reflect.Slice {
-		for i := 0; i < v.Len(); i++ {
-			item := v.Index(i)
-			if err := hooks.DecryptEntityFields(ctx, keeper, item.Interface(), fieldNames); err != nil {
-				return err
-			}
-		}
-		return nil
-	}
-
-	// Handle single result
-	return hooks.DecryptEntityFields(ctx, keeper, result, fieldNames)
+// InterceptorFieldEncryption provides decryption for a single field (for backward compatibility)
+func InterceptorFieldEncryption(fieldName string, _ bool) ent.Interceptor {
+	return InterceptorEncryption(fieldName)
 }
 
-// decryptQueryResultAES decrypts fields using AES fallback
-func decryptQueryResultAES(result ent.Value, fieldNames []string) (ent.Value, error) {
+// decryptQueryResult decrypts specified fields in query results using Tink
+func decryptQueryResult(result ent.Value, fieldNames []string) (ent.Value, error) {
 	if result == nil {
 		return result, nil
 	}
 
-	// Get encryption key
-	key := hooks.GetEncryptionKey()
-
 	v := reflect.ValueOf(result)
 	if v.Kind() == reflect.Ptr {
 		v = v.Elem()
@@ -81,7 +45,7 @@ func decryptQueryResultAES(result ent.Value, fieldNames []string) (ent.Value, er
 	if v.Kind() == reflect.Slice {
 		for i := 0; i < v.Len(); i++ {
 			item := v.Index(i)
-			if err := hooks.DecryptEntityFieldsAES(item.Interface(), key, fieldNames); err != nil {
+			if err := hooks.DecryptEntityFields(item.Interface(), fieldNames); err != nil {
 				return nil, err
 			}
 		}
@@ -89,24 +53,6 @@ func decryptQueryResultAES(result ent.Value, fieldNames []string) (ent.Value, er
 	}
 
 	// Handle single result
-	err := hooks.DecryptEntityFieldsAES(result, key, fieldNames)
+	err := hooks.DecryptEntityFields(result, fieldNames)
 	return result, err
-}
-
-// getSecretsKeeperFromQuery extracts secrets keeper from query
-func getSecretsKeeperFromQuery(q ent.Query) *secrets.Keeper {
-	v := reflect.ValueOf(q)
-	if v.Kind() == reflect.Ptr {
-		v = v.Elem()
-	}
-
-	// Look for Secrets field
-	secretsField := v.FieldByName("Secrets")
-	if secretsField.IsValid() && !secretsField.IsNil() {
-		if keeper, ok := secretsField.Interface().(*secrets.Keeper); ok {
-			return keeper
-		}
-	}
-
-	return nil
 }

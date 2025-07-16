@@ -2,18 +2,26 @@ package hooks
 
 import (
 	"context"
-	"crypto/aes"
-	"crypto/cipher"
-	"crypto/rand"
-	"crypto/sha256"
 	"encoding/base64"
 	"fmt"
-	"io"
+	"os"
 	"reflect"
+	"slices"
 	"strings"
 
 	"entgo.io/ent"
-	"gocloud.dev/secrets"
+
+	"github.com/tink-crypto/tink-go/v2/aead"
+	"github.com/tink-crypto/tink-go/v2/insecurecleartextkeyset"
+	"github.com/tink-crypto/tink-go/v2/keyset"
+	"github.com/tink-crypto/tink-go/v2/tink"
+)
+
+const (
+	// minEncryptedLength is the minimum length for encrypted data
+	minEncryptedLength = 32
+	// minCharTypes is the minimum number of character types for encrypted data detection
+	minCharTypes = 2
 )
 
 var (
@@ -21,46 +29,152 @@ var (
 	ErrFieldNotString = fmt.Errorf("field is not a string")
 	// ErrSetterNotFound is returned when no setter method is found for a field
 	ErrSetterNotFound = fmt.Errorf("no setter found for field")
-	// ErrCiphertextTooShort is returned when ciphertext is too short to decrypt
+	// ErrCiphertextTooShort is returned when the ciphertext is too short
 	ErrCiphertextTooShort = fmt.Errorf("ciphertext too short")
+	// ErrInvalidKeyLength is returned when the key length is invalid
+	ErrInvalidKeyLength = fmt.Errorf("invalid key length")
+	// ErrFieldNotFound is returned when a field is not found
+	ErrFieldNotFound = fmt.Errorf("field not found")
+	// ErrSetterMethodNotFound is returned when no setter method is found
+	ErrSetterMethodNotFound = fmt.Errorf("setter method not found")
 )
 
-// EncryptionManager handles field-level encryption for any entity
-type EncryptionManager struct {
-	secrets *secrets.Keeper
-	fields  []string
-}
+// Tink-based encryption system
+var (
+	tinkAEAD tink.AEAD
+)
 
-// NewEncryptionManager creates a new encryption manager for the specified fields
-func NewEncryptionManager(secrets *secrets.Keeper, fields []string) *EncryptionManager {
-	return &EncryptionManager{
-		secrets: secrets,
-		fields:  fields,
+// initTink initializes Tink encryption system
+func initTink() error {
+	if tinkAEAD != nil {
+		return nil // Already initialized
 	}
+
+	// Try to get existing keyset from environment
+	if keysetData := os.Getenv("OPENLANE_TINK_KEYSET"); keysetData != "" {
+		return initTinkFromKeyset(keysetData)
+	}
+
+	// Generate new keyset
+	return initTinkWithNewKeyset()
 }
 
-// HookEncryption provides transparent encryption for specified fields on any entity
-func HookEncryption(fieldNames ...string) ent.Hook {
+// initTinkFromKeyset initializes Tink from existing keyset
+func initTinkFromKeyset(keysetData string) error {
+	// Decode base64 keyset
+	keysetBytes, err := base64.StdEncoding.DecodeString(keysetData)
+	if err != nil {
+		return fmt.Errorf("failed to decode keyset: %w", err)
+	}
+
+	// Create keyset handle from binary
+	reader := strings.NewReader(string(keysetBytes))
+	keysetHandle, err := insecurecleartextkeyset.Read(keyset.NewBinaryReader(reader))
+	if err != nil {
+		return fmt.Errorf("failed to create keyset handle: %w", err)
+	}
+
+	// Get AEAD primitive
+	primitive, err := aead.New(keysetHandle)
+	if err != nil {
+		return fmt.Errorf("failed to create AEAD primitive: %w", err)
+	}
+
+	tinkAEAD = primitive
+	return nil
+}
+
+// initTinkWithNewKeyset generates a new keyset and initializes Tink
+func initTinkWithNewKeyset() error {
+	// Generate new keyset
+	keysetHandle, err := keyset.NewHandle(aead.AES256GCMKeyTemplate())
+	if err != nil {
+		return fmt.Errorf("failed to generate keyset: %w", err)
+	}
+
+	// Get AEAD primitive
+	primitive, err := aead.New(keysetHandle)
+	if err != nil {
+		return fmt.Errorf("failed to create AEAD primitive: %w", err)
+	}
+
+	tinkAEAD = primitive
+	return nil
+}
+
+// encryptFieldValue encrypts a field value using Tink
+func encryptFieldValue(_ context.Context, _ ent.Mutation, value string) (string, error) {
+	// Initialize Tink if needed
+	if err := initTink(); err != nil {
+		return "", fmt.Errorf("failed to initialize Tink: %w", err)
+	}
+
+	// Encrypt with Tink
+	ciphertext, err := tinkAEAD.Encrypt([]byte(value), nil)
+	if err != nil {
+		return "", fmt.Errorf("failed to encrypt with Tink: %w", err)
+	}
+
+	return base64.StdEncoding.EncodeToString(ciphertext), nil
+}
+
+// decryptFieldValue decrypts a field value using Tink
+func decryptFieldValue(_ context.Context, _ ent.Mutation, encryptedValue string) (string, error) {
+	// Initialize Tink if needed
+	if err := initTink(); err != nil {
+		return "", fmt.Errorf("failed to initialize Tink: %w", err)
+	}
+
+	// Decode from base64
+	ciphertext, err := base64.StdEncoding.DecodeString(encryptedValue)
+	if err != nil {
+		return "", fmt.Errorf("failed to decode ciphertext: %w", err)
+	}
+
+	// Decrypt with Tink
+	plaintext, err := tinkAEAD.Decrypt(ciphertext, nil)
+	if err != nil {
+		return "", fmt.Errorf("failed to decrypt with Tink: %w", err)
+	}
+
+	return string(plaintext), nil
+}
+
+// HookFieldEncryption provides encryption for existing fields with migration support
+func HookFieldEncryption(fieldName string, _ bool) ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			// Get the secrets keeper from the mutation
-			secretsKeeper, err := getSecretsKeeper(m)
+			// Only process if this field is being mutated
+			if !hasField(m, fieldName) {
+				return next.Mutate(ctx, m)
+			}
+
+			// Get the field value
+			value, err := getFieldValue(m, fieldName)
 			if err != nil {
-				return nil, fmt.Errorf("failed to get secrets keeper: %w", err)
+				return nil, fmt.Errorf("failed to get field value for %s: %w", fieldName, err)
 			}
 
-			if secretsKeeper == nil {
-				// If no secrets keeper available, fall back to in-memory encryption
-				return encryptFieldsInMemory(ctx, m, next, fieldNames)
+			// If value is empty, proceed without encryption
+			if value == "" {
+				return next.Mutate(ctx, m)
 			}
 
-			// Encrypt specified fields before storing
-			for _, fieldName := range fieldNames {
-				if hasField(m, fieldName) {
-					if err := encryptField(ctx, m, secretsKeeper, fieldName); err != nil {
-						return nil, fmt.Errorf("failed to encrypt field %s: %w", fieldName, err)
-					}
-				}
+			// Check if the value is already encrypted
+			if isEncrypted(value) {
+				// Already encrypted, proceed as normal
+				return next.Mutate(ctx, m)
+			}
+
+			// Value is not encrypted, encrypt it now
+			encrypted, err := encryptFieldValue(ctx, m, value)
+			if err != nil {
+				return nil, fmt.Errorf("failed to encrypt field %s: %w", fieldName, err)
+			}
+
+			// Set the encrypted value
+			if err := setFieldValue(m, fieldName, encrypted); err != nil {
+				return nil, fmt.Errorf("failed to set encrypted value for %s: %w", fieldName, err)
 			}
 
 			// Proceed with the mutation
@@ -69,9 +183,9 @@ func HookEncryption(fieldNames ...string) ent.Hook {
 				return nil, err
 			}
 
-			// Decrypt fields in the result for immediate use
-			if err := decryptResultFields(ctx, secretsKeeper, result, fieldNames); err != nil {
-				return nil, fmt.Errorf("failed to decrypt result fields: %w", err)
+			// Decrypt the result for immediate use
+			if err := decryptResultField(ctx, m, result, fieldName); err != nil {
+				return nil, fmt.Errorf("failed to decrypt result field %s: %w", fieldName, err)
 			}
 
 			return result, nil
@@ -79,86 +193,13 @@ func HookEncryption(fieldNames ...string) ent.Hook {
 	}
 }
 
-// encryptField encrypts a specific field in the mutation
-func encryptField(ctx context.Context, m ent.Mutation, keeper *secrets.Keeper, fieldName string) error {
-	// Get the field value using reflection
-	value, err := getFieldValue(m, fieldName)
-	if err != nil {
-		return err
-	}
-
-	// Only encrypt non-empty values
-	if value == "" {
-		return nil
-	}
-
-	// Encrypt the value
-	encrypted, err := keeper.Encrypt(ctx, []byte(value))
-	if err != nil {
-		return fmt.Errorf("failed to encrypt value: %w", err)
-	}
-
-	// Encode as base64 for storage
-	encodedValue := base64.StdEncoding.EncodeToString(encrypted)
-
-	// Set the encrypted value back to the field
-	return setFieldValue(m, fieldName, encodedValue)
-}
-
-// encryptFieldsInMemory provides fallback AES encryption when no secrets keeper is available
-func encryptFieldsInMemory(ctx context.Context, m ent.Mutation, next ent.Mutator, fieldNames []string) (ent.Value, error) {
-	// Get or generate encryption key
-	key := getOrGenerateKey()
-
-	// Encrypt specified fields
-	for _, fieldName := range fieldNames {
-		if hasField(m, fieldName) {
-			if err := encryptFieldAES(m, key, fieldName); err != nil {
-				return nil, fmt.Errorf("failed to encrypt field %s: %w", fieldName, err)
-			}
-		}
-	}
-
-	// Proceed with the mutation
-	result, err := next.Mutate(ctx, m)
-	if err != nil {
-		return nil, err
-	}
-
-	// Decrypt fields in the result
-	if err := decryptResultFieldsAES(result, key, fieldNames); err != nil {
-		return nil, fmt.Errorf("failed to decrypt result fields: %w", err)
-	}
-
-	return result, nil
-}
-
-// encryptFieldAES encrypts a field using AES
-func encryptFieldAES(m ent.Mutation, key []byte, fieldName string) error {
-	value, err := getFieldValue(m, fieldName)
-	if err != nil {
-		return err
-	}
-
-	if value == "" {
-		return nil
-	}
-
-	encrypted, err := encryptAES([]byte(value), key)
-	if err != nil {
-		return err
-	}
-
-	return setFieldValue(m, fieldName, base64.StdEncoding.EncodeToString(encrypted))
-}
-
-// decryptResultFields decrypts fields in the mutation result
-func decryptResultFields(ctx context.Context, keeper *secrets.Keeper, result ent.Value, fieldNames []string) error {
+// decryptResultField decrypts a field in the mutation result
+func decryptResultField(ctx context.Context, m ent.Mutation, result ent.Value, fieldName string) error {
 	if result == nil {
 		return nil
 	}
 
-	// Use reflection to access and decrypt fields
+	// Use reflection to access the field
 	v := reflect.ValueOf(result)
 	if v.Kind() == reflect.Ptr {
 		v = v.Elem()
@@ -168,7 +209,7 @@ func decryptResultFields(ctx context.Context, keeper *secrets.Keeper, result ent
 	if v.Kind() == reflect.Slice {
 		for i := 0; i < v.Len(); i++ {
 			item := v.Index(i)
-			if err := decryptEntityFields(ctx, keeper, item.Interface(), fieldNames); err != nil {
+			if err := decryptEntityField(ctx, m, item.Interface(), fieldName); err != nil {
 				return err
 			}
 		}
@@ -176,170 +217,127 @@ func decryptResultFields(ctx context.Context, keeper *secrets.Keeper, result ent
 	}
 
 	// Handle single result
-	return decryptEntityFields(ctx, keeper, result, fieldNames)
+	return decryptEntityField(ctx, m, result, fieldName)
 }
 
-// decryptResultFieldsAES decrypts fields using AES
-func decryptResultFieldsAES(result ent.Value, key []byte, fieldNames []string) error {
-	if result == nil {
-		return nil
-	}
-
-	v := reflect.ValueOf(result)
-	if v.Kind() == reflect.Ptr {
-		v = v.Elem()
-	}
-
-	if v.Kind() == reflect.Slice {
-		for i := 0; i < v.Len(); i++ {
-			item := v.Index(i)
-			if err := decryptEntityFieldsAES(item.Interface(), key, fieldNames); err != nil {
-				return err
-			}
-		}
-		return nil
-	}
-
-	return decryptEntityFieldsAES(result, key, fieldNames)
-}
-
-// decryptEntityFields decrypts specified fields in an entity
-func decryptEntityFields(ctx context.Context, keeper *secrets.Keeper, entity interface{}, fieldNames []string) error {
+// decryptEntityField decrypts a specific field in an entity
+func decryptEntityField(ctx context.Context, m ent.Mutation, entity interface{}, fieldName string) error {
 	v := reflect.ValueOf(entity)
 	if v.Kind() == reflect.Ptr {
 		v = v.Elem()
 	}
 
-	for _, fieldName := range fieldNames {
-		field := v.FieldByName(convertFieldName(fieldName))
-		if !field.IsValid() || !field.CanSet() || field.Kind() != reflect.String {
-			continue
-		}
-
-		encryptedValue := field.String()
-		if encryptedValue == "" {
-			continue
-		}
-
-		// Decode from base64
-		encrypted, err := base64.StdEncoding.DecodeString(encryptedValue)
-		if err != nil {
-			continue // Skip if not base64 encoded
-		}
-
-		// Decrypt
-		decrypted, err := keeper.Decrypt(ctx, encrypted)
-		if err != nil {
-			continue // Skip if decryption fails
-		}
-
-		// Set decrypted value
-		field.SetString(string(decrypted))
+	field := v.FieldByName(convertFieldName(fieldName))
+	if !field.IsValid() || !field.CanSet() || field.Kind() != reflect.String {
+		return nil // Field not found or not settable
 	}
 
+	encryptedValue := field.String()
+	if encryptedValue == "" {
+		return nil // Empty field
+	}
+
+	// Check if the value is encrypted
+	if !isEncrypted(encryptedValue) {
+		return nil // Value is not encrypted, leave as is
+	}
+
+	// Decrypt the value
+	decrypted, err := decryptFieldValue(ctx, m, encryptedValue)
+	if err != nil {
+		return nil // Decryption failed, assume plaintext
+	}
+
+	// Set the decrypted value
+	field.SetString(decrypted)
 	return nil
 }
 
-// decryptEntityFieldsAES decrypts fields using AES
-func decryptEntityFieldsAES(entity interface{}, key []byte, fieldNames []string) error {
-	v := reflect.ValueOf(entity)
-	if v.Kind() == reflect.Ptr {
-		v = v.Elem()
+// isEncrypted checks if a value appears to be encrypted (base64 encoded)
+func isEncrypted(value string) bool {
+	if len(value) == 0 {
+		return false
 	}
 
-	for _, fieldName := range fieldNames {
-		field := v.FieldByName(convertFieldName(fieldName))
-		if !field.IsValid() || !field.CanSet() || field.Kind() != reflect.String {
-			continue
-		}
-
-		encryptedValue := field.String()
-		if encryptedValue == "" {
-			continue
-		}
-
-		encrypted, err := base64.StdEncoding.DecodeString(encryptedValue)
-		if err != nil {
-			continue
-		}
-
-		decrypted, err := decryptAES(encrypted, key)
-		if err != nil {
-			continue
-		}
-
-		field.SetString(string(decrypted))
+	// Must be valid base64
+	if _, err := base64.StdEncoding.DecodeString(value); err != nil {
+		return false
 	}
 
-	return nil
+	// Must be reasonably long (Tink produces at least ~40 chars for AES-GCM)
+	if len(value) < minEncryptedLength {
+		return false
+	}
+
+	// Must be properly padded base64
+	if len(value)%4 != 0 {
+		return false
+	}
+
+	// Simple heuristic: encrypted data should contain mixed character types
+	hasLower := strings.ContainsAny(value, "abcdefghijklmnopqrstuvwxyz")
+	hasUpper := strings.ContainsAny(value, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+	hasDigit := strings.ContainsAny(value, "0123456789")
+
+	// Encrypted base64 typically has at least 2 character types
+	charTypes := 0
+	if hasLower {
+		charTypes++
+	}
+	if hasUpper {
+		charTypes++
+	}
+	if hasDigit {
+		charTypes++
+	}
+
+	return charTypes >= minCharTypes
 }
 
-// Helper functions
-
-// getSecretsKeeper extracts the secrets keeper from a mutation
-func getSecretsKeeper(m ent.Mutation) (*secrets.Keeper, error) {
-	// Try to get secrets keeper using reflection
-	v := reflect.ValueOf(m)
-	if v.Kind() == reflect.Ptr {
-		v = v.Elem()
-	}
-
-	// Look for Secrets field
-	secretsField := v.FieldByName("Secrets")
-	if secretsField.IsValid() && !secretsField.IsNil() {
-		if keeper, ok := secretsField.Interface().(*secrets.Keeper); ok {
-			return keeper, nil
-		}
-	}
-
-	return nil, nil // No keeper available, will use fallback
-}
-
-// hasField checks if a mutation has a specific field
+// Helper functions for field manipulation
 func hasField(m ent.Mutation, fieldName string) bool {
-	fields := m.Fields()
-	for _, field := range fields {
-		if field == fieldName {
-			return true
+	return slices.Contains(m.Fields(), fieldName)
+}
+
+func getFieldValue(m ent.Mutation, fieldName string) (string, error) {
+	value, exists := m.Field(fieldName)
+	if !exists {
+		return "", fmt.Errorf("%w: %s", ErrFieldNotFound, fieldName)
+	}
+
+	str, ok := value.(string)
+	if !ok {
+		return "", ErrFieldNotString
+	}
+
+	return str, nil
+}
+
+func setFieldValue(m ent.Mutation, fieldName string, value string) error {
+	// Use reflection to find and call the setter method
+	v := reflect.ValueOf(m)
+
+	// Convert field name to setter method name (e.g., "field_name" -> "SetFieldName")
+	setterName := "Set" + convertFieldName(fieldName)
+
+	method := v.MethodByName(setterName)
+	if !method.IsValid() {
+		return fmt.Errorf("%w: %s for field %s", ErrSetterMethodNotFound, setterName, fieldName)
+	}
+
+	// Call the setter method
+	results := method.Call([]reflect.Value{reflect.ValueOf(value)})
+
+	// Check if the method returned an error (some setters might return the mutation for chaining)
+	if len(results) > 0 && results[len(results)-1].Type().Implements(reflect.TypeOf((*error)(nil)).Elem()) {
+		if err := results[len(results)-1].Interface(); err != nil {
+			return err.(error)
 		}
 	}
-	return false
+
+	return nil
 }
 
-// getFieldValue gets the value of a field from a mutation
-func getFieldValue(m ent.Mutation, fieldName string) (string, error) {
-	field, exists := m.Field(fieldName)
-	if !exists {
-		return "", nil
-	}
-
-	if str, ok := field.(string); ok {
-		return str, nil
-	}
-
-	return "", fmt.Errorf("field %s: %w", fieldName, ErrFieldNotString)
-}
-
-// setFieldValue sets the value of a field in a mutation
-func setFieldValue(m ent.Mutation, fieldName string, value string) error {
-	// Use reflection to set the field value
-	v := reflect.ValueOf(m)
-	if v.Kind() == reflect.Ptr {
-		v = v.Elem()
-	}
-
-	// Try to find a setter method
-	setterName := "Set" + convertFieldName(fieldName)
-	method := v.MethodByName(setterName)
-	if method.IsValid() {
-		method.Call([]reflect.Value{reflect.ValueOf(value)})
-		return nil
-	}
-
-	return fmt.Errorf("no setter found for field %s: %w", fieldName, ErrSetterNotFound)
-}
-
-// convertFieldName converts snake_case to PascalCase
 func convertFieldName(fieldName string) string {
 	parts := strings.Split(fieldName, "_")
 	for i, part := range parts {
@@ -350,88 +348,160 @@ func convertFieldName(fieldName string) string {
 	return strings.Join(parts, "")
 }
 
-// AES encryption functions
+// GenerateTinkKeyset generates a new Tink keyset for initial setup (exported)
+func GenerateTinkKeyset() (string, error) {
+	// Generate new keyset
+	keysetHandle, err := keyset.NewHandle(aead.AES256GCMKeyTemplate())
+	if err != nil {
+		return "", fmt.Errorf("failed to generate keyset: %w", err)
+	}
 
-// getOrGenerateKey gets or generates an encryption key
-func getOrGenerateKey() []byte {
-	// In production, this should come from environment or secrets management
-	// For now, use a deterministic key based on a constant
-	h := sha256.Sum256([]byte("openlane-encryption-key-v1"))
-	return h[:]
+	// Serialize keyset
+	var buf strings.Builder
+	err = insecurecleartextkeyset.Write(keysetHandle, keyset.NewBinaryWriter(&buf))
+	if err != nil {
+		return "", fmt.Errorf("failed to serialize keyset: %w", err)
+	}
+	keysetBytes := []byte(buf.String())
+
+	// Encode as base64
+	return base64.StdEncoding.EncodeToString(keysetBytes), nil
 }
 
-// encryptAES encrypts data using AES-GCM
-func encryptAES(plaintext, key []byte) ([]byte, error) {
-	block, err := aes.NewCipher(key)
+// Encrypt encrypts data using Tink (exported for external use)
+func Encrypt(plaintext []byte) (string, error) {
+	// Initialize Tink if needed
+	if err := initTink(); err != nil {
+		return "", fmt.Errorf("failed to initialize Tink: %w", err)
+	}
+
+	// Encrypt with Tink
+	ciphertext, err := tinkAEAD.Encrypt(plaintext, nil)
 	if err != nil {
-		return nil, err
+		return "", fmt.Errorf("failed to encrypt with Tink: %w", err)
 	}
 
-	gcm, err := cipher.NewGCM(block)
-	if err != nil {
-		return nil, err
-	}
-
-	nonce := make([]byte, gcm.NonceSize())
-	if _, err := io.ReadFull(rand.Reader, nonce); err != nil {
-		return nil, err
-	}
-
-	ciphertext := gcm.Seal(nonce, nonce, plaintext, nil)
-	return ciphertext, nil
+	// Encode as base64 for storage
+	return base64.StdEncoding.EncodeToString(ciphertext), nil
 }
 
-// decryptAES decrypts data using AES-GCM
-func decryptAES(ciphertext, key []byte) ([]byte, error) {
-	block, err := aes.NewCipher(key)
-	if err != nil {
-		return nil, err
+// Decrypt decrypts data using Tink (exported for external use)
+func Decrypt(encryptedValue string) ([]byte, error) {
+	// Initialize Tink if needed
+	if err := initTink(); err != nil {
+		return nil, fmt.Errorf("failed to initialize Tink: %w", err)
 	}
 
-	gcm, err := cipher.NewGCM(block)
+	// Decode from base64
+	ciphertext, err := base64.StdEncoding.DecodeString(encryptedValue)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to decode ciphertext: %w", err)
 	}
 
-	nonceSize := gcm.NonceSize()
-	if len(ciphertext) < nonceSize {
-		return nil, ErrCiphertextTooShort
-	}
-
-	nonce, ciphertext := ciphertext[:nonceSize], ciphertext[nonceSize:]
-	plaintext, err := gcm.Open(nil, nonce, ciphertext, nil)
+	// Decrypt with Tink
+	plaintext, err := tinkAEAD.Decrypt(ciphertext, nil)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to decrypt with Tink: %w", err)
 	}
 
 	return plaintext, nil
 }
 
-// Public helper functions for use by interceptors
+// DecryptEntityFields decrypts multiple string fields in an entity using Tink
+func DecryptEntityFields(entity interface{}, fieldNames []string) error {
+	v := reflect.ValueOf(entity)
+	if v.Kind() == reflect.Ptr {
+		v = v.Elem()
+	}
 
-// DecryptEntityFields decrypts specified fields in an entity (exported for interceptor use)
-func DecryptEntityFields(ctx context.Context, keeper *secrets.Keeper, entity interface{}, fieldNames []string) error {
-	return decryptEntityFields(ctx, keeper, entity, fieldNames)
+	for _, fieldName := range fieldNames {
+		// Convert snake_case to CamelCase for struct field access
+		field := v.FieldByName(convertFieldName(fieldName))
+		if !field.IsValid() || !field.CanSet() {
+			continue // Field not found or not settable
+		}
+
+		// Assume it's a string field (as per user requirement)
+		if field.Kind() != reflect.String {
+			continue
+		}
+
+		encryptedValue := field.String()
+		if encryptedValue == "" {
+			continue // Empty field
+		}
+
+		// Check if it looks encrypted (base64) - if not, leave as-is
+		if !isEncrypted(encryptedValue) {
+			continue
+		}
+
+		// Decrypt the value
+		decrypted, err := Decrypt(encryptedValue)
+		if err != nil {
+			// If decryption fails, leave the value as-is (might be plaintext)
+			continue
+		}
+
+		// Replace with decrypted plaintext
+		field.SetString(string(decrypted))
+	}
+
+	return nil
 }
 
-// DecryptEntityFieldsAES decrypts fields using AES (exported for interceptor use)
-func DecryptEntityFieldsAES(entity interface{}, key []byte, fieldNames []string) error {
-	return decryptEntityFieldsAES(entity, key, fieldNames)
-}
+// HookEncryption provides field encryption for multiple fields
+func HookEncryption(fieldNames ...string) ent.Hook {
+	return func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			// Process each field that needs encryption
+			for _, fieldName := range fieldNames {
+				if !hasField(m, fieldName) {
+					continue // Field not being mutated
+				}
 
-// GetEncryptionKey gets the encryption key (exported for interceptor use)
-func GetEncryptionKey() []byte {
-	return getOrGenerateKey()
-}
+				// Get the field value
+				value, err := getFieldValue(m, fieldName)
+				if err != nil {
+					return nil, fmt.Errorf("failed to get field value for %s: %w", fieldName, err)
+				}
 
-// AES helper functions for external use
+				// If value is empty, skip encryption
+				if value == "" {
+					continue
+				}
 
-// EncryptAESHelper encrypts data using AES-GCM (exported for external use)
-func EncryptAESHelper(plaintext, key []byte) ([]byte, error) {
-	return encryptAES(plaintext, key)
-}
+				// Check if the value is already encrypted
+				if isEncrypted(value) {
+					continue // Already encrypted
+				}
 
-// DecryptAESHelper decrypts data using AES-GCM (exported for external use)
-func DecryptAESHelper(ciphertext, key []byte) ([]byte, error) {
-	return decryptAES(ciphertext, key)
+				// Encrypt the value
+				encrypted, err := encryptFieldValue(ctx, m, value)
+				if err != nil {
+					return nil, fmt.Errorf("failed to encrypt field %s: %w", fieldName, err)
+				}
+
+				// Set the encrypted value
+				if err := setFieldValue(m, fieldName, encrypted); err != nil {
+					return nil, fmt.Errorf("failed to set encrypted value for %s: %w", fieldName, err)
+				}
+			}
+
+			// Proceed with the mutation
+			result, err := next.Mutate(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			// Decrypt the result for immediate use
+			for _, fieldName := range fieldNames {
+				if err := decryptResultField(ctx, m, result, fieldName); err != nil {
+					return nil, fmt.Errorf("failed to decrypt result field %s: %w", fieldName, err)
+				}
+			}
+
+			return result, nil
+		})
+	}
 }
