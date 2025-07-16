@@ -1745,7 +1745,7 @@ func TestQueryControlSubcategoriesByFramework(t *testing.T) {
 	}
 
 	// cleanup created controls
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID, control4.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID, control4.ID, control5.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
