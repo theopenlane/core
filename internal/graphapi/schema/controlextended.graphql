@@ -32,9 +32,17 @@ extend type Mutation{
 
 extend type Query {
     """
+    All existing categories or domains used in the organization @deprecated
+    """
+    controlCategories: [String!]
+    """
+    All existing subcategories or domains used in the organization @deprecated
+    """
+    controlSubcategories: [String!]
+    """
     Existing categories or domains for controls used in the organization
     """
-    controlCategories(
+    controlCategoriesByFramework(
         """
         Ordering options for APITokens returned from the connection.
         """
@@ -48,7 +56,7 @@ extend type Query {
     """
     Existing subcategories or subdomains for controls used in the organization
     """
-    controlSubcategories(
+    controlSubcategoriesByFramework(
         """
         Ordering options for APITokens returned from the connection.
         """

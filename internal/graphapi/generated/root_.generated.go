@@ -3451,7 +3451,8 @@ type ComplexityRoot struct {
 		ContactSearch                         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Contacts                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
 		Control                               func(childComplexity int, id string) int
-		ControlCategories                     func(childComplexity int, orderBy []*model.ControlCategoryOrder, where *generated.ControlWhereInput) int
+		ControlCategories                     func(childComplexity int) int
+		ControlCategoriesByFramework          func(childComplexity int, orderBy []*model.ControlCategoryOrder, where *generated.ControlWhereInput) int
 		ControlHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlHistoryOrder, where *generated.ControlHistoryWhereInput) int
 		ControlImplementation                 func(childComplexity int, id string) int
 		ControlImplementationHistories        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlImplementationHistoryOrder, where *generated.ControlImplementationHistoryWhereInput) int
@@ -3465,7 +3466,8 @@ type ComplexityRoot struct {
 		ControlScheduledJobHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlScheduledJobHistoryOrder, where *generated.ControlScheduledJobHistoryWhereInput) int
 		ControlScheduledJobs                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlScheduledJobOrder, where *generated.ControlScheduledJobWhereInput) int
 		ControlSearch                         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		ControlSubcategories                  func(childComplexity int, orderBy []*model.ControlCategoryOrder, where *generated.ControlWhereInput) int
+		ControlSubcategories                  func(childComplexity int) int
+		ControlSubcategoriesByFramework       func(childComplexity int, orderBy []*model.ControlCategoryOrder, where *generated.ControlWhereInput) int
 		Controls                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		ControlsGroupByCategory               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput, category *string) int
 		CustomDomain                          func(childComplexity int, id string) int
@@ -23687,12 +23689,19 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		args, err := ec.field_Query_controlCategories_args(ctx, rawArgs)
+		return e.complexity.Query.ControlCategories(childComplexity), true
+
+	case "Query.controlCategoriesByFramework":
+		if e.complexity.Query.ControlCategoriesByFramework == nil {
+			break
+		}
+
+		args, err := ec.field_Query_controlCategoriesByFramework_args(ctx, rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Query.ControlCategories(childComplexity, args["orderBy"].([]*model.ControlCategoryOrder), args["where"].(*generated.ControlWhereInput)), true
+		return e.complexity.Query.ControlCategoriesByFramework(childComplexity, args["orderBy"].([]*model.ControlCategoryOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "Query.controlHistories":
 		if e.complexity.Query.ControlHistories == nil {
@@ -23855,12 +23864,19 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			break
 		}
 
-		args, err := ec.field_Query_controlSubcategories_args(ctx, rawArgs)
+		return e.complexity.Query.ControlSubcategories(childComplexity), true
+
+	case "Query.controlSubcategoriesByFramework":
+		if e.complexity.Query.ControlSubcategoriesByFramework == nil {
+			break
+		}
+
+		args, err := ec.field_Query_controlSubcategoriesByFramework_args(ctx, rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Query.ControlSubcategories(childComplexity, args["orderBy"].([]*model.ControlCategoryOrder), args["where"].(*generated.ControlWhereInput)), true
+		return e.complexity.Query.ControlSubcategoriesByFramework(childComplexity, args["orderBy"].([]*model.ControlCategoryOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "Query.controls":
 		if e.complexity.Query.Controls == nil {
@@ -34762,9 +34778,17 @@ extend type Mutation{
 
 extend type Query {
     """
+    All existing categories or domains used in the organization @deprecated
+    """
+    controlCategories: [String!]
+    """
+    All existing subcategories or domains used in the organization @deprecated
+    """
+    controlSubcategories: [String!]
+    """
     Existing categories or domains for controls used in the organization
     """
-    controlCategories(
+    controlCategoriesByFramework(
         """
         Ordering options for APITokens returned from the connection.
         """
@@ -34778,7 +34802,7 @@ extend type Query {
     """
     Existing subcategories or subdomains for controls used in the organization
     """
-    controlSubcategories(
+    controlSubcategoriesByFramework(
         """
         Ordering options for APITokens returned from the connection.
         """
@@ -34788,7 +34812,7 @@ extend type Query {
         """
         where: ControlWhereInput
     ): [ControlCategoryEdge!]
-    
+
     """
     Get controls grouped by category
     """

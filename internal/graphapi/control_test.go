@@ -1383,6 +1383,140 @@ func TestMutationDeleteControl(t *testing.T) {
 }
 
 func TestQueryControlCategories(t *testing.T) {
+	// create controls with categories and subcategories
+	control1 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
+
+	// create one without a category
+	control3 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	// create one with a duplicate category
+	control4 := (&ControlBuilder{client: suite.client, Category: control1.Category}).MustNew(testUser1.UserCtx, t)
+
+	// create a subcontrol with a different category
+	subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: control1.ID, Category: "New Category"}).MustNew(testUser1.UserCtx, t)
+
+	testCases := []struct {
+		name           string
+		client         *openlaneclient.OpenlaneClient
+		ctx            context.Context
+		expectedErr    string
+		expectedResult []string
+	}{
+		{
+			name:           "happy path, get control categories",
+			client:         suite.client.api,
+			ctx:            testUser1.UserCtx,
+			expectedResult: []string{control1.Category, control2.Category, subcontrol.Category},
+		},
+		{
+			name:           "no controls, no results",
+			client:         suite.client.api,
+			ctx:            testUser2.UserCtx,
+			expectedResult: []string{},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Delete "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.GetControlCategories(tc.ctx)
+			if tc.expectedErr != "" {
+
+				assert.ErrorContains(t, err, tc.expectedErr)
+				assert.Check(t, is.Nil(resp))
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			assert.Check(t, is.Len(resp.ControlCategories, len(tc.expectedResult)))
+
+			// sort the categories so they are consistent
+			slices.Sort(tc.expectedResult)
+			assert.Check(t, is.DeepEqual(tc.expectedResult, resp.ControlCategories))
+
+			for _, category := range resp.ControlCategories {
+				// check for empty categories
+				assert.Check(t, category != "")
+			}
+		})
+	}
+
+	// cleanup created controls
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID, control4.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: subcontrol.ID}).MustDelete(testUser1.UserCtx, t)
+}
+
+func TestQueryControlSubcategories(t *testing.T) {
+	// create controls with categories and subcategories
+	control1 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
+
+	// create one without a subcategory
+	control3 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	// create one with a duplicate subcategory
+	control4 := (&ControlBuilder{client: suite.client, Subcategory: control1.Subcategory}).MustNew(testUser1.UserCtx, t)
+
+	// create a subcontrol with a different category
+	subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: control1.ID, Subcategory: "New Subcategory"}).MustNew(testUser1.UserCtx, t)
+
+	testCases := []struct {
+		name           string
+		client         *openlaneclient.OpenlaneClient
+		ctx            context.Context
+		expectedErr    string
+		expectedResult []string
+	}{
+		{
+			name:           "happy path, get control subcategories",
+			client:         suite.client.api,
+			ctx:            testUser1.UserCtx,
+			expectedResult: []string{control1.Subcategory, control2.Subcategory, subcontrol.Subcategory},
+		},
+		{
+			name:           "no controls, no results",
+			client:         suite.client.api,
+			ctx:            testUser2.UserCtx,
+			expectedResult: []string{},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Delete "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.GetControlSubcategories(tc.ctx)
+			if tc.expectedErr != "" {
+
+				assert.ErrorContains(t, err, tc.expectedErr)
+				assert.Check(t, is.Nil(resp))
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			assert.Check(t, is.Len(resp.ControlSubcategories, len(tc.expectedResult)))
+
+			// sort the categories so they are consistent
+			slices.Sort(tc.expectedResult)
+			assert.Check(t, is.DeepEqual(tc.expectedResult, resp.ControlSubcategories))
+
+			for _, category := range resp.ControlSubcategories {
+				// check for empty categories
+				assert.Check(t, category != "")
+			}
+		})
+	}
+
+	// cleanup created controls
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID, control4.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: subcontrol.ID}).MustDelete(testUser1.UserCtx, t)
+}
+
+func TestQueryControlCategoriesByFramework(t *testing.T) {
 	customFramework := "Custom"
 	// create controls with categories and subcategories
 	control1 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
@@ -1408,33 +1542,33 @@ func TestQueryControlCategories(t *testing.T) {
 		where          *openlaneclient.ControlWhereInput
 		ctx            context.Context
 		expectedErr    string
-		expectedResult []*openlaneclient.GetControlCategories_ControlCategories
+		expectedResult []*openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework
 	}{
 		{
 			name:   "happy path, get control categories",
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
-			expectedResult: []*openlaneclient.GetControlCategories_ControlCategories{
+			expectedResult: []*openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework{
 				{
-					Node: openlaneclient.GetControlCategories_ControlCategories_Node{
+					Node: openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{
 						Name:               control1.Category,
 						ReferenceFramework: &customFramework,
 					},
 				},
 				{
-					Node: openlaneclient.GetControlCategories_ControlCategories_Node{
+					Node: openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{
 						Name:               control2.Category,
 						ReferenceFramework: &customFramework,
 					},
 				},
 				{
-					Node: openlaneclient.GetControlCategories_ControlCategories_Node{
+					Node: openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{
 						Name:               control5.Category,
 						ReferenceFramework: &standard.ShortName,
 					},
 				},
 				{
-					Node: openlaneclient.GetControlCategories_ControlCategories_Node{
+					Node: openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{
 						Name:               control6.Category,
 						ReferenceFramework: &standard.ShortName,
 					},
@@ -1448,15 +1582,15 @@ func TestQueryControlCategories(t *testing.T) {
 			where: &openlaneclient.ControlWhereInput{
 				StandardID: &standard.ID,
 			},
-			expectedResult: []*openlaneclient.GetControlCategories_ControlCategories{
+			expectedResult: []*openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework{
 				{
-					Node: openlaneclient.GetControlCategories_ControlCategories_Node{
+					Node: openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{
 						Name:               control5.Category,
 						ReferenceFramework: &standard.ShortName,
 					},
 				},
 				{
-					Node: openlaneclient.GetControlCategories_ControlCategories_Node{
+					Node: openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{
 						Name:               control6.Category,
 						ReferenceFramework: &standard.ShortName,
 					},
@@ -1467,13 +1601,13 @@ func TestQueryControlCategories(t *testing.T) {
 			name:           "no controls, no results",
 			client:         suite.client.api,
 			ctx:            testUser2.UserCtx,
-			expectedResult: []*openlaneclient.GetControlCategories_ControlCategories{},
+			expectedResult: []*openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework{},
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Get Categories "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.GetControlCategories(tc.ctx, tc.where)
+			resp, err := tc.client.GetControlCategoriesWithFramework(tc.ctx, tc.where)
 			if tc.expectedErr != "" {
 
 				assert.ErrorContains(t, err, tc.expectedErr)
@@ -1485,16 +1619,16 @@ func TestQueryControlCategories(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 
-			assert.Check(t, is.Len(resp.ControlCategories, len(tc.expectedResult)))
+			assert.Check(t, is.Len(resp.ControlCategoriesByFramework, len(tc.expectedResult)))
 
 			// sort the categories so they are consistent
-			slices.SortFunc(tc.expectedResult, func(a, b *openlaneclient.GetControlCategories_ControlCategories) int {
+			slices.SortFunc(tc.expectedResult, func(a, b *openlaneclient.GetControlCategoriesWithFramework_ControlCategoriesByFramework) int {
 				return cmp.Compare(a.Node.Name, b.Node.Name)
 			})
 
-			assert.Check(t, is.DeepEqual(tc.expectedResult, resp.ControlCategories))
+			assert.Check(t, is.DeepEqual(tc.expectedResult, resp.ControlCategoriesByFramework))
 
-			for _, category := range resp.ControlCategories {
+			for _, category := range resp.ControlCategoriesByFramework {
 				// check for empty categories
 				assert.Check(t, category.Node.Name != "")
 				assert.Check(t, category.Node.ReferenceFramework != nil)
@@ -1506,7 +1640,7 @@ func TestQueryControlCategories(t *testing.T) {
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID, control4.ID, control5.ID, control6.ID, control7.ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
-func TestQueryControlSubcategories(t *testing.T) {
+func TestQueryControlSubcategoriesByFramework(t *testing.T) {
 	customFramework := "Custom"
 
 	// create controls with categories and subcategories
@@ -1529,27 +1663,27 @@ func TestQueryControlSubcategories(t *testing.T) {
 		where          *openlaneclient.ControlWhereInput
 		ctx            context.Context
 		expectedErr    string
-		expectedResult []*openlaneclient.GetControlSubcategories_ControlSubcategories
+		expectedResult []*openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework
 	}{
 		{
 			name:   "happy path, get control subcategories",
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
-			expectedResult: []*openlaneclient.GetControlSubcategories_ControlSubcategories{
+			expectedResult: []*openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework{
 				{
-					Node: openlaneclient.GetControlSubcategories_ControlSubcategories_Node{
+					Node: openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node{
 						Name:               control1.Subcategory,
 						ReferenceFramework: &customFramework,
 					},
 				},
 				{
-					Node: openlaneclient.GetControlSubcategories_ControlSubcategories_Node{
+					Node: openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node{
 						Name:               control2.Subcategory,
 						ReferenceFramework: &customFramework,
 					},
 				},
 				{
-					Node: openlaneclient.GetControlSubcategories_ControlSubcategories_Node{
+					Node: openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node{
 						Name:               control5.Subcategory,
 						ReferenceFramework: &standard.ShortName,
 					},
@@ -1563,9 +1697,9 @@ func TestQueryControlSubcategories(t *testing.T) {
 			where: &openlaneclient.ControlWhereInput{
 				StandardID: &standard.ID,
 			},
-			expectedResult: []*openlaneclient.GetControlSubcategories_ControlSubcategories{
+			expectedResult: []*openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework{
 				{
-					Node: openlaneclient.GetControlSubcategories_ControlSubcategories_Node{
+					Node: openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node{
 						Name:               control5.Subcategory,
 						ReferenceFramework: &standard.ShortName,
 					},
@@ -1576,13 +1710,13 @@ func TestQueryControlSubcategories(t *testing.T) {
 			name:           "no controls, no results",
 			client:         suite.client.api,
 			ctx:            testUser2.UserCtx,
-			expectedResult: []*openlaneclient.GetControlSubcategories_ControlSubcategories{},
+			expectedResult: []*openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework{},
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Get Subcategories "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.GetControlSubcategories(tc.ctx, tc.where)
+			resp, err := tc.client.GetControlSubcategoriesWithFramework(tc.ctx, tc.where)
 			if tc.expectedErr != "" {
 
 				assert.ErrorContains(t, err, tc.expectedErr)
@@ -1594,15 +1728,15 @@ func TestQueryControlSubcategories(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 
-			assert.Check(t, is.Len(resp.ControlSubcategories, len(tc.expectedResult)))
+			assert.Check(t, is.Len(resp.ControlSubcategoriesByFramework, len(tc.expectedResult)))
 
 			// sort the categories so they are consistent
-			slices.SortFunc(tc.expectedResult, func(a, b *openlaneclient.GetControlSubcategories_ControlSubcategories) int {
+			slices.SortFunc(tc.expectedResult, func(a, b *openlaneclient.GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework) int {
 				return cmp.Compare(a.Node.Name, b.Node.Name)
 			})
-			assert.Check(t, is.DeepEqual(tc.expectedResult, resp.ControlSubcategories))
+			assert.Check(t, is.DeepEqual(tc.expectedResult, resp.ControlSubcategoriesByFramework))
 
-			for _, category := range resp.ControlSubcategories {
+			for _, category := range resp.ControlSubcategoriesByFramework {
 				// check for empty categories
 				assert.Check(t, category.Node.Name != "")
 			}

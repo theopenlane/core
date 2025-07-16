@@ -55,8 +55,12 @@ mutation CreateControlsByCloneReturnID($input: CloneControlInput!) {
   }
 }
 
-query GetControlCategories($where: ControlWhereInput) {
-  controlCategories(where: $where) {
+query GetControlCategories {
+  controlCategories
+}
+
+query GetControlCategoriesWithFramework($where: ControlWhereInput) {
+  controlCategoriesByFramework(where: $where) {
     node {
       name
       referenceFramework
@@ -99,8 +103,12 @@ query GetControlsGroupByCategory($first: Int, $last: Int, $after: Cursor, $befor
   }
 }
 
-query GetControlSubcategories($where: ControlWhereInput) {
-  controlSubcategories(where: $where) {
+query GetControlSubcategories {
+  controlSubcategories
+}
+
+query GetControlSubcategoriesWithFramework($where: ControlWhereInput) {
+  controlSubcategoriesByFramework(where: $where) {
     node {
       name
       referenceFramework
