@@ -30,7 +30,7 @@ const ManagedByKey = "managed_by"
 // ManagedByValue identifies objects managed by the catalog automation
 const ManagedByValue = "module-manager"
 
-const MITB = "mitbforreal"
+const MITB = "mitbforrealreallyreal"
 
 // Price describes a single price option for a module or addon
 type Price struct {
