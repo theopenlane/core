@@ -312,12 +312,12 @@ steps:
               command: ["model", "test", "--tests", "fga/tests/tests.yaml"]
   - group: ":closed_lock_with_key: Security Checks"
     key: "security"
+    depends_on: "go_test"
     if: build.branch !~ /^renovate\//
     steps:
       - label: ":buildkite: upload test analytics report"
         key: "test-analytics"
         cancel_on_build_failing: false
-        depends_on: ["go_test"]
         commands: |
           #!/bin/bash
           curl \
@@ -346,7 +346,6 @@ steps:
         key: "scan-upload-pr"
         cancel_on_build_failing: true
         if: build.pull_request.id != null
-        depends_on: ["go_test"]
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
@@ -372,7 +371,6 @@ steps:
         key: "scan-upload"
         cancel_on_build_failing: true
         if: build.branch == "main" && build.tag == null
-        depends_on: ["go_test"]
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
