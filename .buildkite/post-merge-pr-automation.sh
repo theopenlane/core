@@ -114,135 +114,30 @@ while IFS=':' read -r pr_number branch_name title; do
     # Update the branch with latest changes from the merged core repo
     echo "🔄 Updating draft PR with latest config changes..."
 
-    # Import the same functions and logic as helm-automation.sh
+    # Source shared libraries to use the correct functions
+    source "${SCRIPT_DIR}/lib/common.sh"
+    source "${SCRIPT_DIR}/lib/helm.sh"
+
+    # Apply latest config changes using the shared library functions
     changes_made=false
     change_summary=""
 
-    # Source functions from helm-automation.sh or define them inline
-    function merge_helm_values() {
-      local source="$1"
-      local target="$2"
-      local description="$3"
+    # Apply configuration changes using library functions
+    # Note: this function returns 0 even when no changes are detected
+    if config_changes=$(apply_helm_config_changes \
+      "$BUILDKITE_BUILD_CHECKOUT_PATH/config" \
+      "$chart_dir" 2>&1); then
 
-      if [[ ! -f "$source" ]]; then
-        echo "⚠️  Source values file not found: $source"
-        return 1
-      fi
-
-      # Create backup of existing values
-      if [[ -f "$target" ]]; then
-        cp "$target" "${target}.backup"
-      fi
-
-      # Create temporary merged file
-      local temp_merged="${target}.merged"
-
-      if [[ -f "$target" ]]; then
-        yq e '.core' "$source" > /tmp/core-values.yaml
-
-        yq e '. as $target | load("/tmp/core-values.yaml") as $core | $target | .core = $core' "$target" > "$temp_merged"
-
-        # Also merge any externalSecrets configuration if it exists
-        if yq e '.externalSecrets' "$source" | grep -v "null" > /dev/null 2>&1; then
-          yq e '.externalSecrets' "$source" > /tmp/external-secrets.yaml
-          yq e '. as $target | load("/tmp/external-secrets.yaml") as $secrets | $target | .externalSecrets = $secrets' "$temp_merged" > "${temp_merged}.tmp"
-          mv "${temp_merged}.tmp" "$temp_merged"
-        fi
+      if [[ -n "$config_changes" ]]; then
+        changes_made=true
+        change_summary="$config_changes"
+        echo "✅ Configuration changes applied:$config_changes"
       else
-        cp "$source" "$temp_merged"
+        echo "ℹ️  No configuration changes detected between source and target"
       fi
-
-      # Check if there are actual differences
-      if [[ -f "$target" ]] && diff -q "$target" "$temp_merged" > /dev/null 2>&1; then
-        echo "  ℹ️  No changes detected in $description"
-        rm -f "$temp_merged" "${target}.backup" /tmp/core-values.yaml /tmp/external-secrets.yaml
-        return 1
-      fi
-
-      # Apply the merged changes
-      mv "$temp_merged" "$target"
-      git add "$target"
-      changes_made=true
-      change_summary+="\\n- 🔄 Updated $description"
-
-      # Cleanup
-      rm -f "${target}.backup" /tmp/core-values.yaml /tmp/external-secrets.yaml
-
-      return 0
-    }
-
-    function copy_and_track() {
-      local source="$1"
-      local target="$2"
-      local description="$3"
-
-      if [[ -f "$source" ]]; then
-        # Check if target exists and has differences
-        if [[ -f "$target" ]]; then
-          if ! diff -q "$source" "$target" > /dev/null 2>&1; then
-            cp "$source" "$target"
-            git add "$target"
-            changes_made=true
-            change_summary+="\\n- ✅ Updated $description"
-            return 0
-          fi
-        else
-          mkdir -p "$(dirname "$target")"
-          cp "$source" "$target"
-          git add "$target"
-          changes_made=true
-          change_summary+="\\n- ✨ Created $description"
-          return 0
-        fi
-      fi
-      return 1
-    }
-
-    function copy_directory_and_track() {
-      local source="$1"
-      local target="$2"
-      local description="$3"
-
-      if [[ -d "$source" ]]; then
-        # Check if target exists and has differences
-        if [[ -d "$target" ]]; then
-          if ! diff -r "$source" "$target" > /dev/null 2>&1; then
-            rm -rf "$target"
-            mkdir -p "$(dirname "$target")"
-            cp -r "$source" "$target"
-            git add "$target"
-            changes_made=true
-            change_summary+="\\n- 🔐 Updated $description"
-            return 0
-          fi
-        else
-          mkdir -p "$(dirname "$target")"
-          cp -r "$source" "$target"
-          git add "$target"
-          changes_made=true
-          change_summary+="\\n- 🆕 Created $description"
-          return 0
-        fi
-      fi
-      return 1
-    }
-
-    # Apply latest config changes
-    merge_helm_values \
-      "$BUILDKITE_BUILD_CHECKOUT_PATH/config/helm-values.yaml" \
-      "$chart_dir/values.yaml" \
-      "Helm values.yaml"
-
-    copy_directory_and_track \
-      "$BUILDKITE_BUILD_CHECKOUT_PATH/config/external-secrets" \
-      "$chart_dir/templates/external-secrets" \
-      "External Secrets templates"
-
-    if [[ -f "$BUILDKITE_BUILD_CHECKOUT_PATH/config/configmap.yaml" ]]; then
-      copy_and_track \
-        "$BUILDKITE_BUILD_CHECKOUT_PATH/config/configmap.yaml" \
-        "$chart_dir/templates/core-configmap.yaml" \
-        "ConfigMap template"
+    else
+      echo "⚠️  Failed to apply configuration changes"
+      # Don't exit, continue to check for version increment
     fi
 
     # Increment chart version for final release
