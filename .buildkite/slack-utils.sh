@@ -30,8 +30,10 @@ function send_slack_notification_from_template() {
       key="${arg%%=*}"
       value="${arg#*=}"
       # Escape special characters for JSON
-      value=$(echo "$value" | sed 's/\\/\\\\/g' | sed 's/"/\\"/g')
-      message_content=$(echo "$message_content" | sed "s/{{${key}}}/$value/g")
+      # First escape backslashes, then quotes, then convert newlines to \n for JSON
+      value=$(echo "$value" | sed 's/\\/\\\\/g' | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
+      # Use a delimiter that won't appear in the content
+      message_content=$(echo "$message_content" | sed "s|{{${key}}}|$value|g")
     fi
   done
 
@@ -56,8 +58,9 @@ function send_slack_notification_from_template() {
 format_summary() {
   local summary="$1"
 
-  local escaped=$(echo "$summary" | sed 's/<br\/>/\\n/g' | sed 's/\\\\n/\\n/g')
-  printf "%b\n" "$escaped"
+  # Replace literal \n with actual newlines for slack formatting
+  # Use printf to properly interpret the escape sequences
+  printf "%b" "$summary" | sed 's/\\n/\n/g'
 }
 
 # Function to send helm update notification

@@ -49,9 +49,22 @@ SCRIPT
     grep -q 'hello World' "$TEST_TEMP_DIR/payload"
 }
 
-@test "format_summary replaces <br/> and \\n with real newlines" {
-  input="foo<br/>bar\\nbaz"
-  expected=$'foo\nbar\nbaz'
+@test "format_summary replaces literal \\n with real newlines" {
+  input="\\n- Updated values.yaml\\n- Fixed config\\n- Added feature"
+  expected=$'
+- Updated values.yaml
+- Fixed config
+- Added feature'
+
+  run format_summary "$input"
+
+  [ "$status" -eq 0 ]
+  [ "$output" = "$expected" ]
+}
+
+@test "format_summary handles empty input" {
+  input=""
+  expected=""
 
   run format_summary "$input"
 
