@@ -2,7 +2,7 @@ directive @goField(forceResolver: Boolean, name: String, omittable: Boolean) on 
 directive @goModel(model: String, models: [String!], forceGenerate: Boolean) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
 directive @hidden(if: Boolean) on OBJECT | FIELD_DEFINITION
 """
-AAGUID (Authenticator Attestation Global Unique Identifier) is a 128-bit identifier used in the WebAuthn and FIDO2 protocols to uniquely identify the model of an authenticator device
+AAGUID (Authenticator Attestation Global Unique Identifier) is a 128-bit identifier used in the WebAuthn and FIDO2 protocols to uniquely identify the model of an authenticator device meow meow testing graphql change
 """
 scalar AAGUID
 type APIToken implements Node {

@@ -30,6 +30,8 @@ const ManagedByKey = "managed_by"
 // ManagedByValue identifies objects managed by the catalog automation
 const ManagedByValue = "module-manager"
 
+const MITB = "mitb"
+
 // Price describes a single price option for a module or addon
 type Price struct {
 	Interval   string            `json:"interval" yaml:"interval" jsonschema:"enum=year,enum=month,description=Billing interval for the price,example=month"`
