@@ -1,5 +1,5 @@
 env:
-  APP_NAME: ${BUILDKITE_PIPELINE_SLUG}
+  APP_NAME: ${BUILDKITE_PIPELINE_SLUG} # test comment
   IMAGE_REPO: ghcr.io/theopenlane/${APP_NAME}
   GCR_REPO: us-west1-docker.pkg.dev/neural-vista-433523-c1/openlane/openlane
   IMAGE_TAG: ${BUILDKITE_BUILD_NUMBER}-${BUILDKITE_COMMIT:0:8}
