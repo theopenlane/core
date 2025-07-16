@@ -32,9 +32,11 @@ merge_helm_values() {
         cp "$target" "$temp_merged"
 
         # Extract core section from source and use it to replace target core section
-        core_section=$(yq e '.openlane.coreConfiguration' "$source")
-        echo "$core_section" > /tmp/core-section.yaml
-        yq e -i '.openlane.coreConfiguration = load("/tmp/core-section.yaml")' "$temp_merged"
+        core_section=$(yq e '.openlane.coreConfiguration' "$source" 2>/dev/null || echo "")
+        if [[ -n "$core_section" ]] && [[ "$core_section" != "null" ]]; then
+            echo "$core_section" > /tmp/core-section.yaml
+            yq e -i '.openlane.coreConfiguration = load("/tmp/core-section.yaml")' "$temp_merged"
+        fi
 
         # Also merge any externalSecrets configuration if it exists in generated file
         if yq e '.externalSecrets' "$source" | grep -v "null" > /dev/null 2>&1; then
@@ -44,7 +46,15 @@ merge_helm_values() {
         fi
 
     else
+        # If target doesn't exist, use source but check for null values
         cp "$source" "$temp_merged"
+
+        # Check if coreConfiguration exists and is not null
+        core_check=$(yq e '.openlane.coreConfiguration' "$temp_merged" 2>/dev/null || echo "")
+        if [[ "$core_check" == "null" ]] || [[ -z "$core_check" ]]; then
+            # If coreConfiguration is null or empty, create an empty object
+            yq e -i '.openlane.coreConfiguration = {}' "$temp_merged"
+        fi
     fi
 
     # Check if there are actual differences

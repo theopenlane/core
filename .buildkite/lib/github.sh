@@ -163,12 +163,16 @@ generate_core_config_pr_body() {
     local commit="${4:-${BUILDKITE_COMMIT:-unknown}}"
     local branch="${5:-${BUILDKITE_BRANCH:-unknown}}"
 
+    # Format changes to convert literal \n to actual newlines
+    local formatted_changes=$(printf "%b" "$changes")
+
     cat << EOF
 ## 🤖 Automated Helm Chart Update
 
 This PR updates the Helm chart based on changes in the core configuration structure.
 
-### 📋 Changes Made:$changes
+### 📋 Changes Made:
+$formatted_changes
 
 ### 🔧 Build Information:
 - **Build Number**: $build_number
@@ -192,13 +196,16 @@ generate_draft_pr_body() {
     local commit="${3:-${BUILDKITE_COMMIT:-unknown}}"
     local branch="${4:-${BUILDKITE_BRANCH:-unknown}}"
 
+    # Format changes to convert literal \n to actual newlines
+    local formatted_changes=$(printf "%b" "$changes")
+
     cat << EOF
 ## 🚧 DRAFT: Config Changes from Core PR #$core_pr_number
 
 ⚠️ **This is a DRAFT PR** - automatically converts to ready for review once [core PR #$core_pr_number](https://github.com/theopenlane/core/pull/$core_pr_number) is merged.
 
 ### Changes:
-$changes
+$formatted_changes
 
 ### Source:
 - **Core PR**: [#$core_pr_number](https://github.com/theopenlane/core/pull/$core_pr_number)
@@ -259,6 +266,9 @@ generate_ready_comment() {
     local core_pr_number="$1"
     local changes="$2"
 
+    # Format changes to convert literal \n to actual newlines
+    local formatted_changes=$(printf "%b" "$changes")
+
     cat << EOF
 ## ✅ PR Ready for Review
 
@@ -277,7 +287,7 @@ This PR has been automatically converted from draft to ready for review because 
 - [ ] Approve and merge to deploy changes
 
 ### 🔧 Changes Applied:
-$changes
+$formatted_changes
 
 ---
 *This PR was automatically updated after the core repository merge.*
