@@ -148,7 +148,7 @@ func (r *queryResolver) ControlSubcategories(ctx context.Context) ([]string, err
 
 // ControlCategoriesByFramework is the resolver for the controlCategoriesByFramework field.
 func (r *queryResolver) ControlCategoriesByFramework(ctx context.Context, orderBy []*model.ControlCategoryOrder, where *generated.ControlWhereInput) ([]*model.ControlCategoryEdge, error) {
-	return r.getAllCategories(ctx, control.FieldSubcategory, where)
+	return r.getAllCategories(ctx, control.FieldCategory, where)
 }
 
 // ControlSubcategoriesByFramework is the resolver for the controlSubcategoriesByFramework field.
