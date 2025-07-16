@@ -16,7 +16,7 @@ func registerWebhookHandler(router *Router) (err error) {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: mw,
+		Middlewares: baseMW, // leaves off the additional middleware(including csrf)
 		Handler: func(c echo.Context) error {
 			return router.Handler.WebhookReceiverHandler(c)
 		},
