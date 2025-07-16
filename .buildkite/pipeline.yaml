@@ -76,10 +76,10 @@ steps:
             command: "echo 'Running full pipeline'"
   - group: ":knife: Pre-check"
     key: "precheck"
-    depends_on: "detect-changes"
     steps:
       - label: ":golang: go generate"
         key: "generate"
+        depends_on: "detect-changes"
         if: build.env("GO_CHANGES") == "true" || build.env("RUN_ALL") == "true"
         agents:
           queue: $LARGE_RUNNER_QUEUE
@@ -100,6 +100,7 @@ steps:
                 - "GOTOOLCHAIN=auto"
       - label: ":yaml: generate config"
         key: "generate_config"
+        depends_on: "detect-changes"
         if: build.env("CONFIG_CHANGES") == "true" || build.env("RUN_ALL") == "true"
         cancel_on_build_failing: true
         plugins:
@@ -247,6 +248,7 @@ steps:
     key: "tests"
     steps:
       - label: ":golangci-lint: lint :lint-roller:"
+        depends_on: "detect-changes"
         if: (build.branch !~ /^renovate\//) && (build.env("GO_CHANGES") == "true" || build.env("RUN_ALL") == "true")
         agents:
           queue: $LARGE_RUNNER_QUEUE
@@ -268,6 +270,7 @@ steps:
               environment:
                 - "GOTOOLCHAIN=auto"
       - label: ":golang: go test - {{matrix.version}}"
+        depends_on: "detect-changes"
         if: build.env("GO_CHANGES") == "true" || build.env("RUN_ALL") == "true"
         agents:
           queue: $LARGE_RUNNER_QUEUE
@@ -300,6 +303,7 @@ steps:
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
         artifact_paths: ["coverage.out", "junit.xml"]
       - label: ":auth0: fga model test"
+        depends_on: "detect-changes"
         if: (build.branch !~ /^renovate\//) && (build.env("FGA_CHANGES") == "true" || build.env("RUN_ALL") == "true")
         agents:
           queue: $SMALL_RUNNER_QUEUE
@@ -312,12 +316,13 @@ steps:
               command: ["model", "test", "--tests", "fga/tests/tests.yaml"]
   - group: ":closed_lock_with_key: Security Checks"
     key: "security"
-    depends_on: "go_test"
     if: build.branch !~ /^renovate\//
     steps:
       - label: ":buildkite: upload test analytics report"
         key: "test-analytics"
         cancel_on_build_failing: false
+        depends_on: ["go_test", "detect-changes"]
+        if: build.env("GO_CHANGES") == "true" || build.env("RUN_ALL") == "true"
         commands: |
           #!/bin/bash
           curl \
@@ -345,7 +350,8 @@ steps:
       - label: ":github: upload PR reports"
         key: "scan-upload-pr"
         cancel_on_build_failing: true
-        if: build.pull_request.id != null
+        if: build.pull_request.id != null && (build.env("GO_CHANGES") == "true" || build.env("RUN_ALL") == "true")
+        depends_on: ["go_test", "detect-changes"]
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
@@ -370,7 +376,8 @@ steps:
       - label: ":github: upload reports"
         key: "scan-upload"
         cancel_on_build_failing: true
-        if: build.branch == "main" && build.tag == null
+        if: build.branch == "main" && build.tag == null && (build.env("GO_CHANGES") == "true" || build.env("RUN_ALL") == "true")
+        depends_on: ["go_test", "detect-changes"]
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
@@ -441,6 +448,7 @@ steps:
     steps:
       - label: ":postgres: atlas lint"
         key: "atlas_lint"
+        depends_on: "detect-changes"
         if: build.env("DB_CHANGES") == "true" || build.env("RUN_ALL") == "true"
         soft_fail:
           - exit_status: 1
@@ -456,6 +464,7 @@ steps:
               step: lint
       - label: ":graphql: lint graphql schema"
         key: "apollo-lint-schema"
+        depends_on: "detect-changes"
         if: build.env("GRAPHQL_CHANGES") == "true" || build.env("RUN_ALL") == "true"
         skip: "true" # skip until plugin is fixed
         soft_fail:
@@ -511,7 +520,8 @@ steps:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
         cancel_on_build_failing: true
-        if: build.branch != "main" && build.tag == null
+        depends_on: ["detect-changes"]
+        if: build.branch != "main" && build.tag == null && (build.env("GO_CHANGES") == "true" || build.env("RUN_ALL") == "true")
         commands: |
           #!/bin/bash
           chmod +x ${APP_NAME}
@@ -581,7 +591,8 @@ steps:
       - label: ":graphql: publish graphql schema"
         key: "apollo-publish-schema"
         skip: false
-        if: build.tag != null
+        depends_on: "detect-changes"
+        if: build.tag != null && (build.env("GRAPHQL_CHANGES") == "true" || build.env("RUN_ALL") == "true")
         cancel_on_build_failing: true
         command: "rover graph publish --schema $$GRAPHQL_SCHEMA_LOCATION $$GRAPHQL_SCHEMA_NAME"
         plugins:
@@ -595,8 +606,9 @@ steps:
               environment:
                 - "APOLLO_KEY"
       - label: ":rocket: atlas push"
-        if: build.branch == "main" && build.tag == null
+        if: build.branch == "main" && build.tag == null && (build.env("DB_CHANGES") == "true" || build.env("RUN_ALL") == "true")
         key: "atlas_migrate"
+        depends_on: "detect-changes"
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
