@@ -18,604 +18,415 @@ env:
   HELM_CHART_PATH: charts/openlane
 
 steps:
-  # Use monorepo-diff plugin to detect file changes and set environment variables
-  - label: ":mag: Detect Changes"
-    key: "detect-changes"
+  # Pre-check step - always runs
+  - label: ":golang: go generate"
+    key: "generate"
+    agents:
+      queue: $LARGE_RUNNER_QUEUE
+      size: $RUNNER_LARGE
+      location: "NYC"
+    cancel_on_build_failing: true
     plugins:
+      - docker#v5.13.0:
+          image: "ghcr.io/theopenlane/build-image:latest"
+          always_pull: true
+          command: ["task", "ci"]
+          propagate-environment: true
+          volumes:
+            - $GOCACHE:$GOCACHE
+            - $GOMODCACHE:$GOMODCACHE
+            - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+          environment:
+            - "GOTOOLCHAIN=auto"
+
+  # Change detection - runs concurrently with generate
+  - plugins:
       - monorepo-diff#v1.4.0:
           diff: "git diff --name-only HEAD~1"
           watch:
-            - path: "**/*.go"
+            # Go code changes - run Go-related steps
+            - path:
+                - "**/*.go"
+                - "go.mod"
+                - "go.sum"
               config:
-                env:
-                  GO_CHANGES: "true"
-                command: "echo 'Go files changed'"
-            - path: "go.mod"
-              config:
-                env:
-                  GO_CHANGES: "true"
-                command: "echo 'Go modules changed'"
-            - path: "go.sum"
-              config:
-                env:
-                  GO_CHANGES: "true"
-                command: "echo 'Go modules changed'"
+                group: ":test_tube: Go Tests & Builds"
+                key: "go-pipeline"
+                steps:
+                  - label: ":golangci-lint: lint"
+                    key: "lint"
+                    if: build.branch !~ /^renovate\//
+                    depends_on: "generate"
+                    agents:
+                      queue: $LARGE_RUNNER_QUEUE
+                      size: $RUNNER_LARGE
+                      location: "NYC"
+                    cancel_on_build_failing: true
+                    timeout_in_minutes: 20
+                    plugins:
+                      - docker#v5.13.0:
+                          image: "ghcr.io/theopenlane/build-image:latest"
+                          command: ["task", "go:lint:ci"]
+                          always_pull: true
+                          propagate-environment: true
+                          volumes:
+                            - $GOCACHE:$GOCACHE
+                            - $GOMODCACHE:$GOMODCACHE
+                            - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                          environment:
+                            - "GOTOOLCHAIN=auto"
+
+                  - label: ":golang: go test"
+                    key: "go_test"
+                    depends_on: "generate"
+                    agents:
+                      queue: $LARGE_RUNNER_QUEUE
+                      size: $RUNNER_LARGE
+                      location: "NYC"
+                    cancel_on_build_failing: true
+                    env:
+                      TEST_DB_URL: "docker://postgres:17-alpine"
+                    plugins:
+                      - docker#v5.13.0:
+                          image: ghcr.io/theopenlane/build-image:latest
+                          always_pull: true
+                          command: ["task", "go:testsum:ci"]
+                          propagate-environment: true
+                          volumes:
+                            - $GOCACHE:$GOCACHE
+                            - $GOMODCACHE:$GOMODCACHE
+                            - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                            - "/var/run/docker.sock:/var/run/docker.sock"
+                          environment:
+                            - "ANALYTICS_KEY"
+                            - "GOMAXPROCS=16"
+                            - "TEST_DB_URL"
+                            - "TEST_DB_CONTAINER_EXPIRY=20"
+                            - "TEST_DB_HOST=172.17.0.1"
+                    artifact_paths: ["coverage.out", "junit.xml"]
+
+                  - label: ":golang: build server"
+                    key: "gobuild-server"
+                    if: build.branch !~ /^renovate\//
+                    depends_on: ["generate", "go_test"]
+                    cancel_on_build_failing: true
+                    artifact_paths: "bin/${APP_NAME}"
+                    agents:
+                      queue: $LARGE_RUNNER_QUEUE
+                      size: $RUNNER_LARGE
+                    plugins:
+                      - docker#v5.13.0:
+                          image: "ghcr.io/theopenlane/build-image:latest"
+                          always_pull: true
+                          propagate-environment: true
+                          volumes:
+                            - $GOCACHE:$GOCACHE
+                            - $GOMODCACHE:$GOMODCACHE
+                            - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                          environment:
+                            - CGO_ENABLED=0
+                            - GOOS=linux
+                          command: ["task", "go:build:ci"]
+
+                  - label: ":terminal: build cli"
+                    key: "gobuild-cli"
+                    if: build.branch !~ /^renovate\//
+                    depends_on: ["generate", "go_test"]
+                    agents:
+                      queue: $LARGE_RUNNER_QUEUE
+                      size: $RUNNER_LARGE
+                    cancel_on_build_failing: true
+                    artifact_paths: "bin/openlane-cli"
+                    plugins:
+                      - docker#v5.13.0:
+                          image: "ghcr.io/theopenlane/build-image:latest"
+                          always_pull: true
+                          propagate-environment: true
+                          volumes:
+                            - $GOCACHE:$GOCACHE
+                            - $GOMODCACHE:$GOMODCACHE
+                            - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                          environment:
+                            - GOOS=darwin
+                            - GOARCH=arm64
+                          command: ["task", "go:build-cli:ci"]
+
+                  - label: ":buildkite: upload test analytics"
+                    key: "test-analytics"
+                    if: build.branch !~ /^renovate\//
+                    cancel_on_build_failing: false
+                    depends_on: ["go_test"]
+                    commands: |
+                      #!/bin/bash
+                      curl \
+                        -X POST \
+                        --fail-with-body \
+                        -H "Authorization: Token token=\"$$ANALYTICS_KEY\"" \
+                        -F "data=@junit.xml" \
+                        -F "format=junit" \
+                        -F "run_env[CI]=buildkite" \
+                        -F "run_env[key]=$BUILDKITE_BUILD_ID" \
+                        -F "run_env[number]=$BUILDKITE_BUILD_NUMBER" \
+                        -F "run_env[job_id]=$BUILDKITE_JOB_ID" \
+                        -F "run_env[branch]=$BUILDKITE_BRANCH" \
+                        -F "run_env[commit_sha]=$BUILDKITE_COMMIT" \
+                        -F "run_env[message]=$BUILDKITE_MESSAGE" \
+                        -F "run_env[url]=$BUILDKITE_BUILD_URL" \
+                        https://analytics-api.buildkite.com/v1/uploads
+                    plugins:
+                      - cluster-secrets#v1.0.0:
+                          variables:
+                            ANALYTICS_KEY: ANALYTICS_KEY
+                      - artifacts#v1.9.4:
+                          download: "junit.xml"
+                          step: "go_test"
+
+                  - label: ":github: upload PR reports"
+                    key: "scan-upload-pr"
+                    cancel_on_build_failing: true
+                    if: build.pull_request.id != null
+                    depends_on: ["go_test"]
+                    plugins:
+                      - cluster-secrets#v1.0.0:
+                          variables:
+                            SONAR_TOKEN: SONAR_TOKEN
+                      - artifacts#v1.9.4:
+                          download: "coverage.out"
+                          step: "go_test"
+                      - artifacts#v1.9.4:
+                          download: "junit.xml"
+                          step: "go_test"
+                      - docker#v5.13.0:
+                          image: "sonarsource/sonar-scanner-cli:11.2"
+                          propagate-environment: true
+                          volumes:
+                            - $GOCACHE:$GOCACHE
+                            - $GOMODCACHE:$GOMODCACHE
+                            - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                          environment:
+                            - "SONAR_TOKEN"
+                            - "SONAR_HOST_URL=$SONAR_HOST"
+                            - "SONAR_SCANNER_OPTS=-Dsonar.pullrequest.branch=$BUILDKITE_BRANCH -Dsonar.pullrequest.base=$BUILDKITE_PULL_REQUEST_BASE_BRANCH -Dsonar.pullrequest.key=$BUILDKITE_PULL_REQUEST"
+
+                  - label: ":github: upload reports"
+                    key: "scan-upload"
+                    cancel_on_build_failing: true
+                    if: build.branch == "main" && build.tag == null
+                    depends_on: ["go_test"]
+                    plugins:
+                      - cluster-secrets#v1.0.0:
+                          variables:
+                            SONAR_TOKEN: SONAR_TOKEN
+                      - artifacts#v1.9.4:
+                          download: coverage.out
+                          step: "go_test"
+                      - artifacts#v1.9.4:
+                          download: "junit.xml"
+                          step: "go_test"
+                      - docker#v5.13.0:
+                          image: "sonarsource/sonar-scanner-cli:11.2"
+                          propagate-environment: true
+                          volumes:
+                            - $GOCACHE:$GOCACHE
+                            - $GOMODCACHE:$GOMODCACHE
+                            - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                          environment:
+                            - "SONAR_TOKEN"
+                            - "SONAR_HOST_URL=$SONAR_HOST"
+
+                  - label: ":docker: docker pr build"
+                    key: "docker-pr-build"
+                    if: build.branch != "main" && build.tag == null && build.branch !~ /^renovate\//
+                    depends_on: ["gobuild-server"]
+                    agents:
+                      queue: $LARGE_RUNNER_QUEUE
+                      size: $RUNNER_LARGE
+                    cancel_on_build_failing: true
+                    commands: |
+                      #!/bin/bash
+                      chmod +x ${APP_NAME}
+                    plugins:
+                      - artifacts#v1.9.4:
+                          download:
+                            - from: "bin/${APP_NAME}"
+                              to: "${APP_NAME}"
+                          step: "gobuild-server"
+                      - cluster-secrets#v1.0.0:
+                          variables:
+                            SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
+                      - docker-login#v3.0.0:
+                          username: openlane-bender
+                          password-env: SECRET_GHCR_PUBLISH_TOKEN
+                          server: ghcr.io
+                      - theopenlane/docker-metadata#v1.0.1:
+                          images:
+                            - "${IMAGE_REPO}"
+                          extra_tags:
+                            - "${IMAGE_TAG}"
+                      - theopenlane/container-build#v1.1.1:
+                          dockerfile: docker/Dockerfile
+                          push: false
+                          build-args:
+                            - NAME=${APP_NAME}
+                      - equinixmetal-buildkite/trivy#v1.19.0:
+                          severity: CRITICAL,HIGH
+                          ignore-unfixed: true
+                          scanners: misconfig,secret,vuln
+                          skip-files: "cosign.key,Dockerfile.dev"
+                          trivy-version: "0.57.1"
+
+            # Database schema changes
             - path: "db/migrations/**/*.sql"
               config:
-                env:
-                  DB_CHANGES: "true"
-                command: "echo 'Database migrations changed'"
+                group: ":database: Database Changes"
+                key: "database"
+                if: build.branch !~ /^renovate\//
+                steps:
+                  - label: ":postgres: atlas lint"
+                    key: "atlas_lint"
+                    depends_on: "generate"
+                    soft_fail:
+                      - exit_status: 1
+                    plugins:
+                      - cluster-secrets#v1.0.0:
+                          variables:
+                            ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
+                      - theopenlane/atlas#v1.2.0:
+                          project: core
+                          atlas-env: dev
+                          config: "file://db/atlas.hcl"
+                          dir: "file://db/migrations"
+                          step: lint
+
+            # FGA model changes
             - path: "fga/**"
               config:
-                env:
-                  FGA_CHANGES: "true"
-                command: "echo 'FGA model files changed'"
+                group: ":auth0: FGA Changes"
+                key: "fga-tests"
+                if: build.branch !~ /^renovate\//
+                steps:
+                  - label: ":auth0: fga model test"
+                    depends_on: "generate"
+                    agents:
+                      queue: $SMALL_RUNNER_QUEUE
+                      size: $RUNNER_SMALL
+                    key: "fga_test"
+                    plugins:
+                      - docker#v5.13.0:
+                          image: openfga/cli:v0.5.1
+                          propagate-environment: true
+                          command: ["model", "test", "--tests", "fga/tests/tests.yaml"]
+
+            # GraphQL schema changes
             - path: "internal/graphapi/**"
               config:
-                env:
-                  GRAPHQL_CHANGES: "true"
-                command: "echo 'GraphQL schema changed'"
-            - path: "config/**"
+                group: ":graphql: GraphQL Changes"
+                key: "graphql"
+                steps:
+                  - label: ":graphql: lint graphql schema"
+                    key: "apollo-lint-schema"
+                    depends_on: "generate"
+                    skip: "true" # skip until plugin is fixed
+                    soft_fail:
+                      - exit_status: 1
+                    cancel_on_build_failing: true
+                    command: |
+                      #!/bin/sh
+                      lint_result_file=$$(mktemp)
+                      set +e
+                      result=$(rover graph check --schema $$GRAPHQL_SCHEMA_LOCATION $$GRAPHQL_SCHEMA_NAME --format plain -o $$lint_result_file 2>&1 > /dev/null)
+                      set -e
+                      output=$$(cat $$lint_result_file)
+                      if [[ "$$output" = "" ]]; then
+                          echo "Linting Failed:"
+                          echo "$${result#*error\[E043\]: }"
+                          echo -e ":graphql: **Graphql Lint Failure**   <br /> $${result#*error\[E043\]: }" |  buildkite-agent annotate --context apollo-lint-schema --style error
+                          exit 1
+                      else
+                          echo "Linting Passed. See annotation for details."
+                          echo -e ":graphql: **Graphql Lint Results** \n <details><summary> Linter Result </summary><code>$$output</code></details>" |  buildkite-agent annotate --context apollo-lint-schema --style success
+                          exit 0
+                      fi
+                    artifact_paths: linter-result.txt
+                    plugins:
+                      - cluster-secrets#v1.0.0:
+                          variables:
+                            APOLLO_KEY: APOLLO_KEY
+                      - docker#v5.13.0:
+                          image: "ghcr.io/theopenlane/build-image:latest"
+                          always_pull: true
+                          propagate-environment: true
+                          environment:
+                            - "APOLLO_KEY"
+                            - "BUILDKITE_AGENT_ACCESS_TOKEN"
+
+                  - label: ":graphql: publish graphql schema"
+                    key: "apollo-publish-schema"
+                    depends_on: "generate"
+                    skip: false
+                    if: build.tag != null
+                    cancel_on_build_failing: true
+                    command: "rover graph publish --schema $$GRAPHQL_SCHEMA_LOCATION $$GRAPHQL_SCHEMA_NAME"
+                    plugins:
+                      - cluster-secrets#v1.0.0:
+                          variables:
+                            APOLLO_KEY: APOLLO_KEY
+                      - docker#v5.13.0:
+                          image: "ghcr.io/theopenlane/build-image:latest"
+                          always_pull: true
+                          propagate-environment: true
+                          environment:
+                            - "APOLLO_KEY"
+
+            # Config changes
+            - path:
+                - "config/**"
+                - ".buildkite/**"
               config:
-                env:
-                  CONFIG_CHANGES: "true"
-                command: "echo 'Config files changed'"
-            - path: "jsonschema/**"
-              config:
-                env:
-                  CONFIG_CHANGES: "true"
-                command: "echo 'Config files changed'"
-            - path: ".buildkite/**"
-              config:
-                env:
-                  BUILDKITE_CHANGES: "true"
-                command: "echo 'Buildkite files changed'"
+                group: ":gear: Config Changes"
+                key: "config-automation"
+                steps:
+                  - label: ":yaml: generate config"
+                    key: "generate_config"
+                    depends_on: "generate"
+                    cancel_on_build_failing: true
+                    plugins:
+                      - docker#v5.13.0:
+                          image: "ghcr.io/theopenlane/build-image:latest"
+                          always_pull: true
+                          command: ["task", "config:ci"]
+                          propagate-environment: true
+                          volumes:
+                            - $GOCACHE:$GOCACHE
+                            - $GOMODCACHE:$GOMODCACHE
+                            - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                          environment:
+                            - "GOTOOLCHAIN=auto"
+
+                  - label: ":construction: create draft config PR"
+                    key: "draft_pr_automation"
+                    depends_on: "generate_config"
+                    if: build.pull_request.id != null
+                    plugins:
+                      - cluster-secrets#v1.0.0:
+                          variables:
+                            GITHUB_TOKEN: GITHUB_TOKEN
+                            SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
+                      - docker#v5.13.0:
+                          image: "ghcr.io/theopenlane/build-image:latest"
+                          always_pull: true
+                          command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/draft-pr-automation.sh"]
+                          propagate-environment: true
+                          volumes:
+                            - $GOCACHE:$GOCACHE
+                            - $GOMODCACHE:$GOMODCACHE
+                          environment:
+                            - "GITHUB_TOKEN"
+                            - "HELM_CHART_REPO"
+                            - "HELM_CHART_PATH"
+                            - "SLACK_WEBHOOK_URL"
+                            - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
+
+          # Default fallback when no patterns match
           default:
-            env:
-              RUN_ALL: "true"
-            command: "echo 'Running full pipeline'"
-  - group: ":knife: Pre-check"
-    key: "precheck"
-    steps:
-      - label: ":golang: go generate"
-        key: "generate"
-        depends_on: "detect-changes"
-        if: build.env("GO_CHANGES") == "true" || build.env("RUN_ALL") == "true"
-        agents:
-          queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
-          location: "NYC"
-        cancel_on_build_failing: true
-        plugins:
-          - docker#v5.13.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
-              always_pull: true
-              command: ["task", "ci"]
-              propagate-environment: true
-              volumes:
-                - $GOCACHE:$GOCACHE
-                - $GOMODCACHE:$GOMODCACHE
-                - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
-              environment:
-                - "GOTOOLCHAIN=auto"
-      - label: ":yaml: generate config"
-        key: "generate_config"
-        depends_on: "detect-changes"
-        if: build.env("CONFIG_CHANGES") == "true" || build.env("RUN_ALL") == "true"
-        cancel_on_build_failing: true
-        plugins:
-          - docker#v5.13.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
-              always_pull: true
-              command: ["task", "config:ci"]
-              propagate-environment: true
-              volumes:
-                - $GOCACHE:$GOCACHE
-                - $GOMODCACHE:$GOMODCACHE
-                - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
-              environment:
-                - "GOTOOLCHAIN=auto"
-      - label: ":construction: create draft config PR"
-        key: "draft_pr_automation"
-        depends_on: "generate_config"
-        if: build.pull_request.id != null
-        plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                GITHUB_TOKEN: GITHUB_TOKEN
-                SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
-          - docker#v5.13.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
-              always_pull: true
-              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/draft-pr-automation.sh"]
-              propagate-environment: true
-              volumes:
-                - $GOCACHE:$GOCACHE
-                - $GOMODCACHE:$GOMODCACHE
-              environment:
-                - "GITHUB_TOKEN"
-                - "HELM_CHART_REPO"
-                - "HELM_CHART_PATH"
-                - "SLACK_WEBHOOK_URL"
-                - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
-      - label: ":link: link PRs"
-        key: "link_pr_automation"
-        depends_on: "draft_pr_automation"
-        if: build.pull_request.id != null
-        plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                GITHUB_TOKEN: GITHUB_TOKEN
-                SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
-          - docker#v5.13.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
-              always_pull: true
-              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/link-pr-automation.sh"]
-              propagate-environment: true
-              volumes:
-                - $GOCACHE:$GOCACHE
-                - $GOMODCACHE:$GOMODCACHE
-              environment:
-                - "GITHUB_TOKEN"
-                - "SLACK_WEBHOOK_URL"
-                - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
-      - label: ":helm: update helm chart"
-        key: "helm_automation"
-        depends_on: "generate_config"
-        if: build.branch == "main"
-        plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                GITHUB_TOKEN: GITHUB_TOKEN
-                SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
-          - docker#v5.13.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
-              always_pull: true
-              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/helm-automation.sh"]
-              propagate-environment: true
-              volumes:
-                - $GOCACHE:$GOCACHE
-                - $GOMODCACHE:$GOMODCACHE
-              environment:
-                - "GITHUB_TOKEN"
-                - "HELM_CHART_REPO"
-                - "HELM_CHART_PATH"
-                - "SLACK_WEBHOOK_URL"
-                - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
-      - label: ":arrows_counterclockwise: finalize config PRs"
-        key: "post_merge_automation"
-        depends_on: "helm_automation"
-        if: build.branch == "main"
-        plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                GITHUB_TOKEN: GITHUB_TOKEN
-                SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
-          - docker#v5.13.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
-              always_pull: true
-              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/post-merge-pr-automation.sh"]
-              propagate-environment: true
-              volumes:
-                - $GOCACHE:$GOCACHE
-                - $GOMODCACHE:$GOMODCACHE
-              environment:
-                - "GITHUB_TOKEN"
-                - "HELM_CHART_REPO"
-                - "HELM_CHART_PATH"
-                - "SLACK_WEBHOOK_URL"
-                - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
-      - label: ":broom: cleanup draft PRs"
-        key: "cleanup_draft_prs"
-        depends_on: "post_merge_automation"
-        if: build.branch == "main"
-        plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                GITHUB_TOKEN: GITHUB_TOKEN
-          - docker#v5.13.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
-              always_pull: true
-              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/cleanup-draft-prs.sh"]
-              propagate-environment: true
-              environment:
-                - "GITHUB_TOKEN"
-                - "HELM_CHART_REPO"
-      - label: ":rocket: update image tag for release"
-        key: "image_tag_automation"
-        depends_on: "docker-build-and-tag"
-        if: build.tag != null
-        plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                GITHUB_TOKEN: GITHUB_TOKEN
-                SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
-          - docker#v5.13.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
-              always_pull: true
-              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/image-tag-automation.sh"]
-              propagate-environment: true
-              volumes:
-                - $GOCACHE:$GOCACHE
-                - $GOMODCACHE:$GOMODCACHE
-              environment:
-                - "GITHUB_TOKEN"
-                - "HELM_CHART_REPO"
-                - "HELM_CHART_PATH"
-                - "SLACK_WEBHOOK_URL"
-                - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
-  - group: ":test_tube: Tests"
-    key: "tests"
-    steps:
-      - label: ":golangci-lint: lint :lint-roller:"
-        depends_on: "detect-changes"
-        if: (build.branch !~ /^renovate\//) && (build.env("GO_CHANGES") == "true" || build.env("RUN_ALL") == "true")
-        agents:
-          queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
-          location: "NYC"
-        cancel_on_build_failing: true
-        timeout_in_minutes: 20
-        key: "lint"
-        plugins:
-          - docker#v5.13.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
-              command: ["task", "go:lint:ci"]
-              always_pull: true
-              propagate-environment: true
-              volumes:
-                - $GOCACHE:$GOCACHE
-                - $GOMODCACHE:$GOMODCACHE
-                - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
-              environment:
-                - "GOTOOLCHAIN=auto"
-      - label: ":golang: go test - {{matrix.version}}"
-        depends_on: "detect-changes"
-        if: build.env("GO_CHANGES") == "true" || build.env("RUN_ALL") == "true"
-        agents:
-          queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
-          location: "NYC"
-        key: "go_test"
-        cancel_on_build_failing: true
-        env:
-          TEST_DB_URL: "docker://postgres:{{matrix.version}}"
-        matrix:
-          setup:
-            version:
-              - 17-alpine
-        plugins:
-          - docker#v5.13.0:
-              image: ghcr.io/theopenlane/build-image:latest
-              always_pull: true
-              command: ["task", "go:testsum:ci"]
-              propagate-environment: true
-              volumes:
-                - $GOCACHE:$GOCACHE
-                - $GOMODCACHE:$GOMODCACHE
-                - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
-                - "/var/run/docker.sock:/var/run/docker.sock"
-              environment:
-                - "ANALYTICS_KEY"
-                - "GOMAXPROCS=16"
-                - "TEST_DB_URL"
-                - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
-                - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
-        artifact_paths: ["coverage.out", "junit.xml"]
-      - label: ":auth0: fga model test"
-        depends_on: "detect-changes"
-        if: (build.branch !~ /^renovate\//) && (build.env("FGA_CHANGES") == "true" || build.env("RUN_ALL") == "true")
-        agents:
-          queue: $SMALL_RUNNER_QUEUE
-          size: $RUNNER_SMALL
-        key: "fga_test"
-        plugins:
-          - docker#v5.13.0:
-              image: openfga/cli:v0.5.1
-              propagate-environment: true
-              command: ["model", "test", "--tests", "fga/tests/tests.yaml"]
-  - group: ":closed_lock_with_key: Security Checks"
-    key: "security"
-    if: build.branch !~ /^renovate\//
-    steps:
-      - label: ":buildkite: upload test analytics report"
-        key: "test-analytics"
-        cancel_on_build_failing: false
-        depends_on: ["go_test", "detect-changes"]
-        if: build.env("GO_CHANGES") == "true" || build.env("RUN_ALL") == "true"
-        commands: |
-          #!/bin/bash
-          curl \
-            -X POST \
-            --fail-with-body \
-            -H "Authorization: Token token=\"$$ANALYTICS_KEY\"" \
-            -F "data=@junit.xml" \
-            -F "format=junit" \
-            -F "run_env[CI]=buildkite" \
-            -F "run_env[key]=$BUILDKITE_BUILD_ID" \
-            -F "run_env[number]=$BUILDKITE_BUILD_NUMBER" \
-            -F "run_env[job_id]=$BUILDKITE_JOB_ID" \
-            -F "run_env[branch]=$BUILDKITE_BRANCH" \
-            -F "run_env[commit_sha]=$BUILDKITE_COMMIT" \
-            -F "run_env[message]=$BUILDKITE_MESSAGE" \
-            -F "run_env[url]=$BUILDKITE_BUILD_URL" \
-            https://analytics-api.buildkite.com/v1/uploads
-        plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                ANALYTICS_KEY: ANALYTICS_KEY
-          - artifacts#v1.9.4:
-              download: "junit.xml"
-              step: "go_test"
-      - label: ":github: upload PR reports"
-        key: "scan-upload-pr"
-        cancel_on_build_failing: true
-        if: build.pull_request.id != null && (build.env("GO_CHANGES") == "true" || build.env("RUN_ALL") == "true")
-        depends_on: ["go_test", "detect-changes"]
-        plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                SONAR_TOKEN: SONAR_TOKEN
-          - artifacts#v1.9.4:
-              download: "coverage.out"
-              step: "go_test"
-          - artifacts#v1.9.4:
-              download: "junit.xml"
-              step: "go_test"
-          - docker#v5.13.0:
-              image: "sonarsource/sonar-scanner-cli:11.2"
-              propagate-environment: true
-              volumes:
-                - $GOCACHE:$GOCACHE
-                - $GOMODCACHE:$GOMODCACHE
-                - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
-              environment:
-                - "SONAR_TOKEN"
-                - "SONAR_HOST_URL=$SONAR_HOST"
-                - "SONAR_SCANNER_OPTS=-Dsonar.pullrequest.branch=$BUILDKITE_BRANCH -Dsonar.pullrequest.base=$BUILDKITE_PULL_REQUEST_BASE_BRANCH -Dsonar.pullrequest.key=$BUILDKITE_PULL_REQUEST"
-      - label: ":github: upload reports"
-        key: "scan-upload"
-        cancel_on_build_failing: true
-        if: build.branch == "main" && build.tag == null && (build.env("GO_CHANGES") == "true" || build.env("RUN_ALL") == "true")
-        depends_on: ["go_test", "detect-changes"]
-        plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                SONAR_TOKEN: SONAR_TOKEN
-          - artifacts#v1.9.4:
-              download: coverage.out
-              step: "go_test"
-          - artifacts#v1.9.4:
-              download: "junit.xml"
-              step: "go_test"
-          - docker#v5.13.0:
-              image: "sonarsource/sonar-scanner-cli:11.2"
-              propagate-environment: true
-              volumes:
-                - $GOCACHE:$GOCACHE
-                - $GOMODCACHE:$GOMODCACHE
-                - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
-              environment:
-                - "SONAR_TOKEN"
-                - "SONAR_HOST_URL=$SONAR_HOST"
-  - group: ":golang: Builds"
-    key: "go-builds"
-    if: (build.branch !~ /^renovate\//) && (build.env("GO_CHANGES") == "true" || build.env("RUN_ALL") == "true")
-    steps:
-      - label: ":golang: build"
-        key: "gobuild-server"
-        cancel_on_build_failing: true
-        artifact_paths: "bin/${APP_NAME}"
-        agents:
-          queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
-        plugins:
-          - docker#v5.13.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
-              always_pull: true
-              propagate-environment: true
-              volumes:
-                - $GOCACHE:$GOCACHE
-                - $GOMODCACHE:$GOMODCACHE
-                - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
-              environment:
-                - CGO_ENABLED=0
-                - GOOS=linux
-              command: ["task", "go:build:ci"]
-      - label: ":terminal: build cli"
-        key: "gobuild-cli"
-        agents:
-          queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
-        cancel_on_build_failing: true
-        artifact_paths: "bin/openlane-cli"
-        plugins:
-          - docker#v5.13.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
-              always_pull: true
-              propagate-environment: true
-              volumes:
-                - $GOCACHE:$GOCACHE
-                - $GOMODCACHE:$GOMODCACHE
-                - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
-              environment:
-                - GOOS=darwin
-                - GOARCH=arm64
-              command: ["task", "go:build-cli:ci"]
-  - group: ":database: schema lint"
-    key: "database"
-    if: (build.branch !~ /^renovate\//) && (build.env("DB_CHANGES") == "true" || build.env("GRAPHQL_CHANGES") == "true" || build.env("RUN_ALL") == "true")
-    steps:
-      - label: ":postgres: atlas lint"
-        key: "atlas_lint"
-        depends_on: "detect-changes"
-        if: build.env("DB_CHANGES") == "true" || build.env("RUN_ALL") == "true"
-        soft_fail:
-          - exit_status: 1
-        plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
-          - theopenlane/atlas#v1.2.0:
-              project: core
-              atlas-env: dev
-              config: "file://db/atlas.hcl"
-              dir: "file://db/migrations"
-              step: lint
-      - label: ":graphql: lint graphql schema"
-        key: "apollo-lint-schema"
-        depends_on: "detect-changes"
-        if: build.env("GRAPHQL_CHANGES") == "true" || build.env("RUN_ALL") == "true"
-        skip: "true" # skip until plugin is fixed
-        soft_fail:
-          - exit_status: 1
-        cancel_on_build_failing: true
-        command: |
-          #!/bin/sh
-          lint_result_file=$$(mktemp)
-
-          # ignore exit code for now
-          set +e
-          result=$(rover graph check --schema $$GRAPHQL_SCHEMA_LOCATION $$GRAPHQL_SCHEMA_NAME --format plain -o $$lint_result_file 2>&1 > /dev/null)
-          set -e
-
-          output=$$(cat $$lint_result_file)
-
-          if [[ "$$output" = "" ]]; then
-              echo ""
-              echo "Linting Failed:"
-              echo "$${result#*error\[E043\]: }"
-
-              echo -e ":graphql: **Graphql Lint Failure**   <br /> $${result#*error\[E043\]: }" |  buildkite-agent annotate --context apollo-lint-schema --style error
-
-              exit 1
-          else
-              echo ""
-              echo "Linting Passed. See annotation for details."
-
-              echo -e ":graphql: **Graphql Lint Results** \n <details><summary> Linter Result </summary><code>$$output</code></details>" |  buildkite-agent annotate --context apollo-lint-schema --style success
-
-              exit 0
-          fi
-        artifact_paths: linter-result.txt
-        plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                APOLLO_KEY: APOLLO_KEY
-          - docker#v5.13.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
-              always_pull: true
-              propagate-environment: true
-              environment:
-                - "APOLLO_KEY"
-                - "BUILDKITE_AGENT_ACCESS_TOKEN"
-  - group: ":docker: Image Build"
-    depends_on: "go-builds"
-    if: build.branch !~ /^renovate\//
-    key: "image-build"
-    steps:
-      - label: ":docker: docker pr build"
-        key: "docker-pr-build"
-        agents:
-          queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
-        cancel_on_build_failing: true
-        depends_on: ["detect-changes"]
-        if: build.branch != "main" && build.tag == null && (build.env("GO_CHANGES") == "true" || build.env("RUN_ALL") == "true")
-        commands: |
-          #!/bin/bash
-          chmod +x ${APP_NAME}
-        plugins:
-          - artifacts#v1.9.4:
-              download:
-                - from: "bin/${APP_NAME}"
-                  to: "${APP_NAME}"
-              step: "gobuild-server"
-          - cluster-secrets#v1.0.0:
-              variables:
-                SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
-          - docker-login#v3.0.0: # we need to login for the image to be accessible on the host
-              username: openlane-bender
-              password-env: SECRET_GHCR_PUBLISH_TOKEN
-              server: ghcr.io
-          - theopenlane/docker-metadata#v1.0.1:
-              images:
-                - "${IMAGE_REPO}"
-              extra_tags:
-                - "${IMAGE_TAG}"
-          - theopenlane/container-build#v1.1.1:
-              dockerfile: docker/Dockerfile
-              push: false
-              build-args:
-                - NAME=${APP_NAME}
-          - equinixmetal-buildkite/trivy#v1.19.0:
-              severity: CRITICAL,HIGH
-              ignore-unfixed: true
-              scanners: misconfig,secret,vuln
-              skip-files: "cosign.key,Dockerfile.dev"
-              trivy-version: "0.57.1"
-      - label: ":docker: docker build and publish"
-        key: "docker-build-and-tag"
-        cancel_on_build_failing: true
-        if: build.tag != null
-        commands: |
-          #!/bin/bash
-          chmod +x ${APP_NAME}
-        plugins:
-          - artifacts#v1.9.4:
-              download:
-                - from: "bin/${APP_NAME}"
-                  to: "${APP_NAME}"
-              step: "gobuild-server"
-          - cluster-secrets#v1.0.0:
-              variables:
-                SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
-          - docker-login#v3.0.0:
-              username: openlane-bender
-              password-env: SECRET_GHCR_PUBLISH_TOKEN
-              server: ghcr.io
-          - theopenlane/docker-metadata#v1.0.1:
-              images:
-                - "${IMAGE_REPO}"
-              extra_tags:
-                - "${BUILDKITE_TAG}"
-                - "latest"
-          - theopenlane/container-build#v1.1.1:
-              dockerfile: docker/Dockerfile
-              push: true
-              build-args:
-                - NAME=${APP_NAME}
-  - group: ":rocket: Publish"
-    key: "publish"
-    steps:
-      - label: ":graphql: publish graphql schema"
-        key: "apollo-publish-schema"
-        skip: false
-        depends_on: "detect-changes"
-        if: build.tag != null && (build.env("GRAPHQL_CHANGES") == "true" || build.env("RUN_ALL") == "true")
-        cancel_on_build_failing: true
-        command: "rover graph publish --schema $$GRAPHQL_SCHEMA_LOCATION $$GRAPHQL_SCHEMA_NAME"
-        plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                APOLLO_KEY: APOLLO_KEY
-          - docker#v5.13.0:
-              image: "ghcr.io/theopenlane/build-image:latest"
-              always_pull: true
-              propagate-environment: true
-              environment:
-                - "APOLLO_KEY"
-      - label: ":rocket: atlas push"
-        if: build.branch == "main" && build.tag == null && (build.env("DB_CHANGES") == "true" || build.env("RUN_ALL") == "true")
-        key: "atlas_migrate"
-        depends_on: "detect-changes"
-        plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
-          - theopenlane/atlas#v1.2.0:
-              project: core
-              dir: "file://db/migrations"
-              step: migrate
-              atlas-env: dev
-              config: "file://db/atlas.hcl"
+            command: "echo 'No specific file changes detected - skipping conditional steps'"
