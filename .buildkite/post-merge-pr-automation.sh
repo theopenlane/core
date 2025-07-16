@@ -16,20 +16,8 @@ YQ_VERSION=${YQ_VERSION:-4.45.4}
 repo="${HELM_CHART_REPO}"
 chart_dir="${HELM_CHART_PATH:-charts/openlane}"
 
-# Install yq if not available (since we're in a container, can't use docker run)
-if ! command -v yq >/dev/null 2>&1; then
-    echo "Installing yq..."
-    YQ_BINARY="yq_linux_amd64"
-    wget -qO /tmp/yq https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/${YQ_BINARY}
-    chmod +x /tmp/yq
-    mv /tmp/yq /usr/local/bin/yq
-fi
-
-# Install gh if not available
-if ! command -v gh >/dev/null 2>&1; then
-    echo "Installing gh..."
-    apk add --no-cache github-cli
-fi
+# Install dependencies using shared library function
+install_dependencies
 
 echo "=== Post-Merge PR Automation ==="
 echo "Repository: $repo"
@@ -40,10 +28,10 @@ echo "Tools verified: ✅"
 # Import slack utility functions
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/slack-utils.sh"
+source "${SCRIPT_DIR}/lib/templates.sh"
 
 # This runs on main branch after merge - find any draft PRs to convert
-work=$(mktemp -d)
-trap 'rm -rf "$work"' EXIT
+work=$(create_temp_workspace)
 
 # Clone the target repository
 echo "Cloning repository..."
@@ -54,58 +42,29 @@ fi
 
 cd "$work"
 
-# Find draft PRs that match our pattern and are still open
-echo "🔍 Looking for draft PRs to convert..."
-
-# Try to determine which core PR was just merged by checking recent commits
-echo "🔍 Attempting to identify recently merged core PR..."
-merged_core_pr=""
-
-# Check if we can find the merged PR from the commit message or branch name
-recent_commit_msg=$(git log --oneline -1 2>/dev/null || echo "")
-if [[ "$recent_commit_msg" =~ \#([0-9]+) ]]; then
-  potential_pr="${BASH_REMATCH[1]}"
-  echo "🔍 Found potential PR number in commit message: #$potential_pr"
-
-  # Verify this PR is actually merged
-  pr_state=$(gh pr view "$potential_pr" --repo "theopenlane/core" --json state --jq '.state' 2>/dev/null || echo "NOT_FOUND")
-  if [[ "$pr_state" == "MERGED" ]]; then
-    merged_core_pr="$potential_pr"
-    echo "✅ Confirmed recently merged core PR: #$merged_core_pr"
-  fi
-fi
+# Look for any existing open draft PRs to update with latest config
+echo "🔍 Looking for existing draft PRs to update with latest configuration..."
 
 # Get list of open draft PRs with our naming pattern
 draft_prs=$(gh pr list --repo "$repo" --state open --draft --json number,title,headRefName \
   | jq -r '.[] | select(.title | test("^🚧 DRAFT: Config changes from core PR")) | "\(.number):\(.headRefName):\(.title)"')
 
-# If we identified a specific merged core PR, filter to only process that one
-if [[ -n "$merged_core_pr" ]]; then
-  echo "🎯 Filtering draft PRs to only process core PR #$merged_core_pr"
-  draft_prs=$(echo "$draft_prs" | grep "core PR #$merged_core_pr" || echo "")
-fi
-
 if [[ -z "$draft_prs" ]]; then
-  echo "ℹ️  No draft PRs found to convert"
+  echo "ℹ️  No existing draft PRs found to update"
+  echo "ℹ️  This means no previous core PRs created config changes that need infrastructure updates"
   exit 0
 fi
 
-echo "Found draft PRs to process:"
+echo "📋 Found existing draft PR(s) to update:"
 echo "$draft_prs"
+echo ""
+echo "🔄 Updating with current end-state configuration from core repository..."
 
-# Process each draft PR
+# Process each draft PR (update them all with latest config)
 while IFS=':' read -r pr_number branch_name title; do
   echo ""
-  echo "📝 Processing draft PR #$pr_number (branch: $branch_name)"
-
-  # Extract core PR number from title for verification
-  core_pr_from_title=$(echo "$title" | grep -o 'core PR #[0-9]*' | grep -o '[0-9]*' || echo "")
-
-  # If we have a specific merged core PR, double-check this PR matches
-  if [[ -n "$merged_core_pr" && "$core_pr_from_title" != "$merged_core_pr" ]]; then
-    echo "⚠️  Draft PR #$pr_number is for core PR #$core_pr_from_title, not the recently merged #$merged_core_pr, skipping"
-    continue
-  fi
+  echo "📝 Updating draft PR #$pr_number (branch: $branch_name) with latest configuration"
+  echo "📝 Original title: $title"
 
   # Check out the draft branch
   if git checkout "$branch_name"; then
@@ -126,12 +85,12 @@ while IFS=':' read -r pr_number branch_name title; do
     # Note: this function returns 0 even when no changes are detected
     if config_changes=$(apply_helm_config_changes \
       "$BUILDKITE_BUILD_CHECKOUT_PATH/config" \
-      "$chart_dir" 2>&1); then
+      "$chart_dir"); then
 
       if [[ -n "$config_changes" ]]; then
         changes_made=true
         change_summary="$config_changes"
-        echo "✅ Configuration changes applied:$config_changes"
+        echo "✅ Configuration changes applied" >&2
       else
         echo "ℹ️  No configuration changes detected between source and target"
       fi
@@ -160,27 +119,20 @@ while IFS=':' read -r pr_number branch_name title; do
     # Generate documentation before committing
     generate_docs_and_commit
 
-    # Configure git
-    git config user.email "bender@theopenlane.io"
-    git config user.name "theopenlane-bender"
+    # Configure git using shared library function
+    setup_git_user
 
     # Commit any additional changes
     if [[ "$changes_made" == "true" ]]; then
-      commit_message="chore: finalize config changes after core merge
-
-Updated configuration after core PR merge with final changes.
-
-Changes made:$change_summary
-
-Build Information:
-- Build Number: ${BUILDKITE_BUILD_NUMBER}
-- Source Commit: ${BUILDKITE_COMMIT:0:8}
-- Branch: ${BUILDKITE_BRANCH}"
+      commit_message=$(load_template "${template_dir}/github/post-merge-commit.md" \
+          "CHANGE_SUMMARY=${change_summary}" \
+          "BUILD_NUMBER=${BUILDKITE_BUILD_NUMBER}" \
+          "SOURCE_COMMIT_SHORT=${BUILDKITE_COMMIT:0:8}")
 
       git commit -m "$commit_message"
 
-      # Push the updated branch
-      if git push origin "$branch_name"; then
+      # Push using shared function
+      if safe_push_branch "$branch_name"; then
         echo "✅ Branch updated successfully"
       else
         echo "⚠️  Failed to push updated branch"
@@ -202,24 +154,9 @@ Build Information:
         gh pr edit "$pr_number" --repo "$repo" --title "$new_title"
 
         # Add a comment about the conversion
-        conversion_comment="## ✅ PR Ready for Review
-
-This PR has been automatically converted from draft to ready for review because the related core repository changes have been merged.
-
-### 🔄 Status Update
-- ✅ Core PR merged to main branch
-- ✅ Configuration changes finalized
-- ✅ Chart version incremented
-- ✅ Ready for infrastructure deployment
-
-### 📋 Final Review Checklist
-- [ ] Review all configuration changes
-- [ ] Verify chart version increment is appropriate
-- [ ] Confirm external secrets configuration is correct
-- [ ] Approve and merge to deploy changes
-
----
-*This PR was automatically updated after the core repository merge.*"
+        template_dir=$(get_template_dir)
+        conversion_comment=$(load_template "${template_dir}/github/pr-ready-comment.md" \
+            "CORE_PR_NUMBER=${core_pr_number}")
 
         gh pr comment "$pr_number" --repo "$repo" --body "$conversion_comment"
 
@@ -243,30 +180,17 @@ This PR has been automatically converted from draft to ready for review because 
       core_pr_number=$(echo "$branch_name" | grep -o 'core-pr-[0-9]*' | cut -d'-' -f3)
 
       # Add closing comment
-      closing_comment="## 🗑️ Closing Draft PR - No Configuration Changes Needed
-
-This draft PR is being automatically closed because the related core repository changes did not require any infrastructure configuration updates.
-
-### 📋 Summary:
-- ✅ Core PR #${core_pr_number} has been merged successfully
-- ℹ️  No Helm chart configuration changes were needed
-- ℹ️  No external secrets updates were required
-- ℹ️  No infrastructure deployment changes necessary
-
-### 🔄 What This Means:
-The core repository changes were code-only modifications that don't affect the infrastructure configuration. Therefore, no infrastructure PR is needed.
-
----
-*This PR was automatically closed after the core repository merge.*"
+      closing_comment=$(load_template "${template_dir}/github/pr-close-comment.md" \
+          "CORE_PR_NUMBER=${core_pr_number}")
 
       gh pr comment "$pr_number" --repo "$repo" --body "$closing_comment"
 
       if gh pr close "$pr_number" --repo "$repo"; then
         echo "✅ Draft PR #$pr_number closed successfully"
 
-        # Optionally delete the branch since it's no longer needed
+        # Delete the branch using shared function since it's no longer needed
         echo "🗑️  Deleting unused branch $branch_name"
-        git push origin --delete "$branch_name" || echo "⚠️  Failed to delete branch $branch_name"
+        safe_delete_branch "$branch_name" || echo "⚠️  Failed to delete branch $branch_name"
 
       else
         echo "⚠️  Failed to close draft PR #$pr_number"
