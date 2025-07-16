@@ -68,7 +68,7 @@ function send_helm_update_notification() {
   local pr_url="$1"
   local change_summary="$2"
 
-  local template_file="${BASH_SOURCE[0]%/*}/templates/helm-update-notification.json"
+  local template_file="${BASH_SOURCE[0]%/*}/templates/slack/helm-update-notification.json"
 
   # Format change summary for Slack (convert <br/> or \n to actual newlines)
   local formatted_summary=$(format_summary "$change_summary")
@@ -90,7 +90,7 @@ function send_pr_ready_notification() {
   local core_pr_number="$3"
   local change_summary="$4"
 
-  local template_file="${BASH_SOURCE[0]%/*}/templates/pr-ready-notification.json"
+  local template_file="${BASH_SOURCE[0]%/*}/templates/slack/pr-ready-notification.json"
 
   send_slack_notification_from_template "$template_file" \
     "INFRA_PR_URL=$infra_pr_url" \
@@ -107,7 +107,7 @@ function send_release_notification() {
   local release_tag="$2"
   local change_summary="$3"
 
-  local template_file="${BASH_SOURCE[0]%/*}/templates/release-notification.json"
+  local template_file="${BASH_SOURCE[0]%/*}/templates/slack/release-notification.json"
 
   send_slack_notification_from_template "$template_file" \
     "PR_URL=$pr_url" \

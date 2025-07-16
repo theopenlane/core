@@ -6,6 +6,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/lib/common.sh"
 source "${SCRIPT_DIR}/lib/helm.sh"
 source "${SCRIPT_DIR}/lib/github.sh"
+source "${SCRIPT_DIR}/lib/templates.sh"
 
 # Configuration
 repo="${HELM_CHART_REPO}"
