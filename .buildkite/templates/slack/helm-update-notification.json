@@ -1,18 +1,18 @@
 {
-  "text": "🤖 Helm Chart Update Required",
+  "text": "🤖 Proposed Updates to Helm Chart",
   "blocks": [
     {
       "type": "header",
       "text": {
         "type": "plain_text",
-        "text": "🤖 Helm Chart Update Required!"
+        "text": "🤖 Proposed Updates to Helm Chart"
       }
     },
     {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "A new PR has been created that updates the Helm chart configuration and needs review before deployment."
+        "text": "A new PR has been created which updates the Helm chart configuration and needs review by a human before deployment."
       }
     },
     {
@@ -47,7 +47,7 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "*Next Steps:*\n• Review the PR for configuration changes\n• Approve and merge to enable deployment\n• Contact DevOps if you have questions"
+        "text": "*Next Steps:*\n• Review the PR for configuration changes\n• Approve and merge to enable deployment\n• Contact DevOps if you have questions\n\n Don't forget to tip your DevOps team for their hard work! :tipping_hand:"
       }
     },
     {

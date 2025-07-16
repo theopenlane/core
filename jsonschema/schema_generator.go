@@ -573,20 +573,28 @@ func getTypeSchemaInfo(field reflect.StructField, defaultTag string) string {
 	return ""
 }
 
-// formatValue formats a value for YAML output
-func formatValue(v interface{}) string {
+// formatValue formats a value for YAML output (compatible with Helm templating)
+func formatValue(v any) string {
+	// Check if v is a nil pointer
+	if v == nil || (reflect.ValueOf(v).Kind() == reflect.Ptr && reflect.ValueOf(v).IsNil()) {
+		return "\"\""
+	}
+
 	switch val := v.(type) {
 	case string:
-		if val == "" {
-			return `""`
-		}
+		// Always quote strings for Helm/YAML compatibility
 		return fmt.Sprintf(`"%s"`, val)
 	case bool:
+		// Helm expects true/false as unquoted
 		return fmt.Sprintf("%t", val)
-	case nil:
-		return "null"
 	default:
-		return fmt.Sprintf("%v", val)
+		// For numbers and other types, output as string if needed
+		formatted := fmt.Sprintf("%v", val)
+		if formatted == "<nil>" {
+			return "\"\""
+		}
+
+		return formatted
 	}
 }
 

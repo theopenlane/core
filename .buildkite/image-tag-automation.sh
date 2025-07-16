@@ -1,23 +1,17 @@
 #!/bin/bash
 set -euo pipefail
 
+# Source shared libraries
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/lib/common.sh"
+source "${SCRIPT_DIR}/lib/templates.sh"
+
 YQ_VERSION=${YQ_VERSION:-4.45.4}
 repo="${HELM_CHART_REPO}"
 chart_dir="${HELM_CHART_PATH:-charts/openlane}"
 
-# Install yq if not available
-if ! command -v yq >/dev/null 2>&1; then
-    echo "Installing yq version ${YQ_VERSION}..."
-    wget -q "https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_amd64" -O /usr/local/bin/yq
-    chmod +x /usr/local/bin/yq
-    echo "✅ yq installed successfully"
-fi
-
-# Install gh if not available
-if ! command -v gh >/dev/null 2>&1; then
-    echo "Installing gh..."
-    apk add --no-cache github-cli
-fi
+# Install dependencies using shared library function
+install_dependencies
 
 echo "=== Image Tag Automation ==="
 echo "Repository: $repo"
@@ -32,11 +26,9 @@ if [[ -z "${BUILDKITE_TAG:-}" ]]; then
 fi
 
 # Import slack utility functions
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/slack-utils.sh"
 
-work=$(mktemp -d)
-trap 'rm -rf "$work"' EXIT
+work=$(create_temp_workspace)
 
 # Clone the target repository
 echo "Cloning repository..."
@@ -138,50 +130,31 @@ source "${BUILDKITE_BUILD_CHECKOUT_PATH}/.buildkite/helm-docs-utils.sh"
 # Generate documentation before committing
 generate_docs_and_commit
 
-# Configure git
-git config --local user.email "bender@theopenlane.io"
-git config --local user.name "theopenlane-bender"
-
-# Configure git to use GitHub token for authentication
-git config --local url."https://x-access-token:${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
+# Configure git using shared library function
+setup_git_user
 
 # Create comprehensive commit message
-commit_message="release: update to ${BUILDKITE_TAG}
+template_dir=$(get_template_dir)
+commit_message=$(load_template "${template_dir}/github/release-commit.md" \
+    "RELEASE_TAG=${BUILDKITE_TAG}" \
+    "CHANGE_SUMMARY=${change_summary}" \
+    "BUILD_NUMBER=${BUILDKITE_BUILD_NUMBER}" \
+    "SOURCE_COMMIT_SHORT=${BUILDKITE_COMMIT:0:8}")
 
-Automated release update for core version ${BUILDKITE_TAG}.
-
-Changes made:$change_summary
-
-Release Information:
-- Release Tag: ${BUILDKITE_TAG}
-- Build Number: ${BUILDKITE_BUILD_NUMBER}
-- Source Commit: ${BUILDKITE_COMMIT:0:8}
+# Use shared function to create commit and push
+create_commit "release" "update to ${BUILDKITE_TAG}" "Release update for ${BUILDKITE_TAG}" "- Source Commit: ${BUILDKITE_COMMIT:0:8}
 - Generated: $(date +'%Y-%m-%d %H:%M:%S UTC')"
 
-git commit -m "$commit_message"
-
-# Push and create PR
+# Push using shared function
 echo "🚀 Pushing release branch..."
-if git push origin "$release_branch"; then
-  pr_body="## 🚀 Release Update: ${BUILDKITE_TAG}
-
-This PR updates the Helm chart for the new core release.
-
-### 📦 Release Details:
-- **New Version**: \`${BUILDKITE_TAG}\`
-- **Docker Image**: \`ghcr.io/theopenlane/core:${BUILDKITE_TAG}\`
-- **Release Notes**: [View on GitHub](https://github.com/theopenlane/core/releases/tag/${BUILDKITE_TAG})
-
-### 📋 Changes Made:$change_summary
-
-### 🔧 Build Information:
-- **Build Number**: ${BUILDKITE_BUILD_NUMBER}
-- **Source Commit**: [\`${BUILDKITE_COMMIT:0:8}\`](https://github.com/theopenlane/core/commit/${BUILDKITE_COMMIT})
-
-### 🚀 Deployment:
-This PR contains the official release artifacts and should be deployed to production environments.
-
-**⚠️ Important**: This is a release deployment PR. Please ensure all testing is complete before merging."
+if safe_push_branch "$release_branch"; then
+  pr_body=$(load_template "${template_dir}/github/release-pr.md" \
+      "RELEASE_TAG=${BUILDKITE_TAG}" \
+      "CHANGE_SUMMARY=${change_summary}" \
+      "BUILD_NUMBER=${BUILDKITE_BUILD_NUMBER}" \
+      "SOURCE_COMMIT_SHORT=${BUILDKITE_COMMIT:0:8}" \
+      "SOURCE_COMMIT_FULL=${BUILDKITE_COMMIT}" \
+      "SOURCE_BRANCH=${BUILDKITE_BRANCH:-main}")
 
   echo "Creating release pull request..."
   if gh pr create \
