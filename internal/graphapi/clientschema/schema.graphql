@@ -8460,10 +8460,6 @@ input CreateExportInput {
 	the specific filters to run against the exported data. This should be a well formatted graphql query
 	"""
 	filters: String
-	"""
-	if we try to export and it fails, the error message will be stored here
-	"""
-	errorMessage: String
 	ownerID: ID
 	eventIDs: [ID!]
 	fileIDs: [ID!]

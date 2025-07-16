@@ -3385,14 +3385,13 @@ func (c *EvidenceUpdateOne) SetInput(i UpdateEvidenceInput) *EvidenceUpdateOne {
 
 // CreateExportInput represents a mutation input for creating exports.
 type CreateExportInput struct {
-	ExportType   enums.ExportType
-	Format       enums.ExportFormat
-	Fields       []string
-	Filters      *string
-	ErrorMessage *string
-	OwnerID      *string
-	EventIDs     []string
-	FileIDs      []string
+	ExportType enums.ExportType
+	Format     enums.ExportFormat
+	Fields     []string
+	Filters    *string
+	OwnerID    *string
+	EventIDs   []string
+	FileIDs    []string
 }
 
 // Mutate applies the CreateExportInput on the ExportMutation builder.
@@ -3404,9 +3403,6 @@ func (i *CreateExportInput) Mutate(m *ExportMutation) {
 	}
 	if v := i.Filters; v != nil {
 		m.SetFilters(*v)
-	}
-	if v := i.ErrorMessage; v != nil {
-		m.SetErrorMessage(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)

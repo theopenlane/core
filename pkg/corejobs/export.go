@@ -33,15 +33,22 @@ const (
 )
 
 var (
-	errUnexpectedStatus    = errors.New("unexpected HTTP status")
-	errInvalidFilters      = errors.New("filters cannot define ownerID")
-	errGraphQLMessage      = errors.New("GraphQL error")
-	errUnknownGraphQLError = errors.New("an unknown error occurred")
-	errMissingRoot         = errors.New("missing root in response")
-	errMissingEdges        = errors.New("missing edges in response")
-	errMissingPageInfo     = errors.New("missing pageInfo in response")
-	errMissingHasNextPage  = errors.New("missing hasNextPage in pageInfo")
-	errMissingEndCursor    = errors.New("missing endCursor in pageInfo")
+	// ErrUnexpectedStatus is returned when an HTTP request returns a status code other than 200
+	ErrUnexpectedStatus = errors.New("unexpected HTTP status")
+	// ErrGraphQLMessage is returned when an error message exists in the response
+	ErrGraphQLMessage = errors.New("GraphQL error")
+	// ErrUnknownGraphQLError is returned when an GraphQL error occurs but no specific message is available
+	ErrUnknownGraphQLError = errors.New("an unknown error occurred")
+	// ErrMissingRoot is returned when the GraphQL response is missing the expected root field
+	ErrMissingRoot = errors.New("missing root in response")
+	// ErrMissingEdges is returned when the response is missing the edges field expected for the data
+	ErrMissingEdges = errors.New("missing edges in response")
+	// ErrMissingPageInfo is returned when the response is missing pagination data
+	ErrMissingPageInfo = errors.New("missing pageInfo in response")
+	// ErrMissingHasNextPage is returned when pagination data is missing the hasNextPage field
+	ErrMissingHasNextPage = errors.New("missing hasNextPage in pageInfo")
+	// ErrMissingEndCursor is returned when pagination data is missing the endCursor field needed for pagination
+	ErrMissingEndCursor = errors.New("missing endCursor in pageInfo")
 )
 
 // ExportContentArgs for the worker to process and update the record for the updated content
@@ -131,15 +138,12 @@ func (w *ExportContentWorker) Work(ctx context.Context, job *river.Job[ExportCon
 				return w.updateExportStatus(ctx, job.Args.ExportID, enums.ExportStatusFailed, err)
 			}
 
-			if _, exists := filterMap["ownerID"]; exists {
-				log.Error().Err(errInvalidFilters).Msg("invalid filters")
-				return w.updateExportStatus(ctx, job.Args.ExportID, enums.ExportStatusFailed, errInvalidFilters)
-			}
 		}
 	}
 
 	where := make(map[string]any)
-	if ownerID != "" {
+
+	if _, exists := filterMap["ownerID"]; !exists && ownerID != "" {
 		where["ownerID"] = ownerID
 	}
 
@@ -284,7 +288,7 @@ func extractErrors(errs []any) error {
 	for _, e := range errs {
 		if msg, ok := e.(map[string]any); ok {
 			if m, ok := msg["message"].(string); ok {
-				errMsgs = append(errMsgs, fmt.Errorf("%w: %s", errGraphQLMessage, m))
+				errMsgs = append(errMsgs, fmt.Errorf("%w: %s", ErrGraphQLMessage, m))
 			}
 		}
 	}
@@ -293,7 +297,7 @@ func extractErrors(errs []any) error {
 		return errors.Join(errMsgs...)
 	}
 
-	return errUnknownGraphQLError
+	return ErrUnknownGraphQLError
 }
 
 func (w *ExportContentWorker) executeGraphQLQuery(ctx context.Context, query string, variables map[string]any) (map[string]any, error) {
@@ -338,7 +342,7 @@ func (w *ExportContentWorker) executeGraphQLQuery(ctx context.Context, query str
 			}
 		}
 
-		return nil, fmt.Errorf("%w (%d): %s", errUnexpectedStatus, resp.StatusCode, string(respBody))
+		return nil, fmt.Errorf("%w (%d): %s", ErrUnexpectedStatus, resp.StatusCode, string(respBody))
 	}
 
 	respBody, err := io.ReadAll(resp.Body)
@@ -456,13 +460,13 @@ func (w *ExportContentWorker) fetchPage(ctx context.Context, query, rootQuery st
 	rootData, ok := data[rootQuery].(map[string]any)
 	if !ok {
 		log.Error().Msg("missing root in response")
-		return nil, false, "", errMissingRoot
+		return nil, false, "", ErrMissingRoot
 	}
 
 	edges, ok := rootData["edges"].([]any)
 	if !ok {
 		log.Error().Msg("missing edges in response")
-		return nil, false, "", errMissingEdges
+		return nil, false, "", ErrMissingEdges
 	}
 
 	nodes := make([]map[string]any, 0, len(edges))
@@ -480,13 +484,13 @@ func (w *ExportContentWorker) fetchPage(ctx context.Context, query, rootQuery st
 	pageInfo, ok := rootData["pageInfo"].(map[string]any)
 	if !ok {
 		log.Error().Msg("missing pageInfo in response")
-		return nil, false, "", errMissingPageInfo
+		return nil, false, "", ErrMissingPageInfo
 	}
 
 	hasNext, ok := pageInfo["hasNextPage"].(bool)
 	if !ok {
 		log.Error().Msg("missing hasNextPage in pageInfo")
-		return nil, false, "", errMissingHasNextPage
+		return nil, false, "", ErrMissingHasNextPage
 	}
 
 	var endCursor string
@@ -494,7 +498,7 @@ func (w *ExportContentWorker) fetchPage(ctx context.Context, query, rootQuery st
 		endCursor, ok = pageInfo["endCursor"].(string)
 		if !ok {
 			log.Error().Msg("missing endCursor in pageInfo")
-			return nil, false, "", errMissingEndCursor
+			return nil, false, "", ErrMissingEndCursor
 		}
 	}
 

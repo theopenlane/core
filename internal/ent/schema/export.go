@@ -74,6 +74,9 @@ func (Export) Fields() []ent.Field {
 
 		field.String("error_message").
 			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput),
+			).
 			Comment("if we try to export and it fails, the error message will be stored here"),
 	}
 }
