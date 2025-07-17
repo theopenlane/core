@@ -20,7 +20,12 @@ import (
 func HookStandardDelete() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.StandardFunc(func(ctx context.Context, m *generated.StandardMutation) (generated.Value, error) {
-			if !entx.CheckIsSoftDelete(ctx) && !auth.IsSystemAdminFromContext(ctx) {
+
+			if !entx.CheckIsSoftDelete(ctx) {
+				return next.Mutate(ctx, m)
+			}
+
+			if !auth.IsSystemAdminFromContext(ctx) {
 				return next.Mutate(ctx, m)
 			}
 
@@ -28,6 +33,15 @@ func HookStandardDelete() ent.Hook {
 			var err error
 
 			ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+			retrievedStandard, err := m.Client().Standard.Get(ctx, id)
+			if err != nil {
+				return nil, err
+			}
+
+			if !retrievedStandard.SystemOwned {
+				return next.Mutate(ctx, m)
+			}
 
 			// remove standard_id mapping from org owned controls
 			err = m.Client().Control.Update().ClearStandardID().Where(
