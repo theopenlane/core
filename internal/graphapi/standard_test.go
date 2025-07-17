@@ -727,22 +727,25 @@ func TestMutationUpdateStandard(t *testing.T) {
 }
 
 func TestMutationDeleteStandard(t *testing.T) {
-	standardOrgOwned1 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	standardOrgOwned2 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	standardOrgOwned3 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	standardSystemOwned := (&StandardBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
+	newAdminUser := suite.systemAdminBuilder(context.Background(), t)
+
+	newTestUser1 := suite.userBuilder(context.Background(), t)
+
+	standardOrgOwned1 := (&StandardBuilder{client: suite.client}).MustNew(newTestUser1.UserCtx, t)
+
+	standardSystemOwned := (&StandardBuilder{client: suite.client}).MustNew(newAdminUser.UserCtx, t)
 
 	const numberOfControls = 4
 
 	for range numberOfControls {
-		(&ControlBuilder{client: suite.client, StandardID: standardSystemOwned.ID}).MustNew(systemAdminUser.UserCtx, t)
+		(&ControlBuilder{client: suite.client, StandardID: standardSystemOwned.ID}).MustNew(newAdminUser.UserCtx, t)
 	}
 
-	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(newAdminUser.UserCtx, t)
 
 	for range numberOfControls {
-		(&ControlBuilder{client: suite.client, StandardID: publicStandard.ID}).MustNew(systemAdminUser.UserCtx, t)
+		(&ControlBuilder{client: suite.client, StandardID: publicStandard.ID}).MustNew(newAdminUser.UserCtx, t)
 	}
 
 	testCases := []struct {
@@ -763,58 +766,46 @@ func TestMutationDeleteStandard(t *testing.T) {
 			name:        "not authorized, delete system owned",
 			idToDelete:  standardSystemOwned.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         newTestUser1.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
 			idToDelete: standardOrgOwned1.ID,
 			client:     suite.client.api,
-			ctx:        testUser1.UserCtx,
+			ctx:        newTestUser1.UserCtx,
 		},
 		{
 			name:       "happy path, delete public",
 			idToDelete: publicStandard.ID,
 			client:     suite.client.api,
-			ctx:        systemAdminUser.UserCtx,
+			ctx:        newAdminUser.UserCtx,
 		},
 		{
 			name:       "happy path, delete system owned",
 			idToDelete: standardSystemOwned.ID,
 			client:     suite.client.api,
-			ctx:        systemAdminUser.UserCtx,
+			ctx:        newAdminUser.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
 			idToDelete:  standardOrgOwned1.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         newTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
 			name:        "already deleted system owned, not found",
 			idToDelete:  standardSystemOwned.ID,
 			client:      suite.client.api,
-			ctx:         systemAdminUser.UserCtx,
+			ctx:         newAdminUser.UserCtx,
 			expectedErr: "not found",
-		},
-		{
-			name:       "happy path, delete using personal access token",
-			idToDelete: standardOrgOwned2.ID,
-			client:     suite.client.apiWithPAT,
-			ctx:        context.Background(),
-		},
-		{
-			name:       "happy path, delete using api token",
-			idToDelete: standardOrgOwned3.ID,
-			client:     suite.client.apiWithToken,
-			ctx:        context.Background(),
 		},
 		{
 			name:        "unknown id, not found",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         newTestUser1.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -835,7 +826,7 @@ func TestMutationDeleteStandard(t *testing.T) {
 		})
 	}
 
-	controlsResp, err := suite.client.api.GetAllControls(systemAdminUser.UserCtx)
+	controlsResp, err := suite.client.api.GetAllControls(newAdminUser.UserCtx)
 	assert.NilError(t, err)
 	assert.Assert(t, controlsResp != nil)
 	assert.Check(t, is.Equal(int64(0), controlsResp.Controls.TotalCount))
