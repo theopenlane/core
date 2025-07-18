@@ -67,7 +67,7 @@ steps:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["task", "buildkite:draft-pr"]
+              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/draft-pr-automation.sh"]
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE
@@ -90,7 +90,7 @@ steps:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["task", "buildkite:link-prs"]
+              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/link-pr-automation.sh"]
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE
@@ -111,7 +111,7 @@ steps:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["task", "buildkite:helm-update"]
+              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/helm-automation.sh"]
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE
@@ -134,7 +134,7 @@ steps:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["task", "buildkite:post-merge"]
+              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/post-merge-pr-automation.sh"]
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE
@@ -156,7 +156,7 @@ steps:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["task", "buildkite:cleanup"]
+              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/cleanup-draft-prs.sh"]
               propagate-environment: true
               environment:
                 - "GITHUB_TOKEN"
@@ -173,7 +173,7 @@ steps:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["task", "buildkite:image-tag"]
+              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/image-tag-automation.sh"]
               propagate-environment: true
               volumes:
                 - $GOCACHE:$GOCACHE
