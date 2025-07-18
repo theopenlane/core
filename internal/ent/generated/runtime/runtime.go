@@ -5090,6 +5090,8 @@ func init() {
 	standard.Hooks[6] = standardHooks[0]
 
 	standard.Hooks[7] = standardHooks[1]
+
+	standard.Hooks[8] = standardHooks[2]
 	standardMixinInters1 := standardMixin[1].Interceptors()
 	standardMixinInters6 := standardMixin[6].Interceptors()
 	standardInters := schema.Standard{}.Interceptors()
