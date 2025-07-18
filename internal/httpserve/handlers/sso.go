@@ -194,51 +194,6 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 	return h.Success(ctx, out)
 }
 
-// oidcConfig builds an OIDC relying party config for the given org.
-// to construct the OIDC configuration, the function removes the standard /.well-known/openid-configuration
-// suffix from the discovery endpoint to obtain the issuer URL. It then calls rp.NewRelyingPartyOIDC
-// to create the relying party instance, passing in the issuer URL, client credentials, the callback URL for the OIDC flow,
-// and a set of standard OIDC scopes (openid, profile, email).
-func (h *Handler) OldoidcConfig(ctx context.Context, orgID string) (rp.RelyingParty, error) {
-	// Fetch the organization's OIDC settings from the database
-	setting, err := h.getOrganizationSettingByOrgID(ctx, orgID)
-	if err != nil {
-		return nil, err
-	}
-
-	// Ensure all required OIDC config fields are present
-	if setting.OidcDiscoveryEndpoint == "" || setting.IdentityProviderClientID == nil || setting.IdentityProviderClientSecret == nil {
-		return nil, ErrMissingOIDCConfig
-	}
-
-	// Remove the well-known suffix to get the issuer URL
-	issuer := strings.TrimSuffix(setting.OidcDiscoveryEndpoint, "/.well-known/openid-configuration")
-
-	// Construct the OIDC relying party configuration
-	rpCfg, err := rp.NewRelyingPartyOIDC(
-		ctx,
-		issuer,                                // OIDC issuer URL
-		*setting.IdentityProviderClientID,     // Client ID for the org's IdP
-		*setting.IdentityProviderClientSecret, // Client secret for the org's IdP
-		h.ssoCallbackURL(),                    // Redirect/callback URL for OIDC flow
-		[]string{oidc.ScopeOpenID, oidc.ScopeProfile, oidc.ScopeEmail}, // OIDC scopes
-		// Configure the nonce verifier to pull the nonce from the context using contextx
-		rp.WithVerifierOpts(rp.WithNonce(func(ctx context.Context) string {
-			if n, ok := contextx.From[nonce](ctx); ok {
-				return string(n)
-			}
-
-			return ""
-		})),
-	)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return rpCfg, nil
-}
-
 // rpConfig holds the configuration for the relying party
 type rpConfig struct {
 	discovery string

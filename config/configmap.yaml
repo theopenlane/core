@@ -65,13 +65,8 @@ data:
   CORE_SERVER_CSRFPROTECTION_COOKIEHTTPONLY: {{ .Values.openlane.coreConfiguration.server.csrfProtection.cookieHttpOnly | default "false" }}
   CORE_SERVER_CSRFPROTECTION_COOKIEDOMAIN: {{ .Values.openlane.coreConfiguration.server.csrfProtection.cookieDomain }}
   CORE_SERVER_CSRFPROTECTION_COOKIEPATH: {{ .Values.openlane.coreConfiguration.server.csrfProtection.cookiePath | default "/" }}
-{{- if .Values.openlane.coreConfiguration.server.defaultTrustCenterDomain }}
   CORE_SERVER_DEFAULTTRUSTCENTERDOMAIN: {{ .Values.openlane.coreConfiguration.server.defaultTrustCenterDomain }}
-{{- else if .Values.domain }}
-  CORE_SERVER_DEFAULTTRUSTCENTERDOMAIN: "{{ .Values.domain }}"
-{{- else }}
-  CORE_SERVER_DEFAULTTRUSTCENTERDOMAIN: ""
-{{- end }}
+  CORE_SERVER_FIELDLEVELENCRYPTION_ENABLED: {{ .Values.openlane.coreConfiguration.server.fieldLevelEncryption.enabled | default "false" }}
   CORE_ENTCONFIG_ENTITYTYPES: {{ .Values.openlane.coreConfiguration.entConfig.entityTypes }}
   CORE_ENTCONFIG_SUMMARIZER_TYPE: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.type | default "lexrank" }}
   CORE_ENTCONFIG_SUMMARIZER_LLM_PROVIDER: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.provider }}
@@ -249,3 +244,13 @@ data:
   CORE_KEYWATCHER_EXTERNALSECRETSINTEGRATION: {{ .Values.openlane.coreConfiguration.keywatcher.externalSecretsIntegration | default "false" }}
   CORE_SLACK_NEWSUBSCRIBERMESSAGEFILE: {{ .Values.openlane.coreConfiguration.slack.newSubscriberMessageFile }}
   CORE_SLACK_NEWUSERMESSAGEFILE: {{ .Values.openlane.coreConfiguration.slack.newUserMessageFile }}
+  CORE_INTEGRATIONOAUTHPROVIDER_REDIRECTURL: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.redirectUrl | default "http://localhost:17608" }}
+  CORE_INTEGRATIONOAUTHPROVIDER_SUCCESSREDIRECTURL: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.successRedirectUrl | default "/integrations/success" }}
+  CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_CLIENTID: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.github.clientId }}
+  CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_CLIENTSECRET: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.github.clientSecret }}
+  CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_CLIENTENDPOINT: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.github.clientEndpoint | default "http://localhost:17608" }}
+  CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_SCOPES: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.github.scopes }}
+  CORE_INTEGRATIONOAUTHPROVIDER_SLACK_CLIENTID: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.slack.clientId }}
+  CORE_INTEGRATIONOAUTHPROVIDER_SLACK_CLIENTSECRET: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.slack.clientSecret }}
+  CORE_INTEGRATIONOAUTHPROVIDER_SLACK_CLIENTENDPOINT: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.slack.clientEndpoint | default "http://localhost:17608" }}
+  CORE_INTEGRATIONOAUTHPROVIDER_SLACK_SCOPES: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.slack.scopes }}

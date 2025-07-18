@@ -87,7 +87,7 @@ func (n Narrative) Mixin() []ent.Mixin {
 			// add groups permissions with viewer, editor, and blocked groups
 			newGroupPermissionsMixin(),
 		},
-	}.getMixins()
+	}.getMixins(n)
 }
 
 // Annotations of the Narrative

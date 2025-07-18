@@ -39,6 +39,10 @@ var (
 	ErrNoEmailFound = errors.New("no email found from oauth provider")
 	// ErrInvalidProvider is returned when registering a user with an unsupported oauth provider
 	ErrInvalidProvider = errors.New("oauth2 provider not supported")
+	// ErrMissingOrganizationContext is returned when organization context is missing during OAuth flow
+	ErrMissingOrganizationContext = errors.New("missing organization context")
+	// ErrMissingUserContext is returned when user context is missing during OAuth flow
+	ErrMissingUserContext = errors.New("missing user context")
 	// ErrNoAuthUser is returned when the user couldn't be identified by the request
 	ErrNoAuthUser = errors.New("could not identify authenticated user in request")
 	// ErrPassWordResetTokenInvalid is returned when the provided token and secret do not match the stored

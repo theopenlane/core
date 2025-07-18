@@ -97,7 +97,7 @@ func (e Entity) Mixin() []ent.Mixin {
 			newOrgOwnedMixin(e),
 			newGroupPermissionsMixin(),
 		},
-	}.getMixins()
+	}.getMixins(e)
 }
 
 // Edges of the Entity

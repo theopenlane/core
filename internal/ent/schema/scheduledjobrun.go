@@ -76,7 +76,7 @@ func (s ScheduledJobRun) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(s),
 		},
-	}.getMixins()
+	}.getMixins(s)
 }
 
 // Edges of the ScheduledJobRun

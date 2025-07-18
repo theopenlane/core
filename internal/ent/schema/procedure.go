@@ -71,7 +71,7 @@ func (p Procedure) Mixin() []ent.Mixin {
 			// all procedures are documents
 			NewDocumentMixin(p),
 		},
-	}.getMixins()
+	}.getMixins(p)
 }
 
 // Annotations of the Procedure

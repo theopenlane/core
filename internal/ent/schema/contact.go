@@ -107,7 +107,7 @@ func (c Contact) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(c),
 		},
-	}.getMixins()
+	}.getMixins(c)
 }
 
 // Edges of the Contact

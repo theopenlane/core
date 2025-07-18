@@ -5,6 +5,7 @@ package generated
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -451,6 +452,12 @@ func (hq *HushQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		hq.sql = prev
+	}
+	if hush.Policy == nil {
+		return errors.New("generated: uninitialized hush.Policy (forgotten import generated/runtime?)")
+	}
+	if err := hush.Policy.EvalQuery(ctx, hq); err != nil {
+		return err
 	}
 	return nil
 }

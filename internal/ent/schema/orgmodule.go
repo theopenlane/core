@@ -87,7 +87,7 @@ func (o OrgModule) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(o),
 		},
-	}.getMixins()
+	}.getMixins(o)
 }
 
 // Annotations returns the annotations for the OrgModule schema

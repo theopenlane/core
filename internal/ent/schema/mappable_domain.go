@@ -65,7 +65,7 @@ func (MappableDomain) Fields() []ent.Field {
 
 // Mixin of the MappableDomain
 func (e MappableDomain) Mixin() []ent.Mixin {
-	return mixinConfig{}.getMixins()
+	return mixinConfig{}.getMixins(e)
 }
 
 // Edges of the MappableDomain

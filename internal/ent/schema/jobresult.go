@@ -97,7 +97,7 @@ func (j JobResult) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(j),
 		},
-	}.getMixins()
+	}.getMixins(j)
 }
 
 // Edges of the JobResult

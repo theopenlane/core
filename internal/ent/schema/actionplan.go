@@ -81,7 +81,7 @@ func (a ActionPlan) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			NewDocumentMixin(a),
 			newOrgOwnedMixin(a),
-		}}.getMixins()
+		}}.getMixins(a)
 }
 
 // Annotations of the ActionPlan

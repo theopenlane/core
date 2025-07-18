@@ -81,7 +81,7 @@ func (j JobRunner) Mixin() []ent.Mixin {
 			),
 			mixin.SystemOwnedMixin{},
 		},
-	}.getMixins()
+	}.getMixins(j)
 }
 
 // Edges of the JobRunner

@@ -2,62 +2,62 @@ package hooks
 
 import (
 	"context"
-	"encoding/hex"
 	"fmt"
 
 	"entgo.io/ent"
-	"gocloud.dev/secrets"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 )
 
-// HookHush runs on invite create mutations
+// HookHush runs on hush create/update mutations to encrypt secret_value
 func HookHush() ent.Hook {
 	return hook.If(
 		func(next ent.Mutator) ent.Mutator {
 			return hook.HushFunc(func(ctx context.Context, m *generated.HushMutation) (generated.Value, error) {
 				v, ok := m.SecretValue()
 				if !ok || v == "" {
-					return nil, fmt.Errorf("unexpected 'secret_name' value") // nolint:err113
+					return next.Mutate(ctx, m)
 				}
 
-				c, err := m.Secrets.Encrypt(ctx, []byte(v))
+				// Encrypt the secret value using Tink
+				encodedValue, err := Encrypt([]byte(v))
+				if err != nil {
+					return nil, fmt.Errorf("failed to encrypt secret value: %w", err)
+				}
+
+				m.SetSecretValue(encodedValue)
+
+				// Proceed with mutation
+				result, err := next.Mutate(ctx, m)
 				if err != nil {
 					return nil, err
 				}
 
-				m.SetName(hex.EncodeToString(c))
-				u, err := next.Mutate(ctx, m)
-
-				if err != nil {
-					return nil, err
+				// Decrypt the result for immediate use
+				if hush, ok := result.(*generated.Hush); ok {
+					err = DecryptHush(hush)
 				}
 
-				if u, ok := u.(*generated.Hush); ok {
-					err = Decrypt(ctx, m.Secrets, u)
-				}
-
-				return u, err
+				return result, err
 			})
 		},
 		hook.HasFields("secret_value"),
 	)
 }
 
-// Decrypt decrypts the secret value
-func Decrypt(ctx context.Context, k *secrets.Keeper, u *generated.Hush) error {
-	b, err := hex.DecodeString(u.SecretValue)
-	if err != nil {
-		return err
+// DecryptHush decrypts the secret value in a Hush entity using Tink
+func DecryptHush(u *generated.Hush) error {
+	if u.SecretValue == "" {
+		return nil
 	}
 
-	plain, err := k.Decrypt(ctx, b)
+	// Decrypt using Tink
+	decrypted, err := Decrypt(u.SecretValue)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to decrypt secret value: %w", err)
 	}
 
-	u.Name = string(plain)
-
+	u.SecretValue = string(decrypted)
 	return nil
 }

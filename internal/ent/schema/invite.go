@@ -115,7 +115,7 @@ func (i Invite) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(i, withSkipTokenTypesObjects(&token.OrgInviteToken{})),
 		},
-	}.getMixins()
+	}.getMixins(i)
 }
 
 // Indexes of the Invite

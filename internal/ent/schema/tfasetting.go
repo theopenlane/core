@@ -95,7 +95,7 @@ func (t TFASetting) Mixin() []ent.Mixin {
 				withSoftDeleteIndex(),
 			),
 		},
-	}.getMixins()
+	}.getMixins(t)
 }
 
 // Hooks of the TFASetting

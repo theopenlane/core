@@ -79,7 +79,7 @@ func (o OrgProduct) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(o),
 		},
-	}.getMixins()
+	}.getMixins(o)
 }
 
 // Annotations returns the annotations for the OrgProduct schema

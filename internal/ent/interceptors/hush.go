@@ -26,7 +26,7 @@ func InterceptorHush() ent.Interceptor {
 			}
 
 			for _, u := range hush {
-				if err := hooks.Decrypt(ctx, q.Secrets, u); err != nil {
+				if err := hooks.DecryptHush(u); err != nil {
 					return nil, err
 				}
 			}

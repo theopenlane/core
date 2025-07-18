@@ -100,7 +100,7 @@ func (GroupSetting) Interceptors() []ent.Interceptor {
 func (GroupSetting) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeTags: true,
-	}.getMixins()
+	}.getMixins(GroupSetting{})
 }
 
 // Policy defines the privacy policy of the GroupSetting

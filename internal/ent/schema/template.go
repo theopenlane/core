@@ -75,7 +75,7 @@ func (t Template) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(t),
 		},
-	}.getMixins()
+	}.getMixins(t)
 }
 
 // Edges of the Template

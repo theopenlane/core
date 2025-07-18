@@ -45,7 +45,7 @@ func (UserSetting) PluralName() string {
 
 // Mixin of the UserSetting
 func (UserSetting) Mixin() []ent.Mixin {
-	return getDefaultMixins()
+	return getDefaultMixins(UserSetting{})
 }
 
 // Fields of the UserSetting

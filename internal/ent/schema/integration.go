@@ -78,7 +78,7 @@ func (i Integration) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(i),
 		},
-	}.getMixins()
+	}.getMixins(i)
 }
 
 // Policy of the Integration
