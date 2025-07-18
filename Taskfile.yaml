@@ -60,6 +60,7 @@ tasks:
       - go-generate-fast ./...
       - task: tidy
 
+
   regenerate:
     desc: a combination of the ent, graph, and gqlgen tasks which are required to fully generate the necessary graph, server, resolvers, client, etc.
     env:
@@ -67,6 +68,124 @@ tasks:
     cmds:
       - go-generate-fast ./...
       - task: tidy
+
+  generate:ci-fast:
+    desc: Generate with checksum tracking for CI optimization
+    cmds:
+      - task: generate:ent:smart
+      - task: generate:graphql:smart
+      - task: generate:others:smart
+      - task: tidy
+
+  generate:ent:smart:
+    internal: true
+    sources:
+      - internal/ent/schema/**/*.go
+      - internal/ent/generate/**/*.go
+      - internal/ent/mixin/**/*.go
+      - internal/ent/templates/**/*
+    generates:
+      - internal/ent/generated/**/*.go
+    method: checksum
+    env:
+      GO_GENERATE_FAST_CACHE_DIR: "/tmp/go-generate-fast-cache"
+    cmds:
+      - mkdir -p /tmp/go-generate-fast-cache
+      - go-generate-fast internal/ent/generate/generate.go
+
+  generate:graphql:smart:
+    internal: true
+    sources:
+      - internal/graphapi/generate/**/*.go
+      - internal/graphapi/schema/**/*.graphql
+      - internal/graphapi/query/**/*.graphql
+      - internal/ent/generated/**/*.go
+    generates:
+      - internal/graphapi/generated/**/*.go
+      - internal/graphapi/model/gen_models.go
+      - internal/graphapi/*.resolvers.go
+      - pkg/openlaneclient/models.go
+      - pkg/openlaneclient/graphqlclient.go
+      - internal/httpserve/handlers/csv/sample_*.csv
+    method: checksum
+    env:
+      GO_GENERATE_FAST_CACHE_DIR: "/tmp/go-generate-fast-cache"
+    cmds:
+      - mkdir -p /tmp/go-generate-fast-cache
+      - go-generate-fast internal/graphapi/generate/generate.go
+
+  generate:others:smart:
+    internal: true
+    sources:
+      - pkg/catalog/**/*.go
+      - pkg/corejobs/internal/**/*.go
+      - pkg/objects/**/*.go
+      - .mockery.yml
+    generates:
+      - pkg/catalog/**/*.yaml
+      - pkg/catalog/**/*.json
+      - pkg/corejobs/internal/cloudflare/mocks/mocks.go
+      - pkg/objects/mocks/mocks.go
+    method: checksum
+    env:
+      GO_GENERATE_FAST_CACHE_DIR: "/tmp/go-generate-fast-cache"
+    cmds:
+      - mkdir -p /tmp/go-generate-fast-cache
+      - go-generate-fast pkg/catalog/generate.go
+      - go-generate-fast pkg/corejobs/internal/generate.go
+      - go-generate-fast pkg/objects/objects.go
+
+  # Buildkite automation tasks
+  buildkite:draft-pr:
+    desc: Create draft PR for config changes
+    cmds:
+      - sh -c "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/draft-pr-automation.sh"
+    preconditions:
+      - sh: '[[ -n "${BUILDKITE_PULL_REQUEST:-}" && "${BUILDKITE_PULL_REQUEST}" != "false" ]]'
+        msg: "Only runs in PR context"
+
+  buildkite:helm-update:
+    desc: Update helm chart from config changes
+    cmds:
+      - sh -c "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/helm-automation.sh"
+    preconditions:
+      - sh: '[[ "${BUILDKITE_BRANCH:-}" == "main" ]]'
+        msg: "Only runs on main branch"
+
+  buildkite:link-prs:
+    desc: Link PRs after draft creation
+    deps: ['buildkite:draft-pr']
+    cmds:
+      - sh -c "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/link-pr-automation.sh"
+    preconditions:
+      - sh: '[[ -n "${BUILDKITE_PULL_REQUEST:-}" && "${BUILDKITE_PULL_REQUEST}" != "false" ]]'
+        msg: "Only runs in PR context"
+
+  buildkite:post-merge:
+    desc: Finalize config PRs after merge
+    deps: ['buildkite:helm-update']
+    cmds:
+      - sh -c "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/post-merge-pr-automation.sh"
+    preconditions:
+      - sh: '[[ "${BUILDKITE_BRANCH:-}" == "main" ]]'
+        msg: "Only runs on main branch"
+
+  buildkite:cleanup:
+    desc: Cleanup draft PRs
+    deps: ['buildkite:post-merge']
+    cmds:
+      - sh -c "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/cleanup-draft-prs.sh"
+    preconditions:
+      - sh: '[[ "${BUILDKITE_BRANCH:-}" == "main" ]]'
+        msg: "Only runs on main branch"
+
+  buildkite:image-tag:
+    desc: Update image tag for release
+    cmds:
+      - sh -c "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/image-tag-automation.sh"
+    preconditions:
+      - sh: '[[ -n "${BUILDKITE_TAG:-}" ]]'
+        msg: "Only runs on tag builds"
 
   generate:ent:
     desc: generate ent models
