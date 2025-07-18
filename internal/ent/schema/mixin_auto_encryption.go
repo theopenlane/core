@@ -15,12 +15,13 @@ import (
 // annotations, providing zero overhead for schemas without encrypted fields.
 //
 // Usage:
-//   1. Annotate any field with hush.EncryptField():
-//      field.String("secret_value").
-//          Sensitive().
-//          Annotations(hush.EncryptField())
 //
-//   2. The mixin automatically detects and encrypts the field
+//  1. Annotate any field with hush.EncryptField():
+//     field.String("secret_value").
+//     Sensitive().
+//     Annotations(hush.EncryptField())
+//
+//  2. The mixin automatically detects and encrypts the field
 //
 // No manual configuration required - encryption is handled transparently.
 type AutoHushEncryptionMixin struct {
