@@ -23,6 +23,8 @@ The hush field-level encryption system provides:
 
 * **Transparent Encryption**: Automatic encryption on write operations using Google Tink
 * **Transparent Decryption**: Automatic decryption on read operations
+* **Optional Encryption**: Encryption is only active when a keyset is configured
+* **Graceful Degradation**: System operates normally without encryption when no keyset is provided
 * **Envelope Encryption**: Support for key rotation without re-encrypting data
 * **Configurable Fields**: Simple annotation-based field encryption
 * **Multiple Backends**: Support for both Tink (primary) and GoCloud secrets
@@ -113,7 +115,7 @@ sequenceDiagram
 
 ```bash
 # Generate a new Tink keyset for encryption
-go run ./cmd/generate-tink-keyset
+go run ./internal/ent/hush/cmd/hush generate
 
 # Example output:
 # OPENLANE_TINK_KEYSET=CNnD/p0JEmQKWAowdHlwZS5nb29nbGVhcGlzLmNvbS9nb29nbGUuY3J5cHRvLnRpbmsuQWVzR2NtS2V5EiIaID+JaHu+6zMW3YgphNkpL5lVJMVeZdAjJclgAHyShxUOGAEQARjZw/6dCSAB
@@ -291,13 +293,20 @@ Base64 encoding ensures encrypted data is stored safely as text in any database.
 
 ```bash
 # Generate a new keyset
-go run ./cmd/generate-tink-keyset
+go run ./internal/ent/hush/cmd/hush generate
 
 # Output includes the base64-encoded keyset
 OPENLANE_TINK_KEYSET=<base64-encoded-keyset>
 ```
 
 ### Keyset Storage Options
+
+#### 0. No Keyset (Development/Testing Only)
+```bash
+# Simply don't set OPENLANE_TINK_KEYSET
+# All data will be stored as plaintext
+# Useful for local development and testing
+```
 
 #### 1. Environment Variable (Development)
 ```bash
@@ -335,7 +344,7 @@ Tink's envelope encryption enables key rotation without re-encrypting existing d
 
 1. **Generate New Keyset**
    ```bash
-   go run ./cmd/generate-tink-keyset
+   go run ./internal/ent/hush/cmd/hush generate
    ```
 
 2. **Add to Existing Keyset**
@@ -354,32 +363,85 @@ Tink's envelope encryption enables key rotation without re-encrypting existing d
 ### Environment Variables
 
 ```bash
-# Required: Tink keyset for encryption
+# Optional: Tink keyset for encryption
+# If not set, encryption will be disabled and data will be stored as plaintext
 OPENLANE_TINK_KEYSET=<base64-encoded-keyset>
 
 # Optional: GoCloud secrets URL (overrides Tink)
 SECRETS_URL=gcpkms://projects/PROJECT/locations/global/keyRings/RING/cryptoKeys/KEY
 ```
 
-### Demo Tool
+### Encryption Behavior
 
-Test encryption/decryption with the demo tool:
+#### When `OPENLANE_TINK_KEYSET` is set:
+- All fields marked with `hush.EncryptField()` are encrypted before storage
+- Data is stored as base64-encoded ciphertext in the database
+- Decryption happens automatically when reading data
+
+#### When `OPENLANE_TINK_KEYSET` is NOT set:
+- Encryption is completely disabled
+- Fields marked with `hush.EncryptField()` are stored as plaintext
+- No encryption or decryption operations occur
+- System operates normally without any errors
+
+**WARNING**: Be consistent with your encryption configuration:
+- If you start with encryption enabled, keep it enabled to access encrypted data
+- If you start without encryption, enabling it later will only encrypt new/updated data
+- Disabling encryption after data is encrypted will make that data unreadable
+
+### CLI Tool
+
+Test keysets with the hush CLI:
 
 ```bash
-# Encrypt a value
-go run ./cmd/hush-demo -secret="my-secret-value"
+# Generate a new keyset
+go run ./internal/ent/hush/cmd/hush generate
 
-# Decrypt a value
-go run ./cmd/hush-demo -encrypted="<encrypted-value>"
+# Generate quietly (script-friendly)
+go run ./internal/ent/hush/cmd/hush generate --quiet
 
-# Quiet mode (just output)
-go run ./cmd/hush-demo -secret="test" -quiet
+# Generate in export format
+go run ./internal/ent/hush/cmd/hush generate --export
 
-# Show encryption details
-go run ./cmd/hush-demo -show-key
+# Show keyset information
+go run ./internal/ent/hush/cmd/hush info <keyset>
 ```
 
 ## Migration
+
+### Migration Scenarios
+
+#### Scenario 1: Enabling Encryption (No Keyset → With Keyset)
+
+When you enable encryption for the first time:
+
+1. Set `OPENLANE_TINK_KEYSET` environment variable
+2. Existing plaintext data remains readable (migration hook detects unencrypted data)
+3. New/updated data will be encrypted
+4. Over time, all data becomes encrypted as records are updated
+
+#### Scenario 2: Disabling Encryption (With Keyset → No Keyset)
+
+**WARNING**: This makes encrypted data unreadable!
+
+If you remove the `OPENLANE_TINK_KEYSET`:
+- Existing encrypted data appears as base64 strings
+- New data is stored as plaintext
+- The system continues to function but encrypted data is inaccessible
+
+#### Scenario 3: Development to Production
+
+**Best Practice**:
+- Development: Run without keyset for easier debugging
+- Staging/Production: Always use a keyset for security
+
+```bash
+# Development
+# No OPENLANE_TINK_KEYSET set
+
+# Production
+export OPENLANE_TINK_KEYSET=<production-keyset>
+```
 
 ### Migrating Unencrypted Data
 
@@ -641,11 +703,17 @@ func (DatabaseConfig) Mixin() []ent.Mixin {
 - Check keyset is properly formatted
 - Try generating a new keyset
 
+#### "Data appears as base64 gibberish"
+- This occurs when encryption was previously enabled but is now disabled
+- The data is encrypted and needs the original keyset to decrypt
+- Re-enable encryption with the original keyset to access the data
+
 ### Debug Commands
 
 ```bash
-# Test encryption works
-echo "test" | go run ./cmd/hush-demo -quiet
+# Test encryption works with new keyset
+KEYSET=$(go run ./internal/ent/hush/cmd/hush generate --quiet)
+echo "Generated keyset: $KEYSET"
 
 # Verify keyset is valid
 echo $OPENLANE_TINK_KEYSET | base64 -d | xxd

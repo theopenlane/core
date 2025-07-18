@@ -85,6 +85,7 @@ require (
 	github.com/theopenlane/newman v0.2.0
 	github.com/theopenlane/riverboat v0.2.1
 	github.com/theopenlane/utils v0.4.7
+	github.com/tink-crypto/tink-go/v2 v2.4.0
 	github.com/tmc/langchaingo v0.1.13
 	github.com/vektah/gqlparser/v2 v2.5.30
 	github.com/vektra/mockery/v3 v3.5.1
@@ -398,7 +399,6 @@ require (
 	github.com/tidwall/tinyqueue v0.1.1 // indirect
 	github.com/timakin/bodyclose v0.0.0-20241222091800-1db5c5ca4d67 // indirect
 	github.com/timonwong/loggercheck v0.10.1 // indirect
-	github.com/tink-crypto/tink-go/v2 v2.4.0 // indirect
 	github.com/tklauser/go-sysconf v0.3.15 // indirect
 	github.com/tklauser/numcpus v0.10.0 // indirect
 	github.com/tomarrell/wrapcheck/v2 v2.10.0 // indirect

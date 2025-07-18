@@ -25,6 +25,7 @@ func HookHush() ent.Hook {
 				if err != nil {
 					return nil, fmt.Errorf("failed to encrypt secret value: %w", err)
 				}
+
 				m.SetSecretValue(encodedValue)
 
 				// Proceed with mutation

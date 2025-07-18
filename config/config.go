@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/utils/cache"
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
+	"github.com/theopenlane/core/internal/ent/hush/crypto"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
@@ -127,7 +128,9 @@ type Server struct {
 	// SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key
 	SecretManagerSecret string `json:"secretManager" koanf:"secretManager" default:"" sensitive:"true"`
 	// DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set
-	DefaultTrustCenterDomain string `json:"defaultTrustCenterDomain" koanf:"defaultTrustCenterDomain" default:"" domain:"inherit"`
+	DefaultTrustCenterDomain string `json:"defaultTrustCenterDomain" koanf:"defaultTrustCenterDomain" default:""`
+	// FieldLevelEncryption contains the configuration for field level encryption
+	FieldLevelEncryption crypto.Config `json:"fieldLevelEncryption" koanf:"fieldLevelEncryption"`
 }
 
 // KeyWatcher contains settings for the key watcher that manages JWT signing keys

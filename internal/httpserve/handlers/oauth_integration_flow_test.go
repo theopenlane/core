@@ -303,8 +303,9 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallbackSuccess() {
 	require.NoError(t, err)
 
 	t.Run("successful callback redirects to HTML interface", func(t *testing.T) {
-		// Mock the OAuth token exchange - this would normally call GitHub API
-		// For now, we'll test the error case since we don't have a real OAuth provider
+		// Since we can't easily mock the OAuth2 endpoints without significant refactoring,
+		// we'll test that the request passes initial validation but fails at token exchange.
+		// This validates all the cookie handling, state validation, and request processing logic.
 		urlPath := fmt.Sprintf("/oauth/callback?code=test_code&state=%s", validState)
 
 		req := httptest.NewRequest(http.MethodGet, urlPath, nil)
@@ -317,12 +318,11 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallbackSuccess() {
 		rec := httptest.NewRecorder()
 		suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
-		// Since we don't have a real OAuth provider configured, this will fail at token exchange
-		// But we can verify that it gets past the initial validation steps
-		assert.NotEqual(t, http.StatusBadRequest, rec.Code, "Should pass initial validation")
-
-		// The actual OAuth token exchange will fail since we don't have a real provider
-		// This is expected behavior for unit tests
+		// Should get 500 internal server error due to OAuth token exchange failing.
+		// This is expected since we don't have real OAuth provider setup in tests.
+		// The important thing is that it passes all validation (not 400 Bad Request).
+		assert.Equal(t, http.StatusInternalServerError, rec.Code, "Should fail with internal server error at OAuth token exchange")
+		assert.Contains(t, rec.Body.String(), "failed to exchange authorization code", "Should contain OAuth exchange error message")
 	})
 }
 
@@ -846,6 +846,7 @@ func (suite *HandlerTestSuite) createTestTokens(ctx context.Context, integration
 		AddIntegrations(integration).
 		SaveX(ctx)
 }
+
 
 // TestStartOAuthFlowCookieHandling tests that the OAuth start flow properly sets cookies with SameSiteNone
 func (suite *HandlerTestSuite) TestStartOAuthFlowCookieHandling() {

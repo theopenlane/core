@@ -30,6 +30,5 @@ func IsFieldEncrypted(annotations []schema.Annotation) bool {
 // GetEncryptedFields extracts all field names that have encryption annotations
 // from a schema. This is used by the automatic hook/interceptor generation.
 func GetEncryptedFields(_ []interface{}) []string {
-	var encryptedFields []string
-	return encryptedFields
+	return []string{}
 }

@@ -238,6 +238,10 @@
         "defaultTrustCenterDomain": {
           "type": "string",
           "description": "DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set"
+        },
+        "fieldLevelEncryption": {
+          "$ref": "#/$defs/crypto.Config",
+          "description": "FieldLevelEncryption contains the configuration for field level encryption"
         }
       },
       "additionalProperties": false,
@@ -311,6 +315,16 @@
       "additionalProperties": false,
       "type": "object",
       "description": "Config holds the cors configuration settings"
+    },
+    "crypto.Config": {
+      "properties": {
+        "Enabled": {
+          "type": "boolean",
+          "description": "Enabled indicates whether Tink encryption is enabled"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "csrf.Config": {
       "properties": {
@@ -924,6 +938,10 @@
         "redirectUrl": {
           "type": "string",
           "description": "RedirectURL is the base URL for integration OAuth callbacks"
+        },
+        "successRedirectUrl": {
+          "type": "string",
+          "description": "SuccessRedirectURL is the URL to redirect to after successful OAuth integration"
         },
         "github": {
           "$ref": "#/$defs/handlers.IntegrationProviderConfig",

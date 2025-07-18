@@ -100,7 +100,6 @@ func (h Hush) Mixin() []ent.Mixin {
 		excludeTags: true,
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(h),
-			// Encryption is now automatically handled - no manual mixin needed!
 		},
 	}.getMixins()
 }
@@ -112,23 +111,18 @@ func (h Hush) Hooks() []ent.Hook {
 	autoHooks := hush.AutoEncryptionHook(h)
 
 	// Add any additional non-encryption hooks here if needed
-	additionalHooks := []ent.Hook{
-		// Add non-encryption hooks here
-	}
+	additionalHooks := []ent.Hook{}
 
 	return append(autoHooks, additionalHooks...)
 }
 
 // Interceptors of the Hush
-// Automatically detects and applies decryption interceptors for annotated fields
 func (h Hush) Interceptors() []ent.Interceptor {
 	// Auto-detect and return decryption interceptors for fields with hush.EncryptField() annotations
 	autoInterceptors := hush.AutoDecryptionInterceptor(h)
 
 	// Add any additional non-encryption interceptors here if needed
-	additionalInterceptors := []ent.Interceptor{
-		// Add non-encryption interceptors here
-	}
+	additionalInterceptors := []ent.Interceptor{}
 
 	return append(autoInterceptors, additionalInterceptors...)
 }

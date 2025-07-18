@@ -666,7 +666,7 @@ Before using the OAuth integration system, you must create OAuth applications wi
 
 #### GitHub App Configuration
 
-**⚠️ Important**: The OAuth integration system uses **separate OAuth configuration** from social login.
+**Important**: The OAuth integration system uses **separate OAuth configuration** from social login.
 
 1. **Create or Update GitHub OAuth App**:
    - Go to GitHub Settings → Developer settings → OAuth Apps
@@ -724,7 +724,7 @@ OAUTH_STATE_EXPIRY=300  # State parameter expiry in seconds
 OAUTH_TOKEN_VALIDATION_INTERVAL=14400  # 4 hours
 ```
 
-### ⚠️ **Security Note: Client Credentials**
+### **Security Note: Client Credentials**
 
 **OAuth client secrets are NEVER exposed to the frontend**. The HTML testing interface works by:
 
