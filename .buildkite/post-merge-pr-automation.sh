@@ -123,6 +123,7 @@ while IFS=':' read -r pr_number branch_name title; do
 
     # Commit any additional changes
     if [[ "$changes_made" == "true" ]]; then
+      template_dir=$(get_template_dir)
       commit_message=$(load_template "${template_dir}/github/post-merge-commit.md" \
           "CHANGE_SUMMARY=${change_summary}" \
           "BUILD_NUMBER=${BUILDKITE_BUILD_NUMBER}" \
@@ -153,7 +154,6 @@ while IFS=':' read -r pr_number branch_name title; do
         gh pr edit "$pr_number" --repo "$repo" --title "$new_title"
 
         # Add a comment about the conversion
-        template_dir=$(get_template_dir)
         conversion_comment=$(load_template "${template_dir}/github/pr-ready-comment.md" \
             "CORE_PR_NUMBER=${core_pr_number}")
 
