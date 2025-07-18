@@ -70,27 +70,7 @@ func ExistingSecretMixin(fieldName string) *FieldEncryptionMixin {
 	return NewFieldEncryptionMixin(fieldName, true)
 }
 
-// AutoHushEncryptionMixin automatically detects fields with hush.EncryptField()
-// annotations and applies encryption hooks and interceptors.
-//
-// This mixin scans the schema's fields for hush encryption annotations
-// and automatically creates the necessary hooks and interceptors.
-//
-// Usage:
-//
-//	func (MySchema) Mixin() []ent.Mixin {
-//	    return []ent.Mixin{
-//	        NewAutoHushEncryptionMixin(MySchema{}),
-//	    }
-//	}
-//
-//	func (MySchema) Fields() []ent.Field {
-//	    return []ent.Field{
-//	        field.String("password").
-//	            Sensitive().
-//	            Annotations(hush.EncryptField()),
-//	    }
-//	}
+// AutoHushEncryptionMixin automatically detects and applies encryption hooks for fields with hush annotations
 type AutoHushEncryptionMixin struct {
 	mixin.Schema
 	schema ent.Interface
@@ -127,15 +107,3 @@ func (m AutoHushEncryptionMixin) Interceptors() []ent.Interceptor {
 	// Use the new automatic detection system from hush package
 	return hush.AutoDecryptionInterceptor(m.schema)
 }
-
-// Example of how to add encryption to a field definition:
-//
-// field.String("db_password").
-//     Comment("Database password").
-//     Sensitive().
-//     Annotations(
-//         entgql.Skip(entgql.SkipWhereInput),
-//         hush.EncryptField(),  // <- New clean annotation approach
-//     ).
-//     Optional().
-//     Immutable(),

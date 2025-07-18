@@ -2355,14 +2355,27 @@ func init() {
 	// groupsettinghistory.DefaultID holds the default value on creation for the id field.
 	groupsettinghistory.DefaultID = groupsettinghistoryDescID.Default.(func() string)
 	hushMixin := schema.Hush{}.Mixin()
+	hush.Policy = privacy.NewPolicies(schema.Hush{})
+	hush.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := hush.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	hushMixinHooks0 := hushMixin[0].Hooks()
 	hushMixinHooks1 := hushMixin[1].Hooks()
 	hushMixinHooks4 := hushMixin[4].Hooks()
 	hushHooks := schema.Hush{}.Hooks()
-	hush.Hooks[0] = hushMixinHooks0[0]
-	hush.Hooks[1] = hushMixinHooks1[0]
-	hush.Hooks[2] = hushMixinHooks4[0]
-	hush.Hooks[3] = hushHooks[0]
+
+	hush.Hooks[1] = hushMixinHooks0[0]
+
+	hush.Hooks[2] = hushMixinHooks1[0]
+
+	hush.Hooks[3] = hushMixinHooks4[0]
+
+	hush.Hooks[4] = hushHooks[0]
 	hushMixinInters1 := hushMixin[1].Interceptors()
 	hushMixinInters4 := hushMixin[4].Interceptors()
 	hushInters := schema.Hush{}.Interceptors()
@@ -2399,6 +2412,17 @@ func init() {
 	hushDescID := hushMixinFields2[0].Descriptor()
 	// hush.DefaultID holds the default value on creation for the id field.
 	hush.DefaultID = hushDescID.Default.(func() string)
+	hushhistory.Policy = privacy.NewPolicies(schema.HushHistory{})
+	hushhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := hushhistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	hushhistoryInters := schema.HushHistory{}.Interceptors()
+	hushhistory.Interceptors[0] = hushhistoryInters[0]
 	hushhistoryFields := schema.HushHistory{}.Fields()
 	_ = hushhistoryFields
 	// hushhistoryDescHistoryTime is the schema descriptor for history_time field.

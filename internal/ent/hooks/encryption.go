@@ -4,17 +4,13 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
-	"os"
 	"reflect"
 	"slices"
 	"strings"
 
 	"entgo.io/ent"
 
-	"github.com/tink-crypto/tink-go/v2/aead"
-	"github.com/tink-crypto/tink-go/v2/insecurecleartextkeyset"
-	"github.com/tink-crypto/tink-go/v2/keyset"
-	"github.com/tink-crypto/tink-go/v2/tink"
+	"github.com/theopenlane/core/internal/ent/hush/crypto"
 )
 
 const (
@@ -39,105 +35,29 @@ var (
 	ErrSetterMethodNotFound = fmt.Errorf("setter method not found")
 )
 
-// Tink-based encryption system
-var (
-	tinkAEAD tink.AEAD
-)
-
-// initTink initializes Tink encryption system
-func initTink() error {
-	if tinkAEAD != nil {
-		return nil // Already initialized
-	}
-
-	// Try to get existing keyset from environment
-	if keysetData := os.Getenv("OPENLANE_TINK_KEYSET"); keysetData != "" {
-		return initTinkFromKeyset(keysetData)
-	}
-
-	// Generate new keyset
-	return initTinkWithNewKeyset()
-}
-
-// initTinkFromKeyset initializes Tink from existing keyset
-func initTinkFromKeyset(keysetData string) error {
-	// Decode base64 keyset
-	keysetBytes, err := base64.StdEncoding.DecodeString(keysetData)
-	if err != nil {
-		return fmt.Errorf("failed to decode keyset: %w", err)
-	}
-
-	// Create keyset handle from binary
-	reader := strings.NewReader(string(keysetBytes))
-	keysetHandle, err := insecurecleartextkeyset.Read(keyset.NewBinaryReader(reader))
-	if err != nil {
-		return fmt.Errorf("failed to create keyset handle: %w", err)
-	}
-
-	// Get AEAD primitive
-	primitive, err := aead.New(keysetHandle)
-	if err != nil {
-		return fmt.Errorf("failed to create AEAD primitive: %w", err)
-	}
-
-	tinkAEAD = primitive
-	return nil
-}
-
-// initTinkWithNewKeyset generates a new keyset and initializes Tink
-func initTinkWithNewKeyset() error {
-	// Generate new keyset
-	keysetHandle, err := keyset.NewHandle(aead.AES256GCMKeyTemplate())
-	if err != nil {
-		return fmt.Errorf("failed to generate keyset: %w", err)
-	}
-
-	// Get AEAD primitive
-	primitive, err := aead.New(keysetHandle)
-	if err != nil {
-		return fmt.Errorf("failed to create AEAD primitive: %w", err)
-	}
-
-	tinkAEAD = primitive
-	return nil
-}
-
 // encryptFieldValue encrypts a field value using Tink
 func encryptFieldValue(_ context.Context, _ ent.Mutation, value string) (string, error) {
-	// Initialize Tink if needed
-	if err := initTink(); err != nil {
-		return "", fmt.Errorf("failed to initialize Tink: %w", err)
+	// Check if encryption is enabled
+	if !crypto.IsEncryptionEnabled() {
+		return value, nil
 	}
 
-	// Encrypt with Tink
-	ciphertext, err := tinkAEAD.Encrypt([]byte(value), nil)
-	if err != nil {
-		return "", fmt.Errorf("failed to encrypt with Tink: %w", err)
-	}
-
-	return base64.StdEncoding.EncodeToString(ciphertext), nil
+	return crypto.Encrypt([]byte(value))
 }
 
 // decryptFieldValue decrypts a field value using Tink
 func decryptFieldValue(_ context.Context, _ ent.Mutation, encryptedValue string) (string, error) {
-	// Initialize Tink if needed
-	if err := initTink(); err != nil {
-		return "", fmt.Errorf("failed to initialize Tink: %w", err)
+	// Check if encryption is enabled
+	if !crypto.IsEncryptionEnabled() {
+		return encryptedValue, nil
 	}
 
-	// Decode from base64
-	ciphertext, err := base64.StdEncoding.DecodeString(encryptedValue)
+	decrypted, err := crypto.Decrypt(encryptedValue)
 	if err != nil {
-		return "", fmt.Errorf("failed to decode ciphertext: %w", err)
+		return "", err
 	}
 
-	// Decrypt with Tink
-	plaintext, err := tinkAEAD.Decrypt(ciphertext, nil)
-	if err != nil {
-		return "", fmt.Errorf("failed to decrypt with Tink: %w", err)
-	}
-
-	return string(plaintext), nil
+	return string(decrypted), nil
 }
 
 // HookFieldEncryption provides encryption for existing fields with migration support
@@ -160,9 +80,9 @@ func HookFieldEncryption(fieldName string, _ bool) ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			// Check if the value is already encrypted
-			if isEncrypted(value) {
-				// Already encrypted, proceed as normal
+			// Check if encryption is enabled and if the value is already encrypted
+			if !crypto.IsEncryptionEnabled() || isEncrypted(value) {
+				// Either encryption is disabled or already encrypted, proceed as normal
 				return next.Mutate(ctx, m)
 			}
 
@@ -221,7 +141,7 @@ func decryptResultField(ctx context.Context, m ent.Mutation, result ent.Value, f
 }
 
 // decryptEntityField decrypts a specific field in an entity
-func decryptEntityField(ctx context.Context, m ent.Mutation, entity interface{}, fieldName string) error {
+func decryptEntityField(ctx context.Context, m ent.Mutation, entity any, fieldName string) error {
 	v := reflect.ValueOf(entity)
 	if v.Kind() == reflect.Ptr {
 		v = v.Elem()
@@ -237,9 +157,9 @@ func decryptEntityField(ctx context.Context, m ent.Mutation, entity interface{},
 		return nil // Empty field
 	}
 
-	// Check if the value is encrypted
-	if !isEncrypted(encryptedValue) {
-		return nil // Value is not encrypted, leave as is
+	// Check if encryption is enabled and if the value is encrypted
+	if !crypto.IsEncryptionEnabled() || !isEncrypted(encryptedValue) {
+		return nil // Either encryption is disabled or value is not encrypted, leave as is
 	}
 
 	// Decrypt the value
@@ -284,9 +204,11 @@ func isEncrypted(value string) bool {
 	if hasLower {
 		charTypes++
 	}
+
 	if hasUpper {
 		charTypes++
 	}
+
 	if hasDigit {
 		charTypes++
 	}
@@ -299,6 +221,7 @@ func hasField(m ent.Mutation, fieldName string) bool {
 	return slices.Contains(m.Fields(), fieldName)
 }
 
+// getFieldValue retrieves a field value from the mutation using reflection
 func getFieldValue(m ent.Mutation, fieldName string) (string, error) {
 	value, exists := m.Field(fieldName)
 	if !exists {
@@ -313,6 +236,7 @@ func getFieldValue(m ent.Mutation, fieldName string) (string, error) {
 	return str, nil
 }
 
+// setFieldValue sets a field value in the mutation using reflection
 func setFieldValue(m ent.Mutation, fieldName string, value string) error {
 	// Use reflection to find and call the setter method
 	v := reflect.ValueOf(m)
@@ -338,6 +262,7 @@ func setFieldValue(m ent.Mutation, fieldName string, value string) error {
 	return nil
 }
 
+// convertFieldName converts snake_case to CamelCase for struct field access
 func convertFieldName(fieldName string) string {
 	parts := strings.Split(fieldName, "_")
 	for i, part := range parts {
@@ -345,70 +270,27 @@ func convertFieldName(fieldName string) string {
 			parts[i] = strings.ToUpper(part[:1]) + part[1:]
 		}
 	}
+
 	return strings.Join(parts, "")
 }
 
 // GenerateTinkKeyset generates a new Tink keyset for initial setup (exported)
 func GenerateTinkKeyset() (string, error) {
-	// Generate new keyset
-	keysetHandle, err := keyset.NewHandle(aead.AES256GCMKeyTemplate())
-	if err != nil {
-		return "", fmt.Errorf("failed to generate keyset: %w", err)
-	}
-
-	// Serialize keyset
-	var buf strings.Builder
-	err = insecurecleartextkeyset.Write(keysetHandle, keyset.NewBinaryWriter(&buf))
-	if err != nil {
-		return "", fmt.Errorf("failed to serialize keyset: %w", err)
-	}
-	keysetBytes := []byte(buf.String())
-
-	// Encode as base64
-	return base64.StdEncoding.EncodeToString(keysetBytes), nil
+	return crypto.GenerateTinkKeyset()
 }
 
 // Encrypt encrypts data using Tink (exported for external use)
 func Encrypt(plaintext []byte) (string, error) {
-	// Initialize Tink if needed
-	if err := initTink(); err != nil {
-		return "", fmt.Errorf("failed to initialize Tink: %w", err)
-	}
-
-	// Encrypt with Tink
-	ciphertext, err := tinkAEAD.Encrypt(plaintext, nil)
-	if err != nil {
-		return "", fmt.Errorf("failed to encrypt with Tink: %w", err)
-	}
-
-	// Encode as base64 for storage
-	return base64.StdEncoding.EncodeToString(ciphertext), nil
+	return crypto.Encrypt(plaintext)
 }
 
 // Decrypt decrypts data using Tink (exported for external use)
 func Decrypt(encryptedValue string) ([]byte, error) {
-	// Initialize Tink if needed
-	if err := initTink(); err != nil {
-		return nil, fmt.Errorf("failed to initialize Tink: %w", err)
-	}
-
-	// Decode from base64
-	ciphertext, err := base64.StdEncoding.DecodeString(encryptedValue)
-	if err != nil {
-		return nil, fmt.Errorf("failed to decode ciphertext: %w", err)
-	}
-
-	// Decrypt with Tink
-	plaintext, err := tinkAEAD.Decrypt(ciphertext, nil)
-	if err != nil {
-		return nil, fmt.Errorf("failed to decrypt with Tink: %w", err)
-	}
-
-	return plaintext, nil
+	return crypto.Decrypt(encryptedValue)
 }
 
 // DecryptEntityFields decrypts multiple string fields in an entity using Tink
-func DecryptEntityFields(entity interface{}, fieldNames []string) error {
+func DecryptEntityFields(entity any, fieldNames []string) error {
 	v := reflect.ValueOf(entity)
 	if v.Kind() == reflect.Ptr {
 		v = v.Elem()
@@ -431,8 +313,8 @@ func DecryptEntityFields(entity interface{}, fieldNames []string) error {
 			continue // Empty field
 		}
 
-		// Check if it looks encrypted (base64) - if not, leave as-is
-		if !isEncrypted(encryptedValue) {
+		// Check if encryption is enabled and if it looks encrypted (base64) - if not, leave as-is
+		if !crypto.IsEncryptionEnabled() || !isEncrypted(encryptedValue) {
 			continue
 		}
 
@@ -471,9 +353,9 @@ func HookEncryption(fieldNames ...string) ent.Hook {
 					continue
 				}
 
-				// Check if the value is already encrypted
-				if isEncrypted(value) {
-					continue // Already encrypted
+				// Check if encryption is enabled and if the value is already encrypted
+				if !crypto.IsEncryptionEnabled() || isEncrypted(value) {
+					continue // Either encryption is disabled or already encrypted
 				}
 
 				// Encrypt the value

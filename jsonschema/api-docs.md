@@ -58,6 +58,7 @@ Server settings for the echo server
 |[**csrfProtection**](#servercsrfprotection)|`object`|Config defines configuration for the CSRF middleware wrapper.<br/>|no|
 |**secretManager**|`string`|SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key<br/>|no|
 |**defaultTrustCenterDomain**|`string`|DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set<br/>|no|
+|[**fieldLevelEncryption**](#serverfieldlevelencryption)|`object`||no|
 
 **Additional Properties:** not allowed  
 <a name="servertls"></a>
@@ -234,6 +235,16 @@ Config defines configuration for the CSRF middleware wrapper.
 |**cookieHttpOnly**|`boolean`|CookieHTTPOnly indicates whether the CSRF cookie is HTTP only.<br/>||
 |**cookieDomain**|`string`|CookieDomain specifies the domain for the CSRF cookie, default to no domain<br/>||
 |**cookiePath**|`string`|CookiePath specifies the path for the CSRF cookie, default to "/"<br/>||
+
+**Additional Properties:** not allowed  
+<a name="serverfieldlevelencryption"></a>
+### server\.fieldLevelEncryption: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**Enabled**|`boolean`|Enabled indicates whether Tink encryption is enabled<br/>||
 
 **Additional Properties:** not allowed  
 <a name="entconfig"></a>
@@ -949,6 +960,7 @@ IntegrationOauthProviderConfig represents the configuration for OAuth providers 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**redirectUrl**|`string`|RedirectURL is the base URL for integration OAuth callbacks<br/>||
+|**successRedirectUrl**|`string`|SuccessRedirectURL is the URL to redirect to after successful OAuth integration<br/>||
 |[**github**](#integrationoauthprovidergithub)|`object`|IntegrationProviderConfig contains OAuth configuration for a specific integration provider<br/>||
 |[**slack**](#integrationoauthproviderslack)|`object`|IntegrationProviderConfig contains OAuth configuration for a specific integration provider<br/>||
 

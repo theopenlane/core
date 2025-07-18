@@ -1,27 +1,38 @@
-# Hush - Field-Level Encryption for Ent
+# Hush field-Level encryption helper for ent
 
-Hush provides **completely automatic** field-level encryption for Ent schemas. Just annotate your sensitive fields with `hush.EncryptField()` and everything else is handled automatically.
+Hush provides automatic field-level encryption for Ent schemas. It was written originally with the intent of just managing the `secret_value` in the hush schema but ended up as a utility allowing you to simply annotate your ent schema sensitive fields with `hush.EncryptField()` and the framework handles encryption transparently.
 
 ## Features
 
-- 🎯 **100% Automatic** - Just annotate fields, everything else is automatic
-- 🔒 **Transparent Encryption** - Seamless encryption on write, decryption on read
-- 🔑 **Key Rotation** - Envelope encryption via Google Tink
-- 📝 **Single Annotation** - Only `hush.EncryptField()` required
-- 🚀 **Zero Configuration** - No manual hooks, interceptors, or mixins
-- 🛡️ **Secure by Default** - AES-256-GCM encryption via Google Tink
-- 🔄 **Smart Migration** - Automatically handles existing unencrypted data
+- **Automatic Encryption** - Annotate fields and encryption is handled automatically
+- **Optional Encryption** - Works without configuration for development, requires keyset for production
+- **Transparent Operations** - Seamless encryption on write, decryption on read
+- **Secure Implementation** - AES-256-GCM encryption via Google Tink
+- **Smart Migration** - Handles existing unencrypted data gracefully
+- **Graceful Degradation** - System operates normally even without encryption configured
 
 ## Quick Start
 
-### 1. Generate Encryption Key
+### Option 1: Development Mode (No Encryption)
+
+For local development and testing, you can run without encryption:
 
 ```bash
-go run ./cmd/generate-tink-keyset
-export OPENLANE_TINK_KEYSET=<generated-keyset>
+# Simply don't set OPENLANE_TINK_KEYSET
+# All fields marked with hush.EncryptField() will store plaintext
 ```
 
-### 2. Annotate Your Fields
+### Option 2: Production Mode (With Encryption)
+
+For production environments where encryption is required:
+
+#### Generate Encryption Key
+
+As with most encryption systems, there needs to be a secret key used to perform the encryption and decryption.
+
+A Taskfile entry has been created for your convenience; you can run `task hush:export`
+
+## Annotate Your Fields
 
 ```go
 import "github.com/theopenlane/core/internal/ent/hush"
@@ -31,30 +42,10 @@ func (MySchema) Fields() []ent.Field {
         field.String("public_field"),
         field.String("secret_field").
             Sensitive().
-            Annotations(hush.EncryptField()), // That's it!
+            Annotations(hush.EncryptField()), // Mark field for encryption
     }
 }
 
-func (m MySchema) Hooks() []ent.Hook {
-    return hush.AutoEncryptionHook(m)
-}
-
-func (m MySchema) Interceptors() []ent.Interceptor {
-    return hush.AutoDecryptionInterceptor(m)
-}
-```
-
-### 3. Use Normally
-
-```go
-// Create - automatically encrypted
-entity, _ := client.MySchema.Create().
-    SetSecretField("encrypted-automatically").
-    Save(ctx)
-
-// Query - automatically decrypted
-entity, _ = client.MySchema.Get(ctx, id)
-fmt.Println(entity.SecretField) // Decrypted value
 ```
 
 ## API Reference
@@ -63,220 +54,131 @@ fmt.Println(entity.SecretField) // Decrypted value
 
 - `hush.EncryptField()` - Mark a field for automatic encryption
 
-### Schema Methods
-
-Required methods in your schema:
-
-```go
-func (MySchema) Hooks() []ent.Hook {
-    return hush.AutoEncryptionHook(MySchema{})
-}
-
-func (MySchema) Interceptors() []ent.Interceptor {
-    return hush.AutoDecryptionInterceptor(MySchema{})
-}
-```
-
 ### Direct Encryption
 
+The underlying crypto package provides direct encryption functions:
+
 ```go
-import "github.com/theopenlane/core/internal/ent/hooks"
+import "github.com/theopenlane/core/internal/crypto"
 
 // Encrypt data
-encrypted, err := hooks.Encrypt([]byte("plaintext"))
+encrypted, err := crypto.Encrypt(ctx, "plaintext")
 
 // Decrypt data
-decrypted, err := hooks.Decrypt(encrypted)
-
-// Generate keyset
-keyset, err := hooks.GenerateTinkKeyset()
-```
-
-## Examples
-
-### OAuth Integration
-
-```go
-type OAuthApp struct {
-    ent.Schema
-}
-
-func (OAuthApp) Fields() []ent.Field {
-    return []ent.Field{
-        field.String("name"),
-        field.String("client_id"),
-        field.String("client_secret").
-            Sensitive().
-            Annotations(hush.EncryptField()),
-        field.String("access_token").
-            Optional().
-            Sensitive().
-            Annotations(hush.EncryptField()),
-    }
-}
-
-func (o OAuthApp) Hooks() []ent.Hook {
-    return hush.AutoEncryptionHook(o)
-}
-
-func (o OAuthApp) Interceptors() []ent.Interceptor {
-    return hush.AutoDecryptionInterceptor(o)
-}
-```
-
-### Database Credentials
-
-```go
-type Database struct {
-    ent.Schema
-}
-
-func (Database) Fields() []ent.Field {
-    return []ent.Field{
-        field.String("host"),
-        field.String("username"),
-        field.String("password").
-            Sensitive().
-            Annotations(hush.EncryptField()),
-    }
-}
-
-func (d Database) Hooks() []ent.Hook {
-    return hush.AutoEncryptionHook(d)
-}
-
-func (d Database) Interceptors() []ent.Interceptor {
-    return hush.AutoDecryptionInterceptor(d)
-}
+decrypted, err := crypto.Decrypt(ctx, encrypted)
 ```
 
 ## Migration
 
-Migration is **completely automatic**! When you add `hush.EncryptField()` to an existing field:
+Migration is automatic when you add `hush.EncryptField()` to an existing field:
 
-1. System detects unencrypted values (not base64)
-2. Encrypts them transparently during operations
-3. Handles mixed encrypted/unencrypted data gracefully
-4. No manual steps required
+1. System detects unencrypted values (not base64 encoded)
+1. Encrypts them transparently during operations (if encryption is enabled)
+1. Handles mixed encrypted/unencrypted data gracefully
+1. No manual migration steps required
 
-### Adding Encryption to Existing Field
+### Important Migration Scenarios
 
-```go
-// Before: Plain field
-field.String("api_key").Sensitive()
-
-// After: Just add annotation - migration is automatic!
-field.String("api_key").
-    Sensitive().
-    Annotations(hush.EncryptField())
-```
-
-## Tools
-
-### Demo Tool
-
-```bash
-# Encrypt
-go run ./cmd/hush-demo -secret="test"
-
-# Decrypt
-go run ./cmd/hush-demo -encrypted="<encrypted>"
-
-# Quiet mode
-go run ./cmd/hush-demo -secret="test" -quiet
-```
-
-### Keyset Generator
-
-```bash
-go run ./cmd/generate-tink-keyset
-```
+- **Enabling Encryption**: Set keyset, existing data migrates gradually
+- **Disabling Encryption**: Remove keyset, new data is plaintext but old encrypted data becomes unreadable
+- **Development → Production**: Start without keyset locally, add keyset in production
 
 ## Configuration
 
 ### Environment Variables
 
 ```bash
-# Required: Tink keyset
+# Optional: Tink keyset for encryption/decryption
+# If not set, encryption is disabled and data is stored as plaintext
 OPENLANE_TINK_KEYSET=<base64-keyset>
 ```
 
-### Production Key Storage
+### Encryption Behavior
 
-```bash
-# AWS Secrets Manager
-aws secretsmanager create-secret \
-  --name openlane-tink-keyset \
-  --secret-string "<keyset>"
+- **With Keyset**: Fields marked with `hush.EncryptField()` are encrypted
+- **Without Keyset**: Fields marked with `hush.EncryptField()` store plaintext
+- **No Errors**: System operates normally in both modes
 
-# Google Secret Manager
-gcloud secrets create openlane-tink-keyset \
-  --data-file=keyset.txt
+### Key Storage
 
-# HashCorp Vault
-vault kv put secret/openlane tink_keyset="<keyset>"
-```
+The implementation uses the key from the environment variable at runtime. How you populate that environment variable is up to your deployment infrastructure.
 
-## Key Rotation
+**WARNING**: Be consistent with your encryption configuration. If you encrypt data with a keyset, you'll need that same keyset to decrypt it later.
 
-Tink's envelope encryption supports rotation without re-encrypting data:
+## Technical Details
 
-1. Generate new keyset with rotation tool
-2. Update environment with new keyset containing both keys
-3. New encryptions use new key, old data remains decryptable
-4. Optionally re-encrypt old data over time
+### Encryption Specification
 
-## Security
-
-- **Algorithm**: AES-256-GCM with AEAD
-- **Library**: Google Tink (production-ready crypto)
+- **Algorithm**: AES-256-GCM with AEAD (Authenticated Encryption with Associated Data)
+- **Library**: Google Tink - production-ready cryptography library
 - **Key Size**: 256-bit AES keys
-- **Nonce**: Unique per encryption (managed by Tink)
-- **Storage**: Base64-encoded for database safety
+- **Nonce**: Unique per encryption operation (managed by Tink)
+- **Encoding**: Base64 for database-safe storage
 
-## Why Base64?
+### Storage Format
 
-Encrypted data contains:
-- Null bytes that terminate strings in databases
-- Invalid UTF-8 that causes encoding errors
-- Control characters that break protocols
+Encrypted data is stored as base64-encoded strings to ensure compatibility with all database systems. Raw encrypted bytes contain:
 
-Base64 ensures safe text storage in any database.
+- Null bytes that can terminate strings in some databases
+- Non-UTF8 sequences that cause encoding errors
+- Control characters that break text protocols
+
+Base64 encoding ensures encrypted data can be safely stored as text in any database.
 
 ## Best Practices
 
-### ✅ DO
-- Only encrypt sensitive fields (passwords, tokens, keys, secrets)
-- Mark encrypted fields as `Sensitive()`
-- Use proper key storage in production
-- Test migrations on staging first
+### Recommended Usage
 
-### ❌ DON'T
-- Encrypt searchable fields (IDs, usernames, emails)
-- Store keys in environment variables in production
-- Commit keys to version control
-- Encrypt very large fields without testing
+- Encrypt only truly sensitive fields (passwords, tokens, API keys, secrets)
+- Always mark encrypted fields with `Sensitive()` annotation
+- Test encryption thoroughly in development before production deployment
+- Implement proper key management for production environments
+- Monitor performance impact for large-scale deployments
 
-## Troubleshooting
+### Common Pitfalls
 
-### Field Not Encrypted
-- Check `hush.EncryptField()` annotation exists
-- Verify `AutoEncryptionHook()` in schema
-- Ensure `OPENLANE_TINK_KEYSET` is set
+- Avoid encrypting fields used in WHERE clauses (IDs, usernames, emails)
+- Do not encrypt fields that need to be indexed or searched
+- Never commit encryption keys to version control
+- Be cautious with very large text fields (consider performance impact)
+- Remember that encrypted fields cannot be used in database-level constraints
 
-### Decryption Failed
-- Verify same keyset used for encryption
-- Check base64 encoding is intact
-- Ensure data wasn't corrupted
+## Benchmarks
 
-### Performance Issues
-- Only encrypt necessary fields
-- Consider field size impact
-- Monitor encryption overhead
+### Direct Encryption/Decryption:
 
-## How It Works
+- Time: ~800 nanoseconds per encrypt+decrypt cycle
+- Memory: ~912 bytes allocated per operation
+- Allocations: 7 memory allocations per operation
 
-1. **Write Operations**: Hooks intercept mutations and encrypt marked fields
-2. **Storage**: Encrypted data is base64-encoded for safe database storage
-3. **Read Operations**: Interceptors decrypt fields transparently when queried
-4. **Key Management**: Tink handles encryption with envelope encryption for rotation
+This means each field encryption/decryption adds roughly 0.8 microseconds of overhead.
+
+Field Detection (Reflection):
+
+- Time: ~1.7 microseconds per field detection
+- Memory: ~2.9KB allocated per detection
+- Allocations: 35 memory allocations per detection
+
+This is a one-time cost during application startup when the encryption hooks are registered.
+
+### 🏁 Real-World Impact
+
+For typical database operations:
+
+- Single entity with 1 encrypted field: +0.8μs overhead
+- Single entity with 5 encrypted fields: +4μs overhead
+- Bulk operations (100 entities, 1 encrypted field each): +80μs overhead
+
+### Context:
+
+- Network round-trip to database: ~1-10ms (1,000-10,000μs)
+- Database query execution: ~100μs-1ms (100-1,000μs)
+- Encryption overhead: ~0.8μs per field
+
+### Bottom Line
+
+The encryption overhead is negligible compared to typical database operations:
+- <0.1% of typical database query time
+- <0.01% of network round-trip time
+
+The field-level encryption provides strong security with minimal performance overhead.

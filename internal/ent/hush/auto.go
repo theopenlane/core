@@ -23,7 +23,12 @@ import (
 func AutoEncryptionHook(schema ent.Interface) []ent.Hook {
 	encryptedFields := detectEncryptedFields(schema)
 	if len(encryptedFields) == 0 {
-		return nil
+		// Return a no-op hook to satisfy the generated runtime
+		return []ent.Hook{
+			func(next ent.Mutator) ent.Mutator {
+				return next
+			},
+		}
 	}
 
 	// Import the hooks package functions
@@ -38,7 +43,12 @@ func AutoEncryptionHook(schema ent.Interface) []ent.Hook {
 func AutoDecryptionInterceptor(schema ent.Interface) []ent.Interceptor {
 	encryptedFields := detectEncryptedFields(schema)
 	if len(encryptedFields) == 0 {
-		return nil
+		// Return a no-op interceptor to satisfy the generated runtime
+		return []ent.Interceptor{
+			ent.InterceptFunc(func(next ent.Querier) ent.Querier {
+				return next
+			}),
+		}
 	}
 
 	return []ent.Interceptor{
@@ -49,11 +59,20 @@ func AutoDecryptionInterceptor(schema ent.Interface) []ent.Interceptor {
 // detectEncryptedFields scans a schema and returns field names that have
 // the hush.EncryptField() annotation.
 func detectEncryptedFields(schema ent.Interface) []string {
-	var encryptedFields []string
+	encryptedFields := []string{}
+
+	// Handle nil schema
+	if schema == nil {
+		return encryptedFields
+	}
 
 	// Use reflection to get the Fields() method
 	schemaValue := reflect.ValueOf(schema)
 	if schemaValue.Kind() == reflect.Ptr {
+		if schemaValue.IsNil() {
+			return encryptedFields
+		}
+
 		schemaValue = schemaValue.Elem()
 	}
 

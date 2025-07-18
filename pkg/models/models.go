@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"mime/multipart"
 	"net/mail"
 	"net/textproto"
@@ -1225,7 +1226,7 @@ type IntegrationTokenResponse struct {
 // ListIntegrationsResponse is the response for listing integrations
 type ListIntegrationsResponse struct {
 	rout.Reply
-	Integrations interface{} `json:"integrations"` // Will be []*ent.Integration
+	Integrations any `json:"integrations"` // Will be []*ent.Integration
 }
 
 // DeleteIntegrationResponse is the response for deleting an integration
@@ -1237,13 +1238,69 @@ type DeleteIntegrationResponse struct {
 // IntegrationStatusResponse is the response for checking integration status
 type IntegrationStatusResponse struct {
 	rout.Reply
-	Provider     string      `json:"provider"`
-	Connected    bool        `json:"connected"`
-	Status       string      `json:"status,omitempty"` // "connected", "expired", "invalid"
-	TokenValid   bool        `json:"tokenValid,omitempty"`
-	TokenExpired bool        `json:"tokenExpired,omitempty"`
-	Message      string      `json:"message"`
-	Integration  interface{} `json:"integration,omitempty"` // Will be *ent.Integration
+	Provider     string `json:"provider"`
+	Connected    bool   `json:"connected"`
+	Status       string `json:"status,omitempty"` // "connected", "expired", "invalid"
+	TokenValid   bool   `json:"tokenValid,omitempty"`
+	TokenExpired bool   `json:"tokenExpired,omitempty"`
+	Message      string `json:"message"`
+	Integration  any    `json:"integration,omitempty"` // Will be *ent.Integration
+}
+
+// GetIntegrationTokenRequest is the request for getting integration tokens
+type GetIntegrationTokenRequest struct {
+	Provider string `param:"provider" description:"OAuth provider (github, slack, etc.)" example:"github"`
+}
+
+// DeleteIntegrationRequest is the request for deleting an integration
+type DeleteIntegrationRequest struct {
+	ID string `param:"id" description:"Integration ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+}
+
+// RefreshIntegrationTokenRequest is the request for refreshing integration tokens
+type RefreshIntegrationTokenRequest struct {
+	Provider string `param:"provider" description:"OAuth provider (github, slack, etc.)" example:"github"`
+}
+
+// GetIntegrationStatusRequest is the request for checking integration status
+type GetIntegrationStatusRequest struct {
+	Provider string `param:"provider" description:"OAuth provider (github, slack, etc.)" example:"github"`
+}
+
+// Validate validates the GetIntegrationTokenRequest
+func (r *GetIntegrationTokenRequest) Validate() error {
+	r.Provider = strings.TrimSpace(r.Provider)
+	if r.Provider == "" {
+		return fmt.Errorf("provider parameter is required")
+	}
+	return nil
+}
+
+// Validate validates the DeleteIntegrationRequest
+func (r *DeleteIntegrationRequest) Validate() error {
+	r.ID = strings.TrimSpace(r.ID)
+	if r.ID == "" {
+		return fmt.Errorf("integration ID is required")
+	}
+	return nil
+}
+
+// Validate validates the RefreshIntegrationTokenRequest
+func (r *RefreshIntegrationTokenRequest) Validate() error {
+	r.Provider = strings.TrimSpace(r.Provider)
+	if r.Provider == "" {
+		return fmt.Errorf("provider parameter is required")
+	}
+	return nil
+}
+
+// Validate validates the GetIntegrationStatusRequest
+func (r *GetIntegrationStatusRequest) Validate() error {
+	r.Provider = strings.TrimSpace(r.Provider)
+	if r.Provider == "" {
+		return fmt.Errorf("provider parameter is required")
+	}
+	return nil
 }
 
 // =========
@@ -1325,9 +1382,9 @@ func (r *OAuthCallbackRequest) Validate() error {
 // OAuthCallbackResponse contains the result of OAuth callback processing
 type OAuthCallbackResponse struct {
 	rout.Reply
-	Success     bool        `json:"success" description:"Whether the OAuth callback was processed successfully" example:"true"`
-	Integration interface{} `json:"integration,omitempty" description:"The created/updated integration object"`
-	Message     string      `json:"message" description:"Success or error message" example:"Successfully connected GitHub integration"`
+	Success     bool   `json:"success" description:"Whether the OAuth callback was processed successfully" example:"true"`
+	Integration any    `json:"integration,omitempty" description:"The created/updated integration object"`
+	Message     string `json:"message" description:"Success or error message" example:"Successfully connected GitHub integration"`
 }
 
 // ExampleOAuthFlowRequest is an example OAuth flow request for OpenAPI documentation

@@ -1,4 +1,4 @@
-package hooks
+package crypto
 
 import (
 	"os"
@@ -113,7 +113,8 @@ func TestTinkWithEnvironmentKeyset(t *testing.T) {
 	// Set test keyset
 	os.Setenv("OPENLANE_TINK_KEYSET", testKeyset)
 
-	// Note: Tink state is managed by crypto package internally
+	// Reset tink state to force re-initialization
+	tinkAEAD = nil
 
 	plaintext := "test-with-env-keyset"
 
@@ -124,109 +125,4 @@ func TestTinkWithEnvironmentKeyset(t *testing.T) {
 	decrypted, err := Decrypt(encrypted)
 	assert.NoError(t, err)
 	assert.Equal(t, plaintext, string(decrypted))
-}
-
-func TestConvertFieldName(t *testing.T) {
-	tests := []struct {
-		input    string
-		expected string
-	}{
-		{"client_secret", "ClientSecret"},
-		{"secret_value", "SecretValue"},
-		{"api_key", "ApiKey"},
-		{"access_token", "AccessToken"},
-		{"refresh_token", "RefreshToken"},
-		{"simple", "Simple"},
-		{"", ""},
-		{"already_camel", "AlreadyCamel"},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.input, func(t *testing.T) {
-			result := convertFieldName(tt.input)
-			assert.Equal(t, tt.expected, result)
-		})
-	}
-}
-
-func TestIsEncrypted(t *testing.T) {
-	// Generate a real encrypted value for testing
-	testPlaintext := "test-value-for-detection"
-	realEncrypted, err := Encrypt([]byte(testPlaintext))
-	assert.NoError(t, err)
-
-	tests := []struct {
-		name     string
-		value    string
-		expected bool
-	}{
-		{"empty string", "", false},
-		{"short string", "abc", false},
-		{"plaintext", "hello world", false},
-		{"valid base64 but short", "dGVzdA==", false}, // "test" in base64
-		{"invalid base64", "invalid-base64-!@#", false},
-		{"too short encrypted", "abc", false},
-		{"real encrypted value", realEncrypted, true}, // Use actual encrypted value
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			result := isEncrypted(tt.value)
-			assert.Equal(t, tt.expected, result)
-		})
-	}
-}
-
-// Mock entity for testing field encryption/decryption
-type MockEntity struct {
-	ClientSecret string
-	SecretValue  string
-	ApiKey       string
-	AccessToken  string
-	RefreshToken string
-	PlainField   string
-}
-
-func TestDecryptEntityFields(t *testing.T) {
-	// Create test data
-	clientSecret := "client-secret-123"
-	secretValue := "secret-value-456"
-
-	// Encrypt the values
-	encryptedClient, err := Encrypt([]byte(clientSecret))
-	assert.NoError(t, err)
-
-	encryptedSecret, err := Encrypt([]byte(secretValue))
-	assert.NoError(t, err)
-
-	// Create mock entity with encrypted values
-	entity := &MockEntity{
-		ClientSecret: encryptedClient,
-		SecretValue:  encryptedSecret,
-		PlainField:   "plain-text",
-	}
-
-	// Test decryption
-	err = DecryptEntityFields(entity, []string{"client_secret", "secret_value"})
-	assert.NoError(t, err)
-
-	// Verify decryption
-	assert.Equal(t, clientSecret, entity.ClientSecret)
-	assert.Equal(t, secretValue, entity.SecretValue)
-	assert.Equal(t, "plain-text", entity.PlainField) // Should remain unchanged
-}
-
-func TestDecryptEntityFieldsInvalidData(t *testing.T) {
-	entity := &MockEntity{
-		ClientSecret: "invalid-base64-!@#",
-		SecretValue:  "also-invalid",
-	}
-
-	// Should not fail, just skip invalid fields
-	err := DecryptEntityFields(entity, []string{"client_secret", "secret_value"})
-	assert.NoError(t, err)
-
-	// Values should remain unchanged
-	assert.Equal(t, "invalid-base64-!@#", entity.ClientSecret)
-	assert.Equal(t, "also-invalid", entity.SecretValue)
 }

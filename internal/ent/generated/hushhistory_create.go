@@ -236,7 +236,9 @@ func (hhc *HushHistoryCreate) Mutation() *HushHistoryMutation {
 
 // Save creates the HushHistory in the database.
 func (hhc *HushHistoryCreate) Save(ctx context.Context) (*HushHistory, error) {
-	hhc.defaults()
+	if err := hhc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, hhc.sqlSave, hhc.mutation, hhc.hooks)
 }
 
@@ -263,23 +265,36 @@ func (hhc *HushHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (hhc *HushHistoryCreate) defaults() {
+func (hhc *HushHistoryCreate) defaults() error {
 	if _, ok := hhc.mutation.HistoryTime(); !ok {
+		if hushhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized hushhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := hushhistory.DefaultHistoryTime()
 		hhc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := hhc.mutation.CreatedAt(); !ok {
+		if hushhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized hushhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := hushhistory.DefaultCreatedAt()
 		hhc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := hhc.mutation.UpdatedAt(); !ok {
+		if hushhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized hushhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := hushhistory.DefaultUpdatedAt()
 		hhc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := hhc.mutation.ID(); !ok {
+		if hushhistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized hushhistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := hushhistory.DefaultID()
 		hhc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

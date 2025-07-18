@@ -224,6 +224,7 @@ data:
   CORE_SLACK_NEWSUBSCRIBERMESSAGEFILE: {{ .Values.core.slack.newSubscriberMessageFile }}
   CORE_SLACK_NEWUSERMESSAGEFILE: {{ .Values.core.slack.newUserMessageFile }}
   CORE_INTEGRATIONOAUTHPROVIDER_REDIRECTURL: {{ .Values.core.integrationOauthProvider.redirectUrl | default "http://localhost:17608" }}
+  CORE_INTEGRATIONOAUTHPROVIDER_SUCCESSREDIRECTURL: {{ .Values.core.integrationOauthProvider.successRedirectUrl | default "/integrations/success" }}
   CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_CLIENTID: {{ .Values.core.integrationOauthProvider.github.clientId }}
   CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_CLIENTSECRET: {{ .Values.core.integrationOauthProvider.github.clientSecret }}
   CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_CLIENTENDPOINT: {{ .Values.core.integrationOauthProvider.github.clientEndpoint | default "http://localhost:17608" }}

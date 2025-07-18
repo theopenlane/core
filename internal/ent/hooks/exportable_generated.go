@@ -9,13 +9,13 @@ import (
 
 // ExportableSchemas contains all schemas that have Exportable annotation
 var ExportableSchemas = map[string]bool{
-	"control":        true,
-	"evidence":       true,
+	"control": true,
+	"evidence": true,
 	"internalpolicy": true,
-	"procedure":      true,
-	"risk":           true,
-	"subscriber":     true,
-	"task":           true,
+	"procedure": true,
+	"risk": true,
+	"subscriber": true,
+	"task": true,
 }
 
 // IsSchemaExportable checks if a schema name is exportable
