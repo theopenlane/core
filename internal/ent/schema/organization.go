@@ -444,7 +444,7 @@ func (Organization) Mixin() []ent.Mixin {
 			// add group based create permissions
 			NewGroupBasedCreateAccessMixin(),
 		},
-	}.getMixins()
+	}.getMixins(Organization{})
 }
 
 // Policy defines the privacy policy of the Organization.

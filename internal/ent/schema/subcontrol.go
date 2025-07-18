@@ -117,7 +117,7 @@ func (s Subcontrol) Mixin() []ent.Mixin {
 				withOrganizationOwner(true),
 			),
 		},
-	}.getMixins()
+	}.getMixins(s)
 }
 
 // Indexes of the Subcontrol

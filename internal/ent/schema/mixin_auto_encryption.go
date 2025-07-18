@@ -7,71 +7,57 @@ import (
 	"github.com/theopenlane/core/internal/ent/hush"
 )
 
-// AutoEncryptionMixin automatically detects and enables encryption for any field
-// annotated with hush.EncryptField(). This mixin is automatically included in all
-// schemas and only applies encryption if needed.
+// AutoHushEncryptionMixin automatically detects and applies encryption hooks
+// for fields annotated with hush.EncryptField().
 //
-// Usage: This mixin is automatically included, no manual action required.
-// Just annotate fields with hush.EncryptField():
+// This mixin is included by default in all schemas via getMixins().
+// It only applies encryption to fields explicitly marked with hush.EncryptField()
+// annotations, providing zero overhead for schemas without encrypted fields.
 //
-//	field.String("password").
-//	    Sensitive().
-//	    Annotations(hush.EncryptField())
+// Usage:
+//   1. Annotate any field with hush.EncryptField():
+//      field.String("secret_value").
+//          Sensitive().
+//          Annotations(hush.EncryptField())
 //
-// The system will automatically detect the annotation and apply encryption.
-type AutoEncryptionMixin struct {
-	mixin.Schema
-}
-
-// Fields returns no additional fields.
-func (AutoEncryptionMixin) Fields() []ent.Field {
-	return []ent.Field{}
-}
-
-// Hooks returns encryption hooks only if the schema has encrypted fields.
-func (m AutoEncryptionMixin) Hooks() []ent.Hook {
-	// This will be called during schema registration with the actual schema context
-	// For now, return empty - the real detection happens in the generated code
-	return []ent.Hook{}
-}
-
-// Interceptors returns decryption interceptors only if the schema has encrypted fields.
-func (m AutoEncryptionMixin) Interceptors() []ent.Interceptor {
-	// This will be called during schema registration with the actual schema context
-	// For now, return empty - the real detection happens in the generated code
-	return []ent.Interceptor{}
-}
-
-// NewUniversalEncryptionMixin creates an encryption mixin that works for any schema.
-// This function is designed to be called with the actual schema instance
-// during code generation or schema registration.
-func NewUniversalEncryptionMixin(schema ent.Interface) ent.Mixin {
-	return &UniversalEncryptionMixin{schema: schema}
-}
-
-// UniversalEncryptionMixin provides automatic encryption detection for any schema.
-type UniversalEncryptionMixin struct {
+//   2. The mixin automatically detects and encrypts the field
+//
+// No manual configuration required - encryption is handled transparently.
+type AutoHushEncryptionMixin struct {
 	mixin.Schema
 	schema ent.Interface
 }
 
-// Fields returns no additional fields.
-func (UniversalEncryptionMixin) Fields() []ent.Field {
+// NewAutoHushEncryptionMixin creates a new auto-encryption mixin for the given schema.
+func NewAutoHushEncryptionMixin(schema ent.Interface) *AutoHushEncryptionMixin {
+	return &AutoHushEncryptionMixin{
+		schema: schema,
+	}
+}
+
+// Fields returns no additional fields since this mixin only adds behavior.
+func (m AutoHushEncryptionMixin) Fields() []ent.Field {
 	return []ent.Field{}
 }
 
-// Hooks returns encryption hooks if the schema has fields with hush.EncryptField() annotations.
-func (m UniversalEncryptionMixin) Hooks() []ent.Hook {
+// Hooks returns encryption hooks for all fields with hush.EncryptField() annotations.
+// If no fields have the annotation, returns a no-op hook with zero overhead.
+func (m AutoHushEncryptionMixin) Hooks() []ent.Hook {
 	if m.schema == nil {
 		return []ent.Hook{}
 	}
+
+	// Use automatic detection system from hush package
 	return hush.AutoEncryptionHook(m.schema)
 }
 
-// Interceptors returns decryption interceptors if the schema has fields with hush.EncryptField() annotations.
-func (m UniversalEncryptionMixin) Interceptors() []ent.Interceptor {
+// Interceptors returns decryption interceptors for all fields with hush.EncryptField() annotations.
+// If no fields have the annotation, returns a no-op interceptor with zero overhead.
+func (m AutoHushEncryptionMixin) Interceptors() []ent.Interceptor {
 	if m.schema == nil {
 		return []ent.Interceptor{}
 	}
+
+	// Use automatic detection system from hush package
 	return hush.AutoDecryptionInterceptor(m.schema)
 }

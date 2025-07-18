@@ -117,7 +117,7 @@ func (f File) Mixin() []ent.Mixin {
 				withHookFuncs(), // use an empty hook, file processing is handled in middleware
 			),
 		},
-	}.getMixins()
+	}.getMixins(f)
 }
 
 // Annotations of the File

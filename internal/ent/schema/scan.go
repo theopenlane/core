@@ -53,7 +53,7 @@ func (s Scan) Mixin() []ent.Mixin {
 			newOrgOwnedMixin(s),
 			newGroupPermissionsMixin(),
 		},
-	}.getMixins()
+	}.getMixins(s)
 }
 
 func (s Scan) Edges() []ent.Edge {
