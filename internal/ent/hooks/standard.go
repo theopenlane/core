@@ -18,7 +18,7 @@ import (
 var (
 	// ErrPublicStandardCannotBeDeleted defines an error that denotes a public standard cannot be
 	// deleted once made public
-	ErrPublicStandardCannotBeDeleted = errors.New("public standard not allowed to be deleted.")
+	ErrPublicStandardCannotBeDeleted = errors.New("public standard not allowed to be deleted")
 )
 
 // HookStandardDelete cascades the deletion of all controls that have a standard linked/connected
