@@ -9,6 +9,7 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
@@ -767,22 +768,23 @@ func TestMutationDeleteStandard(t *testing.T) {
 			expectedErr: notFoundErrorMsg,
 		},
 		{
-			name:       "happy path, delete",
+			name:       "happy path, delete standard",
 			idToDelete: standardOrgOwned1.ID,
 			client:     suite.client.api,
 			ctx:        newTestUser1.UserCtx,
-		},
-		{
-			name:       "happy path, delete public",
-			idToDelete: publicStandard.ID,
-			client:     suite.client.api,
-			ctx:        newAdminUser.UserCtx,
 		},
 		{
 			name:       "happy path, delete system owned",
 			idToDelete: standardSystemOwned.ID,
 			client:     suite.client.api,
 			ctx:        newAdminUser.UserCtx,
+		},
+		{
+			name:        "happy path, delete public",
+			idToDelete:  publicStandard.ID,
+			client:      suite.client.api,
+			ctx:         newAdminUser.UserCtx,
+			expectedErr: hooks.ErrPublicStandardCannotBeDeleted.Error(),
 		},
 		{
 			name:        "already deleted, not found",
@@ -826,5 +828,7 @@ func TestMutationDeleteStandard(t *testing.T) {
 	controlsResp, err := suite.client.api.GetAllControls(newAdminUser.UserCtx)
 	assert.NilError(t, err)
 	assert.Assert(t, controlsResp != nil)
-	assert.Check(t, is.Equal(int64(0), controlsResp.Controls.TotalCount))
+	// controls linked to non public standards would be deleted
+	// while the ones linked to standard should remain
+	assert.Check(t, is.Equal(int64(numberOfControls), controlsResp.Controls.TotalCount))
 }

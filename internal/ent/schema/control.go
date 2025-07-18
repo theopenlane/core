@@ -162,6 +162,9 @@ func (Control) Hooks() []ent.Hook {
 func (Control) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			// when an admin deletes a standard, we cascade
+			// delete controls that might belong to an org
+			rule.AllowMutationIfSystemAdmin(),
 			rule.AllowIfContextAllowRule(),
 			rule.CanCreateObjectsUnderParent[*generated.ControlMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),

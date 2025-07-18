@@ -2,18 +2,23 @@ package hooks
 
 import (
 	"context"
+	"errors"
 
 	"entgo.io/ent"
 
 	"github.com/theopenlane/entx"
-	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+)
+
+var (
+	// ErrPublicStandardCannotBeDeleted defines an error that denotes a public standard cannot be
+	// deleted once made public
+	ErrPublicStandardCannotBeDeleted = errors.New("public standard not allowed to be deleted.")
 )
 
 // HookStandardDelete cascades the deletion of all controls that have a standard linked/connected
@@ -25,16 +30,13 @@ func HookStandardDelete() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			if !auth.IsSystemAdminFromContext(ctx) {
-				return next.Mutate(ctx, m)
-			}
-
 			id, _ := m.ID()
 			var err error
 
-			ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-			retrievedStandard, err := m.Client().Standard.Get(ctx, id)
+			retrievedStandard, err := m.Client().Standard.Query().
+				Where(standard.ID(id)).
+				Select(standard.FieldSystemOwned, standard.FieldIsPublic, standard.FieldOwnerID).
+				Only(ctx)
 			if err != nil {
 				return nil, err
 			}
@@ -43,13 +45,18 @@ func HookStandardDelete() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
+			if retrievedStandard.IsPublic {
+				return nil, ErrPublicStandardCannotBeDeleted
+			}
+
 			// remove standard_id mapping from org owned controls
-			err = m.Client().Control.Update().ClearStandardID().Where(
-				control.And(
-					control.StandardID(id),
-					control.OwnerIDNotNil(),
-				),
-			).Exec(ctx)
+			err = m.Client().Control.Update().ClearStandardID().
+				Where(
+					control.And(
+						control.StandardID(id),
+						control.OwnerIDNotNil(),
+					),
+				).Exec(ctx)
 			if err != nil {
 				return nil, err
 			}
