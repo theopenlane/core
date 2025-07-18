@@ -246,6 +246,7 @@ server:
     enableGraphExtensions: true
     fieldLevelEncryption:
         enabled: false
+        keyset: ""
     graphPool:
         maxWorkers: 100
     idleTimeout: 30000000000

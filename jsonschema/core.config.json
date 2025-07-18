@@ -318,9 +318,13 @@
     },
     "crypto.Config": {
       "properties": {
-        "Enabled": {
+        "enabled": {
           "type": "boolean",
           "description": "Enabled indicates whether Tink encryption is enabled"
+        },
+        "keyset": {
+          "type": "string",
+          "description": "Keyset is the base64-encoded Tink keyset used for encryption"
         }
       },
       "additionalProperties": false,
