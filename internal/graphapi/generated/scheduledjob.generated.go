@@ -87,10 +87,14 @@ func (ec *executionContext) fieldContext_ScheduledJobBulkCreatePayload_scheduled
 				return ec.fieldContext_ScheduledJob_title(ctx, field)
 			case "description":
 				return ec.fieldContext_ScheduledJob_description(ctx, field)
-			case "jobType":
-				return ec.fieldContext_ScheduledJob_jobType(ctx, field)
+			case "platform":
+				return ec.fieldContext_ScheduledJob_platform(ctx, field)
 			case "script":
 				return ec.fieldContext_ScheduledJob_script(ctx, field)
+			case "windmillPath":
+				return ec.fieldContext_ScheduledJob_windmillPath(ctx, field)
+			case "downloadURL":
+				return ec.fieldContext_ScheduledJob_downloadURL(ctx, field)
 			case "configuration":
 				return ec.fieldContext_ScheduledJob_configuration(ctx, field)
 			case "cadence":
@@ -167,10 +171,14 @@ func (ec *executionContext) fieldContext_ScheduledJobCreatePayload_scheduledJob(
 				return ec.fieldContext_ScheduledJob_title(ctx, field)
 			case "description":
 				return ec.fieldContext_ScheduledJob_description(ctx, field)
-			case "jobType":
-				return ec.fieldContext_ScheduledJob_jobType(ctx, field)
+			case "platform":
+				return ec.fieldContext_ScheduledJob_platform(ctx, field)
 			case "script":
 				return ec.fieldContext_ScheduledJob_script(ctx, field)
+			case "windmillPath":
+				return ec.fieldContext_ScheduledJob_windmillPath(ctx, field)
+			case "downloadURL":
+				return ec.fieldContext_ScheduledJob_downloadURL(ctx, field)
 			case "configuration":
 				return ec.fieldContext_ScheduledJob_configuration(ctx, field)
 			case "cadence":
@@ -291,10 +299,14 @@ func (ec *executionContext) fieldContext_ScheduledJobUpdatePayload_scheduledJob(
 				return ec.fieldContext_ScheduledJob_title(ctx, field)
 			case "description":
 				return ec.fieldContext_ScheduledJob_description(ctx, field)
-			case "jobType":
-				return ec.fieldContext_ScheduledJob_jobType(ctx, field)
+			case "platform":
+				return ec.fieldContext_ScheduledJob_platform(ctx, field)
 			case "script":
 				return ec.fieldContext_ScheduledJob_script(ctx, field)
+			case "windmillPath":
+				return ec.fieldContext_ScheduledJob_windmillPath(ctx, field)
+			case "downloadURL":
+				return ec.fieldContext_ScheduledJob_downloadURL(ctx, field)
 			case "configuration":
 				return ec.fieldContext_ScheduledJob_configuration(ctx, field)
 			case "cadence":

@@ -108,6 +108,16 @@ func RequestorID(v string) predicate.Export {
 	return predicate.Export(sql.FieldEQ(FieldRequestorID, v))
 }
 
+// Filters applies equality check predicate on the "filters" field. It's identical to FiltersEQ.
+func Filters(v string) predicate.Export {
+	return predicate.Export(sql.FieldEQ(FieldFilters, v))
+}
+
+// ErrorMessage applies equality check predicate on the "error_message" field. It's identical to ErrorMessageEQ.
+func ErrorMessage(v string) predicate.Export {
+	return predicate.Export(sql.FieldEQ(FieldErrorMessage, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Export {
 	return predicate.Export(sql.FieldEQ(FieldCreatedAt, v))
@@ -731,6 +741,156 @@ func FieldsIsNil() predicate.Export {
 // FieldsNotNil applies the NotNil predicate on the "fields" field.
 func FieldsNotNil() predicate.Export {
 	return predicate.Export(sql.FieldNotNull(FieldFields))
+}
+
+// FiltersEQ applies the EQ predicate on the "filters" field.
+func FiltersEQ(v string) predicate.Export {
+	return predicate.Export(sql.FieldEQ(FieldFilters, v))
+}
+
+// FiltersNEQ applies the NEQ predicate on the "filters" field.
+func FiltersNEQ(v string) predicate.Export {
+	return predicate.Export(sql.FieldNEQ(FieldFilters, v))
+}
+
+// FiltersIn applies the In predicate on the "filters" field.
+func FiltersIn(vs ...string) predicate.Export {
+	return predicate.Export(sql.FieldIn(FieldFilters, vs...))
+}
+
+// FiltersNotIn applies the NotIn predicate on the "filters" field.
+func FiltersNotIn(vs ...string) predicate.Export {
+	return predicate.Export(sql.FieldNotIn(FieldFilters, vs...))
+}
+
+// FiltersGT applies the GT predicate on the "filters" field.
+func FiltersGT(v string) predicate.Export {
+	return predicate.Export(sql.FieldGT(FieldFilters, v))
+}
+
+// FiltersGTE applies the GTE predicate on the "filters" field.
+func FiltersGTE(v string) predicate.Export {
+	return predicate.Export(sql.FieldGTE(FieldFilters, v))
+}
+
+// FiltersLT applies the LT predicate on the "filters" field.
+func FiltersLT(v string) predicate.Export {
+	return predicate.Export(sql.FieldLT(FieldFilters, v))
+}
+
+// FiltersLTE applies the LTE predicate on the "filters" field.
+func FiltersLTE(v string) predicate.Export {
+	return predicate.Export(sql.FieldLTE(FieldFilters, v))
+}
+
+// FiltersContains applies the Contains predicate on the "filters" field.
+func FiltersContains(v string) predicate.Export {
+	return predicate.Export(sql.FieldContains(FieldFilters, v))
+}
+
+// FiltersHasPrefix applies the HasPrefix predicate on the "filters" field.
+func FiltersHasPrefix(v string) predicate.Export {
+	return predicate.Export(sql.FieldHasPrefix(FieldFilters, v))
+}
+
+// FiltersHasSuffix applies the HasSuffix predicate on the "filters" field.
+func FiltersHasSuffix(v string) predicate.Export {
+	return predicate.Export(sql.FieldHasSuffix(FieldFilters, v))
+}
+
+// FiltersIsNil applies the IsNil predicate on the "filters" field.
+func FiltersIsNil() predicate.Export {
+	return predicate.Export(sql.FieldIsNull(FieldFilters))
+}
+
+// FiltersNotNil applies the NotNil predicate on the "filters" field.
+func FiltersNotNil() predicate.Export {
+	return predicate.Export(sql.FieldNotNull(FieldFilters))
+}
+
+// FiltersEqualFold applies the EqualFold predicate on the "filters" field.
+func FiltersEqualFold(v string) predicate.Export {
+	return predicate.Export(sql.FieldEqualFold(FieldFilters, v))
+}
+
+// FiltersContainsFold applies the ContainsFold predicate on the "filters" field.
+func FiltersContainsFold(v string) predicate.Export {
+	return predicate.Export(sql.FieldContainsFold(FieldFilters, v))
+}
+
+// ErrorMessageEQ applies the EQ predicate on the "error_message" field.
+func ErrorMessageEQ(v string) predicate.Export {
+	return predicate.Export(sql.FieldEQ(FieldErrorMessage, v))
+}
+
+// ErrorMessageNEQ applies the NEQ predicate on the "error_message" field.
+func ErrorMessageNEQ(v string) predicate.Export {
+	return predicate.Export(sql.FieldNEQ(FieldErrorMessage, v))
+}
+
+// ErrorMessageIn applies the In predicate on the "error_message" field.
+func ErrorMessageIn(vs ...string) predicate.Export {
+	return predicate.Export(sql.FieldIn(FieldErrorMessage, vs...))
+}
+
+// ErrorMessageNotIn applies the NotIn predicate on the "error_message" field.
+func ErrorMessageNotIn(vs ...string) predicate.Export {
+	return predicate.Export(sql.FieldNotIn(FieldErrorMessage, vs...))
+}
+
+// ErrorMessageGT applies the GT predicate on the "error_message" field.
+func ErrorMessageGT(v string) predicate.Export {
+	return predicate.Export(sql.FieldGT(FieldErrorMessage, v))
+}
+
+// ErrorMessageGTE applies the GTE predicate on the "error_message" field.
+func ErrorMessageGTE(v string) predicate.Export {
+	return predicate.Export(sql.FieldGTE(FieldErrorMessage, v))
+}
+
+// ErrorMessageLT applies the LT predicate on the "error_message" field.
+func ErrorMessageLT(v string) predicate.Export {
+	return predicate.Export(sql.FieldLT(FieldErrorMessage, v))
+}
+
+// ErrorMessageLTE applies the LTE predicate on the "error_message" field.
+func ErrorMessageLTE(v string) predicate.Export {
+	return predicate.Export(sql.FieldLTE(FieldErrorMessage, v))
+}
+
+// ErrorMessageContains applies the Contains predicate on the "error_message" field.
+func ErrorMessageContains(v string) predicate.Export {
+	return predicate.Export(sql.FieldContains(FieldErrorMessage, v))
+}
+
+// ErrorMessageHasPrefix applies the HasPrefix predicate on the "error_message" field.
+func ErrorMessageHasPrefix(v string) predicate.Export {
+	return predicate.Export(sql.FieldHasPrefix(FieldErrorMessage, v))
+}
+
+// ErrorMessageHasSuffix applies the HasSuffix predicate on the "error_message" field.
+func ErrorMessageHasSuffix(v string) predicate.Export {
+	return predicate.Export(sql.FieldHasSuffix(FieldErrorMessage, v))
+}
+
+// ErrorMessageIsNil applies the IsNil predicate on the "error_message" field.
+func ErrorMessageIsNil() predicate.Export {
+	return predicate.Export(sql.FieldIsNull(FieldErrorMessage))
+}
+
+// ErrorMessageNotNil applies the NotNil predicate on the "error_message" field.
+func ErrorMessageNotNil() predicate.Export {
+	return predicate.Export(sql.FieldNotNull(FieldErrorMessage))
+}
+
+// ErrorMessageEqualFold applies the EqualFold predicate on the "error_message" field.
+func ErrorMessageEqualFold(v string) predicate.Export {
+	return predicate.Export(sql.FieldEqualFold(FieldErrorMessage, v))
+}
+
+// ErrorMessageContainsFold applies the ContainsFold predicate on the "error_message" field.
+func ErrorMessageContainsFold(v string) predicate.Export {
+	return predicate.Export(sql.FieldContainsFold(FieldErrorMessage, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

@@ -122,16 +122,6 @@ func (ec *executionContext) marshalNImplementationGuidance2githubᚗcomᚋtheope
 	return v
 }
 
-func (ec *executionContext) unmarshalNJobConfiguration2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐJobConfiguration(ctx context.Context, v any) (models.JobConfiguration, error) {
-	var res models.JobConfiguration
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNJobConfiguration2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐJobConfiguration(ctx context.Context, sel ast.SelectionSet, v models.JobConfiguration) graphql.Marshaler {
-	return v
-}
-
 func (ec *executionContext) unmarshalNReference2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐReference(ctx context.Context, v any) (models.Reference, error) {
 	var res models.Reference
 	err := res.UnmarshalGQL(v)
@@ -464,16 +454,16 @@ func (ec *executionContext) marshalOJobCadence2ᚖgithubᚗcomᚋtheopenlaneᚋc
 	return v
 }
 
-func (ec *executionContext) unmarshalOJobConfiguration2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐJobConfiguration(ctx context.Context, v any) (*models.JobConfiguration, error) {
+func (ec *executionContext) unmarshalOJobConfiguration2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐJobConfiguration(ctx context.Context, v any) (models.JobConfiguration, error) {
 	if v == nil {
 		return nil, nil
 	}
-	var res = new(models.JobConfiguration)
+	var res models.JobConfiguration
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOJobConfiguration2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐJobConfiguration(ctx context.Context, sel ast.SelectionSet, v *models.JobConfiguration) graphql.Marshaler {
+func (ec *executionContext) marshalOJobConfiguration2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐJobConfiguration(ctx context.Context, sel ast.SelectionSet, v models.JobConfiguration) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

@@ -53,6 +53,9 @@ type ObjectOwnedMixin struct {
 	InterceptorFuncs []InterceptorFunc
 	// AllowAnonymousTrustCenterAccess allows anonymous users from the trust center to access the object
 	AllowAnonymousTrustCenterAccess bool
+	// UseListObjectsFilter allows to use the list objects filter for the object owned mixin instead of batch checks
+	// use sparingly, as list objects can be expensive
+	UseListObjectsFilter bool
 }
 
 type HookFunc func(o ObjectOwnedMixin) ent.Hook
@@ -67,12 +70,10 @@ func newObjectOwnedMixin[V any](schema any, opts ...objectOwnedOption) ObjectOwn
 
 	// defaults settings
 	o := ObjectOwnedMixin{
-		Ref:       sch.PluralName(),
-		HookFuncs: []HookFunc{defaultTupleUpdateFunc},
-		InterceptorFuncs: []InterceptorFunc{func(_ ObjectOwnedMixin) ent.Interceptor {
-			return interceptors.FilterQueryResults[V]()
-		}},
-		OwnerRelation: fgax.ParentRelation,
+		Ref:              sch.PluralName(),
+		HookFuncs:        []HookFunc{defaultTupleUpdateFunc},
+		InterceptorFuncs: []InterceptorFunc{},
+		OwnerRelation:    fgax.ParentRelation,
 	}
 
 	// apply options
@@ -82,6 +83,16 @@ func newObjectOwnedMixin[V any](schema any, opts ...objectOwnedOption) ObjectOwn
 
 	if (!o.IncludeOrganizationOwner) && o.AllowEmptyForSystemAdmin {
 		log.Fatal().Msg("ObjectOwnedMixin: AllowEmptyForSystemAdmin cannot be set to true if WithOrganizationOwner is false")
+	}
+
+	if o.UseListObjectsFilter {
+		o.InterceptorFuncs = append(o.InterceptorFuncs, func(_ ObjectOwnedMixin) ent.Interceptor {
+			return interceptors.FilterListQuery()
+		})
+	} else {
+		o.InterceptorFuncs = append(o.InterceptorFuncs, func(_ ObjectOwnedMixin) ent.Interceptor {
+			return interceptors.FilterQueryResults[V]()
+		})
 	}
 
 	return o
@@ -153,6 +164,14 @@ func withOrganizationOwner(skipSystemAdmin bool) objectOwnedOption {
 		o.HookFuncs = append(o.HookFuncs, orgHookCreateFunc)
 		o.InterceptorFuncs = append(o.InterceptorFuncs, defaultOrgInterceptorFunc)
 	}
+}
+
+// withListObjectsFilter allows to use the list objects filter for the object owned mixin instead of batch checks
+func withListObjectsFilter() objectOwnedOption { //nolint:unused
+	return func(o *ObjectOwnedMixin) {
+		o.UseListObjectsFilter = true
+	}
+
 }
 
 // Indexes of the ObjectOwnedMixin

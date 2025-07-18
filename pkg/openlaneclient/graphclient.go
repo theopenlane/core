@@ -63,7 +63,10 @@ type OpenlaneGraphClient interface {
 	CreateControlsByClone(ctx context.Context, input CloneControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateControlsByClone, error)
 	CreateControlsByCloneReturnID(ctx context.Context, input CloneControlInput, interceptors ...clientv2.RequestInterceptor) (*CreateControlsByCloneReturnID, error)
 	GetControlCategories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetControlCategories, error)
+	GetControlCategoriesWithFramework(ctx context.Context, where *ControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControlCategoriesWithFramework, error)
+	GetControlsGroupByCategory(ctx context.Context, first *int64, last *int64, after *string, before *string, where *ControlWhereInput, orderBy []*ControlOrder, category *string, interceptors ...clientv2.RequestInterceptor) (*GetControlsGroupByCategory, error)
 	GetControlSubcategories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetControlSubcategories, error)
+	GetControlSubcategoriesWithFramework(ctx context.Context, where *ControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControlSubcategoriesWithFramework, error)
 	GetAllControlHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllControlHistories, error)
 	GetControlHistories(ctx context.Context, where *ControlHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControlHistories, error)
 	CreateBulkControlImplementation(ctx context.Context, input []*CreateControlImplementationInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkControlImplementation, error)
@@ -459,6 +462,16 @@ type OpenlaneGraphClient interface {
 	GetTrustCenterByID(ctx context.Context, trustCenterID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterByID, error)
 	GetTrustCenters(ctx context.Context, first *int64, last *int64, where *TrustCenterWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenters, error)
 	UpdateTrustCenter(ctx context.Context, updateTrustCenterID string, input UpdateTrustCenterInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenter, error)
+	CreateBulkCSVTrustCenterCompliance(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTrustCenterCompliance, error)
+	CreateBulkTrustCenterCompliance(ctx context.Context, input []*CreateTrustCenterComplianceInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTrustCenterCompliance, error)
+	CreateTrustCenterCompliance(ctx context.Context, input CreateTrustCenterComplianceInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterCompliance, error)
+	DeleteTrustCenterCompliance(ctx context.Context, deleteTrustCenterComplianceID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTrustCenterCompliance, error)
+	GetAllTrustCenterCompliances(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterCompliances, error)
+	GetTrustCenterComplianceByID(ctx context.Context, trustCenterComplianceID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterComplianceByID, error)
+	GetTrustCenterCompliances(ctx context.Context, first *int64, last *int64, where *TrustCenterComplianceWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterCompliances, error)
+	UpdateTrustCenterCompliance(ctx context.Context, updateTrustCenterComplianceID string, input UpdateTrustCenterComplianceInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterCompliance, error)
+	GetAllTrustCenterComplianceHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterComplianceHistories, error)
+	GetTrustCenterComplianceHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterComplianceHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterComplianceHistories, error)
 	GetAllTrustCenterHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterHistories, error)
 	GetTrustCenterHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterHistories, error)
 	CreateTrustCenterSetting(ctx context.Context, input CreateTrustCenterSettingInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterSetting, error)
@@ -6196,7 +6209,7 @@ func (t *AdminSearch_AdminSearch_ScheduledJobs_PageInfo) GetStartCursor() *strin
 
 type AdminSearch_AdminSearch_ScheduledJobs_Edges_Node struct {
 	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	ID            string                  "json:\"id\" graphql:\"id\""
@@ -7277,6 +7290,92 @@ func (t *AdminSearch_AdminSearch_TrustCenters) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type AdminSearch_AdminSearch_TrustCenterCompliances_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *AdminSearch_AdminSearch_TrustCenterCompliances_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenterCompliances_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *AdminSearch_AdminSearch_TrustCenterCompliances_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenterCompliances_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *AdminSearch_AdminSearch_TrustCenterCompliances_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenterCompliances_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *AdminSearch_AdminSearch_TrustCenterCompliances_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenterCompliances_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type AdminSearch_AdminSearch_TrustCenterCompliances_Edges_Node struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *AdminSearch_AdminSearch_TrustCenterCompliances_Edges_Node) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenterCompliances_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_TrustCenterCompliances_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenterCompliances_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type AdminSearch_AdminSearch_TrustCenterCompliances_Edges struct {
+	Node *AdminSearch_AdminSearch_TrustCenterCompliances_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *AdminSearch_AdminSearch_TrustCenterCompliances_Edges) GetNode() *AdminSearch_AdminSearch_TrustCenterCompliances_Edges_Node {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenterCompliances_Edges{}
+	}
+	return t.Node
+}
+
+type AdminSearch_AdminSearch_TrustCenterCompliances struct {
+	Edges      []*AdminSearch_AdminSearch_TrustCenterCompliances_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   AdminSearch_AdminSearch_TrustCenterCompliances_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                   "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *AdminSearch_AdminSearch_TrustCenterCompliances) GetEdges() []*AdminSearch_AdminSearch_TrustCenterCompliances_Edges {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenterCompliances{}
+	}
+	return t.Edges
+}
+func (t *AdminSearch_AdminSearch_TrustCenterCompliances) GetPageInfo() *AdminSearch_AdminSearch_TrustCenterCompliances_PageInfo {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenterCompliances{}
+	}
+	return &t.PageInfo
+}
+func (t *AdminSearch_AdminSearch_TrustCenterCompliances) GetTotalCount() int64 {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_TrustCenterCompliances{}
+	}
+	return t.TotalCount
+}
+
 type AdminSearch_AdminSearch_Users_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -7640,6 +7739,7 @@ type AdminSearch_AdminSearch struct {
 	Tasks                       *AdminSearch_AdminSearch_Tasks                       "json:\"tasks,omitempty\" graphql:\"tasks\""
 	Templates                   *AdminSearch_AdminSearch_Templates                   "json:\"templates,omitempty\" graphql:\"templates\""
 	TotalCount                  int64                                                "json:\"totalCount\" graphql:\"totalCount\""
+	TrustCenterCompliances      *AdminSearch_AdminSearch_TrustCenterCompliances      "json:\"trustCenterCompliances,omitempty\" graphql:\"trustCenterCompliances\""
 	TrustCenters                *AdminSearch_AdminSearch_TrustCenters                "json:\"trustCenters,omitempty\" graphql:\"trustCenters\""
 	UserSettings                *AdminSearch_AdminSearch_UserSettings                "json:\"userSettings,omitempty\" graphql:\"userSettings\""
 	Users                       *AdminSearch_AdminSearch_Users                       "json:\"users,omitempty\" graphql:\"users\""
@@ -7891,6 +7991,12 @@ func (t *AdminSearch_AdminSearch) GetTotalCount() int64 {
 		t = &AdminSearch_AdminSearch{}
 	}
 	return t.TotalCount
+}
+func (t *AdminSearch_AdminSearch) GetTrustCenterCompliances() *AdminSearch_AdminSearch_TrustCenterCompliances {
+	if t == nil {
+		t = &AdminSearch_AdminSearch{}
+	}
+	return t.TrustCenterCompliances
 }
 func (t *AdminSearch_AdminSearch) GetTrustCenters() *AdminSearch_AdminSearch_TrustCenters {
 	if t == nil {
@@ -14520,6 +14626,204 @@ func (t *CreateControlsByCloneReturnID_CreateControlsByClone) GetControls() []*C
 	return t.Controls
 }
 
+type GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node struct {
+	Name               string  "json:\"name\" graphql:\"name\""
+	ReferenceFramework *string "json:\"referenceFramework,omitempty\" graphql:\"referenceFramework\""
+}
+
+func (t *GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node) GetName() string {
+	if t == nil {
+		t = &GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{}
+	}
+	return t.Name
+}
+func (t *GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node) GetReferenceFramework() *string {
+	if t == nil {
+		t = &GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node{}
+	}
+	return t.ReferenceFramework
+}
+
+type GetControlCategoriesWithFramework_ControlCategoriesByFramework struct {
+	Node GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node "json:\"node\" graphql:\"node\""
+}
+
+func (t *GetControlCategoriesWithFramework_ControlCategoriesByFramework) GetNode() *GetControlCategoriesWithFramework_ControlCategoriesByFramework_Node {
+	if t == nil {
+		t = &GetControlCategoriesWithFramework_ControlCategoriesByFramework{}
+	}
+	return &t.Node
+}
+
+type GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_Edges_Node struct {
+	ID                 string  "json:\"id\" graphql:\"id\""
+	OwnerID            *string "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RefCode            string  "json:\"refCode\" graphql:\"refCode\""
+	ReferenceFramework *string "json:\"referenceFramework,omitempty\" graphql:\"referenceFramework\""
+}
+
+func (t *GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_Edges_Node) GetRefCode() string {
+	if t == nil {
+		t = &GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_Edges_Node{}
+	}
+	return t.RefCode
+}
+func (t *GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_Edges_Node) GetReferenceFramework() *string {
+	if t == nil {
+		t = &GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_Edges_Node{}
+	}
+	return t.ReferenceFramework
+}
+
+type GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_Edges struct {
+	Node *GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_Edges) GetNode() *GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_Edges_Node {
+	if t == nil {
+		t = &GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_Edges{}
+	}
+	return t.Node
+}
+
+type GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls struct {
+	Edges      []*GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                                           "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls) GetEdges() []*GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_Edges {
+	if t == nil {
+		t = &GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls{}
+	}
+	return t.Edges
+}
+func (t *GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls) GetPageInfo() *GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls_PageInfo {
+	if t == nil {
+		t = &GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls{}
+	}
+	return &t.PageInfo
+}
+func (t *GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls{}
+	}
+	return t.TotalCount
+}
+
+type GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node struct {
+	Category string                                                                 "json:\"category\" graphql:\"category\""
+	Controls GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls "json:\"controls\" graphql:\"controls\""
+}
+
+func (t *GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node) GetCategory() string {
+	if t == nil {
+		t = &GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node{}
+	}
+	return t.Category
+}
+func (t *GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node) GetControls() *GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node_Controls {
+	if t == nil {
+		t = &GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node{}
+	}
+	return &t.Controls
+}
+
+type GetControlsGroupByCategory_ControlsGroupByCategory_Edges struct {
+	Node GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node "json:\"node\" graphql:\"node\""
+}
+
+func (t *GetControlsGroupByCategory_ControlsGroupByCategory_Edges) GetNode() *GetControlsGroupByCategory_ControlsGroupByCategory_Edges_Node {
+	if t == nil {
+		t = &GetControlsGroupByCategory_ControlsGroupByCategory_Edges{}
+	}
+	return &t.Node
+}
+
+type GetControlsGroupByCategory_ControlsGroupByCategory struct {
+	Edges []*GetControlsGroupByCategory_ControlsGroupByCategory_Edges "json:\"edges\" graphql:\"edges\""
+}
+
+func (t *GetControlsGroupByCategory_ControlsGroupByCategory) GetEdges() []*GetControlsGroupByCategory_ControlsGroupByCategory_Edges {
+	if t == nil {
+		t = &GetControlsGroupByCategory_ControlsGroupByCategory{}
+	}
+	return t.Edges
+}
+
+type GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node struct {
+	Name               string  "json:\"name\" graphql:\"name\""
+	ReferenceFramework *string "json:\"referenceFramework,omitempty\" graphql:\"referenceFramework\""
+}
+
+func (t *GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node) GetName() string {
+	if t == nil {
+		t = &GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node{}
+	}
+	return t.Name
+}
+func (t *GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node) GetReferenceFramework() *string {
+	if t == nil {
+		t = &GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node{}
+	}
+	return t.ReferenceFramework
+}
+
+type GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework struct {
+	Node GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node "json:\"node\" graphql:\"node\""
+}
+
+func (t *GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework) GetNode() *GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework_Node {
+	if t == nil {
+		t = &GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework{}
+	}
+	return &t.Node
+}
+
 type GetAllControlHistories_ControlHistories_Edges_Node struct {
 	AssessmentMethods      []*models.AssessmentMethod       "json:\"assessmentMethods,omitempty\" graphql:\"assessmentMethods\""
 	AssessmentObjectives   []*models.AssessmentObjective    "json:\"assessmentObjectives,omitempty\" graphql:\"assessmentObjectives\""
@@ -19222,8 +19526,7 @@ func (t *GetControlObjectiveHistories_ControlObjectiveHistories) GetEdges() []*G
 }
 
 type CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -19235,12 +19538,6 @@ type CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlSc
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs{}
-	}
-	return t.Cadence
-}
 func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob_ControlScheduledJobs{}
@@ -19314,8 +19611,7 @@ func (t *CreateBulkCSVControlScheduledJob_CreateBulkCSVControlScheduledJob) GetC
 }
 
 type CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -19327,12 +19623,6 @@ type CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlSchedule
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs{}
-	}
-	return t.Cadence
-}
 func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &CreateBulkControlScheduledJob_CreateBulkControlScheduledJob_ControlScheduledJobs{}
@@ -19406,8 +19696,7 @@ func (t *CreateBulkControlScheduledJob_CreateBulkControlScheduledJob) GetControl
 }
 
 type CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -19419,12 +19708,6 @@ type CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob str
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob{}
-	}
-	return t.Cadence
-}
 func (t *CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &CreateControlScheduledJob_CreateControlScheduledJob_ControlScheduledJob{}
@@ -19541,8 +19824,7 @@ func (t *GetAllControlScheduledJobs_ControlScheduledJobs_PageInfo) GetStartCurso
 }
 
 type GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -19554,12 +19836,6 @@ type GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node struct {
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
-	}
-	return t.Cadence
-}
 func (t *GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &GetAllControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
@@ -19658,8 +19934,7 @@ func (t *GetAllControlScheduledJobs_ControlScheduledJobs) GetTotalCount() int64 
 }
 
 type GetControlScheduledJobByID_ControlScheduledJob struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -19671,12 +19946,6 @@ type GetControlScheduledJobByID_ControlScheduledJob struct {
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetControlScheduledJobByID_ControlScheduledJob) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &GetControlScheduledJobByID_ControlScheduledJob{}
-	}
-	return t.Cadence
-}
 func (t *GetControlScheduledJobByID_ControlScheduledJob) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &GetControlScheduledJobByID_ControlScheduledJob{}
@@ -19771,8 +20040,7 @@ func (t *GetControlScheduledJobs_ControlScheduledJobs_PageInfo) GetStartCursor()
 }
 
 type GetControlScheduledJobs_ControlScheduledJobs_Edges_Node struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -19784,12 +20052,6 @@ type GetControlScheduledJobs_ControlScheduledJobs_Edges_Node struct {
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &GetControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
-	}
-	return t.Cadence
-}
 func (t *GetControlScheduledJobs_ControlScheduledJobs_Edges_Node) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &GetControlScheduledJobs_ControlScheduledJobs_Edges_Node{}
@@ -19888,8 +20150,7 @@ func (t *GetControlScheduledJobs_ControlScheduledJobs) GetTotalCount() int64 {
 }
 
 type UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -19901,12 +20162,6 @@ type UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob str
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob{}
-	}
-	return t.Cadence
-}
 func (t *UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &UpdateControlScheduledJob_UpdateControlScheduledJob_ControlScheduledJob{}
@@ -20012,8 +20267,7 @@ func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_PageInf
 }
 
 type GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -20028,12 +20282,6 @@ type GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node 
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
-	}
-	return t.Cadence
-}
 func (t *GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &GetAllControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
@@ -20182,8 +20430,7 @@ func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_PageInfo) 
 }
 
 type GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -20198,12 +20445,6 @@ type GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node str
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
-	}
-	return t.Cadence
-}
 func (t *GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &GetControlScheduledJobHistories_ControlScheduledJobHistories_Edges_Node{}
@@ -28800,17 +29041,19 @@ func (t *GetEvidenceHistories_EvidenceHistories) GetEdges() []*GetEvidenceHistor
 }
 
 type CreateExport_CreateExport_Export struct {
-	CreatedAt   *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ExportType  enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
-	Fields      []string           "json:\"fields,omitempty\" graphql:\"fields\""
-	Format      enums.ExportFormat "json:\"format\" graphql:\"format\""
-	ID          string             "json:\"id\" graphql:\"id\""
-	OwnerID     *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RequestorID *string            "json:\"requestorID,omitempty\" graphql:\"requestorID\""
-	Status      enums.ExportStatus "json:\"status\" graphql:\"status\""
-	UpdatedAt   *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ErrorMessage *string            "json:\"errorMessage,omitempty\" graphql:\"errorMessage\""
+	ExportType   enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
+	Fields       []string           "json:\"fields,omitempty\" graphql:\"fields\""
+	Filters      *string            "json:\"filters,omitempty\" graphql:\"filters\""
+	Format       enums.ExportFormat "json:\"format\" graphql:\"format\""
+	ID           string             "json:\"id\" graphql:\"id\""
+	OwnerID      *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RequestorID  *string            "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status       enums.ExportStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt    *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *CreateExport_CreateExport_Export) GetCreatedAt() *time.Time {
@@ -28825,6 +29068,12 @@ func (t *CreateExport_CreateExport_Export) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
+func (t *CreateExport_CreateExport_Export) GetErrorMessage() *string {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return t.ErrorMessage
+}
 func (t *CreateExport_CreateExport_Export) GetExportType() *enums.ExportType {
 	if t == nil {
 		t = &CreateExport_CreateExport_Export{}
@@ -28836,6 +29085,12 @@ func (t *CreateExport_CreateExport_Export) GetFields() []string {
 		t = &CreateExport_CreateExport_Export{}
 	}
 	return t.Fields
+}
+func (t *CreateExport_CreateExport_Export) GetFilters() *string {
+	if t == nil {
+		t = &CreateExport_CreateExport_Export{}
+	}
+	return t.Filters
 }
 func (t *CreateExport_CreateExport_Export) GetFormat() *enums.ExportFormat {
 	if t == nil {
@@ -28924,17 +29179,19 @@ func (t *GetAllExports_Exports_PageInfo) GetStartCursor() *string {
 }
 
 type GetAllExports_Exports_Edges_Node struct {
-	CreatedAt   *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ExportType  enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
-	Fields      []string           "json:\"fields,omitempty\" graphql:\"fields\""
-	Format      enums.ExportFormat "json:\"format\" graphql:\"format\""
-	ID          string             "json:\"id\" graphql:\"id\""
-	OwnerID     *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RequestorID *string            "json:\"requestorID,omitempty\" graphql:\"requestorID\""
-	Status      enums.ExportStatus "json:\"status\" graphql:\"status\""
-	UpdatedAt   *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ErrorMessage *string            "json:\"errorMessage,omitempty\" graphql:\"errorMessage\""
+	ExportType   enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
+	Fields       []string           "json:\"fields,omitempty\" graphql:\"fields\""
+	Filters      *string            "json:\"filters,omitempty\" graphql:\"filters\""
+	Format       enums.ExportFormat "json:\"format\" graphql:\"format\""
+	ID           string             "json:\"id\" graphql:\"id\""
+	OwnerID      *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RequestorID  *string            "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status       enums.ExportStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt    *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllExports_Exports_Edges_Node) GetCreatedAt() *time.Time {
@@ -28949,6 +29206,12 @@ func (t *GetAllExports_Exports_Edges_Node) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
+func (t *GetAllExports_Exports_Edges_Node) GetErrorMessage() *string {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return t.ErrorMessage
+}
 func (t *GetAllExports_Exports_Edges_Node) GetExportType() *enums.ExportType {
 	if t == nil {
 		t = &GetAllExports_Exports_Edges_Node{}
@@ -28960,6 +29223,12 @@ func (t *GetAllExports_Exports_Edges_Node) GetFields() []string {
 		t = &GetAllExports_Exports_Edges_Node{}
 	}
 	return t.Fields
+}
+func (t *GetAllExports_Exports_Edges_Node) GetFilters() *string {
+	if t == nil {
+		t = &GetAllExports_Exports_Edges_Node{}
+	}
+	return t.Filters
 }
 func (t *GetAllExports_Exports_Edges_Node) GetFormat() *enums.ExportFormat {
 	if t == nil {
@@ -29095,18 +29364,20 @@ func (t *GetExportByID_Export_Files) GetEdges() []*GetExportByID_Export_Files_Ed
 }
 
 type GetExportByID_Export struct {
-	CreatedAt   *time.Time                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ExportType  enums.ExportType           "json:\"exportType\" graphql:\"exportType\""
-	Fields      []string                   "json:\"fields,omitempty\" graphql:\"fields\""
-	Files       GetExportByID_Export_Files "json:\"files\" graphql:\"files\""
-	Format      enums.ExportFormat         "json:\"format\" graphql:\"format\""
-	ID          string                     "json:\"id\" graphql:\"id\""
-	OwnerID     *string                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RequestorID *string                    "json:\"requestorID,omitempty\" graphql:\"requestorID\""
-	Status      enums.ExportStatus         "json:\"status\" graphql:\"status\""
-	UpdatedAt   *time.Time                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ErrorMessage *string                    "json:\"errorMessage,omitempty\" graphql:\"errorMessage\""
+	ExportType   enums.ExportType           "json:\"exportType\" graphql:\"exportType\""
+	Fields       []string                   "json:\"fields,omitempty\" graphql:\"fields\""
+	Files        GetExportByID_Export_Files "json:\"files\" graphql:\"files\""
+	Filters      *string                    "json:\"filters,omitempty\" graphql:\"filters\""
+	Format       enums.ExportFormat         "json:\"format\" graphql:\"format\""
+	ID           string                     "json:\"id\" graphql:\"id\""
+	OwnerID      *string                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RequestorID  *string                    "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status       enums.ExportStatus         "json:\"status\" graphql:\"status\""
+	UpdatedAt    *time.Time                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetExportByID_Export) GetCreatedAt() *time.Time {
@@ -29120,6 +29391,12 @@ func (t *GetExportByID_Export) GetCreatedBy() *string {
 		t = &GetExportByID_Export{}
 	}
 	return t.CreatedBy
+}
+func (t *GetExportByID_Export) GetErrorMessage() *string {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return t.ErrorMessage
 }
 func (t *GetExportByID_Export) GetExportType() *enums.ExportType {
 	if t == nil {
@@ -29138,6 +29415,12 @@ func (t *GetExportByID_Export) GetFiles() *GetExportByID_Export_Files {
 		t = &GetExportByID_Export{}
 	}
 	return &t.Files
+}
+func (t *GetExportByID_Export) GetFilters() *string {
+	if t == nil {
+		t = &GetExportByID_Export{}
+	}
+	return t.Filters
 }
 func (t *GetExportByID_Export) GetFormat() *enums.ExportFormat {
 	if t == nil {
@@ -29215,17 +29498,19 @@ func (t *GetExports_Exports_PageInfo) GetStartCursor() *string {
 }
 
 type GetExports_Exports_Edges_Node struct {
-	CreatedAt   *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ExportType  enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
-	Fields      []string           "json:\"fields,omitempty\" graphql:\"fields\""
-	Format      enums.ExportFormat "json:\"format\" graphql:\"format\""
-	ID          string             "json:\"id\" graphql:\"id\""
-	OwnerID     *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RequestorID *string            "json:\"requestorID,omitempty\" graphql:\"requestorID\""
-	Status      enums.ExportStatus "json:\"status\" graphql:\"status\""
-	UpdatedAt   *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ErrorMessage *string            "json:\"errorMessage,omitempty\" graphql:\"errorMessage\""
+	ExportType   enums.ExportType   "json:\"exportType\" graphql:\"exportType\""
+	Fields       []string           "json:\"fields,omitempty\" graphql:\"fields\""
+	Filters      *string            "json:\"filters,omitempty\" graphql:\"filters\""
+	Format       enums.ExportFormat "json:\"format\" graphql:\"format\""
+	ID           string             "json:\"id\" graphql:\"id\""
+	OwnerID      *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RequestorID  *string            "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status       enums.ExportStatus "json:\"status\" graphql:\"status\""
+	UpdatedAt    *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetExports_Exports_Edges_Node) GetCreatedAt() *time.Time {
@@ -29240,6 +29525,12 @@ func (t *GetExports_Exports_Edges_Node) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
+func (t *GetExports_Exports_Edges_Node) GetErrorMessage() *string {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return t.ErrorMessage
+}
 func (t *GetExports_Exports_Edges_Node) GetExportType() *enums.ExportType {
 	if t == nil {
 		t = &GetExports_Exports_Edges_Node{}
@@ -29251,6 +29542,12 @@ func (t *GetExports_Exports_Edges_Node) GetFields() []string {
 		t = &GetExports_Exports_Edges_Node{}
 	}
 	return t.Fields
+}
+func (t *GetExports_Exports_Edges_Node) GetFilters() *string {
+	if t == nil {
+		t = &GetExports_Exports_Edges_Node{}
+	}
+	return t.Filters
 }
 func (t *GetExports_Exports_Edges_Node) GetFormat() *enums.ExportFormat {
 	if t == nil {
@@ -29386,18 +29683,20 @@ func (t *UpdateExport_UpdateExport_Export_Files) GetEdges() []*UpdateExport_Upda
 }
 
 type UpdateExport_UpdateExport_Export struct {
-	CreatedAt   *time.Time                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	ExportType  enums.ExportType                       "json:\"exportType\" graphql:\"exportType\""
-	Fields      []string                               "json:\"fields,omitempty\" graphql:\"fields\""
-	Files       UpdateExport_UpdateExport_Export_Files "json:\"files\" graphql:\"files\""
-	Format      enums.ExportFormat                     "json:\"format\" graphql:\"format\""
-	ID          string                                 "json:\"id\" graphql:\"id\""
-	OwnerID     *string                                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RequestorID *string                                "json:\"requestorID,omitempty\" graphql:\"requestorID\""
-	Status      enums.ExportStatus                     "json:\"status\" graphql:\"status\""
-	UpdatedAt   *time.Time                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ErrorMessage *string                                "json:\"errorMessage,omitempty\" graphql:\"errorMessage\""
+	ExportType   enums.ExportType                       "json:\"exportType\" graphql:\"exportType\""
+	Fields       []string                               "json:\"fields,omitempty\" graphql:\"fields\""
+	Files        UpdateExport_UpdateExport_Export_Files "json:\"files\" graphql:\"files\""
+	Filters      *string                                "json:\"filters,omitempty\" graphql:\"filters\""
+	Format       enums.ExportFormat                     "json:\"format\" graphql:\"format\""
+	ID           string                                 "json:\"id\" graphql:\"id\""
+	OwnerID      *string                                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RequestorID  *string                                "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status       enums.ExportStatus                     "json:\"status\" graphql:\"status\""
+	UpdatedAt    *time.Time                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *UpdateExport_UpdateExport_Export) GetCreatedAt() *time.Time {
@@ -29411,6 +29710,12 @@ func (t *UpdateExport_UpdateExport_Export) GetCreatedBy() *string {
 		t = &UpdateExport_UpdateExport_Export{}
 	}
 	return t.CreatedBy
+}
+func (t *UpdateExport_UpdateExport_Export) GetErrorMessage() *string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return t.ErrorMessage
 }
 func (t *UpdateExport_UpdateExport_Export) GetExportType() *enums.ExportType {
 	if t == nil {
@@ -29429,6 +29734,12 @@ func (t *UpdateExport_UpdateExport_Export) GetFiles() *UpdateExport_UpdateExport
 		t = &UpdateExport_UpdateExport_Export{}
 	}
 	return &t.Files
+}
+func (t *UpdateExport_UpdateExport_Export) GetFilters() *string {
+	if t == nil {
+		t = &UpdateExport_UpdateExport_Export{}
+	}
+	return t.Filters
 }
 func (t *UpdateExport_UpdateExport_Export) GetFormat() *enums.ExportFormat {
 	if t == nil {
@@ -38954,8 +39265,42 @@ func (t *CreateInvite_CreateInvite_Invite_Owner) GetID() string {
 	return t.ID
 }
 
+type CreateInvite_CreateInvite_Invite_Groups_Edges_Node struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateInvite_CreateInvite_Invite_Groups_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateInvite_CreateInvite_Invite_Groups_Edges_Node{}
+	}
+	return t.ID
+}
+
+type CreateInvite_CreateInvite_Invite_Groups_Edges struct {
+	Node *CreateInvite_CreateInvite_Invite_Groups_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateInvite_CreateInvite_Invite_Groups_Edges) GetNode() *CreateInvite_CreateInvite_Invite_Groups_Edges_Node {
+	if t == nil {
+		t = &CreateInvite_CreateInvite_Invite_Groups_Edges{}
+	}
+	return t.Node
+}
+
+type CreateInvite_CreateInvite_Invite_Groups struct {
+	Edges []*CreateInvite_CreateInvite_Invite_Groups_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateInvite_CreateInvite_Invite_Groups) GetEdges() []*CreateInvite_CreateInvite_Invite_Groups_Edges {
+	if t == nil {
+		t = &CreateInvite_CreateInvite_Invite_Groups{}
+	}
+	return t.Edges
+}
+
 type CreateInvite_CreateInvite_Invite struct {
 	Expires      *time.Time                              "json:\"expires,omitempty\" graphql:\"expires\""
+	Groups       CreateInvite_CreateInvite_Invite_Groups "json:\"groups\" graphql:\"groups\""
 	ID           string                                  "json:\"id\" graphql:\"id\""
 	Owner        *CreateInvite_CreateInvite_Invite_Owner "json:\"owner,omitempty\" graphql:\"owner\""
 	Recipient    string                                  "json:\"recipient\" graphql:\"recipient\""
@@ -38970,6 +39315,12 @@ func (t *CreateInvite_CreateInvite_Invite) GetExpires() *time.Time {
 		t = &CreateInvite_CreateInvite_Invite{}
 	}
 	return t.Expires
+}
+func (t *CreateInvite_CreateInvite_Invite) GetGroups() *CreateInvite_CreateInvite_Invite_Groups {
+	if t == nil {
+		t = &CreateInvite_CreateInvite_Invite{}
+	}
+	return &t.Groups
 }
 func (t *CreateInvite_CreateInvite_Invite) GetID() string {
 	if t == nil {
@@ -39036,13 +39387,53 @@ func (t *DeleteInvite_DeleteInvite) GetDeletedID() string {
 	return t.DeletedID
 }
 
-type GetAllInvites_Invites_Edges_Node struct {
-	ID        string             "json:\"id\" graphql:\"id\""
-	Recipient string             "json:\"recipient\" graphql:\"recipient\""
-	Role      enums.Role         "json:\"role\" graphql:\"role\""
-	Status    enums.InviteStatus "json:\"status\" graphql:\"status\""
+type GetAllInvites_Invites_Edges_Node_Groups_Edges_Node struct {
+	ID string "json:\"id\" graphql:\"id\""
 }
 
+func (t *GetAllInvites_Invites_Edges_Node_Groups_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllInvites_Invites_Edges_Node_Groups_Edges_Node{}
+	}
+	return t.ID
+}
+
+type GetAllInvites_Invites_Edges_Node_Groups_Edges struct {
+	Node *GetAllInvites_Invites_Edges_Node_Groups_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllInvites_Invites_Edges_Node_Groups_Edges) GetNode() *GetAllInvites_Invites_Edges_Node_Groups_Edges_Node {
+	if t == nil {
+		t = &GetAllInvites_Invites_Edges_Node_Groups_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllInvites_Invites_Edges_Node_Groups struct {
+	Edges []*GetAllInvites_Invites_Edges_Node_Groups_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllInvites_Invites_Edges_Node_Groups) GetEdges() []*GetAllInvites_Invites_Edges_Node_Groups_Edges {
+	if t == nil {
+		t = &GetAllInvites_Invites_Edges_Node_Groups{}
+	}
+	return t.Edges
+}
+
+type GetAllInvites_Invites_Edges_Node struct {
+	Groups    GetAllInvites_Invites_Edges_Node_Groups "json:\"groups\" graphql:\"groups\""
+	ID        string                                  "json:\"id\" graphql:\"id\""
+	Recipient string                                  "json:\"recipient\" graphql:\"recipient\""
+	Role      enums.Role                              "json:\"role\" graphql:\"role\""
+	Status    enums.InviteStatus                      "json:\"status\" graphql:\"status\""
+}
+
+func (t *GetAllInvites_Invites_Edges_Node) GetGroups() *GetAllInvites_Invites_Edges_Node_Groups {
+	if t == nil {
+		t = &GetAllInvites_Invites_Edges_Node{}
+	}
+	return &t.Groups
+}
 func (t *GetAllInvites_Invites_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetAllInvites_Invites_Edges_Node{}
@@ -64018,14 +64409,13 @@ func (t *GetScanHistories_ScanHistories) GetTotalCount() int64 {
 
 type CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs struct {
 	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
 	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	ID            string                  "json:\"id\" graphql:\"id\""
-	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
@@ -64083,12 +64473,6 @@ func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetI
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetJobType() *enums.JobType {
-	if t == nil {
-		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
-	}
-	return &t.JobType
-}
 func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetOwnerID() *string {
 	if t == nil {
 		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
@@ -64145,14 +64529,13 @@ func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob) GetScheduledJobs()
 
 type CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs struct {
 	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
 	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	ID            string                  "json:\"id\" graphql:\"id\""
-	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
@@ -64210,12 +64593,6 @@ func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetID() st
 	}
 	return t.ID
 }
-func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetJobType() *enums.JobType {
-	if t == nil {
-		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
-	}
-	return &t.JobType
-}
 func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetOwnerID() *string {
 	if t == nil {
 		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
@@ -64272,14 +64649,13 @@ func (t *CreateBulkScheduledJob_CreateBulkScheduledJob) GetScheduledJobs() []*Cr
 
 type CreateScheduledJob_CreateScheduledJob_ScheduledJob struct {
 	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
 	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	ID            string                  "json:\"id\" graphql:\"id\""
-	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
@@ -64336,12 +64712,6 @@ func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetID() string {
 		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
 	}
 	return t.ID
-}
-func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetJobType() *enums.JobType {
-	if t == nil {
-		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
-	}
-	return &t.JobType
 }
 func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetOwnerID() *string {
 	if t == nil {
@@ -64442,14 +64812,13 @@ func (t *GetAllScheduledJobs_ScheduledJobs_PageInfo) GetStartCursor() *string {
 
 type GetAllScheduledJobs_ScheduledJobs_Edges_Node struct {
 	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
 	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	ID            string                  "json:\"id\" graphql:\"id\""
-	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
@@ -64506,12 +64875,6 @@ func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetID() string {
 		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetJobType() *enums.JobType {
-	if t == nil {
-		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
-	}
-	return &t.JobType
 }
 func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetOwnerID() *string {
 	if t == nil {
@@ -64594,14 +64957,13 @@ func (t *GetAllScheduledJobs_ScheduledJobs) GetTotalCount() int64 {
 
 type GetScheduledJobByID_ScheduledJob struct {
 	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
 	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	ID            string                  "json:\"id\" graphql:\"id\""
-	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
@@ -64658,12 +65020,6 @@ func (t *GetScheduledJobByID_ScheduledJob) GetID() string {
 		t = &GetScheduledJobByID_ScheduledJob{}
 	}
 	return t.ID
-}
-func (t *GetScheduledJobByID_ScheduledJob) GetJobType() *enums.JobType {
-	if t == nil {
-		t = &GetScheduledJobByID_ScheduledJob{}
-	}
-	return &t.JobType
 }
 func (t *GetScheduledJobByID_ScheduledJob) GetOwnerID() *string {
 	if t == nil {
@@ -64742,14 +65098,13 @@ func (t *GetScheduledJobs_ScheduledJobs_PageInfo) GetStartCursor() *string {
 
 type GetScheduledJobs_ScheduledJobs_Edges_Node struct {
 	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
 	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	ID            string                  "json:\"id\" graphql:\"id\""
-	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
@@ -64806,12 +65161,6 @@ func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetID() string {
 		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetJobType() *enums.JobType {
-	if t == nil {
-		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
-	}
-	return &t.JobType
 }
 func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetOwnerID() *string {
 	if t == nil {
@@ -64894,14 +65243,13 @@ func (t *GetScheduledJobs_ScheduledJobs) GetTotalCount() int64 {
 
 type UpdateScheduledJob_UpdateScheduledJob_ScheduledJob struct {
 	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
 	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	ID            string                  "json:\"id\" graphql:\"id\""
-	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
@@ -64958,12 +65306,6 @@ func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetID() string {
 		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
 	}
 	return t.ID
-}
-func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetJobType() *enums.JobType {
-	if t == nil {
-		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
-	}
-	return &t.JobType
 }
 func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetOwnerID() *string {
 	if t == nil {
@@ -65053,7 +65395,7 @@ func (t *GetAllScheduledJobHistories_ScheduledJobHistories_PageInfo) GetStartCur
 
 type GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node struct {
 	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -65061,7 +65403,6 @@ type GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node struct {
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	HistoryTime   time.Time               "json:\"historyTime\" graphql:\"historyTime\""
 	ID            string                  "json:\"id\" graphql:\"id\""
-	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	Operation     history.OpType          "json:\"operation\" graphql:\"operation\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Ref           *string                 "json:\"ref,omitempty\" graphql:\"ref\""
@@ -65126,12 +65467,6 @@ func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetID() s
 		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetJobType() *enums.JobType {
-	if t == nil {
-		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
-	}
-	return &t.JobType
 }
 func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
@@ -65258,7 +65593,7 @@ func (t *GetScheduledJobHistories_ScheduledJobHistories_PageInfo) GetStartCursor
 
 type GetScheduledJobHistories_ScheduledJobHistories_Edges_Node struct {
 	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
-	Configuration models.JobConfiguration "json:\"configuration\" graphql:\"configuration\""
+	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Cron          *string                 "json:\"cron,omitempty\" graphql:\"cron\""
@@ -65266,7 +65601,6 @@ type GetScheduledJobHistories_ScheduledJobHistories_Edges_Node struct {
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	HistoryTime   time.Time               "json:\"historyTime\" graphql:\"historyTime\""
 	ID            string                  "json:\"id\" graphql:\"id\""
-	JobType       enums.JobType           "json:\"jobType\" graphql:\"jobType\""
 	Operation     history.OpType          "json:\"operation\" graphql:\"operation\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Ref           *string                 "json:\"ref,omitempty\" graphql:\"ref\""
@@ -65331,12 +65665,6 @@ func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetID() stri
 		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetJobType() *enums.JobType {
-	if t == nil {
-		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
-	}
-	return &t.JobType
 }
 func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
@@ -69726,6 +70054,92 @@ func (t *GlobalSearch_Search_TrustCenters) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type GlobalSearch_Search_TrustCenterCompliances_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_TrustCenterCompliances_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenterCompliances_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_TrustCenterCompliances_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenterCompliances_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_TrustCenterCompliances_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenterCompliances_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_TrustCenterCompliances_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenterCompliances_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_TrustCenterCompliances_Edges_Node struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_TrustCenterCompliances_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenterCompliances_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_TrustCenterCompliances_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenterCompliances_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_TrustCenterCompliances_Edges struct {
+	Node *GlobalSearch_Search_TrustCenterCompliances_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GlobalSearch_Search_TrustCenterCompliances_Edges) GetNode() *GlobalSearch_Search_TrustCenterCompliances_Edges_Node {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenterCompliances_Edges{}
+	}
+	return t.Node
+}
+
+type GlobalSearch_Search_TrustCenterCompliances struct {
+	Edges      []*GlobalSearch_Search_TrustCenterCompliances_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_TrustCenterCompliances_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                               "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_TrustCenterCompliances) GetEdges() []*GlobalSearch_Search_TrustCenterCompliances_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenterCompliances{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_TrustCenterCompliances) GetPageInfo() *GlobalSearch_Search_TrustCenterCompliances_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenterCompliances{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_TrustCenterCompliances) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_TrustCenterCompliances{}
+	}
+	return t.TotalCount
+}
+
 type GlobalSearch_Search_Users_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -70033,6 +70447,7 @@ type GlobalSearch_Search struct {
 	Tasks                       *GlobalSearch_Search_Tasks                       "json:\"tasks,omitempty\" graphql:\"tasks\""
 	Templates                   *GlobalSearch_Search_Templates                   "json:\"templates,omitempty\" graphql:\"templates\""
 	TotalCount                  int64                                            "json:\"totalCount\" graphql:\"totalCount\""
+	TrustCenterCompliances      *GlobalSearch_Search_TrustCenterCompliances      "json:\"trustCenterCompliances,omitempty\" graphql:\"trustCenterCompliances\""
 	TrustCenters                *GlobalSearch_Search_TrustCenters                "json:\"trustCenters,omitempty\" graphql:\"trustCenters\""
 	UserSettings                *GlobalSearch_Search_UserSettings                "json:\"userSettings,omitempty\" graphql:\"userSettings\""
 	Users                       *GlobalSearch_Search_Users                       "json:\"users,omitempty\" graphql:\"users\""
@@ -70284,6 +70699,12 @@ func (t *GlobalSearch_Search) GetTotalCount() int64 {
 		t = &GlobalSearch_Search{}
 	}
 	return t.TotalCount
+}
+func (t *GlobalSearch_Search) GetTrustCenterCompliances() *GlobalSearch_Search_TrustCenterCompliances {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.TrustCenterCompliances
 }
 func (t *GlobalSearch_Search) GetTrustCenters() *GlobalSearch_Search_TrustCenters {
 	if t == nil {
@@ -80980,6 +81401,789 @@ func (t *UpdateTrustCenter_UpdateTrustCenter) GetTrustCenter() *UpdateTrustCente
 	return &t.TrustCenter
 }
 
+type CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance struct {
+	TrustCenterCompliances []*CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances "json:\"trustCenterCompliances,omitempty\" graphql:\"trustCenterCompliances\""
+}
+
+func (t *CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance) GetTrustCenterCompliances() []*CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance_TrustCenterCompliances {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance{}
+	}
+	return t.TrustCenterCompliances
+}
+
+type CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances) GetID() string {
+	if t == nil {
+		t = &CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances{}
+	}
+	return t.ID
+}
+func (t *CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance struct {
+	TrustCenterCompliances []*CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances "json:\"trustCenterCompliances,omitempty\" graphql:\"trustCenterCompliances\""
+}
+
+func (t *CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance) GetTrustCenterCompliances() []*CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance_TrustCenterCompliances {
+	if t == nil {
+		t = &CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance{}
+	}
+	return t.TrustCenterCompliances
+}
+
+type CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance) GetID() string {
+	if t == nil {
+		t = &CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance{}
+	}
+	return t.ID
+}
+func (t *CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance) GetTags() []string {
+	if t == nil {
+		t = &CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance{}
+	}
+	return t.Tags
+}
+func (t *CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateTrustCenterCompliance_CreateTrustCenterCompliance struct {
+	TrustCenterCompliance CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance "json:\"trustCenterCompliance\" graphql:\"trustCenterCompliance\""
+}
+
+func (t *CreateTrustCenterCompliance_CreateTrustCenterCompliance) GetTrustCenterCompliance() *CreateTrustCenterCompliance_CreateTrustCenterCompliance_TrustCenterCompliance {
+	if t == nil {
+		t = &CreateTrustCenterCompliance_CreateTrustCenterCompliance{}
+	}
+	return &t.TrustCenterCompliance
+}
+
+type DeleteTrustCenterCompliance_DeleteTrustCenterCompliance struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteTrustCenterCompliance_DeleteTrustCenterCompliance) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteTrustCenterCompliance_DeleteTrustCenterCompliance{}
+	}
+	return t.DeletedID
+}
+
+type GetAllTrustCenterCompliances_TrustCenterCompliances_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances_TrustCenterCompliances_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances_TrustCenterCompliances_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances_TrustCenterCompliances_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances_TrustCenterCompliances_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllTrustCenterCompliances_TrustCenterCompliances_Edges struct {
+	Node *GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllTrustCenterCompliances_TrustCenterCompliances_Edges) GetNode() *GetAllTrustCenterCompliances_TrustCenterCompliances_Edges_Node {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances_TrustCenterCompliances_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllTrustCenterCompliances_TrustCenterCompliances struct {
+	Edges      []*GetAllTrustCenterCompliances_TrustCenterCompliances_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllTrustCenterCompliances_TrustCenterCompliances_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                        "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllTrustCenterCompliances_TrustCenterCompliances) GetEdges() []*GetAllTrustCenterCompliances_TrustCenterCompliances_Edges {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances_TrustCenterCompliances{}
+	}
+	return t.Edges
+}
+func (t *GetAllTrustCenterCompliances_TrustCenterCompliances) GetPageInfo() *GetAllTrustCenterCompliances_TrustCenterCompliances_PageInfo {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances_TrustCenterCompliances{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllTrustCenterCompliances_TrustCenterCompliances) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances_TrustCenterCompliances{}
+	}
+	return t.TotalCount
+}
+
+type GetTrustCenterComplianceByID_TrustCenterCompliance struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTrustCenterComplianceByID_TrustCenterCompliance) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterComplianceByID_TrustCenterCompliance{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTrustCenterComplianceByID_TrustCenterCompliance) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterComplianceByID_TrustCenterCompliance{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTrustCenterComplianceByID_TrustCenterCompliance) GetID() string {
+	if t == nil {
+		t = &GetTrustCenterComplianceByID_TrustCenterCompliance{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenterComplianceByID_TrustCenterCompliance) GetTags() []string {
+	if t == nil {
+		t = &GetTrustCenterComplianceByID_TrustCenterCompliance{}
+	}
+	return t.Tags
+}
+func (t *GetTrustCenterComplianceByID_TrustCenterCompliance) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterComplianceByID_TrustCenterCompliance{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTrustCenterComplianceByID_TrustCenterCompliance) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterComplianceByID_TrustCenterCompliance{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTrustCenterCompliances_TrustCenterCompliances_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetTrustCenterCompliances_TrustCenterCompliances_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetTrustCenterCompliances_TrustCenterCompliances_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetTrustCenterCompliances_TrustCenterCompliances_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetTrustCenterCompliances_TrustCenterCompliances_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetTrustCenterCompliances_TrustCenterCompliances_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetTrustCenterCompliances_TrustCenterCompliances_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetTrustCenterCompliances_TrustCenterCompliances_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetTrustCenterCompliances_TrustCenterCompliances_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTrustCenterCompliances_TrustCenterCompliances_Edges struct {
+	Node *GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetTrustCenterCompliances_TrustCenterCompliances_Edges) GetNode() *GetTrustCenterCompliances_TrustCenterCompliances_Edges_Node {
+	if t == nil {
+		t = &GetTrustCenterCompliances_TrustCenterCompliances_Edges{}
+	}
+	return t.Node
+}
+
+type GetTrustCenterCompliances_TrustCenterCompliances struct {
+	Edges      []*GetTrustCenterCompliances_TrustCenterCompliances_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetTrustCenterCompliances_TrustCenterCompliances_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                     "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetTrustCenterCompliances_TrustCenterCompliances) GetEdges() []*GetTrustCenterCompliances_TrustCenterCompliances_Edges {
+	if t == nil {
+		t = &GetTrustCenterCompliances_TrustCenterCompliances{}
+	}
+	return t.Edges
+}
+func (t *GetTrustCenterCompliances_TrustCenterCompliances) GetPageInfo() *GetTrustCenterCompliances_TrustCenterCompliances_PageInfo {
+	if t == nil {
+		t = &GetTrustCenterCompliances_TrustCenterCompliances{}
+	}
+	return &t.PageInfo
+}
+func (t *GetTrustCenterCompliances_TrustCenterCompliances) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetTrustCenterCompliances_TrustCenterCompliances{}
+	}
+	return t.TotalCount
+}
+
+type UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Tags      []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance) GetID() string {
+	if t == nil {
+		t = &UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance{}
+	}
+	return t.ID
+}
+func (t *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance) GetTags() []string {
+	if t == nil {
+		t = &UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance{}
+	}
+	return t.Tags
+}
+func (t *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateTrustCenterCompliance_UpdateTrustCenterCompliance struct {
+	TrustCenterCompliance UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance "json:\"trustCenterCompliance\" graphql:\"trustCenterCompliance\""
+}
+
+func (t *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance) GetTrustCenterCompliance() *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance {
+	if t == nil {
+		t = &UpdateTrustCenterCompliance_UpdateTrustCenterCompliance{}
+	}
+	return &t.TrustCenterCompliance
+}
+
+type GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node struct {
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges struct {
+	Node *GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges) GetNode() *GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories struct {
+	Edges      []*GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                                        "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories) GetEdges() []*GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges {
+	if t == nil {
+		t = &GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories{}
+	}
+	return t.Edges
+}
+func (t *GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories) GetPageInfo() *GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories_PageInfo {
+	if t == nil {
+		t = &GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories{}
+	}
+	return t.TotalCount
+}
+
+type GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node struct {
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges struct {
+	Node *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges) GetNode() *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges_Node {
+	if t == nil {
+		t = &GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetTrustCenterComplianceHistories_TrustCenterComplianceHistories struct {
+	Edges      []*GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                                     "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories) GetEdges() []*GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_Edges {
+	if t == nil {
+		t = &GetTrustCenterComplianceHistories_TrustCenterComplianceHistories{}
+	}
+	return t.Edges
+}
+func (t *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories) GetPageInfo() *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories_PageInfo {
+	if t == nil {
+		t = &GetTrustCenterComplianceHistories_TrustCenterComplianceHistories{}
+	}
+	return &t.PageInfo
+}
+func (t *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetTrustCenterComplianceHistories_TrustCenterComplianceHistories{}
+	}
+	return t.TotalCount
+}
+
 type GetAllTrustCenterHistories_TrustCenterHistories_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -87215,6 +88419,28 @@ func (t *GetControlCategories) GetControlCategories() []string {
 	return t.ControlCategories
 }
 
+type GetControlCategoriesWithFramework struct {
+	ControlCategoriesByFramework []*GetControlCategoriesWithFramework_ControlCategoriesByFramework "json:\"controlCategoriesByFramework,omitempty\" graphql:\"controlCategoriesByFramework\""
+}
+
+func (t *GetControlCategoriesWithFramework) GetControlCategoriesByFramework() []*GetControlCategoriesWithFramework_ControlCategoriesByFramework {
+	if t == nil {
+		t = &GetControlCategoriesWithFramework{}
+	}
+	return t.ControlCategoriesByFramework
+}
+
+type GetControlsGroupByCategory struct {
+	ControlsGroupByCategory GetControlsGroupByCategory_ControlsGroupByCategory "json:\"controlsGroupByCategory\" graphql:\"controlsGroupByCategory\""
+}
+
+func (t *GetControlsGroupByCategory) GetControlsGroupByCategory() *GetControlsGroupByCategory_ControlsGroupByCategory {
+	if t == nil {
+		t = &GetControlsGroupByCategory{}
+	}
+	return &t.ControlsGroupByCategory
+}
+
 type GetControlSubcategories struct {
 	ControlSubcategories []string "json:\"controlSubcategories,omitempty\" graphql:\"controlSubcategories\""
 }
@@ -87224,6 +88450,17 @@ func (t *GetControlSubcategories) GetControlSubcategories() []string {
 		t = &GetControlSubcategories{}
 	}
 	return t.ControlSubcategories
+}
+
+type GetControlSubcategoriesWithFramework struct {
+	ControlSubcategoriesByFramework []*GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework "json:\"controlSubcategoriesByFramework,omitempty\" graphql:\"controlSubcategoriesByFramework\""
+}
+
+func (t *GetControlSubcategoriesWithFramework) GetControlSubcategoriesByFramework() []*GetControlSubcategoriesWithFramework_ControlSubcategoriesByFramework {
+	if t == nil {
+		t = &GetControlSubcategoriesWithFramework{}
+	}
+	return t.ControlSubcategoriesByFramework
 }
 
 type GetAllControlHistories struct {
@@ -91571,6 +92808,116 @@ func (t *UpdateTrustCenter) GetUpdateTrustCenter() *UpdateTrustCenter_UpdateTrus
 	return &t.UpdateTrustCenter
 }
 
+type CreateBulkCSVTrustCenterCompliance struct {
+	CreateBulkCSVTrustCenterCompliance CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance "json:\"createBulkCSVTrustCenterCompliance\" graphql:\"createBulkCSVTrustCenterCompliance\""
+}
+
+func (t *CreateBulkCSVTrustCenterCompliance) GetCreateBulkCSVTrustCenterCompliance() *CreateBulkCSVTrustCenterCompliance_CreateBulkCSVTrustCenterCompliance {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterCompliance{}
+	}
+	return &t.CreateBulkCSVTrustCenterCompliance
+}
+
+type CreateBulkTrustCenterCompliance struct {
+	CreateBulkTrustCenterCompliance CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance "json:\"createBulkTrustCenterCompliance\" graphql:\"createBulkTrustCenterCompliance\""
+}
+
+func (t *CreateBulkTrustCenterCompliance) GetCreateBulkTrustCenterCompliance() *CreateBulkTrustCenterCompliance_CreateBulkTrustCenterCompliance {
+	if t == nil {
+		t = &CreateBulkTrustCenterCompliance{}
+	}
+	return &t.CreateBulkTrustCenterCompliance
+}
+
+type CreateTrustCenterCompliance struct {
+	CreateTrustCenterCompliance CreateTrustCenterCompliance_CreateTrustCenterCompliance "json:\"createTrustCenterCompliance\" graphql:\"createTrustCenterCompliance\""
+}
+
+func (t *CreateTrustCenterCompliance) GetCreateTrustCenterCompliance() *CreateTrustCenterCompliance_CreateTrustCenterCompliance {
+	if t == nil {
+		t = &CreateTrustCenterCompliance{}
+	}
+	return &t.CreateTrustCenterCompliance
+}
+
+type DeleteTrustCenterCompliance struct {
+	DeleteTrustCenterCompliance DeleteTrustCenterCompliance_DeleteTrustCenterCompliance "json:\"deleteTrustCenterCompliance\" graphql:\"deleteTrustCenterCompliance\""
+}
+
+func (t *DeleteTrustCenterCompliance) GetDeleteTrustCenterCompliance() *DeleteTrustCenterCompliance_DeleteTrustCenterCompliance {
+	if t == nil {
+		t = &DeleteTrustCenterCompliance{}
+	}
+	return &t.DeleteTrustCenterCompliance
+}
+
+type GetAllTrustCenterCompliances struct {
+	TrustCenterCompliances GetAllTrustCenterCompliances_TrustCenterCompliances "json:\"trustCenterCompliances\" graphql:\"trustCenterCompliances\""
+}
+
+func (t *GetAllTrustCenterCompliances) GetTrustCenterCompliances() *GetAllTrustCenterCompliances_TrustCenterCompliances {
+	if t == nil {
+		t = &GetAllTrustCenterCompliances{}
+	}
+	return &t.TrustCenterCompliances
+}
+
+type GetTrustCenterComplianceByID struct {
+	TrustCenterCompliance GetTrustCenterComplianceByID_TrustCenterCompliance "json:\"trustCenterCompliance\" graphql:\"trustCenterCompliance\""
+}
+
+func (t *GetTrustCenterComplianceByID) GetTrustCenterCompliance() *GetTrustCenterComplianceByID_TrustCenterCompliance {
+	if t == nil {
+		t = &GetTrustCenterComplianceByID{}
+	}
+	return &t.TrustCenterCompliance
+}
+
+type GetTrustCenterCompliances struct {
+	TrustCenterCompliances GetTrustCenterCompliances_TrustCenterCompliances "json:\"trustCenterCompliances\" graphql:\"trustCenterCompliances\""
+}
+
+func (t *GetTrustCenterCompliances) GetTrustCenterCompliances() *GetTrustCenterCompliances_TrustCenterCompliances {
+	if t == nil {
+		t = &GetTrustCenterCompliances{}
+	}
+	return &t.TrustCenterCompliances
+}
+
+type UpdateTrustCenterCompliance struct {
+	UpdateTrustCenterCompliance UpdateTrustCenterCompliance_UpdateTrustCenterCompliance "json:\"updateTrustCenterCompliance\" graphql:\"updateTrustCenterCompliance\""
+}
+
+func (t *UpdateTrustCenterCompliance) GetUpdateTrustCenterCompliance() *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance {
+	if t == nil {
+		t = &UpdateTrustCenterCompliance{}
+	}
+	return &t.UpdateTrustCenterCompliance
+}
+
+type GetAllTrustCenterComplianceHistories struct {
+	TrustCenterComplianceHistories GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories "json:\"trustCenterComplianceHistories\" graphql:\"trustCenterComplianceHistories\""
+}
+
+func (t *GetAllTrustCenterComplianceHistories) GetTrustCenterComplianceHistories() *GetAllTrustCenterComplianceHistories_TrustCenterComplianceHistories {
+	if t == nil {
+		t = &GetAllTrustCenterComplianceHistories{}
+	}
+	return &t.TrustCenterComplianceHistories
+}
+
+type GetTrustCenterComplianceHistories struct {
+	TrustCenterComplianceHistories GetTrustCenterComplianceHistories_TrustCenterComplianceHistories "json:\"trustCenterComplianceHistories\" graphql:\"trustCenterComplianceHistories\""
+}
+
+func (t *GetTrustCenterComplianceHistories) GetTrustCenterComplianceHistories() *GetTrustCenterComplianceHistories_TrustCenterComplianceHistories {
+	if t == nil {
+		t = &GetTrustCenterComplianceHistories{}
+	}
+	return &t.TrustCenterComplianceHistories
+}
+
 type GetAllTrustCenterHistories struct {
 	TrustCenterHistories GetAllTrustCenterHistories_TrustCenterHistories "json:\"trustCenterHistories\" graphql:\"trustCenterHistories\""
 }
@@ -93283,6 +94630,21 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					ownerID
 					slug
 					customDomainID
+				}
+			}
+		}
+		trustCenterCompliances {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					tags
 				}
 			}
 		}
@@ -95221,6 +96583,84 @@ func (c *Client) GetControlCategories(ctx context.Context, interceptors ...clien
 	return &res, nil
 }
 
+const GetControlCategoriesWithFrameworkDocument = `query GetControlCategoriesWithFramework ($where: ControlWhereInput) {
+	controlCategoriesByFramework(where: $where) {
+		node {
+			name
+			referenceFramework
+		}
+	}
+}
+`
+
+func (c *Client) GetControlCategoriesWithFramework(ctx context.Context, where *ControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControlCategoriesWithFramework, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetControlCategoriesWithFramework
+	if err := c.Client.Post(ctx, "GetControlCategoriesWithFramework", GetControlCategoriesWithFrameworkDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetControlsGroupByCategoryDocument = `query GetControlsGroupByCategory ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: ControlWhereInput, $orderBy: [ControlOrder!], $category: String) {
+	controlsGroupByCategory(first: $first, last: $last, after: $after, before: $before, where: $where, orderBy: $orderBy, category: $category) {
+		edges {
+			node {
+				category
+				controls {
+					edges {
+						node {
+							id
+							refCode
+							referenceFramework
+							ownerID
+						}
+					}
+					totalCount
+					pageInfo {
+						endCursor
+						hasNextPage
+						hasPreviousPage
+						startCursor
+					}
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetControlsGroupByCategory(ctx context.Context, first *int64, last *int64, after *string, before *string, where *ControlWhereInput, orderBy []*ControlOrder, category *string, interceptors ...clientv2.RequestInterceptor) (*GetControlsGroupByCategory, error) {
+	vars := map[string]any{
+		"first":    first,
+		"last":     last,
+		"after":    after,
+		"before":   before,
+		"where":    where,
+		"orderBy":  orderBy,
+		"category": category,
+	}
+
+	var res GetControlsGroupByCategory
+	if err := c.Client.Post(ctx, "GetControlsGroupByCategory", GetControlsGroupByCategoryDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const GetControlSubcategoriesDocument = `query GetControlSubcategories {
 	controlSubcategories
 }
@@ -95231,6 +96671,33 @@ func (c *Client) GetControlSubcategories(ctx context.Context, interceptors ...cl
 
 	var res GetControlSubcategories
 	if err := c.Client.Post(ctx, "GetControlSubcategories", GetControlSubcategoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetControlSubcategoriesWithFrameworkDocument = `query GetControlSubcategoriesWithFramework ($where: ControlWhereInput) {
+	controlSubcategoriesByFramework(where: $where) {
+		node {
+			name
+			referenceFramework
+		}
+	}
+}
+`
+
+func (c *Client) GetControlSubcategoriesWithFramework(ctx context.Context, where *ControlWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetControlSubcategoriesWithFramework, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetControlSubcategoriesWithFramework
+	if err := c.Client.Post(ctx, "GetControlSubcategoriesWithFramework", GetControlSubcategoriesWithFrameworkDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -96464,7 +97931,6 @@ func (c *Client) GetControlObjectiveHistories(ctx context.Context, where *Contro
 const CreateBulkCSVControlScheduledJobDocument = `mutation CreateBulkCSVControlScheduledJob ($input: Upload!) {
 	createBulkCSVControlScheduledJob(input: $input) {
 		controlScheduledJobs {
-			cadence
 			configuration
 			createdAt
 			createdBy
@@ -96500,7 +97966,6 @@ func (c *Client) CreateBulkCSVControlScheduledJob(ctx context.Context, input gra
 const CreateBulkControlScheduledJobDocument = `mutation CreateBulkControlScheduledJob ($input: [CreateControlScheduledJobInput!]) {
 	createBulkControlScheduledJob(input: $input) {
 		controlScheduledJobs {
-			cadence
 			configuration
 			createdAt
 			createdBy
@@ -96536,7 +98001,6 @@ func (c *Client) CreateBulkControlScheduledJob(ctx context.Context, input []*Cre
 const CreateControlScheduledJobDocument = `mutation CreateControlScheduledJob ($input: CreateControlScheduledJobInput!) {
 	createControlScheduledJob(input: $input) {
 		controlScheduledJob {
-			cadence
 			configuration
 			createdAt
 			createdBy
@@ -96604,7 +98068,6 @@ const GetAllControlScheduledJobsDocument = `query GetAllControlScheduledJobs {
 		}
 		edges {
 			node {
-				cadence
 				configuration
 				createdAt
 				createdBy
@@ -96638,7 +98101,6 @@ func (c *Client) GetAllControlScheduledJobs(ctx context.Context, interceptors ..
 
 const GetControlScheduledJobByIDDocument = `query GetControlScheduledJobByID ($controlScheduledJobId: ID!) {
 	controlScheduledJob(id: $controlScheduledJobId) {
-		cadence
 		configuration
 		createdAt
 		createdBy
@@ -96681,7 +98143,6 @@ const GetControlScheduledJobsDocument = `query GetControlScheduledJobs ($first: 
 		}
 		edges {
 			node {
-				cadence
 				configuration
 				createdAt
 				createdBy
@@ -96720,7 +98181,6 @@ func (c *Client) GetControlScheduledJobs(ctx context.Context, first *int64, last
 const UpdateControlScheduledJobDocument = `mutation UpdateControlScheduledJob ($updateControlScheduledJobId: ID!, $input: UpdateControlScheduledJobInput!) {
 	updateControlScheduledJob(id: $updateControlScheduledJobId, input: $input) {
 		controlScheduledJob {
-			cadence
 			configuration
 			createdAt
 			createdBy
@@ -96765,7 +98225,6 @@ const GetAllControlScheduledJobHistoriesDocument = `query GetAllControlScheduled
 		}
 		edges {
 			node {
-				cadence
 				configuration
 				createdAt
 				createdBy
@@ -96811,7 +98270,6 @@ const GetControlScheduledJobHistoriesDocument = `query GetControlScheduledJobHis
 		}
 		edges {
 			node {
-				cadence
 				configuration
 				createdAt
 				createdBy
@@ -99543,8 +101001,10 @@ const CreateExportDocument = `mutation CreateExport ($input: CreateExportInput!)
 			format
 			id
 			fields
+			filters
 			ownerID
 			requestorID
+			errorMessage
 			status
 			updatedAt
 			updatedBy
@@ -99589,6 +101049,8 @@ const GetAllExportsDocument = `query GetAllExports {
 				fields
 				ownerID
 				requestorID
+				errorMessage
+				filters
 				status
 				updatedAt
 				updatedBy
@@ -99619,7 +101081,9 @@ const GetExportByIDDocument = `query GetExportByID ($exportId: ID!) {
 		createdBy
 		exportType
 		id
+		errorMessage
 		ownerID
+		filters
 		requestorID
 		status
 		fields
@@ -99671,7 +101135,9 @@ const GetExportsDocument = `query GetExports ($first: Int, $last: Int, $where: E
 				createdAt
 				createdBy
 				exportType
+				errorMessage
 				id
+				filters
 				format
 				ownerID
 				requestorID
@@ -99711,7 +101177,9 @@ const UpdateExportDocument = `mutation UpdateExport ($id: ID!, $input: UpdateExp
 			createdBy
 			exportType
 			id
+			errorMessage
 			ownerID
+			filters
 			fields
 			requestorID
 			status
@@ -102702,6 +104170,13 @@ const CreateInviteDocument = `mutation CreateInvite ($input: CreateInviteInput!)
 			owner {
 				id
 			}
+			groups {
+				edges {
+					node {
+						id
+					}
+				}
+			}
 		}
 	}
 }
@@ -102756,6 +104231,13 @@ const GetAllInvitesDocument = `query GetAllInvites {
 				recipient
 				role
 				status
+				groups {
+					edges {
+						node {
+							id
+						}
+					}
+				}
 			}
 		}
 	}
@@ -109955,7 +111437,6 @@ const CreateBulkCSVScheduledJobDocument = `mutation CreateBulkCSVScheduledJob ($
 			description
 			displayID
 			id
-			jobType
 			ownerID
 			script
 			systemOwned
@@ -109996,7 +111477,6 @@ const CreateBulkScheduledJobDocument = `mutation CreateBulkScheduledJob ($input:
 			description
 			displayID
 			id
-			jobType
 			ownerID
 			script
 			systemOwned
@@ -110037,7 +111517,6 @@ const CreateScheduledJobDocument = `mutation CreateScheduledJob ($input: CreateS
 			description
 			displayID
 			id
-			jobType
 			ownerID
 			script
 			systemOwned
@@ -110110,7 +111589,6 @@ const GetAllScheduledJobsDocument = `query GetAllScheduledJobs {
 				description
 				displayID
 				id
-				jobType
 				ownerID
 				script
 				systemOwned
@@ -110149,7 +111627,6 @@ const GetScheduledJobByIDDocument = `query GetScheduledJobByID ($scheduledJobId:
 		description
 		displayID
 		id
-		jobType
 		ownerID
 		script
 		systemOwned
@@ -110197,7 +111674,6 @@ const GetScheduledJobsDocument = `query GetScheduledJobs ($first: Int, $last: In
 				description
 				displayID
 				id
-				jobType
 				ownerID
 				script
 				systemOwned
@@ -110241,7 +111717,6 @@ const UpdateScheduledJobDocument = `mutation UpdateScheduledJob ($updateSchedule
 			description
 			displayID
 			id
-			jobType
 			ownerID
 			script
 			systemOwned
@@ -110292,7 +111767,6 @@ const GetAllScheduledJobHistoriesDocument = `query GetAllScheduledJobHistories {
 				displayID
 				historyTime
 				id
-				jobType
 				operation
 				ownerID
 				ref
@@ -110343,7 +111817,6 @@ const GetScheduledJobHistoriesDocument = `query GetScheduledJobHistories ($first
 				displayID
 				historyTime
 				id
-				jobType
 				operation
 				ownerID
 				ref
@@ -111162,6 +112635,21 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 			}
 		}
 		trustCenters {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					id
+					tags
+				}
+			}
+		}
+		trustCenterCompliances {
 			totalCount
 			pageInfo {
 				hasNextPage
@@ -114330,6 +115818,350 @@ func (c *Client) UpdateTrustCenter(ctx context.Context, updateTrustCenterID stri
 	return &res, nil
 }
 
+const CreateBulkCSVTrustCenterComplianceDocument = `mutation CreateBulkCSVTrustCenterCompliance ($input: Upload!) {
+	createBulkCSVTrustCenterCompliance(input: $input) {
+		trustCenterCompliances {
+			createdAt
+			createdBy
+			id
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVTrustCenterCompliance(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTrustCenterCompliance, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVTrustCenterCompliance
+	if err := c.Client.Post(ctx, "CreateBulkCSVTrustCenterCompliance", CreateBulkCSVTrustCenterComplianceDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkTrustCenterComplianceDocument = `mutation CreateBulkTrustCenterCompliance ($input: [CreateTrustCenterComplianceInput!]) {
+	createBulkTrustCenterCompliance(input: $input) {
+		trustCenterCompliances {
+			createdAt
+			createdBy
+			id
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkTrustCenterCompliance(ctx context.Context, input []*CreateTrustCenterComplianceInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTrustCenterCompliance, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkTrustCenterCompliance
+	if err := c.Client.Post(ctx, "CreateBulkTrustCenterCompliance", CreateBulkTrustCenterComplianceDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateTrustCenterComplianceDocument = `mutation CreateTrustCenterCompliance ($input: CreateTrustCenterComplianceInput!) {
+	createTrustCenterCompliance(input: $input) {
+		trustCenterCompliance {
+			createdAt
+			createdBy
+			id
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateTrustCenterCompliance(ctx context.Context, input CreateTrustCenterComplianceInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterCompliance, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateTrustCenterCompliance
+	if err := c.Client.Post(ctx, "CreateTrustCenterCompliance", CreateTrustCenterComplianceDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteTrustCenterComplianceDocument = `mutation DeleteTrustCenterCompliance ($deleteTrustCenterComplianceId: ID!) {
+	deleteTrustCenterCompliance(id: $deleteTrustCenterComplianceId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteTrustCenterCompliance(ctx context.Context, deleteTrustCenterComplianceID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTrustCenterCompliance, error) {
+	vars := map[string]any{
+		"deleteTrustCenterComplianceId": deleteTrustCenterComplianceID,
+	}
+
+	var res DeleteTrustCenterCompliance
+	if err := c.Client.Post(ctx, "DeleteTrustCenterCompliance", DeleteTrustCenterComplianceDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllTrustCenterCompliancesDocument = `query GetAllTrustCenterCompliances {
+	trustCenterCompliances {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllTrustCenterCompliances(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterCompliances, error) {
+	vars := map[string]any{}
+
+	var res GetAllTrustCenterCompliances
+	if err := c.Client.Post(ctx, "GetAllTrustCenterCompliances", GetAllTrustCenterCompliancesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTrustCenterComplianceByIDDocument = `query GetTrustCenterComplianceByID ($trustCenterComplianceId: ID!) {
+	trustCenterCompliance(id: $trustCenterComplianceId) {
+		createdAt
+		createdBy
+		id
+		tags
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetTrustCenterComplianceByID(ctx context.Context, trustCenterComplianceID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterComplianceByID, error) {
+	vars := map[string]any{
+		"trustCenterComplianceId": trustCenterComplianceID,
+	}
+
+	var res GetTrustCenterComplianceByID
+	if err := c.Client.Post(ctx, "GetTrustCenterComplianceByID", GetTrustCenterComplianceByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTrustCenterCompliancesDocument = `query GetTrustCenterCompliances ($first: Int, $last: Int, $where: TrustCenterComplianceWhereInput) {
+	trustCenterCompliances(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetTrustCenterCompliances(ctx context.Context, first *int64, last *int64, where *TrustCenterComplianceWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterCompliances, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetTrustCenterCompliances
+	if err := c.Client.Post(ctx, "GetTrustCenterCompliances", GetTrustCenterCompliancesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateTrustCenterComplianceDocument = `mutation UpdateTrustCenterCompliance ($updateTrustCenterComplianceId: ID!, $input: UpdateTrustCenterComplianceInput!) {
+	updateTrustCenterCompliance(id: $updateTrustCenterComplianceId, input: $input) {
+		trustCenterCompliance {
+			createdAt
+			createdBy
+			id
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateTrustCenterCompliance(ctx context.Context, updateTrustCenterComplianceID string, input UpdateTrustCenterComplianceInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterCompliance, error) {
+	vars := map[string]any{
+		"updateTrustCenterComplianceId": updateTrustCenterComplianceID,
+		"input":                         input,
+	}
+
+	var res UpdateTrustCenterCompliance
+	if err := c.Client.Post(ctx, "UpdateTrustCenterCompliance", UpdateTrustCenterComplianceDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllTrustCenterComplianceHistoriesDocument = `query GetAllTrustCenterComplianceHistories {
+	trustCenterComplianceHistories {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				operation
+				ref
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllTrustCenterComplianceHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterComplianceHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllTrustCenterComplianceHistories
+	if err := c.Client.Post(ctx, "GetAllTrustCenterComplianceHistories", GetAllTrustCenterComplianceHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTrustCenterComplianceHistoriesDocument = `query GetTrustCenterComplianceHistories ($first: Int, $last: Int, $where: TrustCenterComplianceHistoryWhereInput) {
+	trustCenterComplianceHistories(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				operation
+				ref
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetTrustCenterComplianceHistories(ctx context.Context, first *int64, last *int64, where *TrustCenterComplianceHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterComplianceHistories, error) {
+	vars := map[string]any{
+		"first": first,
+		"last":  last,
+		"where": where,
+	}
+
+	var res GetTrustCenterComplianceHistories
+	if err := c.Client.Post(ctx, "GetTrustCenterComplianceHistories", GetTrustCenterComplianceHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const GetAllTrustCenterHistoriesDocument = `query GetAllTrustCenterHistories {
 	trustCenterHistories {
 		totalCount
@@ -116071,7 +117903,10 @@ var DocumentOperationNames = map[string]string{
 	CreateControlsByCloneDocument:                  "CreateControlsByClone",
 	CreateControlsByCloneReturnIDDocument:          "CreateControlsByCloneReturnID",
 	GetControlCategoriesDocument:                   "GetControlCategories",
+	GetControlCategoriesWithFrameworkDocument:      "GetControlCategoriesWithFramework",
+	GetControlsGroupByCategoryDocument:             "GetControlsGroupByCategory",
 	GetControlSubcategoriesDocument:                "GetControlSubcategories",
+	GetControlSubcategoriesWithFrameworkDocument:   "GetControlSubcategoriesWithFramework",
 	GetAllControlHistoriesDocument:                 "GetAllControlHistories",
 	GetControlHistoriesDocument:                    "GetControlHistories",
 	CreateBulkControlImplementationDocument:        "CreateBulkControlImplementation",
@@ -116467,6 +118302,16 @@ var DocumentOperationNames = map[string]string{
 	GetTrustCenterByIDDocument:                     "GetTrustCenterByID",
 	GetTrustCentersDocument:                        "GetTrustCenters",
 	UpdateTrustCenterDocument:                      "UpdateTrustCenter",
+	CreateBulkCSVTrustCenterComplianceDocument:     "CreateBulkCSVTrustCenterCompliance",
+	CreateBulkTrustCenterComplianceDocument:        "CreateBulkTrustCenterCompliance",
+	CreateTrustCenterComplianceDocument:            "CreateTrustCenterCompliance",
+	DeleteTrustCenterComplianceDocument:            "DeleteTrustCenterCompliance",
+	GetAllTrustCenterCompliancesDocument:           "GetAllTrustCenterCompliances",
+	GetTrustCenterComplianceByIDDocument:           "GetTrustCenterComplianceByID",
+	GetTrustCenterCompliancesDocument:              "GetTrustCenterCompliances",
+	UpdateTrustCenterComplianceDocument:            "UpdateTrustCenterCompliance",
+	GetAllTrustCenterComplianceHistoriesDocument:   "GetAllTrustCenterComplianceHistories",
+	GetTrustCenterComplianceHistoriesDocument:      "GetTrustCenterComplianceHistories",
 	GetAllTrustCenterHistoriesDocument:             "GetAllTrustCenterHistories",
 	GetTrustCenterHistoriesDocument:                "GetTrustCenterHistories",
 	CreateTrustCenterSettingDocument:               "CreateTrustCenterSetting",

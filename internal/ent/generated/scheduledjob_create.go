@@ -167,17 +167,9 @@ func (sjc *ScheduledJobCreate) SetNillableDescription(s *string) *ScheduledJobCr
 	return sjc
 }
 
-// SetJobType sets the "job_type" field.
-func (sjc *ScheduledJobCreate) SetJobType(et enums.JobType) *ScheduledJobCreate {
-	sjc.mutation.SetJobType(et)
-	return sjc
-}
-
-// SetNillableJobType sets the "job_type" field if the given value is not nil.
-func (sjc *ScheduledJobCreate) SetNillableJobType(et *enums.JobType) *ScheduledJobCreate {
-	if et != nil {
-		sjc.SetJobType(*et)
-	}
+// SetPlatform sets the "platform" field.
+func (sjc *ScheduledJobCreate) SetPlatform(ept enums.JobPlatformType) *ScheduledJobCreate {
+	sjc.mutation.SetPlatform(ept)
 	return sjc
 }
 
@@ -192,6 +184,18 @@ func (sjc *ScheduledJobCreate) SetNillableScript(s *string) *ScheduledJobCreate 
 	if s != nil {
 		sjc.SetScript(*s)
 	}
+	return sjc
+}
+
+// SetWindmillPath sets the "windmill_path" field.
+func (sjc *ScheduledJobCreate) SetWindmillPath(s string) *ScheduledJobCreate {
+	sjc.mutation.SetWindmillPath(s)
+	return sjc
+}
+
+// SetDownloadURL sets the "download_url" field.
+func (sjc *ScheduledJobCreate) SetDownloadURL(s string) *ScheduledJobCreate {
+	sjc.mutation.SetDownloadURL(s)
 	return sjc
 }
 
@@ -307,10 +311,6 @@ func (sjc *ScheduledJobCreate) defaults() error {
 		v := scheduledjob.DefaultSystemOwned
 		sjc.mutation.SetSystemOwned(v)
 	}
-	if _, ok := sjc.mutation.JobType(); !ok {
-		v := scheduledjob.DefaultJobType
-		sjc.mutation.SetJobType(v)
-	}
 	if _, ok := sjc.mutation.ID(); !ok {
 		if scheduledjob.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized scheduledjob.DefaultID (forgotten import generated/runtime?)")
@@ -339,16 +339,19 @@ func (sjc *ScheduledJobCreate) check() error {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.title": %w`, err)}
 		}
 	}
-	if _, ok := sjc.mutation.JobType(); !ok {
-		return &ValidationError{Name: "job_type", err: errors.New(`generated: missing required field "ScheduledJob.job_type"`)}
+	if _, ok := sjc.mutation.Platform(); !ok {
+		return &ValidationError{Name: "platform", err: errors.New(`generated: missing required field "ScheduledJob.platform"`)}
 	}
-	if v, ok := sjc.mutation.JobType(); ok {
-		if err := scheduledjob.JobTypeValidator(v); err != nil {
-			return &ValidationError{Name: "job_type", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.job_type": %w`, err)}
+	if v, ok := sjc.mutation.Platform(); ok {
+		if err := scheduledjob.PlatformValidator(v); err != nil {
+			return &ValidationError{Name: "platform", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.platform": %w`, err)}
 		}
 	}
-	if _, ok := sjc.mutation.Configuration(); !ok {
-		return &ValidationError{Name: "configuration", err: errors.New(`generated: missing required field "ScheduledJob.configuration"`)}
+	if _, ok := sjc.mutation.WindmillPath(); !ok {
+		return &ValidationError{Name: "windmill_path", err: errors.New(`generated: missing required field "ScheduledJob.windmill_path"`)}
+	}
+	if _, ok := sjc.mutation.DownloadURL(); !ok {
+		return &ValidationError{Name: "download_url", err: errors.New(`generated: missing required field "ScheduledJob.download_url"`)}
 	}
 	if v, ok := sjc.mutation.Cadence(); ok {
 		if err := v.Validate(); err != nil {
@@ -440,13 +443,21 @@ func (sjc *ScheduledJobCreate) createSpec() (*ScheduledJob, *sqlgraph.CreateSpec
 		_spec.SetField(scheduledjob.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := sjc.mutation.JobType(); ok {
-		_spec.SetField(scheduledjob.FieldJobType, field.TypeEnum, value)
-		_node.JobType = value
+	if value, ok := sjc.mutation.Platform(); ok {
+		_spec.SetField(scheduledjob.FieldPlatform, field.TypeEnum, value)
+		_node.Platform = value
 	}
 	if value, ok := sjc.mutation.Script(); ok {
 		_spec.SetField(scheduledjob.FieldScript, field.TypeString, value)
 		_node.Script = value
+	}
+	if value, ok := sjc.mutation.WindmillPath(); ok {
+		_spec.SetField(scheduledjob.FieldWindmillPath, field.TypeString, value)
+		_node.WindmillPath = value
+	}
+	if value, ok := sjc.mutation.DownloadURL(); ok {
+		_spec.SetField(scheduledjob.FieldDownloadURL, field.TypeString, value)
+		_node.DownloadURL = value
 	}
 	if value, ok := sjc.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjob.FieldConfiguration, field.TypeJSON, value)

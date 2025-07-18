@@ -45,10 +45,14 @@ type ScheduledJob struct {
 	Title string `json:"title,omitempty"`
 	// the description of the job
 	Description string `json:"description,omitempty"`
-	// the type of this job
-	JobType enums.JobType `json:"job_type,omitempty"`
+	// the platform to use to execute this job
+	Platform enums.JobPlatformType `json:"platform,omitempty"`
 	// the script to run
 	Script string `json:"script,omitempty"`
+	// Windmill path
+	WindmillPath string `json:"windmill_path,omitempty"`
+	// the url from where to download the script from
+	DownloadURL string `json:"download_url,omitempty"`
 	// the configuration to run this job
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
 	// the schedule to run this job
@@ -94,7 +98,7 @@ func (*ScheduledJob) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case scheduledjob.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case scheduledjob.FieldID, scheduledjob.FieldCreatedBy, scheduledjob.FieldUpdatedBy, scheduledjob.FieldDeletedBy, scheduledjob.FieldDisplayID, scheduledjob.FieldOwnerID, scheduledjob.FieldTitle, scheduledjob.FieldDescription, scheduledjob.FieldJobType, scheduledjob.FieldScript:
+		case scheduledjob.FieldID, scheduledjob.FieldCreatedBy, scheduledjob.FieldUpdatedBy, scheduledjob.FieldDeletedBy, scheduledjob.FieldDisplayID, scheduledjob.FieldOwnerID, scheduledjob.FieldTitle, scheduledjob.FieldDescription, scheduledjob.FieldPlatform, scheduledjob.FieldScript, scheduledjob.FieldWindmillPath, scheduledjob.FieldDownloadURL:
 			values[i] = new(sql.NullString)
 		case scheduledjob.FieldCreatedAt, scheduledjob.FieldUpdatedAt, scheduledjob.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -193,17 +197,29 @@ func (sj *ScheduledJob) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				sj.Description = value.String
 			}
-		case scheduledjob.FieldJobType:
+		case scheduledjob.FieldPlatform:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field job_type", values[i])
+				return fmt.Errorf("unexpected type %T for field platform", values[i])
 			} else if value.Valid {
-				sj.JobType = enums.JobType(value.String)
+				sj.Platform = enums.JobPlatformType(value.String)
 			}
 		case scheduledjob.FieldScript:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field script", values[i])
 			} else if value.Valid {
 				sj.Script = value.String
+			}
+		case scheduledjob.FieldWindmillPath:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field windmill_path", values[i])
+			} else if value.Valid {
+				sj.WindmillPath = value.String
+			}
+		case scheduledjob.FieldDownloadURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field download_url", values[i])
+			} else if value.Valid {
+				sj.DownloadURL = value.String
 			}
 		case scheduledjob.FieldConfiguration:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -305,11 +321,17 @@ func (sj *ScheduledJob) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(sj.Description)
 	builder.WriteString(", ")
-	builder.WriteString("job_type=")
-	builder.WriteString(fmt.Sprintf("%v", sj.JobType))
+	builder.WriteString("platform=")
+	builder.WriteString(fmt.Sprintf("%v", sj.Platform))
 	builder.WriteString(", ")
 	builder.WriteString("script=")
 	builder.WriteString(sj.Script)
+	builder.WriteString(", ")
+	builder.WriteString("windmill_path=")
+	builder.WriteString(sj.WindmillPath)
+	builder.WriteString(", ")
+	builder.WriteString("download_url=")
+	builder.WriteString(sj.DownloadURL)
 	builder.WriteString(", ")
 	builder.WriteString("configuration=")
 	builder.WriteString(fmt.Sprintf("%v", sj.Configuration))

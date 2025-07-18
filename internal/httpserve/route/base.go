@@ -44,7 +44,7 @@ func registerReadinessHandler(router *Router) (err error) {
 		Name:        "Ready",
 		Method:      method,
 		Path:        path,
-		Middlewares: mw,
+		Middlewares: baseMW, // leaves off the additional middleware(including csrf)
 		Handler: func(c echo.Context) error {
 			return router.Handler.ReadyChecks.ReadyHandler(c)
 		},

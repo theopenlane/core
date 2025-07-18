@@ -65,6 +65,7 @@ db:
     primaryDbSource: file:openlane.db
     runMigrations: true
     secondaryDbSource: file:backup.db
+domain: ""
 email:
     companyAddress: ""
     companyName: ""
@@ -124,6 +125,16 @@ entConfig:
             provider: ""
         maximumSentences: 60
         type: lexrank
+    windmill:
+        baseURL: https://app.windmill.dev
+        defaultTimeout: 30s
+        enabled: false
+        folderName: openlane
+        onFailureScript: ""
+        onSuccessScript: ""
+        timezone: UTC
+        token: ""
+        workspace: ""
 integrationOauthProvider:
     github:
         clientEndpoint: http://localhost:17608

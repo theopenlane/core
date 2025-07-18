@@ -10,6 +10,10 @@ import (
 type EvidenceStatus string
 
 var (
+	// EvidenceSubmitted is the status to indicate that the evidence has been submitted and is ready for internal review
+	EvidenceSubmitted EvidenceStatus = "SUBMITTED"
+	// EvidenceInReview is the status to indicate that the evidence is currently under internal review
+	EvidenceInReview EvidenceStatus = "IN_REVIEW"
 	// EvidenceReady is the status to indicate that the evidence is ready for auditor review
 	EvidenceReady EvidenceStatus = "READY"
 	// EvidenceApproved is the status to indicate that the evidence has been approved by the auditor

@@ -4,9 +4,17 @@ package gqlgenerated
 
 import (
 	"context"
+	"errors"
+	"fmt"
+	"strconv"
+	"sync"
+	"sync/atomic"
 
+	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/vektah/gqlparser/v2/ast"
 )
 
 // region    ************************** generated!.gotpl **************************
@@ -22,6 +30,534 @@ import (
 // endregion ************************** directives.gotpl **************************
 
 // region    **************************** field.gotpl *****************************
+
+func (ec *executionContext) _ControlCategory_name(ctx context.Context, field graphql.CollectedField, obj *model.ControlCategory) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ControlCategory_name(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ControlCategory_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ControlCategory",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ControlCategory_referenceFramework(ctx context.Context, field graphql.CollectedField, obj *model.ControlCategory) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ControlCategory_referenceFramework(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ReferenceFramework, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ControlCategory_referenceFramework(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ControlCategory",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ControlCategoryConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.ControlCategoryConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ControlCategoryConnection_edges(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Edges, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.ControlCategoryEdge)
+	fc.Result = res
+	return ec.marshalOControlCategoryEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ControlCategoryConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ControlCategoryConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "node":
+				return ec.fieldContext_ControlCategoryEdge_node(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ControlCategoryEdge", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ControlCategoryConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.ControlCategoryConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ControlCategoryConnection_pageInfo(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PageInfo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*entgql.PageInfo[string])
+	fc.Result = res
+	return ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ControlCategoryConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ControlCategoryConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "hasNextPage":
+				return ec.fieldContext_PageInfo_hasNextPage(ctx, field)
+			case "hasPreviousPage":
+				return ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
+			case "startCursor":
+				return ec.fieldContext_PageInfo_startCursor(ctx, field)
+			case "endCursor":
+				return ec.fieldContext_PageInfo_endCursor(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PageInfo", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ControlCategoryConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *model.ControlCategoryConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ControlCategoryConnection_totalCount(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TotalCount, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ControlCategoryConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ControlCategoryConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ControlCategoryEdge_node(ctx context.Context, field graphql.CollectedField, obj *model.ControlCategoryEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ControlCategoryEdge_node(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.ControlCategory)
+	fc.Result = res
+	return ec.marshalNControlCategory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategory(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ControlCategoryEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ControlCategoryEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "name":
+				return ec.fieldContext_ControlCategory_name(ctx, field)
+			case "referenceFramework":
+				return ec.fieldContext_ControlCategory_referenceFramework(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ControlCategory", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ControlGroup_category(ctx context.Context, field graphql.CollectedField, obj *model.ControlGroup) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ControlGroup_category(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Category, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ControlGroup_category(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ControlGroup",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ControlGroup_controls(ctx context.Context, field graphql.CollectedField, obj *model.ControlGroup) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ControlGroup_controls(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Controls, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*generated.ControlConnection)
+	fc.Result = res
+	return ec.marshalNControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ControlGroup_controls(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ControlGroup",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_ControlConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_ControlConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_ControlConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ControlConnection", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ControlGroupConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.ControlGroupConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ControlGroupConnection_edges(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Edges, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*model.ControlGroupEdge)
+	fc.Result = res
+	return ec.marshalNControlGroupEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroupEdgeᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ControlGroupConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ControlGroupConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "pageInfo":
+				return ec.fieldContext_ControlGroupEdge_pageInfo(ctx, field)
+			case "node":
+				return ec.fieldContext_ControlGroupEdge_node(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ControlGroupEdge", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ControlGroupEdge_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.ControlGroupEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ControlGroupEdge_pageInfo(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PageInfo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*entgql.PageInfo[string])
+	fc.Result = res
+	return ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ControlGroupEdge_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ControlGroupEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "hasNextPage":
+				return ec.fieldContext_PageInfo_hasNextPage(ctx, field)
+			case "hasPreviousPage":
+				return ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
+			case "startCursor":
+				return ec.fieldContext_PageInfo_startCursor(ctx, field)
+			case "endCursor":
+				return ec.fieldContext_PageInfo_endCursor(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PageInfo", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ControlGroupEdge_node(ctx context.Context, field graphql.CollectedField, obj *model.ControlGroupEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ControlGroupEdge_node(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.ControlGroup)
+	fc.Result = res
+	return ec.marshalNControlGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroup(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ControlGroupEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ControlGroupEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "category":
+				return ec.fieldContext_ControlGroup_category(ctx, field)
+			case "controls":
+				return ec.fieldContext_ControlGroup_controls(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ControlGroup", field.Name)
+		},
+	}
+	return fc, nil
+}
 
 // endregion **************************** field.gotpl *****************************
 
@@ -75,6 +611,44 @@ func (ec *executionContext) unmarshalInputCloneControlInput(ctx context.Context,
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputControlCategoryOrder(ctx context.Context, obj any) (model.ControlCategoryOrder, error) {
+	var it model.ControlCategoryOrder
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	if _, present := asMap["direction"]; !present {
+		asMap["direction"] = "ASC"
+	}
+
+	fieldsInOrder := [...]string{"direction", "field"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "direction":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("direction"))
+			data, err := ec.unmarshalNOrderDirection2entgoᚗioᚋcontribᚋentgqlᚐOrderDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Direction = data
+		case "field":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("field"))
+			data, err := ec.unmarshalNControlCategoryOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryOrderField(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Field = data
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -83,9 +657,375 @@ func (ec *executionContext) unmarshalInputCloneControlInput(ctx context.Context,
 
 // region    **************************** object.gotpl ****************************
 
+var controlCategoryImplementors = []string{"ControlCategory"}
+
+func (ec *executionContext) _ControlCategory(ctx context.Context, sel ast.SelectionSet, obj *model.ControlCategory) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, controlCategoryImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ControlCategory")
+		case "name":
+			out.Values[i] = ec._ControlCategory_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "referenceFramework":
+			out.Values[i] = ec._ControlCategory_referenceFramework(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var controlCategoryConnectionImplementors = []string{"ControlCategoryConnection"}
+
+func (ec *executionContext) _ControlCategoryConnection(ctx context.Context, sel ast.SelectionSet, obj *model.ControlCategoryConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, controlCategoryConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ControlCategoryConnection")
+		case "edges":
+			out.Values[i] = ec._ControlCategoryConnection_edges(ctx, field, obj)
+		case "pageInfo":
+			out.Values[i] = ec._ControlCategoryConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "totalCount":
+			out.Values[i] = ec._ControlCategoryConnection_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var controlCategoryEdgeImplementors = []string{"ControlCategoryEdge"}
+
+func (ec *executionContext) _ControlCategoryEdge(ctx context.Context, sel ast.SelectionSet, obj *model.ControlCategoryEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, controlCategoryEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ControlCategoryEdge")
+		case "node":
+			out.Values[i] = ec._ControlCategoryEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var controlGroupImplementors = []string{"ControlGroup"}
+
+func (ec *executionContext) _ControlGroup(ctx context.Context, sel ast.SelectionSet, obj *model.ControlGroup) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, controlGroupImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ControlGroup")
+		case "category":
+			out.Values[i] = ec._ControlGroup_category(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "controls":
+			out.Values[i] = ec._ControlGroup_controls(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var controlGroupConnectionImplementors = []string{"ControlGroupConnection"}
+
+func (ec *executionContext) _ControlGroupConnection(ctx context.Context, sel ast.SelectionSet, obj *model.ControlGroupConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, controlGroupConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ControlGroupConnection")
+		case "edges":
+			out.Values[i] = ec._ControlGroupConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var controlGroupEdgeImplementors = []string{"ControlGroupEdge"}
+
+func (ec *executionContext) _ControlGroupEdge(ctx context.Context, sel ast.SelectionSet, obj *model.ControlGroupEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, controlGroupEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ControlGroupEdge")
+		case "pageInfo":
+			out.Values[i] = ec._ControlGroupEdge_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "node":
+			out.Values[i] = ec._ControlGroupEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 // endregion **************************** object.gotpl ****************************
 
 // region    ***************************** type.gotpl *****************************
+
+func (ec *executionContext) marshalNControlCategory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategory(ctx context.Context, sel ast.SelectionSet, v *model.ControlCategory) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ControlCategory(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNControlCategoryEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge(ctx context.Context, sel ast.SelectionSet, v *model.ControlCategoryEdge) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ControlCategoryEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNControlCategoryOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryOrder(ctx context.Context, v any) (*model.ControlCategoryOrder, error) {
+	res, err := ec.unmarshalInputControlCategoryOrder(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNControlCategoryOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryOrderField(ctx context.Context, v any) (model.ControlCategoryOrderField, error) {
+	var res model.ControlCategoryOrderField
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNControlCategoryOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryOrderField(ctx context.Context, sel ast.SelectionSet, v model.ControlCategoryOrderField) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) marshalNControlGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroup(ctx context.Context, sel ast.SelectionSet, v *model.ControlGroup) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ControlGroup(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNControlGroupConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroupConnection(ctx context.Context, sel ast.SelectionSet, v model.ControlGroupConnection) graphql.Marshaler {
+	return ec._ControlGroupConnection(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNControlGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroupConnection(ctx context.Context, sel ast.SelectionSet, v *model.ControlGroupConnection) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ControlGroupConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNControlGroupEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroupEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ControlGroupEdge) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNControlGroupEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroupEdge(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNControlGroupEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroupEdge(ctx context.Context, sel ast.SelectionSet, v *model.ControlGroupEdge) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ControlGroupEdge(ctx, sel, v)
+}
 
 func (ec *executionContext) unmarshalOCloneControlInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCloneControlInput(ctx context.Context, v any) (*model.CloneControlInput, error) {
 	if v == nil {
@@ -93,6 +1033,119 @@ func (ec *executionContext) unmarshalOCloneControlInput2ᚖgithubᚗcomᚋtheope
 	}
 	res, err := ec.unmarshalInputCloneControlInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOControlCategoryEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge(ctx context.Context, sel ast.SelectionSet, v []*model.ControlCategoryEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOControlCategoryEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalOControlCategoryEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ControlCategoryEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNControlCategoryEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalOControlCategoryEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge(ctx context.Context, sel ast.SelectionSet, v *model.ControlCategoryEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._ControlCategoryEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOControlCategoryOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryOrderᚄ(ctx context.Context, v any) ([]*model.ControlCategoryOrder, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []any
+	vSlice = graphql.CoerceList(v)
+	var err error
+	res := make([]*model.ControlCategoryOrder, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNControlCategoryOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryOrder(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
 }
 
 // endregion ***************************** type.gotpl *****************************

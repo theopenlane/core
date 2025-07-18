@@ -1,0 +1,76 @@
+{
+  "text": "🤖 Proposed Updates to Helm Chart",
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": "🤖 Proposed Updates to Helm Chart"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "A new PR has been created which updates the Helm chart configuration and needs review by a human before deployment."
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*Changes Made:*\n{{CHANGE_SUMMARY}}"
+      }
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "*Build:*\n<{{BUILD_URL}}|#{{BUILD_NUMBER}}>"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Source Branch:*\n`{{SOURCE_BRANCH}}`"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Pipeline:*\n{{PIPELINE_NAME}}"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Triggered by:*\n{{BUILD_CREATOR}}"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "*Next Steps:*\n• Review the PR for configuration changes\n• Approve and merge to enable deployment\n• Contact DevOps if you have questions\n\n Don't forget to tip your DevOps team for their hard work! :tipping_hand:"
+      }
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "📋 Review PR"
+          },
+          "url": "{{PR_URL}}",
+          "style": "primary"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "🔍 Build Details"
+          },
+          "url": "{{BUILD_URL}}"
+        }
+      ]
+    }
+  ]
+}

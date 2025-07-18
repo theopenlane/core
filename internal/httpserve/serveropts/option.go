@@ -6,6 +6,7 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/pem"
+	"errors"
 	"fmt"
 	"net/http"
 	"os"
@@ -50,6 +51,7 @@ import (
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/summarizer"
+	"github.com/theopenlane/core/pkg/windmill"
 )
 
 type ServerOption interface {
@@ -568,6 +570,23 @@ func WithSummarizer() ServerOption {
 		}
 
 		s.Config.Handler.Summarizer = client
+	})
+}
+
+// WithWindmill sets up the Windmill workflow automation client
+func WithWindmill() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		client, err := windmill.NewWindmill(s.Config.Settings.EntConfig)
+		if err != nil {
+			if errors.Is(err, windmill.ErrWindmillDisabled) {
+				log.Info().Msg("Windmill is not enabled, skipping Windmill client setup")
+				return
+			}
+
+			log.Panic().Err(err).Msg("error creating Windmill client")
+		}
+
+		s.Config.Handler.Windmill = client
 	})
 }
 

@@ -113,7 +113,6 @@ func (TrustCenterSubprocessor) Indexes() []ent.Index {
 func (TrustCenterSubprocessor) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SettingsChecks("trust_center"),
-		entfga.SelfAccessChecks(),
 	}
 }
 

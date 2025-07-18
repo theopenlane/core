@@ -7,6 +7,7 @@ Config contains the configuration for the core server
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|**domain**|`string`|Domain provides a global domain value for other modules to inherit<br/>||
 |**refreshInterval**|`integer`|RefreshInterval determines how often to reload the config<br/>||
 |[**server**](#server)|`object`|Server settings for the echo server<br/>|yes|
 |[**entConfig**](#entconfig)|`object`|Config holds the configuration for the ent server<br/>||
@@ -259,6 +260,7 @@ Config holds the configuration for the ent server
 |----|----|-----------|--------|
 |[**entityTypes**](#entconfigentitytypes)|`string[]`|||
 |[**summarizer**](#entconfigsummarizer)|`object`|Summarizer holds configuration for the text summarization functionality<br/>||
+|[**windmill**](#entconfigwindmill)|`object`|Windmill holds configuration for the Windmill workflow automation platform<br/>||
 |**maxPoolSize**|`integer`|MaxPoolSize is the max pond pool workers that can be used by the ent client<br/>||
 
 **Additional Properties:** not allowed  
@@ -411,6 +413,27 @@ OpenAIConfig contains OpenAI specific configuration
 |**apiKey**|`string`|APIKey contains the authentication key for the service<br/>||
 |**url**|`string`|URL specifies the API endpoint<br/>||
 |**organizationID**|`string`|OrganizationID specifies the OpenAI organization ID<br/>||
+
+**Additional Properties:** not allowed  
+<a name="entconfigwindmill"></a>
+### entConfig\.windmill: object
+
+Windmill holds configuration for the Windmill workflow automation platform
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled specifies whether Windmill integration is enabled<br/>||
+|**baseURL**|`string`|BaseURL is the base URL of the Windmill instance<br/>||
+|**workspace**|`string`|Workspace is the Windmill workspace to use<br/>||
+|**token**|`string`|Token is the API token for authentication with Windmill<br/>||
+|**defaultTimeout**|`string`|DefaultTimeout is the default timeout for API requests<br/>||
+|**timezone**|`string`|Timezone for scheduled jobs<br/>||
+|**onFailureScript**|`string`|OnFailureScript script to run when a scheduled job fails<br/>||
+|**onSuccessScript**|`string`|OnSuccessScript script to run when a scheduled job succeeds<br/>||
+|**folderName**|`string`|FolderName identifies the storage path of flows and scripts in Windmill, you'd want to use<br/>||
 
 **Additional Properties:** not allowed  
 <a name="auth"></a>
@@ -900,15 +923,15 @@ Config is the configuration for the object store
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|||
-|**publicStripeKey**|`string`|||
-|**privateStripeKey**|`string`|||
-|**stripeWebhookSecret**|`string`|||
-|**trialSubscriptionPriceID**|`string`|||
-|**personalOrgSubscriptionPriceID**|`string`|||
-|**stripeWebhookURL**|`string`|||
-|**stripeBillingPortalSuccessURL**|`string`|||
-|**stripeCancellationReturnURL**|`string`|||
+|**enabled**|`boolean`|Enabled determines if the entitlements service is enabled<br/>||
+|**publicStripeKey**|`string`|PublicStripeKey is the key for the stripe service<br/>||
+|**privateStripeKey**|`string`|PrivateStripeKey is the key for the stripe service<br/>||
+|**stripeWebhookSecret**|`string`|StripeWebhookSecret is the secret for the stripe service<br/>||
+|**trialSubscriptionPriceID**|`string`|TrialSubscriptionPriceID is the price ID for the trial subscription<br/>||
+|**personalOrgSubscriptionPriceID**|`string`|PersonalOrgSubscriptionPriceID is the price ID for the personal org subscription<br/>||
+|**stripeWebhookURL**|`string`|StripeWebhookURL is the URL for the stripe webhook<br/>||
+|**stripeBillingPortalSuccessURL**|`string`|StripeBillingPortalSuccessURL<br/>||
+|**stripeCancellationReturnURL**|`string`|StripeCancellationReturnURL is the URL for the stripe cancellation return<br/>||
 |[**stripeWebhookEvents**](#subscriptionstripewebhookevents)|`string[]`|||
 
 **Additional Properties:** not allowed  

@@ -99,6 +99,7 @@ type SchemaConfig struct {
 	InternalPolicyHistory              string // InternalPolicyHistory table.
 	Invite                             string // Invite table.
 	InviteEvents                       string // Invite-events->Event table.
+	InviteGroups                       string // Invite-groups->Group table.
 	JobResult                          string // JobResult table.
 	JobRunner                          string // JobRunner table.
 	JobRunnerJobRunnerTokens           string // JobRunner-job_runner_tokens->JobRunnerToken table.
@@ -206,6 +207,8 @@ type SchemaConfig struct {
 	TemplateFiles                      string // Template-files->File table.
 	TemplateHistory                    string // TemplateHistory table.
 	TrustCenter                        string // TrustCenter table.
+	TrustCenterCompliance              string // TrustCenterCompliance table.
+	TrustCenterComplianceHistory       string // TrustCenterComplianceHistory table.
 	TrustCenterHistory                 string // TrustCenterHistory table.
 	TrustCenterSetting                 string // TrustCenterSetting table.
 	TrustCenterSettingFiles            string // TrustCenterSetting-files->File table.

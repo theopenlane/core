@@ -7,7 +7,8 @@ type Config struct {
 
 	// Summarizer contains configuration for text summarization
 	Summarizer Summarizer `json:"summarizer" koanf:"summarizer"`
-
+	// Windmill contains configuration for Windmill workflow automation
+	Windmill Windmill `json:"windmill" koanf:"windmill"`
 	// MaxPoolSize is the max pond pool workers that can be used by the ent client
 	MaxPoolSize int `json:"maxPoolSize" koanf:"maxPoolSize" default:"100"`
 }
@@ -63,7 +64,7 @@ type GenericLLMConfig struct {
 	Model string `json:"model" koanf:"model"`
 
 	// APIKey contains the authentication key for the service
-	APIKey string `json:"apiKey" koanf:"apiKey"`
+	APIKey string `json:"apiKey" koanf:"apiKey" sensitive:"true"`
 }
 
 // GeminiConfig contains Google Gemini specific configuration
@@ -74,7 +75,7 @@ type GeminiConfig struct {
 	CredentialsPath string `json:"credentialsPath" koanf:"credentialsPath"`
 
 	// CredentialsJSON contains Google Cloud credentials as JSON string
-	CredentialsJSON string `json:"credentialsJSON" koanf:"credentialsJSON"`
+	CredentialsJSON string `json:"credentialsJSON" koanf:"credentialsJSON" sensitive:"true"`
 
 	// MaxTokens specifies the maximum tokens for response
 	MaxTokens int `json:"maxTokens" koanf:"maxTokens"`
@@ -139,4 +140,34 @@ type OpenAIConfig struct {
 
 	// OrganizationID specifies the OpenAI organization ID
 	OrganizationID string `json:"organizationID" koanf:"organizationID"`
+}
+
+// Windmill holds configuration for the Windmill workflow automation platform
+type Windmill struct {
+	// Enabled specifies whether Windmill integration is enabled
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
+
+	// BaseURL is the base URL of the Windmill instance
+	BaseURL string `json:"baseURL" koanf:"baseURL" default:"https://app.windmill.dev"`
+
+	// Workspace is the Windmill workspace to use
+	Workspace string `json:"workspace" koanf:"workspace"`
+
+	// Token is the API token for authentication with Windmill
+	Token string `json:"token" koanf:"token" sensitive:"true"`
+
+	// DefaultTimeout is the default timeout for API requests
+	DefaultTimeout string `json:"defaultTimeout" koanf:"defaultTimeout" default:"30s"`
+
+	// Timezone for scheduled jobs
+	Timezone string `json:"timezone" koanf:"timezone" default:"UTC"`
+
+	// OnFailureScript script to run when a scheduled job fails
+	OnFailureScript string `json:"onFailureScript" koanf:"onFailureScript"`
+
+	// OnSuccessScript script to run when a scheduled job succeeds
+	OnSuccessScript string `json:"onSuccessScript," koanf:"onSuccessScript"`
+
+	// FolderName identifies the storage path of flows and scripts in Windmill, you'd want to use
+	FolderName string `json:"folderName" koanf:"folderName" default:"openlane" description:"an example would be openlane, your flows and scripts will then be saved in f/openlane as an example"`
 }

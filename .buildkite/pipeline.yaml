@@ -14,6 +14,8 @@ env:
   GOCACHE: $HOME/.cache/go-build
   GOMODCACHE: $HOME/.cache/go/pkg/mod
   GOLANGCI_LINT_CACHE: $HOME/.cache/golangci-lint
+  HELM_CHART_REPO: https://github.com/theopenlane/openlane-infra.git
+  HELM_CHART_PATH: charts/openlane
 
 steps:
   - group: ":knife: Pre-check"
@@ -53,6 +55,135 @@ steps:
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
                 - "GOTOOLCHAIN=auto"
+      - label: ":construction: create draft config PR"
+        key: "draft_pr_automation"
+        depends_on: "generate_config"
+        if: build.pull_request.id != null
+        plugins:
+          - cluster-secrets#v1.0.0:
+              variables:
+                GITHUB_TOKEN: GITHUB_TOKEN
+                SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
+          - docker#v5.13.0:
+              image: "ghcr.io/theopenlane/build-image:latest"
+              always_pull: true
+              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/draft-pr-automation.sh"]
+              propagate-environment: true
+              volumes:
+                - $GOCACHE:$GOCACHE
+                - $GOMODCACHE:$GOMODCACHE
+              environment:
+                - "GITHUB_TOKEN"
+                - "HELM_CHART_REPO"
+                - "HELM_CHART_PATH"
+                - "SLACK_WEBHOOK_URL"
+                - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
+      - label: ":link: link PRs"
+        key: "link_pr_automation"
+        depends_on: "draft_pr_automation"
+        if: build.pull_request.id != null
+        plugins:
+          - cluster-secrets#v1.0.0:
+              variables:
+                GITHUB_TOKEN: GITHUB_TOKEN
+                SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
+          - docker#v5.13.0:
+              image: "ghcr.io/theopenlane/build-image:latest"
+              always_pull: true
+              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/link-pr-automation.sh"]
+              propagate-environment: true
+              volumes:
+                - $GOCACHE:$GOCACHE
+                - $GOMODCACHE:$GOMODCACHE
+              environment:
+                - "GITHUB_TOKEN"
+                - "SLACK_WEBHOOK_URL"
+                - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
+      - label: ":helm: update helm chart"
+        key: "helm_automation"
+        depends_on: "generate_config"
+        if: build.branch == "main"
+        plugins:
+          - cluster-secrets#v1.0.0:
+              variables:
+                GITHUB_TOKEN: GITHUB_TOKEN
+                SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
+          - docker#v5.13.0:
+              image: "ghcr.io/theopenlane/build-image:latest"
+              always_pull: true
+              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/helm-automation.sh"]
+              propagate-environment: true
+              volumes:
+                - $GOCACHE:$GOCACHE
+                - $GOMODCACHE:$GOMODCACHE
+              environment:
+                - "GITHUB_TOKEN"
+                - "HELM_CHART_REPO"
+                - "HELM_CHART_PATH"
+                - "SLACK_WEBHOOK_URL"
+                - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
+      - label: ":arrows_counterclockwise: finalize config PRs"
+        key: "post_merge_automation"
+        depends_on: "helm_automation"
+        if: build.branch == "main"
+        plugins:
+          - cluster-secrets#v1.0.0:
+              variables:
+                GITHUB_TOKEN: GITHUB_TOKEN
+                SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
+          - docker#v5.13.0:
+              image: "ghcr.io/theopenlane/build-image:latest"
+              always_pull: true
+              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/post-merge-pr-automation.sh"]
+              propagate-environment: true
+              volumes:
+                - $GOCACHE:$GOCACHE
+                - $GOMODCACHE:$GOMODCACHE
+              environment:
+                - "GITHUB_TOKEN"
+                - "HELM_CHART_REPO"
+                - "HELM_CHART_PATH"
+                - "SLACK_WEBHOOK_URL"
+                - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
+      - label: ":broom: cleanup draft PRs"
+        key: "cleanup_draft_prs"
+        depends_on: "post_merge_automation"
+        if: build.branch == "main"
+        plugins:
+          - cluster-secrets#v1.0.0:
+              variables:
+                GITHUB_TOKEN: GITHUB_TOKEN
+          - docker#v5.13.0:
+              image: "ghcr.io/theopenlane/build-image:latest"
+              always_pull: true
+              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/cleanup-draft-prs.sh"]
+              propagate-environment: true
+              environment:
+                - "GITHUB_TOKEN"
+                - "HELM_CHART_REPO"
+      - label: ":rocket: update image tag for release"
+        key: "image_tag_automation"
+        depends_on: "docker-build-and-tag"
+        if: build.tag != null
+        plugins:
+          - cluster-secrets#v1.0.0:
+              variables:
+                GITHUB_TOKEN: GITHUB_TOKEN
+                SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
+          - docker#v5.13.0:
+              image: "ghcr.io/theopenlane/build-image:latest"
+              always_pull: true
+              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/image-tag-automation.sh"]
+              propagate-environment: true
+              volumes:
+                - $GOCACHE:$GOCACHE
+                - $GOMODCACHE:$GOMODCACHE
+              environment:
+                - "GITHUB_TOKEN"
+                - "HELM_CHART_REPO"
+                - "HELM_CHART_PATH"
+                - "SLACK_WEBHOOK_URL"
+                - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
   - group: ":test_tube: Tests"
     key: "tests"
     steps:

@@ -109,6 +109,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliancehistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
@@ -276,6 +278,8 @@ func checkColumn(table, column string) error {
 			template.Table:                       template.ValidColumn,
 			templatehistory.Table:                templatehistory.ValidColumn,
 			trustcenter.Table:                    trustcenter.ValidColumn,
+			trustcentercompliance.Table:          trustcentercompliance.ValidColumn,
+			trustcentercompliancehistory.Table:   trustcentercompliancehistory.ValidColumn,
 			trustcenterhistory.Table:             trustcenterhistory.ValidColumn,
 			trustcentersetting.Table:             trustcentersetting.ValidColumn,
 			trustcentersettinghistory.Table:      trustcentersettinghistory.ValidColumn,

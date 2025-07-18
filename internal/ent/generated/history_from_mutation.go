@@ -1924,10 +1924,6 @@ func (m *ControlScheduledJobMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetConfiguration(configuration)
 	}
 
-	if cadence, exists := m.Cadence(); exists {
-		create = create.SetCadence(cadence)
-	}
-
 	if cron, exists := m.Cron(); exists {
 		create = create.SetNillableCron(&cron)
 	}
@@ -2021,12 +2017,6 @@ func (m *ControlScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetConfiguration(controlscheduledjob.Configuration)
 		}
 
-		if cadence, exists := m.Cadence(); exists {
-			create = create.SetCadence(cadence)
-		} else {
-			create = create.SetCadence(controlscheduledjob.Cadence)
-		}
-
 		if cron, exists := m.Cron(); exists {
 			create = create.SetNillableCron(&cron)
 		} else {
@@ -2083,7 +2073,6 @@ func (m *ControlScheduledJobMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetOwnerID(controlscheduledjob.OwnerID).
 			SetJobID(controlscheduledjob.JobID).
 			SetConfiguration(controlscheduledjob.Configuration).
-			SetCadence(controlscheduledjob.Cadence).
 			SetNillableCron(controlscheduledjob.Cron).
 			SetJobRunnerID(controlscheduledjob.JobRunnerID).
 			Save(ctx)
@@ -8716,12 +8705,20 @@ func (m *ScheduledJobMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetDescription(description)
 	}
 
-	if jobType, exists := m.JobType(); exists {
-		create = create.SetJobType(jobType)
+	if platform, exists := m.Platform(); exists {
+		create = create.SetPlatform(platform)
 	}
 
 	if script, exists := m.Script(); exists {
 		create = create.SetScript(script)
+	}
+
+	if windmillPath, exists := m.WindmillPath(); exists {
+		create = create.SetWindmillPath(windmillPath)
+	}
+
+	if downloadURL, exists := m.DownloadURL(); exists {
+		create = create.SetDownloadURL(downloadURL)
 	}
 
 	if configuration, exists := m.Configuration(); exists {
@@ -8839,16 +8836,28 @@ func (m *ScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetDescription(scheduledjob.Description)
 		}
 
-		if jobType, exists := m.JobType(); exists {
-			create = create.SetJobType(jobType)
+		if platform, exists := m.Platform(); exists {
+			create = create.SetPlatform(platform)
 		} else {
-			create = create.SetJobType(scheduledjob.JobType)
+			create = create.SetPlatform(scheduledjob.Platform)
 		}
 
 		if script, exists := m.Script(); exists {
 			create = create.SetScript(script)
 		} else {
 			create = create.SetScript(scheduledjob.Script)
+		}
+
+		if windmillPath, exists := m.WindmillPath(); exists {
+			create = create.SetWindmillPath(windmillPath)
+		} else {
+			create = create.SetWindmillPath(scheduledjob.WindmillPath)
+		}
+
+		if downloadURL, exists := m.DownloadURL(); exists {
+			create = create.SetDownloadURL(downloadURL)
+		} else {
+			create = create.SetDownloadURL(scheduledjob.DownloadURL)
 		}
 
 		if configuration, exists := m.Configuration(); exists {
@@ -8916,8 +8925,10 @@ func (m *ScheduledJobMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetSystemOwned(scheduledjob.SystemOwned).
 			SetTitle(scheduledjob.Title).
 			SetDescription(scheduledjob.Description).
-			SetJobType(scheduledjob.JobType).
+			SetPlatform(scheduledjob.Platform).
 			SetScript(scheduledjob.Script).
+			SetWindmillPath(scheduledjob.WindmillPath).
+			SetDownloadURL(scheduledjob.DownloadURL).
 			SetConfiguration(scheduledjob.Configuration).
 			SetCadence(scheduledjob.Cadence).
 			SetNillableCron(scheduledjob.Cron).
@@ -10633,6 +10644,174 @@ func (m *TrustCenterMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetOwnerID(trustcenter.OwnerID).
 			SetSlug(trustcenter.Slug).
 			SetCustomDomainID(trustcenter.CustomDomainID).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *TrustCenterComplianceMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.TrustCenterComplianceHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *TrustCenterComplianceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		trustcentercompliance, err := client.TrustCenterCompliance.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.TrustCenterComplianceHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(trustcentercompliance.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(trustcentercompliance.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(trustcentercompliance.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(trustcentercompliance.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(trustcentercompliance.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(trustcentercompliance.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(trustcentercompliance.Tags)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *TrustCenterComplianceMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		trustcentercompliance, err := client.TrustCenterCompliance.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.TrustCenterComplianceHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(trustcentercompliance.CreatedAt).
+			SetUpdatedAt(trustcentercompliance.UpdatedAt).
+			SetCreatedBy(trustcentercompliance.CreatedBy).
+			SetUpdatedBy(trustcentercompliance.UpdatedBy).
+			SetDeletedAt(trustcentercompliance.DeletedAt).
+			SetDeletedBy(trustcentercompliance.DeletedBy).
+			SetTags(trustcentercompliance.Tags).
 			Save(ctx)
 		if err != nil {
 			return err

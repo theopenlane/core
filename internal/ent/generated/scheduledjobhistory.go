@@ -51,10 +51,14 @@ type ScheduledJobHistory struct {
 	Title string `json:"title,omitempty"`
 	// the description of the job
 	Description string `json:"description,omitempty"`
-	// the type of this job
-	JobType enums.JobType `json:"job_type,omitempty"`
+	// the platform to use to execute this job
+	Platform enums.JobPlatformType `json:"platform,omitempty"`
 	// the script to run
 	Script string `json:"script,omitempty"`
+	// Windmill path
+	WindmillPath string `json:"windmill_path,omitempty"`
+	// the url from where to download the script from
+	DownloadURL string `json:"download_url,omitempty"`
 	// the configuration to run this job
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
 	// the schedule to run this job
@@ -77,7 +81,7 @@ func (*ScheduledJobHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case scheduledjobhistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case scheduledjobhistory.FieldID, scheduledjobhistory.FieldRef, scheduledjobhistory.FieldCreatedBy, scheduledjobhistory.FieldUpdatedBy, scheduledjobhistory.FieldDeletedBy, scheduledjobhistory.FieldDisplayID, scheduledjobhistory.FieldOwnerID, scheduledjobhistory.FieldTitle, scheduledjobhistory.FieldDescription, scheduledjobhistory.FieldJobType, scheduledjobhistory.FieldScript:
+		case scheduledjobhistory.FieldID, scheduledjobhistory.FieldRef, scheduledjobhistory.FieldCreatedBy, scheduledjobhistory.FieldUpdatedBy, scheduledjobhistory.FieldDeletedBy, scheduledjobhistory.FieldDisplayID, scheduledjobhistory.FieldOwnerID, scheduledjobhistory.FieldTitle, scheduledjobhistory.FieldDescription, scheduledjobhistory.FieldPlatform, scheduledjobhistory.FieldScript, scheduledjobhistory.FieldWindmillPath, scheduledjobhistory.FieldDownloadURL:
 			values[i] = new(sql.NullString)
 		case scheduledjobhistory.FieldHistoryTime, scheduledjobhistory.FieldCreatedAt, scheduledjobhistory.FieldUpdatedAt, scheduledjobhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -194,17 +198,29 @@ func (sjh *ScheduledJobHistory) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				sjh.Description = value.String
 			}
-		case scheduledjobhistory.FieldJobType:
+		case scheduledjobhistory.FieldPlatform:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field job_type", values[i])
+				return fmt.Errorf("unexpected type %T for field platform", values[i])
 			} else if value.Valid {
-				sjh.JobType = enums.JobType(value.String)
+				sjh.Platform = enums.JobPlatformType(value.String)
 			}
 		case scheduledjobhistory.FieldScript:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field script", values[i])
 			} else if value.Valid {
 				sjh.Script = value.String
+			}
+		case scheduledjobhistory.FieldWindmillPath:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field windmill_path", values[i])
+			} else if value.Valid {
+				sjh.WindmillPath = value.String
+			}
+		case scheduledjobhistory.FieldDownloadURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field download_url", values[i])
+			} else if value.Valid {
+				sjh.DownloadURL = value.String
 			}
 		case scheduledjobhistory.FieldConfiguration:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -310,11 +326,17 @@ func (sjh *ScheduledJobHistory) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(sjh.Description)
 	builder.WriteString(", ")
-	builder.WriteString("job_type=")
-	builder.WriteString(fmt.Sprintf("%v", sjh.JobType))
+	builder.WriteString("platform=")
+	builder.WriteString(fmt.Sprintf("%v", sjh.Platform))
 	builder.WriteString(", ")
 	builder.WriteString("script=")
 	builder.WriteString(sjh.Script)
+	builder.WriteString(", ")
+	builder.WriteString("windmill_path=")
+	builder.WriteString(sjh.WindmillPath)
+	builder.WriteString(", ")
+	builder.WriteString("download_url=")
+	builder.WriteString(sjh.DownloadURL)
 	builder.WriteString(", ")
 	builder.WriteString("configuration=")
 	builder.WriteString(fmt.Sprintf("%v", sjh.Configuration))

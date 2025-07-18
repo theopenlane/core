@@ -3178,6 +3178,27 @@ func (i *Invite) Events(
 	return i.QueryEvents().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (i *Invite) Groups(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*GroupOrder, where *GroupWhereInput,
+) (*GroupConnection, error) {
+	opts := []GroupPaginateOption{
+		WithGroupOrder(orderBy),
+		WithGroupFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := i.Edges.totalCount[2][alias]
+	if nodes, err := i.NamedGroups(alias); err == nil || hasTotalCount {
+		pager, err := newGroupPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &GroupConnection{Edges: []*GroupEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return i.QueryGroups().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (jr *JobResult) Owner(ctx context.Context) (*Organization, error) {
 	result, err := jr.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {

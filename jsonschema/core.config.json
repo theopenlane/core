@@ -488,6 +488,10 @@
           "$ref": "#/$defs/entconfig.Summarizer",
           "description": "Summarizer contains configuration for text summarization"
         },
+        "windmill": {
+          "$ref": "#/$defs/entconfig.Windmill",
+          "description": "Windmill contains configuration for Windmill workflow automation"
+        },
         "maxPoolSize": {
           "type": "integer",
           "description": "MaxPoolSize is the max pond pool workers that can be used by the ent client"
@@ -658,37 +662,90 @@
       "type": "object",
       "description": "SummarizerLLM contains configuration for multiple LLM providers"
     },
+    "entconfig.Windmill": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled specifies whether Windmill integration is enabled"
+        },
+        "baseURL": {
+          "type": "string",
+          "description": "BaseURL is the base URL of the Windmill instance"
+        },
+        "workspace": {
+          "type": "string",
+          "description": "Workspace is the Windmill workspace to use"
+        },
+        "token": {
+          "type": "string",
+          "description": "Token is the API token for authentication with Windmill"
+        },
+        "defaultTimeout": {
+          "type": "string",
+          "description": "DefaultTimeout is the default timeout for API requests"
+        },
+        "timezone": {
+          "type": "string",
+          "description": "Timezone for scheduled jobs"
+        },
+        "onFailureScript": {
+          "type": "string",
+          "description": "OnFailureScript script to run when a scheduled job fails"
+        },
+        "onSuccessScript": {
+          "type": "string",
+          "description": "OnSuccessScript script to run when a scheduled job succeeds"
+        },
+        "folderName": {
+          "type": "string",
+          "description": "FolderName identifies the storage path of flows and scripts in Windmill, you'd want to use"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Windmill holds configuration for the Windmill workflow automation platform"
+    },
     "entitlements.Config": {
       "properties": {
         "enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Enabled determines if the entitlements service is enabled"
         },
         "publicStripeKey": {
-          "type": "string"
+          "type": "string",
+          "description": "PublicStripeKey is the key for the stripe service"
         },
         "privateStripeKey": {
-          "type": "string"
+          "type": "string",
+          "description": "PrivateStripeKey is the key for the stripe service"
         },
         "stripeWebhookSecret": {
-          "type": "string"
+          "type": "string",
+          "description": "StripeWebhookSecret is the secret for the stripe service"
         },
         "trialSubscriptionPriceID": {
-          "type": "string"
+          "type": "string",
+          "description": "TrialSubscriptionPriceID is the price ID for the trial subscription"
         },
         "personalOrgSubscriptionPriceID": {
-          "type": "string"
+          "type": "string",
+          "description": "PersonalOrgSubscriptionPriceID is the price ID for the personal org subscription"
         },
         "stripeWebhookURL": {
-          "type": "string"
+          "type": "string",
+          "description": "StripeWebhookURL is the URL for the stripe webhook"
         },
         "stripeBillingPortalSuccessURL": {
-          "type": "string"
+          "type": "string",
+          "description": "StripeBillingPortalSuccessURL"
         },
         "stripeCancellationReturnURL": {
-          "type": "string"
+          "type": "string",
+          "description": "StripeCancellationReturnURL is the URL for the stripe cancellation return"
         },
         "stripeWebhookEvents": {
-          "$ref": "#/$defs/[]string"
+          "$ref": "#/$defs/[]string",
+          "description": "StripeWebhookEvents is the list of events to register when creating a webhook endpoint"
         }
       },
       "additionalProperties": false,
@@ -1444,6 +1501,10 @@
     }
   },
   "properties": {
+    "domain": {
+      "type": "string",
+      "description": "Domain provides a global domain value for other modules to inherit"
+    },
     "refreshInterval": {
       "type": "integer",
       "description": "RefreshInterval determines how often to reload the config"

@@ -685,8 +685,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "configuration", Type: field.TypeJSON},
-		{Name: "cadence", Type: field.TypeJSON, Nullable: true},
+		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
 		{Name: "job_id", Type: field.TypeString},
 		{Name: "job_runner_id", Type: field.TypeString, Nullable: true},
@@ -700,19 +699,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "control_scheduled_jobs_scheduled_jobs_job",
-				Columns:    []*schema.Column{ControlScheduledJobsColumns[10]},
+				Columns:    []*schema.Column{ControlScheduledJobsColumns[9]},
 				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "control_scheduled_jobs_job_runners_job_runner",
-				Columns:    []*schema.Column{ControlScheduledJobsColumns[11]},
+				Columns:    []*schema.Column{ControlScheduledJobsColumns[10]},
 				RefColumns: []*schema.Column{JobRunnersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "control_scheduled_jobs_organizations_scheduled_jobs",
-				Columns:    []*schema.Column{ControlScheduledJobsColumns[12]},
+				Columns:    []*schema.Column{ControlScheduledJobsColumns[11]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -721,7 +720,7 @@ var (
 			{
 				Name:    "controlscheduledjob_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ControlScheduledJobsColumns[12]},
+				Columns: []*schema.Column{ControlScheduledJobsColumns[11]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -742,8 +741,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "job_id", Type: field.TypeString},
-		{Name: "configuration", Type: field.TypeJSON},
-		{Name: "cadence", Type: field.TypeJSON, Nullable: true},
+		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
 		{Name: "job_runner_id", Type: field.TypeString, Nullable: true},
 	}
@@ -1383,6 +1381,8 @@ var (
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "FAILED", "READY", "NODATA"}, Default: "PENDING"},
 		{Name: "requestor_id", Type: field.TypeString, Nullable: true},
 		{Name: "fields", Type: field.TypeJSON, Nullable: true},
+		{Name: "filters", Type: field.TypeString, Nullable: true},
+		{Name: "error_message", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// ExportsTable holds the schema information for the "exports" table.
@@ -1393,7 +1393,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "exports_organizations_exports",
-				Columns:    []*schema.Column{ExportsColumns[12]},
+				Columns:    []*schema.Column{ExportsColumns[14]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1402,7 +1402,7 @@ var (
 			{
 				Name:    "export_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ExportsColumns[12]},
+				Columns: []*schema.Column{ExportsColumns[14]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3796,9 +3796,11 @@ var (
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "title", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "job_type", Type: field.TypeEnum, Enums: []string{"SSL"}, Default: "SSL"},
+		{Name: "platform", Type: field.TypeEnum, Enums: []string{"GO", "TS"}},
 		{Name: "script", Type: field.TypeString, Nullable: true},
-		{Name: "configuration", Type: field.TypeJSON},
+		{Name: "windmill_path", Type: field.TypeString},
+		{Name: "download_url", Type: field.TypeString},
+		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
 		{Name: "cadence", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -3811,7 +3813,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "scheduled_jobs_organizations_jobs",
-				Columns:    []*schema.Column{ScheduledJobsColumns[17]},
+				Columns:    []*schema.Column{ScheduledJobsColumns[19]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3820,12 +3822,12 @@ var (
 			{
 				Name:    "scheduledjob_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ScheduledJobsColumns[7], ScheduledJobsColumns[17]},
+				Columns: []*schema.Column{ScheduledJobsColumns[7], ScheduledJobsColumns[19]},
 			},
 			{
 				Name:    "scheduledjob_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduledJobsColumns[17]},
+				Columns: []*schema.Column{ScheduledJobsColumns[19]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3850,9 +3852,11 @@ var (
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "title", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "job_type", Type: field.TypeEnum, Enums: []string{"SSL"}, Default: "SSL"},
+		{Name: "platform", Type: field.TypeEnum, Enums: []string{"GO", "TS"}},
 		{Name: "script", Type: field.TypeString, Nullable: true},
-		{Name: "configuration", Type: field.TypeJSON},
+		{Name: "windmill_path", Type: field.TypeString},
+		{Name: "download_url", Type: field.TypeString},
+		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
 		{Name: "cadence", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
 	}
@@ -4589,6 +4593,50 @@ var (
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
+			},
+		},
+	}
+	// TrustCenterCompliancesColumns holds the columns for the "trust_center_compliances" table.
+	TrustCenterCompliancesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+	}
+	// TrustCenterCompliancesTable holds the schema information for the "trust_center_compliances" table.
+	TrustCenterCompliancesTable = &schema.Table{
+		Name:       "trust_center_compliances",
+		Columns:    TrustCenterCompliancesColumns,
+		PrimaryKey: []*schema.Column{TrustCenterCompliancesColumns[0]},
+	}
+	// TrustCenterComplianceHistoryColumns holds the columns for the "trust_center_compliance_history" table.
+	TrustCenterComplianceHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+	}
+	// TrustCenterComplianceHistoryTable holds the schema information for the "trust_center_compliance_history" table.
+	TrustCenterComplianceHistoryTable = &schema.Table{
+		Name:       "trust_center_compliance_history",
+		Columns:    TrustCenterComplianceHistoryColumns,
+		PrimaryKey: []*schema.Column{TrustCenterComplianceHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "trustcentercompliancehistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterComplianceHistoryColumns[1]},
 			},
 		},
 	}
@@ -6166,6 +6214,31 @@ var (
 				Symbol:     "invite_events_event_id",
 				Columns:    []*schema.Column{InviteEventsColumns[1]},
 				RefColumns: []*schema.Column{EventsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// InviteGroupsColumns holds the columns for the "invite_groups" table.
+	InviteGroupsColumns = []*schema.Column{
+		{Name: "invite_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// InviteGroupsTable holds the schema information for the "invite_groups" table.
+	InviteGroupsTable = &schema.Table{
+		Name:       "invite_groups",
+		Columns:    InviteGroupsColumns,
+		PrimaryKey: []*schema.Column{InviteGroupsColumns[0], InviteGroupsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "invite_groups_invite_id",
+				Columns:    []*schema.Column{InviteGroupsColumns[0]},
+				RefColumns: []*schema.Column{InvitesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "invite_groups_group_id",
+				Columns:    []*schema.Column{InviteGroupsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -7769,6 +7842,8 @@ var (
 		TemplatesTable,
 		TemplateHistoryTable,
 		TrustCentersTable,
+		TrustCenterCompliancesTable,
+		TrustCenterComplianceHistoryTable,
 		TrustCenterHistoryTable,
 		TrustCenterSettingsTable,
 		TrustCenterSettingHistoryTable,
@@ -7826,6 +7901,7 @@ var (
 		InternalPolicyTasksTable,
 		InternalPolicyRisksTable,
 		InviteEventsTable,
+		InviteGroupsTable,
 		JobRunnerJobRunnerTokensTable,
 		MappedControlBlockedGroupsTable,
 		MappedControlEditorsTable,
@@ -8145,6 +8221,9 @@ func init() {
 	}
 	TrustCentersTable.ForeignKeys[0].RefTable = OrganizationsTable
 	TrustCentersTable.ForeignKeys[1].RefTable = CustomDomainsTable
+	TrustCenterComplianceHistoryTable.Annotation = &entsql.Annotation{
+		Table: "trust_center_compliance_history",
+	}
 	TrustCenterHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_history",
 	}
@@ -8263,6 +8342,8 @@ func init() {
 	InternalPolicyRisksTable.ForeignKeys[1].RefTable = RisksTable
 	InviteEventsTable.ForeignKeys[0].RefTable = InvitesTable
 	InviteEventsTable.ForeignKeys[1].RefTable = EventsTable
+	InviteGroupsTable.ForeignKeys[0].RefTable = InvitesTable
+	InviteGroupsTable.ForeignKeys[1].RefTable = GroupsTable
 	JobRunnerJobRunnerTokensTable.ForeignKeys[0].RefTable = JobRunnersTable
 	JobRunnerJobRunnerTokensTable.ForeignKeys[1].RefTable = JobRunnerTokensTable
 	MappedControlBlockedGroupsTable.ForeignKeys[0].RefTable = MappedControlsTable

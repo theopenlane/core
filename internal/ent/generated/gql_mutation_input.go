@@ -2066,7 +2066,6 @@ func (c *ControlObjectiveUpdateOne) SetInput(i UpdateControlObjectiveInput) *Con
 // CreateControlScheduledJobInput represents a mutation input for creating controlscheduledjobs.
 type CreateControlScheduledJobInput struct {
 	Configuration models.JobConfiguration
-	Cadence       *models.JobCadence
 	Cron          *models.Cron
 	OwnerID       *string
 	JobID         string
@@ -2077,9 +2076,8 @@ type CreateControlScheduledJobInput struct {
 
 // Mutate applies the CreateControlScheduledJobInput on the ControlScheduledJobMutation builder.
 func (i *CreateControlScheduledJobInput) Mutate(m *ControlScheduledJobMutation) {
-	m.SetConfiguration(i.Configuration)
-	if v := i.Cadence; v != nil {
-		m.SetCadence(*v)
+	if v := i.Configuration; v != nil {
+		m.SetConfiguration(v)
 	}
 	if v := i.Cron; v != nil {
 		m.SetCron(*v)
@@ -2107,9 +2105,9 @@ func (c *ControlScheduledJobCreate) SetInput(i CreateControlScheduledJobInput) *
 
 // UpdateControlScheduledJobInput represents a mutation input for updating controlscheduledjobs.
 type UpdateControlScheduledJobInput struct {
-	Configuration       *models.JobConfiguration
-	ClearCadence        bool
-	Cadence             *models.JobCadence
+	ClearConfiguration  bool
+	Configuration       models.JobConfiguration
+	AppendConfiguration models.JobConfiguration
 	ClearCron           bool
 	Cron                *models.Cron
 	ClearOwner          bool
@@ -2127,14 +2125,14 @@ type UpdateControlScheduledJobInput struct {
 
 // Mutate applies the UpdateControlScheduledJobInput on the ControlScheduledJobMutation builder.
 func (i *UpdateControlScheduledJobInput) Mutate(m *ControlScheduledJobMutation) {
+	if i.ClearConfiguration {
+		m.ClearConfiguration()
+	}
 	if v := i.Configuration; v != nil {
-		m.SetConfiguration(*v)
+		m.SetConfiguration(v)
 	}
-	if i.ClearCadence {
-		m.ClearCadence()
-	}
-	if v := i.Cadence; v != nil {
-		m.SetCadence(*v)
+	if i.AppendConfiguration != nil {
+		m.AppendConfiguration(i.Configuration)
 	}
 	if i.ClearCron {
 		m.ClearCron()
@@ -3390,6 +3388,7 @@ type CreateExportInput struct {
 	ExportType enums.ExportType
 	Format     enums.ExportFormat
 	Fields     []string
+	Filters    *string
 	OwnerID    *string
 	EventIDs   []string
 	FileIDs    []string
@@ -3401,6 +3400,9 @@ func (i *CreateExportInput) Mutate(m *ExportMutation) {
 	m.SetFormat(i.Format)
 	if v := i.Fields; v != nil {
 		m.SetFields(v)
+	}
+	if v := i.Filters; v != nil {
+		m.SetFilters(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -3421,21 +3423,29 @@ func (c *ExportCreate) SetInput(i CreateExportInput) *ExportCreate {
 
 // UpdateExportInput represents a mutation input for updating exports.
 type UpdateExportInput struct {
-	Status         *enums.ExportStatus
-	ClearOwner     bool
-	OwnerID        *string
-	ClearEvents    bool
-	AddEventIDs    []string
-	RemoveEventIDs []string
-	ClearFiles     bool
-	AddFileIDs     []string
-	RemoveFileIDs  []string
+	Status            *enums.ExportStatus
+	ClearErrorMessage bool
+	ErrorMessage      *string
+	ClearOwner        bool
+	OwnerID           *string
+	ClearEvents       bool
+	AddEventIDs       []string
+	RemoveEventIDs    []string
+	ClearFiles        bool
+	AddFileIDs        []string
+	RemoveFileIDs     []string
 }
 
 // Mutate applies the UpdateExportInput on the ExportMutation builder.
 func (i *UpdateExportInput) Mutate(m *ExportMutation) {
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearErrorMessage {
+		m.ClearErrorMessage()
+	}
+	if v := i.ErrorMessage; v != nil {
+		m.SetErrorMessage(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -5309,6 +5319,7 @@ type CreateInviteInput struct {
 	RequestorID  *string
 	OwnerID      *string
 	EventIDs     []string
+	GroupIDs     []string
 }
 
 // Mutate applies the CreateInviteInput on the InviteMutation builder.
@@ -5335,6 +5346,9 @@ func (i *CreateInviteInput) Mutate(m *InviteMutation) {
 	if v := i.EventIDs; len(v) > 0 {
 		m.AddEventIDs(v...)
 	}
+	if v := i.GroupIDs; len(v) > 0 {
+		m.AddGroupIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateInviteInput on the InviteCreate builder.
@@ -5355,6 +5369,9 @@ type UpdateInviteInput struct {
 	ClearEvents    bool
 	AddEventIDs    []string
 	RemoveEventIDs []string
+	ClearGroups    bool
+	AddGroupIDs    []string
+	RemoveGroupIDs []string
 }
 
 // Mutate applies the UpdateInviteInput on the InviteMutation builder.
@@ -5388,6 +5405,15 @@ func (i *UpdateInviteInput) Mutate(m *InviteMutation) {
 	}
 	if v := i.RemoveEventIDs; len(v) > 0 {
 		m.RemoveEventIDs(v...)
+	}
+	if i.ClearGroups {
+		m.ClearGroups()
+	}
+	if v := i.AddGroupIDs; len(v) > 0 {
+		m.AddGroupIDs(v...)
+	}
+	if v := i.RemoveGroupIDs; len(v) > 0 {
+		m.RemoveGroupIDs(v...)
 	}
 }
 
@@ -9406,8 +9432,9 @@ type CreateScheduledJobInput struct {
 	Tags          []string
 	Title         string
 	Description   *string
-	JobType       *enums.JobType
+	Platform      enums.JobPlatformType
 	Script        *string
+	DownloadURL   string
 	Configuration models.JobConfiguration
 	Cadence       *models.JobCadence
 	Cron          *models.Cron
@@ -9423,13 +9450,14 @@ func (i *CreateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.JobType; v != nil {
-		m.SetJobType(*v)
-	}
+	m.SetPlatform(i.Platform)
 	if v := i.Script; v != nil {
 		m.SetScript(*v)
 	}
-	m.SetConfiguration(i.Configuration)
+	m.SetDownloadURL(i.DownloadURL)
+	if v := i.Configuration; v != nil {
+		m.SetConfiguration(v)
+	}
 	if v := i.Cadence; v != nil {
 		m.SetCadence(*v)
 	}
@@ -9449,22 +9477,24 @@ func (c *ScheduledJobCreate) SetInput(i CreateScheduledJobInput) *ScheduledJobCr
 
 // UpdateScheduledJobInput represents a mutation input for updating scheduledjobs.
 type UpdateScheduledJobInput struct {
-	ClearTags        bool
-	Tags             []string
-	AppendTags       []string
-	Title            *string
-	ClearDescription bool
-	Description      *string
-	JobType          *enums.JobType
-	ClearScript      bool
-	Script           *string
-	Configuration    *models.JobConfiguration
-	ClearCadence     bool
-	Cadence          *models.JobCadence
-	ClearCron        bool
-	Cron             *models.Cron
-	ClearOwner       bool
-	OwnerID          *string
+	ClearTags           bool
+	Tags                []string
+	AppendTags          []string
+	Title               *string
+	ClearDescription    bool
+	Description         *string
+	ClearScript         bool
+	Script              *string
+	DownloadURL         *string
+	ClearConfiguration  bool
+	Configuration       models.JobConfiguration
+	AppendConfiguration models.JobConfiguration
+	ClearCadence        bool
+	Cadence             *models.JobCadence
+	ClearCron           bool
+	Cron                *models.Cron
+	ClearOwner          bool
+	OwnerID             *string
 }
 
 // Mutate applies the UpdateScheduledJobInput on the ScheduledJobMutation builder.
@@ -9487,17 +9517,23 @@ func (i *UpdateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if v := i.JobType; v != nil {
-		m.SetJobType(*v)
-	}
 	if i.ClearScript {
 		m.ClearScript()
 	}
 	if v := i.Script; v != nil {
 		m.SetScript(*v)
 	}
+	if v := i.DownloadURL; v != nil {
+		m.SetDownloadURL(*v)
+	}
+	if i.ClearConfiguration {
+		m.ClearConfiguration()
+	}
 	if v := i.Configuration; v != nil {
-		m.SetConfiguration(*v)
+		m.SetConfiguration(v)
+	}
+	if i.AppendConfiguration != nil {
+		m.AppendConfiguration(i.Configuration)
 	}
 	if i.ClearCadence {
 		m.ClearCadence()
@@ -11143,6 +11179,56 @@ func (c *TrustCenterUpdate) SetInput(i UpdateTrustCenterInput) *TrustCenterUpdat
 
 // SetInput applies the change-set in the UpdateTrustCenterInput on the TrustCenterUpdateOne builder.
 func (c *TrustCenterUpdateOne) SetInput(i UpdateTrustCenterInput) *TrustCenterUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateTrustCenterComplianceInput represents a mutation input for creating trustcentercompliances.
+type CreateTrustCenterComplianceInput struct {
+	Tags []string
+}
+
+// Mutate applies the CreateTrustCenterComplianceInput on the TrustCenterComplianceMutation builder.
+func (i *CreateTrustCenterComplianceInput) Mutate(m *TrustCenterComplianceMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+}
+
+// SetInput applies the change-set in the CreateTrustCenterComplianceInput on the TrustCenterComplianceCreate builder.
+func (c *TrustCenterComplianceCreate) SetInput(i CreateTrustCenterComplianceInput) *TrustCenterComplianceCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateTrustCenterComplianceInput represents a mutation input for updating trustcentercompliances.
+type UpdateTrustCenterComplianceInput struct {
+	ClearTags  bool
+	Tags       []string
+	AppendTags []string
+}
+
+// Mutate applies the UpdateTrustCenterComplianceInput on the TrustCenterComplianceMutation builder.
+func (i *UpdateTrustCenterComplianceInput) Mutate(m *TrustCenterComplianceMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterComplianceInput on the TrustCenterComplianceUpdate builder.
+func (c *TrustCenterComplianceUpdate) SetInput(i UpdateTrustCenterComplianceInput) *TrustCenterComplianceUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterComplianceInput on the TrustCenterComplianceUpdateOne builder.
+func (c *TrustCenterComplianceUpdateOne) SetInput(i UpdateTrustCenterComplianceInput) *TrustCenterComplianceUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

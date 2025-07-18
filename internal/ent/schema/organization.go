@@ -423,7 +423,7 @@ func (Organization) Indexes() []ent.Index {
 // Annotations of the Organization
 func (Organization) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
+		entx.Features(entx.ModuleBase),
 		// Delete org members when orgs are deleted
 		entx.CascadeThroughAnnotationField(
 			[]entx.ThroughCleanup{

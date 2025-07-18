@@ -6,13 +6,17 @@ package graphapi
 
 import (
 	"context"
+	"fmt"
 	"slices"
 
+	"entgo.io/contrib/entgql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -140,4 +144,103 @@ func (r *queryResolver) ControlSubcategories(ctx context.Context) ([]string, err
 	}
 
 	return subcategories, nil
+}
+
+// ControlCategoriesByFramework is the resolver for the controlCategoriesByFramework field.
+func (r *queryResolver) ControlCategoriesByFramework(ctx context.Context, orderBy []*model.ControlCategoryOrder, where *generated.ControlWhereInput) ([]*model.ControlCategoryEdge, error) {
+	return r.getAllCategories(ctx, control.FieldCategory, where)
+}
+
+// ControlSubcategoriesByFramework is the resolver for the controlSubcategoriesByFramework field.
+func (r *queryResolver) ControlSubcategoriesByFramework(ctx context.Context, orderBy []*model.ControlCategoryOrder, where *generated.ControlWhereInput) ([]*model.ControlCategoryEdge, error) {
+	return r.getAllCategories(ctx, control.FieldSubcategory, where)
+}
+
+// ControlsGroupByCategory is the resolver for the controlsGroupByCategory field.
+func (r *queryResolver) ControlsGroupByCategory(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput, category *string) (*model.ControlGroupConnection, error) {
+	if category == nil && after != nil || before != nil {
+		log.Info().Msg("category must be provided when using pagination with after or before")
+
+		return nil, fmt.Errorf("%w: category must be provided when using pagination with after or before", rout.ErrBadRequest)
+	}
+
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.ControlOrder{
+			{
+				Field:     generated.ControlOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	whereP, err := getControlWherePredicate(where)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "control"})
+	}
+
+	categories := []string{}
+	if category == nil {
+		whereFilter := control.CategoryNEQ("")
+
+		if whereP != nil {
+			whereFilter = control.And(
+				append([]predicate.Control{control.CategoryNEQ("")}, whereP)...,
+			)
+
+		}
+		// get all distinct categories from controls
+		var err error
+		categories, err = withTransactionalMutation(ctx).Control.Query().
+			Select(control.FieldCategory).
+			Where(whereFilter).
+			Unique(true).
+			GroupBy(control.FieldCategory).
+			Strings(ctx)
+		if err != nil {
+			return nil, parseRequestError(err, action{action: ActionGet, object: "control"})
+		}
+	} else {
+		categories = []string{*category}
+	}
+
+	// for each category, query the controls and return a connection
+	result := &model.ControlGroupConnection{
+		Edges: []*model.ControlGroupEdge{},
+	}
+
+	for _, category := range categories {
+		query, err := withTransactionalMutation(ctx).Control.Query().Where(
+			control.Category(category),
+		).CollectFields(ctx)
+		if err != nil {
+			return nil, parseRequestError(err, action{action: ActionGet, object: "control"})
+		}
+
+		resp, err := query.Paginate(
+			ctx,
+			after,
+			first,
+			before,
+			last,
+			generated.WithControlOrder(orderBy),
+			generated.WithControlFilter(where.Filter))
+		if err != nil {
+			return nil, parseRequestError(err, action{action: ActionGet, object: "control"})
+		}
+
+		controlGroupEdge := &model.ControlGroupEdge{
+			Node: &model.ControlGroup{
+				Category: category,
+				Controls: resp,
+			},
+			PageInfo: &resp.PageInfo,
+		}
+
+		result.Edges = append(result.Edges, controlGroupEdge)
+	}
+
+	return result, nil
 }

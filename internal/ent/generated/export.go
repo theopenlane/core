@@ -44,6 +44,10 @@ type Export struct {
 	RequestorID string `json:"requestor_id,omitempty"`
 	// the specific fields to include in the export (defaults to only the id if not provided)
 	Fields []string `json:"fields,omitempty"`
+	// the specific filters to run against the exported data. This should be a well formatted graphql query
+	Filters string `json:"filters,omitempty"`
+	// if we try to export and it fails, the error message will be stored here
+	ErrorMessage string `json:"error_message,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ExportQuery when eager-loading is set.
 	Edges        ExportEdges `json:"edges"`
@@ -104,7 +108,7 @@ func (*Export) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case export.FieldFields:
 			values[i] = new([]byte)
-		case export.FieldID, export.FieldCreatedBy, export.FieldUpdatedBy, export.FieldDeletedBy, export.FieldOwnerID, export.FieldExportType, export.FieldFormat, export.FieldStatus, export.FieldRequestorID:
+		case export.FieldID, export.FieldCreatedBy, export.FieldUpdatedBy, export.FieldDeletedBy, export.FieldOwnerID, export.FieldExportType, export.FieldFormat, export.FieldStatus, export.FieldRequestorID, export.FieldFilters, export.FieldErrorMessage:
 			values[i] = new(sql.NullString)
 		case export.FieldCreatedAt, export.FieldUpdatedAt, export.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -203,6 +207,18 @@ func (e *Export) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field fields: %w", err)
 				}
 			}
+		case export.FieldFilters:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field filters", values[i])
+			} else if value.Valid {
+				e.Filters = value.String
+			}
+		case export.FieldErrorMessage:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field error_message", values[i])
+			} else if value.Valid {
+				e.ErrorMessage = value.String
+			}
 		default:
 			e.selectValues.Set(columns[i], values[i])
 		}
@@ -289,6 +305,12 @@ func (e *Export) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("fields=")
 	builder.WriteString(fmt.Sprintf("%v", e.Fields))
+	builder.WriteString(", ")
+	builder.WriteString("filters=")
+	builder.WriteString(e.Filters)
+	builder.WriteString(", ")
+	builder.WriteString("error_message=")
+	builder.WriteString(e.ErrorMessage)
 	builder.WriteByte(')')
 	return builder.String()
 }

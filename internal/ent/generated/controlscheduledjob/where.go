@@ -633,14 +633,14 @@ func JobIDContainsFold(v string) predicate.ControlScheduledJob {
 	return predicate.ControlScheduledJob(sql.FieldContainsFold(FieldJobID, v))
 }
 
-// CadenceIsNil applies the IsNil predicate on the "cadence" field.
-func CadenceIsNil() predicate.ControlScheduledJob {
-	return predicate.ControlScheduledJob(sql.FieldIsNull(FieldCadence))
+// ConfigurationIsNil applies the IsNil predicate on the "configuration" field.
+func ConfigurationIsNil() predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldIsNull(FieldConfiguration))
 }
 
-// CadenceNotNil applies the NotNil predicate on the "cadence" field.
-func CadenceNotNil() predicate.ControlScheduledJob {
-	return predicate.ControlScheduledJob(sql.FieldNotNull(FieldCadence))
+// ConfigurationNotNil applies the NotNil predicate on the "configuration" field.
+func ConfigurationNotNil() predicate.ControlScheduledJob {
+	return predicate.ControlScheduledJob(sql.FieldNotNull(FieldConfiguration))
 }
 
 // CronEQ applies the EQ predicate on the "cron" field.

@@ -58,6 +58,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliancehistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessorhistory"
@@ -769,9 +770,6 @@ func (csjh *ControlScheduledJobHistory) changes(new *ControlScheduledJobHistory)
 	}
 	if !reflect.DeepEqual(csjh.Configuration, new.Configuration) {
 		changes = append(changes, NewChange(controlscheduledjobhistory.FieldConfiguration, csjh.Configuration, new.Configuration))
-	}
-	if !reflect.DeepEqual(csjh.Cadence, new.Cadence) {
-		changes = append(changes, NewChange(controlscheduledjobhistory.FieldCadence, csjh.Cadence, new.Cadence))
 	}
 	if !reflect.DeepEqual(csjh.Cron, new.Cron) {
 		changes = append(changes, NewChange(controlscheduledjobhistory.FieldCron, csjh.Cron, new.Cron))
@@ -2687,11 +2685,17 @@ func (sjh *ScheduledJobHistory) changes(new *ScheduledJobHistory) []Change {
 	if !reflect.DeepEqual(sjh.Description, new.Description) {
 		changes = append(changes, NewChange(scheduledjobhistory.FieldDescription, sjh.Description, new.Description))
 	}
-	if !reflect.DeepEqual(sjh.JobType, new.JobType) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldJobType, sjh.JobType, new.JobType))
+	if !reflect.DeepEqual(sjh.Platform, new.Platform) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldPlatform, sjh.Platform, new.Platform))
 	}
 	if !reflect.DeepEqual(sjh.Script, new.Script) {
 		changes = append(changes, NewChange(scheduledjobhistory.FieldScript, sjh.Script, new.Script))
+	}
+	if !reflect.DeepEqual(sjh.WindmillPath, new.WindmillPath) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldWindmillPath, sjh.WindmillPath, new.WindmillPath))
+	}
+	if !reflect.DeepEqual(sjh.DownloadURL, new.DownloadURL) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldDownloadURL, sjh.DownloadURL, new.DownloadURL))
 	}
 	if !reflect.DeepEqual(sjh.Configuration, new.Configuration) {
 		changes = append(changes, NewChange(scheduledjobhistory.FieldConfiguration, sjh.Configuration, new.Configuration))
@@ -3205,6 +3209,54 @@ func (tch *TrustCenterHistory) Diff(history *TrustCenterHistory) (*HistoryDiff[T
 			Old:     history,
 			New:     tch,
 			Changes: history.changes(tch),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
+func (tcch *TrustCenterComplianceHistory) changes(new *TrustCenterComplianceHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(tcch.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(trustcentercompliancehistory.FieldCreatedAt, tcch.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(tcch.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(trustcentercompliancehistory.FieldUpdatedAt, tcch.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(tcch.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(trustcentercompliancehistory.FieldCreatedBy, tcch.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(tcch.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(trustcentercompliancehistory.FieldDeletedAt, tcch.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(tcch.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(trustcentercompliancehistory.FieldDeletedBy, tcch.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(tcch.Tags, new.Tags) {
+		changes = append(changes, NewChange(trustcentercompliancehistory.FieldTags, tcch.Tags, new.Tags))
+	}
+	return changes
+}
+
+func (tcch *TrustCenterComplianceHistory) Diff(history *TrustCenterComplianceHistory) (*HistoryDiff[TrustCenterComplianceHistory], error) {
+	if tcch.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	tcchUnix, historyUnix := tcch.HistoryTime.Unix(), history.HistoryTime.Unix()
+	tcchOlder := tcchUnix < historyUnix || (tcchUnix == historyUnix && tcch.ID < history.ID)
+	historyOlder := tcchUnix > historyUnix || (tcchUnix == historyUnix && tcch.ID > history.ID)
+
+	if tcchOlder {
+		return &HistoryDiff[TrustCenterComplianceHistory]{
+			Old:     tcch,
+			New:     history,
+			Changes: tcch.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[TrustCenterComplianceHistory]{
+			Old:     history,
+			New:     tcch,
+			Changes: history.changes(tcch),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
@@ -3777,6 +3829,12 @@ func (c *Client) Audit(ctx context.Context, after *Cursor, first *int, before *C
 	result.Edges = append(result.Edges, record.Edges...)
 
 	record, err = auditTemplateHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
+	record, err = auditTrustCenterComplianceHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -5409,6 +5467,47 @@ func (c *Client) AuditWithFilter(ctx context.Context, after *Cursor, first *int,
 		}
 
 		result, err = auditTemplateHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
+	if where.Table == strings.TrimSuffix("TrustCenterComplianceHistory", "History") {
+		// map AuditLogWhereInput to TrustCenterComplianceHistoryWhereInput
+		whereInput := &TrustCenterComplianceHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to TrustCenterComplianceHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &TrustCenterComplianceHistoryOrder{
+			Field:     TrustCenterComplianceHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditTrustCenterComplianceHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
@@ -8471,6 +8570,79 @@ func auditTemplateHistory(ctx context.Context, config config, after *Cursor, fir
 			// but just in case, we will handle it gracefully
 			if len(prev) == 0 {
 				prev = append(prev, &TemplateHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type trustcentercompliancehistoryref struct {
+	Ref string
+}
+
+func auditTrustCenterComplianceHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *TrustCenterComplianceHistoryOrder, where *TrustCenterComplianceHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []TrustCenterComplianceHistoryPaginateOption{
+		WithTrustCenterComplianceHistoryOrder(orderBy),
+		WithTrustCenterComplianceHistoryFilter(where.Filter),
+	}
+
+	client := NewTrustCenterComplianceHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "TrustCenterComplianceHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&TrustCenterComplianceHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&TrustCenterComplianceHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					trustcentercompliancehistory.Ref(curr.Node.Ref),
+					trustcentercompliancehistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(trustcentercompliancehistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &TrustCenterComplianceHistory{})
 			}
 
 			record.Changes = prev[0].changes(curr.Node)

@@ -52,6 +52,8 @@ const (
 	EdgeOwner = "owner"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
 	EdgeEvents = "events"
+	// EdgeGroups holds the string denoting the groups edge name in mutations.
+	EdgeGroups = "groups"
 	// Table holds the table name of the invite in the database.
 	Table = "invites"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -66,6 +68,11 @@ const (
 	// EventsInverseTable is the table name for the Event entity.
 	// It exists in this package in order to avoid circular dependency with the "event" package.
 	EventsInverseTable = "events"
+	// GroupsTable is the table that holds the groups relation/edge. The primary key declared below.
+	GroupsTable = "invite_groups"
+	// GroupsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	GroupsInverseTable = "groups"
 )
 
 // Columns holds all SQL columns for invite fields.
@@ -92,6 +99,9 @@ var (
 	// EventsPrimaryKey and EventsColumn2 are the table columns denoting the
 	// primary key for the events relation (M2M).
 	EventsPrimaryKey = []string{"invite_id", "event_id"}
+	// GroupsPrimaryKey and GroupsColumn2 are the table columns denoting the
+	// primary key for the groups relation (M2M).
+	GroupsPrimaryKey = []string{"invite_id", "group_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -110,7 +120,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [6]ent.Hook
+	Hooks        [7]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -259,6 +269,20 @@ func ByEvents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newEventsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByGroupsCount orders the results by groups count.
+func ByGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newGroupsStep(), opts...)
+	}
+}
+
+// ByGroups orders the results by groups terms.
+func ByGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -271,6 +295,13 @@ func newEventsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EventsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, EventsTable, EventsPrimaryKey...),
+	)
+}
+func newGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(GroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, GroupsTable, GroupsPrimaryKey...),
 	)
 }
 

@@ -20,6 +20,9 @@ includes:
   catalog:
     taskfile: ./pkg/catalog/Taskfile.yaml
     dir: ./pkg/catalog
+  bats:
+    taskfile: ./.buildkite/tests/Taskfile.yaml
+
 
 env:
   ATLAS_POSTGRES_DB_URI: "postgres:17-alpine"
