@@ -106,6 +106,7 @@ tasks:
       - internal/graphapi/*.resolvers.go
       - pkg/openlaneclient/models.go
       - pkg/openlaneclient/graphqlclient.go
+      - internal/httpserve/handlers/csv/sample_*.csv
     method: checksum
     env:
       GO_GENERATE_FAST_CACHE_DIR: "/tmp/go-generate-fast-cache"
@@ -138,7 +139,7 @@ tasks:
   buildkite:draft-pr:
     desc: Create draft PR for config changes
     cmds:
-      - bash .buildkite/draft-pr-automation.sh
+      - sh -c "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/draft-pr-automation.sh"
     preconditions:
       - sh: '[[ -n "${BUILDKITE_PULL_REQUEST:-}" && "${BUILDKITE_PULL_REQUEST}" != "false" ]]'
         msg: "Only runs in PR context"
@@ -146,7 +147,7 @@ tasks:
   buildkite:helm-update:
     desc: Update helm chart from config changes
     cmds:
-      - bash .buildkite/helm-automation.sh
+      - sh -c "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/helm-automation.sh"
     preconditions:
       - sh: '[[ "${BUILDKITE_BRANCH:-}" == "main" ]]'
         msg: "Only runs on main branch"
@@ -155,7 +156,7 @@ tasks:
     desc: Link PRs after draft creation
     deps: ['buildkite:draft-pr']
     cmds:
-      - bash .buildkite/link-pr-automation.sh
+      - sh -c "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/link-pr-automation.sh"
     preconditions:
       - sh: '[[ -n "${BUILDKITE_PULL_REQUEST:-}" && "${BUILDKITE_PULL_REQUEST}" != "false" ]]'
         msg: "Only runs in PR context"
@@ -164,7 +165,7 @@ tasks:
     desc: Finalize config PRs after merge
     deps: ['buildkite:helm-update']
     cmds:
-      - bash .buildkite/post-merge-pr-automation.sh
+      - sh -c "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/post-merge-pr-automation.sh"
     preconditions:
       - sh: '[[ "${BUILDKITE_BRANCH:-}" == "main" ]]'
         msg: "Only runs on main branch"
@@ -173,7 +174,7 @@ tasks:
     desc: Cleanup draft PRs
     deps: ['buildkite:post-merge']
     cmds:
-      - bash .buildkite/cleanup-draft-prs.sh
+      - sh -c "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/cleanup-draft-prs.sh"
     preconditions:
       - sh: '[[ "${BUILDKITE_BRANCH:-}" == "main" ]]'
         msg: "Only runs on main branch"
@@ -181,7 +182,7 @@ tasks:
   buildkite:image-tag:
     desc: Update image tag for release
     cmds:
-      - bash .buildkite/image-tag-automation.sh
+      - sh -c "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/image-tag-automation.sh"
     preconditions:
       - sh: '[[ -n "${BUILDKITE_TAG:-}" ]]'
         msg: "Only runs on tag builds"
