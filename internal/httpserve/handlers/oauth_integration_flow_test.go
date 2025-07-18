@@ -195,9 +195,9 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback() {
 		checkResponse  func(t *testing.T, resp *httptest.ResponseRecorder)
 	}{
 		{
-			name:           "invalid state",
-			urlPath:        "/oauth/callback?code=valid_code&state=invalid_state",
-			cookies:        []*http.Cookie{
+			name:    "invalid state",
+			urlPath: "/oauth/callback?code=valid_code&state=invalid_state",
+			cookies: []*http.Cookie{
 				{Name: "oauth_state", Value: validState},
 				{Name: "oauth_org_id", Value: orgID},
 				{Name: "oauth_user_id", Value: testUser.UserInfo.ID},
@@ -208,9 +208,9 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback() {
 			},
 		},
 		{
-			name:           "missing code",
-			urlPath:        fmt.Sprintf("/oauth/callback?state=%s", validState),
-			cookies:        []*http.Cookie{
+			name:    "missing code",
+			urlPath: fmt.Sprintf("/oauth/callback?state=%s", validState),
+			cookies: []*http.Cookie{
 				{Name: "oauth_state", Value: validState},
 				{Name: "oauth_org_id", Value: orgID},
 				{Name: "oauth_user_id", Value: testUser.UserInfo.ID},
@@ -221,9 +221,9 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback() {
 			},
 		},
 		{
-			name:           "missing OAuth state cookie",
-			urlPath:        fmt.Sprintf("/oauth/callback?code=valid_code&state=%s", validState),
-			cookies:        []*http.Cookie{
+			name:    "missing OAuth state cookie",
+			urlPath: fmt.Sprintf("/oauth/callback?code=valid_code&state=%s", validState),
+			cookies: []*http.Cookie{
 				{Name: "oauth_org_id", Value: orgID},
 				{Name: "oauth_user_id", Value: testUser.UserInfo.ID},
 			},
@@ -233,9 +233,9 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback() {
 			},
 		},
 		{
-			name:           "missing OAuth org cookie",
-			urlPath:        fmt.Sprintf("/oauth/callback?code=valid_code&state=%s", validState),
-			cookies:        []*http.Cookie{
+			name:    "missing OAuth org cookie",
+			urlPath: fmt.Sprintf("/oauth/callback?code=valid_code&state=%s", validState),
+			cookies: []*http.Cookie{
 				{Name: "oauth_state", Value: validState},
 				{Name: "oauth_user_id", Value: testUser.UserInfo.ID},
 			},
@@ -245,9 +245,9 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback() {
 			},
 		},
 		{
-			name:           "missing OAuth user cookie",
-			urlPath:        fmt.Sprintf("/oauth/callback?code=valid_code&state=%s", validState),
-			cookies:        []*http.Cookie{
+			name:    "missing OAuth user cookie",
+			urlPath: fmt.Sprintf("/oauth/callback?code=valid_code&state=%s", validState),
+			cookies: []*http.Cookie{
 				{Name: "oauth_state", Value: validState},
 				{Name: "oauth_org_id", Value: orgID},
 			},
@@ -846,7 +846,6 @@ func (suite *HandlerTestSuite) createTestTokens(ctx context.Context, integration
 		AddIntegrations(integration).
 		SaveX(ctx)
 }
-
 
 // TestStartOAuthFlowCookieHandling tests that the OAuth start flow properly sets cookies with SameSiteNone
 func (suite *HandlerTestSuite) TestStartOAuthFlowCookieHandling() {
