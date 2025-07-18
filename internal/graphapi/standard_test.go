@@ -9,6 +9,7 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
@@ -192,6 +193,22 @@ func TestQueryStandards(t *testing.T) {
 		notPublicStandardIDs = append(notPublicStandardIDs, standard.ID)
 	}
 
+	// reset count
+	countPublic = 0
+	countNotPublic = 0
+
+	standards, err := suite.client.api.GetAllStandards(systemAdminUser.UserCtx)
+	assert.NilError(t, err)
+
+	for _, standard := range standards.Standards.Edges {
+		if *standard.Node.IsPublic {
+			countPublic++
+			continue
+		}
+
+		countNotPublic++
+	}
+
 	testCases := []struct {
 		name            string
 		client          *openlaneclient.OpenlaneClient
@@ -250,7 +267,7 @@ func TestQueryStandards(t *testing.T) {
 		})
 	}
 
-	systemOwnedIDs := append(notPublicStandardIDs, publicStandardIDs...)
+	systemOwnedIDs := append(notPublicStandardIDs)
 
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: systemOwnedIDs}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: orgOwnedStandardIDs}).MustDelete(testUser1.UserCtx, t)
@@ -518,9 +535,6 @@ func TestMutationCreateStandard(t *testing.T) {
 			(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: resp.CreateStandard.Standard.ID}).MustDelete(ctx, t)
 		})
 	}
-
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: adminControlIDs}).MustDelete(systemAdminUser.UserCtx, t)
 }
 
 func TestMutationUpdateStandard(t *testing.T) {
@@ -727,11 +741,30 @@ func TestMutationUpdateStandard(t *testing.T) {
 }
 
 func TestMutationDeleteStandard(t *testing.T) {
-	standardOrgOwned1 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	standardOrgOwned2 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	standardOrgOwned3 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	newAdminUser := suite.systemAdminBuilder(context.Background(), t)
 
-	standardSystemOwned := (&StandardBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
+	newTestUser1 := suite.userBuilder(context.Background(), t)
+	apiClient := suite.setupAPITokenClient(newTestUser1.UserCtx, t)
+	patClient := suite.setupPatClient(newTestUser1, t)
+
+	// we need to create the standards each time because the cascade delete of the standard
+	standardOrgOwned1 := (&StandardBuilder{client: suite.client}).MustNew(newTestUser1.UserCtx, t)
+	standardOrgOwned2 := (&StandardBuilder{client: suite.client}).MustNew(newTestUser1.UserCtx, t)
+	standardOrgOwned3 := (&StandardBuilder{client: suite.client}).MustNew(newTestUser1.UserCtx, t)
+
+	standardSystemOwned := (&StandardBuilder{client: suite.client}).MustNew(newAdminUser.UserCtx, t)
+
+	const numberOfControls = 4
+
+	for range numberOfControls {
+		(&ControlBuilder{client: suite.client, StandardID: standardSystemOwned.ID}).MustNew(newAdminUser.UserCtx, t)
+	}
+
+	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(newAdminUser.UserCtx, t)
+
+	for range numberOfControls {
+		(&ControlBuilder{client: suite.client, StandardID: publicStandard.ID}).MustNew(newAdminUser.UserCtx, t)
+	}
 
 	testCases := []struct {
 		name        string
@@ -751,52 +784,59 @@ func TestMutationDeleteStandard(t *testing.T) {
 			name:        "not authorized, delete system owned",
 			idToDelete:  standardSystemOwned.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         newTestUser1.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
-			name:       "happy path, delete",
+			name:       "happy path, delete standard",
 			idToDelete: standardOrgOwned1.ID,
 			client:     suite.client.api,
-			ctx:        testUser1.UserCtx,
+			ctx:        newTestUser1.UserCtx,
 		},
 		{
 			name:       "happy path, delete system owned",
 			idToDelete: standardSystemOwned.ID,
 			client:     suite.client.api,
-			ctx:        systemAdminUser.UserCtx,
+			ctx:        newAdminUser.UserCtx,
+		},
+		{
+			name:        "delete public standard not allowed",
+			idToDelete:  publicStandard.ID,
+			client:      suite.client.api,
+			ctx:         newAdminUser.UserCtx,
+			expectedErr: hooks.ErrPublicStandardCannotBeDeleted.Error(),
 		},
 		{
 			name:        "already deleted, not found",
 			idToDelete:  standardOrgOwned1.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
-			expectedErr: "not found",
-		},
-		{
-			name:        "already deleted system owned, not found",
-			idToDelete:  standardSystemOwned.ID,
-			client:      suite.client.api,
-			ctx:         systemAdminUser.UserCtx,
+			ctx:         newTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
 			name:       "happy path, delete using personal access token",
 			idToDelete: standardOrgOwned2.ID,
-			client:     suite.client.apiWithPAT,
+			client:     patClient,
 			ctx:        context.Background(),
 		},
 		{
 			name:       "happy path, delete using api token",
 			idToDelete: standardOrgOwned3.ID,
-			client:     suite.client.apiWithToken,
+			client:     apiClient,
 			ctx:        context.Background(),
+		},
+		{
+			name:        "already deleted system owned, not found",
+			idToDelete:  standardSystemOwned.ID,
+			client:      suite.client.api,
+			ctx:         newAdminUser.UserCtx,
+			expectedErr: "not found",
 		},
 		{
 			name:        "unknown id, not found",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         newTestUser1.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -816,4 +856,14 @@ func TestMutationDeleteStandard(t *testing.T) {
 			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteStandard.DeletedID))
 		})
 	}
+
+	controlsResp, err := suite.client.api.GetAllControls(newAdminUser.UserCtx)
+	assert.NilError(t, err)
+	assert.Assert(t, controlsResp != nil)
+	// controls linked to non public standards would be deleted
+	// while the ones linked to standard should remain
+	assert.Check(t, is.Equal(int64(numberOfControls), controlsResp.Controls.TotalCount))
+
+	// delete the public standard and the controls linked to it
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(systemAdminUser.UserCtx, t)
 }

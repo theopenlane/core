@@ -202,8 +202,8 @@ type program
 type control
   relations
     define can_view: [user, service] or can_edit or (viewer but not blocked)
-    define can_edit: [user, service] or owner or delegate or (editor but not blocked)
-    define can_delete: [user, service] or owner or (editor but not blocked)
+    define can_edit: [user, service] or owner or delegate or system_admin from system or (editor but not blocked) 
+    define can_delete: [user, service] or owner or (editor but not blocked) or system_admin from system
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, organization, program, standard]
     # do not include group#member here as controls automatically inherit access from the parent organization
@@ -216,6 +216,7 @@ type control
     define owner: [group#member]
     # delegate is a group of users that are given temporary access to the control, they will have edit but not delete access
     define delegate: [group#member]
+    define system: [system]
 # subcontrols are associated with an organization but do not inherit access from the organization
 # subcontrols inherit access from the their parent control(s)
 type subcontrol
