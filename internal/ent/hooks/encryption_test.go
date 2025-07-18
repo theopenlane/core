@@ -5,9 +5,32 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+	"github.com/theopenlane/core/internal/ent/hush/crypto"
 )
 
+// setupEncryption initializes encryption for tests
+func setupEncryption(t *testing.T) {
+	t.Helper()
+
+	// Generate a test keyset
+	keyset, err := crypto.GenerateTinkKeyset()
+	require.NoError(t, err)
+
+	// Initialize crypto with test config
+	cfg := crypto.Config{
+		Enabled: true,
+		Keyset:  keyset,
+	}
+
+	err = crypto.Init(cfg)
+	require.NoError(t, err)
+}
+
 func TestTinkEncryptionDecryption(t *testing.T) {
+	// Setup encryption for tests
+	setupEncryption(t)
+
 	plaintext := "sensitive-data-12345"
 
 	// Test encryption
@@ -23,6 +46,9 @@ func TestTinkEncryptionDecryption(t *testing.T) {
 }
 
 func TestTinkEncryptionConsistency(t *testing.T) {
+	// Setup encryption for tests
+	setupEncryption(t)
+
 	plaintext := "test-consistency"
 
 	// Encrypt multiple times
@@ -47,6 +73,9 @@ func TestTinkEncryptionConsistency(t *testing.T) {
 }
 
 func TestTinkEncryptionEmpty(t *testing.T) {
+	// Setup encryption for tests
+	setupEncryption(t)
+
 	// Test empty string
 	encrypted, err := Encrypt([]byte(""))
 	assert.NoError(t, err)
@@ -57,6 +86,9 @@ func TestTinkEncryptionEmpty(t *testing.T) {
 }
 
 func TestTinkEncryptionLargeData(t *testing.T) {
+	// Setup encryption for tests
+	setupEncryption(t)
+
 	// Test with large data
 	largeData := make([]byte, 10*1024) // 10KB
 	for i := range largeData {
@@ -72,6 +104,9 @@ func TestTinkEncryptionLargeData(t *testing.T) {
 }
 
 func TestTinkDecryptionInvalidData(t *testing.T) {
+	// Setup encryption for tests
+	setupEncryption(t)
+
 	// Test with invalid encrypted data
 	_, err := Decrypt("invalid-encrypted-data")
 	assert.Error(t, err)
@@ -150,6 +185,9 @@ func TestConvertFieldName(t *testing.T) {
 }
 
 func TestIsEncrypted(t *testing.T) {
+	// Setup encryption for tests
+	setupEncryption(t)
+
 	// Generate a real encrypted value for testing
 	testPlaintext := "test-value-for-detection"
 	realEncrypted, err := Encrypt([]byte(testPlaintext))
@@ -188,6 +226,9 @@ type MockEntity struct {
 }
 
 func TestDecryptEntityFields(t *testing.T) {
+	// Setup encryption for tests
+	setupEncryption(t)
+
 	// Create test data
 	clientSecret := "client-secret-123"
 	secretValue := "secret-value-456"
