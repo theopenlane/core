@@ -15,32 +15,47 @@ import (
 // tinkAEAD is the global AEAD primitive used for encryption/decryption
 var tinkAEAD tink.AEAD
 
-// encryptionEnabled indicates whether encryption is enabled (i.e., a keyset is configured)
-var encryptionEnabled bool
+// config holds the current encryption configuration set during initialization
+var config Config
 
 type Config struct {
 	// Enabled indicates whether Tink encryption is enabled
-	Enabled bool `json:"enabled"`
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
+	// Keyset is the base64-encoded Tink keyset used for encryption
+	Keyset string `json:"keyset" koanf:"keyset" default:"" sensitive:"true"`
 }
 
-// initTink initializes Tink encryption system
-func initTink() error {
+// Init initializes the crypto package with the provided configuration
+func Init(cfg Config) error {
+	config = cfg
+	tinkAEAD = nil // Reset to force reinitialization
+	return initTink(cfg)
+}
+
+// initTink initializes Tink encryption system with the provided config
+func initTink(cfg Config) error {
 	if tinkAEAD != nil {
 		return nil // Already initialized
 	}
 
-	// Try to get existing keyset from environment
+	// Check if encryption is enabled and keyset is provided
+	if cfg.Enabled && cfg.Keyset != "" {
+		if err := initTinkFromKeyset(cfg.Keyset); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	// Fallback: Try to get existing keyset from environment for backward compatibility
 	// this intentionally does not source from a file or file input
 	if keysetData := os.Getenv("OPENLANE_TINK_KEYSET"); keysetData != "" {
 		if err := initTinkFromKeyset(keysetData); err != nil {
 			return err
 		}
-		encryptionEnabled = true
 		return nil
 	}
 
 	// No keyset provided - encryption will be disabled
-	encryptionEnabled = false
 	return nil
 }
 
@@ -57,24 +72,6 @@ func initTinkFromKeyset(keysetData string) error {
 	keysetHandle, err := insecurecleartextkeyset.Read(keyset.NewBinaryReader(reader))
 	if err != nil {
 		return fmt.Errorf("failed to create keyset handle: %w", err)
-	}
-
-	// Get AEAD primitive
-	primitive, err := aead.New(keysetHandle)
-	if err != nil {
-		return fmt.Errorf("failed to create AEAD primitive: %w", err)
-	}
-
-	tinkAEAD = primitive
-	return nil
-}
-
-// initTinkWithNewKeyset generates a new keyset and initializes Tink
-func initTinkWithNewKeyset() error {
-	// Generate new keyset
-	keysetHandle, err := keyset.NewHandle(aead.AES256GCMKeyTemplate())
-	if err != nil {
-		return fmt.Errorf("failed to generate keyset: %w", err)
 	}
 
 	// Get AEAD primitive
@@ -281,28 +278,31 @@ func GetKeysetInfo(keysetData string) (map[string]any, error) {
 
 // ReloadTinkAEAD forces reloading of the AEAD primitive with the current keyset
 // Call this after rotating keys to use the new keyset
-func ReloadTinkAEAD() error {
+func ReloadTinkAEAD(cfg Config) error {
 	tinkAEAD = nil
-	encryptionEnabled = false
 
-	return initTink()
+	return initTink(cfg)
 }
 
 // IsEncryptionEnabled returns whether encryption is enabled (i.e., a keyset is configured)
-func IsEncryptionEnabled() bool {
-	// Initialize if not already done
-	_ = initTink()
-	return encryptionEnabled
+func IsEncryptionEnabled(cfg Config) bool {
+	// Check if encryption is enabled via config
+	if cfg.Enabled && cfg.Keyset != "" {
+		return true
+	}
+
+	// Fallback: check if keyset is available via environment for backward compatibility
+	return os.Getenv("OPENLANE_TINK_KEYSET") != ""
 }
 
 // Encrypt encrypts data using Tink
-func Encrypt(plaintext []byte) (string, error) {
-	if err := initTink(); err != nil {
+func Encrypt(cfg Config, plaintext []byte) (string, error) {
+	if err := initTink(cfg); err != nil {
 		return "", fmt.Errorf("failed to initialize Tink: %w", err)
 	}
 
 	// If encryption is not enabled, return the plaintext as-is
-	if !encryptionEnabled {
+	if !IsEncryptionEnabled(cfg) {
 		return string(plaintext), nil
 	}
 
@@ -316,13 +316,13 @@ func Encrypt(plaintext []byte) (string, error) {
 }
 
 // Decrypt decrypts data using Tink
-func Decrypt(encryptedValue string) ([]byte, error) {
-	if err := initTink(); err != nil {
+func Decrypt(cfg Config, encryptedValue string) ([]byte, error) {
+	if err := initTink(cfg); err != nil {
 		return nil, fmt.Errorf("failed to initialize Tink: %w", err)
 	}
 
 	// If encryption is not enabled, return the value as-is
-	if !encryptionEnabled {
+	if !IsEncryptionEnabled(cfg) {
 		return []byte(encryptedValue), nil
 	}
 
@@ -339,4 +339,21 @@ func Decrypt(encryptedValue string) ([]byte, error) {
 	}
 
 	return plaintext, nil
+}
+
+// Functions using the initialized config (for hooks and other internal use)
+
+// EncryptWithConfig encrypts data using the initialized configuration
+func EncryptWithConfig(plaintext []byte) (string, error) {
+	return Encrypt(config, plaintext)
+}
+
+// DecryptWithConfig decrypts data using the initialized configuration
+func DecryptWithConfig(encryptedValue string) ([]byte, error) {
+	return Decrypt(config, encryptedValue)
+}
+
+// IsEncryptionEnabledWithConfig returns whether encryption is enabled using initialized config
+func IsEncryptionEnabledWithConfig() bool {
+	return IsEncryptionEnabled(config)
 }

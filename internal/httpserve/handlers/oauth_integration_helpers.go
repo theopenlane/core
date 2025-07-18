@@ -129,7 +129,7 @@ const (
 	// Secret naming patterns
 	secretNameSeparator = "_"
 	secretDescSeparator = " "
-	secretDescSuffix    = " for %s integration"
+	secretDescSuffix    = " for %s integration" // nolint:gosec
 
 	// Token field names
 	accessTokenField      = "access_token"
@@ -146,7 +146,7 @@ const (
 	statusNotConnected = "not_connected"
 
 	// OAuth token kind
-	oauthTokenKind = "oauth_token"
+	oauthTokenKind = "oauth_token" // nolint:gosec
 )
 
 // IntegrationHelper provides helper methods for integration operations
