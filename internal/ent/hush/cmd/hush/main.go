@@ -11,6 +11,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/hush/crypto"
 )
 
+const minDisableArgs = 2
+
 // main is the entry point for the hush CLI application
 func main() {
 	if err := hushApp().Run(context.Background(), os.Args); err != nil {
@@ -40,7 +42,7 @@ func hushApp() *cli.Command {
 						Value: false,
 					},
 				},
-				Action: func(ctx context.Context, c *cli.Command) error {
+				Action: func(_ context.Context, c *cli.Command) error {
 					return generateKeyset(c.Bool("quiet"), c.Bool("export"))
 				},
 			},
@@ -48,7 +50,7 @@ func hushApp() *cli.Command {
 				Name:      "rotate",
 				Usage:     "Rotate keys in an existing keyset",
 				ArgsUsage: "<keyset>",
-				Action: func(ctx context.Context, c *cli.Command) error {
+				Action: func(_ context.Context, c *cli.Command) error {
 					if c.Args().Len() < 1 {
 						return cli.Exit("Please provide the current keyset as an argument", 1)
 					}
@@ -59,7 +61,7 @@ func hushApp() *cli.Command {
 				Name:      "info",
 				Usage:     "Show keyset information",
 				ArgsUsage: "<keyset>",
-				Action: func(ctx context.Context, c *cli.Command) error {
+				Action: func(_ context.Context, c *cli.Command) error {
 					if c.Args().Len() < 1 {
 						return cli.Exit("Please provide the keyset as an argument", 1)
 					}
@@ -70,7 +72,7 @@ func hushApp() *cli.Command {
 				Name:      "add",
 				Usage:     "Add a new key to the keyset (without making it primary)",
 				ArgsUsage: "<keyset>",
-				Action: func(ctx context.Context, c *cli.Command) error {
+				Action: func(_ context.Context, c *cli.Command) error {
 					if c.Args().Len() < 1 {
 						return cli.Exit("Please provide the current keyset as an argument", 1)
 					}
@@ -81,8 +83,8 @@ func hushApp() *cli.Command {
 				Name:      "disable",
 				Usage:     "Disable old keys in the keyset",
 				ArgsUsage: "<keyset> <keep-count>",
-				Action: func(ctx context.Context, c *cli.Command) error {
-					if c.Args().Len() < 2 {
+				Action: func(_ context.Context, c *cli.Command) error {
+					if c.Args().Len() < minDisableArgs {
 						return cli.Exit("Please provide the keyset and keep-count as arguments", 1)
 					}
 

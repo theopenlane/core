@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/rand"
 	"encoding/base64"
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -30,6 +31,25 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/models"
 )
+
+var errSlackAPI = errors.New("slack API error")
+
+// OAuth error helpers
+func wrapAPIError(provider string, err error) error {
+	return fmt.Errorf("failed to call %s API: %w", provider, err)
+}
+
+func wrapIntegrationError(operation string, err error) error {
+	return fmt.Errorf("failed to %s integration: %w", operation, err)
+}
+
+func wrapSecretError(operation, secretType string, err error) error {
+	return fmt.Errorf("failed to %s %s: %w", operation, secretType, err)
+}
+
+func wrapTokenError(operation, provider string, err error) error {
+	return fmt.Errorf("failed to %s token for %s: %w", operation, provider, err)
+}
 
 // StartOAuthFlow initiates the OAuth flow for a third-party integration
 func (h *Handler) StartOAuthFlow(ctx echo.Context) error {
@@ -283,7 +303,7 @@ func (h *Handler) storeIntegrationTokens(ctx context.Context, orgID, provider st
 		if err != nil {
 			zerolog.Ctx(systemCtx).Error().Msgf("Failed to create integration for org %s and provider %s: %v", orgID, provider, err)
 
-			return nil, fmt.Errorf("failed to create integration: %w", err)
+			return nil, wrapIntegrationError("create", err)
 		}
 	} else {
 		// Update existing integration
@@ -291,26 +311,26 @@ func (h *Handler) storeIntegrationTokens(ctx context.Context, orgID, provider st
 		if err != nil {
 			zerolog.Ctx(systemCtx).Error().Msgf("Failed to update integration for org %s and provider %s: %v", orgID, provider, err)
 
-			return nil, fmt.Errorf("failed to update integration: %w", err)
+			return nil, wrapIntegrationError("update", err)
 		}
 	}
 
 	// Store access token
 	if err := h.storeSecretForIntegration(systemCtx, integration, "access_token", oauthToken.AccessToken); err != nil {
-		return nil, fmt.Errorf("failed to store access token: %w", err)
+		return nil, wrapSecretError("store", "access token", err)
 	}
 
 	// Store refresh token if available
 	if oauthToken.RefreshToken != "" {
 		if err := h.storeSecretForIntegration(systemCtx, integration, "refresh_token", oauthToken.RefreshToken); err != nil {
-			return nil, fmt.Errorf("failed to store refresh token: %w", err)
+			return nil, wrapSecretError("store", "refresh token", err)
 		}
 	}
 
 	// Store token expiry if available
 	if !oauthToken.Expiry.IsZero() {
 		if err := h.storeSecretForIntegration(systemCtx, integration, "expires_at", oauthToken.Expiry.Format(time.RFC3339)); err != nil {
-			return nil, fmt.Errorf("failed to store token expiry: %w", err)
+			return nil, wrapSecretError("store", "token expiry", err)
 		}
 	}
 
@@ -325,7 +345,7 @@ func (h *Handler) storeIntegrationTokens(ctx context.Context, orgID, provider st
 
 	for key, value := range metadata {
 		if err := h.storeSecretForIntegration(systemCtx, integration, key, value); err != nil {
-			return nil, fmt.Errorf("failed to store metadata %s: %w", key, err)
+			return nil, wrapSecretError("store", fmt.Sprintf("metadata %s", key), err)
 		}
 	}
 
@@ -366,7 +386,7 @@ func (h *Handler) storeSecretForIntegration(ctx context.Context, integration *en
 	// Secret value is immutable, so delete and recreate
 	err = h.DBClient.Hush.DeleteOne(existing).Exec(systemCtx)
 	if err != nil {
-		return fmt.Errorf("failed to delete existing secret: %w", err)
+		return wrapSecretError("delete", "existing secret", err)
 	}
 
 	// Create new secret with updated value
@@ -402,7 +422,7 @@ func (h *Handler) validateGithubIntegrationToken(ctx context.Context, token *oau
 		httpsling.ExpectCode(http.StatusOK),
 	)
 	if err != nil {
-		return nil, fmt.Errorf("failed to call GitHub API: %w", err)
+		return nil, wrapAPIError("GitHub", err)
 	}
 
 	defer resp.Body.Close()
@@ -438,7 +458,7 @@ func (h *Handler) getGithubUserEmail(ctx context.Context, accessToken string) (s
 		httpsling.ExpectCode(http.StatusOK),
 	)
 	if err != nil {
-		return "", fmt.Errorf("failed to call GitHub emails API: %w", err)
+		return "", wrapAPIError("GitHub emails", err)
 	}
 
 	defer resp.Body.Close()
@@ -479,14 +499,14 @@ func (h *Handler) validateSlackIntegrationToken(ctx context.Context, token *oaut
 		httpsling.ExpectCode(http.StatusOK),
 	)
 	if err != nil {
-		return nil, fmt.Errorf("failed to call Slack API: %w", err)
+		return nil, wrapAPIError("Slack", err)
 	}
 
 	defer resp.Body.Close()
 
 	// Check if the response is successful
 	if !slackResp.OK {
-		return nil, fmt.Errorf("Slack API error: %s", slackResp.Error)
+		return nil, fmt.Errorf("%w: %s", errSlackAPI, slackResp.Error)
 	}
 
 	// Convert Slack user to IntegrationUserInfo
@@ -528,7 +548,7 @@ func (h *Handler) GetIntegrationToken(ctx echo.Context) error {
 	tokenData, err := h.retrieveIntegrationToken(userCtx, orgID, in.Provider)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			return h.NotFound(ctx, fmt.Errorf("integration not found for provider %s: %w", in.Provider, ErrIntegrationNotFound))
+			return h.NotFound(ctx, wrapIntegrationError("find", fmt.Errorf("provider %s: %w", in.Provider, ErrIntegrationNotFound)))
 		}
 		return h.InternalServerError(ctx, err)
 	}
@@ -664,7 +684,7 @@ func (h *Handler) retrieveIntegrationToken(ctx context.Context, orgID, provider 
 	}
 
 	if tokenData.AccessToken == "" {
-		return nil, fmt.Errorf("no access token found for provider %s: %w", provider, ErrIntegrationNotFound)
+		return nil, wrapTokenError("find access", provider, ErrIntegrationNotFound)
 	}
 
 	return tokenData, nil
@@ -679,7 +699,7 @@ func (h *Handler) RefreshIntegrationToken(ctx context.Context, orgID, provider s
 	}
 
 	if tokenData.RefreshToken == "" {
-		return nil, fmt.Errorf("no refresh token available for provider %s: %w", provider, ErrIntegrationNotFound)
+		return nil, wrapTokenError("find refresh", provider, ErrIntegrationNotFound)
 	}
 
 	// Get provider configuration
@@ -702,13 +722,13 @@ func (h *Handler) RefreshIntegrationToken(ctx context.Context, orgID, provider s
 	tokenSource := providerConfig.Config.TokenSource(ctx, token)
 	freshToken, err := tokenSource.Token()
 	if err != nil {
-		return nil, fmt.Errorf("failed to refresh token: %w", err)
+		return nil, wrapTokenError("refresh", provider, err)
 	}
 
 	// Validate fresh token
 	_, err = providerConfig.Validate(ctx, freshToken)
 	if err != nil {
-		return nil, fmt.Errorf("refreshed token validation failed: %w", err)
+		return nil, wrapTokenError("validate refreshed", provider, err)
 	}
 
 	// Update stored tokens
@@ -764,9 +784,9 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context) error {
 	tokenData, err := h.RefreshIntegrationToken(userCtx, orgID, in.Provider)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			return h.NotFound(ctx, fmt.Errorf("integration not found for provider %s: %w", in.Provider, ErrIntegrationNotFound))
+			return h.NotFound(ctx, wrapIntegrationError("find", fmt.Errorf("provider %s: %w", in.Provider, ErrIntegrationNotFound)))
 		}
-		return h.InternalServerError(ctx, fmt.Errorf("failed to refresh token: %w", err))
+		return h.InternalServerError(ctx, wrapTokenError("refresh", in.Provider, err))
 	}
 
 	out := models.IntegrationTokenResponse{

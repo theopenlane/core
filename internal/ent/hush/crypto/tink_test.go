@@ -17,16 +17,21 @@ func TestEncryptionDisabledWithoutKeyset(t *testing.T) {
 
 	// Reset the encryption state
 	tinkAEAD = nil
-	encryptionEnabled = false
+
+	// Create config with encryption disabled
+	cfg := Config{
+		Enabled: false,
+		Keyset:  "",
+	}
 
 	// Test that encryption is disabled
-	if IsEncryptionEnabled() {
-		t.Error("Expected encryption to be disabled when no keyset is provided")
+	if IsEncryptionEnabled(cfg) {
+		t.Error("Expected encryption to be disabled when config has Enabled=false")
 	}
 
 	// Test that Encrypt returns plaintext
 	plaintext := "test data"
-	encrypted, err := Encrypt([]byte(plaintext))
+	encrypted, err := Encrypt(cfg, []byte(plaintext))
 	if err != nil {
 		t.Fatalf("Encrypt failed: %v", err)
 	}
@@ -35,7 +40,7 @@ func TestEncryptionDisabledWithoutKeyset(t *testing.T) {
 	}
 
 	// Test that Decrypt returns input as-is
-	decrypted, err := Decrypt(plaintext)
+	decrypted, err := Decrypt(cfg, plaintext)
 	if err != nil {
 		t.Fatalf("Decrypt failed: %v", err)
 	}
@@ -51,29 +56,23 @@ func TestEncryptionEnabledWithKeyset(t *testing.T) {
 		t.Fatalf("Failed to generate keyset: %v", err)
 	}
 
-	// Set the keyset
-	originalKeyset := os.Getenv("OPENLANE_TINK_KEYSET")
-	os.Setenv("OPENLANE_TINK_KEYSET", keyset)
-	defer func() {
-		if originalKeyset != "" {
-			os.Setenv("OPENLANE_TINK_KEYSET", originalKeyset)
-		} else {
-			os.Unsetenv("OPENLANE_TINK_KEYSET")
-		}
-	}()
-
 	// Reset the encryption state
 	tinkAEAD = nil
-	encryptionEnabled = false
+
+	// Create config with encryption enabled and keyset
+	cfg := Config{
+		Enabled: true,
+		Keyset:  keyset,
+	}
 
 	// Test that encryption is enabled
-	if !IsEncryptionEnabled() {
-		t.Error("Expected encryption to be enabled when keyset is provided")
+	if !IsEncryptionEnabled(cfg) {
+		t.Error("Expected encryption to be enabled when config has Enabled=true and keyset")
 	}
 
 	// Test that Encrypt actually encrypts
 	plaintext := "test data"
-	encrypted, err := Encrypt([]byte(plaintext))
+	encrypted, err := Encrypt(cfg, []byte(plaintext))
 	if err != nil {
 		t.Fatalf("Encrypt failed: %v", err)
 	}
@@ -82,7 +81,7 @@ func TestEncryptionEnabledWithKeyset(t *testing.T) {
 	}
 
 	// Test that Decrypt works correctly
-	decrypted, err := Decrypt(encrypted)
+	decrypted, err := Decrypt(cfg, encrypted)
 	if err != nil {
 		t.Fatalf("Decrypt failed: %v", err)
 	}

@@ -1,10 +1,11 @@
 package models
 
 import (
-	"fmt"
+	"errors"
 	"mime/multipart"
 	"net/mail"
 	"net/textproto"
+	"slices"
 	"strings"
 	"time"
 
@@ -16,6 +17,11 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/utils/passwd"
+)
+
+var (
+	errProviderRequired      = errors.New("provider parameter is required")
+	errIntegrationIDRequired = errors.New("integration ID is required")
 )
 
 // =========
@@ -1271,7 +1277,7 @@ type GetIntegrationStatusRequest struct {
 func (r *GetIntegrationTokenRequest) Validate() error {
 	r.Provider = strings.TrimSpace(r.Provider)
 	if r.Provider == "" {
-		return fmt.Errorf("provider parameter is required")
+		return errProviderRequired
 	}
 	return nil
 }
@@ -1280,7 +1286,7 @@ func (r *GetIntegrationTokenRequest) Validate() error {
 func (r *DeleteIntegrationRequest) Validate() error {
 	r.ID = strings.TrimSpace(r.ID)
 	if r.ID == "" {
-		return fmt.Errorf("integration ID is required")
+		return errIntegrationIDRequired
 	}
 	return nil
 }
@@ -1289,7 +1295,7 @@ func (r *DeleteIntegrationRequest) Validate() error {
 func (r *RefreshIntegrationTokenRequest) Validate() error {
 	r.Provider = strings.TrimSpace(r.Provider)
 	if r.Provider == "" {
-		return fmt.Errorf("provider parameter is required")
+		return errProviderRequired
 	}
 	return nil
 }
@@ -1298,7 +1304,7 @@ func (r *RefreshIntegrationTokenRequest) Validate() error {
 func (r *GetIntegrationStatusRequest) Validate() error {
 	r.Provider = strings.TrimSpace(r.Provider)
 	if r.Provider == "" {
-		return fmt.Errorf("provider parameter is required")
+		return errProviderRequired
 	}
 	return nil
 }
@@ -1324,13 +1330,7 @@ func (r *OAuthFlowRequest) Validate() error {
 
 	// Validate supported providers
 	supportedProviders := []string{"github", "slack"}
-	validProvider := false
-	for _, p := range supportedProviders {
-		if r.Provider == p {
-			validProvider = true
-			break
-		}
-	}
+	validProvider := slices.Contains(supportedProviders, r.Provider)
 	if !validProvider {
 		return rout.InvalidField("provider")
 	}

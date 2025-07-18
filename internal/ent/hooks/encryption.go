@@ -38,21 +38,21 @@ var (
 // encryptFieldValue encrypts a field value using Tink
 func encryptFieldValue(_ context.Context, _ ent.Mutation, value string) (string, error) {
 	// Check if encryption is enabled
-	if !crypto.IsEncryptionEnabled() {
+	if !crypto.IsEncryptionEnabledWithConfig() {
 		return value, nil
 	}
 
-	return crypto.Encrypt([]byte(value))
+	return crypto.EncryptWithConfig([]byte(value))
 }
 
 // decryptFieldValue decrypts a field value using Tink
 func decryptFieldValue(_ context.Context, _ ent.Mutation, encryptedValue string) (string, error) {
 	// Check if encryption is enabled
-	if !crypto.IsEncryptionEnabled() {
+	if !crypto.IsEncryptionEnabledWithConfig() {
 		return encryptedValue, nil
 	}
 
-	decrypted, err := crypto.Decrypt(encryptedValue)
+	decrypted, err := crypto.DecryptWithConfig(encryptedValue)
 	if err != nil {
 		return "", err
 	}
@@ -81,7 +81,7 @@ func HookFieldEncryption(fieldName string, _ bool) ent.Hook {
 			}
 
 			// Check if encryption is enabled and if the value is already encrypted
-			if !crypto.IsEncryptionEnabled() || isEncrypted(value) {
+			if !crypto.IsEncryptionEnabledWithConfig() || isEncrypted(value) {
 				// Either encryption is disabled or already encrypted, proceed as normal
 				return next.Mutate(ctx, m)
 			}
@@ -158,7 +158,7 @@ func decryptEntityField(ctx context.Context, m ent.Mutation, entity any, fieldNa
 	}
 
 	// Check if encryption is enabled and if the value is encrypted
-	if !crypto.IsEncryptionEnabled() || !isEncrypted(encryptedValue) {
+	if !crypto.IsEncryptionEnabledWithConfig() || !isEncrypted(encryptedValue) {
 		return nil // Either encryption is disabled or value is not encrypted, leave as is
 	}
 
@@ -281,12 +281,12 @@ func GenerateTinkKeyset() (string, error) {
 
 // Encrypt encrypts data using Tink (exported for external use)
 func Encrypt(plaintext []byte) (string, error) {
-	return crypto.Encrypt(plaintext)
+	return crypto.EncryptWithConfig(plaintext)
 }
 
 // Decrypt decrypts data using Tink (exported for external use)
 func Decrypt(encryptedValue string) ([]byte, error) {
-	return crypto.Decrypt(encryptedValue)
+	return crypto.DecryptWithConfig(encryptedValue)
 }
 
 // DecryptEntityFields decrypts multiple string fields in an entity using Tink
@@ -314,7 +314,7 @@ func DecryptEntityFields(entity any, fieldNames []string) error {
 		}
 
 		// Check if encryption is enabled and if it looks encrypted (base64) - if not, leave as-is
-		if !crypto.IsEncryptionEnabled() || !isEncrypted(encryptedValue) {
+		if !crypto.IsEncryptionEnabledWithConfig() || !isEncrypted(encryptedValue) {
 			continue
 		}
 
@@ -354,7 +354,7 @@ func HookEncryption(fieldNames ...string) ent.Hook {
 				}
 
 				// Check if encryption is enabled and if the value is already encrypted
-				if !crypto.IsEncryptionEnabled() || isEncrypted(value) {
+				if !crypto.IsEncryptionEnabledWithConfig() || isEncrypted(value) {
 					continue // Either encryption is disabled or already encrypted
 				}
 

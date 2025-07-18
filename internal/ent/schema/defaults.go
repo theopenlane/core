@@ -73,8 +73,7 @@ var baseDefaultMixins = []ent.Mixin{
 // - any additional mixins can  be appended using the additionalMixins field
 func (m mixinConfig) getMixins(schema ent.Interface) []ent.Mixin {
 	// Start with base mixins and add auto-encryption using the passed schema
-	mixins := make([]ent.Mixin, len(baseDefaultMixins), len(baseDefaultMixins)+6) // pre-allocate for common mixins
-	copy(mixins, baseDefaultMixins)
+	mixins := append([]ent.Mixin{}, baseDefaultMixins...)
 	mixins = append(mixins, NewAutoHushEncryptionMixin(schema))
 
 	if !m.excludeSoftDelete {

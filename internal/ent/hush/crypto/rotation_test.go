@@ -7,6 +7,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// envConfig creates a config that uses environment fallback
+func envConfig() Config {
+	return Config{
+		Enabled: false, // This will fallback to env var
+		Keyset:  "",
+	}
+}
+
 func TestKeyRotationWithoutReencryption(t *testing.T) {
 	// Save original environment
 	originalKeyset := os.Getenv("OPENLANE_TINK_KEYSET")
@@ -39,13 +47,13 @@ func TestKeyRotationWithoutReencryption(t *testing.T) {
 
 	var encryptedData []string
 	for _, plaintext := range testData {
-		encrypted, err := Encrypt([]byte(plaintext))
+		encrypted, err := Encrypt(envConfig(), []byte(plaintext))
 		assert.NoError(t, err)
 		assert.NotEmpty(t, encrypted)
 		encryptedData = append(encryptedData, encrypted)
 
 		// Verify we can decrypt it with the initial keyset
-		decrypted, err := Decrypt(encrypted)
+		decrypted, err := Decrypt(envConfig(), encrypted)
 		assert.NoError(t, err)
 		assert.Equal(t, plaintext, string(decrypted))
 	}
@@ -65,13 +73,13 @@ func TestKeyRotationWithoutReencryption(t *testing.T) {
 
 	// Step 4: Update environment to use rotated keyset
 	os.Setenv("OPENLANE_TINK_KEYSET", rotatedKeyset)
-	err = ReloadTinkAEAD() // Force reload with new keyset
+	err = ReloadTinkAEAD(envConfig()) // Force reload with new keyset
 	assert.NoError(t, err)
 
 	// Step 5: Verify ALL old encrypted data is still decryptable
 	t.Log("Verifying old encrypted data is still decryptable with rotated keyset...")
 	for i, encrypted := range encryptedData {
-		decrypted, err := Decrypt(encrypted)
+		decrypted, err := Decrypt(envConfig(), encrypted)
 		assert.NoError(t, err, "Failed to decrypt item %d with rotated keyset", i)
 		assert.Equal(t, testData[i], string(decrypted), "Decrypted data doesn't match original for item %d", i)
 	}
@@ -84,13 +92,13 @@ func TestKeyRotationWithoutReencryption(t *testing.T) {
 
 	var newEncryptedData []string
 	for _, plaintext := range newTestData {
-		encrypted, err := Encrypt([]byte(plaintext))
+		encrypted, err := Encrypt(envConfig(), []byte(plaintext))
 		assert.NoError(t, err)
 		assert.NotEmpty(t, encrypted)
 		newEncryptedData = append(newEncryptedData, encrypted)
 
 		// Verify immediate decryption works
-		decrypted, err := Decrypt(encrypted)
+		decrypted, err := Decrypt(envConfig(), encrypted)
 		assert.NoError(t, err)
 		assert.Equal(t, plaintext, string(decrypted))
 	}
@@ -99,26 +107,26 @@ func TestKeyRotationWithoutReencryption(t *testing.T) {
 
 	// Step 7: Verify that encrypted data from before and after rotation are different
 	// (different DEKs should produce different ciphertexts even for same plaintext)
-	beforeRotation, err := Encrypt([]byte("test-value"))
+	beforeRotation, err := Encrypt(envConfig(), []byte("test-value"))
 	assert.NoError(t, err)
 
 	// Rotate again to get a new primary key
 	secondRotation, err := RotateKeyset(rotatedKeyset)
 	assert.NoError(t, err)
 	os.Setenv("OPENLANE_TINK_KEYSET", secondRotation)
-	err = ReloadTinkAEAD()
+	err = ReloadTinkAEAD(envConfig())
 	assert.NoError(t, err)
 
-	afterRotation, err := Encrypt([]byte("test-value"))
+	afterRotation, err := Encrypt(envConfig(), []byte("test-value"))
 	assert.NoError(t, err)
 
 	// Should be different ciphertexts (different DEKs)
 	assert.NotEqual(t, beforeRotation, afterRotation, "Same plaintext should produce different ciphertexts with different primary keys")
 
 	// But both should decrypt to the same value
-	decrypted1, err := Decrypt(beforeRotation)
+	decrypted1, err := Decrypt(envConfig(), beforeRotation)
 	assert.NoError(t, err)
-	decrypted2, err := Decrypt(afterRotation)
+	decrypted2, err := Decrypt(envConfig(), afterRotation)
 	assert.NoError(t, err)
 	assert.Equal(t, "test-value", string(decrypted1))
 	assert.Equal(t, "test-value", string(decrypted2))
@@ -211,7 +219,7 @@ func TestKeyRotationPreservesDecryption(t *testing.T) {
 
 	// Encrypt data with keyset1
 	plaintext := "sensitive-user-data"
-	encrypted1, err := Encrypt([]byte(plaintext))
+	encrypted1, err := Encrypt(envConfig(), []byte(plaintext))
 	assert.NoError(t, err)
 
 	// Rotate multiple times
@@ -226,11 +234,11 @@ func TestKeyRotationPreservesDecryption(t *testing.T) {
 
 	// Update to final keyset
 	os.Setenv("OPENLANE_TINK_KEYSET", keyset4)
-	err = ReloadTinkAEAD()
+	err = ReloadTinkAEAD(envConfig())
 	assert.NoError(t, err)
 
 	// Verify the original data encrypted with keyset1 is still decryptable with keyset4
-	decrypted, err := Decrypt(encrypted1)
+	decrypted, err := Decrypt(envConfig(), encrypted1)
 	assert.NoError(t, err)
 	assert.Equal(t, plaintext, string(decrypted))
 
