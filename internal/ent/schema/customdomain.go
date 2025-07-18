@@ -77,7 +77,7 @@ func (e CustomDomain) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(e, withSkipForSystemAdmin(true)),
 		},
-	}.getMixins()
+	}.getMixins(e)
 }
 
 // Edges of the CustomDomain

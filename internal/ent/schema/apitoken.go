@@ -126,7 +126,7 @@ func (a APIToken) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(a),
 		},
-	}.getMixins()
+	}.getMixins(a)
 }
 
 // Annotations of the APIToken

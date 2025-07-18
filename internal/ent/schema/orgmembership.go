@@ -107,7 +107,7 @@ func (OrgMembership) Indexes() []ent.Index {
 
 // Mixin of the OrgMembership
 func (OrgMembership) Mixin() []ent.Mixin {
-	return mixinConfig{excludeTags: true, excludeSoftDelete: true}.getMixins()
+	return mixinConfig{excludeTags: true, excludeSoftDelete: true}.getMixins(OrgMembership{})
 }
 
 // Hooks of the OrgMembership

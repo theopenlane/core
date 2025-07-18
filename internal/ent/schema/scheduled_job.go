@@ -100,7 +100,7 @@ func (s ScheduledJob) Mixin() []ent.Mixin {
 			),
 			mixin.SystemOwnedMixin{},
 		},
-	}.getMixins()
+	}.getMixins(s)
 }
 
 // Annotations of the ScheduledJob

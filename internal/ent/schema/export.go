@@ -85,7 +85,7 @@ func (e Export) Mixin() []ent.Mixin {
 			newOrgOwnedMixin(e,
 				withSkipForSystemAdmin(true)),
 		},
-	}.getMixins()
+	}.getMixins(e)
 }
 
 // Annotations of the Export

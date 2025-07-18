@@ -104,7 +104,7 @@ func (GroupMembership) Indexes() []ent.Index {
 
 // Mixin of the GroupMembership
 func (GroupMembership) Mixin() []ent.Mixin {
-	return mixinConfig{excludeTags: true, excludeSoftDelete: true}.getMixins()
+	return mixinConfig{excludeTags: true, excludeSoftDelete: true}.getMixins(GroupMembership{})
 }
 
 // Interceptors of the GroupMembership

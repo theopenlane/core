@@ -101,30 +101,7 @@ func (h Hush) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(h),
 		},
-	}.getMixins()
-}
-
-// Hooks of the Hush
-// Automatically detects and applies encryption hooks for annotated fields
-func (h Hush) Hooks() []ent.Hook {
-	// Auto-detect and return encryption hooks for fields with hush.EncryptField() annotations
-	autoHooks := hush.AutoEncryptionHook(h)
-
-	// Add any additional non-encryption hooks here if needed
-	additionalHooks := []ent.Hook{}
-
-	return append(autoHooks, additionalHooks...)
-}
-
-// Interceptors of the Hush
-func (h Hush) Interceptors() []ent.Interceptor {
-	// Auto-detect and return decryption interceptors for fields with hush.EncryptField() annotations
-	autoInterceptors := hush.AutoDecryptionInterceptor(h)
-
-	// Add any additional non-encryption interceptors here if needed
-	additionalInterceptors := []ent.Interceptor{}
-
-	return append(autoInterceptors, additionalInterceptors...)
+	}.getMixins(h)
 }
 
 // Policy of the Hush - restricts access to organization members with write access

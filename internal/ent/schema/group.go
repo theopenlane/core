@@ -138,7 +138,7 @@ func (g Group) Mixin() []ent.Mixin {
 				withEdgesNoView(Procedure{}, InternalPolicy{}, Control{}, MappedControl{}),
 			),
 		},
-	}.getMixins()
+	}.getMixins(g)
 }
 
 // Indexes of the Group
