@@ -9,7 +9,26 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/hush/crypto"
 )
+
+// setupEncryption initializes encryption for tests
+func setupEncryption(t *testing.T) {
+	t.Helper()
+
+	// Generate a test keyset
+	keyset, err := crypto.GenerateTinkKeyset()
+	require.NoError(t, err)
+
+	// Initialize crypto with test config
+	cfg := crypto.Config{
+		Enabled: true,
+		Keyset:  keyset,
+	}
+
+	err = crypto.Init(cfg)
+	require.NoError(t, err)
+}
 
 // TestEncryptionAnnotation tests the EncryptionAnnotation struct
 func TestEncryptionAnnotation(t *testing.T) {
@@ -646,6 +665,9 @@ func TestDetectEncryptedFields(t *testing.T) {
 }
 
 func TestHushEncryptionLogic(t *testing.T) {
+	// Setup encryption for tests
+	setupEncryption(t)
+
 	// Test the basic Tink encryption/decryption logic
 
 	plaintext := "super-secret-value-123"
@@ -668,6 +690,9 @@ func TestHushEncryptionLogic(t *testing.T) {
 }
 
 func TestHushEncryptionHelpers(t *testing.T) {
+	// Setup encryption for tests
+	setupEncryption(t)
+
 	// Test Tink encryption helpers work correctly
 
 	// Test multiple encryptions produce different ciphertexts (due to random nonces)
@@ -706,6 +731,9 @@ func TestTinkKeysetGeneration(t *testing.T) {
 }
 
 func TestTinkEncryptionVariousInputs(t *testing.T) {
+	// Setup encryption for tests
+	setupEncryption(t)
+
 	// Test encryption with various input types
 	testCases := []struct {
 		name  string
@@ -737,6 +765,9 @@ func TestTinkEncryptionVariousInputs(t *testing.T) {
 
 func TestHushEncryptionComplete(t *testing.T) {
 	t.Run("tink encryption system integration", func(t *testing.T) {
+		// Setup encryption for tests
+		setupEncryption(t)
+
 		// Test the Tink encryption system works correctly
 
 		// Test encryption/decryption roundtrip
@@ -767,6 +798,9 @@ func TestHushEncryptionComplete(t *testing.T) {
 	})
 
 	t.Run("encryption nonce randomization", func(t *testing.T) {
+		// Setup encryption for tests
+		setupEncryption(t)
+
 		// Test that multiple encryptions of the same value produce different outputs
 		original := "repeated-test-value"
 
