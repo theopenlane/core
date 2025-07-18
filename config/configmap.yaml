@@ -66,6 +66,7 @@ data:
   CORE_SERVER_CSRFPROTECTION_COOKIEDOMAIN: {{ .Values.openlane.coreConfiguration.server.csrfProtection.cookieDomain }}
   CORE_SERVER_CSRFPROTECTION_COOKIEPATH: {{ .Values.openlane.coreConfiguration.server.csrfProtection.cookiePath | default "/" }}
   CORE_SERVER_DEFAULTTRUSTCENTERDOMAIN: {{ .Values.openlane.coreConfiguration.server.defaultTrustCenterDomain }}
+  CORE_SERVER_FIELDLEVELENCRYPTION_ENABLED: {{ .Values.openlane.coreConfiguration.server.fieldLevelEncryption.enabled | default "false" }}
   CORE_ENTCONFIG_ENTITYTYPES: {{ .Values.openlane.coreConfiguration.entConfig.entityTypes }}
   CORE_ENTCONFIG_SUMMARIZER_TYPE: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.type | default "lexrank" }}
   CORE_ENTCONFIG_SUMMARIZER_LLM_PROVIDER: {{ .Values.openlane.coreConfiguration.entConfig.summarizer.llm.provider }}

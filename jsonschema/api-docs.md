@@ -245,7 +245,8 @@ Config defines configuration for the CSRF middleware wrapper.
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**Enabled**|`boolean`|Enabled indicates whether Tink encryption is enabled<br/>||
+|**enabled**|`boolean`|Enabled indicates whether Tink encryption is enabled<br/>||
+|**keyset**|`string`|Keyset is the base64-encoded Tink keyset used for encryption<br/>||
 
 **Additional Properties:** not allowed  
 <a name="entconfig"></a>

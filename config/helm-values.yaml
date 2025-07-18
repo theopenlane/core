@@ -129,7 +129,7 @@ coreConfiguration:
     # -- FieldLevelEncryption contains the configuration for field level encryption
     fieldLevelEncryption:
       # -- Enabled indicates whether Tink encryption is enabled
-      enabled: false  # @schema type:boolean
+      enabled: false  # @schema type:boolean; default:false
   # -- EntConfig contains the ent configuration used by the ent middleware
   entConfig:
     # -- EntityTypes is the list of entity types to create by default for the organization
@@ -481,6 +481,14 @@ externalSecrets:
       secretKey: "CORE_SERVER_SECRETMANAGER"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-server-secretmanager"  # @schema type:string
+    # -- core-server-fieldlevelencryption-keyset secret configuration
+    core-server-fieldlevelencryption-keyset:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for server.fieldLevelEncryption.keyset
+      secretKey: "CORE_SERVER_FIELDLEVELENCRYPTION_KEYSET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-server-fieldlevelencryption-keyset"  # @schema type:string
     # -- core-entconfig-summarizer-llm-gemini-credentialsjson secret configuration
     core-entconfig-summarizer-llm-gemini-credentialsjson:
       # -- Enable this external secret
