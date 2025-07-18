@@ -28,6 +28,7 @@ services:
       - OPENFGA_LIST_OBJECTS_MAX_RESULTS=1000
       - OPENFGA_MAX_CHECKS_PER_BATCH_CHECK=500
       - OPENFGA_LIST_OBJECTS_DEADLINE=5s
+      - OPENFGA_MAX_CHECKS_PER_BATCH_CHECK=100
     command:
       - run
       - --check-query-cache-enabled

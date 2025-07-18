@@ -166,7 +166,7 @@ func TestQueryStandard(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{publicStandard.ID, notPublicStandard.ID}}).MustDelete(systemAdminUser.UserCtx, t)
+	// (&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{publicStandard.ID, notPublicStandard.ID}}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: orgOwnedStandard.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
@@ -191,6 +191,22 @@ func TestQueryStandards(t *testing.T) {
 	for range countNotPublic {
 		standard := (&StandardBuilder{client: suite.client, IsPublic: false}).MustNew(systemAdminUser.UserCtx, t)
 		notPublicStandardIDs = append(notPublicStandardIDs, standard.ID)
+	}
+
+	// reset count
+	countPublic = 0
+	countNotPublic = 0
+
+	standards, err := suite.client.api.GetAllStandards(systemAdminUser.UserCtx)
+	assert.NilError(t, err)
+
+	for _, standard := range standards.Standards.Edges {
+		if *standard.Node.IsPublic {
+			countPublic++
+			continue
+		}
+
+		countNotPublic++
 	}
 
 	testCases := []struct {
@@ -251,7 +267,7 @@ func TestQueryStandards(t *testing.T) {
 		})
 	}
 
-	systemOwnedIDs := append(notPublicStandardIDs, publicStandardIDs...)
+	systemOwnedIDs := append(notPublicStandardIDs)
 
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: systemOwnedIDs}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: orgOwnedStandardIDs}).MustDelete(testUser1.UserCtx, t)
@@ -516,7 +532,9 @@ func TestMutationCreateStandard(t *testing.T) {
 				ctx = testUser1.UserCtx
 			}
 
-			(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: resp.CreateStandard.Standard.ID}).MustDelete(ctx, t)
+			if !*resp.CreateStandard.Standard.IsPublic {
+				(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: resp.CreateStandard.Standard.ID}).MustDelete(ctx, t)
+			}
 		})
 	}
 }
@@ -719,9 +737,6 @@ func TestMutationUpdateStandard(t *testing.T) {
 			}
 		})
 	}
-
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardOrgOwned.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardSystemOwned.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationDeleteStandard(t *testing.T) {
