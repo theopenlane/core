@@ -149,6 +149,7 @@ func (Standard) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookStandardPublicAccessTuples(),
 		hooks.HookStandardCreate(),
+		hooks.HookStandardDelete(),
 	}
 }
 

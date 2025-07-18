@@ -484,7 +484,6 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 
 	// cleanup the system standard and control
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{systemStandard.ID}}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{systemControl.ID}}).MustDelete(systemAdminUser.UserCtx, t)
 }
 
 func TestMutationUpdateInternalPolicy(t *testing.T) {

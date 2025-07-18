@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/iam/auth"
 )
 
 type OrganizationBuilder struct {
@@ -376,9 +377,29 @@ type Cleanup[T DeleteExec] struct {
 //		client: suite.client.db.Organization,
 //		ID: resp.CreateOrganization.Organization.ID}).
 //		MustDelete(testUser1.UserCtx, t)
+//
+// Special handling for standards - update them to be private before deletion
+// this is to allow the system admin to delete public standards
+// and controls that are linked to them
+// this is a workaround to avoid the cascade delete hook on standard
+// that would otherwise prevent the deletion of public standards
+// and controls that are linked to them
 func (c *Cleanup[DeleteExec]) MustDelete(ctx context.Context, t *testing.T) {
 	// add client to context for hooks that expect the client to be in the context
 	ctx = setContext(ctx, suite.client.db)
+
+	// Special handling for standards - update them to be private before deletion
+	// Only do this for system admins
+	if _, ok := any(c.client).(*ent.StandardClient); ok && auth.IsSystemAdminFromContext(ctx) {
+		if c.ID != "" {
+			err := suite.client.db.Standard.UpdateOneID(c.ID).SetIsPublic(false).Exec(ctx)
+			assert.NilError(t, err)
+		}
+		for _, id := range c.IDs {
+			err := suite.client.db.Standard.UpdateOneID(id).SetIsPublic(false).Exec(ctx)
+			assert.NilError(t, err)
+		}
+	}
 
 	for _, id := range c.IDs {
 		err := c.client.DeleteOneID(id).Exec(ctx)
