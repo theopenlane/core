@@ -166,7 +166,7 @@ func TestQueryStandard(t *testing.T) {
 		})
 	}
 
-	// (&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{publicStandard.ID, notPublicStandard.ID}}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{publicStandard.ID, notPublicStandard.ID}}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: orgOwnedStandard.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
@@ -532,9 +532,7 @@ func TestMutationCreateStandard(t *testing.T) {
 				ctx = testUser1.UserCtx
 			}
 
-			if !*resp.CreateStandard.Standard.IsPublic {
-				(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: resp.CreateStandard.Standard.ID}).MustDelete(ctx, t)
-			}
+			(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: resp.CreateStandard.Standard.ID}).MustDelete(ctx, t)
 		})
 	}
 }
@@ -737,15 +735,22 @@ func TestMutationUpdateStandard(t *testing.T) {
 			}
 		})
 	}
+
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardOrgOwned.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardSystemOwned.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationDeleteStandard(t *testing.T) {
-
 	newAdminUser := suite.systemAdminBuilder(context.Background(), t)
 
 	newTestUser1 := suite.userBuilder(context.Background(), t)
+	apiClient := suite.setupAPITokenClient(newTestUser1.UserCtx, t)
+	patClient := suite.setupPatClient(newTestUser1, t)
 
+	// we need to create the standards each time because the cascade delete of the standard
 	standardOrgOwned1 := (&StandardBuilder{client: suite.client}).MustNew(newTestUser1.UserCtx, t)
+	standardOrgOwned2 := (&StandardBuilder{client: suite.client}).MustNew(newTestUser1.UserCtx, t)
+	standardOrgOwned3 := (&StandardBuilder{client: suite.client}).MustNew(newTestUser1.UserCtx, t)
 
 	standardSystemOwned := (&StandardBuilder{client: suite.client}).MustNew(newAdminUser.UserCtx, t)
 
@@ -795,7 +800,7 @@ func TestMutationDeleteStandard(t *testing.T) {
 			ctx:        newAdminUser.UserCtx,
 		},
 		{
-			name:        "happy path, delete public",
+			name:        "delete public standard not allowed",
 			idToDelete:  publicStandard.ID,
 			client:      suite.client.api,
 			ctx:         newAdminUser.UserCtx,
@@ -807,6 +812,18 @@ func TestMutationDeleteStandard(t *testing.T) {
 			client:      suite.client.api,
 			ctx:         newTestUser1.UserCtx,
 			expectedErr: "not found",
+		},
+		{
+			name:       "happy path, delete using personal access token",
+			idToDelete: standardOrgOwned2.ID,
+			client:     patClient,
+			ctx:        context.Background(),
+		},
+		{
+			name:       "happy path, delete using api token",
+			idToDelete: standardOrgOwned3.ID,
+			client:     apiClient,
+			ctx:        context.Background(),
 		},
 		{
 			name:        "already deleted system owned, not found",
@@ -846,4 +863,7 @@ func TestMutationDeleteStandard(t *testing.T) {
 	// controls linked to non public standards would be deleted
 	// while the ones linked to standard should remain
 	assert.Check(t, is.Equal(int64(numberOfControls), controlsResp.Controls.TotalCount))
+
+	// delete the public standard and the controls linked to it
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(systemAdminUser.UserCtx, t)
 }

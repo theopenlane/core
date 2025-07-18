@@ -1009,6 +1009,10 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDsToDelete}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDsToDelete}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: orgStandard.ID}).MustDelete(testUser1.UserCtx, t)
+
+	// now we can delete it and the controls under it will be deleted
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{publicStandard.ID, publicStandard2.ID}}).MustDelete(systemAdminUser.UserCtx, t)
+
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDs}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolID2s}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
@@ -1450,6 +1454,11 @@ func TestQueryControlCategories(t *testing.T) {
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: subcontrol.ID}).MustDelete(newUser.UserCtx, t)
 }
 
+// TestQueryControlSubcategories tests the query for control subcategories
+// Note: this test will pull all categories, even if the controls weren't created in this test, or in this organization (E.g. public standards)
+// will affect the results of this test
+// never try to run this in parallel with other tests that create controls
+// or standards, or that have controls linked to them
 func TestQueryControlSubcategories(t *testing.T) {
 	// create controls with categories and subcategories
 	control1 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
@@ -1517,6 +1526,11 @@ func TestQueryControlSubcategories(t *testing.T) {
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: subcontrol.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
+// TestQueryControlCategoriesByFramework tests the query for control subcategories by framework
+// Note: this test will pull all categories, even if the controls weren't created in this test, or in this organization (E.g. public standards)
+// will affect the results of this test
+// never try to run this in parallel with other tests that create controls
+// or standards, or that have controls linked to them
 func TestQueryControlCategoriesByFramework(t *testing.T) {
 	customFramework := "Custom"
 
@@ -1877,6 +1891,6 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 	}
 
 	// cleanup created controls
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID, control4.ID, control5.ID, control6.ID, control7.ID}}).MustDelete(user1.UserCtx, t)
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(user1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID, control4.ID, control5.ID, control6.ID, control7.ID}}).MustDelete(user1.UserCtx, t)
 }

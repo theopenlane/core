@@ -6,12 +6,15 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 )
 
@@ -21,35 +24,55 @@ var (
 	ErrPublicStandardCannotBeDeleted = errors.New("public standard not allowed to be deleted")
 )
 
-// HookStandardDelete cascades the deletion of all controls that have a standard linked/connected
+// HookStandardDelete cascades the deletion of all controls for a system-owned standard connected
+// as long as the standard is not public. This is to prevent the deletion of a standard that is
+// actively used by an organization.
 func HookStandardDelete() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.StandardFunc(func(ctx context.Context, m *generated.StandardMutation) (generated.Value, error) {
+			// only run on delete operations
+			if !isDeleteOp(ctx, m) {
+				return next.Mutate(ctx, m)
+			}
 
-			if !entx.CheckIsSoftDelete(ctx) {
+			// only system admins edit system-owned standards
+			// check early to avoid unnecessary database queries to both
+			// the database and the authz service
+			if !auth.IsSystemAdminFromContext(ctx) {
 				return next.Mutate(ctx, m)
 			}
 
 			id, _ := m.ID()
 			var err error
 
+			// use the same context we use on edge_cleanup to make sure everything is cleaned up properly
+			ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup standard control edges")), entfga.DeleteTuplesFirstKey{})
+
+			// get the standard, we only need the systemOwned and isPublic fields
 			retrievedStandard, err := m.Client().Standard.Query().
 				Where(standard.ID(id)).
-				Select(standard.FieldSystemOwned, standard.FieldIsPublic, standard.FieldOwnerID).
+				Select(standard.FieldSystemOwned, standard.FieldIsPublic).
 				Only(ctx)
 			if err != nil {
 				return nil, err
 			}
 
+			// if the standard is not system-owned, we don't need to do anything
+			// we don't want to cascade on org owned standards because they might be used
+			// by an organization and they don't care about the parent standard
 			if !retrievedStandard.SystemOwned {
 				return next.Mutate(ctx, m)
 			}
 
+			// prevent accidental deletion of public standards, and require a system admin
+			// to flip it to not public before they can delete it
 			if retrievedStandard.IsPublic {
 				return nil, ErrPublicStandardCannotBeDeleted
 			}
 
 			// remove standard_id mapping from org owned controls
+			// this uses the same allow context, as above, which will allow the
+			// control to be updated to clear the standard id field by the system admin
 			err = m.Client().Control.Update().ClearStandardID().
 				Where(
 					control.And(
