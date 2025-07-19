@@ -2,8 +2,7 @@ services:
   riverboat:
     # the taskfile will set the tag based on the architecture, if you are running on x86_64 it will use the amd64-latest tag
     # if you run without the taskfile and the env var set it will default to arm64-latest
-    # image: ghcr.io/theopenlane/riverboat:${RIVERBOAT_TAG:-arm64-latest}
-    image: ghcr.io/theopenlane/riverboat:arm64-78-90832455
+    image: ghcr.io/theopenlane/riverboat:${RIVERBOAT_TAG:-arm64-latest}
     environment:
       # this needs to use host.docker.internal since it is a separate docker-compose file
       - RIVERBOAT_JOBQUEUE_DATABASEHOST=postgres://postgres:password@host.docker.internal:5432/jobs?sslmode=disable
@@ -15,3 +14,11 @@ services:
     networks:
       - default
     restart: unless-stopped # allow it to keep trying if postgres is not up yet
+  river-ui:
+    image: ghcr.io/riverqueue/riverui:latest
+    ports:
+      - 8082:8080
+    environment:
+      - DATABASE_URL=postgres://postgres:password@host.docker.internal:5432/jobs?sslmode=disable
+    networks:
+      - default
