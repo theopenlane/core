@@ -150,8 +150,7 @@ while IFS=':' read -r pr_number branch_name title; do
         echo "✅ PR #$pr_number converted from draft to ready"
 
         # Update the PR title to remove draft indicator
-        new_title=$(gh pr view "$pr_number" --repo "$repo" --json title --jq '.title' | sed 's/^🚧 DRAFT: /🔄 /')
-        gh pr edit "$pr_number" --repo "$repo" --title "$new_title"
+        new_title=$(gh pr view "$pr_number" --repo "$repo" --json title --jq '.title' | sed -E 's|^🚧 DRAFT: (.*)|🔄 \1|')
 
         # Add a comment about the conversion
         conversion_comment=$(load_template "${template_dir}/github/pr-ready-comment.md" \
