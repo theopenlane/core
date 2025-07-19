@@ -21,12 +21,12 @@ river:
       Config:
         cloudflareApiKey: ""
         databaseHost: ""
-        openlaneAPIHost: ""
+        openlaneAPIHost: "http://host.docker.internal:17608"
         openlaneAPIToken: ""
     deleteExportContentWorker:
       config:
-        cutoffDuration: 0
-        openlaneAPIHost: ""
+        cutoffDuration: 30m
+        openlaneAPIHost: "http://host.docker.internal:17608"
         openlaneAPIToken: ""
     emailWorker:
       config:
@@ -42,7 +42,7 @@ river:
       Config:
         cloudflareApiKey: ""
         databaseHost: ""
-        openlaneAPIHost: ""
+        openlaneAPIHost: "http://host.docker.internal:17608"
         openlaneAPIToken: ""
 
 refreshInterval: 600000000000
