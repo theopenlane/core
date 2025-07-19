@@ -13,9 +13,9 @@ river:
         openlaneAPIToken: ""
     databaseWorker:
       config:
-        baseUrl: http://localhost:1337
+        baseUrl: "http://host.docker.internal:1337"
         debug: false
-        enabled: true
+        enabled: false
         endpoint: query
     deleteCustomDomainWorker:
       Config:
