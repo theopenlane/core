@@ -1,0 +1,48 @@
+river:
+  databaseHost: postgres://postgres:password@host.docker.internal:5432/jobs?sslmode=disable
+  runMigrations: true
+  queues:
+    - name: email
+      maxWorkers: 100
+  workers:
+    createCustomDomainWorker:
+      Config:
+        cloudflareApiKey: ""
+        databaseHost: ""
+        openlaneAPIHost: ""
+        openlaneAPIToken: ""
+    databaseWorker:
+      config:
+        baseUrl: http://localhost:1337
+        debug: false
+        enabled: true
+        endpoint: query
+    deleteCustomDomainWorker:
+      Config:
+        cloudflareApiKey: ""
+        databaseHost: ""
+        openlaneAPIHost: ""
+        openlaneAPIToken: ""
+    deleteExportContentWorker:
+      config:
+        cutoffDuration: 0
+        openlaneAPIHost: ""
+        openlaneAPIToken: ""
+    emailWorker:
+      config:
+        devMode: true
+        fromEmail: no-reply@example.com
+        testDir: fixtures/email
+        token: ""
+    exportContentWorker:
+      config:
+        openlaneAPIHost: "http://host.docker.internal:17608"
+        openlaneAPIToken: "tolp_read_only_token"
+    validateCustomDomainWorker:
+      Config:
+        cloudflareApiKey: ""
+        databaseHost: ""
+        openlaneAPIHost: ""
+        openlaneAPIToken: ""
+
+refreshInterval: 600000000000
