@@ -14,9 +14,9 @@ require (
 	github.com/Yamashou/gqlgenc v0.33.0
 	github.com/alicebob/miniredis/v2 v2.35.0
 	github.com/alitto/pond/v2 v2.5.0
-	github.com/aws/aws-sdk-go-v2/config v1.29.17
-	github.com/aws/aws-sdk-go-v2/credentials v1.17.70
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.84.0
+	github.com/aws/aws-sdk-go-v2/config v1.29.18
+	github.com/aws/aws-sdk-go-v2/credentials v1.17.71
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.84.1
 	github.com/barkimedes/go-deepcopy v0.0.0-20220514131651-17c30cfc62df
 	github.com/brianvoe/gofakeit/v7 v7.3.0
 	github.com/cloudflare/cloudflare-go/v4 v4.6.0
@@ -28,7 +28,7 @@ require (
 	github.com/getkin/kin-openapi v0.132.0
 	github.com/go-jose/go-jose/v4 v4.1.1
 	github.com/go-viper/mapstructure/v2 v2.4.0
-	github.com/go-webauthn/webauthn v0.13.3
+	github.com/go-webauthn/webauthn v0.13.4
 	github.com/gocarina/gocsv v0.0.0-20240520201108-78e41c74b4b1
 	github.com/goccy/go-yaml v1.18.0
 	github.com/golang-jwt/jwt/v5 v5.2.3
@@ -58,10 +58,10 @@ require (
 	github.com/openfga/go-sdk v0.7.1
 	github.com/pkg/errors v0.9.1
 	github.com/pressly/goose/v3 v3.24.3
-	github.com/projectdiscovery/cdncheck v1.1.27
+	github.com/projectdiscovery/cdncheck v1.1.28
 	github.com/projectdiscovery/dnsx v1.2.2
 	github.com/projectdiscovery/goflags v0.1.74
-	github.com/projectdiscovery/utils v0.4.21
+	github.com/projectdiscovery/utils v0.4.22
 	github.com/prometheus/client_golang v1.22.0
 	github.com/ravilushqa/otelgqlgen v0.18.0
 	github.com/redis/go-redis/v9 v9.11.0
@@ -83,7 +83,7 @@ require (
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.14.2
 	github.com/theopenlane/newman v0.2.0
-	github.com/theopenlane/riverboat v0.2.0
+	github.com/theopenlane/riverboat v0.2.1
 	github.com/theopenlane/utils v0.4.7
 	github.com/tmc/langchaingo v0.1.13
 	github.com/vektah/gqlparser/v2 v2.5.30
@@ -154,18 +154,18 @@ require (
 	github.com/ashanbrown/forbidigo v1.6.0 // indirect
 	github.com/ashanbrown/makezero v1.2.0 // indirect
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.6.11 // indirect
-	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.16.32 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.3.36 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.6.36 // indirect
+	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.16.33 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.3.37 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.6.37 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/ini v1.8.3 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/v4a v1.3.36 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/v4a v1.3.37 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.12.4 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.7.4 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.12.17 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.18.17 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sso v1.25.5 // indirect
-	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.30.3 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sts v1.34.0 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.7.5 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.12.18 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.18.18 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sso v1.25.6 // indirect
+	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.30.4 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sts v1.34.1 // indirect
 	github.com/aws/smithy-go v1.22.4 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/bitfield/gotestdox v0.2.2 // indirect
@@ -342,13 +342,13 @@ require (
 	github.com/projectdiscovery/fastdialer v0.4.1 // indirect
 	github.com/projectdiscovery/gologger v1.1.54 // indirect
 	github.com/projectdiscovery/gostruct v0.0.2 // indirect
-	github.com/projectdiscovery/hmap v0.0.89 // indirect
+	github.com/projectdiscovery/hmap v0.0.91 // indirect
 	github.com/projectdiscovery/machineid v0.0.0-20240226150047-2e2c51e35983 // indirect
 	github.com/projectdiscovery/mapcidr v1.1.34 // indirect
-	github.com/projectdiscovery/networkpolicy v0.1.15 // indirect
+	github.com/projectdiscovery/networkpolicy v0.1.17 // indirect
 	github.com/projectdiscovery/ratelimit v0.0.81 // indirect
 	github.com/projectdiscovery/retryabledns v1.0.103 // indirect
-	github.com/projectdiscovery/retryablehttp-go v1.0.114 // indirect
+	github.com/projectdiscovery/retryablehttp-go v1.0.117 // indirect
 	github.com/quasilyte/go-ruleguard v0.4.4 // indirect
 	github.com/quasilyte/go-ruleguard/dsl v0.3.22 // indirect
 	github.com/quasilyte/gogrep v0.5.0 // indirect
@@ -484,8 +484,8 @@ require (
 	github.com/agnivade/levenshtein v1.2.1 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
-	github.com/aws/aws-sdk-go-v2 v1.36.5
-	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.17.84
+	github.com/aws/aws-sdk-go-v2 v1.36.6
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.17.85
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
@@ -576,7 +576,7 @@ require (
 	github.com/pquerna/otp v1.5.0
 	github.com/projectdiscovery/katana v1.1.3
 	github.com/projectdiscovery/subfinder/v2 v2.8.0
-	github.com/projectdiscovery/wappalyzergo v0.2.37
+	github.com/projectdiscovery/wappalyzergo v0.2.38
 	github.com/prometheus/client_model v0.6.2 // indirect
 	github.com/prometheus/common v0.63.0 // indirect
 	github.com/prometheus/procfs v0.16.1 // indirect
