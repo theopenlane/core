@@ -1303,8 +1303,8 @@ github.com/theopenlane/emailtemplates v0.2.3 h1:SUj2LNeFWZCjm37vjZCxNUGAicnw64XQ
 github.com/theopenlane/emailtemplates v0.2.3/go.mod h1:Ee3twHeJKb2RWR2yDXHeVzqn7APdCkfOjSl2DnV1HDw=
 github.com/theopenlane/entx v0.11.2 h1:FgJ5WZYjH0oI0I1bvsWhkWBKwqGlA+TZ2fz/47u7eHM=
 github.com/theopenlane/entx v0.11.2/go.mod h1:LEE0v15vn5Ck8W60bDi6BZz6NldMAl+rC0Uj2RhVNMY=
-github.com/theopenlane/gqlgen-plugins v0.6.3 h1:Fvw9Y66MTNeh6vx4ydMclCjjkH7IMpYegDHKoVRHcgM=
-github.com/theopenlane/gqlgen-plugins v0.6.3/go.mod h1:2yuIlMZaaKyy9E8j6qQztXlh05EAIcTARcy1IFvEWGg=
+github.com/theopenlane/gqlgen-plugins v0.6.4 h1:9LXemsDV1efS+WLPNdj2WgjYfw6DwI9OI7F8/4J4OWY=
+github.com/theopenlane/gqlgen-plugins v0.6.4/go.mod h1:2yuIlMZaaKyy9E8j6qQztXlh05EAIcTARcy1IFvEWGg=
 github.com/theopenlane/httpsling v0.2.2 h1:QqJo/VsjeiM6/RnWZpRQX3I7T62j5u9WdXo52zUWyi0=
 github.com/theopenlane/httpsling v0.2.2/go.mod h1:mrSaIZs4lhcBsOJCv/n67N7eDZ/skD6vA8l8y9MDrKk=
 github.com/theopenlane/iam v0.14.2 h1:5c89C14gqAFUBtJ1AGxol3/uqm2wABZ6qLcolS98ZFQ=
@@ -1383,8 +1383,8 @@ github.com/valyala/fasttemplate v1.2.2 h1:lxLXG0uE3Qnshl9QyaK6XJxMXlQZELvChBOCmQ
 github.com/valyala/fasttemplate v1.2.2/go.mod h1:KHLXt3tVN2HBp8eijSv/kGJopbvo7S+qRAEEKiv+SiQ=
 github.com/vektah/gqlparser/v2 v2.5.30 h1:EqLwGAFLIzt1wpx1IPpY67DwUujF1OfzgEyDsLrN6kE=
 github.com/vektah/gqlparser/v2 v2.5.30/go.mod h1:D1/VCZtV3LPnQrcPBeR/q5jkSQIPti0uYCP/RI0gIeo=
-github.com/vektra/mockery/v3 v3.5.0 h1:BatbjYJLL6P/h0Jkb/+6REJaqaqp8eTbFE8uwQtt11E=
-github.com/vektra/mockery/v3 v3.5.0/go.mod h1:nHEhwwFt+3/CD3XdeklPWnRpDL96KNZgRiGuMPZNjN8=
+github.com/vektra/mockery/v3 v3.5.1 h1:uJA2SuImj4pDgWuPI4MMuJyxgNL8zkXLrzSMWbDRQ20=
+github.com/vektra/mockery/v3 v3.5.1/go.mod h1:m1a4f5oLm3+Vffg9lilSAOe4u2A1ejThZ/JTh44lQYc=
 github.com/vmihailenco/msgpack/v5 v5.4.1 h1:cQriyiUvjTwOHg8QZaPihLWeRAAVoCpE00IUPn0Bjt8=
 github.com/vmihailenco/msgpack/v5 v5.4.1/go.mod h1:GaZTsDaehaPpQVyxrf5mtQlH+pc21PIudVV/E3rRQok=
 github.com/vmihailenco/tagparser/v2 v2.0.0 h1:y09buUbR+b5aycVFQs/g70pqKVZNBmxwAhO7/IwNM9g=

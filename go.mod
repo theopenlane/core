@@ -79,7 +79,7 @@ require (
 	github.com/theopenlane/echox v0.2.4
 	github.com/theopenlane/emailtemplates v0.2.3
 	github.com/theopenlane/entx v0.11.2
-	github.com/theopenlane/gqlgen-plugins v0.6.3
+	github.com/theopenlane/gqlgen-plugins v0.6.4
 	github.com/theopenlane/httpsling v0.2.2
 	github.com/theopenlane/iam v0.14.2
 	github.com/theopenlane/newman v0.2.0
@@ -87,7 +87,7 @@ require (
 	github.com/theopenlane/utils v0.4.7
 	github.com/tmc/langchaingo v0.1.13
 	github.com/vektah/gqlparser/v2 v2.5.30
-	github.com/vektra/mockery/v3 v3.5.0
+	github.com/vektra/mockery/v3 v3.5.1
 	github.com/wk8/go-ordered-map/v2 v2.1.8
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	github.com/xeipuuv/gojsonschema v1.2.0
