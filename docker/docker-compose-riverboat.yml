@@ -3,10 +3,8 @@ services:
     # the taskfile will set the tag based on the architecture, if you are running on x86_64 it will use the amd64-latest tag
     # if you run without the taskfile and the env var set it will default to arm64-latest
     image: ghcr.io/theopenlane/riverboat:${RIVERBOAT_TAG:-arm64-latest}
-    environment:
-      # this needs to use host.docker.internal since it is a separate docker-compose file
-      - RIVERBOAT_JOBQUEUE_DATABASEHOST=postgres://postgres:password@host.docker.internal:5432/jobs?sslmode=disable
-      - RIVERBOAT_RUNMIGRATIONS=true
+    volumes:
+      - ./configs/riverboat/.config.dev.yaml:/config/.config.yaml
     command:
       - serve
       - --debug
