@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -68,7 +69,7 @@ func HookFileCreate() ent.Hook {
 				}
 
 				// add the organization id to the file if its not a user file
-				orgID, err := auth.GetOrganizationIDFromContext(ctx)
+				orgID, err := getOrgIDForFile(ctx)
 				if err != nil {
 					return nil, err
 				}
@@ -99,4 +100,35 @@ func fileOrgSkipper(ctx context.Context) bool {
 	}
 
 	return false
+}
+
+// getOrgIDForFile gets the organization id for a file
+// this first checks the context for the organization id
+// if it's not found, it will attempt to get the organization id from the request context
+// this is used when the owner id isn't yet set in the context because a filed
+// is created by the middleware before the context could be set for personal
+// access tokens; this is safe because the transaction will be rolled back later
+// if the user has no access to the organization
+func getOrgIDForFile(ctx context.Context) (string, error) {
+	// add the organization id to the file if its not a user file
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		// check input instead
+		input := graphutils.GetMapInputVariableByName(ctx, "input")
+		if input != nil {
+			i := *input
+			if i["ownerID"] != nil {
+				owner := i["ownerID"]
+				if owner, ok := owner.(string); ok {
+					orgID = owner
+				}
+			}
+		}
+	}
+
+	if orgID == "" {
+		return nil, ErrOrganizationIDRequired
+	}
+
+	return orgID, nil
 }
