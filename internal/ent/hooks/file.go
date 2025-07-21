@@ -127,7 +127,7 @@ func getOrgIDForFile(ctx context.Context) (string, error) {
 	}
 
 	if orgID == "" {
-		return nil, ErrOrganizationIDRequired
+		return "", ErrOrganizationIDRequired
 	}
 
 	return orgID, nil
