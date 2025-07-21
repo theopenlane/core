@@ -19,7 +19,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
-	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -55,6 +54,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -1149,17 +1149,17 @@ func (ou *OrganizationUpdate) AddJobTemplates(j ...*JobTemplate) *OrganizationUp
 	return ou.AddJobTemplateIDs(ids...)
 }
 
-// AddScheduledJobIDs adds the "scheduled_jobs" edge to the ControlScheduledJob entity by IDs.
+// AddScheduledJobIDs adds the "scheduled_jobs" edge to the ScheduledJob entity by IDs.
 func (ou *OrganizationUpdate) AddScheduledJobIDs(ids ...string) *OrganizationUpdate {
 	ou.mutation.AddScheduledJobIDs(ids...)
 	return ou
 }
 
-// AddScheduledJobs adds the "scheduled_jobs" edges to the ControlScheduledJob entity.
-func (ou *OrganizationUpdate) AddScheduledJobs(c ...*ControlScheduledJob) *OrganizationUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+// AddScheduledJobs adds the "scheduled_jobs" edges to the ScheduledJob entity.
+func (ou *OrganizationUpdate) AddScheduledJobs(s ...*ScheduledJob) *OrganizationUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
 	}
 	return ou.AddScheduledJobIDs(ids...)
 }
@@ -2456,23 +2456,23 @@ func (ou *OrganizationUpdate) RemoveJobTemplates(j ...*JobTemplate) *Organizatio
 	return ou.RemoveJobTemplateIDs(ids...)
 }
 
-// ClearScheduledJobs clears all "scheduled_jobs" edges to the ControlScheduledJob entity.
+// ClearScheduledJobs clears all "scheduled_jobs" edges to the ScheduledJob entity.
 func (ou *OrganizationUpdate) ClearScheduledJobs() *OrganizationUpdate {
 	ou.mutation.ClearScheduledJobs()
 	return ou
 }
 
-// RemoveScheduledJobIDs removes the "scheduled_jobs" edge to ControlScheduledJob entities by IDs.
+// RemoveScheduledJobIDs removes the "scheduled_jobs" edge to ScheduledJob entities by IDs.
 func (ou *OrganizationUpdate) RemoveScheduledJobIDs(ids ...string) *OrganizationUpdate {
 	ou.mutation.RemoveScheduledJobIDs(ids...)
 	return ou
 }
 
-// RemoveScheduledJobs removes "scheduled_jobs" edges to ControlScheduledJob entities.
-func (ou *OrganizationUpdate) RemoveScheduledJobs(c ...*ControlScheduledJob) *OrganizationUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+// RemoveScheduledJobs removes "scheduled_jobs" edges to ScheduledJob entities.
+func (ou *OrganizationUpdate) RemoveScheduledJobs(s ...*ScheduledJob) *OrganizationUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
 	}
 	return ou.RemoveScheduledJobIDs(ids...)
 }
@@ -5534,10 +5534,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{organization.ScheduledJobsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.ControlScheduledJob
+		edge.Schema = ou.schemaConfig.ScheduledJob
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ou.mutation.RemovedScheduledJobsIDs(); len(nodes) > 0 && !ou.mutation.ScheduledJobsCleared() {
@@ -5548,10 +5548,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{organization.ScheduledJobsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.ControlScheduledJob
+		edge.Schema = ou.schemaConfig.ScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5565,10 +5565,10 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{organization.ScheduledJobsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ou.schemaConfig.ControlScheduledJob
+		edge.Schema = ou.schemaConfig.ScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7049,17 +7049,17 @@ func (ouo *OrganizationUpdateOne) AddJobTemplates(j ...*JobTemplate) *Organizati
 	return ouo.AddJobTemplateIDs(ids...)
 }
 
-// AddScheduledJobIDs adds the "scheduled_jobs" edge to the ControlScheduledJob entity by IDs.
+// AddScheduledJobIDs adds the "scheduled_jobs" edge to the ScheduledJob entity by IDs.
 func (ouo *OrganizationUpdateOne) AddScheduledJobIDs(ids ...string) *OrganizationUpdateOne {
 	ouo.mutation.AddScheduledJobIDs(ids...)
 	return ouo
 }
 
-// AddScheduledJobs adds the "scheduled_jobs" edges to the ControlScheduledJob entity.
-func (ouo *OrganizationUpdateOne) AddScheduledJobs(c ...*ControlScheduledJob) *OrganizationUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+// AddScheduledJobs adds the "scheduled_jobs" edges to the ScheduledJob entity.
+func (ouo *OrganizationUpdateOne) AddScheduledJobs(s ...*ScheduledJob) *OrganizationUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
 	}
 	return ouo.AddScheduledJobIDs(ids...)
 }
@@ -8356,23 +8356,23 @@ func (ouo *OrganizationUpdateOne) RemoveJobTemplates(j ...*JobTemplate) *Organiz
 	return ouo.RemoveJobTemplateIDs(ids...)
 }
 
-// ClearScheduledJobs clears all "scheduled_jobs" edges to the ControlScheduledJob entity.
+// ClearScheduledJobs clears all "scheduled_jobs" edges to the ScheduledJob entity.
 func (ouo *OrganizationUpdateOne) ClearScheduledJobs() *OrganizationUpdateOne {
 	ouo.mutation.ClearScheduledJobs()
 	return ouo
 }
 
-// RemoveScheduledJobIDs removes the "scheduled_jobs" edge to ControlScheduledJob entities by IDs.
+// RemoveScheduledJobIDs removes the "scheduled_jobs" edge to ScheduledJob entities by IDs.
 func (ouo *OrganizationUpdateOne) RemoveScheduledJobIDs(ids ...string) *OrganizationUpdateOne {
 	ouo.mutation.RemoveScheduledJobIDs(ids...)
 	return ouo
 }
 
-// RemoveScheduledJobs removes "scheduled_jobs" edges to ControlScheduledJob entities.
-func (ouo *OrganizationUpdateOne) RemoveScheduledJobs(c ...*ControlScheduledJob) *OrganizationUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+// RemoveScheduledJobs removes "scheduled_jobs" edges to ScheduledJob entities.
+func (ouo *OrganizationUpdateOne) RemoveScheduledJobs(s ...*ScheduledJob) *OrganizationUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
 	}
 	return ouo.RemoveScheduledJobIDs(ids...)
 }
@@ -11464,10 +11464,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			Columns: []string{organization.ScheduledJobsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.ControlScheduledJob
+		edge.Schema = ouo.schemaConfig.ScheduledJob
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ouo.mutation.RemovedScheduledJobsIDs(); len(nodes) > 0 && !ouo.mutation.ScheduledJobsCleared() {
@@ -11478,10 +11478,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			Columns: []string{organization.ScheduledJobsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.ControlScheduledJob
+		edge.Schema = ouo.schemaConfig.ScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11495,10 +11495,10 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			Columns: []string{organization.ScheduledJobsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ouo.schemaConfig.ControlScheduledJob
+		edge.Schema = ouo.schemaConfig.ScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

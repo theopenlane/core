@@ -51,28 +51,22 @@ func (JobTemplate) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 			).
-			Comment("the description of the job").
+			Comment("the short description of the job and what it does").
 			Optional(),
-
 		field.Enum("platform").
 			GoType(enums.JobPlatformType("")).
 			Immutable().
 			Annotations(
-				entgql.OrderField("platform"),
+				entgql.OrderField("PLATFORM"),
 			).
-			Comment("the platform to use to execute this job"),
-
+			Comment("the platform to use to execute this job, e.g. golang, typescript, python, etc."),
 		field.String("windmill_path").
 			Annotations(
 				entgql.Skip(
-					entgql.SkipOrderField |
-						entgql.SkipWhereInput |
-						entgql.SkipMutationCreateInput |
-						entgql.SkipMutationUpdateInput,
+					entgql.SkipAll, // hidden from the graphql api, this is an internal field used to track the windmill path
 				),
 			).
-			Comment("Windmill path"),
-
+			Comment("windmill path used to execute the job"),
 		field.String("download_url").
 			Annotations(
 				entgql.Skip(
@@ -81,14 +75,17 @@ func (JobTemplate) Fields() []ent.Field {
 				),
 			).
 			Comment("the url from where to download the script from"),
-
 		field.JSON("configuration", models.JobConfiguration{}).
 			Optional().
-			Comment("the configuration to run this job"),
-
+			Annotations(
+				entgql.Skip(
+					entgql.SkipAll, // currently unused, so hiding from the graphql api for now
+				),
+			).
+			Comment("the json configuration to run this job, which could be used to template a job, e.g. { \"account_name\": \"my-account\" }"),
 		field.String("cron").
 			GoType(models.Cron("")).
-			Comment("cron syntax").
+			Comment("cron schedule to run the job, e.g. 0 0 * * *").
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput | entgql.SkipOrderField),
 			).
@@ -100,7 +97,7 @@ func (JobTemplate) Fields() []ent.Field {
 // Mixin of the JobTemplate
 func (s JobTemplate) Mixin() []ent.Mixin {
 	return mixinConfig{
-		prefix: "JOB",
+		prefix: "JBT",
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(s,
 				withSkipForSystemAdmin(true),
@@ -118,7 +115,7 @@ func (JobTemplate) Annotations() []schema.Annotation {
 // Hooks of the JobTemplate
 func (JobTemplate) Hooks() []ent.Hook {
 	return []ent.Hook{
-		hooks.HookJobTemplateCreate(),
+		hooks.HookJobTemplate(),
 	}
 }
 

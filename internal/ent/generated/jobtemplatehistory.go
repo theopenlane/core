@@ -49,17 +49,17 @@ type JobTemplateHistory struct {
 	SystemOwned bool `json:"system_owned,omitempty"`
 	// the title of the job
 	Title string `json:"title,omitempty"`
-	// the description of the job
+	// the short description of the job and what it does
 	Description string `json:"description,omitempty"`
-	// the platform to use to execute this job
+	// the platform to use to execute this job, e.g. golang, typescript, python, etc.
 	Platform enums.JobPlatformType `json:"platform,omitempty"`
-	// Windmill path
+	// windmill path used to execute the job
 	WindmillPath string `json:"windmill_path,omitempty"`
 	// the url from where to download the script from
 	DownloadURL string `json:"download_url,omitempty"`
-	// the configuration to run this job
+	// the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
-	// cron syntax
+	// cron schedule to run the job, e.g. 0 0 * * *
 	Cron         *models.Cron `json:"cron,omitempty"`
 	selectValues sql.SelectValues
 }

@@ -3935,15 +3935,15 @@ type Control implements Node {
 		last: Int
 
 		"""
-		Ordering options for ControlScheduledJobs returned from the connection.
+		Ordering options for ScheduledJobs returned from the connection.
 		"""
-		orderBy: [ControlScheduledJobOrder!]
+		orderBy: [ScheduledJobOrder!]
 
 		"""
-		Filtering options for ControlScheduledJobs returned from the connection.
+		Filtering options for ScheduledJobs returned from the connection.
 		"""
-		where: ControlScheduledJobWhereInput
-	): ControlScheduledJobConnection!
+		where: ScheduledJobWhereInput
+	): ScheduledJobConnection!
 }
 """
 Return response for createBulkControl mutation
@@ -6746,606 +6746,6 @@ enum ControlOrderField {
 	ref_code
 	CONTROL_OWNER_name
 }
-type ControlScheduledJob implements Node {
-	id: ID!
-	createdAt: Time
-	updatedAt: Time
-	createdBy: String
-	updatedBy: String
-	"""
-	the organization id that owns the object
-	"""
-	ownerID: ID
-	"""
-	the scheduled_job id to take the script to run from
-	"""
-	jobID: ID!
-	"""
-	the configuration to run this job
-	"""
-	configuration: JobConfiguration
-	"""
-	cron syntax. If not provided, it would inherit the cron of the parent job
-	"""
-	cron: String
-	"""
-	the runner that this job will run on. If not set, it will scheduled on a general runner instead
-	"""
-	jobRunnerID: ID
-	owner: Organization
-	jobTemplate: JobTemplate!
-	controls(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Controls returned from the connection.
-		"""
-		orderBy: [ControlOrder!]
-
-		"""
-		Filtering options for Controls returned from the connection.
-		"""
-		where: ControlWhereInput
-	): ControlConnection!
-	subcontrols(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Subcontrols returned from the connection.
-		"""
-		orderBy: [SubcontrolOrder!]
-
-		"""
-		Filtering options for Subcontrols returned from the connection.
-		"""
-		where: SubcontrolWhereInput
-	): SubcontrolConnection!
-	jobRunner: JobRunner
-}
-"""
-Return response for createBulkControlScheduledJob mutation
-"""
-type ControlScheduledJobBulkCreatePayload {
-	"""
-	Created controlScheduledJobs
-	"""
-	controlScheduledJobs: [ControlScheduledJob!]
-}
-"""
-A connection to a list of items.
-"""
-type ControlScheduledJobConnection {
-	"""
-	A list of edges.
-	"""
-	edges: [ControlScheduledJobEdge]
-	"""
-	Information to aid in pagination.
-	"""
-	pageInfo: PageInfo!
-	"""
-	Identifies the total count of items in the connection.
-	"""
-	totalCount: Int!
-}
-"""
-Return response for createControlScheduledJob mutation
-"""
-type ControlScheduledJobCreatePayload {
-	"""
-	Created controlScheduledJob
-	"""
-	controlScheduledJob: ControlScheduledJob!
-}
-"""
-Return response for deleteControlScheduledJob mutation
-"""
-type ControlScheduledJobDeletePayload {
-	"""
-	Deleted controlScheduledJob ID
-	"""
-	deletedID: ID!
-}
-"""
-An edge in a connection.
-"""
-type ControlScheduledJobEdge {
-	"""
-	The item at the end of the edge.
-	"""
-	node: ControlScheduledJob
-	"""
-	A cursor for use in pagination.
-	"""
-	cursor: Cursor!
-}
-type ControlScheduledJobHistory implements Node {
-	id: ID!
-	historyTime: Time!
-	ref: String
-	operation: ControlScheduledJobHistoryOpType!
-	createdAt: Time
-	updatedAt: Time
-	createdBy: String
-	updatedBy: String
-	"""
-	the organization id that owns the object
-	"""
-	ownerID: String
-	"""
-	the scheduled_job id to take the script to run from
-	"""
-	jobID: String!
-	"""
-	the configuration to run this job
-	"""
-	configuration: JobConfiguration
-	"""
-	cron syntax. If not provided, it would inherit the cron of the parent job
-	"""
-	cron: String
-	"""
-	the runner that this job will run on. If not set, it will scheduled on a general runner instead
-	"""
-	jobRunnerID: String
-}
-"""
-A connection to a list of items.
-"""
-type ControlScheduledJobHistoryConnection {
-	"""
-	A list of edges.
-	"""
-	edges: [ControlScheduledJobHistoryEdge]
-	"""
-	Information to aid in pagination.
-	"""
-	pageInfo: PageInfo!
-	"""
-	Identifies the total count of items in the connection.
-	"""
-	totalCount: Int!
-}
-"""
-An edge in a connection.
-"""
-type ControlScheduledJobHistoryEdge {
-	"""
-	The item at the end of the edge.
-	"""
-	node: ControlScheduledJobHistory
-	"""
-	A cursor for use in pagination.
-	"""
-	cursor: Cursor!
-}
-"""
-ControlScheduledJobHistoryOpType is enum for the field operation
-"""
-enum ControlScheduledJobHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
-	INSERT
-	UPDATE
-	DELETE
-}
-"""
-Ordering options for ControlScheduledJobHistory connections
-"""
-input ControlScheduledJobHistoryOrder {
-	"""
-	The ordering direction.
-	"""
-	direction: OrderDirection! = ASC
-	"""
-	The field by which to order ControlScheduledJobHistories.
-	"""
-	field: ControlScheduledJobHistoryOrderField!
-}
-"""
-Properties by which ControlScheduledJobHistory connections can be ordered.
-"""
-enum ControlScheduledJobHistoryOrderField {
-	history_time
-	created_at
-	updated_at
-}
-"""
-ControlScheduledJobHistoryWhereInput is used for filtering ControlScheduledJobHistory objects.
-Input was generated by ent.
-"""
-input ControlScheduledJobHistoryWhereInput {
-	not: ControlScheduledJobHistoryWhereInput
-	and: [ControlScheduledJobHistoryWhereInput!]
-	or: [ControlScheduledJobHistoryWhereInput!]
-	"""
-	id field predicates
-	"""
-	id: ID
-	idNEQ: ID
-	idIn: [ID!]
-	idNotIn: [ID!]
-	idGT: ID
-	idGTE: ID
-	idLT: ID
-	idLTE: ID
-	idEqualFold: ID
-	idContainsFold: ID
-	"""
-	history_time field predicates
-	"""
-	historyTime: Time
-	historyTimeNEQ: Time
-	historyTimeIn: [Time!]
-	historyTimeNotIn: [Time!]
-	historyTimeGT: Time
-	historyTimeGTE: Time
-	historyTimeLT: Time
-	historyTimeLTE: Time
-	"""
-	ref field predicates
-	"""
-	ref: String
-	refNEQ: String
-	refIn: [String!]
-	refNotIn: [String!]
-	refGT: String
-	refGTE: String
-	refLT: String
-	refLTE: String
-	refContains: String
-	refHasPrefix: String
-	refHasSuffix: String
-	refIsNil: Boolean
-	refNotNil: Boolean
-	refEqualFold: String
-	refContainsFold: String
-	"""
-	operation field predicates
-	"""
-	operation: ControlScheduledJobHistoryOpType
-	operationNEQ: ControlScheduledJobHistoryOpType
-	operationIn: [ControlScheduledJobHistoryOpType!]
-	operationNotIn: [ControlScheduledJobHistoryOpType!]
-	"""
-	created_at field predicates
-	"""
-	createdAt: Time
-	createdAtNEQ: Time
-	createdAtIn: [Time!]
-	createdAtNotIn: [Time!]
-	createdAtGT: Time
-	createdAtGTE: Time
-	createdAtLT: Time
-	createdAtLTE: Time
-	createdAtIsNil: Boolean
-	createdAtNotNil: Boolean
-	"""
-	updated_at field predicates
-	"""
-	updatedAt: Time
-	updatedAtNEQ: Time
-	updatedAtIn: [Time!]
-	updatedAtNotIn: [Time!]
-	updatedAtGT: Time
-	updatedAtGTE: Time
-	updatedAtLT: Time
-	updatedAtLTE: Time
-	updatedAtIsNil: Boolean
-	updatedAtNotNil: Boolean
-	"""
-	created_by field predicates
-	"""
-	createdBy: String
-	createdByNEQ: String
-	createdByIn: [String!]
-	createdByNotIn: [String!]
-	createdByGT: String
-	createdByGTE: String
-	createdByLT: String
-	createdByLTE: String
-	createdByContains: String
-	createdByHasPrefix: String
-	createdByHasSuffix: String
-	createdByIsNil: Boolean
-	createdByNotNil: Boolean
-	createdByEqualFold: String
-	createdByContainsFold: String
-	"""
-	updated_by field predicates
-	"""
-	updatedBy: String
-	updatedByNEQ: String
-	updatedByIn: [String!]
-	updatedByNotIn: [String!]
-	updatedByGT: String
-	updatedByGTE: String
-	updatedByLT: String
-	updatedByLTE: String
-	updatedByContains: String
-	updatedByHasPrefix: String
-	updatedByHasSuffix: String
-	updatedByIsNil: Boolean
-	updatedByNotNil: Boolean
-	updatedByEqualFold: String
-	updatedByContainsFold: String
-	"""
-	owner_id field predicates
-	"""
-	ownerID: String
-	ownerIDNEQ: String
-	ownerIDIn: [String!]
-	ownerIDNotIn: [String!]
-	ownerIDGT: String
-	ownerIDGTE: String
-	ownerIDLT: String
-	ownerIDLTE: String
-	ownerIDContains: String
-	ownerIDHasPrefix: String
-	ownerIDHasSuffix: String
-	ownerIDIsNil: Boolean
-	ownerIDNotNil: Boolean
-	ownerIDEqualFold: String
-	ownerIDContainsFold: String
-	"""
-	job_id field predicates
-	"""
-	jobID: String
-	jobIDNEQ: String
-	jobIDIn: [String!]
-	jobIDNotIn: [String!]
-	jobIDGT: String
-	jobIDGTE: String
-	jobIDLT: String
-	jobIDLTE: String
-	jobIDContains: String
-	jobIDHasPrefix: String
-	jobIDHasSuffix: String
-	jobIDEqualFold: String
-	jobIDContainsFold: String
-	"""
-	job_runner_id field predicates
-	"""
-	jobRunnerID: String
-	jobRunnerIDNEQ: String
-	jobRunnerIDIn: [String!]
-	jobRunnerIDNotIn: [String!]
-	jobRunnerIDGT: String
-	jobRunnerIDGTE: String
-	jobRunnerIDLT: String
-	jobRunnerIDLTE: String
-	jobRunnerIDContains: String
-	jobRunnerIDHasPrefix: String
-	jobRunnerIDHasSuffix: String
-	jobRunnerIDIsNil: Boolean
-	jobRunnerIDNotNil: Boolean
-	jobRunnerIDEqualFold: String
-	jobRunnerIDContainsFold: String
-}
-"""
-Ordering options for ControlScheduledJob connections
-"""
-input ControlScheduledJobOrder {
-	"""
-	The ordering direction.
-	"""
-	direction: OrderDirection! = ASC
-	"""
-	The field by which to order ControlScheduledJobs.
-	"""
-	field: ControlScheduledJobOrderField!
-}
-"""
-Properties by which ControlScheduledJob connections can be ordered.
-"""
-enum ControlScheduledJobOrderField {
-	created_at
-	updated_at
-}
-"""
-Return response for updateControlScheduledJob mutation
-"""
-type ControlScheduledJobUpdatePayload {
-	"""
-	Updated controlScheduledJob
-	"""
-	controlScheduledJob: ControlScheduledJob!
-}
-"""
-ControlScheduledJobWhereInput is used for filtering ControlScheduledJob objects.
-Input was generated by ent.
-"""
-input ControlScheduledJobWhereInput {
-	not: ControlScheduledJobWhereInput
-	and: [ControlScheduledJobWhereInput!]
-	or: [ControlScheduledJobWhereInput!]
-	"""
-	id field predicates
-	"""
-	id: ID
-	idNEQ: ID
-	idIn: [ID!]
-	idNotIn: [ID!]
-	idGT: ID
-	idGTE: ID
-	idLT: ID
-	idLTE: ID
-	idEqualFold: ID
-	idContainsFold: ID
-	"""
-	created_at field predicates
-	"""
-	createdAt: Time
-	createdAtNEQ: Time
-	createdAtIn: [Time!]
-	createdAtNotIn: [Time!]
-	createdAtGT: Time
-	createdAtGTE: Time
-	createdAtLT: Time
-	createdAtLTE: Time
-	createdAtIsNil: Boolean
-	createdAtNotNil: Boolean
-	"""
-	updated_at field predicates
-	"""
-	updatedAt: Time
-	updatedAtNEQ: Time
-	updatedAtIn: [Time!]
-	updatedAtNotIn: [Time!]
-	updatedAtGT: Time
-	updatedAtGTE: Time
-	updatedAtLT: Time
-	updatedAtLTE: Time
-	updatedAtIsNil: Boolean
-	updatedAtNotNil: Boolean
-	"""
-	created_by field predicates
-	"""
-	createdBy: String
-	createdByNEQ: String
-	createdByIn: [String!]
-	createdByNotIn: [String!]
-	createdByGT: String
-	createdByGTE: String
-	createdByLT: String
-	createdByLTE: String
-	createdByContains: String
-	createdByHasPrefix: String
-	createdByHasSuffix: String
-	createdByIsNil: Boolean
-	createdByNotNil: Boolean
-	createdByEqualFold: String
-	createdByContainsFold: String
-	"""
-	updated_by field predicates
-	"""
-	updatedBy: String
-	updatedByNEQ: String
-	updatedByIn: [String!]
-	updatedByNotIn: [String!]
-	updatedByGT: String
-	updatedByGTE: String
-	updatedByLT: String
-	updatedByLTE: String
-	updatedByContains: String
-	updatedByHasPrefix: String
-	updatedByHasSuffix: String
-	updatedByIsNil: Boolean
-	updatedByNotNil: Boolean
-	updatedByEqualFold: String
-	updatedByContainsFold: String
-	"""
-	owner_id field predicates
-	"""
-	ownerID: ID
-	ownerIDNEQ: ID
-	ownerIDIn: [ID!]
-	ownerIDNotIn: [ID!]
-	ownerIDGT: ID
-	ownerIDGTE: ID
-	ownerIDLT: ID
-	ownerIDLTE: ID
-	ownerIDContains: ID
-	ownerIDHasPrefix: ID
-	ownerIDHasSuffix: ID
-	ownerIDIsNil: Boolean
-	ownerIDNotNil: Boolean
-	ownerIDEqualFold: ID
-	ownerIDContainsFold: ID
-	"""
-	job_id field predicates
-	"""
-	jobID: ID
-	jobIDNEQ: ID
-	jobIDIn: [ID!]
-	jobIDNotIn: [ID!]
-	jobIDGT: ID
-	jobIDGTE: ID
-	jobIDLT: ID
-	jobIDLTE: ID
-	jobIDContains: ID
-	jobIDHasPrefix: ID
-	jobIDHasSuffix: ID
-	jobIDEqualFold: ID
-	jobIDContainsFold: ID
-	"""
-	job_runner_id field predicates
-	"""
-	jobRunnerID: ID
-	jobRunnerIDNEQ: ID
-	jobRunnerIDIn: [ID!]
-	jobRunnerIDNotIn: [ID!]
-	jobRunnerIDGT: ID
-	jobRunnerIDGTE: ID
-	jobRunnerIDLT: ID
-	jobRunnerIDLTE: ID
-	jobRunnerIDContains: ID
-	jobRunnerIDHasPrefix: ID
-	jobRunnerIDHasSuffix: ID
-	jobRunnerIDIsNil: Boolean
-	jobRunnerIDNotNil: Boolean
-	jobRunnerIDEqualFold: ID
-	jobRunnerIDContainsFold: ID
-	"""
-	owner edge predicates
-	"""
-	hasOwner: Boolean
-	hasOwnerWith: [OrganizationWhereInput!]
-	"""
-	job_template edge predicates
-	"""
-	hasJobTemplate: Boolean
-	hasJobTemplateWith: [JobTemplateWhereInput!]
-	"""
-	controls edge predicates
-	"""
-	hasControls: Boolean
-	hasControlsWith: [ControlWhereInput!]
-	"""
-	subcontrols edge predicates
-	"""
-	hasSubcontrols: Boolean
-	hasSubcontrolsWith: [SubcontrolWhereInput!]
-	"""
-	job_runner edge predicates
-	"""
-	hasJobRunner: Boolean
-	hasJobRunnerWith: [JobRunnerWhereInput!]
-}
 """
 Return response for updateControl mutation
 """
@@ -7794,7 +7194,7 @@ input ControlWhereInput {
 	scheduled_jobs edge predicates
 	"""
 	hasScheduledJobs: Boolean
-	hasScheduledJobsWith: [ControlScheduledJobWhereInput!]
+	hasScheduledJobsWith: [ScheduledJobWhereInput!]
 }
 """
 CreateAPITokenInput is used for create APIToken object.
@@ -8201,25 +7601,6 @@ input CreateControlObjectiveInput {
 	riskIDs: [ID!]
 	narrativeIDs: [ID!]
 	taskIDs: [ID!]
-}
-"""
-CreateControlScheduledJobInput is used for create ControlScheduledJob object.
-Input was generated by ent.
-"""
-input CreateControlScheduledJobInput {
-	"""
-	the configuration to run this job
-	"""
-	configuration: JobConfiguration
-	"""
-	cron syntax. If not provided, it would inherit the cron of the parent job
-	"""
-	cron: String
-	ownerID: ID
-	jobTemplateID: ID!
-	controlIDs: [ID!]
-	subcontrolIDs: [ID!]
-	jobRunnerID: ID
 }
 input CreateControlWithSubcontrolsInput {
 	control: CreateControlInput
@@ -8903,11 +8284,11 @@ input CreateJobTemplateInput {
 	"""
 	title: String!
 	"""
-	the description of the job
+	the short description of the job and what it does
 	"""
 	description: String
 	"""
-	the platform to use to execute this job
+	the platform to use to execute this job, e.g. golang, typescript, python, etc.
 	"""
 	platform: JobTemplateJobPlatformType!
 	"""
@@ -8915,11 +8296,7 @@ input CreateJobTemplateInput {
 	"""
 	downloadURL: String!
 	"""
-	the configuration to run this job
-	"""
-	configuration: JobConfiguration
-	"""
-	cron syntax
+	cron schedule to run the job, e.g. 0 0 * * *
 	"""
 	cron: String
 	ownerID: ID
@@ -9541,6 +8918,25 @@ input CreateScanInput {
 	viewerIDs: [ID!]
 	assetIDs: [ID!]
 	entityIDs: [ID!]
+}
+"""
+CreateScheduledJobInput is used for create ScheduledJob object.
+Input was generated by ent.
+"""
+input CreateScheduledJobInput {
+	"""
+	the configuration to run this job
+	"""
+	configuration: JobConfiguration
+	"""
+	cron syntax. If not provided, it would inherit the cron of the parent job
+	"""
+	cron: String
+	ownerID: ID
+	jobTemplateID: ID!
+	controlIDs: [ID!]
+	subcontrolIDs: [ID!]
+	jobRunnerID: ID
 }
 """
 CreateScheduledJobRunInput is used for create ScheduledJobRun object.
@@ -22565,7 +21961,7 @@ type JobResult implements Node {
 	startedAt: Time!
 	fileID: ID!
 	owner: Organization
-	scheduledJob: ControlScheduledJob!
+	scheduledJob: ScheduledJob!
 	file: File!
 }
 """
@@ -22813,7 +22209,7 @@ input JobResultWhereInput {
 	scheduled_job edge predicates
 	"""
 	hasScheduledJob: Boolean
-	hasScheduledJobWith: [ControlScheduledJobWhereInput!]
+	hasScheduledJobWith: [ScheduledJobWhereInput!]
 	"""
 	file edge predicates
 	"""
@@ -23754,27 +23150,19 @@ type JobTemplate implements Node {
 	"""
 	title: String!
 	"""
-	the description of the job
+	the short description of the job and what it does
 	"""
 	description: String
 	"""
-	the platform to use to execute this job
+	the platform to use to execute this job, e.g. golang, typescript, python, etc.
 	"""
 	platform: JobTemplateJobPlatformType!
-	"""
-	Windmill path
-	"""
-	windmillPath: String!
 	"""
 	the url from where to download the script from
 	"""
 	downloadURL: String!
 	"""
-	the configuration to run this job
-	"""
-	configuration: JobConfiguration
-	"""
-	cron syntax
+	cron schedule to run the job, e.g. 0 0 * * *
 	"""
 	cron: String
 	owner: Organization
@@ -23866,27 +23254,19 @@ type JobTemplateHistory implements Node {
 	"""
 	title: String!
 	"""
-	the description of the job
+	the short description of the job and what it does
 	"""
 	description: String
 	"""
-	the platform to use to execute this job
+	the platform to use to execute this job, e.g. golang, typescript, python, etc.
 	"""
 	platform: JobTemplateHistoryJobPlatformType!
-	"""
-	Windmill path
-	"""
-	windmillPath: String!
 	"""
 	the url from where to download the script from
 	"""
 	downloadURL: String!
 	"""
-	the configuration to run this job
-	"""
-	configuration: JobConfiguration
-	"""
-	cron syntax
+	cron schedule to run the job, e.g. 0 0 * * *
 	"""
 	cron: String
 }
@@ -23956,7 +23336,7 @@ enum JobTemplateHistoryOrderField {
 	created_at
 	updated_at
 	title
-	platform
+	PLATFORM
 }
 """
 JobTemplateHistoryWhereInput is used for filtering JobTemplateHistory objects.
@@ -24187,7 +23567,7 @@ enum JobTemplateOrderField {
 	created_at
 	updated_at
 	title
-	platform
+	PLATFORM
 }
 """
 Return response for updateJobTemplate mutation
@@ -26027,56 +25407,6 @@ type Mutation {
 		id: ID!
 	): ControlObjectiveDeletePayload!
 	"""
-	Create a new controlScheduledJob
-	"""
-	createControlScheduledJob(
-		"""
-		values of the controlScheduledJob
-		"""
-		input: CreateControlScheduledJobInput!
-	): ControlScheduledJobCreatePayload!
-	"""
-	Create multiple new controlScheduledJobs
-	"""
-	createBulkControlScheduledJob(
-		"""
-		values of the controlScheduledJob
-		"""
-		input: [CreateControlScheduledJobInput!]
-	): ControlScheduledJobBulkCreatePayload!
-	"""
-	Create multiple new controlScheduledJobs via file upload
-	"""
-	createBulkCSVControlScheduledJob(
-		"""
-		csv file containing values of the controlScheduledJob
-		"""
-		input: Upload!
-	): ControlScheduledJobBulkCreatePayload!
-	"""
-	Update an existing controlScheduledJob
-	"""
-	updateControlScheduledJob(
-		"""
-		ID of the controlScheduledJob
-		"""
-		id: ID!
-
-		"""
-		New values for the controlScheduledJob
-		"""
-		input: UpdateControlScheduledJobInput!
-	): ControlScheduledJobUpdatePayload!
-	"""
-	Delete an existing controlScheduledJob
-	"""
-	deleteControlScheduledJob(
-		"""
-		ID of the controlScheduledJob
-		"""
-		id: ID!
-	): ControlScheduledJobDeletePayload!
-	"""
 	Create a new customDomain
 	"""
 	createCustomDomain(
@@ -27600,6 +26930,56 @@ type Mutation {
 		"""
 		id: ID!
 	): ScanDeletePayload!
+	"""
+	Create a new scheduledJob
+	"""
+	createScheduledJob(
+		"""
+		values of the scheduledJob
+		"""
+		input: CreateScheduledJobInput!
+	): ScheduledJobCreatePayload!
+	"""
+	Create multiple new scheduledJobs
+	"""
+	createBulkScheduledJob(
+		"""
+		values of the scheduledJob
+		"""
+		input: [CreateScheduledJobInput!]
+	): ScheduledJobBulkCreatePayload!
+	"""
+	Create multiple new scheduledJobs via file upload
+	"""
+	createBulkCSVScheduledJob(
+		"""
+		csv file containing values of the scheduledJob
+		"""
+		input: Upload!
+	): ScheduledJobBulkCreatePayload!
+	"""
+	Update an existing scheduledJob
+	"""
+	updateScheduledJob(
+		"""
+		ID of the scheduledJob
+		"""
+		id: ID!
+
+		"""
+		New values for the scheduledJob
+		"""
+		input: UpdateScheduledJobInput!
+	): ScheduledJobUpdatePayload!
+	"""
+	Delete an existing scheduledJob
+	"""
+	deleteScheduledJob(
+		"""
+		ID of the scheduledJob
+		"""
+		id: ID!
+	): ScheduledJobDeletePayload!
 	"""
 	Create a new standard
 	"""
@@ -32582,15 +31962,15 @@ type Organization implements Node {
 		last: Int
 
 		"""
-		Ordering options for ControlScheduledJobs returned from the connection.
+		Ordering options for ScheduledJobs returned from the connection.
 		"""
-		orderBy: [ControlScheduledJobOrder!]
+		orderBy: [ScheduledJobOrder!]
 
 		"""
-		Filtering options for ControlScheduledJobs returned from the connection.
+		Filtering options for ScheduledJobs returned from the connection.
 		"""
-		where: ControlScheduledJobWhereInput
-	): ControlScheduledJobConnection!
+		where: ScheduledJobWhereInput
+	): ScheduledJobConnection!
 	jobResults(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -34747,7 +34127,7 @@ input OrganizationWhereInput {
 	scheduled_jobs edge predicates
 	"""
 	hasScheduledJobs: Boolean
-	hasScheduledJobsWith: [ControlScheduledJobWhereInput!]
+	hasScheduledJobsWith: [ScheduledJobWhereInput!]
 	"""
 	job_results edge predicates
 	"""
@@ -38904,68 +38284,6 @@ type Query {
 		"""
 		where: ControlObjectiveHistoryWhereInput
 	): ControlObjectiveHistoryConnection!
-	controlScheduledJobs(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for ControlScheduledJobs returned from the connection.
-		"""
-		orderBy: [ControlScheduledJobOrder!]
-
-		"""
-		Filtering options for ControlScheduledJobs returned from the connection.
-		"""
-		where: ControlScheduledJobWhereInput
-	): ControlScheduledJobConnection!
-	controlScheduledJobHistories(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for ControlScheduledJobHistories returned from the connection.
-		"""
-		orderBy: ControlScheduledJobHistoryOrder
-
-		"""
-		Filtering options for ControlScheduledJobHistories returned from the connection.
-		"""
-		where: ControlScheduledJobHistoryWhereInput
-	): ControlScheduledJobHistoryConnection!
 	customDomains(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -40888,6 +40206,68 @@ type Query {
 		"""
 		where: ScanHistoryWhereInput
 	): ScanHistoryConnection!
+	scheduledJobs(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for ScheduledJobs returned from the connection.
+		"""
+		orderBy: [ScheduledJobOrder!]
+
+		"""
+		Filtering options for ScheduledJobs returned from the connection.
+		"""
+		where: ScheduledJobWhereInput
+	): ScheduledJobConnection!
+	scheduledJobHistories(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for ScheduledJobHistories returned from the connection.
+		"""
+		orderBy: ScheduledJobHistoryOrder
+
+		"""
+		Filtering options for ScheduledJobHistories returned from the connection.
+		"""
+		where: ScheduledJobHistoryWhereInput
+	): ScheduledJobHistoryConnection!
 	scheduledJobRuns(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -42690,6 +42070,35 @@ type Query {
 		last: Int
 	): ScanConnection
 	"""
+	Search across ScheduledJob objects
+	"""
+	adminScheduledJobSearch(
+		"""
+		Query string to search across objects
+		"""
+		query: String!
+
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+	): ScheduledJobConnection
+	"""
 	Search across Standard objects
 	"""
 	adminStandardSearch(
@@ -43169,15 +42578,6 @@ type Query {
 		id: ID!
 	): ControlObjective!
 	"""
-	Look up controlScheduledJob by ID
-	"""
-	controlScheduledJob(
-		"""
-		ID of the controlScheduledJob
-		"""
-		id: ID!
-	): ControlScheduledJob!
-	"""
 	Look up customDomain by ID
 	"""
 	customDomain(
@@ -43492,6 +42892,15 @@ type Query {
 		"""
 		id: ID!
 	): Scan!
+	"""
+	Look up scheduledJob by ID
+	"""
+	scheduledJob(
+		"""
+		ID of the scheduledJob
+		"""
+		id: ID!
+	): ScheduledJob!
 	"""
 	Look up scheduledJobRun by ID
 	"""
@@ -44487,6 +43896,35 @@ type Query {
 		"""
 		last: Int
 	): ScanConnection
+	"""
+	Search across ScheduledJob objects
+	"""
+	scheduledJobSearch(
+		"""
+		Query string to search across objects
+		"""
+		query: String!
+
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+	): ScheduledJobConnection
 	"""
 	Search across Standard objects
 	"""
@@ -47211,6 +46649,460 @@ input ScanWhereInput {
 	hasEntities: Boolean
 	hasEntitiesWith: [EntityWhereInput!]
 }
+type ScheduledJob implements Node {
+	id: ID!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	"""
+	a shortened prefixed id field to use as a human readable identifier
+	"""
+	displayID: String!
+	"""
+	the organization id that owns the object
+	"""
+	ownerID: ID
+	"""
+	the scheduled_job id to take the script to run from
+	"""
+	jobID: ID!
+	"""
+	the configuration to run this job
+	"""
+	configuration: JobConfiguration
+	"""
+	cron syntax. If not provided, it would inherit the cron of the parent job
+	"""
+	cron: String
+	"""
+	the runner that this job will run on. If not set, it will scheduled on a general runner instead
+	"""
+	jobRunnerID: ID
+	owner: Organization
+	jobTemplate: JobTemplate!
+	controls(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Controls returned from the connection.
+		"""
+		orderBy: [ControlOrder!]
+
+		"""
+		Filtering options for Controls returned from the connection.
+		"""
+		where: ControlWhereInput
+	): ControlConnection!
+	subcontrols(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Subcontrols returned from the connection.
+		"""
+		orderBy: [SubcontrolOrder!]
+
+		"""
+		Filtering options for Subcontrols returned from the connection.
+		"""
+		where: SubcontrolWhereInput
+	): SubcontrolConnection!
+	jobRunner: JobRunner
+}
+"""
+Return response for createBulkScheduledJob mutation
+"""
+type ScheduledJobBulkCreatePayload {
+	"""
+	Created scheduledJobs
+	"""
+	scheduledJobs: [ScheduledJob!]
+}
+"""
+A connection to a list of items.
+"""
+type ScheduledJobConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [ScheduledJobEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+Return response for createScheduledJob mutation
+"""
+type ScheduledJobCreatePayload {
+	"""
+	Created scheduledJob
+	"""
+	scheduledJob: ScheduledJob!
+}
+"""
+Return response for deleteScheduledJob mutation
+"""
+type ScheduledJobDeletePayload {
+	"""
+	Deleted scheduledJob ID
+	"""
+	deletedID: ID!
+}
+"""
+An edge in a connection.
+"""
+type ScheduledJobEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: ScheduledJob
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+type ScheduledJobHistory implements Node {
+	id: ID!
+	historyTime: Time!
+	ref: String
+	operation: ScheduledJobHistoryOpType!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	"""
+	a shortened prefixed id field to use as a human readable identifier
+	"""
+	displayID: String!
+	"""
+	the organization id that owns the object
+	"""
+	ownerID: String
+	"""
+	the scheduled_job id to take the script to run from
+	"""
+	jobID: String!
+	"""
+	the configuration to run this job
+	"""
+	configuration: JobConfiguration
+	"""
+	cron syntax. If not provided, it would inherit the cron of the parent job
+	"""
+	cron: String
+	"""
+	the runner that this job will run on. If not set, it will scheduled on a general runner instead
+	"""
+	jobRunnerID: String
+}
+"""
+A connection to a list of items.
+"""
+type ScheduledJobHistoryConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [ScheduledJobHistoryEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ScheduledJobHistoryEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: ScheduledJobHistory
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+"""
+ScheduledJobHistoryOpType is enum for the field operation
+"""
+enum ScheduledJobHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+	INSERT
+	UPDATE
+	DELETE
+}
+"""
+Ordering options for ScheduledJobHistory connections
+"""
+input ScheduledJobHistoryOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order ScheduledJobHistories.
+	"""
+	field: ScheduledJobHistoryOrderField!
+}
+"""
+Properties by which ScheduledJobHistory connections can be ordered.
+"""
+enum ScheduledJobHistoryOrderField {
+	history_time
+	created_at
+	updated_at
+}
+"""
+ScheduledJobHistoryWhereInput is used for filtering ScheduledJobHistory objects.
+Input was generated by ent.
+"""
+input ScheduledJobHistoryWhereInput {
+	not: ScheduledJobHistoryWhereInput
+	and: [ScheduledJobHistoryWhereInput!]
+	or: [ScheduledJobHistoryWhereInput!]
+	"""
+	id field predicates
+	"""
+	id: ID
+	idNEQ: ID
+	idIn: [ID!]
+	idNotIn: [ID!]
+	idGT: ID
+	idGTE: ID
+	idLT: ID
+	idLTE: ID
+	idEqualFold: ID
+	idContainsFold: ID
+	"""
+	history_time field predicates
+	"""
+	historyTime: Time
+	historyTimeNEQ: Time
+	historyTimeIn: [Time!]
+	historyTimeNotIn: [Time!]
+	historyTimeGT: Time
+	historyTimeGTE: Time
+	historyTimeLT: Time
+	historyTimeLTE: Time
+	"""
+	ref field predicates
+	"""
+	ref: String
+	refNEQ: String
+	refIn: [String!]
+	refNotIn: [String!]
+	refGT: String
+	refGTE: String
+	refLT: String
+	refLTE: String
+	refContains: String
+	refHasPrefix: String
+	refHasSuffix: String
+	refIsNil: Boolean
+	refNotNil: Boolean
+	refEqualFold: String
+	refContainsFold: String
+	"""
+	operation field predicates
+	"""
+	operation: ScheduledJobHistoryOpType
+	operationNEQ: ScheduledJobHistoryOpType
+	operationIn: [ScheduledJobHistoryOpType!]
+	operationNotIn: [ScheduledJobHistoryOpType!]
+	"""
+	created_at field predicates
+	"""
+	createdAt: Time
+	createdAtNEQ: Time
+	createdAtIn: [Time!]
+	createdAtNotIn: [Time!]
+	createdAtGT: Time
+	createdAtGTE: Time
+	createdAtLT: Time
+	createdAtLTE: Time
+	createdAtIsNil: Boolean
+	createdAtNotNil: Boolean
+	"""
+	updated_at field predicates
+	"""
+	updatedAt: Time
+	updatedAtNEQ: Time
+	updatedAtIn: [Time!]
+	updatedAtNotIn: [Time!]
+	updatedAtGT: Time
+	updatedAtGTE: Time
+	updatedAtLT: Time
+	updatedAtLTE: Time
+	updatedAtIsNil: Boolean
+	updatedAtNotNil: Boolean
+	"""
+	created_by field predicates
+	"""
+	createdBy: String
+	createdByNEQ: String
+	createdByIn: [String!]
+	createdByNotIn: [String!]
+	createdByGT: String
+	createdByGTE: String
+	createdByLT: String
+	createdByLTE: String
+	createdByContains: String
+	createdByHasPrefix: String
+	createdByHasSuffix: String
+	createdByIsNil: Boolean
+	createdByNotNil: Boolean
+	createdByEqualFold: String
+	createdByContainsFold: String
+	"""
+	updated_by field predicates
+	"""
+	updatedBy: String
+	updatedByNEQ: String
+	updatedByIn: [String!]
+	updatedByNotIn: [String!]
+	updatedByGT: String
+	updatedByGTE: String
+	updatedByLT: String
+	updatedByLTE: String
+	updatedByContains: String
+	updatedByHasPrefix: String
+	updatedByHasSuffix: String
+	updatedByIsNil: Boolean
+	updatedByNotNil: Boolean
+	updatedByEqualFold: String
+	updatedByContainsFold: String
+	"""
+	display_id field predicates
+	"""
+	displayID: String
+	displayIDNEQ: String
+	displayIDIn: [String!]
+	displayIDNotIn: [String!]
+	displayIDGT: String
+	displayIDGTE: String
+	displayIDLT: String
+	displayIDLTE: String
+	displayIDContains: String
+	displayIDHasPrefix: String
+	displayIDHasSuffix: String
+	displayIDEqualFold: String
+	displayIDContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: String
+	ownerIDNEQ: String
+	ownerIDIn: [String!]
+	ownerIDNotIn: [String!]
+	ownerIDGT: String
+	ownerIDGTE: String
+	ownerIDLT: String
+	ownerIDLTE: String
+	ownerIDContains: String
+	ownerIDHasPrefix: String
+	ownerIDHasSuffix: String
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: String
+	ownerIDContainsFold: String
+	"""
+	job_id field predicates
+	"""
+	jobID: String
+	jobIDNEQ: String
+	jobIDIn: [String!]
+	jobIDNotIn: [String!]
+	jobIDGT: String
+	jobIDGTE: String
+	jobIDLT: String
+	jobIDLTE: String
+	jobIDContains: String
+	jobIDHasPrefix: String
+	jobIDHasSuffix: String
+	jobIDEqualFold: String
+	jobIDContainsFold: String
+	"""
+	job_runner_id field predicates
+	"""
+	jobRunnerID: String
+	jobRunnerIDNEQ: String
+	jobRunnerIDIn: [String!]
+	jobRunnerIDNotIn: [String!]
+	jobRunnerIDGT: String
+	jobRunnerIDGTE: String
+	jobRunnerIDLT: String
+	jobRunnerIDLTE: String
+	jobRunnerIDContains: String
+	jobRunnerIDHasPrefix: String
+	jobRunnerIDHasSuffix: String
+	jobRunnerIDIsNil: Boolean
+	jobRunnerIDNotNil: Boolean
+	jobRunnerIDEqualFold: String
+	jobRunnerIDContainsFold: String
+}
+"""
+Ordering options for ScheduledJob connections
+"""
+input ScheduledJobOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order ScheduledJobs.
+	"""
+	field: ScheduledJobOrderField!
+}
+"""
+Properties by which ScheduledJob connections can be ordered.
+"""
+enum ScheduledJobOrderField {
+	created_at
+	updated_at
+}
 type ScheduledJobRun implements Node {
 	id: ID!
 	createdAt: Time
@@ -47244,7 +47136,7 @@ type ScheduledJobRun implements Node {
 	"""
 	script: String!
 	owner: Organization
-	scheduledJob: ControlScheduledJob!
+	scheduledJob: ScheduledJob!
 	jobRunner: JobRunner!
 }
 """
@@ -47480,7 +47372,193 @@ input ScheduledJobRunWhereInput {
 	scheduled_job edge predicates
 	"""
 	hasScheduledJob: Boolean
-	hasScheduledJobWith: [ControlScheduledJobWhereInput!]
+	hasScheduledJobWith: [ScheduledJobWhereInput!]
+	"""
+	job_runner edge predicates
+	"""
+	hasJobRunner: Boolean
+	hasJobRunnerWith: [JobRunnerWhereInput!]
+}
+"""
+Return response for updateScheduledJob mutation
+"""
+type ScheduledJobUpdatePayload {
+	"""
+	Updated scheduledJob
+	"""
+	scheduledJob: ScheduledJob!
+}
+"""
+ScheduledJobWhereInput is used for filtering ScheduledJob objects.
+Input was generated by ent.
+"""
+input ScheduledJobWhereInput {
+	not: ScheduledJobWhereInput
+	and: [ScheduledJobWhereInput!]
+	or: [ScheduledJobWhereInput!]
+	"""
+	id field predicates
+	"""
+	id: ID
+	idNEQ: ID
+	idIn: [ID!]
+	idNotIn: [ID!]
+	idGT: ID
+	idGTE: ID
+	idLT: ID
+	idLTE: ID
+	idEqualFold: ID
+	idContainsFold: ID
+	"""
+	created_at field predicates
+	"""
+	createdAt: Time
+	createdAtNEQ: Time
+	createdAtIn: [Time!]
+	createdAtNotIn: [Time!]
+	createdAtGT: Time
+	createdAtGTE: Time
+	createdAtLT: Time
+	createdAtLTE: Time
+	createdAtIsNil: Boolean
+	createdAtNotNil: Boolean
+	"""
+	updated_at field predicates
+	"""
+	updatedAt: Time
+	updatedAtNEQ: Time
+	updatedAtIn: [Time!]
+	updatedAtNotIn: [Time!]
+	updatedAtGT: Time
+	updatedAtGTE: Time
+	updatedAtLT: Time
+	updatedAtLTE: Time
+	updatedAtIsNil: Boolean
+	updatedAtNotNil: Boolean
+	"""
+	created_by field predicates
+	"""
+	createdBy: String
+	createdByNEQ: String
+	createdByIn: [String!]
+	createdByNotIn: [String!]
+	createdByGT: String
+	createdByGTE: String
+	createdByLT: String
+	createdByLTE: String
+	createdByContains: String
+	createdByHasPrefix: String
+	createdByHasSuffix: String
+	createdByIsNil: Boolean
+	createdByNotNil: Boolean
+	createdByEqualFold: String
+	createdByContainsFold: String
+	"""
+	updated_by field predicates
+	"""
+	updatedBy: String
+	updatedByNEQ: String
+	updatedByIn: [String!]
+	updatedByNotIn: [String!]
+	updatedByGT: String
+	updatedByGTE: String
+	updatedByLT: String
+	updatedByLTE: String
+	updatedByContains: String
+	updatedByHasPrefix: String
+	updatedByHasSuffix: String
+	updatedByIsNil: Boolean
+	updatedByNotNil: Boolean
+	updatedByEqualFold: String
+	updatedByContainsFold: String
+	"""
+	display_id field predicates
+	"""
+	displayID: String
+	displayIDNEQ: String
+	displayIDIn: [String!]
+	displayIDNotIn: [String!]
+	displayIDGT: String
+	displayIDGTE: String
+	displayIDLT: String
+	displayIDLTE: String
+	displayIDContains: String
+	displayIDHasPrefix: String
+	displayIDHasSuffix: String
+	displayIDEqualFold: String
+	displayIDContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: ID
+	ownerIDNEQ: ID
+	ownerIDIn: [ID!]
+	ownerIDNotIn: [ID!]
+	ownerIDGT: ID
+	ownerIDGTE: ID
+	ownerIDLT: ID
+	ownerIDLTE: ID
+	ownerIDContains: ID
+	ownerIDHasPrefix: ID
+	ownerIDHasSuffix: ID
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: ID
+	ownerIDContainsFold: ID
+	"""
+	job_id field predicates
+	"""
+	jobID: ID
+	jobIDNEQ: ID
+	jobIDIn: [ID!]
+	jobIDNotIn: [ID!]
+	jobIDGT: ID
+	jobIDGTE: ID
+	jobIDLT: ID
+	jobIDLTE: ID
+	jobIDContains: ID
+	jobIDHasPrefix: ID
+	jobIDHasSuffix: ID
+	jobIDEqualFold: ID
+	jobIDContainsFold: ID
+	"""
+	job_runner_id field predicates
+	"""
+	jobRunnerID: ID
+	jobRunnerIDNEQ: ID
+	jobRunnerIDIn: [ID!]
+	jobRunnerIDNotIn: [ID!]
+	jobRunnerIDGT: ID
+	jobRunnerIDGTE: ID
+	jobRunnerIDLT: ID
+	jobRunnerIDLTE: ID
+	jobRunnerIDContains: ID
+	jobRunnerIDHasPrefix: ID
+	jobRunnerIDHasSuffix: ID
+	jobRunnerIDIsNil: Boolean
+	jobRunnerIDNotNil: Boolean
+	jobRunnerIDEqualFold: ID
+	jobRunnerIDContainsFold: ID
+	"""
+	owner edge predicates
+	"""
+	hasOwner: Boolean
+	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	job_template edge predicates
+	"""
+	hasJobTemplate: Boolean
+	hasJobTemplateWith: [JobTemplateWhereInput!]
+	"""
+	controls edge predicates
+	"""
+	hasControls: Boolean
+	hasControlsWith: [ControlWhereInput!]
+	"""
+	subcontrols edge predicates
+	"""
+	hasSubcontrols: Boolean
+	hasSubcontrolsWith: [SubcontrolWhereInput!]
 	"""
 	job_runner edge predicates
 	"""
@@ -47530,6 +47608,7 @@ type SearchResults {
 	programs: ProgramConnection
 	risks: RiskConnection
 	scans: ScanConnection
+	scheduledJobs: ScheduledJobConnection
 	standards: StandardConnection
 	subcontrols: SubcontrolConnection
 	subprocessors: SubprocessorConnection
@@ -48981,15 +49060,15 @@ type Subcontrol implements Node {
 		last: Int
 
 		"""
-		Ordering options for ControlScheduledJobs returned from the connection.
+		Ordering options for ScheduledJobs returned from the connection.
 		"""
-		orderBy: [ControlScheduledJobOrder!]
+		orderBy: [ScheduledJobOrder!]
 
 		"""
-		Filtering options for ControlScheduledJobs returned from the connection.
+		Filtering options for ScheduledJobs returned from the connection.
 		"""
-		where: ControlScheduledJobWhereInput
-	): ControlScheduledJobConnection!
+		where: ScheduledJobWhereInput
+	): ScheduledJobConnection!
 }
 """
 Return response for createBulkSubcontrol mutation
@@ -50097,7 +50176,7 @@ input SubcontrolWhereInput {
 	scheduled_jobs edge predicates
 	"""
 	hasScheduledJobs: Boolean
-	hasScheduledJobsWith: [ControlScheduledJobWhereInput!]
+	hasScheduledJobsWith: [ScheduledJobWhereInput!]
 }
 type Subprocessor implements Node {
 	id: ID!
@@ -56152,34 +56231,6 @@ input UpdateControlObjectiveInput {
 	RevisionBump: VersionBump
 }
 """
-UpdateControlScheduledJobInput is used for update ControlScheduledJob object.
-Input was generated by ent.
-"""
-input UpdateControlScheduledJobInput {
-	"""
-	the configuration to run this job
-	"""
-	configuration: JobConfiguration
-	appendConfiguration: JobConfiguration
-	clearConfiguration: Boolean
-	"""
-	cron syntax. If not provided, it would inherit the cron of the parent job
-	"""
-	cron: String
-	clearCron: Boolean
-	ownerID: ID
-	clearOwner: Boolean
-	jobTemplateID: ID
-	addControlIDs: [ID!]
-	removeControlIDs: [ID!]
-	clearControls: Boolean
-	addSubcontrolIDs: [ID!]
-	removeSubcontrolIDs: [ID!]
-	clearSubcontrols: Boolean
-	jobRunnerID: ID
-	clearJobRunner: Boolean
-}
-"""
 UpdateCustomDomainInput is used for update CustomDomain object.
 Input was generated by ent.
 """
@@ -57107,7 +57158,7 @@ input UpdateJobTemplateInput {
 	"""
 	title: String
 	"""
-	the description of the job
+	the short description of the job and what it does
 	"""
 	description: String
 	clearDescription: Boolean
@@ -57116,13 +57167,7 @@ input UpdateJobTemplateInput {
 	"""
 	downloadURL: String
 	"""
-	the configuration to run this job
-	"""
-	configuration: JobConfiguration
-	appendConfiguration: JobConfiguration
-	clearConfiguration: Boolean
-	"""
-	cron syntax
+	cron schedule to run the job, e.g. 0 0 * * *
 	"""
 	cron: String
 	clearCron: Boolean
@@ -58024,6 +58069,34 @@ input UpdateScanInput {
 	addEntityIDs: [ID!]
 	removeEntityIDs: [ID!]
 	clearEntities: Boolean
+}
+"""
+UpdateScheduledJobInput is used for update ScheduledJob object.
+Input was generated by ent.
+"""
+input UpdateScheduledJobInput {
+	"""
+	the configuration to run this job
+	"""
+	configuration: JobConfiguration
+	appendConfiguration: JobConfiguration
+	clearConfiguration: Boolean
+	"""
+	cron syntax. If not provided, it would inherit the cron of the parent job
+	"""
+	cron: String
+	clearCron: Boolean
+	ownerID: ID
+	clearOwner: Boolean
+	jobTemplateID: ID
+	addControlIDs: [ID!]
+	removeControlIDs: [ID!]
+	clearControls: Boolean
+	addSubcontrolIDs: [ID!]
+	removeSubcontrolIDs: [ID!]
+	clearSubcontrols: Boolean
+	jobRunnerID: ID
+	clearJobRunner: Boolean
 }
 """
 UpdateScheduledJobRunInput is used for update ScheduledJobRun object.

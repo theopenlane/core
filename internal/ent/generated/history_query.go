@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
-	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
@@ -42,6 +41,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scanhistory"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessorhistory"
@@ -328,52 +328,6 @@ func (cohq *ControlObjectiveHistoryQuery) AsOf(ctx context.Context, time time.Ti
 	return cohq.
 		Where(controlobjectivehistory.HistoryTimeLTE(time)).
 		Order(controlobjectivehistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (csj *ControlScheduledJob) History() *ControlScheduledJobHistoryQuery {
-	historyClient := NewControlScheduledJobHistoryClient(csj.config)
-	return historyClient.Query().Where(controlscheduledjobhistory.Ref(csj.ID))
-}
-
-func (csjh *ControlScheduledJobHistory) Next(ctx context.Context) (*ControlScheduledJobHistory, error) {
-	client := NewControlScheduledJobHistoryClient(csjh.config)
-	return client.Query().
-		Where(
-			controlscheduledjobhistory.Ref(csjh.Ref),
-			controlscheduledjobhistory.HistoryTimeGT(csjh.HistoryTime),
-		).
-		Order(controlscheduledjobhistory.ByHistoryTime()).
-		First(ctx)
-}
-
-func (csjh *ControlScheduledJobHistory) Prev(ctx context.Context) (*ControlScheduledJobHistory, error) {
-	client := NewControlScheduledJobHistoryClient(csjh.config)
-	return client.Query().
-		Where(
-			controlscheduledjobhistory.Ref(csjh.Ref),
-			controlscheduledjobhistory.HistoryTimeLT(csjh.HistoryTime),
-		).
-		Order(controlscheduledjobhistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (csjhq *ControlScheduledJobHistoryQuery) Earliest(ctx context.Context) (*ControlScheduledJobHistory, error) {
-	return csjhq.
-		Order(controlscheduledjobhistory.ByHistoryTime()).
-		First(ctx)
-}
-
-func (csjhq *ControlScheduledJobHistoryQuery) Latest(ctx context.Context) (*ControlScheduledJobHistory, error) {
-	return csjhq.
-		Order(controlscheduledjobhistory.ByHistoryTime(sql.OrderDesc())).
-		First(ctx)
-}
-
-func (csjhq *ControlScheduledJobHistoryQuery) AsOf(ctx context.Context, time time.Time) (*ControlScheduledJobHistory, error) {
-	return csjhq.
-		Where(controlscheduledjobhistory.HistoryTimeLTE(time)).
-		Order(controlscheduledjobhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 
@@ -1616,6 +1570,52 @@ func (shq *ScanHistoryQuery) AsOf(ctx context.Context, time time.Time) (*ScanHis
 	return shq.
 		Where(scanhistory.HistoryTimeLTE(time)).
 		Order(scanhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (sj *ScheduledJob) History() *ScheduledJobHistoryQuery {
+	historyClient := NewScheduledJobHistoryClient(sj.config)
+	return historyClient.Query().Where(scheduledjobhistory.Ref(sj.ID))
+}
+
+func (sjh *ScheduledJobHistory) Next(ctx context.Context) (*ScheduledJobHistory, error) {
+	client := NewScheduledJobHistoryClient(sjh.config)
+	return client.Query().
+		Where(
+			scheduledjobhistory.Ref(sjh.Ref),
+			scheduledjobhistory.HistoryTimeGT(sjh.HistoryTime),
+		).
+		Order(scheduledjobhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (sjh *ScheduledJobHistory) Prev(ctx context.Context) (*ScheduledJobHistory, error) {
+	client := NewScheduledJobHistoryClient(sjh.config)
+	return client.Query().
+		Where(
+			scheduledjobhistory.Ref(sjh.Ref),
+			scheduledjobhistory.HistoryTimeLT(sjh.HistoryTime),
+		).
+		Order(scheduledjobhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (sjhq *ScheduledJobHistoryQuery) Earliest(ctx context.Context) (*ScheduledJobHistory, error) {
+	return sjhq.
+		Order(scheduledjobhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (sjhq *ScheduledJobHistoryQuery) Latest(ctx context.Context) (*ScheduledJobHistory, error) {
+	return sjhq.
+		Order(scheduledjobhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (sjhq *ScheduledJobHistoryQuery) AsOf(ctx context.Context, time time.Time) (*ScheduledJobHistory, error) {
+	return sjhq.
+		Where(scheduledjobhistory.HistoryTimeLTE(time)).
+		Order(scheduledjobhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

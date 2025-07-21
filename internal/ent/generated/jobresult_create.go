@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -193,9 +193,9 @@ func (jrc *JobResultCreate) SetOwner(o *Organization) *JobResultCreate {
 	return jrc.SetOwnerID(o.ID)
 }
 
-// SetScheduledJob sets the "scheduled_job" edge to the ControlScheduledJob entity.
-func (jrc *JobResultCreate) SetScheduledJob(c *ControlScheduledJob) *JobResultCreate {
-	return jrc.SetScheduledJobID(c.ID)
+// SetScheduledJob sets the "scheduled_job" edge to the ScheduledJob entity.
+func (jrc *JobResultCreate) SetScheduledJob(s *ScheduledJob) *JobResultCreate {
+	return jrc.SetScheduledJobID(s.ID)
 }
 
 // SetFile sets the "file" edge to the File entity.
@@ -421,7 +421,7 @@ func (jrc *JobResultCreate) createSpec() (*JobResult, *sqlgraph.CreateSpec) {
 			Columns: []string{jobresult.ScheduledJobColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = jrc.schemaConfig.JobResult

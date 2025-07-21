@@ -130,7 +130,7 @@ type ControlEdges struct {
 	// Subcontrols holds the value of the subcontrols edge.
 	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 	// ScheduledJobs holds the value of the scheduled_jobs edge.
-	ScheduledJobs []*ControlScheduledJob `json:"scheduled_jobs,omitempty"`
+	ScheduledJobs []*ScheduledJob `json:"scheduled_jobs,omitempty"`
 	// MappedToControls holds the value of the mapped_to_controls edge.
 	MappedToControls []*MappedControl `json:"mapped_to_controls,omitempty"`
 	// MappedFromControls holds the value of the mapped_from_controls edge.
@@ -156,7 +156,7 @@ type ControlEdges struct {
 	namedScans                  map[string][]*Scan
 	namedControlImplementations map[string][]*ControlImplementation
 	namedSubcontrols            map[string][]*Subcontrol
-	namedScheduledJobs          map[string][]*ControlScheduledJob
+	namedScheduledJobs          map[string][]*ScheduledJob
 	namedMappedToControls       map[string][]*MappedControl
 	namedMappedFromControls     map[string][]*MappedControl
 }
@@ -342,7 +342,7 @@ func (e ControlEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 
 // ScheduledJobsOrErr returns the ScheduledJobs value or an error if the edge
 // was not loaded in eager-loading.
-func (e ControlEdges) ScheduledJobsOrErr() ([]*ControlScheduledJob, error) {
+func (e ControlEdges) ScheduledJobsOrErr() ([]*ScheduledJob, error) {
 	if e.loadedTypes[19] {
 		return e.ScheduledJobs, nil
 	}
@@ -706,7 +706,7 @@ func (c *Control) QuerySubcontrols() *SubcontrolQuery {
 }
 
 // QueryScheduledJobs queries the "scheduled_jobs" edge of the Control entity.
-func (c *Control) QueryScheduledJobs() *ControlScheduledJobQuery {
+func (c *Control) QueryScheduledJobs() *ScheduledJobQuery {
 	return NewControlClient(c.config).QueryScheduledJobs(c)
 }
 
@@ -1202,7 +1202,7 @@ func (c *Control) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
 
 // NamedScheduledJobs returns the ScheduledJobs named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Control) NamedScheduledJobs(name string) ([]*ControlScheduledJob, error) {
+func (c *Control) NamedScheduledJobs(name string) ([]*ScheduledJob, error) {
 	if c.Edges.namedScheduledJobs == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
@@ -1213,12 +1213,12 @@ func (c *Control) NamedScheduledJobs(name string) ([]*ControlScheduledJob, error
 	return nodes, nil
 }
 
-func (c *Control) appendNamedScheduledJobs(name string, edges ...*ControlScheduledJob) {
+func (c *Control) appendNamedScheduledJobs(name string, edges ...*ScheduledJob) {
 	if c.Edges.namedScheduledJobs == nil {
-		c.Edges.namedScheduledJobs = make(map[string][]*ControlScheduledJob)
+		c.Edges.namedScheduledJobs = make(map[string][]*ScheduledJob)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedScheduledJobs[name] = []*ControlScheduledJob{}
+		c.Edges.namedScheduledJobs[name] = []*ScheduledJob{}
 	} else {
 		c.Edges.namedScheduledJobs[name] = append(c.Edges.namedScheduledJobs[name], edges...)
 	}

@@ -69,6 +69,8 @@ var (
 	// ErrFutureTimeNotAllowed is returned when you try to set a time into the future.
 	// future being any second/minute past the current time of validation
 	ErrFutureTimeNotAllowed = errors.New("time cannot be in the future")
+	// ErrFieldRequired is returned when a field is required but not provided
+	ErrFieldRequired = errors.New("field is required but not provided")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

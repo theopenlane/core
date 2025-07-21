@@ -2,7 +2,6 @@ package hooks
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -10,8 +9,10 @@ import (
 	"time"
 
 	"entgo.io/ent"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/windmill"
 	"github.com/theopenlane/entx"
@@ -22,10 +23,10 @@ const (
 	defaultTimeout = 30 * time.Second
 )
 
-// HookJobTemplateCreate verifies a scheduled job has
+// HookJobTemplate verifies a scheduled job has
 // a cron and the configuration matches what is expected
 // It also validates the download URL and creates a Windmill flow if configured
-func HookJobTemplateCreate() ent.Hook {
+func HookJobTemplate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.JobTemplateFunc(func(ctx context.Context,
 			mutation *generated.JobTemplateMutation) (generated.Value, error) {
@@ -50,11 +51,15 @@ func HookJobTemplateCreate() ent.Hook {
 			switch mutation.Op() {
 			case ent.OpCreate:
 				if err := createWindmillFlow(ctx, mutation); err != nil {
-					return nil, fmt.Errorf("failed to create windmill flow: %w", err)
+					log.Error().Err(err).Msg("failed to create windmill flow")
+
+					return nil, fmt.Errorf("failed to create job template: %w", err)
 				}
 			case ent.OpUpdate, ent.OpUpdateOne:
 				if err := updateWindmillFlow(ctx, mutation); err != nil {
-					return nil, fmt.Errorf("failed to update windmill flow: %w", err)
+					log.Error().Err(err).Msg("failed to update windmill flow")
+
+					return nil, fmt.Errorf("failed to update job template: %w", err)
 				}
 			}
 
@@ -72,7 +77,9 @@ func createWindmillFlow(ctx context.Context, mutation *generated.JobTemplateMuta
 
 	entConfig := mutation.Client().EntConfig
 	if entConfig == nil {
-		return errors.New("ent config is required") // nolint:err113
+		log.Error().Msg("ent config is required, but not set, unable to create windmill flow")
+
+		return ErrInternalServerError
 	}
 
 	title, _ := mutation.Title()
@@ -80,7 +87,7 @@ func createWindmillFlow(ctx context.Context, mutation *generated.JobTemplateMuta
 	downloadURL, _ := mutation.DownloadURL()
 
 	if downloadURL == "" {
-		return errors.New("download_url is required for windmill flow creation") // nolint:err113
+		return fmt.Errorf("%w: download_url", ErrFieldRequired)
 	}
 
 	rawCode, err := downloadRawCode(ctx, downloadURL)
@@ -157,7 +164,7 @@ func updateWindmillFlow(ctx context.Context, mutation *generated.JobTemplateMuta
 // downloadRawCode downloads raw code from a URL that will be wrapped into a Windmill flow
 func downloadRawCode(ctx context.Context, downloadURL string) (string, error) {
 	if downloadURL == "" {
-		return "", errors.New("download_url is required for raw code download") // nolint:err113
+		return "", fmt.Errorf("%w: download_url", ErrFieldRequired)
 	}
 
 	client := &http.Client{
@@ -192,12 +199,12 @@ func generateFlowPath() string {
 	return strings.ToLower(ulids.New().String())
 }
 
-// HookControlScheduledJobCreate verifies a job that can be attached to a control/subcontrol has
+// HookScheduledJobCreate verifies a job that can be attached to a control/subcontrol has
 // a cron and the configuration matches what is expected
-func HookControlScheduledJobCreate() ent.Hook {
+func HookScheduledJobCreate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.ControlScheduledJobFunc(func(ctx context.Context,
-			mutation *generated.ControlScheduledJobMutation) (generated.Value, error) {
+		return hook.ScheduledJobFunc(func(ctx context.Context,
+			mutation *generated.ScheduledJobMutation) (generated.Value, error) {
 			cron, hasCron := mutation.Cron()
 
 			if entx.CheckIsSoftDelete(ctx) {
@@ -210,7 +217,10 @@ func HookControlScheduledJobCreate() ent.Hook {
 
 			jobID, _ := mutation.JobID()
 
-			job, err := mutation.Client().JobTemplate.Get(ctx, jobID)
+			job, err := mutation.Client().JobTemplate.Query().
+				Where(jobtemplate.ID(jobID)).
+				Select(jobtemplate.FieldCron).
+				Only(ctx)
 			if err != nil {
 				return nil, err
 			}
@@ -231,7 +241,7 @@ func HookControlScheduledJobCreate() ent.Hook {
 
 			if mutation.Op() == ent.OpCreate {
 				if err := createWindmillScheduledJob(ctx, mutation); err != nil {
-					return nil, fmt.Errorf("failed to create windmill scheduled job: %w", err) //nolint:err113
+					return nil, fmt.Errorf("failed to create scheduled job: %w", err)
 				}
 			}
 
@@ -248,7 +258,7 @@ func validateCron(cron models.Cron, hasCron bool) error {
 	return cron.Validate()
 }
 
-func createWindmillScheduledJob(ctx context.Context, mutation *generated.ControlScheduledJobMutation) error {
+func createWindmillScheduledJob(ctx context.Context, mutation *generated.ScheduledJobMutation) error {
 	windmillClient := mutation.Client().Windmill
 	if windmillClient == nil {
 		return nil
@@ -256,17 +266,19 @@ func createWindmillScheduledJob(ctx context.Context, mutation *generated.Control
 
 	jobID, hasJobID := mutation.JobID()
 	if !hasJobID {
-		return errors.New("job_id is required for windmill scheduled job creation") // nolint:err113
+		return fmt.Errorf("%w: job_id", ErrFieldRequired)
 	}
 
 	cron, hasCron := mutation.Cron()
 	if !hasCron || cron == "" {
-		return errors.New("cron is required for windmill scheduled job creation") // nolint:err113
+		return fmt.Errorf("%w: cron", ErrFieldRequired)
 	}
 
 	entConfig := mutation.Client().EntConfig
 	if entConfig == nil {
-		return errors.New("ent config is required") // nolint:err113
+		log.Error().Msg("ent config is required, but not set, unable to create scheduled job")
+
+		return ErrInternalServerError
 	}
 
 	scheduledJobPath := fmt.Sprintf("s/%s/control_scheduled_job_%s", entConfig.Windmill.FolderName, generateFlowPath())

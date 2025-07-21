@@ -38,10 +38,6 @@ type Tx struct {
 	ControlObjective *ControlObjectiveClient
 	// ControlObjectiveHistory is the client for interacting with the ControlObjectiveHistory builders.
 	ControlObjectiveHistory *ControlObjectiveHistoryClient
-	// ControlScheduledJob is the client for interacting with the ControlScheduledJob builders.
-	ControlScheduledJob *ControlScheduledJobClient
-	// ControlScheduledJobHistory is the client for interacting with the ControlScheduledJobHistory builders.
-	ControlScheduledJobHistory *ControlScheduledJobHistoryClient
 	// CustomDomain is the client for interacting with the CustomDomain builders.
 	CustomDomain *CustomDomainClient
 	// CustomDomainHistory is the client for interacting with the CustomDomainHistory builders.
@@ -178,6 +174,10 @@ type Tx struct {
 	Scan *ScanClient
 	// ScanHistory is the client for interacting with the ScanHistory builders.
 	ScanHistory *ScanHistoryClient
+	// ScheduledJob is the client for interacting with the ScheduledJob builders.
+	ScheduledJob *ScheduledJobClient
+	// ScheduledJobHistory is the client for interacting with the ScheduledJobHistory builders.
+	ScheduledJobHistory *ScheduledJobHistoryClient
 	// ScheduledJobRun is the client for interacting with the ScheduledJobRun builders.
 	ScheduledJobRun *ScheduledJobRunClient
 	// Standard is the client for interacting with the Standard builders.
@@ -374,8 +374,6 @@ func (tx *Tx) init() {
 	tx.ControlImplementationHistory = NewControlImplementationHistoryClient(tx.config)
 	tx.ControlObjective = NewControlObjectiveClient(tx.config)
 	tx.ControlObjectiveHistory = NewControlObjectiveHistoryClient(tx.config)
-	tx.ControlScheduledJob = NewControlScheduledJobClient(tx.config)
-	tx.ControlScheduledJobHistory = NewControlScheduledJobHistoryClient(tx.config)
 	tx.CustomDomain = NewCustomDomainClient(tx.config)
 	tx.CustomDomainHistory = NewCustomDomainHistoryClient(tx.config)
 	tx.DNSVerification = NewDNSVerificationClient(tx.config)
@@ -444,6 +442,8 @@ func (tx *Tx) init() {
 	tx.RiskHistory = NewRiskHistoryClient(tx.config)
 	tx.Scan = NewScanClient(tx.config)
 	tx.ScanHistory = NewScanHistoryClient(tx.config)
+	tx.ScheduledJob = NewScheduledJobClient(tx.config)
+	tx.ScheduledJobHistory = NewScheduledJobHistoryClient(tx.config)
 	tx.ScheduledJobRun = NewScheduledJobRunClient(tx.config)
 	tx.Standard = NewStandardClient(tx.config)
 	tx.StandardHistory = NewStandardHistoryClient(tx.config)

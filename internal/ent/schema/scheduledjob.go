@@ -20,11 +20,11 @@ type ScheduledJob struct {
 	ent.Schema
 }
 
-// SchemaControlScheduledJobis the name of the schema in snake case
-const SchemaControlScheduledJob = "scheduled_job"
+// SchemaScheduledJob is the name of the schema in snake case
+const SchemaScheduledJob = "scheduled_job"
 
 func (ScheduledJob) Name() string {
-	return SchemaControlScheduledJob
+	return SchemaScheduledJob
 }
 
 func (ScheduledJob) GetType() any {
@@ -32,7 +32,7 @@ func (ScheduledJob) GetType() any {
 }
 
 func (ScheduledJob) PluralName() string {
-	return pluralize.NewClient().Plural(SchemaControlScheduledJob)
+	return pluralize.NewClient().Plural(SchemaScheduledJob)
 }
 
 // Fields of the ControlScheduledJob
@@ -47,7 +47,6 @@ func (ScheduledJob) Fields() []ent.Field {
 			).
 			Optional().
 			Comment("the configuration to run this job"),
-
 		field.String("cron").
 			GoType(models.Cron("")).
 			Comment("cron syntax. If not provided, it would inherit the cron of the parent job").
@@ -58,7 +57,6 @@ func (ScheduledJob) Fields() []ent.Field {
 			).
 			Optional().
 			Nillable(),
-
 		field.String("job_runner_id").
 			Optional().
 			Comment("the runner that this job will run on. If not set, it will scheduled on a general runner instead"),
@@ -68,8 +66,12 @@ func (ScheduledJob) Fields() []ent.Field {
 // Mixin of the ControlScheduledJob
 func (c ScheduledJob) Mixin() []ent.Mixin {
 	return mixinConfig{
+		prefix:      "SJB",
 		excludeTags: true,
 		additionalMixins: []ent.Mixin{
+			// TODO: update to object owned mixin
+			// that will allow inheritance by control + subcontrol to edit the scheduled job
+			// currently only org admins can create and edit scheduled jobs
 			newOrgOwnedMixin(c),
 		},
 	}.getMixins()
@@ -106,13 +108,14 @@ func (ScheduledJob) Indexes() []ent.Index {
 func (ScheduledJob) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.Features("compliance", "continuous-compliance-automation"),
+		entx.SchemaSearchable(false), // not sure yet why, but this breaks generation when enabled
 	}
 }
 
 // Hooks of the ControlScheduledJob
 func (ScheduledJob) Hooks() []ent.Hook {
 	return []ent.Hook{
-		hooks.HookControlScheduledJobCreate(),
+		hooks.HookScheduledJobCreate(),
 	}
 }
 

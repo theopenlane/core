@@ -488,7 +488,6 @@ query AdminSearch($query: String!) {
           ownerID
           title
           description
-          configuration
         }
       }
     }
@@ -731,6 +730,24 @@ query AdminSearch($query: String!) {
           ownerID
           target
           metadata
+        }
+      }
+    }
+    scheduledJobs {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          displayID
+          ownerID
+          jobID
+          jobRunnerID
         }
       }
     }

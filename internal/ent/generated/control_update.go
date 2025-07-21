@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
-	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -28,6 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -781,17 +781,17 @@ func (cu *ControlUpdate) AddSubcontrols(s ...*Subcontrol) *ControlUpdate {
 	return cu.AddSubcontrolIDs(ids...)
 }
 
-// AddScheduledJobIDs adds the "scheduled_jobs" edge to the ControlScheduledJob entity by IDs.
+// AddScheduledJobIDs adds the "scheduled_jobs" edge to the ScheduledJob entity by IDs.
 func (cu *ControlUpdate) AddScheduledJobIDs(ids ...string) *ControlUpdate {
 	cu.mutation.AddScheduledJobIDs(ids...)
 	return cu
 }
 
-// AddScheduledJobs adds the "scheduled_jobs" edges to the ControlScheduledJob entity.
-func (cu *ControlUpdate) AddScheduledJobs(c ...*ControlScheduledJob) *ControlUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+// AddScheduledJobs adds the "scheduled_jobs" edges to the ScheduledJob entity.
+func (cu *ControlUpdate) AddScheduledJobs(s ...*ScheduledJob) *ControlUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
 	}
 	return cu.AddScheduledJobIDs(ids...)
 }
@@ -1164,23 +1164,23 @@ func (cu *ControlUpdate) RemoveSubcontrols(s ...*Subcontrol) *ControlUpdate {
 	return cu.RemoveSubcontrolIDs(ids...)
 }
 
-// ClearScheduledJobs clears all "scheduled_jobs" edges to the ControlScheduledJob entity.
+// ClearScheduledJobs clears all "scheduled_jobs" edges to the ScheduledJob entity.
 func (cu *ControlUpdate) ClearScheduledJobs() *ControlUpdate {
 	cu.mutation.ClearScheduledJobs()
 	return cu
 }
 
-// RemoveScheduledJobIDs removes the "scheduled_jobs" edge to ControlScheduledJob entities by IDs.
+// RemoveScheduledJobIDs removes the "scheduled_jobs" edge to ScheduledJob entities by IDs.
 func (cu *ControlUpdate) RemoveScheduledJobIDs(ids ...string) *ControlUpdate {
 	cu.mutation.RemoveScheduledJobIDs(ids...)
 	return cu
 }
 
-// RemoveScheduledJobs removes "scheduled_jobs" edges to ControlScheduledJob entities.
-func (cu *ControlUpdate) RemoveScheduledJobs(c ...*ControlScheduledJob) *ControlUpdate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+// RemoveScheduledJobs removes "scheduled_jobs" edges to ScheduledJob entities.
+func (cu *ControlUpdate) RemoveScheduledJobs(s ...*ScheduledJob) *ControlUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
 	}
 	return cu.RemoveScheduledJobIDs(ids...)
 }
@@ -2314,10 +2314,10 @@ func (cu *ControlUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: control.ScheduledJobsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cu.schemaConfig.ControlScheduledJobControls
+		edge.Schema = cu.schemaConfig.ScheduledJobControls
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := cu.mutation.RemovedScheduledJobsIDs(); len(nodes) > 0 && !cu.mutation.ScheduledJobsCleared() {
@@ -2328,10 +2328,10 @@ func (cu *ControlUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: control.ScheduledJobsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cu.schemaConfig.ControlScheduledJobControls
+		edge.Schema = cu.schemaConfig.ScheduledJobControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2345,10 +2345,10 @@ func (cu *ControlUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: control.ScheduledJobsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cu.schemaConfig.ControlScheduledJobControls
+		edge.Schema = cu.schemaConfig.ScheduledJobControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3204,17 +3204,17 @@ func (cuo *ControlUpdateOne) AddSubcontrols(s ...*Subcontrol) *ControlUpdateOne 
 	return cuo.AddSubcontrolIDs(ids...)
 }
 
-// AddScheduledJobIDs adds the "scheduled_jobs" edge to the ControlScheduledJob entity by IDs.
+// AddScheduledJobIDs adds the "scheduled_jobs" edge to the ScheduledJob entity by IDs.
 func (cuo *ControlUpdateOne) AddScheduledJobIDs(ids ...string) *ControlUpdateOne {
 	cuo.mutation.AddScheduledJobIDs(ids...)
 	return cuo
 }
 
-// AddScheduledJobs adds the "scheduled_jobs" edges to the ControlScheduledJob entity.
-func (cuo *ControlUpdateOne) AddScheduledJobs(c ...*ControlScheduledJob) *ControlUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+// AddScheduledJobs adds the "scheduled_jobs" edges to the ScheduledJob entity.
+func (cuo *ControlUpdateOne) AddScheduledJobs(s ...*ScheduledJob) *ControlUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
 	}
 	return cuo.AddScheduledJobIDs(ids...)
 }
@@ -3587,23 +3587,23 @@ func (cuo *ControlUpdateOne) RemoveSubcontrols(s ...*Subcontrol) *ControlUpdateO
 	return cuo.RemoveSubcontrolIDs(ids...)
 }
 
-// ClearScheduledJobs clears all "scheduled_jobs" edges to the ControlScheduledJob entity.
+// ClearScheduledJobs clears all "scheduled_jobs" edges to the ScheduledJob entity.
 func (cuo *ControlUpdateOne) ClearScheduledJobs() *ControlUpdateOne {
 	cuo.mutation.ClearScheduledJobs()
 	return cuo
 }
 
-// RemoveScheduledJobIDs removes the "scheduled_jobs" edge to ControlScheduledJob entities by IDs.
+// RemoveScheduledJobIDs removes the "scheduled_jobs" edge to ScheduledJob entities by IDs.
 func (cuo *ControlUpdateOne) RemoveScheduledJobIDs(ids ...string) *ControlUpdateOne {
 	cuo.mutation.RemoveScheduledJobIDs(ids...)
 	return cuo
 }
 
-// RemoveScheduledJobs removes "scheduled_jobs" edges to ControlScheduledJob entities.
-func (cuo *ControlUpdateOne) RemoveScheduledJobs(c ...*ControlScheduledJob) *ControlUpdateOne {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
+// RemoveScheduledJobs removes "scheduled_jobs" edges to ScheduledJob entities.
+func (cuo *ControlUpdateOne) RemoveScheduledJobs(s ...*ScheduledJob) *ControlUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
 	}
 	return cuo.RemoveScheduledJobIDs(ids...)
 }
@@ -4767,10 +4767,10 @@ func (cuo *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err e
 			Columns: control.ScheduledJobsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cuo.schemaConfig.ControlScheduledJobControls
+		edge.Schema = cuo.schemaConfig.ScheduledJobControls
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := cuo.mutation.RemovedScheduledJobsIDs(); len(nodes) > 0 && !cuo.mutation.ScheduledJobsCleared() {
@@ -4781,10 +4781,10 @@ func (cuo *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err e
 			Columns: control.ScheduledJobsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cuo.schemaConfig.ControlScheduledJobControls
+		edge.Schema = cuo.schemaConfig.ScheduledJobControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4798,10 +4798,10 @@ func (cuo *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err e
 			Columns: control.ScheduledJobsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = cuo.schemaConfig.ControlScheduledJobControls
+		edge.Schema = cuo.schemaConfig.ScheduledJobControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

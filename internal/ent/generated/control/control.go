@@ -232,10 +232,10 @@ const (
 	// SubcontrolsColumn is the table column denoting the subcontrols relation/edge.
 	SubcontrolsColumn = "control_id"
 	// ScheduledJobsTable is the table that holds the scheduled_jobs relation/edge. The primary key declared below.
-	ScheduledJobsTable = "control_scheduled_job_controls"
-	// ScheduledJobsInverseTable is the table name for the ControlScheduledJob entity.
-	// It exists in this package in order to avoid circular dependency with the "controlscheduledjob" package.
-	ScheduledJobsInverseTable = "control_scheduled_jobs"
+	ScheduledJobsTable = "scheduled_job_controls"
+	// ScheduledJobsInverseTable is the table name for the ScheduledJob entity.
+	// It exists in this package in order to avoid circular dependency with the "scheduledjob" package.
+	ScheduledJobsInverseTable = "scheduled_jobs"
 	// MappedToControlsTable is the table that holds the mapped_to_controls relation/edge. The primary key declared below.
 	MappedToControlsTable = "mapped_control_to_controls"
 	// MappedToControlsInverseTable is the table name for the MappedControl entity.
@@ -325,7 +325,7 @@ var (
 	ControlImplementationsPrimaryKey = []string{"control_id", "control_implementation_id"}
 	// ScheduledJobsPrimaryKey and ScheduledJobsColumn2 are the table columns denoting the
 	// primary key for the scheduled_jobs relation (M2M).
-	ScheduledJobsPrimaryKey = []string{"control_scheduled_job_id", "control_id"}
+	ScheduledJobsPrimaryKey = []string{"scheduled_job_id", "control_id"}
 	// MappedToControlsPrimaryKey and MappedToControlsColumn2 are the table columns denoting the
 	// primary key for the mapped_to_controls relation (M2M).
 	MappedToControlsPrimaryKey = []string{"mapped_control_id", "control_id"}

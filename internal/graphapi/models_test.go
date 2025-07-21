@@ -1537,15 +1537,15 @@ func (d *DNSVerificationBuilder) MustNew(ctx context.Context, t *testing.T) *ent
 	return dnsVerification
 }
 
-type ScheduledJobBuilder struct {
+type JobTemplateBuilder struct {
 	client *client
 }
 
-func (w *ScheduledJobBuilder) MustNew(ctx context.Context, t *testing.T) *ent.ScheduledJob {
+func (j *JobTemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.JobTemplate {
 	const testScriptURL = "https://raw.githubusercontent.com/theopenlane/jobs-examples/refs/heads/main/basic/print.go"
 
-	ctx = setContext(ctx, w.client.db)
-	wn, err := w.client.db.ScheduledJob.Create().
+	ctx = setContext(ctx, j.client.db)
+	jt, err := j.client.db.JobTemplate.Create().
 		SetTitle("SSL checks").
 		SetCron("0 22 * * 1-5").
 		SetDescription("Check and verify a tls certificate is valid").
@@ -1555,10 +1555,10 @@ func (w *ScheduledJobBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Sc
 		Save(ctx)
 	assert.NilError(t, err)
 
-	return wn
+	return jt
 }
 
-type ControlScheduledJobBuilder struct {
+type ScheduledJobBuilder struct {
 	client *client
 
 	// Fields
@@ -1569,10 +1569,10 @@ type ControlScheduledJobBuilder struct {
 	ControlIDs    []string
 }
 
-func (b *ControlScheduledJobBuilder) MustNew(ctx context.Context, t *testing.T) *generated.ControlScheduledJob {
+func (b *ScheduledJobBuilder) MustNew(ctx context.Context, t *testing.T) *generated.ScheduledJob {
 	ctx = setContext(ctx, b.client.db)
 
-	job := b.client.db.ControlScheduledJob.Create().
+	job := b.client.db.ScheduledJob.Create().
 		SetJobID(b.JobID)
 
 	if b.JobRunnerID != "" {

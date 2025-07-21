@@ -25,7 +25,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
-	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
@@ -53,6 +52,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scanhistory"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessorhistory"
@@ -740,66 +740,6 @@ func (coh *ControlObjectiveHistory) Diff(history *ControlObjectiveHistory) (*His
 			Old:     history,
 			New:     coh,
 			Changes: history.changes(coh),
-		}, nil
-	}
-	return nil, ErrIdenticalHistory
-}
-
-func (csjh *ControlScheduledJobHistory) changes(new *ControlScheduledJobHistory) []Change {
-	var changes []Change
-	if !reflect.DeepEqual(csjh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(controlscheduledjobhistory.FieldCreatedAt, csjh.CreatedAt, new.CreatedAt))
-	}
-	if !reflect.DeepEqual(csjh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(controlscheduledjobhistory.FieldUpdatedAt, csjh.UpdatedAt, new.UpdatedAt))
-	}
-	if !reflect.DeepEqual(csjh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(controlscheduledjobhistory.FieldCreatedBy, csjh.CreatedBy, new.CreatedBy))
-	}
-	if !reflect.DeepEqual(csjh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(controlscheduledjobhistory.FieldDeletedAt, csjh.DeletedAt, new.DeletedAt))
-	}
-	if !reflect.DeepEqual(csjh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(controlscheduledjobhistory.FieldDeletedBy, csjh.DeletedBy, new.DeletedBy))
-	}
-	if !reflect.DeepEqual(csjh.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(controlscheduledjobhistory.FieldOwnerID, csjh.OwnerID, new.OwnerID))
-	}
-	if !reflect.DeepEqual(csjh.JobID, new.JobID) {
-		changes = append(changes, NewChange(controlscheduledjobhistory.FieldJobID, csjh.JobID, new.JobID))
-	}
-	if !reflect.DeepEqual(csjh.Configuration, new.Configuration) {
-		changes = append(changes, NewChange(controlscheduledjobhistory.FieldConfiguration, csjh.Configuration, new.Configuration))
-	}
-	if !reflect.DeepEqual(csjh.Cron, new.Cron) {
-		changes = append(changes, NewChange(controlscheduledjobhistory.FieldCron, csjh.Cron, new.Cron))
-	}
-	if !reflect.DeepEqual(csjh.JobRunnerID, new.JobRunnerID) {
-		changes = append(changes, NewChange(controlscheduledjobhistory.FieldJobRunnerID, csjh.JobRunnerID, new.JobRunnerID))
-	}
-	return changes
-}
-
-func (csjh *ControlScheduledJobHistory) Diff(history *ControlScheduledJobHistory) (*HistoryDiff[ControlScheduledJobHistory], error) {
-	if csjh.Ref != history.Ref {
-		return nil, ErrMismatchedRef
-	}
-
-	csjhUnix, historyUnix := csjh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	csjhOlder := csjhUnix < historyUnix || (csjhUnix == historyUnix && csjh.ID < history.ID)
-	historyOlder := csjhUnix > historyUnix || (csjhUnix == historyUnix && csjh.ID > history.ID)
-
-	if csjhOlder {
-		return &HistoryDiff[ControlScheduledJobHistory]{
-			Old:     csjh,
-			New:     history,
-			Changes: csjh.changes(history),
-		}, nil
-	} else if historyOlder {
-		return &HistoryDiff[ControlScheduledJobHistory]{
-			Old:     history,
-			New:     csjh,
-			Changes: history.changes(csjh),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
@@ -2728,6 +2668,69 @@ func (sh *ScanHistory) Diff(history *ScanHistory) (*HistoryDiff[ScanHistory], er
 	return nil, ErrIdenticalHistory
 }
 
+func (sjh *ScheduledJobHistory) changes(new *ScheduledJobHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(sjh.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldCreatedAt, sjh.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(sjh.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldUpdatedAt, sjh.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(sjh.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldCreatedBy, sjh.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(sjh.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldDeletedAt, sjh.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(sjh.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldDeletedBy, sjh.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(sjh.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldDisplayID, sjh.DisplayID, new.DisplayID))
+	}
+	if !reflect.DeepEqual(sjh.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldOwnerID, sjh.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(sjh.JobID, new.JobID) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldJobID, sjh.JobID, new.JobID))
+	}
+	if !reflect.DeepEqual(sjh.Configuration, new.Configuration) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldConfiguration, sjh.Configuration, new.Configuration))
+	}
+	if !reflect.DeepEqual(sjh.Cron, new.Cron) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldCron, sjh.Cron, new.Cron))
+	}
+	if !reflect.DeepEqual(sjh.JobRunnerID, new.JobRunnerID) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldJobRunnerID, sjh.JobRunnerID, new.JobRunnerID))
+	}
+	return changes
+}
+
+func (sjh *ScheduledJobHistory) Diff(history *ScheduledJobHistory) (*HistoryDiff[ScheduledJobHistory], error) {
+	if sjh.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	sjhUnix, historyUnix := sjh.HistoryTime.Unix(), history.HistoryTime.Unix()
+	sjhOlder := sjhUnix < historyUnix || (sjhUnix == historyUnix && sjh.ID < history.ID)
+	historyOlder := sjhUnix > historyUnix || (sjhUnix == historyUnix && sjh.ID > history.ID)
+
+	if sjhOlder {
+		return &HistoryDiff[ScheduledJobHistory]{
+			Old:     sjh,
+			New:     history,
+			Changes: sjh.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[ScheduledJobHistory]{
+			Old:     history,
+			New:     sjh,
+			Changes: history.changes(sjh),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
 func (sh *StandardHistory) changes(new *StandardHistory) []Change {
 	var changes []Change
 	if !reflect.DeepEqual(sh.CreatedAt, new.CreatedAt) {
@@ -3630,12 +3633,6 @@ func (c *Client) Audit(ctx context.Context, after *Cursor, first *int, before *C
 	}
 	result.Edges = append(result.Edges, record.Edges...)
 
-	record, err = auditControlScheduledJobHistory(ctx, c.config, after, first, before, last, nil, nil)
-	if err != nil {
-		return nil, err
-	}
-	result.Edges = append(result.Edges, record.Edges...)
-
 	record, err = auditCustomDomainHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
@@ -3793,6 +3790,12 @@ func (c *Client) Audit(ctx context.Context, after *Cursor, first *int, before *C
 	result.Edges = append(result.Edges, record.Edges...)
 
 	record, err = auditScanHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
+	record, err = auditScheduledJobHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -4108,47 +4111,6 @@ func (c *Client) AuditWithFilter(ctx context.Context, after *Cursor, first *int,
 		}
 
 		result, err = auditControlObjectiveHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
-		if err != nil {
-			return nil, err
-		}
-
-		return
-	}
-	if where.Table == strings.TrimSuffix("ControlScheduledJobHistory", "History") {
-		// map AuditLogWhereInput to ControlScheduledJobHistoryWhereInput
-		whereInput := &ControlScheduledJobHistoryWhereInput{}
-		if where.RefID != nil {
-			whereInput.RefEqualFold = where.RefID
-		}
-
-		if where.UpdatedBy != nil {
-			whereInput.UpdatedBy = where.UpdatedBy
-		}
-
-		if where.Operation != nil {
-			whereInput.Operation = where.Operation
-		}
-
-		if where.Before != nil {
-			whereInput.HistoryTimeLT = where.Before
-		}
-
-		if where.After != nil {
-			whereInput.HistoryTimeGT = where.After
-		}
-
-		// map AuditLogOrder to ControlScheduledJobHistoryOrder
-		// default to ordering by HistoryTime desc
-		orderByInput := &ControlScheduledJobHistoryOrder{
-			Field:     ControlScheduledJobHistoryOrderFieldHistoryTime,
-			Direction: entgql.OrderDirectionDesc,
-		}
-
-		if orderBy != nil {
-			orderByInput.Direction = orderBy.Direction
-		}
-
-		result, err = auditControlScheduledJobHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
@@ -5262,6 +5224,47 @@ func (c *Client) AuditWithFilter(ctx context.Context, after *Cursor, first *int,
 
 		return
 	}
+	if where.Table == strings.TrimSuffix("ScheduledJobHistory", "History") {
+		// map AuditLogWhereInput to ScheduledJobHistoryWhereInput
+		whereInput := &ScheduledJobHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to ScheduledJobHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &ScheduledJobHistoryOrder{
+			Field:     ScheduledJobHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditScheduledJobHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
 	if where.Table == strings.TrimSuffix("StandardHistory", "History") {
 		// map AuditLogWhereInput to StandardHistoryWhereInput
 		whereInput := &StandardHistoryWhereInput{}
@@ -6155,79 +6158,6 @@ func auditControlObjectiveHistory(ctx context.Context, config config, after *Cur
 			// but just in case, we will handle it gracefully
 			if len(prev) == 0 {
 				prev = append(prev, &ControlObjectiveHistory{})
-			}
-
-			record.Changes = prev[0].changes(curr.Node)
-		}
-
-		edge := &AuditLogEdge{
-			Node: record,
-			// we only currently support pagination from the same table, so we can use the existing cursor
-			Cursor: curr.Cursor,
-		}
-
-		result.Edges = append(result.Edges, edge)
-	}
-
-	result.TotalCount = histories.TotalCount
-	result.PageInfo = histories.PageInfo
-
-	return result, nil
-}
-
-type controlscheduledjobhistoryref struct {
-	Ref string
-}
-
-func auditControlScheduledJobHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *ControlScheduledJobHistoryOrder, where *ControlScheduledJobHistoryWhereInput) (result *AuditLogConnection, err error) {
-	result = &AuditLogConnection{
-		Edges: []*AuditLogEdge{},
-	}
-
-	opts := []ControlScheduledJobHistoryPaginateOption{
-		WithControlScheduledJobHistoryOrder(orderBy),
-		WithControlScheduledJobHistoryFilter(where.Filter),
-	}
-
-	client := NewControlScheduledJobHistoryClient(config)
-
-	histories, err := client.Query().
-		Paginate(ctx, after, first, before, last, opts...)
-	if err != nil {
-		return nil, err
-	}
-
-	for _, curr := range histories.Edges {
-		record := &AuditLog{
-			Table:       "ControlScheduledJobHistory",
-			RefID:       curr.Node.Ref,
-			HistoryTime: curr.Node.HistoryTime,
-			Operation:   curr.Node.Operation,
-			UpdatedBy:   curr.Node.UpdatedBy,
-		}
-		switch curr.Node.Operation {
-		case history.OpTypeInsert:
-			record.Changes = (&ControlScheduledJobHistory{}).changes(curr.Node)
-		case history.OpTypeDelete:
-			record.Changes = curr.Node.changes(&ControlScheduledJobHistory{})
-		default:
-			// Get the previous history entry to calculate the changes
-			prev, err := client.Query().
-				Where(
-					controlscheduledjobhistory.Ref(curr.Node.Ref),
-					controlscheduledjobhistory.HistoryTimeLT(curr.Node.HistoryTime),
-				).
-				Order(controlscheduledjobhistory.ByHistoryTime(sql.OrderDesc())).
-				Limit(1).
-				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
-			if err != nil {
-				return nil, err
-			}
-
-			// this shouldn't happen because the initial change will always be an insert
-			// but just in case, we will handle it gracefully
-			if len(prev) == 0 {
-				prev = append(prev, &ControlScheduledJobHistory{})
 			}
 
 			record.Changes = prev[0].changes(curr.Node)
@@ -8199,6 +8129,79 @@ func auditScanHistory(ctx context.Context, config config, after *Cursor, first *
 			// but just in case, we will handle it gracefully
 			if len(prev) == 0 {
 				prev = append(prev, &ScanHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type scheduledjobhistoryref struct {
+	Ref string
+}
+
+func auditScheduledJobHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *ScheduledJobHistoryOrder, where *ScheduledJobHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []ScheduledJobHistoryPaginateOption{
+		WithScheduledJobHistoryOrder(orderBy),
+		WithScheduledJobHistoryFilter(where.Filter),
+	}
+
+	client := NewScheduledJobHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "ScheduledJobHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&ScheduledJobHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&ScheduledJobHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					scheduledjobhistory.Ref(curr.Node.Ref),
+					scheduledjobhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(scheduledjobhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &ScheduledJobHistory{})
 			}
 
 			record.Changes = prev[0].changes(curr.Node)

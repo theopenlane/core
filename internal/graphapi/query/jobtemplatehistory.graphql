@@ -11,7 +11,6 @@ query GetAllJobTemplateHistories {
     }
     edges {
       node {
-        configuration
         createdAt
         createdBy
         cron
@@ -29,7 +28,6 @@ query GetAllJobTemplateHistories {
         title
         updatedAt
         updatedBy
-        windmillPath
       }
     }
   }
@@ -46,7 +44,6 @@ query GetJobTemplateHistories($first: Int, $last: Int, $where: JobTemplateHistor
     }
     edges {
       node {
-        configuration
         createdAt
         createdBy
         cron
@@ -64,7 +61,6 @@ query GetJobTemplateHistories($first: Int, $last: Int, $where: JobTemplateHistor
         title
         updatedAt
         updatedBy
-        windmillPath
       }
     }
   }

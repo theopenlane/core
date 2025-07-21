@@ -1,7 +1,7 @@
+
 mutation CreateBulkCSVJobTemplate($input: Upload!) {
   createBulkCSVJobTemplate(input: $input) {
     jobTemplates {
-      configuration
       createdAt
       createdBy
       cron
@@ -16,7 +16,6 @@ mutation CreateBulkCSVJobTemplate($input: Upload!) {
       title
       updatedAt
       updatedBy
-      windmillPath
     }
   }
 }
@@ -24,7 +23,6 @@ mutation CreateBulkCSVJobTemplate($input: Upload!) {
 mutation CreateBulkJobTemplate($input: [CreateJobTemplateInput!]) {
   createBulkJobTemplate(input: $input) {
     jobTemplates {
-      configuration
       createdAt
       createdBy
       cron
@@ -39,7 +37,6 @@ mutation CreateBulkJobTemplate($input: [CreateJobTemplateInput!]) {
       title
       updatedAt
       updatedBy
-      windmillPath
     }
   }
 }
@@ -47,7 +44,6 @@ mutation CreateBulkJobTemplate($input: [CreateJobTemplateInput!]) {
 mutation CreateJobTemplate($input: CreateJobTemplateInput!) {
   createJobTemplate(input: $input) {
     jobTemplate {
-      configuration
       createdAt
       createdBy
       cron
@@ -62,7 +58,6 @@ mutation CreateJobTemplate($input: CreateJobTemplateInput!) {
       title
       updatedAt
       updatedBy
-      windmillPath
     }
   }
 }
@@ -84,7 +79,6 @@ query GetAllJobTemplates {
     }
     edges {
       node {
-        configuration
         createdAt
         createdBy
         cron
@@ -99,15 +93,12 @@ query GetAllJobTemplates {
         title
         updatedAt
         updatedBy
-        windmillPath
       }
     }
   }
 }
-
 query GetJobTemplateByID($jobTemplateId: ID!) {
   jobTemplate(id: $jobTemplateId) {
-    configuration
     createdAt
     createdBy
     cron
@@ -122,7 +113,6 @@ query GetJobTemplateByID($jobTemplateId: ID!) {
     title
     updatedAt
     updatedBy
-    windmillPath
   }
 }
 
@@ -137,7 +127,6 @@ query GetJobTemplates($first: Int, $last: Int, $where: JobTemplateWhereInput) {
     }
     edges {
       node {
-        configuration
         createdAt
         createdBy
         cron
@@ -152,16 +141,13 @@ query GetJobTemplates($first: Int, $last: Int, $where: JobTemplateWhereInput) {
         title
         updatedAt
         updatedBy
-        windmillPath
       }
     }
   }
 }
-
 mutation UpdateJobTemplate($updateJobTemplateId: ID!, $input: UpdateJobTemplateInput!) {
   updateJobTemplate(id: $updateJobTemplateId, input: $input) {
     jobTemplate {
-      configuration
       createdAt
       createdBy
       cron
@@ -176,7 +162,6 @@ mutation UpdateJobTemplate($updateJobTemplateId: ID!, $input: UpdateJobTemplateI
       title
       updatedAt
       updatedBy
-      windmillPath
     }
   }
 }

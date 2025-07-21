@@ -1,7 +1,7 @@
 
 
-query GetAllControlScheduledJobHistories {
-  controlScheduledJobHistories {
+query GetAllScheduledJobHistories {
+  scheduledJobHistories {
     totalCount
     pageInfo {
       startCursor
@@ -15,6 +15,7 @@ query GetAllControlScheduledJobHistories {
         createdAt
         createdBy
         cron
+        displayID
         historyTime
         id
         jobID
@@ -29,8 +30,8 @@ query GetAllControlScheduledJobHistories {
   }
 }
 
-query GetControlScheduledJobHistories($first: Int, $last: Int, $where: ControlScheduledJobHistoryWhereInput) {
-  controlScheduledJobHistories(first: $first, last: $last, where: $where) {
+query GetScheduledJobHistories($first: Int, $last: Int, $where: ScheduledJobHistoryWhereInput) {
+  scheduledJobHistories(first: $first, last: $last, where: $where) {
     totalCount
     pageInfo {
       startCursor
@@ -44,6 +45,7 @@ query GetControlScheduledJobHistories($first: Int, $last: Int, $where: ControlSc
         createdAt
         createdBy
         cron
+        displayID
         historyTime
         id
         jobID

@@ -12,28 +12,26 @@ import (
 )
 
 func TestQueryScheduledJob(t *testing.T) {
-
-	job := (&ScheduledJobBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-
+	job := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	runner := (&JobRunnerBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 
-	firstScheduledJob := (&ControlScheduledJobBuilder{
+	firstScheduledJob := (&ScheduledJobBuilder{
 		client:        suite.client,
 		JobID:         job.ID,
 		Configuration: models.JobConfiguration{},
 		JobRunnerID:   runner.ID,
 	}).MustNew(testUser1.UserCtx, t)
 
-	secondScheduledJob := (&ControlScheduledJobBuilder{
+	secondScheduledJob := (&ScheduledJobBuilder{
 		client:        suite.client,
 		JobID:         job.ID,
 		Configuration: models.JobConfiguration{},
 		JobRunnerID:   runner.ID,
 	}).MustNew(testUser1.UserCtx, t)
 
-	secondJob := (&ScheduledJobBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	secondJob := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
-	thirdScheduledJob := (&ControlScheduledJobBuilder{
+	thirdScheduledJob := (&ScheduledJobBuilder{
 		client:        suite.client,
 		JobID:         secondJob.ID,
 		Configuration: models.JobConfiguration{},
@@ -55,6 +53,18 @@ func TestQueryScheduledJob(t *testing.T) {
 			expectedCount: 2,
 		},
 		{
+			name:          "happy path admin user",
+			client:        suite.client.api,
+			ctx:           testUser1.UserCtx,
+			expectedCount: 2,
+		},
+		{
+			name:          "happy path view only user",
+			client:        suite.client.api,
+			ctx:           testUser1.UserCtx,
+			expectedCount: 2,
+		},
+		{
 			name:          "happy path user with pat",
 			client:        suite.client.apiWithPAT,
 			ctx:           context.Background(),
@@ -70,8 +80,7 @@ func TestQueryScheduledJob(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
-
-			resp, err := tc.client.GetAllControlScheduledJobs(tc.ctx)
+			resp, err := tc.client.GetAllScheduledJobs(tc.ctx)
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
@@ -82,7 +91,7 @@ func TestQueryScheduledJob(t *testing.T) {
 
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
-			assert.Check(t, is.Len(resp.ControlScheduledJobs.Edges, tc.expectedCount))
+			assert.Check(t, is.Len(resp.ScheduledJobs.Edges, tc.expectedCount))
 		})
 	}
 
@@ -91,25 +100,21 @@ func TestQueryScheduledJob(t *testing.T) {
 		IDs:    []string{runner.ID},
 	}).MustDelete(systemAdminUser.UserCtx, t)
 
-	(&Cleanup[*generated.ControlScheduledJobDeleteOne]{
-		client: suite.client.db.ControlScheduledJob,
+	(&Cleanup[*generated.ScheduledJobDeleteOne]{
+		client: suite.client.db.ScheduledJob,
 		IDs:    []string{firstScheduledJob.ID, secondScheduledJob.ID},
 	}).MustDelete(testUser1.UserCtx, t)
 
-	(&Cleanup[*generated.ControlScheduledJobDeleteOne]{
-		client: suite.client.db.ControlScheduledJob,
+	(&Cleanup[*generated.ScheduledJobDeleteOne]{
+		client: suite.client.db.ScheduledJob,
 		IDs:    []string{thirdScheduledJob.ID},
 	}).MustDelete(testUser2.UserCtx, t)
 }
 
-func TestControlScheduledJob(t *testing.T) {
-
-	job := (&ScheduledJobBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-
+func TestScheduledJob(t *testing.T) {
+	job := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	runner := (&JobRunnerBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-
 	control := (&ControlBuilder{client: suite.client, Name: "Test Control"}).MustNew(testUser1.UserCtx, t)
-
 	subControl := (&SubcontrolBuilder{client: suite.client, ControlID: control.ID, Name: "Test Control"}).
 		MustNew(testUser1.UserCtx, t)
 
@@ -117,20 +122,45 @@ func TestControlScheduledJob(t *testing.T) {
 		name       string
 		ctx        context.Context
 		client     *openlaneclient.OpenlaneClient
-		jobBuilder ControlScheduledJobBuilder
+		jobBuilder ScheduledJobBuilder
 		errorMsg   string
 	}{
 		{
 			name:   "happy path - create scheduled job with runner",
 			ctx:    testUser1.UserCtx,
 			client: suite.client.api,
-			jobBuilder: ControlScheduledJobBuilder{
+			jobBuilder: ScheduledJobBuilder{
 				client:        suite.client,
 				JobID:         job.ID,
 				Configuration: models.JobConfiguration{},
 				JobRunnerID:   runner.ID,
 				ControlIDs:    []string{control.ID},
 			},
+		},
+		{
+			name:   "happy path - create scheduled job with runner by admin",
+			ctx:    adminUser.UserCtx,
+			client: suite.client.api,
+			jobBuilder: ScheduledJobBuilder{
+				client:        suite.client,
+				JobID:         job.ID,
+				Configuration: models.JobConfiguration{},
+				JobRunnerID:   runner.ID,
+				ControlIDs:    []string{control.ID},
+			},
+		},
+		{
+			name:   "create scheduled job with runner by view only user should fail",
+			ctx:    viewOnlyUser.UserCtx,
+			client: suite.client.api,
+			jobBuilder: ScheduledJobBuilder{
+				client:        suite.client,
+				JobID:         job.ID,
+				Configuration: models.JobConfiguration{},
+				JobRunnerID:   runner.ID,
+				ControlIDs:    []string{control.ID},
+			},
+			errorMsg: notAuthorizedErrorMsg,
 		},
 	}
 
@@ -155,8 +185,8 @@ func TestControlScheduledJob(t *testing.T) {
 				assert.Equal(t, len(controls), len(tc.jobBuilder.ControlIDs))
 			}
 
-			(&Cleanup[*generated.ControlScheduledJobDeleteOne]{
-				client: suite.client.db.ControlScheduledJob,
+			(&Cleanup[*generated.ScheduledJobDeleteOne]{
+				client: suite.client.db.ScheduledJob,
 				ID:     job.ID,
 			}).MustDelete(tc.ctx, t)
 		})
@@ -165,6 +195,11 @@ func TestControlScheduledJob(t *testing.T) {
 	(&Cleanup[*generated.JobRunnerDeleteOne]{
 		client: suite.client.db.JobRunner,
 		ID:     runner.ID,
+	}).MustDelete(testUser1.UserCtx, t)
+
+	(&Cleanup[*generated.JobTemplateDeleteOne]{
+		client: suite.client.db.JobTemplate,
+		ID:     job.ID,
 	}).MustDelete(testUser1.UserCtx, t)
 
 	(&Cleanup[*generated.SubcontrolDeleteOne]{

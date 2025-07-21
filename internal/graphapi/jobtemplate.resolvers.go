@@ -90,7 +90,7 @@ func (r *mutationResolver) UpdateJobTemplate(ctx context.Context, id string, inp
 	}
 
 	// setup update request
-	req := res.Update().SetInput(input).AppendTags(input.AppendTags).AppendConfiguration(input.AppendConfiguration)
+	req := res.Update().SetInput(input).AppendTags(input.AppendTags)
 
 	res, err = req.Save(ctx)
 	if err != nil {

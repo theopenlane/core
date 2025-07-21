@@ -656,20 +656,20 @@ func (c *Control) Subcontrols(
 }
 
 func (c *Control) ScheduledJobs(
-	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ControlScheduledJobOrder, where *ControlScheduledJobWhereInput,
-) (*ControlScheduledJobConnection, error) {
-	opts := []ControlScheduledJobPaginateOption{
-		WithControlScheduledJobOrder(orderBy),
-		WithControlScheduledJobFilter(where.Filter),
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ScheduledJobOrder, where *ScheduledJobWhereInput,
+) (*ScheduledJobConnection, error) {
+	opts := []ScheduledJobPaginateOption{
+		WithScheduledJobOrder(orderBy),
+		WithScheduledJobFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
 	totalCount, hasTotalCount := c.Edges.totalCount[19][alias]
 	if nodes, err := c.NamedScheduledJobs(alias); err == nil || hasTotalCount {
-		pager, err := newControlScheduledJobPager(opts, last != nil)
+		pager, err := newScheduledJobPager(opts, last != nil)
 		if err != nil {
 			return nil, err
 		}
-		conn := &ControlScheduledJobConnection{Edges: []*ControlScheduledJobEdge{}, TotalCount: totalCount}
+		conn := &ScheduledJobConnection{Edges: []*ScheduledJobEdge{}, TotalCount: totalCount}
 		conn.build(nodes, pager, after, first, before, last)
 		return conn, nil
 	}
@@ -1047,72 +1047,6 @@ func (co *ControlObjective) Tasks(
 		return conn, nil
 	}
 	return co.QueryTasks().Paginate(ctx, after, first, before, last, opts...)
-}
-
-func (csj *ControlScheduledJob) Owner(ctx context.Context) (*Organization, error) {
-	result, err := csj.Edges.OwnerOrErr()
-	if IsNotLoaded(err) {
-		result, err = csj.QueryOwner().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
-func (csj *ControlScheduledJob) JobTemplate(ctx context.Context) (*JobTemplate, error) {
-	result, err := csj.Edges.JobTemplateOrErr()
-	if IsNotLoaded(err) {
-		result, err = csj.QueryJobTemplate().Only(ctx)
-	}
-	return result, err
-}
-
-func (csj *ControlScheduledJob) Controls(
-	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ControlOrder, where *ControlWhereInput,
-) (*ControlConnection, error) {
-	opts := []ControlPaginateOption{
-		WithControlOrder(orderBy),
-		WithControlFilter(where.Filter),
-	}
-	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := csj.Edges.totalCount[2][alias]
-	if nodes, err := csj.NamedControls(alias); err == nil || hasTotalCount {
-		pager, err := newControlPager(opts, last != nil)
-		if err != nil {
-			return nil, err
-		}
-		conn := &ControlConnection{Edges: []*ControlEdge{}, TotalCount: totalCount}
-		conn.build(nodes, pager, after, first, before, last)
-		return conn, nil
-	}
-	return csj.QueryControls().Paginate(ctx, after, first, before, last, opts...)
-}
-
-func (csj *ControlScheduledJob) Subcontrols(
-	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*SubcontrolOrder, where *SubcontrolWhereInput,
-) (*SubcontrolConnection, error) {
-	opts := []SubcontrolPaginateOption{
-		WithSubcontrolOrder(orderBy),
-		WithSubcontrolFilter(where.Filter),
-	}
-	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := csj.Edges.totalCount[3][alias]
-	if nodes, err := csj.NamedSubcontrols(alias); err == nil || hasTotalCount {
-		pager, err := newSubcontrolPager(opts, last != nil)
-		if err != nil {
-			return nil, err
-		}
-		conn := &SubcontrolConnection{Edges: []*SubcontrolEdge{}, TotalCount: totalCount}
-		conn.build(nodes, pager, after, first, before, last)
-		return conn, nil
-	}
-	return csj.QuerySubcontrols().Paginate(ctx, after, first, before, last, opts...)
-}
-
-func (csj *ControlScheduledJob) JobRunner(ctx context.Context) (*JobRunner, error) {
-	result, err := csj.Edges.JobRunnerOrErr()
-	if IsNotLoaded(err) {
-		result, err = csj.QueryJobRunner().Only(ctx)
-	}
-	return result, MaskNotFound(err)
 }
 
 func (cd *CustomDomain) Owner(ctx context.Context) (*Organization, error) {
@@ -3207,7 +3141,7 @@ func (jr *JobResult) Owner(ctx context.Context) (*Organization, error) {
 	return result, MaskNotFound(err)
 }
 
-func (jr *JobResult) ScheduledJob(ctx context.Context) (*ControlScheduledJob, error) {
+func (jr *JobResult) ScheduledJob(ctx context.Context) (*ScheduledJob, error) {
 	result, err := jr.Edges.ScheduledJobOrErr()
 	if IsNotLoaded(err) {
 		result, err = jr.QueryScheduledJob().Only(ctx)
@@ -4834,20 +4768,20 @@ func (o *Organization) JobTemplates(
 }
 
 func (o *Organization) ScheduledJobs(
-	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ControlScheduledJobOrder, where *ControlScheduledJobWhereInput,
-) (*ControlScheduledJobConnection, error) {
-	opts := []ControlScheduledJobPaginateOption{
-		WithControlScheduledJobOrder(orderBy),
-		WithControlScheduledJobFilter(where.Filter),
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ScheduledJobOrder, where *ScheduledJobWhereInput,
+) (*ScheduledJobConnection, error) {
+	opts := []ScheduledJobPaginateOption{
+		WithScheduledJobOrder(orderBy),
+		WithScheduledJobFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
 	totalCount, hasTotalCount := o.Edges.totalCount[55][alias]
 	if nodes, err := o.NamedScheduledJobs(alias); err == nil || hasTotalCount {
-		pager, err := newControlScheduledJobPager(opts, last != nil)
+		pager, err := newScheduledJobPager(opts, last != nil)
 		if err != nil {
 			return nil, err
 		}
-		conn := &ControlScheduledJobConnection{Edges: []*ControlScheduledJobEdge{}, TotalCount: totalCount}
+		conn := &ScheduledJobConnection{Edges: []*ScheduledJobEdge{}, TotalCount: totalCount}
 		conn.build(nodes, pager, after, first, before, last)
 		return conn, nil
 	}
@@ -6105,6 +6039,72 @@ func (s *Scan) Entities(
 	return s.QueryEntities().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (sj *ScheduledJob) Owner(ctx context.Context) (*Organization, error) {
+	result, err := sj.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = sj.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (sj *ScheduledJob) JobTemplate(ctx context.Context) (*JobTemplate, error) {
+	result, err := sj.Edges.JobTemplateOrErr()
+	if IsNotLoaded(err) {
+		result, err = sj.QueryJobTemplate().Only(ctx)
+	}
+	return result, err
+}
+
+func (sj *ScheduledJob) Controls(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ControlOrder, where *ControlWhereInput,
+) (*ControlConnection, error) {
+	opts := []ControlPaginateOption{
+		WithControlOrder(orderBy),
+		WithControlFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := sj.Edges.totalCount[2][alias]
+	if nodes, err := sj.NamedControls(alias); err == nil || hasTotalCount {
+		pager, err := newControlPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &ControlConnection{Edges: []*ControlEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return sj.QueryControls().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (sj *ScheduledJob) Subcontrols(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*SubcontrolOrder, where *SubcontrolWhereInput,
+) (*SubcontrolConnection, error) {
+	opts := []SubcontrolPaginateOption{
+		WithSubcontrolOrder(orderBy),
+		WithSubcontrolFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := sj.Edges.totalCount[3][alias]
+	if nodes, err := sj.NamedSubcontrols(alias); err == nil || hasTotalCount {
+		pager, err := newSubcontrolPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &SubcontrolConnection{Edges: []*SubcontrolEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return sj.QuerySubcontrols().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (sj *ScheduledJob) JobRunner(ctx context.Context) (*JobRunner, error) {
+	result, err := sj.Edges.JobRunnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = sj.QueryJobRunner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (sjr *ScheduledJobRun) Owner(ctx context.Context) (*Organization, error) {
 	result, err := sjr.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -6113,7 +6113,7 @@ func (sjr *ScheduledJobRun) Owner(ctx context.Context) (*Organization, error) {
 	return result, MaskNotFound(err)
 }
 
-func (sjr *ScheduledJobRun) ScheduledJob(ctx context.Context) (*ControlScheduledJob, error) {
+func (sjr *ScheduledJobRun) ScheduledJob(ctx context.Context) (*ScheduledJob, error) {
 	result, err := sjr.Edges.ScheduledJobOrErr()
 	if IsNotLoaded(err) {
 		result, err = sjr.QueryScheduledJob().Only(ctx)
@@ -6380,20 +6380,20 @@ func (s *Subcontrol) ControlImplementations(
 }
 
 func (s *Subcontrol) ScheduledJobs(
-	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ControlScheduledJobOrder, where *ControlScheduledJobWhereInput,
-) (*ControlScheduledJobConnection, error) {
-	opts := []ControlScheduledJobPaginateOption{
-		WithControlScheduledJobOrder(orderBy),
-		WithControlScheduledJobFilter(where.Filter),
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ScheduledJobOrder, where *ScheduledJobWhereInput,
+) (*ScheduledJobConnection, error) {
+	opts := []ScheduledJobPaginateOption{
+		WithScheduledJobOrder(orderBy),
+		WithScheduledJobFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
 	totalCount, hasTotalCount := s.Edges.totalCount[13][alias]
 	if nodes, err := s.NamedScheduledJobs(alias); err == nil || hasTotalCount {
-		pager, err := newControlScheduledJobPager(opts, last != nil)
+		pager, err := newScheduledJobPager(opts, last != nil)
 		if err != nil {
 			return nil, err
 		}
-		conn := &ControlScheduledJobConnection{Edges: []*ControlScheduledJobEdge{}, TotalCount: totalCount}
+		conn := &ScheduledJobConnection{Edges: []*ScheduledJobEdge{}, TotalCount: totalCount}
 		conn.build(nodes, pager, after, first, before, last)
 		return conn, nil
 	}

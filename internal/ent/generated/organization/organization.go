@@ -576,10 +576,10 @@ const (
 	// JobTemplatesColumn is the table column denoting the job_templates relation/edge.
 	JobTemplatesColumn = "owner_id"
 	// ScheduledJobsTable is the table that holds the scheduled_jobs relation/edge.
-	ScheduledJobsTable = "control_scheduled_jobs"
-	// ScheduledJobsInverseTable is the table name for the ControlScheduledJob entity.
-	// It exists in this package in order to avoid circular dependency with the "controlscheduledjob" package.
-	ScheduledJobsInverseTable = "control_scheduled_jobs"
+	ScheduledJobsTable = "scheduled_jobs"
+	// ScheduledJobsInverseTable is the table name for the ScheduledJob entity.
+	// It exists in this package in order to avoid circular dependency with the "scheduledjob" package.
+	ScheduledJobsInverseTable = "scheduled_jobs"
 	// ScheduledJobsColumn is the table column denoting the scheduled_jobs relation/edge.
 	ScheduledJobsColumn = "owner_id"
 	// JobResultsTable is the table that holds the job_results relation/edge.

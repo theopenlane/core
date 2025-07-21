@@ -2215,7 +2215,7 @@ type Control struct {
 	Scans                  *ScanConnection                  `json:"scans"`
 	ControlImplementations *ControlImplementationConnection `json:"controlImplementations"`
 	Subcontrols            *SubcontrolConnection            `json:"subcontrols"`
-	ScheduledJobs          *ControlScheduledJobConnection   `json:"scheduledJobs"`
+	ScheduledJobs          *ScheduledJobConnection          `json:"scheduledJobs"`
 }
 
 func (Control) IsNode() {}
@@ -3828,413 +3828,6 @@ type ControlOrder struct {
 	Field ControlOrderField `json:"field"`
 }
 
-type ControlScheduledJob struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty"`
-	// the scheduled_job id to take the script to run from
-	JobID string `json:"jobID"`
-	// the configuration to run this job
-	Configuration models.JobConfiguration `json:"configuration,omitempty"`
-	// cron syntax. If not provided, it would inherit the cron of the parent job
-	Cron *string `json:"cron,omitempty"`
-	// the runner that this job will run on. If not set, it will scheduled on a general runner instead
-	JobRunnerID *string               `json:"jobRunnerID,omitempty"`
-	Owner       *Organization         `json:"owner,omitempty"`
-	JobTemplate *JobTemplate          `json:"jobTemplate"`
-	Controls    *ControlConnection    `json:"controls"`
-	Subcontrols *SubcontrolConnection `json:"subcontrols"`
-	JobRunner   *JobRunner            `json:"jobRunner,omitempty"`
-}
-
-func (ControlScheduledJob) IsNode() {}
-
-// Return response for createBulkControlScheduledJob mutation
-type ControlScheduledJobBulkCreatePayload struct {
-	// Created controlScheduledJobs
-	ControlScheduledJobs []*ControlScheduledJob `json:"controlScheduledJobs,omitempty"`
-}
-
-// A connection to a list of items.
-type ControlScheduledJobConnection struct {
-	// A list of edges.
-	Edges []*ControlScheduledJobEdge `json:"edges,omitempty"`
-	// Information to aid in pagination.
-	PageInfo *PageInfo `json:"pageInfo"`
-	// Identifies the total count of items in the connection.
-	TotalCount int64 `json:"totalCount"`
-}
-
-// Return response for createControlScheduledJob mutation
-type ControlScheduledJobCreatePayload struct {
-	// Created controlScheduledJob
-	ControlScheduledJob *ControlScheduledJob `json:"controlScheduledJob"`
-}
-
-// Return response for deleteControlScheduledJob mutation
-type ControlScheduledJobDeletePayload struct {
-	// Deleted controlScheduledJob ID
-	DeletedID string `json:"deletedID"`
-}
-
-// An edge in a connection.
-type ControlScheduledJobEdge struct {
-	// The item at the end of the edge.
-	Node *ControlScheduledJob `json:"node,omitempty"`
-	// A cursor for use in pagination.
-	Cursor string `json:"cursor"`
-}
-
-type ControlScheduledJobHistory struct {
-	ID          string         `json:"id"`
-	HistoryTime time.Time      `json:"historyTime"`
-	Ref         *string        `json:"ref,omitempty"`
-	Operation   history.OpType `json:"operation"`
-	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
-	CreatedBy   *string        `json:"createdBy,omitempty"`
-	UpdatedBy   *string        `json:"updatedBy,omitempty"`
-	// the organization id that owns the object
-	OwnerID *string `json:"ownerID,omitempty"`
-	// the scheduled_job id to take the script to run from
-	JobID string `json:"jobID"`
-	// the configuration to run this job
-	Configuration models.JobConfiguration `json:"configuration,omitempty"`
-	// cron syntax. If not provided, it would inherit the cron of the parent job
-	Cron *string `json:"cron,omitempty"`
-	// the runner that this job will run on. If not set, it will scheduled on a general runner instead
-	JobRunnerID *string `json:"jobRunnerID,omitempty"`
-}
-
-func (ControlScheduledJobHistory) IsNode() {}
-
-// A connection to a list of items.
-type ControlScheduledJobHistoryConnection struct {
-	// A list of edges.
-	Edges []*ControlScheduledJobHistoryEdge `json:"edges,omitempty"`
-	// Information to aid in pagination.
-	PageInfo *PageInfo `json:"pageInfo"`
-	// Identifies the total count of items in the connection.
-	TotalCount int64 `json:"totalCount"`
-}
-
-// An edge in a connection.
-type ControlScheduledJobHistoryEdge struct {
-	// The item at the end of the edge.
-	Node *ControlScheduledJobHistory `json:"node,omitempty"`
-	// A cursor for use in pagination.
-	Cursor string `json:"cursor"`
-}
-
-// Ordering options for ControlScheduledJobHistory connections
-type ControlScheduledJobHistoryOrder struct {
-	// The ordering direction.
-	Direction OrderDirection `json:"direction"`
-	// The field by which to order ControlScheduledJobHistories.
-	Field ControlScheduledJobHistoryOrderField `json:"field"`
-}
-
-// ControlScheduledJobHistoryWhereInput is used for filtering ControlScheduledJobHistory objects.
-// Input was generated by ent.
-type ControlScheduledJobHistoryWhereInput struct {
-	Not *ControlScheduledJobHistoryWhereInput   `json:"not,omitempty"`
-	And []*ControlScheduledJobHistoryWhereInput `json:"and,omitempty"`
-	Or  []*ControlScheduledJobHistoryWhereInput `json:"or,omitempty"`
-	// id field predicates
-	ID             *string  `json:"id,omitempty"`
-	IDNeq          *string  `json:"idNEQ,omitempty"`
-	IDIn           []string `json:"idIn,omitempty"`
-	IDNotIn        []string `json:"idNotIn,omitempty"`
-	IDGt           *string  `json:"idGT,omitempty"`
-	IDGte          *string  `json:"idGTE,omitempty"`
-	IDLt           *string  `json:"idLT,omitempty"`
-	IDLte          *string  `json:"idLTE,omitempty"`
-	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
-	IDContainsFold *string  `json:"idContainsFold,omitempty"`
-	// history_time field predicates
-	HistoryTime      *time.Time   `json:"historyTime,omitempty"`
-	HistoryTimeNeq   *time.Time   `json:"historyTimeNEQ,omitempty"`
-	HistoryTimeIn    []*time.Time `json:"historyTimeIn,omitempty"`
-	HistoryTimeNotIn []*time.Time `json:"historyTimeNotIn,omitempty"`
-	HistoryTimeGt    *time.Time   `json:"historyTimeGT,omitempty"`
-	HistoryTimeGte   *time.Time   `json:"historyTimeGTE,omitempty"`
-	HistoryTimeLt    *time.Time   `json:"historyTimeLT,omitempty"`
-	HistoryTimeLte   *time.Time   `json:"historyTimeLTE,omitempty"`
-	// ref field predicates
-	Ref             *string  `json:"ref,omitempty"`
-	RefNeq          *string  `json:"refNEQ,omitempty"`
-	RefIn           []string `json:"refIn,omitempty"`
-	RefNotIn        []string `json:"refNotIn,omitempty"`
-	RefGt           *string  `json:"refGT,omitempty"`
-	RefGte          *string  `json:"refGTE,omitempty"`
-	RefLt           *string  `json:"refLT,omitempty"`
-	RefLte          *string  `json:"refLTE,omitempty"`
-	RefContains     *string  `json:"refContains,omitempty"`
-	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
-	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
-	RefIsNil        *bool    `json:"refIsNil,omitempty"`
-	RefNotNil       *bool    `json:"refNotNil,omitempty"`
-	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
-	RefContainsFold *string  `json:"refContainsFold,omitempty"`
-	// operation field predicates
-	Operation      *history.OpType  `json:"operation,omitempty"`
-	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []history.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
-	// created_at field predicates
-	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
-	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
-	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
-	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
-	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
-	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
-	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
-	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
-	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
-	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
-	// updated_at field predicates
-	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
-	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
-	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
-	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
-	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
-	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
-	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
-	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
-	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
-	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
-	// owner_id field predicates
-	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
-	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
-	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
-	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
-	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
-	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
-	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
-	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
-	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
-	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
-	// job_id field predicates
-	JobID             *string  `json:"jobID,omitempty"`
-	JobIdneq          *string  `json:"jobIDNEQ,omitempty"`
-	JobIDIn           []string `json:"jobIDIn,omitempty"`
-	JobIDNotIn        []string `json:"jobIDNotIn,omitempty"`
-	JobIdgt           *string  `json:"jobIDGT,omitempty"`
-	JobIdgte          *string  `json:"jobIDGTE,omitempty"`
-	JobIdlt           *string  `json:"jobIDLT,omitempty"`
-	JobIdlte          *string  `json:"jobIDLTE,omitempty"`
-	JobIDContains     *string  `json:"jobIDContains,omitempty"`
-	JobIDHasPrefix    *string  `json:"jobIDHasPrefix,omitempty"`
-	JobIDHasSuffix    *string  `json:"jobIDHasSuffix,omitempty"`
-	JobIDEqualFold    *string  `json:"jobIDEqualFold,omitempty"`
-	JobIDContainsFold *string  `json:"jobIDContainsFold,omitempty"`
-	// job_runner_id field predicates
-	JobRunnerID             *string  `json:"jobRunnerID,omitempty"`
-	JobRunnerIdneq          *string  `json:"jobRunnerIDNEQ,omitempty"`
-	JobRunnerIDIn           []string `json:"jobRunnerIDIn,omitempty"`
-	JobRunnerIDNotIn        []string `json:"jobRunnerIDNotIn,omitempty"`
-	JobRunnerIdgt           *string  `json:"jobRunnerIDGT,omitempty"`
-	JobRunnerIdgte          *string  `json:"jobRunnerIDGTE,omitempty"`
-	JobRunnerIdlt           *string  `json:"jobRunnerIDLT,omitempty"`
-	JobRunnerIdlte          *string  `json:"jobRunnerIDLTE,omitempty"`
-	JobRunnerIDContains     *string  `json:"jobRunnerIDContains,omitempty"`
-	JobRunnerIDHasPrefix    *string  `json:"jobRunnerIDHasPrefix,omitempty"`
-	JobRunnerIDHasSuffix    *string  `json:"jobRunnerIDHasSuffix,omitempty"`
-	JobRunnerIDIsNil        *bool    `json:"jobRunnerIDIsNil,omitempty"`
-	JobRunnerIDNotNil       *bool    `json:"jobRunnerIDNotNil,omitempty"`
-	JobRunnerIDEqualFold    *string  `json:"jobRunnerIDEqualFold,omitempty"`
-	JobRunnerIDContainsFold *string  `json:"jobRunnerIDContainsFold,omitempty"`
-}
-
-// Ordering options for ControlScheduledJob connections
-type ControlScheduledJobOrder struct {
-	// The ordering direction.
-	Direction OrderDirection `json:"direction"`
-	// The field by which to order ControlScheduledJobs.
-	Field ControlScheduledJobOrderField `json:"field"`
-}
-
-// Return response for updateControlScheduledJob mutation
-type ControlScheduledJobUpdatePayload struct {
-	// Updated controlScheduledJob
-	ControlScheduledJob *ControlScheduledJob `json:"controlScheduledJob"`
-}
-
-// ControlScheduledJobWhereInput is used for filtering ControlScheduledJob objects.
-// Input was generated by ent.
-type ControlScheduledJobWhereInput struct {
-	Not *ControlScheduledJobWhereInput   `json:"not,omitempty"`
-	And []*ControlScheduledJobWhereInput `json:"and,omitempty"`
-	Or  []*ControlScheduledJobWhereInput `json:"or,omitempty"`
-	// id field predicates
-	ID             *string  `json:"id,omitempty"`
-	IDNeq          *string  `json:"idNEQ,omitempty"`
-	IDIn           []string `json:"idIn,omitempty"`
-	IDNotIn        []string `json:"idNotIn,omitempty"`
-	IDGt           *string  `json:"idGT,omitempty"`
-	IDGte          *string  `json:"idGTE,omitempty"`
-	IDLt           *string  `json:"idLT,omitempty"`
-	IDLte          *string  `json:"idLTE,omitempty"`
-	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
-	IDContainsFold *string  `json:"idContainsFold,omitempty"`
-	// created_at field predicates
-	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
-	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
-	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
-	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
-	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
-	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
-	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
-	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
-	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
-	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
-	// updated_at field predicates
-	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
-	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
-	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
-	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
-	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
-	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
-	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
-	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
-	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
-	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
-	// owner_id field predicates
-	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
-	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
-	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
-	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
-	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
-	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
-	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
-	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
-	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
-	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
-	// job_id field predicates
-	JobID             *string  `json:"jobID,omitempty"`
-	JobIdneq          *string  `json:"jobIDNEQ,omitempty"`
-	JobIDIn           []string `json:"jobIDIn,omitempty"`
-	JobIDNotIn        []string `json:"jobIDNotIn,omitempty"`
-	JobIdgt           *string  `json:"jobIDGT,omitempty"`
-	JobIdgte          *string  `json:"jobIDGTE,omitempty"`
-	JobIdlt           *string  `json:"jobIDLT,omitempty"`
-	JobIdlte          *string  `json:"jobIDLTE,omitempty"`
-	JobIDContains     *string  `json:"jobIDContains,omitempty"`
-	JobIDHasPrefix    *string  `json:"jobIDHasPrefix,omitempty"`
-	JobIDHasSuffix    *string  `json:"jobIDHasSuffix,omitempty"`
-	JobIDEqualFold    *string  `json:"jobIDEqualFold,omitempty"`
-	JobIDContainsFold *string  `json:"jobIDContainsFold,omitempty"`
-	// job_runner_id field predicates
-	JobRunnerID             *string  `json:"jobRunnerID,omitempty"`
-	JobRunnerIdneq          *string  `json:"jobRunnerIDNEQ,omitempty"`
-	JobRunnerIDIn           []string `json:"jobRunnerIDIn,omitempty"`
-	JobRunnerIDNotIn        []string `json:"jobRunnerIDNotIn,omitempty"`
-	JobRunnerIdgt           *string  `json:"jobRunnerIDGT,omitempty"`
-	JobRunnerIdgte          *string  `json:"jobRunnerIDGTE,omitempty"`
-	JobRunnerIdlt           *string  `json:"jobRunnerIDLT,omitempty"`
-	JobRunnerIdlte          *string  `json:"jobRunnerIDLTE,omitempty"`
-	JobRunnerIDContains     *string  `json:"jobRunnerIDContains,omitempty"`
-	JobRunnerIDHasPrefix    *string  `json:"jobRunnerIDHasPrefix,omitempty"`
-	JobRunnerIDHasSuffix    *string  `json:"jobRunnerIDHasSuffix,omitempty"`
-	JobRunnerIDIsNil        *bool    `json:"jobRunnerIDIsNil,omitempty"`
-	JobRunnerIDNotNil       *bool    `json:"jobRunnerIDNotNil,omitempty"`
-	JobRunnerIDEqualFold    *string  `json:"jobRunnerIDEqualFold,omitempty"`
-	JobRunnerIDContainsFold *string  `json:"jobRunnerIDContainsFold,omitempty"`
-	// owner edge predicates
-	HasOwner     *bool                     `json:"hasOwner,omitempty"`
-	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
-	// job_template edge predicates
-	HasJobTemplate     *bool                    `json:"hasJobTemplate,omitempty"`
-	HasJobTemplateWith []*JobTemplateWhereInput `json:"hasJobTemplateWith,omitempty"`
-	// controls edge predicates
-	HasControls     *bool                `json:"hasControls,omitempty"`
-	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
-	// subcontrols edge predicates
-	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
-	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
-	// job_runner edge predicates
-	HasJobRunner     *bool                  `json:"hasJobRunner,omitempty"`
-	HasJobRunnerWith []*JobRunnerWhereInput `json:"hasJobRunnerWith,omitempty"`
-}
-
 // Return response for updateControl mutation
 type ControlUpdatePayload struct {
 	// Updated control
@@ -4595,8 +4188,8 @@ type ControlWhereInput struct {
 	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
 	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
 	// scheduled_jobs edge predicates
-	HasScheduledJobs     *bool                            `json:"hasScheduledJobs,omitempty"`
-	HasScheduledJobsWith []*ControlScheduledJobWhereInput `json:"hasScheduledJobsWith,omitempty"`
+	HasScheduledJobs     *bool                     `json:"hasScheduledJobs,omitempty"`
+	HasScheduledJobsWith []*ScheduledJobWhereInput `json:"hasScheduledJobsWith,omitempty"`
 }
 
 // CreateAPITokenInput is used for create APIToken object.
@@ -4844,20 +4437,6 @@ type CreateControlObjectiveInput struct {
 	RiskIDs           []string `json:"riskIDs,omitempty"`
 	NarrativeIDs      []string `json:"narrativeIDs,omitempty"`
 	TaskIDs           []string `json:"taskIDs,omitempty"`
-}
-
-// CreateControlScheduledJobInput is used for create ControlScheduledJob object.
-// Input was generated by ent.
-type CreateControlScheduledJobInput struct {
-	// the configuration to run this job
-	Configuration models.JobConfiguration `json:"configuration,omitempty"`
-	// cron syntax. If not provided, it would inherit the cron of the parent job
-	Cron          *string  `json:"cron,omitempty"`
-	OwnerID       *string  `json:"ownerID,omitempty"`
-	JobTemplateID string   `json:"jobTemplateID"`
-	ControlIDs    []string `json:"controlIDs,omitempty"`
-	SubcontrolIDs []string `json:"subcontrolIDs,omitempty"`
-	JobRunnerID   *string  `json:"jobRunnerID,omitempty"`
 }
 
 type CreateControlWithSubcontrolsInput struct {
@@ -5317,15 +4896,13 @@ type CreateJobTemplateInput struct {
 	Tags []string `json:"tags,omitempty"`
 	// the title of the job
 	Title string `json:"title"`
-	// the description of the job
+	// the short description of the job and what it does
 	Description *string `json:"description,omitempty"`
-	// the platform to use to execute this job
+	// the platform to use to execute this job, e.g. golang, typescript, python, etc.
 	Platform enums.JobPlatformType `json:"platform"`
 	// the url from where to download the script from
 	DownloadURL string `json:"downloadURL"`
-	// the configuration to run this job
-	Configuration models.JobConfiguration `json:"configuration,omitempty"`
-	// cron syntax
+	// cron schedule to run the job, e.g. 0 0 * * *
 	Cron    *string `json:"cron,omitempty"`
 	OwnerID *string `json:"ownerID,omitempty"`
 }
@@ -5744,6 +5321,20 @@ type CreateScanInput struct {
 	ViewerIDs       []string          `json:"viewerIDs,omitempty"`
 	AssetIDs        []string          `json:"assetIDs,omitempty"`
 	EntityIDs       []string          `json:"entityIDs,omitempty"`
+}
+
+// CreateScheduledJobInput is used for create ScheduledJob object.
+// Input was generated by ent.
+type CreateScheduledJobInput struct {
+	// the configuration to run this job
+	Configuration models.JobConfiguration `json:"configuration,omitempty"`
+	// cron syntax. If not provided, it would inherit the cron of the parent job
+	Cron          *string  `json:"cron,omitempty"`
+	OwnerID       *string  `json:"ownerID,omitempty"`
+	JobTemplateID string   `json:"jobTemplateID"`
+	ControlIDs    []string `json:"controlIDs,omitempty"`
+	SubcontrolIDs []string `json:"subcontrolIDs,omitempty"`
+	JobRunnerID   *string  `json:"jobRunnerID,omitempty"`
 }
 
 // CreateScheduledJobRunInput is used for create ScheduledJobRun object.
@@ -13349,11 +12940,11 @@ type JobResult struct {
 	// The time the job finished it's execution. This is different from the db insertion time
 	FinishedAt time.Time `json:"finishedAt"`
 	// The time the job started it's execution. This is different from the db insertion time
-	StartedAt    time.Time            `json:"startedAt"`
-	FileID       string               `json:"fileID"`
-	Owner        *Organization        `json:"owner,omitempty"`
-	ScheduledJob *ControlScheduledJob `json:"scheduledJob"`
-	File         *File                `json:"file"`
+	StartedAt    time.Time     `json:"startedAt"`
+	FileID       string        `json:"fileID"`
+	Owner        *Organization `json:"owner,omitempty"`
+	ScheduledJob *ScheduledJob `json:"scheduledJob"`
+	File         *File         `json:"file"`
 }
 
 func (JobResult) IsNode() {}
@@ -13535,8 +13126,8 @@ type JobResultWhereInput struct {
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 	// scheduled_job edge predicates
-	HasScheduledJob     *bool                            `json:"hasScheduledJob,omitempty"`
-	HasScheduledJobWith []*ControlScheduledJobWhereInput `json:"hasScheduledJobWith,omitempty"`
+	HasScheduledJob     *bool                     `json:"hasScheduledJob,omitempty"`
+	HasScheduledJobWith []*ScheduledJobWhereInput `json:"hasScheduledJobWith,omitempty"`
 	// file edge predicates
 	HasFile     *bool             `json:"hasFile,omitempty"`
 	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
@@ -14194,17 +13785,13 @@ type JobTemplate struct {
 	SystemOwned *bool `json:"systemOwned,omitempty"`
 	// the title of the job
 	Title string `json:"title"`
-	// the description of the job
+	// the short description of the job and what it does
 	Description *string `json:"description,omitempty"`
-	// the platform to use to execute this job
+	// the platform to use to execute this job, e.g. golang, typescript, python, etc.
 	Platform enums.JobPlatformType `json:"platform"`
-	// Windmill path
-	WindmillPath string `json:"windmillPath"`
 	// the url from where to download the script from
 	DownloadURL string `json:"downloadURL"`
-	// the configuration to run this job
-	Configuration models.JobConfiguration `json:"configuration,omitempty"`
-	// cron syntax
+	// cron schedule to run the job, e.g. 0 0 * * *
 	Cron  *string       `json:"cron,omitempty"`
 	Owner *Organization `json:"owner,omitempty"`
 }
@@ -14266,17 +13853,13 @@ type JobTemplateHistory struct {
 	SystemOwned *bool `json:"systemOwned,omitempty"`
 	// the title of the job
 	Title string `json:"title"`
-	// the description of the job
+	// the short description of the job and what it does
 	Description *string `json:"description,omitempty"`
-	// the platform to use to execute this job
+	// the platform to use to execute this job, e.g. golang, typescript, python, etc.
 	Platform enums.JobPlatformType `json:"platform"`
-	// Windmill path
-	WindmillPath string `json:"windmillPath"`
 	// the url from where to download the script from
 	DownloadURL string `json:"downloadURL"`
-	// the configuration to run this job
-	Configuration models.JobConfiguration `json:"configuration,omitempty"`
-	// cron syntax
+	// cron schedule to run the job, e.g. 0 0 * * *
 	Cron *string `json:"cron,omitempty"`
 }
 
@@ -17367,7 +16950,7 @@ type Organization struct {
 	JobRunnerRegistrationTokens   *JobRunnerRegistrationTokenConnection `json:"jobRunnerRegistrationTokens"`
 	DNSVerifications              *DNSVerificationConnection            `json:"dnsVerifications"`
 	JobTemplates                  *JobTemplateConnection                `json:"jobTemplates"`
-	ScheduledJobs                 *ControlScheduledJobConnection        `json:"scheduledJobs"`
+	ScheduledJobs                 *ScheduledJobConnection               `json:"scheduledJobs"`
 	JobResults                    *JobResultConnection                  `json:"jobResults"`
 	ScheduledJobRuns              *ScheduledJobRunConnection            `json:"scheduledJobRuns"`
 	TrustCenters                  *TrustCenterConnection                `json:"trustCenters"`
@@ -18734,8 +18317,8 @@ type OrganizationWhereInput struct {
 	HasJobTemplates     *bool                    `json:"hasJobTemplates,omitempty"`
 	HasJobTemplatesWith []*JobTemplateWhereInput `json:"hasJobTemplatesWith,omitempty"`
 	// scheduled_jobs edge predicates
-	HasScheduledJobs     *bool                            `json:"hasScheduledJobs,omitempty"`
-	HasScheduledJobsWith []*ControlScheduledJobWhereInput `json:"hasScheduledJobsWith,omitempty"`
+	HasScheduledJobs     *bool                     `json:"hasScheduledJobs,omitempty"`
+	HasScheduledJobsWith []*ScheduledJobWhereInput `json:"hasScheduledJobsWith,omitempty"`
 	// job_results edge predicates
 	HasJobResults     *bool                  `json:"hasJobResults,omitempty"`
 	HasJobResultsWith []*JobResultWhereInput `json:"hasJobResultsWith,omitempty"`
@@ -21983,6 +21566,291 @@ type ScanWhereInput struct {
 	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
 }
 
+type ScheduledJob struct {
+	ID        string     `json:"id"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
+	// the organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// the scheduled_job id to take the script to run from
+	JobID string `json:"jobID"`
+	// the configuration to run this job
+	Configuration models.JobConfiguration `json:"configuration,omitempty"`
+	// cron syntax. If not provided, it would inherit the cron of the parent job
+	Cron *string `json:"cron,omitempty"`
+	// the runner that this job will run on. If not set, it will scheduled on a general runner instead
+	JobRunnerID *string               `json:"jobRunnerID,omitempty"`
+	Owner       *Organization         `json:"owner,omitempty"`
+	JobTemplate *JobTemplate          `json:"jobTemplate"`
+	Controls    *ControlConnection    `json:"controls"`
+	Subcontrols *SubcontrolConnection `json:"subcontrols"`
+	JobRunner   *JobRunner            `json:"jobRunner,omitempty"`
+}
+
+func (ScheduledJob) IsNode() {}
+
+// Return response for createBulkScheduledJob mutation
+type ScheduledJobBulkCreatePayload struct {
+	// Created scheduledJobs
+	ScheduledJobs []*ScheduledJob `json:"scheduledJobs,omitempty"`
+}
+
+// A connection to a list of items.
+type ScheduledJobConnection struct {
+	// A list of edges.
+	Edges []*ScheduledJobEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// Return response for createScheduledJob mutation
+type ScheduledJobCreatePayload struct {
+	// Created scheduledJob
+	ScheduledJob *ScheduledJob `json:"scheduledJob"`
+}
+
+// Return response for deleteScheduledJob mutation
+type ScheduledJobDeletePayload struct {
+	// Deleted scheduledJob ID
+	DeletedID string `json:"deletedID"`
+}
+
+// An edge in a connection.
+type ScheduledJobEdge struct {
+	// The item at the end of the edge.
+	Node *ScheduledJob `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+type ScheduledJobHistory struct {
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
+	// the organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// the scheduled_job id to take the script to run from
+	JobID string `json:"jobID"`
+	// the configuration to run this job
+	Configuration models.JobConfiguration `json:"configuration,omitempty"`
+	// cron syntax. If not provided, it would inherit the cron of the parent job
+	Cron *string `json:"cron,omitempty"`
+	// the runner that this job will run on. If not set, it will scheduled on a general runner instead
+	JobRunnerID *string `json:"jobRunnerID,omitempty"`
+}
+
+func (ScheduledJobHistory) IsNode() {}
+
+// A connection to a list of items.
+type ScheduledJobHistoryConnection struct {
+	// A list of edges.
+	Edges []*ScheduledJobHistoryEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// An edge in a connection.
+type ScheduledJobHistoryEdge struct {
+	// The item at the end of the edge.
+	Node *ScheduledJobHistory `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+// Ordering options for ScheduledJobHistory connections
+type ScheduledJobHistoryOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order ScheduledJobHistories.
+	Field ScheduledJobHistoryOrderField `json:"field"`
+}
+
+// ScheduledJobHistoryWhereInput is used for filtering ScheduledJobHistory objects.
+// Input was generated by ent.
+type ScheduledJobHistoryWhereInput struct {
+	Not *ScheduledJobHistoryWhereInput   `json:"not,omitempty"`
+	And []*ScheduledJobHistoryWhereInput `json:"and,omitempty"`
+	Or  []*ScheduledJobHistoryWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// history_time field predicates
+	HistoryTime      *time.Time   `json:"historyTime,omitempty"`
+	HistoryTimeNeq   *time.Time   `json:"historyTimeNEQ,omitempty"`
+	HistoryTimeIn    []*time.Time `json:"historyTimeIn,omitempty"`
+	HistoryTimeNotIn []*time.Time `json:"historyTimeNotIn,omitempty"`
+	HistoryTimeGt    *time.Time   `json:"historyTimeGT,omitempty"`
+	HistoryTimeGte   *time.Time   `json:"historyTimeGTE,omitempty"`
+	HistoryTimeLt    *time.Time   `json:"historyTimeLT,omitempty"`
+	HistoryTimeLte   *time.Time   `json:"historyTimeLTE,omitempty"`
+	// ref field predicates
+	Ref             *string  `json:"ref,omitempty"`
+	RefNeq          *string  `json:"refNEQ,omitempty"`
+	RefIn           []string `json:"refIn,omitempty"`
+	RefNotIn        []string `json:"refNotIn,omitempty"`
+	RefGt           *string  `json:"refGT,omitempty"`
+	RefGte          *string  `json:"refGTE,omitempty"`
+	RefLt           *string  `json:"refLT,omitempty"`
+	RefLte          *string  `json:"refLTE,omitempty"`
+	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
+	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
+	RefIsNil        *bool    `json:"refIsNil,omitempty"`
+	RefNotNil       *bool    `json:"refNotNil,omitempty"`
+	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
+	RefContainsFold *string  `json:"refContainsFold,omitempty"`
+	// operation field predicates
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// job_id field predicates
+	JobID             *string  `json:"jobID,omitempty"`
+	JobIdneq          *string  `json:"jobIDNEQ,omitempty"`
+	JobIDIn           []string `json:"jobIDIn,omitempty"`
+	JobIDNotIn        []string `json:"jobIDNotIn,omitempty"`
+	JobIdgt           *string  `json:"jobIDGT,omitempty"`
+	JobIdgte          *string  `json:"jobIDGTE,omitempty"`
+	JobIdlt           *string  `json:"jobIDLT,omitempty"`
+	JobIdlte          *string  `json:"jobIDLTE,omitempty"`
+	JobIDContains     *string  `json:"jobIDContains,omitempty"`
+	JobIDHasPrefix    *string  `json:"jobIDHasPrefix,omitempty"`
+	JobIDHasSuffix    *string  `json:"jobIDHasSuffix,omitempty"`
+	JobIDEqualFold    *string  `json:"jobIDEqualFold,omitempty"`
+	JobIDContainsFold *string  `json:"jobIDContainsFold,omitempty"`
+	// job_runner_id field predicates
+	JobRunnerID             *string  `json:"jobRunnerID,omitempty"`
+	JobRunnerIdneq          *string  `json:"jobRunnerIDNEQ,omitempty"`
+	JobRunnerIDIn           []string `json:"jobRunnerIDIn,omitempty"`
+	JobRunnerIDNotIn        []string `json:"jobRunnerIDNotIn,omitempty"`
+	JobRunnerIdgt           *string  `json:"jobRunnerIDGT,omitempty"`
+	JobRunnerIdgte          *string  `json:"jobRunnerIDGTE,omitempty"`
+	JobRunnerIdlt           *string  `json:"jobRunnerIDLT,omitempty"`
+	JobRunnerIdlte          *string  `json:"jobRunnerIDLTE,omitempty"`
+	JobRunnerIDContains     *string  `json:"jobRunnerIDContains,omitempty"`
+	JobRunnerIDHasPrefix    *string  `json:"jobRunnerIDHasPrefix,omitempty"`
+	JobRunnerIDHasSuffix    *string  `json:"jobRunnerIDHasSuffix,omitempty"`
+	JobRunnerIDIsNil        *bool    `json:"jobRunnerIDIsNil,omitempty"`
+	JobRunnerIDNotNil       *bool    `json:"jobRunnerIDNotNil,omitempty"`
+	JobRunnerIDEqualFold    *string  `json:"jobRunnerIDEqualFold,omitempty"`
+	JobRunnerIDContainsFold *string  `json:"jobRunnerIDContainsFold,omitempty"`
+}
+
+// Ordering options for ScheduledJob connections
+type ScheduledJobOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order ScheduledJobs.
+	Field ScheduledJobOrderField `json:"field"`
+}
+
 type ScheduledJobRun struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
@@ -22002,10 +21870,10 @@ type ScheduledJobRun struct {
 	ExpectedExecutionTime time.Time `json:"expectedExecutionTime"`
 	// the script that will be executed by the agent.
 	// This script will be templated with the values from the configuration on the job
-	Script       string               `json:"script"`
-	Owner        *Organization        `json:"owner,omitempty"`
-	ScheduledJob *ControlScheduledJob `json:"scheduledJob"`
-	JobRunner    *JobRunner           `json:"jobRunner"`
+	Script       string        `json:"script"`
+	Owner        *Organization `json:"owner,omitempty"`
+	ScheduledJob *ScheduledJob `json:"scheduledJob"`
+	JobRunner    *JobRunner    `json:"jobRunner"`
 }
 
 func (ScheduledJobRun) IsNode() {}
@@ -22183,8 +22051,162 @@ type ScheduledJobRunWhereInput struct {
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 	// scheduled_job edge predicates
-	HasScheduledJob     *bool                            `json:"hasScheduledJob,omitempty"`
-	HasScheduledJobWith []*ControlScheduledJobWhereInput `json:"hasScheduledJobWith,omitempty"`
+	HasScheduledJob     *bool                     `json:"hasScheduledJob,omitempty"`
+	HasScheduledJobWith []*ScheduledJobWhereInput `json:"hasScheduledJobWith,omitempty"`
+	// job_runner edge predicates
+	HasJobRunner     *bool                  `json:"hasJobRunner,omitempty"`
+	HasJobRunnerWith []*JobRunnerWhereInput `json:"hasJobRunnerWith,omitempty"`
+}
+
+// Return response for updateScheduledJob mutation
+type ScheduledJobUpdatePayload struct {
+	// Updated scheduledJob
+	ScheduledJob *ScheduledJob `json:"scheduledJob"`
+}
+
+// ScheduledJobWhereInput is used for filtering ScheduledJob objects.
+// Input was generated by ent.
+type ScheduledJobWhereInput struct {
+	Not *ScheduledJobWhereInput   `json:"not,omitempty"`
+	And []*ScheduledJobWhereInput `json:"and,omitempty"`
+	Or  []*ScheduledJobWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// job_id field predicates
+	JobID             *string  `json:"jobID,omitempty"`
+	JobIdneq          *string  `json:"jobIDNEQ,omitempty"`
+	JobIDIn           []string `json:"jobIDIn,omitempty"`
+	JobIDNotIn        []string `json:"jobIDNotIn,omitempty"`
+	JobIdgt           *string  `json:"jobIDGT,omitempty"`
+	JobIdgte          *string  `json:"jobIDGTE,omitempty"`
+	JobIdlt           *string  `json:"jobIDLT,omitempty"`
+	JobIdlte          *string  `json:"jobIDLTE,omitempty"`
+	JobIDContains     *string  `json:"jobIDContains,omitempty"`
+	JobIDHasPrefix    *string  `json:"jobIDHasPrefix,omitempty"`
+	JobIDHasSuffix    *string  `json:"jobIDHasSuffix,omitempty"`
+	JobIDEqualFold    *string  `json:"jobIDEqualFold,omitempty"`
+	JobIDContainsFold *string  `json:"jobIDContainsFold,omitempty"`
+	// job_runner_id field predicates
+	JobRunnerID             *string  `json:"jobRunnerID,omitempty"`
+	JobRunnerIdneq          *string  `json:"jobRunnerIDNEQ,omitempty"`
+	JobRunnerIDIn           []string `json:"jobRunnerIDIn,omitempty"`
+	JobRunnerIDNotIn        []string `json:"jobRunnerIDNotIn,omitempty"`
+	JobRunnerIdgt           *string  `json:"jobRunnerIDGT,omitempty"`
+	JobRunnerIdgte          *string  `json:"jobRunnerIDGTE,omitempty"`
+	JobRunnerIdlt           *string  `json:"jobRunnerIDLT,omitempty"`
+	JobRunnerIdlte          *string  `json:"jobRunnerIDLTE,omitempty"`
+	JobRunnerIDContains     *string  `json:"jobRunnerIDContains,omitempty"`
+	JobRunnerIDHasPrefix    *string  `json:"jobRunnerIDHasPrefix,omitempty"`
+	JobRunnerIDHasSuffix    *string  `json:"jobRunnerIDHasSuffix,omitempty"`
+	JobRunnerIDIsNil        *bool    `json:"jobRunnerIDIsNil,omitempty"`
+	JobRunnerIDNotNil       *bool    `json:"jobRunnerIDNotNil,omitempty"`
+	JobRunnerIDEqualFold    *string  `json:"jobRunnerIDEqualFold,omitempty"`
+	JobRunnerIDContainsFold *string  `json:"jobRunnerIDContainsFold,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// job_template edge predicates
+	HasJobTemplate     *bool                    `json:"hasJobTemplate,omitempty"`
+	HasJobTemplateWith []*JobTemplateWhereInput `json:"hasJobTemplateWith,omitempty"`
+	// controls edge predicates
+	HasControls     *bool                `json:"hasControls,omitempty"`
+	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
+	// subcontrols edge predicates
+	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
+	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
 	// job_runner edge predicates
 	HasJobRunner     *bool                  `json:"hasJobRunner,omitempty"`
 	HasJobRunnerWith []*JobRunnerWhereInput `json:"hasJobRunnerWith,omitempty"`
@@ -22229,6 +22251,7 @@ type SearchResults struct {
 	Programs                    *ProgramConnection                    `json:"programs,omitempty"`
 	Risks                       *RiskConnection                       `json:"risks,omitempty"`
 	Scans                       *ScanConnection                       `json:"scans,omitempty"`
+	ScheduledJobs               *ScheduledJobConnection               `json:"scheduledJobs,omitempty"`
 	Standards                   *StandardConnection                   `json:"standards,omitempty"`
 	Subcontrols                 *SubcontrolConnection                 `json:"subcontrols,omitempty"`
 	Subprocessors               *SubprocessorConnection               `json:"subprocessors,omitempty"`
@@ -23054,7 +23077,7 @@ type Subcontrol struct {
 	Owner                  *Organization                    `json:"owner,omitempty"`
 	Control                *Control                         `json:"control"`
 	ControlImplementations *ControlImplementationConnection `json:"controlImplementations"`
-	ScheduledJobs          *ControlScheduledJobConnection   `json:"scheduledJobs"`
+	ScheduledJobs          *ScheduledJobConnection          `json:"scheduledJobs"`
 }
 
 func (Subcontrol) IsNode() {}
@@ -23856,8 +23879,8 @@ type SubcontrolWhereInput struct {
 	HasControlImplementations     *bool                              `json:"hasControlImplementations,omitempty"`
 	HasControlImplementationsWith []*ControlImplementationWhereInput `json:"hasControlImplementationsWith,omitempty"`
 	// scheduled_jobs edge predicates
-	HasScheduledJobs     *bool                            `json:"hasScheduledJobs,omitempty"`
-	HasScheduledJobsWith []*ControlScheduledJobWhereInput `json:"hasScheduledJobsWith,omitempty"`
+	HasScheduledJobs     *bool                     `json:"hasScheduledJobs,omitempty"`
+	HasScheduledJobsWith []*ScheduledJobWhereInput `json:"hasScheduledJobsWith,omitempty"`
 }
 
 type Subprocessor struct {
@@ -28007,29 +28030,6 @@ type UpdateControlObjectiveInput struct {
 	RevisionBump            *models.VersionBump `json:"RevisionBump,omitempty"`
 }
 
-// UpdateControlScheduledJobInput is used for update ControlScheduledJob object.
-// Input was generated by ent.
-type UpdateControlScheduledJobInput struct {
-	// the configuration to run this job
-	Configuration       models.JobConfiguration `json:"configuration,omitempty"`
-	AppendConfiguration models.JobConfiguration `json:"appendConfiguration,omitempty"`
-	ClearConfiguration  *bool                   `json:"clearConfiguration,omitempty"`
-	// cron syntax. If not provided, it would inherit the cron of the parent job
-	Cron                *string  `json:"cron,omitempty"`
-	ClearCron           *bool    `json:"clearCron,omitempty"`
-	OwnerID             *string  `json:"ownerID,omitempty"`
-	ClearOwner          *bool    `json:"clearOwner,omitempty"`
-	JobTemplateID       *string  `json:"jobTemplateID,omitempty"`
-	AddControlIDs       []string `json:"addControlIDs,omitempty"`
-	RemoveControlIDs    []string `json:"removeControlIDs,omitempty"`
-	ClearControls       *bool    `json:"clearControls,omitempty"`
-	AddSubcontrolIDs    []string `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs []string `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols    *bool    `json:"clearSubcontrols,omitempty"`
-	JobRunnerID         *string  `json:"jobRunnerID,omitempty"`
-	ClearJobRunner      *bool    `json:"clearJobRunner,omitempty"`
-}
-
 // UpdateCustomDomainInput is used for update CustomDomain object.
 // Input was generated by ent.
 type UpdateCustomDomainInput struct {
@@ -28753,16 +28753,12 @@ type UpdateJobTemplateInput struct {
 	ClearTags  *bool    `json:"clearTags,omitempty"`
 	// the title of the job
 	Title *string `json:"title,omitempty"`
-	// the description of the job
+	// the short description of the job and what it does
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
 	// the url from where to download the script from
 	DownloadURL *string `json:"downloadURL,omitempty"`
-	// the configuration to run this job
-	Configuration       models.JobConfiguration `json:"configuration,omitempty"`
-	AppendConfiguration models.JobConfiguration `json:"appendConfiguration,omitempty"`
-	ClearConfiguration  *bool                   `json:"clearConfiguration,omitempty"`
-	// cron syntax
+	// cron schedule to run the job, e.g. 0 0 * * *
 	Cron       *string `json:"cron,omitempty"`
 	ClearCron  *bool   `json:"clearCron,omitempty"`
 	OwnerID    *string `json:"ownerID,omitempty"`
@@ -29480,6 +29476,29 @@ type UpdateScanInput struct {
 	AddEntityIDs          []string          `json:"addEntityIDs,omitempty"`
 	RemoveEntityIDs       []string          `json:"removeEntityIDs,omitempty"`
 	ClearEntities         *bool             `json:"clearEntities,omitempty"`
+}
+
+// UpdateScheduledJobInput is used for update ScheduledJob object.
+// Input was generated by ent.
+type UpdateScheduledJobInput struct {
+	// the configuration to run this job
+	Configuration       models.JobConfiguration `json:"configuration,omitempty"`
+	AppendConfiguration models.JobConfiguration `json:"appendConfiguration,omitempty"`
+	ClearConfiguration  *bool                   `json:"clearConfiguration,omitempty"`
+	// cron syntax. If not provided, it would inherit the cron of the parent job
+	Cron                *string  `json:"cron,omitempty"`
+	ClearCron           *bool    `json:"clearCron,omitempty"`
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	ClearOwner          *bool    `json:"clearOwner,omitempty"`
+	JobTemplateID       *string  `json:"jobTemplateID,omitempty"`
+	AddControlIDs       []string `json:"addControlIDs,omitempty"`
+	RemoveControlIDs    []string `json:"removeControlIDs,omitempty"`
+	ClearControls       *bool    `json:"clearControls,omitempty"`
+	AddSubcontrolIDs    []string `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs []string `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols    *bool    `json:"clearSubcontrols,omitempty"`
+	JobRunnerID         *string  `json:"jobRunnerID,omitempty"`
+	ClearJobRunner      *bool    `json:"clearJobRunner,omitempty"`
 }
 
 // UpdateScheduledJobRunInput is used for update ScheduledJobRun object.
@@ -32205,120 +32224,6 @@ func (e ControlOrderField) MarshalJSON() ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-// Properties by which ControlScheduledJobHistory connections can be ordered.
-type ControlScheduledJobHistoryOrderField string
-
-const (
-	ControlScheduledJobHistoryOrderFieldHistoryTime ControlScheduledJobHistoryOrderField = "history_time"
-	ControlScheduledJobHistoryOrderFieldCreatedAt   ControlScheduledJobHistoryOrderField = "created_at"
-	ControlScheduledJobHistoryOrderFieldUpdatedAt   ControlScheduledJobHistoryOrderField = "updated_at"
-)
-
-var AllControlScheduledJobHistoryOrderField = []ControlScheduledJobHistoryOrderField{
-	ControlScheduledJobHistoryOrderFieldHistoryTime,
-	ControlScheduledJobHistoryOrderFieldCreatedAt,
-	ControlScheduledJobHistoryOrderFieldUpdatedAt,
-}
-
-func (e ControlScheduledJobHistoryOrderField) IsValid() bool {
-	switch e {
-	case ControlScheduledJobHistoryOrderFieldHistoryTime, ControlScheduledJobHistoryOrderFieldCreatedAt, ControlScheduledJobHistoryOrderFieldUpdatedAt:
-		return true
-	}
-	return false
-}
-
-func (e ControlScheduledJobHistoryOrderField) String() string {
-	return string(e)
-}
-
-func (e *ControlScheduledJobHistoryOrderField) UnmarshalGQL(v any) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = ControlScheduledJobHistoryOrderField(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid ControlScheduledJobHistoryOrderField", str)
-	}
-	return nil
-}
-
-func (e ControlScheduledJobHistoryOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
-}
-
-func (e *ControlScheduledJobHistoryOrderField) UnmarshalJSON(b []byte) error {
-	s, err := strconv.Unquote(string(b))
-	if err != nil {
-		return err
-	}
-	return e.UnmarshalGQL(s)
-}
-
-func (e ControlScheduledJobHistoryOrderField) MarshalJSON() ([]byte, error) {
-	var buf bytes.Buffer
-	e.MarshalGQL(&buf)
-	return buf.Bytes(), nil
-}
-
-// Properties by which ControlScheduledJob connections can be ordered.
-type ControlScheduledJobOrderField string
-
-const (
-	ControlScheduledJobOrderFieldCreatedAt ControlScheduledJobOrderField = "created_at"
-	ControlScheduledJobOrderFieldUpdatedAt ControlScheduledJobOrderField = "updated_at"
-)
-
-var AllControlScheduledJobOrderField = []ControlScheduledJobOrderField{
-	ControlScheduledJobOrderFieldCreatedAt,
-	ControlScheduledJobOrderFieldUpdatedAt,
-}
-
-func (e ControlScheduledJobOrderField) IsValid() bool {
-	switch e {
-	case ControlScheduledJobOrderFieldCreatedAt, ControlScheduledJobOrderFieldUpdatedAt:
-		return true
-	}
-	return false
-}
-
-func (e ControlScheduledJobOrderField) String() string {
-	return string(e)
-}
-
-func (e *ControlScheduledJobOrderField) UnmarshalGQL(v any) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = ControlScheduledJobOrderField(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid ControlScheduledJobOrderField", str)
-	}
-	return nil
-}
-
-func (e ControlScheduledJobOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
-}
-
-func (e *ControlScheduledJobOrderField) UnmarshalJSON(b []byte) error {
-	s, err := strconv.Unquote(string(b))
-	if err != nil {
-		return err
-	}
-	return e.UnmarshalGQL(s)
-}
-
-func (e ControlScheduledJobOrderField) MarshalJSON() ([]byte, error) {
-	var buf bytes.Buffer
-	e.MarshalGQL(&buf)
-	return buf.Bytes(), nil
-}
-
 // Properties by which CustomDomainHistory connections can be ordered.
 type CustomDomainHistoryOrderField string
 
@@ -34371,7 +34276,7 @@ const (
 	JobTemplateHistoryOrderFieldCreatedAt   JobTemplateHistoryOrderField = "created_at"
 	JobTemplateHistoryOrderFieldUpdatedAt   JobTemplateHistoryOrderField = "updated_at"
 	JobTemplateHistoryOrderFieldTitle       JobTemplateHistoryOrderField = "title"
-	JobTemplateHistoryOrderFieldPlatform    JobTemplateHistoryOrderField = "platform"
+	JobTemplateHistoryOrderFieldPlatform    JobTemplateHistoryOrderField = "PLATFORM"
 )
 
 var AllJobTemplateHistoryOrderField = []JobTemplateHistoryOrderField{
@@ -34432,7 +34337,7 @@ const (
 	JobTemplateOrderFieldCreatedAt JobTemplateOrderField = "created_at"
 	JobTemplateOrderFieldUpdatedAt JobTemplateOrderField = "updated_at"
 	JobTemplateOrderFieldTitle     JobTemplateOrderField = "title"
-	JobTemplateOrderFieldPlatform  JobTemplateOrderField = "platform"
+	JobTemplateOrderFieldPlatform  JobTemplateOrderField = "PLATFORM"
 )
 
 var AllJobTemplateOrderField = []JobTemplateOrderField{
@@ -36224,6 +36129,120 @@ func (e *ScanOrderField) UnmarshalJSON(b []byte) error {
 }
 
 func (e ScanOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which ScheduledJobHistory connections can be ordered.
+type ScheduledJobHistoryOrderField string
+
+const (
+	ScheduledJobHistoryOrderFieldHistoryTime ScheduledJobHistoryOrderField = "history_time"
+	ScheduledJobHistoryOrderFieldCreatedAt   ScheduledJobHistoryOrderField = "created_at"
+	ScheduledJobHistoryOrderFieldUpdatedAt   ScheduledJobHistoryOrderField = "updated_at"
+)
+
+var AllScheduledJobHistoryOrderField = []ScheduledJobHistoryOrderField{
+	ScheduledJobHistoryOrderFieldHistoryTime,
+	ScheduledJobHistoryOrderFieldCreatedAt,
+	ScheduledJobHistoryOrderFieldUpdatedAt,
+}
+
+func (e ScheduledJobHistoryOrderField) IsValid() bool {
+	switch e {
+	case ScheduledJobHistoryOrderFieldHistoryTime, ScheduledJobHistoryOrderFieldCreatedAt, ScheduledJobHistoryOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e ScheduledJobHistoryOrderField) String() string {
+	return string(e)
+}
+
+func (e *ScheduledJobHistoryOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ScheduledJobHistoryOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ScheduledJobHistoryOrderField", str)
+	}
+	return nil
+}
+
+func (e ScheduledJobHistoryOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *ScheduledJobHistoryOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e ScheduledJobHistoryOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which ScheduledJob connections can be ordered.
+type ScheduledJobOrderField string
+
+const (
+	ScheduledJobOrderFieldCreatedAt ScheduledJobOrderField = "created_at"
+	ScheduledJobOrderFieldUpdatedAt ScheduledJobOrderField = "updated_at"
+)
+
+var AllScheduledJobOrderField = []ScheduledJobOrderField{
+	ScheduledJobOrderFieldCreatedAt,
+	ScheduledJobOrderFieldUpdatedAt,
+}
+
+func (e ScheduledJobOrderField) IsValid() bool {
+	switch e {
+	case ScheduledJobOrderFieldCreatedAt, ScheduledJobOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e ScheduledJobOrderField) String() string {
+	return string(e)
+}
+
+func (e *ScheduledJobOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ScheduledJobOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ScheduledJobOrderField", str)
+	}
+	return nil
+}
+
+func (e ScheduledJobOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *ScheduledJobOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e ScheduledJobOrderField) MarshalJSON() ([]byte, error) {
 	var buf bytes.Buffer
 	e.MarshalGQL(&buf)
 	return buf.Bytes(), nil

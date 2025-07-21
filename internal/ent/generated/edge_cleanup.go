@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
-	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -53,6 +52,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -152,18 +152,6 @@ func ControlObjectiveEdgeCleanup(ctx context.Context, id string) error {
 
 func ControlObjectiveHistoryEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlobjectivehistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func ControlScheduledJobEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlscheduledjob edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func ControlScheduledJobHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlscheduledjobhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -784,9 +772,9 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	if exists, err := FromContext(ctx).ControlScheduledJob.Query().Where((controlscheduledjob.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
-		if controlscheduledjobCount, err := FromContext(ctx).ControlScheduledJob.Delete().Where(controlscheduledjob.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			log.Debug().Err(err).Int("count", controlscheduledjobCount).Msg("deleting controlscheduledjob")
+	if exists, err := FromContext(ctx).ScheduledJob.Query().Where((scheduledjob.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if scheduledjobCount, err := FromContext(ctx).ScheduledJob.Delete().Where(scheduledjob.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", scheduledjobCount).Msg("deleting scheduledjob")
 			return err
 		}
 	}
@@ -943,6 +931,18 @@ func ScanEdgeCleanup(ctx context.Context, id string) error {
 
 func ScanHistoryEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup scanhistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func ScheduledJobEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup scheduledjob edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func ScheduledJobHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup scheduledjobhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }

@@ -89,12 +89,8 @@ func (ec *executionContext) fieldContext_JobTemplateBulkCreatePayload_jobTemplat
 				return ec.fieldContext_JobTemplate_description(ctx, field)
 			case "platform":
 				return ec.fieldContext_JobTemplate_platform(ctx, field)
-			case "windmillPath":
-				return ec.fieldContext_JobTemplate_windmillPath(ctx, field)
 			case "downloadURL":
 				return ec.fieldContext_JobTemplate_downloadURL(ctx, field)
-			case "configuration":
-				return ec.fieldContext_JobTemplate_configuration(ctx, field)
 			case "cron":
 				return ec.fieldContext_JobTemplate_cron(ctx, field)
 			case "owner":
@@ -169,12 +165,8 @@ func (ec *executionContext) fieldContext_JobTemplateCreatePayload_jobTemplate(_ 
 				return ec.fieldContext_JobTemplate_description(ctx, field)
 			case "platform":
 				return ec.fieldContext_JobTemplate_platform(ctx, field)
-			case "windmillPath":
-				return ec.fieldContext_JobTemplate_windmillPath(ctx, field)
 			case "downloadURL":
 				return ec.fieldContext_JobTemplate_downloadURL(ctx, field)
-			case "configuration":
-				return ec.fieldContext_JobTemplate_configuration(ctx, field)
 			case "cron":
 				return ec.fieldContext_JobTemplate_cron(ctx, field)
 			case "owner":
@@ -293,12 +285,8 @@ func (ec *executionContext) fieldContext_JobTemplateUpdatePayload_jobTemplate(_ 
 				return ec.fieldContext_JobTemplate_description(ctx, field)
 			case "platform":
 				return ec.fieldContext_JobTemplate_platform(ctx, field)
-			case "windmillPath":
-				return ec.fieldContext_JobTemplate_windmillPath(ctx, field)
 			case "downloadURL":
 				return ec.fieldContext_JobTemplate_downloadURL(ctx, field)
-			case "configuration":
-				return ec.fieldContext_JobTemplate_configuration(ctx, field)
 			case "cron":
 				return ec.fieldContext_JobTemplate_cron(ctx, field)
 			case "owner":

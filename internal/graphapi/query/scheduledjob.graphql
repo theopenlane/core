@@ -1,11 +1,11 @@
-
-mutation CreateBulkCSVControlScheduledJob($input: Upload!) {
-  createBulkCSVControlScheduledJob(input: $input) {
-    controlScheduledJobs {
+mutation CreateBulkCSVScheduledJob($input: Upload!) {
+  createBulkCSVScheduledJob(input: $input) {
+    scheduledJobs {
       configuration
       createdAt
       createdBy
       cron
+      displayID
       id
       jobID
       jobRunnerID
@@ -16,13 +16,14 @@ mutation CreateBulkCSVControlScheduledJob($input: Upload!) {
   }
 }
 
-mutation CreateBulkControlScheduledJob($input: [CreateControlScheduledJobInput!]) {
-  createBulkControlScheduledJob(input: $input) {
-    controlScheduledJobs {
+mutation CreateBulkScheduledJob($input: [CreateScheduledJobInput!]) {
+  createBulkScheduledJob(input: $input) {
+    scheduledJobs {
       configuration
       createdAt
       createdBy
       cron
+      displayID
       id
       jobID
       jobRunnerID
@@ -33,13 +34,14 @@ mutation CreateBulkControlScheduledJob($input: [CreateControlScheduledJobInput!]
   }
 }
 
-mutation CreateControlScheduledJob($input: CreateControlScheduledJobInput!) {
-  createControlScheduledJob(input: $input) {
-    controlScheduledJob {
+mutation CreateScheduledJob($input: CreateScheduledJobInput!) {
+  createScheduledJob(input: $input) {
+    scheduledJob {
       configuration
       createdAt
       createdBy
       cron
+      displayID
       id
       jobID
       jobRunnerID
@@ -50,14 +52,14 @@ mutation CreateControlScheduledJob($input: CreateControlScheduledJobInput!) {
   }
 }
 
-mutation DeleteControlScheduledJob($deleteControlScheduledJobId: ID!) {
-  deleteControlScheduledJob(id: $deleteControlScheduledJobId) {
+mutation DeleteScheduledJob($deleteScheduledJobId: ID!) {
+  deleteScheduledJob(id: $deleteScheduledJobId) {
     deletedID
   }
 }
 
-query GetAllControlScheduledJobs {
-  controlScheduledJobs {
+query GetAllScheduledJobs {
+  scheduledJobs {
     totalCount
     pageInfo {
       startCursor
@@ -71,6 +73,7 @@ query GetAllControlScheduledJobs {
         createdAt
         createdBy
         cron
+        displayID
         id
         jobID
         jobRunnerID
@@ -81,12 +84,14 @@ query GetAllControlScheduledJobs {
     }
   }
 }
-query GetControlScheduledJobByID($controlScheduledJobId: ID!) {
-  controlScheduledJob(id: $controlScheduledJobId) {
+
+query GetScheduledJobByID($scheduledJobId: ID!) {
+  scheduledJob(id: $scheduledJobId) {
     configuration
     createdAt
     createdBy
     cron
+    displayID
     id
     jobID
     jobRunnerID
@@ -96,8 +101,8 @@ query GetControlScheduledJobByID($controlScheduledJobId: ID!) {
   }
 }
 
-query GetControlScheduledJobs($first: Int, $last: Int, $where: ControlScheduledJobWhereInput) {
-  controlScheduledJobs(first: $first, last: $last, where: $where) {
+query GetScheduledJobs($first: Int, $last: Int, $where: ScheduledJobWhereInput) {
+  scheduledJobs(first: $first, last: $last, where: $where) {
     totalCount
     pageInfo {
       startCursor
@@ -111,6 +116,7 @@ query GetControlScheduledJobs($first: Int, $last: Int, $where: ControlScheduledJ
         createdAt
         createdBy
         cron
+        displayID
         id
         jobID
         jobRunnerID
@@ -121,13 +127,15 @@ query GetControlScheduledJobs($first: Int, $last: Int, $where: ControlScheduledJ
     }
   }
 }
-mutation UpdateControlScheduledJob($updateControlScheduledJobId: ID!, $input: UpdateControlScheduledJobInput!) {
-  updateControlScheduledJob(id: $updateControlScheduledJobId, input: $input) {
-    controlScheduledJob {
+
+mutation UpdateScheduledJob($updateScheduledJobId: ID!, $input: UpdateScheduledJobInput!) {
+  updateScheduledJob(id: $updateScheduledJobId, input: $input) {
+    scheduledJob {
       configuration
       createdAt
       createdBy
       cron
+      displayID
       id
       jobID
       jobRunnerID

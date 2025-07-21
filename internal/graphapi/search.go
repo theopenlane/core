@@ -1045,10 +1045,6 @@ func adminSearchJobTemplates(ctx context.Context, query string, after *entgql.Cu
 				jobtemplate.OwnerIDContainsFold(query),     // search by OwnerID
 				jobtemplate.TitleContainsFold(query),       // search by Title
 				jobtemplate.DescriptionContainsFold(query), // search by Description
-				func(s *sql.Selector) {
-					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(configuration)::text LIKE $7", likeQuery)) // search by Configuration
-				},
 			),
 		)
 
