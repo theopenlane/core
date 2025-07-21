@@ -3797,11 +3797,9 @@ var (
 		{Name: "title", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "platform", Type: field.TypeEnum, Enums: []string{"GO", "TS"}},
-		{Name: "script", Type: field.TypeString, Nullable: true},
 		{Name: "windmill_path", Type: field.TypeString},
 		{Name: "download_url", Type: field.TypeString},
 		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
-		{Name: "cadence", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
@@ -3813,7 +3811,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "scheduled_jobs_organizations_jobs",
-				Columns:    []*schema.Column{ScheduledJobsColumns[19]},
+				Columns:    []*schema.Column{ScheduledJobsColumns[17]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3822,12 +3820,12 @@ var (
 			{
 				Name:    "scheduledjob_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ScheduledJobsColumns[7], ScheduledJobsColumns[19]},
+				Columns: []*schema.Column{ScheduledJobsColumns[7], ScheduledJobsColumns[17]},
 			},
 			{
 				Name:    "scheduledjob_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduledJobsColumns[19]},
+				Columns: []*schema.Column{ScheduledJobsColumns[17]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3853,11 +3851,9 @@ var (
 		{Name: "title", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "platform", Type: field.TypeEnum, Enums: []string{"GO", "TS"}},
-		{Name: "script", Type: field.TypeString, Nullable: true},
 		{Name: "windmill_path", Type: field.TypeString},
 		{Name: "download_url", Type: field.TypeString},
 		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
-		{Name: "cadence", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
 	}
 	// ScheduledJobHistoryTable holds the schema information for the "scheduled_job_history" table.

@@ -178,26 +178,6 @@ func (sju *ScheduledJobUpdate) ClearDescription() *ScheduledJobUpdate {
 	return sju
 }
 
-// SetScript sets the "script" field.
-func (sju *ScheduledJobUpdate) SetScript(s string) *ScheduledJobUpdate {
-	sju.mutation.SetScript(s)
-	return sju
-}
-
-// SetNillableScript sets the "script" field if the given value is not nil.
-func (sju *ScheduledJobUpdate) SetNillableScript(s *string) *ScheduledJobUpdate {
-	if s != nil {
-		sju.SetScript(*s)
-	}
-	return sju
-}
-
-// ClearScript clears the value of the "script" field.
-func (sju *ScheduledJobUpdate) ClearScript() *ScheduledJobUpdate {
-	sju.mutation.ClearScript()
-	return sju
-}
-
 // SetWindmillPath sets the "windmill_path" field.
 func (sju *ScheduledJobUpdate) SetWindmillPath(s string) *ScheduledJobUpdate {
 	sju.mutation.SetWindmillPath(s)
@@ -241,26 +221,6 @@ func (sju *ScheduledJobUpdate) AppendConfiguration(mc models.JobConfiguration) *
 // ClearConfiguration clears the value of the "configuration" field.
 func (sju *ScheduledJobUpdate) ClearConfiguration() *ScheduledJobUpdate {
 	sju.mutation.ClearConfiguration()
-	return sju
-}
-
-// SetCadence sets the "cadence" field.
-func (sju *ScheduledJobUpdate) SetCadence(mc models.JobCadence) *ScheduledJobUpdate {
-	sju.mutation.SetCadence(mc)
-	return sju
-}
-
-// SetNillableCadence sets the "cadence" field if the given value is not nil.
-func (sju *ScheduledJobUpdate) SetNillableCadence(mc *models.JobCadence) *ScheduledJobUpdate {
-	if mc != nil {
-		sju.SetCadence(*mc)
-	}
-	return sju
-}
-
-// ClearCadence clears the value of the "cadence" field.
-func (sju *ScheduledJobUpdate) ClearCadence() *ScheduledJobUpdate {
-	sju.mutation.ClearCadence()
 	return sju
 }
 
@@ -349,11 +309,6 @@ func (sju *ScheduledJobUpdate) check() error {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.title": %w`, err)}
 		}
 	}
-	if v, ok := sju.mutation.Cadence(); ok {
-		if err := v.Validate(); err != nil {
-			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.cadence": %w`, err)}
-		}
-	}
 	if v, ok := sju.mutation.Cron(); ok {
 		if err := v.Validate(); err != nil {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.cron": %w`, err)}
@@ -433,12 +388,6 @@ func (sju *ScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if sju.mutation.DescriptionCleared() {
 		_spec.ClearField(scheduledjob.FieldDescription, field.TypeString)
 	}
-	if value, ok := sju.mutation.Script(); ok {
-		_spec.SetField(scheduledjob.FieldScript, field.TypeString, value)
-	}
-	if sju.mutation.ScriptCleared() {
-		_spec.ClearField(scheduledjob.FieldScript, field.TypeString)
-	}
 	if value, ok := sju.mutation.WindmillPath(); ok {
 		_spec.SetField(scheduledjob.FieldWindmillPath, field.TypeString, value)
 	}
@@ -455,12 +404,6 @@ func (sju *ScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if sju.mutation.ConfigurationCleared() {
 		_spec.ClearField(scheduledjob.FieldConfiguration, field.TypeJSON)
-	}
-	if value, ok := sju.mutation.Cadence(); ok {
-		_spec.SetField(scheduledjob.FieldCadence, field.TypeJSON, value)
-	}
-	if sju.mutation.CadenceCleared() {
-		_spec.ClearField(scheduledjob.FieldCadence, field.TypeJSON)
 	}
 	if value, ok := sju.mutation.Cron(); ok {
 		_spec.SetField(scheduledjob.FieldCron, field.TypeString, value)
@@ -667,26 +610,6 @@ func (sjuo *ScheduledJobUpdateOne) ClearDescription() *ScheduledJobUpdateOne {
 	return sjuo
 }
 
-// SetScript sets the "script" field.
-func (sjuo *ScheduledJobUpdateOne) SetScript(s string) *ScheduledJobUpdateOne {
-	sjuo.mutation.SetScript(s)
-	return sjuo
-}
-
-// SetNillableScript sets the "script" field if the given value is not nil.
-func (sjuo *ScheduledJobUpdateOne) SetNillableScript(s *string) *ScheduledJobUpdateOne {
-	if s != nil {
-		sjuo.SetScript(*s)
-	}
-	return sjuo
-}
-
-// ClearScript clears the value of the "script" field.
-func (sjuo *ScheduledJobUpdateOne) ClearScript() *ScheduledJobUpdateOne {
-	sjuo.mutation.ClearScript()
-	return sjuo
-}
-
 // SetWindmillPath sets the "windmill_path" field.
 func (sjuo *ScheduledJobUpdateOne) SetWindmillPath(s string) *ScheduledJobUpdateOne {
 	sjuo.mutation.SetWindmillPath(s)
@@ -730,26 +653,6 @@ func (sjuo *ScheduledJobUpdateOne) AppendConfiguration(mc models.JobConfiguratio
 // ClearConfiguration clears the value of the "configuration" field.
 func (sjuo *ScheduledJobUpdateOne) ClearConfiguration() *ScheduledJobUpdateOne {
 	sjuo.mutation.ClearConfiguration()
-	return sjuo
-}
-
-// SetCadence sets the "cadence" field.
-func (sjuo *ScheduledJobUpdateOne) SetCadence(mc models.JobCadence) *ScheduledJobUpdateOne {
-	sjuo.mutation.SetCadence(mc)
-	return sjuo
-}
-
-// SetNillableCadence sets the "cadence" field if the given value is not nil.
-func (sjuo *ScheduledJobUpdateOne) SetNillableCadence(mc *models.JobCadence) *ScheduledJobUpdateOne {
-	if mc != nil {
-		sjuo.SetCadence(*mc)
-	}
-	return sjuo
-}
-
-// ClearCadence clears the value of the "cadence" field.
-func (sjuo *ScheduledJobUpdateOne) ClearCadence() *ScheduledJobUpdateOne {
-	sjuo.mutation.ClearCadence()
 	return sjuo
 }
 
@@ -851,11 +754,6 @@ func (sjuo *ScheduledJobUpdateOne) check() error {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.title": %w`, err)}
 		}
 	}
-	if v, ok := sjuo.mutation.Cadence(); ok {
-		if err := v.Validate(); err != nil {
-			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.cadence": %w`, err)}
-		}
-	}
 	if v, ok := sjuo.mutation.Cron(); ok {
 		if err := v.Validate(); err != nil {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.cron": %w`, err)}
@@ -952,12 +850,6 @@ func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *Schedule
 	if sjuo.mutation.DescriptionCleared() {
 		_spec.ClearField(scheduledjob.FieldDescription, field.TypeString)
 	}
-	if value, ok := sjuo.mutation.Script(); ok {
-		_spec.SetField(scheduledjob.FieldScript, field.TypeString, value)
-	}
-	if sjuo.mutation.ScriptCleared() {
-		_spec.ClearField(scheduledjob.FieldScript, field.TypeString)
-	}
 	if value, ok := sjuo.mutation.WindmillPath(); ok {
 		_spec.SetField(scheduledjob.FieldWindmillPath, field.TypeString, value)
 	}
@@ -974,12 +866,6 @@ func (sjuo *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *Schedule
 	}
 	if sjuo.mutation.ConfigurationCleared() {
 		_spec.ClearField(scheduledjob.FieldConfiguration, field.TypeJSON)
-	}
-	if value, ok := sjuo.mutation.Cadence(); ok {
-		_spec.SetField(scheduledjob.FieldCadence, field.TypeJSON, value)
-	}
-	if sjuo.mutation.CadenceCleared() {
-		_spec.ClearField(scheduledjob.FieldCadence, field.TypeJSON)
 	}
 	if value, ok := sjuo.mutation.Cron(); ok {
 		_spec.SetField(scheduledjob.FieldCron, field.TypeString, value)

@@ -208,7 +208,28 @@ func HookControlScheduledJobCreate() ent.Hook {
 				return nil, err
 			}
 
-			if mutation.Op() == ent.OpCreate && hasCron && cron != "" {
+			jobID, _ := mutation.JobID()
+
+			job, err := mutation.Client().ScheduledJob.Get(ctx, jobID)
+			if err != nil {
+				return nil, err
+			}
+
+			// atleast the cron schedule must be there
+			// either on this job or the parent
+			if !hasCron && job.Cron == nil {
+				return nil, ErrCronRequired
+			}
+
+			var value = cron.String()
+
+			// inherit if no cron set here
+			if value == "" && job.Cron != nil {
+				cron = *job.Cron
+				mutation.SetCron(cron)
+			}
+
+			if mutation.Op() == ent.OpCreate {
 				if err := createWindmillScheduledJob(ctx, mutation); err != nil {
 					return nil, fmt.Errorf("failed to create windmill scheduled job: %w", err) //nolint:err113
 				}

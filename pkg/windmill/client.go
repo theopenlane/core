@@ -244,6 +244,7 @@ func (c *Client) CreateScheduledJob(ctx context.Context, req CreateScheduledJobR
 	url := fmt.Sprintf("%s/api/w/%s/schedules/create", c.baseURL, c.workspace)
 
 	apiReq := struct {
+		IsFlow     bool   `json:"is_flow"`
 		Path       string `json:"path"`
 		Schedule   string `json:"schedule"`
 		ScriptPath string `json:"script_path"`
@@ -265,6 +266,7 @@ func (c *Client) CreateScheduledJob(ctx context.Context, req CreateScheduledJobR
 		ScriptPath: req.FlowPath,
 		Enabled:    true,
 		Timezone:   c.timezone,
+		IsFlow:     true,
 	}
 
 	if c.onFailureScript != "" {

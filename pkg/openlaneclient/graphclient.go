@@ -6208,7 +6208,6 @@ func (t *AdminSearch_AdminSearch_ScheduledJobs_PageInfo) GetStartCursor() *strin
 }
 
 type AdminSearch_AdminSearch_ScheduledJobs_Edges_Node struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
 	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	Description   *string                 "json:\"description,omitempty\" graphql:\"description\""
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
@@ -6218,12 +6217,6 @@ type AdminSearch_AdminSearch_ScheduledJobs_Edges_Node struct {
 	Title         string                  "json:\"title\" graphql:\"title\""
 }
 
-func (t *AdminSearch_AdminSearch_ScheduledJobs_Edges_Node) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_ScheduledJobs_Edges_Node{}
-	}
-	return t.Cadence
-}
 func (t *AdminSearch_AdminSearch_ScheduledJobs_Edges_Node) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_ScheduledJobs_Edges_Node{}
@@ -64408,7 +64401,6 @@ func (t *GetScanHistories_ScanHistories) GetTotalCount() int64 {
 }
 
 type CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
 	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -64417,7 +64409,6 @@ type CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs struct {
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	ID            string                  "json:\"id\" graphql:\"id\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
 	Title         string                  "json:\"title\" graphql:\"title\""
@@ -64425,12 +64416,6 @@ type CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs struct {
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
-	}
-	return t.Cadence
-}
 func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
@@ -64479,12 +64464,6 @@ func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetO
 	}
 	return t.OwnerID
 }
-func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetScript() *string {
-	if t == nil {
-		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
-	}
-	return t.Script
-}
 func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs) GetSystemOwned() *bool {
 	if t == nil {
 		t = &CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob_ScheduledJobs{}
@@ -64528,7 +64507,6 @@ func (t *CreateBulkCSVScheduledJob_CreateBulkCSVScheduledJob) GetScheduledJobs()
 }
 
 type CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
 	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -64537,7 +64515,6 @@ type CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs struct {
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	ID            string                  "json:\"id\" graphql:\"id\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
 	Title         string                  "json:\"title\" graphql:\"title\""
@@ -64545,12 +64522,6 @@ type CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs struct {
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
-	}
-	return t.Cadence
-}
 func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
@@ -64599,12 +64570,6 @@ func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetOwnerID
 	}
 	return t.OwnerID
 }
-func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetScript() *string {
-	if t == nil {
-		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
-	}
-	return t.Script
-}
 func (t *CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs) GetSystemOwned() *bool {
 	if t == nil {
 		t = &CreateBulkScheduledJob_CreateBulkScheduledJob_ScheduledJobs{}
@@ -64648,7 +64613,6 @@ func (t *CreateBulkScheduledJob_CreateBulkScheduledJob) GetScheduledJobs() []*Cr
 }
 
 type CreateScheduledJob_CreateScheduledJob_ScheduledJob struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
 	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -64657,7 +64621,6 @@ type CreateScheduledJob_CreateScheduledJob_ScheduledJob struct {
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	ID            string                  "json:\"id\" graphql:\"id\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
 	Title         string                  "json:\"title\" graphql:\"title\""
@@ -64665,12 +64628,6 @@ type CreateScheduledJob_CreateScheduledJob_ScheduledJob struct {
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
-	}
-	return t.Cadence
-}
 func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
@@ -64718,12 +64675,6 @@ func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetOwnerID() *strin
 		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
 	}
 	return t.OwnerID
-}
-func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetScript() *string {
-	if t == nil {
-		t = &CreateScheduledJob_CreateScheduledJob_ScheduledJob{}
-	}
-	return t.Script
 }
 func (t *CreateScheduledJob_CreateScheduledJob_ScheduledJob) GetSystemOwned() *bool {
 	if t == nil {
@@ -64811,7 +64762,6 @@ func (t *GetAllScheduledJobs_ScheduledJobs_PageInfo) GetStartCursor() *string {
 }
 
 type GetAllScheduledJobs_ScheduledJobs_Edges_Node struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
 	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -64820,7 +64770,6 @@ type GetAllScheduledJobs_ScheduledJobs_Edges_Node struct {
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	ID            string                  "json:\"id\" graphql:\"id\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
 	Title         string                  "json:\"title\" graphql:\"title\""
@@ -64828,12 +64777,6 @@ type GetAllScheduledJobs_ScheduledJobs_Edges_Node struct {
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
-	}
-	return t.Cadence
-}
 func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
@@ -64881,12 +64824,6 @@ func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetOwnerID() *string {
 		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
 	}
 	return t.OwnerID
-}
-func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetScript() *string {
-	if t == nil {
-		t = &GetAllScheduledJobs_ScheduledJobs_Edges_Node{}
-	}
-	return t.Script
 }
 func (t *GetAllScheduledJobs_ScheduledJobs_Edges_Node) GetSystemOwned() *bool {
 	if t == nil {
@@ -64956,7 +64893,6 @@ func (t *GetAllScheduledJobs_ScheduledJobs) GetTotalCount() int64 {
 }
 
 type GetScheduledJobByID_ScheduledJob struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
 	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -64965,7 +64901,6 @@ type GetScheduledJobByID_ScheduledJob struct {
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	ID            string                  "json:\"id\" graphql:\"id\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
 	Title         string                  "json:\"title\" graphql:\"title\""
@@ -64973,12 +64908,6 @@ type GetScheduledJobByID_ScheduledJob struct {
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetScheduledJobByID_ScheduledJob) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &GetScheduledJobByID_ScheduledJob{}
-	}
-	return t.Cadence
-}
 func (t *GetScheduledJobByID_ScheduledJob) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &GetScheduledJobByID_ScheduledJob{}
@@ -65026,12 +64955,6 @@ func (t *GetScheduledJobByID_ScheduledJob) GetOwnerID() *string {
 		t = &GetScheduledJobByID_ScheduledJob{}
 	}
 	return t.OwnerID
-}
-func (t *GetScheduledJobByID_ScheduledJob) GetScript() *string {
-	if t == nil {
-		t = &GetScheduledJobByID_ScheduledJob{}
-	}
-	return t.Script
 }
 func (t *GetScheduledJobByID_ScheduledJob) GetSystemOwned() *bool {
 	if t == nil {
@@ -65097,7 +65020,6 @@ func (t *GetScheduledJobs_ScheduledJobs_PageInfo) GetStartCursor() *string {
 }
 
 type GetScheduledJobs_ScheduledJobs_Edges_Node struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
 	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -65106,7 +65028,6 @@ type GetScheduledJobs_ScheduledJobs_Edges_Node struct {
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	ID            string                  "json:\"id\" graphql:\"id\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
 	Title         string                  "json:\"title\" graphql:\"title\""
@@ -65114,12 +65035,6 @@ type GetScheduledJobs_ScheduledJobs_Edges_Node struct {
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
-	}
-	return t.Cadence
-}
 func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
@@ -65167,12 +65082,6 @@ func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetOwnerID() *string {
 		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
 	}
 	return t.OwnerID
-}
-func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetScript() *string {
-	if t == nil {
-		t = &GetScheduledJobs_ScheduledJobs_Edges_Node{}
-	}
-	return t.Script
 }
 func (t *GetScheduledJobs_ScheduledJobs_Edges_Node) GetSystemOwned() *bool {
 	if t == nil {
@@ -65242,7 +65151,6 @@ func (t *GetScheduledJobs_ScheduledJobs) GetTotalCount() int64 {
 }
 
 type UpdateScheduledJob_UpdateScheduledJob_ScheduledJob struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
 	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -65251,7 +65159,6 @@ type UpdateScheduledJob_UpdateScheduledJob_ScheduledJob struct {
 	DisplayID     string                  "json:\"displayID\" graphql:\"displayID\""
 	ID            string                  "json:\"id\" graphql:\"id\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
 	Title         string                  "json:\"title\" graphql:\"title\""
@@ -65259,12 +65166,6 @@ type UpdateScheduledJob_UpdateScheduledJob_ScheduledJob struct {
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
-	}
-	return t.Cadence
-}
 func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
@@ -65312,12 +65213,6 @@ func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetOwnerID() *strin
 		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
 	}
 	return t.OwnerID
-}
-func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetScript() *string {
-	if t == nil {
-		t = &UpdateScheduledJob_UpdateScheduledJob_ScheduledJob{}
-	}
-	return t.Script
 }
 func (t *UpdateScheduledJob_UpdateScheduledJob_ScheduledJob) GetSystemOwned() *bool {
 	if t == nil {
@@ -65394,7 +65289,6 @@ func (t *GetAllScheduledJobHistories_ScheduledJobHistories_PageInfo) GetStartCur
 }
 
 type GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
 	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -65406,7 +65300,6 @@ type GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node struct {
 	Operation     history.OpType          "json:\"operation\" graphql:\"operation\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Ref           *string                 "json:\"ref,omitempty\" graphql:\"ref\""
-	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
 	Title         string                  "json:\"title\" graphql:\"title\""
@@ -65414,12 +65307,6 @@ type GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node struct {
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
-	}
-	return t.Cadence
-}
 func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
@@ -65485,12 +65372,6 @@ func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetRef() 
 		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
 	}
 	return t.Ref
-}
-func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetScript() *string {
-	if t == nil {
-		t = &GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
-	}
-	return t.Script
 }
 func (t *GetAllScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetSystemOwned() *bool {
 	if t == nil {
@@ -65592,7 +65473,6 @@ func (t *GetScheduledJobHistories_ScheduledJobHistories_PageInfo) GetStartCursor
 }
 
 type GetScheduledJobHistories_ScheduledJobHistories_Edges_Node struct {
-	Cadence       *models.JobCadence      "json:\"cadence,omitempty\" graphql:\"cadence\""
 	Configuration models.JobConfiguration "json:\"configuration,omitempty\" graphql:\"configuration\""
 	CreatedAt     *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -65604,7 +65484,6 @@ type GetScheduledJobHistories_ScheduledJobHistories_Edges_Node struct {
 	Operation     history.OpType          "json:\"operation\" graphql:\"operation\""
 	OwnerID       *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Ref           *string                 "json:\"ref,omitempty\" graphql:\"ref\""
-	Script        *string                 "json:\"script,omitempty\" graphql:\"script\""
 	SystemOwned   *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags          []string                "json:\"tags,omitempty\" graphql:\"tags\""
 	Title         string                  "json:\"title\" graphql:\"title\""
@@ -65612,12 +65491,6 @@ type GetScheduledJobHistories_ScheduledJobHistories_Edges_Node struct {
 	UpdatedBy     *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetCadence() *models.JobCadence {
-	if t == nil {
-		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
-	}
-	return t.Cadence
-}
 func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetConfiguration() *models.JobConfiguration {
 	if t == nil {
 		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
@@ -65683,12 +65556,6 @@ func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetRef() *st
 		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
 	}
 	return t.Ref
-}
-func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetScript() *string {
-	if t == nil {
-		t = &GetScheduledJobHistories_ScheduledJobHistories_Edges_Node{}
-	}
-	return t.Script
 }
 func (t *GetScheduledJobHistories_ScheduledJobHistories_Edges_Node) GetSystemOwned() *bool {
 	if t == nil {
@@ -94469,7 +94336,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					title
 					description
 					configuration
-					cadence
 				}
 			}
 		}
@@ -111429,7 +111295,6 @@ func (c *Client) GetScanHistories(ctx context.Context, first *int64, last *int64
 const CreateBulkCSVScheduledJobDocument = `mutation CreateBulkCSVScheduledJob ($input: Upload!) {
 	createBulkCSVScheduledJob(input: $input) {
 		scheduledJobs {
-			cadence
 			configuration
 			createdAt
 			createdBy
@@ -111438,7 +111303,6 @@ const CreateBulkCSVScheduledJobDocument = `mutation CreateBulkCSVScheduledJob ($
 			displayID
 			id
 			ownerID
-			script
 			systemOwned
 			tags
 			title
@@ -111469,7 +111333,6 @@ func (c *Client) CreateBulkCSVScheduledJob(ctx context.Context, input graphql.Up
 const CreateBulkScheduledJobDocument = `mutation CreateBulkScheduledJob ($input: [CreateScheduledJobInput!]) {
 	createBulkScheduledJob(input: $input) {
 		scheduledJobs {
-			cadence
 			configuration
 			createdAt
 			createdBy
@@ -111478,7 +111341,6 @@ const CreateBulkScheduledJobDocument = `mutation CreateBulkScheduledJob ($input:
 			displayID
 			id
 			ownerID
-			script
 			systemOwned
 			tags
 			title
@@ -111509,7 +111371,6 @@ func (c *Client) CreateBulkScheduledJob(ctx context.Context, input []*CreateSche
 const CreateScheduledJobDocument = `mutation CreateScheduledJob ($input: CreateScheduledJobInput!) {
 	createScheduledJob(input: $input) {
 		scheduledJob {
-			cadence
 			configuration
 			createdAt
 			createdBy
@@ -111518,7 +111379,6 @@ const CreateScheduledJobDocument = `mutation CreateScheduledJob ($input: CreateS
 			displayID
 			id
 			ownerID
-			script
 			systemOwned
 			tags
 			title
@@ -111581,7 +111441,6 @@ const GetAllScheduledJobsDocument = `query GetAllScheduledJobs {
 		}
 		edges {
 			node {
-				cadence
 				configuration
 				createdAt
 				createdBy
@@ -111590,7 +111449,6 @@ const GetAllScheduledJobsDocument = `query GetAllScheduledJobs {
 				displayID
 				id
 				ownerID
-				script
 				systemOwned
 				tags
 				title
@@ -111619,7 +111477,6 @@ func (c *Client) GetAllScheduledJobs(ctx context.Context, interceptors ...client
 
 const GetScheduledJobByIDDocument = `query GetScheduledJobByID ($scheduledJobId: ID!) {
 	scheduledJob(id: $scheduledJobId) {
-		cadence
 		configuration
 		createdAt
 		createdBy
@@ -111628,7 +111485,6 @@ const GetScheduledJobByIDDocument = `query GetScheduledJobByID ($scheduledJobId:
 		displayID
 		id
 		ownerID
-		script
 		systemOwned
 		tags
 		title
@@ -111666,7 +111522,6 @@ const GetScheduledJobsDocument = `query GetScheduledJobs ($first: Int, $last: In
 		}
 		edges {
 			node {
-				cadence
 				configuration
 				createdAt
 				createdBy
@@ -111675,7 +111530,6 @@ const GetScheduledJobsDocument = `query GetScheduledJobs ($first: Int, $last: In
 				displayID
 				id
 				ownerID
-				script
 				systemOwned
 				tags
 				title
@@ -111709,7 +111563,6 @@ func (c *Client) GetScheduledJobs(ctx context.Context, first *int64, last *int64
 const UpdateScheduledJobDocument = `mutation UpdateScheduledJob ($updateScheduledJobId: ID!, $input: UpdateScheduledJobInput!) {
 	updateScheduledJob(id: $updateScheduledJobId, input: $input) {
 		scheduledJob {
-			cadence
 			configuration
 			createdAt
 			createdBy
@@ -111718,7 +111571,6 @@ const UpdateScheduledJobDocument = `mutation UpdateScheduledJob ($updateSchedule
 			displayID
 			id
 			ownerID
-			script
 			systemOwned
 			tags
 			title
@@ -111758,7 +111610,6 @@ const GetAllScheduledJobHistoriesDocument = `query GetAllScheduledJobHistories {
 		}
 		edges {
 			node {
-				cadence
 				configuration
 				createdAt
 				createdBy
@@ -111770,7 +111621,6 @@ const GetAllScheduledJobHistoriesDocument = `query GetAllScheduledJobHistories {
 				operation
 				ownerID
 				ref
-				script
 				systemOwned
 				tags
 				title
@@ -111808,7 +111658,6 @@ const GetScheduledJobHistoriesDocument = `query GetScheduledJobHistories ($first
 		}
 		edges {
 			node {
-				cadence
 				configuration
 				createdAt
 				createdBy
@@ -111820,7 +111669,6 @@ const GetScheduledJobHistoriesDocument = `query GetScheduledJobHistories ($first
 				operation
 				ownerID
 				ref
-				script
 				systemOwned
 				tags
 				title

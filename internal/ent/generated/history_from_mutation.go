@@ -8709,10 +8709,6 @@ func (m *ScheduledJobMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetPlatform(platform)
 	}
 
-	if script, exists := m.Script(); exists {
-		create = create.SetScript(script)
-	}
-
 	if windmillPath, exists := m.WindmillPath(); exists {
 		create = create.SetWindmillPath(windmillPath)
 	}
@@ -8723,10 +8719,6 @@ func (m *ScheduledJobMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 	if configuration, exists := m.Configuration(); exists {
 		create = create.SetConfiguration(configuration)
-	}
-
-	if cadence, exists := m.Cadence(); exists {
-		create = create.SetCadence(cadence)
 	}
 
 	if cron, exists := m.Cron(); exists {
@@ -8842,12 +8834,6 @@ func (m *ScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetPlatform(scheduledjob.Platform)
 		}
 
-		if script, exists := m.Script(); exists {
-			create = create.SetScript(script)
-		} else {
-			create = create.SetScript(scheduledjob.Script)
-		}
-
 		if windmillPath, exists := m.WindmillPath(); exists {
 			create = create.SetWindmillPath(windmillPath)
 		} else {
@@ -8864,12 +8850,6 @@ func (m *ScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetConfiguration(configuration)
 		} else {
 			create = create.SetConfiguration(scheduledjob.Configuration)
-		}
-
-		if cadence, exists := m.Cadence(); exists {
-			create = create.SetCadence(cadence)
-		} else {
-			create = create.SetCadence(scheduledjob.Cadence)
 		}
 
 		if cron, exists := m.Cron(); exists {
@@ -8926,11 +8906,9 @@ func (m *ScheduledJobMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetTitle(scheduledjob.Title).
 			SetDescription(scheduledjob.Description).
 			SetPlatform(scheduledjob.Platform).
-			SetScript(scheduledjob.Script).
 			SetWindmillPath(scheduledjob.WindmillPath).
 			SetDownloadURL(scheduledjob.DownloadURL).
 			SetConfiguration(scheduledjob.Configuration).
-			SetCadence(scheduledjob.Cadence).
 			SetNillableCron(scheduledjob.Cron).
 			Save(ctx)
 		if err != nil {

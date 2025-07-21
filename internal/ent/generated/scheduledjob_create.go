@@ -173,20 +173,6 @@ func (sjc *ScheduledJobCreate) SetPlatform(ept enums.JobPlatformType) *Scheduled
 	return sjc
 }
 
-// SetScript sets the "script" field.
-func (sjc *ScheduledJobCreate) SetScript(s string) *ScheduledJobCreate {
-	sjc.mutation.SetScript(s)
-	return sjc
-}
-
-// SetNillableScript sets the "script" field if the given value is not nil.
-func (sjc *ScheduledJobCreate) SetNillableScript(s *string) *ScheduledJobCreate {
-	if s != nil {
-		sjc.SetScript(*s)
-	}
-	return sjc
-}
-
 // SetWindmillPath sets the "windmill_path" field.
 func (sjc *ScheduledJobCreate) SetWindmillPath(s string) *ScheduledJobCreate {
 	sjc.mutation.SetWindmillPath(s)
@@ -202,20 +188,6 @@ func (sjc *ScheduledJobCreate) SetDownloadURL(s string) *ScheduledJobCreate {
 // SetConfiguration sets the "configuration" field.
 func (sjc *ScheduledJobCreate) SetConfiguration(mc models.JobConfiguration) *ScheduledJobCreate {
 	sjc.mutation.SetConfiguration(mc)
-	return sjc
-}
-
-// SetCadence sets the "cadence" field.
-func (sjc *ScheduledJobCreate) SetCadence(mc models.JobCadence) *ScheduledJobCreate {
-	sjc.mutation.SetCadence(mc)
-	return sjc
-}
-
-// SetNillableCadence sets the "cadence" field if the given value is not nil.
-func (sjc *ScheduledJobCreate) SetNillableCadence(mc *models.JobCadence) *ScheduledJobCreate {
-	if mc != nil {
-		sjc.SetCadence(*mc)
-	}
 	return sjc
 }
 
@@ -353,11 +325,6 @@ func (sjc *ScheduledJobCreate) check() error {
 	if _, ok := sjc.mutation.DownloadURL(); !ok {
 		return &ValidationError{Name: "download_url", err: errors.New(`generated: missing required field "ScheduledJob.download_url"`)}
 	}
-	if v, ok := sjc.mutation.Cadence(); ok {
-		if err := v.Validate(); err != nil {
-			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.cadence": %w`, err)}
-		}
-	}
 	if v, ok := sjc.mutation.Cron(); ok {
 		if err := v.Validate(); err != nil {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.cron": %w`, err)}
@@ -447,10 +414,6 @@ func (sjc *ScheduledJobCreate) createSpec() (*ScheduledJob, *sqlgraph.CreateSpec
 		_spec.SetField(scheduledjob.FieldPlatform, field.TypeEnum, value)
 		_node.Platform = value
 	}
-	if value, ok := sjc.mutation.Script(); ok {
-		_spec.SetField(scheduledjob.FieldScript, field.TypeString, value)
-		_node.Script = value
-	}
 	if value, ok := sjc.mutation.WindmillPath(); ok {
 		_spec.SetField(scheduledjob.FieldWindmillPath, field.TypeString, value)
 		_node.WindmillPath = value
@@ -462,10 +425,6 @@ func (sjc *ScheduledJobCreate) createSpec() (*ScheduledJob, *sqlgraph.CreateSpec
 	if value, ok := sjc.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjob.FieldConfiguration, field.TypeJSON, value)
 		_node.Configuration = value
-	}
-	if value, ok := sjc.mutation.Cadence(); ok {
-		_spec.SetField(scheduledjob.FieldCadence, field.TypeJSON, value)
-		_node.Cadence = value
 	}
 	if value, ok := sjc.mutation.Cron(); ok {
 		_spec.SetField(scheduledjob.FieldCron, field.TypeString, value)
