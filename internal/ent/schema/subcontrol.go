@@ -8,11 +8,13 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
@@ -144,10 +146,11 @@ func (Subcontrol) Hooks() []ent.Hook {
 }
 
 // Policy of the Subcontrol
-func (Subcontrol) Policy() ent.Policy {
+func (s Subcontrol) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			rule.AllowIfContextAllowRule(),
+			rule.DenyIfMissingAllFeatures(s.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.SubcontrolMutation](rule.ControlParent), // if mutation contains control_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.SubcontrolMutation](),
@@ -156,8 +159,15 @@ func (Subcontrol) Policy() ent.Policy {
 }
 
 // Annotations of the Standard
-func (Subcontrol) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entx.Features("compliance"),
+func (Subcontrol) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+	}
+}
+
+// Interceptors of the Subcontrol
+func (s Subcontrol) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorRequireAnyFeature("subcontrol", s.Features()...),
 	}
 }

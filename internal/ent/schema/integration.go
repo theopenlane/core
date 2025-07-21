@@ -3,13 +3,14 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/entx"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Integration maps configured integrations (github, slack, etc.) to organizations
@@ -82,17 +83,24 @@ func (i Integration) Mixin() []ent.Mixin {
 }
 
 // Policy of the Integration
-func (Integration) Policy() ent.Policy {
+func (i Integration) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(i.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
 }
 
-// Annotations of the Integration
-func (Integration) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entx.Features("base"),
+func (Integration) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
+// Interceptors of the Integration
+func (i Integration) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorRequireAnyFeature("integration", i.Features()...),
 	}
 }

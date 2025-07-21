@@ -6835,7 +6835,8 @@ func (c *EventClient) Hooks() []Hook {
 
 // Interceptors returns the client interceptors.
 func (c *EventClient) Interceptors() []Interceptor {
-	return c.inters.Event
+	inters := c.inters.Event
+	return append(inters[:len(inters):len(inters)], event.Interceptors[:]...)
 }
 
 func (c *EventClient) mutate(ctx context.Context, m *EventMutation) (Value, error) {

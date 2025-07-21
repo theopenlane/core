@@ -10,9 +10,11 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
+"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
@@ -159,13 +161,14 @@ func (Control) Hooks() []ent.Hook {
 }
 
 // Policy of the Control
-func (Control) Policy() ent.Policy {
+func (c Control) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			// when an admin deletes a standard, we updated
 			// controls to unlink the standard that might belong to an organization
 			rule.AllowMutationIfSystemAdmin(),
 			rule.AllowIfContextAllowRule(),
+			rule.DenyIfMissingAllFeatures(c.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.ControlMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ControlMutation](),
@@ -173,11 +176,24 @@ func (Control) Policy() ent.Policy {
 	)
 }
 
+func (Control) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+		
+	}
+}
+
 // Annotations of the Control
-func (Control) Annotations() []schema.Annotation {
+func (c Control) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features(entx.ModuleCompliance, entx.ModuleContinuousComplianceAutomation),
 		entfga.SelfAccessChecks(),
 		entx.Exportable{},
+	}
+}
+
+// Interceptors of the Control
+func (c Control) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorRequireAnyFeature("control", c.Features()...),
 	}
 }

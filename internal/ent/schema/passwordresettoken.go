@@ -12,15 +12,24 @@ import (
 
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
+"github.com/theopenlane/core/pkg/models"
 	emixin "github.com/theopenlane/entx/mixin"
+"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/interceptors"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/mixin"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+"github.com/theopenlane/core/pkg/models"
 )
 
 // PasswordResetToken holds the schema definition for the PasswordResetToken entity
@@ -72,6 +81,12 @@ func (PasswordResetToken) Fields() []ent.Field {
 	}
 }
 
+func (PasswordResetToken) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Mixin of the PasswordResetToken
 func (p PasswordResetToken) Mixin() []ent.Mixin {
 	return []ent.Mixin{
@@ -94,15 +109,21 @@ func (PasswordResetToken) Indexes() []ent.Index {
 }
 
 // Annotations of the PasswordResetToken
-func (PasswordResetToken) Annotations() []schema.Annotation {
+func (p PasswordResetToken) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		entgql.Skip(entgql.SkipAll),
 		entx.SchemaGenSkip(true),
 		entx.QueryGenSkip(true),
 		history.Annotations{
 			Exclude: true,
 		},
+	}
+}
+
+// Interceptors of the PasswordResetToken
+func (p PasswordResetToken) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorRequireAllFeatures("passwordresettoken", p.Features()...),
 	}
 }
 
@@ -114,7 +135,7 @@ func (PasswordResetToken) Hooks() []ent.Hook {
 }
 
 // Policy of the PasswordResetToken
-func (PasswordResetToken) Policy() ent.Policy {
+func (p PasswordResetToken) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			rule.AllowAfterApplyingPrivacyTokenFilter[*token.ResetToken](),
@@ -122,6 +143,7 @@ func (PasswordResetToken) Policy() ent.Policy {
 		policy.WithOnMutationRules(
 			ent.OpCreate,
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.ResetToken](),
+			rule.DenyIfMissingAllFeatures(p.Features()...),
 			rule.AllowMutationAfterApplyingOwnerFilter(),
 		),
 		policy.WithOnMutationRules(

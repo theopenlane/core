@@ -12,8 +12,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
+"github.com/theopenlane/core/pkg/models"
 )
 
 const (
@@ -110,9 +112,10 @@ func (TrustCenter) Hooks() []ent.Hook {
 }
 
 // Policy of the TrustCenter
-func (TrustCenter) Policy() ent.Policy {
+func (t TrustCenter) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(t.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
@@ -126,16 +129,23 @@ func (TrustCenter) Indexes() []ent.Index {
 	}
 }
 
+func (TrustCenter) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogTrustCenterModule,
+	}
+}
+
 // Annotations of the TrustCenter
-func (TrustCenter) Annotations() []schema.Annotation {
+func (t TrustCenter) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 	}
 }
 
 // Interceptors of the TrustCenter
-func (TrustCenter) Interceptors() []ent.Interceptor {
+func (t TrustCenter) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
+		interceptors.InterceptorRequireAnyFeature("trustcenter", t.Features()...),
 		interceptors.InterceptorTrustCenter(),
 	}
 }

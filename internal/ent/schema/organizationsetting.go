@@ -9,7 +9,6 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/utils/keygen"
 
@@ -143,9 +142,8 @@ func (o OrganizationSetting) Edges() []ent.Edge {
 }
 
 // Annotations of the OrganizationSetting
-func (OrganizationSetting) Annotations() []schema.Annotation {
+func (o OrganizationSetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		entfga.SettingsChecks("organization"),
 	}
 }
@@ -159,7 +157,7 @@ func (OrganizationSetting) Hooks() []ent.Hook {
 }
 
 // Interceptors of the OrganizationSetting
-func (OrganizationSetting) Interceptors() []ent.Interceptor {
+func (o OrganizationSetting) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorOrganizationSetting(),
 	}

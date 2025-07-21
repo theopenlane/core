@@ -152,13 +152,18 @@ func (p PersonalAccessToken) Mixin() []ent.Mixin {
 	}.getMixins()
 }
 
+func (p PersonalAccessToken) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Annotations of the PersonalAccessToken
-func (PersonalAccessToken) Annotations() []schema.Annotation {
+func (p PersonalAccessToken) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		history.Annotations{
 			Exclude: true,
 		},
-		entx.Features("base"),
 	}
 }
 
@@ -171,17 +176,19 @@ func (PersonalAccessToken) Hooks() []ent.Hook {
 }
 
 // Interceptors of the PersonalAccessToken
-func (PersonalAccessToken) Interceptors() []ent.Interceptor {
+func (p PersonalAccessToken) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
+		interceptors.InterceptorRequireAllFeatures("personalaccesstoken", p.Features()...),
 		interceptors.InterceptorPat(),
 	}
 }
 
 // Policy of the PersonalAccessToken
-func (PersonalAccessToken) Policy() ent.Policy {
+func (p PersonalAccessToken) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
 			rule.AllowIfContextAllowRule(),
+			rule.DenyIfMissingAllFeatures(p.Features()...),
 			rule.AllowMutationAfterApplyingOwnerFilter(),
 			privacy.AlwaysAllowRule(),
 		},

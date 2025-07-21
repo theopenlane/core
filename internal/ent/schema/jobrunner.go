@@ -96,10 +96,16 @@ func (JobRunner) Indexes() []ent.Index {
 	return []ent.Index{}
 }
 
+func (JobRunner) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+		
+	}
+}
+
 // Annotations of the JobRunner
-func (JobRunner) Annotations() []schema.Annotation {
+func (j JobRunner) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "continuous-compliance-automation"),
 		history.Annotations{
 			Exclude: true,
 		},
@@ -115,17 +121,19 @@ func (JobRunner) Hooks() []ent.Hook {
 }
 
 // Interceptors of the JobRunner
-func (JobRunner) Interceptors() []ent.Interceptor {
+func (j JobRunner) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
+		interceptors.InterceptorRequireAnyFeature("jobrunner", j.Features()...),
 		interceptors.InterceptorJobRunnerFilterSystemOwned(),
 	}
 }
 
 // Policy of the JobRunner
-func (JobRunner) Policy() ent.Policy {
+func (j JobRunner) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.JobRunnerRegistrationToken](),
+			rule.DenyIfMissingAllFeatures(j.Features()...),
 			rule.SystemOwnedJobRunner(),
 			rule.AllowIfContextAllowRule(),
 			policy.CheckCreateAccess(),

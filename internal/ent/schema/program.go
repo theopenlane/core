@@ -13,11 +13,13 @@ import (
 
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
+"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -173,10 +175,15 @@ func (p Program) Edges() []ent.Edge {
 	}
 }
 
+func (Program) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+	}
+}
+
 // Annotations of the Program
-func (Program) Annotations() []schema.Annotation {
+func (p Program) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance"),
 		// Delete groups members when groups are deleted
 		entx.CascadeThroughAnnotationField(
 			[]entx.ThroughCleanup{
@@ -198,16 +205,18 @@ func (Program) Hooks() []ent.Hook {
 }
 
 // Interceptors of the Program
-func (Program) Interceptors() []ent.Interceptor {
+func (p Program) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
+		interceptors.InterceptorRequireAllFeatures("program", p.Features()...),
 		interceptors.FilterQueryResults[generated.Program](),
 	}
 }
 
 // Policy of the program
-func (Program) Policy() ent.Policy {
+func (p Program) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(p.Features()...),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ProgramMutation](),
 		),

@@ -6,6 +6,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
+"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -77,10 +78,16 @@ func (i InternalPolicy) Mixin() []ent.Mixin {
 	}.getMixins()
 }
 
+func (InternalPolicy) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+		models.CatalogPolicyManagementAddon,
+	}
+}
+
 // Annotations of the InternalPolicy
-func (InternalPolicy) Annotations() []schema.Annotation {
+func (i InternalPolicy) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "policy-management"),
 		entfga.SelfAccessChecks(),
 		entx.Exportable{},
 	}
@@ -105,9 +112,10 @@ func (InternalPolicy) Interceptors() []ent.Interceptor {
 }
 
 // Policy of the InternalPolicy
-func (InternalPolicy) Policy() ent.Policy {
+func (i InternalPolicy) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(i.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.InternalPolicyMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.InternalPolicyMutation](),

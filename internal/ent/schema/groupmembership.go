@@ -10,11 +10,13 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
+"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -86,10 +88,15 @@ func (g GroupMembership) Edges() []ent.Edge {
 	}
 }
 
+func (GroupMembership) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Annotations of the GroupMembership
-func (GroupMembership) Annotations() []schema.Annotation {
+func (g GroupMembership) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		entfga.MembershipChecks("group"),
 	}
 }
@@ -108,8 +115,9 @@ func (GroupMembership) Mixin() []ent.Mixin {
 }
 
 // Interceptors of the GroupMembership
-func (GroupMembership) Interceptors() []ent.Interceptor {
+func (g GroupMembership) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
+		interceptors.InterceptorRequireAnyFeature("groupmembership", g.Features()...),
 		interceptors.FilterListQuery(),
 	}
 }
@@ -123,9 +131,10 @@ func (GroupMembership) Hooks() []ent.Hook {
 }
 
 // Policy of the GroupMembership
-func (GroupMembership) Policy() ent.Policy {
+func (g GroupMembership) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(g.Features()...),
 			entfga.CheckEditAccess[*generated.GroupMembershipMutation](),
 		),
 	)

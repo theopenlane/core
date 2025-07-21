@@ -13,6 +13,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -26,8 +28,23 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 
 	orgID := user.Edges.OrgMemberships[0].ID
 
+	// Enable the compliance module feature for the organization
+	// Standard entity requires ModuleCompliance feature to be enabled
+	_, err := suite.client.Authz.WriteTupleKeys(context.Background(), []fgax.TupleKey{
+		fgax.GetTupleKey(fgax.TupleRequest{
+			SubjectID:   orgID,
+			SubjectType: generated.TypeOrganization,
+			ObjectID:    "compliance_module",
+			ObjectType:  "feature",
+			Relation:    "enabled",
+		}),
+	}, nil)
+	require.NoError(t, err)
+
 	ctx := auth.NewTestContextForSystemAdmin(user.ID, orgID)
 	ctx = generated.NewContext(ctx, suite.client)
+
+	ctx = contextx.With(ctx, auth.OrganizationCreationContextKey{})
 
 	tests := []struct {
 		name           string

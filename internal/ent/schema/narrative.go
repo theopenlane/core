@@ -8,8 +8,10 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
+"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
@@ -90,18 +92,32 @@ func (n Narrative) Mixin() []ent.Mixin {
 	}.getMixins()
 }
 
+func (Narrative) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+		models.CatalogPolicyManagementAddon,
+	}
+}
+
 // Annotations of the Narrative
-func (Narrative) Annotations() []schema.Annotation {
+func (n Narrative) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "policy-management"),
 		entfga.SelfAccessChecks(),
 	}
 }
 
+// Interceptors of the Narrative
+func (n Narrative) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorRequireAnyFeature("narrative", n.Features()...),
+	}
+}
+
 // Policy of the Narrative
-func (Narrative) Policy() ent.Policy {
+func (n Narrative) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(n.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.NarrativeMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.NarrativeMutation](),

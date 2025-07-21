@@ -3,14 +3,14 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/entx"
 )
 
 // ControlScheduledJob holds the schema definition for the ControlScheduledJob entity
@@ -102,10 +102,9 @@ func (ControlScheduledJob) Indexes() []ent.Index {
 	return []ent.Index{}
 }
 
-// Annotations of the ControlScheduledJob
-func (ControlScheduledJob) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entx.Features("compliance", "continuous-compliance-automation"),
+func (ControlScheduledJob) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
 	}
 }
 
@@ -117,14 +116,17 @@ func (ControlScheduledJob) Hooks() []ent.Hook {
 }
 
 // Interceptors of the ControlScheduledJob
-func (ControlScheduledJob) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
+func (c ControlScheduledJob) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorRequireAnyFeature("controljob", c.Features()...),
+	}
 }
 
 // Policy of the ControlScheduledJob
-func (ControlScheduledJob) Policy() ent.Policy {
+func (c ControlScheduledJob) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(c.Features()...),
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),

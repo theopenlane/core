@@ -10,7 +10,9 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -84,18 +86,32 @@ func (a ActionPlan) Mixin() []ent.Mixin {
 		}}.getMixins()
 }
 
+func (ActionPlan) Features() []entx.FeatureModule {
+	return []entx.FeatureModule{
+		entx.ModuleCompliance,
+		entx.ModuleContinuousComplianceAutomation,
+	}
+}
+
 // Annotations of the ActionPlan
-func (ActionPlan) Annotations() []schema.Annotation {
+func (a ActionPlan) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "continuous-compliance-automation"),
 		entfga.SelfAccessChecks(),
 	}
 }
 
+// Interceptors of the ActionPlan
+func (a ActionPlan) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorRequireAnyFeature("actionplan", a.Features()...),
+	}
+}
+
 // Policy of the ActionPlan
-func (ActionPlan) Policy() ent.Policy {
+func (a ActionPlan) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(a.Features()...),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ActionPlanMutation](),
 		),

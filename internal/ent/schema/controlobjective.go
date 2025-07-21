@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -126,18 +127,32 @@ func (c ControlObjective) Mixin() []ent.Mixin {
 	}.getMixins()
 }
 
+func (ControlObjective) Features() []entx.FeatureModule {
+	return []entx.FeatureModule{
+		entx.ModuleCompliance,
+		entx.ModuleContinuousComplianceAutomation,
+	}
+}
+
 // Annotations of the ControlObjective
-func (ControlObjective) Annotations() []schema.Annotation {
+func (c ControlObjective) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "continuous-compliance-automation"),
 		entfga.SelfAccessChecks(),
 	}
 }
 
+// Interceptors of the ControlObjective
+func (c ControlObjective) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorRequireAnyFeature("controlobjective", c.Features()...),
+	}
+}
+
 // Policy of the ControlObjective
-func (ControlObjective) Policy() ent.Policy {
+func (c ControlObjective) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(c.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.ControlObjectiveMutation](rule.ProgramParent),     // if mutation contains program_id, check access
 			rule.CanCreateObjectsUnderParent[*generated.ControlObjectiveMutation](rule.ControlsParent),    // if mutation contains control_id, check access
 			rule.CanCreateObjectsUnderParent[*generated.ControlObjectiveMutation](rule.SubcontrolsParent), // if mutation contains subcontrol_id, check access

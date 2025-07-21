@@ -129,10 +129,15 @@ func (a APIToken) Mixin() []ent.Mixin {
 	}.getMixins()
 }
 
+func (APIToken) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Annotations of the APIToken
-func (APIToken) Annotations() []schema.Annotation {
+func (a APIToken) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		history.Annotations{
 			Exclude: true,
 		},
@@ -148,17 +153,19 @@ func (APIToken) Hooks() []ent.Hook {
 }
 
 // Interceptors of the APIToken
-func (APIToken) Interceptors() []ent.Interceptor {
+func (a APIToken) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
+		// interceptors.InterceptorRequireAllFeatures("apitoken", a.Features()...),
 		interceptors.InterceptorAPIToken(),
 	}
 }
 
 // Policy of the APIToken
-func (APIToken) Policy() ent.Policy {
+func (a APIToken) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			rule.AllowIfContextAllowRule(),
+			rule.DenyIfMissingAllFeatures(a.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

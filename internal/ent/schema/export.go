@@ -7,13 +7,22 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/pkg/enums"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
+"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/hooks"
+"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/internal/ent/interceptors"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+"github.com/theopenlane/core/pkg/models"
 )
 
 // Export holds the schema definition for export records used for exporting various content types.
@@ -100,23 +109,36 @@ func (e Export) Mixin() []ent.Mixin {
 	}.getMixins()
 }
 
+func (Export) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Annotations of the Export
-func (Export) Annotations() []schema.Annotation {
+func (e Export) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features(entx.ModuleBase),
 		history.Annotations{
 			Exclude: true,
 		},
 	}
 }
 
+// Interceptors of the Export
+func (e Export) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorRequireAnyFeature("export", e.Features()...),
+	}
+}
+
 // Policy of the Export
-func (Export) Policy() ent.Policy {
+func (e Export) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			rule.AllowQueryIfSystemAdmin(),
 		),
 		policy.WithOnMutationRules(ent.OpCreate,
+			rule.DenyIfMissingAllFeatures(e.Features()...),
 			privacy.AlwaysAllowRule(),
 		),
 		policy.WithOnMutationRules(ent.OpUpdate|ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne,

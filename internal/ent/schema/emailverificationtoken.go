@@ -11,16 +11,25 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
+"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/entx/history"
+"github.com/theopenlane/core/pkg/models"
 	emixin "github.com/theopenlane/entx/mixin"
+"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/interceptors"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/mixin"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+"github.com/theopenlane/core/pkg/models"
 )
 
 // EmailVerificationToken holds the schema definition for the EmailVerificationToken entity
@@ -90,6 +99,12 @@ func (e EmailVerificationToken) Mixin() []ent.Mixin {
 	}
 }
 
+func (EmailVerificationToken) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Indexes of the EmailVerificationToken
 func (EmailVerificationToken) Indexes() []ent.Index {
 	return []ent.Index{
@@ -100,15 +115,21 @@ func (EmailVerificationToken) Indexes() []ent.Index {
 }
 
 // Annotations of the EmailVerificationToken
-func (EmailVerificationToken) Annotations() []schema.Annotation {
+func (e EmailVerificationToken) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		entgql.Skip(entgql.SkipAll),
 		entx.SchemaGenSkip(true),
 		entx.QueryGenSkip(true),
 		history.Annotations{
 			Exclude: true,
 		},
+	}
+}
+
+// Interceptors of the EmailVerificationToken
+func (e EmailVerificationToken) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorRequireAllFeatures("emailverificationtoken", e.Features()...),
 	}
 }
 
@@ -120,7 +141,7 @@ func (EmailVerificationToken) Hooks() []ent.Hook {
 }
 
 // Policy of the EmailVerificationToken
-func (EmailVerificationToken) Policy() ent.Policy {
+func (e EmailVerificationToken) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			rule.AllowAfterApplyingPrivacyTokenFilter[*token.VerifyToken](),
@@ -128,6 +149,7 @@ func (EmailVerificationToken) Policy() ent.Policy {
 		policy.WithOnMutationRules(
 			ent.OpCreate,
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.ResetToken](),
+			rule.DenyIfMissingAllFeatures(e.Features()...),
 			rule.AllowMutationAfterApplyingOwnerFilter(),
 		),
 		policy.WithOnMutationRules(

@@ -78,9 +78,8 @@ func (o OrgMembership) Edges() []ent.Edge {
 }
 
 // Annotations of the OrgMembership
-func (OrgMembership) Annotations() []schema.Annotation {
+func (o OrgMembership) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		entfga.MembershipChecks("organization"),
 		// Delete groups + program members when orgmembership is deleted
 		entx.CascadeThroughAnnotationField(
@@ -121,7 +120,7 @@ func (OrgMembership) Hooks() []ent.Hook {
 }
 
 // Interceptors of the OrgMembership
-func (OrgMembership) Interceptors() []ent.Interceptor {
+func (o OrgMembership) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorOrgMember(),
 		interceptors.TraverseOrgMembers(),

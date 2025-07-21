@@ -9,8 +9,11 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 )
 
@@ -72,18 +75,30 @@ func (a Asset) Edges() []ent.Edge {
 	}
 }
 
-func (Asset) Policy() ent.Policy {
+func (a Asset) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(a.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
 }
 
+func (Asset) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Annotations of the Asset
-func (Asset) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entx.Features("asset-management"),
+func (a Asset) Annotations() []schema.Annotation {
+	return []schema.Annotation{}
+}
+
+// Interceptors of the Asset
+func (a Asset) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorRequireAnyFeature("asset", a.Features()...),
 	}
 }
 

@@ -120,10 +120,15 @@ func (o OrgSubscription) Mixin() []ent.Mixin {
 	}.getMixins()
 }
 
+func (OrgSubscription) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Annotations of the OrgSubscription
-func (OrgSubscription) Annotations() []schema.Annotation {
+func (o OrgSubscription) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		// since we only have queries, we can just use the interceptors for queries and can skip the fga generated checks
@@ -131,8 +136,9 @@ func (OrgSubscription) Annotations() []schema.Annotation {
 }
 
 // Interceptors of the OrgSubscription
-func (OrgSubscription) Interceptors() []ent.Interceptor {
+func (o OrgSubscription) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
+		interceptors.InterceptorRequireAnyFeature("orgsubscription", o.Features()...),
 		interceptors.InterceptorSubscriptionURL(),
 	}
 }

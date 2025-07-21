@@ -13,13 +13,22 @@ import (
 
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
+"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
+"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/internal/ent/interceptors"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/enums"
+"github.com/theopenlane/core/pkg/models"
 )
 
 const (
@@ -134,13 +143,25 @@ func (i Invite) Edges() []ent.Edge {
 	}
 }
 
+func (Invite) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Annotations of the Invite
-func (Invite) Annotations() []schema.Annotation {
+func (i Invite) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		history.Annotations{
 			Exclude: true,
 		},
+	}
+}
+
+// Interceptors of the Invite
+func (i Invite) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorRequireAnyFeature("invite", i.Features()...),
 	}
 }
 
@@ -154,13 +175,14 @@ func (Invite) Hooks() []ent.Hook {
 }
 
 // Policy of the Invite
-func (Invite) Policy() ent.Policy {
+func (i Invite) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](),
 		),
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](),
+			rule.DenyIfMissingAllFeatures(i.Features()...),
 			rule.CanInviteUsers(),
 			policy.CheckOrgWriteAccess(),
 			rule.AllowMutationAfterApplyingOwnerFilter(),

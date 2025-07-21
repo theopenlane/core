@@ -456,6 +456,7 @@ func defaultOrganizationSettings(ctx context.Context, m *generated.OrganizationM
 		user, err := m.Client().User.Get(ctx, userID)
 		if err != nil {
 			zerolog.Ctx(ctx).Error().Err(err).Msg("unable to fetch user from database")
+			return "", err
 		}
 
 		billingContact := user.FirstName + " " + user.LastName

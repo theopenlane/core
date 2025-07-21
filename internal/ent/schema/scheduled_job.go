@@ -8,8 +8,10 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
@@ -110,10 +112,23 @@ func (s ScheduledJob) Mixin() []ent.Mixin {
 	}.getMixins()
 }
 
+func (ScheduledJob) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Annotations of the ScheduledJob
-func (ScheduledJob) Annotations() []schema.Annotation {
+func (s ScheduledJob) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		// entfga.SelfAccessChecks(),
+	}
+}
+
+// Interceptors of the ScheduledJob
+func (s ScheduledJob) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorRequireAnyFeature("scheduledjob", s.Features()...),
 	}
 }
 
@@ -125,9 +140,10 @@ func (ScheduledJob) Hooks() []ent.Hook {
 }
 
 // Policy of the ScheduledJob
-func (ScheduledJob) Policy() ent.Policy {
+func (s ScheduledJob) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(s.Features()...),
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),

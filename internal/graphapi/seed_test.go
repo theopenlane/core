@@ -11,6 +11,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 )
@@ -48,8 +49,7 @@ type testUserDetails struct {
 	UserCtx context.Context
 }
 
-// userBuilder creates a new test user and returns the details
-func (suite *GraphTestSuite) userBuilder(ctx context.Context, t *testing.T) testUserDetails {
+func (suite *GraphTestSuite) userBuilder(ctx context.Context, t *testing.T, features ...models.OrgModule) testUserDetails {
 	testUser := testUserDetails{}
 
 	// create a test user
@@ -76,7 +76,29 @@ func (suite *GraphTestSuite) userBuilder(ctx context.Context, t *testing.T) test
 	testGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 	testUser.GroupID = testGroup.ID
 
+	suite.enableAllModules(ctx, t, testUser.OrganizationID, features...)
+
 	return testUser
+}
+
+func (suite *GraphTestSuite) enableAllModules(ctx context.Context, t *testing.T, orgID string, features ...models.OrgModule) {
+	if len(features) == 0 {
+		features = models.AllOrgModules
+	}
+
+	tuples := make([]fgax.TupleKey, 0, len(features))
+	for _, feature := range features {
+		tuples = append(tuples, fgax.GetTupleKey(fgax.TupleRequest{
+			SubjectID:   orgID,
+			SubjectType: ent.TypeOrganization,
+			ObjectID:    string(feature),
+			ObjectType:  "feature",
+			Relation:    "enabled",
+		}))
+	}
+
+	_, err := suite.client.db.Authz.WriteTupleKeys(ctx, tuples, nil)
+	assert.NilError(t, err)
 }
 
 // setupTestData creates test users and sets up the clients with the necessary tokens

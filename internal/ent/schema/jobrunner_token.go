@@ -9,11 +9,17 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
+"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/utils/keygen"
+"github.com/theopenlane/core/pkg/models"
 )
 
 // JobRunnerToken holds the schema definition for the JobRunnerToken entity
@@ -115,10 +121,16 @@ func (JobRunnerToken) Indexes() []ent.Index {
 	}
 }
 
+func (JobRunnerToken) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+		
+	}
+}
+
 // Annotations of the JobRunnerToken
-func (JobRunnerToken) Annotations() []schema.Annotation {
+func (j JobRunnerToken) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "continuous-compliance-automation"),
 		history.Annotations{
 			Exclude: true,
 		},
@@ -136,10 +148,11 @@ func (JobRunnerToken) Interceptors() []ent.Interceptor {
 }
 
 // Policy of the JobRunnerToken
-func (JobRunnerToken) Policy() ent.Policy {
+func (j JobRunnerToken) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.JobRunnerRegistrationToken](),
+			rule.DenyIfMissingAllFeatures(j.Features()...),
 			rule.AllowIfContextAllowRule(),
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),

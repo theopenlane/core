@@ -8,12 +8,14 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
+"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // File defines the file schema.
@@ -120,23 +122,35 @@ func (f File) Mixin() []ent.Mixin {
 	}.getMixins()
 }
 
+func (File) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+		models.CatalogComplianceModule,
+		models.CatalogPolicyManagementAddon,
+		models.CatalogRiskManagementAddon,
+		models.CatalogBaseModule,
+		models.CatalogEntityManagementModule,
+		
+	}
+}
+
 // Annotations of the File
-func (File) Annotations() []schema.Annotation {
+func (f File) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "policy-management", "risk-management", "asset-management", "entity-management", "continuous-compliance-automation"),
 		entfga.SelfAccessChecks(),
 	}
 }
 
 // Interceptors of the File
-func (File) Interceptors() []ent.Interceptor {
+func (f File) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
+		interceptors.InterceptorRequireAnyFeature("file", f.Features()...),
 		interceptors.InterceptorPresignedURL(),
 	}
 }
 
 // Policy of the File
-func (File) Policy() ent.Policy {
+func (f File) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithOnMutationRules(
 			// check permissions on delete and update operations, creation is handled by the parent object
@@ -144,6 +158,7 @@ func (File) Policy() ent.Policy {
 			entfga.CheckEditAccess[*generated.FileMutation](),
 		),
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(f.Features()...),
 			privacy.AlwaysAllowRule(),
 		),
 	)

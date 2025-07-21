@@ -3,14 +3,13 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/entx"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Hush maps configured integrations (github, slack, etc.) to organizations
@@ -86,10 +85,9 @@ func (h Hush) Edges() []ent.Edge {
 	}
 }
 
-// Annotations of the Hushhh
-func (Hush) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entx.Features("base"),
+func (Hush) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
 	}
 }
 
@@ -111,8 +109,9 @@ func (Hush) Hooks() []ent.Hook {
 }
 
 // Interceptors of the Hush
-func (Hush) Interceptors() []ent.Interceptor {
+func (h Hush) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
+		interceptors.InterceptorRequireAnyFeature("hush", h.Features()...),
 		interceptors.InterceptorHush(),
 	}
 }

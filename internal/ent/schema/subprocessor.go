@@ -4,7 +4,6 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
@@ -15,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 )
 
@@ -112,10 +112,11 @@ func (Subprocessor) Hooks() []ent.Hook {
 }
 
 // Policy of the Subprocessor
-func (Subprocessor) Policy() ent.Policy {
+func (s Subprocessor) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			rule.SystemOwnedSubprocessor(),
+			rule.DenyIfMissingAllFeatures(s.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
@@ -129,16 +130,16 @@ func (Subprocessor) Indexes() []ent.Index {
 	}
 }
 
-// Annotations of the Subprocessor
-func (Subprocessor) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entx.Features("trust-center"),
+func (Subprocessor) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogTrustCenterModule,
 	}
 }
 
 // Interceptors of the Subprocessor
-func (Subprocessor) Interceptors() []ent.Interceptor {
+func (t Subprocessor) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
+		interceptors.InterceptorRequireAnyFeature("subprocessor", t.Features()...),
 		interceptors.TraverseSubprocessor(),
 	}
 }

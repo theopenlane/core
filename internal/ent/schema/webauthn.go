@@ -14,6 +14,7 @@ import (
 	emixin "github.com/theopenlane/entx/mixin"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -122,8 +123,14 @@ func (w Webauthn) Mixin() []ent.Mixin {
 	}
 }
 
+func (Webauthn) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Annotations of the Webauthn
-func (Webauthn) Annotations() []schema.Annotation {
+func (w Webauthn) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.RelayConnection(),
 
@@ -135,7 +142,13 @@ func (Webauthn) Annotations() []schema.Annotation {
 		history.Annotations{
 			Exclude: true,
 		},
-		entx.Features("base"),
+	}
+}
+
+// Interceptors of the Webauthn
+func (w Webauthn) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorRequireAnyFeature("webauthn", w.Features()...),
 	}
 }
 

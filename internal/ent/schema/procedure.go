@@ -6,6 +6,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
+"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -74,10 +75,20 @@ func (p Procedure) Mixin() []ent.Mixin {
 	}.getMixins()
 }
 
+func (Procedure) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+		models.CatalogPolicyManagementAddon,
+		models.CatalogRiskManagementAddon,
+		models.CatalogBaseModule,
+		models.CatalogEntityManagementModule,
+		
+	}
+}
+
 // Annotations of the Procedure
-func (Procedure) Annotations() []schema.Annotation {
+func (p Procedure) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "policy-management", "risk-management", "asset-management", "entity-management", "continuous-compliance-automation"),
 		entfga.SelfAccessChecks(),
 		entx.Exportable{},
 	}
@@ -94,17 +105,19 @@ func (Procedure) Hooks() []ent.Hook {
 }
 
 // Interceptors of the Procedure
-func (Procedure) Interceptors() []ent.Interceptor {
+func (p Procedure) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
+		interceptors.InterceptorRequireAnyFeature("procedure", p.Features()...),
 		// procedures are org owned, but we need to ensure the groups are filtered as well
 		interceptors.FilterQueryResults[generated.Procedure](),
 	}
 }
 
 // Policy of the Procedure
-func (Procedure) Policy() ent.Policy {
+func (p Procedure) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(p.Features()...),
 			rule.CanCreateObjectsUnderParent[*generated.ProcedureMutation](rule.ProgramParent), // if mutation contains program_id, check access
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.ProcedureMutation](),

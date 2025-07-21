@@ -13,7 +13,9 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -142,12 +144,29 @@ func (t Task) Edges() []ent.Edge {
 	}
 }
 
+func (Task) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+		models.CatalogPolicyManagementAddon,
+		models.CatalogRiskManagementAddon,
+		models.CatalogBaseModule,
+		models.CatalogEntityManagementModule,
+		
+	}
+}
+
 // Annotations of the Task
-func (Task) Annotations() []schema.Annotation {
+func (t Task) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance", "policy-management", "risk-management", "asset-management", "entity-management", "continuous-compliance-automation"),
 		entfga.SelfAccessChecks(),
 		entx.Exportable{},
+	}
+}
+
+// Interceptors of the Task
+func (t Task) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorRequireAnyFeature("task", t.Features()...),
 	}
 }
 
@@ -160,9 +179,10 @@ func (Task) Hooks() []ent.Hook {
 }
 
 // Policy of the Task
-func (Task) Policy() ent.Policy {
+func (t Task) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.AllowIfHasAllFeatures(t.Features()...),
 			entfga.CheckEditAccess[*generated.TaskMutation](),
 		),
 	)

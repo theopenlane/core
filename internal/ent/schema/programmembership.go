@@ -10,11 +10,13 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
+"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -85,10 +87,15 @@ func (p ProgramMembership) Edges() []ent.Edge {
 	}
 }
 
+func (ProgramMembership) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogComplianceModule,
+	}
+}
+
 // Annotations of the ProgramMembership
-func (ProgramMembership) Annotations() []schema.Annotation {
+func (p ProgramMembership) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("compliance"),
 		entfga.MembershipChecks("program"),
 	}
 }
@@ -122,9 +129,10 @@ func (ProgramMembership) Interceptors() []ent.Interceptor {
 }
 
 // // Policy of the ProgramMembership
-func (ProgramMembership) Policy() ent.Policy {
+func (p ProgramMembership) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(p.Features()...),
 			entfga.CheckEditAccess[*generated.ProgramMembershipMutation](),
 		),
 	)

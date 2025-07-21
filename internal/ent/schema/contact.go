@@ -9,13 +9,17 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Contact holds the schema definition for the Contact entity
@@ -126,17 +130,29 @@ func (Contact) Hooks() []ent.Hook {
 }
 
 // Policy of the Contact
-func (Contact) Policy() ent.Policy {
+func (c Contact) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(c.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
 }
 
+func (Contact) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogEntityManagementModule,
+	}
+}
+
 // Annotations of the Contact
-func (Contact) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entx.Features("entity-management"),
+func (c Contact) Annotations() []schema.Annotation {
+	return []schema.Annotation{}
+}
+
+// Interceptors of the Contact
+func (c Contact) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorRequireAllFeatures("contact", c.Features()...),
 	}
 }

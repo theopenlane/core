@@ -72,7 +72,7 @@ func ValidColumn(column string) bool {
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
 	Hooks        [3]ent.Hook
-	Interceptors [1]ent.Interceptor
+	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// OrganizationIDValidator is a validator for the "organization_id" field. It is called by the builders before save.
 	OrganizationIDValidator func(string) error

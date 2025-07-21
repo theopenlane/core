@@ -8,9 +8,12 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
+"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // DocumentData holds the schema definition for the DocumentData entity
@@ -73,18 +76,31 @@ func (d DocumentData) Edges() []ent.Edge {
 	}
 }
 
+func (DocumentData) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogBaseModule,
+	}
+}
+
 // Annotations of the DocumentData
-func (DocumentData) Annotations() []schema.Annotation {
+func (d DocumentData) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entx.Features("base"),
 		entfga.SelfAccessChecks(),
 	}
 }
 
+// Interceptors of the DocumentData
+func (d DocumentData) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorRequireAnyFeature("documentdata", d.Features()...),
+	}
+}
+
 // Policy of the DocumentData
-func (DocumentData) Policy() ent.Policy {
+func (d DocumentData) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(d.Features()...),
 			entfga.CheckEditAccess[*generated.DocumentDataMutation](),
 		),
 	)

@@ -12,9 +12,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
+"github.com/theopenlane/core/pkg/models"
 )
 
 // TrustCenterSetting holds the schema definition for the TrustCenterSetting entity
@@ -139,8 +142,9 @@ func (t TrustCenterSetting) Edges() []ent.Edge {
 }
 
 // Interceptors of the TrustCenterSetting
-func (TrustCenterSetting) Interceptors() []ent.Interceptor {
+func (t TrustCenterSetting) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
+		interceptors.InterceptorRequireAnyFeature("trustcentersettings", t.Features()...),
 		interceptors.InterceptorTrustCenterChild(),
 	}
 }
@@ -153,9 +157,10 @@ func (TrustCenterSetting) Hooks() []ent.Hook {
 	}
 }
 
-func (TrustCenterSetting) Policy() ent.Policy {
+func (t TrustCenterSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(t.Features()...),
 			entfga.CheckEditAccess[*generated.TrustCenterSettingMutation](),
 		),
 	)
@@ -168,7 +173,13 @@ func (TrustCenterSetting) Indexes() []ent.Index {
 	}
 }
 
-func (TrustCenterSetting) Annotations() []schema.Annotation {
+func (TrustCenterSetting) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogTrustCenterModule,
+	}
+}
+
+func (t TrustCenterSetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SettingsChecks("trust_center"),
 		entfga.SelfAccessChecks(),

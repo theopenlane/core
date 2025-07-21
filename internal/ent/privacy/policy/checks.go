@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // CheckCreateAccess checks if the user has access to create an object in the org
@@ -81,6 +82,6 @@ func CheckFeatureAccess(feature string) privacy.QueryMutationRule {
 }
 
 // CheckAnyFeatureAccess ensures the requesting organization has at least one of the provided features enabled.
-func CheckAnyFeatureAccess(features ...string) privacy.QueryMutationRule {
+func CheckAnyFeatureAccess(features ...models.OrgModule) privacy.QueryMutationRule {
 	return rule.AllowIfHasAnyFeature(features...)
 }

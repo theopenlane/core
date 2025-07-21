@@ -5737,14 +5737,10 @@ type CreateScheduledJobInput struct {
 	Description *string `json:"description,omitempty"`
 	// the platform to use to execute this job
 	Platform enums.JobPlatformType `json:"platform"`
-	// the script to run
-	Script *string `json:"script,omitempty"`
 	// the url from where to download the script from
 	DownloadURL string `json:"downloadURL"`
 	// the configuration to run this job
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
-	// the schedule to run this job
-	Cadence *models.JobCadence `json:"cadence,omitempty"`
 	// cron syntax
 	Cron    *string `json:"cron,omitempty"`
 	OwnerID *string `json:"ownerID,omitempty"`
@@ -21544,16 +21540,12 @@ type ScheduledJob struct {
 	Description *string `json:"description,omitempty"`
 	// the platform to use to execute this job
 	Platform enums.JobPlatformType `json:"platform"`
-	// the script to run
-	Script *string `json:"script,omitempty"`
 	// Windmill path
 	WindmillPath string `json:"windmillPath"`
 	// the url from where to download the script from
 	DownloadURL string `json:"downloadURL"`
 	// the configuration to run this job
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
-	// the schedule to run this job
-	Cadence *models.JobCadence `json:"cadence,omitempty"`
 	// cron syntax
 	Cron  *string       `json:"cron,omitempty"`
 	Owner *Organization `json:"owner,omitempty"`
@@ -21620,16 +21612,12 @@ type ScheduledJobHistory struct {
 	Description *string `json:"description,omitempty"`
 	// the platform to use to execute this job
 	Platform enums.JobPlatformType `json:"platform"`
-	// the script to run
-	Script *string `json:"script,omitempty"`
 	// Windmill path
 	WindmillPath string `json:"windmillPath"`
 	// the url from where to download the script from
 	DownloadURL string `json:"downloadURL"`
 	// the configuration to run this job
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
-	// the schedule to run this job
-	Cadence *models.JobCadence `json:"cadence,omitempty"`
 	// cron syntax
 	Cron *string `json:"cron,omitempty"`
 }
@@ -29481,18 +29469,12 @@ type UpdateScheduledJobInput struct {
 	// the description of the job
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
-	// the script to run
-	Script      *string `json:"script,omitempty"`
-	ClearScript *bool   `json:"clearScript,omitempty"`
 	// the url from where to download the script from
 	DownloadURL *string `json:"downloadURL,omitempty"`
 	// the configuration to run this job
 	Configuration       models.JobConfiguration `json:"configuration,omitempty"`
 	AppendConfiguration models.JobConfiguration `json:"appendConfiguration,omitempty"`
 	ClearConfiguration  *bool                   `json:"clearConfiguration,omitempty"`
-	// the schedule to run this job
-	Cadence      *models.JobCadence `json:"cadence,omitempty"`
-	ClearCadence *bool              `json:"clearCadence,omitempty"`
 	// cron syntax
 	Cron       *string `json:"cron,omitempty"`
 	ClearCron  *bool   `json:"clearCron,omitempty"`

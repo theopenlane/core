@@ -4,7 +4,6 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
@@ -14,7 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/entx"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // CustomDomain holds the schema definition for the CustomDomain
@@ -109,7 +108,7 @@ func (CustomDomain) Indexes() []ent.Index {
 }
 
 // Policy of the CustomDomain
-func (CustomDomain) Policy() ent.Policy {
+func (c CustomDomain) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			rule.AllowQueryIfSystemAdmin(),
@@ -120,6 +119,7 @@ func (CustomDomain) Policy() ent.Policy {
 		),
 		policy.WithOnMutationRules(
 			ent.OpCreate|ent.OpDeleteOne|ent.OpDelete,
+			rule.DenyIfMissingAllFeatures(c.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
@@ -133,9 +133,8 @@ func (CustomDomain) Hooks() []ent.Hook {
 	}
 }
 
-// Annotations of the CustomDomain
-func (CustomDomain) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entx.Features("trust-center"),
+func (CustomDomain) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogTrustCenterModule,
 	}
 }

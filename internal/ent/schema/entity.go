@@ -5,16 +5,19 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/entsql"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // Entity holds the schema definition for the Entity entity
@@ -134,17 +137,24 @@ func (Entity) Hooks() []ent.Hook {
 }
 
 // Policy of the Entity
-func (Entity) Policy() ent.Policy {
+func (e Entity) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.DenyIfMissingAllFeatures(e.Features()...),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
 }
 
-// Annotations of the Entity
-func (Entity) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		entx.Features("entity-management"),
+func (Entity) Features() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogEntityManagementModule,
+	}
+}
+
+// Interceptors of the Entity
+func (e Entity) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorRequireAnyFeature("entity", e.Features()...),
 	}
 }

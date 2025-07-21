@@ -230,8 +230,10 @@ func init() {
 	actionplan.Hooks[7] = actionplanMixinHooks7[0]
 	actionplanMixinInters1 := actionplanMixin[1].Interceptors()
 	actionplanMixinInters7 := actionplanMixin[7].Interceptors()
+	actionplanInters := schema.ActionPlan{}.Interceptors()
 	actionplan.Interceptors[0] = actionplanMixinInters1[0]
 	actionplan.Interceptors[1] = actionplanMixinInters7[0]
+	actionplan.Interceptors[2] = actionplanInters[0]
 	actionplanMixinFields0 := actionplanMixin[0].Fields()
 	_ = actionplanMixinFields0
 	actionplanMixinFields2 := actionplanMixin[2].Fields()
@@ -409,8 +411,10 @@ func init() {
 	asset.Hooks[6] = assetMixinHooks6[2]
 	assetMixinInters1 := assetMixin[1].Interceptors()
 	assetMixinInters5 := assetMixin[5].Interceptors()
+	assetInters := schema.Asset{}.Interceptors()
 	asset.Interceptors[0] = assetMixinInters1[0]
 	asset.Interceptors[1] = assetMixinInters5[0]
+	asset.Interceptors[2] = assetInters[0]
 	assetMixinFields0 := assetMixin[0].Fields()
 	_ = assetMixinFields0
 	assetMixinFields2 := assetMixin[2].Fields()
@@ -506,8 +510,10 @@ func init() {
 	contact.Hooks[4] = contactHooks[0]
 	contactMixinInters1 := contactMixin[1].Interceptors()
 	contactMixinInters5 := contactMixin[5].Interceptors()
+	contactInters := schema.Contact{}.Interceptors()
 	contact.Interceptors[0] = contactMixinInters1[0]
 	contact.Interceptors[1] = contactMixinInters5[0]
+	contact.Interceptors[2] = contactInters[0]
 	contactMixinFields0 := contactMixin[0].Fields()
 	_ = contactMixinFields0
 	contactMixinFields2 := contactMixin[2].Fields()
@@ -640,9 +646,11 @@ func init() {
 	control.Hooks[10] = controlHooks[0]
 	controlMixinInters1 := controlMixin[1].Interceptors()
 	controlMixinInters6 := controlMixin[6].Interceptors()
+	controlInters := schema.Control{}.Interceptors()
 	control.Interceptors[0] = controlMixinInters1[0]
 	control.Interceptors[1] = controlMixinInters6[0]
 	control.Interceptors[2] = controlMixinInters6[1]
+	control.Interceptors[3] = controlInters[0]
 	controlMixinFields0 := controlMixin[0].Fields()
 	_ = controlMixinFields0
 	controlMixinFields2 := controlMixin[2].Fields()
@@ -753,9 +761,11 @@ func init() {
 	controlimplementation.Hooks[8] = controlimplementationHooks[0]
 	controlimplementationMixinInters1 := controlimplementationMixin[1].Interceptors()
 	controlimplementationMixinInters5 := controlimplementationMixin[5].Interceptors()
+	controlimplementationInters := schema.ControlImplementation{}.Interceptors()
 	controlimplementation.Interceptors[0] = controlimplementationMixinInters1[0]
 	controlimplementation.Interceptors[1] = controlimplementationMixinInters5[0]
 	controlimplementation.Interceptors[2] = controlimplementationMixinInters5[1]
+	controlimplementation.Interceptors[3] = controlimplementationInters[0]
 	controlimplementationMixinFields0 := controlimplementationMixin[0].Fields()
 	_ = controlimplementationMixinFields0
 	controlimplementationMixinFields2 := controlimplementationMixin[2].Fields()
@@ -859,9 +869,11 @@ func init() {
 	controlobjective.Hooks[9] = controlobjectiveMixinHooks7[2]
 	controlobjectiveMixinInters1 := controlobjectiveMixin[1].Interceptors()
 	controlobjectiveMixinInters6 := controlobjectiveMixin[6].Interceptors()
+	controlobjectiveInters := schema.ControlObjective{}.Interceptors()
 	controlobjective.Interceptors[0] = controlobjectiveMixinInters1[0]
 	controlobjective.Interceptors[1] = controlobjectiveMixinInters6[0]
 	controlobjective.Interceptors[2] = controlobjectiveMixinInters6[1]
+	controlobjective.Interceptors[3] = controlobjectiveInters[0]
 	controlobjectiveMixinFields0 := controlobjectiveMixin[0].Fields()
 	_ = controlobjectiveMixinFields0
 	controlobjectiveMixinFields2 := controlobjectiveMixin[2].Fields()
@@ -973,8 +985,10 @@ func init() {
 	controlscheduledjob.Hooks[4] = controlscheduledjobHooks[0]
 	controlscheduledjobMixinInters1 := controlscheduledjobMixin[1].Interceptors()
 	controlscheduledjobMixinInters4 := controlscheduledjobMixin[4].Interceptors()
+	controlscheduledjobInters := schema.ControlScheduledJob{}.Interceptors()
 	controlscheduledjob.Interceptors[0] = controlscheduledjobMixinInters1[0]
 	controlscheduledjob.Interceptors[1] = controlscheduledjobMixinInters4[0]
+	controlscheduledjob.Interceptors[2] = controlscheduledjobInters[0]
 	controlscheduledjobMixinFields0 := controlscheduledjobMixin[0].Fields()
 	_ = controlscheduledjobMixinFields0
 	controlscheduledjobMixinFields2 := controlscheduledjobMixin[2].Fields()
@@ -1321,9 +1335,11 @@ func init() {
 	documentdata.Hooks[4] = documentdataMixinHooks5[1]
 	documentdataMixinInters1 := documentdataMixin[1].Interceptors()
 	documentdataMixinInters5 := documentdataMixin[5].Interceptors()
+	documentdataInters := schema.DocumentData{}.Interceptors()
 	documentdata.Interceptors[0] = documentdataMixinInters1[0]
 	documentdata.Interceptors[1] = documentdataMixinInters5[0]
 	documentdata.Interceptors[2] = documentdataMixinInters5[1]
+	documentdata.Interceptors[3] = documentdataInters[0]
 	documentdataMixinFields0 := documentdataMixin[0].Fields()
 	_ = documentdataMixinFields0
 	documentdataMixinFields2 := documentdataMixin[2].Fields()
@@ -1415,8 +1431,10 @@ func init() {
 	emailverificationtoken.Hooks[4] = emailverificationtokenHooks[0]
 	emailverificationtokenMixinInters2 := emailverificationtokenMixin[2].Interceptors()
 	emailverificationtokenMixinInters3 := emailverificationtokenMixin[3].Interceptors()
+	emailverificationtokenInters := schema.EmailVerificationToken{}.Interceptors()
 	emailverificationtoken.Interceptors[0] = emailverificationtokenMixinInters2[0]
 	emailverificationtoken.Interceptors[1] = emailverificationtokenMixinInters3[0]
+	emailverificationtoken.Interceptors[2] = emailverificationtokenInters[0]
 	emailverificationtokenMixinFields0 := emailverificationtokenMixin[0].Fields()
 	_ = emailverificationtokenMixinFields0
 	emailverificationtokenMixinFields1 := emailverificationtokenMixin[1].Fields()
@@ -1494,8 +1512,10 @@ func init() {
 	entity.Hooks[7] = entityHooks[0]
 	entityMixinInters1 := entityMixin[1].Interceptors()
 	entityMixinInters5 := entityMixin[5].Interceptors()
+	entityInters := schema.Entity{}.Interceptors()
 	entity.Interceptors[0] = entityMixinInters1[0]
 	entity.Interceptors[1] = entityMixinInters5[0]
+	entity.Interceptors[2] = entityInters[0]
 	entityMixinFields0 := entityMixin[0].Fields()
 	_ = entityMixinFields0
 	entityMixinFields2 := entityMixin[2].Fields()
@@ -1632,8 +1652,10 @@ func init() {
 	entitytype.Hooks[3] = entitytypeMixinHooks5[0]
 	entitytypeMixinInters1 := entitytypeMixin[1].Interceptors()
 	entitytypeMixinInters5 := entitytypeMixin[5].Interceptors()
+	entitytypeInters := schema.EntityType{}.Interceptors()
 	entitytype.Interceptors[0] = entitytypeMixinInters1[0]
 	entitytype.Interceptors[1] = entitytypeMixinInters5[0]
+	entitytype.Interceptors[2] = entitytypeInters[0]
 	entitytypeMixinFields0 := entitytypeMixin[0].Fields()
 	_ = entitytypeMixinFields0
 	entitytypeMixinFields2 := entitytypeMixin[2].Fields()
@@ -1733,6 +1755,8 @@ func init() {
 	eventMixinHooks0 := eventMixin[0].Hooks()
 
 	event.Hooks[1] = eventMixinHooks0[0]
+	eventInters := schema.Event{}.Interceptors()
+	event.Interceptors[0] = eventInters[0]
 	eventMixinFields0 := eventMixin[0].Fields()
 	_ = eventMixinFields0
 	eventMixinFields1 := eventMixin[1].Fields()
@@ -1788,9 +1812,11 @@ func init() {
 	evidence.Hooks[6] = evidenceHooks[0]
 	evidenceMixinInters1 := evidenceMixin[1].Interceptors()
 	evidenceMixinInters5 := evidenceMixin[5].Interceptors()
+	evidenceInters := schema.Evidence{}.Interceptors()
 	evidence.Interceptors[0] = evidenceMixinInters1[0]
 	evidence.Interceptors[1] = evidenceMixinInters5[0]
 	evidence.Interceptors[2] = evidenceMixinInters5[1]
+	evidence.Interceptors[3] = evidenceInters[0]
 	evidenceMixinFields0 := evidenceMixin[0].Fields()
 	_ = evidenceMixinFields0
 	evidenceMixinFields2 := evidenceMixin[2].Fields()
@@ -1918,8 +1944,10 @@ func init() {
 	export.Hooks[4] = exportHooks[0]
 	exportMixinInters1 := exportMixin[1].Interceptors()
 	exportMixinInters4 := exportMixin[4].Interceptors()
+	exportInters := schema.Export{}.Interceptors()
 	export.Interceptors[0] = exportMixinInters1[0]
 	export.Interceptors[1] = exportMixinInters4[0]
+	export.Interceptors[2] = exportInters[0]
 	exportMixinFields0 := exportMixin[0].Fields()
 	_ = exportMixinFields0
 	exportMixinFields2 := exportMixin[2].Fields()
@@ -1973,6 +2001,7 @@ func init() {
 	file.Interceptors[0] = fileMixinInters1[0]
 	file.Interceptors[1] = fileMixinInters5[0]
 	file.Interceptors[2] = fileInters[0]
+	file.Interceptors[3] = fileInters[1]
 	fileMixinFields0 := fileMixin[0].Fields()
 	_ = fileMixinFields0
 	fileMixinFields2 := fileMixin[2].Fields()
@@ -2080,6 +2109,7 @@ func init() {
 	group.Interceptors[0] = groupMixinInters1[0]
 	group.Interceptors[1] = groupMixinInters5[0]
 	group.Interceptors[2] = groupInters[0]
+	group.Interceptors[3] = groupInters[1]
 	groupMixinFields0 := groupMixin[0].Fields()
 	_ = groupMixinFields0
 	groupMixinFields2 := groupMixin[2].Fields()
@@ -2215,6 +2245,7 @@ func init() {
 	groupmembership.Hooks[3] = groupmembershipHooks[1]
 	groupmembershipInters := schema.GroupMembership{}.Interceptors()
 	groupmembership.Interceptors[0] = groupmembershipInters[0]
+	groupmembership.Interceptors[1] = groupmembershipInters[1]
 	groupmembershipMixinFields0 := groupmembershipMixin[0].Fields()
 	_ = groupmembershipMixinFields0
 	groupmembershipMixinFields1 := groupmembershipMixin[1].Fields()
@@ -2289,6 +2320,7 @@ func init() {
 	groupsettingInters := schema.GroupSetting{}.Interceptors()
 	groupsetting.Interceptors[0] = groupsettingMixinInters1[0]
 	groupsetting.Interceptors[1] = groupsettingInters[0]
+	groupsetting.Interceptors[2] = groupsettingInters[1]
 	groupsettingMixinFields0 := groupsettingMixin[0].Fields()
 	_ = groupsettingMixinFields0
 	groupsettingMixinFields2 := groupsettingMixin[2].Fields()
@@ -2371,6 +2403,7 @@ func init() {
 	hush.Interceptors[0] = hushMixinInters1[0]
 	hush.Interceptors[1] = hushMixinInters4[0]
 	hush.Interceptors[2] = hushInters[0]
+	hush.Interceptors[3] = hushInters[1]
 	hushMixinFields0 := hushMixin[0].Fields()
 	_ = hushMixinFields0
 	hushMixinFields2 := hushMixin[2].Fields()
@@ -2442,8 +2475,10 @@ func init() {
 	integration.Hooks[3] = integrationMixinHooks5[0]
 	integrationMixinInters1 := integrationMixin[1].Interceptors()
 	integrationMixinInters5 := integrationMixin[5].Interceptors()
+	integrationInters := schema.Integration{}.Interceptors()
 	integration.Interceptors[0] = integrationMixinInters1[0]
 	integration.Interceptors[1] = integrationMixinInters5[0]
+	integration.Interceptors[2] = integrationInters[0]
 	integrationMixinFields0 := integrationMixin[0].Fields()
 	_ = integrationMixinFields0
 	integrationMixinFields2 := integrationMixin[2].Fields()
@@ -2736,8 +2771,10 @@ func init() {
 	invite.Hooks[6] = inviteHooks[2]
 	inviteMixinInters1 := inviteMixin[1].Interceptors()
 	inviteMixinInters4 := inviteMixin[4].Interceptors()
+	inviteInters := schema.Invite{}.Interceptors()
 	invite.Interceptors[0] = inviteMixinInters1[0]
 	invite.Interceptors[1] = inviteMixinInters4[0]
+	invite.Interceptors[2] = inviteInters[0]
 	inviteMixinFields0 := inviteMixin[0].Fields()
 	_ = inviteMixinFields0
 	inviteMixinFields2 := inviteMixin[2].Fields()
@@ -2899,6 +2936,7 @@ func init() {
 	jobrunner.Interceptors[0] = jobrunnerMixinInters1[0]
 	jobrunner.Interceptors[1] = jobrunnerMixinInters5[0]
 	jobrunner.Interceptors[2] = jobrunnerInters[0]
+	jobrunner.Interceptors[3] = jobrunnerInters[1]
 	jobrunnerMixinFields0 := jobrunnerMixin[0].Fields()
 	_ = jobrunnerMixinFields0
 	jobrunnerMixinFields2 := jobrunnerMixin[2].Fields()
@@ -2967,6 +3005,7 @@ func init() {
 	jobrunnerregistrationtoken.Interceptors[0] = jobrunnerregistrationtokenMixinInters1[0]
 	jobrunnerregistrationtoken.Interceptors[1] = jobrunnerregistrationtokenMixinInters5[0]
 	jobrunnerregistrationtoken.Interceptors[2] = jobrunnerregistrationtokenInters[0]
+	jobrunnerregistrationtoken.Interceptors[3] = jobrunnerregistrationtokenInters[1]
 	jobrunnerregistrationtokenMixinFields0 := jobrunnerregistrationtokenMixin[0].Fields()
 	_ = jobrunnerregistrationtokenMixinFields0
 	jobrunnerregistrationtokenMixinFields2 := jobrunnerregistrationtokenMixin[2].Fields()
@@ -3323,9 +3362,11 @@ func init() {
 	narrative.Hooks[8] = narrativeMixinHooks6[2]
 	narrativeMixinInters1 := narrativeMixin[1].Interceptors()
 	narrativeMixinInters5 := narrativeMixin[5].Interceptors()
+	narrativeInters := schema.Narrative{}.Interceptors()
 	narrative.Interceptors[0] = narrativeMixinInters1[0]
 	narrative.Interceptors[1] = narrativeMixinInters5[0]
 	narrative.Interceptors[2] = narrativeMixinInters5[1]
+	narrative.Interceptors[3] = narrativeInters[0]
 	narrativeMixinFields0 := narrativeMixin[0].Fields()
 	_ = narrativeMixinFields0
 	narrativeMixinFields2 := narrativeMixin[2].Fields()
@@ -3515,7 +3556,9 @@ func init() {
 
 	onboarding.Hooks[2] = onboardingHooks[0]
 	onboardingMixinInters1 := onboardingMixin[1].Interceptors()
+	onboardingInters := schema.Onboarding{}.Interceptors()
 	onboarding.Interceptors[0] = onboardingMixinInters1[0]
+	onboarding.Interceptors[1] = onboardingInters[0]
 	onboardingMixinFields0 := onboardingMixin[0].Fields()
 	_ = onboardingMixinFields0
 	onboardingFields := schema.Onboarding{}.Fields()
@@ -3756,6 +3799,7 @@ func init() {
 	orgsubscription.Interceptors[0] = orgsubscriptionMixinInters1[0]
 	orgsubscription.Interceptors[1] = orgsubscriptionMixinInters4[0]
 	orgsubscription.Interceptors[2] = orgsubscriptionInters[0]
+	orgsubscription.Interceptors[3] = orgsubscriptionInters[1]
 	orgsubscriptionMixinFields0 := orgsubscriptionMixin[0].Fields()
 	_ = orgsubscriptionMixinFields0
 	orgsubscriptionMixinFields2 := orgsubscriptionMixin[2].Fields()
@@ -4162,8 +4206,10 @@ func init() {
 	passwordresettoken.Hooks[4] = passwordresettokenHooks[0]
 	passwordresettokenMixinInters2 := passwordresettokenMixin[2].Interceptors()
 	passwordresettokenMixinInters3 := passwordresettokenMixin[3].Interceptors()
+	passwordresettokenInters := schema.PasswordResetToken{}.Interceptors()
 	passwordresettoken.Interceptors[0] = passwordresettokenMixinInters2[0]
 	passwordresettoken.Interceptors[1] = passwordresettokenMixinInters3[0]
+	passwordresettoken.Interceptors[2] = passwordresettokenInters[0]
 	passwordresettokenMixinFields0 := passwordresettokenMixin[0].Fields()
 	_ = passwordresettokenMixinFields0
 	passwordresettokenMixinFields1 := passwordresettokenMixin[1].Fields()
@@ -4240,6 +4286,7 @@ func init() {
 	personalaccesstoken.Interceptors[0] = personalaccesstokenMixinInters1[0]
 	personalaccesstoken.Interceptors[1] = personalaccesstokenMixinInters5[0]
 	personalaccesstoken.Interceptors[2] = personalaccesstokenInters[0]
+	personalaccesstoken.Interceptors[3] = personalaccesstokenInters[1]
 	personalaccesstokenMixinFields0 := personalaccesstokenMixin[0].Fields()
 	_ = personalaccesstokenMixinFields0
 	personalaccesstokenMixinFields2 := personalaccesstokenMixin[2].Fields()
@@ -4324,6 +4371,7 @@ func init() {
 	procedure.Interceptors[0] = procedureMixinInters1[0]
 	procedure.Interceptors[1] = procedureMixinInters6[0]
 	procedure.Interceptors[2] = procedureInters[0]
+	procedure.Interceptors[3] = procedureInters[1]
 	procedureMixinFields0 := procedureMixin[0].Fields()
 	_ = procedureMixinFields0
 	procedureMixinFields2 := procedureMixin[2].Fields()
@@ -4509,6 +4557,7 @@ func init() {
 	program.Interceptors[0] = programMixinInters1[0]
 	program.Interceptors[1] = programMixinInters5[0]
 	program.Interceptors[2] = programInters[0]
+	program.Interceptors[3] = programInters[1]
 	programMixinFields0 := programMixin[0].Fields()
 	_ = programMixinFields0
 	programMixinFields2 := programMixin[2].Fields()
@@ -4721,9 +4770,11 @@ func init() {
 	risk.Hooks[10] = riskHooks[1]
 	riskMixinInters1 := riskMixin[1].Interceptors()
 	riskMixinInters5 := riskMixin[5].Interceptors()
+	riskInters := schema.Risk{}.Interceptors()
 	risk.Interceptors[0] = riskMixinInters1[0]
 	risk.Interceptors[1] = riskMixinInters5[0]
 	risk.Interceptors[2] = riskMixinInters5[1]
+	risk.Interceptors[3] = riskInters[0]
 	riskMixinFields0 := riskMixin[0].Fields()
 	_ = riskMixinFields0
 	riskMixinFields2 := riskMixin[2].Fields()
@@ -4827,8 +4878,10 @@ func init() {
 	scan.Hooks[6] = scanMixinHooks6[2]
 	scanMixinInters1 := scanMixin[1].Interceptors()
 	scanMixinInters5 := scanMixin[5].Interceptors()
+	scanInters := schema.Scan{}.Interceptors()
 	scan.Interceptors[0] = scanMixinInters1[0]
 	scan.Interceptors[1] = scanMixinInters5[0]
+	scan.Interceptors[2] = scanInters[0]
 	scanMixinFields0 := scanMixin[0].Fields()
 	_ = scanMixinFields0
 	scanMixinFields2 := scanMixin[2].Fields()
@@ -4930,8 +4983,10 @@ func init() {
 	scheduledjob.Hooks[6] = scheduledjobHooks[0]
 	scheduledjobMixinInters1 := scheduledjobMixin[1].Interceptors()
 	scheduledjobMixinInters5 := scheduledjobMixin[5].Interceptors()
+	scheduledjobInters := schema.ScheduledJob{}.Interceptors()
 	scheduledjob.Interceptors[0] = scheduledjobMixinInters1[0]
 	scheduledjob.Interceptors[1] = scheduledjobMixinInters5[0]
+	scheduledjob.Interceptors[2] = scheduledjobInters[0]
 	scheduledjobMixinFields0 := scheduledjobMixin[0].Fields()
 	_ = scheduledjobMixinFields0
 	scheduledjobMixinFields2 := scheduledjobMixin[2].Fields()
@@ -5032,8 +5087,10 @@ func init() {
 	scheduledjobrun.Hooks[3] = scheduledjobrunMixinHooks4[0]
 	scheduledjobrunMixinInters1 := scheduledjobrunMixin[1].Interceptors()
 	scheduledjobrunMixinInters4 := scheduledjobrunMixin[4].Interceptors()
+	scheduledjobrunInters := schema.ScheduledJobRun{}.Interceptors()
 	scheduledjobrun.Interceptors[0] = scheduledjobrunMixinInters1[0]
 	scheduledjobrun.Interceptors[1] = scheduledjobrunMixinInters4[0]
+	scheduledjobrun.Interceptors[2] = scheduledjobrunInters[0]
 	scheduledjobrunMixinFields0 := scheduledjobrunMixin[0].Fields()
 	_ = scheduledjobrunMixinFields0
 	scheduledjobrunMixinFields2 := scheduledjobrunMixin[2].Fields()
@@ -5098,6 +5155,7 @@ func init() {
 	standard.Interceptors[0] = standardMixinInters1[0]
 	standard.Interceptors[1] = standardMixinInters6[0]
 	standard.Interceptors[2] = standardInters[0]
+	standard.Interceptors[3] = standardInters[1]
 	standardMixinFields0 := standardMixin[0].Fields()
 	_ = standardMixinFields0
 	standardMixinFields2 := standardMixin[2].Fields()
@@ -5273,9 +5331,11 @@ func init() {
 	subcontrol.Hooks[9] = subcontrolHooks[1]
 	subcontrolMixinInters1 := subcontrolMixin[1].Interceptors()
 	subcontrolMixinInters6 := subcontrolMixin[6].Interceptors()
+	subcontrolInters := schema.Subcontrol{}.Interceptors()
 	subcontrol.Interceptors[0] = subcontrolMixinInters1[0]
 	subcontrol.Interceptors[1] = subcontrolMixinInters6[0]
 	subcontrol.Interceptors[2] = subcontrolMixinInters6[1]
+	subcontrol.Interceptors[3] = subcontrolInters[0]
 	subcontrolMixinFields0 := subcontrolMixin[0].Fields()
 	_ = subcontrolMixinFields0
 	subcontrolMixinFields2 := subcontrolMixin[2].Fields()
@@ -5388,6 +5448,7 @@ func init() {
 	subprocessor.Interceptors[0] = subprocessorMixinInters1[0]
 	subprocessor.Interceptors[1] = subprocessorMixinInters5[0]
 	subprocessor.Interceptors[2] = subprocessorInters[0]
+	subprocessor.Interceptors[3] = subprocessorInters[1]
 	subprocessorMixinFields0 := subprocessorMixin[0].Fields()
 	_ = subprocessorMixinFields0
 	subprocessorMixinFields2 := subprocessorMixin[2].Fields()
@@ -5596,7 +5657,9 @@ func init() {
 
 	tfasetting.Hooks[5] = tfasettingHooks[1]
 	tfasettingMixinInters1 := tfasettingMixin[1].Interceptors()
+	tfasettingInters := schema.TFASetting{}.Interceptors()
 	tfasetting.Interceptors[0] = tfasettingMixinInters1[0]
+	tfasetting.Interceptors[1] = tfasettingInters[0]
 	tfasettingMixinFields0 := tfasettingMixin[0].Fields()
 	_ = tfasettingMixinFields0
 	tfasettingMixinFields2 := tfasettingMixin[2].Fields()
@@ -5664,9 +5727,11 @@ func init() {
 	task.Hooks[7] = taskHooks[1]
 	taskMixinInters1 := taskMixin[1].Interceptors()
 	taskMixinInters5 := taskMixin[5].Interceptors()
+	taskInters := schema.Task{}.Interceptors()
 	task.Interceptors[0] = taskMixinInters1[0]
 	task.Interceptors[1] = taskMixinInters5[0]
 	task.Interceptors[2] = taskMixinInters5[1]
+	task.Interceptors[3] = taskInters[0]
 	taskMixinFields0 := taskMixin[0].Fields()
 	_ = taskMixinFields0
 	taskMixinFields2 := taskMixin[2].Fields()
@@ -5866,6 +5931,7 @@ func init() {
 	trustcenter.Interceptors[0] = trustcenterMixinInters1[0]
 	trustcenter.Interceptors[1] = trustcenterMixinInters5[0]
 	trustcenter.Interceptors[2] = trustcenterInters[0]
+	trustcenter.Interceptors[3] = trustcenterInters[1]
 	trustcenterMixinFields0 := trustcenterMixin[0].Fields()
 	_ = trustcenterMixinFields0
 	trustcenterMixinFields2 := trustcenterMixin[2].Fields()
@@ -6041,6 +6107,7 @@ func init() {
 	trustcentersettingInters := schema.TrustCenterSetting{}.Interceptors()
 	trustcentersetting.Interceptors[0] = trustcentersettingMixinInters1[0]
 	trustcentersetting.Interceptors[1] = trustcentersettingInters[0]
+	trustcentersetting.Interceptors[2] = trustcentersettingInters[1]
 	trustcentersettingMixinFields0 := trustcentersettingMixin[0].Fields()
 	_ = trustcentersettingMixinFields0
 	trustcentersettingMixinFields2 := trustcentersettingMixin[2].Fields()
@@ -6160,6 +6227,7 @@ func init() {
 	trustcentersubprocessorInters := schema.TrustCenterSubprocessor{}.Interceptors()
 	trustcentersubprocessor.Interceptors[0] = trustcentersubprocessorMixinInters1[0]
 	trustcentersubprocessor.Interceptors[1] = trustcentersubprocessorInters[0]
+	trustcentersubprocessor.Interceptors[2] = trustcentersubprocessorInters[1]
 	trustcentersubprocessorMixinFields0 := trustcentersubprocessorMixin[0].Fields()
 	_ = trustcentersubprocessorMixinFields0
 	trustcentersubprocessorMixinFields2 := trustcentersubprocessorMixin[2].Fields()
@@ -6524,7 +6592,9 @@ func init() {
 	webauthn.Hooks[1] = webauthnMixinHooks3[0]
 	webauthn.Hooks[2] = webauthnHooks[0]
 	webauthnMixinInters3 := webauthnMixin[3].Interceptors()
+	webauthnInters := schema.Webauthn{}.Interceptors()
 	webauthn.Interceptors[0] = webauthnMixinInters3[0]
+	webauthn.Interceptors[1] = webauthnInters[0]
 	webauthnMixinFields0 := webauthnMixin[0].Fields()
 	_ = webauthnMixinFields0
 	webauthnMixinFields1 := webauthnMixin[1].Fields()
