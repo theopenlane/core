@@ -1547,16 +1547,10 @@ func (w *ScheduledJobBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Sc
 	ctx = setContext(ctx, w.client.db)
 	wn, err := w.client.db.ScheduledJob.Create().
 		SetTitle("SSL checks").
+		SetCron("0 22 * * 1-5").
 		SetDescription("Check and verify a tls certificate is valid").
 		SetPlatform(enums.JobPlatformTypeGo).
-		SetScript(`
-echo | openssl s_client -servername {{ .URL }} -connect {{ .URL }}:443 2>/dev/null | openssl x509 -noout -dates -issuer -subject
-		`).
 		SetWindmillPath("u/admin/gifted_script").
-		SetCadence(models.JobCadence{
-			Frequency: enums.JobCadenceFrequencyDaily,
-			Time:      "15:09",
-		}).
 		SetDownloadURL(testScriptURL).
 		Save(ctx)
 	assert.NilError(t, err)
