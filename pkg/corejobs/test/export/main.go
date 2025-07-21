@@ -12,6 +12,24 @@ import (
 
 // the main function here will insert a job into the river to export contents
 // this will be picked up by the river server and processed
+//
+// You can create an export like this and retrieve the id
+//
+//	mutation($input: CreateExportInput!) {
+//	 createExport(input: $input) {
+//	  export {
+//	    id
+//	  }
+//	 }
+//	}
+//
+//	{
+//	  "input": {
+//	    "exportType": "CONTROL",
+//	    "format": "CSV",
+//	    "fields": ["id", "createdAt", "displayID"]
+//	  }
+//	}
 func main() {
 	client := common.NewInsertOnlyRiverClient()
 
