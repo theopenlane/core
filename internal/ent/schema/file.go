@@ -132,6 +132,7 @@ func (File) Annotations() []schema.Annotation {
 func (File) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorPresignedURL(),
+		interceptors.InterceptorFile(), // filter on the organization id
 	}
 }
 
@@ -153,5 +154,6 @@ func (File) Policy() ent.Policy {
 func (File) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookFileDelete(),
+		hooks.HookFileCreate(),
 	}
 }

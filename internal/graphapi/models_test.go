@@ -15,6 +15,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
@@ -276,9 +277,10 @@ type EvidenceBuilder struct {
 	client *client
 
 	// Fields
-	Name      string
-	ProgramID string
-	ControlID string
+	Name        string
+	ProgramID   string
+	ControlID   string
+	IncludeFile bool
 }
 
 type StandardBuilder struct {
@@ -325,6 +327,13 @@ type MappableDomainBuilder struct {
 	// Fields
 	Name   string
 	ZoneID string
+}
+
+type FileBuilder struct {
+	client *client
+
+	// Fields
+	Name string
 }
 
 // Faker structs with random injected data
@@ -1157,30 +1166,43 @@ func (s *SubcontrolBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Subc
 }
 
 // MustNew control builder is used to create, without authz checks, controls in the database
-func (c *EvidenceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Evidence {
-	ctx = setContext(ctx, c.client.db)
+func (e *EvidenceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Evidence {
+	ctx = setContext(ctx, e.client.db)
 
-	if c.Name == "" {
-		c.Name = gofakeit.AppName()
+	if e.Name == "" {
+		e.Name = gofakeit.AppName()
 	}
 
-	mutation := c.client.db.Evidence.Create().
+	mutation := e.client.db.Evidence.Create().
 		SetCreationDate(time.Now().Add(-time.Minute)).
-		SetName(c.Name)
+		SetName(e.Name)
 
-	if c.ProgramID != "" {
-		mutation.AddProgramIDs(c.ProgramID)
+	if e.ProgramID != "" {
+		mutation.AddProgramIDs(e.ProgramID)
 	}
 
-	if c.ControlID != "" {
-		mutation.AddControlIDs(c.ControlID)
+	if e.ControlID != "" {
+		mutation.AddControlIDs(e.ControlID)
 	}
 
-	control, err := mutation.
+	if e.IncludeFile {
+		file := (&FileBuilder{client: e.client, Name: e.Name}).MustNew(ctx, t)
+
+		mutation.AddFileIDs(file.ID)
+	}
+
+	ev, err := mutation.
 		Save(ctx)
 	assert.NilError(t, err)
 
-	return control
+	if e.IncludeFile {
+		ev, err := e.client.db.Evidence.Query().WithFiles().Where(evidence.ID(ev.ID)).Only(ctx)
+		assert.NilError(t, err)
+
+		return ev
+	}
+
+	return ev
 }
 
 // MustNew standard builder is used to create, without authz checks, standards in the database
@@ -1861,4 +1883,26 @@ func (sc *SecretCleanup) MustDelete(ctx context.Context, t *testing.T) {
 
 	err := sc.client.db.Hush.DeleteOneID(sc.ID).Exec(ctx)
 	assert.NilError(t, err)
+}
+
+// MustNew file builder is used to create, without authz checks, files in the database
+func (fb *FileBuilder) MustNew(ctx context.Context, t *testing.T) *ent.File {
+	ctx = setContext(ctx, fb.client.db)
+
+	if fb.Name == "" {
+		fb.Name = gofakeit.Name()
+	}
+
+	url := gofakeit.URL()
+
+	mutation := fb.client.db.File.Create().
+		SetProvidedFileName(fb.Name).
+		SetProvidedFileExtension("csv").
+		SetDetectedContentType("application/csv").
+		SetURI(url)
+
+	file, err := mutation.Save(ctx)
+	assert.NilError(t, err)
+
+	return file
 }

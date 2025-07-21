@@ -44,6 +44,7 @@ func newOrgOwnedMixin(schema any, opts ...objectOwnedOption) ObjectOwnedMixin {
 		Ref:              sch.PluralName(),
 		HookFuncs:        []HookFunc{defaultOrgHookFunc},
 		InterceptorFuncs: []InterceptorFunc{defaultOrgInterceptorFunc},
+		OwnerFieldName:   ownerFieldName,
 	}
 
 	// apply options
@@ -68,7 +69,7 @@ var defaultOrgHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 
 			// set owner on create mutation
 			if m.Op() == ent.OpCreate {
-				if err := setOwnerIDField(ctx, m); err != nil {
+				if err := o.setOwnerIDField(ctx, m); err != nil {
 					return nil, err
 				}
 
@@ -112,7 +113,7 @@ var orgHookCreateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 			}
 
 			// set owner on create mutation
-			if err := setOwnerIDField(ctx, m); err != nil {
+			if err := o.setOwnerIDField(ctx, m); err != nil {
 				log.Error().Err(err).Msg("failed to set owner id field")
 
 				return nil, err
@@ -143,7 +144,7 @@ var orgHookCreateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 }
 
 // setOwnerIDField sets the owner id field on the mutation based on the current organization
-func setOwnerIDField(ctx context.Context, m ent.Mutation) error {
+func (o ObjectOwnedMixin) setOwnerIDField(ctx context.Context, m ent.Mutation) error {
 	// if the context has the organization creation context key, skip the hook
 	// because we don't want the owner to be based on the current organization
 	if _, ok := contextx.From[auth.OrganizationCreationContextKey](ctx); ok {

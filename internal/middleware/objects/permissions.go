@@ -59,13 +59,14 @@ func AddFilePermissions(ctx context.Context) error {
 				})
 				tuples = append(tuples, orgReq)
 			}
-			log.Info().Interface("req", req).Msg("adding file permissions")
+
+			log.Debug().Interface("req", req).Msg("adding file permissions")
 
 			if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, tuples, nil); err != nil {
 				return err
 			}
 
-			log.Info().Interface("req", req).Msg("added file permissions")
+			log.Debug().Interface("req", req).Msg("added file permissions")
 
 			// remove file from context, we are done with it
 			ctx = objects.RemoveFileFromContext(ctx, f)
