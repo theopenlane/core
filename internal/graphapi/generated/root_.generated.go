@@ -3832,7 +3832,6 @@ type ComplexityRoot struct {
 	}
 
 	ScheduledJob struct {
-		Cadence       func(childComplexity int) int
 		Configuration func(childComplexity int) int
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
@@ -3844,7 +3843,6 @@ type ComplexityRoot struct {
 		Owner         func(childComplexity int) int
 		OwnerID       func(childComplexity int) int
 		Platform      func(childComplexity int) int
-		Script        func(childComplexity int) int
 		SystemOwned   func(childComplexity int) int
 		Tags          func(childComplexity int) int
 		Title         func(childComplexity int) int
@@ -3877,7 +3875,6 @@ type ComplexityRoot struct {
 	}
 
 	ScheduledJobHistory struct {
-		Cadence       func(childComplexity int) int
 		Configuration func(childComplexity int) int
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
@@ -3891,7 +3888,6 @@ type ComplexityRoot struct {
 		OwnerID       func(childComplexity int) int
 		Platform      func(childComplexity int) int
 		Ref           func(childComplexity int) int
-		Script        func(childComplexity int) int
 		SystemOwned   func(childComplexity int) int
 		Tags          func(childComplexity int) int
 		Title         func(childComplexity int) int
@@ -26975,13 +26971,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScanUpdatePayload.Scan(childComplexity), true
 
-	case "ScheduledJob.cadence":
-		if e.complexity.ScheduledJob.Cadence == nil {
-			break
-		}
-
-		return e.complexity.ScheduledJob.Cadence(childComplexity), true
-
 	case "ScheduledJob.configuration":
 		if e.complexity.ScheduledJob.Configuration == nil {
 			break
@@ -27058,13 +27047,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScheduledJob.Platform(childComplexity), true
-
-	case "ScheduledJob.script":
-		if e.complexity.ScheduledJob.Script == nil {
-			break
-		}
-
-		return e.complexity.ScheduledJob.Script(childComplexity), true
 
 	case "ScheduledJob.systemOwned":
 		if e.complexity.ScheduledJob.SystemOwned == nil {
@@ -27164,13 +27146,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJobEdge.Node(childComplexity), true
 
-	case "ScheduledJobHistory.cadence":
-		if e.complexity.ScheduledJobHistory.Cadence == nil {
-			break
-		}
-
-		return e.complexity.ScheduledJobHistory.Cadence(childComplexity), true
-
 	case "ScheduledJobHistory.configuration":
 		if e.complexity.ScheduledJobHistory.Configuration == nil {
 			break
@@ -27261,13 +27236,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScheduledJobHistory.Ref(childComplexity), true
-
-	case "ScheduledJobHistory.script":
-		if e.complexity.ScheduledJobHistory.Script == nil {
-			break
-		}
-
-		return e.complexity.ScheduledJobHistory.Script(childComplexity), true
 
 	case "ScheduledJobHistory.systemOwned":
 		if e.complexity.ScheduledJobHistory.SystemOwned == nil {
@@ -44559,10 +44527,6 @@ input CreateScheduledJobInput {
   """
   platform: ScheduledJobJobPlatformType!
   """
-  the script to run
-  """
-  script: String
-  """
   the url from where to download the script from
   """
   downloadURL: String!
@@ -44570,10 +44534,6 @@ input CreateScheduledJobInput {
   the configuration to run this job
   """
   configuration: JobConfiguration
-  """
-  the schedule to run this job
-  """
-  cadence: JobCadence
   """
   cron syntax
   """
@@ -74567,10 +74527,6 @@ type ScheduledJob implements Node {
   """
   platform: ScheduledJobJobPlatformType!
   """
-  the script to run
-  """
-  script: String
-  """
   Windmill path
   """
   windmillPath: String!
@@ -74582,10 +74538,6 @@ type ScheduledJob implements Node {
   the configuration to run this job
   """
   configuration: JobConfiguration
-  """
-  the schedule to run this job
-  """
-  cadence: JobCadence
   """
   cron syntax
   """
@@ -74660,10 +74612,6 @@ type ScheduledJobHistory implements Node {
   """
   platform: ScheduledJobHistoryJobPlatformType!
   """
-  the script to run
-  """
-  script: String
-  """
   Windmill path
   """
   windmillPath: String!
@@ -74675,10 +74623,6 @@ type ScheduledJobHistory implements Node {
   the configuration to run this job
   """
   configuration: JobConfiguration
-  """
-  the schedule to run this job
-  """
-  cadence: JobCadence
   """
   cron syntax
   """
@@ -85504,11 +85448,6 @@ input UpdateScheduledJobInput {
   description: String
   clearDescription: Boolean
   """
-  the script to run
-  """
-  script: String
-  clearScript: Boolean
-  """
   the url from where to download the script from
   """
   downloadURL: String
@@ -85518,11 +85457,6 @@ input UpdateScheduledJobInput {
   configuration: JobConfiguration
   appendConfiguration: JobConfiguration
   clearConfiguration: Boolean
-  """
-  the schedule to run this job
-  """
-  cadence: JobCadence
-  clearCadence: Boolean
   """
   cron syntax
   """

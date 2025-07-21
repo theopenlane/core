@@ -2523,11 +2523,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scheduledjob.FieldTitle:         {Type: field.TypeString, Column: scheduledjob.FieldTitle},
 			scheduledjob.FieldDescription:   {Type: field.TypeString, Column: scheduledjob.FieldDescription},
 			scheduledjob.FieldPlatform:      {Type: field.TypeEnum, Column: scheduledjob.FieldPlatform},
-			scheduledjob.FieldScript:        {Type: field.TypeString, Column: scheduledjob.FieldScript},
 			scheduledjob.FieldWindmillPath:  {Type: field.TypeString, Column: scheduledjob.FieldWindmillPath},
 			scheduledjob.FieldDownloadURL:   {Type: field.TypeString, Column: scheduledjob.FieldDownloadURL},
 			scheduledjob.FieldConfiguration: {Type: field.TypeJSON, Column: scheduledjob.FieldConfiguration},
-			scheduledjob.FieldCadence:       {Type: field.TypeJSON, Column: scheduledjob.FieldCadence},
 			scheduledjob.FieldCron:          {Type: field.TypeString, Column: scheduledjob.FieldCron},
 		},
 	}
@@ -2558,11 +2556,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scheduledjobhistory.FieldTitle:         {Type: field.TypeString, Column: scheduledjobhistory.FieldTitle},
 			scheduledjobhistory.FieldDescription:   {Type: field.TypeString, Column: scheduledjobhistory.FieldDescription},
 			scheduledjobhistory.FieldPlatform:      {Type: field.TypeEnum, Column: scheduledjobhistory.FieldPlatform},
-			scheduledjobhistory.FieldScript:        {Type: field.TypeString, Column: scheduledjobhistory.FieldScript},
 			scheduledjobhistory.FieldWindmillPath:  {Type: field.TypeString, Column: scheduledjobhistory.FieldWindmillPath},
 			scheduledjobhistory.FieldDownloadURL:   {Type: field.TypeString, Column: scheduledjobhistory.FieldDownloadURL},
 			scheduledjobhistory.FieldConfiguration: {Type: field.TypeJSON, Column: scheduledjobhistory.FieldConfiguration},
-			scheduledjobhistory.FieldCadence:       {Type: field.TypeJSON, Column: scheduledjobhistory.FieldCadence},
 			scheduledjobhistory.FieldCron:          {Type: field.TypeString, Column: scheduledjobhistory.FieldCron},
 		},
 	}
@@ -23671,11 +23667,6 @@ func (f *ScheduledJobFilter) WherePlatform(p entql.StringP) {
 	f.Where(p.Field(scheduledjob.FieldPlatform))
 }
 
-// WhereScript applies the entql string predicate on the script field.
-func (f *ScheduledJobFilter) WhereScript(p entql.StringP) {
-	f.Where(p.Field(scheduledjob.FieldScript))
-}
-
 // WhereWindmillPath applies the entql string predicate on the windmill_path field.
 func (f *ScheduledJobFilter) WhereWindmillPath(p entql.StringP) {
 	f.Where(p.Field(scheduledjob.FieldWindmillPath))
@@ -23689,11 +23680,6 @@ func (f *ScheduledJobFilter) WhereDownloadURL(p entql.StringP) {
 // WhereConfiguration applies the entql json.RawMessage predicate on the configuration field.
 func (f *ScheduledJobFilter) WhereConfiguration(p entql.BytesP) {
 	f.Where(p.Field(scheduledjob.FieldConfiguration))
-}
-
-// WhereCadence applies the entql json.RawMessage predicate on the cadence field.
-func (f *ScheduledJobFilter) WhereCadence(p entql.BytesP) {
-	f.Where(p.Field(scheduledjob.FieldCadence))
 }
 
 // WhereCron applies the entql string predicate on the cron field.
@@ -23835,11 +23821,6 @@ func (f *ScheduledJobHistoryFilter) WherePlatform(p entql.StringP) {
 	f.Where(p.Field(scheduledjobhistory.FieldPlatform))
 }
 
-// WhereScript applies the entql string predicate on the script field.
-func (f *ScheduledJobHistoryFilter) WhereScript(p entql.StringP) {
-	f.Where(p.Field(scheduledjobhistory.FieldScript))
-}
-
 // WhereWindmillPath applies the entql string predicate on the windmill_path field.
 func (f *ScheduledJobHistoryFilter) WhereWindmillPath(p entql.StringP) {
 	f.Where(p.Field(scheduledjobhistory.FieldWindmillPath))
@@ -23853,11 +23834,6 @@ func (f *ScheduledJobHistoryFilter) WhereDownloadURL(p entql.StringP) {
 // WhereConfiguration applies the entql json.RawMessage predicate on the configuration field.
 func (f *ScheduledJobHistoryFilter) WhereConfiguration(p entql.BytesP) {
 	f.Where(p.Field(scheduledjobhistory.FieldConfiguration))
-}
-
-// WhereCadence applies the entql json.RawMessage predicate on the cadence field.
-func (f *ScheduledJobHistoryFilter) WhereCadence(p entql.BytesP) {
-	f.Where(p.Field(scheduledjobhistory.FieldCadence))
 }
 
 // WhereCron applies the entql string predicate on the cron field.

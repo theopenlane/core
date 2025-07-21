@@ -177,26 +177,6 @@ func (sjhu *ScheduledJobHistoryUpdate) ClearDescription() *ScheduledJobHistoryUp
 	return sjhu
 }
 
-// SetScript sets the "script" field.
-func (sjhu *ScheduledJobHistoryUpdate) SetScript(s string) *ScheduledJobHistoryUpdate {
-	sjhu.mutation.SetScript(s)
-	return sjhu
-}
-
-// SetNillableScript sets the "script" field if the given value is not nil.
-func (sjhu *ScheduledJobHistoryUpdate) SetNillableScript(s *string) *ScheduledJobHistoryUpdate {
-	if s != nil {
-		sjhu.SetScript(*s)
-	}
-	return sjhu
-}
-
-// ClearScript clears the value of the "script" field.
-func (sjhu *ScheduledJobHistoryUpdate) ClearScript() *ScheduledJobHistoryUpdate {
-	sjhu.mutation.ClearScript()
-	return sjhu
-}
-
 // SetWindmillPath sets the "windmill_path" field.
 func (sjhu *ScheduledJobHistoryUpdate) SetWindmillPath(s string) *ScheduledJobHistoryUpdate {
 	sjhu.mutation.SetWindmillPath(s)
@@ -240,26 +220,6 @@ func (sjhu *ScheduledJobHistoryUpdate) AppendConfiguration(mc models.JobConfigur
 // ClearConfiguration clears the value of the "configuration" field.
 func (sjhu *ScheduledJobHistoryUpdate) ClearConfiguration() *ScheduledJobHistoryUpdate {
 	sjhu.mutation.ClearConfiguration()
-	return sjhu
-}
-
-// SetCadence sets the "cadence" field.
-func (sjhu *ScheduledJobHistoryUpdate) SetCadence(mc models.JobCadence) *ScheduledJobHistoryUpdate {
-	sjhu.mutation.SetCadence(mc)
-	return sjhu
-}
-
-// SetNillableCadence sets the "cadence" field if the given value is not nil.
-func (sjhu *ScheduledJobHistoryUpdate) SetNillableCadence(mc *models.JobCadence) *ScheduledJobHistoryUpdate {
-	if mc != nil {
-		sjhu.SetCadence(*mc)
-	}
-	return sjhu
-}
-
-// ClearCadence clears the value of the "cadence" field.
-func (sjhu *ScheduledJobHistoryUpdate) ClearCadence() *ScheduledJobHistoryUpdate {
-	sjhu.mutation.ClearCadence()
 	return sjhu
 }
 
@@ -407,12 +367,6 @@ func (sjhu *ScheduledJobHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	if sjhu.mutation.DescriptionCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := sjhu.mutation.Script(); ok {
-		_spec.SetField(scheduledjobhistory.FieldScript, field.TypeString, value)
-	}
-	if sjhu.mutation.ScriptCleared() {
-		_spec.ClearField(scheduledjobhistory.FieldScript, field.TypeString)
-	}
 	if value, ok := sjhu.mutation.WindmillPath(); ok {
 		_spec.SetField(scheduledjobhistory.FieldWindmillPath, field.TypeString, value)
 	}
@@ -429,12 +383,6 @@ func (sjhu *ScheduledJobHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	}
 	if sjhu.mutation.ConfigurationCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldConfiguration, field.TypeJSON)
-	}
-	if value, ok := sjhu.mutation.Cadence(); ok {
-		_spec.SetField(scheduledjobhistory.FieldCadence, field.TypeJSON, value)
-	}
-	if sjhu.mutation.CadenceCleared() {
-		_spec.ClearField(scheduledjobhistory.FieldCadence, field.TypeJSON)
 	}
 	if value, ok := sjhu.mutation.Cron(); ok {
 		_spec.SetField(scheduledjobhistory.FieldCron, field.TypeString, value)
@@ -610,26 +558,6 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) ClearDescription() *ScheduledJobHisto
 	return sjhuo
 }
 
-// SetScript sets the "script" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetScript(s string) *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.SetScript(s)
-	return sjhuo
-}
-
-// SetNillableScript sets the "script" field if the given value is not nil.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetNillableScript(s *string) *ScheduledJobHistoryUpdateOne {
-	if s != nil {
-		sjhuo.SetScript(*s)
-	}
-	return sjhuo
-}
-
-// ClearScript clears the value of the "script" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) ClearScript() *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.ClearScript()
-	return sjhuo
-}
-
 // SetWindmillPath sets the "windmill_path" field.
 func (sjhuo *ScheduledJobHistoryUpdateOne) SetWindmillPath(s string) *ScheduledJobHistoryUpdateOne {
 	sjhuo.mutation.SetWindmillPath(s)
@@ -673,26 +601,6 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) AppendConfiguration(mc models.JobConf
 // ClearConfiguration clears the value of the "configuration" field.
 func (sjhuo *ScheduledJobHistoryUpdateOne) ClearConfiguration() *ScheduledJobHistoryUpdateOne {
 	sjhuo.mutation.ClearConfiguration()
-	return sjhuo
-}
-
-// SetCadence sets the "cadence" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetCadence(mc models.JobCadence) *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.SetCadence(mc)
-	return sjhuo
-}
-
-// SetNillableCadence sets the "cadence" field if the given value is not nil.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetNillableCadence(mc *models.JobCadence) *ScheduledJobHistoryUpdateOne {
-	if mc != nil {
-		sjhuo.SetCadence(*mc)
-	}
-	return sjhuo
-}
-
-// ClearCadence clears the value of the "cadence" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) ClearCadence() *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.ClearCadence()
 	return sjhuo
 }
 
@@ -870,12 +778,6 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	if sjhuo.mutation.DescriptionCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := sjhuo.mutation.Script(); ok {
-		_spec.SetField(scheduledjobhistory.FieldScript, field.TypeString, value)
-	}
-	if sjhuo.mutation.ScriptCleared() {
-		_spec.ClearField(scheduledjobhistory.FieldScript, field.TypeString)
-	}
 	if value, ok := sjhuo.mutation.WindmillPath(); ok {
 		_spec.SetField(scheduledjobhistory.FieldWindmillPath, field.TypeString, value)
 	}
@@ -892,12 +794,6 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	if sjhuo.mutation.ConfigurationCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldConfiguration, field.TypeJSON)
-	}
-	if value, ok := sjhuo.mutation.Cadence(); ok {
-		_spec.SetField(scheduledjobhistory.FieldCadence, field.TypeJSON, value)
-	}
-	if sjhuo.mutation.CadenceCleared() {
-		_spec.ClearField(scheduledjobhistory.FieldCadence, field.TypeJSON)
 	}
 	if value, ok := sjhuo.mutation.Cron(); ok {
 		_spec.SetField(scheduledjobhistory.FieldCron, field.TypeString, value)

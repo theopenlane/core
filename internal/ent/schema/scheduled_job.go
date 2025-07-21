@@ -62,16 +62,6 @@ func (ScheduledJob) Fields() []ent.Field {
 			).
 			Comment("the platform to use to execute this job"),
 
-		field.String("script").
-			Annotations(
-				entgql.Skip(
-					entgql.SkipOrderField |
-						entgql.SkipWhereInput,
-				),
-			).
-			Optional().
-			Comment("the script to run"),
-
 		field.String("windmill_path").
 			Annotations(
 				entgql.Skip(
@@ -95,10 +85,6 @@ func (ScheduledJob) Fields() []ent.Field {
 		field.JSON("configuration", models.JobConfiguration{}).
 			Optional().
 			Comment("the configuration to run this job"),
-
-		field.JSON("cadence", models.JobCadence{}).
-			Comment("the schedule to run this job").
-			Optional(),
 
 		field.String("cron").
 			GoType(models.Cron("")).

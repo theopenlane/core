@@ -132,11 +132,6 @@ func Description(v string) predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldDescription, v))
 }
 
-// Script applies equality check predicate on the "script" field. It's identical to ScriptEQ.
-func Script(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldScript, v))
-}
-
 // WindmillPath applies equality check predicate on the "windmill_path" field. It's identical to WindmillPathEQ.
 func WindmillPath(v string) predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldWindmillPath, v))
@@ -1002,81 +997,6 @@ func PlatformNotIn(vs ...enums.JobPlatformType) predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldNotIn(FieldPlatform, v...))
 }
 
-// ScriptEQ applies the EQ predicate on the "script" field.
-func ScriptEQ(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldScript, v))
-}
-
-// ScriptNEQ applies the NEQ predicate on the "script" field.
-func ScriptNEQ(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldNEQ(FieldScript, v))
-}
-
-// ScriptIn applies the In predicate on the "script" field.
-func ScriptIn(vs ...string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldIn(FieldScript, vs...))
-}
-
-// ScriptNotIn applies the NotIn predicate on the "script" field.
-func ScriptNotIn(vs ...string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldNotIn(FieldScript, vs...))
-}
-
-// ScriptGT applies the GT predicate on the "script" field.
-func ScriptGT(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldGT(FieldScript, v))
-}
-
-// ScriptGTE applies the GTE predicate on the "script" field.
-func ScriptGTE(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldGTE(FieldScript, v))
-}
-
-// ScriptLT applies the LT predicate on the "script" field.
-func ScriptLT(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldLT(FieldScript, v))
-}
-
-// ScriptLTE applies the LTE predicate on the "script" field.
-func ScriptLTE(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldLTE(FieldScript, v))
-}
-
-// ScriptContains applies the Contains predicate on the "script" field.
-func ScriptContains(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldContains(FieldScript, v))
-}
-
-// ScriptHasPrefix applies the HasPrefix predicate on the "script" field.
-func ScriptHasPrefix(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldHasPrefix(FieldScript, v))
-}
-
-// ScriptHasSuffix applies the HasSuffix predicate on the "script" field.
-func ScriptHasSuffix(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldHasSuffix(FieldScript, v))
-}
-
-// ScriptIsNil applies the IsNil predicate on the "script" field.
-func ScriptIsNil() predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldIsNull(FieldScript))
-}
-
-// ScriptNotNil applies the NotNil predicate on the "script" field.
-func ScriptNotNil() predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldNotNull(FieldScript))
-}
-
-// ScriptEqualFold applies the EqualFold predicate on the "script" field.
-func ScriptEqualFold(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldEqualFold(FieldScript, v))
-}
-
-// ScriptContainsFold applies the ContainsFold predicate on the "script" field.
-func ScriptContainsFold(v string) predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldContainsFold(FieldScript, v))
-}
-
 // WindmillPathEQ applies the EQ predicate on the "windmill_path" field.
 func WindmillPathEQ(v string) predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldWindmillPath, v))
@@ -1215,16 +1135,6 @@ func ConfigurationIsNil() predicate.ScheduledJobHistory {
 // ConfigurationNotNil applies the NotNil predicate on the "configuration" field.
 func ConfigurationNotNil() predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldNotNull(FieldConfiguration))
-}
-
-// CadenceIsNil applies the IsNil predicate on the "cadence" field.
-func CadenceIsNil() predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldIsNull(FieldCadence))
-}
-
-// CadenceNotNil applies the NotNil predicate on the "cadence" field.
-func CadenceNotNil() predicate.ScheduledJobHistory {
-	return predicate.ScheduledJobHistory(sql.FieldNotNull(FieldCadence))
 }
 
 // CronEQ applies the EQ predicate on the "cron" field.

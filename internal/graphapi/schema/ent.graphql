@@ -9019,10 +9019,6 @@ input CreateScheduledJobInput {
   """
   platform: ScheduledJobJobPlatformType!
   """
-  the script to run
-  """
-  script: String
-  """
   the url from where to download the script from
   """
   downloadURL: String!
@@ -9030,10 +9026,6 @@ input CreateScheduledJobInput {
   the configuration to run this job
   """
   configuration: JobConfiguration
-  """
-  the schedule to run this job
-  """
-  cadence: JobCadence
   """
   cron syntax
   """
@@ -39027,10 +39019,6 @@ type ScheduledJob implements Node {
   """
   platform: ScheduledJobJobPlatformType!
   """
-  the script to run
-  """
-  script: String
-  """
   Windmill path
   """
   windmillPath: String!
@@ -39042,10 +39030,6 @@ type ScheduledJob implements Node {
   the configuration to run this job
   """
   configuration: JobConfiguration
-  """
-  the schedule to run this job
-  """
-  cadence: JobCadence
   """
   cron syntax
   """
@@ -39120,10 +39104,6 @@ type ScheduledJobHistory implements Node {
   """
   platform: ScheduledJobHistoryJobPlatformType!
   """
-  the script to run
-  """
-  script: String
-  """
   Windmill path
   """
   windmillPath: String!
@@ -39135,10 +39115,6 @@ type ScheduledJobHistory implements Node {
   the configuration to run this job
   """
   configuration: JobConfiguration
-  """
-  the schedule to run this job
-  """
-  cadence: JobCadence
   """
   cron syntax
   """
@@ -49964,11 +49940,6 @@ input UpdateScheduledJobInput {
   description: String
   clearDescription: Boolean
   """
-  the script to run
-  """
-  script: String
-  clearScript: Boolean
-  """
   the url from where to download the script from
   """
   downloadURL: String
@@ -49978,11 +49949,6 @@ input UpdateScheduledJobInput {
   configuration: JobConfiguration
   appendConfiguration: JobConfiguration
   clearConfiguration: Boolean
-  """
-  the schedule to run this job
-  """
-  cadence: JobCadence
-  clearCadence: Boolean
   """
   cron syntax
   """

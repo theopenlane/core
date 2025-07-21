@@ -2688,9 +2688,6 @@ func (sjh *ScheduledJobHistory) changes(new *ScheduledJobHistory) []Change {
 	if !reflect.DeepEqual(sjh.Platform, new.Platform) {
 		changes = append(changes, NewChange(scheduledjobhistory.FieldPlatform, sjh.Platform, new.Platform))
 	}
-	if !reflect.DeepEqual(sjh.Script, new.Script) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldScript, sjh.Script, new.Script))
-	}
 	if !reflect.DeepEqual(sjh.WindmillPath, new.WindmillPath) {
 		changes = append(changes, NewChange(scheduledjobhistory.FieldWindmillPath, sjh.WindmillPath, new.WindmillPath))
 	}
@@ -2699,9 +2696,6 @@ func (sjh *ScheduledJobHistory) changes(new *ScheduledJobHistory) []Change {
 	}
 	if !reflect.DeepEqual(sjh.Configuration, new.Configuration) {
 		changes = append(changes, NewChange(scheduledjobhistory.FieldConfiguration, sjh.Configuration, new.Configuration))
-	}
-	if !reflect.DeepEqual(sjh.Cadence, new.Cadence) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldCadence, sjh.Cadence, new.Cadence))
 	}
 	if !reflect.DeepEqual(sjh.Cron, new.Cron) {
 		changes = append(changes, NewChange(scheduledjobhistory.FieldCron, sjh.Cron, new.Cron))

@@ -37087,11 +37087,6 @@ func (sj *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, scheduledjob.FieldPlatform)
 				fieldSeen[scheduledjob.FieldPlatform] = struct{}{}
 			}
-		case "script":
-			if _, ok := fieldSeen[scheduledjob.FieldScript]; !ok {
-				selectedFields = append(selectedFields, scheduledjob.FieldScript)
-				fieldSeen[scheduledjob.FieldScript] = struct{}{}
-			}
 		case "windmillPath":
 			if _, ok := fieldSeen[scheduledjob.FieldWindmillPath]; !ok {
 				selectedFields = append(selectedFields, scheduledjob.FieldWindmillPath)
@@ -37106,11 +37101,6 @@ func (sj *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opC
 			if _, ok := fieldSeen[scheduledjob.FieldConfiguration]; !ok {
 				selectedFields = append(selectedFields, scheduledjob.FieldConfiguration)
 				fieldSeen[scheduledjob.FieldConfiguration] = struct{}{}
-			}
-		case "cadence":
-			if _, ok := fieldSeen[scheduledjob.FieldCadence]; !ok {
-				selectedFields = append(selectedFields, scheduledjob.FieldCadence)
-				fieldSeen[scheduledjob.FieldCadence] = struct{}{}
 			}
 		case "cron":
 			if _, ok := fieldSeen[scheduledjob.FieldCron]; !ok {
@@ -37277,11 +37267,6 @@ func (sjh *ScheduledJobHistoryQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, scheduledjobhistory.FieldPlatform)
 				fieldSeen[scheduledjobhistory.FieldPlatform] = struct{}{}
 			}
-		case "script":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldScript]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldScript)
-				fieldSeen[scheduledjobhistory.FieldScript] = struct{}{}
-			}
 		case "windmillPath":
 			if _, ok := fieldSeen[scheduledjobhistory.FieldWindmillPath]; !ok {
 				selectedFields = append(selectedFields, scheduledjobhistory.FieldWindmillPath)
@@ -37296,11 +37281,6 @@ func (sjh *ScheduledJobHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[scheduledjobhistory.FieldConfiguration]; !ok {
 				selectedFields = append(selectedFields, scheduledjobhistory.FieldConfiguration)
 				fieldSeen[scheduledjobhistory.FieldConfiguration] = struct{}{}
-			}
-		case "cadence":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldCadence]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldCadence)
-				fieldSeen[scheduledjobhistory.FieldCadence] = struct{}{}
 			}
 		case "cron":
 			if _, ok := fieldSeen[scheduledjobhistory.FieldCron]; !ok {

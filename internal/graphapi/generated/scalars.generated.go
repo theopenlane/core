@@ -428,32 +428,6 @@ func (ec *executionContext) marshalOImplementationGuidance2ᚕgithubᚗcomᚋthe
 	return ret
 }
 
-func (ec *executionContext) unmarshalOJobCadence2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐJobCadence(ctx context.Context, v any) (models.JobCadence, error) {
-	var res models.JobCadence
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOJobCadence2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐJobCadence(ctx context.Context, sel ast.SelectionSet, v models.JobCadence) graphql.Marshaler {
-	return v
-}
-
-func (ec *executionContext) unmarshalOJobCadence2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐJobCadence(ctx context.Context, v any) (*models.JobCadence, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var res = new(models.JobCadence)
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOJobCadence2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐJobCadence(ctx context.Context, sel ast.SelectionSet, v *models.JobCadence) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return v
-}
-
 func (ec *executionContext) unmarshalOJobConfiguration2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐJobConfiguration(ctx context.Context, v any) (models.JobConfiguration, error) {
 	if v == nil {
 		return nil, nil

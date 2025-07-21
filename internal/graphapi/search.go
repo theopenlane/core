@@ -1537,10 +1537,6 @@ func adminSearchScheduledJobs(ctx context.Context, query string, after *entgql.C
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(configuration)::text LIKE $7", likeQuery)) // search by Configuration
 				},
-				func(s *sql.Selector) {
-					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(cadence)::text LIKE $8", likeQuery)) // search by Cadence
-				},
 			),
 		)
 

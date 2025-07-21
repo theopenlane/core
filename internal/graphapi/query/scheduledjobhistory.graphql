@@ -11,7 +11,6 @@ query GetAllScheduledJobHistories {
     }
     edges {
       node {
-        cadence
         configuration
         createdAt
         createdBy
@@ -23,7 +22,6 @@ query GetAllScheduledJobHistories {
         operation
         ownerID
         ref
-        script
         systemOwned
         tags
         title
@@ -45,7 +43,6 @@ query GetScheduledJobHistories($first: Int, $last: Int, $where: ScheduledJobHist
     }
     edges {
       node {
-        cadence
         configuration
         createdAt
         createdBy
@@ -57,7 +54,6 @@ query GetScheduledJobHistories($first: Int, $last: Int, $where: ScheduledJobHist
         operation
         ownerID
         ref
-        script
         systemOwned
         tags
         title

@@ -9433,10 +9433,8 @@ type CreateScheduledJobInput struct {
 	Title         string
 	Description   *string
 	Platform      enums.JobPlatformType
-	Script        *string
 	DownloadURL   string
 	Configuration models.JobConfiguration
-	Cadence       *models.JobCadence
 	Cron          *models.Cron
 	OwnerID       *string
 }
@@ -9451,15 +9449,9 @@ func (i *CreateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
 		m.SetDescription(*v)
 	}
 	m.SetPlatform(i.Platform)
-	if v := i.Script; v != nil {
-		m.SetScript(*v)
-	}
 	m.SetDownloadURL(i.DownloadURL)
 	if v := i.Configuration; v != nil {
 		m.SetConfiguration(v)
-	}
-	if v := i.Cadence; v != nil {
-		m.SetCadence(*v)
 	}
 	if v := i.Cron; v != nil {
 		m.SetCron(*v)
@@ -9483,14 +9475,10 @@ type UpdateScheduledJobInput struct {
 	Title               *string
 	ClearDescription    bool
 	Description         *string
-	ClearScript         bool
-	Script              *string
 	DownloadURL         *string
 	ClearConfiguration  bool
 	Configuration       models.JobConfiguration
 	AppendConfiguration models.JobConfiguration
-	ClearCadence        bool
-	Cadence             *models.JobCadence
 	ClearCron           bool
 	Cron                *models.Cron
 	ClearOwner          bool
@@ -9517,12 +9505,6 @@ func (i *UpdateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	if i.ClearScript {
-		m.ClearScript()
-	}
-	if v := i.Script; v != nil {
-		m.SetScript(*v)
-	}
 	if v := i.DownloadURL; v != nil {
 		m.SetDownloadURL(*v)
 	}
@@ -9534,12 +9516,6 @@ func (i *UpdateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
 	}
 	if i.AppendConfiguration != nil {
 		m.AppendConfiguration(i.Configuration)
-	}
-	if i.ClearCadence {
-		m.ClearCadence()
-	}
-	if v := i.Cadence; v != nil {
-		m.SetCadence(*v)
 	}
 	if i.ClearCron {
 		m.ClearCron()

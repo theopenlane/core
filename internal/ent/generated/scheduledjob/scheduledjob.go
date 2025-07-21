@@ -44,16 +44,12 @@ const (
 	FieldDescription = "description"
 	// FieldPlatform holds the string denoting the platform field in the database.
 	FieldPlatform = "platform"
-	// FieldScript holds the string denoting the script field in the database.
-	FieldScript = "script"
 	// FieldWindmillPath holds the string denoting the windmill_path field in the database.
 	FieldWindmillPath = "windmill_path"
 	// FieldDownloadURL holds the string denoting the download_url field in the database.
 	FieldDownloadURL = "download_url"
 	// FieldConfiguration holds the string denoting the configuration field in the database.
 	FieldConfiguration = "configuration"
-	// FieldCadence holds the string denoting the cadence field in the database.
-	FieldCadence = "cadence"
 	// FieldCron holds the string denoting the cron field in the database.
 	FieldCron = "cron"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
@@ -85,11 +81,9 @@ var Columns = []string{
 	FieldTitle,
 	FieldDescription,
 	FieldPlatform,
-	FieldScript,
 	FieldWindmillPath,
 	FieldDownloadURL,
 	FieldConfiguration,
-	FieldCadence,
 	FieldCron,
 }
 
@@ -206,11 +200,6 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByPlatform orders the results by the platform field.
 func ByPlatform(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPlatform, opts...).ToFunc()
-}
-
-// ByScript orders the results by the script field.
-func ByScript(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldScript, opts...).ToFunc()
 }
 
 // ByWindmillPath orders the results by the windmill_path field.
