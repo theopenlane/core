@@ -203,7 +203,7 @@ const DefaultStatus enums.EvidenceStatus = "READY"
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.EvidenceStatus) error {
 	switch s.String() {
-	case "APPROVED", "READY", "MISSING_ARTIFACT", "REJECTED", "NEEDS_RENEWAL":
+	case "APPROVED", "READY", "MISSING_ARTIFACT", "REJECTED", "NEEDS_RENEWAL", "SUBMITTED", "IN_REVIEW":
 		return nil
 	default:
 		return fmt.Errorf("evidence: invalid enum value for status field: %q", s)

@@ -49292,6 +49292,8 @@ enum EvidenceEvidenceStatus @goModel(model: "github.com/theopenlane/core/pkg/enu
   MISSING_ARTIFACT
   REJECTED
   NEEDS_RENEWAL
+  SUBMITTED
+  IN_REVIEW
 }
 type EvidenceHistory implements Node {
   id: ID!
@@ -49390,6 +49392,8 @@ enum EvidenceHistoryEvidenceStatus @goModel(model: "github.com/theopenlane/core/
   MISSING_ARTIFACT
   REJECTED
   NEEDS_RENEWAL
+  SUBMITTED
+  IN_REVIEW
 }
 """
 EvidenceHistoryOpType is enum for the field operation
