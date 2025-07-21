@@ -359,6 +359,24 @@ query GlobalSearch($query: String!) {
         }
       }
     }
+    jobTemplates {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          description
+          displayID
+          id
+          tags
+          title
+        }
+      }
+    }
     mappableDomains {
       totalCount
       pageInfo {
@@ -535,24 +553,6 @@ query GlobalSearch($query: String!) {
           id
           tags
           target
-        }
-      }
-    }
-    scheduledJobs {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          description
-          displayID
-          id
-          tags
-          title
         }
       }
     }

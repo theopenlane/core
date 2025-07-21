@@ -87,8 +87,8 @@ func (ec *executionContext) fieldContext_ControlScheduledJobBulkCreatePayload_co
 				return ec.fieldContext_ControlScheduledJob_jobRunnerID(ctx, field)
 			case "owner":
 				return ec.fieldContext_ControlScheduledJob_owner(ctx, field)
-			case "job":
-				return ec.fieldContext_ControlScheduledJob_job(ctx, field)
+			case "jobTemplate":
+				return ec.fieldContext_ControlScheduledJob_jobTemplate(ctx, field)
 			case "controls":
 				return ec.fieldContext_ControlScheduledJob_controls(ctx, field)
 			case "subcontrols":
@@ -163,8 +163,8 @@ func (ec *executionContext) fieldContext_ControlScheduledJobCreatePayload_contro
 				return ec.fieldContext_ControlScheduledJob_jobRunnerID(ctx, field)
 			case "owner":
 				return ec.fieldContext_ControlScheduledJob_owner(ctx, field)
-			case "job":
-				return ec.fieldContext_ControlScheduledJob_job(ctx, field)
+			case "jobTemplate":
+				return ec.fieldContext_ControlScheduledJob_jobTemplate(ctx, field)
 			case "controls":
 				return ec.fieldContext_ControlScheduledJob_controls(ctx, field)
 			case "subcontrols":
@@ -283,8 +283,8 @@ func (ec *executionContext) fieldContext_ControlScheduledJobUpdatePayload_contro
 				return ec.fieldContext_ControlScheduledJob_jobRunnerID(ctx, field)
 			case "owner":
 				return ec.fieldContext_ControlScheduledJob_owner(ctx, field)
-			case "job":
-				return ec.fieldContext_ControlScheduledJob_job(ctx, field)
+			case "jobTemplate":
+				return ec.fieldContext_ControlScheduledJob_jobTemplate(ctx, field)
 			case "controls":
 				return ec.fieldContext_ControlScheduledJob_controls(ctx, field)
 			case "subcontrols":

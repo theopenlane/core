@@ -16,9 +16,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
+	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -32,7 +32,7 @@ type ControlScheduledJobQuery struct {
 	inters               []Interceptor
 	predicates           []predicate.ControlScheduledJob
 	withOwner            *OrganizationQuery
-	withJob              *ScheduledJobQuery
+	withJobTemplate      *JobTemplateQuery
 	withControls         *ControlQuery
 	withSubcontrols      *SubcontrolQuery
 	withJobRunner        *JobRunnerQuery
@@ -101,9 +101,9 @@ func (csjq *ControlScheduledJobQuery) QueryOwner() *OrganizationQuery {
 	return query
 }
 
-// QueryJob chains the current query on the "job" edge.
-func (csjq *ControlScheduledJobQuery) QueryJob() *ScheduledJobQuery {
-	query := (&ScheduledJobClient{config: csjq.config}).Query()
+// QueryJobTemplate chains the current query on the "job_template" edge.
+func (csjq *ControlScheduledJobQuery) QueryJobTemplate() *JobTemplateQuery {
+	query := (&JobTemplateClient{config: csjq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := csjq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -114,11 +114,11 @@ func (csjq *ControlScheduledJobQuery) QueryJob() *ScheduledJobQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(controlscheduledjob.Table, controlscheduledjob.FieldID, selector),
-			sqlgraph.To(scheduledjob.Table, scheduledjob.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, controlscheduledjob.JobTable, controlscheduledjob.JobColumn),
+			sqlgraph.To(jobtemplate.Table, jobtemplate.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, controlscheduledjob.JobTemplateTable, controlscheduledjob.JobTemplateColumn),
 		)
 		schemaConfig := csjq.schemaConfig
-		step.To.Schema = schemaConfig.ScheduledJob
+		step.To.Schema = schemaConfig.JobTemplate
 		step.Edge.Schema = schemaConfig.ControlScheduledJob
 		fromU = sqlgraph.SetNeighbors(csjq.driver.Dialect(), step)
 		return fromU, nil
@@ -394,7 +394,7 @@ func (csjq *ControlScheduledJobQuery) Clone() *ControlScheduledJobQuery {
 		inters:          append([]Interceptor{}, csjq.inters...),
 		predicates:      append([]predicate.ControlScheduledJob{}, csjq.predicates...),
 		withOwner:       csjq.withOwner.Clone(),
-		withJob:         csjq.withJob.Clone(),
+		withJobTemplate: csjq.withJobTemplate.Clone(),
 		withControls:    csjq.withControls.Clone(),
 		withSubcontrols: csjq.withSubcontrols.Clone(),
 		withJobRunner:   csjq.withJobRunner.Clone(),
@@ -416,14 +416,14 @@ func (csjq *ControlScheduledJobQuery) WithOwner(opts ...func(*OrganizationQuery)
 	return csjq
 }
 
-// WithJob tells the query-builder to eager-load the nodes that are connected to
-// the "job" edge. The optional arguments are used to configure the query builder of the edge.
-func (csjq *ControlScheduledJobQuery) WithJob(opts ...func(*ScheduledJobQuery)) *ControlScheduledJobQuery {
-	query := (&ScheduledJobClient{config: csjq.config}).Query()
+// WithJobTemplate tells the query-builder to eager-load the nodes that are connected to
+// the "job_template" edge. The optional arguments are used to configure the query builder of the edge.
+func (csjq *ControlScheduledJobQuery) WithJobTemplate(opts ...func(*JobTemplateQuery)) *ControlScheduledJobQuery {
+	query := (&JobTemplateClient{config: csjq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	csjq.withJob = query
+	csjq.withJobTemplate = query
 	return csjq
 }
 
@@ -546,7 +546,7 @@ func (csjq *ControlScheduledJobQuery) sqlAll(ctx context.Context, hooks ...query
 		_spec       = csjq.querySpec()
 		loadedTypes = [5]bool{
 			csjq.withOwner != nil,
-			csjq.withJob != nil,
+			csjq.withJobTemplate != nil,
 			csjq.withControls != nil,
 			csjq.withSubcontrols != nil,
 			csjq.withJobRunner != nil,
@@ -581,9 +581,9 @@ func (csjq *ControlScheduledJobQuery) sqlAll(ctx context.Context, hooks ...query
 			return nil, err
 		}
 	}
-	if query := csjq.withJob; query != nil {
-		if err := csjq.loadJob(ctx, query, nodes, nil,
-			func(n *ControlScheduledJob, e *ScheduledJob) { n.Edges.Job = e }); err != nil {
+	if query := csjq.withJobTemplate; query != nil {
+		if err := csjq.loadJobTemplate(ctx, query, nodes, nil,
+			func(n *ControlScheduledJob, e *JobTemplate) { n.Edges.JobTemplate = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -658,7 +658,7 @@ func (csjq *ControlScheduledJobQuery) loadOwner(ctx context.Context, query *Orga
 	}
 	return nil
 }
-func (csjq *ControlScheduledJobQuery) loadJob(ctx context.Context, query *ScheduledJobQuery, nodes []*ControlScheduledJob, init func(*ControlScheduledJob), assign func(*ControlScheduledJob, *ScheduledJob)) error {
+func (csjq *ControlScheduledJobQuery) loadJobTemplate(ctx context.Context, query *JobTemplateQuery, nodes []*ControlScheduledJob, init func(*ControlScheduledJob), assign func(*ControlScheduledJob, *JobTemplate)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ControlScheduledJob)
 	for i := range nodes {
@@ -671,7 +671,7 @@ func (csjq *ControlScheduledJobQuery) loadJob(ctx context.Context, query *Schedu
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(scheduledjob.IDIn(ids...))
+	query.Where(jobtemplate.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -874,7 +874,7 @@ func (csjq *ControlScheduledJobQuery) querySpec() *sqlgraph.QuerySpec {
 		if csjq.withOwner != nil {
 			_spec.Node.AddColumnOnce(controlscheduledjob.FieldOwnerID)
 		}
-		if csjq.withJob != nil {
+		if csjq.withJobTemplate != nil {
 			_spec.Node.AddColumnOnce(controlscheduledjob.FieldJobID)
 		}
 		if csjq.withJobRunner != nil {

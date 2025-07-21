@@ -15,9 +15,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
+	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/pkg/models"
 
@@ -207,9 +207,15 @@ func (csju *ControlScheduledJobUpdate) SetOwner(o *Organization) *ControlSchedul
 	return csju.SetOwnerID(o.ID)
 }
 
-// SetJob sets the "job" edge to the ScheduledJob entity.
-func (csju *ControlScheduledJobUpdate) SetJob(s *ScheduledJob) *ControlScheduledJobUpdate {
-	return csju.SetJobID(s.ID)
+// SetJobTemplateID sets the "job_template" edge to the JobTemplate entity by ID.
+func (csju *ControlScheduledJobUpdate) SetJobTemplateID(id string) *ControlScheduledJobUpdate {
+	csju.mutation.SetJobTemplateID(id)
+	return csju
+}
+
+// SetJobTemplate sets the "job_template" edge to the JobTemplate entity.
+func (csju *ControlScheduledJobUpdate) SetJobTemplate(j *JobTemplate) *ControlScheduledJobUpdate {
+	return csju.SetJobTemplateID(j.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -258,9 +264,9 @@ func (csju *ControlScheduledJobUpdate) ClearOwner() *ControlScheduledJobUpdate {
 	return csju
 }
 
-// ClearJob clears the "job" edge to the ScheduledJob entity.
-func (csju *ControlScheduledJobUpdate) ClearJob() *ControlScheduledJobUpdate {
-	csju.mutation.ClearJob()
+// ClearJobTemplate clears the "job_template" edge to the JobTemplate entity.
+func (csju *ControlScheduledJobUpdate) ClearJobTemplate() *ControlScheduledJobUpdate {
+	csju.mutation.ClearJobTemplate()
 	return csju
 }
 
@@ -366,8 +372,8 @@ func (csju *ControlScheduledJobUpdate) check() error {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJob.cron": %w`, err)}
 		}
 	}
-	if csju.mutation.JobCleared() && len(csju.mutation.JobIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "ControlScheduledJob.job"`)
+	if csju.mutation.JobTemplateCleared() && len(csju.mutation.JobTemplateIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "ControlScheduledJob.job_template"`)
 	}
 	return nil
 }
@@ -468,29 +474,29 @@ func (csju *ControlScheduledJobUpdate) sqlSave(ctx context.Context) (n int, err 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if csju.mutation.JobCleared() {
+	if csju.mutation.JobTemplateCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   controlscheduledjob.JobTable,
-			Columns: []string{controlscheduledjob.JobColumn},
+			Table:   controlscheduledjob.JobTemplateTable,
+			Columns: []string{controlscheduledjob.JobTemplateColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = csju.schemaConfig.ControlScheduledJob
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := csju.mutation.JobIDs(); len(nodes) > 0 {
+	if nodes := csju.mutation.JobTemplateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   controlscheduledjob.JobTable,
-			Columns: []string{controlscheduledjob.JobColumn},
+			Table:   controlscheduledjob.JobTemplateTable,
+			Columns: []string{controlscheduledjob.JobTemplateColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = csju.schemaConfig.ControlScheduledJob
@@ -819,9 +825,15 @@ func (csjuo *ControlScheduledJobUpdateOne) SetOwner(o *Organization) *ControlSch
 	return csjuo.SetOwnerID(o.ID)
 }
 
-// SetJob sets the "job" edge to the ScheduledJob entity.
-func (csjuo *ControlScheduledJobUpdateOne) SetJob(s *ScheduledJob) *ControlScheduledJobUpdateOne {
-	return csjuo.SetJobID(s.ID)
+// SetJobTemplateID sets the "job_template" edge to the JobTemplate entity by ID.
+func (csjuo *ControlScheduledJobUpdateOne) SetJobTemplateID(id string) *ControlScheduledJobUpdateOne {
+	csjuo.mutation.SetJobTemplateID(id)
+	return csjuo
+}
+
+// SetJobTemplate sets the "job_template" edge to the JobTemplate entity.
+func (csjuo *ControlScheduledJobUpdateOne) SetJobTemplate(j *JobTemplate) *ControlScheduledJobUpdateOne {
+	return csjuo.SetJobTemplateID(j.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -870,9 +882,9 @@ func (csjuo *ControlScheduledJobUpdateOne) ClearOwner() *ControlScheduledJobUpda
 	return csjuo
 }
 
-// ClearJob clears the "job" edge to the ScheduledJob entity.
-func (csjuo *ControlScheduledJobUpdateOne) ClearJob() *ControlScheduledJobUpdateOne {
-	csjuo.mutation.ClearJob()
+// ClearJobTemplate clears the "job_template" edge to the JobTemplate entity.
+func (csjuo *ControlScheduledJobUpdateOne) ClearJobTemplate() *ControlScheduledJobUpdateOne {
+	csjuo.mutation.ClearJobTemplate()
 	return csjuo
 }
 
@@ -991,8 +1003,8 @@ func (csjuo *ControlScheduledJobUpdateOne) check() error {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ControlScheduledJob.cron": %w`, err)}
 		}
 	}
-	if csjuo.mutation.JobCleared() && len(csjuo.mutation.JobIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "ControlScheduledJob.job"`)
+	if csjuo.mutation.JobTemplateCleared() && len(csjuo.mutation.JobTemplateIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "ControlScheduledJob.job_template"`)
 	}
 	return nil
 }
@@ -1110,29 +1122,29 @@ func (csjuo *ControlScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if csjuo.mutation.JobCleared() {
+	if csjuo.mutation.JobTemplateCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   controlscheduledjob.JobTable,
-			Columns: []string{controlscheduledjob.JobColumn},
+			Table:   controlscheduledjob.JobTemplateTable,
+			Columns: []string{controlscheduledjob.JobTemplateColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = csjuo.schemaConfig.ControlScheduledJob
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := csjuo.mutation.JobIDs(); len(nodes) > 0 {
+	if nodes := csjuo.mutation.JobTemplateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   controlscheduledjob.JobTable,
-			Columns: []string{controlscheduledjob.JobColumn},
+			Table:   controlscheduledjob.JobTemplateTable,
+			Columns: []string{controlscheduledjob.JobTemplateColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = csjuo.schemaConfig.ControlScheduledJob

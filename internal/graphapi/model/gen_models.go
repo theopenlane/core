@@ -817,6 +817,30 @@ type JobRunnerUpdatePayload struct {
 	JobRunner *generated.JobRunner `json:"jobRunner"`
 }
 
+// Return response for createBulkJobTemplate mutation
+type JobTemplateBulkCreatePayload struct {
+	// Created jobTemplates
+	JobTemplates []*generated.JobTemplate `json:"jobTemplates,omitempty"`
+}
+
+// Return response for createJobTemplate mutation
+type JobTemplateCreatePayload struct {
+	// Created jobTemplate
+	JobTemplate *generated.JobTemplate `json:"jobTemplate"`
+}
+
+// Return response for deleteJobTemplate mutation
+type JobTemplateDeletePayload struct {
+	// Deleted jobTemplate ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateJobTemplate mutation
+type JobTemplateUpdatePayload struct {
+	// Updated jobTemplate
+	JobTemplate *generated.JobTemplate `json:"jobTemplate"`
+}
+
 // Return response for createBulkMappableDomain mutation
 type MappableDomainBulkCreatePayload struct {
 	// Created mappableDomains
@@ -1118,30 +1142,6 @@ type ScanUpdatePayload struct {
 	Scan *generated.Scan `json:"scan"`
 }
 
-// Return response for createBulkScheduledJob mutation
-type ScheduledJobBulkCreatePayload struct {
-	// Created scheduledJobs
-	ScheduledJobs []*generated.ScheduledJob `json:"scheduledJobs,omitempty"`
-}
-
-// Return response for createScheduledJob mutation
-type ScheduledJobCreatePayload struct {
-	// Created scheduledJob
-	ScheduledJob *generated.ScheduledJob `json:"scheduledJob"`
-}
-
-// Return response for deleteScheduledJob mutation
-type ScheduledJobDeletePayload struct {
-	// Deleted scheduledJob ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for updateScheduledJob mutation
-type ScheduledJobUpdatePayload struct {
-	// Updated scheduledJob
-	ScheduledJob *generated.ScheduledJob `json:"scheduledJob"`
-}
-
 type SearchResults struct {
 	// Information to aid in pagination.
 	Page *entgql.PageInfo[string] `json:"page"`
@@ -1169,6 +1169,7 @@ type SearchResults struct {
 	JobRunners                  *generated.JobRunnerConnection                  `json:"jobRunners,omitempty"`
 	JobRunnerRegistrationTokens *generated.JobRunnerRegistrationTokenConnection `json:"jobRunnerRegistrationTokens,omitempty"`
 	JobRunnerTokens             *generated.JobRunnerTokenConnection             `json:"jobRunnerTokens,omitempty"`
+	JobTemplates                *generated.JobTemplateConnection                `json:"jobTemplates,omitempty"`
 	MappableDomains             *generated.MappableDomainConnection             `json:"mappableDomains,omitempty"`
 	MappedControls              *generated.MappedControlConnection              `json:"mappedControls,omitempty"`
 	Narratives                  *generated.NarrativeConnection                  `json:"narratives,omitempty"`
@@ -1180,7 +1181,6 @@ type SearchResults struct {
 	Programs                    *generated.ProgramConnection                    `json:"programs,omitempty"`
 	Risks                       *generated.RiskConnection                       `json:"risks,omitempty"`
 	Scans                       *generated.ScanConnection                       `json:"scans,omitempty"`
-	ScheduledJobs               *generated.ScheduledJobConnection               `json:"scheduledJobs,omitempty"`
 	Standards                   *generated.StandardConnection                   `json:"standards,omitempty"`
 	Subcontrols                 *generated.SubcontrolConnection                 `json:"subcontrols,omitempty"`
 	Subprocessors               *generated.SubprocessorConnection               `json:"subprocessors,omitempty"`

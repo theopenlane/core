@@ -79,7 +79,7 @@ func (s Subcontrol) Edges() []ent.Edge {
 		}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: s,
-			edgeSchema: ControlScheduledJob{},
+			edgeSchema: ScheduledJob{},
 		}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: s,

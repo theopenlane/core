@@ -15,30 +15,30 @@ import (
 	"github.com/theopenlane/entx"
 )
 
-// ScheduledJob holds the schema definition for the ScheduledJob entity
-type ScheduledJob struct {
+// JobTemplate holds the schema definition for the JobTemplate entity
+type JobTemplate struct {
 	SchemaFuncs
 
 	ent.Schema
 }
 
-// SchemaScheduledJobis the name of the schema in snake case
-const SchemaScheduledJob = "job"
+// SchemaJobTemplate is the name of the schema in snake case
+const SchemaJobTemplate = "job_template"
 
-func (ScheduledJob) Name() string {
-	return SchemaScheduledJob
+func (JobTemplate) Name() string {
+	return SchemaJobTemplate
 }
 
-func (ScheduledJob) GetType() any {
-	return ScheduledJob.Type
+func (JobTemplate) GetType() any {
+	return JobTemplate.Type
 }
 
-func (ScheduledJob) PluralName() string {
-	return pluralize.NewClient().Plural(SchemaScheduledJob)
+func (JobTemplate) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaJobTemplate)
 }
 
-// Fields of the ScheduledJob
-func (ScheduledJob) Fields() []ent.Field {
+// Fields of the JobTemplate
+func (JobTemplate) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("title").
 			Comment("the title of the job").
@@ -97,8 +97,8 @@ func (ScheduledJob) Fields() []ent.Field {
 	}
 }
 
-// Mixin of the ScheduledJob
-func (s ScheduledJob) Mixin() []ent.Mixin {
+// Mixin of the JobTemplate
+func (s JobTemplate) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "JOB",
 		additionalMixins: []ent.Mixin{
@@ -110,22 +110,20 @@ func (s ScheduledJob) Mixin() []ent.Mixin {
 	}.getMixins()
 }
 
-// Annotations of the ScheduledJob
-func (ScheduledJob) Annotations() []schema.Annotation {
-	return []schema.Annotation{
-		// entfga.SelfAccessChecks(),
-	}
+// Annotations of the JobTemplate
+func (JobTemplate) Annotations() []schema.Annotation {
+	return []schema.Annotation{}
 }
 
-// Hooks of the ScheduledJob
-func (ScheduledJob) Hooks() []ent.Hook {
+// Hooks of the JobTemplate
+func (JobTemplate) Hooks() []ent.Hook {
 	return []ent.Hook{
-		hooks.HookScheduledJobCreate(),
+		hooks.HookJobTemplateCreate(),
 	}
 }
 
-// Policy of the ScheduledJob
-func (ScheduledJob) Policy() ent.Policy {
+// Policy of the JobTemplate
+func (JobTemplate) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),

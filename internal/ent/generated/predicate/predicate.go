@@ -153,6 +153,12 @@ type JobRunnerRegistrationToken func(*sql.Selector)
 // JobRunnerToken is the predicate function for jobrunnertoken builders.
 type JobRunnerToken func(*sql.Selector)
 
+// JobTemplate is the predicate function for jobtemplate builders.
+type JobTemplate func(*sql.Selector)
+
+// JobTemplateHistory is the predicate function for jobtemplatehistory builders.
+type JobTemplateHistory func(*sql.Selector)
+
 // MappableDomain is the predicate function for mappabledomain builders.
 type MappableDomain func(*sql.Selector)
 
@@ -248,12 +254,6 @@ type Scan func(*sql.Selector)
 
 // ScanHistory is the predicate function for scanhistory builders.
 type ScanHistory func(*sql.Selector)
-
-// ScheduledJob is the predicate function for scheduledjob builders.
-type ScheduledJob func(*sql.Selector)
-
-// ScheduledJobHistory is the predicate function for scheduledjobhistory builders.
-type ScheduledJobHistory func(*sql.Selector)
 
 // ScheduledJobRun is the predicate function for scheduledjobrun builders.
 type ScheduledJobRun func(*sql.Selector)

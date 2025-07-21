@@ -110,6 +110,10 @@ type Tx struct {
 	JobRunnerRegistrationToken *JobRunnerRegistrationTokenClient
 	// JobRunnerToken is the client for interacting with the JobRunnerToken builders.
 	JobRunnerToken *JobRunnerTokenClient
+	// JobTemplate is the client for interacting with the JobTemplate builders.
+	JobTemplate *JobTemplateClient
+	// JobTemplateHistory is the client for interacting with the JobTemplateHistory builders.
+	JobTemplateHistory *JobTemplateHistoryClient
 	// MappableDomain is the client for interacting with the MappableDomain builders.
 	MappableDomain *MappableDomainClient
 	// MappableDomainHistory is the client for interacting with the MappableDomainHistory builders.
@@ -174,10 +178,6 @@ type Tx struct {
 	Scan *ScanClient
 	// ScanHistory is the client for interacting with the ScanHistory builders.
 	ScanHistory *ScanHistoryClient
-	// ScheduledJob is the client for interacting with the ScheduledJob builders.
-	ScheduledJob *ScheduledJobClient
-	// ScheduledJobHistory is the client for interacting with the ScheduledJobHistory builders.
-	ScheduledJobHistory *ScheduledJobHistoryClient
 	// ScheduledJobRun is the client for interacting with the ScheduledJobRun builders.
 	ScheduledJobRun *ScheduledJobRunClient
 	// Standard is the client for interacting with the Standard builders.
@@ -410,6 +410,8 @@ func (tx *Tx) init() {
 	tx.JobRunner = NewJobRunnerClient(tx.config)
 	tx.JobRunnerRegistrationToken = NewJobRunnerRegistrationTokenClient(tx.config)
 	tx.JobRunnerToken = NewJobRunnerTokenClient(tx.config)
+	tx.JobTemplate = NewJobTemplateClient(tx.config)
+	tx.JobTemplateHistory = NewJobTemplateHistoryClient(tx.config)
 	tx.MappableDomain = NewMappableDomainClient(tx.config)
 	tx.MappableDomainHistory = NewMappableDomainHistoryClient(tx.config)
 	tx.MappedControl = NewMappedControlClient(tx.config)
@@ -442,8 +444,6 @@ func (tx *Tx) init() {
 	tx.RiskHistory = NewRiskHistoryClient(tx.config)
 	tx.Scan = NewScanClient(tx.config)
 	tx.ScanHistory = NewScanHistoryClient(tx.config)
-	tx.ScheduledJob = NewScheduledJobClient(tx.config)
-	tx.ScheduledJobHistory = NewScheduledJobHistoryClient(tx.config)
 	tx.ScheduledJobRun = NewScheduledJobRunClient(tx.config)
 	tx.Standard = NewStandardClient(tx.config)
 	tx.StandardHistory = NewStandardHistoryClient(tx.config)

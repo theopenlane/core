@@ -2690,27 +2690,27 @@ func HasDNSVerificationsWith(preds ...predicate.DNSVerification) predicate.Organ
 	})
 }
 
-// HasJobs applies the HasEdge predicate on the "jobs" edge.
-func HasJobs() predicate.Organization {
+// HasJobTemplates applies the HasEdge predicate on the "job_templates" edge.
+func HasJobTemplates() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, JobsTable, JobsColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, JobTemplatesTable, JobTemplatesColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.ScheduledJob
-		step.Edge.Schema = schemaConfig.ScheduledJob
+		step.To.Schema = schemaConfig.JobTemplate
+		step.Edge.Schema = schemaConfig.JobTemplate
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasJobsWith applies the HasEdge predicate on the "jobs" edge with a given conditions (other predicates).
-func HasJobsWith(preds ...predicate.ScheduledJob) predicate.Organization {
+// HasJobTemplatesWith applies the HasEdge predicate on the "job_templates" edge with a given conditions (other predicates).
+func HasJobTemplatesWith(preds ...predicate.JobTemplate) predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
-		step := newJobsStep()
+		step := newJobTemplatesStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.ScheduledJob
-		step.Edge.Schema = schemaConfig.ScheduledJob
+		step.To.Schema = schemaConfig.JobTemplate
+		step.Edge.Schema = schemaConfig.JobTemplate
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -597,6 +597,30 @@ func (f JobRunnerTokenFunc) Mutate(ctx context.Context, m generated.Mutation) (g
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.JobRunnerTokenMutation", m)
 }
 
+// The JobTemplateFunc type is an adapter to allow the use of ordinary
+// function as JobTemplate mutator.
+type JobTemplateFunc func(context.Context, *generated.JobTemplateMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f JobTemplateFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.JobTemplateMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.JobTemplateMutation", m)
+}
+
+// The JobTemplateHistoryFunc type is an adapter to allow the use of ordinary
+// function as JobTemplateHistory mutator.
+type JobTemplateHistoryFunc func(context.Context, *generated.JobTemplateHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f JobTemplateHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.JobTemplateHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.JobTemplateHistoryMutation", m)
+}
+
 // The MappableDomainFunc type is an adapter to allow the use of ordinary
 // function as MappableDomain mutator.
 type MappableDomainFunc func(context.Context, *generated.MappableDomainMutation) (generated.Value, error)
@@ -979,30 +1003,6 @@ func (f ScanHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (gene
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ScanHistoryMutation", m)
-}
-
-// The ScheduledJobFunc type is an adapter to allow the use of ordinary
-// function as ScheduledJob mutator.
-type ScheduledJobFunc func(context.Context, *generated.ScheduledJobMutation) (generated.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f ScheduledJobFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
-	if mv, ok := m.(*generated.ScheduledJobMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ScheduledJobMutation", m)
-}
-
-// The ScheduledJobHistoryFunc type is an adapter to allow the use of ordinary
-// function as ScheduledJobHistory mutator.
-type ScheduledJobHistoryFunc func(context.Context, *generated.ScheduledJobHistoryMutation) (generated.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f ScheduledJobHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
-	if mv, ok := m.(*generated.ScheduledJobHistoryMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ScheduledJobHistoryMutation", m)
 }
 
 // The ScheduledJobRunFunc type is an adapter to allow the use of ordinary

@@ -105,7 +105,7 @@ func (j JobResult) Edges() []ent.Edge {
 	return []ent.Edge{
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: j,
-			edgeSchema: ControlScheduledJob{},
+			edgeSchema: ScheduledJob{},
 			field:      "scheduled_job_id",
 			required:   true,
 		}),

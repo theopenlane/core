@@ -12,8 +12,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
+	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -54,8 +54,8 @@ type ControlScheduledJob struct {
 type ControlScheduledJobEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
-	// Job holds the value of the job edge.
-	Job *ScheduledJob `json:"job,omitempty"`
+	// JobTemplate holds the value of the job_template edge.
+	JobTemplate *JobTemplate `json:"job_template,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
@@ -83,15 +83,15 @@ func (e ControlScheduledJobEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
-// JobOrErr returns the Job value or an error if the edge
+// JobTemplateOrErr returns the JobTemplate value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e ControlScheduledJobEdges) JobOrErr() (*ScheduledJob, error) {
-	if e.Job != nil {
-		return e.Job, nil
+func (e ControlScheduledJobEdges) JobTemplateOrErr() (*JobTemplate, error) {
+	if e.JobTemplate != nil {
+		return e.JobTemplate, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: scheduledjob.Label}
+		return nil, &NotFoundError{label: jobtemplate.Label}
 	}
-	return nil, &NotLoadedError{edge: "job"}
+	return nil, &NotLoadedError{edge: "job_template"}
 }
 
 // ControlsOrErr returns the Controls value or an error if the edge
@@ -244,9 +244,9 @@ func (csj *ControlScheduledJob) QueryOwner() *OrganizationQuery {
 	return NewControlScheduledJobClient(csj.config).QueryOwner(csj)
 }
 
-// QueryJob queries the "job" edge of the ControlScheduledJob entity.
-func (csj *ControlScheduledJob) QueryJob() *ScheduledJobQuery {
-	return NewControlScheduledJobClient(csj.config).QueryJob(csj)
+// QueryJobTemplate queries the "job_template" edge of the ControlScheduledJob entity.
+func (csj *ControlScheduledJob) QueryJobTemplate() *JobTemplateQuery {
+	return NewControlScheduledJobClient(csj.config).QueryJobTemplate(csj)
 }
 
 // QueryControls queries the "controls" edge of the ControlScheduledJob entity.

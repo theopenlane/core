@@ -32,6 +32,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
+	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -43,7 +44,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
@@ -1012,6 +1012,49 @@ func adminSearchJobRunnerTokens(ctx context.Context, query string, after *entgql
 	return request.Paginate(ctx, after, first, before, last)
 }
 
+// searchJobTemplate searches for JobTemplate based on the query string looking for matches
+func searchJobTemplates(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.JobTemplateConnection, error) {
+	request := withTransactionalMutation(ctx).JobTemplate.Query().
+		Where(
+			jobtemplate.Or(
+				jobtemplate.DescriptionContainsFold(query), // search by Description
+				jobtemplate.DisplayID(query),               // search equal to DisplayID
+				jobtemplate.ID(query),                      // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+				},
+				jobtemplate.TitleContainsFold(query), // search by Title
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchJobTemplate searches for JobTemplate based on the query string looking for matches
+func adminSearchJobTemplates(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.JobTemplateConnection, error) {
+	request := withTransactionalMutation(ctx).JobTemplate.Query().
+		Where(
+			jobtemplate.Or(
+				jobtemplate.ID(query),        // search equal to ID
+				jobtemplate.DisplayID(query), // search equal to DisplayID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+				jobtemplate.OwnerIDContainsFold(query),     // search by OwnerID
+				jobtemplate.TitleContainsFold(query),       // search by Title
+				jobtemplate.DescriptionContainsFold(query), // search by Description
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(configuration)::text LIKE $7", likeQuery)) // search by Configuration
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
 // searchMappableDomain searches for MappableDomain based on the query string looking for matches
 func searchMappableDomains(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.MappableDomainConnection, error) {
 	request := withTransactionalMutation(ctx).MappableDomain.Query().
@@ -1493,49 +1536,6 @@ func adminSearchScans(ctx context.Context, query string, after *entgql.Cursor[st
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(metadata)::text LIKE $5", likeQuery)) // search by Metadata
-				},
-			),
-		)
-
-	return request.Paginate(ctx, after, first, before, last)
-}
-
-// searchScheduledJob searches for ScheduledJob based on the query string looking for matches
-func searchScheduledJobs(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ScheduledJobConnection, error) {
-	request := withTransactionalMutation(ctx).ScheduledJob.Query().
-		Where(
-			scheduledjob.Or(
-				scheduledjob.DescriptionContainsFold(query), // search by Description
-				scheduledjob.DisplayID(query),               // search equal to DisplayID
-				scheduledjob.ID(query),                      // search equal to ID
-				func(s *sql.Selector) {
-					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
-				},
-				scheduledjob.TitleContainsFold(query), // search by Title
-			),
-		)
-
-	return request.Paginate(ctx, after, first, before, last)
-}
-
-// searchScheduledJob searches for ScheduledJob based on the query string looking for matches
-func adminSearchScheduledJobs(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ScheduledJobConnection, error) {
-	request := withTransactionalMutation(ctx).ScheduledJob.Query().
-		Where(
-			scheduledjob.Or(
-				scheduledjob.ID(query),        // search equal to ID
-				scheduledjob.DisplayID(query), // search equal to DisplayID
-				func(s *sql.Selector) {
-					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
-				},
-				scheduledjob.OwnerIDContainsFold(query),     // search by OwnerID
-				scheduledjob.TitleContainsFold(query),       // search by Title
-				scheduledjob.DescriptionContainsFold(query), // search by Description
-				func(s *sql.Selector) {
-					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(configuration)::text LIKE $7", likeQuery)) // search by Configuration
 				},
 			),
 		)

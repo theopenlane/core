@@ -22,13 +22,13 @@ const (
 	defaultTimeout = 30 * time.Second
 )
 
-// HookScheduledJobCreate verifies a scheduled job has
+// HookJobTemplateCreate verifies a scheduled job has
 // a cron and the configuration matches what is expected
 // It also validates the download URL and creates a Windmill flow if configured
-func HookScheduledJobCreate() ent.Hook {
+func HookJobTemplateCreate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.ScheduledJobFunc(func(ctx context.Context,
-			mutation *generated.ScheduledJobMutation) (generated.Value, error) {
+		return hook.JobTemplateFunc(func(ctx context.Context,
+			mutation *generated.JobTemplateMutation) (generated.Value, error) {
 			if entx.CheckIsSoftDelete(ctx) {
 				return next.Mutate(ctx, mutation)
 			}
@@ -64,7 +64,7 @@ func HookScheduledJobCreate() ent.Hook {
 }
 
 // createWindmillFlow creates a Windmill flow for the scheduled job
-func createWindmillFlow(ctx context.Context, mutation *generated.ScheduledJobMutation) error {
+func createWindmillFlow(ctx context.Context, mutation *generated.JobTemplateMutation) error {
 	windmillClient := mutation.Client().Windmill
 	if windmillClient == nil {
 		return nil
@@ -112,7 +112,7 @@ func createWindmillFlow(ctx context.Context, mutation *generated.ScheduledJobMut
 	return nil
 }
 
-func updateWindmillFlow(ctx context.Context, mutation *generated.ScheduledJobMutation) error {
+func updateWindmillFlow(ctx context.Context, mutation *generated.JobTemplateMutation) error {
 	windmillClient := mutation.Client().Windmill
 	if windmillClient == nil {
 		return nil
@@ -210,12 +210,12 @@ func HookControlScheduledJobCreate() ent.Hook {
 
 			jobID, _ := mutation.JobID()
 
-			job, err := mutation.Client().ScheduledJob.Get(ctx, jobID)
+			job, err := mutation.Client().JobTemplate.Get(ctx, jobID)
 			if err != nil {
 				return nil, err
 			}
 
-			// atleast the cron schedule must be there
+			// at least the cron schedule must be there
 			// either on this job or the parent
 			if !hasCron && job.Cron == nil {
 				return nil, ErrCronRequired

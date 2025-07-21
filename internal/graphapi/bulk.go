@@ -439,6 +439,25 @@ func (r *mutationResolver) bulkCreateInvite(ctx context.Context, input []*genera
 	}, nil
 }
 
+// bulkCreateJobTemplate uses the CreateBulk function to create multiple JobTemplate entities
+func (r *mutationResolver) bulkCreateJobTemplate(ctx context.Context, input []*generated.CreateJobTemplateInput) (*model.JobTemplateBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.JobTemplateCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.JobTemplate.Create().SetInput(*data)
+	}
+
+	res, err := c.JobTemplate.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "jobtemplate"})
+	}
+
+	// return response
+	return &model.JobTemplateBulkCreatePayload{
+		JobTemplates: res,
+	}, nil
+}
+
 // bulkCreateMappableDomain uses the CreateBulk function to create multiple MappableDomain entities
 func (r *mutationResolver) bulkCreateMappableDomain(ctx context.Context, input []*generated.CreateMappableDomainInput) (*model.MappableDomainBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -626,25 +645,6 @@ func (r *mutationResolver) bulkCreateScan(ctx context.Context, input []*generate
 	// return response
 	return &model.ScanBulkCreatePayload{
 		Scans: res,
-	}, nil
-}
-
-// bulkCreateScheduledJob uses the CreateBulk function to create multiple ScheduledJob entities
-func (r *mutationResolver) bulkCreateScheduledJob(ctx context.Context, input []*generated.CreateScheduledJobInput) (*model.ScheduledJobBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.ScheduledJobCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.ScheduledJob.Create().SetInput(*data)
-	}
-
-	res, err := c.ScheduledJob.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "scheduledjob"})
-	}
-
-	// return response
-	return &model.ScheduledJobBulkCreatePayload{
-		ScheduledJobs: res,
 	}, nil
 }
 

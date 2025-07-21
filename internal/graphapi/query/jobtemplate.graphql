@@ -1,72 +1,80 @@
-
-mutation CreateBulkCSVScheduledJob($input: Upload!) {
-  createBulkCSVScheduledJob(input: $input) {
-    scheduledJobs {
+mutation CreateBulkCSVJobTemplate($input: Upload!) {
+  createBulkCSVJobTemplate(input: $input) {
+    jobTemplates {
       configuration
       createdAt
       createdBy
       cron
       description
       displayID
+      downloadURL
       id
       ownerID
+      platform
       systemOwned
       tags
       title
       updatedAt
       updatedBy
+      windmillPath
     }
   }
 }
 
-mutation CreateBulkScheduledJob($input: [CreateScheduledJobInput!]) {
-  createBulkScheduledJob(input: $input) {
-    scheduledJobs {
+mutation CreateBulkJobTemplate($input: [CreateJobTemplateInput!]) {
+  createBulkJobTemplate(input: $input) {
+    jobTemplates {
       configuration
       createdAt
       createdBy
       cron
       description
       displayID
+      downloadURL
       id
       ownerID
+      platform
       systemOwned
       tags
       title
       updatedAt
       updatedBy
+      windmillPath
     }
   }
 }
 
-mutation CreateScheduledJob($input: CreateScheduledJobInput!) {
-  createScheduledJob(input: $input) {
-    scheduledJob {
+mutation CreateJobTemplate($input: CreateJobTemplateInput!) {
+  createJobTemplate(input: $input) {
+    jobTemplate {
       configuration
       createdAt
       createdBy
       cron
       description
       displayID
+      downloadURL
       id
       ownerID
+      platform
       systemOwned
       tags
       title
       updatedAt
       updatedBy
+      windmillPath
     }
   }
 }
 
-mutation DeleteScheduledJob($deleteScheduledJobId: ID!) {
-  deleteScheduledJob(id: $deleteScheduledJobId) {
+mutation DeleteJobTemplate($deleteJobTemplateId: ID!) {
+  deleteJobTemplate(id: $deleteJobTemplateId) {
     deletedID
   }
 }
 
-query GetAllScheduledJobs {
-  scheduledJobs {
+query GetAllJobTemplates {
+  jobTemplates {
     totalCount
     pageInfo {
       startCursor
@@ -82,37 +90,44 @@ query GetAllScheduledJobs {
         cron
         description
         displayID
+        downloadURL
         id
         ownerID
+        platform
         systemOwned
         tags
         title
         updatedAt
         updatedBy
+        windmillPath
       }
     }
   }
 }
-query GetScheduledJobByID($scheduledJobId: ID!) {
-  scheduledJob(id: $scheduledJobId) {
+
+query GetJobTemplateByID($jobTemplateId: ID!) {
+  jobTemplate(id: $jobTemplateId) {
     configuration
     createdAt
     createdBy
     cron
     description
     displayID
+    downloadURL
     id
     ownerID
+    platform
     systemOwned
     tags
     title
     updatedAt
     updatedBy
+    windmillPath
   }
 }
 
-query GetScheduledJobs($first: Int, $last: Int, $where: ScheduledJobWhereInput) {
-  scheduledJobs(first: $first, last: $last, where: $where) {
+query GetJobTemplates($first: Int, $last: Int, $where: JobTemplateWhereInput) {
+  jobTemplates(first: $first, last: $last, where: $where) {
     totalCount
     pageInfo {
       startCursor
@@ -128,33 +143,40 @@ query GetScheduledJobs($first: Int, $last: Int, $where: ScheduledJobWhereInput) 
         cron
         description
         displayID
+        downloadURL
         id
         ownerID
+        platform
         systemOwned
         tags
         title
         updatedAt
         updatedBy
+        windmillPath
       }
     }
   }
 }
-mutation UpdateScheduledJob($updateScheduledJobId: ID!, $input: UpdateScheduledJobInput!) {
-  updateScheduledJob(id: $updateScheduledJobId, input: $input) {
-    scheduledJob {
+
+mutation UpdateJobTemplate($updateJobTemplateId: ID!, $input: UpdateJobTemplateInput!) {
+  updateJobTemplate(id: $updateJobTemplateId, input: $input) {
+    jobTemplate {
       configuration
       createdAt
       createdBy
       cron
       description
       displayID
+      downloadURL
       id
       ownerID
+      platform
       systemOwned
       tags
       title
       updatedAt
       updatedBy
+      windmillPath
     }
   }
 }

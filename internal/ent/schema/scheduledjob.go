@@ -13,8 +13,8 @@ import (
 	"github.com/theopenlane/entx"
 )
 
-// ControlScheduledJob holds the schema definition for the ControlScheduledJob entity
-type ControlScheduledJob struct {
+// ScheduledJob holds the schema definition for the ScheduledJob entity
+type ScheduledJob struct {
 	SchemaFuncs
 
 	ent.Schema
@@ -23,20 +23,20 @@ type ControlScheduledJob struct {
 // SchemaControlScheduledJobis the name of the schema in snake case
 const SchemaControlScheduledJob = "scheduled_job"
 
-func (ControlScheduledJob) Name() string {
+func (ScheduledJob) Name() string {
 	return SchemaControlScheduledJob
 }
 
-func (ControlScheduledJob) GetType() any {
-	return ControlScheduledJob.Type
+func (ScheduledJob) GetType() any {
+	return ScheduledJob.Type
 }
 
-func (ControlScheduledJob) PluralName() string {
+func (ScheduledJob) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaControlScheduledJob)
 }
 
 // Fields of the ControlScheduledJob
-func (ControlScheduledJob) Fields() []ent.Field {
+func (ScheduledJob) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("job_id").
 			Comment("the scheduled_job id to take the script to run from"),
@@ -66,7 +66,7 @@ func (ControlScheduledJob) Fields() []ent.Field {
 }
 
 // Mixin of the ControlScheduledJob
-func (c ControlScheduledJob) Mixin() []ent.Mixin {
+func (c ScheduledJob) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeTags: true,
 		additionalMixins: []ent.Mixin{
@@ -76,11 +76,11 @@ func (c ControlScheduledJob) Mixin() []ent.Mixin {
 }
 
 // Edges of the ControlScheduledJob
-func (c ControlScheduledJob) Edges() []ent.Edge {
+func (c ScheduledJob) Edges() []ent.Edge {
 	return []ent.Edge{
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: c,
-			edgeSchema: ScheduledJob{},
+			edgeSchema: JobTemplate{},
 			field:      "job_id",
 			required:   true,
 		}),
@@ -98,31 +98,31 @@ func (c ControlScheduledJob) Edges() []ent.Edge {
 }
 
 // Indexes of the ControlScheduledJob
-func (ControlScheduledJob) Indexes() []ent.Index {
+func (ScheduledJob) Indexes() []ent.Index {
 	return []ent.Index{}
 }
 
 // Annotations of the ControlScheduledJob
-func (ControlScheduledJob) Annotations() []schema.Annotation {
+func (ScheduledJob) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.Features("compliance", "continuous-compliance-automation"),
 	}
 }
 
 // Hooks of the ControlScheduledJob
-func (ControlScheduledJob) Hooks() []ent.Hook {
+func (ScheduledJob) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookControlScheduledJobCreate(),
 	}
 }
 
 // Interceptors of the ControlScheduledJob
-func (ControlScheduledJob) Interceptors() []ent.Interceptor {
+func (ScheduledJob) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{}
 }
 
 // Policy of the ControlScheduledJob
-func (ControlScheduledJob) Policy() ent.Policy {
+func (ScheduledJob) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),

@@ -44,6 +44,7 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		jobrunnerResults                  *generated.JobRunnerConnection
 		jobrunnerregistrationtokenResults *generated.JobRunnerRegistrationTokenConnection
 		jobrunnertokenResults             *generated.JobRunnerTokenConnection
+		jobtemplateResults                *generated.JobTemplateConnection
 		mappabledomainResults             *generated.MappableDomainConnection
 		mappedcontrolResults              *generated.MappedControlConnection
 		narrativeResults                  *generated.NarrativeConnection
@@ -55,7 +56,6 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		programResults                    *generated.ProgramConnection
 		riskResults                       *generated.RiskConnection
 		scanResults                       *generated.ScanConnection
-		scheduledjobResults               *generated.ScheduledJobConnection
 		standardResults                   *generated.StandardConnection
 		subcontrolResults                 *generated.SubcontrolConnection
 		subprocessorResults               *generated.SubprocessorConnection
@@ -226,6 +226,13 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		},
 		func() {
 			var err error
+			jobtemplateResults, err = searchJobTemplates(ctx, query, after, first, before, last)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
 			mappabledomainResults, err = searchMappableDomains(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
@@ -297,13 +304,6 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		func() {
 			var err error
 			scanResults, err = searchScans(ctx, query, after, first, before, last)
-			if err != nil {
-				errors = append(errors, err)
-			}
-		},
-		func() {
-			var err error
-			scheduledjobResults, err = searchScheduledJobs(ctx, query, after, first, before, last)
 			if err != nil {
 				errors = append(errors, err)
 			}
@@ -506,6 +506,11 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 		res.TotalCount += jobrunnertokenResults.TotalCount
 	}
+	if jobtemplateResults != nil && len(jobtemplateResults.Edges) > 0 {
+		res.JobTemplates = jobtemplateResults
+
+		res.TotalCount += jobtemplateResults.TotalCount
+	}
 	if mappabledomainResults != nil && len(mappabledomainResults.Edges) > 0 {
 		res.MappableDomains = mappabledomainResults
 
@@ -560,11 +565,6 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		res.Scans = scanResults
 
 		res.TotalCount += scanResults.TotalCount
-	}
-	if scheduledjobResults != nil && len(scheduledjobResults.Edges) > 0 {
-		res.ScheduledJobs = scheduledjobResults
-
-		res.TotalCount += scheduledjobResults.TotalCount
 	}
 	if standardResults != nil && len(standardResults.Edges) > 0 {
 		res.Standards = standardResults
@@ -844,6 +844,16 @@ func (r *queryResolver) JobRunnerTokenSearch(ctx context.Context, query string, 
 	// return the results
 	return jobrunnertokenResults, nil
 }
+func (r *queryResolver) JobTemplateSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.JobTemplateConnection, error) {
+	jobtemplateResults, err := searchJobTemplates(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return jobtemplateResults, nil
+}
 func (r *queryResolver) MappableDomainSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.MappableDomainConnection, error) {
 	mappabledomainResults, err := searchMappableDomains(ctx, query, after, first, before, last)
 
@@ -953,16 +963,6 @@ func (r *queryResolver) ScanSearch(ctx context.Context, query string, after *ent
 
 	// return the results
 	return scanResults, nil
-}
-func (r *queryResolver) ScheduledJobSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ScheduledJobConnection, error) {
-	scheduledjobResults, err := searchScheduledJobs(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return scheduledjobResults, nil
 }
 func (r *queryResolver) StandardSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.StandardConnection, error) {
 	standardResults, err := searchStandards(ctx, query, after, first, before, last)

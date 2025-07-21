@@ -1057,10 +1057,10 @@ func (csj *ControlScheduledJob) Owner(ctx context.Context) (*Organization, error
 	return result, MaskNotFound(err)
 }
 
-func (csj *ControlScheduledJob) Job(ctx context.Context) (*ScheduledJob, error) {
-	result, err := csj.Edges.JobOrErr()
+func (csj *ControlScheduledJob) JobTemplate(ctx context.Context) (*JobTemplate, error) {
+	result, err := csj.Edges.JobTemplateOrErr()
 	if IsNotLoaded(err) {
-		result, err = csj.QueryJob().Only(ctx)
+		result, err = csj.QueryJobTemplate().Only(ctx)
 	}
 	return result, err
 }
@@ -3297,6 +3297,14 @@ func (jrt *JobRunnerToken) JobRunners(
 	return jrt.QueryJobRunners().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (jt *JobTemplate) Owner(ctx context.Context) (*Organization, error) {
+	result, err := jt.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = jt.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (md *MappableDomain) CustomDomains(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*CustomDomainOrder, where *CustomDomainWhereInput,
 ) (*CustomDomainConnection, error) {
@@ -4804,25 +4812,25 @@ func (o *Organization) DNSVerifications(
 	return o.QueryDNSVerifications().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (o *Organization) Jobs(
-	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ScheduledJobOrder, where *ScheduledJobWhereInput,
-) (*ScheduledJobConnection, error) {
-	opts := []ScheduledJobPaginateOption{
-		WithScheduledJobOrder(orderBy),
-		WithScheduledJobFilter(where.Filter),
+func (o *Organization) JobTemplates(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*JobTemplateOrder, where *JobTemplateWhereInput,
+) (*JobTemplateConnection, error) {
+	opts := []JobTemplatePaginateOption{
+		WithJobTemplateOrder(orderBy),
+		WithJobTemplateFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
 	totalCount, hasTotalCount := o.Edges.totalCount[54][alias]
-	if nodes, err := o.NamedJobs(alias); err == nil || hasTotalCount {
-		pager, err := newScheduledJobPager(opts, last != nil)
+	if nodes, err := o.NamedJobTemplates(alias); err == nil || hasTotalCount {
+		pager, err := newJobTemplatePager(opts, last != nil)
 		if err != nil {
 			return nil, err
 		}
-		conn := &ScheduledJobConnection{Edges: []*ScheduledJobEdge{}, TotalCount: totalCount}
+		conn := &JobTemplateConnection{Edges: []*JobTemplateEdge{}, TotalCount: totalCount}
 		conn.build(nodes, pager, after, first, before, last)
 		return conn, nil
 	}
-	return o.QueryJobs().Paginate(ctx, after, first, before, last, opts...)
+	return o.QueryJobTemplates().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (o *Organization) ScheduledJobs(
@@ -6095,14 +6103,6 @@ func (s *Scan) Entities(
 		return conn, nil
 	}
 	return s.QueryEntities().Paginate(ctx, after, first, before, last, opts...)
-}
-
-func (sj *ScheduledJob) Owner(ctx context.Context) (*Organization, error) {
-	result, err := sj.Edges.OwnerOrErr()
-	if IsNotLoaded(err) {
-		result, err = sj.QueryOwner().Only(ctx)
-	}
-	return result, MaskNotFound(err)
 }
 
 func (sjr *ScheduledJobRun) Owner(ctx context.Context) (*Organization, error) {

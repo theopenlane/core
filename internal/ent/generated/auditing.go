@@ -39,6 +39,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
+	"github.com/theopenlane/core/internal/ent/generated/jobtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
@@ -52,7 +53,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scanhistory"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessorhistory"
@@ -1702,6 +1702,84 @@ func (iph *InternalPolicyHistory) Diff(history *InternalPolicyHistory) (*History
 	return nil, ErrIdenticalHistory
 }
 
+func (jth *JobTemplateHistory) changes(new *JobTemplateHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(jth.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldCreatedAt, jth.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(jth.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldUpdatedAt, jth.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(jth.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldCreatedBy, jth.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(jth.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldDeletedAt, jth.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(jth.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldDeletedBy, jth.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(jth.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldDisplayID, jth.DisplayID, new.DisplayID))
+	}
+	if !reflect.DeepEqual(jth.Tags, new.Tags) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldTags, jth.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(jth.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldOwnerID, jth.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(jth.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldSystemOwned, jth.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(jth.Title, new.Title) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldTitle, jth.Title, new.Title))
+	}
+	if !reflect.DeepEqual(jth.Description, new.Description) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldDescription, jth.Description, new.Description))
+	}
+	if !reflect.DeepEqual(jth.Platform, new.Platform) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldPlatform, jth.Platform, new.Platform))
+	}
+	if !reflect.DeepEqual(jth.WindmillPath, new.WindmillPath) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldWindmillPath, jth.WindmillPath, new.WindmillPath))
+	}
+	if !reflect.DeepEqual(jth.DownloadURL, new.DownloadURL) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldDownloadURL, jth.DownloadURL, new.DownloadURL))
+	}
+	if !reflect.DeepEqual(jth.Configuration, new.Configuration) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldConfiguration, jth.Configuration, new.Configuration))
+	}
+	if !reflect.DeepEqual(jth.Cron, new.Cron) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldCron, jth.Cron, new.Cron))
+	}
+	return changes
+}
+
+func (jth *JobTemplateHistory) Diff(history *JobTemplateHistory) (*HistoryDiff[JobTemplateHistory], error) {
+	if jth.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	jthUnix, historyUnix := jth.HistoryTime.Unix(), history.HistoryTime.Unix()
+	jthOlder := jthUnix < historyUnix || (jthUnix == historyUnix && jth.ID < history.ID)
+	historyOlder := jthUnix > historyUnix || (jthUnix == historyUnix && jth.ID > history.ID)
+
+	if jthOlder {
+		return &HistoryDiff[JobTemplateHistory]{
+			Old:     jth,
+			New:     history,
+			Changes: jth.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[JobTemplateHistory]{
+			Old:     history,
+			New:     jth,
+			Changes: history.changes(jth),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
 func (mdh *MappableDomainHistory) changes(new *MappableDomainHistory) []Change {
 	var changes []Change
 	if !reflect.DeepEqual(mdh.CreatedAt, new.CreatedAt) {
@@ -2645,84 +2723,6 @@ func (sh *ScanHistory) Diff(history *ScanHistory) (*HistoryDiff[ScanHistory], er
 			Old:     history,
 			New:     sh,
 			Changes: history.changes(sh),
-		}, nil
-	}
-	return nil, ErrIdenticalHistory
-}
-
-func (sjh *ScheduledJobHistory) changes(new *ScheduledJobHistory) []Change {
-	var changes []Change
-	if !reflect.DeepEqual(sjh.CreatedAt, new.CreatedAt) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldCreatedAt, sjh.CreatedAt, new.CreatedAt))
-	}
-	if !reflect.DeepEqual(sjh.UpdatedAt, new.UpdatedAt) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldUpdatedAt, sjh.UpdatedAt, new.UpdatedAt))
-	}
-	if !reflect.DeepEqual(sjh.CreatedBy, new.CreatedBy) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldCreatedBy, sjh.CreatedBy, new.CreatedBy))
-	}
-	if !reflect.DeepEqual(sjh.DeletedAt, new.DeletedAt) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldDeletedAt, sjh.DeletedAt, new.DeletedAt))
-	}
-	if !reflect.DeepEqual(sjh.DeletedBy, new.DeletedBy) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldDeletedBy, sjh.DeletedBy, new.DeletedBy))
-	}
-	if !reflect.DeepEqual(sjh.DisplayID, new.DisplayID) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldDisplayID, sjh.DisplayID, new.DisplayID))
-	}
-	if !reflect.DeepEqual(sjh.Tags, new.Tags) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldTags, sjh.Tags, new.Tags))
-	}
-	if !reflect.DeepEqual(sjh.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldOwnerID, sjh.OwnerID, new.OwnerID))
-	}
-	if !reflect.DeepEqual(sjh.SystemOwned, new.SystemOwned) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldSystemOwned, sjh.SystemOwned, new.SystemOwned))
-	}
-	if !reflect.DeepEqual(sjh.Title, new.Title) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldTitle, sjh.Title, new.Title))
-	}
-	if !reflect.DeepEqual(sjh.Description, new.Description) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldDescription, sjh.Description, new.Description))
-	}
-	if !reflect.DeepEqual(sjh.Platform, new.Platform) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldPlatform, sjh.Platform, new.Platform))
-	}
-	if !reflect.DeepEqual(sjh.WindmillPath, new.WindmillPath) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldWindmillPath, sjh.WindmillPath, new.WindmillPath))
-	}
-	if !reflect.DeepEqual(sjh.DownloadURL, new.DownloadURL) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldDownloadURL, sjh.DownloadURL, new.DownloadURL))
-	}
-	if !reflect.DeepEqual(sjh.Configuration, new.Configuration) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldConfiguration, sjh.Configuration, new.Configuration))
-	}
-	if !reflect.DeepEqual(sjh.Cron, new.Cron) {
-		changes = append(changes, NewChange(scheduledjobhistory.FieldCron, sjh.Cron, new.Cron))
-	}
-	return changes
-}
-
-func (sjh *ScheduledJobHistory) Diff(history *ScheduledJobHistory) (*HistoryDiff[ScheduledJobHistory], error) {
-	if sjh.Ref != history.Ref {
-		return nil, ErrMismatchedRef
-	}
-
-	sjhUnix, historyUnix := sjh.HistoryTime.Unix(), history.HistoryTime.Unix()
-	sjhOlder := sjhUnix < historyUnix || (sjhUnix == historyUnix && sjh.ID < history.ID)
-	historyOlder := sjhUnix > historyUnix || (sjhUnix == historyUnix && sjh.ID > history.ID)
-
-	if sjhOlder {
-		return &HistoryDiff[ScheduledJobHistory]{
-			Old:     sjh,
-			New:     history,
-			Changes: sjh.changes(history),
-		}, nil
-	} else if historyOlder {
-		return &HistoryDiff[ScheduledJobHistory]{
-			Old:     history,
-			New:     sjh,
-			Changes: history.changes(sjh),
 		}, nil
 	}
 	return nil, ErrIdenticalHistory
@@ -3714,6 +3714,12 @@ func (c *Client) Audit(ctx context.Context, after *Cursor, first *int, before *C
 	}
 	result.Edges = append(result.Edges, record.Edges...)
 
+	record, err = auditJobTemplateHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
 	record, err = auditMappableDomainHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
@@ -3787,12 +3793,6 @@ func (c *Client) Audit(ctx context.Context, after *Cursor, first *int, before *C
 	result.Edges = append(result.Edges, record.Edges...)
 
 	record, err = auditScanHistory(ctx, c.config, after, first, before, last, nil, nil)
-	if err != nil {
-		return nil, err
-	}
-	result.Edges = append(result.Edges, record.Edges...)
-
-	record, err = auditScheduledJobHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -4688,6 +4688,47 @@ func (c *Client) AuditWithFilter(ctx context.Context, after *Cursor, first *int,
 
 		return
 	}
+	if where.Table == strings.TrimSuffix("JobTemplateHistory", "History") {
+		// map AuditLogWhereInput to JobTemplateHistoryWhereInput
+		whereInput := &JobTemplateHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to JobTemplateHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &JobTemplateHistoryOrder{
+			Field:     JobTemplateHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditJobTemplateHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
 	if where.Table == strings.TrimSuffix("MappableDomainHistory", "History") {
 		// map AuditLogWhereInput to MappableDomainHistoryWhereInput
 		whereInput := &MappableDomainHistoryWhereInput{}
@@ -5215,47 +5256,6 @@ func (c *Client) AuditWithFilter(ctx context.Context, after *Cursor, first *int,
 		}
 
 		result, err = auditScanHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
-		if err != nil {
-			return nil, err
-		}
-
-		return
-	}
-	if where.Table == strings.TrimSuffix("ScheduledJobHistory", "History") {
-		// map AuditLogWhereInput to ScheduledJobHistoryWhereInput
-		whereInput := &ScheduledJobHistoryWhereInput{}
-		if where.RefID != nil {
-			whereInput.RefEqualFold = where.RefID
-		}
-
-		if where.UpdatedBy != nil {
-			whereInput.UpdatedBy = where.UpdatedBy
-		}
-
-		if where.Operation != nil {
-			whereInput.Operation = where.Operation
-		}
-
-		if where.Before != nil {
-			whereInput.HistoryTimeLT = where.Before
-		}
-
-		if where.After != nil {
-			whereInput.HistoryTimeGT = where.After
-		}
-
-		// map AuditLogOrder to ScheduledJobHistoryOrder
-		// default to ordering by HistoryTime desc
-		orderByInput := &ScheduledJobHistoryOrder{
-			Field:     ScheduledJobHistoryOrderFieldHistoryTime,
-			Direction: entgql.OrderDirectionDesc,
-		}
-
-		if orderBy != nil {
-			orderByInput.Direction = orderBy.Direction
-		}
-
-		result, err = auditScheduledJobHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
@@ -7197,6 +7197,79 @@ func auditInternalPolicyHistory(ctx context.Context, config config, after *Curso
 	return result, nil
 }
 
+type jobtemplatehistoryref struct {
+	Ref string
+}
+
+func auditJobTemplateHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *JobTemplateHistoryOrder, where *JobTemplateHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []JobTemplateHistoryPaginateOption{
+		WithJobTemplateHistoryOrder(orderBy),
+		WithJobTemplateHistoryFilter(where.Filter),
+	}
+
+	client := NewJobTemplateHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "JobTemplateHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&JobTemplateHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&JobTemplateHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					jobtemplatehistory.Ref(curr.Node.Ref),
+					jobtemplatehistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(jobtemplatehistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &JobTemplateHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
 type mappabledomainhistoryref struct {
 	Ref string
 }
@@ -8126,79 +8199,6 @@ func auditScanHistory(ctx context.Context, config config, after *Cursor, first *
 			// but just in case, we will handle it gracefully
 			if len(prev) == 0 {
 				prev = append(prev, &ScanHistory{})
-			}
-
-			record.Changes = prev[0].changes(curr.Node)
-		}
-
-		edge := &AuditLogEdge{
-			Node: record,
-			// we only currently support pagination from the same table, so we can use the existing cursor
-			Cursor: curr.Cursor,
-		}
-
-		result.Edges = append(result.Edges, edge)
-	}
-
-	result.TotalCount = histories.TotalCount
-	result.PageInfo = histories.PageInfo
-
-	return result, nil
-}
-
-type scheduledjobhistoryref struct {
-	Ref string
-}
-
-func auditScheduledJobHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *ScheduledJobHistoryOrder, where *ScheduledJobHistoryWhereInput) (result *AuditLogConnection, err error) {
-	result = &AuditLogConnection{
-		Edges: []*AuditLogEdge{},
-	}
-
-	opts := []ScheduledJobHistoryPaginateOption{
-		WithScheduledJobHistoryOrder(orderBy),
-		WithScheduledJobHistoryFilter(where.Filter),
-	}
-
-	client := NewScheduledJobHistoryClient(config)
-
-	histories, err := client.Query().
-		Paginate(ctx, after, first, before, last, opts...)
-	if err != nil {
-		return nil, err
-	}
-
-	for _, curr := range histories.Edges {
-		record := &AuditLog{
-			Table:       "ScheduledJobHistory",
-			RefID:       curr.Node.Ref,
-			HistoryTime: curr.Node.HistoryTime,
-			Operation:   curr.Node.Operation,
-			UpdatedBy:   curr.Node.UpdatedBy,
-		}
-		switch curr.Node.Operation {
-		case history.OpTypeInsert:
-			record.Changes = (&ScheduledJobHistory{}).changes(curr.Node)
-		case history.OpTypeDelete:
-			record.Changes = curr.Node.changes(&ScheduledJobHistory{})
-		default:
-			// Get the previous history entry to calculate the changes
-			prev, err := client.Query().
-				Where(
-					scheduledjobhistory.Ref(curr.Node.Ref),
-					scheduledjobhistory.HistoryTimeLT(curr.Node.HistoryTime),
-				).
-				Order(scheduledjobhistory.ByHistoryTime(sql.OrderDesc())).
-				Limit(1).
-				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
-			if err != nil {
-				return nil, err
-			}
-
-			// this shouldn't happen because the initial change will always be an insert
-			// but just in case, we will handle it gracefully
-			if len(prev) == 0 {
-				prev = append(prev, &ScheduledJobHistory{})
 			}
 
 			record.Changes = prev[0].changes(curr.Node)

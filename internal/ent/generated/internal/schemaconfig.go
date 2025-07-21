@@ -105,6 +105,8 @@ type SchemaConfig struct {
 	JobRunnerJobRunnerTokens           string // JobRunner-job_runner_tokens->JobRunnerToken table.
 	JobRunnerRegistrationToken         string // JobRunnerRegistrationToken table.
 	JobRunnerToken                     string // JobRunnerToken table.
+	JobTemplate                        string // JobTemplate table.
+	JobTemplateHistory                 string // JobTemplateHistory table.
 	MappableDomain                     string // MappableDomain table.
 	MappableDomainHistory              string // MappableDomainHistory table.
 	MappedControl                      string // MappedControl table.
@@ -182,8 +184,6 @@ type SchemaConfig struct {
 	ScanViewers                        string // Scan-viewers->Group table.
 	ScanAssets                         string // Scan-assets->Asset table.
 	ScanHistory                        string // ScanHistory table.
-	ScheduledJob                       string // ScheduledJob table.
-	ScheduledJobHistory                string // ScheduledJobHistory table.
 	ScheduledJobRun                    string // ScheduledJobRun table.
 	Standard                           string // Standard table.
 	StandardHistory                    string // StandardHistory table.

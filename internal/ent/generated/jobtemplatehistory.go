@@ -10,17 +10,23 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/jobtemplatehistory"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/entx/history"
 )
 
-// ScheduledJob is the model entity for the ScheduledJob schema.
-type ScheduledJob struct {
+// JobTemplateHistory is the model entity for the JobTemplateHistory schema.
+type JobTemplateHistory struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID string `json:"id,omitempty"`
+	// HistoryTime holds the value of the "history_time" field.
+	HistoryTime time.Time `json:"history_time,omitempty"`
+	// Ref holds the value of the "ref" field.
+	Ref string `json:"ref,omitempty"`
+	// Operation holds the value of the "operation" field.
+	Operation history.OpType `json:"operation,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -54,49 +60,26 @@ type ScheduledJob struct {
 	// the configuration to run this job
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
 	// cron syntax
-	Cron *models.Cron `json:"cron,omitempty"`
-	// Edges holds the relations/edges for other nodes in the graph.
-	// The values are being populated by the ScheduledJobQuery when eager-loading is set.
-	Edges        ScheduledJobEdges `json:"edges"`
+	Cron         *models.Cron `json:"cron,omitempty"`
 	selectValues sql.SelectValues
 }
 
-// ScheduledJobEdges holds the relations/edges for other nodes in the graph.
-type ScheduledJobEdges struct {
-	// Owner holds the value of the owner edge.
-	Owner *Organization `json:"owner,omitempty"`
-	// loadedTypes holds the information for reporting if a
-	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
-	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
-}
-
-// OwnerOrErr returns the Owner value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e ScheduledJobEdges) OwnerOrErr() (*Organization, error) {
-	if e.Owner != nil {
-		return e.Owner, nil
-	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: organization.Label}
-	}
-	return nil, &NotLoadedError{edge: "owner"}
-}
-
 // scanValues returns the types for scanning values from sql.Rows.
-func (*ScheduledJob) scanValues(columns []string) ([]any, error) {
+func (*JobTemplateHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case scheduledjob.FieldCron:
+		case jobtemplatehistory.FieldCron:
 			values[i] = &sql.NullScanner{S: new(models.Cron)}
-		case scheduledjob.FieldTags, scheduledjob.FieldConfiguration:
+		case jobtemplatehistory.FieldTags, jobtemplatehistory.FieldConfiguration:
 			values[i] = new([]byte)
-		case scheduledjob.FieldSystemOwned:
+		case jobtemplatehistory.FieldOperation:
+			values[i] = new(history.OpType)
+		case jobtemplatehistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case scheduledjob.FieldID, scheduledjob.FieldCreatedBy, scheduledjob.FieldUpdatedBy, scheduledjob.FieldDeletedBy, scheduledjob.FieldDisplayID, scheduledjob.FieldOwnerID, scheduledjob.FieldTitle, scheduledjob.FieldDescription, scheduledjob.FieldPlatform, scheduledjob.FieldWindmillPath, scheduledjob.FieldDownloadURL:
+		case jobtemplatehistory.FieldID, jobtemplatehistory.FieldRef, jobtemplatehistory.FieldCreatedBy, jobtemplatehistory.FieldUpdatedBy, jobtemplatehistory.FieldDeletedBy, jobtemplatehistory.FieldDisplayID, jobtemplatehistory.FieldOwnerID, jobtemplatehistory.FieldTitle, jobtemplatehistory.FieldDescription, jobtemplatehistory.FieldPlatform, jobtemplatehistory.FieldWindmillPath, jobtemplatehistory.FieldDownloadURL:
 			values[i] = new(sql.NullString)
-		case scheduledjob.FieldCreatedAt, scheduledjob.FieldUpdatedAt, scheduledjob.FieldDeletedAt:
+		case jobtemplatehistory.FieldHistoryTime, jobtemplatehistory.FieldCreatedAt, jobtemplatehistory.FieldUpdatedAt, jobtemplatehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -106,216 +89,238 @@ func (*ScheduledJob) scanValues(columns []string) ([]any, error) {
 }
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
-// to the ScheduledJob fields.
-func (sj *ScheduledJob) assignValues(columns []string, values []any) error {
+// to the JobTemplateHistory fields.
+func (jth *JobTemplateHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
 	for i := range columns {
 		switch columns[i] {
-		case scheduledjob.FieldID:
+		case jobtemplatehistory.FieldID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value.Valid {
-				sj.ID = value.String
+				jth.ID = value.String
 			}
-		case scheduledjob.FieldCreatedAt:
+		case jobtemplatehistory.FieldHistoryTime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field history_time", values[i])
+			} else if value.Valid {
+				jth.HistoryTime = value.Time
+			}
+		case jobtemplatehistory.FieldRef:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field ref", values[i])
+			} else if value.Valid {
+				jth.Ref = value.String
+			}
+		case jobtemplatehistory.FieldOperation:
+			if value, ok := values[i].(*history.OpType); !ok {
+				return fmt.Errorf("unexpected type %T for field operation", values[i])
+			} else if value != nil {
+				jth.Operation = *value
+			}
+		case jobtemplatehistory.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				sj.CreatedAt = value.Time
+				jth.CreatedAt = value.Time
 			}
-		case scheduledjob.FieldUpdatedAt:
+		case jobtemplatehistory.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				sj.UpdatedAt = value.Time
+				jth.UpdatedAt = value.Time
 			}
-		case scheduledjob.FieldCreatedBy:
+		case jobtemplatehistory.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
 			} else if value.Valid {
-				sj.CreatedBy = value.String
+				jth.CreatedBy = value.String
 			}
-		case scheduledjob.FieldUpdatedBy:
+		case jobtemplatehistory.FieldUpdatedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
-				sj.UpdatedBy = value.String
+				jth.UpdatedBy = value.String
 			}
-		case scheduledjob.FieldDeletedAt:
+		case jobtemplatehistory.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				sj.DeletedAt = value.Time
+				jth.DeletedAt = value.Time
 			}
-		case scheduledjob.FieldDeletedBy:
+		case jobtemplatehistory.FieldDeletedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
-				sj.DeletedBy = value.String
+				jth.DeletedBy = value.String
 			}
-		case scheduledjob.FieldDisplayID:
+		case jobtemplatehistory.FieldDisplayID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_id", values[i])
 			} else if value.Valid {
-				sj.DisplayID = value.String
+				jth.DisplayID = value.String
 			}
-		case scheduledjob.FieldTags:
+		case jobtemplatehistory.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field tags", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &sj.Tags); err != nil {
+				if err := json.Unmarshal(*value, &jth.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
-		case scheduledjob.FieldOwnerID:
+		case jobtemplatehistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
-				sj.OwnerID = value.String
+				jth.OwnerID = value.String
 			}
-		case scheduledjob.FieldSystemOwned:
+		case jobtemplatehistory.FieldSystemOwned:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
 			} else if value.Valid {
-				sj.SystemOwned = value.Bool
+				jth.SystemOwned = value.Bool
 			}
-		case scheduledjob.FieldTitle:
+		case jobtemplatehistory.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field title", values[i])
 			} else if value.Valid {
-				sj.Title = value.String
+				jth.Title = value.String
 			}
-		case scheduledjob.FieldDescription:
+		case jobtemplatehistory.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				sj.Description = value.String
+				jth.Description = value.String
 			}
-		case scheduledjob.FieldPlatform:
+		case jobtemplatehistory.FieldPlatform:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field platform", values[i])
 			} else if value.Valid {
-				sj.Platform = enums.JobPlatformType(value.String)
+				jth.Platform = enums.JobPlatformType(value.String)
 			}
-		case scheduledjob.FieldWindmillPath:
+		case jobtemplatehistory.FieldWindmillPath:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field windmill_path", values[i])
 			} else if value.Valid {
-				sj.WindmillPath = value.String
+				jth.WindmillPath = value.String
 			}
-		case scheduledjob.FieldDownloadURL:
+		case jobtemplatehistory.FieldDownloadURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field download_url", values[i])
 			} else if value.Valid {
-				sj.DownloadURL = value.String
+				jth.DownloadURL = value.String
 			}
-		case scheduledjob.FieldConfiguration:
+		case jobtemplatehistory.FieldConfiguration:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field configuration", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &sj.Configuration); err != nil {
+				if err := json.Unmarshal(*value, &jth.Configuration); err != nil {
 					return fmt.Errorf("unmarshal field configuration: %w", err)
 				}
 			}
-		case scheduledjob.FieldCron:
+		case jobtemplatehistory.FieldCron:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field cron", values[i])
 			} else if value.Valid {
-				sj.Cron = new(models.Cron)
-				*sj.Cron = *value.S.(*models.Cron)
+				jth.Cron = new(models.Cron)
+				*jth.Cron = *value.S.(*models.Cron)
 			}
 		default:
-			sj.selectValues.Set(columns[i], values[i])
+			jth.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
 }
 
-// Value returns the ent.Value that was dynamically selected and assigned to the ScheduledJob.
+// Value returns the ent.Value that was dynamically selected and assigned to the JobTemplateHistory.
 // This includes values selected through modifiers, order, etc.
-func (sj *ScheduledJob) Value(name string) (ent.Value, error) {
-	return sj.selectValues.Get(name)
+func (jth *JobTemplateHistory) Value(name string) (ent.Value, error) {
+	return jth.selectValues.Get(name)
 }
 
-// QueryOwner queries the "owner" edge of the ScheduledJob entity.
-func (sj *ScheduledJob) QueryOwner() *OrganizationQuery {
-	return NewScheduledJobClient(sj.config).QueryOwner(sj)
-}
-
-// Update returns a builder for updating this ScheduledJob.
-// Note that you need to call ScheduledJob.Unwrap() before calling this method if this ScheduledJob
+// Update returns a builder for updating this JobTemplateHistory.
+// Note that you need to call JobTemplateHistory.Unwrap() before calling this method if this JobTemplateHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (sj *ScheduledJob) Update() *ScheduledJobUpdateOne {
-	return NewScheduledJobClient(sj.config).UpdateOne(sj)
+func (jth *JobTemplateHistory) Update() *JobTemplateHistoryUpdateOne {
+	return NewJobTemplateHistoryClient(jth.config).UpdateOne(jth)
 }
 
-// Unwrap unwraps the ScheduledJob entity that was returned from a transaction after it was closed,
+// Unwrap unwraps the JobTemplateHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (sj *ScheduledJob) Unwrap() *ScheduledJob {
-	_tx, ok := sj.config.driver.(*txDriver)
+func (jth *JobTemplateHistory) Unwrap() *JobTemplateHistory {
+	_tx, ok := jth.config.driver.(*txDriver)
 	if !ok {
-		panic("generated: ScheduledJob is not a transactional entity")
+		panic("generated: JobTemplateHistory is not a transactional entity")
 	}
-	sj.config.driver = _tx.drv
-	return sj
+	jth.config.driver = _tx.drv
+	return jth
 }
 
 // String implements the fmt.Stringer.
-func (sj *ScheduledJob) String() string {
+func (jth *JobTemplateHistory) String() string {
 	var builder strings.Builder
-	builder.WriteString("ScheduledJob(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", sj.ID))
+	builder.WriteString("JobTemplateHistory(")
+	builder.WriteString(fmt.Sprintf("id=%v, ", jth.ID))
+	builder.WriteString("history_time=")
+	builder.WriteString(jth.HistoryTime.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("ref=")
+	builder.WriteString(jth.Ref)
+	builder.WriteString(", ")
+	builder.WriteString("operation=")
+	builder.WriteString(fmt.Sprintf("%v", jth.Operation))
+	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(sj.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(jth.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(sj.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(jth.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
-	builder.WriteString(sj.CreatedBy)
+	builder.WriteString(jth.CreatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
-	builder.WriteString(sj.UpdatedBy)
+	builder.WriteString(jth.UpdatedBy)
 	builder.WriteString(", ")
 	builder.WriteString("deleted_at=")
-	builder.WriteString(sj.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(jth.DeletedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("deleted_by=")
-	builder.WriteString(sj.DeletedBy)
+	builder.WriteString(jth.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("display_id=")
-	builder.WriteString(sj.DisplayID)
+	builder.WriteString(jth.DisplayID)
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", sj.Tags))
+	builder.WriteString(fmt.Sprintf("%v", jth.Tags))
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
-	builder.WriteString(sj.OwnerID)
+	builder.WriteString(jth.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("system_owned=")
-	builder.WriteString(fmt.Sprintf("%v", sj.SystemOwned))
+	builder.WriteString(fmt.Sprintf("%v", jth.SystemOwned))
 	builder.WriteString(", ")
 	builder.WriteString("title=")
-	builder.WriteString(sj.Title)
+	builder.WriteString(jth.Title)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(sj.Description)
+	builder.WriteString(jth.Description)
 	builder.WriteString(", ")
 	builder.WriteString("platform=")
-	builder.WriteString(fmt.Sprintf("%v", sj.Platform))
+	builder.WriteString(fmt.Sprintf("%v", jth.Platform))
 	builder.WriteString(", ")
 	builder.WriteString("windmill_path=")
-	builder.WriteString(sj.WindmillPath)
+	builder.WriteString(jth.WindmillPath)
 	builder.WriteString(", ")
 	builder.WriteString("download_url=")
-	builder.WriteString(sj.DownloadURL)
+	builder.WriteString(jth.DownloadURL)
 	builder.WriteString(", ")
 	builder.WriteString("configuration=")
-	builder.WriteString(fmt.Sprintf("%v", sj.Configuration))
+	builder.WriteString(fmt.Sprintf("%v", jth.Configuration))
 	builder.WriteString(", ")
-	if v := sj.Cron; v != nil {
+	if v := jth.Cron; v != nil {
 		builder.WriteString("cron=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
@@ -323,5 +328,5 @@ func (sj *ScheduledJob) String() string {
 	return builder.String()
 }
 
-// ScheduledJobs is a parsable slice of ScheduledJob.
-type ScheduledJobs []*ScheduledJob
+// JobTemplateHistories is a parsable slice of JobTemplateHistory.
+type JobTemplateHistories []*JobTemplateHistory

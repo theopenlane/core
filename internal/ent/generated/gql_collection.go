@@ -58,6 +58,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
+	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
+	"github.com/theopenlane/core/internal/ent/generated/jobtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
@@ -86,8 +88,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scanhistory"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
@@ -6855,16 +6855,16 @@ func (csj *ControlScheduledJobQuery) collectField(ctx context.Context, oneNode b
 				fieldSeen[controlscheduledjob.FieldOwnerID] = struct{}{}
 			}
 
-		case "job":
+		case "jobTemplate":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ScheduledJobClient{config: csj.config}).Query()
+				query = (&JobTemplateClient{config: csj.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, scheduledjobImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, jobtemplateImplementors)...); err != nil {
 				return err
 			}
-			csj.withJob = query
+			csj.withJobTemplate = query
 			if _, ok := fieldSeen[controlscheduledjob.FieldJobID]; !ok {
 				selectedFields = append(selectedFields, controlscheduledjob.FieldJobID)
 				fieldSeen[controlscheduledjob.FieldJobID] = struct{}{}
@@ -20902,6 +20902,360 @@ func newJobRunnerTokenPaginateArgs(rv map[string]any) *jobrunnertokenPaginateArg
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (jt *JobTemplateQuery) CollectFields(ctx context.Context, satisfies ...string) (*JobTemplateQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return jt, nil
+	}
+	if err := jt.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return jt, nil
+}
+
+func (jt *JobTemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(jobtemplate.Columns))
+		selectedFields = []string{jobtemplate.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: jt.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			jt.withOwner = query
+			if _, ok := fieldSeen[jobtemplate.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, jobtemplate.FieldOwnerID)
+				fieldSeen[jobtemplate.FieldOwnerID] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[jobtemplate.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, jobtemplate.FieldCreatedAt)
+				fieldSeen[jobtemplate.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[jobtemplate.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, jobtemplate.FieldUpdatedAt)
+				fieldSeen[jobtemplate.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[jobtemplate.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, jobtemplate.FieldCreatedBy)
+				fieldSeen[jobtemplate.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[jobtemplate.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, jobtemplate.FieldUpdatedBy)
+				fieldSeen[jobtemplate.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[jobtemplate.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, jobtemplate.FieldDisplayID)
+				fieldSeen[jobtemplate.FieldDisplayID] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[jobtemplate.FieldTags]; !ok {
+				selectedFields = append(selectedFields, jobtemplate.FieldTags)
+				fieldSeen[jobtemplate.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[jobtemplate.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, jobtemplate.FieldOwnerID)
+				fieldSeen[jobtemplate.FieldOwnerID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[jobtemplate.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, jobtemplate.FieldSystemOwned)
+				fieldSeen[jobtemplate.FieldSystemOwned] = struct{}{}
+			}
+		case "title":
+			if _, ok := fieldSeen[jobtemplate.FieldTitle]; !ok {
+				selectedFields = append(selectedFields, jobtemplate.FieldTitle)
+				fieldSeen[jobtemplate.FieldTitle] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[jobtemplate.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, jobtemplate.FieldDescription)
+				fieldSeen[jobtemplate.FieldDescription] = struct{}{}
+			}
+		case "platform":
+			if _, ok := fieldSeen[jobtemplate.FieldPlatform]; !ok {
+				selectedFields = append(selectedFields, jobtemplate.FieldPlatform)
+				fieldSeen[jobtemplate.FieldPlatform] = struct{}{}
+			}
+		case "windmillPath":
+			if _, ok := fieldSeen[jobtemplate.FieldWindmillPath]; !ok {
+				selectedFields = append(selectedFields, jobtemplate.FieldWindmillPath)
+				fieldSeen[jobtemplate.FieldWindmillPath] = struct{}{}
+			}
+		case "downloadURL":
+			if _, ok := fieldSeen[jobtemplate.FieldDownloadURL]; !ok {
+				selectedFields = append(selectedFields, jobtemplate.FieldDownloadURL)
+				fieldSeen[jobtemplate.FieldDownloadURL] = struct{}{}
+			}
+		case "configuration":
+			if _, ok := fieldSeen[jobtemplate.FieldConfiguration]; !ok {
+				selectedFields = append(selectedFields, jobtemplate.FieldConfiguration)
+				fieldSeen[jobtemplate.FieldConfiguration] = struct{}{}
+			}
+		case "cron":
+			if _, ok := fieldSeen[jobtemplate.FieldCron]; !ok {
+				selectedFields = append(selectedFields, jobtemplate.FieldCron)
+				fieldSeen[jobtemplate.FieldCron] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		jt.Select(selectedFields...)
+	}
+	return nil
+}
+
+type jobtemplatePaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []JobTemplatePaginateOption
+}
+
+func newJobTemplatePaginateArgs(rv map[string]any) *jobtemplatePaginateArgs {
+	args := &jobtemplatePaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*JobTemplateOrder:
+			args.opts = append(args.opts, WithJobTemplateOrder(v))
+		case []any:
+			var orders []*JobTemplateOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &JobTemplateOrder{Field: &JobTemplateOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithJobTemplateOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*JobTemplateWhereInput); ok {
+		args.opts = append(args.opts, WithJobTemplateFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (jth *JobTemplateHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*JobTemplateHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return jth, nil
+	}
+	if err := jth.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return jth, nil
+}
+
+func (jth *JobTemplateHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(jobtemplatehistory.Columns))
+		selectedFields = []string{jobtemplatehistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[jobtemplatehistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, jobtemplatehistory.FieldHistoryTime)
+				fieldSeen[jobtemplatehistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[jobtemplatehistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, jobtemplatehistory.FieldRef)
+				fieldSeen[jobtemplatehistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[jobtemplatehistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, jobtemplatehistory.FieldOperation)
+				fieldSeen[jobtemplatehistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[jobtemplatehistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, jobtemplatehistory.FieldCreatedAt)
+				fieldSeen[jobtemplatehistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[jobtemplatehistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, jobtemplatehistory.FieldUpdatedAt)
+				fieldSeen[jobtemplatehistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[jobtemplatehistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, jobtemplatehistory.FieldCreatedBy)
+				fieldSeen[jobtemplatehistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[jobtemplatehistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, jobtemplatehistory.FieldUpdatedBy)
+				fieldSeen[jobtemplatehistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[jobtemplatehistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, jobtemplatehistory.FieldDisplayID)
+				fieldSeen[jobtemplatehistory.FieldDisplayID] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[jobtemplatehistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, jobtemplatehistory.FieldTags)
+				fieldSeen[jobtemplatehistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[jobtemplatehistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, jobtemplatehistory.FieldOwnerID)
+				fieldSeen[jobtemplatehistory.FieldOwnerID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[jobtemplatehistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, jobtemplatehistory.FieldSystemOwned)
+				fieldSeen[jobtemplatehistory.FieldSystemOwned] = struct{}{}
+			}
+		case "title":
+			if _, ok := fieldSeen[jobtemplatehistory.FieldTitle]; !ok {
+				selectedFields = append(selectedFields, jobtemplatehistory.FieldTitle)
+				fieldSeen[jobtemplatehistory.FieldTitle] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[jobtemplatehistory.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, jobtemplatehistory.FieldDescription)
+				fieldSeen[jobtemplatehistory.FieldDescription] = struct{}{}
+			}
+		case "platform":
+			if _, ok := fieldSeen[jobtemplatehistory.FieldPlatform]; !ok {
+				selectedFields = append(selectedFields, jobtemplatehistory.FieldPlatform)
+				fieldSeen[jobtemplatehistory.FieldPlatform] = struct{}{}
+			}
+		case "windmillPath":
+			if _, ok := fieldSeen[jobtemplatehistory.FieldWindmillPath]; !ok {
+				selectedFields = append(selectedFields, jobtemplatehistory.FieldWindmillPath)
+				fieldSeen[jobtemplatehistory.FieldWindmillPath] = struct{}{}
+			}
+		case "downloadURL":
+			if _, ok := fieldSeen[jobtemplatehistory.FieldDownloadURL]; !ok {
+				selectedFields = append(selectedFields, jobtemplatehistory.FieldDownloadURL)
+				fieldSeen[jobtemplatehistory.FieldDownloadURL] = struct{}{}
+			}
+		case "configuration":
+			if _, ok := fieldSeen[jobtemplatehistory.FieldConfiguration]; !ok {
+				selectedFields = append(selectedFields, jobtemplatehistory.FieldConfiguration)
+				fieldSeen[jobtemplatehistory.FieldConfiguration] = struct{}{}
+			}
+		case "cron":
+			if _, ok := fieldSeen[jobtemplatehistory.FieldCron]; !ok {
+				selectedFields = append(selectedFields, jobtemplatehistory.FieldCron)
+				fieldSeen[jobtemplatehistory.FieldCron] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		jth.Select(selectedFields...)
+	}
+	return nil
+}
+
+type jobtemplatehistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []JobTemplateHistoryPaginateOption
+}
+
+func newJobTemplateHistoryPaginateArgs(rv map[string]any) *jobtemplatehistoryPaginateArgs {
+	args := &jobtemplatehistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &JobTemplateHistoryOrder{Field: &JobTemplateHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithJobTemplateHistoryOrder(order))
+			}
+		case *JobTemplateHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithJobTemplateHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*JobTemplateHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithJobTemplateHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (md *MappableDomainQuery) CollectFields(ctx context.Context, satisfies ...string) (*MappableDomainQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
@@ -28952,17 +29306,17 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
-		case "jobs":
+		case "jobTemplates":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ScheduledJobClient{config: o.config}).Query()
+				query = (&JobTemplateClient{config: o.config}).Query()
 			)
-			args := newScheduledJobPaginateArgs(fieldArgs(ctx, new(ScheduledJobWhereInput), path...))
+			args := newJobTemplatePaginateArgs(fieldArgs(ctx, new(JobTemplateWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
 				return fmt.Errorf("validate first and last in path %q: %w", path, err)
 			}
-			pager, err := newScheduledJobPager(args.opts, args.last != nil)
+			pager, err := newJobTemplatePager(args.opts, args.last != nil)
 			if err != nil {
 				return fmt.Errorf("create new pager in path %q: %w", path, err)
 			}
@@ -28984,9 +29338,9 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(organization.JobsColumn), ids...))
+							s.Where(sql.InValues(s.C(organization.JobTemplatesColumn), ids...))
 						})
-						if err := query.GroupBy(organization.JobsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.GroupBy(organization.JobTemplatesColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -29005,7 +29359,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				} else {
 					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
-							n := len(nodes[i].Edges.Jobs)
+							n := len(nodes[i].Edges.JobTemplates)
 							if nodes[i].Edges.totalCount[54] == nil {
 								nodes[i].Edges.totalCount[54] = make(map[string]int)
 							}
@@ -29023,7 +29377,7 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			}
 			path = append(path, edgesField, nodeField)
 			if field := collectedField(ctx, path...); field != nil {
-				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, scheduledjobImplementors)...); err != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, jobtemplateImplementors)...); err != nil {
 					return err
 				}
 			}
@@ -29031,13 +29385,13 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(organization.JobsColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(organization.JobTemplatesColumn, limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
 				query = pager.applyOrder(query)
 			}
-			o.WithNamedJobs(alias, func(wq *ScheduledJobQuery) {
+			o.WithNamedJobTemplates(alias, func(wq *JobTemplateQuery) {
 				*wq = *query
 			})
 
@@ -36992,360 +37346,6 @@ func newScanHistoryPaginateArgs(rv map[string]any) *scanhistoryPaginateArgs {
 	}
 	if v, ok := rv[whereField].(*ScanHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithScanHistoryFilter(v.Filter))
-	}
-	return args
-}
-
-// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (sj *ScheduledJobQuery) CollectFields(ctx context.Context, satisfies ...string) (*ScheduledJobQuery, error) {
-	fc := graphql.GetFieldContext(ctx)
-	if fc == nil {
-		return sj, nil
-	}
-	if err := sj.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
-		return nil, err
-	}
-	return sj, nil
-}
-
-func (sj *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
-	path = append([]string(nil), path...)
-	var (
-		unknownSeen    bool
-		fieldSeen      = make(map[string]struct{}, len(scheduledjob.Columns))
-		selectedFields = []string{scheduledjob.FieldID}
-	)
-	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
-		switch field.Name {
-
-		case "owner":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&OrganizationClient{config: sj.config}).Query()
-			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
-				return err
-			}
-			sj.withOwner = query
-			if _, ok := fieldSeen[scheduledjob.FieldOwnerID]; !ok {
-				selectedFields = append(selectedFields, scheduledjob.FieldOwnerID)
-				fieldSeen[scheduledjob.FieldOwnerID] = struct{}{}
-			}
-		case "createdAt":
-			if _, ok := fieldSeen[scheduledjob.FieldCreatedAt]; !ok {
-				selectedFields = append(selectedFields, scheduledjob.FieldCreatedAt)
-				fieldSeen[scheduledjob.FieldCreatedAt] = struct{}{}
-			}
-		case "updatedAt":
-			if _, ok := fieldSeen[scheduledjob.FieldUpdatedAt]; !ok {
-				selectedFields = append(selectedFields, scheduledjob.FieldUpdatedAt)
-				fieldSeen[scheduledjob.FieldUpdatedAt] = struct{}{}
-			}
-		case "createdBy":
-			if _, ok := fieldSeen[scheduledjob.FieldCreatedBy]; !ok {
-				selectedFields = append(selectedFields, scheduledjob.FieldCreatedBy)
-				fieldSeen[scheduledjob.FieldCreatedBy] = struct{}{}
-			}
-		case "updatedBy":
-			if _, ok := fieldSeen[scheduledjob.FieldUpdatedBy]; !ok {
-				selectedFields = append(selectedFields, scheduledjob.FieldUpdatedBy)
-				fieldSeen[scheduledjob.FieldUpdatedBy] = struct{}{}
-			}
-		case "displayID":
-			if _, ok := fieldSeen[scheduledjob.FieldDisplayID]; !ok {
-				selectedFields = append(selectedFields, scheduledjob.FieldDisplayID)
-				fieldSeen[scheduledjob.FieldDisplayID] = struct{}{}
-			}
-		case "tags":
-			if _, ok := fieldSeen[scheduledjob.FieldTags]; !ok {
-				selectedFields = append(selectedFields, scheduledjob.FieldTags)
-				fieldSeen[scheduledjob.FieldTags] = struct{}{}
-			}
-		case "ownerID":
-			if _, ok := fieldSeen[scheduledjob.FieldOwnerID]; !ok {
-				selectedFields = append(selectedFields, scheduledjob.FieldOwnerID)
-				fieldSeen[scheduledjob.FieldOwnerID] = struct{}{}
-			}
-		case "systemOwned":
-			if _, ok := fieldSeen[scheduledjob.FieldSystemOwned]; !ok {
-				selectedFields = append(selectedFields, scheduledjob.FieldSystemOwned)
-				fieldSeen[scheduledjob.FieldSystemOwned] = struct{}{}
-			}
-		case "title":
-			if _, ok := fieldSeen[scheduledjob.FieldTitle]; !ok {
-				selectedFields = append(selectedFields, scheduledjob.FieldTitle)
-				fieldSeen[scheduledjob.FieldTitle] = struct{}{}
-			}
-		case "description":
-			if _, ok := fieldSeen[scheduledjob.FieldDescription]; !ok {
-				selectedFields = append(selectedFields, scheduledjob.FieldDescription)
-				fieldSeen[scheduledjob.FieldDescription] = struct{}{}
-			}
-		case "platform":
-			if _, ok := fieldSeen[scheduledjob.FieldPlatform]; !ok {
-				selectedFields = append(selectedFields, scheduledjob.FieldPlatform)
-				fieldSeen[scheduledjob.FieldPlatform] = struct{}{}
-			}
-		case "windmillPath":
-			if _, ok := fieldSeen[scheduledjob.FieldWindmillPath]; !ok {
-				selectedFields = append(selectedFields, scheduledjob.FieldWindmillPath)
-				fieldSeen[scheduledjob.FieldWindmillPath] = struct{}{}
-			}
-		case "downloadURL":
-			if _, ok := fieldSeen[scheduledjob.FieldDownloadURL]; !ok {
-				selectedFields = append(selectedFields, scheduledjob.FieldDownloadURL)
-				fieldSeen[scheduledjob.FieldDownloadURL] = struct{}{}
-			}
-		case "configuration":
-			if _, ok := fieldSeen[scheduledjob.FieldConfiguration]; !ok {
-				selectedFields = append(selectedFields, scheduledjob.FieldConfiguration)
-				fieldSeen[scheduledjob.FieldConfiguration] = struct{}{}
-			}
-		case "cron":
-			if _, ok := fieldSeen[scheduledjob.FieldCron]; !ok {
-				selectedFields = append(selectedFields, scheduledjob.FieldCron)
-				fieldSeen[scheduledjob.FieldCron] = struct{}{}
-			}
-		case "id":
-		case "__typename":
-		default:
-			unknownSeen = true
-		}
-	}
-	if !unknownSeen {
-		sj.Select(selectedFields...)
-	}
-	return nil
-}
-
-type scheduledjobPaginateArgs struct {
-	first, last   *int
-	after, before *Cursor
-	opts          []ScheduledJobPaginateOption
-}
-
-func newScheduledJobPaginateArgs(rv map[string]any) *scheduledjobPaginateArgs {
-	args := &scheduledjobPaginateArgs{}
-	if rv == nil {
-		return args
-	}
-	if v := rv[firstField]; v != nil {
-		args.first = v.(*int)
-	}
-	if v := rv[lastField]; v != nil {
-		args.last = v.(*int)
-	}
-	if v := rv[afterField]; v != nil {
-		args.after = v.(*Cursor)
-	}
-	if v := rv[beforeField]; v != nil {
-		args.before = v.(*Cursor)
-	}
-	if v, ok := rv[orderByField]; ok {
-		switch v := v.(type) {
-		case []*ScheduledJobOrder:
-			args.opts = append(args.opts, WithScheduledJobOrder(v))
-		case []any:
-			var orders []*ScheduledJobOrder
-			for i := range v {
-				mv, ok := v[i].(map[string]any)
-				if !ok {
-					continue
-				}
-				var (
-					err1, err2 error
-					order      = &ScheduledJobOrder{Field: &ScheduledJobOrderField{}, Direction: entgql.OrderDirectionAsc}
-				)
-				if d, ok := mv[directionField]; ok {
-					err1 = order.Direction.UnmarshalGQL(d)
-				}
-				if f, ok := mv[fieldField]; ok {
-					err2 = order.Field.UnmarshalGQL(f)
-				}
-				if err1 == nil && err2 == nil {
-					orders = append(orders, order)
-				}
-			}
-			args.opts = append(args.opts, WithScheduledJobOrder(orders))
-		}
-	}
-	if v, ok := rv[whereField].(*ScheduledJobWhereInput); ok {
-		args.opts = append(args.opts, WithScheduledJobFilter(v.Filter))
-	}
-	return args
-}
-
-// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (sjh *ScheduledJobHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ScheduledJobHistoryQuery, error) {
-	fc := graphql.GetFieldContext(ctx)
-	if fc == nil {
-		return sjh, nil
-	}
-	if err := sjh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
-		return nil, err
-	}
-	return sjh, nil
-}
-
-func (sjh *ScheduledJobHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
-	path = append([]string(nil), path...)
-	var (
-		unknownSeen    bool
-		fieldSeen      = make(map[string]struct{}, len(scheduledjobhistory.Columns))
-		selectedFields = []string{scheduledjobhistory.FieldID}
-	)
-	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
-		switch field.Name {
-		case "historyTime":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldHistoryTime]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldHistoryTime)
-				fieldSeen[scheduledjobhistory.FieldHistoryTime] = struct{}{}
-			}
-		case "ref":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldRef]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldRef)
-				fieldSeen[scheduledjobhistory.FieldRef] = struct{}{}
-			}
-		case "operation":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldOperation]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldOperation)
-				fieldSeen[scheduledjobhistory.FieldOperation] = struct{}{}
-			}
-		case "createdAt":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldCreatedAt]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldCreatedAt)
-				fieldSeen[scheduledjobhistory.FieldCreatedAt] = struct{}{}
-			}
-		case "updatedAt":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldUpdatedAt]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldUpdatedAt)
-				fieldSeen[scheduledjobhistory.FieldUpdatedAt] = struct{}{}
-			}
-		case "createdBy":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldCreatedBy]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldCreatedBy)
-				fieldSeen[scheduledjobhistory.FieldCreatedBy] = struct{}{}
-			}
-		case "updatedBy":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldUpdatedBy]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldUpdatedBy)
-				fieldSeen[scheduledjobhistory.FieldUpdatedBy] = struct{}{}
-			}
-		case "displayID":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldDisplayID]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldDisplayID)
-				fieldSeen[scheduledjobhistory.FieldDisplayID] = struct{}{}
-			}
-		case "tags":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldTags]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldTags)
-				fieldSeen[scheduledjobhistory.FieldTags] = struct{}{}
-			}
-		case "ownerID":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldOwnerID]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldOwnerID)
-				fieldSeen[scheduledjobhistory.FieldOwnerID] = struct{}{}
-			}
-		case "systemOwned":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldSystemOwned]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldSystemOwned)
-				fieldSeen[scheduledjobhistory.FieldSystemOwned] = struct{}{}
-			}
-		case "title":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldTitle]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldTitle)
-				fieldSeen[scheduledjobhistory.FieldTitle] = struct{}{}
-			}
-		case "description":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldDescription]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldDescription)
-				fieldSeen[scheduledjobhistory.FieldDescription] = struct{}{}
-			}
-		case "platform":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldPlatform]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldPlatform)
-				fieldSeen[scheduledjobhistory.FieldPlatform] = struct{}{}
-			}
-		case "windmillPath":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldWindmillPath]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldWindmillPath)
-				fieldSeen[scheduledjobhistory.FieldWindmillPath] = struct{}{}
-			}
-		case "downloadURL":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldDownloadURL]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldDownloadURL)
-				fieldSeen[scheduledjobhistory.FieldDownloadURL] = struct{}{}
-			}
-		case "configuration":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldConfiguration]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldConfiguration)
-				fieldSeen[scheduledjobhistory.FieldConfiguration] = struct{}{}
-			}
-		case "cron":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldCron]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldCron)
-				fieldSeen[scheduledjobhistory.FieldCron] = struct{}{}
-			}
-		case "id":
-		case "__typename":
-		default:
-			unknownSeen = true
-		}
-	}
-	if !unknownSeen {
-		sjh.Select(selectedFields...)
-	}
-	return nil
-}
-
-type scheduledjobhistoryPaginateArgs struct {
-	first, last   *int
-	after, before *Cursor
-	opts          []ScheduledJobHistoryPaginateOption
-}
-
-func newScheduledJobHistoryPaginateArgs(rv map[string]any) *scheduledjobhistoryPaginateArgs {
-	args := &scheduledjobhistoryPaginateArgs{}
-	if rv == nil {
-		return args
-	}
-	if v := rv[firstField]; v != nil {
-		args.first = v.(*int)
-	}
-	if v := rv[lastField]; v != nil {
-		args.last = v.(*int)
-	}
-	if v := rv[afterField]; v != nil {
-		args.after = v.(*Cursor)
-	}
-	if v := rv[beforeField]; v != nil {
-		args.before = v.(*Cursor)
-	}
-	if v, ok := rv[orderByField]; ok {
-		switch v := v.(type) {
-		case map[string]any:
-			var (
-				err1, err2 error
-				order      = &ScheduledJobHistoryOrder{Field: &ScheduledJobHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
-			)
-			if d, ok := v[directionField]; ok {
-				err1 = order.Direction.UnmarshalGQL(d)
-			}
-			if f, ok := v[fieldField]; ok {
-				err2 = order.Field.UnmarshalGQL(f)
-			}
-			if err1 == nil && err2 == nil {
-				args.opts = append(args.opts, WithScheduledJobHistoryOrder(order))
-			}
-		case *ScheduledJobHistoryOrder:
-			if v != nil {
-				args.opts = append(args.opts, WithScheduledJobHistoryOrder(v))
-			}
-		}
-	}
-	if v, ok := rv[whereField].(*ScheduledJobHistoryWhereInput); ok {
-		args.opts = append(args.opts, WithScheduledJobHistoryFilter(v.Filter))
 	}
 	return args
 }

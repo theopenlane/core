@@ -39,8 +39,8 @@ const (
 	FieldJobRunnerID = "job_runner_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
-	// EdgeJob holds the string denoting the job edge name in mutations.
-	EdgeJob = "job"
+	// EdgeJobTemplate holds the string denoting the job_template edge name in mutations.
+	EdgeJobTemplate = "job_template"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
@@ -56,13 +56,13 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
-	// JobTable is the table that holds the job relation/edge.
-	JobTable = "control_scheduled_jobs"
-	// JobInverseTable is the table name for the ScheduledJob entity.
-	// It exists in this package in order to avoid circular dependency with the "scheduledjob" package.
-	JobInverseTable = "scheduled_jobs"
-	// JobColumn is the table column denoting the job relation/edge.
-	JobColumn = "job_id"
+	// JobTemplateTable is the table that holds the job_template relation/edge.
+	JobTemplateTable = "control_scheduled_jobs"
+	// JobTemplateInverseTable is the table name for the JobTemplate entity.
+	// It exists in this package in order to avoid circular dependency with the "jobtemplate" package.
+	JobTemplateInverseTable = "job_templates"
+	// JobTemplateColumn is the table column denoting the job_template relation/edge.
+	JobTemplateColumn = "job_id"
 	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
 	ControlsTable = "control_scheduled_job_controls"
 	// ControlsInverseTable is the table name for the Control entity.
@@ -203,10 +203,10 @@ func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByJobField orders the results by job field.
-func ByJobField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByJobTemplateField orders the results by job_template field.
+func ByJobTemplateField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newJobStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newJobTemplateStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -251,11 +251,11 @@ func newOwnerStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 	)
 }
-func newJobStep() *sqlgraph.Step {
+func newJobTemplateStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(JobInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, JobTable, JobColumn),
+		sqlgraph.To(JobTemplateInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, JobTemplateTable, JobTemplateColumn),
 	)
 }
 func newControlsStep() *sqlgraph.Step {

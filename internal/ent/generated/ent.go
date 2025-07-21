@@ -61,6 +61,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
+	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
+	"github.com/theopenlane/core/internal/ent/generated/jobtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
@@ -93,8 +95,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/scanhistory"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
@@ -230,6 +230,8 @@ func checkColumn(table, column string) error {
 			jobrunner.Table:                      jobrunner.ValidColumn,
 			jobrunnerregistrationtoken.Table:     jobrunnerregistrationtoken.ValidColumn,
 			jobrunnertoken.Table:                 jobrunnertoken.ValidColumn,
+			jobtemplate.Table:                    jobtemplate.ValidColumn,
+			jobtemplatehistory.Table:             jobtemplatehistory.ValidColumn,
 			mappabledomain.Table:                 mappabledomain.ValidColumn,
 			mappabledomainhistory.Table:          mappabledomainhistory.ValidColumn,
 			mappedcontrol.Table:                  mappedcontrol.ValidColumn,
@@ -262,8 +264,6 @@ func checkColumn(table, column string) error {
 			riskhistory.Table:                    riskhistory.ValidColumn,
 			scan.Table:                           scan.ValidColumn,
 			scanhistory.Table:                    scanhistory.ValidColumn,
-			scheduledjob.Table:                   scheduledjob.ValidColumn,
-			scheduledjobhistory.Table:            scheduledjobhistory.ValidColumn,
 			scheduledjobrun.Table:                scheduledjobrun.ValidColumn,
 			standard.Table:                       standard.ValidColumn,
 			standardhistory.Table:                standardhistory.ValidColumn,

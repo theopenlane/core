@@ -161,8 +161,8 @@ const (
 	EdgeJobRunnerRegistrationTokens = "job_runner_registration_tokens"
 	// EdgeDNSVerifications holds the string denoting the dns_verifications edge name in mutations.
 	EdgeDNSVerifications = "dns_verifications"
-	// EdgeJobs holds the string denoting the jobs edge name in mutations.
-	EdgeJobs = "jobs"
+	// EdgeJobTemplates holds the string denoting the job_templates edge name in mutations.
+	EdgeJobTemplates = "job_templates"
 	// EdgeScheduledJobs holds the string denoting the scheduled_jobs edge name in mutations.
 	EdgeScheduledJobs = "scheduled_jobs"
 	// EdgeJobResults holds the string denoting the job_results edge name in mutations.
@@ -568,13 +568,13 @@ const (
 	DNSVerificationsInverseTable = "dns_verifications"
 	// DNSVerificationsColumn is the table column denoting the dns_verifications relation/edge.
 	DNSVerificationsColumn = "owner_id"
-	// JobsTable is the table that holds the jobs relation/edge.
-	JobsTable = "scheduled_jobs"
-	// JobsInverseTable is the table name for the ScheduledJob entity.
-	// It exists in this package in order to avoid circular dependency with the "scheduledjob" package.
-	JobsInverseTable = "scheduled_jobs"
-	// JobsColumn is the table column denoting the jobs relation/edge.
-	JobsColumn = "owner_id"
+	// JobTemplatesTable is the table that holds the job_templates relation/edge.
+	JobTemplatesTable = "job_templates"
+	// JobTemplatesInverseTable is the table name for the JobTemplate entity.
+	// It exists in this package in order to avoid circular dependency with the "jobtemplate" package.
+	JobTemplatesInverseTable = "job_templates"
+	// JobTemplatesColumn is the table column denoting the job_templates relation/edge.
+	JobTemplatesColumn = "owner_id"
 	// ScheduledJobsTable is the table that holds the scheduled_jobs relation/edge.
 	ScheduledJobsTable = "control_scheduled_jobs"
 	// ScheduledJobsInverseTable is the table name for the ControlScheduledJob entity.
@@ -1583,17 +1583,17 @@ func ByDNSVerifications(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption 
 	}
 }
 
-// ByJobsCount orders the results by jobs count.
-func ByJobsCount(opts ...sql.OrderTermOption) OrderOption {
+// ByJobTemplatesCount orders the results by job_templates count.
+func ByJobTemplatesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newJobsStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newJobTemplatesStep(), opts...)
 	}
 }
 
-// ByJobs orders the results by jobs terms.
-func ByJobs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByJobTemplates orders the results by job_templates terms.
+func ByJobTemplates(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newJobsStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newJobTemplatesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -2121,11 +2121,11 @@ func newDNSVerificationsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, DNSVerificationsTable, DNSVerificationsColumn),
 	)
 }
-func newJobsStep() *sqlgraph.Step {
+func newJobTemplatesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(JobsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, JobsTable, JobsColumn),
+		sqlgraph.To(JobTemplatesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, JobTemplatesTable, JobTemplatesColumn),
 	)
 }
 func newScheduledJobsStep() *sqlgraph.Step {

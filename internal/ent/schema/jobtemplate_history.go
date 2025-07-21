@@ -17,18 +17,18 @@ import (
 	"github.com/theopenlane/entx/history"
 )
 
-// ScheduledJobHistory holds the schema definition for the ScheduledJobHistory entity.
-type ScheduledJobHistory struct {
+// JobTemplateHistory holds the schema definition for the JobTemplateHistory entity.
+type JobTemplateHistory struct {
 	ent.Schema
 }
 
-// Annotations of the ScheduledJobHistory.
-func (ScheduledJobHistory) Annotations() []schema.Annotation {
+// Annotations of the JobTemplateHistory.
+func (JobTemplateHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
 		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
-			Table: "scheduled_job_history",
+			Table: "job_template_history",
 		},
 		history.Annotations{
 			IsHistory: true,
@@ -39,8 +39,8 @@ func (ScheduledJobHistory) Annotations() []schema.Annotation {
 	}
 }
 
-// Fields of the ScheduledJobHistory.
-func (ScheduledJobHistory) Fields() []ent.Field {
+// Fields of the JobTemplateHistory.
+func (JobTemplateHistory) Fields() []ent.Field {
 	historyFields := []ent.Field{
 		field.Time("history_time").
 			Annotations(
@@ -59,7 +59,7 @@ func (ScheduledJobHistory) Fields() []ent.Field {
 	// get the fields from the mixins
 	// we only want to include mixin fields, not edges
 	// so this prevents FKs back to the main tables
-	mixins := ScheduledJob{}.Mixin()
+	mixins := JobTemplate{}.Mixin()
 	for _, mixin := range mixins {
 		for _, field := range mixin.Fields() {
 			// make sure the mixed in fields do not have unique constraints
@@ -73,7 +73,7 @@ func (ScheduledJobHistory) Fields() []ent.Field {
 		}
 	}
 
-	original := ScheduledJob{}
+	original := JobTemplate{}
 	for _, field := range original.Fields() {
 		// make sure the fields do not have unique constraints
 		field.Descriptor().Unique = false
@@ -88,16 +88,16 @@ func (ScheduledJobHistory) Fields() []ent.Field {
 	return historyFields
 }
 
-// Indexes of the ScheduledJobHistory
-func (ScheduledJobHistory) Indexes() []ent.Index {
+// Indexes of the JobTemplateHistory
+func (JobTemplateHistory) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("history_time"),
 	}
 }
 
-// Policy of the ScheduledJobHistory.
+// Policy of the JobTemplateHistory.
 // ensure history.AllowIfHistoryRequest() is already added to the base policy
-func (ScheduledJobHistory) Policy() ent.Policy {
+func (JobTemplateHistory) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			history.AllowIfHistoryRequest(),
@@ -105,8 +105,8 @@ func (ScheduledJobHistory) Policy() ent.Policy {
 	)
 }
 
-// Interceptors of the ScheduledJobHistory
-func (ScheduledJobHistory) Interceptors() []ent.Interceptor {
+// Interceptors of the JobTemplateHistory
+func (JobTemplateHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.HistoryAccess("audit_log_viewer", false, false, ""),
 	}

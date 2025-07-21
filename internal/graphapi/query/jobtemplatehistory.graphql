@@ -1,7 +1,7 @@
 
 
-query GetAllScheduledJobHistories {
-  scheduledJobHistories {
+query GetAllJobTemplateHistories {
+  jobTemplateHistories {
     totalCount
     pageInfo {
       startCursor
@@ -17,23 +17,26 @@ query GetAllScheduledJobHistories {
         cron
         description
         displayID
+        downloadURL
         historyTime
         id
         operation
         ownerID
+        platform
         ref
         systemOwned
         tags
         title
         updatedAt
         updatedBy
+        windmillPath
       }
     }
   }
 }
 
-query GetScheduledJobHistories($first: Int, $last: Int, $where: ScheduledJobHistoryWhereInput) {
-  scheduledJobHistories(first: $first, last: $last, where: $where) {
+query GetJobTemplateHistories($first: Int, $last: Int, $where: JobTemplateHistoryWhereInput) {
+  jobTemplateHistories(first: $first, last: $last, where: $where) {
     totalCount
     pageInfo {
       startCursor
@@ -49,16 +52,19 @@ query GetScheduledJobHistories($first: Int, $last: Int, $where: ScheduledJobHist
         cron
         description
         displayID
+        downloadURL
         historyTime
         id
         operation
         ownerID
+        platform
         ref
         systemOwned
         tags
         title
         updatedAt
         updatedBy
+        windmillPath
       }
     }
   }
