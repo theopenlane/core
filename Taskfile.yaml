@@ -41,6 +41,8 @@ env:
   GO_GENERATE_FAST_DISABLE: "false" # set to true to disable cached entries
   GO_GENERATE_FAST_RECACHE: "false" # set to true to recache all entries
   COMPOSE_PROJECT_NAME: openlane
+  # CLI demo environment variables
+  ADMIN_USER_EMAIL: "admin@admin.theopenlane.io"
 
 tasks:
   default:
@@ -515,3 +517,4 @@ tasks:
     cmds:
       - rover install --plugin supergraph@v2.8.2
       - rover install --plugin router@v1.50.0
+
