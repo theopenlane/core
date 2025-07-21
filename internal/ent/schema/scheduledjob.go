@@ -35,7 +35,7 @@ func (ScheduledJob) PluralName() string {
 	return pluralize.NewClient().Plural(SchemaScheduledJob)
 }
 
-// Fields of the ControlScheduledJob
+// Fields of the ScheduledJob
 func (ScheduledJob) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("job_id").
@@ -63,7 +63,7 @@ func (ScheduledJob) Fields() []ent.Field {
 	}
 }
 
-// Mixin of the ControlScheduledJob
+// Mixin of the ScheduledJob
 func (c ScheduledJob) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix:      "SJB",
@@ -77,7 +77,7 @@ func (c ScheduledJob) Mixin() []ent.Mixin {
 	}.getMixins()
 }
 
-// Edges of the ControlScheduledJob
+// Edges of the ScheduledJob
 func (c ScheduledJob) Edges() []ent.Edge {
 	return []ent.Edge{
 		uniqueEdgeTo(&edgeDefinition{
@@ -99,12 +99,12 @@ func (c ScheduledJob) Edges() []ent.Edge {
 	}
 }
 
-// Indexes of the ControlScheduledJob
+// Indexes of the ScheduledJob
 func (ScheduledJob) Indexes() []ent.Index {
 	return []ent.Index{}
 }
 
-// Annotations of the ControlScheduledJob
+// Annotations of the ScheduledJob
 func (ScheduledJob) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.Features("compliance", "continuous-compliance-automation"),
@@ -112,19 +112,19 @@ func (ScheduledJob) Annotations() []schema.Annotation {
 	}
 }
 
-// Hooks of the ControlScheduledJob
+// Hooks of the ScheduledJob
 func (ScheduledJob) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookScheduledJobCreate(),
 	}
 }
 
-// Interceptors of the ControlScheduledJob
+// Interceptors of the ScheduledJob
 func (ScheduledJob) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{}
 }
 
-// Policy of the ControlScheduledJob
+// Policy of the ScheduledJob
 func (ScheduledJob) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(

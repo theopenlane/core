@@ -22251,7 +22251,6 @@ type SearchResults struct {
 	Programs                    *ProgramConnection                    `json:"programs,omitempty"`
 	Risks                       *RiskConnection                       `json:"risks,omitempty"`
 	Scans                       *ScanConnection                       `json:"scans,omitempty"`
-	ScheduledJobs               *ScheduledJobConnection               `json:"scheduledJobs,omitempty"`
 	Standards                   *StandardConnection                   `json:"standards,omitempty"`
 	Subcontrols                 *SubcontrolConnection                 `json:"subcontrols,omitempty"`
 	Subprocessors               *SubprocessorConnection               `json:"subprocessors,omitempty"`

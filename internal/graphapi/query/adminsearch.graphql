@@ -733,24 +733,6 @@ query AdminSearch($query: String!) {
         }
       }
     }
-    scheduledJobs {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
-          displayID
-          ownerID
-          jobID
-          jobRunnerID
-        }
-      }
-    }
     standards {
       totalCount
       pageInfo {

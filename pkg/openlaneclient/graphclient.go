@@ -6289,113 +6289,6 @@ func (t *AdminSearch_AdminSearch_Scans) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
-type AdminSearch_AdminSearch_ScheduledJobs_PageInfo struct {
-	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
-	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
-	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
-	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
-}
-
-func (t *AdminSearch_AdminSearch_ScheduledJobs_PageInfo) GetEndCursor() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_ScheduledJobs_PageInfo{}
-	}
-	return t.EndCursor
-}
-func (t *AdminSearch_AdminSearch_ScheduledJobs_PageInfo) GetHasNextPage() bool {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_ScheduledJobs_PageInfo{}
-	}
-	return t.HasNextPage
-}
-func (t *AdminSearch_AdminSearch_ScheduledJobs_PageInfo) GetHasPreviousPage() bool {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_ScheduledJobs_PageInfo{}
-	}
-	return t.HasPreviousPage
-}
-func (t *AdminSearch_AdminSearch_ScheduledJobs_PageInfo) GetStartCursor() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_ScheduledJobs_PageInfo{}
-	}
-	return t.StartCursor
-}
-
-type AdminSearch_AdminSearch_ScheduledJobs_Edges_Node struct {
-	DisplayID   string  "json:\"displayID\" graphql:\"displayID\""
-	ID          string  "json:\"id\" graphql:\"id\""
-	JobID       string  "json:\"jobID\" graphql:\"jobID\""
-	JobRunnerID *string "json:\"jobRunnerID,omitempty\" graphql:\"jobRunnerID\""
-	OwnerID     *string "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-}
-
-func (t *AdminSearch_AdminSearch_ScheduledJobs_Edges_Node) GetDisplayID() string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_ScheduledJobs_Edges_Node{}
-	}
-	return t.DisplayID
-}
-func (t *AdminSearch_AdminSearch_ScheduledJobs_Edges_Node) GetID() string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_ScheduledJobs_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *AdminSearch_AdminSearch_ScheduledJobs_Edges_Node) GetJobID() string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_ScheduledJobs_Edges_Node{}
-	}
-	return t.JobID
-}
-func (t *AdminSearch_AdminSearch_ScheduledJobs_Edges_Node) GetJobRunnerID() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_ScheduledJobs_Edges_Node{}
-	}
-	return t.JobRunnerID
-}
-func (t *AdminSearch_AdminSearch_ScheduledJobs_Edges_Node) GetOwnerID() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_ScheduledJobs_Edges_Node{}
-	}
-	return t.OwnerID
-}
-
-type AdminSearch_AdminSearch_ScheduledJobs_Edges struct {
-	Node *AdminSearch_AdminSearch_ScheduledJobs_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *AdminSearch_AdminSearch_ScheduledJobs_Edges) GetNode() *AdminSearch_AdminSearch_ScheduledJobs_Edges_Node {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_ScheduledJobs_Edges{}
-	}
-	return t.Node
-}
-
-type AdminSearch_AdminSearch_ScheduledJobs struct {
-	Edges      []*AdminSearch_AdminSearch_ScheduledJobs_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-	PageInfo   AdminSearch_AdminSearch_ScheduledJobs_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
-	TotalCount int64                                          "json:\"totalCount\" graphql:\"totalCount\""
-}
-
-func (t *AdminSearch_AdminSearch_ScheduledJobs) GetEdges() []*AdminSearch_AdminSearch_ScheduledJobs_Edges {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_ScheduledJobs{}
-	}
-	return t.Edges
-}
-func (t *AdminSearch_AdminSearch_ScheduledJobs) GetPageInfo() *AdminSearch_AdminSearch_ScheduledJobs_PageInfo {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_ScheduledJobs{}
-	}
-	return &t.PageInfo
-}
-func (t *AdminSearch_AdminSearch_ScheduledJobs) GetTotalCount() int64 {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_ScheduledJobs{}
-	}
-	return t.TotalCount
-}
-
 type AdminSearch_AdminSearch_Standards_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -7825,7 +7718,6 @@ type AdminSearch_AdminSearch struct {
 	Programs                    *AdminSearch_AdminSearch_Programs                    "json:\"programs,omitempty\" graphql:\"programs\""
 	Risks                       *AdminSearch_AdminSearch_Risks                       "json:\"risks,omitempty\" graphql:\"risks\""
 	Scans                       *AdminSearch_AdminSearch_Scans                       "json:\"scans,omitempty\" graphql:\"scans\""
-	ScheduledJobs               *AdminSearch_AdminSearch_ScheduledJobs               "json:\"scheduledJobs,omitempty\" graphql:\"scheduledJobs\""
 	Standards                   *AdminSearch_AdminSearch_Standards                   "json:\"standards,omitempty\" graphql:\"standards\""
 	Subcontrols                 *AdminSearch_AdminSearch_Subcontrols                 "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
 	Subprocessors               *AdminSearch_AdminSearch_Subprocessors               "json:\"subprocessors,omitempty\" graphql:\"subprocessors\""
@@ -8043,12 +7935,6 @@ func (t *AdminSearch_AdminSearch) GetScans() *AdminSearch_AdminSearch_Scans {
 		t = &AdminSearch_AdminSearch{}
 	}
 	return t.Scans
-}
-func (t *AdminSearch_AdminSearch) GetScheduledJobs() *AdminSearch_AdminSearch_ScheduledJobs {
-	if t == nil {
-		t = &AdminSearch_AdminSearch{}
-	}
-	return t.ScheduledJobs
 }
 func (t *AdminSearch_AdminSearch) GetStandards() *AdminSearch_AdminSearch_Standards {
 	if t == nil {
@@ -69433,92 +69319,6 @@ func (t *GlobalSearch_Search_Scans) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
-type GlobalSearch_Search_ScheduledJobs_PageInfo struct {
-	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
-	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
-	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
-	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
-}
-
-func (t *GlobalSearch_Search_ScheduledJobs_PageInfo) GetEndCursor() *string {
-	if t == nil {
-		t = &GlobalSearch_Search_ScheduledJobs_PageInfo{}
-	}
-	return t.EndCursor
-}
-func (t *GlobalSearch_Search_ScheduledJobs_PageInfo) GetHasNextPage() bool {
-	if t == nil {
-		t = &GlobalSearch_Search_ScheduledJobs_PageInfo{}
-	}
-	return t.HasNextPage
-}
-func (t *GlobalSearch_Search_ScheduledJobs_PageInfo) GetHasPreviousPage() bool {
-	if t == nil {
-		t = &GlobalSearch_Search_ScheduledJobs_PageInfo{}
-	}
-	return t.HasPreviousPage
-}
-func (t *GlobalSearch_Search_ScheduledJobs_PageInfo) GetStartCursor() *string {
-	if t == nil {
-		t = &GlobalSearch_Search_ScheduledJobs_PageInfo{}
-	}
-	return t.StartCursor
-}
-
-type GlobalSearch_Search_ScheduledJobs_Edges_Node struct {
-	DisplayID string "json:\"displayID\" graphql:\"displayID\""
-	ID        string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GlobalSearch_Search_ScheduledJobs_Edges_Node) GetDisplayID() string {
-	if t == nil {
-		t = &GlobalSearch_Search_ScheduledJobs_Edges_Node{}
-	}
-	return t.DisplayID
-}
-func (t *GlobalSearch_Search_ScheduledJobs_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GlobalSearch_Search_ScheduledJobs_Edges_Node{}
-	}
-	return t.ID
-}
-
-type GlobalSearch_Search_ScheduledJobs_Edges struct {
-	Node *GlobalSearch_Search_ScheduledJobs_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GlobalSearch_Search_ScheduledJobs_Edges) GetNode() *GlobalSearch_Search_ScheduledJobs_Edges_Node {
-	if t == nil {
-		t = &GlobalSearch_Search_ScheduledJobs_Edges{}
-	}
-	return t.Node
-}
-
-type GlobalSearch_Search_ScheduledJobs struct {
-	Edges      []*GlobalSearch_Search_ScheduledJobs_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-	PageInfo   GlobalSearch_Search_ScheduledJobs_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
-	TotalCount int64                                      "json:\"totalCount\" graphql:\"totalCount\""
-}
-
-func (t *GlobalSearch_Search_ScheduledJobs) GetEdges() []*GlobalSearch_Search_ScheduledJobs_Edges {
-	if t == nil {
-		t = &GlobalSearch_Search_ScheduledJobs{}
-	}
-	return t.Edges
-}
-func (t *GlobalSearch_Search_ScheduledJobs) GetPageInfo() *GlobalSearch_Search_ScheduledJobs_PageInfo {
-	if t == nil {
-		t = &GlobalSearch_Search_ScheduledJobs{}
-	}
-	return &t.PageInfo
-}
-func (t *GlobalSearch_Search_ScheduledJobs) GetTotalCount() int64 {
-	if t == nil {
-		t = &GlobalSearch_Search_ScheduledJobs{}
-	}
-	return t.TotalCount
-}
-
 type GlobalSearch_Search_Standards_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -70626,7 +70426,6 @@ type GlobalSearch_Search struct {
 	Programs                    *GlobalSearch_Search_Programs                    "json:\"programs,omitempty\" graphql:\"programs\""
 	Risks                       *GlobalSearch_Search_Risks                       "json:\"risks,omitempty\" graphql:\"risks\""
 	Scans                       *GlobalSearch_Search_Scans                       "json:\"scans,omitempty\" graphql:\"scans\""
-	ScheduledJobs               *GlobalSearch_Search_ScheduledJobs               "json:\"scheduledJobs,omitempty\" graphql:\"scheduledJobs\""
 	Standards                   *GlobalSearch_Search_Standards                   "json:\"standards,omitempty\" graphql:\"standards\""
 	Subcontrols                 *GlobalSearch_Search_Subcontrols                 "json:\"subcontrols,omitempty\" graphql:\"subcontrols\""
 	Subprocessors               *GlobalSearch_Search_Subprocessors               "json:\"subprocessors,omitempty\" graphql:\"subprocessors\""
@@ -70844,12 +70643,6 @@ func (t *GlobalSearch_Search) GetScans() *GlobalSearch_Search_Scans {
 		t = &GlobalSearch_Search{}
 	}
 	return t.Scans
-}
-func (t *GlobalSearch_Search) GetScheduledJobs() *GlobalSearch_Search_ScheduledJobs {
-	if t == nil {
-		t = &GlobalSearch_Search{}
-	}
-	return t.ScheduledJobs
 }
 func (t *GlobalSearch_Search) GetStandards() *GlobalSearch_Search_Standards {
 	if t == nil {
@@ -94664,24 +94457,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 				}
 			}
 		}
-		scheduledJobs {
-			totalCount
-			pageInfo {
-				hasNextPage
-				hasPreviousPage
-				startCursor
-				endCursor
-			}
-			edges {
-				node {
-					id
-					displayID
-					ownerID
-					jobID
-					jobRunnerID
-				}
-			}
-		}
 		standards {
 			totalCount
 			pageInfo {
@@ -112733,21 +112508,6 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 					id
 					tags
 					target
-				}
-			}
-		}
-		scheduledJobs {
-			totalCount
-			pageInfo {
-				hasNextPage
-				hasPreviousPage
-				startCursor
-				endCursor
-			}
-			edges {
-				node {
-					displayID
-					id
 				}
 			}
 		}

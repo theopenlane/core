@@ -3435,7 +3435,6 @@ type ComplexityRoot struct {
 		AdminProgramSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminRiskSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminScanSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminScheduledJobSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminSearch                           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminStandardSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminSubcontrolSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -3604,7 +3603,6 @@ type ComplexityRoot struct {
 		ScheduledJobHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ScheduledJobHistoryOrder, where *generated.ScheduledJobHistoryWhereInput) int
 		ScheduledJobRun                       func(childComplexity int, id string) int
 		ScheduledJobRuns                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobRunOrder, where *generated.ScheduledJobRunWhereInput) int
-		ScheduledJobSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		ScheduledJobs                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
 		Search                                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Self                                  func(childComplexity int) int
@@ -3975,7 +3973,6 @@ type ComplexityRoot struct {
 		Programs                    func(childComplexity int) int
 		Risks                       func(childComplexity int) int
 		Scans                       func(childComplexity int) int
-		ScheduledJobs               func(childComplexity int) int
 		Standards                   func(childComplexity int) int
 		Subcontrols                 func(childComplexity int) int
 		Subprocessors               func(childComplexity int) int
@@ -23449,18 +23446,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.AdminScanSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
-	case "Query.adminScheduledJobSearch":
-		if e.complexity.Query.AdminScheduledJobSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminScheduledJobSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminScheduledJobSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
 	case "Query.adminSearch":
 		if e.complexity.Query.AdminSearch == nil {
 			break
@@ -25466,18 +25451,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.ScheduledJobRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScheduledJobRunOrder), args["where"].(*generated.ScheduledJobRunWhereInput)), true
-
-	case "Query.scheduledJobSearch":
-		if e.complexity.Query.ScheduledJobSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_scheduledJobSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.ScheduledJobSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
 	case "Query.scheduledJobs":
 		if e.complexity.Query.ScheduledJobs == nil {
@@ -27709,13 +27682,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SearchResults.Scans(childComplexity), true
-
-	case "SearchResults.scheduledJobs":
-		if e.complexity.SearchResults.ScheduledJobs == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.ScheduledJobs(childComplexity), true
 
 	case "SearchResults.standards":
 		if e.complexity.SearchResults.Standards == nil {
@@ -33921,31 +33887,6 @@ type ActionPlanBulkCreatePayload {
         """
         last: Int
     ): ScanConnection
-    """
-    Search across ScheduledJob objects
-    """
-    adminScheduledJobSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): ScheduledJobConnection
     """
     Search across Standard objects
     """
@@ -92557,31 +92498,6 @@ type ScheduledJobBulkCreatePayload {
         last: Int
     ): ScanConnection
     """
-    Search across ScheduledJob objects
-    """
-    scheduledJobSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): ScheduledJobConnection
-    """
     Search across Standard objects
     """
     standardSearch(
@@ -92900,7 +92816,6 @@ type SearchResults{
   programs: ProgramConnection
   risks: RiskConnection
   scans: ScanConnection
-  scheduledJobs: ScheduledJobConnection
   standards: StandardConnection
   subcontrols: SubcontrolConnection
   subprocessors: SubprocessorConnection

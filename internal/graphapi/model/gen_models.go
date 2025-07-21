@@ -1181,7 +1181,6 @@ type SearchResults struct {
 	Programs                    *generated.ProgramConnection                    `json:"programs,omitempty"`
 	Risks                       *generated.RiskConnection                       `json:"risks,omitempty"`
 	Scans                       *generated.ScanConnection                       `json:"scans,omitempty"`
-	ScheduledJobs               *generated.ScheduledJobConnection               `json:"scheduledJobs,omitempty"`
 	Standards                   *generated.StandardConnection                   `json:"standards,omitempty"`
 	Subcontrols                 *generated.SubcontrolConnection                 `json:"subcontrols,omitempty"`
 	Subprocessors               *generated.SubprocessorConnection               `json:"subprocessors,omitempty"`
