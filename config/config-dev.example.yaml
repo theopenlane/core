@@ -129,14 +129,14 @@ entConfig:
     - vendor
     - account
 
-windmill:
-  enabled: true
-  baseURL: "http://localhost:8090"
-  workspace: "test"
-  token: "token_here"
-  defaultTimeout: "30s"
-  onFailureScript: "u/admin/glimmering_script"
-  onSuccessScript: "u/admin/glimmering_script"
+  windmill:
+    enabled: true
+    baseURL: "http://localhost:8090"
+    workspace: "test"
+    token: "token_here"
+    defaultTimeout: "30s"
+    onFailureScript: "u/admin/glimmering_script"
+    onSuccessScript: "u/admin/glimmering_script"
 
 objectStorage:
   # when using local storage, we serve the files up on a static handler

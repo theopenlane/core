@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-	"time"
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
@@ -21,17 +20,14 @@ import (
 	"github.com/theopenlane/utils/ulids"
 )
 
-const (
-	defaultTimeout = 30 * time.Second
-)
-
 // HookJobTemplate verifies a scheduled job has
 // a cron and the configuration matches what is expected
 // It also validates the download URL and creates a Windmill flow if configured
 func HookJobTemplate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.JobTemplateFunc(func(ctx context.Context,
-			mutation *generated.JobTemplateMutation) (generated.Value, error) {
+			mutation *generated.JobTemplateMutation,
+		) (generated.Value, error) {
 			if entx.CheckIsSoftDelete(ctx) {
 				return next.Mutate(ctx, mutation)
 			}
@@ -120,6 +116,8 @@ func createWindmillFlow(ctx context.Context, mutation *generated.JobTemplateMuta
 		Value:    []any{rawCode},
 		Language: platform,
 	}
+
+	log.Warn().Str("flow_path", flowPath).Str("summary", summary).Msg("creating windmill flow")
 
 	resp, err := windmillClient.CreateFlow(ctx, flowReq)
 	if err != nil {
@@ -230,7 +228,8 @@ func generateFlowPath(mutation GenericMutation) (string, error) {
 func HookScheduledJobCreate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.ScheduledJobFunc(func(ctx context.Context,
-			mutation *generated.ScheduledJobMutation) (generated.Value, error) {
+			mutation *generated.ScheduledJobMutation,
+		) (generated.Value, error) {
 			if entx.CheckIsSoftDelete(ctx) {
 				return next.Mutate(ctx, mutation)
 			}

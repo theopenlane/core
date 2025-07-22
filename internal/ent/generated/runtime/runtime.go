@@ -3015,6 +3015,8 @@ func init() {
 	jobtemplate.Hooks[5] = jobtemplateMixinHooks6[0]
 
 	jobtemplate.Hooks[6] = jobtemplateHooks[0]
+
+	jobtemplate.Hooks[7] = jobtemplateHooks[1]
 	jobtemplateMixinInters1 := jobtemplateMixin[1].Interceptors()
 	jobtemplateMixinInters5 := jobtemplateMixin[5].Interceptors()
 	jobtemplate.Interceptors[0] = jobtemplateMixinInters1[0]

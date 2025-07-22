@@ -7,12 +7,15 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/entfga"
 )
 
 // JobTemplate holds the schema definition for the JobTemplate entity
@@ -119,13 +122,19 @@ func (j JobTemplate) Mixin() []ent.Mixin {
 
 // Annotations of the JobTemplate
 func (JobTemplate) Annotations() []schema.Annotation {
-	return []schema.Annotation{}
+	return []schema.Annotation{
+		entfga.SelfAccessChecks(),
+	}
 }
 
 // Hooks of the JobTemplate
 func (JobTemplate) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookJobTemplate(),
+		hook.On(
+			hooks.OrgOwnedTuplesHook(),
+			ent.OpCreate,
+		),
 	}
 }
 
@@ -151,6 +160,8 @@ func (JobTemplate) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
+			// ensure we check edit access, otherwise you can edit a system owned job template
+			entfga.CheckEditAccess[*generated.JobTemplateMutation](),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/utils/ulids"
 )
 
 func TestQueryJobTemplate(t *testing.T) {
@@ -353,80 +354,95 @@ func TestMutationUpdateJobTemplate(t *testing.T) {
 	(&Cleanup[*generated.JobTemplateDeleteOne]{client: suite.client.db.JobTemplate, ID: jobTemplate.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-// func TestMutationDeleteJobTemplate(t *testing.T) {
-// 	// create JobTemplates to be deleted
-// 	JobTemplate1 := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-// 	JobTemplate2 := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-// 	JobTemplate3 := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+func TestMutationDeleteJobTemplate(t *testing.T) {
+	// create JobTemplates to be deleted
+	jobTemplate1 := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	jobTemplate2 := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	jobTemplate3 := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-// 	testCases := []struct {
-// 		name        string
-// 		idToDelete  string
-// 		client      *openlaneclient.OpenlaneClient
-// 		ctx         context.Context
-// 		expectedErr string
-// 	}{
-// 		{
-// 			name:        "not found, delete",
-// 			idToDelete:  JobTemplate1.ID,
-// 			client:      suite.client.api,
-// 			ctx:         testUser2.UserCtx,
-// 			expectedErr: notFoundErrorMsg,
-// 		},
-// 		{
-// 			name:        "not authorized, delete",
-// 			idToDelete:  JobTemplate1.ID,
-// 			client:      suite.client.api,
-// 			ctx:         viewOnlyUser.UserCtx,
-// 			expectedErr: notAuthorizedErrorMsg,
-// 		},
-// 		{
-// 			name:       "happy path, delete",
-// 			idToDelete: JobTemplate1.ID,
-// 			client:     suite.client.api,
-// 			ctx:        testUser1.UserCtx,
-// 		},
-// 		{
-// 			name:        "already deleted, not found",
-// 			idToDelete:  JobTemplate1.ID,
-// 			client:      suite.client.api,
-// 			ctx:         testUser1.UserCtx,
-// 			expectedErr: "not found",
-// 		},
-// 		{
-// 			name:       "happy path, delete using personal access token",
-// 			idToDelete: JobTemplate2.ID,
-// 			client:     suite.client.apiWithPAT,
-// 			ctx:        context.Background(),
-// 		},
-// 		{
-// 			name:       "happy path, delete using api token",
-// 			idToDelete: JobTemplate3.ID,
-// 			client:     suite.client.apiWithToken,
-// 			ctx:        context.Background(),
-// 		},
-// 		{
-// 			name:        "unknown id, not found",
-// 			idToDelete:  ulids.New().String(),
-// 			client:      suite.client.api,
-// 			ctx:         testUser1.UserCtx,
-// 			expectedErr: notFoundErrorMsg,
-// 		},
-// 	}
+	jobTemplateSystem := (&JobTemplateBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 
-// 	for _, tc := range testCases {
-// 		t.Run("Delete "+tc.name, func(t *testing.T) {
-// 			resp, err := tc.client.DeleteJobTemplate(tc.ctx, tc.idToDelete)
-// 			if tc.expectedErr != "" {
-// 				assert.ErrorContains(t, err, tc.expectedErr)
-// 				assert.Check(t, is.Nil(resp))
+	testCases := []struct {
+		name        string
+		idToDelete  string
+		client      *openlaneclient.OpenlaneClient
+		ctx         context.Context
+		expectedErr string
+	}{
+		{
+			name:        "not found, delete",
+			idToDelete:  jobTemplate1.ID,
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			expectedErr: notFoundErrorMsg,
+		},
+		{
+			name:        "not authorized, delete",
+			idToDelete:  jobTemplate1.ID,
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name:        "not authorized, delete system owned JobTemplate",
+			idToDelete:  jobTemplateSystem.ID,
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name:       "happy path, delete",
+			idToDelete: jobTemplate1.ID,
+			client:     suite.client.api,
+			ctx:        testUser1.UserCtx,
+		},
+		{
+			name:       "happy path, delete system owned JobTemplate",
+			idToDelete: jobTemplateSystem.ID,
+			client:     suite.client.api,
+			ctx:        systemAdminUser.UserCtx,
+		},
+		{
+			name:        "already deleted, not found",
+			idToDelete:  jobTemplate1.ID,
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "not found",
+		},
+		{
+			name:       "happy path, delete using personal access token",
+			idToDelete: jobTemplate2.ID,
+			client:     suite.client.apiWithPAT,
+			ctx:        context.Background(),
+		},
+		{
+			name:       "happy path, delete using api token",
+			idToDelete: jobTemplate3.ID,
+			client:     suite.client.apiWithToken,
+			ctx:        context.Background(),
+		},
+		{
+			name:        "unknown id, not found",
+			idToDelete:  ulids.New().String(),
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: notFoundErrorMsg,
+		},
+	}
 
-// 				return
-// 			}
+	for _, tc := range testCases {
+		t.Run("Delete "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.DeleteJobTemplate(tc.ctx, tc.idToDelete)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				assert.Check(t, is.Nil(resp))
 
-// 			assert.NilError(t, err)
-// 			assert.Assert(t, resp != nil)
-// 			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteJobTemplate.DeletedID))
-// 		})
-// 	}
-// }
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteJobTemplate.DeletedID))
+		})
+	}
+}

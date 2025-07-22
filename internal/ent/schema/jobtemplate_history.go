@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/iam/entfga"
 )
 
 // JobTemplateHistory holds the schema definition for the JobTemplateHistory entity.
@@ -36,6 +37,11 @@ func (JobTemplateHistory) Annotations() []schema.Annotation {
 		},
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entfga.Annotations{
+			ObjectType:   "job_template",
+			IDField:      "Ref",
+			IncludeHooks: false,
+		},
 	}
 }
 
@@ -108,6 +114,6 @@ func (JobTemplateHistory) Policy() ent.Policy {
 // Interceptors of the JobTemplateHistory
 func (JobTemplateHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", false, false, ""),
+		interceptors.FilterListQuery(),
 	}
 }
