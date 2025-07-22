@@ -105,26 +105,6 @@ func (sjhu *ScheduledJobHistoryUpdate) ClearDeletedBy() *ScheduledJobHistoryUpda
 	return sjhu
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (sjhu *ScheduledJobHistoryUpdate) SetOwnerID(s string) *ScheduledJobHistoryUpdate {
-	sjhu.mutation.SetOwnerID(s)
-	return sjhu
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (sjhu *ScheduledJobHistoryUpdate) SetNillableOwnerID(s *string) *ScheduledJobHistoryUpdate {
-	if s != nil {
-		sjhu.SetOwnerID(*s)
-	}
-	return sjhu
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (sjhu *ScheduledJobHistoryUpdate) ClearOwnerID() *ScheduledJobHistoryUpdate {
-	sjhu.mutation.ClearOwnerID()
-	return sjhu
-}
-
 // SetJobID sets the "job_id" field.
 func (sjhu *ScheduledJobHistoryUpdate) SetJobID(s string) *ScheduledJobHistoryUpdate {
 	sjhu.mutation.SetJobID(s)
@@ -135,6 +115,20 @@ func (sjhu *ScheduledJobHistoryUpdate) SetJobID(s string) *ScheduledJobHistoryUp
 func (sjhu *ScheduledJobHistoryUpdate) SetNillableJobID(s *string) *ScheduledJobHistoryUpdate {
 	if s != nil {
 		sjhu.SetJobID(*s)
+	}
+	return sjhu
+}
+
+// SetActive sets the "active" field.
+func (sjhu *ScheduledJobHistoryUpdate) SetActive(b bool) *ScheduledJobHistoryUpdate {
+	sjhu.mutation.SetActive(b)
+	return sjhu
+}
+
+// SetNillableActive sets the "active" field if the given value is not nil.
+func (sjhu *ScheduledJobHistoryUpdate) SetNillableActive(b *bool) *ScheduledJobHistoryUpdate {
+	if b != nil {
+		sjhu.SetActive(*b)
 	}
 	return sjhu
 }
@@ -292,14 +286,14 @@ func (sjhu *ScheduledJobHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	if sjhu.mutation.DeletedByCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := sjhu.mutation.OwnerID(); ok {
-		_spec.SetField(scheduledjobhistory.FieldOwnerID, field.TypeString, value)
-	}
 	if sjhu.mutation.OwnerIDCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := sjhu.mutation.JobID(); ok {
 		_spec.SetField(scheduledjobhistory.FieldJobID, field.TypeString, value)
+	}
+	if value, ok := sjhu.mutation.Active(); ok {
+		_spec.SetField(scheduledjobhistory.FieldActive, field.TypeBool, value)
 	}
 	if value, ok := sjhu.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjobhistory.FieldConfiguration, field.TypeJSON, value)
@@ -420,26 +414,6 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) ClearDeletedBy() *ScheduledJobHistory
 	return sjhuo
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetOwnerID(s string) *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.SetOwnerID(s)
-	return sjhuo
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (sjhuo *ScheduledJobHistoryUpdateOne) SetNillableOwnerID(s *string) *ScheduledJobHistoryUpdateOne {
-	if s != nil {
-		sjhuo.SetOwnerID(*s)
-	}
-	return sjhuo
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (sjhuo *ScheduledJobHistoryUpdateOne) ClearOwnerID() *ScheduledJobHistoryUpdateOne {
-	sjhuo.mutation.ClearOwnerID()
-	return sjhuo
-}
-
 // SetJobID sets the "job_id" field.
 func (sjhuo *ScheduledJobHistoryUpdateOne) SetJobID(s string) *ScheduledJobHistoryUpdateOne {
 	sjhuo.mutation.SetJobID(s)
@@ -450,6 +424,20 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) SetJobID(s string) *ScheduledJobHisto
 func (sjhuo *ScheduledJobHistoryUpdateOne) SetNillableJobID(s *string) *ScheduledJobHistoryUpdateOne {
 	if s != nil {
 		sjhuo.SetJobID(*s)
+	}
+	return sjhuo
+}
+
+// SetActive sets the "active" field.
+func (sjhuo *ScheduledJobHistoryUpdateOne) SetActive(b bool) *ScheduledJobHistoryUpdateOne {
+	sjhuo.mutation.SetActive(b)
+	return sjhuo
+}
+
+// SetNillableActive sets the "active" field if the given value is not nil.
+func (sjhuo *ScheduledJobHistoryUpdateOne) SetNillableActive(b *bool) *ScheduledJobHistoryUpdateOne {
+	if b != nil {
+		sjhuo.SetActive(*b)
 	}
 	return sjhuo
 }
@@ -637,14 +625,14 @@ func (sjhuo *ScheduledJobHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	if sjhuo.mutation.DeletedByCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := sjhuo.mutation.OwnerID(); ok {
-		_spec.SetField(scheduledjobhistory.FieldOwnerID, field.TypeString, value)
-	}
 	if sjhuo.mutation.OwnerIDCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := sjhuo.mutation.JobID(); ok {
 		_spec.SetField(scheduledjobhistory.FieldJobID, field.TypeString, value)
+	}
+	if value, ok := sjhuo.mutation.Active(); ok {
+		_spec.SetField(scheduledjobhistory.FieldActive, field.TypeBool, value)
 	}
 	if value, ok := sjhuo.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjobhistory.FieldConfiguration, field.TypeJSON, value)

@@ -41,6 +41,8 @@ const (
 	FieldOwnerID = "owner_id"
 	// FieldJobID holds the string denoting the job_id field in the database.
 	FieldJobID = "job_id"
+	// FieldActive holds the string denoting the active field in the database.
+	FieldActive = "active"
 	// FieldConfiguration holds the string denoting the configuration field in the database.
 	FieldConfiguration = "configuration"
 	// FieldCron holds the string denoting the cron field in the database.
@@ -66,6 +68,7 @@ var Columns = []string{
 	FieldDisplayID,
 	FieldOwnerID,
 	FieldJobID,
+	FieldActive,
 	FieldConfiguration,
 	FieldCron,
 	FieldJobRunnerID,
@@ -98,6 +101,8 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultActive holds the default value on creation for the "active" field.
+	DefaultActive bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -178,6 +183,11 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 // ByJobID orders the results by the job_id field.
 func ByJobID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldJobID, opts...).ToFunc()
+}
+
+// ByActive orders the results by the active field.
+func ByActive(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldActive, opts...).ToFunc()
 }
 
 // ByCron orders the results by the cron field.

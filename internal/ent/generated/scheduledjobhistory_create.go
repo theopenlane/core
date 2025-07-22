@@ -166,6 +166,20 @@ func (sjhc *ScheduledJobHistoryCreate) SetJobID(s string) *ScheduledJobHistoryCr
 	return sjhc
 }
 
+// SetActive sets the "active" field.
+func (sjhc *ScheduledJobHistoryCreate) SetActive(b bool) *ScheduledJobHistoryCreate {
+	sjhc.mutation.SetActive(b)
+	return sjhc
+}
+
+// SetNillableActive sets the "active" field if the given value is not nil.
+func (sjhc *ScheduledJobHistoryCreate) SetNillableActive(b *bool) *ScheduledJobHistoryCreate {
+	if b != nil {
+		sjhc.SetActive(*b)
+	}
+	return sjhc
+}
+
 // SetConfiguration sets the "configuration" field.
 func (sjhc *ScheduledJobHistoryCreate) SetConfiguration(mc models.JobConfiguration) *ScheduledJobHistoryCreate {
 	sjhc.mutation.SetConfiguration(mc)
@@ -272,6 +286,10 @@ func (sjhc *ScheduledJobHistoryCreate) defaults() error {
 		v := scheduledjobhistory.DefaultUpdatedAt()
 		sjhc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := sjhc.mutation.Active(); !ok {
+		v := scheduledjobhistory.DefaultActive
+		sjhc.mutation.SetActive(v)
+	}
 	if _, ok := sjhc.mutation.ID(); !ok {
 		if scheduledjobhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized scheduledjobhistory.DefaultID (forgotten import generated/runtime?)")
@@ -300,6 +318,9 @@ func (sjhc *ScheduledJobHistoryCreate) check() error {
 	}
 	if _, ok := sjhc.mutation.JobID(); !ok {
 		return &ValidationError{Name: "job_id", err: errors.New(`generated: missing required field "ScheduledJobHistory.job_id"`)}
+	}
+	if _, ok := sjhc.mutation.Active(); !ok {
+		return &ValidationError{Name: "active", err: errors.New(`generated: missing required field "ScheduledJobHistory.active"`)}
 	}
 	if v, ok := sjhc.mutation.Cron(); ok {
 		if err := v.Validate(); err != nil {
@@ -389,6 +410,10 @@ func (sjhc *ScheduledJobHistoryCreate) createSpec() (*ScheduledJobHistory, *sqlg
 	if value, ok := sjhc.mutation.JobID(); ok {
 		_spec.SetField(scheduledjobhistory.FieldJobID, field.TypeString, value)
 		_node.JobID = value
+	}
+	if value, ok := sjhc.mutation.Active(); ok {
+		_spec.SetField(scheduledjobhistory.FieldActive, field.TypeBool, value)
+		_node.Active = value
 	}
 	if value, ok := sjhc.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjobhistory.FieldConfiguration, field.TypeJSON, value)

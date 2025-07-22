@@ -40,11 +40,13 @@ type ScheduledJobHistory struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"display_id,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the scheduled_job id to take the script to run from
 	JobID string `json:"job_id,omitempty"`
-	// the configuration to run this job
+	// whether the scheduled job is active
+	Active bool `json:"active,omitempty"`
+	// the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
 	// cron syntax. If not provided, it would inherit the cron of the parent job
 	Cron *models.Cron `json:"cron,omitempty"`
@@ -64,6 +66,8 @@ func (*ScheduledJobHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case scheduledjobhistory.FieldOperation:
 			values[i] = new(history.OpType)
+		case scheduledjobhistory.FieldActive:
+			values[i] = new(sql.NullBool)
 		case scheduledjobhistory.FieldID, scheduledjobhistory.FieldRef, scheduledjobhistory.FieldCreatedBy, scheduledjobhistory.FieldUpdatedBy, scheduledjobhistory.FieldDeletedBy, scheduledjobhistory.FieldDisplayID, scheduledjobhistory.FieldOwnerID, scheduledjobhistory.FieldJobID, scheduledjobhistory.FieldJobRunnerID:
 			values[i] = new(sql.NullString)
 		case scheduledjobhistory.FieldHistoryTime, scheduledjobhistory.FieldCreatedAt, scheduledjobhistory.FieldUpdatedAt, scheduledjobhistory.FieldDeletedAt:
@@ -161,6 +165,12 @@ func (sjh *ScheduledJobHistory) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				sjh.JobID = value.String
 			}
+		case scheduledjobhistory.FieldActive:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field active", values[i])
+			} else if value.Valid {
+				sjh.Active = value.Bool
+			}
 		case scheduledjobhistory.FieldConfiguration:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field configuration", values[i])
@@ -253,6 +263,9 @@ func (sjh *ScheduledJobHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("job_id=")
 	builder.WriteString(sjh.JobID)
+	builder.WriteString(", ")
+	builder.WriteString("active=")
+	builder.WriteString(fmt.Sprintf("%v", sjh.Active))
 	builder.WriteString(", ")
 	builder.WriteString("configuration=")
 	builder.WriteString(fmt.Sprintf("%v", sjh.Configuration))

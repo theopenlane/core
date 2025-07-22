@@ -54,6 +54,8 @@ const (
 	FieldCron = "cron"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
+	// EdgeScheduledJobs holds the string denoting the scheduled_jobs edge name in mutations.
+	EdgeScheduledJobs = "scheduled_jobs"
 	// Table holds the table name of the jobtemplate in the database.
 	Table = "job_templates"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -63,6 +65,13 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
+	// ScheduledJobsTable is the table that holds the scheduled_jobs relation/edge.
+	ScheduledJobsTable = "scheduled_jobs"
+	// ScheduledJobsInverseTable is the table name for the ScheduledJob entity.
+	// It exists in this package in order to avoid circular dependency with the "scheduledjob" package.
+	ScheduledJobsInverseTable = "scheduled_jobs"
+	// ScheduledJobsColumn is the table column denoting the scheduled_jobs relation/edge.
+	ScheduledJobsColumn = "job_id"
 )
 
 // Columns holds all SQL columns for jobtemplate fields.
@@ -120,6 +129,8 @@ var (
 	DefaultSystemOwned bool
 	// TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	TitleValidator func(string) error
+	// CronValidator is a validator for the "cron" field. It is called by the builders before save.
+	CronValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -223,11 +234,32 @@ func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByScheduledJobsCount orders the results by scheduled_jobs count.
+func ByScheduledJobsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newScheduledJobsStep(), opts...)
+	}
+}
+
+// ByScheduledJobs orders the results by scheduled_jobs terms.
+func ByScheduledJobs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newScheduledJobsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(OwnerInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+	)
+}
+func newScheduledJobsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ScheduledJobsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ScheduledJobsTable, ScheduledJobsColumn),
 	)
 }
 

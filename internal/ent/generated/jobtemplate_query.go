@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -15,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -22,13 +24,15 @@ import (
 // JobTemplateQuery is the builder for querying JobTemplate entities.
 type JobTemplateQuery struct {
 	config
-	ctx        *QueryContext
-	order      []jobtemplate.OrderOption
-	inters     []Interceptor
-	predicates []predicate.JobTemplate
-	withOwner  *OrganizationQuery
-	loadTotal  []func(context.Context, []*JobTemplate) error
-	modifiers  []func(*sql.Selector)
+	ctx                    *QueryContext
+	order                  []jobtemplate.OrderOption
+	inters                 []Interceptor
+	predicates             []predicate.JobTemplate
+	withOwner              *OrganizationQuery
+	withScheduledJobs      *ScheduledJobQuery
+	loadTotal              []func(context.Context, []*JobTemplate) error
+	modifiers              []func(*sql.Selector)
+	withNamedScheduledJobs map[string]*ScheduledJobQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -84,6 +88,31 @@ func (jtq *JobTemplateQuery) QueryOwner() *OrganizationQuery {
 		schemaConfig := jtq.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.JobTemplate
+		fromU = sqlgraph.SetNeighbors(jtq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryScheduledJobs chains the current query on the "scheduled_jobs" edge.
+func (jtq *JobTemplateQuery) QueryScheduledJobs() *ScheduledJobQuery {
+	query := (&ScheduledJobClient{config: jtq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := jtq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := jtq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(jobtemplate.Table, jobtemplate.FieldID, selector),
+			sqlgraph.To(scheduledjob.Table, scheduledjob.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, jobtemplate.ScheduledJobsTable, jobtemplate.ScheduledJobsColumn),
+		)
+		schemaConfig := jtq.schemaConfig
+		step.To.Schema = schemaConfig.ScheduledJob
+		step.Edge.Schema = schemaConfig.ScheduledJob
 		fromU = sqlgraph.SetNeighbors(jtq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -277,12 +306,13 @@ func (jtq *JobTemplateQuery) Clone() *JobTemplateQuery {
 		return nil
 	}
 	return &JobTemplateQuery{
-		config:     jtq.config,
-		ctx:        jtq.ctx.Clone(),
-		order:      append([]jobtemplate.OrderOption{}, jtq.order...),
-		inters:     append([]Interceptor{}, jtq.inters...),
-		predicates: append([]predicate.JobTemplate{}, jtq.predicates...),
-		withOwner:  jtq.withOwner.Clone(),
+		config:            jtq.config,
+		ctx:               jtq.ctx.Clone(),
+		order:             append([]jobtemplate.OrderOption{}, jtq.order...),
+		inters:            append([]Interceptor{}, jtq.inters...),
+		predicates:        append([]predicate.JobTemplate{}, jtq.predicates...),
+		withOwner:         jtq.withOwner.Clone(),
+		withScheduledJobs: jtq.withScheduledJobs.Clone(),
 		// clone intermediate query.
 		sql:       jtq.sql.Clone(),
 		path:      jtq.path,
@@ -298,6 +328,17 @@ func (jtq *JobTemplateQuery) WithOwner(opts ...func(*OrganizationQuery)) *JobTem
 		opt(query)
 	}
 	jtq.withOwner = query
+	return jtq
+}
+
+// WithScheduledJobs tells the query-builder to eager-load the nodes that are connected to
+// the "scheduled_jobs" edge. The optional arguments are used to configure the query builder of the edge.
+func (jtq *JobTemplateQuery) WithScheduledJobs(opts ...func(*ScheduledJobQuery)) *JobTemplateQuery {
+	query := (&ScheduledJobClient{config: jtq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	jtq.withScheduledJobs = query
 	return jtq
 }
 
@@ -385,8 +426,9 @@ func (jtq *JobTemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*JobTemplate{}
 		_spec       = jtq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [2]bool{
 			jtq.withOwner != nil,
+			jtq.withScheduledJobs != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -415,6 +457,20 @@ func (jtq *JobTemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	if query := jtq.withOwner; query != nil {
 		if err := jtq.loadOwner(ctx, query, nodes, nil,
 			func(n *JobTemplate, e *Organization) { n.Edges.Owner = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := jtq.withScheduledJobs; query != nil {
+		if err := jtq.loadScheduledJobs(ctx, query, nodes,
+			func(n *JobTemplate) { n.Edges.ScheduledJobs = []*ScheduledJob{} },
+			func(n *JobTemplate, e *ScheduledJob) { n.Edges.ScheduledJobs = append(n.Edges.ScheduledJobs, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range jtq.withNamedScheduledJobs {
+		if err := jtq.loadScheduledJobs(ctx, query, nodes,
+			func(n *JobTemplate) { n.appendNamedScheduledJobs(name) },
+			func(n *JobTemplate, e *ScheduledJob) { n.appendNamedScheduledJobs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -452,6 +508,36 @@ func (jtq *JobTemplateQuery) loadOwner(ctx context.Context, query *OrganizationQ
 		for i := range nodes {
 			assign(nodes[i], n)
 		}
+	}
+	return nil
+}
+func (jtq *JobTemplateQuery) loadScheduledJobs(ctx context.Context, query *ScheduledJobQuery, nodes []*JobTemplate, init func(*JobTemplate), assign func(*JobTemplate, *ScheduledJob)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*JobTemplate)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(scheduledjob.FieldJobID)
+	}
+	query.Where(predicate.ScheduledJob(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(jobtemplate.ScheduledJobsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.JobID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "job_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -555,6 +641,20 @@ func (jtq *JobTemplateQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (jtq *JobTemplateQuery) Modify(modifiers ...func(s *sql.Selector)) *JobTemplateSelect {
 	jtq.modifiers = append(jtq.modifiers, modifiers...)
 	return jtq.Select()
+}
+
+// WithNamedScheduledJobs tells the query-builder to eager-load the nodes that are connected to the "scheduled_jobs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (jtq *JobTemplateQuery) WithNamedScheduledJobs(name string, opts ...func(*ScheduledJobQuery)) *JobTemplateQuery {
+	query := (&ScheduledJobClient{config: jtq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if jtq.withNamedScheduledJobs == nil {
+		jtq.withNamedScheduledJobs = make(map[string]*ScheduledJobQuery)
+	}
+	jtq.withNamedScheduledJobs[name] = query
+	return jtq
 }
 
 // CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs

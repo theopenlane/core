@@ -2303,7 +2303,7 @@ var (
 		{Name: "title", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "platform", Type: field.TypeEnum, Enums: []string{"GO", "TS"}},
-		{Name: "windmill_path", Type: field.TypeString},
+		{Name: "windmill_path", Type: field.TypeString, Nullable: true},
 		{Name: "download_url", Type: field.TypeString},
 		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
@@ -2357,7 +2357,7 @@ var (
 		{Name: "title", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "platform", Type: field.TypeEnum, Enums: []string{"GO", "TS"}},
-		{Name: "windmill_path", Type: field.TypeString},
+		{Name: "windmill_path", Type: field.TypeString, Nullable: true},
 		{Name: "download_url", Type: field.TypeString},
 		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
@@ -3797,10 +3797,11 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
+		{Name: "active", Type: field.TypeBool, Default: true},
 		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "job_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "job_runner_id", Type: field.TypeString, Nullable: true},
 	}
 	// ScheduledJobsTable holds the schema information for the "scheduled_jobs" table.
@@ -3810,20 +3811,20 @@ var (
 		PrimaryKey: []*schema.Column{ScheduledJobsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "scheduled_jobs_organizations_scheduled_jobs",
-				Columns:    []*schema.Column{ScheduledJobsColumns[10]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "scheduled_jobs_job_templates_job_template",
+				Symbol:     "scheduled_jobs_job_templates_scheduled_jobs",
 				Columns:    []*schema.Column{ScheduledJobsColumns[11]},
 				RefColumns: []*schema.Column{JobTemplatesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "scheduled_jobs_job_runners_job_runner",
+				Symbol:     "scheduled_jobs_organizations_scheduled_jobs",
 				Columns:    []*schema.Column{ScheduledJobsColumns[12]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "scheduled_jobs_job_runners_job_runner",
+				Columns:    []*schema.Column{ScheduledJobsColumns[13]},
 				RefColumns: []*schema.Column{JobRunnersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3832,12 +3833,12 @@ var (
 			{
 				Name:    "scheduledjob_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ScheduledJobsColumns[7], ScheduledJobsColumns[10]},
+				Columns: []*schema.Column{ScheduledJobsColumns[7], ScheduledJobsColumns[12]},
 			},
 			{
 				Name:    "scheduledjob_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduledJobsColumns[10]},
+				Columns: []*schema.Column{ScheduledJobsColumns[12]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3859,6 +3860,7 @@ var (
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "job_id", Type: field.TypeString},
+		{Name: "active", Type: field.TypeBool, Default: true},
 		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
 		{Name: "job_runner_id", Type: field.TypeString, Nullable: true},
@@ -8183,8 +8185,8 @@ func init() {
 	ScanHistoryTable.Annotation = &entsql.Annotation{
 		Table: "scan_history",
 	}
-	ScheduledJobsTable.ForeignKeys[0].RefTable = OrganizationsTable
-	ScheduledJobsTable.ForeignKeys[1].RefTable = JobTemplatesTable
+	ScheduledJobsTable.ForeignKeys[0].RefTable = JobTemplatesTable
+	ScheduledJobsTable.ForeignKeys[1].RefTable = OrganizationsTable
 	ScheduledJobsTable.ForeignKeys[2].RefTable = JobRunnersTable
 	ScheduledJobHistoryTable.Annotation = &entsql.Annotation{
 		Table: "scheduled_job_history",

@@ -65,11 +65,15 @@ type JobTemplate struct {
 type JobTemplateEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// ScheduledJobs holds the value of the scheduled_jobs edge.
+	ScheduledJobs []*ScheduledJob `json:"scheduled_jobs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [2]map[string]int
+
+	namedScheduledJobs map[string][]*ScheduledJob
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -81,6 +85,15 @@ func (e JobTemplateEdges) OwnerOrErr() (*Organization, error) {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
+}
+
+// ScheduledJobsOrErr returns the ScheduledJobs value or an error if the edge
+// was not loaded in eager-loading.
+func (e JobTemplateEdges) ScheduledJobsOrErr() ([]*ScheduledJob, error) {
+	if e.loadedTypes[1] {
+		return e.ScheduledJobs, nil
+	}
+	return nil, &NotLoadedError{edge: "scheduled_jobs"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -244,6 +257,11 @@ func (jt *JobTemplate) QueryOwner() *OrganizationQuery {
 	return NewJobTemplateClient(jt.config).QueryOwner(jt)
 }
 
+// QueryScheduledJobs queries the "scheduled_jobs" edge of the JobTemplate entity.
+func (jt *JobTemplate) QueryScheduledJobs() *ScheduledJobQuery {
+	return NewJobTemplateClient(jt.config).QueryScheduledJobs(jt)
+}
+
 // Update returns a builder for updating this JobTemplate.
 // Note that you need to call JobTemplate.Unwrap() before calling this method if this JobTemplate
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -321,6 +339,30 @@ func (jt *JobTemplate) String() string {
 	}
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedScheduledJobs returns the ScheduledJobs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (jt *JobTemplate) NamedScheduledJobs(name string) ([]*ScheduledJob, error) {
+	if jt.Edges.namedScheduledJobs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := jt.Edges.namedScheduledJobs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (jt *JobTemplate) appendNamedScheduledJobs(name string, edges ...*ScheduledJob) {
+	if jt.Edges.namedScheduledJobs == nil {
+		jt.Edges.namedScheduledJobs = make(map[string][]*ScheduledJob)
+	}
+	if len(edges) == 0 {
+		jt.Edges.namedScheduledJobs[name] = []*ScheduledJob{}
+	} else {
+		jt.Edges.namedScheduledJobs[name] = append(jt.Edges.namedScheduledJobs[name], edges...)
+	}
 }
 
 // JobTemplates is a parsable slice of JobTemplate.

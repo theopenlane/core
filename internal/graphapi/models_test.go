@@ -1539,20 +1539,55 @@ func (d *DNSVerificationBuilder) MustNew(ctx context.Context, t *testing.T) *ent
 
 type JobTemplateBuilder struct {
 	client *client
+
+	Title        string
+	Description  *string
+	Cron         string
+	Platform     enums.JobPlatformType
+	DownloadURL  string
+	WindmillPath string
 }
 
-func (j *JobTemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.JobTemplate {
-	const testScriptURL = "https://raw.githubusercontent.com/theopenlane/jobs-examples/refs/heads/main/basic/print.go"
+const testScriptURL = "https://raw.githubusercontent.com/theopenlane/jobs-examples/refs/heads/main/basic/print.go"
 
+func (j *JobTemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.JobTemplate {
 	ctx = setContext(ctx, j.client.db)
-	jt, err := j.client.db.JobTemplate.Create().
-		SetTitle("SSL checks").
-		SetCron("0 22 * * 1-5").
-		SetDescription("Check and verify a tls certificate is valid").
-		SetPlatform(enums.JobPlatformTypeGo).
-		SetWindmillPath("u/admin/gifted_script").
-		SetDownloadURL(testScriptURL).
-		Save(ctx)
+
+	if j.Title == "" {
+		j.Title = "Test Job Template"
+	}
+
+	if j.DownloadURL == "" {
+		j.DownloadURL = testScriptURL
+	}
+
+	if j.Platform == "" {
+		j.Platform = enums.JobPlatformTypeGo
+	}
+
+	if j.WindmillPath == "" {
+		j.WindmillPath = "u/admin/gifted_script"
+	}
+
+	mut := j.client.db.JobTemplate.Create().
+		SetTitle(j.Title).
+		SetDownloadURL(j.DownloadURL).
+		SetPlatform(j.Platform).
+		SetWindmillPath(j.WindmillPath)
+
+	if j.Description != nil {
+		mut.SetDescription(*j.Description)
+	}
+
+	if j.Cron != "" {
+		mut.SetCron(models.Cron(j.Cron))
+	}
+
+	if j.Description != nil {
+		mut.SetDescription(*j.Description)
+	}
+
+	jt, err := mut.Save(ctx)
 	assert.NilError(t, err)
 
 	return jt
@@ -1567,6 +1602,7 @@ type ScheduledJobBuilder struct {
 	Cron          *string
 	JobRunnerID   string
 	ControlIDs    []string
+	Active        bool
 }
 
 func (b *ScheduledJobBuilder) MustNew(ctx context.Context, t *testing.T) *generated.ScheduledJob {

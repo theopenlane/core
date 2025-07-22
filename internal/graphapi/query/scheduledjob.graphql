@@ -48,6 +48,20 @@ mutation CreateScheduledJob($input: CreateScheduledJobInput!) {
       ownerID
       updatedAt
       updatedBy
+      controls {
+        edges {
+          node {
+            id
+          }
+        }
+      }
+      subcontrols {
+        edges {
+          node {
+            id
+          }
+        }
+      }
     }
   }
 }
@@ -98,6 +112,20 @@ query GetScheduledJobByID($scheduledJobId: ID!) {
     ownerID
     updatedAt
     updatedBy
+    controls {
+      edges {
+        node {
+          id
+        }
+      }
+    }
+    subcontrols {
+      edges {
+        node {
+          id
+        }
+      }
+    }
   }
 }
 
@@ -123,6 +151,20 @@ query GetScheduledJobs($first: Int, $last: Int, $where: ScheduledJobWhereInput) 
         ownerID
         updatedAt
         updatedBy
+        controls {
+          edges {
+            node {
+              id
+            }
+          }
+        }
+        subcontrols {
+          edges {
+            node {
+              id
+            }
+          }
+        }
       }
     }
   }
@@ -142,6 +184,20 @@ mutation UpdateScheduledJob($updateScheduledJobId: ID!, $input: UpdateScheduledJ
       ownerID
       updatedAt
       updatedBy
+      controls {
+        edges {
+          node {
+            id
+          }
+        }
+      }
+      subcontrols {
+        edges {
+          node {
+            id
+          }
+        }
+      }
     }
   }
 }

@@ -36,11 +36,13 @@ type ScheduledJob struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"display_id,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the scheduled_job id to take the script to run from
 	JobID string `json:"job_id,omitempty"`
-	// the configuration to run this job
+	// whether the scheduled job is active
+	Active bool `json:"active,omitempty"`
+	// the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
 	// cron syntax. If not provided, it would inherit the cron of the parent job
 	Cron *models.Cron `json:"cron,omitempty"`
@@ -134,6 +136,8 @@ func (*ScheduledJob) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.Cron)}
 		case scheduledjob.FieldConfiguration:
 			values[i] = new([]byte)
+		case scheduledjob.FieldActive:
+			values[i] = new(sql.NullBool)
 		case scheduledjob.FieldID, scheduledjob.FieldCreatedBy, scheduledjob.FieldUpdatedBy, scheduledjob.FieldDeletedBy, scheduledjob.FieldDisplayID, scheduledjob.FieldOwnerID, scheduledjob.FieldJobID, scheduledjob.FieldJobRunnerID:
 			values[i] = new(sql.NullString)
 		case scheduledjob.FieldCreatedAt, scheduledjob.FieldUpdatedAt, scheduledjob.FieldDeletedAt:
@@ -212,6 +216,12 @@ func (sj *ScheduledJob) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field job_id", values[i])
 			} else if value.Valid {
 				sj.JobID = value.String
+			}
+		case scheduledjob.FieldActive:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field active", values[i])
+			} else if value.Valid {
+				sj.Active = value.Bool
 			}
 		case scheduledjob.FieldConfiguration:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -321,6 +331,9 @@ func (sj *ScheduledJob) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("job_id=")
 	builder.WriteString(sj.JobID)
+	builder.WriteString(", ")
+	builder.WriteString("active=")
+	builder.WriteString(fmt.Sprintf("%v", sj.Active))
 	builder.WriteString(", ")
 	builder.WriteString("configuration=")
 	builder.WriteString(fmt.Sprintf("%v", sj.Configuration))

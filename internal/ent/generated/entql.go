@@ -2531,6 +2531,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scheduledjob.FieldDisplayID:     {Type: field.TypeString, Column: scheduledjob.FieldDisplayID},
 			scheduledjob.FieldOwnerID:       {Type: field.TypeString, Column: scheduledjob.FieldOwnerID},
 			scheduledjob.FieldJobID:         {Type: field.TypeString, Column: scheduledjob.FieldJobID},
+			scheduledjob.FieldActive:        {Type: field.TypeBool, Column: scheduledjob.FieldActive},
 			scheduledjob.FieldConfiguration: {Type: field.TypeJSON, Column: scheduledjob.FieldConfiguration},
 			scheduledjob.FieldCron:          {Type: field.TypeString, Column: scheduledjob.FieldCron},
 			scheduledjob.FieldJobRunnerID:   {Type: field.TypeString, Column: scheduledjob.FieldJobRunnerID},
@@ -2559,6 +2560,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scheduledjobhistory.FieldDisplayID:     {Type: field.TypeString, Column: scheduledjobhistory.FieldDisplayID},
 			scheduledjobhistory.FieldOwnerID:       {Type: field.TypeString, Column: scheduledjobhistory.FieldOwnerID},
 			scheduledjobhistory.FieldJobID:         {Type: field.TypeString, Column: scheduledjobhistory.FieldJobID},
+			scheduledjobhistory.FieldActive:        {Type: field.TypeBool, Column: scheduledjobhistory.FieldActive},
 			scheduledjobhistory.FieldConfiguration: {Type: field.TypeJSON, Column: scheduledjobhistory.FieldConfiguration},
 			scheduledjobhistory.FieldCron:          {Type: field.TypeString, Column: scheduledjobhistory.FieldCron},
 			scheduledjobhistory.FieldJobRunnerID:   {Type: field.TypeString, Column: scheduledjobhistory.FieldJobRunnerID},
@@ -5633,6 +5635,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Organization",
 	)
 	graph.MustAddE(
+		"scheduled_jobs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.ScheduledJobsTable,
+			Columns: []string{jobtemplate.ScheduledJobsColumn},
+			Bidi:    false,
+		},
+		"JobTemplate",
+		"ScheduledJob",
+	)
+	graph.MustAddE(
 		"custom_domains",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -7664,7 +7678,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"job_template",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   scheduledjob.JobTemplateTable,
 			Columns: []string{scheduledjob.JobTemplateColumn},
 			Bidi:    false,
@@ -17196,6 +17210,20 @@ func (f *JobTemplateFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
 	})))
 }
 
+// WhereHasScheduledJobs applies a predicate to check if query has an edge scheduled_jobs.
+func (f *JobTemplateFilter) WhereHasScheduledJobs() {
+	f.Where(entql.HasEdge("scheduled_jobs"))
+}
+
+// WhereHasScheduledJobsWith applies a predicate to check if query has an edge scheduled_jobs with a given conditions (other predicates).
+func (f *JobTemplateFilter) WhereHasScheduledJobsWith(preds ...predicate.ScheduledJob) {
+	f.Where(entql.HasEdgeWith("scheduled_jobs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (jthq *JobTemplateHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	jthq.predicates = append(jthq.predicates, pred)
@@ -23653,6 +23681,11 @@ func (f *ScheduledJobFilter) WhereJobID(p entql.StringP) {
 	f.Where(p.Field(scheduledjob.FieldJobID))
 }
 
+// WhereActive applies the entql bool predicate on the active field.
+func (f *ScheduledJobFilter) WhereActive(p entql.BoolP) {
+	f.Where(p.Field(scheduledjob.FieldActive))
+}
+
 // WhereConfiguration applies the entql json.RawMessage predicate on the configuration field.
 func (f *ScheduledJobFilter) WhereConfiguration(p entql.BytesP) {
 	f.Where(p.Field(scheduledjob.FieldConfiguration))
@@ -23836,6 +23869,11 @@ func (f *ScheduledJobHistoryFilter) WhereOwnerID(p entql.StringP) {
 // WhereJobID applies the entql string predicate on the job_id field.
 func (f *ScheduledJobHistoryFilter) WhereJobID(p entql.StringP) {
 	f.Where(p.Field(scheduledjobhistory.FieldJobID))
+}
+
+// WhereActive applies the entql bool predicate on the active field.
+func (f *ScheduledJobHistoryFilter) WhereActive(p entql.BoolP) {
+	f.Where(p.Field(scheduledjobhistory.FieldActive))
 }
 
 // WhereConfiguration applies the entql json.RawMessage predicate on the configuration field.

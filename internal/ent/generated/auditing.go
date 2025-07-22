@@ -2694,6 +2694,9 @@ func (sjh *ScheduledJobHistory) changes(new *ScheduledJobHistory) []Change {
 	if !reflect.DeepEqual(sjh.JobID, new.JobID) {
 		changes = append(changes, NewChange(scheduledjobhistory.FieldJobID, sjh.JobID, new.JobID))
 	}
+	if !reflect.DeepEqual(sjh.Active, new.Active) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldActive, sjh.Active, new.Active))
+	}
 	if !reflect.DeepEqual(sjh.Configuration, new.Configuration) {
 		changes = append(changes, NewChange(scheduledjobhistory.FieldConfiguration, sjh.Configuration, new.Configuration))
 	}

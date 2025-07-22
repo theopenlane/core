@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -192,6 +193,12 @@ func (jtu *JobTemplateUpdate) SetNillableWindmillPath(s *string) *JobTemplateUpd
 	return jtu
 }
 
+// ClearWindmillPath clears the value of the "windmill_path" field.
+func (jtu *JobTemplateUpdate) ClearWindmillPath() *JobTemplateUpdate {
+	jtu.mutation.ClearWindmillPath()
+	return jtu
+}
+
 // SetDownloadURL sets the "download_url" field.
 func (jtu *JobTemplateUpdate) SetDownloadURL(s string) *JobTemplateUpdate {
 	jtu.mutation.SetDownloadURL(s)
@@ -249,6 +256,21 @@ func (jtu *JobTemplateUpdate) SetOwner(o *Organization) *JobTemplateUpdate {
 	return jtu.SetOwnerID(o.ID)
 }
 
+// AddScheduledJobIDs adds the "scheduled_jobs" edge to the ScheduledJob entity by IDs.
+func (jtu *JobTemplateUpdate) AddScheduledJobIDs(ids ...string) *JobTemplateUpdate {
+	jtu.mutation.AddScheduledJobIDs(ids...)
+	return jtu
+}
+
+// AddScheduledJobs adds the "scheduled_jobs" edges to the ScheduledJob entity.
+func (jtu *JobTemplateUpdate) AddScheduledJobs(s ...*ScheduledJob) *JobTemplateUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return jtu.AddScheduledJobIDs(ids...)
+}
+
 // Mutation returns the JobTemplateMutation object of the builder.
 func (jtu *JobTemplateUpdate) Mutation() *JobTemplateMutation {
 	return jtu.mutation
@@ -258,6 +280,27 @@ func (jtu *JobTemplateUpdate) Mutation() *JobTemplateMutation {
 func (jtu *JobTemplateUpdate) ClearOwner() *JobTemplateUpdate {
 	jtu.mutation.ClearOwner()
 	return jtu
+}
+
+// ClearScheduledJobs clears all "scheduled_jobs" edges to the ScheduledJob entity.
+func (jtu *JobTemplateUpdate) ClearScheduledJobs() *JobTemplateUpdate {
+	jtu.mutation.ClearScheduledJobs()
+	return jtu
+}
+
+// RemoveScheduledJobIDs removes the "scheduled_jobs" edge to ScheduledJob entities by IDs.
+func (jtu *JobTemplateUpdate) RemoveScheduledJobIDs(ids ...string) *JobTemplateUpdate {
+	jtu.mutation.RemoveScheduledJobIDs(ids...)
+	return jtu
+}
+
+// RemoveScheduledJobs removes "scheduled_jobs" edges to ScheduledJob entities.
+func (jtu *JobTemplateUpdate) RemoveScheduledJobs(s ...*ScheduledJob) *JobTemplateUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return jtu.RemoveScheduledJobIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -310,7 +353,7 @@ func (jtu *JobTemplateUpdate) check() error {
 		}
 	}
 	if v, ok := jtu.mutation.Cron(); ok {
-		if err := v.Validate(); err != nil {
+		if err := jobtemplate.CronValidator(string(v)); err != nil {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "JobTemplate.cron": %w`, err)}
 		}
 	}
@@ -391,6 +434,9 @@ func (jtu *JobTemplateUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := jtu.mutation.WindmillPath(); ok {
 		_spec.SetField(jobtemplate.FieldWindmillPath, field.TypeString, value)
 	}
+	if jtu.mutation.WindmillPathCleared() {
+		_spec.ClearField(jobtemplate.FieldWindmillPath, field.TypeString)
+	}
 	if value, ok := jtu.mutation.DownloadURL(); ok {
 		_spec.SetField(jobtemplate.FieldDownloadURL, field.TypeString, value)
 	}
@@ -437,6 +483,54 @@ func (jtu *JobTemplateUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = jtu.schemaConfig.JobTemplate
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if jtu.mutation.ScheduledJobsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.ScheduledJobsTable,
+			Columns: []string{jobtemplate.ScheduledJobsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = jtu.schemaConfig.ScheduledJob
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := jtu.mutation.RemovedScheduledJobsIDs(); len(nodes) > 0 && !jtu.mutation.ScheduledJobsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.ScheduledJobsTable,
+			Columns: []string{jobtemplate.ScheduledJobsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = jtu.schemaConfig.ScheduledJob
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := jtu.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.ScheduledJobsTable,
+			Columns: []string{jobtemplate.ScheduledJobsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = jtu.schemaConfig.ScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -624,6 +718,12 @@ func (jtuo *JobTemplateUpdateOne) SetNillableWindmillPath(s *string) *JobTemplat
 	return jtuo
 }
 
+// ClearWindmillPath clears the value of the "windmill_path" field.
+func (jtuo *JobTemplateUpdateOne) ClearWindmillPath() *JobTemplateUpdateOne {
+	jtuo.mutation.ClearWindmillPath()
+	return jtuo
+}
+
 // SetDownloadURL sets the "download_url" field.
 func (jtuo *JobTemplateUpdateOne) SetDownloadURL(s string) *JobTemplateUpdateOne {
 	jtuo.mutation.SetDownloadURL(s)
@@ -681,6 +781,21 @@ func (jtuo *JobTemplateUpdateOne) SetOwner(o *Organization) *JobTemplateUpdateOn
 	return jtuo.SetOwnerID(o.ID)
 }
 
+// AddScheduledJobIDs adds the "scheduled_jobs" edge to the ScheduledJob entity by IDs.
+func (jtuo *JobTemplateUpdateOne) AddScheduledJobIDs(ids ...string) *JobTemplateUpdateOne {
+	jtuo.mutation.AddScheduledJobIDs(ids...)
+	return jtuo
+}
+
+// AddScheduledJobs adds the "scheduled_jobs" edges to the ScheduledJob entity.
+func (jtuo *JobTemplateUpdateOne) AddScheduledJobs(s ...*ScheduledJob) *JobTemplateUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return jtuo.AddScheduledJobIDs(ids...)
+}
+
 // Mutation returns the JobTemplateMutation object of the builder.
 func (jtuo *JobTemplateUpdateOne) Mutation() *JobTemplateMutation {
 	return jtuo.mutation
@@ -690,6 +805,27 @@ func (jtuo *JobTemplateUpdateOne) Mutation() *JobTemplateMutation {
 func (jtuo *JobTemplateUpdateOne) ClearOwner() *JobTemplateUpdateOne {
 	jtuo.mutation.ClearOwner()
 	return jtuo
+}
+
+// ClearScheduledJobs clears all "scheduled_jobs" edges to the ScheduledJob entity.
+func (jtuo *JobTemplateUpdateOne) ClearScheduledJobs() *JobTemplateUpdateOne {
+	jtuo.mutation.ClearScheduledJobs()
+	return jtuo
+}
+
+// RemoveScheduledJobIDs removes the "scheduled_jobs" edge to ScheduledJob entities by IDs.
+func (jtuo *JobTemplateUpdateOne) RemoveScheduledJobIDs(ids ...string) *JobTemplateUpdateOne {
+	jtuo.mutation.RemoveScheduledJobIDs(ids...)
+	return jtuo
+}
+
+// RemoveScheduledJobs removes "scheduled_jobs" edges to ScheduledJob entities.
+func (jtuo *JobTemplateUpdateOne) RemoveScheduledJobs(s ...*ScheduledJob) *JobTemplateUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return jtuo.RemoveScheduledJobIDs(ids...)
 }
 
 // Where appends a list predicates to the JobTemplateUpdate builder.
@@ -755,7 +891,7 @@ func (jtuo *JobTemplateUpdateOne) check() error {
 		}
 	}
 	if v, ok := jtuo.mutation.Cron(); ok {
-		if err := v.Validate(); err != nil {
+		if err := jobtemplate.CronValidator(string(v)); err != nil {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "JobTemplate.cron": %w`, err)}
 		}
 	}
@@ -853,6 +989,9 @@ func (jtuo *JobTemplateUpdateOne) sqlSave(ctx context.Context) (_node *JobTempla
 	if value, ok := jtuo.mutation.WindmillPath(); ok {
 		_spec.SetField(jobtemplate.FieldWindmillPath, field.TypeString, value)
 	}
+	if jtuo.mutation.WindmillPathCleared() {
+		_spec.ClearField(jobtemplate.FieldWindmillPath, field.TypeString)
+	}
 	if value, ok := jtuo.mutation.DownloadURL(); ok {
 		_spec.SetField(jobtemplate.FieldDownloadURL, field.TypeString, value)
 	}
@@ -899,6 +1038,54 @@ func (jtuo *JobTemplateUpdateOne) sqlSave(ctx context.Context) (_node *JobTempla
 			},
 		}
 		edge.Schema = jtuo.schemaConfig.JobTemplate
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if jtuo.mutation.ScheduledJobsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.ScheduledJobsTable,
+			Columns: []string{jobtemplate.ScheduledJobsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = jtuo.schemaConfig.ScheduledJob
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := jtuo.mutation.RemovedScheduledJobsIDs(); len(nodes) > 0 && !jtuo.mutation.ScheduledJobsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.ScheduledJobsTable,
+			Columns: []string{jobtemplate.ScheduledJobsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = jtuo.schemaConfig.ScheduledJob
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := jtuo.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.ScheduledJobsTable,
+			Columns: []string{jobtemplate.ScheduledJobsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = jtuo.schemaConfig.ScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

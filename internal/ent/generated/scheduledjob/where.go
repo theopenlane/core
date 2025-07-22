@@ -113,6 +113,11 @@ func JobID(v string) predicate.ScheduledJob {
 	return predicate.ScheduledJob(sql.FieldEQ(FieldJobID, v))
 }
 
+// Active applies equality check predicate on the "active" field. It's identical to ActiveEQ.
+func Active(v bool) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldEQ(FieldActive, v))
+}
+
 // Cron applies equality check predicate on the "cron" field. It's identical to CronEQ.
 func Cron(v models.Cron) predicate.ScheduledJob {
 	return predicate.ScheduledJob(sql.FieldEQ(FieldCron, v))
@@ -703,6 +708,16 @@ func JobIDContainsFold(v string) predicate.ScheduledJob {
 	return predicate.ScheduledJob(sql.FieldContainsFold(FieldJobID, v))
 }
 
+// ActiveEQ applies the EQ predicate on the "active" field.
+func ActiveEQ(v bool) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldEQ(FieldActive, v))
+}
+
+// ActiveNEQ applies the NEQ predicate on the "active" field.
+func ActiveNEQ(v bool) predicate.ScheduledJob {
+	return predicate.ScheduledJob(sql.FieldNEQ(FieldActive, v))
+}
+
 // ConfigurationIsNil applies the IsNil predicate on the "configuration" field.
 func ConfigurationIsNil() predicate.ScheduledJob {
 	return predicate.ScheduledJob(sql.FieldIsNull(FieldConfiguration))
@@ -902,7 +917,7 @@ func HasJobTemplate() predicate.ScheduledJob {
 	return predicate.ScheduledJob(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, JobTemplateTable, JobTemplateColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, JobTemplateTable, JobTemplateColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.JobTemplate

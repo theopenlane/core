@@ -7,8 +7,10 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 )
@@ -39,14 +41,20 @@ func (ScheduledJob) PluralName() string {
 func (ScheduledJob) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("job_id").
+			NotEmpty().
 			Comment("the scheduled_job id to take the script to run from"),
-
+		field.Bool("active").
+			Default(true).
+			Comment("whether the scheduled job is active"),
+		// TODO: when a job gets set to inactive, it should pause the job in windmilll
 		field.JSON("configuration", models.JobConfiguration{}).
-			Annotations(
-				entgql.Skip(entgql.SkipWhereInput | entgql.SkipOrderField),
-			).
 			Optional().
-			Comment("the configuration to run this job"),
+			Annotations(
+				entgql.Skip(
+					entgql.SkipWhereInput | entgql.SkipOrderField,
+				),
+			).
+			Comment("the json configuration to run this job, which could be used to template a job, e.g. { \"account_name\": \"my-account\" }"),
 		field.String("cron").
 			GoType(models.Cron("")).
 			Comment("cron syntax. If not provided, it would inherit the cron of the parent job").
@@ -55,11 +63,23 @@ func (ScheduledJob) Fields() []ent.Field {
 					entgql.SkipOrderField,
 				),
 			).
+			Validate(func(s string) error {
+				if s == "" {
+					return nil
+				}
+
+				c := models.Cron(s)
+
+				return c.Validate()
+			}).
 			Optional().
 			Nillable(),
 		field.String("job_runner_id").
 			Optional().
 			Comment("the runner that this job will run on. If not set, it will scheduled on a general runner instead"),
+		// TODO: we should consider adding a hook that will round-robin the orgs runners
+		// or instead of setting a runner, say "org_runner" so we know they are using their own runner vs. a potentially
+		// openlane shared runner; we shouldn't have to have the user (or UI) look up this ID every time to create a job
 	}
 }
 
@@ -72,7 +92,11 @@ func (c ScheduledJob) Mixin() []ent.Mixin {
 			// TODO: update to object owned mixin
 			// that will allow inheritance by control + subcontrol to edit the scheduled job
 			// currently only org admins can create and edit scheduled jobs
-			newOrgOwnedMixin(c),
+			newObjectOwnedMixin[generated.ScheduledJob](c,
+				withParents(Control{}, Subcontrol{}),
+				withOrganizationOwner(true),
+				withSkipForSystemAdmin(true),
+			),
 		},
 	}.getMixins()
 }
@@ -80,7 +104,7 @@ func (c ScheduledJob) Mixin() []ent.Mixin {
 // Edges of the ScheduledJob
 func (c ScheduledJob) Edges() []ent.Edge {
 	return []ent.Edge{
-		uniqueEdgeTo(&edgeDefinition{
+		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: c,
 			edgeSchema: JobTemplate{},
 			field:      "job_id",
@@ -130,6 +154,8 @@ func (ScheduledJob) Policy() ent.Policy {
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
+			rule.CanCreateObjectsUnderParent[*generated.ControlMutation](rule.ControlsParent),       // if mutation contains control_id, check access
+			rule.CanCreateObjectsUnderParent[*generated.SubcontrolMutation](rule.SubcontrolsParent), // if mutation contains subcontrol_id, check access
 		),
 	)
 }

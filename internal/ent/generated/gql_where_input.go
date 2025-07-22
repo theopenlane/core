@@ -38643,6 +38643,10 @@ type JobTemplateWhereInput struct {
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+
+	// "scheduled_jobs" edge predicates.
+	HasScheduledJobs     *bool                     `json:"hasScheduledJobs,omitempty"`
+	HasScheduledJobsWith []*ScheduledJobWhereInput `json:"hasScheduledJobsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -39106,6 +39110,24 @@ func (i *JobTemplateWhereInput) P() (predicate.JobTemplate, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, jobtemplate.HasOwnerWith(with...))
+	}
+	if i.HasScheduledJobs != nil {
+		p := jobtemplate.HasScheduledJobs()
+		if !*i.HasScheduledJobs {
+			p = jobtemplate.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasScheduledJobsWith) > 0 {
+		with := make([]predicate.ScheduledJob, 0, len(i.HasScheduledJobsWith))
+		for _, w := range i.HasScheduledJobsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasScheduledJobsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, jobtemplate.HasScheduledJobsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -63915,6 +63937,10 @@ type ScheduledJobWhereInput struct {
 	JobIDEqualFold    *string  `json:"jobIDEqualFold,omitempty"`
 	JobIDContainsFold *string  `json:"jobIDContainsFold,omitempty"`
 
+	// "active" field predicates.
+	Active    *bool `json:"active,omitempty"`
+	ActiveNEQ *bool `json:"activeNEQ,omitempty"`
+
 	// "job_runner_id" field predicates.
 	JobRunnerID             *string  `json:"jobRunnerID,omitempty"`
 	JobRunnerIDNEQ          *string  `json:"jobRunnerIDNEQ,omitempty"`
@@ -64327,6 +64353,12 @@ func (i *ScheduledJobWhereInput) P() (predicate.ScheduledJob, error) {
 	if i.JobIDContainsFold != nil {
 		predicates = append(predicates, scheduledjob.JobIDContainsFold(*i.JobIDContainsFold))
 	}
+	if i.Active != nil {
+		predicates = append(predicates, scheduledjob.ActiveEQ(*i.Active))
+	}
+	if i.ActiveNEQ != nil {
+		predicates = append(predicates, scheduledjob.ActiveNEQ(*i.ActiveNEQ))
+	}
 	if i.JobRunnerID != nil {
 		predicates = append(predicates, scheduledjob.JobRunnerIDEQ(*i.JobRunnerID))
 	}
@@ -64629,6 +64661,10 @@ type ScheduledJobHistoryWhereInput struct {
 	JobIDHasSuffix    *string  `json:"jobIDHasSuffix,omitempty"`
 	JobIDEqualFold    *string  `json:"jobIDEqualFold,omitempty"`
 	JobIDContainsFold *string  `json:"jobIDContainsFold,omitempty"`
+
+	// "active" field predicates.
+	Active    *bool `json:"active,omitempty"`
+	ActiveNEQ *bool `json:"activeNEQ,omitempty"`
 
 	// "job_runner_id" field predicates.
 	JobRunnerID             *string  `json:"jobRunnerID,omitempty"`
@@ -65102,6 +65138,12 @@ func (i *ScheduledJobHistoryWhereInput) P() (predicate.ScheduledJobHistory, erro
 	}
 	if i.JobIDContainsFold != nil {
 		predicates = append(predicates, scheduledjobhistory.JobIDContainsFold(*i.JobIDContainsFold))
+	}
+	if i.Active != nil {
+		predicates = append(predicates, scheduledjobhistory.ActiveEQ(*i.Active))
+	}
+	if i.ActiveNEQ != nil {
+		predicates = append(predicates, scheduledjobhistory.ActiveNEQ(*i.ActiveNEQ))
 	}
 	if i.JobRunnerID != nil {
 		predicates = append(predicates, scheduledjobhistory.JobRunnerIDEQ(*i.JobRunnerID))

@@ -91,10 +91,14 @@ func (ec *executionContext) fieldContext_JobTemplateBulkCreatePayload_jobTemplat
 				return ec.fieldContext_JobTemplate_platform(ctx, field)
 			case "downloadURL":
 				return ec.fieldContext_JobTemplate_downloadURL(ctx, field)
+			case "configuration":
+				return ec.fieldContext_JobTemplate_configuration(ctx, field)
 			case "cron":
 				return ec.fieldContext_JobTemplate_cron(ctx, field)
 			case "owner":
 				return ec.fieldContext_JobTemplate_owner(ctx, field)
+			case "scheduledJobs":
+				return ec.fieldContext_JobTemplate_scheduledJobs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type JobTemplate", field.Name)
 		},
@@ -167,10 +171,14 @@ func (ec *executionContext) fieldContext_JobTemplateCreatePayload_jobTemplate(_ 
 				return ec.fieldContext_JobTemplate_platform(ctx, field)
 			case "downloadURL":
 				return ec.fieldContext_JobTemplate_downloadURL(ctx, field)
+			case "configuration":
+				return ec.fieldContext_JobTemplate_configuration(ctx, field)
 			case "cron":
 				return ec.fieldContext_JobTemplate_cron(ctx, field)
 			case "owner":
 				return ec.fieldContext_JobTemplate_owner(ctx, field)
+			case "scheduledJobs":
+				return ec.fieldContext_JobTemplate_scheduledJobs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type JobTemplate", field.Name)
 		},
@@ -287,10 +295,14 @@ func (ec *executionContext) fieldContext_JobTemplateUpdatePayload_jobTemplate(_ 
 				return ec.fieldContext_JobTemplate_platform(ctx, field)
 			case "downloadURL":
 				return ec.fieldContext_JobTemplate_downloadURL(ctx, field)
+			case "configuration":
+				return ec.fieldContext_JobTemplate_configuration(ctx, field)
 			case "cron":
 				return ec.fieldContext_JobTemplate_cron(ctx, field)
 			case "owner":
 				return ec.fieldContext_JobTemplate_owner(ctx, field)
+			case "scheduledJobs":
+				return ec.fieldContext_JobTemplate_scheduledJobs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type JobTemplate", field.Name)
 		},

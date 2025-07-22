@@ -20427,6 +20427,95 @@ func (jt *JobTemplateQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, jobtemplate.FieldOwnerID)
 				fieldSeen[jobtemplate.FieldOwnerID] = struct{}{}
 			}
+
+		case "scheduledJobs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ScheduledJobClient{config: jt.config}).Query()
+			)
+			args := newScheduledJobPaginateArgs(fieldArgs(ctx, new(ScheduledJobWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newScheduledJobPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					jt.loadTotal = append(jt.loadTotal, func(ctx context.Context, nodes []*JobTemplate) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"job_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(jobtemplate.ScheduledJobsColumn), ids...))
+						})
+						if err := query.GroupBy(jobtemplate.ScheduledJobsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[1][alias] = n
+						}
+						return nil
+					})
+				} else {
+					jt.loadTotal = append(jt.loadTotal, func(_ context.Context, nodes []*JobTemplate) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.ScheduledJobs)
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[1][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, scheduledjobImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(jobtemplate.ScheduledJobsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			jt.WithNamedScheduledJobs(alias, func(wq *ScheduledJobQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[jobtemplate.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, jobtemplate.FieldCreatedAt)
@@ -20486,6 +20575,11 @@ func (jt *JobTemplateQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[jobtemplate.FieldDownloadURL]; !ok {
 				selectedFields = append(selectedFields, jobtemplate.FieldDownloadURL)
 				fieldSeen[jobtemplate.FieldDownloadURL] = struct{}{}
+			}
+		case "configuration":
+			if _, ok := fieldSeen[jobtemplate.FieldConfiguration]; !ok {
+				selectedFields = append(selectedFields, jobtemplate.FieldConfiguration)
+				fieldSeen[jobtemplate.FieldConfiguration] = struct{}{}
 			}
 		case "cron":
 			if _, ok := fieldSeen[jobtemplate.FieldCron]; !ok {
@@ -20656,6 +20750,11 @@ func (jth *JobTemplateHistoryQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[jobtemplatehistory.FieldDownloadURL]; !ok {
 				selectedFields = append(selectedFields, jobtemplatehistory.FieldDownloadURL)
 				fieldSeen[jobtemplatehistory.FieldDownloadURL] = struct{}{}
+			}
+		case "configuration":
+			if _, ok := fieldSeen[jobtemplatehistory.FieldConfiguration]; !ok {
+				selectedFields = append(selectedFields, jobtemplatehistory.FieldConfiguration)
+				fieldSeen[jobtemplatehistory.FieldConfiguration] = struct{}{}
 			}
 		case "cron":
 			if _, ok := fieldSeen[jobtemplatehistory.FieldCron]; !ok {
@@ -37107,6 +37206,11 @@ func (sj *ScheduledJobQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, scheduledjob.FieldJobID)
 				fieldSeen[scheduledjob.FieldJobID] = struct{}{}
 			}
+		case "active":
+			if _, ok := fieldSeen[scheduledjob.FieldActive]; !ok {
+				selectedFields = append(selectedFields, scheduledjob.FieldActive)
+				fieldSeen[scheduledjob.FieldActive] = struct{}{}
+			}
 		case "configuration":
 			if _, ok := fieldSeen[scheduledjob.FieldConfiguration]; !ok {
 				selectedFields = append(selectedFields, scheduledjob.FieldConfiguration)
@@ -37261,6 +37365,11 @@ func (sjh *ScheduledJobHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[scheduledjobhistory.FieldJobID]; !ok {
 				selectedFields = append(selectedFields, scheduledjobhistory.FieldJobID)
 				fieldSeen[scheduledjobhistory.FieldJobID] = struct{}{}
+			}
+		case "active":
+			if _, ok := fieldSeen[scheduledjobhistory.FieldActive]; !ok {
+				selectedFields = append(selectedFields, scheduledjobhistory.FieldActive)
+				fieldSeen[scheduledjobhistory.FieldActive] = struct{}{}
 			}
 		case "configuration":
 			if _, ok := fieldSeen[scheduledjobhistory.FieldConfiguration]; !ok {

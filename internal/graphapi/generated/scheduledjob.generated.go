@@ -81,6 +81,8 @@ func (ec *executionContext) fieldContext_ScheduledJobBulkCreatePayload_scheduled
 				return ec.fieldContext_ScheduledJob_ownerID(ctx, field)
 			case "jobID":
 				return ec.fieldContext_ScheduledJob_jobID(ctx, field)
+			case "active":
+				return ec.fieldContext_ScheduledJob_active(ctx, field)
 			case "configuration":
 				return ec.fieldContext_ScheduledJob_configuration(ctx, field)
 			case "cron":
@@ -159,6 +161,8 @@ func (ec *executionContext) fieldContext_ScheduledJobCreatePayload_scheduledJob(
 				return ec.fieldContext_ScheduledJob_ownerID(ctx, field)
 			case "jobID":
 				return ec.fieldContext_ScheduledJob_jobID(ctx, field)
+			case "active":
+				return ec.fieldContext_ScheduledJob_active(ctx, field)
 			case "configuration":
 				return ec.fieldContext_ScheduledJob_configuration(ctx, field)
 			case "cron":
@@ -281,6 +285,8 @@ func (ec *executionContext) fieldContext_ScheduledJobUpdatePayload_scheduledJob(
 				return ec.fieldContext_ScheduledJob_ownerID(ctx, field)
 			case "jobID":
 				return ec.fieldContext_ScheduledJob_jobID(ctx, field)
+			case "active":
+				return ec.fieldContext_ScheduledJob_active(ctx, field)
 			case "configuration":
 				return ec.fieldContext_ScheduledJob_configuration(ctx, field)
 			case "cron":

@@ -3055,6 +3055,10 @@ func init() {
 	jobtemplateDescTitle := jobtemplateFields[0].Descriptor()
 	// jobtemplate.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	jobtemplate.TitleValidator = jobtemplateDescTitle.Validators[0].(func(string) error)
+	// jobtemplateDescCron is the schema descriptor for cron field.
+	jobtemplateDescCron := jobtemplateFields[6].Descriptor()
+	// jobtemplate.CronValidator is a validator for the "cron" field. It is called by the builders before save.
+	jobtemplate.CronValidator = jobtemplateDescCron.Validators[0].(func(string) error)
 	// jobtemplateDescID is the schema descriptor for id field.
 	jobtemplateDescID := jobtemplateMixinFields2[0].Descriptor()
 	// jobtemplate.DefaultID holds the default value on creation for the id field.
@@ -4952,11 +4956,14 @@ func init() {
 
 	scheduledjob.Hooks[4] = scheduledjobMixinHooks4[0]
 
-	scheduledjob.Hooks[5] = scheduledjobHooks[0]
+	scheduledjob.Hooks[5] = scheduledjobMixinHooks4[1]
+
+	scheduledjob.Hooks[6] = scheduledjobHooks[0]
 	scheduledjobMixinInters1 := scheduledjobMixin[1].Interceptors()
 	scheduledjobMixinInters4 := scheduledjobMixin[4].Interceptors()
 	scheduledjob.Interceptors[0] = scheduledjobMixinInters1[0]
 	scheduledjob.Interceptors[1] = scheduledjobMixinInters4[0]
+	scheduledjob.Interceptors[2] = scheduledjobMixinInters4[1]
 	scheduledjobMixinFields0 := scheduledjobMixin[0].Fields()
 	_ = scheduledjobMixinFields0
 	scheduledjobMixinFields2 := scheduledjobMixin[2].Fields()
@@ -4983,6 +4990,18 @@ func init() {
 	scheduledjobDescOwnerID := scheduledjobMixinFields4[0].Descriptor()
 	// scheduledjob.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	scheduledjob.OwnerIDValidator = scheduledjobDescOwnerID.Validators[0].(func(string) error)
+	// scheduledjobDescJobID is the schema descriptor for job_id field.
+	scheduledjobDescJobID := scheduledjobFields[0].Descriptor()
+	// scheduledjob.JobIDValidator is a validator for the "job_id" field. It is called by the builders before save.
+	scheduledjob.JobIDValidator = scheduledjobDescJobID.Validators[0].(func(string) error)
+	// scheduledjobDescActive is the schema descriptor for active field.
+	scheduledjobDescActive := scheduledjobFields[1].Descriptor()
+	// scheduledjob.DefaultActive holds the default value on creation for the active field.
+	scheduledjob.DefaultActive = scheduledjobDescActive.Default.(bool)
+	// scheduledjobDescCron is the schema descriptor for cron field.
+	scheduledjobDescCron := scheduledjobFields[3].Descriptor()
+	// scheduledjob.CronValidator is a validator for the "cron" field. It is called by the builders before save.
+	scheduledjob.CronValidator = scheduledjobDescCron.Validators[0].(func(string) error)
 	// scheduledjobDescID is the schema descriptor for id field.
 	scheduledjobDescID := scheduledjobMixinFields2[0].Descriptor()
 	// scheduledjob.DefaultID holds the default value on creation for the id field.
@@ -5014,6 +5033,10 @@ func init() {
 	scheduledjobhistory.DefaultUpdatedAt = scheduledjobhistoryDescUpdatedAt.Default.(func() time.Time)
 	// scheduledjobhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	scheduledjobhistory.UpdateDefaultUpdatedAt = scheduledjobhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// scheduledjobhistoryDescActive is the schema descriptor for active field.
+	scheduledjobhistoryDescActive := scheduledjobhistoryFields[13].Descriptor()
+	// scheduledjobhistory.DefaultActive holds the default value on creation for the active field.
+	scheduledjobhistory.DefaultActive = scheduledjobhistoryDescActive.Default.(bool)
 	// scheduledjobhistoryDescID is the schema descriptor for id field.
 	scheduledjobhistoryDescID := scheduledjobhistoryFields[9].Descriptor()
 	// scheduledjobhistory.DefaultID holds the default value on creation for the id field.

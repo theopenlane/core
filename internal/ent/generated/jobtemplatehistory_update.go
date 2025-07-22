@@ -191,6 +191,12 @@ func (jthu *JobTemplateHistoryUpdate) SetNillableWindmillPath(s *string) *JobTem
 	return jthu
 }
 
+// ClearWindmillPath clears the value of the "windmill_path" field.
+func (jthu *JobTemplateHistoryUpdate) ClearWindmillPath() *JobTemplateHistoryUpdate {
+	jthu.mutation.ClearWindmillPath()
+	return jthu
+}
+
 // SetDownloadURL sets the "download_url" field.
 func (jthu *JobTemplateHistoryUpdate) SetDownloadURL(s string) *JobTemplateHistoryUpdate {
 	jthu.mutation.SetDownloadURL(s)
@@ -369,6 +375,9 @@ func (jthu *JobTemplateHistoryUpdate) sqlSave(ctx context.Context) (n int, err e
 	}
 	if value, ok := jthu.mutation.WindmillPath(); ok {
 		_spec.SetField(jobtemplatehistory.FieldWindmillPath, field.TypeString, value)
+	}
+	if jthu.mutation.WindmillPathCleared() {
+		_spec.ClearField(jobtemplatehistory.FieldWindmillPath, field.TypeString)
 	}
 	if value, ok := jthu.mutation.DownloadURL(); ok {
 		_spec.SetField(jobtemplatehistory.FieldDownloadURL, field.TypeString, value)
@@ -569,6 +578,12 @@ func (jthuo *JobTemplateHistoryUpdateOne) SetNillableWindmillPath(s *string) *Jo
 	if s != nil {
 		jthuo.SetWindmillPath(*s)
 	}
+	return jthuo
+}
+
+// ClearWindmillPath clears the value of the "windmill_path" field.
+func (jthuo *JobTemplateHistoryUpdateOne) ClearWindmillPath() *JobTemplateHistoryUpdateOne {
+	jthuo.mutation.ClearWindmillPath()
 	return jthuo
 }
 
@@ -780,6 +795,9 @@ func (jthuo *JobTemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *J
 	}
 	if value, ok := jthuo.mutation.WindmillPath(); ok {
 		_spec.SetField(jobtemplatehistory.FieldWindmillPath, field.TypeString, value)
+	}
+	if jthuo.mutation.WindmillPathCleared() {
+		_spec.ClearField(jobtemplatehistory.FieldWindmillPath, field.TypeString)
 	}
 	if value, ok := jthuo.mutation.DownloadURL(); ok {
 		_spec.SetField(jobtemplatehistory.FieldDownloadURL, field.TypeString, value)

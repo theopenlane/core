@@ -33,6 +33,8 @@ const (
 	FieldOwnerID = "owner_id"
 	// FieldJobID holds the string denoting the job_id field in the database.
 	FieldJobID = "job_id"
+	// FieldActive holds the string denoting the active field in the database.
+	FieldActive = "active"
 	// FieldConfiguration holds the string denoting the configuration field in the database.
 	FieldConfiguration = "configuration"
 	// FieldCron holds the string denoting the cron field in the database.
@@ -96,6 +98,7 @@ var Columns = []string{
 	FieldDisplayID,
 	FieldOwnerID,
 	FieldJobID,
+	FieldActive,
 	FieldConfiguration,
 	FieldCron,
 	FieldJobRunnerID,
@@ -126,8 +129,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [6]ent.Hook
-	Interceptors [2]ent.Interceptor
+	Hooks        [7]ent.Hook
+	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -139,6 +142,12 @@ var (
 	DisplayIDValidator func(string) error
 	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	OwnerIDValidator func(string) error
+	// JobIDValidator is a validator for the "job_id" field. It is called by the builders before save.
+	JobIDValidator func(string) error
+	// DefaultActive holds the default value on creation for the "active" field.
+	DefaultActive bool
+	// CronValidator is a validator for the "cron" field. It is called by the builders before save.
+	CronValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -194,6 +203,11 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 // ByJobID orders the results by the job_id field.
 func ByJobID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldJobID, opts...).ToFunc()
+}
+
+// ByActive orders the results by the active field.
+func ByActive(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldActive, opts...).ToFunc()
 }
 
 // ByCron orders the results by the cron field.
@@ -265,7 +279,7 @@ func newJobTemplateStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(JobTemplateInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, JobTemplateTable, JobTemplateColumn),
+		sqlgraph.Edge(sqlgraph.M2O, true, JobTemplateTable, JobTemplateColumn),
 	)
 }
 func newControlsStep() *sqlgraph.Step {

@@ -66,6 +66,7 @@ func (JobTemplate) Fields() []ent.Field {
 					entgql.SkipAll, // hidden from the graphql api, this is an internal field used to track the windmill path
 				),
 			).
+			Optional().
 			Comment("windmill path used to execute the job"),
 		field.String("download_url").
 			Annotations(
@@ -79,7 +80,7 @@ func (JobTemplate) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.Skip(
-					entgql.SkipAll, // currently unused, so hiding from the graphql api for now
+					entgql.SkipWhereInput | entgql.SkipOrderField,
 				),
 			).
 			Comment("the json configuration to run this job, which could be used to template a job, e.g. { \"account_name\": \"my-account\" }"),
@@ -89,6 +90,15 @@ func (JobTemplate) Fields() []ent.Field {
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput | entgql.SkipOrderField),
 			).
+			Validate(func(s string) error {
+				if s == "" {
+					return nil
+				}
+
+				c := models.Cron(s)
+
+				return c.Validate()
+			}).
 			Optional().
 			Nillable(),
 	}
@@ -116,6 +126,23 @@ func (JobTemplate) Annotations() []schema.Annotation {
 func (JobTemplate) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookJobTemplate(),
+	}
+}
+
+// Edges of the JobTemplate
+func (j JobTemplate) Edges() []ent.Edge {
+	return []ent.Edge{
+		// ensure we cascade delete scheduled jobs when a job template is deleted
+		// TODO: if a job template is system owned, we should look into protection to prevent deletion
+		// if there are schedule jobs linked
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:    j,
+			edgeSchema:    ScheduledJob{},
+			cascadeDelete: "JobTemplate",
+			annotations: []schema.Annotation{
+				entgql.Skip(entgql.SkipMutationCreateInput),
+			},
+		}),
 	}
 }
 

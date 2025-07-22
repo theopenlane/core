@@ -2074,21 +2074,23 @@ type ComplexityRoot struct {
 	}
 
 	JobTemplate struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		Cron        func(childComplexity int) int
-		Description func(childComplexity int) int
-		DisplayID   func(childComplexity int) int
-		DownloadURL func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Owner       func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Platform    func(childComplexity int) int
-		SystemOwned func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		Title       func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		Configuration func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		Cron          func(childComplexity int) int
+		Description   func(childComplexity int) int
+		DisplayID     func(childComplexity int) int
+		DownloadURL   func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Owner         func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		Platform      func(childComplexity int) int
+		ScheduledJobs func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
+		SystemOwned   func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		Title         func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
 	}
 
 	JobTemplateBulkCreatePayload struct {
@@ -2115,23 +2117,24 @@ type ComplexityRoot struct {
 	}
 
 	JobTemplateHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		Cron        func(childComplexity int) int
-		Description func(childComplexity int) int
-		DisplayID   func(childComplexity int) int
-		DownloadURL func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Platform    func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		SystemOwned func(childComplexity int) int
-		Tags        func(childComplexity int) int
-		Title       func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		Configuration func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		Cron          func(childComplexity int) int
+		Description   func(childComplexity int) int
+		DisplayID     func(childComplexity int) int
+		DownloadURL   func(childComplexity int) int
+		HistoryTime   func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Operation     func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		Platform      func(childComplexity int) int
+		Ref           func(childComplexity int) int
+		SystemOwned   func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		Title         func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
 	}
 
 	JobTemplateHistoryConnection struct {
@@ -3836,6 +3839,7 @@ type ComplexityRoot struct {
 	}
 
 	ScheduledJob struct {
+		Active        func(childComplexity int) int
 		Configuration func(childComplexity int) int
 		Controls      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt     func(childComplexity int) int
@@ -3878,6 +3882,7 @@ type ComplexityRoot struct {
 	}
 
 	ScheduledJobHistory struct {
+		Active        func(childComplexity int) int
 		Configuration func(childComplexity int) int
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
@@ -14552,6 +14557,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobRunnerUpdatePayload.JobRunner(childComplexity), true
 
+	case "JobTemplate.configuration":
+		if e.complexity.JobTemplate.Configuration == nil {
+			break
+		}
+
+		return e.complexity.JobTemplate.Configuration(childComplexity), true
+
 	case "JobTemplate.createdAt":
 		if e.complexity.JobTemplate.CreatedAt == nil {
 			break
@@ -14621,6 +14633,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobTemplate.Platform(childComplexity), true
+
+	case "JobTemplate.scheduledJobs":
+		if e.complexity.JobTemplate.ScheduledJobs == nil {
+			break
+		}
+
+		args, err := ec.field_JobTemplate_scheduledJobs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.JobTemplate.ScheduledJobs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScheduledJobOrder), args["where"].(*generated.ScheduledJobWhereInput)), true
 
 	case "JobTemplate.systemOwned":
 		if e.complexity.JobTemplate.SystemOwned == nil {
@@ -14712,6 +14736,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobTemplateEdge.Node(childComplexity), true
+
+	case "JobTemplateHistory.configuration":
+		if e.complexity.JobTemplateHistory.Configuration == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.Configuration(childComplexity), true
 
 	case "JobTemplateHistory.createdAt":
 		if e.complexity.JobTemplateHistory.CreatedAt == nil {
@@ -26987,6 +27018,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScanUpdatePayload.Scan(childComplexity), true
 
+	case "ScheduledJob.active":
+		if e.complexity.ScheduledJob.Active == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.Active(childComplexity), true
+
 	case "ScheduledJob.configuration":
 		if e.complexity.ScheduledJob.Configuration == nil {
 			break
@@ -27164,6 +27202,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScheduledJobEdge.Node(childComplexity), true
+
+	case "ScheduledJobHistory.active":
+		if e.complexity.ScheduledJobHistory.Active == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.Active(childComplexity), true
 
 	case "ScheduledJobHistory.configuration":
 		if e.complexity.ScheduledJobHistory.Configuration == nil {
@@ -43221,6 +43266,10 @@ input CreateJobTemplateInput {
   """
   downloadURL: String!
   """
+  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
+  """
+  configuration: JobConfiguration
+  """
   cron schedule to run the job, e.g. 0 0 * * *
   """
   cron: String
@@ -43840,7 +43889,11 @@ Input was generated by ent.
 """
 input CreateScheduledJobInput {
   """
-  the configuration to run this job
+  whether the scheduled job is active
+  """
+  active: Boolean
+  """
+  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
   """
   configuration: JobConfiguration
   """
@@ -57253,10 +57306,45 @@ type JobTemplate implements Node {
   """
   downloadURL: String!
   """
+  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
+  """
+  configuration: JobConfiguration
+  """
   cron schedule to run the job, e.g. 0 0 * * *
   """
   cron: String
   owner: Organization
+  scheduledJobs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ScheduledJobs returned from the connection.
+    """
+    orderBy: [ScheduledJobOrder!]
+
+    """
+    Filtering options for ScheduledJobs returned from the connection.
+    """
+    where: ScheduledJobWhereInput
+  ): ScheduledJobConnection!
 }
 """
 A connection to a list of items.
@@ -57329,6 +57417,10 @@ type JobTemplateHistory implements Node {
   the url from where to download the script from
   """
   downloadURL: String!
+  """
+  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
+  """
+  configuration: JobConfiguration
   """
   cron schedule to run the job, e.g. 0 0 * * *
   """
@@ -57803,6 +57895,11 @@ input JobTemplateWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  scheduled_jobs edge predicates
+  """
+  hasScheduledJobs: Boolean
+  hasScheduledJobsWith: [ScheduledJobWhereInput!]
 }
 """
 The builtin Map type
@@ -74406,7 +74503,7 @@ type ScheduledJob implements Node {
   """
   displayID: String!
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: ID
   """
@@ -74414,7 +74511,11 @@ type ScheduledJob implements Node {
   """
   jobID: ID!
   """
-  the configuration to run this job
+  whether the scheduled job is active
+  """
+  active: Boolean!
+  """
+  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
   """
   configuration: JobConfiguration
   """
@@ -74535,7 +74636,7 @@ type ScheduledJobHistory implements Node {
   """
   displayID: String!
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: String
   """
@@ -74543,7 +74644,11 @@ type ScheduledJobHistory implements Node {
   """
   jobID: String!
   """
-  the configuration to run this job
+  whether the scheduled job is active
+  """
+  active: Boolean!
+  """
+  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
   """
   configuration: JobConfiguration
   """
@@ -74783,6 +74888,11 @@ input ScheduledJobHistoryWhereInput {
   jobIDHasSuffix: String
   jobIDEqualFold: String
   jobIDContainsFold: String
+  """
+  active field predicates
+  """
+  active: Boolean
+  activeNEQ: Boolean
   """
   job_runner_id field predicates
   """
@@ -75231,6 +75341,11 @@ input ScheduledJobWhereInput {
   jobIDHasSuffix: ID
   jobIDEqualFold: ID
   jobIDContainsFold: ID
+  """
+  active field predicates
+  """
+  active: Boolean
+  activeNEQ: Boolean
   """
   job_runner_id field predicates
   """
@@ -84435,12 +84550,21 @@ input UpdateJobTemplateInput {
   """
   downloadURL: String
   """
+  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
+  """
+  configuration: JobConfiguration
+  appendConfiguration: JobConfiguration
+  clearConfiguration: Boolean
+  """
   cron schedule to run the job, e.g. 0 0 * * *
   """
   cron: String
   clearCron: Boolean
   ownerID: ID
   clearOwner: Boolean
+  addScheduledJobIDs: [ID!]
+  removeScheduledJobIDs: [ID!]
+  clearScheduledJobs: Boolean
 }
 """
 UpdateMappableDomainInput is used for update MappableDomain object.
@@ -85338,7 +85462,11 @@ Input was generated by ent.
 """
 input UpdateScheduledJobInput {
   """
-  the configuration to run this job
+  whether the scheduled job is active
+  """
+  active: Boolean
+  """
+  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
   """
   configuration: JobConfiguration
   appendConfiguration: JobConfiguration
@@ -85348,8 +85476,6 @@ input UpdateScheduledJobInput {
   """
   cron: String
   clearCron: Boolean
-  ownerID: ID
-  clearOwner: Boolean
   jobTemplateID: ID
   addControlIDs: [ID!]
   removeControlIDs: [ID!]

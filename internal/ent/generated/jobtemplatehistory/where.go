@@ -1052,6 +1052,16 @@ func WindmillPathHasSuffix(v string) predicate.JobTemplateHistory {
 	return predicate.JobTemplateHistory(sql.FieldHasSuffix(FieldWindmillPath, v))
 }
 
+// WindmillPathIsNil applies the IsNil predicate on the "windmill_path" field.
+func WindmillPathIsNil() predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldIsNull(FieldWindmillPath))
+}
+
+// WindmillPathNotNil applies the NotNil predicate on the "windmill_path" field.
+func WindmillPathNotNil() predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldNotNull(FieldWindmillPath))
+}
+
 // WindmillPathEqualFold applies the EqualFold predicate on the "windmill_path" field.
 func WindmillPathEqualFold(v string) predicate.JobTemplateHistory {
 	return predicate.JobTemplateHistory(sql.FieldEqualFold(FieldWindmillPath, v))

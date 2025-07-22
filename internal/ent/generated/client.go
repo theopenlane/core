@@ -11386,6 +11386,25 @@ func (c *JobTemplateClient) QueryOwner(jt *JobTemplate) *OrganizationQuery {
 	return query
 }
 
+// QueryScheduledJobs queries the scheduled_jobs edge of a JobTemplate.
+func (c *JobTemplateClient) QueryScheduledJobs(jt *JobTemplate) *ScheduledJobQuery {
+	query := (&ScheduledJobClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := jt.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(jobtemplate.Table, jobtemplate.FieldID, id),
+			sqlgraph.To(scheduledjob.Table, scheduledjob.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, jobtemplate.ScheduledJobsTable, jobtemplate.ScheduledJobsColumn),
+		)
+		schemaConfig := jt.schemaConfig
+		step.To.Schema = schemaConfig.ScheduledJob
+		step.Edge.Schema = schemaConfig.ScheduledJob
+		fromV = sqlgraph.Neighbors(jt.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *JobTemplateClient) Hooks() []Hook {
 	hooks := c.hooks.JobTemplate
@@ -19193,7 +19212,7 @@ func (c *ScheduledJobClient) QueryJobTemplate(sj *ScheduledJob) *JobTemplateQuer
 		step := sqlgraph.NewStep(
 			sqlgraph.From(scheduledjob.Table, scheduledjob.FieldID, id),
 			sqlgraph.To(jobtemplate.Table, jobtemplate.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, scheduledjob.JobTemplateTable, scheduledjob.JobTemplateColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, scheduledjob.JobTemplateTable, scheduledjob.JobTemplateColumn),
 		)
 		schemaConfig := sj.schemaConfig
 		step.To.Schema = schemaConfig.JobTemplate

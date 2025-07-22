@@ -115,7 +115,7 @@ func (sjq *ScheduledJobQuery) QueryJobTemplate() *JobTemplateQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(scheduledjob.Table, scheduledjob.FieldID, selector),
 			sqlgraph.To(jobtemplate.Table, jobtemplate.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, scheduledjob.JobTemplateTable, scheduledjob.JobTemplateColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, scheduledjob.JobTemplateTable, scheduledjob.JobTemplateColumn),
 		)
 		schemaConfig := sjq.schemaConfig
 		step.To.Schema = schemaConfig.JobTemplate

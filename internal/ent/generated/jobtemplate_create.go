@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -179,6 +180,14 @@ func (jtc *JobTemplateCreate) SetWindmillPath(s string) *JobTemplateCreate {
 	return jtc
 }
 
+// SetNillableWindmillPath sets the "windmill_path" field if the given value is not nil.
+func (jtc *JobTemplateCreate) SetNillableWindmillPath(s *string) *JobTemplateCreate {
+	if s != nil {
+		jtc.SetWindmillPath(*s)
+	}
+	return jtc
+}
+
 // SetDownloadURL sets the "download_url" field.
 func (jtc *JobTemplateCreate) SetDownloadURL(s string) *JobTemplateCreate {
 	jtc.mutation.SetDownloadURL(s)
@@ -222,6 +231,21 @@ func (jtc *JobTemplateCreate) SetNillableID(s *string) *JobTemplateCreate {
 // SetOwner sets the "owner" edge to the Organization entity.
 func (jtc *JobTemplateCreate) SetOwner(o *Organization) *JobTemplateCreate {
 	return jtc.SetOwnerID(o.ID)
+}
+
+// AddScheduledJobIDs adds the "scheduled_jobs" edge to the ScheduledJob entity by IDs.
+func (jtc *JobTemplateCreate) AddScheduledJobIDs(ids ...string) *JobTemplateCreate {
+	jtc.mutation.AddScheduledJobIDs(ids...)
+	return jtc
+}
+
+// AddScheduledJobs adds the "scheduled_jobs" edges to the ScheduledJob entity.
+func (jtc *JobTemplateCreate) AddScheduledJobs(s ...*ScheduledJob) *JobTemplateCreate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return jtc.AddScheduledJobIDs(ids...)
 }
 
 // Mutation returns the JobTemplateMutation object of the builder.
@@ -319,14 +343,11 @@ func (jtc *JobTemplateCreate) check() error {
 			return &ValidationError{Name: "platform", err: fmt.Errorf(`generated: validator failed for field "JobTemplate.platform": %w`, err)}
 		}
 	}
-	if _, ok := jtc.mutation.WindmillPath(); !ok {
-		return &ValidationError{Name: "windmill_path", err: errors.New(`generated: missing required field "JobTemplate.windmill_path"`)}
-	}
 	if _, ok := jtc.mutation.DownloadURL(); !ok {
 		return &ValidationError{Name: "download_url", err: errors.New(`generated: missing required field "JobTemplate.download_url"`)}
 	}
 	if v, ok := jtc.mutation.Cron(); ok {
-		if err := v.Validate(); err != nil {
+		if err := jobtemplate.CronValidator(string(v)); err != nil {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "JobTemplate.cron": %w`, err)}
 		}
 	}
@@ -446,6 +467,23 @@ func (jtc *JobTemplateCreate) createSpec() (*JobTemplate, *sqlgraph.CreateSpec) 
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := jtc.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.ScheduledJobsTable,
+			Columns: []string{jobtemplate.ScheduledJobsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = jtc.schemaConfig.ScheduledJob
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

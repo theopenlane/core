@@ -909,6 +909,16 @@ func WindmillPathHasSuffix(v string) predicate.JobTemplate {
 	return predicate.JobTemplate(sql.FieldHasSuffix(FieldWindmillPath, v))
 }
 
+// WindmillPathIsNil applies the IsNil predicate on the "windmill_path" field.
+func WindmillPathIsNil() predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldIsNull(FieldWindmillPath))
+}
+
+// WindmillPathNotNil applies the NotNil predicate on the "windmill_path" field.
+func WindmillPathNotNil() predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldNotNull(FieldWindmillPath))
+}
+
 // WindmillPathEqualFold applies the EqualFold predicate on the "windmill_path" field.
 func WindmillPathEqualFold(v string) predicate.JobTemplate {
 	return predicate.JobTemplate(sql.FieldEqualFold(FieldWindmillPath, v))
@@ -1095,6 +1105,35 @@ func HasOwnerWith(preds ...predicate.Organization) predicate.JobTemplate {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.JobTemplate
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasScheduledJobs applies the HasEdge predicate on the "scheduled_jobs" edge.
+func HasScheduledJobs() predicate.JobTemplate {
+	return predicate.JobTemplate(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ScheduledJobsTable, ScheduledJobsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ScheduledJob
+		step.Edge.Schema = schemaConfig.ScheduledJob
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasScheduledJobsWith applies the HasEdge predicate on the "scheduled_jobs" edge with a given conditions (other predicates).
+func HasScheduledJobsWith(preds ...predicate.ScheduledJob) predicate.JobTemplate {
+	return predicate.JobTemplate(func(s *sql.Selector) {
+		step := newScheduledJobsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ScheduledJob
+		step.Edge.Schema = schemaConfig.ScheduledJob
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

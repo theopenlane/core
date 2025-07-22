@@ -377,6 +377,13 @@ func JobRunnerTokenEdgeCleanup(ctx context.Context, id string) error {
 func JobTemplateEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobtemplate edge")), entfga.DeleteTuplesFirstKey{})
 
+	if exists, err := FromContext(ctx).ScheduledJob.Query().Where((scheduledjob.HasJobTemplateWith(jobtemplate.ID(id)))).Exist(ctx); err == nil && exists {
+		if scheduledjobCount, err := FromContext(ctx).ScheduledJob.Delete().Where(scheduledjob.HasJobTemplateWith(jobtemplate.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", scheduledjobCount).Msg("deleting scheduledjob")
+			return err
+		}
+	}
+
 	return nil
 }
 

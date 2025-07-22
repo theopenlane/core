@@ -8759,6 +8759,10 @@ func (m *ScheduledJobMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetJobID(jobID)
 	}
 
+	if active, exists := m.Active(); exists {
+		create = create.SetActive(active)
+	}
+
 	if configuration, exists := m.Configuration(); exists {
 		create = create.SetConfiguration(configuration)
 	}
@@ -8856,6 +8860,12 @@ func (m *ScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetJobID(scheduledjob.JobID)
 		}
 
+		if active, exists := m.Active(); exists {
+			create = create.SetActive(active)
+		} else {
+			create = create.SetActive(scheduledjob.Active)
+		}
+
 		if configuration, exists := m.Configuration(); exists {
 			create = create.SetConfiguration(configuration)
 		} else {
@@ -8918,6 +8928,7 @@ func (m *ScheduledJobMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetDisplayID(scheduledjob.DisplayID).
 			SetOwnerID(scheduledjob.OwnerID).
 			SetJobID(scheduledjob.JobID).
+			SetActive(scheduledjob.Active).
 			SetConfiguration(scheduledjob.Configuration).
 			SetNillableCron(scheduledjob.Cron).
 			SetJobRunnerID(scheduledjob.JobRunnerID).

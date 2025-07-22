@@ -3239,6 +3239,27 @@ func (jt *JobTemplate) Owner(ctx context.Context) (*Organization, error) {
 	return result, MaskNotFound(err)
 }
 
+func (jt *JobTemplate) ScheduledJobs(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ScheduledJobOrder, where *ScheduledJobWhereInput,
+) (*ScheduledJobConnection, error) {
+	opts := []ScheduledJobPaginateOption{
+		WithScheduledJobOrder(orderBy),
+		WithScheduledJobFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := jt.Edges.totalCount[1][alias]
+	if nodes, err := jt.NamedScheduledJobs(alias); err == nil || hasTotalCount {
+		pager, err := newScheduledJobPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &ScheduledJobConnection{Edges: []*ScheduledJobEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return jt.QueryScheduledJobs().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (md *MappableDomain) CustomDomains(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*CustomDomainOrder, where *CustomDomainWhereInput,
 ) (*CustomDomainConnection, error) {

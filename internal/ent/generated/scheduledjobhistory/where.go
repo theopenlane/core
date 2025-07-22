@@ -121,6 +121,11 @@ func JobID(v string) predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldJobID, v))
 }
 
+// Active applies equality check predicate on the "active" field. It's identical to ActiveEQ.
+func Active(v bool) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldActive, v))
+}
+
 // Cron applies equality check predicate on the "cron" field. It's identical to CronEQ.
 func Cron(v models.Cron) predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldCron, v))
@@ -844,6 +849,16 @@ func JobIDEqualFold(v string) predicate.ScheduledJobHistory {
 // JobIDContainsFold applies the ContainsFold predicate on the "job_id" field.
 func JobIDContainsFold(v string) predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldContainsFold(FieldJobID, v))
+}
+
+// ActiveEQ applies the EQ predicate on the "active" field.
+func ActiveEQ(v bool) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldEQ(FieldActive, v))
+}
+
+// ActiveNEQ applies the NEQ predicate on the "active" field.
+func ActiveNEQ(v bool) predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldNEQ(FieldActive, v))
 }
 
 // ConfigurationIsNil applies the IsNil predicate on the "configuration" field.

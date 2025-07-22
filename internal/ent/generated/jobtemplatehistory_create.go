@@ -213,6 +213,14 @@ func (jthc *JobTemplateHistoryCreate) SetWindmillPath(s string) *JobTemplateHist
 	return jthc
 }
 
+// SetNillableWindmillPath sets the "windmill_path" field if the given value is not nil.
+func (jthc *JobTemplateHistoryCreate) SetNillableWindmillPath(s *string) *JobTemplateHistoryCreate {
+	if s != nil {
+		jthc.SetWindmillPath(*s)
+	}
+	return jthc
+}
+
 // SetDownloadURL sets the "download_url" field.
 func (jthc *JobTemplateHistoryCreate) SetDownloadURL(s string) *JobTemplateHistoryCreate {
 	jthc.mutation.SetDownloadURL(s)
@@ -355,9 +363,6 @@ func (jthc *JobTemplateHistoryCreate) check() error {
 		if err := jobtemplatehistory.PlatformValidator(v); err != nil {
 			return &ValidationError{Name: "platform", err: fmt.Errorf(`generated: validator failed for field "JobTemplateHistory.platform": %w`, err)}
 		}
-	}
-	if _, ok := jthc.mutation.WindmillPath(); !ok {
-		return &ValidationError{Name: "windmill_path", err: errors.New(`generated: missing required field "JobTemplateHistory.windmill_path"`)}
 	}
 	if _, ok := jthc.mutation.DownloadURL(); !ok {
 		return &ValidationError{Name: "download_url", err: errors.New(`generated: missing required field "JobTemplateHistory.download_url"`)}

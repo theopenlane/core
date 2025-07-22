@@ -136,6 +136,20 @@ func (sjc *ScheduledJobCreate) SetJobID(s string) *ScheduledJobCreate {
 	return sjc
 }
 
+// SetActive sets the "active" field.
+func (sjc *ScheduledJobCreate) SetActive(b bool) *ScheduledJobCreate {
+	sjc.mutation.SetActive(b)
+	return sjc
+}
+
+// SetNillableActive sets the "active" field if the given value is not nil.
+func (sjc *ScheduledJobCreate) SetNillableActive(b *bool) *ScheduledJobCreate {
+	if b != nil {
+		sjc.SetActive(*b)
+	}
+	return sjc
+}
+
 // SetConfiguration sets the "configuration" field.
 func (sjc *ScheduledJobCreate) SetConfiguration(mc models.JobConfiguration) *ScheduledJobCreate {
 	sjc.mutation.SetConfiguration(mc)
@@ -286,6 +300,10 @@ func (sjc *ScheduledJobCreate) defaults() error {
 		v := scheduledjob.DefaultUpdatedAt()
 		sjc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := sjc.mutation.Active(); !ok {
+		v := scheduledjob.DefaultActive
+		sjc.mutation.SetActive(v)
+	}
 	if _, ok := sjc.mutation.ID(); !ok {
 		if scheduledjob.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized scheduledjob.DefaultID (forgotten import generated/runtime?)")
@@ -314,8 +332,16 @@ func (sjc *ScheduledJobCreate) check() error {
 	if _, ok := sjc.mutation.JobID(); !ok {
 		return &ValidationError{Name: "job_id", err: errors.New(`generated: missing required field "ScheduledJob.job_id"`)}
 	}
+	if v, ok := sjc.mutation.JobID(); ok {
+		if err := scheduledjob.JobIDValidator(v); err != nil {
+			return &ValidationError{Name: "job_id", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.job_id": %w`, err)}
+		}
+	}
+	if _, ok := sjc.mutation.Active(); !ok {
+		return &ValidationError{Name: "active", err: errors.New(`generated: missing required field "ScheduledJob.active"`)}
+	}
 	if v, ok := sjc.mutation.Cron(); ok {
-		if err := v.Validate(); err != nil {
+		if err := scheduledjob.CronValidator(string(v)); err != nil {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.cron": %w`, err)}
 		}
 	}
@@ -386,6 +412,10 @@ func (sjc *ScheduledJobCreate) createSpec() (*ScheduledJob, *sqlgraph.CreateSpec
 		_spec.SetField(scheduledjob.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
 	}
+	if value, ok := sjc.mutation.Active(); ok {
+		_spec.SetField(scheduledjob.FieldActive, field.TypeBool, value)
+		_node.Active = value
+	}
 	if value, ok := sjc.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjob.FieldConfiguration, field.TypeJSON, value)
 		_node.Configuration = value
@@ -415,7 +445,7 @@ func (sjc *ScheduledJobCreate) createSpec() (*ScheduledJob, *sqlgraph.CreateSpec
 	if nodes := sjc.mutation.JobTemplateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   scheduledjob.JobTemplateTable,
 			Columns: []string{scheduledjob.JobTemplateColumn},
 			Bidi:    false,
