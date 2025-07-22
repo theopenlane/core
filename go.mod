@@ -150,6 +150,7 @@ require (
 	github.com/alixaxel/pagerank v0.0.0-20200105181019-900657b89dcb // indirect
 	github.com/andybalholm/brotli v1.1.1 // indirect
 	github.com/andybalholm/cascadia v1.3.3 // indirect
+	github.com/apapsch/go-jsonmerge/v2 v2.0.0 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 // indirect
 	github.com/ashanbrown/forbidigo v1.6.0 // indirect
 	github.com/ashanbrown/makezero v1.2.0 // indirect
@@ -327,6 +328,7 @@ require (
 	github.com/nishanths/predeclared v0.2.2 // indirect
 	github.com/nunnatsa/ginkgolinter v0.19.1 // indirect
 	github.com/nwaples/rardecode/v2 v2.0.0-beta.4.0.20241112120701-034e449c6e78 // indirect
+	github.com/oapi-codegen/runtime v1.1.1 // indirect
 	github.com/oasdiff/yaml v0.0.0-20250309154309-f31be36b4037 // indirect
 	github.com/oasdiff/yaml3 v0.0.0-20250309153720-d2182401db90 // indirect
 	github.com/olekukonko/errors v1.1.0 // indirect
@@ -358,6 +360,7 @@ require (
 	github.com/raeperd/recvcheck v0.2.0 // indirect
 	github.com/refraction-networking/utls v1.7.0 // indirect
 	github.com/remeh/sizedwaitgroup v1.0.0 // indirect
+	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	github.com/rs/xid v1.6.0 // indirect
 	github.com/ryancurrah/gomodguard v1.4.1 // indirect
@@ -407,6 +410,7 @@ require (
 	github.com/uudashr/gocognit v1.2.0 // indirect
 	github.com/uudashr/iface v1.3.1 // indirect
 	github.com/weppos/publicsuffix-go v0.40.3-0.20250710122833-cbec4cbedf45 // indirect
+	github.com/windmill-labs/windmill-go-client v1.510.1 // indirect
 	github.com/xeipuuv/gojsonpointer v0.0.0-20180127040702-4e3ac2762d5f // indirect
 	github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415 // indirect
 	github.com/xen0n/gosmopolitan v1.2.2 // indirect

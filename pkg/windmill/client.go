@@ -13,6 +13,10 @@ import (
 	"strings"
 	"time"
 
+	wmill "github.com/windmill-labs/windmill-go-client"
+	api "github.com/windmill-labs/windmill-go-client/api"
+
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -44,11 +48,34 @@ func (wrt *windmillRoundTripper) RoundTrip(req *http.Request) (*http.Response, e
 	return wrt.base.RoundTrip(clonedReq)
 }
 
+func (c *Client) newClient(token string) error {
+	workspace := c.workspace
+
+	client, err := api.NewClientWithResponses(c.baseURL, func(c *api.Client) error {
+		c.RequestEditors = append(c.RequestEditors, func(ctx context.Context, req *http.Request) error {
+			req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
+			return nil
+		})
+		return nil
+	})
+	if err != nil {
+		return fmt.Errorf("failed to create Windmill client: %w", err)
+	}
+
+	c.wmillClient = &wmill.ClientWithWorkspace{
+		Client:    client,
+		Workspace: workspace,
+	}
+
+	return nil
+}
+
 // Client is a simple SDK for creating and managing Windmill flows
 type Client struct {
 	baseURL         string
 	workspace       string
 	httpClient      *http.Client
+	wmillClient     *wmill.ClientWithWorkspace
 	timezone        string
 	onFailureScript string
 	onSuccessScript string
@@ -78,17 +105,26 @@ func NewWindmill(cfg entconfig.Config) (*Client, error) {
 		base:  http.DefaultTransport,
 	}
 
-	return &Client{
+	log.Info().Msgf("Windmill client created with config: %+v", cfg.Windmill)
+
+	c := &Client{
 		baseURL:         cfg.Windmill.BaseURL,
 		workspace:       cfg.Windmill.Workspace,
 		timezone:        cfg.Windmill.Timezone,
 		onFailureScript: cfg.Windmill.OnFailureScript,
 		onSuccessScript: cfg.Windmill.OnSuccessScript,
+
 		httpClient: &http.Client{
 			Timeout:   timeout,
 			Transport: transport,
 		},
-	}, nil
+	}
+
+	if err := c.newClient(cfg.Windmill.Token); err != nil {
+		return nil, err
+	}
+
+	return c, nil
 }
 
 // CreateFlow creates a new flow in Windmill and returns the flow path
@@ -99,16 +135,18 @@ func (c *Client) CreateFlow(ctx context.Context, req CreateFlowRequest) (*Create
 	flowValue := createFlowValue(req.Value, req.Language)
 
 	apiReq := struct {
-		Path    string `json:"path"`
-		Summary string `json:"summary"`
-		Value   struct {
+		Path        string `json:"path"`
+		Summary     string `json:"summary,omitempty"`
+		Description string `json:"description,omitempty"`
+		Value       struct {
 			Modules    []any `json:"modules"`
 			SameWorker bool  `json:"same_worker"`
 		} `json:"value"`
 		Schema any `json:"schema,omitempty"`
 	}{
-		Path:    req.Path,
-		Summary: req.Summary,
+		Path:        req.Path,
+		Summary:     req.Summary,
+		Description: req.Description,
 		Value: struct {
 			Modules    []any `json:"modules"`
 			SameWorker bool  `json:"same_worker"`
@@ -168,8 +206,8 @@ func (c *Client) UpdateFlow(ctx context.Context, path string, req UpdateFlowRequ
 
 	apiReq := struct {
 		Path        string `json:"path"`
-		Summary     string `json:"summary"`
-		Description string `json:"description"`
+		Summary     string `json:"summary,omitempty"`
+		Description string `json:"description,omitempty"`
 		Value       struct {
 			Modules []any `json:"modules"`
 		} `json:"value"`
@@ -184,6 +222,8 @@ func (c *Client) UpdateFlow(ctx context.Context, path string, req UpdateFlowRequ
 			Modules: flowValue,
 		},
 	}
+
+	log.Info().Msgf("apiReq: %+v", apiReq)
 
 	if req.Schema != nil {
 		apiReq.Schema = req.Schema
@@ -243,64 +283,46 @@ func (c *Client) GetFlow(ctx context.Context, path string) (*Flow, error) {
 func (c *Client) CreateScheduledJob(ctx context.Context, req CreateScheduledJobRequest) (*CreateScheduledJobResponse, error) {
 	url := fmt.Sprintf("%s/api/w/%s/schedules/create", c.baseURL, c.workspace)
 
-	apiReq := struct {
-		IsFlow     bool   `json:"is_flow"`
-		Path       string `json:"path"`
-		Schedule   string `json:"schedule"`
-		ScriptPath string `json:"script_path"`
-		Enabled    bool   `json:"enabled"`
-		Timezone   string `json:"timezone,omitempty"`
-		OnFailure  *struct {
-			ScriptPath string `json:"script_path"`
-			Args       any    `json:"args,omitempty"`
-		} `json:"on_failure,omitempty"`
-		OnSuccess *struct {
-			ScriptPath string `json:"script_path"`
-			Args       any    `json:"args,omitempty"`
-		} `json:"on_success,omitempty"`
-		Args    any    `json:"args,omitempty"`
-		Summary string `json:"summary,omitempty"`
-	}{
+	enabled := true
+	apiReq := api.CreateScheduleJSONRequestBody{
+		IsFlow:     true,
 		Path:       req.Path,
 		Schedule:   req.Schedule,
 		ScriptPath: req.FlowPath,
-		Enabled:    true,
+		Enabled:    &enabled,
 		Timezone:   c.timezone,
-		IsFlow:     true,
 	}
 
 	if c.onFailureScript != "" {
-		apiReq.OnFailure = &struct {
-			ScriptPath string `json:"script_path"`
-			Args       any    `json:"args,omitempty"`
-		}{
-			ScriptPath: c.onFailureScript,
-			Args:       req.Args,
-		}
+		apiReq.OnFailure = &c.onFailureScript
 	}
 
 	if c.onSuccessScript != "" {
-		apiReq.OnSuccess = &struct {
-			ScriptPath string `json:"script_path"`
-			Args       any    `json:"args,omitempty"`
-		}{
-			ScriptPath: c.onSuccessScript,
-			Args:       req.Args,
-		}
+		apiReq.OnSuccess = &c.onSuccessScript
 	}
 
 	if req.Args != nil {
-		apiReq.Args = req.Args
+		// TODO: use the right kind instead
+		if args, ok := req.Args.(api.ScriptArgs); ok {
+			apiReq.Args = args
+		}
 	}
 
 	if req.Summary != "" {
-		apiReq.Summary = req.Summary
+		apiReq.Summary = &req.Summary
 	}
+
+	log.Info().Msgf("apiReq: %+v", apiReq)
 
 	jsonData, err := json.Marshal(apiReq)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal request: %w", err)
 	}
+
+	// resp, err := c.wmillClient.Client.CreateSchedule(ctx, c.workspace, apiReq)
+	// if err != nil {
+	// 	return nil, fmt.Errorf("failed to create scheduled job: %w", err)
+	// }
 
 	httpReq, err := http.NewRequestWithContext(ctx, "POST", url, bytes.NewBuffer(jsonData))
 	if err != nil {
@@ -312,7 +334,6 @@ func (c *Client) CreateScheduledJob(ctx context.Context, req CreateScheduledJobR
 		return nil, fmt.Errorf("failed to execute request: %w", err)
 	}
 	defer resp.Body.Close()
-
 	respBody, readErr := io.ReadAll(resp.Body)
 	if readErr != nil {
 		return nil, fmt.Errorf("failed to read response body: %w", readErr)

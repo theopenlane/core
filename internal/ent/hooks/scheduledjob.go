@@ -9,11 +9,13 @@ import (
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/windmill"
 	"github.com/theopenlane/entx"
@@ -37,6 +39,32 @@ func HookJobTemplate() ent.Hook {
 			if hasDownloadURL && downloadURL != "" {
 				if _, err := models.ValidateURL(downloadURL); err != nil {
 					return nil, fmt.Errorf("invalid download URL: %w", err)
+				}
+			}
+
+			var hasWindmillUpdate bool
+
+			// check for updates to windmill fields
+			platform, _ := mutation.Platform()
+			title, _ := mutation.Title()
+			description, _ := mutation.Description()
+
+			if downloadURL != "" || platform != "" || title != "" || description != "" {
+				hasWindmillUpdate = true
+			}
+
+			// capture old values
+			var oldWindmillPath, oldDownloadURL string
+			if hasWindmillUpdate && mutation.Op().Is(ent.OpUpdateOne) {
+				var err error
+				oldWindmillPath, err = mutation.OldWindmillPath(ctx)
+				if err != nil {
+					return nil, err
+				}
+
+				oldDownloadURL, err = mutation.OldDownloadURL(ctx)
+				if err != nil {
+					return nil, err
 				}
 			}
 
@@ -70,10 +98,12 @@ func HookJobTemplate() ent.Hook {
 					return nil, fmt.Errorf("failed to set windmill path on job template: %w", err)
 				}
 			case ent.OpUpdate, ent.OpUpdateOne:
-				if err := updateWindmillFlow(ctx, mutation); err != nil {
-					log.Error().Err(err).Msg("failed to update windmill flow")
+				if hasWindmillUpdate {
+					if err := updateWindmillFlow(ctx, mutation, oldWindmillPath, oldDownloadURL); err != nil {
+						log.Error().Err(err).Msg("failed to update windmill flow")
 
-					return nil, fmt.Errorf("failed to update job template: %w", err)
+						return nil, fmt.Errorf("failed to update job template: %w", err)
+					}
 				}
 			}
 
@@ -98,26 +128,23 @@ func createWindmillFlow(ctx context.Context, mutation *generated.JobTemplateMuta
 		return "", err
 	}
 
-	flowPath, err := generateFlowPath(mutation)
+	flowPath, err := generateFlowPath(ctx, mutation)
 	if err != nil {
 		return "", err
 	}
 
-	summary := title
-	if description, _ := mutation.Description(); description != "" {
-		summary = fmt.Sprintf("%s - %s", title, description)
-	}
-
+	description, _ := mutation.Description()
 	platform, _ := mutation.Platform()
 
 	flowReq := windmill.CreateFlowRequest{
-		Path:     flowPath,
-		Summary:  summary,
-		Value:    []any{rawCode},
-		Language: platform,
+		Path:        flowPath,
+		Summary:     title,
+		Description: description,
+		Value:       []any{rawCode},
+		Language:    platform,
 	}
 
-	log.Warn().Str("flow_path", flowPath).Str("summary", summary).Msg("creating windmill flow")
+	log.Warn().Str("flow_path", flowPath).Str("title", title).Str("description", description).Msg("creating windmill flow")
 
 	resp, err := windmillClient.CreateFlow(ctx, flowReq)
 	if err != nil {
@@ -128,20 +155,11 @@ func createWindmillFlow(ctx context.Context, mutation *generated.JobTemplateMuta
 }
 
 // updateWindmillFlow updates a Windmill flow for the scheduled job
-func updateWindmillFlow(ctx context.Context, mutation *generated.JobTemplateMutation) error {
+// this happens after the job template is updated in the database
+func updateWindmillFlow(ctx context.Context, mutation *generated.JobTemplateMutation, oldWindmillPath, oldDownloadURL string) error {
 	windmillClient := mutation.Client().Windmill
 	if windmillClient == nil {
 		return nil
-	}
-
-	oldWindmillPath, err := mutation.OldWindmillPath(ctx)
-	if err != nil {
-		return err
-	}
-
-	oldDownloadURL, err := mutation.OldDownloadURL(ctx)
-	if err != nil {
-		return err
 	}
 
 	downloadURL, hasDownloadURL := mutation.DownloadURL()
@@ -163,8 +181,34 @@ func updateWindmillFlow(ctx context.Context, mutation *generated.JobTemplateMuta
 		flowReq.Value = []any{rawCode}
 	}
 
-	if hasPlatform {
+	if hasPlatform && platform != "" {
 		flowReq.Language = platform
+	}
+
+	// ensure we have a valid windmill path,
+	// this could happen on a bulk update where we couldn't get the path
+	// via the OldWindmillPath function
+	if oldWindmillPath == "" {
+		ids, err := mutation.IDs(ctx)
+		if err != nil {
+			return err
+		}
+
+		if len(ids) == 0 {
+			log.Error().Msg("no ids found, unable to update windmill flow")
+
+			return nil
+		}
+
+		jt, err := mutation.Client().JobTemplate.Query().
+			Where(jobtemplate.IDIn(ids...)).
+			Select(jobtemplate.FieldWindmillPath).
+			Only(ctx)
+		if err != nil {
+			return err
+		}
+
+		oldWindmillPath = jt.WindmillPath
 	}
 
 	return windmillClient.UpdateFlow(ctx, oldWindmillPath, flowReq)
@@ -202,7 +246,7 @@ func downloadRawCode(ctx context.Context, downloadURL string) (string, error) {
 }
 
 // generateFlowPath generates a unique random flow path based on the ent config
-func generateFlowPath(mutation GenericMutation) (string, error) {
+func generateFlowPath(ctx context.Context, mutation GenericMutation) (string, error) {
 	entConfig := mutation.Client().EntConfig
 	if entConfig == nil {
 		log.Error().Msg("ent config is required, but not set, unable to create scheduled job")
@@ -219,8 +263,50 @@ func generateFlowPath(mutation GenericMutation) (string, error) {
 		return "", fmt.Errorf("unknown mutation type: %T", mutation) //nolint:err113
 	}
 
-	// TODO: should this path be the organization name instead of everything into `openlane` folder
-	return fmt.Sprintf("s/%s/%s_%s", entConfig.Windmill.FolderName, flowType, strings.ToLower(ulids.New().String())), nil
+	// get organization name
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	org, err := mutation.Client().Organization.Query().
+		Where(organization.ID(orgID)).
+		Select(organization.FieldName).
+		Only(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	// Windmill requires folder names to be alphanumeric or underscores
+	// Replace any invalid characters with underscores
+	// see SpecialCharValidator in ent validator to see that the org name can only contain
+	// alphanumeric characters, hyphens, underscores, periods, commas, and ampersands
+
+	replacer := strings.NewReplacer(
+		" ", "_",
+		"-", "_",
+		".", "_",
+		"/", "_",
+	)
+
+	orgName := replacer.Replace(org.Name)
+	// Remove any other invalid characters
+	validName := make([]rune, 0, len(org.Name))
+	for _, r := range org.Name {
+		if (r >= 'a' && r <= 'z') ||
+			(r >= 'A' && r <= 'Z') ||
+			(r >= '0' && r <= '9') ||
+			r == '_' {
+			validName = append(validName, r)
+		} else {
+			validName = append(validName, '_')
+		}
+	}
+
+	// the `f` here means folder, this is a convention used by Windmill
+	// and should most likely always be the case. They also have `u` for users
+	// this should create a path like `f/org_name/scheduled_job_12345678901234567890123456789012`
+	return fmt.Sprintf("f/%s/%s_%s", orgName, flowType, strings.ToLower(ulids.New().String())), nil
 }
 
 // HookScheduledJobCreate verifies a job that can be attached to a control/subcontrol has
@@ -298,9 +384,18 @@ func createWindmillScheduledJob(ctx context.Context, mutation *generated.Schedul
 	jobID, _ := mutation.JobID()
 	cron, _ := mutation.Cron()
 
-	scheduledJobPath, err := generateFlowPath(mutation)
+	scheduledJobPath, err := generateFlowPath(ctx, mutation)
 	if err != nil {
 		return err
+	}
+
+	// get the flow path from the job template
+	flowPath, err := mutation.Client().JobTemplate.Query().
+		Where(jobtemplate.ID(jobID)).
+		Select(jobtemplate.FieldWindmillPath).
+		Only(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get job template windmill path: %w", err)
 	}
 
 	enabled := true
@@ -308,10 +403,18 @@ func createWindmillScheduledJob(ctx context.Context, mutation *generated.Schedul
 		Path:     scheduledJobPath,
 		Schedule: string(cron),
 		Enabled:  &enabled,
-		Summary:  fmt.Sprintf("scheduled job - %s", jobID),
+		FlowPath: flowPath.WindmillPath,
+		Summary:  fmt.Sprintf("Scheduled Job - %s", jobID),
 	}
 
-	_, err = windmillClient.CreateScheduledJob(ctx, scheduleReq)
+	resp, err := windmillClient.CreateScheduledJob(ctx, scheduleReq)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to create windmill scheduled job")
 
-	return err
+		return fmt.Errorf("failed to create scheduled job in windmill: %w", err)
+	}
+
+	log.Info().Str("scheduled_job_path", resp.Path).Msg("created windmill scheduled job")
+
+	return nil
 }

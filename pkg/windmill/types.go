@@ -8,19 +8,21 @@ import (
 
 // CreateFlowRequest represents the request structure for creating a new flow
 type CreateFlowRequest struct {
-	Path     string                `json:"path"`
-	Summary  string                `json:"summary,omitempty"`
-	Value    []any                 `json:"value"`
-	Schema   any                   `json:"schema,omitempty"`
-	Language enums.JobPlatformType `json:"language"`
+	Path        string                `json:"path"`
+	Summary     string                `json:"summary,omitempty"`
+	Description string                `json:"description,omitempty"`
+	Value       []any                 `json:"value"`
+	Schema      any                   `json:"schema,omitempty"`
+	Language    enums.JobPlatformType `json:"language"`
 }
 
 // UpdateFlowRequest represents the request structure for updating an existing flow
 type UpdateFlowRequest struct {
-	Summary  string                `json:"summary,omitempty"`
-	Value    []any                 `json:"value"`
-	Schema   any                   `json:"schema,omitempty"`
-	Language enums.JobPlatformType `json:"language"`
+	Summary     string                `json:"summary,omitempty"`
+	Description string                `json:"description,omitempty"`
+	Value       []any                 `json:"value"`
+	Schema      any                   `json:"schema,omitempty"`
+	Language    enums.JobPlatformType `json:"language"`
 }
 
 // CreateFlowResponse represents the response after creating a flow
