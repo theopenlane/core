@@ -105,11 +105,11 @@ func (JobTemplate) Fields() []ent.Field {
 }
 
 // Mixin of the JobTemplate
-func (s JobTemplate) Mixin() []ent.Mixin {
+func (j JobTemplate) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "JBT",
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(s,
+			newOrgOwnedMixin(j,
 				withSkipForSystemAdmin(true),
 			),
 			mixin.SystemOwnedMixin{},

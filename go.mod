@@ -1,6 +1,6 @@
 module github.com/theopenlane/core
 
-go 1.24.4
+go 1.24.5
 
 replace github.com/oNaiPs/go-generate-fast => github.com/golanglemonade/go-generate-fast v0.0.0-20241211000619-c8e4743fac43
 
@@ -81,7 +81,7 @@ require (
 	github.com/theopenlane/entx v0.11.2
 	github.com/theopenlane/gqlgen-plugins v0.6.4
 	github.com/theopenlane/httpsling v0.2.2
-	github.com/theopenlane/iam v0.14.2
+	github.com/theopenlane/iam v0.14.3
 	github.com/theopenlane/newman v0.2.0
 	github.com/theopenlane/riverboat v0.2.1
 	github.com/theopenlane/utils v0.4.7
@@ -252,7 +252,7 @@ require (
 	github.com/golangci/unconvert v0.0.0-20240309020433-c5143eacb3ed // indirect
 	github.com/google/generative-ai-go v0.19.0 // indirect
 	github.com/google/go-github/v30 v30.1.0 // indirect
-	github.com/google/go-github/v72 v72.0.0 // indirect
+	github.com/google/go-github/v73 v73.0.0 // indirect
 	github.com/google/renameio/v2 v2.0.0 // indirect
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
 	github.com/gordonklaus/ineffassign v0.1.0 // indirect
@@ -265,6 +265,7 @@ require (
 	github.com/hako/durafmt v0.0.0-20210608085754-5c1018a4e16b // indirect
 	github.com/hashicorp/go-immutable-radix/v2 v2.1.0 // indirect
 	github.com/hashicorp/go-version v1.7.0 // indirect
+	github.com/hashicorp/hcl/v2 v2.24.0 // indirect
 	github.com/hdm/jarm-go v0.0.7 // indirect
 	github.com/hexops/gotextdiff v1.0.3 // indirect
 	github.com/huandu/xstrings v1.5.0 // indirect
@@ -533,7 +534,6 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.1 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
-	github.com/hashicorp/hcl/v2 v2.24.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
