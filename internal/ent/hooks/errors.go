@@ -69,6 +69,8 @@ var (
 	// ErrFutureTimeNotAllowed is returned when you try to set a time into the future.
 	// future being any second/minute past the current time of validation
 	ErrFutureTimeNotAllowed = errors.New("time cannot be in the future")
+	// ErrOrganizationIDRequired is returned when an organization id is required but not provided
+	ErrOrganizationIDRequired = errors.New("organization id is required")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

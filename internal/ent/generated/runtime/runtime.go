@@ -1967,12 +1967,15 @@ func init() {
 	file.Hooks[2] = fileMixinHooks1[0]
 
 	file.Hooks[3] = fileHooks[0]
+
+	file.Hooks[4] = fileHooks[1]
 	fileMixinInters1 := fileMixin[1].Interceptors()
 	fileMixinInters5 := fileMixin[5].Interceptors()
 	fileInters := schema.File{}.Interceptors()
 	file.Interceptors[0] = fileMixinInters1[0]
 	file.Interceptors[1] = fileMixinInters5[0]
 	file.Interceptors[2] = fileInters[0]
+	file.Interceptors[3] = fileInters[1]
 	fileMixinFields0 := fileMixin[0].Fields()
 	_ = fileMixinFields0
 	fileMixinFields2 := fileMixin[2].Fields()
