@@ -166,11 +166,13 @@ The below is what is intended to happen, it is not all currently implemented
 
 ### MVP
 1. **Results** - results need to be posted back to the openlane API to the job results table
-    1. Add the create resolver, this should be locked down to only system admin tokens
+    1. Add the create resolver, this should be locked down to only job runner tokens can post results for that
+    organization
     1. Add success and failure scripts that can be used in both dev + production
     1. Example success script (this is pseudo code, don't expect it to work)
         ```go
         func main() (interface{}, error) {
+            // look at user the job runner token instead of a system admin token
             v, err := wmill.GetVariable("u/admin/openlane_system_admin_token")
             if err != nil {
                 return nil, err
