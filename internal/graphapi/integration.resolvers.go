@@ -131,3 +131,4 @@ func (r *queryResolver) Integration(ctx context.Context, id string) (*generated.
 
 	return res, nil
 }
+

@@ -86,8 +86,6 @@ query GetAllIntegrations {
           edges {
             node {
               id
-              secretName
-              secretValue
             }
           }
         }
@@ -124,36 +122,6 @@ query GetIntegrationByID($integrationId: ID!) {
   }
 }
 
-query GetIntegrationByKind($kind: String!) {
-  integrations(where: {kind: $kind}) {
-    edges {
-      node {
-        description
-        id
-        kind
-        name
-        ownerID
-        owner {
-          id
-        }
-        secrets {
-          edges {
-            node {
-              id
-              secretName
-              secretValue
-            }
-          }
-        }
-        createdAt
-        createdBy
-        updatedAt
-        updatedBy
-      }
-    }
-  }
-}
-
 query GetIntegrations($where: IntegrationWhereInput) {
   integrations(where: $where) {
     edges {
@@ -170,8 +138,6 @@ query GetIntegrations($where: IntegrationWhereInput) {
           edges {
             node {
               id
-              secretName
-              secretValue
             }
           }
         }
@@ -199,8 +165,6 @@ mutation UpdateIntegration($updateIntegrationId: ID!, $input: UpdateIntegrationI
         edges {
           node {
             id
-            secretName
-            secretValue
           }
         }
       }
