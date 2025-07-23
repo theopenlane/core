@@ -167,7 +167,4 @@ type Windmill struct {
 
 	// OnSuccessScript script to run when a scheduled job succeeds
 	OnSuccessScript string `json:"onSuccessScript," koanf:"onSuccessScript"`
-
-	// FolderName identifies the storage path of flows and scripts in Windmill, you'd want to use
-	FolderName string `json:"folderName" koanf:"folderName" default:"openlane" description:"an example would be openlane, your flows and scripts will then be saved in f/openlane as an example"`
 }

@@ -46,6 +46,8 @@ services:
           cpus: "0.50"
           memory: 512M
     restart: unless-stopped
+    env_file:
+      - ./configs/windmill/.env
     environment:
       - DATABASE_URL=postgres://postgres:password@postgres:5432/windmill?sslmode=disable
       - MODE=worker

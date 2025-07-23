@@ -7,8 +7,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"net/http"
-	"strings"
 	"time"
 
 	api "github.com/windmill-labs/windmill-go-client/api"
@@ -36,7 +34,6 @@ const (
 type Client struct {
 	baseURL         string
 	workspace       string
-	httpClient      *http.Client
 	requester       *httpsling.Requester
 	timezone        string
 	onFailureScript string
@@ -90,6 +87,10 @@ func createRequester(cfg entconfig.Config) (*httpsling.Requester, error) {
 		return nil, fmt.Errorf("failed to parse windmill default timeout: %w", err)
 	}
 
+	if timeout == 0 {
+		timeout = defaultTimeoutSeconds
+	}
+
 	return httpsling.New(
 		httpsling.Client(
 			httpclient.Timeout(timeout),
@@ -107,13 +108,6 @@ func (c *Client) CreateFlow(ctx context.Context, req CreateFlowRequest) (*Create
 	path := fmt.Sprintf("/api/w/%s/flows/create", c.workspace)
 
 	flowValue := createFlowValue(req.Value, req.Language)
-
-	// apiReq1 := api.CreateFlowJSONBody{
-	// 	Path:        req.Path,
-	// 	Summary:     req.Summary,
-	// 	Description: &req.Description,
-	// 	Value:       flowValue,
-	// }
 
 	apiReq := struct {
 		Path        string `json:"path"`
@@ -191,7 +185,7 @@ func (c *Client) UpdateFlow(ctx context.Context, path string, req UpdateFlowRequ
 	}{
 		Path:        path,
 		Summary:     req.Summary,
-		Description: req.Summary,
+		Description: req.Description,
 		Value: struct {
 			Modules []any `json:"modules"`
 		}{
@@ -270,7 +264,6 @@ func (c *Client) CreateScheduledJob(ctx context.Context, req CreateScheduledJobR
 	}
 
 	if req.Args != nil {
-		// TODO: use the right kind instead
 		if args, ok := req.Args.(api.ScriptArgs); ok {
 			apiReq.Args = args
 		}
@@ -315,36 +308,16 @@ func (c *Client) CreateScheduledJob(ctx context.Context, req CreateScheduledJobR
 	return response, nil
 }
 
-func createFlowAgainst(rawContent []any, language enums.JobPlatformType) []any {
-	// createFlowAgainst creates a properly structured flow against from raw code content
-	flowAgainst := make([]any, 0, len(rawContent))
-
-	val := api.SchemasFlowValue{}
-	modules := []api.SchemasFlowModule{}
-
-	for _, content := range rawContent {
-		var codeContent string
-		switch v := content.(type) {
-		case string:
-			codeContent = v
-		case []byte:
-			codeContent = string(v)
-		default:
-
-			if jsonBytes, err := json.Marshal(v); err == nil {
-				codeContent = string(jsonBytes)
-			} else {
-				codeContent = fmt.Sprintf("%v", v)
-			}
-		}
-
-			module := api.SchemasFlowModule{
-				Id: generateRandomID(),
-
-			}
-
-
-	return flowAgainst
+func getWindmillLanguage(language enums.JobPlatformType) api.SchemasRawScriptLanguage {
+	switch language {
+	case enums.JobPlatformTypeGo:
+		return api.SchemasRawScriptLanguageGo
+	case enums.JobPlatformTypeTs:
+		return api.SchemasRawScriptLanguageBun
+	default:
+		// fall back to bash for any other language
+		return api.SchemasRawScriptLanguageBash
+	}
 }
 
 // createFlowValue creates a properly structured flow value from raw code content
@@ -366,6 +339,8 @@ func createFlowValue(rawContent []any, language enums.JobPlatformType) []any {
 				codeContent = fmt.Sprintf("%v", v)
 			}
 		}
+
+		language := getWindmillLanguage(language)
 
 		module := struct {
 			ID    string `json:"id"`
@@ -389,15 +364,15 @@ func createFlowValue(rawContent []any, language enums.JobPlatformType) []any {
 					Value string `json:"value"`
 				} `json:"input_transforms"`
 			}{
-				Type:     "rawscript",
+				Type:     string(api.Rawscript),
 				Content:  codeContent,
-				Language: strings.ToLower(language.String()),
+				Language: string(language),
 				InputTransforms: map[string]struct {
 					Type  string `json:"type"`
 					Value string `json:"value"`
 				}{
 					"name": {
-						Type:  "static",
+						Type:  string(api.Static),
 						Value: "",
 					},
 				},
