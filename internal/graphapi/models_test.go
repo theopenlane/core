@@ -1721,23 +1721,16 @@ func (tcs *TrustCenterSettingBuilder) MustNew(ctx context.Context, t *testing.T)
 // IntegrationBuilder is used to create integrations
 type IntegrationBuilder struct {
 	client *client
-	input  ent.CreateIntegrationInput
 
 	// Fields
 	Name        string
 	Description string
 	Kind        string
-	OwnerID     string
 }
 
 // MustNew integration builder is used to create, without authz checks, integrations in the database
 func (ib *IntegrationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Integration {
 	ctx = setContext(ctx, ib.client.db)
-
-	// Use input if provided, otherwise use individual fields
-	if ib.input.Name != "" {
-		return ib.createFromInput(ctx, t)
-	}
 
 	if ib.Name == "" {
 		ib.Name = "GitHub Integration Test"
@@ -1751,41 +1744,10 @@ func (ib *IntegrationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.In
 		ib.Kind = "github"
 	}
 
-	if ib.OwnerID == "" {
-		// Use the organization ID from the test user
-		ib.OwnerID = testUser1.OrganizationID
-	}
-
 	mutation := ib.client.db.Integration.Create().
 		SetName(ib.Name).
 		SetDescription(ib.Description).
-		SetKind(ib.Kind).
-		SetOwnerID(ib.OwnerID)
-
-	integration, err := mutation.Save(ctx)
-	assert.NilError(t, err)
-
-	return integration
-}
-
-// createFromInput creates integration from input struct
-func (ib *IntegrationBuilder) createFromInput(ctx context.Context, t *testing.T) *ent.Integration {
-	mutation := ib.client.db.Integration.Create().
-		SetName(ib.input.Name)
-
-	if ib.input.Description != nil {
-		mutation.SetDescription(*ib.input.Description)
-	}
-
-	if ib.input.Kind != nil {
-		mutation.SetKind(*ib.input.Kind)
-	}
-
-	if ib.input.OwnerID != nil {
-		mutation.SetOwnerID(*ib.input.OwnerID)
-	} else {
-		mutation.SetOwnerID(testUser1.OrganizationID)
-	}
+		SetKind(ib.Kind)
 
 	integration, err := mutation.Save(ctx)
 	assert.NilError(t, err)

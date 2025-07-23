@@ -107,6 +107,10 @@ func (h Hush) Mixin() []ent.Mixin {
 // Policy of the Hush - restricts access to organization members with write access
 func (Hush) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			// restrict read access to hush secrets to organization members with write access
+			policy.CheckOrgEditAccess(),
+		),
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
 		),

@@ -363,25 +363,6 @@ func (r *mutationResolver) bulkCreateHush(ctx context.Context, input []*generate
 	}, nil
 }
 
-// bulkCreateIntegration uses the CreateBulk function to create multiple Integration entities
-func (r *mutationResolver) bulkCreateIntegration(ctx context.Context, input []*generated.CreateIntegrationInput) (*model.IntegrationBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.IntegrationCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.Integration.Create().SetInput(*data)
-	}
-
-	res, err := c.Integration.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "integration"})
-	}
-
-	// return response
-	return &model.IntegrationBulkCreatePayload{
-		Integrations: res,
-	}, nil
-}
-
 // bulkCreateInternalPolicy uses the CreateBulk function to create multiple InternalPolicy entities
 func (r *mutationResolver) bulkCreateInternalPolicy(ctx context.Context, input []*generated.CreateInternalPolicyInput) (*model.InternalPolicyBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

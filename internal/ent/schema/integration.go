@@ -94,5 +94,10 @@ func (Integration) Policy() ent.Policy {
 func (Integration) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.Features("base"),
+		entgql.Skip(
+			// integrations are created by an oauth flow, not by the user directly
+			entgql.SkipMutationCreateInput,
+			entgql.SkipMutationUpdateInput,
+		),
 	}
 }

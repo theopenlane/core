@@ -673,28 +673,10 @@ type HushUpdatePayload struct {
 	Hush *generated.Hush `json:"hush"`
 }
 
-// Return response for createBulkIntegration mutation
-type IntegrationBulkCreatePayload struct {
-	// Created integrations
-	Integrations []*generated.Integration `json:"integrations,omitempty"`
-}
-
-// Return response for createIntegration mutation
-type IntegrationCreatePayload struct {
-	// Created integration
-	Integration *generated.Integration `json:"integration"`
-}
-
 // Return response for deleteIntegration mutation
 type IntegrationDeletePayload struct {
 	// Deleted integration ID
 	DeletedID string `json:"deletedID"`
-}
-
-// Return response for updateIntegration mutation
-type IntegrationUpdatePayload struct {
-	// Updated integration
-	Integration *generated.Integration `json:"integration"`
 }
 
 // Return response for createBulkInternalPolicy mutation

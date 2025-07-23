@@ -1,69 +1,3 @@
-mutation CreateBulkCSVIntegration($input: Upload!) {
-  createBulkCSVIntegration(input: $input) {
-    integrations {
-      description
-      id
-      kind
-      name
-      ownerID
-      owner {
-        id
-      }
-      secrets {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-    }
-  }
-}
-
-mutation CreateBulkIntegration($input: [CreateIntegrationInput!]) {
-  createBulkIntegration(input: $input) {
-    integrations {
-      description
-      id
-      kind
-      name
-      ownerID
-      owner {
-        id
-      }
-      secrets {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-    }
-  }
-}
-
-mutation CreateIntegration($input: CreateIntegrationInput!) {
-  createIntegration(input: $input) {
-    integration {
-      description
-      id
-      kind
-      name
-      ownerID
-      owner {
-        id
-      }
-      secrets {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-    }
-  }
-}
-
 mutation DeleteIntegration($deleteIntegrationId: ID!) {
   deleteIntegration(id: $deleteIntegrationId) {
     deletedID
@@ -79,16 +13,6 @@ query GetAllIntegrations {
         kind
         name
         ownerID
-        owner {
-          id
-        }
-        secrets {
-          edges {
-            node {
-              id
-            }
-          }
-        }
         createdAt
         createdBy
         updatedAt
@@ -105,9 +29,20 @@ query GetIntegrationByID($integrationId: ID!) {
     kind
     name
     ownerID
-    owner {
-      id
-    }
+    createdAt
+    createdBy
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetIntegrationByIDWithSecrets($integrationId: ID!) {
+  integration(id: $integrationId) {
+    description
+    id
+    kind
+    name
+    ownerID
     secrets {
       edges {
         node {
@@ -145,28 +80,6 @@ query GetIntegrations($where: IntegrationWhereInput) {
         createdBy
         updatedAt
         updatedBy
-      }
-    }
-  }
-}
-
-mutation UpdateIntegration($updateIntegrationId: ID!, $input: UpdateIntegrationInput!) {
-  updateIntegration(id: $updateIntegrationId, input: $input) {
-    integration {
-      description
-      id
-      kind
-      name
-      ownerID
-      owner {
-        id
-      }
-      secrets {
-        edges {
-          node {
-            id
-          }
-        }
       }
     }
   }
