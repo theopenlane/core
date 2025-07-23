@@ -23,8 +23,8 @@ services:
     environment:
       - DATABASE_URL=postgres://postgres:password@postgres:5432/windmill?sslmode=disable
       - MODE=server
-    env_file:
-      - ./configs/windmill/.env
+      - LICENSE_KEY=${EE_LICENSE_KEY}
+      - SUPERADMIN_SECRET=${SUPERADMIN_SECRET}
     depends_on:
       postgres:
         condition: service_healthy
@@ -46,12 +46,12 @@ services:
           cpus: "0.50"
           memory: 512M
     restart: unless-stopped
-    env_file:
-      - ./configs/windmill/.env
     environment:
       - DATABASE_URL=postgres://postgres:password@postgres:5432/windmill?sslmode=disable
       - MODE=worker
       - WORKER_GROUP=default
+      - LICENSE_KEY=${EE_LICENSE_KEY}
+      - SUPERADMIN_SECRET=${SUPERADMIN_SECRET}
     depends_on:
       postgres:
         condition: service_healthy

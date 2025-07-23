@@ -42,6 +42,9 @@ env:
   GO_GENERATE_FAST_RECACHE: "false" # set to true to recache all entries
   COMPOSE_PROJECT_NAME: openlane
 
+# load the .env file for windmill
+dotenv: ['docker/configs/windmill/.env']
+
 tasks:
   default:
     silent: true
