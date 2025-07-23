@@ -135,8 +135,8 @@ entConfig:
     workspace: "test"
     token: "token_here"
     defaultTimeout: "30s"
-    onFailureScript: "u/admin/glimmering_script"
-    onSuccessScript: "u/admin/glimmering_script"
+    onFailureScript: ""
+    onSuccessScript: ""
 
 objectStorage:
   # when using local storage, we serve the files up on a static handler
