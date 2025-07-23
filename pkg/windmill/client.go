@@ -146,7 +146,7 @@ func (c *Client) CreateFlow(ctx context.Context, req CreateFlowRequest) (*Create
 		return nil, fmt.Errorf("failed to marshal request: %w", err)
 	}
 
-	var out *string
+	var out string
 	resp, err := c.requester.ReceiveWithContext(ctx, &out,
 		httpsling.Post(path),
 		httpsling.Body(jsonData),
@@ -158,11 +158,11 @@ func (c *Client) CreateFlow(ctx context.Context, req CreateFlowRequest) (*Create
 	defer resp.Body.Close()
 
 	if !httpsling.IsSuccess(resp) {
-		return nil, fmt.Errorf("%w: %d, URL: %s, response body: %s", errUnexpectedStatusCode, resp.StatusCode, path, *out)
+		return nil, fmt.Errorf("%w: %d, URL: %s, response body: %s", errUnexpectedStatusCode, resp.StatusCode, path, out)
 	}
 
 	// the response is plain text containing the flow path, not json
-	flowPath := string(*out)
+	flowPath := string(out)
 	if flowPath == "" {
 		return nil, errEmptyResponseBody
 	}
@@ -208,7 +208,7 @@ func (c *Client) UpdateFlow(ctx context.Context, path string, req UpdateFlowRequ
 		return fmt.Errorf("failed to marshal request: %w", err)
 	}
 
-	var out api.UpdateFlowResponse
+	var out string
 	resp, err := c.requester.ReceiveWithContext(ctx, &out,
 		httpsling.Post(url),
 		httpsling.Body(jsonData),
@@ -287,7 +287,7 @@ func (c *Client) CreateScheduledJob(ctx context.Context, req CreateScheduledJobR
 		return nil, fmt.Errorf("failed to marshal request: %w", err)
 	}
 
-	var out api.CreateScheduleResponse
+	var out string
 	resp, err := c.requester.ReceiveWithContext(ctx, &out,
 		httpsling.Post(url),
 		httpsling.Body(jsonData),
@@ -299,11 +299,11 @@ func (c *Client) CreateScheduledJob(ctx context.Context, req CreateScheduledJobR
 	defer resp.Body.Close()
 
 	if !httpsling.IsSuccess(resp) {
-		return nil, fmt.Errorf("%w: %d, URL: %s, response body: %s", errUnexpectedStatusCode, resp.StatusCode, url, string(out.Body))
+		return nil, fmt.Errorf("%w: %d, URL: %s, response body: %s", errUnexpectedStatusCode, resp.StatusCode, url, out)
 	}
 
 	// the response is plain text containing the schedule path, not json
-	schedulePath := string(out.Body)
+	schedulePath := string(out)
 	if schedulePath == "" {
 		return nil, errEmptyResponseBody
 	}
@@ -313,6 +313,38 @@ func (c *Client) CreateScheduledJob(ctx context.Context, req CreateScheduledJobR
 	}
 
 	return response, nil
+}
+
+func createFlowAgainst(rawContent []any, language enums.JobPlatformType) []any {
+	// createFlowAgainst creates a properly structured flow against from raw code content
+	flowAgainst := make([]any, 0, len(rawContent))
+
+	val := api.SchemasFlowValue{}
+	modules := []api.SchemasFlowModule{}
+
+	for _, content := range rawContent {
+		var codeContent string
+		switch v := content.(type) {
+		case string:
+			codeContent = v
+		case []byte:
+			codeContent = string(v)
+		default:
+
+			if jsonBytes, err := json.Marshal(v); err == nil {
+				codeContent = string(jsonBytes)
+			} else {
+				codeContent = fmt.Sprintf("%v", v)
+			}
+		}
+
+			module := api.SchemasFlowModule{
+				Id: generateRandomID(),
+
+			}
+
+
+	return flowAgainst
 }
 
 // createFlowValue creates a properly structured flow value from raw code content
