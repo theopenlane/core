@@ -1399,8 +1399,8 @@ github.com/weppos/publicsuffix-go v0.13.0/go.mod h1:z3LCPQ38eedDQSwmsSRW4Y7t2L8L
 github.com/weppos/publicsuffix-go v0.40.3-0.20250127173806-e489a31678ca/go.mod h1:43Dfyxu2dpmLg56at26Q4k9gwf3yWSUiwk8kGnwzULk=
 github.com/weppos/publicsuffix-go v0.40.3-0.20250710122833-cbec4cbedf45 h1:WaHaVQQ6RPkJfmwBDjQPzkJ86OAzFod2E3qApjSR9/Q=
 github.com/weppos/publicsuffix-go v0.40.3-0.20250710122833-cbec4cbedf45/go.mod h1:Efaen92I7hksG9EA+bsuHPWscS8ePs86CXxNFfG2cG4=
-github.com/windmill-labs/windmill-go-client v1.510.1 h1:MtacxF7NL4D5CjsxJUHSbeBOwFiwqpV3fo03vZo+mdw=
-github.com/windmill-labs/windmill-go-client v1.510.1/go.mod h1:RjnzKr3lc7/Gr72zXDmmqtnUm6PzU+UVHhd3alNKxoM=
+github.com/windmill-labs/windmill-go-client v1.512.0 h1:aFNI3LfUFflAdmGSDmx0hUWZ78VNeMIo08iFh0lmLxA=
+github.com/windmill-labs/windmill-go-client v1.512.0/go.mod h1:RjnzKr3lc7/Gr72zXDmmqtnUm6PzU+UVHhd3alNKxoM=
 github.com/wk8/go-ordered-map/v2 v2.1.8 h1:5h/BUHu93oj4gIdvHHHGsScSTMijfx5PeYkE/fJgbpc=
 github.com/wk8/go-ordered-map/v2 v2.1.8/go.mod h1:5nJHM5DyteebpVlHnWMV0rPz6Zp7+xBAnxjb1X5vnTw=
 github.com/wundergraph/graphql-go-tools v1.67.4 h1:1QtoftaZz5sScV/J6XLZ/oTfi1lMHp6UmFkYRQfY2/g=
