@@ -1798,13 +1798,13 @@ type SecretBuilder struct {
 	client *client
 
 	// Fields
-	Name            string
-	Description     string
-	Kind            string
-	SecretName      string
-	SecretValue     string
-	OwnerID         string
-	IntegrationIDs  []string
+	Name           string
+	Description    string
+	Kind           string
+	SecretName     string
+	SecretValue    string
+	OwnerID        string
+	IntegrationIDs []string
 }
 
 // WithIntegration adds an integration ID to the secret

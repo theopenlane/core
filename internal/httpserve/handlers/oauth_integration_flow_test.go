@@ -508,10 +508,6 @@ func (suite *HandlerTestSuite) TestOAuthCookieConfiguration() {
 	})
 }
 
-
-
-
-
 // Helper functions for testing
 
 // generateTestOAuthState creates a valid OAuth state for testing
