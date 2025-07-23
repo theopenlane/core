@@ -3428,6 +3428,11 @@ func (r *queryResolver) Webauthns(ctx context.Context, after *entgql.Cursor[stri
 // Group returns gqlgenerated.GroupResolver implementation.
 func (r *Resolver) Group() gqlgenerated.GroupResolver { return &groupResolver{r} }
 
+// OrgSubscription returns gqlgenerated.OrgSubscriptionResolver implementation.
+func (r *Resolver) OrgSubscription() gqlgenerated.OrgSubscriptionResolver {
+	return &orgSubscriptionResolver{r}
+}
+
 // Query returns gqlgenerated.QueryResolver implementation.
 func (r *Resolver) Query() gqlgenerated.QueryResolver { return &queryResolver{r} }
 
@@ -3512,6 +3517,7 @@ func (r *Resolver) UpdateTrustCenterInput() gqlgenerated.UpdateTrustCenterInputR
 }
 
 type groupResolver struct{ *Resolver }
+type orgSubscriptionResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
 type createEntityInputResolver struct{ *Resolver }
 type createGroupInputResolver struct{ *Resolver }
