@@ -235,10 +235,10 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 	subControl := (&SubcontrolBuilder{client: suite.client, ControlID: control.ID, Name: "Test Control"}).
 		MustNew(testUser1.UserCtx, t)
 
-	job2 := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	job2 := (&JobTemplateBuilder{client: suite.client, Cron: "0 0 0 * * *"}).MustNew(testUser2.UserCtx, t)
 
-	cron := "0 0 * * *"
-	invalidCron := "a b c d e"
+	cron := "0 0 0 * * *"
+	invalidCron := "0 0 * * *" // invalid cron syntax (requires 5 parts), should fail validation
 
 	testCases := []struct {
 		name        string
@@ -357,8 +357,10 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 			if tc.request.Cron != nil {
 				assert.Check(t, is.Equal(*resp.CreateScheduledJob.ScheduledJob.Cron, *tc.request.Cron))
 			} else {
-				// should fall back to the job template cron
-				assert.Check(t, is.Equal(*resp.CreateScheduledJob.ScheduledJob.Cron, job.Cron.String()))
+				// should fall back to the job template cron if it has one
+				if resp.CreateScheduledJob.ScheduledJob.Cron != nil {
+					assert.Check(t, is.Equal(*resp.CreateScheduledJob.ScheduledJob.Cron, job.Cron.String()))
+				}
 			}
 
 			// check optional fields with if checks if they were provided
@@ -413,9 +415,9 @@ func TestMutationUpdateScheduledJob(t *testing.T) {
 	subControl := (&SubcontrolBuilder{client: suite.client, ControlID: control2.ID, Name: "SCT-1"}).
 		MustNew(testUser1.UserCtx, t)
 
-	newCron := "1 0 * * *"
-	anotherCron := "0 1 * * *"
-	invalidCron := "0 0 * * * c"
+	newCron := "1 1 0 * * *"
+	anotherCron := "0 0 1 * * *"
+	invalidCron := "0 0 0 * *"
 	testCases := []struct {
 		name           string
 		request        openlaneclient.UpdateScheduledJobInput

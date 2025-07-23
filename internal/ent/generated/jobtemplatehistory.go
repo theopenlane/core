@@ -59,7 +59,7 @@ type JobTemplateHistory struct {
 	DownloadURL string `json:"download_url,omitempty"`
 	// the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
-	// cron schedule to run the job, e.g. 0 0 * * *
+	// cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
 	Cron         *models.Cron `json:"cron,omitempty"`
 	selectValues sql.SelectValues
 }

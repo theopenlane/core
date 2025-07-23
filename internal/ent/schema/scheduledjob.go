@@ -46,7 +46,7 @@ func (ScheduledJob) Fields() []ent.Field {
 		field.Bool("active").
 			Default(true).
 			Comment("whether the scheduled job is active"),
-		// TODO: when a job gets set to inactive, it should pause the job in windmilll
+		// TODO: when a job gets set to inactive, it should pause the job in windmill
 		field.JSON("configuration", models.JobConfiguration{}).
 			Optional().
 			Annotations(
@@ -57,7 +57,7 @@ func (ScheduledJob) Fields() []ent.Field {
 			Comment("the json configuration to run this job, which could be used to template a job, e.g. { \"account_name\": \"my-account\" }"),
 		field.String("cron").
 			GoType(models.Cron("")).
-			Comment("cron syntax. If not provided, it would inherit the cron of the parent job").
+			Comment("cron 6-field syntax, defaults to the job template's cron if not provided").
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput |
 					entgql.SkipOrderField,

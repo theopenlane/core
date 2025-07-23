@@ -94,3 +94,5 @@ For more information on cron syntax, see [crontab.guru](https://crontab.guru/).
 - Openlane agent wrapper
 - Add success and failure scripts that can be used in both dev + production
 - ^ Fix the API (maybe just switch to the go-client) because the syntax is incorrect
+- Add priority field to scheduler
+- Add hook to disable a scheduled job

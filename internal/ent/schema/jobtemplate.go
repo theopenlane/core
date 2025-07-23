@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
@@ -89,7 +90,7 @@ func (JobTemplate) Fields() []ent.Field {
 			Comment("the json configuration to run this job, which could be used to template a job, e.g. { \"account_name\": \"my-account\" }"),
 		field.String("cron").
 			GoType(models.Cron("")).
-			Comment("cron schedule to run the job, e.g. 0 0 * * *").
+			Comment("cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *").
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput | entgql.SkipOrderField),
 			).
@@ -159,6 +160,7 @@ func (j JobTemplate) Edges() []ent.Edge {
 func (JobTemplate) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.AllowMutationIfSystemAdmin(),
 			policy.CheckCreateAccess(),
 			// ensure we check edit access, otherwise you can edit a system owned job template
 			entfga.CheckEditAccess[*generated.JobTemplateMutation](),

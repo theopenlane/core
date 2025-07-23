@@ -44,7 +44,7 @@ type ScheduledJob struct {
 	Active bool `json:"active,omitempty"`
 	// the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
-	// cron syntax. If not provided, it would inherit the cron of the parent job
+	// cron 6-field syntax, defaults to the job template's cron if not provided
 	Cron *models.Cron `json:"cron,omitempty"`
 	// the runner that this job will run on. If not set, it will scheduled on a general runner instead
 	JobRunnerID string `json:"job_runner_id,omitempty"`
