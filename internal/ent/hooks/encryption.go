@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/core/internal/ent/hush/crypto"
 )
 
@@ -36,7 +37,7 @@ var (
 )
 
 // encryptFieldValue encrypts a field value using Tink
-func encryptFieldValue(_ context.Context, _ ent.Mutation, value string) (string, error) {
+func encryptFieldValue(value string) (string, error) {
 	// Check if encryption is enabled
 	if !crypto.IsEncryptionEnabledWithConfig() {
 		return value, nil
@@ -46,7 +47,7 @@ func encryptFieldValue(_ context.Context, _ ent.Mutation, value string) (string,
 }
 
 // decryptFieldValue decrypts a field value using Tink
-func decryptFieldValue(_ context.Context, _ ent.Mutation, encryptedValue string) (string, error) {
+func decryptFieldValue(encryptedValue string) (string, error) {
 	// Check if encryption is enabled
 	if !crypto.IsEncryptionEnabledWithConfig() {
 		return encryptedValue, nil
@@ -60,41 +61,51 @@ func decryptFieldValue(_ context.Context, _ ent.Mutation, encryptedValue string)
 	return string(decrypted), nil
 }
 
+// processFieldEncryption handles the common encryption logic for a single field for many hooks
+func processFieldEncryption(m ent.Mutation, fieldName string) (bool, error) {
+	// Only process if this field is being mutated
+	if !hasField(m, fieldName) {
+		return false, nil
+	}
+
+	// Get the field value
+	value, err := getFieldValue(m, fieldName)
+	if err != nil {
+		return false, fmt.Errorf("failed to get field value for %s: %w", fieldName, err)
+	}
+
+	// If value is empty, skip encryption
+	if value == "" {
+		return false, nil
+	}
+
+	// Check if encryption is enabled and if the value is already encrypted
+	if !crypto.IsEncryptionEnabledWithConfig() || isEncrypted(value) {
+		// Either encryption is disabled or already encrypted
+		return false, nil
+	}
+
+	// Encrypt the value
+	encrypted, err := encryptFieldValue(value)
+	if err != nil {
+		return false, fmt.Errorf("failed to encrypt field %s: %w", fieldName, err)
+	}
+
+	// Set the encrypted value
+	if err := setFieldValue(m, fieldName, encrypted); err != nil {
+		return false, fmt.Errorf("failed to set encrypted value for %s: %w", fieldName, err)
+	}
+
+	return true, nil
+}
+
 // HookFieldEncryption provides encryption for existing fields with migration support
-func HookFieldEncryption(fieldName string, _ bool) ent.Hook {
+func HookFieldEncryption(fieldName string) ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			// Only process if this field is being mutated
-			if !hasField(m, fieldName) {
-				return next.Mutate(ctx, m)
-			}
-
-			// Get the field value
-			value, err := getFieldValue(m, fieldName)
-			if err != nil {
-				return nil, fmt.Errorf("failed to get field value for %s: %w", fieldName, err)
-			}
-
-			// If value is empty, proceed without encryption
-			if value == "" {
-				return next.Mutate(ctx, m)
-			}
-
-			// Check if encryption is enabled and if the value is already encrypted
-			if !crypto.IsEncryptionEnabledWithConfig() || isEncrypted(value) {
-				// Either encryption is disabled or already encrypted, proceed as normal
-				return next.Mutate(ctx, m)
-			}
-
-			// Value is not encrypted, encrypt it now
-			encrypted, err := encryptFieldValue(ctx, m, value)
-			if err != nil {
-				return nil, fmt.Errorf("failed to encrypt field %s: %w", fieldName, err)
-			}
-
-			// Set the encrypted value
-			if err := setFieldValue(m, fieldName, encrypted); err != nil {
-				return nil, fmt.Errorf("failed to set encrypted value for %s: %w", fieldName, err)
+			// Process field encryption
+			if _, err := processFieldEncryption(m, fieldName); err != nil {
+				return nil, err
 			}
 
 			// Proceed with the mutation
@@ -104,7 +115,7 @@ func HookFieldEncryption(fieldName string, _ bool) ent.Hook {
 			}
 
 			// Decrypt the result for immediate use
-			if err := decryptResultField(ctx, m, result, fieldName); err != nil {
+			if err := decryptResultField(result, fieldName); err != nil {
 				return nil, fmt.Errorf("failed to decrypt result field %s: %w", fieldName, err)
 			}
 
@@ -114,7 +125,7 @@ func HookFieldEncryption(fieldName string, _ bool) ent.Hook {
 }
 
 // decryptResultField decrypts a field in the mutation result
-func decryptResultField(ctx context.Context, m ent.Mutation, result ent.Value, fieldName string) error {
+func decryptResultField(result ent.Value, fieldName string) error {
 	if result == nil {
 		return nil
 	}
@@ -129,7 +140,7 @@ func decryptResultField(ctx context.Context, m ent.Mutation, result ent.Value, f
 	if v.Kind() == reflect.Slice {
 		for i := 0; i < v.Len(); i++ {
 			item := v.Index(i)
-			if err := decryptEntityField(ctx, m, item.Interface(), fieldName); err != nil {
+			if err := decryptEntityField(item.Interface(), fieldName); err != nil {
 				return err
 			}
 		}
@@ -137,17 +148,17 @@ func decryptResultField(ctx context.Context, m ent.Mutation, result ent.Value, f
 	}
 
 	// Handle single result
-	return decryptEntityField(ctx, m, result, fieldName)
+	return decryptEntityField(result, fieldName)
 }
 
 // decryptEntityField decrypts a specific field in an entity
-func decryptEntityField(ctx context.Context, m ent.Mutation, entity any, fieldName string) error {
+func decryptEntityField(entity any, fieldName string) error {
 	v := reflect.ValueOf(entity)
 	if v.Kind() == reflect.Ptr {
 		v = v.Elem()
 	}
 
-	field := v.FieldByName(convertFieldName(fieldName))
+	field := v.FieldByName(strcase.UpperCamelCase(fieldName))
 	if !field.IsValid() || !field.CanSet() || field.Kind() != reflect.String {
 		return nil // Field not found or not settable
 	}
@@ -163,7 +174,7 @@ func decryptEntityField(ctx context.Context, m ent.Mutation, entity any, fieldNa
 	}
 
 	// Decrypt the value
-	decrypted, err := decryptFieldValue(ctx, m, encryptedValue)
+	decrypted, err := decryptFieldValue(encryptedValue)
 	if err != nil {
 		return nil // Decryption failed, assume plaintext
 	}
@@ -242,7 +253,7 @@ func setFieldValue(m ent.Mutation, fieldName string, value string) error {
 	v := reflect.ValueOf(m)
 
 	// Convert field name to setter method name (e.g., "field_name" -> "SetFieldName")
-	setterName := "Set" + convertFieldName(fieldName)
+	setterName := "Set" + strcase.UpperCamelCase(fieldName)
 
 	method := v.MethodByName(setterName)
 	if !method.IsValid() {
@@ -260,18 +271,6 @@ func setFieldValue(m ent.Mutation, fieldName string, value string) error {
 	}
 
 	return nil
-}
-
-// convertFieldName converts snake_case to CamelCase for struct field access
-func convertFieldName(fieldName string) string {
-	parts := strings.Split(fieldName, "_")
-	for i, part := range parts {
-		if len(part) > 0 {
-			parts[i] = strings.ToUpper(part[:1]) + part[1:]
-		}
-	}
-
-	return strings.Join(parts, "")
 }
 
 // GenerateTinkKeyset generates a new Tink keyset for initial setup (exported)
@@ -298,7 +297,7 @@ func DecryptEntityFields(entity any, fieldNames []string) error {
 
 	for _, fieldName := range fieldNames {
 		// Convert snake_case to CamelCase for struct field access
-		field := v.FieldByName(convertFieldName(fieldName))
+		field := v.FieldByName(strcase.UpperCamelCase(fieldName))
 		if !field.IsValid() || !field.CanSet() {
 			continue // Field not found or not settable
 		}
@@ -338,35 +337,8 @@ func HookEncryption(fieldNames ...string) ent.Hook {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			// Process each field that needs encryption
 			for _, fieldName := range fieldNames {
-				if !hasField(m, fieldName) {
-					continue // Field not being mutated
-				}
-
-				// Get the field value
-				value, err := getFieldValue(m, fieldName)
-				if err != nil {
-					return nil, fmt.Errorf("failed to get field value for %s: %w", fieldName, err)
-				}
-
-				// If value is empty, skip encryption
-				if value == "" {
-					continue
-				}
-
-				// Check if encryption is enabled and if the value is already encrypted
-				if !crypto.IsEncryptionEnabledWithConfig() || isEncrypted(value) {
-					continue // Either encryption is disabled or already encrypted
-				}
-
-				// Encrypt the value
-				encrypted, err := encryptFieldValue(ctx, m, value)
-				if err != nil {
-					return nil, fmt.Errorf("failed to encrypt field %s: %w", fieldName, err)
-				}
-
-				// Set the encrypted value
-				if err := setFieldValue(m, fieldName, encrypted); err != nil {
-					return nil, fmt.Errorf("failed to set encrypted value for %s: %w", fieldName, err)
+				if _, err := processFieldEncryption(m, fieldName); err != nil {
+					return nil, err
 				}
 			}
 
@@ -378,7 +350,7 @@ func HookEncryption(fieldNames ...string) ent.Hook {
 
 			// Decrypt the result for immediate use
 			for _, fieldName := range fieldNames {
-				if err := decryptResultField(ctx, m, result, fieldName); err != nil {
+				if err := decryptResultField(result, fieldName); err != nil {
 					return nil, fmt.Errorf("failed to decrypt result field %s: %w", fieldName, err)
 				}
 			}

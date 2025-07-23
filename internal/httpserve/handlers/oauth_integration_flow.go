@@ -167,12 +167,10 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context) error {
 
 	orgID := orgCookie.Value
 
-	userCookie, err := sessions.GetCookie(ctx.Request(), "oauth_user_id")
+	_, err = sessions.GetCookie(ctx.Request(), "oauth_user_id")
 	if err != nil {
 		return h.BadRequest(ctx, ErrMissingUserContext)
 	}
-
-	_ = userCookie.Value
 
 	// Get the user from database to set authenticated context
 	reqCtx := ctx.Request().Context()
@@ -198,7 +196,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context) error {
 	}
 
 	// Exchange code for token
-	oauthToken, err := providerConfig.Config.Exchange(ctx.Request().Context(), in.Code)
+	oauthToken, err := providerConfig.Config.Exchange(reqCtx, in.Code)
 	if err != nil {
 		log.Error().Err(err).Str("provider", provider).Msg("failed to exchange OAuth code for token")
 
@@ -206,7 +204,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context) error {
 	}
 
 	// Validate token and get user info
-	userInfo, err := providerConfig.Validate(ctx.Request().Context(), oauthToken)
+	userInfo, err := providerConfig.Validate(reqCtx, oauthToken)
 	if err != nil {
 		log.Error().Err(err).Str("provider", provider).Msg("failed to validate OAuth token")
 
@@ -275,23 +273,10 @@ func (h *Handler) storeIntegrationTokens(ctx context.Context, orgID, provider st
 	systemCtx = contextx.With(systemCtx, auth.OrgSubscriptionContextKey{})
 
 	// Check if integration already exists for this org/provider
-	integration, err := h.DBClient.Integration.Query().Where(integrationschema.And(integrationschema.OwnerID(orgID), integrationschema.Kind(provider))).Only(systemCtx)
+	integration, err := h.DBClient.Integration.Query().Where(integrationschema.And(integrationschema.OwnerID(orgID), integrationschema.Kind(provider))).First(systemCtx)
 
 	if !ent.IsNotFound(err) && err != nil {
 		return nil, err
-	}
-
-	// Create new integration if not found
-	helper := NewIntegrationHelper(provider, "")
-	if err := h.DBClient.Integration.Create().
-		SetOwnerID(orgID).
-		SetName(helper.Name()).
-		SetDescription(helper.Description()).
-		SetKind(provider).
-		Exec(systemCtx); err != nil {
-		zerolog.Ctx(systemCtx).Error().Msgf("Failed to create integration for org %s and provider %s: %v", orgID, provider, err)
-		return nil, err
-
 	}
 
 	helperWithUser := NewIntegrationHelper(provider, userInfo.Username)
@@ -381,6 +366,7 @@ func (h *Handler) storeSecretForIntegration(ctx context.Context, integration *en
 			Exec(systemCtx); err != nil {
 			return err
 		}
+		return nil
 	}
 
 	// Secret value is immutable, so delete and recreate
@@ -524,143 +510,23 @@ func (h *Handler) validateSlackIntegrationToken(ctx context.Context, token *oaut
 	return userInfo, nil
 }
 
-// GetIntegrationToken retrieves stored OAuth tokens for an integration
-func (h *Handler) GetIntegrationToken(ctx echo.Context) error {
-	var in models.GetIntegrationTokenRequest
-	if err := ctx.Bind(&in); err != nil {
-		return h.InvalidInput(ctx, err)
-	}
-
-	if err := in.Validate(); err != nil {
-		return h.InvalidInput(ctx, err)
-	}
-
-	// Get the authenticated user and organization
-	userCtx := ctx.Request().Context()
-	user, err := auth.GetAuthenticatedUserFromContext(userCtx)
-	if err != nil {
-		return h.Unauthorized(ctx, err)
-	}
-
-	orgID := user.OrganizationID
-
-	// Get integration token
-	tokenData, err := h.retrieveIntegrationToken(userCtx, orgID, in.Provider)
-	if err != nil {
-		if ent.IsNotFound(err) {
-			return h.NotFound(ctx, wrapIntegrationError("find", fmt.Errorf("provider %s: %w", in.Provider, ErrIntegrationNotFound)))
-		}
-		return h.InternalServerError(ctx, err)
-	}
-
-	out := models.IntegrationTokenResponse{
-		Reply:     rout.Reply{Success: true},
-		Provider:  in.Provider,
-		Token:     tokenData,
-		ExpiresAt: tokenData.ExpiresAt,
-	}
-
-	return h.Success(ctx, out)
-}
-
-// ListIntegrations returns all integrations for the user's organization
-func (h *Handler) ListIntegrations(ctx echo.Context) error {
-	// Get the authenticated user and organization
-	userCtx := ctx.Request().Context()
-	user, err := auth.GetAuthenticatedUserFromContext(userCtx)
-	if err != nil {
-		return h.Unauthorized(ctx, err)
-	}
-
-	orgID := user.OrganizationID
-
-	// Query integrations for the organization
-	integrations, err := h.DBClient.Integration.Query().Where(integrationschema.OwnerID(orgID)).All(userCtx)
-	if err != nil {
-		return h.InternalServerError(ctx, err)
-	}
-
-	out := models.ListIntegrationsResponse{
-		Reply:        rout.Reply{Success: true},
-		Integrations: integrations,
-	}
-
-	return h.Success(ctx, out)
-}
-
-// DeleteIntegration removes an integration and its associated secrets
-func (h *Handler) DeleteIntegration(ctx echo.Context) error {
-	var in models.DeleteIntegrationRequest
-	if err := ctx.Bind(&in); err != nil {
-		return h.InvalidInput(ctx, err)
-	}
-
-	if err := in.Validate(); err != nil {
-		return h.InvalidInput(ctx, err)
-	}
-
-	// Get the authenticated user and organization
-	userCtx := ctx.Request().Context()
-	user, err := auth.GetAuthenticatedUserFromContext(userCtx)
-	if err != nil {
-		return h.Unauthorized(ctx, err)
-	}
-
-	orgID := user.OrganizationID
-
-	// Verify integration belongs to user's organization
-	integration, err := h.DBClient.Integration.Query().Where(integrationschema.And(integrationschema.ID(in.ID), integrationschema.OwnerID(orgID))).Only(userCtx)
-	if err != nil {
-		if ent.IsNotFound(err) {
-			return h.NotFound(ctx, ErrIntegrationNotFound)
-		}
-		return h.InternalServerError(ctx, err)
-	}
-
-	// Use privacy bypass for deletion
-	systemCtx := privacy.DecisionContext(userCtx, privacy.Allow)
-
-	// Delete associated secrets first
-	_, err = h.DBClient.Hush.Delete().Where(hushschema.And(hushschema.OwnerID(orgID), hushschema.HasIntegrationsWith(integrationschema.ID(in.ID)))).Exec(systemCtx)
-	if err != nil {
-		log.Error().Err(err).Str("integration_id", in.ID).Msg("failed to delete integration secrets")
-		return h.InternalServerError(ctx, ErrDeleteSecrets)
-	}
-
-	// Delete integration
-	err = h.DBClient.Integration.DeleteOneID(in.ID).Exec(systemCtx)
-	if err != nil {
-		return h.InternalServerError(ctx, err)
-	}
-
-	out := models.DeleteIntegrationResponse{
-		Reply:   rout.Reply{Success: true},
-		Message: "Integration " + integration.Name + " deleted successfully",
-	}
-
-	return h.Success(ctx, out)
-}
-
 // retrieveIntegrationToken gets stored OAuth token for a provider
 func (h *Handler) retrieveIntegrationToken(ctx context.Context, orgID, provider string) (*models.IntegrationToken, error) {
-	// Get integration
-	integration, err := h.DBClient.Integration.Query().Where(integrationschema.And(integrationschema.OwnerID(orgID), integrationschema.Kind(provider))).Only(ctx)
+	// Get integration with associated secrets in a single query
+	integration, err := h.DBClient.Integration.Query().
+		Where(integrationschema.And(integrationschema.OwnerID(orgID), integrationschema.Kind(provider))).
+		WithSecrets().
+		Only(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	// Get associated secrets
-	secrets, err := h.DBClient.Hush.Query().Where(hushschema.And(hushschema.OwnerID(orgID), hushschema.HasIntegrationsWith(integrationschema.ID(integration.ID)))).All(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	// Build token data
+	// Build token data from the loaded secrets
 	tokenData := &models.IntegrationToken{
 		Provider: provider,
 	}
 
-	for _, secret := range secrets {
+	for _, secret := range integration.Edges.Secrets {
 		if secret.SecretName == "" || secret.SecretValue == "" {
 			continue
 		}
@@ -732,7 +598,7 @@ func (h *Handler) RefreshIntegrationToken(ctx context.Context, orgID, provider s
 	}
 
 	// Update stored tokens
-	integration, err := h.DBClient.Integration.Query().Where(integrationschema.And(integrationschema.OwnerID(orgID), integrationschema.Kind(provider))).Only(ctx)
+	integration, err := h.DBClient.Integration.Query().Where(integrationschema.And(integrationschema.OwnerID(orgID), integrationschema.Kind(provider))).First(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -794,78 +660,6 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context) error {
 		Provider:  in.Provider,
 		Token:     tokenData,
 		ExpiresAt: tokenData.ExpiresAt,
-	}
-
-	return h.Success(ctx, out)
-}
-
-// GetIntegrationStatus checks if an integration is connected and returns its status
-func (h *Handler) GetIntegrationStatus(ctx echo.Context) error {
-	var in models.GetIntegrationStatusRequest
-	if err := ctx.Bind(&in); err != nil {
-		return h.InvalidInput(ctx, err)
-	}
-
-	if err := in.Validate(); err != nil {
-		return h.InvalidInput(ctx, err)
-	}
-
-	// Get the authenticated user and organization
-	userCtx := ctx.Request().Context()
-	user, err := auth.GetAuthenticatedUserFromContext(userCtx)
-	if err != nil {
-		return h.Unauthorized(ctx, err)
-	}
-
-	orgID := user.OrganizationID
-
-	// Check if integration exists
-	integration, err := h.DBClient.Integration.Query().Where(integrationschema.And(integrationschema.OwnerID(orgID), integrationschema.Kind(in.Provider))).Only(userCtx)
-
-	if err != nil {
-		if ent.IsNotFound(err) {
-			out := models.IntegrationStatusResponse{
-				Reply:     rout.Reply{Success: true},
-				Provider:  in.Provider,
-				Connected: false,
-				Message:   NewIntegrationHelper(in.Provider, "").StatusMessage(statusNotConnected),
-			}
-			return h.Success(ctx, out)
-		}
-		return h.InternalServerError(ctx, err)
-	}
-
-	// Check if we have valid tokens
-	tokenData, err := h.retrieveIntegrationToken(userCtx, orgID, in.Provider)
-	tokenValid := err == nil && tokenData.AccessToken != ""
-
-	// Check if token is expired
-	tokenExpired := false
-	if tokenData != nil && tokenData.ExpiresAt != nil {
-		tokenExpired = time.Now().After(*tokenData.ExpiresAt)
-	}
-
-	status := statusConnected
-	helper := NewIntegrationHelper(in.Provider, "")
-	message := helper.StatusMessage(status)
-
-	if !tokenValid {
-		status = statusInvalid
-		message = helper.StatusMessage(status)
-	} else if tokenExpired {
-		status = statusExpired
-		message = helper.StatusMessage(status)
-	}
-
-	out := models.IntegrationStatusResponse{
-		Reply:        rout.Reply{Success: true},
-		Provider:     in.Provider,
-		Connected:    true,
-		Status:       status,
-		TokenValid:   tokenValid,
-		TokenExpired: tokenExpired,
-		Message:      message,
-		Integration:  integration,
 	}
 
 	return h.Success(ctx, out)

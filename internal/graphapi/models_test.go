@@ -1717,3 +1717,186 @@ func (tcs *TrustCenterSettingBuilder) MustNew(ctx context.Context, t *testing.T)
 
 	return trustCenterSetting
 }
+
+// IntegrationBuilder is used to create integrations
+type IntegrationBuilder struct {
+	client *client
+	input  ent.CreateIntegrationInput
+
+	// Fields
+	Name        string
+	Description string
+	Kind        string
+	OwnerID     string
+}
+
+// MustNew integration builder is used to create, without authz checks, integrations in the database
+func (ib *IntegrationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Integration {
+	ctx = setContext(ctx, ib.client.db)
+
+	// Use input if provided, otherwise use individual fields
+	if ib.input.Name != "" {
+		return ib.createFromInput(ctx, t)
+	}
+
+	if ib.Name == "" {
+		ib.Name = "GitHub Integration Test"
+	}
+
+	if ib.Description == "" {
+		ib.Description = "Test integration for GraphQL tests"
+	}
+
+	if ib.Kind == "" {
+		ib.Kind = "github"
+	}
+
+	if ib.OwnerID == "" {
+		// Use the organization ID from the test user
+		ib.OwnerID = testUser1.OrganizationID
+	}
+
+	mutation := ib.client.db.Integration.Create().
+		SetName(ib.Name).
+		SetDescription(ib.Description).
+		SetKind(ib.Kind).
+		SetOwnerID(ib.OwnerID)
+
+	integration, err := mutation.Save(ctx)
+	assert.NilError(t, err)
+
+	return integration
+}
+
+// createFromInput creates integration from input struct
+func (ib *IntegrationBuilder) createFromInput(ctx context.Context, t *testing.T) *ent.Integration {
+	mutation := ib.client.db.Integration.Create().
+		SetName(ib.input.Name)
+
+	if ib.input.Description != nil {
+		mutation.SetDescription(*ib.input.Description)
+	}
+
+	if ib.input.Kind != nil {
+		mutation.SetKind(*ib.input.Kind)
+	}
+
+	if ib.input.OwnerID != nil {
+		mutation.SetOwnerID(*ib.input.OwnerID)
+	} else {
+		mutation.SetOwnerID(testUser1.OrganizationID)
+	}
+
+	integration, err := mutation.Save(ctx)
+	assert.NilError(t, err)
+
+	return integration
+}
+
+// SecretBuilder is used to create secrets (hush)
+type SecretBuilder struct {
+	client *client
+
+	// Fields
+	Name            string
+	Description     string
+	Kind            string
+	SecretName      string
+	SecretValue     string
+	OwnerID         string
+	IntegrationIDs  []string
+}
+
+// WithIntegration adds an integration ID to the secret
+func (sb *SecretBuilder) WithIntegration(integrationID string) *SecretBuilder {
+	sb.IntegrationIDs = append(sb.IntegrationIDs, integrationID)
+	return sb
+}
+
+// WithSecretName sets the secret name
+func (sb *SecretBuilder) WithSecretName(name string) *SecretBuilder {
+	sb.SecretName = name
+	return sb
+}
+
+// WithSecretValue sets the secret value
+func (sb *SecretBuilder) WithSecretValue(value string) *SecretBuilder {
+	sb.SecretValue = value
+	return sb
+}
+
+// MustNew secret builder is used to create, without authz checks, secrets in the database
+func (sb *SecretBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Hush {
+	ctx = setContext(ctx, sb.client.db)
+
+	if sb.Name == "" {
+		sb.Name = "Test Secret"
+	}
+
+	if sb.Description == "" {
+		sb.Description = "Test secret for GraphQL tests"
+	}
+
+	if sb.Kind == "" {
+		sb.Kind = "oauth_token"
+	}
+
+	if sb.SecretName == "" {
+		sb.SecretName = "github_access_token"
+	}
+
+	if sb.SecretValue == "" {
+		sb.SecretValue = "gho_test_token_123456"
+	}
+
+	if sb.OwnerID == "" {
+		// Use the organization ID from the test user
+		sb.OwnerID = testUser1.OrganizationID
+	}
+
+	mutation := sb.client.db.Hush.Create().
+		SetName(sb.Name).
+		SetDescription(sb.Description).
+		SetKind(sb.Kind).
+		SetSecretName(sb.SecretName).
+		SetSecretValue(sb.SecretValue).
+		SetOwnerID(sb.OwnerID)
+
+	// Add integration associations if provided
+	if len(sb.IntegrationIDs) > 0 {
+		mutation.AddIntegrationIDs(sb.IntegrationIDs...)
+	}
+
+	secret, err := mutation.Save(ctx)
+	assert.NilError(t, err)
+
+	return secret
+}
+
+// IntegrationCleanup is used to delete integrations
+type IntegrationCleanup struct {
+	client *client
+	ID     string
+}
+
+// MustDelete deletes the integration
+func (ic *IntegrationCleanup) MustDelete(ctx context.Context, t *testing.T) {
+	ctx = setContext(ctx, ic.client.db)
+
+	err := ic.client.db.Integration.DeleteOneID(ic.ID).Exec(ctx)
+	assert.NilError(t, err)
+}
+
+// SecretCleanup is used to delete secrets
+type SecretCleanup struct {
+	client *client
+	ID     string
+}
+
+// MustDelete deletes the secret
+func (sc *SecretCleanup) MustDelete(ctx context.Context, t *testing.T) {
+	ctx = setContext(ctx, sc.client.db)
+
+	err := sc.client.db.Hush.DeleteOneID(sc.ID).Exec(ctx)
+	assert.NilError(t, err)
+}

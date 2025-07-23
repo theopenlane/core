@@ -3,7 +3,7 @@
 OAuth Integration Testing Interface
 
 SECURITY NOTE: This HTML file contains NO OAuth credentials.
-It works by making API calls to the local server (localhost:17608) which
+It works by making GraphQL API calls to the local server (localhost:17608) which
 handles OAuth using your existing GitHub OAuth app configuration.
 
 Prerequisites:
@@ -13,6 +13,11 @@ Prerequisites:
 2. Your existing config.yaml already has the OAuth credentials
 3. Start server with: task run-dev
 4. Access via: http://localhost:17608/pkg/testutils/integrations/index.html
+
+Notes:
+- Uses GraphQL queries and mutations for integration management
+- OAuth flow still uses REST endpoints (start, callback, refresh)
+- Integration status, token retrieval, deletion, and listing now use GraphQL
 
 DO NOT serve this file locally (file://) - it requires server API access.
 -->
@@ -454,13 +459,66 @@ DO NOT serve this file locally (file://) - it requires server API access.
       async function checkIntegrationStatus(provider) {
         try {
           log(`Checking ${provider} status...`, 'info');
-          const response = await makeAuthenticatedRequest(`${apiBase}/v1/integrations/${provider}/status`);
+
+          const query = `
+            query GetIntegrationByKind($kind: String!) {
+              integrations(where: { kind: $kind }) {
+                edges {
+                  node {
+                    id
+                    kind
+                    name
+                    description
+                    secrets {
+                      edges {
+                        node {
+                          id
+                          secretName
+                          secretValue
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          `;
+
+          const response = await makeAuthenticatedRequest(`${apiBase}/query`, {
+            method: 'POST',
+            body: JSON.stringify({
+              query: query,
+              variables: { kind: provider }
+            })
+          });
 
           if (response.ok) {
             const data = await response.json();
-            log(`${provider} status: ${data.status || 'disconnected'}`, 'success');
-            updateStatus(provider, data.status || 'disconnected', data.tokenValid, data.tokenExpired);
-            return data;
+            if (data.data && data.data.integrations.edges.length > 0) {
+              const integration = data.data.integrations.edges[0].node;
+              const hasAccessToken = integration.secrets.edges.some(s =>
+                s.node.secretName.includes('_access_token') && s.node.secretValue
+              );
+
+              // Check if token might be expired by looking for expires_at
+              const expiresAtSecret = integration.secrets.edges.find(s =>
+                s.node.secretName.includes('_expires_at')
+              );
+              let tokenExpired = false;
+              if (expiresAtSecret && expiresAtSecret.node.secretValue) {
+                const expiresAt = new Date(expiresAtSecret.node.secretValue);
+                tokenExpired = expiresAt < new Date();
+              }
+
+              const status = hasAccessToken ? (tokenExpired ? 'expired' : 'connected') : 'invalid';
+              log(`${provider} status: ${status}`, 'success');
+              updateStatus(provider, status, hasAccessToken, tokenExpired);
+              return { status, tokenValid: hasAccessToken, tokenExpired };
+            } else {
+              log(`${provider} status: disconnected`, 'success');
+              updateStatus(provider, 'disconnected', false, false);
+              return { status: 'disconnected', tokenValid: false, tokenExpired: false };
+            }
           } else {
             log(`Failed to check ${provider} status`, 'error');
             updateStatus(provider, 'disconnected');
@@ -474,13 +532,71 @@ DO NOT serve this file locally (file://) - it requires server API access.
       async function getIntegrationToken(provider) {
         try {
           log(`Getting ${provider} token...`, 'info');
-          const response = await makeAuthenticatedRequest(`${apiBase}/v1/integrations/${provider}/token`);
+
+          const query = `
+            query GetIntegrationByKind($kind: String!) {
+              integrations(where: { kind: $kind }) {
+                edges {
+                  node {
+                    id
+                    kind
+                    name
+                    secrets {
+                      edges {
+                        node {
+                          id
+                          secretName
+                          secretValue
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          `;
+
+          const response = await makeAuthenticatedRequest(`${apiBase}/query`, {
+            method: 'POST',
+            body: JSON.stringify({
+              query: query,
+              variables: { kind: provider }
+            })
+          });
 
           if (response.ok) {
             const data = await response.json();
-            log(`Retrieved ${provider} token`, 'success');
-            displayToken(provider, data.token);
-            return data.token;
+            if (data.data && data.data.integrations.edges.length > 0) {
+              const integration = data.data.integrations.edges[0].node;
+              const secrets = integration.secrets.edges.map(e => e.node);
+
+              // Build token data from secrets
+              const tokenData = { provider };
+
+              for (const secret of secrets) {
+                if (secret.secretName.includes('_access_token')) {
+                  tokenData.accessToken = secret.secretValue;
+                } else if (secret.secretName.includes('_refresh_token')) {
+                  tokenData.refreshToken = secret.secretValue;
+                } else if (secret.secretName.includes('_expires_at')) {
+                  tokenData.expiresAt = secret.secretValue;
+                } else if (secret.secretName.includes('_provider_user_id')) {
+                  tokenData.providerUserId = secret.secretValue;
+                } else if (secret.secretName.includes('_provider_username')) {
+                  tokenData.providerUsername = secret.secretValue;
+                } else if (secret.secretName.includes('_provider_email')) {
+                  tokenData.providerEmail = secret.secretValue;
+                }
+              }
+
+              log(`Retrieved ${provider} token`, 'success');
+              displayToken(provider, tokenData);
+              return tokenData;
+            } else {
+              log(`No ${provider} integration found`, 'error');
+              displayToken(provider, null);
+              return null;
+            }
           } else {
             log(`Failed to get ${provider} token`, 'error');
             displayToken(provider, null);
@@ -514,24 +630,71 @@ DO NOT serve this file locally (file://) - it requires server API access.
       async function disconnectIntegration(provider) {
         try {
           // First get the integration to find its ID
-          const integrations = await listIntegrations();
-          const integration = integrations.find(i => i.kind === provider);
+          log(`Finding ${provider} integration to disconnect...`, 'info');
 
-          if (!integration) {
+          const query = `
+            query GetIntegrationByKind($kind: String!) {
+              integrations(where: { kind: $kind }) {
+                edges {
+                  node {
+                    id
+                    kind
+                    name
+                  }
+                }
+              }
+            }
+          `;
+
+          const response = await makeAuthenticatedRequest(`${apiBase}/query`, {
+            method: 'POST',
+            body: JSON.stringify({
+              query: query,
+              variables: { kind: provider }
+            })
+          });
+
+          if (!response.ok) {
+            log(`Failed to find ${provider} integration`, 'error');
+            return;
+          }
+
+          const data = await response.json();
+          if (!data.data || data.data.integrations.edges.length === 0) {
             log(`No ${provider} integration found to disconnect`, 'error');
             return;
           }
 
+          const integrationId = data.data.integrations.edges[0].node.id;
+
           log(`Disconnecting ${provider} integration...`, 'info');
-          const response = await makeAuthenticatedRequest(`${apiBase}/v1/integrations/${integration.id}`, {
-            method: 'DELETE'
+
+          const deleteMutation = `
+            mutation DeleteIntegration($deleteIntegrationId: ID!) {
+              deleteIntegration(id: $deleteIntegrationId) {
+                deletedID
+              }
+            }
+          `;
+
+          const deleteResponse = await makeAuthenticatedRequest(`${apiBase}/query`, {
+            method: 'POST',
+            body: JSON.stringify({
+              query: deleteMutation,
+              variables: { deleteIntegrationId: integrationId }
+            })
           });
 
-          if (response.ok) {
-            log(`Disconnected ${provider} integration`, 'success');
-            updateStatus(provider, 'disconnected');
-            displayToken(provider, null);
-            await loadIntegrationsList();
+          if (deleteResponse.ok) {
+            const deleteData = await deleteResponse.json();
+            if (deleteData.data && deleteData.data.deleteIntegration) {
+              log(`Disconnected ${provider} integration`, 'success');
+              updateStatus(provider, 'disconnected');
+              displayToken(provider, null);
+              await loadIntegrationsList();
+            } else {
+              log(`Failed to disconnect ${provider} integration: ${JSON.stringify(deleteData.errors)}`, 'error');
+            }
           } else {
             log(`Failed to disconnect ${provider} integration`, 'error');
           }
@@ -542,10 +705,33 @@ DO NOT serve this file locally (file://) - it requires server API access.
 
       async function listIntegrations() {
         try {
-          const response = await makeAuthenticatedRequest(`${apiBase}/v1/integrations`);
+          const query = `
+            query GetAllIntegrations {
+              integrations {
+                edges {
+                  node {
+                    id
+                    kind
+                    name
+                    description
+                    createdAt
+                    updatedAt
+                  }
+                }
+              }
+            }
+          `;
+
+          const response = await makeAuthenticatedRequest(`${apiBase}/query`, {
+            method: 'POST',
+            body: JSON.stringify({ query })
+          });
+
           if (response.ok) {
             const data = await response.json();
-            return data.integrations || [];
+            if (data.data && data.data.integrations) {
+              return data.data.integrations.edges.map(edge => edge.node);
+            }
           }
           return [];
         } catch (error) {

@@ -16,7 +16,7 @@ func registerIntegrationOAuthStartHandler(router *Router) error {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: authMW, // Require authentication for OAuth integration flow
+		Middlewares: authMW,
 		Handler: func(c echo.Context) error {
 			return router.Handler.StartOAuthFlow(c)
 		},
@@ -39,78 +39,9 @@ func registerIntegrationOAuthCallbackHandler(router *Router) error {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: mw, // Use authMW
+		Middlewares: mw, // needs to not be authenticated as it is called by external oauth provider
 		Handler: func(c echo.Context) error {
 			return router.Handler.HandleOAuthCallback(c)
-		},
-	}
-
-	if err := router.AddV1Route(path, method, nil, route); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// registerIntegrationTokenHandler registers the handler to retrieve integration tokens
-func registerIntegrationTokenHandler(router *Router) error {
-	path := "/integrations/:provider/token"
-	method := http.MethodGet
-	name := "GetIntegrationToken"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: authMW, // Require authentication
-		Handler: func(c echo.Context) error {
-			return router.Handler.GetIntegrationToken(c)
-		},
-	}
-
-	if err := router.AddV1Route(path, method, nil, route); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// registerListIntegrationsHandler registers the handler to list organization integrations
-func registerListIntegrationsHandler(router *Router) error {
-	path := "/integrations"
-	method := http.MethodGet
-	name := "ListIntegrations"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: authMW, // Require authentication
-		Handler: func(c echo.Context) error {
-			return router.Handler.ListIntegrations(c)
-		},
-	}
-
-	if err := router.AddV1Route(path, method, nil, route); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// registerDeleteIntegrationHandler registers the handler to delete an integration
-func registerDeleteIntegrationHandler(router *Router) error {
-	path := "/integrations/:id"
-	method := http.MethodDelete
-	name := "DeleteIntegration"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: authMW, // Require authentication
-		Handler: func(c echo.Context) error {
-			return router.Handler.DeleteIntegration(c)
 		},
 	}
 
@@ -131,32 +62,9 @@ func registerRefreshIntegrationTokenHandler(router *Router) error {
 		Name:        name,
 		Method:      method,
 		Path:        path,
-		Middlewares: authMW, // Require authentication
+		Middlewares: authMW,
 		Handler: func(c echo.Context) error {
 			return router.Handler.RefreshIntegrationTokenHandler(c)
-		},
-	}
-
-	if err := router.AddV1Route(path, method, nil, route); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// registerIntegrationStatusHandler registers the handler to check integration status
-func registerIntegrationStatusHandler(router *Router) error {
-	path := "/integrations/:provider/status"
-	method := http.MethodGet
-	name := "GetIntegrationStatus"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: authMW, // Require authentication
-		Handler: func(c echo.Context) error {
-			return router.Handler.GetIntegrationStatus(c)
 		},
 	}
 

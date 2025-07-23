@@ -4,6 +4,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/stoewer/go-strcase"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/internal/ent/hush/crypto"
@@ -178,7 +179,7 @@ func TestConvertFieldName(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.input, func(t *testing.T) {
-			result := convertFieldName(tt.input)
+			result := strcase.UpperCamelCase(tt.input)
 			assert.Equal(t, tt.expected, result)
 		})
 	}
