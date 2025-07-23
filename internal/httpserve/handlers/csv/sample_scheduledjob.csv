@@ -1,2 +1,2 @@
-Tags,Title,Description,Platform,DownloadUrl,Configuration,Cron,OwnerId
-example_tags,example_title,example_description,example_platform,example_downloadurl,example_configuration,example_cron,example_ownerid
+Active,Configuration,Cron,OwnerId,JobTemplateId,ControlIDs,SubcontrolIDs,JobRunnerId
+example_active,example_configuration,example_cron,example_ownerid,example_jobtemplateid,example_controlids,example_subcontrolids,example_jobrunnerid

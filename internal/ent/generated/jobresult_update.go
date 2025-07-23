@@ -11,11 +11,11 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -174,9 +174,9 @@ func (jru *JobResultUpdate) SetOwner(o *Organization) *JobResultUpdate {
 	return jru.SetOwnerID(o.ID)
 }
 
-// SetScheduledJob sets the "scheduled_job" edge to the ControlScheduledJob entity.
-func (jru *JobResultUpdate) SetScheduledJob(c *ControlScheduledJob) *JobResultUpdate {
-	return jru.SetScheduledJobID(c.ID)
+// SetScheduledJob sets the "scheduled_job" edge to the ScheduledJob entity.
+func (jru *JobResultUpdate) SetScheduledJob(s *ScheduledJob) *JobResultUpdate {
+	return jru.SetScheduledJobID(s.ID)
 }
 
 // SetFile sets the "file" edge to the File entity.
@@ -195,7 +195,7 @@ func (jru *JobResultUpdate) ClearOwner() *JobResultUpdate {
 	return jru
 }
 
-// ClearScheduledJob clears the "scheduled_job" edge to the ControlScheduledJob entity.
+// ClearScheduledJob clears the "scheduled_job" edge to the ScheduledJob entity.
 func (jru *JobResultUpdate) ClearScheduledJob() *JobResultUpdate {
 	jru.mutation.ClearScheduledJob()
 	return jru
@@ -360,7 +360,7 @@ func (jru *JobResultUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{jobresult.ScheduledJobColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = jru.schemaConfig.JobResult
@@ -374,7 +374,7 @@ func (jru *JobResultUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{jobresult.ScheduledJobColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = jru.schemaConfig.JobResult
@@ -577,9 +577,9 @@ func (jruo *JobResultUpdateOne) SetOwner(o *Organization) *JobResultUpdateOne {
 	return jruo.SetOwnerID(o.ID)
 }
 
-// SetScheduledJob sets the "scheduled_job" edge to the ControlScheduledJob entity.
-func (jruo *JobResultUpdateOne) SetScheduledJob(c *ControlScheduledJob) *JobResultUpdateOne {
-	return jruo.SetScheduledJobID(c.ID)
+// SetScheduledJob sets the "scheduled_job" edge to the ScheduledJob entity.
+func (jruo *JobResultUpdateOne) SetScheduledJob(s *ScheduledJob) *JobResultUpdateOne {
+	return jruo.SetScheduledJobID(s.ID)
 }
 
 // SetFile sets the "file" edge to the File entity.
@@ -598,7 +598,7 @@ func (jruo *JobResultUpdateOne) ClearOwner() *JobResultUpdateOne {
 	return jruo
 }
 
-// ClearScheduledJob clears the "scheduled_job" edge to the ControlScheduledJob entity.
+// ClearScheduledJob clears the "scheduled_job" edge to the ScheduledJob entity.
 func (jruo *JobResultUpdateOne) ClearScheduledJob() *JobResultUpdateOne {
 	jruo.mutation.ClearScheduledJob()
 	return jruo
@@ -793,7 +793,7 @@ func (jruo *JobResultUpdateOne) sqlSave(ctx context.Context) (_node *JobResult, 
 			Columns: []string{jobresult.ScheduledJobColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = jruo.schemaConfig.JobResult
@@ -807,7 +807,7 @@ func (jruo *JobResultUpdateOne) sqlSave(ctx context.Context) (_node *JobResult, 
 			Columns: []string{jobresult.ScheduledJobColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlscheduledjob.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = jruo.schemaConfig.JobResult

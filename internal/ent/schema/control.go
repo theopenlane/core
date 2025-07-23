@@ -86,7 +86,7 @@ func (c Control) Edges() []ent.Edge {
 		}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: c,
-			edgeSchema: ControlScheduledJob{},
+			edgeSchema: ScheduledJob{},
 		}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: c,

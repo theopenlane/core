@@ -22,8 +22,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
-	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
-	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
@@ -57,6 +55,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
+	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
+	"github.com/theopenlane/core/internal/ent/generated/jobtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
@@ -184,16 +184,6 @@ var controlobjectivehistoryImplementors = []string{"ControlObjectiveHistory", "N
 
 // IsNode implements the Node interface check for GQLGen.
 func (*ControlObjectiveHistory) IsNode() {}
-
-var controlscheduledjobImplementors = []string{"ControlScheduledJob", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*ControlScheduledJob) IsNode() {}
-
-var controlscheduledjobhistoryImplementors = []string{"ControlScheduledJobHistory", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*ControlScheduledJobHistory) IsNode() {}
 
 var customdomainImplementors = []string{"CustomDomain", "Node"}
 
@@ -359,6 +349,16 @@ var jobrunnertokenImplementors = []string{"JobRunnerToken", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*JobRunnerToken) IsNode() {}
+
+var jobtemplateImplementors = []string{"JobTemplate", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*JobTemplate) IsNode() {}
+
+var jobtemplatehistoryImplementors = []string{"JobTemplateHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*JobTemplateHistory) IsNode() {}
 
 var mappabledomainImplementors = []string{"MappableDomain", "Node"}
 
@@ -815,24 +815,6 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
-	case controlscheduledjob.Table:
-		query := c.ControlScheduledJob.Query().
-			Where(controlscheduledjob.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, controlscheduledjobImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case controlscheduledjobhistory.Table:
-		query := c.ControlScheduledJobHistory.Query().
-			Where(controlscheduledjobhistory.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, controlscheduledjobhistoryImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
 	case customdomain.Table:
 		query := c.CustomDomain.Query().
 			Where(customdomain.ID(id))
@@ -1126,6 +1108,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(jobrunnertoken.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, jobrunnertokenImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case jobtemplate.Table:
+		query := c.JobTemplate.Query().
+			Where(jobtemplate.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, jobtemplateImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case jobtemplatehistory.Table:
+		query := c.JobTemplateHistory.Query().
+			Where(jobtemplatehistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, jobtemplatehistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1915,38 +1915,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 				*noder = node
 			}
 		}
-	case controlscheduledjob.Table:
-		query := c.ControlScheduledJob.Query().
-			Where(controlscheduledjob.IDIn(ids...))
-		query, err := query.CollectFields(ctx, controlscheduledjobImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case controlscheduledjobhistory.Table:
-		query := c.ControlScheduledJobHistory.Query().
-			Where(controlscheduledjobhistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, controlscheduledjobhistoryImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
 	case customdomain.Table:
 		query := c.CustomDomain.Query().
 			Where(customdomain.IDIn(ids...))
@@ -2463,6 +2431,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.JobRunnerToken.Query().
 			Where(jobrunnertoken.IDIn(ids...))
 		query, err := query.CollectFields(ctx, jobrunnertokenImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case jobtemplate.Table:
+		query := c.JobTemplate.Query().
+			Where(jobtemplate.IDIn(ids...))
+		query, err := query.CollectFields(ctx, jobtemplateImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case jobtemplatehistory.Table:
+		query := c.JobTemplateHistory.Query().
+			Where(jobtemplatehistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, jobtemplatehistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

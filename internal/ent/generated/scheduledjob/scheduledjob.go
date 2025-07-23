@@ -3,14 +3,11 @@
 package scheduledjob
 
 import (
-	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/pkg/enums"
 )
 
 const (
@@ -32,28 +29,28 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldDisplayID holds the string denoting the display_id field in the database.
 	FieldDisplayID = "display_id"
-	// FieldTags holds the string denoting the tags field in the database.
-	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
-	// FieldSystemOwned holds the string denoting the system_owned field in the database.
-	FieldSystemOwned = "system_owned"
-	// FieldTitle holds the string denoting the title field in the database.
-	FieldTitle = "title"
-	// FieldDescription holds the string denoting the description field in the database.
-	FieldDescription = "description"
-	// FieldPlatform holds the string denoting the platform field in the database.
-	FieldPlatform = "platform"
-	// FieldWindmillPath holds the string denoting the windmill_path field in the database.
-	FieldWindmillPath = "windmill_path"
-	// FieldDownloadURL holds the string denoting the download_url field in the database.
-	FieldDownloadURL = "download_url"
+	// FieldJobID holds the string denoting the job_id field in the database.
+	FieldJobID = "job_id"
+	// FieldActive holds the string denoting the active field in the database.
+	FieldActive = "active"
 	// FieldConfiguration holds the string denoting the configuration field in the database.
 	FieldConfiguration = "configuration"
 	// FieldCron holds the string denoting the cron field in the database.
 	FieldCron = "cron"
+	// FieldJobRunnerID holds the string denoting the job_runner_id field in the database.
+	FieldJobRunnerID = "job_runner_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
+	// EdgeJobTemplate holds the string denoting the job_template edge name in mutations.
+	EdgeJobTemplate = "job_template"
+	// EdgeControls holds the string denoting the controls edge name in mutations.
+	EdgeControls = "controls"
+	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
+	EdgeSubcontrols = "subcontrols"
+	// EdgeJobRunner holds the string denoting the job_runner edge name in mutations.
+	EdgeJobRunner = "job_runner"
 	// Table holds the table name of the scheduledjob in the database.
 	Table = "scheduled_jobs"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -63,6 +60,30 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
+	// JobTemplateTable is the table that holds the job_template relation/edge.
+	JobTemplateTable = "scheduled_jobs"
+	// JobTemplateInverseTable is the table name for the JobTemplate entity.
+	// It exists in this package in order to avoid circular dependency with the "jobtemplate" package.
+	JobTemplateInverseTable = "job_templates"
+	// JobTemplateColumn is the table column denoting the job_template relation/edge.
+	JobTemplateColumn = "job_id"
+	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
+	ControlsTable = "scheduled_job_controls"
+	// ControlsInverseTable is the table name for the Control entity.
+	// It exists in this package in order to avoid circular dependency with the "control" package.
+	ControlsInverseTable = "controls"
+	// SubcontrolsTable is the table that holds the subcontrols relation/edge. The primary key declared below.
+	SubcontrolsTable = "scheduled_job_subcontrols"
+	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
+	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
+	SubcontrolsInverseTable = "subcontrols"
+	// JobRunnerTable is the table that holds the job_runner relation/edge.
+	JobRunnerTable = "scheduled_jobs"
+	// JobRunnerInverseTable is the table name for the JobRunner entity.
+	// It exists in this package in order to avoid circular dependency with the "jobrunner" package.
+	JobRunnerInverseTable = "job_runners"
+	// JobRunnerColumn is the table column denoting the job_runner relation/edge.
+	JobRunnerColumn = "job_runner_id"
 )
 
 // Columns holds all SQL columns for scheduledjob fields.
@@ -75,17 +96,22 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldDisplayID,
-	FieldTags,
 	FieldOwnerID,
-	FieldSystemOwned,
-	FieldTitle,
-	FieldDescription,
-	FieldPlatform,
-	FieldWindmillPath,
-	FieldDownloadURL,
+	FieldJobID,
+	FieldActive,
 	FieldConfiguration,
 	FieldCron,
+	FieldJobRunnerID,
 }
+
+var (
+	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
+	// primary key for the controls relation (M2M).
+	ControlsPrimaryKey = []string{"scheduled_job_id", "control_id"}
+	// SubcontrolsPrimaryKey and SubcontrolsColumn2 are the table columns denoting the
+	// primary key for the subcontrols relation (M2M).
+	SubcontrolsPrimaryKey = []string{"scheduled_job_id", "subcontrol_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -104,7 +130,7 @@ func ValidColumn(column string) bool {
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
 	Hooks        [7]ent.Hook
-	Interceptors [2]ent.Interceptor
+	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -114,25 +140,17 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
 	DisplayIDValidator func(string) error
-	// DefaultTags holds the default value on creation for the "tags" field.
-	DefaultTags []string
-	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
-	DefaultSystemOwned bool
-	// TitleValidator is a validator for the "title" field. It is called by the builders before save.
-	TitleValidator func(string) error
+	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	OwnerIDValidator func(string) error
+	// JobIDValidator is a validator for the "job_id" field. It is called by the builders before save.
+	JobIDValidator func(string) error
+	// DefaultActive holds the default value on creation for the "active" field.
+	DefaultActive bool
+	// CronValidator is a validator for the "cron" field. It is called by the builders before save.
+	CronValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
-
-// PlatformValidator is a validator for the "platform" field enum values. It is called by the builders before save.
-func PlatformValidator(pl enums.JobPlatformType) error {
-	switch pl.String() {
-	case "GO", "TS":
-		return nil
-	default:
-		return fmt.Errorf("scheduledjob: invalid enum value for platform field: %q", pl)
-	}
-}
 
 // OrderOption defines the ordering options for the ScheduledJob queries.
 type OrderOption func(*sql.Selector)
@@ -182,34 +200,14 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
-// BySystemOwned orders the results by the system_owned field.
-func BySystemOwned(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSystemOwned, opts...).ToFunc()
+// ByJobID orders the results by the job_id field.
+func ByJobID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldJobID, opts...).ToFunc()
 }
 
-// ByTitle orders the results by the title field.
-func ByTitle(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldTitle, opts...).ToFunc()
-}
-
-// ByDescription orders the results by the description field.
-func ByDescription(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDescription, opts...).ToFunc()
-}
-
-// ByPlatform orders the results by the platform field.
-func ByPlatform(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPlatform, opts...).ToFunc()
-}
-
-// ByWindmillPath orders the results by the windmill_path field.
-func ByWindmillPath(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldWindmillPath, opts...).ToFunc()
-}
-
-// ByDownloadURL orders the results by the download_url field.
-func ByDownloadURL(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDownloadURL, opts...).ToFunc()
+// ByActive orders the results by the active field.
+func ByActive(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldActive, opts...).ToFunc()
 }
 
 // ByCron orders the results by the cron field.
@@ -217,10 +215,57 @@ func ByCron(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCron, opts...).ToFunc()
 }
 
+// ByJobRunnerID orders the results by the job_runner_id field.
+func ByJobRunnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldJobRunnerID, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByJobTemplateField orders the results by job_template field.
+func ByJobTemplateField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newJobTemplateStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByControlsCount orders the results by controls count.
+func ByControlsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newControlsStep(), opts...)
+	}
+}
+
+// ByControls orders the results by controls terms.
+func ByControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// BySubcontrolsCount orders the results by subcontrols count.
+func BySubcontrolsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSubcontrolsStep(), opts...)
+	}
+}
+
+// BySubcontrols orders the results by subcontrols terms.
+func BySubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubcontrolsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByJobRunnerField orders the results by job_runner field.
+func ByJobRunnerField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newJobRunnerStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -230,10 +275,31 @@ func newOwnerStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 	)
 }
-
-var (
-	// enums.JobPlatformType must implement graphql.Marshaler.
-	_ graphql.Marshaler = (*enums.JobPlatformType)(nil)
-	// enums.JobPlatformType must implement graphql.Unmarshaler.
-	_ graphql.Unmarshaler = (*enums.JobPlatformType)(nil)
-)
+func newJobTemplateStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(JobTemplateInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, JobTemplateTable, JobTemplateColumn),
+	)
+}
+func newControlsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ControlsTable, ControlsPrimaryKey...),
+	)
+}
+func newSubcontrolsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubcontrolsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, SubcontrolsTable, SubcontrolsPrimaryKey...),
+	)
+}
+func newJobRunnerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(JobRunnerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, JobRunnerTable, JobRunnerColumn),
+	)
+}

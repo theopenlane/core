@@ -1,7 +1,7 @@
 
 
-query GetAllControlScheduledJobHistories {
-  controlScheduledJobHistories {
+query GetAllJobTemplateHistories {
+  jobTemplateHistories {
     totalCount
     pageInfo {
       startCursor
@@ -11,17 +11,21 @@ query GetAllControlScheduledJobHistories {
     }
     edges {
       node {
-        configuration
         createdAt
         createdBy
         cron
+        description
+        displayID
+        downloadURL
         historyTime
         id
-        jobID
-        jobRunnerID
         operation
         ownerID
+        platform
         ref
+        systemOwned
+        tags
+        title
         updatedAt
         updatedBy
       }
@@ -29,8 +33,8 @@ query GetAllControlScheduledJobHistories {
   }
 }
 
-query GetControlScheduledJobHistories($first: Int, $last: Int, $where: ControlScheduledJobHistoryWhereInput) {
-  controlScheduledJobHistories(first: $first, last: $last, where: $where) {
+query GetJobTemplateHistories($first: Int, $last: Int, $where: JobTemplateHistoryWhereInput) {
+  jobTemplateHistories(first: $first, last: $last, where: $where) {
     totalCount
     pageInfo {
       startCursor
@@ -40,17 +44,21 @@ query GetControlScheduledJobHistories($first: Int, $last: Int, $where: ControlSc
     }
     edges {
       node {
-        configuration
         createdAt
         createdBy
         cron
+        description
+        displayID
+        downloadURL
         historyTime
         id
-        jobID
-        jobRunnerID
         operation
         ownerID
+        platform
         ref
+        systemOwned
+        tags
+        title
         updatedAt
         updatedBy
       }

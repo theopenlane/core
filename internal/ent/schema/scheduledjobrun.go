@@ -84,7 +84,7 @@ func (s ScheduledJobRun) Edges() []ent.Edge {
 	return []ent.Edge{
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: s,
-			edgeSchema: ControlScheduledJob{},
+			edgeSchema: ScheduledJob{},
 			field:      "scheduled_job_id",
 			required:   true,
 		}),
@@ -125,11 +125,10 @@ func (ScheduledJobRun) Interceptors() []ent.Interceptor {
 
 // Policy of the ScheduledJobRun
 func (ScheduledJobRun) Policy() ent.Policy {
-	// add the new policy here, the default post-policy is to deny all
-	// so you need to ensure there are rules in place to allow the actions you want
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
+			policy.CheckOrgWriteAccess(),
 		),
 	)
 }

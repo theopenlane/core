@@ -120,7 +120,7 @@ type SubcontrolEdges struct {
 	// the implementation(s) of the subcontrol
 	ControlImplementations []*ControlImplementation `json:"control_implementations,omitempty"`
 	// ScheduledJobs holds the value of the scheduled_jobs edge.
-	ScheduledJobs []*ControlScheduledJob `json:"scheduled_jobs,omitempty"`
+	ScheduledJobs []*ScheduledJob `json:"scheduled_jobs,omitempty"`
 	// MappedToSubcontrols holds the value of the mapped_to_subcontrols edge.
 	MappedToSubcontrols []*MappedControl `json:"mapped_to_subcontrols,omitempty"`
 	// MappedFromSubcontrols holds the value of the mapped_from_subcontrols edge.
@@ -140,7 +140,7 @@ type SubcontrolEdges struct {
 	namedProcedures             map[string][]*Procedure
 	namedInternalPolicies       map[string][]*InternalPolicy
 	namedControlImplementations map[string][]*ControlImplementation
-	namedScheduledJobs          map[string][]*ControlScheduledJob
+	namedScheduledJobs          map[string][]*ScheduledJob
 	namedMappedToSubcontrols    map[string][]*MappedControl
 	namedMappedFromSubcontrols  map[string][]*MappedControl
 }
@@ -272,7 +272,7 @@ func (e SubcontrolEdges) ControlImplementationsOrErr() ([]*ControlImplementation
 
 // ScheduledJobsOrErr returns the ScheduledJobs value or an error if the edge
 // was not loaded in eager-loading.
-func (e SubcontrolEdges) ScheduledJobsOrErr() ([]*ControlScheduledJob, error) {
+func (e SubcontrolEdges) ScheduledJobsOrErr() ([]*ScheduledJob, error) {
 	if e.loadedTypes[13] {
 		return e.ScheduledJobs, nil
 	}
@@ -624,7 +624,7 @@ func (s *Subcontrol) QueryControlImplementations() *ControlImplementationQuery {
 }
 
 // QueryScheduledJobs queries the "scheduled_jobs" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryScheduledJobs() *ControlScheduledJobQuery {
+func (s *Subcontrol) QueryScheduledJobs() *ScheduledJobQuery {
 	return NewSubcontrolClient(s.config).QueryScheduledJobs(s)
 }
 
@@ -976,7 +976,7 @@ func (s *Subcontrol) appendNamedControlImplementations(name string, edges ...*Co
 
 // NamedScheduledJobs returns the ScheduledJobs named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (s *Subcontrol) NamedScheduledJobs(name string) ([]*ControlScheduledJob, error) {
+func (s *Subcontrol) NamedScheduledJobs(name string) ([]*ScheduledJob, error) {
 	if s.Edges.namedScheduledJobs == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
@@ -987,12 +987,12 @@ func (s *Subcontrol) NamedScheduledJobs(name string) ([]*ControlScheduledJob, er
 	return nodes, nil
 }
 
-func (s *Subcontrol) appendNamedScheduledJobs(name string, edges ...*ControlScheduledJob) {
+func (s *Subcontrol) appendNamedScheduledJobs(name string, edges ...*ScheduledJob) {
 	if s.Edges.namedScheduledJobs == nil {
-		s.Edges.namedScheduledJobs = make(map[string][]*ControlScheduledJob)
+		s.Edges.namedScheduledJobs = make(map[string][]*ScheduledJob)
 	}
 	if len(edges) == 0 {
-		s.Edges.namedScheduledJobs[name] = []*ControlScheduledJob{}
+		s.Edges.namedScheduledJobs[name] = []*ScheduledJob{}
 	} else {
 		s.Edges.namedScheduledJobs[name] = append(s.Edges.namedScheduledJobs[name], edges...)
 	}

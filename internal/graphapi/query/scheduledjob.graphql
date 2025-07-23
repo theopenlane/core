@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVScheduledJob($input: Upload!) {
   createBulkCSVScheduledJob(input: $input) {
     scheduledJobs {
@@ -6,13 +5,11 @@ mutation CreateBulkCSVScheduledJob($input: Upload!) {
       createdAt
       createdBy
       cron
-      description
       displayID
       id
+      jobID
+      jobRunnerID
       ownerID
-      systemOwned
-      tags
-      title
       updatedAt
       updatedBy
     }
@@ -26,13 +23,11 @@ mutation CreateBulkScheduledJob($input: [CreateScheduledJobInput!]) {
       createdAt
       createdBy
       cron
-      description
       displayID
       id
+      jobID
+      jobRunnerID
       ownerID
-      systemOwned
-      tags
-      title
       updatedAt
       updatedBy
     }
@@ -46,15 +41,27 @@ mutation CreateScheduledJob($input: CreateScheduledJobInput!) {
       createdAt
       createdBy
       cron
-      description
       displayID
       id
+      jobID
+      jobRunnerID
       ownerID
-      systemOwned
-      tags
-      title
       updatedAt
       updatedBy
+      controls {
+        edges {
+          node {
+            id
+          }
+        }
+      }
+      subcontrols {
+        edges {
+          node {
+            id
+          }
+        }
+      }
     }
   }
 }
@@ -80,34 +87,45 @@ query GetAllScheduledJobs {
         createdAt
         createdBy
         cron
-        description
         displayID
         id
+        jobID
+        jobRunnerID
         ownerID
-        systemOwned
-        tags
-        title
         updatedAt
         updatedBy
       }
     }
   }
 }
+
 query GetScheduledJobByID($scheduledJobId: ID!) {
   scheduledJob(id: $scheduledJobId) {
     configuration
     createdAt
     createdBy
     cron
-    description
     displayID
     id
+    jobID
+    jobRunnerID
     ownerID
-    systemOwned
-    tags
-    title
     updatedAt
     updatedBy
+    controls {
+      edges {
+        node {
+          id
+        }
+      }
+    }
+    subcontrols {
+      edges {
+        node {
+          id
+        }
+      }
+    }
   }
 }
 
@@ -126,19 +144,32 @@ query GetScheduledJobs($first: Int, $last: Int, $where: ScheduledJobWhereInput) 
         createdAt
         createdBy
         cron
-        description
         displayID
         id
+        jobID
+        jobRunnerID
         ownerID
-        systemOwned
-        tags
-        title
         updatedAt
         updatedBy
+        controls {
+          edges {
+            node {
+              id
+            }
+          }
+        }
+        subcontrols {
+          edges {
+            node {
+              id
+            }
+          }
+        }
       }
     }
   }
 }
+
 mutation UpdateScheduledJob($updateScheduledJobId: ID!, $input: UpdateScheduledJobInput!) {
   updateScheduledJob(id: $updateScheduledJobId, input: $input) {
     scheduledJob {
@@ -146,15 +177,27 @@ mutation UpdateScheduledJob($updateScheduledJobId: ID!, $input: UpdateScheduledJ
       createdAt
       createdBy
       cron
-      description
       displayID
       id
+      jobID
+      jobRunnerID
       ownerID
-      systemOwned
-      tags
-      title
       updatedAt
       updatedBy
+      controls {
+        edges {
+          node {
+            id
+          }
+        }
+      }
+      subcontrols {
+        edges {
+          node {
+            id
+          }
+        }
+      }
     }
   }
 }

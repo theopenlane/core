@@ -90,7 +90,7 @@ func (r *mutationResolver) UpdateScheduledJob(ctx context.Context, id string, in
 	}
 
 	// setup update request
-	req := res.Update().SetInput(input).AppendTags(input.AppendTags)
+	req := res.Update().SetInput(input).AppendConfiguration(input.AppendConfiguration)
 
 	res, err = req.Save(ctx)
 	if err != nil {

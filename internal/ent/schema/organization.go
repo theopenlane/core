@@ -364,12 +364,12 @@ func (o Organization) Edges() []ent.Edge {
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:         o,
-			edgeSchema:         ScheduledJob{},
+			edgeSchema:         JobTemplate{},
 			cascadeDeleteOwner: true,
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:         o,
-			edgeSchema:         ControlScheduledJob{},
+			edgeSchema:         ScheduledJob{},
 			cascadeDeleteOwner: true,
 		}),
 		edgeToWithPagination(&edgeDefinition{

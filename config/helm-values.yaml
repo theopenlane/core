@@ -196,8 +196,6 @@ coreConfiguration:
       onFailureScript: ""  # @schema type:string
       # -- OnSuccessScript script to run when a scheduled job succeeds
       onSuccessScript: ""  # @schema type:string
-      # -- FolderName identifies the storage path of flows and scripts in Windmill, you'd want to use
-      folderName: "openlane"  # @schema type:string; default:openlane
     # -- MaxPoolSize is the max pond pool workers that can be used by the ent client
     maxPoolSize: 100  # @schema type:integer; default:100
   # -- Auth contains the authentication token settings and provider(s)

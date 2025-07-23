@@ -3655,15 +3655,15 @@ type Control implements Node {
     last: Int
 
     """
-    Ordering options for ControlScheduledJobs returned from the connection.
+    Ordering options for ScheduledJobs returned from the connection.
     """
-    orderBy: [ControlScheduledJobOrder!]
+    orderBy: [ScheduledJobOrder!]
 
     """
-    Filtering options for ControlScheduledJobs returned from the connection.
+    Filtering options for ScheduledJobs returned from the connection.
     """
-    where: ControlScheduledJobWhereInput
-  ): ControlScheduledJobConnection!
+    where: ScheduledJobWhereInput
+  ): ScheduledJobConnection!
 }
 """
 A connection to a list of items.
@@ -6306,570 +6306,6 @@ enum ControlOrderField {
   ref_code
   CONTROL_OWNER_name
 }
-type ControlScheduledJob implements Node {
-  id: ID!
-  createdAt: Time
-  updatedAt: Time
-  createdBy: String
-  updatedBy: String
-  """
-  the organization id that owns the object
-  """
-  ownerID: ID
-  """
-  the scheduled_job id to take the script to run from
-  """
-  jobID: ID!
-  """
-  the configuration to run this job
-  """
-  configuration: JobConfiguration
-  """
-  cron syntax. If not provided, it would inherit the cron of the parent job
-  """
-  cron: String
-  """
-  the runner that this job will run on. If not set, it will scheduled on a general runner instead
-  """
-  jobRunnerID: ID
-  owner: Organization
-  job: ScheduledJob!
-  controls(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Controls returned from the connection.
-    """
-    orderBy: [ControlOrder!]
-
-    """
-    Filtering options for Controls returned from the connection.
-    """
-    where: ControlWhereInput
-  ): ControlConnection!
-  subcontrols(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Subcontrols returned from the connection.
-    """
-    orderBy: [SubcontrolOrder!]
-
-    """
-    Filtering options for Subcontrols returned from the connection.
-    """
-    where: SubcontrolWhereInput
-  ): SubcontrolConnection!
-  jobRunner: JobRunner
-}
-"""
-A connection to a list of items.
-"""
-type ControlScheduledJobConnection {
-  """
-  A list of edges.
-  """
-  edges: [ControlScheduledJobEdge]
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-  """
-  Identifies the total count of items in the connection.
-  """
-  totalCount: Int!
-}
-"""
-An edge in a connection.
-"""
-type ControlScheduledJobEdge {
-  """
-  The item at the end of the edge.
-  """
-  node: ControlScheduledJob
-  """
-  A cursor for use in pagination.
-  """
-  cursor: Cursor!
-}
-type ControlScheduledJobHistory implements Node {
-  id: ID!
-  historyTime: Time!
-  ref: String
-  operation: ControlScheduledJobHistoryOpType!
-  createdAt: Time
-  updatedAt: Time
-  createdBy: String
-  updatedBy: String
-  """
-  the organization id that owns the object
-  """
-  ownerID: String
-  """
-  the scheduled_job id to take the script to run from
-  """
-  jobID: String!
-  """
-  the configuration to run this job
-  """
-  configuration: JobConfiguration
-  """
-  cron syntax. If not provided, it would inherit the cron of the parent job
-  """
-  cron: String
-  """
-  the runner that this job will run on. If not set, it will scheduled on a general runner instead
-  """
-  jobRunnerID: String
-}
-"""
-A connection to a list of items.
-"""
-type ControlScheduledJobHistoryConnection {
-  """
-  A list of edges.
-  """
-  edges: [ControlScheduledJobHistoryEdge]
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-  """
-  Identifies the total count of items in the connection.
-  """
-  totalCount: Int!
-}
-"""
-An edge in a connection.
-"""
-type ControlScheduledJobHistoryEdge {
-  """
-  The item at the end of the edge.
-  """
-  node: ControlScheduledJobHistory
-  """
-  A cursor for use in pagination.
-  """
-  cursor: Cursor!
-}
-"""
-ControlScheduledJobHistoryOpType is enum for the field operation
-"""
-enum ControlScheduledJobHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
-  INSERT
-  UPDATE
-  DELETE
-}
-"""
-Ordering options for ControlScheduledJobHistory connections
-"""
-input ControlScheduledJobHistoryOrder {
-  """
-  The ordering direction.
-  """
-  direction: OrderDirection! = ASC
-  """
-  The field by which to order ControlScheduledJobHistories.
-  """
-  field: ControlScheduledJobHistoryOrderField!
-}
-"""
-Properties by which ControlScheduledJobHistory connections can be ordered.
-"""
-enum ControlScheduledJobHistoryOrderField {
-  history_time
-  created_at
-  updated_at
-}
-"""
-ControlScheduledJobHistoryWhereInput is used for filtering ControlScheduledJobHistory objects.
-Input was generated by ent.
-"""
-input ControlScheduledJobHistoryWhereInput {
-  not: ControlScheduledJobHistoryWhereInput
-  and: [ControlScheduledJobHistoryWhereInput!]
-  or: [ControlScheduledJobHistoryWhereInput!]
-  """
-  id field predicates
-  """
-  id: ID
-  idNEQ: ID
-  idIn: [ID!]
-  idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
-  idEqualFold: ID
-  idContainsFold: ID
-  """
-  history_time field predicates
-  """
-  historyTime: Time
-  historyTimeNEQ: Time
-  historyTimeIn: [Time!]
-  historyTimeNotIn: [Time!]
-  historyTimeGT: Time
-  historyTimeGTE: Time
-  historyTimeLT: Time
-  historyTimeLTE: Time
-  """
-  ref field predicates
-  """
-  ref: String
-  refNEQ: String
-  refIn: [String!]
-  refNotIn: [String!]
-  refGT: String
-  refGTE: String
-  refLT: String
-  refLTE: String
-  refContains: String
-  refHasPrefix: String
-  refHasSuffix: String
-  refIsNil: Boolean
-  refNotNil: Boolean
-  refEqualFold: String
-  refContainsFold: String
-  """
-  operation field predicates
-  """
-  operation: ControlScheduledJobHistoryOpType
-  operationNEQ: ControlScheduledJobHistoryOpType
-  operationIn: [ControlScheduledJobHistoryOpType!]
-  operationNotIn: [ControlScheduledJobHistoryOpType!]
-  """
-  created_at field predicates
-  """
-  createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
-  createdAtGT: Time
-  createdAtGTE: Time
-  createdAtLT: Time
-  createdAtLTE: Time
-  createdAtIsNil: Boolean
-  createdAtNotNil: Boolean
-  """
-  updated_at field predicates
-  """
-  updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
-  updatedAtGT: Time
-  updatedAtGTE: Time
-  updatedAtLT: Time
-  updatedAtLTE: Time
-  updatedAtIsNil: Boolean
-  updatedAtNotNil: Boolean
-  """
-  created_by field predicates
-  """
-  createdBy: String
-  createdByNEQ: String
-  createdByIn: [String!]
-  createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
-  createdByContains: String
-  createdByHasPrefix: String
-  createdByHasSuffix: String
-  createdByIsNil: Boolean
-  createdByNotNil: Boolean
-  createdByEqualFold: String
-  createdByContainsFold: String
-  """
-  updated_by field predicates
-  """
-  updatedBy: String
-  updatedByNEQ: String
-  updatedByIn: [String!]
-  updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
-  updatedByContains: String
-  updatedByHasPrefix: String
-  updatedByHasSuffix: String
-  updatedByIsNil: Boolean
-  updatedByNotNil: Boolean
-  updatedByEqualFold: String
-  updatedByContainsFold: String
-  """
-  owner_id field predicates
-  """
-  ownerID: String
-  ownerIDNEQ: String
-  ownerIDIn: [String!]
-  ownerIDNotIn: [String!]
-  ownerIDGT: String
-  ownerIDGTE: String
-  ownerIDLT: String
-  ownerIDLTE: String
-  ownerIDContains: String
-  ownerIDHasPrefix: String
-  ownerIDHasSuffix: String
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: String
-  ownerIDContainsFold: String
-  """
-  job_id field predicates
-  """
-  jobID: String
-  jobIDNEQ: String
-  jobIDIn: [String!]
-  jobIDNotIn: [String!]
-  jobIDGT: String
-  jobIDGTE: String
-  jobIDLT: String
-  jobIDLTE: String
-  jobIDContains: String
-  jobIDHasPrefix: String
-  jobIDHasSuffix: String
-  jobIDEqualFold: String
-  jobIDContainsFold: String
-  """
-  job_runner_id field predicates
-  """
-  jobRunnerID: String
-  jobRunnerIDNEQ: String
-  jobRunnerIDIn: [String!]
-  jobRunnerIDNotIn: [String!]
-  jobRunnerIDGT: String
-  jobRunnerIDGTE: String
-  jobRunnerIDLT: String
-  jobRunnerIDLTE: String
-  jobRunnerIDContains: String
-  jobRunnerIDHasPrefix: String
-  jobRunnerIDHasSuffix: String
-  jobRunnerIDIsNil: Boolean
-  jobRunnerIDNotNil: Boolean
-  jobRunnerIDEqualFold: String
-  jobRunnerIDContainsFold: String
-}
-"""
-Ordering options for ControlScheduledJob connections
-"""
-input ControlScheduledJobOrder {
-  """
-  The ordering direction.
-  """
-  direction: OrderDirection! = ASC
-  """
-  The field by which to order ControlScheduledJobs.
-  """
-  field: ControlScheduledJobOrderField!
-}
-"""
-Properties by which ControlScheduledJob connections can be ordered.
-"""
-enum ControlScheduledJobOrderField {
-  created_at
-  updated_at
-}
-"""
-ControlScheduledJobWhereInput is used for filtering ControlScheduledJob objects.
-Input was generated by ent.
-"""
-input ControlScheduledJobWhereInput {
-  not: ControlScheduledJobWhereInput
-  and: [ControlScheduledJobWhereInput!]
-  or: [ControlScheduledJobWhereInput!]
-  """
-  id field predicates
-  """
-  id: ID
-  idNEQ: ID
-  idIn: [ID!]
-  idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
-  idEqualFold: ID
-  idContainsFold: ID
-  """
-  created_at field predicates
-  """
-  createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
-  createdAtGT: Time
-  createdAtGTE: Time
-  createdAtLT: Time
-  createdAtLTE: Time
-  createdAtIsNil: Boolean
-  createdAtNotNil: Boolean
-  """
-  updated_at field predicates
-  """
-  updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
-  updatedAtGT: Time
-  updatedAtGTE: Time
-  updatedAtLT: Time
-  updatedAtLTE: Time
-  updatedAtIsNil: Boolean
-  updatedAtNotNil: Boolean
-  """
-  created_by field predicates
-  """
-  createdBy: String
-  createdByNEQ: String
-  createdByIn: [String!]
-  createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
-  createdByContains: String
-  createdByHasPrefix: String
-  createdByHasSuffix: String
-  createdByIsNil: Boolean
-  createdByNotNil: Boolean
-  createdByEqualFold: String
-  createdByContainsFold: String
-  """
-  updated_by field predicates
-  """
-  updatedBy: String
-  updatedByNEQ: String
-  updatedByIn: [String!]
-  updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
-  updatedByContains: String
-  updatedByHasPrefix: String
-  updatedByHasSuffix: String
-  updatedByIsNil: Boolean
-  updatedByNotNil: Boolean
-  updatedByEqualFold: String
-  updatedByContainsFold: String
-  """
-  owner_id field predicates
-  """
-  ownerID: ID
-  ownerIDNEQ: ID
-  ownerIDIn: [ID!]
-  ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
-  ownerIDContains: ID
-  ownerIDHasPrefix: ID
-  ownerIDHasSuffix: ID
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: ID
-  ownerIDContainsFold: ID
-  """
-  job_id field predicates
-  """
-  jobID: ID
-  jobIDNEQ: ID
-  jobIDIn: [ID!]
-  jobIDNotIn: [ID!]
-  jobIDGT: ID
-  jobIDGTE: ID
-  jobIDLT: ID
-  jobIDLTE: ID
-  jobIDContains: ID
-  jobIDHasPrefix: ID
-  jobIDHasSuffix: ID
-  jobIDEqualFold: ID
-  jobIDContainsFold: ID
-  """
-  job_runner_id field predicates
-  """
-  jobRunnerID: ID
-  jobRunnerIDNEQ: ID
-  jobRunnerIDIn: [ID!]
-  jobRunnerIDNotIn: [ID!]
-  jobRunnerIDGT: ID
-  jobRunnerIDGTE: ID
-  jobRunnerIDLT: ID
-  jobRunnerIDLTE: ID
-  jobRunnerIDContains: ID
-  jobRunnerIDHasPrefix: ID
-  jobRunnerIDHasSuffix: ID
-  jobRunnerIDIsNil: Boolean
-  jobRunnerIDNotNil: Boolean
-  jobRunnerIDEqualFold: ID
-  jobRunnerIDContainsFold: ID
-  """
-  owner edge predicates
-  """
-  hasOwner: Boolean
-  hasOwnerWith: [OrganizationWhereInput!]
-  """
-  job edge predicates
-  """
-  hasJob: Boolean
-  hasJobWith: [ScheduledJobWhereInput!]
-  """
-  controls edge predicates
-  """
-  hasControls: Boolean
-  hasControlsWith: [ControlWhereInput!]
-  """
-  subcontrols edge predicates
-  """
-  hasSubcontrols: Boolean
-  hasSubcontrolsWith: [SubcontrolWhereInput!]
-  """
-  job_runner edge predicates
-  """
-  hasJobRunner: Boolean
-  hasJobRunnerWith: [JobRunnerWhereInput!]
-}
 """
 ControlWhereInput is used for filtering Control objects.
 Input was generated by ent.
@@ -7309,7 +6745,7 @@ input ControlWhereInput {
   scheduled_jobs edge predicates
   """
   hasScheduledJobs: Boolean
-  hasScheduledJobsWith: [ControlScheduledJobWhereInput!]
+  hasScheduledJobsWith: [ScheduledJobWhereInput!]
 }
 """
 CreateAPITokenInput is used for create APIToken object.
@@ -7716,25 +7152,6 @@ input CreateControlObjectiveInput {
   riskIDs: [ID!]
   narrativeIDs: [ID!]
   taskIDs: [ID!]
-}
-"""
-CreateControlScheduledJobInput is used for create ControlScheduledJob object.
-Input was generated by ent.
-"""
-input CreateControlScheduledJobInput {
-  """
-  the configuration to run this job
-  """
-  configuration: JobConfiguration
-  """
-  cron syntax. If not provided, it would inherit the cron of the parent job
-  """
-  cron: String
-  ownerID: ID
-  jobID: ID!
-  controlIDs: [ID!]
-  subcontrolIDs: [ID!]
-  jobRunnerID: ID
 }
 """
 CreateCustomDomainInput is used for create CustomDomain object.
@@ -8390,6 +7807,41 @@ input CreateJobRunnerTokenInput {
   jobRunnerIDs: [ID!]
 }
 """
+CreateJobTemplateInput is used for create JobTemplate object.
+Input was generated by ent.
+"""
+input CreateJobTemplateInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the title of the job
+  """
+  title: String!
+  """
+  the short description of the job and what it does
+  """
+  description: String
+  """
+  the platform to use to execute this job, e.g. golang, typescript, python, etc.
+  """
+  platform: JobTemplateJobPlatformType!
+  """
+  the url from where to download the script from
+  """
+  downloadURL: String!
+  """
+  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
+  """
+  configuration: JobConfiguration
+  """
+  cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
+  """
+  cron: String
+  ownerID: ID
+}
+"""
 CreateMappableDomainInput is used for create MappableDomain object.
 Input was generated by ent.
 """
@@ -8610,7 +8062,7 @@ input CreateOrganizationInput {
   jobRunnerTokenIDs: [ID!]
   jobRunnerRegistrationTokenIDs: [ID!]
   dnsVerificationIDs: [ID!]
-  jobIDs: [ID!]
+  jobTemplateIDs: [ID!]
   scheduledJobIDs: [ID!]
   jobResultIDs: [ID!]
   scheduledJobRunIDs: [ID!]
@@ -9003,34 +8455,22 @@ Input was generated by ent.
 """
 input CreateScheduledJobInput {
   """
-  tags associated with the object
+  whether the scheduled job is active
   """
-  tags: [String!]
+  active: Boolean
   """
-  the title of the job
-  """
-  title: String!
-  """
-  the description of the job
-  """
-  description: String
-  """
-  the platform to use to execute this job
-  """
-  platform: ScheduledJobJobPlatformType!
-  """
-  the url from where to download the script from
-  """
-  downloadURL: String!
-  """
-  the configuration to run this job
+  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
   """
   configuration: JobConfiguration
   """
-  cron syntax
+  cron 6-field syntax, defaults to the job template's cron if not provided
   """
   cron: String
   ownerID: ID
+  jobTemplateID: ID!
+  controlIDs: [ID!]
+  subcontrolIDs: [ID!]
+  jobRunnerID: ID
 }
 """
 CreateScheduledJobRunInput is used for create ScheduledJobRun object.
@@ -21303,7 +20743,7 @@ type JobResult implements Node {
   startedAt: Time!
   fileID: ID!
   owner: Organization
-  scheduledJob: ControlScheduledJob!
+  scheduledJob: ScheduledJob!
   file: File!
 }
 """
@@ -21551,7 +20991,7 @@ input JobResultWhereInput {
   scheduled_job edge predicates
   """
   hasScheduledJob: Boolean
-  hasScheduledJobWith: [ControlScheduledJobWhereInput!]
+  hasScheduledJobWith: [ScheduledJobWhereInput!]
   """
   file edge predicates
   """
@@ -22392,6 +21832,640 @@ input JobRunnerWhereInput {
   """
   hasJobRunnerTokens: Boolean
   hasJobRunnerTokensWith: [JobRunnerTokenWhereInput!]
+}
+type JobTemplate implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  the title of the job
+  """
+  title: String!
+  """
+  the short description of the job and what it does
+  """
+  description: String
+  """
+  the platform to use to execute this job, e.g. golang, typescript, python, etc.
+  """
+  platform: JobTemplateJobPlatformType!
+  """
+  the url from where to download the script from
+  """
+  downloadURL: String!
+  """
+  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
+  """
+  configuration: JobConfiguration
+  """
+  cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
+  """
+  cron: String
+  owner: Organization
+  scheduledJobs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ScheduledJobs returned from the connection.
+    """
+    orderBy: [ScheduledJobOrder!]
+
+    """
+    Filtering options for ScheduledJobs returned from the connection.
+    """
+    where: ScheduledJobWhereInput
+  ): ScheduledJobConnection!
+}
+"""
+A connection to a list of items.
+"""
+type JobTemplateConnection {
+  """
+  A list of edges.
+  """
+  edges: [JobTemplateEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type JobTemplateEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: JobTemplate
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type JobTemplateHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: JobTemplateHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  the title of the job
+  """
+  title: String!
+  """
+  the short description of the job and what it does
+  """
+  description: String
+  """
+  the platform to use to execute this job, e.g. golang, typescript, python, etc.
+  """
+  platform: JobTemplateHistoryJobPlatformType!
+  """
+  the url from where to download the script from
+  """
+  downloadURL: String!
+  """
+  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
+  """
+  configuration: JobConfiguration
+  """
+  cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
+  """
+  cron: String
+}
+"""
+A connection to a list of items.
+"""
+type JobTemplateHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [JobTemplateHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type JobTemplateHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: JobTemplateHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+JobTemplateHistoryJobPlatformType is enum for the field platform
+"""
+enum JobTemplateHistoryJobPlatformType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobPlatformType") {
+  GO
+  TS
+}
+"""
+JobTemplateHistoryOpType is enum for the field operation
+"""
+enum JobTemplateHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for JobTemplateHistory connections
+"""
+input JobTemplateHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order JobTemplateHistories.
+  """
+  field: JobTemplateHistoryOrderField!
+}
+"""
+Properties by which JobTemplateHistory connections can be ordered.
+"""
+enum JobTemplateHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  title
+  PLATFORM
+}
+"""
+JobTemplateHistoryWhereInput is used for filtering JobTemplateHistory objects.
+Input was generated by ent.
+"""
+input JobTemplateHistoryWhereInput {
+  not: JobTemplateHistoryWhereInput
+  and: [JobTemplateHistoryWhereInput!]
+  or: [JobTemplateHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: JobTemplateHistoryOpType
+  operationNEQ: JobTemplateHistoryOpType
+  operationIn: [JobTemplateHistoryOpType!]
+  operationNotIn: [JobTemplateHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  title field predicates
+  """
+  title: String
+  titleNEQ: String
+  titleIn: [String!]
+  titleNotIn: [String!]
+  titleGT: String
+  titleGTE: String
+  titleLT: String
+  titleLTE: String
+  titleContains: String
+  titleHasPrefix: String
+  titleHasSuffix: String
+  titleEqualFold: String
+  titleContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  platform field predicates
+  """
+  platform: JobTemplateHistoryJobPlatformType
+  platformNEQ: JobTemplateHistoryJobPlatformType
+  platformIn: [JobTemplateHistoryJobPlatformType!]
+  platformNotIn: [JobTemplateHistoryJobPlatformType!]
+}
+"""
+JobTemplateJobPlatformType is enum for the field platform
+"""
+enum JobTemplateJobPlatformType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobPlatformType") {
+  GO
+  TS
+}
+"""
+Ordering options for JobTemplate connections
+"""
+input JobTemplateOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order JobTemplates.
+  """
+  field: JobTemplateOrderField!
+}
+"""
+Properties by which JobTemplate connections can be ordered.
+"""
+enum JobTemplateOrderField {
+  created_at
+  updated_at
+  title
+  PLATFORM
+}
+"""
+JobTemplateWhereInput is used for filtering JobTemplate objects.
+Input was generated by ent.
+"""
+input JobTemplateWhereInput {
+  not: JobTemplateWhereInput
+  and: [JobTemplateWhereInput!]
+  or: [JobTemplateWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  title field predicates
+  """
+  title: String
+  titleNEQ: String
+  titleIn: [String!]
+  titleNotIn: [String!]
+  titleGT: String
+  titleGTE: String
+  titleLT: String
+  titleLTE: String
+  titleContains: String
+  titleHasPrefix: String
+  titleHasSuffix: String
+  titleEqualFold: String
+  titleContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  platform field predicates
+  """
+  platform: JobTemplateJobPlatformType
+  platformNEQ: JobTemplateJobPlatformType
+  platformIn: [JobTemplateJobPlatformType!]
+  platformNotIn: [JobTemplateJobPlatformType!]
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  scheduled_jobs edge predicates
+  """
+  hasScheduledJobs: Boolean
+  hasScheduledJobsWith: [ScheduledJobWhereInput!]
 }
 """
 The builtin Map type
@@ -27905,7 +27979,38 @@ type Organization implements Node {
     """
     where: DNSVerificationWhereInput
   ): DNSVerificationConnection!
-  jobs(
+  jobTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for JobTemplates returned from the connection.
+    """
+    orderBy: [JobTemplateOrder!]
+
+    """
+    Filtering options for JobTemplates returned from the connection.
+    """
+    where: JobTemplateWhereInput
+  ): JobTemplateConnection!
+  scheduledJobs(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -27936,37 +28041,6 @@ type Organization implements Node {
     """
     where: ScheduledJobWhereInput
   ): ScheduledJobConnection!
-  scheduledJobs(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for ControlScheduledJobs returned from the connection.
-    """
-    orderBy: [ControlScheduledJobOrder!]
-
-    """
-    Filtering options for ControlScheduledJobs returned from the connection.
-    """
-    where: ControlScheduledJobWhereInput
-  ): ControlScheduledJobConnection!
   jobResults(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -30043,15 +30117,15 @@ input OrganizationWhereInput {
   hasDNSVerifications: Boolean
   hasDNSVerificationsWith: [DNSVerificationWhereInput!]
   """
-  jobs edge predicates
+  job_templates edge predicates
   """
-  hasJobs: Boolean
-  hasJobsWith: [ScheduledJobWhereInput!]
+  hasJobTemplates: Boolean
+  hasJobTemplatesWith: [JobTemplateWhereInput!]
   """
   scheduled_jobs edge predicates
   """
   hasScheduledJobs: Boolean
-  hasScheduledJobsWith: [ControlScheduledJobWhereInput!]
+  hasScheduledJobsWith: [ScheduledJobWhereInput!]
   """
   job_results edge predicates
   """
@@ -34049,68 +34123,6 @@ type Query {
     """
     where: ControlObjectiveHistoryWhereInput
   ): ControlObjectiveHistoryConnection!
-  controlScheduledJobs(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for ControlScheduledJobs returned from the connection.
-    """
-    orderBy: [ControlScheduledJobOrder!]
-
-    """
-    Filtering options for ControlScheduledJobs returned from the connection.
-    """
-    where: ControlScheduledJobWhereInput
-  ): ControlScheduledJobConnection!
-  controlScheduledJobHistories(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for ControlScheduledJobHistories returned from the connection.
-    """
-    orderBy: ControlScheduledJobHistoryOrder
-
-    """
-    Filtering options for ControlScheduledJobHistories returned from the connection.
-    """
-    where: ControlScheduledJobHistoryWhereInput
-  ): ControlScheduledJobHistoryConnection!
   customDomains(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -35134,6 +35146,68 @@ type Query {
     """
     where: JobRunnerTokenWhereInput
   ): JobRunnerTokenConnection!
+  jobTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for JobTemplates returned from the connection.
+    """
+    orderBy: [JobTemplateOrder!]
+
+    """
+    Filtering options for JobTemplates returned from the connection.
+    """
+    where: JobTemplateWhereInput
+  ): JobTemplateConnection!
+  jobTemplateHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for JobTemplateHistories returned from the connection.
+    """
+    orderBy: JobTemplateHistoryOrder
+
+    """
+    Filtering options for JobTemplateHistories returned from the connection.
+    """
+    where: JobTemplateHistoryWhereInput
+  ): JobTemplateHistoryConnection!
   mappableDomains(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -38995,46 +39069,94 @@ type ScheduledJob implements Node {
   """
   displayID: String!
   """
-  tags associated with the object
-  """
-  tags: [String!]
-  """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: ID
   """
-  indicates if the record is owned by the the openlane system and not by an organization
+  the scheduled_job id to take the script to run from
   """
-  systemOwned: Boolean
+  jobID: ID!
   """
-  the title of the job
+  whether the scheduled job is active
   """
-  title: String!
+  active: Boolean!
   """
-  the description of the job
-  """
-  description: String
-  """
-  the platform to use to execute this job
-  """
-  platform: ScheduledJobJobPlatformType!
-  """
-  Windmill path
-  """
-  windmillPath: String!
-  """
-  the url from where to download the script from
-  """
-  downloadURL: String!
-  """
-  the configuration to run this job
+  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
   """
   configuration: JobConfiguration
   """
-  cron syntax
+  cron 6-field syntax, defaults to the job template's cron if not provided
   """
   cron: String
+  """
+  the runner that this job will run on. If not set, it will scheduled on a general runner instead
+  """
+  jobRunnerID: ID
   owner: Organization
+  jobTemplate: JobTemplate!
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
+  jobRunner: JobRunner
 }
 """
 A connection to a list of items.
@@ -39080,45 +39202,29 @@ type ScheduledJobHistory implements Node {
   """
   displayID: String!
   """
-  tags associated with the object
-  """
-  tags: [String!]
-  """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: String
   """
-  indicates if the record is owned by the the openlane system and not by an organization
+  the scheduled_job id to take the script to run from
   """
-  systemOwned: Boolean
+  jobID: String!
   """
-  the title of the job
+  whether the scheduled job is active
   """
-  title: String!
+  active: Boolean!
   """
-  the description of the job
-  """
-  description: String
-  """
-  the platform to use to execute this job
-  """
-  platform: ScheduledJobHistoryJobPlatformType!
-  """
-  Windmill path
-  """
-  windmillPath: String!
-  """
-  the url from where to download the script from
-  """
-  downloadURL: String!
-  """
-  the configuration to run this job
+  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
   """
   configuration: JobConfiguration
   """
-  cron syntax
+  cron 6-field syntax, defaults to the job template's cron if not provided
   """
   cron: String
+  """
+  the runner that this job will run on. If not set, it will scheduled on a general runner instead
+  """
+  jobRunnerID: String
 }
 """
 A connection to a list of items.
@@ -39151,13 +39257,6 @@ type ScheduledJobHistoryEdge {
   cursor: Cursor!
 }
 """
-ScheduledJobHistoryJobPlatformType is enum for the field platform
-"""
-enum ScheduledJobHistoryJobPlatformType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobPlatformType") {
-  GO
-  TS
-}
-"""
 ScheduledJobHistoryOpType is enum for the field operation
 """
 enum ScheduledJobHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
@@ -39185,8 +39284,6 @@ enum ScheduledJobHistoryOrderField {
   history_time
   created_at
   updated_at
-  title
-  platform
 }
 """
 ScheduledJobHistoryWhereInput is used for filtering ScheduledJobHistory objects.
@@ -39342,60 +39439,44 @@ input ScheduledJobHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
-  system_owned field predicates
+  job_id field predicates
   """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
+  jobID: String
+  jobIDNEQ: String
+  jobIDIn: [String!]
+  jobIDNotIn: [String!]
+  jobIDGT: String
+  jobIDGTE: String
+  jobIDLT: String
+  jobIDLTE: String
+  jobIDContains: String
+  jobIDHasPrefix: String
+  jobIDHasSuffix: String
+  jobIDEqualFold: String
+  jobIDContainsFold: String
   """
-  title field predicates
+  active field predicates
   """
-  title: String
-  titleNEQ: String
-  titleIn: [String!]
-  titleNotIn: [String!]
-  titleGT: String
-  titleGTE: String
-  titleLT: String
-  titleLTE: String
-  titleContains: String
-  titleHasPrefix: String
-  titleHasSuffix: String
-  titleEqualFold: String
-  titleContainsFold: String
+  active: Boolean
+  activeNEQ: Boolean
   """
-  description field predicates
+  job_runner_id field predicates
   """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """
-  platform field predicates
-  """
-  platform: ScheduledJobHistoryJobPlatformType
-  platformNEQ: ScheduledJobHistoryJobPlatformType
-  platformIn: [ScheduledJobHistoryJobPlatformType!]
-  platformNotIn: [ScheduledJobHistoryJobPlatformType!]
-}
-"""
-ScheduledJobJobPlatformType is enum for the field platform
-"""
-enum ScheduledJobJobPlatformType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobPlatformType") {
-  GO
-  TS
+  jobRunnerID: String
+  jobRunnerIDNEQ: String
+  jobRunnerIDIn: [String!]
+  jobRunnerIDNotIn: [String!]
+  jobRunnerIDGT: String
+  jobRunnerIDGTE: String
+  jobRunnerIDLT: String
+  jobRunnerIDLTE: String
+  jobRunnerIDContains: String
+  jobRunnerIDHasPrefix: String
+  jobRunnerIDHasSuffix: String
+  jobRunnerIDIsNil: Boolean
+  jobRunnerIDNotNil: Boolean
+  jobRunnerIDEqualFold: String
+  jobRunnerIDContainsFold: String
 }
 """
 Ordering options for ScheduledJob connections
@@ -39416,8 +39497,6 @@ Properties by which ScheduledJob connections can be ordered.
 enum ScheduledJobOrderField {
   created_at
   updated_at
-  title
-  platform
 }
 type ScheduledJobRun implements Node {
   id: ID!
@@ -39452,7 +39531,7 @@ type ScheduledJobRun implements Node {
   """
   script: String!
   owner: Organization
-  scheduledJob: ControlScheduledJob!
+  scheduledJob: ScheduledJob!
   jobRunner: JobRunner!
 }
 """
@@ -39688,7 +39767,7 @@ input ScheduledJobRunWhereInput {
   scheduled_job edge predicates
   """
   hasScheduledJob: Boolean
-  hasScheduledJobWith: [ControlScheduledJobWhereInput!]
+  hasScheduledJobWith: [ScheduledJobWhereInput!]
   """
   job_runner edge predicates
   """
@@ -39813,58 +39892,69 @@ input ScheduledJobWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
-  system_owned field predicates
+  job_id field predicates
   """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
+  jobID: ID
+  jobIDNEQ: ID
+  jobIDIn: [ID!]
+  jobIDNotIn: [ID!]
+  jobIDGT: ID
+  jobIDGTE: ID
+  jobIDLT: ID
+  jobIDLTE: ID
+  jobIDContains: ID
+  jobIDHasPrefix: ID
+  jobIDHasSuffix: ID
+  jobIDEqualFold: ID
+  jobIDContainsFold: ID
   """
-  title field predicates
+  active field predicates
   """
-  title: String
-  titleNEQ: String
-  titleIn: [String!]
-  titleNotIn: [String!]
-  titleGT: String
-  titleGTE: String
-  titleLT: String
-  titleLTE: String
-  titleContains: String
-  titleHasPrefix: String
-  titleHasSuffix: String
-  titleEqualFold: String
-  titleContainsFold: String
+  active: Boolean
+  activeNEQ: Boolean
   """
-  description field predicates
+  job_runner_id field predicates
   """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """
-  platform field predicates
-  """
-  platform: ScheduledJobJobPlatformType
-  platformNEQ: ScheduledJobJobPlatformType
-  platformIn: [ScheduledJobJobPlatformType!]
-  platformNotIn: [ScheduledJobJobPlatformType!]
+  jobRunnerID: ID
+  jobRunnerIDNEQ: ID
+  jobRunnerIDIn: [ID!]
+  jobRunnerIDNotIn: [ID!]
+  jobRunnerIDGT: ID
+  jobRunnerIDGTE: ID
+  jobRunnerIDLT: ID
+  jobRunnerIDLTE: ID
+  jobRunnerIDContains: ID
+  jobRunnerIDHasPrefix: ID
+  jobRunnerIDHasSuffix: ID
+  jobRunnerIDIsNil: Boolean
+  jobRunnerIDNotNil: Boolean
+  jobRunnerIDEqualFold: ID
+  jobRunnerIDContainsFold: ID
   """
   owner edge predicates
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  job_template edge predicates
+  """
+  hasJobTemplate: Boolean
+  hasJobTemplateWith: [JobTemplateWhereInput!]
+  """
+  controls edge predicates
+  """
+  hasControls: Boolean
+  hasControlsWith: [ControlWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
+  """
+  job_runner edge predicates
+  """
+  hasJobRunner: Boolean
+  hasJobRunnerWith: [JobRunnerWhereInput!]
 }
 type Standard implements Node {
   id: ID!
@@ -41269,15 +41359,15 @@ type Subcontrol implements Node {
     last: Int
 
     """
-    Ordering options for ControlScheduledJobs returned from the connection.
+    Ordering options for ScheduledJobs returned from the connection.
     """
-    orderBy: [ControlScheduledJobOrder!]
+    orderBy: [ScheduledJobOrder!]
 
     """
-    Filtering options for ControlScheduledJobs returned from the connection.
+    Filtering options for ScheduledJobs returned from the connection.
     """
-    where: ControlScheduledJobWhereInput
-  ): ControlScheduledJobConnection!
+    where: ScheduledJobWhereInput
+  ): ScheduledJobConnection!
 }
 """
 A connection to a list of items.
@@ -42349,7 +42439,7 @@ input SubcontrolWhereInput {
   scheduled_jobs edge predicates
   """
   hasScheduledJobs: Boolean
-  hasScheduledJobsWith: [ControlScheduledJobWhereInput!]
+  hasScheduledJobsWith: [ScheduledJobWhereInput!]
 }
 type Subprocessor implements Node {
   id: ID!
@@ -48100,34 +48190,6 @@ input UpdateControlObjectiveInput {
   clearTasks: Boolean
 }
 """
-UpdateControlScheduledJobInput is used for update ControlScheduledJob object.
-Input was generated by ent.
-"""
-input UpdateControlScheduledJobInput {
-  """
-  the configuration to run this job
-  """
-  configuration: JobConfiguration
-  appendConfiguration: JobConfiguration
-  clearConfiguration: Boolean
-  """
-  cron syntax. If not provided, it would inherit the cron of the parent job
-  """
-  cron: String
-  clearCron: Boolean
-  ownerID: ID
-  clearOwner: Boolean
-  jobID: ID
-  addControlIDs: [ID!]
-  removeControlIDs: [ID!]
-  clearControls: Boolean
-  addSubcontrolIDs: [ID!]
-  removeSubcontrolIDs: [ID!]
-  clearSubcontrols: Boolean
-  jobRunnerID: ID
-  clearJobRunner: Boolean
-}
-"""
 UpdateCustomDomainInput is used for update CustomDomain object.
 Input was generated by ent.
 """
@@ -49030,6 +49092,47 @@ input UpdateJobRunnerTokenInput {
   clearJobRunners: Boolean
 }
 """
+UpdateJobTemplateInput is used for update JobTemplate object.
+Input was generated by ent.
+"""
+input UpdateJobTemplateInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  the title of the job
+  """
+  title: String
+  """
+  the short description of the job and what it does
+  """
+  description: String
+  clearDescription: Boolean
+  """
+  the url from where to download the script from
+  """
+  downloadURL: String
+  """
+  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
+  """
+  configuration: JobConfiguration
+  appendConfiguration: JobConfiguration
+  clearConfiguration: Boolean
+  """
+  cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
+  """
+  cron: String
+  clearCron: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  addScheduledJobIDs: [ID!]
+  removeScheduledJobIDs: [ID!]
+  clearScheduledJobs: Boolean
+}
+"""
 UpdateMappableDomainInput is used for update MappableDomain object.
 Input was generated by ent.
 """
@@ -49352,9 +49455,9 @@ input UpdateOrganizationInput {
   addDNSVerificationIDs: [ID!]
   removeDNSVerificationIDs: [ID!]
   clearDNSVerifications: Boolean
-  addJobIDs: [ID!]
-  removeJobIDs: [ID!]
-  clearJobs: Boolean
+  addJobTemplateIDs: [ID!]
+  removeJobTemplateIDs: [ID!]
+  clearJobTemplates: Boolean
   addScheduledJobIDs: [ID!]
   removeScheduledJobIDs: [ID!]
   clearScheduledJobs: Boolean
@@ -49925,37 +50028,29 @@ Input was generated by ent.
 """
 input UpdateScheduledJobInput {
   """
-  tags associated with the object
+  whether the scheduled job is active
   """
-  tags: [String!]
-  appendTags: [String!]
-  clearTags: Boolean
+  active: Boolean
   """
-  the title of the job
-  """
-  title: String
-  """
-  the description of the job
-  """
-  description: String
-  clearDescription: Boolean
-  """
-  the url from where to download the script from
-  """
-  downloadURL: String
-  """
-  the configuration to run this job
+  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
   """
   configuration: JobConfiguration
   appendConfiguration: JobConfiguration
   clearConfiguration: Boolean
   """
-  cron syntax
+  cron 6-field syntax, defaults to the job template's cron if not provided
   """
   cron: String
   clearCron: Boolean
-  ownerID: ID
-  clearOwner: Boolean
+  jobTemplateID: ID
+  addControlIDs: [ID!]
+  removeControlIDs: [ID!]
+  clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
+  jobRunnerID: ID
+  clearJobRunner: Boolean
 }
 """
 UpdateScheduledJobRunInput is used for update ScheduledJobRun object.

@@ -24,8 +24,10 @@ func TestQueryControl(t *testing.T) {
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// add adminUser to the program so that they can create a control
-	(&ProgramMemberBuilder{client: suite.client, ProgramID: program.ID,
-		UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).
+	(&ProgramMemberBuilder{
+		client: suite.client, ProgramID: program.ID,
+		UserID: adminUser.ID, Role: enums.RoleAdmin.String(),
+	}).
 		MustNew(testUser1.UserCtx, t)
 	anonymousContext := createAnonymousTrustCenterContext("abc123", testUser1.OrganizationID)
 
@@ -317,8 +319,10 @@ func TestMutationCreateControl(t *testing.T) {
 	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// add adminUser to the program so that they can create a control associated with the program1
-	(&ProgramMemberBuilder{client: suite.client, ProgramID: program1.ID,
-		UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).
+	(&ProgramMemberBuilder{
+		client: suite.client, ProgramID: program1.ID,
+		UserID: adminUser.ID, Role: enums.RoleAdmin.String(),
+	}).
 		MustNew(testUser1.UserCtx, t)
 
 	// create groups to be associated with the control
@@ -1323,6 +1327,8 @@ func TestMutationDeleteControl(t *testing.T) {
 	control1 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	control2 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	controlSystem := (&ControlBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
+
 	testCases := []struct {
 		name        string
 		idToDelete  string
@@ -1336,6 +1342,13 @@ func TestMutationDeleteControl(t *testing.T) {
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
+		},
+		{
+			name:        "not authorized, delete system owned control",
+			idToDelete:  controlSystem.ID,
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
@@ -1355,6 +1368,12 @@ func TestMutationDeleteControl(t *testing.T) {
 			idToDelete: control2.ID,
 			client:     suite.client.apiWithPAT,
 			ctx:        context.Background(),
+		},
+		{
+			name:       "happy path, delete system owned control",
+			idToDelete: controlSystem.ID,
+			client:     suite.client.api,
+			ctx:        systemAdminUser.UserCtx,
 		},
 		{
 			name:        "unknown id, not found",
@@ -1768,7 +1787,7 @@ func TestQueryControlSubcategoriesByFramework(t *testing.T) {
 }
 
 func TestQueryControlGroupsByCategory(t *testing.T) {
-	var user1 = suite.userBuilder(context.Background(), t)
+	user1 := suite.userBuilder(context.Background(), t)
 
 	// create controls with categories and subcategories
 	control1 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(user1.UserCtx, t)

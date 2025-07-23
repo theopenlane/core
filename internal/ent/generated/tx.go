@@ -38,10 +38,6 @@ type Tx struct {
 	ControlObjective *ControlObjectiveClient
 	// ControlObjectiveHistory is the client for interacting with the ControlObjectiveHistory builders.
 	ControlObjectiveHistory *ControlObjectiveHistoryClient
-	// ControlScheduledJob is the client for interacting with the ControlScheduledJob builders.
-	ControlScheduledJob *ControlScheduledJobClient
-	// ControlScheduledJobHistory is the client for interacting with the ControlScheduledJobHistory builders.
-	ControlScheduledJobHistory *ControlScheduledJobHistoryClient
 	// CustomDomain is the client for interacting with the CustomDomain builders.
 	CustomDomain *CustomDomainClient
 	// CustomDomainHistory is the client for interacting with the CustomDomainHistory builders.
@@ -110,6 +106,10 @@ type Tx struct {
 	JobRunnerRegistrationToken *JobRunnerRegistrationTokenClient
 	// JobRunnerToken is the client for interacting with the JobRunnerToken builders.
 	JobRunnerToken *JobRunnerTokenClient
+	// JobTemplate is the client for interacting with the JobTemplate builders.
+	JobTemplate *JobTemplateClient
+	// JobTemplateHistory is the client for interacting with the JobTemplateHistory builders.
+	JobTemplateHistory *JobTemplateHistoryClient
 	// MappableDomain is the client for interacting with the MappableDomain builders.
 	MappableDomain *MappableDomainClient
 	// MappableDomainHistory is the client for interacting with the MappableDomainHistory builders.
@@ -374,8 +374,6 @@ func (tx *Tx) init() {
 	tx.ControlImplementationHistory = NewControlImplementationHistoryClient(tx.config)
 	tx.ControlObjective = NewControlObjectiveClient(tx.config)
 	tx.ControlObjectiveHistory = NewControlObjectiveHistoryClient(tx.config)
-	tx.ControlScheduledJob = NewControlScheduledJobClient(tx.config)
-	tx.ControlScheduledJobHistory = NewControlScheduledJobHistoryClient(tx.config)
 	tx.CustomDomain = NewCustomDomainClient(tx.config)
 	tx.CustomDomainHistory = NewCustomDomainHistoryClient(tx.config)
 	tx.DNSVerification = NewDNSVerificationClient(tx.config)
@@ -410,6 +408,8 @@ func (tx *Tx) init() {
 	tx.JobRunner = NewJobRunnerClient(tx.config)
 	tx.JobRunnerRegistrationToken = NewJobRunnerRegistrationTokenClient(tx.config)
 	tx.JobRunnerToken = NewJobRunnerTokenClient(tx.config)
+	tx.JobTemplate = NewJobTemplateClient(tx.config)
+	tx.JobTemplateHistory = NewJobTemplateHistoryClient(tx.config)
 	tx.MappableDomain = NewMappableDomainClient(tx.config)
 	tx.MappableDomainHistory = NewMappableDomainHistoryClient(tx.config)
 	tx.MappedControl = NewMappedControlClient(tx.config)

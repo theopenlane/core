@@ -144,25 +144,6 @@ func (r *mutationResolver) bulkCreateControlObjective(ctx context.Context, input
 	}, nil
 }
 
-// bulkCreateControlScheduledJob uses the CreateBulk function to create multiple ControlScheduledJob entities
-func (r *mutationResolver) bulkCreateControlScheduledJob(ctx context.Context, input []*generated.CreateControlScheduledJobInput) (*model.ControlScheduledJobBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.ControlScheduledJobCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.ControlScheduledJob.Create().SetInput(*data)
-	}
-
-	res, err := c.ControlScheduledJob.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "controlscheduledjob"})
-	}
-
-	// return response
-	return &model.ControlScheduledJobBulkCreatePayload{
-		ControlScheduledJobs: res,
-	}, nil
-}
-
 // bulkCreateCustomDomain uses the CreateBulk function to create multiple CustomDomain entities
 func (r *mutationResolver) bulkCreateCustomDomain(ctx context.Context, input []*generated.CreateCustomDomainInput) (*model.CustomDomainBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -436,6 +417,25 @@ func (r *mutationResolver) bulkCreateInvite(ctx context.Context, input []*genera
 	// return response
 	return &model.InviteBulkCreatePayload{
 		Invites: res,
+	}, nil
+}
+
+// bulkCreateJobTemplate uses the CreateBulk function to create multiple JobTemplate entities
+func (r *mutationResolver) bulkCreateJobTemplate(ctx context.Context, input []*generated.CreateJobTemplateInput) (*model.JobTemplateBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.JobTemplateCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.JobTemplate.Create().SetInput(*data)
+	}
+
+	res, err := c.JobTemplate.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "jobtemplate"})
+	}
+
+	// return response
+	return &model.JobTemplateBulkCreatePayload{
+		JobTemplates: res,
 	}, nil
 }
 

@@ -77,28 +77,28 @@ func (ec *executionContext) fieldContext_ScheduledJobBulkCreatePayload_scheduled
 				return ec.fieldContext_ScheduledJob_updatedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_ScheduledJob_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_ScheduledJob_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ScheduledJob_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_ScheduledJob_systemOwned(ctx, field)
-			case "title":
-				return ec.fieldContext_ScheduledJob_title(ctx, field)
-			case "description":
-				return ec.fieldContext_ScheduledJob_description(ctx, field)
-			case "platform":
-				return ec.fieldContext_ScheduledJob_platform(ctx, field)
-			case "windmillPath":
-				return ec.fieldContext_ScheduledJob_windmillPath(ctx, field)
-			case "downloadURL":
-				return ec.fieldContext_ScheduledJob_downloadURL(ctx, field)
+			case "jobID":
+				return ec.fieldContext_ScheduledJob_jobID(ctx, field)
+			case "active":
+				return ec.fieldContext_ScheduledJob_active(ctx, field)
 			case "configuration":
 				return ec.fieldContext_ScheduledJob_configuration(ctx, field)
 			case "cron":
 				return ec.fieldContext_ScheduledJob_cron(ctx, field)
+			case "jobRunnerID":
+				return ec.fieldContext_ScheduledJob_jobRunnerID(ctx, field)
 			case "owner":
 				return ec.fieldContext_ScheduledJob_owner(ctx, field)
+			case "jobTemplate":
+				return ec.fieldContext_ScheduledJob_jobTemplate(ctx, field)
+			case "controls":
+				return ec.fieldContext_ScheduledJob_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_ScheduledJob_subcontrols(ctx, field)
+			case "jobRunner":
+				return ec.fieldContext_ScheduledJob_jobRunner(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ScheduledJob", field.Name)
 		},
@@ -157,28 +157,28 @@ func (ec *executionContext) fieldContext_ScheduledJobCreatePayload_scheduledJob(
 				return ec.fieldContext_ScheduledJob_updatedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_ScheduledJob_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_ScheduledJob_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ScheduledJob_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_ScheduledJob_systemOwned(ctx, field)
-			case "title":
-				return ec.fieldContext_ScheduledJob_title(ctx, field)
-			case "description":
-				return ec.fieldContext_ScheduledJob_description(ctx, field)
-			case "platform":
-				return ec.fieldContext_ScheduledJob_platform(ctx, field)
-			case "windmillPath":
-				return ec.fieldContext_ScheduledJob_windmillPath(ctx, field)
-			case "downloadURL":
-				return ec.fieldContext_ScheduledJob_downloadURL(ctx, field)
+			case "jobID":
+				return ec.fieldContext_ScheduledJob_jobID(ctx, field)
+			case "active":
+				return ec.fieldContext_ScheduledJob_active(ctx, field)
 			case "configuration":
 				return ec.fieldContext_ScheduledJob_configuration(ctx, field)
 			case "cron":
 				return ec.fieldContext_ScheduledJob_cron(ctx, field)
+			case "jobRunnerID":
+				return ec.fieldContext_ScheduledJob_jobRunnerID(ctx, field)
 			case "owner":
 				return ec.fieldContext_ScheduledJob_owner(ctx, field)
+			case "jobTemplate":
+				return ec.fieldContext_ScheduledJob_jobTemplate(ctx, field)
+			case "controls":
+				return ec.fieldContext_ScheduledJob_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_ScheduledJob_subcontrols(ctx, field)
+			case "jobRunner":
+				return ec.fieldContext_ScheduledJob_jobRunner(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ScheduledJob", field.Name)
 		},
@@ -281,28 +281,28 @@ func (ec *executionContext) fieldContext_ScheduledJobUpdatePayload_scheduledJob(
 				return ec.fieldContext_ScheduledJob_updatedBy(ctx, field)
 			case "displayID":
 				return ec.fieldContext_ScheduledJob_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_ScheduledJob_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_ScheduledJob_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_ScheduledJob_systemOwned(ctx, field)
-			case "title":
-				return ec.fieldContext_ScheduledJob_title(ctx, field)
-			case "description":
-				return ec.fieldContext_ScheduledJob_description(ctx, field)
-			case "platform":
-				return ec.fieldContext_ScheduledJob_platform(ctx, field)
-			case "windmillPath":
-				return ec.fieldContext_ScheduledJob_windmillPath(ctx, field)
-			case "downloadURL":
-				return ec.fieldContext_ScheduledJob_downloadURL(ctx, field)
+			case "jobID":
+				return ec.fieldContext_ScheduledJob_jobID(ctx, field)
+			case "active":
+				return ec.fieldContext_ScheduledJob_active(ctx, field)
 			case "configuration":
 				return ec.fieldContext_ScheduledJob_configuration(ctx, field)
 			case "cron":
 				return ec.fieldContext_ScheduledJob_cron(ctx, field)
+			case "jobRunnerID":
+				return ec.fieldContext_ScheduledJob_jobRunnerID(ctx, field)
 			case "owner":
 				return ec.fieldContext_ScheduledJob_owner(ctx, field)
+			case "jobTemplate":
+				return ec.fieldContext_ScheduledJob_jobTemplate(ctx, field)
+			case "controls":
+				return ec.fieldContext_ScheduledJob_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_ScheduledJob_subcontrols(ctx, field)
+			case "jobRunner":
+				return ec.fieldContext_ScheduledJob_jobRunner(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ScheduledJob", field.Name)
 		},

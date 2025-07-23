@@ -15,20 +15,21 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/iam/entfga"
 )
 
-// ControlScheduledJobHistory holds the schema definition for the ControlScheduledJobHistory entity.
-type ControlScheduledJobHistory struct {
+// JobTemplateHistory holds the schema definition for the JobTemplateHistory entity.
+type JobTemplateHistory struct {
 	ent.Schema
 }
 
-// Annotations of the ControlScheduledJobHistory.
-func (ControlScheduledJobHistory) Annotations() []schema.Annotation {
+// Annotations of the JobTemplateHistory.
+func (JobTemplateHistory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaGenSkip(true),
 		entx.Features(entx.ModuleAuditLog),
 		entsql.Annotation{
-			Table: "control_scheduled_job_history",
+			Table: "job_template_history",
 		},
 		history.Annotations{
 			IsHistory: true,
@@ -36,11 +37,16 @@ func (ControlScheduledJobHistory) Annotations() []schema.Annotation {
 		},
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entfga.Annotations{
+			ObjectType:   "job_template",
+			IDField:      "Ref",
+			IncludeHooks: false,
+		},
 	}
 }
 
-// Fields of the ControlScheduledJobHistory.
-func (ControlScheduledJobHistory) Fields() []ent.Field {
+// Fields of the JobTemplateHistory.
+func (JobTemplateHistory) Fields() []ent.Field {
 	historyFields := []ent.Field{
 		field.Time("history_time").
 			Annotations(
@@ -59,7 +65,7 @@ func (ControlScheduledJobHistory) Fields() []ent.Field {
 	// get the fields from the mixins
 	// we only want to include mixin fields, not edges
 	// so this prevents FKs back to the main tables
-	mixins := ControlScheduledJob{}.Mixin()
+	mixins := JobTemplate{}.Mixin()
 	for _, mixin := range mixins {
 		for _, field := range mixin.Fields() {
 			// make sure the mixed in fields do not have unique constraints
@@ -73,7 +79,7 @@ func (ControlScheduledJobHistory) Fields() []ent.Field {
 		}
 	}
 
-	original := ControlScheduledJob{}
+	original := JobTemplate{}
 	for _, field := range original.Fields() {
 		// make sure the fields do not have unique constraints
 		field.Descriptor().Unique = false
@@ -88,16 +94,16 @@ func (ControlScheduledJobHistory) Fields() []ent.Field {
 	return historyFields
 }
 
-// Indexes of the ControlScheduledJobHistory
-func (ControlScheduledJobHistory) Indexes() []ent.Index {
+// Indexes of the JobTemplateHistory
+func (JobTemplateHistory) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("history_time"),
 	}
 }
 
-// Policy of the ControlScheduledJobHistory.
+// Policy of the JobTemplateHistory.
 // ensure history.AllowIfHistoryRequest() is already added to the base policy
-func (ControlScheduledJobHistory) Policy() ent.Policy {
+func (JobTemplateHistory) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			history.AllowIfHistoryRequest(),
@@ -105,9 +111,9 @@ func (ControlScheduledJobHistory) Policy() ent.Policy {
 	)
 }
 
-// Interceptors of the ControlScheduledJobHistory
-func (ControlScheduledJobHistory) Interceptors() []ent.Interceptor {
+// Interceptors of the JobTemplateHistory
+func (JobTemplateHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", false, false, ""),
+		interceptors.FilterListQuery(),
 	}
 }

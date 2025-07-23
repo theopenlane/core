@@ -237,30 +237,6 @@ type ControlObjectiveUpdatePayload struct {
 	ControlObjective *generated.ControlObjective `json:"controlObjective"`
 }
 
-// Return response for createBulkControlScheduledJob mutation
-type ControlScheduledJobBulkCreatePayload struct {
-	// Created controlScheduledJobs
-	ControlScheduledJobs []*generated.ControlScheduledJob `json:"controlScheduledJobs,omitempty"`
-}
-
-// Return response for createControlScheduledJob mutation
-type ControlScheduledJobCreatePayload struct {
-	// Created controlScheduledJob
-	ControlScheduledJob *generated.ControlScheduledJob `json:"controlScheduledJob"`
-}
-
-// Return response for deleteControlScheduledJob mutation
-type ControlScheduledJobDeletePayload struct {
-	// Deleted controlScheduledJob ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for updateControlScheduledJob mutation
-type ControlScheduledJobUpdatePayload struct {
-	// Updated controlScheduledJob
-	ControlScheduledJob *generated.ControlScheduledJob `json:"controlScheduledJob"`
-}
-
 // Return response for updateControl mutation
 type ControlUpdatePayload struct {
 	// Updated control
@@ -817,6 +793,30 @@ type JobRunnerUpdatePayload struct {
 	JobRunner *generated.JobRunner `json:"jobRunner"`
 }
 
+// Return response for createBulkJobTemplate mutation
+type JobTemplateBulkCreatePayload struct {
+	// Created jobTemplates
+	JobTemplates []*generated.JobTemplate `json:"jobTemplates,omitempty"`
+}
+
+// Return response for createJobTemplate mutation
+type JobTemplateCreatePayload struct {
+	// Created jobTemplate
+	JobTemplate *generated.JobTemplate `json:"jobTemplate"`
+}
+
+// Return response for deleteJobTemplate mutation
+type JobTemplateDeletePayload struct {
+	// Deleted jobTemplate ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateJobTemplate mutation
+type JobTemplateUpdatePayload struct {
+	// Updated jobTemplate
+	JobTemplate *generated.JobTemplate `json:"jobTemplate"`
+}
+
 // Return response for createBulkMappableDomain mutation
 type MappableDomainBulkCreatePayload struct {
 	// Created mappableDomains
@@ -1169,6 +1169,7 @@ type SearchResults struct {
 	JobRunners                  *generated.JobRunnerConnection                  `json:"jobRunners,omitempty"`
 	JobRunnerRegistrationTokens *generated.JobRunnerRegistrationTokenConnection `json:"jobRunnerRegistrationTokens,omitempty"`
 	JobRunnerTokens             *generated.JobRunnerTokenConnection             `json:"jobRunnerTokens,omitempty"`
+	JobTemplates                *generated.JobTemplateConnection                `json:"jobTemplates,omitempty"`
 	MappableDomains             *generated.MappableDomainConnection             `json:"mappableDomains,omitempty"`
 	MappedControls              *generated.MappedControlConnection              `json:"mappedControls,omitempty"`
 	Narratives                  *generated.NarrativeConnection                  `json:"narratives,omitempty"`
@@ -1180,7 +1181,6 @@ type SearchResults struct {
 	Programs                    *generated.ProgramConnection                    `json:"programs,omitempty"`
 	Risks                       *generated.RiskConnection                       `json:"risks,omitempty"`
 	Scans                       *generated.ScanConnection                       `json:"scans,omitempty"`
-	ScheduledJobs               *generated.ScheduledJobConnection               `json:"scheduledJobs,omitempty"`
 	Standards                   *generated.StandardConnection                   `json:"standards,omitempty"`
 	Subcontrols                 *generated.SubcontrolConnection                 `json:"subcontrols,omitempty"`
 	Subprocessors               *generated.SubprocessorConnection               `json:"subprocessors,omitempty"`
