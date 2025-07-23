@@ -129,7 +129,6 @@ entConfig:
         baseURL: https://app.windmill.dev
         defaultTimeout: 30s
         enabled: false
-        folderName: openlane
         onFailureScript: ""
         onSuccessScript: ""
         timezone: UTC

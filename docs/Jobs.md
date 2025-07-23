@@ -130,7 +130,7 @@ Job Results (`JobResult`) track the execution outcomes of scheduled jobs. Each r
             onSuccessScript: ""
     ```
 5. Run the normal `task run-dev` to setup the core api
-6. From `core-startup` run the following to seed some test job templates:
+6. From `core-startup` run the following to seed some test job templates and scheduled jobs:
     ```bash
     task feeling:lucky
     task startup:create:jobs
