@@ -201,8 +201,8 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_jobRunnerRegistrationTokens(ctx, field)
 			case "dnsVerifications":
 				return ec.fieldContext_Organization_dnsVerifications(ctx, field)
-			case "jobs":
-				return ec.fieldContext_Organization_jobs(ctx, field)
+			case "jobTemplates":
+				return ec.fieldContext_Organization_jobTemplates(ctx, field)
 			case "scheduledJobs":
 				return ec.fieldContext_Organization_scheduledJobs(ctx, field)
 			case "jobResults":
@@ -403,8 +403,8 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_jobRunnerRegistrationTokens(ctx, field)
 			case "dnsVerifications":
 				return ec.fieldContext_Organization_dnsVerifications(ctx, field)
-			case "jobs":
-				return ec.fieldContext_Organization_jobs(ctx, field)
+			case "jobTemplates":
+				return ec.fieldContext_Organization_jobTemplates(ctx, field)
 			case "scheduledJobs":
 				return ec.fieldContext_Organization_scheduledJobs(ctx, field)
 			case "jobResults":
@@ -649,8 +649,8 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_jobRunnerRegistrationTokens(ctx, field)
 			case "dnsVerifications":
 				return ec.fieldContext_Organization_dnsVerifications(ctx, field)
-			case "jobs":
-				return ec.fieldContext_Organization_jobs(ctx, field)
+			case "jobTemplates":
+				return ec.fieldContext_Organization_jobTemplates(ctx, field)
 			case "scheduledJobs":
 				return ec.fieldContext_Organization_scheduledJobs(ctx, field)
 			case "jobResults":

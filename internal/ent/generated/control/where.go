@@ -2252,19 +2252,19 @@ func HasScheduledJobs() predicate.Control {
 			sqlgraph.Edge(sqlgraph.M2M, true, ScheduledJobsTable, ScheduledJobsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.ControlScheduledJob
-		step.Edge.Schema = schemaConfig.ControlScheduledJobControls
+		step.To.Schema = schemaConfig.ScheduledJob
+		step.Edge.Schema = schemaConfig.ScheduledJobControls
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
 // HasScheduledJobsWith applies the HasEdge predicate on the "scheduled_jobs" edge with a given conditions (other predicates).
-func HasScheduledJobsWith(preds ...predicate.ControlScheduledJob) predicate.Control {
+func HasScheduledJobsWith(preds ...predicate.ScheduledJob) predicate.Control {
 	return predicate.Control(func(s *sql.Selector) {
 		step := newScheduledJobsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.ControlScheduledJob
-		step.Edge.Schema = schemaConfig.ControlScheduledJobControls
+		step.To.Schema = schemaConfig.ScheduledJob
+		step.Edge.Schema = schemaConfig.ScheduledJobControls
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

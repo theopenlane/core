@@ -44,6 +44,9 @@ env:
   # CLI demo environment variables
   ADMIN_USER_EMAIL: "admin@admin.theopenlane.io"
 
+# load the .env file for windmill
+dotenv: ['docker/configs/windmill/.env']
+
 tasks:
   default:
     silent: true

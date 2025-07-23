@@ -438,7 +438,7 @@ type ComplexityRoot struct {
 		References             func(childComplexity int) int
 		Risks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Scans                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
-		ScheduledJobs          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlScheduledJobOrder, where *generated.ControlScheduledJobWhereInput) int
+		ScheduledJobs          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
 		Source                 func(childComplexity int) int
 		Standard               func(childComplexity int) int
 		StandardID             func(childComplexity int) int
@@ -716,78 +716,6 @@ type ComplexityRoot struct {
 
 	ControlObjectiveUpdatePayload struct {
 		ControlObjective func(childComplexity int) int
-	}
-
-	ControlScheduledJob struct {
-		Configuration func(childComplexity int) int
-		Controls      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Cron          func(childComplexity int) int
-		ID            func(childComplexity int) int
-		Job           func(childComplexity int) int
-		JobID         func(childComplexity int) int
-		JobRunner     func(childComplexity int) int
-		JobRunnerID   func(childComplexity int) int
-		Owner         func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
-		Subcontrols   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
-	}
-
-	ControlScheduledJobBulkCreatePayload struct {
-		ControlScheduledJobs func(childComplexity int) int
-	}
-
-	ControlScheduledJobConnection struct {
-		Edges      func(childComplexity int) int
-		PageInfo   func(childComplexity int) int
-		TotalCount func(childComplexity int) int
-	}
-
-	ControlScheduledJobCreatePayload struct {
-		ControlScheduledJob func(childComplexity int) int
-	}
-
-	ControlScheduledJobDeletePayload struct {
-		DeletedID func(childComplexity int) int
-	}
-
-	ControlScheduledJobEdge struct {
-		Cursor func(childComplexity int) int
-		Node   func(childComplexity int) int
-	}
-
-	ControlScheduledJobHistory struct {
-		Configuration func(childComplexity int) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Cron          func(childComplexity int) int
-		HistoryTime   func(childComplexity int) int
-		ID            func(childComplexity int) int
-		JobID         func(childComplexity int) int
-		JobRunnerID   func(childComplexity int) int
-		Operation     func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
-		Ref           func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
-	}
-
-	ControlScheduledJobHistoryConnection struct {
-		Edges      func(childComplexity int) int
-		PageInfo   func(childComplexity int) int
-		TotalCount func(childComplexity int) int
-	}
-
-	ControlScheduledJobHistoryEdge struct {
-		Cursor func(childComplexity int) int
-		Node   func(childComplexity int) int
-	}
-
-	ControlScheduledJobUpdatePayload struct {
-		ControlScheduledJob func(childComplexity int) int
 	}
 
 	ControlUpdatePayload struct {
@@ -2145,6 +2073,85 @@ type ComplexityRoot struct {
 		JobRunner func(childComplexity int) int
 	}
 
+	JobTemplate struct {
+		Configuration func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		Cron          func(childComplexity int) int
+		Description   func(childComplexity int) int
+		DisplayID     func(childComplexity int) int
+		DownloadURL   func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Owner         func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		Platform      func(childComplexity int) int
+		ScheduledJobs func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
+		SystemOwned   func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		Title         func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
+	}
+
+	JobTemplateBulkCreatePayload struct {
+		JobTemplates func(childComplexity int) int
+	}
+
+	JobTemplateConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	JobTemplateCreatePayload struct {
+		JobTemplate func(childComplexity int) int
+	}
+
+	JobTemplateDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	JobTemplateEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	JobTemplateHistory struct {
+		Configuration func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		Cron          func(childComplexity int) int
+		Description   func(childComplexity int) int
+		DisplayID     func(childComplexity int) int
+		DownloadURL   func(childComplexity int) int
+		HistoryTime   func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Operation     func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		Platform      func(childComplexity int) int
+		Ref           func(childComplexity int) int
+		SystemOwned   func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		Title         func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
+	}
+
+	JobTemplateHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	JobTemplateHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	JobTemplateUpdatePayload struct {
+		JobTemplate func(childComplexity int) int
+	}
+
 	MappableDomain struct {
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
@@ -2299,7 +2306,6 @@ type ComplexityRoot struct {
 		CreateBulkCSVControl                 func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVControlImplementation   func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVControlObjective        func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVControlScheduledJob     func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVCustomDomain            func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVDNSVerification         func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVDocumentData            func(childComplexity int, input graphql.Upload) int
@@ -2313,6 +2319,7 @@ type ComplexityRoot struct {
 		CreateBulkCSVIntegration             func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVInternalPolicy          func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVInvite                  func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVJobTemplate             func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVMappableDomain          func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVMappedControl           func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVNarrative               func(childComplexity int, input graphql.Upload) int
@@ -2336,7 +2343,6 @@ type ComplexityRoot struct {
 		CreateBulkControl                    func(childComplexity int, input []*generated.CreateControlInput) int
 		CreateBulkControlImplementation      func(childComplexity int, input []*generated.CreateControlImplementationInput) int
 		CreateBulkControlObjective           func(childComplexity int, input []*generated.CreateControlObjectiveInput) int
-		CreateBulkControlScheduledJob        func(childComplexity int, input []*generated.CreateControlScheduledJobInput) int
 		CreateBulkCustomDomain               func(childComplexity int, input []*generated.CreateCustomDomainInput) int
 		CreateBulkDNSVerification            func(childComplexity int, input []*generated.CreateDNSVerificationInput) int
 		CreateBulkDocumentData               func(childComplexity int, input []*generated.CreateDocumentDataInput) int
@@ -2350,6 +2356,7 @@ type ComplexityRoot struct {
 		CreateBulkIntegration                func(childComplexity int, input []*generated.CreateIntegrationInput) int
 		CreateBulkInternalPolicy             func(childComplexity int, input []*generated.CreateInternalPolicyInput) int
 		CreateBulkInvite                     func(childComplexity int, input []*generated.CreateInviteInput) int
+		CreateBulkJobTemplate                func(childComplexity int, input []*generated.CreateJobTemplateInput) int
 		CreateBulkMappableDomain             func(childComplexity int, input []*generated.CreateMappableDomainInput) int
 		CreateBulkMappedControl              func(childComplexity int, input []*generated.CreateMappedControlInput) int
 		CreateBulkNarrative                  func(childComplexity int, input []*generated.CreateNarrativeInput) int
@@ -2373,7 +2380,6 @@ type ComplexityRoot struct {
 		CreateControl                        func(childComplexity int, input generated.CreateControlInput) int
 		CreateControlImplementation          func(childComplexity int, input generated.CreateControlImplementationInput) int
 		CreateControlObjective               func(childComplexity int, input generated.CreateControlObjectiveInput) int
-		CreateControlScheduledJob            func(childComplexity int, input generated.CreateControlScheduledJobInput) int
 		CreateControlWithSubcontrols         func(childComplexity int, input model.CreateControlWithSubcontrolsInput) int
 		CreateControlsByClone                func(childComplexity int, input *model.CloneControlInput) int
 		CreateCustomDomain                   func(childComplexity int, input generated.CreateCustomDomainInput) int
@@ -2396,6 +2402,7 @@ type ComplexityRoot struct {
 		CreateInvite                         func(childComplexity int, input generated.CreateInviteInput) int
 		CreateJobRunnerRegistrationToken     func(childComplexity int, input generated.CreateJobRunnerRegistrationTokenInput) int
 		CreateJobRunnerToken                 func(childComplexity int, input generated.CreateJobRunnerTokenInput) int
+		CreateJobTemplate                    func(childComplexity int, input generated.CreateJobTemplateInput) int
 		CreateMappableDomain                 func(childComplexity int, input generated.CreateMappableDomainInput) int
 		CreateMappedControl                  func(childComplexity int, input generated.CreateMappedControlInput) int
 		CreateNarrative                      func(childComplexity int, input generated.CreateNarrativeInput) int
@@ -2433,7 +2440,6 @@ type ComplexityRoot struct {
 		DeleteControl                        func(childComplexity int, id string) int
 		DeleteControlImplementation          func(childComplexity int, id string) int
 		DeleteControlObjective               func(childComplexity int, id string) int
-		DeleteControlScheduledJob            func(childComplexity int, id string) int
 		DeleteCustomDomain                   func(childComplexity int, id string) int
 		DeleteDNSVerification                func(childComplexity int, id string) int
 		DeleteDocumentData                   func(childComplexity int, id string) int
@@ -2453,6 +2459,7 @@ type ComplexityRoot struct {
 		DeleteJobRunner                      func(childComplexity int, id string) int
 		DeleteJobRunnerRegistrationToken     func(childComplexity int, id string) int
 		DeleteJobRunnerToken                 func(childComplexity int, id string) int
+		DeleteJobTemplate                    func(childComplexity int, id string) int
 		DeleteMappableDomain                 func(childComplexity int, id string) int
 		DeleteMappedControl                  func(childComplexity int, id string) int
 		DeleteNarrative                      func(childComplexity int, id string) int
@@ -2485,7 +2492,6 @@ type ComplexityRoot struct {
 		UpdateControl                        func(childComplexity int, id string, input generated.UpdateControlInput) int
 		UpdateControlImplementation          func(childComplexity int, id string, input generated.UpdateControlImplementationInput) int
 		UpdateControlObjective               func(childComplexity int, id string, input generated.UpdateControlObjectiveInput) int
-		UpdateControlScheduledJob            func(childComplexity int, id string, input generated.UpdateControlScheduledJobInput) int
 		UpdateCustomDomain                   func(childComplexity int, id string, input generated.UpdateCustomDomainInput) int
 		UpdateDNSVerification                func(childComplexity int, id string, input generated.UpdateDNSVerificationInput) int
 		UpdateDocumentData                   func(childComplexity int, id string, input generated.UpdateDocumentDataInput) int
@@ -2502,6 +2508,7 @@ type ComplexityRoot struct {
 		UpdateInternalPolicy                 func(childComplexity int, id string, input generated.UpdateInternalPolicyInput) int
 		UpdateInvite                         func(childComplexity int, id string, input generated.UpdateInviteInput) int
 		UpdateJobRunner                      func(childComplexity int, id string, input generated.UpdateJobRunnerInput) int
+		UpdateJobTemplate                    func(childComplexity int, id string, input generated.UpdateJobTemplateInput) int
 		UpdateMappableDomain                 func(childComplexity int, id string, input generated.UpdateMappableDomainInput) int
 		UpdateMappedControl                  func(childComplexity int, id string, input generated.UpdateMappedControlInput) int
 		UpdateNarrative                      func(childComplexity int, id string, input generated.UpdateNarrativeInput) int
@@ -2857,7 +2864,7 @@ type ComplexityRoot struct {
 		JobRunnerRegistrationTokens   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerRegistrationTokenOrder, where *generated.JobRunnerRegistrationTokenWhereInput) int
 		JobRunnerTokens               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) int
 		JobRunners                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerOrder, where *generated.JobRunnerWhereInput) int
-		Jobs                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
+		JobTemplates                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobTemplateOrder, where *generated.JobTemplateWhereInput) int
 		MappedControlCreators         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		MappedControls                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappedControlOrder, where *generated.MappedControlWhereInput) int
 		Members                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
@@ -2878,7 +2885,7 @@ type ComplexityRoot struct {
 		Scans                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		ScheduledJobCreators          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ScheduledJobRuns              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobRunOrder, where *generated.ScheduledJobRunWhereInput) int
-		ScheduledJobs                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlScheduledJobOrder, where *generated.ControlScheduledJobWhereInput) int
+		ScheduledJobs                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
 		Secrets                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
 		Setting                       func(childComplexity int) int
 		StandardCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -3419,6 +3426,7 @@ type ComplexityRoot struct {
 		AdminJobRunnerRegistrationTokenSearch func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminJobRunnerSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminJobRunnerTokenSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminJobTemplateSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminMappableDomainSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminMappedControlSearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminNarrativeSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -3430,7 +3438,6 @@ type ComplexityRoot struct {
 		AdminProgramSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminRiskSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminScanSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminScheduledJobSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminSearch                           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminStandardSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminSubcontrolSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -3464,9 +3471,6 @@ type ComplexityRoot struct {
 		ControlObjectiveHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlObjectiveHistoryOrder, where *generated.ControlObjectiveHistoryWhereInput) int
 		ControlObjectiveSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		ControlObjectives                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
-		ControlScheduledJob                   func(childComplexity int, id string) int
-		ControlScheduledJobHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlScheduledJobHistoryOrder, where *generated.ControlScheduledJobHistoryWhereInput) int
-		ControlScheduledJobs                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlScheduledJobOrder, where *generated.ControlScheduledJobWhereInput) int
 		ControlSearch                         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		ControlSubcategories                  func(childComplexity int) int
 		ControlSubcategoriesByFramework       func(childComplexity int, orderBy []*model.ControlCategoryOrder, where *generated.ControlWhereInput) int
@@ -3540,6 +3544,10 @@ type ComplexityRoot struct {
 		JobRunnerTokenSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		JobRunnerTokens                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) int
 		JobRunners                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerOrder, where *generated.JobRunnerWhereInput) int
+		JobTemplate                           func(childComplexity int, id string) int
+		JobTemplateHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.JobTemplateHistoryOrder, where *generated.JobTemplateHistoryWhereInput) int
+		JobTemplateSearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		JobTemplates                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobTemplateOrder, where *generated.JobTemplateWhereInput) int
 		MappableDomain                        func(childComplexity int, id string) int
 		MappableDomainHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.MappableDomainHistoryOrder, where *generated.MappableDomainHistoryWhereInput) int
 		MappableDomainSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -3598,7 +3606,6 @@ type ComplexityRoot struct {
 		ScheduledJobHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ScheduledJobHistoryOrder, where *generated.ScheduledJobHistoryWhereInput) int
 		ScheduledJobRun                       func(childComplexity int, id string) int
 		ScheduledJobRuns                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobRunOrder, where *generated.ScheduledJobRunWhereInput) int
-		ScheduledJobSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		ScheduledJobs                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
 		Search                                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Self                                  func(childComplexity int) int
@@ -3832,25 +3839,23 @@ type ComplexityRoot struct {
 	}
 
 	ScheduledJob struct {
-		Cadence       func(childComplexity int) int
+		Active        func(childComplexity int) int
 		Configuration func(childComplexity int) int
+		Controls      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
 		Cron          func(childComplexity int) int
-		Description   func(childComplexity int) int
 		DisplayID     func(childComplexity int) int
-		DownloadURL   func(childComplexity int) int
 		ID            func(childComplexity int) int
+		JobID         func(childComplexity int) int
+		JobRunner     func(childComplexity int) int
+		JobRunnerID   func(childComplexity int) int
+		JobTemplate   func(childComplexity int) int
 		Owner         func(childComplexity int) int
 		OwnerID       func(childComplexity int) int
-		Platform      func(childComplexity int) int
-		Script        func(childComplexity int) int
-		SystemOwned   func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		Title         func(childComplexity int) int
+		Subcontrols   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		UpdatedAt     func(childComplexity int) int
 		UpdatedBy     func(childComplexity int) int
-		WindmillPath  func(childComplexity int) int
 	}
 
 	ScheduledJobBulkCreatePayload struct {
@@ -3877,27 +3882,21 @@ type ComplexityRoot struct {
 	}
 
 	ScheduledJobHistory struct {
-		Cadence       func(childComplexity int) int
+		Active        func(childComplexity int) int
 		Configuration func(childComplexity int) int
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
 		Cron          func(childComplexity int) int
-		Description   func(childComplexity int) int
 		DisplayID     func(childComplexity int) int
-		DownloadURL   func(childComplexity int) int
 		HistoryTime   func(childComplexity int) int
 		ID            func(childComplexity int) int
+		JobID         func(childComplexity int) int
+		JobRunnerID   func(childComplexity int) int
 		Operation     func(childComplexity int) int
 		OwnerID       func(childComplexity int) int
-		Platform      func(childComplexity int) int
 		Ref           func(childComplexity int) int
-		Script        func(childComplexity int) int
-		SystemOwned   func(childComplexity int) int
-		Tags          func(childComplexity int) int
-		Title         func(childComplexity int) int
 		UpdatedAt     func(childComplexity int) int
 		UpdatedBy     func(childComplexity int) int
-		WindmillPath  func(childComplexity int) int
 	}
 
 	ScheduledJobHistoryConnection struct {
@@ -3966,6 +3965,7 @@ type ComplexityRoot struct {
 		JobRunnerRegistrationTokens func(childComplexity int) int
 		JobRunnerTokens             func(childComplexity int) int
 		JobRunners                  func(childComplexity int) int
+		JobTemplates                func(childComplexity int) int
 		MappableDomains             func(childComplexity int) int
 		MappedControls              func(childComplexity int) int
 		Narratives                  func(childComplexity int) int
@@ -3978,7 +3978,6 @@ type ComplexityRoot struct {
 		Programs                    func(childComplexity int) int
 		Risks                       func(childComplexity int) int
 		Scans                       func(childComplexity int) int
-		ScheduledJobs               func(childComplexity int) int
 		Standards                   func(childComplexity int) int
 		Subcontrols                 func(childComplexity int) int
 		Subprocessors               func(childComplexity int) int
@@ -4122,7 +4121,7 @@ type ComplexityRoot struct {
 		ReferenceID            func(childComplexity int) int
 		References             func(childComplexity int) int
 		Risks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
-		ScheduledJobs          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlScheduledJobOrder, where *generated.ControlScheduledJobWhereInput) int
+		ScheduledJobs          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
 		Source                 func(childComplexity int) int
 		Status                 func(childComplexity int) int
 		Subcategory            func(childComplexity int) int
@@ -6949,7 +6948,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Control.ScheduledJobs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlScheduledJobOrder), args["where"].(*generated.ControlScheduledJobWhereInput)), true
+		return e.complexity.Control.ScheduledJobs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScheduledJobOrder), args["where"].(*generated.ScheduledJobWhereInput)), true
 
 	case "Control.source":
 		if e.complexity.Control.Source == nil {
@@ -8270,310 +8269,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlObjectiveUpdatePayload.ControlObjective(childComplexity), true
-
-	case "ControlScheduledJob.configuration":
-		if e.complexity.ControlScheduledJob.Configuration == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJob.Configuration(childComplexity), true
-
-	case "ControlScheduledJob.controls":
-		if e.complexity.ControlScheduledJob.Controls == nil {
-			break
-		}
-
-		args, err := ec.field_ControlScheduledJob_controls_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.ControlScheduledJob.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
-
-	case "ControlScheduledJob.createdAt":
-		if e.complexity.ControlScheduledJob.CreatedAt == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJob.CreatedAt(childComplexity), true
-
-	case "ControlScheduledJob.createdBy":
-		if e.complexity.ControlScheduledJob.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJob.CreatedBy(childComplexity), true
-
-	case "ControlScheduledJob.cron":
-		if e.complexity.ControlScheduledJob.Cron == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJob.Cron(childComplexity), true
-
-	case "ControlScheduledJob.id":
-		if e.complexity.ControlScheduledJob.ID == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJob.ID(childComplexity), true
-
-	case "ControlScheduledJob.job":
-		if e.complexity.ControlScheduledJob.Job == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJob.Job(childComplexity), true
-
-	case "ControlScheduledJob.jobID":
-		if e.complexity.ControlScheduledJob.JobID == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJob.JobID(childComplexity), true
-
-	case "ControlScheduledJob.jobRunner":
-		if e.complexity.ControlScheduledJob.JobRunner == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJob.JobRunner(childComplexity), true
-
-	case "ControlScheduledJob.jobRunnerID":
-		if e.complexity.ControlScheduledJob.JobRunnerID == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJob.JobRunnerID(childComplexity), true
-
-	case "ControlScheduledJob.owner":
-		if e.complexity.ControlScheduledJob.Owner == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJob.Owner(childComplexity), true
-
-	case "ControlScheduledJob.ownerID":
-		if e.complexity.ControlScheduledJob.OwnerID == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJob.OwnerID(childComplexity), true
-
-	case "ControlScheduledJob.subcontrols":
-		if e.complexity.ControlScheduledJob.Subcontrols == nil {
-			break
-		}
-
-		args, err := ec.field_ControlScheduledJob_subcontrols_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.ControlScheduledJob.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
-
-	case "ControlScheduledJob.updatedAt":
-		if e.complexity.ControlScheduledJob.UpdatedAt == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJob.UpdatedAt(childComplexity), true
-
-	case "ControlScheduledJob.updatedBy":
-		if e.complexity.ControlScheduledJob.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJob.UpdatedBy(childComplexity), true
-
-	case "ControlScheduledJobBulkCreatePayload.controlScheduledJobs":
-		if e.complexity.ControlScheduledJobBulkCreatePayload.ControlScheduledJobs == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobBulkCreatePayload.ControlScheduledJobs(childComplexity), true
-
-	case "ControlScheduledJobConnection.edges":
-		if e.complexity.ControlScheduledJobConnection.Edges == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobConnection.Edges(childComplexity), true
-
-	case "ControlScheduledJobConnection.pageInfo":
-		if e.complexity.ControlScheduledJobConnection.PageInfo == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobConnection.PageInfo(childComplexity), true
-
-	case "ControlScheduledJobConnection.totalCount":
-		if e.complexity.ControlScheduledJobConnection.TotalCount == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobConnection.TotalCount(childComplexity), true
-
-	case "ControlScheduledJobCreatePayload.controlScheduledJob":
-		if e.complexity.ControlScheduledJobCreatePayload.ControlScheduledJob == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobCreatePayload.ControlScheduledJob(childComplexity), true
-
-	case "ControlScheduledJobDeletePayload.deletedID":
-		if e.complexity.ControlScheduledJobDeletePayload.DeletedID == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobDeletePayload.DeletedID(childComplexity), true
-
-	case "ControlScheduledJobEdge.cursor":
-		if e.complexity.ControlScheduledJobEdge.Cursor == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobEdge.Cursor(childComplexity), true
-
-	case "ControlScheduledJobEdge.node":
-		if e.complexity.ControlScheduledJobEdge.Node == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobEdge.Node(childComplexity), true
-
-	case "ControlScheduledJobHistory.configuration":
-		if e.complexity.ControlScheduledJobHistory.Configuration == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobHistory.Configuration(childComplexity), true
-
-	case "ControlScheduledJobHistory.createdAt":
-		if e.complexity.ControlScheduledJobHistory.CreatedAt == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobHistory.CreatedAt(childComplexity), true
-
-	case "ControlScheduledJobHistory.createdBy":
-		if e.complexity.ControlScheduledJobHistory.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobHistory.CreatedBy(childComplexity), true
-
-	case "ControlScheduledJobHistory.cron":
-		if e.complexity.ControlScheduledJobHistory.Cron == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobHistory.Cron(childComplexity), true
-
-	case "ControlScheduledJobHistory.historyTime":
-		if e.complexity.ControlScheduledJobHistory.HistoryTime == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobHistory.HistoryTime(childComplexity), true
-
-	case "ControlScheduledJobHistory.id":
-		if e.complexity.ControlScheduledJobHistory.ID == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobHistory.ID(childComplexity), true
-
-	case "ControlScheduledJobHistory.jobID":
-		if e.complexity.ControlScheduledJobHistory.JobID == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobHistory.JobID(childComplexity), true
-
-	case "ControlScheduledJobHistory.jobRunnerID":
-		if e.complexity.ControlScheduledJobHistory.JobRunnerID == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobHistory.JobRunnerID(childComplexity), true
-
-	case "ControlScheduledJobHistory.operation":
-		if e.complexity.ControlScheduledJobHistory.Operation == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobHistory.Operation(childComplexity), true
-
-	case "ControlScheduledJobHistory.ownerID":
-		if e.complexity.ControlScheduledJobHistory.OwnerID == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobHistory.OwnerID(childComplexity), true
-
-	case "ControlScheduledJobHistory.ref":
-		if e.complexity.ControlScheduledJobHistory.Ref == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobHistory.Ref(childComplexity), true
-
-	case "ControlScheduledJobHistory.updatedAt":
-		if e.complexity.ControlScheduledJobHistory.UpdatedAt == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobHistory.UpdatedAt(childComplexity), true
-
-	case "ControlScheduledJobHistory.updatedBy":
-		if e.complexity.ControlScheduledJobHistory.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobHistory.UpdatedBy(childComplexity), true
-
-	case "ControlScheduledJobHistoryConnection.edges":
-		if e.complexity.ControlScheduledJobHistoryConnection.Edges == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobHistoryConnection.Edges(childComplexity), true
-
-	case "ControlScheduledJobHistoryConnection.pageInfo":
-		if e.complexity.ControlScheduledJobHistoryConnection.PageInfo == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobHistoryConnection.PageInfo(childComplexity), true
-
-	case "ControlScheduledJobHistoryConnection.totalCount":
-		if e.complexity.ControlScheduledJobHistoryConnection.TotalCount == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobHistoryConnection.TotalCount(childComplexity), true
-
-	case "ControlScheduledJobHistoryEdge.cursor":
-		if e.complexity.ControlScheduledJobHistoryEdge.Cursor == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobHistoryEdge.Cursor(childComplexity), true
-
-	case "ControlScheduledJobHistoryEdge.node":
-		if e.complexity.ControlScheduledJobHistoryEdge.Node == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobHistoryEdge.Node(childComplexity), true
-
-	case "ControlScheduledJobUpdatePayload.controlScheduledJob":
-		if e.complexity.ControlScheduledJobUpdatePayload.ControlScheduledJob == nil {
-			break
-		}
-
-		return e.complexity.ControlScheduledJobUpdatePayload.ControlScheduledJob(childComplexity), true
 
 	case "ControlUpdatePayload.control":
 		if e.complexity.ControlUpdatePayload.Control == nil {
@@ -14862,6 +14557,354 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobRunnerUpdatePayload.JobRunner(childComplexity), true
 
+	case "JobTemplate.configuration":
+		if e.complexity.JobTemplate.Configuration == nil {
+			break
+		}
+
+		return e.complexity.JobTemplate.Configuration(childComplexity), true
+
+	case "JobTemplate.createdAt":
+		if e.complexity.JobTemplate.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.JobTemplate.CreatedAt(childComplexity), true
+
+	case "JobTemplate.createdBy":
+		if e.complexity.JobTemplate.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.JobTemplate.CreatedBy(childComplexity), true
+
+	case "JobTemplate.cron":
+		if e.complexity.JobTemplate.Cron == nil {
+			break
+		}
+
+		return e.complexity.JobTemplate.Cron(childComplexity), true
+
+	case "JobTemplate.description":
+		if e.complexity.JobTemplate.Description == nil {
+			break
+		}
+
+		return e.complexity.JobTemplate.Description(childComplexity), true
+
+	case "JobTemplate.displayID":
+		if e.complexity.JobTemplate.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.JobTemplate.DisplayID(childComplexity), true
+
+	case "JobTemplate.downloadURL":
+		if e.complexity.JobTemplate.DownloadURL == nil {
+			break
+		}
+
+		return e.complexity.JobTemplate.DownloadURL(childComplexity), true
+
+	case "JobTemplate.id":
+		if e.complexity.JobTemplate.ID == nil {
+			break
+		}
+
+		return e.complexity.JobTemplate.ID(childComplexity), true
+
+	case "JobTemplate.owner":
+		if e.complexity.JobTemplate.Owner == nil {
+			break
+		}
+
+		return e.complexity.JobTemplate.Owner(childComplexity), true
+
+	case "JobTemplate.ownerID":
+		if e.complexity.JobTemplate.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.JobTemplate.OwnerID(childComplexity), true
+
+	case "JobTemplate.platform":
+		if e.complexity.JobTemplate.Platform == nil {
+			break
+		}
+
+		return e.complexity.JobTemplate.Platform(childComplexity), true
+
+	case "JobTemplate.scheduledJobs":
+		if e.complexity.JobTemplate.ScheduledJobs == nil {
+			break
+		}
+
+		args, err := ec.field_JobTemplate_scheduledJobs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.JobTemplate.ScheduledJobs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScheduledJobOrder), args["where"].(*generated.ScheduledJobWhereInput)), true
+
+	case "JobTemplate.systemOwned":
+		if e.complexity.JobTemplate.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.JobTemplate.SystemOwned(childComplexity), true
+
+	case "JobTemplate.tags":
+		if e.complexity.JobTemplate.Tags == nil {
+			break
+		}
+
+		return e.complexity.JobTemplate.Tags(childComplexity), true
+
+	case "JobTemplate.title":
+		if e.complexity.JobTemplate.Title == nil {
+			break
+		}
+
+		return e.complexity.JobTemplate.Title(childComplexity), true
+
+	case "JobTemplate.updatedAt":
+		if e.complexity.JobTemplate.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.JobTemplate.UpdatedAt(childComplexity), true
+
+	case "JobTemplate.updatedBy":
+		if e.complexity.JobTemplate.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.JobTemplate.UpdatedBy(childComplexity), true
+
+	case "JobTemplateBulkCreatePayload.jobTemplates":
+		if e.complexity.JobTemplateBulkCreatePayload.JobTemplates == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateBulkCreatePayload.JobTemplates(childComplexity), true
+
+	case "JobTemplateConnection.edges":
+		if e.complexity.JobTemplateConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateConnection.Edges(childComplexity), true
+
+	case "JobTemplateConnection.pageInfo":
+		if e.complexity.JobTemplateConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateConnection.PageInfo(childComplexity), true
+
+	case "JobTemplateConnection.totalCount":
+		if e.complexity.JobTemplateConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateConnection.TotalCount(childComplexity), true
+
+	case "JobTemplateCreatePayload.jobTemplate":
+		if e.complexity.JobTemplateCreatePayload.JobTemplate == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateCreatePayload.JobTemplate(childComplexity), true
+
+	case "JobTemplateDeletePayload.deletedID":
+		if e.complexity.JobTemplateDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateDeletePayload.DeletedID(childComplexity), true
+
+	case "JobTemplateEdge.cursor":
+		if e.complexity.JobTemplateEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateEdge.Cursor(childComplexity), true
+
+	case "JobTemplateEdge.node":
+		if e.complexity.JobTemplateEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateEdge.Node(childComplexity), true
+
+	case "JobTemplateHistory.configuration":
+		if e.complexity.JobTemplateHistory.Configuration == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.Configuration(childComplexity), true
+
+	case "JobTemplateHistory.createdAt":
+		if e.complexity.JobTemplateHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.CreatedAt(childComplexity), true
+
+	case "JobTemplateHistory.createdBy":
+		if e.complexity.JobTemplateHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.CreatedBy(childComplexity), true
+
+	case "JobTemplateHistory.cron":
+		if e.complexity.JobTemplateHistory.Cron == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.Cron(childComplexity), true
+
+	case "JobTemplateHistory.description":
+		if e.complexity.JobTemplateHistory.Description == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.Description(childComplexity), true
+
+	case "JobTemplateHistory.displayID":
+		if e.complexity.JobTemplateHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.DisplayID(childComplexity), true
+
+	case "JobTemplateHistory.downloadURL":
+		if e.complexity.JobTemplateHistory.DownloadURL == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.DownloadURL(childComplexity), true
+
+	case "JobTemplateHistory.historyTime":
+		if e.complexity.JobTemplateHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.HistoryTime(childComplexity), true
+
+	case "JobTemplateHistory.id":
+		if e.complexity.JobTemplateHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.ID(childComplexity), true
+
+	case "JobTemplateHistory.operation":
+		if e.complexity.JobTemplateHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.Operation(childComplexity), true
+
+	case "JobTemplateHistory.ownerID":
+		if e.complexity.JobTemplateHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.OwnerID(childComplexity), true
+
+	case "JobTemplateHistory.platform":
+		if e.complexity.JobTemplateHistory.Platform == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.Platform(childComplexity), true
+
+	case "JobTemplateHistory.ref":
+		if e.complexity.JobTemplateHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.Ref(childComplexity), true
+
+	case "JobTemplateHistory.systemOwned":
+		if e.complexity.JobTemplateHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.SystemOwned(childComplexity), true
+
+	case "JobTemplateHistory.tags":
+		if e.complexity.JobTemplateHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.Tags(childComplexity), true
+
+	case "JobTemplateHistory.title":
+		if e.complexity.JobTemplateHistory.Title == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.Title(childComplexity), true
+
+	case "JobTemplateHistory.updatedAt":
+		if e.complexity.JobTemplateHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.UpdatedAt(childComplexity), true
+
+	case "JobTemplateHistory.updatedBy":
+		if e.complexity.JobTemplateHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.UpdatedBy(childComplexity), true
+
+	case "JobTemplateHistoryConnection.edges":
+		if e.complexity.JobTemplateHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistoryConnection.Edges(childComplexity), true
+
+	case "JobTemplateHistoryConnection.pageInfo":
+		if e.complexity.JobTemplateHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistoryConnection.PageInfo(childComplexity), true
+
+	case "JobTemplateHistoryConnection.totalCount":
+		if e.complexity.JobTemplateHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistoryConnection.TotalCount(childComplexity), true
+
+	case "JobTemplateHistoryEdge.cursor":
+		if e.complexity.JobTemplateHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistoryEdge.Cursor(childComplexity), true
+
+	case "JobTemplateHistoryEdge.node":
+		if e.complexity.JobTemplateHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistoryEdge.Node(childComplexity), true
+
+	case "JobTemplateUpdatePayload.jobTemplate":
+		if e.complexity.JobTemplateUpdatePayload.JobTemplate == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateUpdatePayload.JobTemplate(childComplexity), true
+
 	case "MappableDomain.createdAt":
 		if e.complexity.MappableDomain.CreatedAt == nil {
 			break
@@ -15613,18 +15656,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVControlObjective(childComplexity, args["input"].(graphql.Upload)), true
 
-	case "Mutation.createBulkCSVControlScheduledJob":
-		if e.complexity.Mutation.CreateBulkCSVControlScheduledJob == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkCSVControlScheduledJob_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkCSVControlScheduledJob(childComplexity, args["input"].(graphql.Upload)), true
-
 	case "Mutation.createBulkCSVCustomDomain":
 		if e.complexity.Mutation.CreateBulkCSVCustomDomain == nil {
 			break
@@ -15780,6 +15811,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkCSVInvite(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.createBulkCSVJobTemplate":
+		if e.complexity.Mutation.CreateBulkCSVJobTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVJobTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVJobTemplate(childComplexity, args["input"].(graphql.Upload)), true
 
 	case "Mutation.createBulkCSVMappableDomain":
 		if e.complexity.Mutation.CreateBulkCSVMappableDomain == nil {
@@ -16057,18 +16100,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkControlObjective(childComplexity, args["input"].([]*generated.CreateControlObjectiveInput)), true
 
-	case "Mutation.createBulkControlScheduledJob":
-		if e.complexity.Mutation.CreateBulkControlScheduledJob == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkControlScheduledJob_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkControlScheduledJob(childComplexity, args["input"].([]*generated.CreateControlScheduledJobInput)), true
-
 	case "Mutation.createBulkCustomDomain":
 		if e.complexity.Mutation.CreateBulkCustomDomain == nil {
 			break
@@ -16224,6 +16255,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkInvite(childComplexity, args["input"].([]*generated.CreateInviteInput)), true
+
+	case "Mutation.createBulkJobTemplate":
+		if e.complexity.Mutation.CreateBulkJobTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkJobTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkJobTemplate(childComplexity, args["input"].([]*generated.CreateJobTemplateInput)), true
 
 	case "Mutation.createBulkMappableDomain":
 		if e.complexity.Mutation.CreateBulkMappableDomain == nil {
@@ -16501,18 +16544,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateControlObjective(childComplexity, args["input"].(generated.CreateControlObjectiveInput)), true
 
-	case "Mutation.createControlScheduledJob":
-		if e.complexity.Mutation.CreateControlScheduledJob == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createControlScheduledJob_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateControlScheduledJob(childComplexity, args["input"].(generated.CreateControlScheduledJobInput)), true
-
 	case "Mutation.createControlWithSubcontrols":
 		if e.complexity.Mutation.CreateControlWithSubcontrols == nil {
 			break
@@ -16776,6 +16807,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateJobRunnerToken(childComplexity, args["input"].(generated.CreateJobRunnerTokenInput)), true
+
+	case "Mutation.createJobTemplate":
+		if e.complexity.Mutation.CreateJobTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createJobTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateJobTemplate(childComplexity, args["input"].(generated.CreateJobTemplateInput)), true
 
 	case "Mutation.createMappableDomain":
 		if e.complexity.Mutation.CreateMappableDomain == nil {
@@ -17221,18 +17264,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteControlObjective(childComplexity, args["id"].(string)), true
 
-	case "Mutation.deleteControlScheduledJob":
-		if e.complexity.Mutation.DeleteControlScheduledJob == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteControlScheduledJob_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.DeleteControlScheduledJob(childComplexity, args["id"].(string)), true
-
 	case "Mutation.deleteCustomDomain":
 		if e.complexity.Mutation.DeleteCustomDomain == nil {
 			break
@@ -17460,6 +17491,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.DeleteJobRunnerToken(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteJobTemplate":
+		if e.complexity.Mutation.DeleteJobTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteJobTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteJobTemplate(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteMappableDomain":
 		if e.complexity.Mutation.DeleteMappableDomain == nil {
@@ -17845,18 +17888,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateControlObjective(childComplexity, args["id"].(string), args["input"].(generated.UpdateControlObjectiveInput)), true
 
-	case "Mutation.updateControlScheduledJob":
-		if e.complexity.Mutation.UpdateControlScheduledJob == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateControlScheduledJob_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.UpdateControlScheduledJob(childComplexity, args["id"].(string), args["input"].(generated.UpdateControlScheduledJobInput)), true
-
 	case "Mutation.updateCustomDomain":
 		if e.complexity.Mutation.UpdateCustomDomain == nil {
 			break
@@ -18048,6 +18079,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateJobRunner(childComplexity, args["id"].(string), args["input"].(generated.UpdateJobRunnerInput)), true
+
+	case "Mutation.updateJobTemplate":
+		if e.complexity.Mutation.UpdateJobTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateJobTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateJobTemplate(childComplexity, args["id"].(string), args["input"].(generated.UpdateJobTemplateInput)), true
 
 	case "Mutation.updateMappableDomain":
 		if e.complexity.Mutation.UpdateMappableDomain == nil {
@@ -20139,17 +20182,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Organization.JobRunners(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobRunnerOrder), args["where"].(*generated.JobRunnerWhereInput)), true
 
-	case "Organization.jobs":
-		if e.complexity.Organization.Jobs == nil {
+	case "Organization.jobTemplates":
+		if e.complexity.Organization.JobTemplates == nil {
 			break
 		}
 
-		args, err := ec.field_Organization_jobs_args(ctx, rawArgs)
+		args, err := ec.field_Organization_jobTemplates_args(ctx, rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Organization.Jobs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScheduledJobOrder), args["where"].(*generated.ScheduledJobWhereInput)), true
+		return e.complexity.Organization.JobTemplates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobTemplateOrder), args["where"].(*generated.JobTemplateWhereInput)), true
 
 	case "Organization.mappedControlCreators":
 		if e.complexity.Organization.MappedControlCreators == nil {
@@ -20381,7 +20424,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Organization.ScheduledJobs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlScheduledJobOrder), args["where"].(*generated.ControlScheduledJobWhereInput)), true
+		return e.complexity.Organization.ScheduledJobs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScheduledJobOrder), args["where"].(*generated.ScheduledJobWhereInput)), true
 
 	case "Organization.secrets":
 		if e.complexity.Organization.Secrets == nil {
@@ -23290,6 +23333,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.AdminJobRunnerTokenSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
+	case "Query.adminJobTemplateSearch":
+		if e.complexity.Query.AdminJobTemplateSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminJobTemplateSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminJobTemplateSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
 	case "Query.adminMappableDomainSearch":
 		if e.complexity.Query.AdminMappableDomainSearch == nil {
 			break
@@ -23421,18 +23476,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.AdminScanSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminScheduledJobSearch":
-		if e.complexity.Query.AdminScheduledJobSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminScheduledJobSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminScheduledJobSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
 	case "Query.adminSearch":
 		if e.complexity.Query.AdminSearch == nil {
@@ -23824,42 +23867,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.ControlObjectives(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlObjectiveOrder), args["where"].(*generated.ControlObjectiveWhereInput)), true
-
-	case "Query.controlScheduledJob":
-		if e.complexity.Query.ControlScheduledJob == nil {
-			break
-		}
-
-		args, err := ec.field_Query_controlScheduledJob_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.ControlScheduledJob(childComplexity, args["id"].(string)), true
-
-	case "Query.controlScheduledJobHistories":
-		if e.complexity.Query.ControlScheduledJobHistories == nil {
-			break
-		}
-
-		args, err := ec.field_Query_controlScheduledJobHistories_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.ControlScheduledJobHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.ControlScheduledJobHistoryOrder), args["where"].(*generated.ControlScheduledJobHistoryWhereInput)), true
-
-	case "Query.controlScheduledJobs":
-		if e.complexity.Query.ControlScheduledJobs == nil {
-			break
-		}
-
-		args, err := ec.field_Query_controlScheduledJobs_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.ControlScheduledJobs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlScheduledJobOrder), args["where"].(*generated.ControlScheduledJobWhereInput)), true
 
 	case "Query.controlSearch":
 		if e.complexity.Query.ControlSearch == nil {
@@ -24732,6 +24739,54 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.JobRunners(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobRunnerOrder), args["where"].(*generated.JobRunnerWhereInput)), true
 
+	case "Query.jobTemplate":
+		if e.complexity.Query.JobTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Query_jobTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.JobTemplate(childComplexity, args["id"].(string)), true
+
+	case "Query.jobTemplateHistories":
+		if e.complexity.Query.JobTemplateHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_jobTemplateHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.JobTemplateHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.JobTemplateHistoryOrder), args["where"].(*generated.JobTemplateHistoryWhereInput)), true
+
+	case "Query.jobTemplateSearch":
+		if e.complexity.Query.JobTemplateSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_jobTemplateSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.JobTemplateSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.jobTemplates":
+		if e.complexity.Query.JobTemplates == nil {
+			break
+		}
+
+		args, err := ec.field_Query_jobTemplates_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.JobTemplates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobTemplateOrder), args["where"].(*generated.JobTemplateWhereInput)), true
+
 	case "Query.mappableDomain":
 		if e.complexity.Query.MappableDomain == nil {
 			break
@@ -25427,18 +25482,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.ScheduledJobRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScheduledJobRunOrder), args["where"].(*generated.ScheduledJobRunWhereInput)), true
-
-	case "Query.scheduledJobSearch":
-		if e.complexity.Query.ScheduledJobSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_scheduledJobSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.ScheduledJobSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
 	case "Query.scheduledJobs":
 		if e.complexity.Query.ScheduledJobs == nil {
@@ -26975,12 +27018,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScanUpdatePayload.Scan(childComplexity), true
 
-	case "ScheduledJob.cadence":
-		if e.complexity.ScheduledJob.Cadence == nil {
+	case "ScheduledJob.active":
+		if e.complexity.ScheduledJob.Active == nil {
 			break
 		}
 
-		return e.complexity.ScheduledJob.Cadence(childComplexity), true
+		return e.complexity.ScheduledJob.Active(childComplexity), true
 
 	case "ScheduledJob.configuration":
 		if e.complexity.ScheduledJob.Configuration == nil {
@@ -26988,6 +27031,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScheduledJob.Configuration(childComplexity), true
+
+	case "ScheduledJob.controls":
+		if e.complexity.ScheduledJob.Controls == nil {
+			break
+		}
+
+		args, err := ec.field_ScheduledJob_controls_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ScheduledJob.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "ScheduledJob.createdAt":
 		if e.complexity.ScheduledJob.CreatedAt == nil {
@@ -27010,13 +27065,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJob.Cron(childComplexity), true
 
-	case "ScheduledJob.description":
-		if e.complexity.ScheduledJob.Description == nil {
-			break
-		}
-
-		return e.complexity.ScheduledJob.Description(childComplexity), true
-
 	case "ScheduledJob.displayID":
 		if e.complexity.ScheduledJob.DisplayID == nil {
 			break
@@ -27024,19 +27072,40 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJob.DisplayID(childComplexity), true
 
-	case "ScheduledJob.downloadURL":
-		if e.complexity.ScheduledJob.DownloadURL == nil {
-			break
-		}
-
-		return e.complexity.ScheduledJob.DownloadURL(childComplexity), true
-
 	case "ScheduledJob.id":
 		if e.complexity.ScheduledJob.ID == nil {
 			break
 		}
 
 		return e.complexity.ScheduledJob.ID(childComplexity), true
+
+	case "ScheduledJob.jobID":
+		if e.complexity.ScheduledJob.JobID == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.JobID(childComplexity), true
+
+	case "ScheduledJob.jobRunner":
+		if e.complexity.ScheduledJob.JobRunner == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.JobRunner(childComplexity), true
+
+	case "ScheduledJob.jobRunnerID":
+		if e.complexity.ScheduledJob.JobRunnerID == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.JobRunnerID(childComplexity), true
+
+	case "ScheduledJob.jobTemplate":
+		if e.complexity.ScheduledJob.JobTemplate == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.JobTemplate(childComplexity), true
 
 	case "ScheduledJob.owner":
 		if e.complexity.ScheduledJob.Owner == nil {
@@ -27052,40 +27121,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJob.OwnerID(childComplexity), true
 
-	case "ScheduledJob.platform":
-		if e.complexity.ScheduledJob.Platform == nil {
+	case "ScheduledJob.subcontrols":
+		if e.complexity.ScheduledJob.Subcontrols == nil {
 			break
 		}
 
-		return e.complexity.ScheduledJob.Platform(childComplexity), true
-
-	case "ScheduledJob.script":
-		if e.complexity.ScheduledJob.Script == nil {
-			break
+		args, err := ec.field_ScheduledJob_subcontrols_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
 		}
 
-		return e.complexity.ScheduledJob.Script(childComplexity), true
-
-	case "ScheduledJob.systemOwned":
-		if e.complexity.ScheduledJob.SystemOwned == nil {
-			break
-		}
-
-		return e.complexity.ScheduledJob.SystemOwned(childComplexity), true
-
-	case "ScheduledJob.tags":
-		if e.complexity.ScheduledJob.Tags == nil {
-			break
-		}
-
-		return e.complexity.ScheduledJob.Tags(childComplexity), true
-
-	case "ScheduledJob.title":
-		if e.complexity.ScheduledJob.Title == nil {
-			break
-		}
-
-		return e.complexity.ScheduledJob.Title(childComplexity), true
+		return e.complexity.ScheduledJob.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
 
 	case "ScheduledJob.updatedAt":
 		if e.complexity.ScheduledJob.UpdatedAt == nil {
@@ -27100,13 +27146,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScheduledJob.UpdatedBy(childComplexity), true
-
-	case "ScheduledJob.windmillPath":
-		if e.complexity.ScheduledJob.WindmillPath == nil {
-			break
-		}
-
-		return e.complexity.ScheduledJob.WindmillPath(childComplexity), true
 
 	case "ScheduledJobBulkCreatePayload.scheduledJobs":
 		if e.complexity.ScheduledJobBulkCreatePayload.ScheduledJobs == nil {
@@ -27164,12 +27203,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJobEdge.Node(childComplexity), true
 
-	case "ScheduledJobHistory.cadence":
-		if e.complexity.ScheduledJobHistory.Cadence == nil {
+	case "ScheduledJobHistory.active":
+		if e.complexity.ScheduledJobHistory.Active == nil {
 			break
 		}
 
-		return e.complexity.ScheduledJobHistory.Cadence(childComplexity), true
+		return e.complexity.ScheduledJobHistory.Active(childComplexity), true
 
 	case "ScheduledJobHistory.configuration":
 		if e.complexity.ScheduledJobHistory.Configuration == nil {
@@ -27199,26 +27238,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJobHistory.Cron(childComplexity), true
 
-	case "ScheduledJobHistory.description":
-		if e.complexity.ScheduledJobHistory.Description == nil {
-			break
-		}
-
-		return e.complexity.ScheduledJobHistory.Description(childComplexity), true
-
 	case "ScheduledJobHistory.displayID":
 		if e.complexity.ScheduledJobHistory.DisplayID == nil {
 			break
 		}
 
 		return e.complexity.ScheduledJobHistory.DisplayID(childComplexity), true
-
-	case "ScheduledJobHistory.downloadURL":
-		if e.complexity.ScheduledJobHistory.DownloadURL == nil {
-			break
-		}
-
-		return e.complexity.ScheduledJobHistory.DownloadURL(childComplexity), true
 
 	case "ScheduledJobHistory.historyTime":
 		if e.complexity.ScheduledJobHistory.HistoryTime == nil {
@@ -27234,6 +27259,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJobHistory.ID(childComplexity), true
 
+	case "ScheduledJobHistory.jobID":
+		if e.complexity.ScheduledJobHistory.JobID == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.JobID(childComplexity), true
+
+	case "ScheduledJobHistory.jobRunnerID":
+		if e.complexity.ScheduledJobHistory.JobRunnerID == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.JobRunnerID(childComplexity), true
+
 	case "ScheduledJobHistory.operation":
 		if e.complexity.ScheduledJobHistory.Operation == nil {
 			break
@@ -27248,47 +27287,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJobHistory.OwnerID(childComplexity), true
 
-	case "ScheduledJobHistory.platform":
-		if e.complexity.ScheduledJobHistory.Platform == nil {
-			break
-		}
-
-		return e.complexity.ScheduledJobHistory.Platform(childComplexity), true
-
 	case "ScheduledJobHistory.ref":
 		if e.complexity.ScheduledJobHistory.Ref == nil {
 			break
 		}
 
 		return e.complexity.ScheduledJobHistory.Ref(childComplexity), true
-
-	case "ScheduledJobHistory.script":
-		if e.complexity.ScheduledJobHistory.Script == nil {
-			break
-		}
-
-		return e.complexity.ScheduledJobHistory.Script(childComplexity), true
-
-	case "ScheduledJobHistory.systemOwned":
-		if e.complexity.ScheduledJobHistory.SystemOwned == nil {
-			break
-		}
-
-		return e.complexity.ScheduledJobHistory.SystemOwned(childComplexity), true
-
-	case "ScheduledJobHistory.tags":
-		if e.complexity.ScheduledJobHistory.Tags == nil {
-			break
-		}
-
-		return e.complexity.ScheduledJobHistory.Tags(childComplexity), true
-
-	case "ScheduledJobHistory.title":
-		if e.complexity.ScheduledJobHistory.Title == nil {
-			break
-		}
-
-		return e.complexity.ScheduledJobHistory.Title(childComplexity), true
 
 	case "ScheduledJobHistory.updatedAt":
 		if e.complexity.ScheduledJobHistory.UpdatedAt == nil {
@@ -27303,13 +27307,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScheduledJobHistory.UpdatedBy(childComplexity), true
-
-	case "ScheduledJobHistory.windmillPath":
-		if e.complexity.ScheduledJobHistory.WindmillPath == nil {
-			break
-		}
-
-		return e.complexity.ScheduledJobHistory.WindmillPath(childComplexity), true
 
 	case "ScheduledJobHistoryConnection.edges":
 		if e.complexity.ScheduledJobHistoryConnection.Edges == nil {
@@ -27640,6 +27637,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SearchResults.JobRunners(childComplexity), true
 
+	case "SearchResults.jobTemplates":
+		if e.complexity.SearchResults.JobTemplates == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.JobTemplates(childComplexity), true
+
 	case "SearchResults.mappableDomains":
 		if e.complexity.SearchResults.MappableDomains == nil {
 			break
@@ -27723,13 +27727,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SearchResults.Scans(childComplexity), true
-
-	case "SearchResults.scheduledJobs":
-		if e.complexity.SearchResults.ScheduledJobs == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.ScheduledJobs(childComplexity), true
 
 	case "SearchResults.standards":
 		if e.complexity.SearchResults.Standards == nil {
@@ -28556,7 +28553,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Subcontrol.ScheduledJobs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlScheduledJobOrder), args["where"].(*generated.ControlScheduledJobWhereInput)), true
+		return e.complexity.Subcontrol.ScheduledJobs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScheduledJobOrder), args["where"].(*generated.ScheduledJobWhereInput)), true
 
 	case "Subcontrol.source":
 		if e.complexity.Subcontrol.Source == nil {
@@ -32581,10 +32578,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputControlObjectiveOrder,
 		ec.unmarshalInputControlObjectiveWhereInput,
 		ec.unmarshalInputControlOrder,
-		ec.unmarshalInputControlScheduledJobHistoryOrder,
-		ec.unmarshalInputControlScheduledJobHistoryWhereInput,
-		ec.unmarshalInputControlScheduledJobOrder,
-		ec.unmarshalInputControlScheduledJobWhereInput,
 		ec.unmarshalInputControlWhereInput,
 		ec.unmarshalInputCreateAPITokenInput,
 		ec.unmarshalInputCreateActionPlanInput,
@@ -32593,7 +32586,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateControlImplementationInput,
 		ec.unmarshalInputCreateControlInput,
 		ec.unmarshalInputCreateControlObjectiveInput,
-		ec.unmarshalInputCreateControlScheduledJobInput,
 		ec.unmarshalInputCreateControlWithSubcontrolsInput,
 		ec.unmarshalInputCreateCustomDomainInput,
 		ec.unmarshalInputCreateDNSVerificationInput,
@@ -32616,6 +32608,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateJobRunnerInput,
 		ec.unmarshalInputCreateJobRunnerRegistrationTokenInput,
 		ec.unmarshalInputCreateJobRunnerTokenInput,
+		ec.unmarshalInputCreateJobTemplateInput,
 		ec.unmarshalInputCreateMappableDomainInput,
 		ec.unmarshalInputCreateMappedControlInput,
 		ec.unmarshalInputCreateMemberWithProgramInput,
@@ -32716,6 +32709,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputJobRunnerTokenOrder,
 		ec.unmarshalInputJobRunnerTokenWhereInput,
 		ec.unmarshalInputJobRunnerWhereInput,
+		ec.unmarshalInputJobTemplateHistoryOrder,
+		ec.unmarshalInputJobTemplateHistoryWhereInput,
+		ec.unmarshalInputJobTemplateOrder,
+		ec.unmarshalInputJobTemplateWhereInput,
 		ec.unmarshalInputMappableDomainHistoryOrder,
 		ec.unmarshalInputMappableDomainHistoryWhereInput,
 		ec.unmarshalInputMappableDomainOrder,
@@ -32825,7 +32822,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateControlImplementationInput,
 		ec.unmarshalInputUpdateControlInput,
 		ec.unmarshalInputUpdateControlObjectiveInput,
-		ec.unmarshalInputUpdateControlScheduledJobInput,
 		ec.unmarshalInputUpdateCustomDomainInput,
 		ec.unmarshalInputUpdateDNSVerificationInput,
 		ec.unmarshalInputUpdateDocumentDataInput,
@@ -32846,6 +32842,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateJobRunnerInput,
 		ec.unmarshalInputUpdateJobRunnerRegistrationTokenInput,
 		ec.unmarshalInputUpdateJobRunnerTokenInput,
+		ec.unmarshalInputUpdateJobTemplateInput,
 		ec.unmarshalInputUpdateMappableDomainInput,
 		ec.unmarshalInputUpdateMappedControlInput,
 		ec.unmarshalInputUpdateNarrativeInput,
@@ -33636,6 +33633,31 @@ type ActionPlanBulkCreatePayload {
         last: Int
     ): JobRunnerTokenConnection
     """
+    Search across JobTemplate objects
+    """
+    adminJobTemplateSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): JobTemplateConnection
+    """
     Search across MappableDomain objects
     """
     adminMappableDomainSearch(
@@ -33910,31 +33932,6 @@ type ActionPlanBulkCreatePayload {
         """
         last: Int
     ): ScanConnection
-    """
-    Search across ScheduledJob objects
-    """
-    adminScheduledJobSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): ScheduledJobConnection
     """
     Search across Standard objects
     """
@@ -35123,109 +35120,6 @@ type ControlObjectiveBulkCreatePayload {
     Created controlObjectives
     """
     controlObjectives: [ControlObjective!]
-}`, BuiltIn: false},
-	{Name: "../schema/controlscheduledjob.graphql", Input: `extend type Query {
-    """
-    Look up controlScheduledJob by ID
-    """
-     controlScheduledJob(
-        """
-        ID of the controlScheduledJob
-        """
-        id: ID!
-    ):  ControlScheduledJob!
-}
-
-extend type Mutation{
-    """
-    Create a new controlScheduledJob
-    """
-    createControlScheduledJob(
-        """
-        values of the controlScheduledJob
-        """
-        input: CreateControlScheduledJobInput!
-    ): ControlScheduledJobCreatePayload!
-    """
-    Create multiple new controlScheduledJobs
-    """
-    createBulkControlScheduledJob(
-        """
-        values of the controlScheduledJob
-        """
-        input: [CreateControlScheduledJobInput!]
-    ): ControlScheduledJobBulkCreatePayload!
-    """
-    Create multiple new controlScheduledJobs via file upload
-    """
-    createBulkCSVControlScheduledJob(
-        """
-        csv file containing values of the controlScheduledJob
-        """
-        input: Upload!
-    ): ControlScheduledJobBulkCreatePayload!
-    """
-    Update an existing controlScheduledJob
-    """
-    updateControlScheduledJob(
-        """
-        ID of the controlScheduledJob
-        """
-        id: ID!
-        """
-        New values for the controlScheduledJob
-        """
-        input: UpdateControlScheduledJobInput!
-    ): ControlScheduledJobUpdatePayload!
-    """
-    Delete an existing controlScheduledJob
-    """
-    deleteControlScheduledJob(
-        """
-        ID of the controlScheduledJob
-        """
-        id: ID!
-    ): ControlScheduledJobDeletePayload!
-}
-
-"""
-Return response for createControlScheduledJob mutation
-"""
-type ControlScheduledJobCreatePayload {
-    """
-    Created controlScheduledJob
-    """
-    controlScheduledJob: ControlScheduledJob!
-}
-
-"""
-Return response for updateControlScheduledJob mutation
-"""
-type ControlScheduledJobUpdatePayload {
-    """
-    Updated controlScheduledJob
-    """
-    controlScheduledJob: ControlScheduledJob!
-}
-
-"""
-Return response for deleteControlScheduledJob mutation
-"""
-type ControlScheduledJobDeletePayload {
-    """
-    Deleted controlScheduledJob ID
-    """
-    deletedID: ID!
-}
-
-"""
-Return response for createBulkControlScheduledJob mutation
-"""
-type ControlScheduledJobBulkCreatePayload {
-    """
-    Created controlScheduledJobs
-    """
-    controlScheduledJobs: [ControlScheduledJob!]
 }`, BuiltIn: false},
 	{Name: "../schema/customdomain.graphql", Input: `extend type Query {
     """
@@ -39195,15 +39089,15 @@ type Control implements Node {
     last: Int
 
     """
-    Ordering options for ControlScheduledJobs returned from the connection.
+    Ordering options for ScheduledJobs returned from the connection.
     """
-    orderBy: [ControlScheduledJobOrder!]
+    orderBy: [ScheduledJobOrder!]
 
     """
-    Filtering options for ControlScheduledJobs returned from the connection.
+    Filtering options for ScheduledJobs returned from the connection.
     """
-    where: ControlScheduledJobWhereInput
-  ): ControlScheduledJobConnection!
+    where: ScheduledJobWhereInput
+  ): ScheduledJobConnection!
 }
 """
 A connection to a list of items.
@@ -41846,570 +41740,6 @@ enum ControlOrderField {
   ref_code
   CONTROL_OWNER_name
 }
-type ControlScheduledJob implements Node {
-  id: ID!
-  createdAt: Time
-  updatedAt: Time
-  createdBy: String
-  updatedBy: String
-  """
-  the organization id that owns the object
-  """
-  ownerID: ID
-  """
-  the scheduled_job id to take the script to run from
-  """
-  jobID: ID!
-  """
-  the configuration to run this job
-  """
-  configuration: JobConfiguration
-  """
-  cron syntax. If not provided, it would inherit the cron of the parent job
-  """
-  cron: String
-  """
-  the runner that this job will run on. If not set, it will scheduled on a general runner instead
-  """
-  jobRunnerID: ID
-  owner: Organization
-  job: ScheduledJob!
-  controls(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Controls returned from the connection.
-    """
-    orderBy: [ControlOrder!]
-
-    """
-    Filtering options for Controls returned from the connection.
-    """
-    where: ControlWhereInput
-  ): ControlConnection!
-  subcontrols(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Subcontrols returned from the connection.
-    """
-    orderBy: [SubcontrolOrder!]
-
-    """
-    Filtering options for Subcontrols returned from the connection.
-    """
-    where: SubcontrolWhereInput
-  ): SubcontrolConnection!
-  jobRunner: JobRunner
-}
-"""
-A connection to a list of items.
-"""
-type ControlScheduledJobConnection {
-  """
-  A list of edges.
-  """
-  edges: [ControlScheduledJobEdge]
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-  """
-  Identifies the total count of items in the connection.
-  """
-  totalCount: Int!
-}
-"""
-An edge in a connection.
-"""
-type ControlScheduledJobEdge {
-  """
-  The item at the end of the edge.
-  """
-  node: ControlScheduledJob
-  """
-  A cursor for use in pagination.
-  """
-  cursor: Cursor!
-}
-type ControlScheduledJobHistory implements Node {
-  id: ID!
-  historyTime: Time!
-  ref: String
-  operation: ControlScheduledJobHistoryOpType!
-  createdAt: Time
-  updatedAt: Time
-  createdBy: String
-  updatedBy: String
-  """
-  the organization id that owns the object
-  """
-  ownerID: String
-  """
-  the scheduled_job id to take the script to run from
-  """
-  jobID: String!
-  """
-  the configuration to run this job
-  """
-  configuration: JobConfiguration
-  """
-  cron syntax. If not provided, it would inherit the cron of the parent job
-  """
-  cron: String
-  """
-  the runner that this job will run on. If not set, it will scheduled on a general runner instead
-  """
-  jobRunnerID: String
-}
-"""
-A connection to a list of items.
-"""
-type ControlScheduledJobHistoryConnection {
-  """
-  A list of edges.
-  """
-  edges: [ControlScheduledJobHistoryEdge]
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-  """
-  Identifies the total count of items in the connection.
-  """
-  totalCount: Int!
-}
-"""
-An edge in a connection.
-"""
-type ControlScheduledJobHistoryEdge {
-  """
-  The item at the end of the edge.
-  """
-  node: ControlScheduledJobHistory
-  """
-  A cursor for use in pagination.
-  """
-  cursor: Cursor!
-}
-"""
-ControlScheduledJobHistoryOpType is enum for the field operation
-"""
-enum ControlScheduledJobHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
-  INSERT
-  UPDATE
-  DELETE
-}
-"""
-Ordering options for ControlScheduledJobHistory connections
-"""
-input ControlScheduledJobHistoryOrder {
-  """
-  The ordering direction.
-  """
-  direction: OrderDirection! = ASC
-  """
-  The field by which to order ControlScheduledJobHistories.
-  """
-  field: ControlScheduledJobHistoryOrderField!
-}
-"""
-Properties by which ControlScheduledJobHistory connections can be ordered.
-"""
-enum ControlScheduledJobHistoryOrderField {
-  history_time
-  created_at
-  updated_at
-}
-"""
-ControlScheduledJobHistoryWhereInput is used for filtering ControlScheduledJobHistory objects.
-Input was generated by ent.
-"""
-input ControlScheduledJobHistoryWhereInput {
-  not: ControlScheduledJobHistoryWhereInput
-  and: [ControlScheduledJobHistoryWhereInput!]
-  or: [ControlScheduledJobHistoryWhereInput!]
-  """
-  id field predicates
-  """
-  id: ID
-  idNEQ: ID
-  idIn: [ID!]
-  idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
-  idEqualFold: ID
-  idContainsFold: ID
-  """
-  history_time field predicates
-  """
-  historyTime: Time
-  historyTimeNEQ: Time
-  historyTimeIn: [Time!]
-  historyTimeNotIn: [Time!]
-  historyTimeGT: Time
-  historyTimeGTE: Time
-  historyTimeLT: Time
-  historyTimeLTE: Time
-  """
-  ref field predicates
-  """
-  ref: String
-  refNEQ: String
-  refIn: [String!]
-  refNotIn: [String!]
-  refGT: String
-  refGTE: String
-  refLT: String
-  refLTE: String
-  refContains: String
-  refHasPrefix: String
-  refHasSuffix: String
-  refIsNil: Boolean
-  refNotNil: Boolean
-  refEqualFold: String
-  refContainsFold: String
-  """
-  operation field predicates
-  """
-  operation: ControlScheduledJobHistoryOpType
-  operationNEQ: ControlScheduledJobHistoryOpType
-  operationIn: [ControlScheduledJobHistoryOpType!]
-  operationNotIn: [ControlScheduledJobHistoryOpType!]
-  """
-  created_at field predicates
-  """
-  createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
-  createdAtGT: Time
-  createdAtGTE: Time
-  createdAtLT: Time
-  createdAtLTE: Time
-  createdAtIsNil: Boolean
-  createdAtNotNil: Boolean
-  """
-  updated_at field predicates
-  """
-  updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
-  updatedAtGT: Time
-  updatedAtGTE: Time
-  updatedAtLT: Time
-  updatedAtLTE: Time
-  updatedAtIsNil: Boolean
-  updatedAtNotNil: Boolean
-  """
-  created_by field predicates
-  """
-  createdBy: String
-  createdByNEQ: String
-  createdByIn: [String!]
-  createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
-  createdByContains: String
-  createdByHasPrefix: String
-  createdByHasSuffix: String
-  createdByIsNil: Boolean
-  createdByNotNil: Boolean
-  createdByEqualFold: String
-  createdByContainsFold: String
-  """
-  updated_by field predicates
-  """
-  updatedBy: String
-  updatedByNEQ: String
-  updatedByIn: [String!]
-  updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
-  updatedByContains: String
-  updatedByHasPrefix: String
-  updatedByHasSuffix: String
-  updatedByIsNil: Boolean
-  updatedByNotNil: Boolean
-  updatedByEqualFold: String
-  updatedByContainsFold: String
-  """
-  owner_id field predicates
-  """
-  ownerID: String
-  ownerIDNEQ: String
-  ownerIDIn: [String!]
-  ownerIDNotIn: [String!]
-  ownerIDGT: String
-  ownerIDGTE: String
-  ownerIDLT: String
-  ownerIDLTE: String
-  ownerIDContains: String
-  ownerIDHasPrefix: String
-  ownerIDHasSuffix: String
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: String
-  ownerIDContainsFold: String
-  """
-  job_id field predicates
-  """
-  jobID: String
-  jobIDNEQ: String
-  jobIDIn: [String!]
-  jobIDNotIn: [String!]
-  jobIDGT: String
-  jobIDGTE: String
-  jobIDLT: String
-  jobIDLTE: String
-  jobIDContains: String
-  jobIDHasPrefix: String
-  jobIDHasSuffix: String
-  jobIDEqualFold: String
-  jobIDContainsFold: String
-  """
-  job_runner_id field predicates
-  """
-  jobRunnerID: String
-  jobRunnerIDNEQ: String
-  jobRunnerIDIn: [String!]
-  jobRunnerIDNotIn: [String!]
-  jobRunnerIDGT: String
-  jobRunnerIDGTE: String
-  jobRunnerIDLT: String
-  jobRunnerIDLTE: String
-  jobRunnerIDContains: String
-  jobRunnerIDHasPrefix: String
-  jobRunnerIDHasSuffix: String
-  jobRunnerIDIsNil: Boolean
-  jobRunnerIDNotNil: Boolean
-  jobRunnerIDEqualFold: String
-  jobRunnerIDContainsFold: String
-}
-"""
-Ordering options for ControlScheduledJob connections
-"""
-input ControlScheduledJobOrder {
-  """
-  The ordering direction.
-  """
-  direction: OrderDirection! = ASC
-  """
-  The field by which to order ControlScheduledJobs.
-  """
-  field: ControlScheduledJobOrderField!
-}
-"""
-Properties by which ControlScheduledJob connections can be ordered.
-"""
-enum ControlScheduledJobOrderField {
-  created_at
-  updated_at
-}
-"""
-ControlScheduledJobWhereInput is used for filtering ControlScheduledJob objects.
-Input was generated by ent.
-"""
-input ControlScheduledJobWhereInput {
-  not: ControlScheduledJobWhereInput
-  and: [ControlScheduledJobWhereInput!]
-  or: [ControlScheduledJobWhereInput!]
-  """
-  id field predicates
-  """
-  id: ID
-  idNEQ: ID
-  idIn: [ID!]
-  idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
-  idEqualFold: ID
-  idContainsFold: ID
-  """
-  created_at field predicates
-  """
-  createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
-  createdAtGT: Time
-  createdAtGTE: Time
-  createdAtLT: Time
-  createdAtLTE: Time
-  createdAtIsNil: Boolean
-  createdAtNotNil: Boolean
-  """
-  updated_at field predicates
-  """
-  updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
-  updatedAtGT: Time
-  updatedAtGTE: Time
-  updatedAtLT: Time
-  updatedAtLTE: Time
-  updatedAtIsNil: Boolean
-  updatedAtNotNil: Boolean
-  """
-  created_by field predicates
-  """
-  createdBy: String
-  createdByNEQ: String
-  createdByIn: [String!]
-  createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
-  createdByContains: String
-  createdByHasPrefix: String
-  createdByHasSuffix: String
-  createdByIsNil: Boolean
-  createdByNotNil: Boolean
-  createdByEqualFold: String
-  createdByContainsFold: String
-  """
-  updated_by field predicates
-  """
-  updatedBy: String
-  updatedByNEQ: String
-  updatedByIn: [String!]
-  updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
-  updatedByContains: String
-  updatedByHasPrefix: String
-  updatedByHasSuffix: String
-  updatedByIsNil: Boolean
-  updatedByNotNil: Boolean
-  updatedByEqualFold: String
-  updatedByContainsFold: String
-  """
-  owner_id field predicates
-  """
-  ownerID: ID
-  ownerIDNEQ: ID
-  ownerIDIn: [ID!]
-  ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
-  ownerIDContains: ID
-  ownerIDHasPrefix: ID
-  ownerIDHasSuffix: ID
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: ID
-  ownerIDContainsFold: ID
-  """
-  job_id field predicates
-  """
-  jobID: ID
-  jobIDNEQ: ID
-  jobIDIn: [ID!]
-  jobIDNotIn: [ID!]
-  jobIDGT: ID
-  jobIDGTE: ID
-  jobIDLT: ID
-  jobIDLTE: ID
-  jobIDContains: ID
-  jobIDHasPrefix: ID
-  jobIDHasSuffix: ID
-  jobIDEqualFold: ID
-  jobIDContainsFold: ID
-  """
-  job_runner_id field predicates
-  """
-  jobRunnerID: ID
-  jobRunnerIDNEQ: ID
-  jobRunnerIDIn: [ID!]
-  jobRunnerIDNotIn: [ID!]
-  jobRunnerIDGT: ID
-  jobRunnerIDGTE: ID
-  jobRunnerIDLT: ID
-  jobRunnerIDLTE: ID
-  jobRunnerIDContains: ID
-  jobRunnerIDHasPrefix: ID
-  jobRunnerIDHasSuffix: ID
-  jobRunnerIDIsNil: Boolean
-  jobRunnerIDNotNil: Boolean
-  jobRunnerIDEqualFold: ID
-  jobRunnerIDContainsFold: ID
-  """
-  owner edge predicates
-  """
-  hasOwner: Boolean
-  hasOwnerWith: [OrganizationWhereInput!]
-  """
-  job edge predicates
-  """
-  hasJob: Boolean
-  hasJobWith: [ScheduledJobWhereInput!]
-  """
-  controls edge predicates
-  """
-  hasControls: Boolean
-  hasControlsWith: [ControlWhereInput!]
-  """
-  subcontrols edge predicates
-  """
-  hasSubcontrols: Boolean
-  hasSubcontrolsWith: [SubcontrolWhereInput!]
-  """
-  job_runner edge predicates
-  """
-  hasJobRunner: Boolean
-  hasJobRunnerWith: [JobRunnerWhereInput!]
-}
 """
 ControlWhereInput is used for filtering Control objects.
 Input was generated by ent.
@@ -42849,7 +42179,7 @@ input ControlWhereInput {
   scheduled_jobs edge predicates
   """
   hasScheduledJobs: Boolean
-  hasScheduledJobsWith: [ControlScheduledJobWhereInput!]
+  hasScheduledJobsWith: [ScheduledJobWhereInput!]
 }
 """
 CreateAPITokenInput is used for create APIToken object.
@@ -43256,25 +42586,6 @@ input CreateControlObjectiveInput {
   riskIDs: [ID!]
   narrativeIDs: [ID!]
   taskIDs: [ID!]
-}
-"""
-CreateControlScheduledJobInput is used for create ControlScheduledJob object.
-Input was generated by ent.
-"""
-input CreateControlScheduledJobInput {
-  """
-  the configuration to run this job
-  """
-  configuration: JobConfiguration
-  """
-  cron syntax. If not provided, it would inherit the cron of the parent job
-  """
-  cron: String
-  ownerID: ID
-  jobID: ID!
-  controlIDs: [ID!]
-  subcontrolIDs: [ID!]
-  jobRunnerID: ID
 }
 """
 CreateCustomDomainInput is used for create CustomDomain object.
@@ -43930,6 +43241,41 @@ input CreateJobRunnerTokenInput {
   jobRunnerIDs: [ID!]
 }
 """
+CreateJobTemplateInput is used for create JobTemplate object.
+Input was generated by ent.
+"""
+input CreateJobTemplateInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the title of the job
+  """
+  title: String!
+  """
+  the short description of the job and what it does
+  """
+  description: String
+  """
+  the platform to use to execute this job, e.g. golang, typescript, python, etc.
+  """
+  platform: JobTemplateJobPlatformType!
+  """
+  the url from where to download the script from
+  """
+  downloadURL: String!
+  """
+  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
+  """
+  configuration: JobConfiguration
+  """
+  cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
+  """
+  cron: String
+  ownerID: ID
+}
+"""
 CreateMappableDomainInput is used for create MappableDomain object.
 Input was generated by ent.
 """
@@ -44150,7 +43496,7 @@ input CreateOrganizationInput {
   jobRunnerTokenIDs: [ID!]
   jobRunnerRegistrationTokenIDs: [ID!]
   dnsVerificationIDs: [ID!]
-  jobIDs: [ID!]
+  jobTemplateIDs: [ID!]
   scheduledJobIDs: [ID!]
   jobResultIDs: [ID!]
   scheduledJobRunIDs: [ID!]
@@ -44543,42 +43889,22 @@ Input was generated by ent.
 """
 input CreateScheduledJobInput {
   """
-  tags associated with the object
+  whether the scheduled job is active
   """
-  tags: [String!]
+  active: Boolean
   """
-  the title of the job
-  """
-  title: String!
-  """
-  the description of the job
-  """
-  description: String
-  """
-  the platform to use to execute this job
-  """
-  platform: ScheduledJobJobPlatformType!
-  """
-  the script to run
-  """
-  script: String
-  """
-  the url from where to download the script from
-  """
-  downloadURL: String!
-  """
-  the configuration to run this job
+  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
   """
   configuration: JobConfiguration
   """
-  the schedule to run this job
-  """
-  cadence: JobCadence
-  """
-  cron syntax
+  cron 6-field syntax, defaults to the job template's cron if not provided
   """
   cron: String
   ownerID: ID
+  jobTemplateID: ID!
+  controlIDs: [ID!]
+  subcontrolIDs: [ID!]
+  jobRunnerID: ID
 }
 """
 CreateScheduledJobRunInput is used for create ScheduledJobRun object.
@@ -56851,7 +56177,7 @@ type JobResult implements Node {
   startedAt: Time!
   fileID: ID!
   owner: Organization
-  scheduledJob: ControlScheduledJob!
+  scheduledJob: ScheduledJob!
   file: File!
 }
 """
@@ -57099,7 +56425,7 @@ input JobResultWhereInput {
   scheduled_job edge predicates
   """
   hasScheduledJob: Boolean
-  hasScheduledJobWith: [ControlScheduledJobWhereInput!]
+  hasScheduledJobWith: [ScheduledJobWhereInput!]
   """
   file edge predicates
   """
@@ -57940,6 +57266,640 @@ input JobRunnerWhereInput {
   """
   hasJobRunnerTokens: Boolean
   hasJobRunnerTokensWith: [JobRunnerTokenWhereInput!]
+}
+type JobTemplate implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  the title of the job
+  """
+  title: String!
+  """
+  the short description of the job and what it does
+  """
+  description: String
+  """
+  the platform to use to execute this job, e.g. golang, typescript, python, etc.
+  """
+  platform: JobTemplateJobPlatformType!
+  """
+  the url from where to download the script from
+  """
+  downloadURL: String!
+  """
+  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
+  """
+  configuration: JobConfiguration
+  """
+  cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
+  """
+  cron: String
+  owner: Organization
+  scheduledJobs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ScheduledJobs returned from the connection.
+    """
+    orderBy: [ScheduledJobOrder!]
+
+    """
+    Filtering options for ScheduledJobs returned from the connection.
+    """
+    where: ScheduledJobWhereInput
+  ): ScheduledJobConnection!
+}
+"""
+A connection to a list of items.
+"""
+type JobTemplateConnection {
+  """
+  A list of edges.
+  """
+  edges: [JobTemplateEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type JobTemplateEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: JobTemplate
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type JobTemplateHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: JobTemplateHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  the title of the job
+  """
+  title: String!
+  """
+  the short description of the job and what it does
+  """
+  description: String
+  """
+  the platform to use to execute this job, e.g. golang, typescript, python, etc.
+  """
+  platform: JobTemplateHistoryJobPlatformType!
+  """
+  the url from where to download the script from
+  """
+  downloadURL: String!
+  """
+  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
+  """
+  configuration: JobConfiguration
+  """
+  cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
+  """
+  cron: String
+}
+"""
+A connection to a list of items.
+"""
+type JobTemplateHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [JobTemplateHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type JobTemplateHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: JobTemplateHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+JobTemplateHistoryJobPlatformType is enum for the field platform
+"""
+enum JobTemplateHistoryJobPlatformType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobPlatformType") {
+  GO
+  TS
+}
+"""
+JobTemplateHistoryOpType is enum for the field operation
+"""
+enum JobTemplateHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for JobTemplateHistory connections
+"""
+input JobTemplateHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order JobTemplateHistories.
+  """
+  field: JobTemplateHistoryOrderField!
+}
+"""
+Properties by which JobTemplateHistory connections can be ordered.
+"""
+enum JobTemplateHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  title
+  PLATFORM
+}
+"""
+JobTemplateHistoryWhereInput is used for filtering JobTemplateHistory objects.
+Input was generated by ent.
+"""
+input JobTemplateHistoryWhereInput {
+  not: JobTemplateHistoryWhereInput
+  and: [JobTemplateHistoryWhereInput!]
+  or: [JobTemplateHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: JobTemplateHistoryOpType
+  operationNEQ: JobTemplateHistoryOpType
+  operationIn: [JobTemplateHistoryOpType!]
+  operationNotIn: [JobTemplateHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  title field predicates
+  """
+  title: String
+  titleNEQ: String
+  titleIn: [String!]
+  titleNotIn: [String!]
+  titleGT: String
+  titleGTE: String
+  titleLT: String
+  titleLTE: String
+  titleContains: String
+  titleHasPrefix: String
+  titleHasSuffix: String
+  titleEqualFold: String
+  titleContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  platform field predicates
+  """
+  platform: JobTemplateHistoryJobPlatformType
+  platformNEQ: JobTemplateHistoryJobPlatformType
+  platformIn: [JobTemplateHistoryJobPlatformType!]
+  platformNotIn: [JobTemplateHistoryJobPlatformType!]
+}
+"""
+JobTemplateJobPlatformType is enum for the field platform
+"""
+enum JobTemplateJobPlatformType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobPlatformType") {
+  GO
+  TS
+}
+"""
+Ordering options for JobTemplate connections
+"""
+input JobTemplateOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order JobTemplates.
+  """
+  field: JobTemplateOrderField!
+}
+"""
+Properties by which JobTemplate connections can be ordered.
+"""
+enum JobTemplateOrderField {
+  created_at
+  updated_at
+  title
+  PLATFORM
+}
+"""
+JobTemplateWhereInput is used for filtering JobTemplate objects.
+Input was generated by ent.
+"""
+input JobTemplateWhereInput {
+  not: JobTemplateWhereInput
+  and: [JobTemplateWhereInput!]
+  or: [JobTemplateWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  title field predicates
+  """
+  title: String
+  titleNEQ: String
+  titleIn: [String!]
+  titleNotIn: [String!]
+  titleGT: String
+  titleGTE: String
+  titleLT: String
+  titleLTE: String
+  titleContains: String
+  titleHasPrefix: String
+  titleHasSuffix: String
+  titleEqualFold: String
+  titleContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  platform field predicates
+  """
+  platform: JobTemplateJobPlatformType
+  platformNEQ: JobTemplateJobPlatformType
+  platformIn: [JobTemplateJobPlatformType!]
+  platformNotIn: [JobTemplateJobPlatformType!]
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  scheduled_jobs edge predicates
+  """
+  hasScheduledJobs: Boolean
+  hasScheduledJobsWith: [ScheduledJobWhereInput!]
 }
 """
 The builtin Map type
@@ -63453,7 +63413,38 @@ type Organization implements Node {
     """
     where: DNSVerificationWhereInput
   ): DNSVerificationConnection!
-  jobs(
+  jobTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for JobTemplates returned from the connection.
+    """
+    orderBy: [JobTemplateOrder!]
+
+    """
+    Filtering options for JobTemplates returned from the connection.
+    """
+    where: JobTemplateWhereInput
+  ): JobTemplateConnection!
+  scheduledJobs(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -63484,37 +63475,6 @@ type Organization implements Node {
     """
     where: ScheduledJobWhereInput
   ): ScheduledJobConnection!
-  scheduledJobs(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for ControlScheduledJobs returned from the connection.
-    """
-    orderBy: [ControlScheduledJobOrder!]
-
-    """
-    Filtering options for ControlScheduledJobs returned from the connection.
-    """
-    where: ControlScheduledJobWhereInput
-  ): ControlScheduledJobConnection!
   jobResults(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -65591,15 +65551,15 @@ input OrganizationWhereInput {
   hasDNSVerifications: Boolean
   hasDNSVerificationsWith: [DNSVerificationWhereInput!]
   """
-  jobs edge predicates
+  job_templates edge predicates
   """
-  hasJobs: Boolean
-  hasJobsWith: [ScheduledJobWhereInput!]
+  hasJobTemplates: Boolean
+  hasJobTemplatesWith: [JobTemplateWhereInput!]
   """
   scheduled_jobs edge predicates
   """
   hasScheduledJobs: Boolean
-  hasScheduledJobsWith: [ControlScheduledJobWhereInput!]
+  hasScheduledJobsWith: [ScheduledJobWhereInput!]
   """
   job_results edge predicates
   """
@@ -69597,68 +69557,6 @@ type Query {
     """
     where: ControlObjectiveHistoryWhereInput
   ): ControlObjectiveHistoryConnection!
-  controlScheduledJobs(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for ControlScheduledJobs returned from the connection.
-    """
-    orderBy: [ControlScheduledJobOrder!]
-
-    """
-    Filtering options for ControlScheduledJobs returned from the connection.
-    """
-    where: ControlScheduledJobWhereInput
-  ): ControlScheduledJobConnection!
-  controlScheduledJobHistories(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for ControlScheduledJobHistories returned from the connection.
-    """
-    orderBy: ControlScheduledJobHistoryOrder
-
-    """
-    Filtering options for ControlScheduledJobHistories returned from the connection.
-    """
-    where: ControlScheduledJobHistoryWhereInput
-  ): ControlScheduledJobHistoryConnection!
   customDomains(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -70682,6 +70580,68 @@ type Query {
     """
     where: JobRunnerTokenWhereInput
   ): JobRunnerTokenConnection!
+  jobTemplates(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for JobTemplates returned from the connection.
+    """
+    orderBy: [JobTemplateOrder!]
+
+    """
+    Filtering options for JobTemplates returned from the connection.
+    """
+    where: JobTemplateWhereInput
+  ): JobTemplateConnection!
+  jobTemplateHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for JobTemplateHistories returned from the connection.
+    """
+    orderBy: JobTemplateHistoryOrder
+
+    """
+    Filtering options for JobTemplateHistories returned from the connection.
+    """
+    where: JobTemplateHistoryWhereInput
+  ): JobTemplateHistoryConnection!
   mappableDomains(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -74543,54 +74503,94 @@ type ScheduledJob implements Node {
   """
   displayID: String!
   """
-  tags associated with the object
-  """
-  tags: [String!]
-  """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: ID
   """
-  indicates if the record is owned by the the openlane system and not by an organization
+  the scheduled_job id to take the script to run from
   """
-  systemOwned: Boolean
+  jobID: ID!
   """
-  the title of the job
+  whether the scheduled job is active
   """
-  title: String!
+  active: Boolean!
   """
-  the description of the job
-  """
-  description: String
-  """
-  the platform to use to execute this job
-  """
-  platform: ScheduledJobJobPlatformType!
-  """
-  the script to run
-  """
-  script: String
-  """
-  Windmill path
-  """
-  windmillPath: String!
-  """
-  the url from where to download the script from
-  """
-  downloadURL: String!
-  """
-  the configuration to run this job
+  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
   """
   configuration: JobConfiguration
   """
-  the schedule to run this job
-  """
-  cadence: JobCadence
-  """
-  cron syntax
+  cron 6-field syntax, defaults to the job template's cron if not provided
   """
   cron: String
+  """
+  the runner that this job will run on. If not set, it will scheduled on a general runner instead
+  """
+  jobRunnerID: ID
   owner: Organization
+  jobTemplate: JobTemplate!
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  subcontrols(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Subcontrols returned from the connection.
+    """
+    orderBy: [SubcontrolOrder!]
+
+    """
+    Filtering options for Subcontrols returned from the connection.
+    """
+    where: SubcontrolWhereInput
+  ): SubcontrolConnection!
+  jobRunner: JobRunner
 }
 """
 A connection to a list of items.
@@ -74636,53 +74636,29 @@ type ScheduledJobHistory implements Node {
   """
   displayID: String!
   """
-  tags associated with the object
-  """
-  tags: [String!]
-  """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: String
   """
-  indicates if the record is owned by the the openlane system and not by an organization
+  the scheduled_job id to take the script to run from
   """
-  systemOwned: Boolean
+  jobID: String!
   """
-  the title of the job
+  whether the scheduled job is active
   """
-  title: String!
+  active: Boolean!
   """
-  the description of the job
-  """
-  description: String
-  """
-  the platform to use to execute this job
-  """
-  platform: ScheduledJobHistoryJobPlatformType!
-  """
-  the script to run
-  """
-  script: String
-  """
-  Windmill path
-  """
-  windmillPath: String!
-  """
-  the url from where to download the script from
-  """
-  downloadURL: String!
-  """
-  the configuration to run this job
+  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
   """
   configuration: JobConfiguration
   """
-  the schedule to run this job
-  """
-  cadence: JobCadence
-  """
-  cron syntax
+  cron 6-field syntax, defaults to the job template's cron if not provided
   """
   cron: String
+  """
+  the runner that this job will run on. If not set, it will scheduled on a general runner instead
+  """
+  jobRunnerID: String
 }
 """
 A connection to a list of items.
@@ -74715,13 +74691,6 @@ type ScheduledJobHistoryEdge {
   cursor: Cursor!
 }
 """
-ScheduledJobHistoryJobPlatformType is enum for the field platform
-"""
-enum ScheduledJobHistoryJobPlatformType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobPlatformType") {
-  GO
-  TS
-}
-"""
 ScheduledJobHistoryOpType is enum for the field operation
 """
 enum ScheduledJobHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
@@ -74749,8 +74718,6 @@ enum ScheduledJobHistoryOrderField {
   history_time
   created_at
   updated_at
-  title
-  platform
 }
 """
 ScheduledJobHistoryWhereInput is used for filtering ScheduledJobHistory objects.
@@ -74906,60 +74873,44 @@ input ScheduledJobHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
-  system_owned field predicates
+  job_id field predicates
   """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
+  jobID: String
+  jobIDNEQ: String
+  jobIDIn: [String!]
+  jobIDNotIn: [String!]
+  jobIDGT: String
+  jobIDGTE: String
+  jobIDLT: String
+  jobIDLTE: String
+  jobIDContains: String
+  jobIDHasPrefix: String
+  jobIDHasSuffix: String
+  jobIDEqualFold: String
+  jobIDContainsFold: String
   """
-  title field predicates
+  active field predicates
   """
-  title: String
-  titleNEQ: String
-  titleIn: [String!]
-  titleNotIn: [String!]
-  titleGT: String
-  titleGTE: String
-  titleLT: String
-  titleLTE: String
-  titleContains: String
-  titleHasPrefix: String
-  titleHasSuffix: String
-  titleEqualFold: String
-  titleContainsFold: String
+  active: Boolean
+  activeNEQ: Boolean
   """
-  description field predicates
+  job_runner_id field predicates
   """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """
-  platform field predicates
-  """
-  platform: ScheduledJobHistoryJobPlatformType
-  platformNEQ: ScheduledJobHistoryJobPlatformType
-  platformIn: [ScheduledJobHistoryJobPlatformType!]
-  platformNotIn: [ScheduledJobHistoryJobPlatformType!]
-}
-"""
-ScheduledJobJobPlatformType is enum for the field platform
-"""
-enum ScheduledJobJobPlatformType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobPlatformType") {
-  GO
-  TS
+  jobRunnerID: String
+  jobRunnerIDNEQ: String
+  jobRunnerIDIn: [String!]
+  jobRunnerIDNotIn: [String!]
+  jobRunnerIDGT: String
+  jobRunnerIDGTE: String
+  jobRunnerIDLT: String
+  jobRunnerIDLTE: String
+  jobRunnerIDContains: String
+  jobRunnerIDHasPrefix: String
+  jobRunnerIDHasSuffix: String
+  jobRunnerIDIsNil: Boolean
+  jobRunnerIDNotNil: Boolean
+  jobRunnerIDEqualFold: String
+  jobRunnerIDContainsFold: String
 }
 """
 Ordering options for ScheduledJob connections
@@ -74980,8 +74931,6 @@ Properties by which ScheduledJob connections can be ordered.
 enum ScheduledJobOrderField {
   created_at
   updated_at
-  title
-  platform
 }
 type ScheduledJobRun implements Node {
   id: ID!
@@ -75016,7 +74965,7 @@ type ScheduledJobRun implements Node {
   """
   script: String!
   owner: Organization
-  scheduledJob: ControlScheduledJob!
+  scheduledJob: ScheduledJob!
   jobRunner: JobRunner!
 }
 """
@@ -75252,7 +75201,7 @@ input ScheduledJobRunWhereInput {
   scheduled_job edge predicates
   """
   hasScheduledJob: Boolean
-  hasScheduledJobWith: [ControlScheduledJobWhereInput!]
+  hasScheduledJobWith: [ScheduledJobWhereInput!]
   """
   job_runner edge predicates
   """
@@ -75377,58 +75326,69 @@ input ScheduledJobWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
-  system_owned field predicates
+  job_id field predicates
   """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
+  jobID: ID
+  jobIDNEQ: ID
+  jobIDIn: [ID!]
+  jobIDNotIn: [ID!]
+  jobIDGT: ID
+  jobIDGTE: ID
+  jobIDLT: ID
+  jobIDLTE: ID
+  jobIDContains: ID
+  jobIDHasPrefix: ID
+  jobIDHasSuffix: ID
+  jobIDEqualFold: ID
+  jobIDContainsFold: ID
   """
-  title field predicates
+  active field predicates
   """
-  title: String
-  titleNEQ: String
-  titleIn: [String!]
-  titleNotIn: [String!]
-  titleGT: String
-  titleGTE: String
-  titleLT: String
-  titleLTE: String
-  titleContains: String
-  titleHasPrefix: String
-  titleHasSuffix: String
-  titleEqualFold: String
-  titleContainsFold: String
+  active: Boolean
+  activeNEQ: Boolean
   """
-  description field predicates
+  job_runner_id field predicates
   """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """
-  platform field predicates
-  """
-  platform: ScheduledJobJobPlatformType
-  platformNEQ: ScheduledJobJobPlatformType
-  platformIn: [ScheduledJobJobPlatformType!]
-  platformNotIn: [ScheduledJobJobPlatformType!]
+  jobRunnerID: ID
+  jobRunnerIDNEQ: ID
+  jobRunnerIDIn: [ID!]
+  jobRunnerIDNotIn: [ID!]
+  jobRunnerIDGT: ID
+  jobRunnerIDGTE: ID
+  jobRunnerIDLT: ID
+  jobRunnerIDLTE: ID
+  jobRunnerIDContains: ID
+  jobRunnerIDHasPrefix: ID
+  jobRunnerIDHasSuffix: ID
+  jobRunnerIDIsNil: Boolean
+  jobRunnerIDNotNil: Boolean
+  jobRunnerIDEqualFold: ID
+  jobRunnerIDContainsFold: ID
   """
   owner edge predicates
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  job_template edge predicates
+  """
+  hasJobTemplate: Boolean
+  hasJobTemplateWith: [JobTemplateWhereInput!]
+  """
+  controls edge predicates
+  """
+  hasControls: Boolean
+  hasControlsWith: [ControlWhereInput!]
+  """
+  subcontrols edge predicates
+  """
+  hasSubcontrols: Boolean
+  hasSubcontrolsWith: [SubcontrolWhereInput!]
+  """
+  job_runner edge predicates
+  """
+  hasJobRunner: Boolean
+  hasJobRunnerWith: [JobRunnerWhereInput!]
 }
 type Standard implements Node {
   id: ID!
@@ -76833,15 +76793,15 @@ type Subcontrol implements Node {
     last: Int
 
     """
-    Ordering options for ControlScheduledJobs returned from the connection.
+    Ordering options for ScheduledJobs returned from the connection.
     """
-    orderBy: [ControlScheduledJobOrder!]
+    orderBy: [ScheduledJobOrder!]
 
     """
-    Filtering options for ControlScheduledJobs returned from the connection.
+    Filtering options for ScheduledJobs returned from the connection.
     """
-    where: ControlScheduledJobWhereInput
-  ): ControlScheduledJobConnection!
+    where: ScheduledJobWhereInput
+  ): ScheduledJobConnection!
 }
 """
 A connection to a list of items.
@@ -77913,7 +77873,7 @@ input SubcontrolWhereInput {
   scheduled_jobs edge predicates
   """
   hasScheduledJobs: Boolean
-  hasScheduledJobsWith: [ControlScheduledJobWhereInput!]
+  hasScheduledJobsWith: [ScheduledJobWhereInput!]
 }
 type Subprocessor implements Node {
   id: ID!
@@ -83664,34 +83624,6 @@ input UpdateControlObjectiveInput {
   clearTasks: Boolean
 }
 """
-UpdateControlScheduledJobInput is used for update ControlScheduledJob object.
-Input was generated by ent.
-"""
-input UpdateControlScheduledJobInput {
-  """
-  the configuration to run this job
-  """
-  configuration: JobConfiguration
-  appendConfiguration: JobConfiguration
-  clearConfiguration: Boolean
-  """
-  cron syntax. If not provided, it would inherit the cron of the parent job
-  """
-  cron: String
-  clearCron: Boolean
-  ownerID: ID
-  clearOwner: Boolean
-  jobID: ID
-  addControlIDs: [ID!]
-  removeControlIDs: [ID!]
-  clearControls: Boolean
-  addSubcontrolIDs: [ID!]
-  removeSubcontrolIDs: [ID!]
-  clearSubcontrols: Boolean
-  jobRunnerID: ID
-  clearJobRunner: Boolean
-}
-"""
 UpdateCustomDomainInput is used for update CustomDomain object.
 Input was generated by ent.
 """
@@ -84594,6 +84526,47 @@ input UpdateJobRunnerTokenInput {
   clearJobRunners: Boolean
 }
 """
+UpdateJobTemplateInput is used for update JobTemplate object.
+Input was generated by ent.
+"""
+input UpdateJobTemplateInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  the title of the job
+  """
+  title: String
+  """
+  the short description of the job and what it does
+  """
+  description: String
+  clearDescription: Boolean
+  """
+  the url from where to download the script from
+  """
+  downloadURL: String
+  """
+  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
+  """
+  configuration: JobConfiguration
+  appendConfiguration: JobConfiguration
+  clearConfiguration: Boolean
+  """
+  cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
+  """
+  cron: String
+  clearCron: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  addScheduledJobIDs: [ID!]
+  removeScheduledJobIDs: [ID!]
+  clearScheduledJobs: Boolean
+}
+"""
 UpdateMappableDomainInput is used for update MappableDomain object.
 Input was generated by ent.
 """
@@ -84916,9 +84889,9 @@ input UpdateOrganizationInput {
   addDNSVerificationIDs: [ID!]
   removeDNSVerificationIDs: [ID!]
   clearDNSVerifications: Boolean
-  addJobIDs: [ID!]
-  removeJobIDs: [ID!]
-  clearJobs: Boolean
+  addJobTemplateIDs: [ID!]
+  removeJobTemplateIDs: [ID!]
+  clearJobTemplates: Boolean
   addScheduledJobIDs: [ID!]
   removeScheduledJobIDs: [ID!]
   clearScheduledJobs: Boolean
@@ -85489,47 +85462,29 @@ Input was generated by ent.
 """
 input UpdateScheduledJobInput {
   """
-  tags associated with the object
+  whether the scheduled job is active
   """
-  tags: [String!]
-  appendTags: [String!]
-  clearTags: Boolean
+  active: Boolean
   """
-  the title of the job
-  """
-  title: String
-  """
-  the description of the job
-  """
-  description: String
-  clearDescription: Boolean
-  """
-  the script to run
-  """
-  script: String
-  clearScript: Boolean
-  """
-  the url from where to download the script from
-  """
-  downloadURL: String
-  """
-  the configuration to run this job
+  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
   """
   configuration: JobConfiguration
   appendConfiguration: JobConfiguration
   clearConfiguration: Boolean
   """
-  the schedule to run this job
-  """
-  cadence: JobCadence
-  clearCadence: Boolean
-  """
-  cron syntax
+  cron 6-field syntax, defaults to the job template's cron if not provided
   """
   cron: String
   clearCron: Boolean
-  ownerID: ID
-  clearOwner: Boolean
+  jobTemplateID: ID
+  addControlIDs: [ID!]
+  removeControlIDs: [ID!]
+  clearControls: Boolean
+  addSubcontrolIDs: [ID!]
+  removeSubcontrolIDs: [ID!]
+  clearSubcontrols: Boolean
+  jobRunnerID: ID
+  clearJobRunner: Boolean
 }
 """
 UpdateScheduledJobRunInput is used for update ScheduledJobRun object.
@@ -90113,6 +90068,109 @@ type JobRunnerTokenDeletePayload {
     deletedID: ID!
 }
 `, BuiltIn: false},
+	{Name: "../schema/jobtemplate.graphql", Input: `extend type Query {
+    """
+    Look up jobTemplate by ID
+    """
+     jobTemplate(
+        """
+        ID of the jobTemplate
+        """
+        id: ID!
+    ):  JobTemplate!
+}
+
+extend type Mutation{
+    """
+    Create a new jobTemplate
+    """
+    createJobTemplate(
+        """
+        values of the jobTemplate
+        """
+        input: CreateJobTemplateInput!
+    ): JobTemplateCreatePayload!
+    """
+    Create multiple new jobTemplates
+    """
+    createBulkJobTemplate(
+        """
+        values of the jobTemplate
+        """
+        input: [CreateJobTemplateInput!]
+    ): JobTemplateBulkCreatePayload!
+    """
+    Create multiple new jobTemplates via file upload
+    """
+    createBulkCSVJobTemplate(
+        """
+        csv file containing values of the jobTemplate
+        """
+        input: Upload!
+    ): JobTemplateBulkCreatePayload!
+    """
+    Update an existing jobTemplate
+    """
+    updateJobTemplate(
+        """
+        ID of the jobTemplate
+        """
+        id: ID!
+        """
+        New values for the jobTemplate
+        """
+        input: UpdateJobTemplateInput!
+    ): JobTemplateUpdatePayload!
+    """
+    Delete an existing jobTemplate
+    """
+    deleteJobTemplate(
+        """
+        ID of the jobTemplate
+        """
+        id: ID!
+    ): JobTemplateDeletePayload!
+}
+
+"""
+Return response for createJobTemplate mutation
+"""
+type JobTemplateCreatePayload {
+    """
+    Created jobTemplate
+    """
+    jobTemplate: JobTemplate!
+}
+
+"""
+Return response for updateJobTemplate mutation
+"""
+type JobTemplateUpdatePayload {
+    """
+    Updated jobTemplate
+    """
+    jobTemplate: JobTemplate!
+}
+
+"""
+Return response for deleteJobTemplate mutation
+"""
+type JobTemplateDeletePayload {
+    """
+    Deleted jobTemplate ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkJobTemplate mutation
+"""
+type JobTemplateBulkCreatePayload {
+    """
+    Created jobTemplates
+    """
+    jobTemplates: [JobTemplate!]
+}`, BuiltIn: false},
 	{Name: "../schema/mappabledomain.graphql", Input: `extend type Query {
     """
     Look up mappableDomain by ID
@@ -91700,8 +91758,7 @@ type ScheduledJobBulkCreatePayload {
     Created scheduledJobs
     """
     scheduledJobs: [ScheduledJob!]
-}
-`, BuiltIn: false},
+}`, BuiltIn: false},
 	{Name: "../schema/scheduledjobrun.graphql", Input: `extend type Query {
     """
     Look up scheduledJobRun by ID
@@ -92267,6 +92324,31 @@ type ScheduledJobBulkCreatePayload {
         last: Int
     ): JobRunnerTokenConnection
     """
+    Search across JobTemplate objects
+    """
+    jobTemplateSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): JobTemplateConnection
+    """
     Search across MappableDomain objects
     """
     mappableDomainSearch(
@@ -92541,31 +92623,6 @@ type ScheduledJobBulkCreatePayload {
         """
         last: Int
     ): ScanConnection
-    """
-    Search across ScheduledJob objects
-    """
-    scheduledJobSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): ScheduledJobConnection
     """
     Search across Standard objects
     """
@@ -92873,6 +92930,7 @@ type SearchResults{
   jobRunners: JobRunnerConnection
   jobRunnerRegistrationTokens: JobRunnerRegistrationTokenConnection
   jobRunnerTokens: JobRunnerTokenConnection
+  jobTemplates: JobTemplateConnection
   mappableDomains: MappableDomainConnection
   mappedControls: MappedControlConnection
   narratives: NarrativeConnection
@@ -92884,7 +92942,6 @@ type SearchResults{
   programs: ProgramConnection
   risks: RiskConnection
   scans: ScanConnection
-  scheduledJobs: ScheduledJobConnection
   standards: StandardConnection
   subcontrols: SubcontrolConnection
   subprocessors: SubprocessorConnection

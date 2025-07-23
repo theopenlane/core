@@ -11,22 +11,18 @@ query GetAllScheduledJobHistories {
     }
     edges {
       node {
-        cadence
         configuration
         createdAt
         createdBy
         cron
-        description
         displayID
         historyTime
         id
+        jobID
+        jobRunnerID
         operation
         ownerID
         ref
-        script
-        systemOwned
-        tags
-        title
         updatedAt
         updatedBy
       }
@@ -45,22 +41,18 @@ query GetScheduledJobHistories($first: Int, $last: Int, $where: ScheduledJobHist
     }
     edges {
       node {
-        cadence
         configuration
         createdAt
         createdBy
         cron
-        description
         displayID
         historyTime
         id
+        jobID
+        jobRunnerID
         operation
         ownerID
         ref
-        script
-        systemOwned
-        tags
-        title
         updatedAt
         updatedBy
       }

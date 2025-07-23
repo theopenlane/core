@@ -10,9 +10,12 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
+	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -113,12 +116,6 @@ func (sjc *ScheduledJobCreate) SetDisplayID(s string) *ScheduledJobCreate {
 	return sjc
 }
 
-// SetTags sets the "tags" field.
-func (sjc *ScheduledJobCreate) SetTags(s []string) *ScheduledJobCreate {
-	sjc.mutation.SetTags(s)
-	return sjc
-}
-
 // SetOwnerID sets the "owner_id" field.
 func (sjc *ScheduledJobCreate) SetOwnerID(s string) *ScheduledJobCreate {
 	sjc.mutation.SetOwnerID(s)
@@ -133,89 +130,29 @@ func (sjc *ScheduledJobCreate) SetNillableOwnerID(s *string) *ScheduledJobCreate
 	return sjc
 }
 
-// SetSystemOwned sets the "system_owned" field.
-func (sjc *ScheduledJobCreate) SetSystemOwned(b bool) *ScheduledJobCreate {
-	sjc.mutation.SetSystemOwned(b)
+// SetJobID sets the "job_id" field.
+func (sjc *ScheduledJobCreate) SetJobID(s string) *ScheduledJobCreate {
+	sjc.mutation.SetJobID(s)
 	return sjc
 }
 
-// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
-func (sjc *ScheduledJobCreate) SetNillableSystemOwned(b *bool) *ScheduledJobCreate {
+// SetActive sets the "active" field.
+func (sjc *ScheduledJobCreate) SetActive(b bool) *ScheduledJobCreate {
+	sjc.mutation.SetActive(b)
+	return sjc
+}
+
+// SetNillableActive sets the "active" field if the given value is not nil.
+func (sjc *ScheduledJobCreate) SetNillableActive(b *bool) *ScheduledJobCreate {
 	if b != nil {
-		sjc.SetSystemOwned(*b)
+		sjc.SetActive(*b)
 	}
-	return sjc
-}
-
-// SetTitle sets the "title" field.
-func (sjc *ScheduledJobCreate) SetTitle(s string) *ScheduledJobCreate {
-	sjc.mutation.SetTitle(s)
-	return sjc
-}
-
-// SetDescription sets the "description" field.
-func (sjc *ScheduledJobCreate) SetDescription(s string) *ScheduledJobCreate {
-	sjc.mutation.SetDescription(s)
-	return sjc
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (sjc *ScheduledJobCreate) SetNillableDescription(s *string) *ScheduledJobCreate {
-	if s != nil {
-		sjc.SetDescription(*s)
-	}
-	return sjc
-}
-
-// SetPlatform sets the "platform" field.
-func (sjc *ScheduledJobCreate) SetPlatform(ept enums.JobPlatformType) *ScheduledJobCreate {
-	sjc.mutation.SetPlatform(ept)
-	return sjc
-}
-
-// SetScript sets the "script" field.
-func (sjc *ScheduledJobCreate) SetScript(s string) *ScheduledJobCreate {
-	sjc.mutation.SetScript(s)
-	return sjc
-}
-
-// SetNillableScript sets the "script" field if the given value is not nil.
-func (sjc *ScheduledJobCreate) SetNillableScript(s *string) *ScheduledJobCreate {
-	if s != nil {
-		sjc.SetScript(*s)
-	}
-	return sjc
-}
-
-// SetWindmillPath sets the "windmill_path" field.
-func (sjc *ScheduledJobCreate) SetWindmillPath(s string) *ScheduledJobCreate {
-	sjc.mutation.SetWindmillPath(s)
-	return sjc
-}
-
-// SetDownloadURL sets the "download_url" field.
-func (sjc *ScheduledJobCreate) SetDownloadURL(s string) *ScheduledJobCreate {
-	sjc.mutation.SetDownloadURL(s)
 	return sjc
 }
 
 // SetConfiguration sets the "configuration" field.
 func (sjc *ScheduledJobCreate) SetConfiguration(mc models.JobConfiguration) *ScheduledJobCreate {
 	sjc.mutation.SetConfiguration(mc)
-	return sjc
-}
-
-// SetCadence sets the "cadence" field.
-func (sjc *ScheduledJobCreate) SetCadence(mc models.JobCadence) *ScheduledJobCreate {
-	sjc.mutation.SetCadence(mc)
-	return sjc
-}
-
-// SetNillableCadence sets the "cadence" field if the given value is not nil.
-func (sjc *ScheduledJobCreate) SetNillableCadence(mc *models.JobCadence) *ScheduledJobCreate {
-	if mc != nil {
-		sjc.SetCadence(*mc)
-	}
 	return sjc
 }
 
@@ -229,6 +166,20 @@ func (sjc *ScheduledJobCreate) SetCron(m models.Cron) *ScheduledJobCreate {
 func (sjc *ScheduledJobCreate) SetNillableCron(m *models.Cron) *ScheduledJobCreate {
 	if m != nil {
 		sjc.SetCron(*m)
+	}
+	return sjc
+}
+
+// SetJobRunnerID sets the "job_runner_id" field.
+func (sjc *ScheduledJobCreate) SetJobRunnerID(s string) *ScheduledJobCreate {
+	sjc.mutation.SetJobRunnerID(s)
+	return sjc
+}
+
+// SetNillableJobRunnerID sets the "job_runner_id" field if the given value is not nil.
+func (sjc *ScheduledJobCreate) SetNillableJobRunnerID(s *string) *ScheduledJobCreate {
+	if s != nil {
+		sjc.SetJobRunnerID(*s)
 	}
 	return sjc
 }
@@ -250,6 +201,52 @@ func (sjc *ScheduledJobCreate) SetNillableID(s *string) *ScheduledJobCreate {
 // SetOwner sets the "owner" edge to the Organization entity.
 func (sjc *ScheduledJobCreate) SetOwner(o *Organization) *ScheduledJobCreate {
 	return sjc.SetOwnerID(o.ID)
+}
+
+// SetJobTemplateID sets the "job_template" edge to the JobTemplate entity by ID.
+func (sjc *ScheduledJobCreate) SetJobTemplateID(id string) *ScheduledJobCreate {
+	sjc.mutation.SetJobTemplateID(id)
+	return sjc
+}
+
+// SetJobTemplate sets the "job_template" edge to the JobTemplate entity.
+func (sjc *ScheduledJobCreate) SetJobTemplate(j *JobTemplate) *ScheduledJobCreate {
+	return sjc.SetJobTemplateID(j.ID)
+}
+
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
+func (sjc *ScheduledJobCreate) AddControlIDs(ids ...string) *ScheduledJobCreate {
+	sjc.mutation.AddControlIDs(ids...)
+	return sjc
+}
+
+// AddControls adds the "controls" edges to the Control entity.
+func (sjc *ScheduledJobCreate) AddControls(c ...*Control) *ScheduledJobCreate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return sjc.AddControlIDs(ids...)
+}
+
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (sjc *ScheduledJobCreate) AddSubcontrolIDs(ids ...string) *ScheduledJobCreate {
+	sjc.mutation.AddSubcontrolIDs(ids...)
+	return sjc
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (sjc *ScheduledJobCreate) AddSubcontrols(s ...*Subcontrol) *ScheduledJobCreate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return sjc.AddSubcontrolIDs(ids...)
+}
+
+// SetJobRunner sets the "job_runner" edge to the JobRunner entity.
+func (sjc *ScheduledJobCreate) SetJobRunner(j *JobRunner) *ScheduledJobCreate {
+	return sjc.SetJobRunnerID(j.ID)
 }
 
 // Mutation returns the ScheduledJobMutation object of the builder.
@@ -303,13 +300,9 @@ func (sjc *ScheduledJobCreate) defaults() error {
 		v := scheduledjob.DefaultUpdatedAt()
 		sjc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := sjc.mutation.Tags(); !ok {
-		v := scheduledjob.DefaultTags
-		sjc.mutation.SetTags(v)
-	}
-	if _, ok := sjc.mutation.SystemOwned(); !ok {
-		v := scheduledjob.DefaultSystemOwned
-		sjc.mutation.SetSystemOwned(v)
+	if _, ok := sjc.mutation.Active(); !ok {
+		v := scheduledjob.DefaultActive
+		sjc.mutation.SetActive(v)
 	}
 	if _, ok := sjc.mutation.ID(); !ok {
 		if scheduledjob.DefaultID == nil {
@@ -331,37 +324,29 @@ func (sjc *ScheduledJobCreate) check() error {
 			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.display_id": %w`, err)}
 		}
 	}
-	if _, ok := sjc.mutation.Title(); !ok {
-		return &ValidationError{Name: "title", err: errors.New(`generated: missing required field "ScheduledJob.title"`)}
-	}
-	if v, ok := sjc.mutation.Title(); ok {
-		if err := scheduledjob.TitleValidator(v); err != nil {
-			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.title": %w`, err)}
+	if v, ok := sjc.mutation.OwnerID(); ok {
+		if err := scheduledjob.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.owner_id": %w`, err)}
 		}
 	}
-	if _, ok := sjc.mutation.Platform(); !ok {
-		return &ValidationError{Name: "platform", err: errors.New(`generated: missing required field "ScheduledJob.platform"`)}
+	if _, ok := sjc.mutation.JobID(); !ok {
+		return &ValidationError{Name: "job_id", err: errors.New(`generated: missing required field "ScheduledJob.job_id"`)}
 	}
-	if v, ok := sjc.mutation.Platform(); ok {
-		if err := scheduledjob.PlatformValidator(v); err != nil {
-			return &ValidationError{Name: "platform", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.platform": %w`, err)}
+	if v, ok := sjc.mutation.JobID(); ok {
+		if err := scheduledjob.JobIDValidator(v); err != nil {
+			return &ValidationError{Name: "job_id", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.job_id": %w`, err)}
 		}
 	}
-	if _, ok := sjc.mutation.WindmillPath(); !ok {
-		return &ValidationError{Name: "windmill_path", err: errors.New(`generated: missing required field "ScheduledJob.windmill_path"`)}
-	}
-	if _, ok := sjc.mutation.DownloadURL(); !ok {
-		return &ValidationError{Name: "download_url", err: errors.New(`generated: missing required field "ScheduledJob.download_url"`)}
-	}
-	if v, ok := sjc.mutation.Cadence(); ok {
-		if err := v.Validate(); err != nil {
-			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.cadence": %w`, err)}
-		}
+	if _, ok := sjc.mutation.Active(); !ok {
+		return &ValidationError{Name: "active", err: errors.New(`generated: missing required field "ScheduledJob.active"`)}
 	}
 	if v, ok := sjc.mutation.Cron(); ok {
-		if err := v.Validate(); err != nil {
+		if err := scheduledjob.CronValidator(string(v)); err != nil {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "ScheduledJob.cron": %w`, err)}
 		}
+	}
+	if len(sjc.mutation.JobTemplateIDs()) == 0 {
+		return &ValidationError{Name: "job_template", err: errors.New(`generated: missing required edge "ScheduledJob.job_template"`)}
 	}
 	return nil
 }
@@ -427,45 +412,13 @@ func (sjc *ScheduledJobCreate) createSpec() (*ScheduledJob, *sqlgraph.CreateSpec
 		_spec.SetField(scheduledjob.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
 	}
-	if value, ok := sjc.mutation.Tags(); ok {
-		_spec.SetField(scheduledjob.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
-	}
-	if value, ok := sjc.mutation.SystemOwned(); ok {
-		_spec.SetField(scheduledjob.FieldSystemOwned, field.TypeBool, value)
-		_node.SystemOwned = value
-	}
-	if value, ok := sjc.mutation.Title(); ok {
-		_spec.SetField(scheduledjob.FieldTitle, field.TypeString, value)
-		_node.Title = value
-	}
-	if value, ok := sjc.mutation.Description(); ok {
-		_spec.SetField(scheduledjob.FieldDescription, field.TypeString, value)
-		_node.Description = value
-	}
-	if value, ok := sjc.mutation.Platform(); ok {
-		_spec.SetField(scheduledjob.FieldPlatform, field.TypeEnum, value)
-		_node.Platform = value
-	}
-	if value, ok := sjc.mutation.Script(); ok {
-		_spec.SetField(scheduledjob.FieldScript, field.TypeString, value)
-		_node.Script = value
-	}
-	if value, ok := sjc.mutation.WindmillPath(); ok {
-		_spec.SetField(scheduledjob.FieldWindmillPath, field.TypeString, value)
-		_node.WindmillPath = value
-	}
-	if value, ok := sjc.mutation.DownloadURL(); ok {
-		_spec.SetField(scheduledjob.FieldDownloadURL, field.TypeString, value)
-		_node.DownloadURL = value
+	if value, ok := sjc.mutation.Active(); ok {
+		_spec.SetField(scheduledjob.FieldActive, field.TypeBool, value)
+		_node.Active = value
 	}
 	if value, ok := sjc.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjob.FieldConfiguration, field.TypeJSON, value)
 		_node.Configuration = value
-	}
-	if value, ok := sjc.mutation.Cadence(); ok {
-		_spec.SetField(scheduledjob.FieldCadence, field.TypeJSON, value)
-		_node.Cadence = value
 	}
 	if value, ok := sjc.mutation.Cron(); ok {
 		_spec.SetField(scheduledjob.FieldCron, field.TypeString, value)
@@ -487,6 +440,76 @@ func (sjc *ScheduledJobCreate) createSpec() (*ScheduledJob, *sqlgraph.CreateSpec
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sjc.mutation.JobTemplateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   scheduledjob.JobTemplateTable,
+			Columns: []string{scheduledjob.JobTemplateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sjc.schemaConfig.ScheduledJob
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.JobID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sjc.mutation.ControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scheduledjob.ControlsTable,
+			Columns: scheduledjob.ControlsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sjc.schemaConfig.ScheduledJobControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sjc.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scheduledjob.SubcontrolsTable,
+			Columns: scheduledjob.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sjc.schemaConfig.ScheduledJobSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sjc.mutation.JobRunnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scheduledjob.JobRunnerTable,
+			Columns: []string{scheduledjob.JobRunnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sjc.schemaConfig.ScheduledJob
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.JobRunnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

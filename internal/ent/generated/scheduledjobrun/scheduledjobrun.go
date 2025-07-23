@@ -59,9 +59,9 @@ const (
 	OwnerColumn = "owner_id"
 	// ScheduledJobTable is the table that holds the scheduled_job relation/edge.
 	ScheduledJobTable = "scheduled_job_runs"
-	// ScheduledJobInverseTable is the table name for the ControlScheduledJob entity.
-	// It exists in this package in order to avoid circular dependency with the "controlscheduledjob" package.
-	ScheduledJobInverseTable = "control_scheduled_jobs"
+	// ScheduledJobInverseTable is the table name for the ScheduledJob entity.
+	// It exists in this package in order to avoid circular dependency with the "scheduledjob" package.
+	ScheduledJobInverseTable = "scheduled_jobs"
 	// ScheduledJobColumn is the table column denoting the scheduled_job relation/edge.
 	ScheduledJobColumn = "scheduled_job_id"
 	// JobRunnerTable is the table that holds the job_runner relation/edge.

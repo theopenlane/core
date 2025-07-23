@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
 )
@@ -41,30 +40,18 @@ type ScheduledJobHistory struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"display_id,omitempty"`
-	// tags associated with the object
-	Tags []string `json:"tags,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
-	// indicates if the record is owned by the the openlane system and not by an organization
-	SystemOwned bool `json:"system_owned,omitempty"`
-	// the title of the job
-	Title string `json:"title,omitempty"`
-	// the description of the job
-	Description string `json:"description,omitempty"`
-	// the platform to use to execute this job
-	Platform enums.JobPlatformType `json:"platform,omitempty"`
-	// the script to run
-	Script string `json:"script,omitempty"`
-	// Windmill path
-	WindmillPath string `json:"windmill_path,omitempty"`
-	// the url from where to download the script from
-	DownloadURL string `json:"download_url,omitempty"`
-	// the configuration to run this job
+	// the scheduled_job id to take the script to run from
+	JobID string `json:"job_id,omitempty"`
+	// whether the scheduled job is active
+	Active bool `json:"active,omitempty"`
+	// the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
-	// the schedule to run this job
-	Cadence models.JobCadence `json:"cadence,omitempty"`
-	// cron syntax
-	Cron         *models.Cron `json:"cron,omitempty"`
+	// cron 6-field syntax, defaults to the job template's cron if not provided
+	Cron *models.Cron `json:"cron,omitempty"`
+	// the runner that this job will run on. If not set, it will scheduled on a general runner instead
+	JobRunnerID  string `json:"job_runner_id,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -75,13 +62,13 @@ func (*ScheduledJobHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case scheduledjobhistory.FieldCron:
 			values[i] = &sql.NullScanner{S: new(models.Cron)}
-		case scheduledjobhistory.FieldTags, scheduledjobhistory.FieldConfiguration, scheduledjobhistory.FieldCadence:
+		case scheduledjobhistory.FieldConfiguration:
 			values[i] = new([]byte)
 		case scheduledjobhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case scheduledjobhistory.FieldSystemOwned:
+		case scheduledjobhistory.FieldActive:
 			values[i] = new(sql.NullBool)
-		case scheduledjobhistory.FieldID, scheduledjobhistory.FieldRef, scheduledjobhistory.FieldCreatedBy, scheduledjobhistory.FieldUpdatedBy, scheduledjobhistory.FieldDeletedBy, scheduledjobhistory.FieldDisplayID, scheduledjobhistory.FieldOwnerID, scheduledjobhistory.FieldTitle, scheduledjobhistory.FieldDescription, scheduledjobhistory.FieldPlatform, scheduledjobhistory.FieldScript, scheduledjobhistory.FieldWindmillPath, scheduledjobhistory.FieldDownloadURL:
+		case scheduledjobhistory.FieldID, scheduledjobhistory.FieldRef, scheduledjobhistory.FieldCreatedBy, scheduledjobhistory.FieldUpdatedBy, scheduledjobhistory.FieldDeletedBy, scheduledjobhistory.FieldDisplayID, scheduledjobhistory.FieldOwnerID, scheduledjobhistory.FieldJobID, scheduledjobhistory.FieldJobRunnerID:
 			values[i] = new(sql.NullString)
 		case scheduledjobhistory.FieldHistoryTime, scheduledjobhistory.FieldCreatedAt, scheduledjobhistory.FieldUpdatedAt, scheduledjobhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -166,61 +153,23 @@ func (sjh *ScheduledJobHistory) assignValues(columns []string, values []any) err
 			} else if value.Valid {
 				sjh.DisplayID = value.String
 			}
-		case scheduledjobhistory.FieldTags:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field tags", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &sjh.Tags); err != nil {
-					return fmt.Errorf("unmarshal field tags: %w", err)
-				}
-			}
 		case scheduledjobhistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				sjh.OwnerID = value.String
 			}
-		case scheduledjobhistory.FieldSystemOwned:
+		case scheduledjobhistory.FieldJobID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field job_id", values[i])
+			} else if value.Valid {
+				sjh.JobID = value.String
+			}
+		case scheduledjobhistory.FieldActive:
 			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
+				return fmt.Errorf("unexpected type %T for field active", values[i])
 			} else if value.Valid {
-				sjh.SystemOwned = value.Bool
-			}
-		case scheduledjobhistory.FieldTitle:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field title", values[i])
-			} else if value.Valid {
-				sjh.Title = value.String
-			}
-		case scheduledjobhistory.FieldDescription:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field description", values[i])
-			} else if value.Valid {
-				sjh.Description = value.String
-			}
-		case scheduledjobhistory.FieldPlatform:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field platform", values[i])
-			} else if value.Valid {
-				sjh.Platform = enums.JobPlatformType(value.String)
-			}
-		case scheduledjobhistory.FieldScript:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field script", values[i])
-			} else if value.Valid {
-				sjh.Script = value.String
-			}
-		case scheduledjobhistory.FieldWindmillPath:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field windmill_path", values[i])
-			} else if value.Valid {
-				sjh.WindmillPath = value.String
-			}
-		case scheduledjobhistory.FieldDownloadURL:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field download_url", values[i])
-			} else if value.Valid {
-				sjh.DownloadURL = value.String
+				sjh.Active = value.Bool
 			}
 		case scheduledjobhistory.FieldConfiguration:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -230,20 +179,18 @@ func (sjh *ScheduledJobHistory) assignValues(columns []string, values []any) err
 					return fmt.Errorf("unmarshal field configuration: %w", err)
 				}
 			}
-		case scheduledjobhistory.FieldCadence:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field cadence", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &sjh.Cadence); err != nil {
-					return fmt.Errorf("unmarshal field cadence: %w", err)
-				}
-			}
 		case scheduledjobhistory.FieldCron:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field cron", values[i])
 			} else if value.Valid {
 				sjh.Cron = new(models.Cron)
 				*sjh.Cron = *value.S.(*models.Cron)
+			}
+		case scheduledjobhistory.FieldJobRunnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field job_runner_id", values[i])
+			} else if value.Valid {
+				sjh.JobRunnerID = value.String
 			}
 		default:
 			sjh.selectValues.Set(columns[i], values[i])
@@ -311,43 +258,25 @@ func (sjh *ScheduledJobHistory) String() string {
 	builder.WriteString("display_id=")
 	builder.WriteString(sjh.DisplayID)
 	builder.WriteString(", ")
-	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", sjh.Tags))
-	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(sjh.OwnerID)
 	builder.WriteString(", ")
-	builder.WriteString("system_owned=")
-	builder.WriteString(fmt.Sprintf("%v", sjh.SystemOwned))
+	builder.WriteString("job_id=")
+	builder.WriteString(sjh.JobID)
 	builder.WriteString(", ")
-	builder.WriteString("title=")
-	builder.WriteString(sjh.Title)
-	builder.WriteString(", ")
-	builder.WriteString("description=")
-	builder.WriteString(sjh.Description)
-	builder.WriteString(", ")
-	builder.WriteString("platform=")
-	builder.WriteString(fmt.Sprintf("%v", sjh.Platform))
-	builder.WriteString(", ")
-	builder.WriteString("script=")
-	builder.WriteString(sjh.Script)
-	builder.WriteString(", ")
-	builder.WriteString("windmill_path=")
-	builder.WriteString(sjh.WindmillPath)
-	builder.WriteString(", ")
-	builder.WriteString("download_url=")
-	builder.WriteString(sjh.DownloadURL)
+	builder.WriteString("active=")
+	builder.WriteString(fmt.Sprintf("%v", sjh.Active))
 	builder.WriteString(", ")
 	builder.WriteString("configuration=")
 	builder.WriteString(fmt.Sprintf("%v", sjh.Configuration))
-	builder.WriteString(", ")
-	builder.WriteString("cadence=")
-	builder.WriteString(fmt.Sprintf("%v", sjh.Cadence))
 	builder.WriteString(", ")
 	if v := sjh.Cron; v != nil {
 		builder.WriteString("cron=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
+	builder.WriteString(", ")
+	builder.WriteString("job_runner_id=")
+	builder.WriteString(sjh.JobRunnerID)
 	builder.WriteByte(')')
 	return builder.String()
 }

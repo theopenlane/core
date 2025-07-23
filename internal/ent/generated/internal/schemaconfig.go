@@ -38,10 +38,6 @@ type SchemaConfig struct {
 	ControlObjectiveViewers            string // ControlObjective-viewers->Group table.
 	ControlObjectiveTasks              string // ControlObjective-tasks->Task table.
 	ControlObjectiveHistory            string // ControlObjectiveHistory table.
-	ControlScheduledJob                string // ControlScheduledJob table.
-	ControlScheduledJobControls        string // ControlScheduledJob-controls->Control table.
-	ControlScheduledJobSubcontrols     string // ControlScheduledJob-subcontrols->Subcontrol table.
-	ControlScheduledJobHistory         string // ControlScheduledJobHistory table.
 	CustomDomain                       string // CustomDomain table.
 	CustomDomainHistory                string // CustomDomainHistory table.
 	DNSVerification                    string // DNSVerification table.
@@ -105,6 +101,8 @@ type SchemaConfig struct {
 	JobRunnerJobRunnerTokens           string // JobRunner-job_runner_tokens->JobRunnerToken table.
 	JobRunnerRegistrationToken         string // JobRunnerRegistrationToken table.
 	JobRunnerToken                     string // JobRunnerToken table.
+	JobTemplate                        string // JobTemplate table.
+	JobTemplateHistory                 string // JobTemplateHistory table.
 	MappableDomain                     string // MappableDomain table.
 	MappableDomainHistory              string // MappableDomainHistory table.
 	MappedControl                      string // MappedControl table.
@@ -183,6 +181,8 @@ type SchemaConfig struct {
 	ScanAssets                         string // Scan-assets->Asset table.
 	ScanHistory                        string // ScanHistory table.
 	ScheduledJob                       string // ScheduledJob table.
+	ScheduledJobControls               string // ScheduledJob-controls->Control table.
+	ScheduledJobSubcontrols            string // ScheduledJob-subcontrols->Subcontrol table.
 	ScheduledJobHistory                string // ScheduledJobHistory table.
 	ScheduledJobRun                    string // ScheduledJobRun table.
 	Standard                           string // Standard table.

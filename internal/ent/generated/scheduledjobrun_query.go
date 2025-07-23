@@ -12,10 +12,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -29,7 +29,7 @@ type ScheduledJobRunQuery struct {
 	inters           []Interceptor
 	predicates       []predicate.ScheduledJobRun
 	withOwner        *OrganizationQuery
-	withScheduledJob *ControlScheduledJobQuery
+	withScheduledJob *ScheduledJobQuery
 	withJobRunner    *JobRunnerQuery
 	loadTotal        []func(context.Context, []*ScheduledJobRun) error
 	modifiers        []func(*sql.Selector)
@@ -95,8 +95,8 @@ func (sjrq *ScheduledJobRunQuery) QueryOwner() *OrganizationQuery {
 }
 
 // QueryScheduledJob chains the current query on the "scheduled_job" edge.
-func (sjrq *ScheduledJobRunQuery) QueryScheduledJob() *ControlScheduledJobQuery {
-	query := (&ControlScheduledJobClient{config: sjrq.config}).Query()
+func (sjrq *ScheduledJobRunQuery) QueryScheduledJob() *ScheduledJobQuery {
+	query := (&ScheduledJobClient{config: sjrq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := sjrq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -107,11 +107,11 @@ func (sjrq *ScheduledJobRunQuery) QueryScheduledJob() *ControlScheduledJobQuery 
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(scheduledjobrun.Table, scheduledjobrun.FieldID, selector),
-			sqlgraph.To(controlscheduledjob.Table, controlscheduledjob.FieldID),
+			sqlgraph.To(scheduledjob.Table, scheduledjob.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, scheduledjobrun.ScheduledJobTable, scheduledjobrun.ScheduledJobColumn),
 		)
 		schemaConfig := sjrq.schemaConfig
-		step.To.Schema = schemaConfig.ControlScheduledJob
+		step.To.Schema = schemaConfig.ScheduledJob
 		step.Edge.Schema = schemaConfig.ScheduledJobRun
 		fromU = sqlgraph.SetNeighbors(sjrq.driver.Dialect(), step)
 		return fromU, nil
@@ -359,8 +359,8 @@ func (sjrq *ScheduledJobRunQuery) WithOwner(opts ...func(*OrganizationQuery)) *S
 
 // WithScheduledJob tells the query-builder to eager-load the nodes that are connected to
 // the "scheduled_job" edge. The optional arguments are used to configure the query builder of the edge.
-func (sjrq *ScheduledJobRunQuery) WithScheduledJob(opts ...func(*ControlScheduledJobQuery)) *ScheduledJobRunQuery {
-	query := (&ControlScheduledJobClient{config: sjrq.config}).Query()
+func (sjrq *ScheduledJobRunQuery) WithScheduledJob(opts ...func(*ScheduledJobQuery)) *ScheduledJobRunQuery {
+	query := (&ScheduledJobClient{config: sjrq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -500,7 +500,7 @@ func (sjrq *ScheduledJobRunQuery) sqlAll(ctx context.Context, hooks ...queryHook
 	}
 	if query := sjrq.withScheduledJob; query != nil {
 		if err := sjrq.loadScheduledJob(ctx, query, nodes, nil,
-			func(n *ScheduledJobRun, e *ControlScheduledJob) { n.Edges.ScheduledJob = e }); err != nil {
+			func(n *ScheduledJobRun, e *ScheduledJob) { n.Edges.ScheduledJob = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -547,7 +547,7 @@ func (sjrq *ScheduledJobRunQuery) loadOwner(ctx context.Context, query *Organiza
 	}
 	return nil
 }
-func (sjrq *ScheduledJobRunQuery) loadScheduledJob(ctx context.Context, query *ControlScheduledJobQuery, nodes []*ScheduledJobRun, init func(*ScheduledJobRun), assign func(*ScheduledJobRun, *ControlScheduledJob)) error {
+func (sjrq *ScheduledJobRunQuery) loadScheduledJob(ctx context.Context, query *ScheduledJobQuery, nodes []*ScheduledJobRun, init func(*ScheduledJobRun), assign func(*ScheduledJobRun, *ScheduledJob)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ScheduledJobRun)
 	for i := range nodes {
@@ -560,7 +560,7 @@ func (sjrq *ScheduledJobRunQuery) loadScheduledJob(ctx context.Context, query *C
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(controlscheduledjob.IDIn(ids...))
+	query.Where(scheduledjob.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err

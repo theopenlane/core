@@ -9,9 +9,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -58,7 +58,7 @@ type ScheduledJobRunEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// ScheduledJob holds the value of the scheduled_job edge.
-	ScheduledJob *ControlScheduledJob `json:"scheduled_job,omitempty"`
+	ScheduledJob *ScheduledJob `json:"scheduled_job,omitempty"`
 	// JobRunner holds the value of the job_runner edge.
 	JobRunner *JobRunner `json:"job_runner,omitempty"`
 	// loadedTypes holds the information for reporting if a
@@ -81,11 +81,11 @@ func (e ScheduledJobRunEdges) OwnerOrErr() (*Organization, error) {
 
 // ScheduledJobOrErr returns the ScheduledJob value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e ScheduledJobRunEdges) ScheduledJobOrErr() (*ControlScheduledJob, error) {
+func (e ScheduledJobRunEdges) ScheduledJobOrErr() (*ScheduledJob, error) {
 	if e.ScheduledJob != nil {
 		return e.ScheduledJob, nil
 	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: controlscheduledjob.Label}
+		return nil, &NotFoundError{label: scheduledjob.Label}
 	}
 	return nil, &NotLoadedError{edge: "scheduled_job"}
 }
@@ -222,7 +222,7 @@ func (sjr *ScheduledJobRun) QueryOwner() *OrganizationQuery {
 }
 
 // QueryScheduledJob queries the "scheduled_job" edge of the ScheduledJobRun entity.
-func (sjr *ScheduledJobRun) QueryScheduledJob() *ControlScheduledJobQuery {
+func (sjr *ScheduledJobRun) QueryScheduledJob() *ScheduledJobQuery {
 	return NewScheduledJobRunClient(sjr.config).QueryScheduledJob(sjr)
 }
 

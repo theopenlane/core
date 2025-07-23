@@ -10,9 +10,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
+	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -35,30 +36,18 @@ type ScheduledJob struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"display_id,omitempty"`
-	// tags associated with the object
-	Tags []string `json:"tags,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
-	// indicates if the record is owned by the the openlane system and not by an organization
-	SystemOwned bool `json:"system_owned,omitempty"`
-	// the title of the job
-	Title string `json:"title,omitempty"`
-	// the description of the job
-	Description string `json:"description,omitempty"`
-	// the platform to use to execute this job
-	Platform enums.JobPlatformType `json:"platform,omitempty"`
-	// the script to run
-	Script string `json:"script,omitempty"`
-	// Windmill path
-	WindmillPath string `json:"windmill_path,omitempty"`
-	// the url from where to download the script from
-	DownloadURL string `json:"download_url,omitempty"`
-	// the configuration to run this job
+	// the scheduled_job id to take the script to run from
+	JobID string `json:"job_id,omitempty"`
+	// whether the scheduled job is active
+	Active bool `json:"active,omitempty"`
+	// the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
-	// the schedule to run this job
-	Cadence models.JobCadence `json:"cadence,omitempty"`
-	// cron syntax
+	// cron 6-field syntax, defaults to the job template's cron if not provided
 	Cron *models.Cron `json:"cron,omitempty"`
+	// the runner that this job will run on. If not set, it will scheduled on a general runner instead
+	JobRunnerID string `json:"job_runner_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ScheduledJobQuery when eager-loading is set.
 	Edges        ScheduledJobEdges `json:"edges"`
@@ -69,11 +58,22 @@ type ScheduledJob struct {
 type ScheduledJobEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// JobTemplate holds the value of the job_template edge.
+	JobTemplate *JobTemplate `json:"job_template,omitempty"`
+	// Controls holds the value of the controls edge.
+	Controls []*Control `json:"controls,omitempty"`
+	// Subcontrols holds the value of the subcontrols edge.
+	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
+	// JobRunner holds the value of the job_runner edge.
+	JobRunner *JobRunner `json:"job_runner,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [5]map[string]int
+
+	namedControls    map[string][]*Control
+	namedSubcontrols map[string][]*Subcontrol
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -87,6 +87,46 @@ func (e ScheduledJobEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// JobTemplateOrErr returns the JobTemplate value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ScheduledJobEdges) JobTemplateOrErr() (*JobTemplate, error) {
+	if e.JobTemplate != nil {
+		return e.JobTemplate, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: jobtemplate.Label}
+	}
+	return nil, &NotLoadedError{edge: "job_template"}
+}
+
+// ControlsOrErr returns the Controls value or an error if the edge
+// was not loaded in eager-loading.
+func (e ScheduledJobEdges) ControlsOrErr() ([]*Control, error) {
+	if e.loadedTypes[2] {
+		return e.Controls, nil
+	}
+	return nil, &NotLoadedError{edge: "controls"}
+}
+
+// SubcontrolsOrErr returns the Subcontrols value or an error if the edge
+// was not loaded in eager-loading.
+func (e ScheduledJobEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
+	if e.loadedTypes[3] {
+		return e.Subcontrols, nil
+	}
+	return nil, &NotLoadedError{edge: "subcontrols"}
+}
+
+// JobRunnerOrErr returns the JobRunner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ScheduledJobEdges) JobRunnerOrErr() (*JobRunner, error) {
+	if e.JobRunner != nil {
+		return e.JobRunner, nil
+	} else if e.loadedTypes[4] {
+		return nil, &NotFoundError{label: jobrunner.Label}
+	}
+	return nil, &NotLoadedError{edge: "job_runner"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*ScheduledJob) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -94,11 +134,11 @@ func (*ScheduledJob) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case scheduledjob.FieldCron:
 			values[i] = &sql.NullScanner{S: new(models.Cron)}
-		case scheduledjob.FieldTags, scheduledjob.FieldConfiguration, scheduledjob.FieldCadence:
+		case scheduledjob.FieldConfiguration:
 			values[i] = new([]byte)
-		case scheduledjob.FieldSystemOwned:
+		case scheduledjob.FieldActive:
 			values[i] = new(sql.NullBool)
-		case scheduledjob.FieldID, scheduledjob.FieldCreatedBy, scheduledjob.FieldUpdatedBy, scheduledjob.FieldDeletedBy, scheduledjob.FieldDisplayID, scheduledjob.FieldOwnerID, scheduledjob.FieldTitle, scheduledjob.FieldDescription, scheduledjob.FieldPlatform, scheduledjob.FieldScript, scheduledjob.FieldWindmillPath, scheduledjob.FieldDownloadURL:
+		case scheduledjob.FieldID, scheduledjob.FieldCreatedBy, scheduledjob.FieldUpdatedBy, scheduledjob.FieldDeletedBy, scheduledjob.FieldDisplayID, scheduledjob.FieldOwnerID, scheduledjob.FieldJobID, scheduledjob.FieldJobRunnerID:
 			values[i] = new(sql.NullString)
 		case scheduledjob.FieldCreatedAt, scheduledjob.FieldUpdatedAt, scheduledjob.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -165,61 +205,23 @@ func (sj *ScheduledJob) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				sj.DisplayID = value.String
 			}
-		case scheduledjob.FieldTags:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field tags", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &sj.Tags); err != nil {
-					return fmt.Errorf("unmarshal field tags: %w", err)
-				}
-			}
 		case scheduledjob.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				sj.OwnerID = value.String
 			}
-		case scheduledjob.FieldSystemOwned:
+		case scheduledjob.FieldJobID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field job_id", values[i])
+			} else if value.Valid {
+				sj.JobID = value.String
+			}
+		case scheduledjob.FieldActive:
 			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
+				return fmt.Errorf("unexpected type %T for field active", values[i])
 			} else if value.Valid {
-				sj.SystemOwned = value.Bool
-			}
-		case scheduledjob.FieldTitle:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field title", values[i])
-			} else if value.Valid {
-				sj.Title = value.String
-			}
-		case scheduledjob.FieldDescription:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field description", values[i])
-			} else if value.Valid {
-				sj.Description = value.String
-			}
-		case scheduledjob.FieldPlatform:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field platform", values[i])
-			} else if value.Valid {
-				sj.Platform = enums.JobPlatformType(value.String)
-			}
-		case scheduledjob.FieldScript:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field script", values[i])
-			} else if value.Valid {
-				sj.Script = value.String
-			}
-		case scheduledjob.FieldWindmillPath:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field windmill_path", values[i])
-			} else if value.Valid {
-				sj.WindmillPath = value.String
-			}
-		case scheduledjob.FieldDownloadURL:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field download_url", values[i])
-			} else if value.Valid {
-				sj.DownloadURL = value.String
+				sj.Active = value.Bool
 			}
 		case scheduledjob.FieldConfiguration:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -229,20 +231,18 @@ func (sj *ScheduledJob) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field configuration: %w", err)
 				}
 			}
-		case scheduledjob.FieldCadence:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field cadence", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &sj.Cadence); err != nil {
-					return fmt.Errorf("unmarshal field cadence: %w", err)
-				}
-			}
 		case scheduledjob.FieldCron:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field cron", values[i])
 			} else if value.Valid {
 				sj.Cron = new(models.Cron)
 				*sj.Cron = *value.S.(*models.Cron)
+			}
+		case scheduledjob.FieldJobRunnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field job_runner_id", values[i])
+			} else if value.Valid {
+				sj.JobRunnerID = value.String
 			}
 		default:
 			sj.selectValues.Set(columns[i], values[i])
@@ -260,6 +260,26 @@ func (sj *ScheduledJob) Value(name string) (ent.Value, error) {
 // QueryOwner queries the "owner" edge of the ScheduledJob entity.
 func (sj *ScheduledJob) QueryOwner() *OrganizationQuery {
 	return NewScheduledJobClient(sj.config).QueryOwner(sj)
+}
+
+// QueryJobTemplate queries the "job_template" edge of the ScheduledJob entity.
+func (sj *ScheduledJob) QueryJobTemplate() *JobTemplateQuery {
+	return NewScheduledJobClient(sj.config).QueryJobTemplate(sj)
+}
+
+// QueryControls queries the "controls" edge of the ScheduledJob entity.
+func (sj *ScheduledJob) QueryControls() *ControlQuery {
+	return NewScheduledJobClient(sj.config).QueryControls(sj)
+}
+
+// QuerySubcontrols queries the "subcontrols" edge of the ScheduledJob entity.
+func (sj *ScheduledJob) QuerySubcontrols() *SubcontrolQuery {
+	return NewScheduledJobClient(sj.config).QuerySubcontrols(sj)
+}
+
+// QueryJobRunner queries the "job_runner" edge of the ScheduledJob entity.
+func (sj *ScheduledJob) QueryJobRunner() *JobRunnerQuery {
+	return NewScheduledJobClient(sj.config).QueryJobRunner(sj)
 }
 
 // Update returns a builder for updating this ScheduledJob.
@@ -306,45 +326,75 @@ func (sj *ScheduledJob) String() string {
 	builder.WriteString("display_id=")
 	builder.WriteString(sj.DisplayID)
 	builder.WriteString(", ")
-	builder.WriteString("tags=")
-	builder.WriteString(fmt.Sprintf("%v", sj.Tags))
-	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(sj.OwnerID)
 	builder.WriteString(", ")
-	builder.WriteString("system_owned=")
-	builder.WriteString(fmt.Sprintf("%v", sj.SystemOwned))
+	builder.WriteString("job_id=")
+	builder.WriteString(sj.JobID)
 	builder.WriteString(", ")
-	builder.WriteString("title=")
-	builder.WriteString(sj.Title)
-	builder.WriteString(", ")
-	builder.WriteString("description=")
-	builder.WriteString(sj.Description)
-	builder.WriteString(", ")
-	builder.WriteString("platform=")
-	builder.WriteString(fmt.Sprintf("%v", sj.Platform))
-	builder.WriteString(", ")
-	builder.WriteString("script=")
-	builder.WriteString(sj.Script)
-	builder.WriteString(", ")
-	builder.WriteString("windmill_path=")
-	builder.WriteString(sj.WindmillPath)
-	builder.WriteString(", ")
-	builder.WriteString("download_url=")
-	builder.WriteString(sj.DownloadURL)
+	builder.WriteString("active=")
+	builder.WriteString(fmt.Sprintf("%v", sj.Active))
 	builder.WriteString(", ")
 	builder.WriteString("configuration=")
 	builder.WriteString(fmt.Sprintf("%v", sj.Configuration))
-	builder.WriteString(", ")
-	builder.WriteString("cadence=")
-	builder.WriteString(fmt.Sprintf("%v", sj.Cadence))
 	builder.WriteString(", ")
 	if v := sj.Cron; v != nil {
 		builder.WriteString("cron=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
+	builder.WriteString(", ")
+	builder.WriteString("job_runner_id=")
+	builder.WriteString(sj.JobRunnerID)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedControls returns the Controls named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (sj *ScheduledJob) NamedControls(name string) ([]*Control, error) {
+	if sj.Edges.namedControls == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := sj.Edges.namedControls[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (sj *ScheduledJob) appendNamedControls(name string, edges ...*Control) {
+	if sj.Edges.namedControls == nil {
+		sj.Edges.namedControls = make(map[string][]*Control)
+	}
+	if len(edges) == 0 {
+		sj.Edges.namedControls[name] = []*Control{}
+	} else {
+		sj.Edges.namedControls[name] = append(sj.Edges.namedControls[name], edges...)
+	}
+}
+
+// NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (sj *ScheduledJob) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if sj.Edges.namedSubcontrols == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := sj.Edges.namedSubcontrols[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (sj *ScheduledJob) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if sj.Edges.namedSubcontrols == nil {
+		sj.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+	}
+	if len(edges) == 0 {
+		sj.Edges.namedSubcontrols[name] = []*Subcontrol{}
+	} else {
+		sj.Edges.namedSubcontrols[name] = append(sj.Edges.namedSubcontrols[name], edges...)
+	}
 }
 
 // ScheduledJobs is a parsable slice of ScheduledJob.

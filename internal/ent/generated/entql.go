@@ -16,8 +16,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
-	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjob"
-	"github.com/theopenlane/core/internal/ent/generated/controlscheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
@@ -52,6 +50,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
+	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
+	"github.com/theopenlane/core/internal/ent/generated/jobtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
@@ -567,57 +567,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 	}
 	graph.Nodes[13] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
-			Table:   controlscheduledjob.Table,
-			Columns: controlscheduledjob.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeString,
-				Column: controlscheduledjob.FieldID,
-			},
-		},
-		Type: "ControlScheduledJob",
-		Fields: map[string]*sqlgraph.FieldSpec{
-			controlscheduledjob.FieldCreatedAt:     {Type: field.TypeTime, Column: controlscheduledjob.FieldCreatedAt},
-			controlscheduledjob.FieldUpdatedAt:     {Type: field.TypeTime, Column: controlscheduledjob.FieldUpdatedAt},
-			controlscheduledjob.FieldCreatedBy:     {Type: field.TypeString, Column: controlscheduledjob.FieldCreatedBy},
-			controlscheduledjob.FieldUpdatedBy:     {Type: field.TypeString, Column: controlscheduledjob.FieldUpdatedBy},
-			controlscheduledjob.FieldDeletedAt:     {Type: field.TypeTime, Column: controlscheduledjob.FieldDeletedAt},
-			controlscheduledjob.FieldDeletedBy:     {Type: field.TypeString, Column: controlscheduledjob.FieldDeletedBy},
-			controlscheduledjob.FieldOwnerID:       {Type: field.TypeString, Column: controlscheduledjob.FieldOwnerID},
-			controlscheduledjob.FieldJobID:         {Type: field.TypeString, Column: controlscheduledjob.FieldJobID},
-			controlscheduledjob.FieldConfiguration: {Type: field.TypeJSON, Column: controlscheduledjob.FieldConfiguration},
-			controlscheduledjob.FieldCron:          {Type: field.TypeString, Column: controlscheduledjob.FieldCron},
-			controlscheduledjob.FieldJobRunnerID:   {Type: field.TypeString, Column: controlscheduledjob.FieldJobRunnerID},
-		},
-	}
-	graph.Nodes[14] = &sqlgraph.Node{
-		NodeSpec: sqlgraph.NodeSpec{
-			Table:   controlscheduledjobhistory.Table,
-			Columns: controlscheduledjobhistory.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeString,
-				Column: controlscheduledjobhistory.FieldID,
-			},
-		},
-		Type: "ControlScheduledJobHistory",
-		Fields: map[string]*sqlgraph.FieldSpec{
-			controlscheduledjobhistory.FieldHistoryTime:   {Type: field.TypeTime, Column: controlscheduledjobhistory.FieldHistoryTime},
-			controlscheduledjobhistory.FieldRef:           {Type: field.TypeString, Column: controlscheduledjobhistory.FieldRef},
-			controlscheduledjobhistory.FieldOperation:     {Type: field.TypeEnum, Column: controlscheduledjobhistory.FieldOperation},
-			controlscheduledjobhistory.FieldCreatedAt:     {Type: field.TypeTime, Column: controlscheduledjobhistory.FieldCreatedAt},
-			controlscheduledjobhistory.FieldUpdatedAt:     {Type: field.TypeTime, Column: controlscheduledjobhistory.FieldUpdatedAt},
-			controlscheduledjobhistory.FieldCreatedBy:     {Type: field.TypeString, Column: controlscheduledjobhistory.FieldCreatedBy},
-			controlscheduledjobhistory.FieldUpdatedBy:     {Type: field.TypeString, Column: controlscheduledjobhistory.FieldUpdatedBy},
-			controlscheduledjobhistory.FieldDeletedAt:     {Type: field.TypeTime, Column: controlscheduledjobhistory.FieldDeletedAt},
-			controlscheduledjobhistory.FieldDeletedBy:     {Type: field.TypeString, Column: controlscheduledjobhistory.FieldDeletedBy},
-			controlscheduledjobhistory.FieldOwnerID:       {Type: field.TypeString, Column: controlscheduledjobhistory.FieldOwnerID},
-			controlscheduledjobhistory.FieldJobID:         {Type: field.TypeString, Column: controlscheduledjobhistory.FieldJobID},
-			controlscheduledjobhistory.FieldConfiguration: {Type: field.TypeJSON, Column: controlscheduledjobhistory.FieldConfiguration},
-			controlscheduledjobhistory.FieldCron:          {Type: field.TypeString, Column: controlscheduledjobhistory.FieldCron},
-			controlscheduledjobhistory.FieldJobRunnerID:   {Type: field.TypeString, Column: controlscheduledjobhistory.FieldJobRunnerID},
-		},
-	}
-	graph.Nodes[15] = &sqlgraph.Node{
-		NodeSpec: sqlgraph.NodeSpec{
 			Table:   customdomain.Table,
 			Columns: customdomain.Columns,
 			ID: &sqlgraph.FieldSpec{
@@ -640,7 +589,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			customdomain.FieldDNSVerificationID: {Type: field.TypeString, Column: customdomain.FieldDNSVerificationID},
 		},
 	}
-	graph.Nodes[16] = &sqlgraph.Node{
+	graph.Nodes[14] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   customdomainhistory.Table,
 			Columns: customdomainhistory.Columns,
@@ -667,7 +616,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			customdomainhistory.FieldDNSVerificationID: {Type: field.TypeString, Column: customdomainhistory.FieldDNSVerificationID},
 		},
 	}
-	graph.Nodes[17] = &sqlgraph.Node{
+	graph.Nodes[15] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   dnsverification.Table,
 			Columns: dnsverification.Columns,
@@ -697,7 +646,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			dnsverification.FieldAcmeChallengeStatusReason:   {Type: field.TypeString, Column: dnsverification.FieldAcmeChallengeStatusReason},
 		},
 	}
-	graph.Nodes[18] = &sqlgraph.Node{
+	graph.Nodes[16] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   dnsverificationhistory.Table,
 			Columns: dnsverificationhistory.Columns,
@@ -730,7 +679,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			dnsverificationhistory.FieldAcmeChallengeStatusReason:   {Type: field.TypeString, Column: dnsverificationhistory.FieldAcmeChallengeStatusReason},
 		},
 	}
-	graph.Nodes[19] = &sqlgraph.Node{
+	graph.Nodes[17] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   documentdata.Table,
 			Columns: documentdata.Columns,
@@ -753,7 +702,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			documentdata.FieldData:       {Type: field.TypeJSON, Column: documentdata.FieldData},
 		},
 	}
-	graph.Nodes[20] = &sqlgraph.Node{
+	graph.Nodes[18] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   documentdatahistory.Table,
 			Columns: documentdatahistory.Columns,
@@ -779,7 +728,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			documentdatahistory.FieldData:        {Type: field.TypeJSON, Column: documentdatahistory.FieldData},
 		},
 	}
-	graph.Nodes[21] = &sqlgraph.Node{
+	graph.Nodes[19] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   emailverificationtoken.Table,
 			Columns: emailverificationtoken.Columns,
@@ -803,7 +752,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			emailverificationtoken.FieldSecret:    {Type: field.TypeBytes, Column: emailverificationtoken.FieldSecret},
 		},
 	}
-	graph.Nodes[22] = &sqlgraph.Node{
+	graph.Nodes[20] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   entity.Table,
 			Columns: entity.Columns,
@@ -830,7 +779,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entity.FieldStatus:       {Type: field.TypeString, Column: entity.FieldStatus},
 		},
 	}
-	graph.Nodes[23] = &sqlgraph.Node{
+	graph.Nodes[21] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   entityhistory.Table,
 			Columns: entityhistory.Columns,
@@ -860,7 +809,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entityhistory.FieldStatus:       {Type: field.TypeString, Column: entityhistory.FieldStatus},
 		},
 	}
-	graph.Nodes[24] = &sqlgraph.Node{
+	graph.Nodes[22] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   entitytype.Table,
 			Columns: entitytype.Columns,
@@ -882,7 +831,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entitytype.FieldName:      {Type: field.TypeString, Column: entitytype.FieldName},
 		},
 	}
-	graph.Nodes[25] = &sqlgraph.Node{
+	graph.Nodes[23] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   entitytypehistory.Table,
 			Columns: entitytypehistory.Columns,
@@ -907,7 +856,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entitytypehistory.FieldName:        {Type: field.TypeString, Column: entitytypehistory.FieldName},
 		},
 	}
-	graph.Nodes[26] = &sqlgraph.Node{
+	graph.Nodes[24] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   event.Table,
 			Columns: event.Columns,
@@ -929,7 +878,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			event.FieldMetadata:      {Type: field.TypeJSON, Column: event.FieldMetadata},
 		},
 	}
-	graph.Nodes[27] = &sqlgraph.Node{
+	graph.Nodes[25] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   evidence.Table,
 			Columns: evidence.Columns,
@@ -960,7 +909,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			evidence.FieldStatus:              {Type: field.TypeEnum, Column: evidence.FieldStatus},
 		},
 	}
-	graph.Nodes[28] = &sqlgraph.Node{
+	graph.Nodes[26] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   evidencehistory.Table,
 			Columns: evidencehistory.Columns,
@@ -994,7 +943,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			evidencehistory.FieldStatus:              {Type: field.TypeEnum, Column: evidencehistory.FieldStatus},
 		},
 	}
-	graph.Nodes[29] = &sqlgraph.Node{
+	graph.Nodes[27] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   export.Table,
 			Columns: export.Columns,
@@ -1021,7 +970,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			export.FieldErrorMessage: {Type: field.TypeString, Column: export.FieldErrorMessage},
 		},
 	}
-	graph.Nodes[30] = &sqlgraph.Node{
+	graph.Nodes[28] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   file.Table,
 			Columns: file.Columns,
@@ -1055,7 +1004,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			file.FieldFileContents:          {Type: field.TypeBytes, Column: file.FieldFileContents},
 		},
 	}
-	graph.Nodes[31] = &sqlgraph.Node{
+	graph.Nodes[29] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   filehistory.Table,
 			Columns: filehistory.Columns,
@@ -1092,7 +1041,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			filehistory.FieldFileContents:          {Type: field.TypeBytes, Column: filehistory.FieldFileContents},
 		},
 	}
-	graph.Nodes[32] = &sqlgraph.Node{
+	graph.Nodes[30] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   group.Table,
 			Columns: group.Columns,
@@ -1120,7 +1069,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			group.FieldDisplayName:     {Type: field.TypeString, Column: group.FieldDisplayName},
 		},
 	}
-	graph.Nodes[33] = &sqlgraph.Node{
+	graph.Nodes[31] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   grouphistory.Table,
 			Columns: grouphistory.Columns,
@@ -1151,7 +1100,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			grouphistory.FieldDisplayName:     {Type: field.TypeString, Column: grouphistory.FieldDisplayName},
 		},
 	}
-	graph.Nodes[34] = &sqlgraph.Node{
+	graph.Nodes[32] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   groupmembership.Table,
 			Columns: groupmembership.Columns,
@@ -1171,7 +1120,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			groupmembership.FieldUserID:    {Type: field.TypeString, Column: groupmembership.FieldUserID},
 		},
 	}
-	graph.Nodes[35] = &sqlgraph.Node{
+	graph.Nodes[33] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   groupmembershiphistory.Table,
 			Columns: groupmembershiphistory.Columns,
@@ -1194,7 +1143,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			groupmembershiphistory.FieldUserID:      {Type: field.TypeString, Column: groupmembershiphistory.FieldUserID},
 		},
 	}
-	graph.Nodes[36] = &sqlgraph.Node{
+	graph.Nodes[34] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   groupsetting.Table,
 			Columns: groupsetting.Columns,
@@ -1218,7 +1167,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			groupsetting.FieldGroupID:      {Type: field.TypeString, Column: groupsetting.FieldGroupID},
 		},
 	}
-	graph.Nodes[37] = &sqlgraph.Node{
+	graph.Nodes[35] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   groupsettinghistory.Table,
 			Columns: groupsettinghistory.Columns,
@@ -1245,7 +1194,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			groupsettinghistory.FieldGroupID:      {Type: field.TypeString, Column: groupsettinghistory.FieldGroupID},
 		},
 	}
-	graph.Nodes[38] = &sqlgraph.Node{
+	graph.Nodes[36] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   hush.Table,
 			Columns: hush.Columns,
@@ -1270,7 +1219,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			hush.FieldSecretValue: {Type: field.TypeString, Column: hush.FieldSecretValue},
 		},
 	}
-	graph.Nodes[39] = &sqlgraph.Node{
+	graph.Nodes[37] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   hushhistory.Table,
 			Columns: hushhistory.Columns,
@@ -1298,7 +1247,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			hushhistory.FieldSecretValue: {Type: field.TypeString, Column: hushhistory.FieldSecretValue},
 		},
 	}
-	graph.Nodes[40] = &sqlgraph.Node{
+	graph.Nodes[38] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   integration.Table,
 			Columns: integration.Columns,
@@ -1322,7 +1271,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integration.FieldKind:        {Type: field.TypeString, Column: integration.FieldKind},
 		},
 	}
-	graph.Nodes[41] = &sqlgraph.Node{
+	graph.Nodes[39] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   integrationhistory.Table,
 			Columns: integrationhistory.Columns,
@@ -1349,7 +1298,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integrationhistory.FieldKind:        {Type: field.TypeString, Column: integrationhistory.FieldKind},
 		},
 	}
-	graph.Nodes[42] = &sqlgraph.Node{
+	graph.Nodes[40] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   internalpolicy.Table,
 			Columns: internalpolicy.Columns,
@@ -1388,7 +1337,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicy.FieldDismissedImprovementSuggestions: {Type: field.TypeJSON, Column: internalpolicy.FieldDismissedImprovementSuggestions},
 		},
 	}
-	graph.Nodes[43] = &sqlgraph.Node{
+	graph.Nodes[41] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   internalpolicyhistory.Table,
 			Columns: internalpolicyhistory.Columns,
@@ -1430,7 +1379,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicyhistory.FieldDismissedImprovementSuggestions: {Type: field.TypeJSON, Column: internalpolicyhistory.FieldDismissedImprovementSuggestions},
 		},
 	}
-	graph.Nodes[44] = &sqlgraph.Node{
+	graph.Nodes[42] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   invite.Table,
 			Columns: invite.Columns,
@@ -1458,7 +1407,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			invite.FieldSecret:       {Type: field.TypeBytes, Column: invite.FieldSecret},
 		},
 	}
-	graph.Nodes[45] = &sqlgraph.Node{
+	graph.Nodes[43] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   jobresult.Table,
 			Columns: jobresult.Columns,
@@ -1484,7 +1433,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			jobresult.FieldFileID:         {Type: field.TypeString, Column: jobresult.FieldFileID},
 		},
 	}
-	graph.Nodes[46] = &sqlgraph.Node{
+	graph.Nodes[44] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   jobrunner.Table,
 			Columns: jobrunner.Columns,
@@ -1510,7 +1459,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			jobrunner.FieldIPAddress:   {Type: field.TypeString, Column: jobrunner.FieldIPAddress},
 		},
 	}
-	graph.Nodes[47] = &sqlgraph.Node{
+	graph.Nodes[45] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   jobrunnerregistrationtoken.Table,
 			Columns: jobrunnerregistrationtoken.Columns,
@@ -1535,7 +1484,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			jobrunnerregistrationtoken.FieldJobRunnerID: {Type: field.TypeString, Column: jobrunnerregistrationtoken.FieldJobRunnerID},
 		},
 	}
-	graph.Nodes[48] = &sqlgraph.Node{
+	graph.Nodes[46] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   jobrunnertoken.Table,
 			Columns: jobrunnertoken.Columns,
@@ -1561,6 +1510,69 @@ var schemaGraph = func() *sqlgraph.Schema {
 			jobrunnertoken.FieldRevokedReason: {Type: field.TypeString, Column: jobrunnertoken.FieldRevokedReason},
 			jobrunnertoken.FieldRevokedBy:     {Type: field.TypeString, Column: jobrunnertoken.FieldRevokedBy},
 			jobrunnertoken.FieldRevokedAt:     {Type: field.TypeTime, Column: jobrunnertoken.FieldRevokedAt},
+		},
+	}
+	graph.Nodes[47] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   jobtemplate.Table,
+			Columns: jobtemplate.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: jobtemplate.FieldID,
+			},
+		},
+		Type: "JobTemplate",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			jobtemplate.FieldCreatedAt:     {Type: field.TypeTime, Column: jobtemplate.FieldCreatedAt},
+			jobtemplate.FieldUpdatedAt:     {Type: field.TypeTime, Column: jobtemplate.FieldUpdatedAt},
+			jobtemplate.FieldCreatedBy:     {Type: field.TypeString, Column: jobtemplate.FieldCreatedBy},
+			jobtemplate.FieldUpdatedBy:     {Type: field.TypeString, Column: jobtemplate.FieldUpdatedBy},
+			jobtemplate.FieldDeletedAt:     {Type: field.TypeTime, Column: jobtemplate.FieldDeletedAt},
+			jobtemplate.FieldDeletedBy:     {Type: field.TypeString, Column: jobtemplate.FieldDeletedBy},
+			jobtemplate.FieldDisplayID:     {Type: field.TypeString, Column: jobtemplate.FieldDisplayID},
+			jobtemplate.FieldTags:          {Type: field.TypeJSON, Column: jobtemplate.FieldTags},
+			jobtemplate.FieldOwnerID:       {Type: field.TypeString, Column: jobtemplate.FieldOwnerID},
+			jobtemplate.FieldSystemOwned:   {Type: field.TypeBool, Column: jobtemplate.FieldSystemOwned},
+			jobtemplate.FieldTitle:         {Type: field.TypeString, Column: jobtemplate.FieldTitle},
+			jobtemplate.FieldDescription:   {Type: field.TypeString, Column: jobtemplate.FieldDescription},
+			jobtemplate.FieldPlatform:      {Type: field.TypeEnum, Column: jobtemplate.FieldPlatform},
+			jobtemplate.FieldWindmillPath:  {Type: field.TypeString, Column: jobtemplate.FieldWindmillPath},
+			jobtemplate.FieldDownloadURL:   {Type: field.TypeString, Column: jobtemplate.FieldDownloadURL},
+			jobtemplate.FieldConfiguration: {Type: field.TypeJSON, Column: jobtemplate.FieldConfiguration},
+			jobtemplate.FieldCron:          {Type: field.TypeString, Column: jobtemplate.FieldCron},
+		},
+	}
+	graph.Nodes[48] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   jobtemplatehistory.Table,
+			Columns: jobtemplatehistory.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: jobtemplatehistory.FieldID,
+			},
+		},
+		Type: "JobTemplateHistory",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			jobtemplatehistory.FieldHistoryTime:   {Type: field.TypeTime, Column: jobtemplatehistory.FieldHistoryTime},
+			jobtemplatehistory.FieldRef:           {Type: field.TypeString, Column: jobtemplatehistory.FieldRef},
+			jobtemplatehistory.FieldOperation:     {Type: field.TypeEnum, Column: jobtemplatehistory.FieldOperation},
+			jobtemplatehistory.FieldCreatedAt:     {Type: field.TypeTime, Column: jobtemplatehistory.FieldCreatedAt},
+			jobtemplatehistory.FieldUpdatedAt:     {Type: field.TypeTime, Column: jobtemplatehistory.FieldUpdatedAt},
+			jobtemplatehistory.FieldCreatedBy:     {Type: field.TypeString, Column: jobtemplatehistory.FieldCreatedBy},
+			jobtemplatehistory.FieldUpdatedBy:     {Type: field.TypeString, Column: jobtemplatehistory.FieldUpdatedBy},
+			jobtemplatehistory.FieldDeletedAt:     {Type: field.TypeTime, Column: jobtemplatehistory.FieldDeletedAt},
+			jobtemplatehistory.FieldDeletedBy:     {Type: field.TypeString, Column: jobtemplatehistory.FieldDeletedBy},
+			jobtemplatehistory.FieldDisplayID:     {Type: field.TypeString, Column: jobtemplatehistory.FieldDisplayID},
+			jobtemplatehistory.FieldTags:          {Type: field.TypeJSON, Column: jobtemplatehistory.FieldTags},
+			jobtemplatehistory.FieldOwnerID:       {Type: field.TypeString, Column: jobtemplatehistory.FieldOwnerID},
+			jobtemplatehistory.FieldSystemOwned:   {Type: field.TypeBool, Column: jobtemplatehistory.FieldSystemOwned},
+			jobtemplatehistory.FieldTitle:         {Type: field.TypeString, Column: jobtemplatehistory.FieldTitle},
+			jobtemplatehistory.FieldDescription:   {Type: field.TypeString, Column: jobtemplatehistory.FieldDescription},
+			jobtemplatehistory.FieldPlatform:      {Type: field.TypeEnum, Column: jobtemplatehistory.FieldPlatform},
+			jobtemplatehistory.FieldWindmillPath:  {Type: field.TypeString, Column: jobtemplatehistory.FieldWindmillPath},
+			jobtemplatehistory.FieldDownloadURL:   {Type: field.TypeString, Column: jobtemplatehistory.FieldDownloadURL},
+			jobtemplatehistory.FieldConfiguration: {Type: field.TypeJSON, Column: jobtemplatehistory.FieldConfiguration},
+			jobtemplatehistory.FieldCron:          {Type: field.TypeString, Column: jobtemplatehistory.FieldCron},
 		},
 	}
 	graph.Nodes[49] = &sqlgraph.Node{
@@ -2517,18 +2529,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scheduledjob.FieldDeletedAt:     {Type: field.TypeTime, Column: scheduledjob.FieldDeletedAt},
 			scheduledjob.FieldDeletedBy:     {Type: field.TypeString, Column: scheduledjob.FieldDeletedBy},
 			scheduledjob.FieldDisplayID:     {Type: field.TypeString, Column: scheduledjob.FieldDisplayID},
-			scheduledjob.FieldTags:          {Type: field.TypeJSON, Column: scheduledjob.FieldTags},
 			scheduledjob.FieldOwnerID:       {Type: field.TypeString, Column: scheduledjob.FieldOwnerID},
-			scheduledjob.FieldSystemOwned:   {Type: field.TypeBool, Column: scheduledjob.FieldSystemOwned},
-			scheduledjob.FieldTitle:         {Type: field.TypeString, Column: scheduledjob.FieldTitle},
-			scheduledjob.FieldDescription:   {Type: field.TypeString, Column: scheduledjob.FieldDescription},
-			scheduledjob.FieldPlatform:      {Type: field.TypeEnum, Column: scheduledjob.FieldPlatform},
-			scheduledjob.FieldScript:        {Type: field.TypeString, Column: scheduledjob.FieldScript},
-			scheduledjob.FieldWindmillPath:  {Type: field.TypeString, Column: scheduledjob.FieldWindmillPath},
-			scheduledjob.FieldDownloadURL:   {Type: field.TypeString, Column: scheduledjob.FieldDownloadURL},
+			scheduledjob.FieldJobID:         {Type: field.TypeString, Column: scheduledjob.FieldJobID},
+			scheduledjob.FieldActive:        {Type: field.TypeBool, Column: scheduledjob.FieldActive},
 			scheduledjob.FieldConfiguration: {Type: field.TypeJSON, Column: scheduledjob.FieldConfiguration},
-			scheduledjob.FieldCadence:       {Type: field.TypeJSON, Column: scheduledjob.FieldCadence},
 			scheduledjob.FieldCron:          {Type: field.TypeString, Column: scheduledjob.FieldCron},
+			scheduledjob.FieldJobRunnerID:   {Type: field.TypeString, Column: scheduledjob.FieldJobRunnerID},
 		},
 	}
 	graph.Nodes[82] = &sqlgraph.Node{
@@ -2552,18 +2558,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scheduledjobhistory.FieldDeletedAt:     {Type: field.TypeTime, Column: scheduledjobhistory.FieldDeletedAt},
 			scheduledjobhistory.FieldDeletedBy:     {Type: field.TypeString, Column: scheduledjobhistory.FieldDeletedBy},
 			scheduledjobhistory.FieldDisplayID:     {Type: field.TypeString, Column: scheduledjobhistory.FieldDisplayID},
-			scheduledjobhistory.FieldTags:          {Type: field.TypeJSON, Column: scheduledjobhistory.FieldTags},
 			scheduledjobhistory.FieldOwnerID:       {Type: field.TypeString, Column: scheduledjobhistory.FieldOwnerID},
-			scheduledjobhistory.FieldSystemOwned:   {Type: field.TypeBool, Column: scheduledjobhistory.FieldSystemOwned},
-			scheduledjobhistory.FieldTitle:         {Type: field.TypeString, Column: scheduledjobhistory.FieldTitle},
-			scheduledjobhistory.FieldDescription:   {Type: field.TypeString, Column: scheduledjobhistory.FieldDescription},
-			scheduledjobhistory.FieldPlatform:      {Type: field.TypeEnum, Column: scheduledjobhistory.FieldPlatform},
-			scheduledjobhistory.FieldScript:        {Type: field.TypeString, Column: scheduledjobhistory.FieldScript},
-			scheduledjobhistory.FieldWindmillPath:  {Type: field.TypeString, Column: scheduledjobhistory.FieldWindmillPath},
-			scheduledjobhistory.FieldDownloadURL:   {Type: field.TypeString, Column: scheduledjobhistory.FieldDownloadURL},
+			scheduledjobhistory.FieldJobID:         {Type: field.TypeString, Column: scheduledjobhistory.FieldJobID},
+			scheduledjobhistory.FieldActive:        {Type: field.TypeBool, Column: scheduledjobhistory.FieldActive},
 			scheduledjobhistory.FieldConfiguration: {Type: field.TypeJSON, Column: scheduledjobhistory.FieldConfiguration},
-			scheduledjobhistory.FieldCadence:       {Type: field.TypeJSON, Column: scheduledjobhistory.FieldCadence},
 			scheduledjobhistory.FieldCron:          {Type: field.TypeString, Column: scheduledjobhistory.FieldCron},
+			scheduledjobhistory.FieldJobRunnerID:   {Type: field.TypeString, Column: scheduledjobhistory.FieldJobRunnerID},
 		},
 	}
 	graph.Nodes[83] = &sqlgraph.Node{
@@ -3808,7 +3808,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Control",
-		"ControlScheduledJob",
+		"ScheduledJob",
 	)
 	graph.MustAddE(
 		"mapped_to_controls",
@@ -4061,66 +4061,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"ControlObjective",
 		"Task",
-	)
-	graph.MustAddE(
-		"owner",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   controlscheduledjob.OwnerTable,
-			Columns: []string{controlscheduledjob.OwnerColumn},
-			Bidi:    false,
-		},
-		"ControlScheduledJob",
-		"Organization",
-	)
-	graph.MustAddE(
-		"job",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   controlscheduledjob.JobTable,
-			Columns: []string{controlscheduledjob.JobColumn},
-			Bidi:    false,
-		},
-		"ControlScheduledJob",
-		"ScheduledJob",
-	)
-	graph.MustAddE(
-		"controls",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   controlscheduledjob.ControlsTable,
-			Columns: controlscheduledjob.ControlsPrimaryKey,
-			Bidi:    false,
-		},
-		"ControlScheduledJob",
-		"Control",
-	)
-	graph.MustAddE(
-		"subcontrols",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   controlscheduledjob.SubcontrolsTable,
-			Columns: controlscheduledjob.SubcontrolsPrimaryKey,
-			Bidi:    false,
-		},
-		"ControlScheduledJob",
-		"Subcontrol",
-	)
-	graph.MustAddE(
-		"job_runner",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   controlscheduledjob.JobRunnerTable,
-			Columns: []string{controlscheduledjob.JobRunnerColumn},
-			Bidi:    false,
-		},
-		"ControlScheduledJob",
-		"JobRunner",
 	)
 	graph.MustAddE(
 		"owner",
@@ -5596,7 +5536,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"JobResult",
-		"ControlScheduledJob",
+		"ScheduledJob",
 	)
 	graph.MustAddE(
 		"file",
@@ -5681,6 +5621,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"JobRunnerToken",
 		"JobRunner",
+	)
+	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   jobtemplate.OwnerTable,
+			Columns: []string{jobtemplate.OwnerColumn},
+			Bidi:    false,
+		},
+		"JobTemplate",
+		"Organization",
+	)
+	graph.MustAddE(
+		"scheduled_jobs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.ScheduledJobsTable,
+			Columns: []string{jobtemplate.ScheduledJobsColumn},
+			Bidi:    false,
+		},
+		"JobTemplate",
+		"ScheduledJob",
 	)
 	graph.MustAddE(
 		"custom_domains",
@@ -6847,16 +6811,16 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"DNSVerification",
 	)
 	graph.MustAddE(
-		"jobs",
+		"job_templates",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.JobsTable,
-			Columns: []string{organization.JobsColumn},
+			Table:   organization.JobTemplatesTable,
+			Columns: []string{organization.JobTemplatesColumn},
 			Bidi:    false,
 		},
 		"Organization",
-		"ScheduledJob",
+		"JobTemplate",
 	)
 	graph.MustAddE(
 		"scheduled_jobs",
@@ -6868,7 +6832,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Organization",
-		"ControlScheduledJob",
+		"ScheduledJob",
 	)
 	graph.MustAddE(
 		"job_results",
@@ -7711,6 +7675,54 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Organization",
 	)
 	graph.MustAddE(
+		"job_template",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   scheduledjob.JobTemplateTable,
+			Columns: []string{scheduledjob.JobTemplateColumn},
+			Bidi:    false,
+		},
+		"ScheduledJob",
+		"JobTemplate",
+	)
+	graph.MustAddE(
+		"controls",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scheduledjob.ControlsTable,
+			Columns: scheduledjob.ControlsPrimaryKey,
+			Bidi:    false,
+		},
+		"ScheduledJob",
+		"Control",
+	)
+	graph.MustAddE(
+		"subcontrols",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   scheduledjob.SubcontrolsTable,
+			Columns: scheduledjob.SubcontrolsPrimaryKey,
+			Bidi:    false,
+		},
+		"ScheduledJob",
+		"Subcontrol",
+	)
+	graph.MustAddE(
+		"job_runner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scheduledjob.JobRunnerTable,
+			Columns: []string{scheduledjob.JobRunnerColumn},
+			Bidi:    false,
+		},
+		"ScheduledJob",
+		"JobRunner",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -7732,7 +7744,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"ScheduledJobRun",
-		"ControlScheduledJob",
+		"ScheduledJob",
 	)
 	graph.MustAddE(
 		"job_runner",
@@ -7936,7 +7948,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Bidi:    false,
 		},
 		"Subcontrol",
-		"ControlScheduledJob",
+		"ScheduledJob",
 	)
 	graph.MustAddE(
 		"mapped_to_subcontrols",
@@ -10357,7 +10369,7 @@ func (f *ControlFilter) WhereHasScheduledJobs() {
 }
 
 // WhereHasScheduledJobsWith applies a predicate to check if query has an edge scheduled_jobs with a given conditions (other predicates).
-func (f *ControlFilter) WhereHasScheduledJobsWith(preds ...predicate.ControlScheduledJob) {
+func (f *ControlFilter) WhereHasScheduledJobsWith(preds ...predicate.ScheduledJob) {
 	f.Where(entql.HasEdgeWith("scheduled_jobs", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -11355,281 +11367,6 @@ func (f *ControlObjectiveHistoryFilter) WhereSubcategory(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (csjq *ControlScheduledJobQuery) addPredicate(pred func(s *sql.Selector)) {
-	csjq.predicates = append(csjq.predicates, pred)
-}
-
-// Filter returns a Filter implementation to apply filters on the ControlScheduledJobQuery builder.
-func (csjq *ControlScheduledJobQuery) Filter() *ControlScheduledJobFilter {
-	return &ControlScheduledJobFilter{config: csjq.config, predicateAdder: csjq}
-}
-
-// addPredicate implements the predicateAdder interface.
-func (m *ControlScheduledJobMutation) addPredicate(pred func(s *sql.Selector)) {
-	m.predicates = append(m.predicates, pred)
-}
-
-// Filter returns an entql.Where implementation to apply filters on the ControlScheduledJobMutation builder.
-func (m *ControlScheduledJobMutation) Filter() *ControlScheduledJobFilter {
-	return &ControlScheduledJobFilter{config: m.config, predicateAdder: m}
-}
-
-// ControlScheduledJobFilter provides a generic filtering capability at runtime for ControlScheduledJobQuery.
-type ControlScheduledJobFilter struct {
-	predicateAdder
-	config
-}
-
-// Where applies the entql predicate on the query filter.
-func (f *ControlScheduledJobFilter) Where(p entql.P) {
-	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[13].Type, p, s); err != nil {
-			s.AddError(err)
-		}
-	})
-}
-
-// WhereID applies the entql string predicate on the id field.
-func (f *ControlScheduledJobFilter) WhereID(p entql.StringP) {
-	f.Where(p.Field(controlscheduledjob.FieldID))
-}
-
-// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
-func (f *ControlScheduledJobFilter) WhereCreatedAt(p entql.TimeP) {
-	f.Where(p.Field(controlscheduledjob.FieldCreatedAt))
-}
-
-// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
-func (f *ControlScheduledJobFilter) WhereUpdatedAt(p entql.TimeP) {
-	f.Where(p.Field(controlscheduledjob.FieldUpdatedAt))
-}
-
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *ControlScheduledJobFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(controlscheduledjob.FieldCreatedBy))
-}
-
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *ControlScheduledJobFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(controlscheduledjob.FieldUpdatedBy))
-}
-
-// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
-func (f *ControlScheduledJobFilter) WhereDeletedAt(p entql.TimeP) {
-	f.Where(p.Field(controlscheduledjob.FieldDeletedAt))
-}
-
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *ControlScheduledJobFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(controlscheduledjob.FieldDeletedBy))
-}
-
-// WhereOwnerID applies the entql string predicate on the owner_id field.
-func (f *ControlScheduledJobFilter) WhereOwnerID(p entql.StringP) {
-	f.Where(p.Field(controlscheduledjob.FieldOwnerID))
-}
-
-// WhereJobID applies the entql string predicate on the job_id field.
-func (f *ControlScheduledJobFilter) WhereJobID(p entql.StringP) {
-	f.Where(p.Field(controlscheduledjob.FieldJobID))
-}
-
-// WhereConfiguration applies the entql json.RawMessage predicate on the configuration field.
-func (f *ControlScheduledJobFilter) WhereConfiguration(p entql.BytesP) {
-	f.Where(p.Field(controlscheduledjob.FieldConfiguration))
-}
-
-// WhereCron applies the entql string predicate on the cron field.
-func (f *ControlScheduledJobFilter) WhereCron(p entql.StringP) {
-	f.Where(p.Field(controlscheduledjob.FieldCron))
-}
-
-// WhereJobRunnerID applies the entql string predicate on the job_runner_id field.
-func (f *ControlScheduledJobFilter) WhereJobRunnerID(p entql.StringP) {
-	f.Where(p.Field(controlscheduledjob.FieldJobRunnerID))
-}
-
-// WhereHasOwner applies a predicate to check if query has an edge owner.
-func (f *ControlScheduledJobFilter) WhereHasOwner() {
-	f.Where(entql.HasEdge("owner"))
-}
-
-// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
-func (f *ControlScheduledJobFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
-	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasJob applies a predicate to check if query has an edge job.
-func (f *ControlScheduledJobFilter) WhereHasJob() {
-	f.Where(entql.HasEdge("job"))
-}
-
-// WhereHasJobWith applies a predicate to check if query has an edge job with a given conditions (other predicates).
-func (f *ControlScheduledJobFilter) WhereHasJobWith(preds ...predicate.ScheduledJob) {
-	f.Where(entql.HasEdgeWith("job", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasControls applies a predicate to check if query has an edge controls.
-func (f *ControlScheduledJobFilter) WhereHasControls() {
-	f.Where(entql.HasEdge("controls"))
-}
-
-// WhereHasControlsWith applies a predicate to check if query has an edge controls with a given conditions (other predicates).
-func (f *ControlScheduledJobFilter) WhereHasControlsWith(preds ...predicate.Control) {
-	f.Where(entql.HasEdgeWith("controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasSubcontrols applies a predicate to check if query has an edge subcontrols.
-func (f *ControlScheduledJobFilter) WhereHasSubcontrols() {
-	f.Where(entql.HasEdge("subcontrols"))
-}
-
-// WhereHasSubcontrolsWith applies a predicate to check if query has an edge subcontrols with a given conditions (other predicates).
-func (f *ControlScheduledJobFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
-	f.Where(entql.HasEdgeWith("subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasJobRunner applies a predicate to check if query has an edge job_runner.
-func (f *ControlScheduledJobFilter) WhereHasJobRunner() {
-	f.Where(entql.HasEdge("job_runner"))
-}
-
-// WhereHasJobRunnerWith applies a predicate to check if query has an edge job_runner with a given conditions (other predicates).
-func (f *ControlScheduledJobFilter) WhereHasJobRunnerWith(preds ...predicate.JobRunner) {
-	f.Where(entql.HasEdgeWith("job_runner", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// addPredicate implements the predicateAdder interface.
-func (csjhq *ControlScheduledJobHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	csjhq.predicates = append(csjhq.predicates, pred)
-}
-
-// Filter returns a Filter implementation to apply filters on the ControlScheduledJobHistoryQuery builder.
-func (csjhq *ControlScheduledJobHistoryQuery) Filter() *ControlScheduledJobHistoryFilter {
-	return &ControlScheduledJobHistoryFilter{config: csjhq.config, predicateAdder: csjhq}
-}
-
-// addPredicate implements the predicateAdder interface.
-func (m *ControlScheduledJobHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
-	m.predicates = append(m.predicates, pred)
-}
-
-// Filter returns an entql.Where implementation to apply filters on the ControlScheduledJobHistoryMutation builder.
-func (m *ControlScheduledJobHistoryMutation) Filter() *ControlScheduledJobHistoryFilter {
-	return &ControlScheduledJobHistoryFilter{config: m.config, predicateAdder: m}
-}
-
-// ControlScheduledJobHistoryFilter provides a generic filtering capability at runtime for ControlScheduledJobHistoryQuery.
-type ControlScheduledJobHistoryFilter struct {
-	predicateAdder
-	config
-}
-
-// Where applies the entql predicate on the query filter.
-func (f *ControlScheduledJobHistoryFilter) Where(p entql.P) {
-	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[14].Type, p, s); err != nil {
-			s.AddError(err)
-		}
-	})
-}
-
-// WhereID applies the entql string predicate on the id field.
-func (f *ControlScheduledJobHistoryFilter) WhereID(p entql.StringP) {
-	f.Where(p.Field(controlscheduledjobhistory.FieldID))
-}
-
-// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
-func (f *ControlScheduledJobHistoryFilter) WhereHistoryTime(p entql.TimeP) {
-	f.Where(p.Field(controlscheduledjobhistory.FieldHistoryTime))
-}
-
-// WhereRef applies the entql string predicate on the ref field.
-func (f *ControlScheduledJobHistoryFilter) WhereRef(p entql.StringP) {
-	f.Where(p.Field(controlscheduledjobhistory.FieldRef))
-}
-
-// WhereOperation applies the entql string predicate on the operation field.
-func (f *ControlScheduledJobHistoryFilter) WhereOperation(p entql.StringP) {
-	f.Where(p.Field(controlscheduledjobhistory.FieldOperation))
-}
-
-// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
-func (f *ControlScheduledJobHistoryFilter) WhereCreatedAt(p entql.TimeP) {
-	f.Where(p.Field(controlscheduledjobhistory.FieldCreatedAt))
-}
-
-// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
-func (f *ControlScheduledJobHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
-	f.Where(p.Field(controlscheduledjobhistory.FieldUpdatedAt))
-}
-
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *ControlScheduledJobHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(controlscheduledjobhistory.FieldCreatedBy))
-}
-
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *ControlScheduledJobHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(controlscheduledjobhistory.FieldUpdatedBy))
-}
-
-// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
-func (f *ControlScheduledJobHistoryFilter) WhereDeletedAt(p entql.TimeP) {
-	f.Where(p.Field(controlscheduledjobhistory.FieldDeletedAt))
-}
-
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *ControlScheduledJobHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(controlscheduledjobhistory.FieldDeletedBy))
-}
-
-// WhereOwnerID applies the entql string predicate on the owner_id field.
-func (f *ControlScheduledJobHistoryFilter) WhereOwnerID(p entql.StringP) {
-	f.Where(p.Field(controlscheduledjobhistory.FieldOwnerID))
-}
-
-// WhereJobID applies the entql string predicate on the job_id field.
-func (f *ControlScheduledJobHistoryFilter) WhereJobID(p entql.StringP) {
-	f.Where(p.Field(controlscheduledjobhistory.FieldJobID))
-}
-
-// WhereConfiguration applies the entql json.RawMessage predicate on the configuration field.
-func (f *ControlScheduledJobHistoryFilter) WhereConfiguration(p entql.BytesP) {
-	f.Where(p.Field(controlscheduledjobhistory.FieldConfiguration))
-}
-
-// WhereCron applies the entql string predicate on the cron field.
-func (f *ControlScheduledJobHistoryFilter) WhereCron(p entql.StringP) {
-	f.Where(p.Field(controlscheduledjobhistory.FieldCron))
-}
-
-// WhereJobRunnerID applies the entql string predicate on the job_runner_id field.
-func (f *ControlScheduledJobHistoryFilter) WhereJobRunnerID(p entql.StringP) {
-	f.Where(p.Field(controlscheduledjobhistory.FieldJobRunnerID))
-}
-
-// addPredicate implements the predicateAdder interface.
 func (cdq *CustomDomainQuery) addPredicate(pred func(s *sql.Selector)) {
 	cdq.predicates = append(cdq.predicates, pred)
 }
@@ -11658,7 +11395,7 @@ type CustomDomainFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *CustomDomainFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[15].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[13].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -11795,7 +11532,7 @@ type CustomDomainHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *CustomDomainHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[16].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[14].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -11905,7 +11642,7 @@ type DNSVerificationFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *DNSVerificationFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[17].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[15].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -12058,7 +11795,7 @@ type DNSVerificationHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *DNSVerificationHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[18].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[16].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -12198,7 +11935,7 @@ type DocumentDataFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *DocumentDataFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[19].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[17].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -12344,7 +12081,7 @@ type DocumentDataHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *DocumentDataHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[20].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[18].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -12449,7 +12186,7 @@ type EmailVerificationTokenFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *EmailVerificationTokenFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[21].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[19].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -12558,7 +12295,7 @@ type EntityFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *EntityFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[22].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[20].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -12822,7 +12559,7 @@ type EntityHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *EntityHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[23].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[21].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -12947,7 +12684,7 @@ type EntityTypeFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *EntityTypeFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[24].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[22].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13060,7 +12797,7 @@ type EntityTypeHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *EntityTypeHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[25].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[23].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13160,7 +12897,7 @@ type EventFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *EventFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[26].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[24].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13413,7 +13150,7 @@ type EvidenceFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *EvidenceFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[27].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[25].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13641,7 +13378,7 @@ type EvidenceHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *EvidenceHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[28].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[26].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13786,7 +13523,7 @@ type ExportFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ExportFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[29].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[27].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13938,7 +13675,7 @@ type FileFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *FileFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[30].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[28].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -14279,7 +14016,7 @@ type FileHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *FileHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[31].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[29].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -14439,7 +14176,7 @@ type GroupFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[32].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[30].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15044,7 +14781,7 @@ type GroupHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[33].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[31].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15174,7 +14911,7 @@ type GroupMembershipFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupMembershipFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[34].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[32].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15305,7 +15042,7 @@ type GroupMembershipHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupMembershipHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[35].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[33].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15395,7 +15132,7 @@ type GroupSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[36].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[34].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15504,7 +15241,7 @@ type GroupSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[37].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[35].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15614,7 +15351,7 @@ type HushFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *HushFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[38].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[36].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15756,7 +15493,7 @@ type HushHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *HushHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[39].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[37].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15871,7 +15608,7 @@ type IntegrationFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *IntegrationFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[40].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[38].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16008,7 +15745,7 @@ type IntegrationHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *IntegrationHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[41].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[39].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16118,7 +15855,7 @@ type InternalPolicyFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *InternalPolicyFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[42].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[40].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16470,7 +16207,7 @@ type InternalPolicyHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *InternalPolicyHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[43].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[41].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16655,7 +16392,7 @@ type InviteFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *InviteFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[44].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[42].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16812,7 +16549,7 @@ type JobResultFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *JobResultFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[45].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[43].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16908,7 +16645,7 @@ func (f *JobResultFilter) WhereHasScheduledJob() {
 }
 
 // WhereHasScheduledJobWith applies a predicate to check if query has an edge scheduled_job with a given conditions (other predicates).
-func (f *JobResultFilter) WhereHasScheduledJobWith(preds ...predicate.ControlScheduledJob) {
+func (f *JobResultFilter) WhereHasScheduledJobWith(preds ...predicate.ScheduledJob) {
 	f.Where(entql.HasEdgeWith("scheduled_job", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -16959,7 +16696,7 @@ type JobRunnerFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *JobRunnerFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[46].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[44].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -17092,7 +16829,7 @@ type JobRunnerRegistrationTokenFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *JobRunnerRegistrationTokenFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[47].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[45].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -17220,7 +16957,7 @@ type JobRunnerTokenFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *JobRunnerTokenFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[48].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[46].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -17332,6 +17069,299 @@ func (f *JobRunnerTokenFilter) WhereHasJobRunnersWith(preds ...predicate.JobRunn
 			p(s)
 		}
 	})))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (jtq *JobTemplateQuery) addPredicate(pred func(s *sql.Selector)) {
+	jtq.predicates = append(jtq.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the JobTemplateQuery builder.
+func (jtq *JobTemplateQuery) Filter() *JobTemplateFilter {
+	return &JobTemplateFilter{config: jtq.config, predicateAdder: jtq}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *JobTemplateMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the JobTemplateMutation builder.
+func (m *JobTemplateMutation) Filter() *JobTemplateFilter {
+	return &JobTemplateFilter{config: m.config, predicateAdder: m}
+}
+
+// JobTemplateFilter provides a generic filtering capability at runtime for JobTemplateQuery.
+type JobTemplateFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *JobTemplateFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[47].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *JobTemplateFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(jobtemplate.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *JobTemplateFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(jobtemplate.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *JobTemplateFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(jobtemplate.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *JobTemplateFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(jobtemplate.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *JobTemplateFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(jobtemplate.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *JobTemplateFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(jobtemplate.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *JobTemplateFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(jobtemplate.FieldDeletedBy))
+}
+
+// WhereDisplayID applies the entql string predicate on the display_id field.
+func (f *JobTemplateFilter) WhereDisplayID(p entql.StringP) {
+	f.Where(p.Field(jobtemplate.FieldDisplayID))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *JobTemplateFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(jobtemplate.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *JobTemplateFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(jobtemplate.FieldOwnerID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *JobTemplateFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(jobtemplate.FieldSystemOwned))
+}
+
+// WhereTitle applies the entql string predicate on the title field.
+func (f *JobTemplateFilter) WhereTitle(p entql.StringP) {
+	f.Where(p.Field(jobtemplate.FieldTitle))
+}
+
+// WhereDescription applies the entql string predicate on the description field.
+func (f *JobTemplateFilter) WhereDescription(p entql.StringP) {
+	f.Where(p.Field(jobtemplate.FieldDescription))
+}
+
+// WherePlatform applies the entql string predicate on the platform field.
+func (f *JobTemplateFilter) WherePlatform(p entql.StringP) {
+	f.Where(p.Field(jobtemplate.FieldPlatform))
+}
+
+// WhereWindmillPath applies the entql string predicate on the windmill_path field.
+func (f *JobTemplateFilter) WhereWindmillPath(p entql.StringP) {
+	f.Where(p.Field(jobtemplate.FieldWindmillPath))
+}
+
+// WhereDownloadURL applies the entql string predicate on the download_url field.
+func (f *JobTemplateFilter) WhereDownloadURL(p entql.StringP) {
+	f.Where(p.Field(jobtemplate.FieldDownloadURL))
+}
+
+// WhereConfiguration applies the entql json.RawMessage predicate on the configuration field.
+func (f *JobTemplateFilter) WhereConfiguration(p entql.BytesP) {
+	f.Where(p.Field(jobtemplate.FieldConfiguration))
+}
+
+// WhereCron applies the entql string predicate on the cron field.
+func (f *JobTemplateFilter) WhereCron(p entql.StringP) {
+	f.Where(p.Field(jobtemplate.FieldCron))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *JobTemplateFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *JobTemplateFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasScheduledJobs applies a predicate to check if query has an edge scheduled_jobs.
+func (f *JobTemplateFilter) WhereHasScheduledJobs() {
+	f.Where(entql.HasEdge("scheduled_jobs"))
+}
+
+// WhereHasScheduledJobsWith applies a predicate to check if query has an edge scheduled_jobs with a given conditions (other predicates).
+func (f *JobTemplateFilter) WhereHasScheduledJobsWith(preds ...predicate.ScheduledJob) {
+	f.Where(entql.HasEdgeWith("scheduled_jobs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (jthq *JobTemplateHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	jthq.predicates = append(jthq.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the JobTemplateHistoryQuery builder.
+func (jthq *JobTemplateHistoryQuery) Filter() *JobTemplateHistoryFilter {
+	return &JobTemplateHistoryFilter{config: jthq.config, predicateAdder: jthq}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *JobTemplateHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the JobTemplateHistoryMutation builder.
+func (m *JobTemplateHistoryMutation) Filter() *JobTemplateHistoryFilter {
+	return &JobTemplateHistoryFilter{config: m.config, predicateAdder: m}
+}
+
+// JobTemplateHistoryFilter provides a generic filtering capability at runtime for JobTemplateHistoryQuery.
+type JobTemplateHistoryFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *JobTemplateHistoryFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[48].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *JobTemplateHistoryFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(jobtemplatehistory.FieldID))
+}
+
+// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
+func (f *JobTemplateHistoryFilter) WhereHistoryTime(p entql.TimeP) {
+	f.Where(p.Field(jobtemplatehistory.FieldHistoryTime))
+}
+
+// WhereRef applies the entql string predicate on the ref field.
+func (f *JobTemplateHistoryFilter) WhereRef(p entql.StringP) {
+	f.Where(p.Field(jobtemplatehistory.FieldRef))
+}
+
+// WhereOperation applies the entql string predicate on the operation field.
+func (f *JobTemplateHistoryFilter) WhereOperation(p entql.StringP) {
+	f.Where(p.Field(jobtemplatehistory.FieldOperation))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *JobTemplateHistoryFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(jobtemplatehistory.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *JobTemplateHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(jobtemplatehistory.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *JobTemplateHistoryFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(jobtemplatehistory.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *JobTemplateHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(jobtemplatehistory.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *JobTemplateHistoryFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(jobtemplatehistory.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *JobTemplateHistoryFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(jobtemplatehistory.FieldDeletedBy))
+}
+
+// WhereDisplayID applies the entql string predicate on the display_id field.
+func (f *JobTemplateHistoryFilter) WhereDisplayID(p entql.StringP) {
+	f.Where(p.Field(jobtemplatehistory.FieldDisplayID))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *JobTemplateHistoryFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(jobtemplatehistory.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *JobTemplateHistoryFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(jobtemplatehistory.FieldOwnerID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *JobTemplateHistoryFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(jobtemplatehistory.FieldSystemOwned))
+}
+
+// WhereTitle applies the entql string predicate on the title field.
+func (f *JobTemplateHistoryFilter) WhereTitle(p entql.StringP) {
+	f.Where(p.Field(jobtemplatehistory.FieldTitle))
+}
+
+// WhereDescription applies the entql string predicate on the description field.
+func (f *JobTemplateHistoryFilter) WhereDescription(p entql.StringP) {
+	f.Where(p.Field(jobtemplatehistory.FieldDescription))
+}
+
+// WherePlatform applies the entql string predicate on the platform field.
+func (f *JobTemplateHistoryFilter) WherePlatform(p entql.StringP) {
+	f.Where(p.Field(jobtemplatehistory.FieldPlatform))
+}
+
+// WhereWindmillPath applies the entql string predicate on the windmill_path field.
+func (f *JobTemplateHistoryFilter) WhereWindmillPath(p entql.StringP) {
+	f.Where(p.Field(jobtemplatehistory.FieldWindmillPath))
+}
+
+// WhereDownloadURL applies the entql string predicate on the download_url field.
+func (f *JobTemplateHistoryFilter) WhereDownloadURL(p entql.StringP) {
+	f.Where(p.Field(jobtemplatehistory.FieldDownloadURL))
+}
+
+// WhereConfiguration applies the entql json.RawMessage predicate on the configuration field.
+func (f *JobTemplateHistoryFilter) WhereConfiguration(p entql.BytesP) {
+	f.Where(p.Field(jobtemplatehistory.FieldConfiguration))
+}
+
+// WhereCron applies the entql string predicate on the cron field.
+func (f *JobTemplateHistoryFilter) WhereCron(p entql.StringP) {
+	f.Where(p.Field(jobtemplatehistory.FieldCron))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -20507,14 +20537,14 @@ func (f *OrganizationFilter) WhereHasDNSVerificationsWith(preds ...predicate.DNS
 	})))
 }
 
-// WhereHasJobs applies a predicate to check if query has an edge jobs.
-func (f *OrganizationFilter) WhereHasJobs() {
-	f.Where(entql.HasEdge("jobs"))
+// WhereHasJobTemplates applies a predicate to check if query has an edge job_templates.
+func (f *OrganizationFilter) WhereHasJobTemplates() {
+	f.Where(entql.HasEdge("job_templates"))
 }
 
-// WhereHasJobsWith applies a predicate to check if query has an edge jobs with a given conditions (other predicates).
-func (f *OrganizationFilter) WhereHasJobsWith(preds ...predicate.ScheduledJob) {
-	f.Where(entql.HasEdgeWith("jobs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasJobTemplatesWith applies a predicate to check if query has an edge job_templates with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasJobTemplatesWith(preds ...predicate.JobTemplate) {
+	f.Where(entql.HasEdgeWith("job_templates", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -20527,7 +20557,7 @@ func (f *OrganizationFilter) WhereHasScheduledJobs() {
 }
 
 // WhereHasScheduledJobsWith applies a predicate to check if query has an edge scheduled_jobs with a given conditions (other predicates).
-func (f *OrganizationFilter) WhereHasScheduledJobsWith(preds ...predicate.ControlScheduledJob) {
+func (f *OrganizationFilter) WhereHasScheduledJobsWith(preds ...predicate.ScheduledJob) {
 	f.Where(entql.HasEdgeWith("scheduled_jobs", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -23641,49 +23671,19 @@ func (f *ScheduledJobFilter) WhereDisplayID(p entql.StringP) {
 	f.Where(p.Field(scheduledjob.FieldDisplayID))
 }
 
-// WhereTags applies the entql json.RawMessage predicate on the tags field.
-func (f *ScheduledJobFilter) WhereTags(p entql.BytesP) {
-	f.Where(p.Field(scheduledjob.FieldTags))
-}
-
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *ScheduledJobFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(scheduledjob.FieldOwnerID))
 }
 
-// WhereSystemOwned applies the entql bool predicate on the system_owned field.
-func (f *ScheduledJobFilter) WhereSystemOwned(p entql.BoolP) {
-	f.Where(p.Field(scheduledjob.FieldSystemOwned))
+// WhereJobID applies the entql string predicate on the job_id field.
+func (f *ScheduledJobFilter) WhereJobID(p entql.StringP) {
+	f.Where(p.Field(scheduledjob.FieldJobID))
 }
 
-// WhereTitle applies the entql string predicate on the title field.
-func (f *ScheduledJobFilter) WhereTitle(p entql.StringP) {
-	f.Where(p.Field(scheduledjob.FieldTitle))
-}
-
-// WhereDescription applies the entql string predicate on the description field.
-func (f *ScheduledJobFilter) WhereDescription(p entql.StringP) {
-	f.Where(p.Field(scheduledjob.FieldDescription))
-}
-
-// WherePlatform applies the entql string predicate on the platform field.
-func (f *ScheduledJobFilter) WherePlatform(p entql.StringP) {
-	f.Where(p.Field(scheduledjob.FieldPlatform))
-}
-
-// WhereScript applies the entql string predicate on the script field.
-func (f *ScheduledJobFilter) WhereScript(p entql.StringP) {
-	f.Where(p.Field(scheduledjob.FieldScript))
-}
-
-// WhereWindmillPath applies the entql string predicate on the windmill_path field.
-func (f *ScheduledJobFilter) WhereWindmillPath(p entql.StringP) {
-	f.Where(p.Field(scheduledjob.FieldWindmillPath))
-}
-
-// WhereDownloadURL applies the entql string predicate on the download_url field.
-func (f *ScheduledJobFilter) WhereDownloadURL(p entql.StringP) {
-	f.Where(p.Field(scheduledjob.FieldDownloadURL))
+// WhereActive applies the entql bool predicate on the active field.
+func (f *ScheduledJobFilter) WhereActive(p entql.BoolP) {
+	f.Where(p.Field(scheduledjob.FieldActive))
 }
 
 // WhereConfiguration applies the entql json.RawMessage predicate on the configuration field.
@@ -23691,14 +23691,14 @@ func (f *ScheduledJobFilter) WhereConfiguration(p entql.BytesP) {
 	f.Where(p.Field(scheduledjob.FieldConfiguration))
 }
 
-// WhereCadence applies the entql json.RawMessage predicate on the cadence field.
-func (f *ScheduledJobFilter) WhereCadence(p entql.BytesP) {
-	f.Where(p.Field(scheduledjob.FieldCadence))
-}
-
 // WhereCron applies the entql string predicate on the cron field.
 func (f *ScheduledJobFilter) WhereCron(p entql.StringP) {
 	f.Where(p.Field(scheduledjob.FieldCron))
+}
+
+// WhereJobRunnerID applies the entql string predicate on the job_runner_id field.
+func (f *ScheduledJobFilter) WhereJobRunnerID(p entql.StringP) {
+	f.Where(p.Field(scheduledjob.FieldJobRunnerID))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -23709,6 +23709,62 @@ func (f *ScheduledJobFilter) WhereHasOwner() {
 // WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
 func (f *ScheduledJobFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
 	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasJobTemplate applies a predicate to check if query has an edge job_template.
+func (f *ScheduledJobFilter) WhereHasJobTemplate() {
+	f.Where(entql.HasEdge("job_template"))
+}
+
+// WhereHasJobTemplateWith applies a predicate to check if query has an edge job_template with a given conditions (other predicates).
+func (f *ScheduledJobFilter) WhereHasJobTemplateWith(preds ...predicate.JobTemplate) {
+	f.Where(entql.HasEdgeWith("job_template", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasControls applies a predicate to check if query has an edge controls.
+func (f *ScheduledJobFilter) WhereHasControls() {
+	f.Where(entql.HasEdge("controls"))
+}
+
+// WhereHasControlsWith applies a predicate to check if query has an edge controls with a given conditions (other predicates).
+func (f *ScheduledJobFilter) WhereHasControlsWith(preds ...predicate.Control) {
+	f.Where(entql.HasEdgeWith("controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSubcontrols applies a predicate to check if query has an edge subcontrols.
+func (f *ScheduledJobFilter) WhereHasSubcontrols() {
+	f.Where(entql.HasEdge("subcontrols"))
+}
+
+// WhereHasSubcontrolsWith applies a predicate to check if query has an edge subcontrols with a given conditions (other predicates).
+func (f *ScheduledJobFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasJobRunner applies a predicate to check if query has an edge job_runner.
+func (f *ScheduledJobFilter) WhereHasJobRunner() {
+	f.Where(entql.HasEdge("job_runner"))
+}
+
+// WhereHasJobRunnerWith applies a predicate to check if query has an edge job_runner with a given conditions (other predicates).
+func (f *ScheduledJobFilter) WhereHasJobRunnerWith(preds ...predicate.JobRunner) {
+	f.Where(entql.HasEdgeWith("job_runner", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -23805,49 +23861,19 @@ func (f *ScheduledJobHistoryFilter) WhereDisplayID(p entql.StringP) {
 	f.Where(p.Field(scheduledjobhistory.FieldDisplayID))
 }
 
-// WhereTags applies the entql json.RawMessage predicate on the tags field.
-func (f *ScheduledJobHistoryFilter) WhereTags(p entql.BytesP) {
-	f.Where(p.Field(scheduledjobhistory.FieldTags))
-}
-
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *ScheduledJobHistoryFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(scheduledjobhistory.FieldOwnerID))
 }
 
-// WhereSystemOwned applies the entql bool predicate on the system_owned field.
-func (f *ScheduledJobHistoryFilter) WhereSystemOwned(p entql.BoolP) {
-	f.Where(p.Field(scheduledjobhistory.FieldSystemOwned))
+// WhereJobID applies the entql string predicate on the job_id field.
+func (f *ScheduledJobHistoryFilter) WhereJobID(p entql.StringP) {
+	f.Where(p.Field(scheduledjobhistory.FieldJobID))
 }
 
-// WhereTitle applies the entql string predicate on the title field.
-func (f *ScheduledJobHistoryFilter) WhereTitle(p entql.StringP) {
-	f.Where(p.Field(scheduledjobhistory.FieldTitle))
-}
-
-// WhereDescription applies the entql string predicate on the description field.
-func (f *ScheduledJobHistoryFilter) WhereDescription(p entql.StringP) {
-	f.Where(p.Field(scheduledjobhistory.FieldDescription))
-}
-
-// WherePlatform applies the entql string predicate on the platform field.
-func (f *ScheduledJobHistoryFilter) WherePlatform(p entql.StringP) {
-	f.Where(p.Field(scheduledjobhistory.FieldPlatform))
-}
-
-// WhereScript applies the entql string predicate on the script field.
-func (f *ScheduledJobHistoryFilter) WhereScript(p entql.StringP) {
-	f.Where(p.Field(scheduledjobhistory.FieldScript))
-}
-
-// WhereWindmillPath applies the entql string predicate on the windmill_path field.
-func (f *ScheduledJobHistoryFilter) WhereWindmillPath(p entql.StringP) {
-	f.Where(p.Field(scheduledjobhistory.FieldWindmillPath))
-}
-
-// WhereDownloadURL applies the entql string predicate on the download_url field.
-func (f *ScheduledJobHistoryFilter) WhereDownloadURL(p entql.StringP) {
-	f.Where(p.Field(scheduledjobhistory.FieldDownloadURL))
+// WhereActive applies the entql bool predicate on the active field.
+func (f *ScheduledJobHistoryFilter) WhereActive(p entql.BoolP) {
+	f.Where(p.Field(scheduledjobhistory.FieldActive))
 }
 
 // WhereConfiguration applies the entql json.RawMessage predicate on the configuration field.
@@ -23855,14 +23881,14 @@ func (f *ScheduledJobHistoryFilter) WhereConfiguration(p entql.BytesP) {
 	f.Where(p.Field(scheduledjobhistory.FieldConfiguration))
 }
 
-// WhereCadence applies the entql json.RawMessage predicate on the cadence field.
-func (f *ScheduledJobHistoryFilter) WhereCadence(p entql.BytesP) {
-	f.Where(p.Field(scheduledjobhistory.FieldCadence))
-}
-
 // WhereCron applies the entql string predicate on the cron field.
 func (f *ScheduledJobHistoryFilter) WhereCron(p entql.StringP) {
 	f.Where(p.Field(scheduledjobhistory.FieldCron))
+}
+
+// WhereJobRunnerID applies the entql string predicate on the job_runner_id field.
+func (f *ScheduledJobHistoryFilter) WhereJobRunnerID(p entql.StringP) {
+	f.Where(p.Field(scheduledjobhistory.FieldJobRunnerID))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -23985,7 +24011,7 @@ func (f *ScheduledJobRunFilter) WhereHasScheduledJob() {
 }
 
 // WhereHasScheduledJobWith applies a predicate to check if query has an edge scheduled_job with a given conditions (other predicates).
-func (f *ScheduledJobRunFilter) WhereHasScheduledJobWith(preds ...predicate.ControlScheduledJob) {
+func (f *ScheduledJobRunFilter) WhereHasScheduledJobWith(preds ...predicate.ScheduledJob) {
 	f.Where(entql.HasEdgeWith("scheduled_job", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
@@ -24738,7 +24764,7 @@ func (f *SubcontrolFilter) WhereHasScheduledJobs() {
 }
 
 // WhereHasScheduledJobsWith applies a predicate to check if query has an edge scheduled_jobs with a given conditions (other predicates).
-func (f *SubcontrolFilter) WhereHasScheduledJobsWith(preds ...predicate.ControlScheduledJob) {
+func (f *SubcontrolFilter) WhereHasScheduledJobsWith(preds ...predicate.ScheduledJob) {
 	f.Where(entql.HasEdgeWith("scheduled_jobs", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)

@@ -1,20 +1,21 @@
 package windmill
 
 import (
-	"bytes"
 	"context"
 	"crypto/rand"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
-	"net/http"
-	"strings"
 	"time"
 
+	api "github.com/windmill-labs/windmill-go-client/api"
+
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/httpsling/httpclient"
 )
 
 var (
@@ -29,26 +30,11 @@ const (
 	randomIDByteLength = 4
 )
 
-type windmillRoundTripper struct {
-	token string
-	base  http.RoundTripper
-}
-
-// RoundTrip implements http.RoundTripper and adds authentication + content-type headers to the request
-func (wrt *windmillRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
-	clonedReq := req.Clone(req.Context())
-
-	clonedReq.Header.Set("Authorization", "Bearer "+wrt.token)
-	clonedReq.Header.Set("Content-Type", "application/json")
-
-	return wrt.base.RoundTrip(clonedReq)
-}
-
 // Client is a simple SDK for creating and managing Windmill flows
 type Client struct {
 	baseURL         string
 	workspace       string
-	httpClient      *http.Client
+	requester       *httpsling.Requester
 	timezone        string
 	onFailureScript string
 	onSuccessScript string
@@ -56,59 +42,86 @@ type Client struct {
 
 // NewWindmill creates a new Windmill client based on the provided configuration
 func NewWindmill(cfg entconfig.Config) (*Client, error) {
-	if !cfg.Windmill.Enabled {
-		return nil, ErrWindmillDisabled
+	if err := validateConfig(cfg); err != nil {
+		return nil, fmt.Errorf("invalid windmill config: %w", err)
 	}
 
-	if cfg.Windmill.Token == "" {
-		return nil, ErrMissingToken
-	}
-
-	if cfg.Windmill.Workspace == "" {
-		return nil, ErrMissingWorkspace
-	}
-
-	timeout, err := time.ParseDuration(cfg.Windmill.DefaultTimeout)
+	requester, err := createRequester(cfg)
 	if err != nil {
-		timeout = defaultTimeoutSeconds * time.Second
+		return nil, fmt.Errorf("failed to create requester: %w", err)
 	}
 
-	transport := &windmillRoundTripper{
-		token: cfg.Windmill.Token,
-		base:  http.DefaultTransport,
-	}
-
-	return &Client{
+	c := &Client{
 		baseURL:         cfg.Windmill.BaseURL,
 		workspace:       cfg.Windmill.Workspace,
 		timezone:        cfg.Windmill.Timezone,
 		onFailureScript: cfg.Windmill.OnFailureScript,
 		onSuccessScript: cfg.Windmill.OnSuccessScript,
-		httpClient: &http.Client{
-			Timeout:   timeout,
-			Transport: transport,
-		},
-	}, nil
+		requester:       requester,
+	}
+
+	return c, nil
+}
+
+// validateConfig validates the Windmill configuration before creating a client
+func validateConfig(cfg entconfig.Config) error {
+	if !cfg.Windmill.Enabled {
+		return ErrWindmillDisabled
+	}
+
+	if cfg.Windmill.Token == "" {
+		return ErrMissingToken
+	}
+
+	if cfg.Windmill.Workspace == "" {
+		return ErrMissingWorkspace
+	}
+	return nil
+}
+
+// createRequester creates a new httpsling.Requester with the Windmill configuration
+// It sets the base URL, authorization header, and content type for the requests
+func createRequester(cfg entconfig.Config) (*httpsling.Requester, error) {
+	timeout, err := time.ParseDuration(cfg.Windmill.DefaultTimeout)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse windmill default timeout: %w", err)
+	}
+
+	if timeout == 0 {
+		timeout = defaultTimeoutSeconds
+	}
+
+	return httpsling.New(
+		httpsling.Client(
+			httpclient.Timeout(timeout),
+		),
+
+		httpsling.URL(cfg.Windmill.BaseURL),
+		httpsling.AddHeader(httpsling.HeaderAuthorization, "Bearer "+cfg.Windmill.Token),
+		httpsling.AddHeader(httpsling.HeaderContentType, httpsling.ContentTypeJSON),
+	)
 }
 
 // CreateFlow creates a new flow in Windmill and returns the flow path
 // It wraps raw code into proper Windmill flow structure
 func (c *Client) CreateFlow(ctx context.Context, req CreateFlowRequest) (*CreateFlowResponse, error) {
-	url := fmt.Sprintf("%s/api/w/%s/flows/create", c.baseURL, c.workspace)
+	path := fmt.Sprintf("/api/w/%s/flows/create", c.workspace)
 
 	flowValue := createFlowValue(req.Value, req.Language)
 
 	apiReq := struct {
-		Path    string `json:"path"`
-		Summary string `json:"summary"`
-		Value   struct {
+		Path        string `json:"path"`
+		Summary     string `json:"summary,omitempty"`
+		Description string `json:"description,omitempty"`
+		Value       struct {
 			Modules    []any `json:"modules"`
 			SameWorker bool  `json:"same_worker"`
 		} `json:"value"`
 		Schema any `json:"schema,omitempty"`
 	}{
-		Path:    req.Path,
-		Summary: req.Summary,
+		Path:        req.Path,
+		Summary:     req.Summary,
+		Description: req.Description,
 		Value: struct {
 			Modules    []any `json:"modules"`
 			SameWorker bool  `json:"same_worker"`
@@ -127,28 +140,23 @@ func (c *Client) CreateFlow(ctx context.Context, req CreateFlowRequest) (*Create
 		return nil, fmt.Errorf("failed to marshal request: %w", err)
 	}
 
-	httpReq, err := http.NewRequestWithContext(ctx, "POST", url, bytes.NewBuffer(jsonData))
+	var out string
+	resp, err := c.requester.ReceiveWithContext(ctx, &out,
+		httpsling.Post(path),
+		httpsling.Body(jsonData),
+	)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create request: %w", err)
+		return nil, err
 	}
 
-	resp, err := c.httpClient.Do(httpReq)
-	if err != nil {
-		return nil, fmt.Errorf("failed to execute request: %w", err)
-	}
 	defer resp.Body.Close()
 
-	respBody, readErr := io.ReadAll(resp.Body)
-	if readErr != nil {
-		return nil, fmt.Errorf("failed to read response body: %w", readErr)
-	}
-
-	if resp.StatusCode != http.StatusCreated && resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("%w: %d, URL: %s, response body: %s", errUnexpectedStatusCode, resp.StatusCode, url, string(respBody))
+	if !httpsling.IsSuccess(resp) {
+		return nil, fmt.Errorf("%w: %d, URL: %s, response body: %s", errUnexpectedStatusCode, resp.StatusCode, path, out)
 	}
 
 	// the response is plain text containing the flow path, not json
-	flowPath := string(respBody)
+	flowPath := string(out)
 	if flowPath == "" {
 		return nil, errEmptyResponseBody
 	}
@@ -168,8 +176,8 @@ func (c *Client) UpdateFlow(ctx context.Context, path string, req UpdateFlowRequ
 
 	apiReq := struct {
 		Path        string `json:"path"`
-		Summary     string `json:"summary"`
-		Description string `json:"description"`
+		Summary     string `json:"summary,omitempty"`
+		Description string `json:"description,omitempty"`
 		Value       struct {
 			Modules []any `json:"modules"`
 		} `json:"value"`
@@ -177,7 +185,7 @@ func (c *Client) UpdateFlow(ctx context.Context, path string, req UpdateFlowRequ
 	}{
 		Path:        path,
 		Summary:     req.Summary,
-		Description: req.Summary,
+		Description: req.Description,
 		Value: struct {
 			Modules []any `json:"modules"`
 		}{
@@ -194,18 +202,18 @@ func (c *Client) UpdateFlow(ctx context.Context, path string, req UpdateFlowRequ
 		return fmt.Errorf("failed to marshal request: %w", err)
 	}
 
-	httpReq, err := http.NewRequestWithContext(ctx, "POST", url, bytes.NewBuffer(jsonData))
+	var out string
+	resp, err := c.requester.ReceiveWithContext(ctx, &out,
+		httpsling.Post(url),
+		httpsling.Body(jsonData),
+	)
 	if err != nil {
-		return fmt.Errorf("failed to create request: %w", err)
+		return fmt.Errorf("failed to update flow: %w", err)
 	}
 
-	resp, err := c.httpClient.Do(httpReq)
-	if err != nil {
-		return fmt.Errorf("failed to execute request: %w", err)
-	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
+	if !httpsling.IsSuccess(resp) {
 		return fmt.Errorf("%w: %d", errUnexpectedStatusCode, resp.StatusCode)
 	}
 
@@ -213,115 +221,82 @@ func (c *Client) UpdateFlow(ctx context.Context, path string, req UpdateFlowRequ
 }
 
 // GetFlow retrieves a flow by path
-func (c *Client) GetFlow(ctx context.Context, path string) (*Flow, error) {
-	url := fmt.Sprintf("%s/api/w/%s/flows/get/%s", c.baseURL, c.workspace, path)
+func (c *Client) GetFlow(ctx context.Context, path string) (*api.Flow, error) {
+	requestPath := fmt.Sprintf("api/w/%s/flows/get/%s", c.workspace, path)
 
-	httpReq, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	var out api.Flow
+	resp, err := c.requester.ReceiveWithContext(ctx, &out,
+		httpsling.Get(requestPath),
+	)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create request: %w", err)
+		return nil, err
 	}
 
-	resp, err := c.httpClient.Do(httpReq)
-	if err != nil {
-		return nil, fmt.Errorf("failed to execute request: %w", err)
-	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
+	if !httpsling.IsSuccess(resp) {
 		return nil, fmt.Errorf("%w: %d", errUnexpectedStatusCode, resp.StatusCode)
 	}
 
-	var flow Flow
-	if err := json.NewDecoder(resp.Body).Decode(&flow); err != nil {
-		return nil, fmt.Errorf("failed to decode response: %w", err)
-	}
-
-	return &flow, nil
+	return &out, nil
 }
 
 // CreateScheduledJob creates a new scheduled job in Windmill
 func (c *Client) CreateScheduledJob(ctx context.Context, req CreateScheduledJobRequest) (*CreateScheduledJobResponse, error) {
 	url := fmt.Sprintf("%s/api/w/%s/schedules/create", c.baseURL, c.workspace)
 
-	apiReq := struct {
-		Path       string `json:"path"`
-		Schedule   string `json:"schedule"`
-		ScriptPath string `json:"script_path"`
-		Enabled    bool   `json:"enabled"`
-		Timezone   string `json:"timezone,omitempty"`
-		OnFailure  *struct {
-			ScriptPath string `json:"script_path"`
-			Args       any    `json:"args,omitempty"`
-		} `json:"on_failure,omitempty"`
-		OnSuccess *struct {
-			ScriptPath string `json:"script_path"`
-			Args       any    `json:"args,omitempty"`
-		} `json:"on_success,omitempty"`
-		Args    any    `json:"args,omitempty"`
-		Summary string `json:"summary,omitempty"`
-	}{
+	enabled := true
+	apiReq := api.CreateScheduleJSONRequestBody{
+		IsFlow:     true,
 		Path:       req.Path,
 		Schedule:   req.Schedule,
 		ScriptPath: req.FlowPath,
-		Enabled:    true,
+		Enabled:    &enabled,
 		Timezone:   c.timezone,
 	}
 
 	if c.onFailureScript != "" {
-		apiReq.OnFailure = &struct {
-			ScriptPath string `json:"script_path"`
-			Args       any    `json:"args,omitempty"`
-		}{
-			ScriptPath: c.onFailureScript,
-			Args:       req.Args,
-		}
+		apiReq.OnFailure = &c.onFailureScript
 	}
 
 	if c.onSuccessScript != "" {
-		apiReq.OnSuccess = &struct {
-			ScriptPath string `json:"script_path"`
-			Args       any    `json:"args,omitempty"`
-		}{
-			ScriptPath: c.onSuccessScript,
-			Args:       req.Args,
-		}
+		apiReq.OnSuccess = &c.onSuccessScript
 	}
 
 	if req.Args != nil {
-		apiReq.Args = req.Args
+		if args, ok := req.Args.(api.ScriptArgs); ok {
+			apiReq.Args = args
+		}
 	}
 
 	if req.Summary != "" {
-		apiReq.Summary = req.Summary
+		apiReq.Summary = &req.Summary
 	}
+
+	log.Info().Msgf("apiReq: %+v", apiReq)
 
 	jsonData, err := json.Marshal(apiReq)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal request: %w", err)
 	}
 
-	httpReq, err := http.NewRequestWithContext(ctx, "POST", url, bytes.NewBuffer(jsonData))
+	var out string
+	resp, err := c.requester.ReceiveWithContext(ctx, &out,
+		httpsling.Post(url),
+		httpsling.Body(jsonData),
+	)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create request: %w", err)
+		return nil, fmt.Errorf("failed to create scheduled job: %w", err)
 	}
 
-	resp, err := c.httpClient.Do(httpReq)
-	if err != nil {
-		return nil, fmt.Errorf("failed to execute request: %w", err)
-	}
 	defer resp.Body.Close()
 
-	respBody, readErr := io.ReadAll(resp.Body)
-	if readErr != nil {
-		return nil, fmt.Errorf("failed to read response body: %w", readErr)
-	}
-
-	if resp.StatusCode != http.StatusCreated && resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("%w: %d, URL: %s, response body: %s", errUnexpectedStatusCode, resp.StatusCode, url, string(respBody))
+	if !httpsling.IsSuccess(resp) {
+		return nil, fmt.Errorf("%w: %d, URL: %s, response body: %s", errUnexpectedStatusCode, resp.StatusCode, url, out)
 	}
 
 	// the response is plain text containing the schedule path, not json
-	schedulePath := string(respBody)
+	schedulePath := string(out)
 	if schedulePath == "" {
 		return nil, errEmptyResponseBody
 	}
@@ -331,6 +306,18 @@ func (c *Client) CreateScheduledJob(ctx context.Context, req CreateScheduledJobR
 	}
 
 	return response, nil
+}
+
+func getWindmillLanguage(language enums.JobPlatformType) api.SchemasRawScriptLanguage {
+	switch language {
+	case enums.JobPlatformTypeGo:
+		return api.SchemasRawScriptLanguageGo
+	case enums.JobPlatformTypeTs:
+		return api.SchemasRawScriptLanguageBun
+	default:
+		// fall back to bash for any other language
+		return api.SchemasRawScriptLanguageBash
+	}
 }
 
 // createFlowValue creates a properly structured flow value from raw code content
@@ -352,6 +339,8 @@ func createFlowValue(rawContent []any, language enums.JobPlatformType) []any {
 				codeContent = fmt.Sprintf("%v", v)
 			}
 		}
+
+		language := getWindmillLanguage(language)
 
 		module := struct {
 			ID    string `json:"id"`
@@ -375,15 +364,15 @@ func createFlowValue(rawContent []any, language enums.JobPlatformType) []any {
 					Value string `json:"value"`
 				} `json:"input_transforms"`
 			}{
-				Type:     "rawscript",
+				Type:     string(api.Rawscript),
 				Content:  codeContent,
-				Language: strings.ToLower(language.String()),
+				Language: string(language),
 				InputTransforms: map[string]struct {
 					Type  string `json:"type"`
 					Value string `json:"value"`
 				}{
 					"name": {
-						Type:  "static",
+						Type:  string(api.Static),
 						Value: "",
 					},
 				},

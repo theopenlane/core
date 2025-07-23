@@ -335,6 +335,7 @@ func TestMutationDeleteOBJECT(t *testing.T) {
 	// create objects to be deleted
 	OBJECT1 := (&OBJECTBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	OBJECT2 := (&OBJECTBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	OBJECT3 := (&OBJECTBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -344,11 +345,18 @@ func TestMutationDeleteOBJECT(t *testing.T) {
 		expectedErr string
 	}{
 		{
-			name:        "not authorized, delete",
+			name:        "not found, delete",
 			idToDelete:  OBJECT1.ID,
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
+		},
+		{
+			name:        "not authorized, delete",
+			idToDelete:  OBJECT1.ID,
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
@@ -367,6 +375,12 @@ func TestMutationDeleteOBJECT(t *testing.T) {
 			name:       "happy path, delete using personal access token",
 			idToDelete: OBJECT2.ID,
 			client:     suite.client.apiWithPAT,
+			ctx:        context.Background(),
+		},
+		{
+			name:       "happy path, delete using api token",
+			idToDelete: OBJECT3.ID,
+			client:     suite.client.apiWithToken,
 			ctx:        context.Background(),
 		},
 		{
@@ -390,7 +404,7 @@ func TestMutationDeleteOBJECT(t *testing.T) {
 
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
-			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteOBJECTDeletedID))
+			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteOBJECT.DeletedID))
 		})
 	}
 }

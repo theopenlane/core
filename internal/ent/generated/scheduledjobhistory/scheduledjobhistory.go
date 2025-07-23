@@ -9,7 +9,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -38,30 +37,18 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldDisplayID holds the string denoting the display_id field in the database.
 	FieldDisplayID = "display_id"
-	// FieldTags holds the string denoting the tags field in the database.
-	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
-	// FieldSystemOwned holds the string denoting the system_owned field in the database.
-	FieldSystemOwned = "system_owned"
-	// FieldTitle holds the string denoting the title field in the database.
-	FieldTitle = "title"
-	// FieldDescription holds the string denoting the description field in the database.
-	FieldDescription = "description"
-	// FieldPlatform holds the string denoting the platform field in the database.
-	FieldPlatform = "platform"
-	// FieldScript holds the string denoting the script field in the database.
-	FieldScript = "script"
-	// FieldWindmillPath holds the string denoting the windmill_path field in the database.
-	FieldWindmillPath = "windmill_path"
-	// FieldDownloadURL holds the string denoting the download_url field in the database.
-	FieldDownloadURL = "download_url"
+	// FieldJobID holds the string denoting the job_id field in the database.
+	FieldJobID = "job_id"
+	// FieldActive holds the string denoting the active field in the database.
+	FieldActive = "active"
 	// FieldConfiguration holds the string denoting the configuration field in the database.
 	FieldConfiguration = "configuration"
-	// FieldCadence holds the string denoting the cadence field in the database.
-	FieldCadence = "cadence"
 	// FieldCron holds the string denoting the cron field in the database.
 	FieldCron = "cron"
+	// FieldJobRunnerID holds the string denoting the job_runner_id field in the database.
+	FieldJobRunnerID = "job_runner_id"
 	// Table holds the table name of the scheduledjobhistory in the database.
 	Table = "scheduled_job_history"
 )
@@ -79,18 +66,12 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldDisplayID,
-	FieldTags,
 	FieldOwnerID,
-	FieldSystemOwned,
-	FieldTitle,
-	FieldDescription,
-	FieldPlatform,
-	FieldScript,
-	FieldWindmillPath,
-	FieldDownloadURL,
+	FieldJobID,
+	FieldActive,
 	FieldConfiguration,
-	FieldCadence,
 	FieldCron,
+	FieldJobRunnerID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -120,10 +101,8 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
-	// DefaultTags holds the default value on creation for the "tags" field.
-	DefaultTags []string
-	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
-	DefaultSystemOwned bool
+	// DefaultActive holds the default value on creation for the "active" field.
+	DefaultActive bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -135,16 +114,6 @@ func OperationValidator(o history.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("scheduledjobhistory: invalid enum value for operation field: %q", o)
-	}
-}
-
-// PlatformValidator is a validator for the "platform" field enum values. It is called by the builders before save.
-func PlatformValidator(pl enums.JobPlatformType) error {
-	switch pl.String() {
-	case "GO", "TS":
-		return nil
-	default:
-		return fmt.Errorf("scheduledjobhistory: invalid enum value for platform field: %q", pl)
 	}
 }
 
@@ -211,39 +180,14 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
-// BySystemOwned orders the results by the system_owned field.
-func BySystemOwned(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSystemOwned, opts...).ToFunc()
+// ByJobID orders the results by the job_id field.
+func ByJobID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldJobID, opts...).ToFunc()
 }
 
-// ByTitle orders the results by the title field.
-func ByTitle(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldTitle, opts...).ToFunc()
-}
-
-// ByDescription orders the results by the description field.
-func ByDescription(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDescription, opts...).ToFunc()
-}
-
-// ByPlatform orders the results by the platform field.
-func ByPlatform(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPlatform, opts...).ToFunc()
-}
-
-// ByScript orders the results by the script field.
-func ByScript(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldScript, opts...).ToFunc()
-}
-
-// ByWindmillPath orders the results by the windmill_path field.
-func ByWindmillPath(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldWindmillPath, opts...).ToFunc()
-}
-
-// ByDownloadURL orders the results by the download_url field.
-func ByDownloadURL(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDownloadURL, opts...).ToFunc()
+// ByActive orders the results by the active field.
+func ByActive(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldActive, opts...).ToFunc()
 }
 
 // ByCron orders the results by the cron field.
@@ -251,16 +195,14 @@ func ByCron(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCron, opts...).ToFunc()
 }
 
+// ByJobRunnerID orders the results by the job_runner_id field.
+func ByJobRunnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldJobRunnerID, opts...).ToFunc()
+}
+
 var (
 	// history.OpType must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
-)
-
-var (
-	// enums.JobPlatformType must implement graphql.Marshaler.
-	_ graphql.Marshaler = (*enums.JobPlatformType)(nil)
-	// enums.JobPlatformType must implement graphql.Unmarshaler.
-	_ graphql.Unmarshaler = (*enums.JobPlatformType)(nil)
 )

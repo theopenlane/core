@@ -6,7 +6,16 @@ import (
 	"io"
 	"time"
 
-	"github.com/gorhill/cronexpr"
+	"github.com/robfig/cron/v3"
+)
+
+// cronerParser is a cron parser that supports six fields (second, minute, hour, day of month, month, day of week).
+// It is used to parse cron expressions for scheduled jobs.
+// https://www.windmill.dev/docs/core_concepts/scheduling
+// this is slightly different from the standard linux cron syntax which has five fields
+// (minute, hour, day of month, month, day of week).
+var cronerParser = cron.NewParser(
+	cron.Second | cron.Minute | cron.Hour | cron.Dom | cron.Month | cron.Dow,
 )
 
 const (
@@ -29,7 +38,7 @@ func (c Cron) Validate() error {
 		return nil
 	}
 
-	cron, err := cronexpr.Parse(c.String())
+	cron, err := cronerParser.Parse(c.String())
 	if err != nil {
 		return fmt.Errorf("invalid cron syntax: %w", err) // nolint:err113
 	}
@@ -37,8 +46,10 @@ func (c Cron) Validate() error {
 	// compute the next 5 execution times to cover cases like
 	// 0,20,40 * * * * where the user can request to run in the 20th and 40th minute
 	// that would break the 30 minute check
-	currentTime := time.Now()
-	executions := cron.NextN(currentTime, nextNCronExecutions)
+	executions, err := nextExecutions(cron, nextNCronExecutions)
+	if err != nil {
+		return fmt.Errorf("failed to get next cron executions: %w", err) // nolint:err113
+	}
 
 	for i := 1; i < len(executions); i++ {
 		interval := executions[i].Sub(executions[i-1])
@@ -50,9 +61,22 @@ func (c Cron) Validate() error {
 	return nil
 }
 
+// nextExecutions computes the next `count` executions of the cron schedule
+func nextExecutions(schedule cron.Schedule, count int) ([]time.Time, error) {
+	var times []time.Time
+	next := time.Now()
+
+	for range count {
+		next = schedule.Next(next)
+		times = append(times, next)
+	}
+
+	return times, nil
+}
+
 // Next returns the next scheduled time after `from` based on the cron expression.
 func (c Cron) Next(from time.Time) (time.Time, error) {
-	cron, err := cronexpr.Parse(c.String())
+	cron, err := cron.ParseStandard(c.String())
 	if err != nil {
 		return time.Time{}, fmt.Errorf("invalid cron expression: %w", err) //nolint:err113
 	}

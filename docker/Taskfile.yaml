@@ -124,7 +124,7 @@ tasks:
 
   windmill:
     dir: ..
-    desc: brings up the compose environment for windmill development (enterprise by default)
+    desc: brings up the minimum compose environment for windmill development (enterprise by default)
     env:
       WM_IMAGE: "{{.WM_IMAGE}}"
     vars:
@@ -137,7 +137,24 @@ tasks:
             echo "ghcr.io/windmill-labs/windmill-ee:main"
           fi
     cmds:
-      - "docker compose -f ./docker/docker-compose-windmill.yml up -d"
+      - "COMPOSE_PROFILES=windmill docker compose -f ./docker/docker-compose-windmill.yml up -d"
+
+  windmill:full:
+    dir: ..
+    desc: brings up the full compose environment for windmill development (enterprise by default)
+    env:
+      WM_IMAGE: "{{.WM_IMAGE}}"
+    vars:
+      ENTERPRISE: '{{.ENTERPRISE | default "true"}}'
+      WM_IMAGE:
+        sh: |
+          if [ "{{.ENTERPRISE}}" = "false" ]; then
+            echo "ghcr.io/windmill-labs/windmill:main"
+          else
+            echo "ghcr.io/windmill-labs/windmill-ee:main"
+          fi
+    cmds:
+      - "COMPOSE_PROFILES=windmill-full docker compose -f ./docker/docker-compose-windmill.yml up -d"
 
   windmill:down:
     dir: ..

@@ -463,72 +463,6 @@ func (r *queryResolver) ControlObjectiveHistories(ctx context.Context, after *en
 	return res, err
 }
 
-// ControlScheduledJobs is the resolver for the controlScheduledJobs field.
-func (r *queryResolver) ControlScheduledJobs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlScheduledJobOrder, where *generated.ControlScheduledJobWhereInput) (*generated.ControlScheduledJobConnection, error) {
-	// set page limit if nothing was set
-	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
-
-	if orderBy == nil {
-		orderBy = []*generated.ControlScheduledJobOrder{
-			{
-				Field:     generated.ControlScheduledJobOrderFieldCreatedAt,
-				Direction: entgql.OrderDirectionDesc,
-			},
-		}
-	}
-
-	query, err := withTransactionalMutation(ctx).ControlScheduledJob.Query().CollectFields(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "controlscheduledjob"})
-	}
-
-	res, err := query.Paginate(
-		ctx,
-		after,
-		first,
-		before,
-		last,
-		generated.WithControlScheduledJobOrder(orderBy),
-		generated.WithControlScheduledJobFilter(where.Filter))
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "controlscheduledjob"})
-	}
-
-	return res, err
-}
-
-// ControlScheduledJobHistories is the resolver for the controlScheduledJobHistories field.
-func (r *queryResolver) ControlScheduledJobHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlScheduledJobHistoryOrder, where *generated.ControlScheduledJobHistoryWhereInput) (*generated.ControlScheduledJobHistoryConnection, error) {
-	// set page limit if nothing was set
-	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
-
-	if orderBy == nil {
-		orderBy = &generated.ControlScheduledJobHistoryOrder{
-			Field:     generated.ControlScheduledJobHistoryOrderFieldCreatedAt,
-			Direction: entgql.OrderDirectionDesc,
-		}
-	}
-
-	query, err := withTransactionalMutation(ctx).ControlScheduledJobHistory.Query().CollectFields(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "controlscheduledjobhistory"})
-	}
-
-	res, err := query.Paginate(
-		ctx,
-		after,
-		first,
-		before,
-		last,
-		generated.WithControlScheduledJobHistoryOrder(orderBy),
-		generated.WithControlScheduledJobHistoryFilter(where.Filter))
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "controlscheduledjobhistory"})
-	}
-
-	return res, err
-}
-
 // CustomDomains is the resolver for the customDomains field.
 func (r *queryResolver) CustomDomains(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) (*generated.CustomDomainConnection, error) {
 	// set page limit if nothing was set
@@ -1604,6 +1538,72 @@ func (r *queryResolver) JobRunnerTokens(ctx context.Context, after *entgql.Curso
 		generated.WithJobRunnerTokenFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunnertoken"})
+	}
+
+	return res, err
+}
+
+// JobTemplates is the resolver for the jobTemplates field.
+func (r *queryResolver) JobTemplates(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobTemplateOrder, where *generated.JobTemplateWhereInput) (*generated.JobTemplateConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.JobTemplateOrder{
+			{
+				Field:     generated.JobTemplateOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).JobTemplate.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "jobtemplate"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithJobTemplateOrder(orderBy),
+		generated.WithJobTemplateFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "jobtemplate"})
+	}
+
+	return res, err
+}
+
+// JobTemplateHistories is the resolver for the jobTemplateHistories field.
+func (r *queryResolver) JobTemplateHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.JobTemplateHistoryOrder, where *generated.JobTemplateHistoryWhereInput) (*generated.JobTemplateHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.JobTemplateHistoryOrder{
+			Field:     generated.JobTemplateHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).JobTemplateHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "jobtemplatehistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithJobTemplateHistoryOrder(orderBy),
+		generated.WithJobTemplateHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "jobtemplatehistory"})
 	}
 
 	return res, err

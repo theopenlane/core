@@ -1872,218 +1872,6 @@ func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) 
 	return nil
 }
 
-func (m *ControlScheduledJobMutation) CreateHistoryFromCreate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	client := m.Client()
-
-	id, ok := m.ID()
-	if !ok {
-		return idNotFoundError
-	}
-
-	create := client.ControlScheduledJobHistory.Create()
-
-	create = create.
-		SetOperation(EntOpToHistoryOp(m.Op())).
-		SetHistoryTime(time.Now()).
-		SetRef(id)
-
-	if createdAt, exists := m.CreatedAt(); exists {
-		create = create.SetCreatedAt(createdAt)
-	}
-
-	if updatedAt, exists := m.UpdatedAt(); exists {
-		create = create.SetUpdatedAt(updatedAt)
-	}
-
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
-	}
-
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if deletedAt, exists := m.DeletedAt(); exists {
-		create = create.SetDeletedAt(deletedAt)
-	}
-
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
-	}
-
-	if ownerID, exists := m.OwnerID(); exists {
-		create = create.SetOwnerID(ownerID)
-	}
-
-	if jobID, exists := m.JobID(); exists {
-		create = create.SetJobID(jobID)
-	}
-
-	if configuration, exists := m.Configuration(); exists {
-		create = create.SetConfiguration(configuration)
-	}
-
-	if cron, exists := m.Cron(); exists {
-		create = create.SetNillableCron(&cron)
-	}
-
-	if jobRunnerID, exists := m.JobRunnerID(); exists {
-		create = create.SetJobRunnerID(jobRunnerID)
-	}
-
-	_, err := create.Save(ctx)
-
-	return err
-}
-
-func (m *ControlScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
-		return m.CreateHistoryFromDelete(ctx)
-	}
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		controlscheduledjob, err := client.ControlScheduledJob.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.ControlScheduledJobHistory.Create()
-
-		create = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id)
-
-		if createdAt, exists := m.CreatedAt(); exists {
-			create = create.SetCreatedAt(createdAt)
-		} else {
-			create = create.SetCreatedAt(controlscheduledjob.CreatedAt)
-		}
-
-		if updatedAt, exists := m.UpdatedAt(); exists {
-			create = create.SetUpdatedAt(updatedAt)
-		} else {
-			create = create.SetUpdatedAt(controlscheduledjob.UpdatedAt)
-		}
-
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
-		} else {
-			create = create.SetCreatedBy(controlscheduledjob.CreatedBy)
-		}
-
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
-		} else {
-			create = create.SetUpdatedBy(controlscheduledjob.UpdatedBy)
-		}
-
-		if deletedAt, exists := m.DeletedAt(); exists {
-			create = create.SetDeletedAt(deletedAt)
-		} else {
-			create = create.SetDeletedAt(controlscheduledjob.DeletedAt)
-		}
-
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
-		} else {
-			create = create.SetDeletedBy(controlscheduledjob.DeletedBy)
-		}
-
-		if ownerID, exists := m.OwnerID(); exists {
-			create = create.SetOwnerID(ownerID)
-		} else {
-			create = create.SetOwnerID(controlscheduledjob.OwnerID)
-		}
-
-		if jobID, exists := m.JobID(); exists {
-			create = create.SetJobID(jobID)
-		} else {
-			create = create.SetJobID(controlscheduledjob.JobID)
-		}
-
-		if configuration, exists := m.Configuration(); exists {
-			create = create.SetConfiguration(configuration)
-		} else {
-			create = create.SetConfiguration(controlscheduledjob.Configuration)
-		}
-
-		if cron, exists := m.Cron(); exists {
-			create = create.SetNillableCron(&cron)
-		} else {
-			create = create.SetNillableCron(controlscheduledjob.Cron)
-		}
-
-		if jobRunnerID, exists := m.JobRunnerID(); exists {
-			create = create.SetJobRunnerID(jobRunnerID)
-		} else {
-			create = create.SetJobRunnerID(controlscheduledjob.JobRunnerID)
-		}
-
-		if _, err := create.Save(ctx); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *ControlScheduledJobMutation) CreateHistoryFromDelete(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-
-	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
-		return nil
-	}
-
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		controlscheduledjob, err := client.ControlScheduledJob.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.ControlScheduledJobHistory.Create()
-
-		_, err = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id).
-			SetCreatedAt(controlscheduledjob.CreatedAt).
-			SetUpdatedAt(controlscheduledjob.UpdatedAt).
-			SetCreatedBy(controlscheduledjob.CreatedBy).
-			SetUpdatedBy(controlscheduledjob.UpdatedBy).
-			SetDeletedAt(controlscheduledjob.DeletedAt).
-			SetDeletedBy(controlscheduledjob.DeletedBy).
-			SetOwnerID(controlscheduledjob.OwnerID).
-			SetJobID(controlscheduledjob.JobID).
-			SetConfiguration(controlscheduledjob.Configuration).
-			SetNillableCron(controlscheduledjob.Cron).
-			SetJobRunnerID(controlscheduledjob.JobRunnerID).
-			Save(ctx)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
 func (m *CustomDomainMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	client := m.Client()
@@ -5260,6 +5048,284 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetDismissedControlSuggestions(internalpolicy.DismissedControlSuggestions).
 			SetImprovementSuggestions(internalpolicy.ImprovementSuggestions).
 			SetDismissedImprovementSuggestions(internalpolicy.DismissedImprovementSuggestions).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *JobTemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.JobTemplateHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if title, exists := m.Title(); exists {
+		create = create.SetTitle(title)
+	}
+
+	if description, exists := m.Description(); exists {
+		create = create.SetDescription(description)
+	}
+
+	if platform, exists := m.Platform(); exists {
+		create = create.SetPlatform(platform)
+	}
+
+	if windmillPath, exists := m.WindmillPath(); exists {
+		create = create.SetWindmillPath(windmillPath)
+	}
+
+	if downloadURL, exists := m.DownloadURL(); exists {
+		create = create.SetDownloadURL(downloadURL)
+	}
+
+	if configuration, exists := m.Configuration(); exists {
+		create = create.SetConfiguration(configuration)
+	}
+
+	if cron, exists := m.Cron(); exists {
+		create = create.SetNillableCron(&cron)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *JobTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		jobtemplate, err := client.JobTemplate.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.JobTemplateHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(jobtemplate.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(jobtemplate.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(jobtemplate.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(jobtemplate.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(jobtemplate.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(jobtemplate.DeletedBy)
+		}
+
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		} else {
+			create = create.SetDisplayID(jobtemplate.DisplayID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(jobtemplate.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(jobtemplate.OwnerID)
+		}
+
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(jobtemplate.SystemOwned)
+		}
+
+		if title, exists := m.Title(); exists {
+			create = create.SetTitle(title)
+		} else {
+			create = create.SetTitle(jobtemplate.Title)
+		}
+
+		if description, exists := m.Description(); exists {
+			create = create.SetDescription(description)
+		} else {
+			create = create.SetDescription(jobtemplate.Description)
+		}
+
+		if platform, exists := m.Platform(); exists {
+			create = create.SetPlatform(platform)
+		} else {
+			create = create.SetPlatform(jobtemplate.Platform)
+		}
+
+		if windmillPath, exists := m.WindmillPath(); exists {
+			create = create.SetWindmillPath(windmillPath)
+		} else {
+			create = create.SetWindmillPath(jobtemplate.WindmillPath)
+		}
+
+		if downloadURL, exists := m.DownloadURL(); exists {
+			create = create.SetDownloadURL(downloadURL)
+		} else {
+			create = create.SetDownloadURL(jobtemplate.DownloadURL)
+		}
+
+		if configuration, exists := m.Configuration(); exists {
+			create = create.SetConfiguration(configuration)
+		} else {
+			create = create.SetConfiguration(jobtemplate.Configuration)
+		}
+
+		if cron, exists := m.Cron(); exists {
+			create = create.SetNillableCron(&cron)
+		} else {
+			create = create.SetNillableCron(jobtemplate.Cron)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *JobTemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		jobtemplate, err := client.JobTemplate.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.JobTemplateHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(jobtemplate.CreatedAt).
+			SetUpdatedAt(jobtemplate.UpdatedAt).
+			SetCreatedBy(jobtemplate.CreatedBy).
+			SetUpdatedBy(jobtemplate.UpdatedBy).
+			SetDeletedAt(jobtemplate.DeletedAt).
+			SetDeletedBy(jobtemplate.DeletedBy).
+			SetDisplayID(jobtemplate.DisplayID).
+			SetTags(jobtemplate.Tags).
+			SetOwnerID(jobtemplate.OwnerID).
+			SetSystemOwned(jobtemplate.SystemOwned).
+			SetTitle(jobtemplate.Title).
+			SetDescription(jobtemplate.Description).
+			SetPlatform(jobtemplate.Platform).
+			SetWindmillPath(jobtemplate.WindmillPath).
+			SetDownloadURL(jobtemplate.DownloadURL).
+			SetConfiguration(jobtemplate.Configuration).
+			SetNillableCron(jobtemplate.Cron).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -8685,52 +8751,28 @@ func (m *ScheduledJobMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetDisplayID(displayID)
 	}
 
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
-
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
 
-	if systemOwned, exists := m.SystemOwned(); exists {
-		create = create.SetSystemOwned(systemOwned)
+	if jobID, exists := m.JobID(); exists {
+		create = create.SetJobID(jobID)
 	}
 
-	if title, exists := m.Title(); exists {
-		create = create.SetTitle(title)
-	}
-
-	if description, exists := m.Description(); exists {
-		create = create.SetDescription(description)
-	}
-
-	if platform, exists := m.Platform(); exists {
-		create = create.SetPlatform(platform)
-	}
-
-	if script, exists := m.Script(); exists {
-		create = create.SetScript(script)
-	}
-
-	if windmillPath, exists := m.WindmillPath(); exists {
-		create = create.SetWindmillPath(windmillPath)
-	}
-
-	if downloadURL, exists := m.DownloadURL(); exists {
-		create = create.SetDownloadURL(downloadURL)
+	if active, exists := m.Active(); exists {
+		create = create.SetActive(active)
 	}
 
 	if configuration, exists := m.Configuration(); exists {
 		create = create.SetConfiguration(configuration)
 	}
 
-	if cadence, exists := m.Cadence(); exists {
-		create = create.SetCadence(cadence)
-	}
-
 	if cron, exists := m.Cron(); exists {
 		create = create.SetNillableCron(&cron)
+	}
+
+	if jobRunnerID, exists := m.JobRunnerID(); exists {
+		create = create.SetJobRunnerID(jobRunnerID)
 	}
 
 	_, err := create.Save(ctx)
@@ -8806,58 +8848,22 @@ func (m *ScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetDisplayID(scheduledjob.DisplayID)
 		}
 
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
-		} else {
-			create = create.SetTags(scheduledjob.Tags)
-		}
-
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
 			create = create.SetOwnerID(scheduledjob.OwnerID)
 		}
 
-		if systemOwned, exists := m.SystemOwned(); exists {
-			create = create.SetSystemOwned(systemOwned)
+		if jobID, exists := m.JobID(); exists {
+			create = create.SetJobID(jobID)
 		} else {
-			create = create.SetSystemOwned(scheduledjob.SystemOwned)
+			create = create.SetJobID(scheduledjob.JobID)
 		}
 
-		if title, exists := m.Title(); exists {
-			create = create.SetTitle(title)
+		if active, exists := m.Active(); exists {
+			create = create.SetActive(active)
 		} else {
-			create = create.SetTitle(scheduledjob.Title)
-		}
-
-		if description, exists := m.Description(); exists {
-			create = create.SetDescription(description)
-		} else {
-			create = create.SetDescription(scheduledjob.Description)
-		}
-
-		if platform, exists := m.Platform(); exists {
-			create = create.SetPlatform(platform)
-		} else {
-			create = create.SetPlatform(scheduledjob.Platform)
-		}
-
-		if script, exists := m.Script(); exists {
-			create = create.SetScript(script)
-		} else {
-			create = create.SetScript(scheduledjob.Script)
-		}
-
-		if windmillPath, exists := m.WindmillPath(); exists {
-			create = create.SetWindmillPath(windmillPath)
-		} else {
-			create = create.SetWindmillPath(scheduledjob.WindmillPath)
-		}
-
-		if downloadURL, exists := m.DownloadURL(); exists {
-			create = create.SetDownloadURL(downloadURL)
-		} else {
-			create = create.SetDownloadURL(scheduledjob.DownloadURL)
+			create = create.SetActive(scheduledjob.Active)
 		}
 
 		if configuration, exists := m.Configuration(); exists {
@@ -8866,16 +8872,16 @@ func (m *ScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetConfiguration(scheduledjob.Configuration)
 		}
 
-		if cadence, exists := m.Cadence(); exists {
-			create = create.SetCadence(cadence)
-		} else {
-			create = create.SetCadence(scheduledjob.Cadence)
-		}
-
 		if cron, exists := m.Cron(); exists {
 			create = create.SetNillableCron(&cron)
 		} else {
 			create = create.SetNillableCron(scheduledjob.Cron)
+		}
+
+		if jobRunnerID, exists := m.JobRunnerID(); exists {
+			create = create.SetJobRunnerID(jobRunnerID)
+		} else {
+			create = create.SetJobRunnerID(scheduledjob.JobRunnerID)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -8920,18 +8926,12 @@ func (m *ScheduledJobMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetDeletedAt(scheduledjob.DeletedAt).
 			SetDeletedBy(scheduledjob.DeletedBy).
 			SetDisplayID(scheduledjob.DisplayID).
-			SetTags(scheduledjob.Tags).
 			SetOwnerID(scheduledjob.OwnerID).
-			SetSystemOwned(scheduledjob.SystemOwned).
-			SetTitle(scheduledjob.Title).
-			SetDescription(scheduledjob.Description).
-			SetPlatform(scheduledjob.Platform).
-			SetScript(scheduledjob.Script).
-			SetWindmillPath(scheduledjob.WindmillPath).
-			SetDownloadURL(scheduledjob.DownloadURL).
+			SetJobID(scheduledjob.JobID).
+			SetActive(scheduledjob.Active).
 			SetConfiguration(scheduledjob.Configuration).
-			SetCadence(scheduledjob.Cadence).
 			SetNillableCron(scheduledjob.Cron).
+			SetJobRunnerID(scheduledjob.JobRunnerID).
 			Save(ctx)
 		if err != nil {
 			return err

@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
 )
@@ -147,12 +146,6 @@ func (sjhc *ScheduledJobHistoryCreate) SetDisplayID(s string) *ScheduledJobHisto
 	return sjhc
 }
 
-// SetTags sets the "tags" field.
-func (sjhc *ScheduledJobHistoryCreate) SetTags(s []string) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetTags(s)
-	return sjhc
-}
-
 // SetOwnerID sets the "owner_id" field.
 func (sjhc *ScheduledJobHistoryCreate) SetOwnerID(s string) *ScheduledJobHistoryCreate {
 	sjhc.mutation.SetOwnerID(s)
@@ -167,89 +160,29 @@ func (sjhc *ScheduledJobHistoryCreate) SetNillableOwnerID(s *string) *ScheduledJ
 	return sjhc
 }
 
-// SetSystemOwned sets the "system_owned" field.
-func (sjhc *ScheduledJobHistoryCreate) SetSystemOwned(b bool) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetSystemOwned(b)
+// SetJobID sets the "job_id" field.
+func (sjhc *ScheduledJobHistoryCreate) SetJobID(s string) *ScheduledJobHistoryCreate {
+	sjhc.mutation.SetJobID(s)
 	return sjhc
 }
 
-// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
-func (sjhc *ScheduledJobHistoryCreate) SetNillableSystemOwned(b *bool) *ScheduledJobHistoryCreate {
+// SetActive sets the "active" field.
+func (sjhc *ScheduledJobHistoryCreate) SetActive(b bool) *ScheduledJobHistoryCreate {
+	sjhc.mutation.SetActive(b)
+	return sjhc
+}
+
+// SetNillableActive sets the "active" field if the given value is not nil.
+func (sjhc *ScheduledJobHistoryCreate) SetNillableActive(b *bool) *ScheduledJobHistoryCreate {
 	if b != nil {
-		sjhc.SetSystemOwned(*b)
+		sjhc.SetActive(*b)
 	}
-	return sjhc
-}
-
-// SetTitle sets the "title" field.
-func (sjhc *ScheduledJobHistoryCreate) SetTitle(s string) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetTitle(s)
-	return sjhc
-}
-
-// SetDescription sets the "description" field.
-func (sjhc *ScheduledJobHistoryCreate) SetDescription(s string) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetDescription(s)
-	return sjhc
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (sjhc *ScheduledJobHistoryCreate) SetNillableDescription(s *string) *ScheduledJobHistoryCreate {
-	if s != nil {
-		sjhc.SetDescription(*s)
-	}
-	return sjhc
-}
-
-// SetPlatform sets the "platform" field.
-func (sjhc *ScheduledJobHistoryCreate) SetPlatform(ept enums.JobPlatformType) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetPlatform(ept)
-	return sjhc
-}
-
-// SetScript sets the "script" field.
-func (sjhc *ScheduledJobHistoryCreate) SetScript(s string) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetScript(s)
-	return sjhc
-}
-
-// SetNillableScript sets the "script" field if the given value is not nil.
-func (sjhc *ScheduledJobHistoryCreate) SetNillableScript(s *string) *ScheduledJobHistoryCreate {
-	if s != nil {
-		sjhc.SetScript(*s)
-	}
-	return sjhc
-}
-
-// SetWindmillPath sets the "windmill_path" field.
-func (sjhc *ScheduledJobHistoryCreate) SetWindmillPath(s string) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetWindmillPath(s)
-	return sjhc
-}
-
-// SetDownloadURL sets the "download_url" field.
-func (sjhc *ScheduledJobHistoryCreate) SetDownloadURL(s string) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetDownloadURL(s)
 	return sjhc
 }
 
 // SetConfiguration sets the "configuration" field.
 func (sjhc *ScheduledJobHistoryCreate) SetConfiguration(mc models.JobConfiguration) *ScheduledJobHistoryCreate {
 	sjhc.mutation.SetConfiguration(mc)
-	return sjhc
-}
-
-// SetCadence sets the "cadence" field.
-func (sjhc *ScheduledJobHistoryCreate) SetCadence(mc models.JobCadence) *ScheduledJobHistoryCreate {
-	sjhc.mutation.SetCadence(mc)
-	return sjhc
-}
-
-// SetNillableCadence sets the "cadence" field if the given value is not nil.
-func (sjhc *ScheduledJobHistoryCreate) SetNillableCadence(mc *models.JobCadence) *ScheduledJobHistoryCreate {
-	if mc != nil {
-		sjhc.SetCadence(*mc)
-	}
 	return sjhc
 }
 
@@ -263,6 +196,20 @@ func (sjhc *ScheduledJobHistoryCreate) SetCron(m models.Cron) *ScheduledJobHisto
 func (sjhc *ScheduledJobHistoryCreate) SetNillableCron(m *models.Cron) *ScheduledJobHistoryCreate {
 	if m != nil {
 		sjhc.SetCron(*m)
+	}
+	return sjhc
+}
+
+// SetJobRunnerID sets the "job_runner_id" field.
+func (sjhc *ScheduledJobHistoryCreate) SetJobRunnerID(s string) *ScheduledJobHistoryCreate {
+	sjhc.mutation.SetJobRunnerID(s)
+	return sjhc
+}
+
+// SetNillableJobRunnerID sets the "job_runner_id" field if the given value is not nil.
+func (sjhc *ScheduledJobHistoryCreate) SetNillableJobRunnerID(s *string) *ScheduledJobHistoryCreate {
+	if s != nil {
+		sjhc.SetJobRunnerID(*s)
 	}
 	return sjhc
 }
@@ -339,13 +286,9 @@ func (sjhc *ScheduledJobHistoryCreate) defaults() error {
 		v := scheduledjobhistory.DefaultUpdatedAt()
 		sjhc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := sjhc.mutation.Tags(); !ok {
-		v := scheduledjobhistory.DefaultTags
-		sjhc.mutation.SetTags(v)
-	}
-	if _, ok := sjhc.mutation.SystemOwned(); !ok {
-		v := scheduledjobhistory.DefaultSystemOwned
-		sjhc.mutation.SetSystemOwned(v)
+	if _, ok := sjhc.mutation.Active(); !ok {
+		v := scheduledjobhistory.DefaultActive
+		sjhc.mutation.SetActive(v)
 	}
 	if _, ok := sjhc.mutation.ID(); !ok {
 		if scheduledjobhistory.DefaultID == nil {
@@ -373,27 +316,11 @@ func (sjhc *ScheduledJobHistoryCreate) check() error {
 	if _, ok := sjhc.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`generated: missing required field "ScheduledJobHistory.display_id"`)}
 	}
-	if _, ok := sjhc.mutation.Title(); !ok {
-		return &ValidationError{Name: "title", err: errors.New(`generated: missing required field "ScheduledJobHistory.title"`)}
+	if _, ok := sjhc.mutation.JobID(); !ok {
+		return &ValidationError{Name: "job_id", err: errors.New(`generated: missing required field "ScheduledJobHistory.job_id"`)}
 	}
-	if _, ok := sjhc.mutation.Platform(); !ok {
-		return &ValidationError{Name: "platform", err: errors.New(`generated: missing required field "ScheduledJobHistory.platform"`)}
-	}
-	if v, ok := sjhc.mutation.Platform(); ok {
-		if err := scheduledjobhistory.PlatformValidator(v); err != nil {
-			return &ValidationError{Name: "platform", err: fmt.Errorf(`generated: validator failed for field "ScheduledJobHistory.platform": %w`, err)}
-		}
-	}
-	if _, ok := sjhc.mutation.WindmillPath(); !ok {
-		return &ValidationError{Name: "windmill_path", err: errors.New(`generated: missing required field "ScheduledJobHistory.windmill_path"`)}
-	}
-	if _, ok := sjhc.mutation.DownloadURL(); !ok {
-		return &ValidationError{Name: "download_url", err: errors.New(`generated: missing required field "ScheduledJobHistory.download_url"`)}
-	}
-	if v, ok := sjhc.mutation.Cadence(); ok {
-		if err := v.Validate(); err != nil {
-			return &ValidationError{Name: "cadence", err: fmt.Errorf(`generated: validator failed for field "ScheduledJobHistory.cadence": %w`, err)}
-		}
+	if _, ok := sjhc.mutation.Active(); !ok {
+		return &ValidationError{Name: "active", err: errors.New(`generated: missing required field "ScheduledJobHistory.active"`)}
 	}
 	if v, ok := sjhc.mutation.Cron(); ok {
 		if err := v.Validate(); err != nil {
@@ -476,53 +403,29 @@ func (sjhc *ScheduledJobHistoryCreate) createSpec() (*ScheduledJobHistory, *sqlg
 		_spec.SetField(scheduledjobhistory.FieldDisplayID, field.TypeString, value)
 		_node.DisplayID = value
 	}
-	if value, ok := sjhc.mutation.Tags(); ok {
-		_spec.SetField(scheduledjobhistory.FieldTags, field.TypeJSON, value)
-		_node.Tags = value
-	}
 	if value, ok := sjhc.mutation.OwnerID(); ok {
 		_spec.SetField(scheduledjobhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
-	if value, ok := sjhc.mutation.SystemOwned(); ok {
-		_spec.SetField(scheduledjobhistory.FieldSystemOwned, field.TypeBool, value)
-		_node.SystemOwned = value
+	if value, ok := sjhc.mutation.JobID(); ok {
+		_spec.SetField(scheduledjobhistory.FieldJobID, field.TypeString, value)
+		_node.JobID = value
 	}
-	if value, ok := sjhc.mutation.Title(); ok {
-		_spec.SetField(scheduledjobhistory.FieldTitle, field.TypeString, value)
-		_node.Title = value
-	}
-	if value, ok := sjhc.mutation.Description(); ok {
-		_spec.SetField(scheduledjobhistory.FieldDescription, field.TypeString, value)
-		_node.Description = value
-	}
-	if value, ok := sjhc.mutation.Platform(); ok {
-		_spec.SetField(scheduledjobhistory.FieldPlatform, field.TypeEnum, value)
-		_node.Platform = value
-	}
-	if value, ok := sjhc.mutation.Script(); ok {
-		_spec.SetField(scheduledjobhistory.FieldScript, field.TypeString, value)
-		_node.Script = value
-	}
-	if value, ok := sjhc.mutation.WindmillPath(); ok {
-		_spec.SetField(scheduledjobhistory.FieldWindmillPath, field.TypeString, value)
-		_node.WindmillPath = value
-	}
-	if value, ok := sjhc.mutation.DownloadURL(); ok {
-		_spec.SetField(scheduledjobhistory.FieldDownloadURL, field.TypeString, value)
-		_node.DownloadURL = value
+	if value, ok := sjhc.mutation.Active(); ok {
+		_spec.SetField(scheduledjobhistory.FieldActive, field.TypeBool, value)
+		_node.Active = value
 	}
 	if value, ok := sjhc.mutation.Configuration(); ok {
 		_spec.SetField(scheduledjobhistory.FieldConfiguration, field.TypeJSON, value)
 		_node.Configuration = value
 	}
-	if value, ok := sjhc.mutation.Cadence(); ok {
-		_spec.SetField(scheduledjobhistory.FieldCadence, field.TypeJSON, value)
-		_node.Cadence = value
-	}
 	if value, ok := sjhc.mutation.Cron(); ok {
 		_spec.SetField(scheduledjobhistory.FieldCron, field.TypeString, value)
 		_node.Cron = &value
+	}
+	if value, ok := sjhc.mutation.JobRunnerID(); ok {
+		_spec.SetField(scheduledjobhistory.FieldJobRunnerID, field.TypeString, value)
+		_node.JobRunnerID = value
 	}
 	return _node, _spec
 }
