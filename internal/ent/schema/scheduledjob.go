@@ -129,7 +129,9 @@ func (ScheduledJob) Indexes() []ent.Index {
 func (ScheduledJob) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.Features("compliance", "continuous-compliance-automation"),
-		entx.SchemaSearchable(false), // not sure yet why, but this breaks generation when enabled
+		// this schema shouldn't be need to be searchable, most results would be the job template,
+		// not the scheduled job itself
+		entx.SchemaSearchable(false),
 	}
 }
 

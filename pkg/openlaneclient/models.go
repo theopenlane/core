@@ -4904,7 +4904,7 @@ type CreateJobTemplateInput struct {
 	DownloadURL string `json:"downloadURL"`
 	// the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
-	// cron schedule to run the job, e.g. 0 0 * * *
+	// cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
 	Cron    *string `json:"cron,omitempty"`
 	OwnerID *string `json:"ownerID,omitempty"`
 }
@@ -5332,7 +5332,7 @@ type CreateScheduledJobInput struct {
 	Active *bool `json:"active,omitempty"`
 	// the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
-	// cron syntax. If not provided, it would inherit the cron of the parent job
+	// cron 6-field syntax, defaults to the job template's cron if not provided
 	Cron          *string  `json:"cron,omitempty"`
 	OwnerID       *string  `json:"ownerID,omitempty"`
 	JobTemplateID string   `json:"jobTemplateID"`
@@ -13797,7 +13797,7 @@ type JobTemplate struct {
 	DownloadURL string `json:"downloadURL"`
 	// the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
-	// cron schedule to run the job, e.g. 0 0 * * *
+	// cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
 	Cron          *string                 `json:"cron,omitempty"`
 	Owner         *Organization           `json:"owner,omitempty"`
 	ScheduledJobs *ScheduledJobConnection `json:"scheduledJobs"`
@@ -13868,7 +13868,7 @@ type JobTemplateHistory struct {
 	DownloadURL string `json:"downloadURL"`
 	// the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
-	// cron schedule to run the job, e.g. 0 0 * * *
+	// cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
 	Cron *string `json:"cron,omitempty"`
 }
 
@@ -21594,7 +21594,7 @@ type ScheduledJob struct {
 	Active bool `json:"active"`
 	// the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
-	// cron syntax. If not provided, it would inherit the cron of the parent job
+	// cron 6-field syntax, defaults to the job template's cron if not provided
 	Cron *string `json:"cron,omitempty"`
 	// the runner that this job will run on. If not set, it will scheduled on a general runner instead
 	JobRunnerID *string               `json:"jobRunnerID,omitempty"`
@@ -21662,7 +21662,7 @@ type ScheduledJobHistory struct {
 	Active bool `json:"active"`
 	// the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
-	// cron syntax. If not provided, it would inherit the cron of the parent job
+	// cron 6-field syntax, defaults to the job template's cron if not provided
 	Cron *string `json:"cron,omitempty"`
 	// the runner that this job will run on. If not set, it will scheduled on a general runner instead
 	JobRunnerID *string `json:"jobRunnerID,omitempty"`
@@ -28783,7 +28783,7 @@ type UpdateJobTemplateInput struct {
 	Configuration       models.JobConfiguration `json:"configuration,omitempty"`
 	AppendConfiguration models.JobConfiguration `json:"appendConfiguration,omitempty"`
 	ClearConfiguration  *bool                   `json:"clearConfiguration,omitempty"`
-	// cron schedule to run the job, e.g. 0 0 * * *
+	// cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
 	Cron                  *string  `json:"cron,omitempty"`
 	ClearCron             *bool    `json:"clearCron,omitempty"`
 	OwnerID               *string  `json:"ownerID,omitempty"`
@@ -29515,7 +29515,7 @@ type UpdateScheduledJobInput struct {
 	Configuration       models.JobConfiguration `json:"configuration,omitempty"`
 	AppendConfiguration models.JobConfiguration `json:"appendConfiguration,omitempty"`
 	ClearConfiguration  *bool                   `json:"clearConfiguration,omitempty"`
-	// cron syntax. If not provided, it would inherit the cron of the parent job
+	// cron 6-field syntax, defaults to the job template's cron if not provided
 	Cron                *string  `json:"cron,omitempty"`
 	ClearCron           *bool    `json:"clearCron,omitempty"`
 	JobTemplateID       *string  `json:"jobTemplateID,omitempty"`

@@ -10,6 +10,7 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
@@ -148,8 +149,8 @@ func (JobResult) Interceptors() []ent.Interceptor {
 func (JobResult) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			policy.CheckCreateAccess(),
-			// entfga.CheckEditAccess[*generated.JobResultMutation](),
+			// only system admin tokens should be posting back job results
+			rule.AllowMutationIfSystemAdmin(),
 		),
 	)
 }

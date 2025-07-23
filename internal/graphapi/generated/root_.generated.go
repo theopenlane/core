@@ -43270,7 +43270,7 @@ input CreateJobTemplateInput {
   """
   configuration: JobConfiguration
   """
-  cron schedule to run the job, e.g. 0 0 * * *
+  cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
   """
   cron: String
   ownerID: ID
@@ -43897,7 +43897,7 @@ input CreateScheduledJobInput {
   """
   configuration: JobConfiguration
   """
-  cron syntax. If not provided, it would inherit the cron of the parent job
+  cron 6-field syntax, defaults to the job template's cron if not provided
   """
   cron: String
   ownerID: ID
@@ -57310,7 +57310,7 @@ type JobTemplate implements Node {
   """
   configuration: JobConfiguration
   """
-  cron schedule to run the job, e.g. 0 0 * * *
+  cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
   """
   cron: String
   owner: Organization
@@ -57422,7 +57422,7 @@ type JobTemplateHistory implements Node {
   """
   configuration: JobConfiguration
   """
-  cron schedule to run the job, e.g. 0 0 * * *
+  cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
   """
   cron: String
 }
@@ -74519,7 +74519,7 @@ type ScheduledJob implements Node {
   """
   configuration: JobConfiguration
   """
-  cron syntax. If not provided, it would inherit the cron of the parent job
+  cron 6-field syntax, defaults to the job template's cron if not provided
   """
   cron: String
   """
@@ -74652,7 +74652,7 @@ type ScheduledJobHistory implements Node {
   """
   configuration: JobConfiguration
   """
-  cron syntax. If not provided, it would inherit the cron of the parent job
+  cron 6-field syntax, defaults to the job template's cron if not provided
   """
   cron: String
   """
@@ -84556,7 +84556,7 @@ input UpdateJobTemplateInput {
   appendConfiguration: JobConfiguration
   clearConfiguration: Boolean
   """
-  cron schedule to run the job, e.g. 0 0 * * *
+  cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
   """
   cron: String
   clearCron: Boolean
@@ -85472,7 +85472,7 @@ input UpdateScheduledJobInput {
   appendConfiguration: JobConfiguration
   clearConfiguration: Boolean
   """
-  cron syntax. If not provided, it would inherit the cron of the parent job
+  cron 6-field syntax, defaults to the job template's cron if not provided
   """
   cron: String
   clearCron: Boolean
