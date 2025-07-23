@@ -4,6 +4,7 @@
         SubscriptionURL string `json:"subscriptionURL,omitempty"`
         ManagePaymentMethods string `json:"managePaymentMethods,omitempty"`
         Cancellation string `json:"cancellation,omitempty"`
+        ModuleBillingURLs map[string]string `json:"moduleBillingURLs,omitempty"`
     {{- end }}
     {{- if eq $.Name "File" }}
         // PresignedURL is the presigned URL for the file when using s3 storage
