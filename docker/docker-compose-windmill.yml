@@ -11,6 +11,9 @@ x-logging: &default-logging
 services:
   windmill_server:
     image: ${WM_IMAGE:-ghcr.io/windmill-labs/windmill-ee:main}
+    profiles:
+      - windmill
+      - windmill-full
     deploy:
       replicas: 1
     restart: unless-stopped
@@ -33,6 +36,9 @@ services:
 
   windmill_worker:
     image: ${WM_IMAGE:-ghcr.io/windmill-labs/windmill-ee:main}
+    profiles:
+      - windmill
+      - windmill-full
     deploy:
       replicas: 1
       resources:
@@ -55,76 +61,86 @@ services:
     networks:
       - default
 
-  # windmill_worker_native:
-  #   image: ${WM_IMAGE:-ghcr.io/windmill-labs/windmill-ee:main}
-  #   deploy:
-  #     replicas: 0
-  #     resources:
-  #       limits:
-  #         cpus: "1"
-  #         memory: 2048M
-  #   restart: unless-stopped
-  #   environment:
-  #     - DATABASE_URL=postgres://postgres:password@postgres:5432/windmill?sslmode=disable
-  #     - MODE=worker
-  #     - WORKER_GROUP=native
-  #     - NUM_WORKERS=8
-  #     - SLEEP_QUEUE=200
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #   volumes:
-  #     - worker_logs:/tmp/windmill/logs
-  #   logging: *default-logging
-  #   networks:
-  #     - default
+  windmill_worker_native:
+    image: ${WM_IMAGE:-ghcr.io/windmill-labs/windmill-ee:main}
+    profiles:
+      - windmill-full
+    deploy:
+      replicas: 0
+      resources:
+        limits:
+          cpus: "1"
+          memory: 2048M
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgres://postgres:password@postgres:5432/windmill?sslmode=disable
+      - MODE=worker
+      - WORKER_GROUP=native
+      - NUM_WORKERS=8
+      - SLEEP_QUEUE=200
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - worker_logs:/tmp/windmill/logs
+    logging: *default-logging
+    networks:
+      - default
 
-  # windmill_indexer:
-  #   image: ${WM_IMAGE:-ghcr.io/windmill-labs/windmill-ee:main}
-  #   deploy:
-  #     replicas: 0
-  #   restart: unless-stopped
-  #   expose:
-  #     - 8002
-  #   environment:
-  #     - PORT=8002
-  #     - DATABASE_URL=postgres://postgres:password@postgres:5432/windmill?sslmode=disable
-  #     - MODE=indexer
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #   volumes:
-  #     - windmill_index:/tmp/windmill/search
-  #     - worker_logs:/tmp/windmill/logs
-  #   logging: *default-logging
-  #   networks:
-  #     - default
+  windmill_indexer:
+    image: ${WM_IMAGE:-ghcr.io/windmill-labs/windmill-ee:main}
+    profiles:
+      - windmill-full
+    deploy:
+      replicas: 1
+    restart: unless-stopped
+    expose:
+      - 8002
+    environment:
+      - PORT=8002
+      - DATABASE_URL=postgres://postgres:password@postgres:5432/windmill?sslmode=disable
+      - MODE=indexer
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - windmill_index:/tmp/windmill/search
+      - worker_logs:/tmp/windmill/logs
+    logging: *default-logging
+    networks:
+      - default
 
-  # lsp:
-  #   image: ghcr.io/windmill-labs/windmill-lsp:latest
-  #   restart: unless-stopped
-  #   replicas: 0
-  #   expose:
-  #     - 3001
-  #   volumes:
-  #     - lsp_cache:/pyls/.cache
-  #   logging: *default-logging
-  #   networks:
-  #     - default
+  lsp:
+    image: ghcr.io/windmill-labs/windmill-lsp:latest
+    profiles:
+      - windmill-full
+    restart: unless-stopped
+    expose:
+      - 3001
+    volumes:
+      - lsp_cache:/pyls/.cache
+    logging: *default-logging
+    networks:
+      - default
 
-  # multiplayer:
-  #   image: ghcr.io/windmill-labs/windmill-multiplayer:latest
-  #   deploy:
-  #     replicas: 0
-  #   restart: unless-stopped
-  #   expose:
-  #     - 3002
-  #   logging: *default-logging
-  #   networks:
-  #     - default
+  multiplayer:
+    image: ghcr.io/windmill-labs/windmill-multiplayer:latest
+    profiles:
+      - windmill-full
+    deploy:
+      replicas: 1
+    restart: unless-stopped
+    expose:
+      - 3002
+    logging: *default-logging
+    networks:
+      - default
 
   caddy: # this is the ui server
     image: ghcr.io/windmill-labs/caddy-l4:latest
+    profiles:
+      - windmill
+      - windmill-full
     restart: unless-stopped
     volumes:
       - ./files/windmill/Caddyfile:/etc/caddy/Caddyfile
@@ -141,6 +157,6 @@ services:
 volumes:
   worker_dependency_cache: null
   worker_logs: null
-  # windmill_index: null
-  # lsp_cache: null
+  windmill_index: null
+  lsp_cache: null
   caddy_data: null

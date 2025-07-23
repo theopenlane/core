@@ -2,7 +2,7 @@
 
 ## Setup Dev
 
-1. Run `task docker:windmill:up` to startup windmill
+1. Run `task docker:windmill` to startup windmill, this will start the minimum set of components. If you want all the extra components you can run `task docker:windmill:full` to start everything in the compose file
 1. Copy the windmill example config and add the license keys
     ```bash
     cp docker/configs/windmill/.env-example docker/configs/windmill/.env1
@@ -88,11 +88,15 @@ Scheduled Jobs are instances of Job Templates that are configured to run on a sc
 For more information on cron syntax, see [crontab.guru](https://crontab.guru/).
 
 
-## Future Work
+## TODOs
 - Results need to be posted back to the openlane API to the job results table
+    - Add success and failure scripts that can be used in both dev + production
+    - ^ Fix the API because the syntax is incorrect and they aren't being added correctly - works currently with the script names set to empty in config
 - Allow for other triggers (e.g. webhooks) instead of always running on a schedule
-- Openlane agent wrapper
-- Add success and failure scripts that can be used in both dev + production
-- ^ Fix the API (maybe just switch to the go-client) because the syntax is incorrect
-- Add priority field to scheduler
-- Add hook to disable a scheduled job
+- Openlane agent wrapper for running on customers infra - should include a binary + docker image for both arm + x86 arch
+- Add priority field to scheduled job, allow customers to prioritize certain jobs higher than others
+- Add hook to disable a scheduled job - added field as `active` in the db, but its not currently passed to windmill and no update of scheduled
+jobs happens
+- Test update paths for job templates + schedules in windmill, only creation has been tested
+- Test deletion path + add hooks to ensure templates + schedules get deleted from windmill if they are deleted from the api
+- Job runner assignment - instead of using/requiring an ID we should fall back to being able to assign to any worker in the organization instead, look at using queues in windmill

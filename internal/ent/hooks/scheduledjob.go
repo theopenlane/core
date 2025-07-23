@@ -3,7 +3,6 @@ package hooks
 import (
 	"context"
 	"fmt"
-	"net/http"
 	"strings"
 
 	"entgo.io/ent"
@@ -16,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/windmill"
 	"github.com/theopenlane/entx"
@@ -144,8 +144,6 @@ func createWindmillFlow(ctx context.Context, mutation *generated.JobTemplateMuta
 		Language:    platform,
 	}
 
-	log.Warn().Str("flow_path", flowPath).Str("title", title).Str("description", description).Msg("creating windmill flow")
-
 	resp, err := windmillClient.CreateFlow(ctx, flowReq)
 	if err != nil {
 		return "", err
@@ -224,6 +222,7 @@ func downloadRawCode(ctx context.Context, downloadURL string) (string, error) {
 		httpsling.URL(downloadURL),
 		httpsling.Get(),
 	)
+
 	if err != nil {
 		log.Error().Err(err).Msg("failed to create httpsling requestor")
 
@@ -238,7 +237,7 @@ func downloadRawCode(ctx context.Context, downloadURL string) (string, error) {
 
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
+	if !httpsling.IsSuccess(resp) {
 		return "", fmt.Errorf("failed to download raw code, status: %d", resp.StatusCode) //nolint:err113
 	}
 
@@ -263,16 +262,32 @@ func generateFlowPath(ctx context.Context, mutation GenericMutation) (string, er
 		return "", fmt.Errorf("unknown mutation type: %T", mutation) //nolint:err113
 	}
 
+	folderName, err := getCustomerFolderName(ctx, mutation)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to get customer folder name")
+
+		return "", err
+	}
+
+	// the `f` here means folder, this is a convention used by Windmill
+	// and should most likely always be the case. They also have `u` for users
+	// this should create a path like `f/org_name/scheduled_job_12345678901234567890123456789012`
+	return fmt.Sprintf("f/%s/%s_%s", folderName, flowType, strings.ToLower(ulids.New().String())), nil
+}
+
+func getCustomerFolderName(ctx context.Context, mutation GenericMutation) (string, error) {
 	// get organization name
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
 		return "", err
 	}
 
+	// allow to bypass auth checks for org name
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	org, err := mutation.Client().Organization.Query().
 		Where(organization.ID(orgID)).
 		Select(organization.FieldName).
-		Only(ctx)
+		Only(allowCtx)
 	if err != nil {
 		return "", err
 	}
@@ -281,32 +296,14 @@ func generateFlowPath(ctx context.Context, mutation GenericMutation) (string, er
 	// Replace any invalid characters with underscores
 	// see SpecialCharValidator in ent validator to see that the org name can only contain
 	// alphanumeric characters, hyphens, underscores, periods, commas, and ampersands
-
-	replacer := strings.NewReplacer(
-		" ", "_",
-		"-", "_",
-		".", "_",
-		"/", "_",
-	)
-
-	orgName := replacer.Replace(org.Name)
-	// Remove any other invalid characters
-	validName := make([]rune, 0, len(org.Name))
-	for _, r := range org.Name {
-		if (r >= 'a' && r <= 'z') ||
-			(r >= 'A' && r <= 'Z') ||
-			(r >= '0' && r <= '9') ||
-			r == '_' {
-			validName = append(validName, r)
-		} else {
-			validName = append(validName, '_')
+	validName := strings.Map(func(r rune) rune {
+		if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') || (r >= '0' && r <= '9') || r == '_' || r == '-' {
+			return r
 		}
-	}
+		return '_'
+	}, org.Name)
 
-	// the `f` here means folder, this is a convention used by Windmill
-	// and should most likely always be the case. They also have `u` for users
-	// this should create a path like `f/org_name/scheduled_job_12345678901234567890123456789012`
-	return fmt.Sprintf("f/%s/%s_%s", orgName, flowType, strings.ToLower(ulids.New().String())), nil
+	return string(validName), nil
 }
 
 // HookScheduledJobCreate verifies a job that can be attached to a control/subcontrol has
@@ -398,7 +395,8 @@ func createWindmillScheduledJob(ctx context.Context, mutation *generated.Schedul
 		return fmt.Errorf("failed to get job template windmill path: %w", err)
 	}
 
-	enabled := true
+	enabled, _ := mutation.Active()
+
 	scheduleReq := windmill.CreateScheduledJobRequest{
 		Path:     scheduledJobPath,
 		Schedule: string(cron),
@@ -407,14 +405,12 @@ func createWindmillScheduledJob(ctx context.Context, mutation *generated.Schedul
 		Summary:  fmt.Sprintf("Scheduled Job - %s", jobID),
 	}
 
-	resp, err := windmillClient.CreateScheduledJob(ctx, scheduleReq)
+	_, err = windmillClient.CreateScheduledJob(ctx, scheduleReq)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to create windmill scheduled job")
 
-		return fmt.Errorf("failed to create scheduled job in windmill: %w", err)
+		return fmt.Errorf("failed to create scheduled job: %w", err)
 	}
-
-	log.Info().Str("scheduled_job_path", resp.Path).Msg("created windmill scheduled job")
 
 	return nil
 }

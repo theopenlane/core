@@ -89,9 +89,6 @@ func (c ScheduledJob) Mixin() []ent.Mixin {
 		prefix:      "SJB",
 		excludeTags: true,
 		additionalMixins: []ent.Mixin{
-			// TODO: update to object owned mixin
-			// that will allow inheritance by control + subcontrol to edit the scheduled job
-			// currently only org admins can create and edit scheduled jobs
 			newObjectOwnedMixin[generated.ScheduledJob](c,
 				withParents(Control{}, Subcontrol{}),
 				withOrganizationOwner(true),
