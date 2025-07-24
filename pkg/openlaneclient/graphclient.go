@@ -200,14 +200,11 @@ type OpenlaneGraphClient interface {
 	UpdateHush(ctx context.Context, updateHushID string, input UpdateHushInput, interceptors ...clientv2.RequestInterceptor) (*UpdateHush, error)
 	GetAllHushHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllHushHistories, error)
 	GetHushHistories(ctx context.Context, where *HushHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetHushHistories, error)
-	CreateBulkCSVIntegration(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVIntegration, error)
-	CreateBulkIntegration(ctx context.Context, input []*CreateIntegrationInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkIntegration, error)
-	CreateIntegration(ctx context.Context, input CreateIntegrationInput, interceptors ...clientv2.RequestInterceptor) (*CreateIntegration, error)
 	DeleteIntegration(ctx context.Context, deleteIntegrationID string, interceptors ...clientv2.RequestInterceptor) (*DeleteIntegration, error)
 	GetAllIntegrations(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllIntegrations, error)
 	GetIntegrationByID(ctx context.Context, integrationID string, interceptors ...clientv2.RequestInterceptor) (*GetIntegrationByID, error)
+	GetIntegrationByIDWithSecrets(ctx context.Context, integrationID string, interceptors ...clientv2.RequestInterceptor) (*GetIntegrationByIDWithSecrets, error)
 	GetIntegrations(ctx context.Context, where *IntegrationWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetIntegrations, error)
-	UpdateIntegration(ctx context.Context, updateIntegrationID string, input UpdateIntegrationInput, interceptors ...clientv2.RequestInterceptor) (*UpdateIntegration, error)
 	GetAllIntegrationHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllIntegrationHistories, error)
 	GetIntegrationHistories(ctx context.Context, where *IntegrationHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetIntegrationHistories, error)
 	CreateBulkCSVInternalPolicy(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVInternalPolicy, error)
@@ -34786,330 +34783,6 @@ func (t *GetHushHistories_HushHistories) GetEdges() []*GetHushHistories_HushHist
 	return t.Edges
 }
 
-type CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Owner struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Owner) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Owner{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Secrets_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Secrets_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Secrets_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Secrets_Edges struct {
-	Node *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Secrets_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Secrets_Edges) GetNode() *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Secrets_Edges_Node {
-	if t == nil {
-		t = &CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Secrets_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Secrets struct {
-	Edges []*CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Secrets_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Secrets) GetEdges() []*CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Secrets_Edges {
-	if t == nil {
-		t = &CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Secrets{}
-	}
-	return t.Edges
-}
-
-type CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations struct {
-	Description *string                                                                "json:\"description,omitempty\" graphql:\"description\""
-	ID          string                                                                 "json:\"id\" graphql:\"id\""
-	Kind        *string                                                                "json:\"kind,omitempty\" graphql:\"kind\""
-	Name        string                                                                 "json:\"name\" graphql:\"name\""
-	Owner       *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Owner  "json:\"owner,omitempty\" graphql:\"owner\""
-	OwnerID     *string                                                                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Secrets     CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Secrets "json:\"secrets\" graphql:\"secrets\""
-}
-
-func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations) GetDescription() *string {
-	if t == nil {
-		t = &CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations{}
-	}
-	return t.Description
-}
-func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations{}
-	}
-	return t.ID
-}
-func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations) GetKind() *string {
-	if t == nil {
-		t = &CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations{}
-	}
-	return t.Kind
-}
-func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations) GetName() string {
-	if t == nil {
-		t = &CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations{}
-	}
-	return t.Name
-}
-func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations) GetOwner() *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Owner {
-	if t == nil {
-		t = &CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations{}
-	}
-	return t.Owner
-}
-func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations) GetOwnerID() *string {
-	if t == nil {
-		t = &CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations{}
-	}
-	return t.OwnerID
-}
-func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations) GetSecrets() *CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations_Secrets {
-	if t == nil {
-		t = &CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations{}
-	}
-	return &t.Secrets
-}
-
-type CreateBulkCSVIntegration_CreateBulkCSVIntegration struct {
-	Integrations []*CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations "json:\"integrations,omitempty\" graphql:\"integrations\""
-}
-
-func (t *CreateBulkCSVIntegration_CreateBulkCSVIntegration) GetIntegrations() []*CreateBulkCSVIntegration_CreateBulkCSVIntegration_Integrations {
-	if t == nil {
-		t = &CreateBulkCSVIntegration_CreateBulkCSVIntegration{}
-	}
-	return t.Integrations
-}
-
-type CreateBulkIntegration_CreateBulkIntegration_Integrations_Owner struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations_Owner) GetID() string {
-	if t == nil {
-		t = &CreateBulkIntegration_CreateBulkIntegration_Integrations_Owner{}
-	}
-	return t.ID
-}
-
-type CreateBulkIntegration_CreateBulkIntegration_Integrations_Secrets_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations_Secrets_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateBulkIntegration_CreateBulkIntegration_Integrations_Secrets_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateBulkIntegration_CreateBulkIntegration_Integrations_Secrets_Edges struct {
-	Node *CreateBulkIntegration_CreateBulkIntegration_Integrations_Secrets_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations_Secrets_Edges) GetNode() *CreateBulkIntegration_CreateBulkIntegration_Integrations_Secrets_Edges_Node {
-	if t == nil {
-		t = &CreateBulkIntegration_CreateBulkIntegration_Integrations_Secrets_Edges{}
-	}
-	return t.Node
-}
-
-type CreateBulkIntegration_CreateBulkIntegration_Integrations_Secrets struct {
-	Edges []*CreateBulkIntegration_CreateBulkIntegration_Integrations_Secrets_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations_Secrets) GetEdges() []*CreateBulkIntegration_CreateBulkIntegration_Integrations_Secrets_Edges {
-	if t == nil {
-		t = &CreateBulkIntegration_CreateBulkIntegration_Integrations_Secrets{}
-	}
-	return t.Edges
-}
-
-type CreateBulkIntegration_CreateBulkIntegration_Integrations struct {
-	Description *string                                                          "json:\"description,omitempty\" graphql:\"description\""
-	ID          string                                                           "json:\"id\" graphql:\"id\""
-	Kind        *string                                                          "json:\"kind,omitempty\" graphql:\"kind\""
-	Name        string                                                           "json:\"name\" graphql:\"name\""
-	Owner       *CreateBulkIntegration_CreateBulkIntegration_Integrations_Owner  "json:\"owner,omitempty\" graphql:\"owner\""
-	OwnerID     *string                                                          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Secrets     CreateBulkIntegration_CreateBulkIntegration_Integrations_Secrets "json:\"secrets\" graphql:\"secrets\""
-}
-
-func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations) GetDescription() *string {
-	if t == nil {
-		t = &CreateBulkIntegration_CreateBulkIntegration_Integrations{}
-	}
-	return t.Description
-}
-func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations) GetID() string {
-	if t == nil {
-		t = &CreateBulkIntegration_CreateBulkIntegration_Integrations{}
-	}
-	return t.ID
-}
-func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations) GetKind() *string {
-	if t == nil {
-		t = &CreateBulkIntegration_CreateBulkIntegration_Integrations{}
-	}
-	return t.Kind
-}
-func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations) GetName() string {
-	if t == nil {
-		t = &CreateBulkIntegration_CreateBulkIntegration_Integrations{}
-	}
-	return t.Name
-}
-func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations) GetOwner() *CreateBulkIntegration_CreateBulkIntegration_Integrations_Owner {
-	if t == nil {
-		t = &CreateBulkIntegration_CreateBulkIntegration_Integrations{}
-	}
-	return t.Owner
-}
-func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations) GetOwnerID() *string {
-	if t == nil {
-		t = &CreateBulkIntegration_CreateBulkIntegration_Integrations{}
-	}
-	return t.OwnerID
-}
-func (t *CreateBulkIntegration_CreateBulkIntegration_Integrations) GetSecrets() *CreateBulkIntegration_CreateBulkIntegration_Integrations_Secrets {
-	if t == nil {
-		t = &CreateBulkIntegration_CreateBulkIntegration_Integrations{}
-	}
-	return &t.Secrets
-}
-
-type CreateBulkIntegration_CreateBulkIntegration struct {
-	Integrations []*CreateBulkIntegration_CreateBulkIntegration_Integrations "json:\"integrations,omitempty\" graphql:\"integrations\""
-}
-
-func (t *CreateBulkIntegration_CreateBulkIntegration) GetIntegrations() []*CreateBulkIntegration_CreateBulkIntegration_Integrations {
-	if t == nil {
-		t = &CreateBulkIntegration_CreateBulkIntegration{}
-	}
-	return t.Integrations
-}
-
-type CreateIntegration_CreateIntegration_Integration_Owner struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateIntegration_CreateIntegration_Integration_Owner) GetID() string {
-	if t == nil {
-		t = &CreateIntegration_CreateIntegration_Integration_Owner{}
-	}
-	return t.ID
-}
-
-type CreateIntegration_CreateIntegration_Integration_Secrets_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateIntegration_CreateIntegration_Integration_Secrets_Edges_Node) GetID() string {
-	if t == nil {
-		t = &CreateIntegration_CreateIntegration_Integration_Secrets_Edges_Node{}
-	}
-	return t.ID
-}
-
-type CreateIntegration_CreateIntegration_Integration_Secrets_Edges struct {
-	Node *CreateIntegration_CreateIntegration_Integration_Secrets_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *CreateIntegration_CreateIntegration_Integration_Secrets_Edges) GetNode() *CreateIntegration_CreateIntegration_Integration_Secrets_Edges_Node {
-	if t == nil {
-		t = &CreateIntegration_CreateIntegration_Integration_Secrets_Edges{}
-	}
-	return t.Node
-}
-
-type CreateIntegration_CreateIntegration_Integration_Secrets struct {
-	Edges []*CreateIntegration_CreateIntegration_Integration_Secrets_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *CreateIntegration_CreateIntegration_Integration_Secrets) GetEdges() []*CreateIntegration_CreateIntegration_Integration_Secrets_Edges {
-	if t == nil {
-		t = &CreateIntegration_CreateIntegration_Integration_Secrets{}
-	}
-	return t.Edges
-}
-
-type CreateIntegration_CreateIntegration_Integration struct {
-	Description *string                                                 "json:\"description,omitempty\" graphql:\"description\""
-	ID          string                                                  "json:\"id\" graphql:\"id\""
-	Kind        *string                                                 "json:\"kind,omitempty\" graphql:\"kind\""
-	Name        string                                                  "json:\"name\" graphql:\"name\""
-	Owner       *CreateIntegration_CreateIntegration_Integration_Owner  "json:\"owner,omitempty\" graphql:\"owner\""
-	OwnerID     *string                                                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Secrets     CreateIntegration_CreateIntegration_Integration_Secrets "json:\"secrets\" graphql:\"secrets\""
-}
-
-func (t *CreateIntegration_CreateIntegration_Integration) GetDescription() *string {
-	if t == nil {
-		t = &CreateIntegration_CreateIntegration_Integration{}
-	}
-	return t.Description
-}
-func (t *CreateIntegration_CreateIntegration_Integration) GetID() string {
-	if t == nil {
-		t = &CreateIntegration_CreateIntegration_Integration{}
-	}
-	return t.ID
-}
-func (t *CreateIntegration_CreateIntegration_Integration) GetKind() *string {
-	if t == nil {
-		t = &CreateIntegration_CreateIntegration_Integration{}
-	}
-	return t.Kind
-}
-func (t *CreateIntegration_CreateIntegration_Integration) GetName() string {
-	if t == nil {
-		t = &CreateIntegration_CreateIntegration_Integration{}
-	}
-	return t.Name
-}
-func (t *CreateIntegration_CreateIntegration_Integration) GetOwner() *CreateIntegration_CreateIntegration_Integration_Owner {
-	if t == nil {
-		t = &CreateIntegration_CreateIntegration_Integration{}
-	}
-	return t.Owner
-}
-func (t *CreateIntegration_CreateIntegration_Integration) GetOwnerID() *string {
-	if t == nil {
-		t = &CreateIntegration_CreateIntegration_Integration{}
-	}
-	return t.OwnerID
-}
-func (t *CreateIntegration_CreateIntegration_Integration) GetSecrets() *CreateIntegration_CreateIntegration_Integration_Secrets {
-	if t == nil {
-		t = &CreateIntegration_CreateIntegration_Integration{}
-	}
-	return &t.Secrets
-}
-
-type CreateIntegration_CreateIntegration struct {
-	Integration CreateIntegration_CreateIntegration_Integration "json:\"integration\" graphql:\"integration\""
-}
-
-func (t *CreateIntegration_CreateIntegration) GetIntegration() *CreateIntegration_CreateIntegration_Integration {
-	if t == nil {
-		t = &CreateIntegration_CreateIntegration{}
-	}
-	return &t.Integration
-}
-
 type DeleteIntegration_DeleteIntegration struct {
 	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
 }
@@ -35121,62 +34794,16 @@ func (t *DeleteIntegration_DeleteIntegration) GetDeletedID() string {
 	return t.DeletedID
 }
 
-type GetAllIntegrations_Integrations_Edges_Node_Owner struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetAllIntegrations_Integrations_Edges_Node_Owner) GetID() string {
-	if t == nil {
-		t = &GetAllIntegrations_Integrations_Edges_Node_Owner{}
-	}
-	return t.ID
-}
-
-type GetAllIntegrations_Integrations_Edges_Node_Secrets_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetAllIntegrations_Integrations_Edges_Node_Secrets_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetAllIntegrations_Integrations_Edges_Node_Secrets_Edges_Node{}
-	}
-	return t.ID
-}
-
-type GetAllIntegrations_Integrations_Edges_Node_Secrets_Edges struct {
-	Node *GetAllIntegrations_Integrations_Edges_Node_Secrets_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetAllIntegrations_Integrations_Edges_Node_Secrets_Edges) GetNode() *GetAllIntegrations_Integrations_Edges_Node_Secrets_Edges_Node {
-	if t == nil {
-		t = &GetAllIntegrations_Integrations_Edges_Node_Secrets_Edges{}
-	}
-	return t.Node
-}
-
-type GetAllIntegrations_Integrations_Edges_Node_Secrets struct {
-	Edges []*GetAllIntegrations_Integrations_Edges_Node_Secrets_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetAllIntegrations_Integrations_Edges_Node_Secrets) GetEdges() []*GetAllIntegrations_Integrations_Edges_Node_Secrets_Edges {
-	if t == nil {
-		t = &GetAllIntegrations_Integrations_Edges_Node_Secrets{}
-	}
-	return t.Edges
-}
-
 type GetAllIntegrations_Integrations_Edges_Node struct {
-	CreatedAt   *time.Time                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                                            "json:\"description,omitempty\" graphql:\"description\""
-	ID          string                                             "json:\"id\" graphql:\"id\""
-	Kind        *string                                            "json:\"kind,omitempty\" graphql:\"kind\""
-	Name        string                                             "json:\"name\" graphql:\"name\""
-	Owner       *GetAllIntegrations_Integrations_Edges_Node_Owner  "json:\"owner,omitempty\" graphql:\"owner\""
-	OwnerID     *string                                            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Secrets     GetAllIntegrations_Integrations_Edges_Node_Secrets "json:\"secrets\" graphql:\"secrets\""
-	UpdatedAt   *time.Time                                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string    "json:\"description,omitempty\" graphql:\"description\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	Kind        *string    "json:\"kind,omitempty\" graphql:\"kind\""
+	Name        string     "json:\"name\" graphql:\"name\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllIntegrations_Integrations_Edges_Node) GetCreatedAt() *time.Time {
@@ -35215,23 +34842,11 @@ func (t *GetAllIntegrations_Integrations_Edges_Node) GetName() string {
 	}
 	return t.Name
 }
-func (t *GetAllIntegrations_Integrations_Edges_Node) GetOwner() *GetAllIntegrations_Integrations_Edges_Node_Owner {
-	if t == nil {
-		t = &GetAllIntegrations_Integrations_Edges_Node{}
-	}
-	return t.Owner
-}
 func (t *GetAllIntegrations_Integrations_Edges_Node) GetOwnerID() *string {
 	if t == nil {
 		t = &GetAllIntegrations_Integrations_Edges_Node{}
 	}
 	return t.OwnerID
-}
-func (t *GetAllIntegrations_Integrations_Edges_Node) GetSecrets() *GetAllIntegrations_Integrations_Edges_Node_Secrets {
-	if t == nil {
-		t = &GetAllIntegrations_Integrations_Edges_Node{}
-	}
-	return &t.Secrets
 }
 func (t *GetAllIntegrations_Integrations_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -35268,62 +34883,16 @@ func (t *GetAllIntegrations_Integrations) GetEdges() []*GetAllIntegrations_Integ
 	return t.Edges
 }
 
-type GetIntegrationByID_Integration_Owner struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetIntegrationByID_Integration_Owner) GetID() string {
-	if t == nil {
-		t = &GetIntegrationByID_Integration_Owner{}
-	}
-	return t.ID
-}
-
-type GetIntegrationByID_Integration_Secrets_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetIntegrationByID_Integration_Secrets_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetIntegrationByID_Integration_Secrets_Edges_Node{}
-	}
-	return t.ID
-}
-
-type GetIntegrationByID_Integration_Secrets_Edges struct {
-	Node *GetIntegrationByID_Integration_Secrets_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetIntegrationByID_Integration_Secrets_Edges) GetNode() *GetIntegrationByID_Integration_Secrets_Edges_Node {
-	if t == nil {
-		t = &GetIntegrationByID_Integration_Secrets_Edges{}
-	}
-	return t.Node
-}
-
-type GetIntegrationByID_Integration_Secrets struct {
-	Edges []*GetIntegrationByID_Integration_Secrets_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetIntegrationByID_Integration_Secrets) GetEdges() []*GetIntegrationByID_Integration_Secrets_Edges {
-	if t == nil {
-		t = &GetIntegrationByID_Integration_Secrets{}
-	}
-	return t.Edges
-}
-
 type GetIntegrationByID_Integration struct {
-	CreatedAt   *time.Time                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                                "json:\"description,omitempty\" graphql:\"description\""
-	ID          string                                 "json:\"id\" graphql:\"id\""
-	Kind        *string                                "json:\"kind,omitempty\" graphql:\"kind\""
-	Name        string                                 "json:\"name\" graphql:\"name\""
-	Owner       *GetIntegrationByID_Integration_Owner  "json:\"owner,omitempty\" graphql:\"owner\""
-	OwnerID     *string                                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Secrets     GetIntegrationByID_Integration_Secrets "json:\"secrets\" graphql:\"secrets\""
-	UpdatedAt   *time.Time                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string    "json:\"description,omitempty\" graphql:\"description\""
+	ID          string     "json:\"id\" graphql:\"id\""
+	Kind        *string    "json:\"kind,omitempty\" graphql:\"kind\""
+	Name        string     "json:\"name\" graphql:\"name\""
+	OwnerID     *string    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	UpdatedAt   *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetIntegrationByID_Integration) GetCreatedAt() *time.Time {
@@ -35362,23 +34931,11 @@ func (t *GetIntegrationByID_Integration) GetName() string {
 	}
 	return t.Name
 }
-func (t *GetIntegrationByID_Integration) GetOwner() *GetIntegrationByID_Integration_Owner {
-	if t == nil {
-		t = &GetIntegrationByID_Integration{}
-	}
-	return t.Owner
-}
 func (t *GetIntegrationByID_Integration) GetOwnerID() *string {
 	if t == nil {
 		t = &GetIntegrationByID_Integration{}
 	}
 	return t.OwnerID
-}
-func (t *GetIntegrationByID_Integration) GetSecrets() *GetIntegrationByID_Integration_Secrets {
-	if t == nil {
-		t = &GetIntegrationByID_Integration{}
-	}
-	return &t.Secrets
 }
 func (t *GetIntegrationByID_Integration) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -35389,6 +34946,113 @@ func (t *GetIntegrationByID_Integration) GetUpdatedAt() *time.Time {
 func (t *GetIntegrationByID_Integration) GetUpdatedBy() *string {
 	if t == nil {
 		t = &GetIntegrationByID_Integration{}
+	}
+	return t.UpdatedBy
+}
+
+type GetIntegrationByIDWithSecrets_Integration_Secrets_Edges_Node struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *GetIntegrationByIDWithSecrets_Integration_Secrets_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetIntegrationByIDWithSecrets_Integration_Secrets_Edges_Node{}
+	}
+	return t.ID
+}
+
+type GetIntegrationByIDWithSecrets_Integration_Secrets_Edges struct {
+	Node *GetIntegrationByIDWithSecrets_Integration_Secrets_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetIntegrationByIDWithSecrets_Integration_Secrets_Edges) GetNode() *GetIntegrationByIDWithSecrets_Integration_Secrets_Edges_Node {
+	if t == nil {
+		t = &GetIntegrationByIDWithSecrets_Integration_Secrets_Edges{}
+	}
+	return t.Node
+}
+
+type GetIntegrationByIDWithSecrets_Integration_Secrets struct {
+	Edges []*GetIntegrationByIDWithSecrets_Integration_Secrets_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetIntegrationByIDWithSecrets_Integration_Secrets) GetEdges() []*GetIntegrationByIDWithSecrets_Integration_Secrets_Edges {
+	if t == nil {
+		t = &GetIntegrationByIDWithSecrets_Integration_Secrets{}
+	}
+	return t.Edges
+}
+
+type GetIntegrationByIDWithSecrets_Integration struct {
+	CreatedAt   *time.Time                                        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string                                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string                                           "json:\"description,omitempty\" graphql:\"description\""
+	ID          string                                            "json:\"id\" graphql:\"id\""
+	Kind        *string                                           "json:\"kind,omitempty\" graphql:\"kind\""
+	Name        string                                            "json:\"name\" graphql:\"name\""
+	OwnerID     *string                                           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Secrets     GetIntegrationByIDWithSecrets_Integration_Secrets "json:\"secrets\" graphql:\"secrets\""
+	UpdatedAt   *time.Time                                        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string                                           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetIntegrationByIDWithSecrets_Integration) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetIntegrationByIDWithSecrets_Integration{}
+	}
+	return t.CreatedAt
+}
+func (t *GetIntegrationByIDWithSecrets_Integration) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetIntegrationByIDWithSecrets_Integration{}
+	}
+	return t.CreatedBy
+}
+func (t *GetIntegrationByIDWithSecrets_Integration) GetDescription() *string {
+	if t == nil {
+		t = &GetIntegrationByIDWithSecrets_Integration{}
+	}
+	return t.Description
+}
+func (t *GetIntegrationByIDWithSecrets_Integration) GetID() string {
+	if t == nil {
+		t = &GetIntegrationByIDWithSecrets_Integration{}
+	}
+	return t.ID
+}
+func (t *GetIntegrationByIDWithSecrets_Integration) GetKind() *string {
+	if t == nil {
+		t = &GetIntegrationByIDWithSecrets_Integration{}
+	}
+	return t.Kind
+}
+func (t *GetIntegrationByIDWithSecrets_Integration) GetName() string {
+	if t == nil {
+		t = &GetIntegrationByIDWithSecrets_Integration{}
+	}
+	return t.Name
+}
+func (t *GetIntegrationByIDWithSecrets_Integration) GetOwnerID() *string {
+	if t == nil {
+		t = &GetIntegrationByIDWithSecrets_Integration{}
+	}
+	return t.OwnerID
+}
+func (t *GetIntegrationByIDWithSecrets_Integration) GetSecrets() *GetIntegrationByIDWithSecrets_Integration_Secrets {
+	if t == nil {
+		t = &GetIntegrationByIDWithSecrets_Integration{}
+	}
+	return &t.Secrets
+}
+func (t *GetIntegrationByIDWithSecrets_Integration) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetIntegrationByIDWithSecrets_Integration{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetIntegrationByIDWithSecrets_Integration) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetIntegrationByIDWithSecrets_Integration{}
 	}
 	return t.UpdatedBy
 }
@@ -35538,114 +35202,6 @@ func (t *GetIntegrations_Integrations) GetEdges() []*GetIntegrations_Integration
 		t = &GetIntegrations_Integrations{}
 	}
 	return t.Edges
-}
-
-type UpdateIntegration_UpdateIntegration_Integration_Owner struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *UpdateIntegration_UpdateIntegration_Integration_Owner) GetID() string {
-	if t == nil {
-		t = &UpdateIntegration_UpdateIntegration_Integration_Owner{}
-	}
-	return t.ID
-}
-
-type UpdateIntegration_UpdateIntegration_Integration_Secrets_Edges_Node struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *UpdateIntegration_UpdateIntegration_Integration_Secrets_Edges_Node) GetID() string {
-	if t == nil {
-		t = &UpdateIntegration_UpdateIntegration_Integration_Secrets_Edges_Node{}
-	}
-	return t.ID
-}
-
-type UpdateIntegration_UpdateIntegration_Integration_Secrets_Edges struct {
-	Node *UpdateIntegration_UpdateIntegration_Integration_Secrets_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *UpdateIntegration_UpdateIntegration_Integration_Secrets_Edges) GetNode() *UpdateIntegration_UpdateIntegration_Integration_Secrets_Edges_Node {
-	if t == nil {
-		t = &UpdateIntegration_UpdateIntegration_Integration_Secrets_Edges{}
-	}
-	return t.Node
-}
-
-type UpdateIntegration_UpdateIntegration_Integration_Secrets struct {
-	Edges []*UpdateIntegration_UpdateIntegration_Integration_Secrets_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *UpdateIntegration_UpdateIntegration_Integration_Secrets) GetEdges() []*UpdateIntegration_UpdateIntegration_Integration_Secrets_Edges {
-	if t == nil {
-		t = &UpdateIntegration_UpdateIntegration_Integration_Secrets{}
-	}
-	return t.Edges
-}
-
-type UpdateIntegration_UpdateIntegration_Integration struct {
-	Description *string                                                 "json:\"description,omitempty\" graphql:\"description\""
-	ID          string                                                  "json:\"id\" graphql:\"id\""
-	Kind        *string                                                 "json:\"kind,omitempty\" graphql:\"kind\""
-	Name        string                                                  "json:\"name\" graphql:\"name\""
-	Owner       *UpdateIntegration_UpdateIntegration_Integration_Owner  "json:\"owner,omitempty\" graphql:\"owner\""
-	OwnerID     *string                                                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Secrets     UpdateIntegration_UpdateIntegration_Integration_Secrets "json:\"secrets\" graphql:\"secrets\""
-}
-
-func (t *UpdateIntegration_UpdateIntegration_Integration) GetDescription() *string {
-	if t == nil {
-		t = &UpdateIntegration_UpdateIntegration_Integration{}
-	}
-	return t.Description
-}
-func (t *UpdateIntegration_UpdateIntegration_Integration) GetID() string {
-	if t == nil {
-		t = &UpdateIntegration_UpdateIntegration_Integration{}
-	}
-	return t.ID
-}
-func (t *UpdateIntegration_UpdateIntegration_Integration) GetKind() *string {
-	if t == nil {
-		t = &UpdateIntegration_UpdateIntegration_Integration{}
-	}
-	return t.Kind
-}
-func (t *UpdateIntegration_UpdateIntegration_Integration) GetName() string {
-	if t == nil {
-		t = &UpdateIntegration_UpdateIntegration_Integration{}
-	}
-	return t.Name
-}
-func (t *UpdateIntegration_UpdateIntegration_Integration) GetOwner() *UpdateIntegration_UpdateIntegration_Integration_Owner {
-	if t == nil {
-		t = &UpdateIntegration_UpdateIntegration_Integration{}
-	}
-	return t.Owner
-}
-func (t *UpdateIntegration_UpdateIntegration_Integration) GetOwnerID() *string {
-	if t == nil {
-		t = &UpdateIntegration_UpdateIntegration_Integration{}
-	}
-	return t.OwnerID
-}
-func (t *UpdateIntegration_UpdateIntegration_Integration) GetSecrets() *UpdateIntegration_UpdateIntegration_Integration_Secrets {
-	if t == nil {
-		t = &UpdateIntegration_UpdateIntegration_Integration{}
-	}
-	return &t.Secrets
-}
-
-type UpdateIntegration_UpdateIntegration struct {
-	Integration UpdateIntegration_UpdateIntegration_Integration "json:\"integration\" graphql:\"integration\""
-}
-
-func (t *UpdateIntegration_UpdateIntegration) GetIntegration() *UpdateIntegration_UpdateIntegration_Integration {
-	if t == nil {
-		t = &UpdateIntegration_UpdateIntegration{}
-	}
-	return &t.Integration
 }
 
 type GetAllIntegrationHistories_IntegrationHistories_Edges_Node struct {
@@ -90232,39 +89788,6 @@ func (t *GetHushHistories) GetHushHistories() *GetHushHistories_HushHistories {
 	return &t.HushHistories
 }
 
-type CreateBulkCSVIntegration struct {
-	CreateBulkCSVIntegration CreateBulkCSVIntegration_CreateBulkCSVIntegration "json:\"createBulkCSVIntegration\" graphql:\"createBulkCSVIntegration\""
-}
-
-func (t *CreateBulkCSVIntegration) GetCreateBulkCSVIntegration() *CreateBulkCSVIntegration_CreateBulkCSVIntegration {
-	if t == nil {
-		t = &CreateBulkCSVIntegration{}
-	}
-	return &t.CreateBulkCSVIntegration
-}
-
-type CreateBulkIntegration struct {
-	CreateBulkIntegration CreateBulkIntegration_CreateBulkIntegration "json:\"createBulkIntegration\" graphql:\"createBulkIntegration\""
-}
-
-func (t *CreateBulkIntegration) GetCreateBulkIntegration() *CreateBulkIntegration_CreateBulkIntegration {
-	if t == nil {
-		t = &CreateBulkIntegration{}
-	}
-	return &t.CreateBulkIntegration
-}
-
-type CreateIntegration struct {
-	CreateIntegration CreateIntegration_CreateIntegration "json:\"createIntegration\" graphql:\"createIntegration\""
-}
-
-func (t *CreateIntegration) GetCreateIntegration() *CreateIntegration_CreateIntegration {
-	if t == nil {
-		t = &CreateIntegration{}
-	}
-	return &t.CreateIntegration
-}
-
 type DeleteIntegration struct {
 	DeleteIntegration DeleteIntegration_DeleteIntegration "json:\"deleteIntegration\" graphql:\"deleteIntegration\""
 }
@@ -90298,6 +89821,17 @@ func (t *GetIntegrationByID) GetIntegration() *GetIntegrationByID_Integration {
 	return &t.Integration
 }
 
+type GetIntegrationByIDWithSecrets struct {
+	Integration GetIntegrationByIDWithSecrets_Integration "json:\"integration\" graphql:\"integration\""
+}
+
+func (t *GetIntegrationByIDWithSecrets) GetIntegration() *GetIntegrationByIDWithSecrets_Integration {
+	if t == nil {
+		t = &GetIntegrationByIDWithSecrets{}
+	}
+	return &t.Integration
+}
+
 type GetIntegrations struct {
 	Integrations GetIntegrations_Integrations "json:\"integrations\" graphql:\"integrations\""
 }
@@ -90307,17 +89841,6 @@ func (t *GetIntegrations) GetIntegrations() *GetIntegrations_Integrations {
 		t = &GetIntegrations{}
 	}
 	return &t.Integrations
-}
-
-type UpdateIntegration struct {
-	UpdateIntegration UpdateIntegration_UpdateIntegration "json:\"updateIntegration\" graphql:\"updateIntegration\""
-}
-
-func (t *UpdateIntegration) GetUpdateIntegration() *UpdateIntegration_UpdateIntegration {
-	if t == nil {
-		t = &UpdateIntegration{}
-	}
-	return &t.UpdateIntegration
 }
 
 type GetAllIntegrationHistories struct {
@@ -103050,126 +102573,6 @@ func (c *Client) GetHushHistories(ctx context.Context, where *HushHistoryWhereIn
 	return &res, nil
 }
 
-const CreateBulkCSVIntegrationDocument = `mutation CreateBulkCSVIntegration ($input: Upload!) {
-	createBulkCSVIntegration(input: $input) {
-		integrations {
-			description
-			id
-			kind
-			name
-			ownerID
-			owner {
-				id
-			}
-			secrets {
-				edges {
-					node {
-						id
-					}
-				}
-			}
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkCSVIntegration(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVIntegration, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkCSVIntegration
-	if err := c.Client.Post(ctx, "CreateBulkCSVIntegration", CreateBulkCSVIntegrationDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const CreateBulkIntegrationDocument = `mutation CreateBulkIntegration ($input: [CreateIntegrationInput!]) {
-	createBulkIntegration(input: $input) {
-		integrations {
-			description
-			id
-			kind
-			name
-			ownerID
-			owner {
-				id
-			}
-			secrets {
-				edges {
-					node {
-						id
-					}
-				}
-			}
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkIntegration(ctx context.Context, input []*CreateIntegrationInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkIntegration, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkIntegration
-	if err := c.Client.Post(ctx, "CreateBulkIntegration", CreateBulkIntegrationDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const CreateIntegrationDocument = `mutation CreateIntegration ($input: CreateIntegrationInput!) {
-	createIntegration(input: $input) {
-		integration {
-			description
-			id
-			kind
-			name
-			ownerID
-			owner {
-				id
-			}
-			secrets {
-				edges {
-					node {
-						id
-					}
-				}
-			}
-		}
-	}
-}
-`
-
-func (c *Client) CreateIntegration(ctx context.Context, input CreateIntegrationInput, interceptors ...clientv2.RequestInterceptor) (*CreateIntegration, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateIntegration
-	if err := c.Client.Post(ctx, "CreateIntegration", CreateIntegrationDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const DeleteIntegrationDocument = `mutation DeleteIntegration ($deleteIntegrationId: ID!) {
 	deleteIntegration(id: $deleteIntegrationId) {
 		deletedID
@@ -103203,16 +102606,6 @@ const GetAllIntegrationsDocument = `query GetAllIntegrations {
 				kind
 				name
 				ownerID
-				owner {
-					id
-				}
-				secrets {
-					edges {
-						node {
-							id
-						}
-					}
-				}
 				createdAt
 				createdBy
 				updatedAt
@@ -103245,16 +102638,6 @@ const GetIntegrationByIDDocument = `query GetIntegrationByID ($integrationId: ID
 		kind
 		name
 		ownerID
-		owner {
-			id
-		}
-		secrets {
-			edges {
-				node {
-					id
-				}
-			}
-		}
 		createdAt
 		createdBy
 		updatedAt
@@ -103270,6 +102653,45 @@ func (c *Client) GetIntegrationByID(ctx context.Context, integrationID string, i
 
 	var res GetIntegrationByID
 	if err := c.Client.Post(ctx, "GetIntegrationByID", GetIntegrationByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetIntegrationByIDWithSecretsDocument = `query GetIntegrationByIDWithSecrets ($integrationId: ID!) {
+	integration(id: $integrationId) {
+		description
+		id
+		kind
+		name
+		ownerID
+		secrets {
+			edges {
+				node {
+					id
+				}
+			}
+		}
+		createdAt
+		createdBy
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetIntegrationByIDWithSecrets(ctx context.Context, integrationID string, interceptors ...clientv2.RequestInterceptor) (*GetIntegrationByIDWithSecrets, error) {
+	vars := map[string]any{
+		"integrationId": integrationID,
+	}
+
+	var res GetIntegrationByIDWithSecrets
+	if err := c.Client.Post(ctx, "GetIntegrationByIDWithSecrets", GetIntegrationByIDWithSecretsDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -103316,47 +102738,6 @@ func (c *Client) GetIntegrations(ctx context.Context, where *IntegrationWhereInp
 
 	var res GetIntegrations
 	if err := c.Client.Post(ctx, "GetIntegrations", GetIntegrationsDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const UpdateIntegrationDocument = `mutation UpdateIntegration ($updateIntegrationId: ID!, $input: UpdateIntegrationInput!) {
-	updateIntegration(id: $updateIntegrationId, input: $input) {
-		integration {
-			description
-			id
-			kind
-			name
-			ownerID
-			owner {
-				id
-			}
-			secrets {
-				edges {
-					node {
-						id
-					}
-				}
-			}
-		}
-	}
-}
-`
-
-func (c *Client) UpdateIntegration(ctx context.Context, updateIntegrationID string, input UpdateIntegrationInput, interceptors ...clientv2.RequestInterceptor) (*UpdateIntegration, error) {
-	vars := map[string]any{
-		"updateIntegrationId": updateIntegrationID,
-		"input":               input,
-	}
-
-	var res UpdateIntegration
-	if err := c.Client.Post(ctx, "UpdateIntegration", UpdateIntegrationDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -118400,14 +117781,11 @@ var DocumentOperationNames = map[string]string{
 	UpdateHushDocument:                             "UpdateHush",
 	GetAllHushHistoriesDocument:                    "GetAllHushHistories",
 	GetHushHistoriesDocument:                       "GetHushHistories",
-	CreateBulkCSVIntegrationDocument:               "CreateBulkCSVIntegration",
-	CreateBulkIntegrationDocument:                  "CreateBulkIntegration",
-	CreateIntegrationDocument:                      "CreateIntegration",
 	DeleteIntegrationDocument:                      "DeleteIntegration",
 	GetAllIntegrationsDocument:                     "GetAllIntegrations",
 	GetIntegrationByIDDocument:                     "GetIntegrationByID",
+	GetIntegrationByIDWithSecretsDocument:          "GetIntegrationByIDWithSecrets",
 	GetIntegrationsDocument:                        "GetIntegrations",
-	UpdateIntegrationDocument:                      "UpdateIntegration",
 	GetAllIntegrationHistoriesDocument:             "GetAllIntegrationHistories",
 	GetIntegrationHistoriesDocument:                "GetIntegrationHistories",
 	CreateBulkCSVInternalPolicyDocument:            "CreateBulkCSVInternalPolicy",

@@ -118,7 +118,7 @@ func (j JobTemplate) Mixin() []ent.Mixin {
 			),
 			mixin.SystemOwnedMixin{},
 		},
-	}.getMixins()
+	}.getMixins(j)
 }
 
 // Annotations of the JobTemplate

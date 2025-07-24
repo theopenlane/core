@@ -25,6 +25,7 @@ Config contains the configuration for the core server
 |[**subscription**](#subscription)|`object`|||
 |[**keywatcher**](#keywatcher)|`object`|KeyWatcher contains settings for the key watcher that manages JWT signing keys<br/>||
 |[**slack**](#slack)|`object`|Slack contains settings for Slack notifications<br/>||
+|[**integrationOauthProvider**](#integrationoauthprovider)|`object`|IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations<br/>||
 
 **Additional Properties:** not allowed  
 <a name="server"></a>
@@ -58,6 +59,7 @@ Server settings for the echo server
 |[**csrfProtection**](#servercsrfprotection)|`object`|Config defines configuration for the CSRF middleware wrapper.<br/>|no|
 |**secretManager**|`string`|SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key<br/>|no|
 |**defaultTrustCenterDomain**|`string`|DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set<br/>|no|
+|[**fieldLevelEncryption**](#serverfieldlevelencryption)|`object`||no|
 
 **Additional Properties:** not allowed  
 <a name="servertls"></a>
@@ -234,6 +236,17 @@ Config defines configuration for the CSRF middleware wrapper.
 |**cookieHttpOnly**|`boolean`|CookieHTTPOnly indicates whether the CSRF cookie is HTTP only.<br/>||
 |**cookieDomain**|`string`|CookieDomain specifies the domain for the CSRF cookie, default to no domain<br/>||
 |**cookiePath**|`string`|CookiePath specifies the path for the CSRF cookie, default to "/"<br/>||
+
+**Additional Properties:** not allowed  
+<a name="serverfieldlevelencryption"></a>
+### server\.fieldLevelEncryption: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled indicates whether Tink encryption is enabled<br/>||
+|**keyset**|`string`|Keyset is the base64-encoded Tink keyset used for encryption<br/>||
 
 **Additional Properties:** not allowed  
 <a name="entconfig"></a>
@@ -959,4 +972,64 @@ Slack contains settings for Slack notifications
 |**newUserMessageFile**|`string`|NewUserMessageFile is the path to the template used for new user notifications<br/>||
 
 **Additional Properties:** not allowed  
+<a name="integrationoauthprovider"></a>
+## integrationOauthProvider: object
+
+IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**redirectUrl**|`string`|RedirectURL is the base URL for integration OAuth callbacks<br/>||
+|**successRedirectUrl**|`string`|SuccessRedirectURL is the URL to redirect to after successful OAuth integration<br/>||
+|[**github**](#integrationoauthprovidergithub)|`object`|IntegrationProviderConfig contains OAuth configuration for a specific integration provider<br/>||
+|[**slack**](#integrationoauthproviderslack)|`object`|IntegrationProviderConfig contains OAuth configuration for a specific integration provider<br/>||
+
+**Additional Properties:** not allowed  
+<a name="integrationoauthprovidergithub"></a>
+### integrationOauthProvider\.github: object
+
+IntegrationProviderConfig contains OAuth configuration for a specific integration provider
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**clientId**|`string`|ClientID is the OAuth2 client ID<br/>||
+|**clientSecret**|`string`|ClientSecret is the OAuth2 client secret<br/>||
+|**clientEndpoint**|`string`|ClientEndpoint is the base URL for the OAuth endpoints<br/>||
+|[**scopes**](#integrationoauthprovidergithubscopes)|`string[]`|||
+
+**Additional Properties:** not allowed  
+<a name="integrationoauthprovidergithubscopes"></a>
+#### integrationOauthProvider\.github\.scopes: array
+
+**Items**
+
+**Item Type:** `string`  
+<a name="integrationoauthproviderslack"></a>
+### integrationOauthProvider\.slack: object
+
+IntegrationProviderConfig contains OAuth configuration for a specific integration provider
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**clientId**|`string`|ClientID is the OAuth2 client ID<br/>||
+|**clientSecret**|`string`|ClientSecret is the OAuth2 client secret<br/>||
+|**clientEndpoint**|`string`|ClientEndpoint is the base URL for the OAuth endpoints<br/>||
+|[**scopes**](#integrationoauthproviderslackscopes)|`string[]`|||
+
+**Additional Properties:** not allowed  
+<a name="integrationoauthproviderslackscopes"></a>
+#### integrationOauthProvider\.slack\.scopes: array
+
+**Items**
+
+**Item Type:** `string`  
 

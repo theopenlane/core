@@ -134,6 +134,19 @@ entConfig:
         timezone: UTC
         token: ""
         workspace: ""
+integrationOauthProvider:
+    github:
+        clientEndpoint: http://localhost:17608
+        clientId: ""
+        clientSecret: ""
+        scopes: null
+    redirectUrl: http://localhost:17608
+    slack:
+        clientEndpoint: http://localhost:17608
+        clientId: ""
+        clientSecret: ""
+        scopes: null
+    successRedirectUrl: /integrations/success
 jobQueue:
     connectionURI: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
     riverConf:
@@ -230,6 +243,9 @@ server:
     defaultTrustCenterDomain: ""
     dev: false
     enableGraphExtensions: true
+    fieldLevelEncryption:
+        enabled: false
+        keyset: ""
     graphPool:
         maxWorkers: 100
     idleTimeout: 30000000000

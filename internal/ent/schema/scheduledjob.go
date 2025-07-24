@@ -95,7 +95,7 @@ func (c ScheduledJob) Mixin() []ent.Mixin {
 				withSkipForSystemAdmin(true),
 			),
 		},
-	}.getMixins()
+	}.getMixins(c)
 }
 
 // Edges of the ScheduledJob

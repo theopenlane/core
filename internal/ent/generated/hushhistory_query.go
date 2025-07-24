@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -331,6 +332,12 @@ func (hhq *HushHistoryQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		hhq.sql = prev
+	}
+	if hushhistory.Policy == nil {
+		return errors.New("generated: uninitialized hushhistory.Policy (forgotten import generated/runtime?)")
+	}
+	if err := hushhistory.Policy.EvalQuery(ctx, hhq); err != nil {
+		return err
 	}
 	return nil
 }

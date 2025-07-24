@@ -110,7 +110,7 @@ func (TrustCenterSetting) Fields() []ent.Field {
 func (t TrustCenterSetting) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeTags: true,
-	}.getMixins()
+	}.getMixins(t)
 }
 
 // Edges of the TrustCenterSetting

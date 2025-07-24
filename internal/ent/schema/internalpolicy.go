@@ -74,7 +74,7 @@ func (i InternalPolicy) Mixin() []ent.Mixin {
 			// policies are documents
 			DocumentMixin{DocumentType: "policy"}, // use short name for the document type
 		},
-	}.getMixins()
+	}.getMixins(i)
 }
 
 // Annotations of the InternalPolicy

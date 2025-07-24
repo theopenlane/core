@@ -1719,18 +1719,10 @@ type ComplexityRoot struct {
 		UpdatedBy   func(childComplexity int) int
 	}
 
-	IntegrationBulkCreatePayload struct {
-		Integrations func(childComplexity int) int
-	}
-
 	IntegrationConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
-	}
-
-	IntegrationCreatePayload struct {
-		Integration func(childComplexity int) int
 	}
 
 	IntegrationDeletePayload struct {
@@ -1767,10 +1759,6 @@ type ComplexityRoot struct {
 	IntegrationHistoryEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
-	}
-
-	IntegrationUpdatePayload struct {
-		Integration func(childComplexity int) int
 	}
 
 	InternalPolicy struct {
@@ -2322,7 +2310,6 @@ type ComplexityRoot struct {
 		CreateBulkCSVGroupMembership         func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVGroupSetting            func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVHush                    func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVIntegration             func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVInternalPolicy          func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVInvite                  func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVJobTemplate             func(childComplexity int, input graphql.Upload) int
@@ -2359,7 +2346,6 @@ type ComplexityRoot struct {
 		CreateBulkGroupMembership            func(childComplexity int, input []*generated.CreateGroupMembershipInput) int
 		CreateBulkGroupSetting               func(childComplexity int, input []*generated.CreateGroupSettingInput) int
 		CreateBulkHush                       func(childComplexity int, input []*generated.CreateHushInput) int
-		CreateBulkIntegration                func(childComplexity int, input []*generated.CreateIntegrationInput) int
 		CreateBulkInternalPolicy             func(childComplexity int, input []*generated.CreateInternalPolicyInput) int
 		CreateBulkInvite                     func(childComplexity int, input []*generated.CreateInviteInput) int
 		CreateBulkJobTemplate                func(childComplexity int, input []*generated.CreateJobTemplateInput) int
@@ -2403,7 +2389,6 @@ type ComplexityRoot struct {
 		CreateGroupSetting                   func(childComplexity int, input generated.CreateGroupSettingInput) int
 		CreateGroupWithMembers               func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput) int
 		CreateHush                           func(childComplexity int, input generated.CreateHushInput) int
-		CreateIntegration                    func(childComplexity int, input generated.CreateIntegrationInput) int
 		CreateInternalPolicy                 func(childComplexity int, input generated.CreateInternalPolicyInput) int
 		CreateInvite                         func(childComplexity int, input generated.CreateInviteInput) int
 		CreateJobRunnerRegistrationToken     func(childComplexity int, input generated.CreateJobRunnerRegistrationTokenInput) int
@@ -2510,7 +2495,6 @@ type ComplexityRoot struct {
 		UpdateGroupMembership                func(childComplexity int, id string, input generated.UpdateGroupMembershipInput) int
 		UpdateGroupSetting                   func(childComplexity int, id string, input generated.UpdateGroupSettingInput) int
 		UpdateHush                           func(childComplexity int, id string, input generated.UpdateHushInput) int
-		UpdateIntegration                    func(childComplexity int, id string, input generated.UpdateIntegrationInput) int
 		UpdateInternalPolicy                 func(childComplexity int, id string, input generated.UpdateInternalPolicyInput) int
 		UpdateInvite                         func(childComplexity int, id string, input generated.UpdateInviteInput) int
 		UpdateJobRunner                      func(childComplexity int, id string, input generated.UpdateJobRunnerInput) int
@@ -12975,13 +12959,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Integration.UpdatedBy(childComplexity), true
 
-	case "IntegrationBulkCreatePayload.integrations":
-		if e.complexity.IntegrationBulkCreatePayload.Integrations == nil {
-			break
-		}
-
-		return e.complexity.IntegrationBulkCreatePayload.Integrations(childComplexity), true
-
 	case "IntegrationConnection.edges":
 		if e.complexity.IntegrationConnection.Edges == nil {
 			break
@@ -13002,13 +12979,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.IntegrationConnection.TotalCount(childComplexity), true
-
-	case "IntegrationCreatePayload.integration":
-		if e.complexity.IntegrationCreatePayload.Integration == nil {
-			break
-		}
-
-		return e.complexity.IntegrationCreatePayload.Integration(childComplexity), true
 
 	case "IntegrationDeletePayload.deletedID":
 		if e.complexity.IntegrationDeletePayload.DeletedID == nil {
@@ -13156,13 +13126,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.IntegrationHistoryEdge.Node(childComplexity), true
-
-	case "IntegrationUpdatePayload.integration":
-		if e.complexity.IntegrationUpdatePayload.Integration == nil {
-			break
-		}
-
-		return e.complexity.IntegrationUpdatePayload.Integration(childComplexity), true
 
 	case "InternalPolicy.approvalRequired":
 		if e.complexity.InternalPolicy.ApprovalRequired == nil {
@@ -15797,18 +15760,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVHush(childComplexity, args["input"].(graphql.Upload)), true
 
-	case "Mutation.createBulkCSVIntegration":
-		if e.complexity.Mutation.CreateBulkCSVIntegration == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkCSVIntegration_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkCSVIntegration(childComplexity, args["input"].(graphql.Upload)), true
-
 	case "Mutation.createBulkCSVInternalPolicy":
 		if e.complexity.Mutation.CreateBulkCSVInternalPolicy == nil {
 			break
@@ -16240,18 +16191,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkHush(childComplexity, args["input"].([]*generated.CreateHushInput)), true
-
-	case "Mutation.createBulkIntegration":
-		if e.complexity.Mutation.CreateBulkIntegration == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkIntegration_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkIntegration(childComplexity, args["input"].([]*generated.CreateIntegrationInput)), true
 
 	case "Mutation.createBulkInternalPolicy":
 		if e.complexity.Mutation.CreateBulkInternalPolicy == nil {
@@ -16768,18 +16707,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateHush(childComplexity, args["input"].(generated.CreateHushInput)), true
-
-	case "Mutation.createIntegration":
-		if e.complexity.Mutation.CreateIntegration == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createIntegration_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateIntegration(childComplexity, args["input"].(generated.CreateIntegrationInput)), true
 
 	case "Mutation.createInternalPolicy":
 		if e.complexity.Mutation.CreateInternalPolicy == nil {
@@ -18052,18 +17979,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateHush(childComplexity, args["id"].(string), args["input"].(generated.UpdateHushInput)), true
-
-	case "Mutation.updateIntegration":
-		if e.complexity.Mutation.UpdateIntegration == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateIntegration_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.UpdateIntegration(childComplexity, args["id"].(string), args["input"].(generated.UpdateIntegrationInput)), true
 
 	case "Mutation.updateInternalPolicy":
 		if e.complexity.Mutation.UpdateInternalPolicy == nil {
@@ -32629,7 +32544,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateGroupMembershipInput,
 		ec.unmarshalInputCreateGroupSettingInput,
 		ec.unmarshalInputCreateHushInput,
-		ec.unmarshalInputCreateIntegrationInput,
 		ec.unmarshalInputCreateInternalPolicyInput,
 		ec.unmarshalInputCreateInviteInput,
 		ec.unmarshalInputCreateJobResultInput,
@@ -32863,7 +32777,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateGroupMembershipInput,
 		ec.unmarshalInputUpdateGroupSettingInput,
 		ec.unmarshalInputUpdateHushInput,
-		ec.unmarshalInputUpdateIntegrationInput,
 		ec.unmarshalInputUpdateInternalPolicyInput,
 		ec.unmarshalInputUpdateInviteInput,
 		ec.unmarshalInputUpdateJobResultInput,
@@ -43044,28 +42957,6 @@ input CreateHushInput {
   secretValue: String
   ownerID: ID
   integrationIDs: [ID!]
-  eventIDs: [ID!]
-}
-"""
-CreateIntegrationInput is used for create Integration object.
-Input was generated by ent.
-"""
-input CreateIntegrationInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  """
-  the name of the integration - must be unique within the organization
-  """
-  name: String!
-  """
-  a description of the integration
-  """
-  description: String
-  kind: String
-  ownerID: ID
-  secretIDs: [ID!]
   eventIDs: [ID!]
 }
 """
@@ -84280,37 +84171,6 @@ input UpdateHushInput {
   clearEvents: Boolean
 }
 """
-UpdateIntegrationInput is used for update Integration object.
-Input was generated by ent.
-"""
-input UpdateIntegrationInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  appendTags: [String!]
-  clearTags: Boolean
-  """
-  the name of the integration - must be unique within the organization
-  """
-  name: String
-  """
-  a description of the integration
-  """
-  description: String
-  clearDescription: Boolean
-  kind: String
-  clearKind: Boolean
-  ownerID: ID
-  clearOwner: Boolean
-  addSecretIDs: [ID!]
-  removeSecretIDs: [ID!]
-  clearSecrets: Boolean
-  addEventIDs: [ID!]
-  removeEventIDs: [ID!]
-  clearEvents: Boolean
-}
-"""
 UpdateInternalPolicyInput is used for update InternalPolicy object.
 Input was generated by ent.
 """
@@ -89604,46 +89464,6 @@ type HushBulkCreatePayload {
 
 extend type Mutation{
     """
-    Create a new integration
-    """
-    createIntegration(
-        """
-        values of the integration
-        """
-        input: CreateIntegrationInput!
-    ): IntegrationCreatePayload!
-    """
-    Create multiple new integrations
-    """
-    createBulkIntegration(
-        """
-        values of the integration
-        """
-        input: [CreateIntegrationInput!]
-    ): IntegrationBulkCreatePayload!
-    """
-    Create multiple new integrations via file upload
-    """
-    createBulkCSVIntegration(
-        """
-        csv file containing values of the integration
-        """
-        input: Upload!
-    ): IntegrationBulkCreatePayload!
-    """
-    Update an existing integration
-    """
-    updateIntegration(
-        """
-        ID of the integration
-        """
-        id: ID!
-        """
-        New values for the integration
-        """
-        input: UpdateIntegrationInput!
-    ): IntegrationUpdatePayload!
-    """
     Delete an existing integration
     """
     deleteIntegration(
@@ -89653,27 +89473,6 @@ extend type Mutation{
         id: ID!
     ): IntegrationDeletePayload!
 }
-
-"""
-Return response for createIntegration mutation
-"""
-type IntegrationCreatePayload {
-    """
-    Created integration
-    """
-    integration: Integration!
-}
-
-"""
-Return response for updateIntegration mutation
-"""
-type IntegrationUpdatePayload {
-    """
-    Updated integration
-    """
-    integration: Integration!
-}
-
 """
 Return response for deleteIntegration mutation
 """
@@ -89683,16 +89482,7 @@ type IntegrationDeletePayload {
     """
     deletedID: ID!
 }
-
-"""
-Return response for createBulkIntegration mutation
-"""
-type IntegrationBulkCreatePayload {
-    """
-    Created integrations
-    """
-    integrations: [Integration!]
-}`, BuiltIn: false},
+`, BuiltIn: false},
 	{Name: "../schema/internalpolicy.graphql", Input: `extend type Query {
     """
     Look up internalPolicy by ID

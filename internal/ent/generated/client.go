@@ -9489,12 +9489,14 @@ func (c *HushHistoryClient) GetX(ctx context.Context, id string) *HushHistory {
 
 // Hooks returns the client hooks.
 func (c *HushHistoryClient) Hooks() []Hook {
-	return c.hooks.HushHistory
+	hooks := c.hooks.HushHistory
+	return append(hooks[:len(hooks):len(hooks)], hushhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
 func (c *HushHistoryClient) Interceptors() []Interceptor {
-	return c.inters.HushHistory
+	inters := c.inters.HushHistory
+	return append(inters[:len(inters):len(inters)], hushhistory.Interceptors[:]...)
 }
 
 func (c *HushHistoryClient) mutate(ctx context.Context, m *HushHistoryMutation) (Value, error) {

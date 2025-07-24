@@ -12,46 +12,6 @@ extend type Query {
 
 extend type Mutation{
     """
-    Create a new integration
-    """
-    createIntegration(
-        """
-        values of the integration
-        """
-        input: CreateIntegrationInput!
-    ): IntegrationCreatePayload!
-    """
-    Create multiple new integrations
-    """
-    createBulkIntegration(
-        """
-        values of the integration
-        """
-        input: [CreateIntegrationInput!]
-    ): IntegrationBulkCreatePayload!
-    """
-    Create multiple new integrations via file upload
-    """
-    createBulkCSVIntegration(
-        """
-        csv file containing values of the integration
-        """
-        input: Upload!
-    ): IntegrationBulkCreatePayload!
-    """
-    Update an existing integration
-    """
-    updateIntegration(
-        """
-        ID of the integration
-        """
-        id: ID!
-        """
-        New values for the integration
-        """
-        input: UpdateIntegrationInput!
-    ): IntegrationUpdatePayload!
-    """
     Delete an existing integration
     """
     deleteIntegration(
@@ -61,27 +21,6 @@ extend type Mutation{
         id: ID!
     ): IntegrationDeletePayload!
 }
-
-"""
-Return response for createIntegration mutation
-"""
-type IntegrationCreatePayload {
-    """
-    Created integration
-    """
-    integration: Integration!
-}
-
-"""
-Return response for updateIntegration mutation
-"""
-type IntegrationUpdatePayload {
-    """
-    Updated integration
-    """
-    integration: Integration!
-}
-
 """
 Return response for deleteIntegration mutation
 """
@@ -90,14 +29,4 @@ type IntegrationDeletePayload {
     Deleted integration ID
     """
     deletedID: ID!
-}
-
-"""
-Return response for createBulkIntegration mutation
-"""
-type IntegrationBulkCreatePayload {
-    """
-    Created integrations
-    """
-    integrations: [Integration!]
 }

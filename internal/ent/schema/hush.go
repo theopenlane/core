@@ -8,8 +8,8 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
+	"github.com/theopenlane/core/internal/ent/hush"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/entx"
 )
 
@@ -68,6 +68,7 @@ func (Hush) Fields() []ent.Field {
 			Sensitive().
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput),
+				hush.EncryptField(), // Automatically encrypt this field
 			).
 			Optional().
 			Immutable(),
@@ -100,19 +101,18 @@ func (h Hush) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(h),
 		},
-	}.getMixins()
+	}.getMixins(h)
 }
 
-// Hooks of the Hush
-func (Hush) Hooks() []ent.Hook {
-	return []ent.Hook{
-		hooks.HookHush(),
-	}
-}
-
-// Interceptors of the Hush
-func (Hush) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorHush(),
-	}
+// Policy of the Hush - restricts access to organization members with write access
+func (Hush) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			// restrict read access to hush secrets to organization members with write access
+			policy.CheckOrgEditAccess(),
+		),
+		policy.WithMutationRules(
+			policy.CheckOrgWriteAccess(),
+		),
+	)
 }
