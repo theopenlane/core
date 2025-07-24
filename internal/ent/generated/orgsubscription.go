@@ -68,9 +68,10 @@ type OrgSubscription struct {
 	selectValues sql.SelectValues
 
 	// SubscriptionURL is the URL to the stripe checkout session
-	SubscriptionURL      string `json:"subscriptionURL,omitempty"`
-	ManagePaymentMethods string `json:"managePaymentMethods,omitempty"`
-	Cancellation         string `json:"cancellation,omitempty"`
+	SubscriptionURL      string            `json:"subscriptionURL,omitempty"`
+	ManagePaymentMethods string            `json:"managePaymentMethods,omitempty"`
+	Cancellation         string            `json:"cancellation,omitempty"`
+	ModuleBillingURLs    map[string]string `json:"moduleBillingURLs,omitempty"`
 }
 
 // OrgSubscriptionEdges holds the relations/edges for other nodes in the graph.

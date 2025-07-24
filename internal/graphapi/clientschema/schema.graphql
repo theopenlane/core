@@ -25103,6 +25103,10 @@ input MappedControlWhereInput {
 	hasToSubcontrols: Boolean
 	hasToSubcontrolsWith: [SubcontrolWhereInput!]
 }
+type ModuleBillingURL {
+	module: String!
+	url: String!
+}
 type Mutation {
 	"""
 	Create a new actionPlan
@@ -29631,6 +29635,7 @@ type OrgSubscription implements Node {
 	subscriptionURL: String
 	managePaymentMethods: String
 	cancellation: String
+	moduleBillingURLs: [ModuleBillingURL!]
 }
 """
 A connection to a list of items.

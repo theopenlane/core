@@ -38,6 +38,7 @@ type ResolverRoot interface {
 	AuditLog() AuditLogResolver
 	Group() GroupResolver
 	Mutation() MutationResolver
+	OrgSubscription() OrgSubscriptionResolver
 	Query() QueryResolver
 	CreateEntityInput() CreateEntityInputResolver
 	CreateGroupInput() CreateGroupInputResolver
@@ -2292,6 +2293,11 @@ type ComplexityRoot struct {
 		MappedControl func(childComplexity int) int
 	}
 
+	ModuleBillingURL struct {
+		Module func(childComplexity int) int
+		URL    func(childComplexity int) int
+	}
+
 	Mutation struct {
 		CreateAPIToken                       func(childComplexity int, input generated.CreateAPITokenInput) int
 		CreateActionPlan                     func(childComplexity int, input generated.CreateActionPlanInput) int
@@ -2758,6 +2764,7 @@ type ComplexityRoot struct {
 		Features                 func(childComplexity int) int
 		ID                       func(childComplexity int) int
 		ManagePaymentMethods     func(childComplexity int) int
+		ModuleBillingURLs        func(childComplexity int) int
 		Owner                    func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
 		PaymentMethodAdded       func(childComplexity int) int
@@ -15500,6 +15507,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.MappedControlUpdatePayload.MappedControl(childComplexity), true
 
+	case "ModuleBillingURL.module":
+		if e.complexity.ModuleBillingURL.Module == nil {
+			break
+		}
+
+		return e.complexity.ModuleBillingURL.Module(childComplexity), true
+
+	case "ModuleBillingURL.url":
+		if e.complexity.ModuleBillingURL.URL == nil {
+			break
+		}
+
+		return e.complexity.ModuleBillingURL.URL(childComplexity), true
+
 	case "Mutation.createAPIToken":
 		if e.complexity.Mutation.CreateAPIToken == nil {
 			break
@@ -19410,6 +19431,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.OrgSubscription.ManagePaymentMethods(childComplexity), true
+
+	case "OrgSubscription.moduleBillingURLs":
+		if e.complexity.OrgSubscription.ModuleBillingURLs == nil {
+			break
+		}
+
+		return e.complexity.OrgSubscription.ModuleBillingURLs(childComplexity), true
 
 	case "OrgSubscription.owner":
 		if e.complexity.OrgSubscription.Owner == nil {
@@ -90895,7 +90923,14 @@ extend input OrgMembershipWhereInput {
     subscriptionURL: String
     managePaymentMethods: String
     cancellation: String
-}`, BuiltIn: false},
+    moduleBillingURLs: [ModuleBillingURL!]
+}
+
+type ModuleBillingURL {
+    module: String!
+    url: String!
+}
+`, BuiltIn: false},
 	{Name: "../schema/personalaccesstoken.graphql", Input: `extend type Query {
     """
     Look up personalAccessToken by ID
