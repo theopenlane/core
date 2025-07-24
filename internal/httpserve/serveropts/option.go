@@ -35,6 +35,7 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hush/crypto"
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
@@ -168,8 +169,11 @@ func WithTokenManager() ServerOption {
 // WithAuth supplies the authn and jwt config for the server
 func WithAuth() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
-		// add oauth providers
+		// add oauth providers for social login
 		s.Config.Handler.OauthProvider = s.Config.Settings.Auth.Providers
+
+		// add oauth providers for integrations (separate config)
+		s.Config.Handler.IntegrationOauthProvider = s.Config.Settings.IntegrationOauthProvider
 
 		// add auth middleware
 		opts := []authmw.Option{
@@ -618,5 +622,16 @@ func WithCSRF() ServerOption {
 			s.Config.GraphMiddleware = append(s.Config.GraphMiddleware, csrf.Middleware(cfg))
 			s.Config.Handler.AdditionalMiddleware = append(s.Config.Handler.AdditionalMiddleware, csrf.Middleware(cfg))
 		}
+	})
+}
+
+// WithCrypto initializes the field level encryption system for the server
+func WithCrypto() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		if err := crypto.Init(s.Config.Settings.Server.FieldLevelEncryption); err != nil {
+			log.Panic().Err(err).Msg("Error initializing crypto")
+		}
+
+		log.Info().Bool("enabled", s.Config.Settings.Server.FieldLevelEncryption.Enabled).Msg("Crypto initialized")
 	})
 }

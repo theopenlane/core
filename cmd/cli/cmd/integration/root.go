@@ -41,10 +41,6 @@ func consoleOutput(e any) error {
 		e = nodes
 	case *openlaneclient.GetIntegrationByID:
 		e = v.Integration
-	case *openlaneclient.CreateIntegration:
-		e = v.CreateIntegration.Integration
-	case *openlaneclient.UpdateIntegration:
-		e = v.UpdateIntegration.Integration
 	case *openlaneclient.DeleteIntegration:
 		deletedTableOutput(v)
 		return nil

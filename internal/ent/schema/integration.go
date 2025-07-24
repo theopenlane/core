@@ -78,7 +78,7 @@ func (i Integration) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(i),
 		},
-	}.getMixins()
+	}.getMixins(i)
 }
 
 // Policy of the Integration
@@ -94,5 +94,10 @@ func (Integration) Policy() ent.Policy {
 func (Integration) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.Features("base"),
+		entgql.Skip(
+			// integrations are created by an oauth flow, not by the user directly
+			entgql.SkipMutationCreateInput,
+			entgql.SkipMutationUpdateInput,
+		),
 	}
 }

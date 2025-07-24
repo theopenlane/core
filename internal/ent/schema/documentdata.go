@@ -56,7 +56,7 @@ func (d DocumentData) Mixin() []ent.Mixin {
 				withOrganizationOwner(false),
 				withParents(Template{})),
 		},
-	}.getMixins()
+	}.getMixins(d)
 }
 
 // Edges of the DocumentData

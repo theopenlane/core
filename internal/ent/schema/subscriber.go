@@ -114,7 +114,7 @@ func (s Subscriber) Mixin() []ent.Mixin {
 			newOrgOwnedMixin(s,
 				withSkipTokenTypesObjects(&token.VerifyToken{}, &token.SignUpToken{}), withSkipForSystemAdmin(true)),
 		},
-	}.getMixins()
+	}.getMixins(s)
 }
 
 // Edges of the Subscriber

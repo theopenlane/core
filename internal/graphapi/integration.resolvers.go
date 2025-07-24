@@ -7,100 +7,10 @@ package graphapi
 import (
 	"context"
 
-	"github.com/99designs/gqlgen/graphql"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/utils/rout"
 )
-
-// CreateIntegration is the resolver for the createIntegration field.
-func (r *mutationResolver) CreateIntegration(ctx context.Context, input generated.CreateIntegrationInput) (*model.IntegrationCreatePayload, error) {
-	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
-	}
-
-	res, err := withTransactionalMutation(ctx).Integration.Create().SetInput(input).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "integration"})
-	}
-
-	return &model.IntegrationCreatePayload{
-		Integration: res,
-	}, nil
-}
-
-// CreateBulkIntegration is the resolver for the createBulkIntegration field.
-func (r *mutationResolver) CreateBulkIntegration(ctx context.Context, input []*generated.CreateIntegrationInput) (*model.IntegrationBulkCreatePayload, error) {
-	if len(input) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	// set the organization in the auth context if its not done for us
-	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
-	}
-
-	return r.bulkCreateIntegration(ctx, input)
-}
-
-// CreateBulkCSVIntegration is the resolver for the createBulkCSVIntegration field.
-func (r *mutationResolver) CreateBulkCSVIntegration(ctx context.Context, input graphql.Upload) (*model.IntegrationBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateIntegrationInput](input)
-	if err != nil {
-		log.Error().Err(err).Msg("failed to unmarshal bulk data")
-
-		return nil, err
-	}
-
-	if len(data) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	// set the organization in the auth context if its not done for us
-	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
-	}
-
-	return r.bulkCreateIntegration(ctx, data)
-}
-
-// UpdateIntegration is the resolver for the updateIntegration field.
-func (r *mutationResolver) UpdateIntegration(ctx context.Context, id string, input generated.UpdateIntegrationInput) (*model.IntegrationUpdatePayload, error) {
-	res, err := withTransactionalMutation(ctx).Integration.Get(ctx, id)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "integration"})
-	}
-
-	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.ErrPermissionDenied
-	}
-
-	// setup update request
-	req := res.Update().SetInput(input).AppendTags(input.AppendTags)
-
-	res, err = req.Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "integration"})
-	}
-
-	return &model.IntegrationUpdatePayload{
-		Integration: res,
-	}, nil
-}
 
 // DeleteIntegration is the resolver for the deleteIntegration field.
 func (r *mutationResolver) DeleteIntegration(ctx context.Context, id string) (*model.IntegrationDeletePayload, error) {
@@ -131,3 +41,91 @@ func (r *queryResolver) Integration(ctx context.Context, id string) (*generated.
 
 	return res, nil
 }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//    it when you're done.
+//  - You have helper methods in this file. Move them out to keep these resolver files clean.
+/*
+	func (r *mutationResolver) CreateIntegration(ctx context.Context, input generated.CreateIntegrationInput) (*model.IntegrationCreatePayload, error) {
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	res, err := withTransactionalMutation(ctx).Integration.Create().SetInput(input).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "integration"})
+	}
+
+	return &model.IntegrationCreatePayload{
+		Integration: res,
+	}, nil
+}
+func (r *mutationResolver) CreateBulkIntegration(ctx context.Context, input []*generated.CreateIntegrationInput) (*model.IntegrationBulkCreatePayload, error) {
+	if len(input) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	return r.bulkCreateIntegration(ctx, input)
+}
+func (r *mutationResolver) CreateBulkCSVIntegration(ctx context.Context, input graphql.Upload) (*model.IntegrationBulkCreatePayload, error) {
+	data, err := unmarshalBulkData[generated.CreateIntegrationInput](input)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, err
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	return r.bulkCreateIntegration(ctx, data)
+}
+func (r *mutationResolver) UpdateIntegration(ctx context.Context, id string, input generated.UpdateIntegrationInput) (*model.IntegrationUpdatePayload, error) {
+	res, err := withTransactionalMutation(ctx).Integration.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "integration"})
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.ErrPermissionDenied
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input).AppendTags(input.AppendTags)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "integration"})
+	}
+
+	return &model.IntegrationUpdatePayload{
+		Integration: res,
+	}, nil
+}
+*/
