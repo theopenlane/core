@@ -1193,6 +1193,84 @@ type CreateTrustCenterAnonymousJWTResponse struct {
 	AuthData
 }
 
+// =================
+// IMPERSONATION
+// =================
+//
+
+const (
+	// MinImpersonationReasonLength is the minimum length for impersonation reason
+	MinImpersonationReasonLength = 10
+	// MaxImpersonationReasonLength is the maximum length for impersonation reason
+	MaxImpersonationReasonLength = 500
+)
+
+// StartImpersonationRequest represents a request to start impersonating a user
+type StartImpersonationRequest struct {
+	TargetUserID   string   `json:"target_user_id" validate:"required" description:"The ID of the user to impersonate"`
+	Type           string   `json:"type" validate:"required,oneof=support job admin" description:"The type of impersonation (support, job, admin)"`
+	Reason         string   `json:"reason" validate:"required,min=10,max=500" description:"Reason for the impersonation"`
+	Duration       *int     `json:"duration_hours,omitempty" description:"Duration in hours (optional, defaults to 1 hour)"`
+	Scopes         []string `json:"scopes,omitempty" description:"Specific scopes for the impersonation session"`
+	OrganizationID string   `json:"organization_id,omitempty" description:"Organization context for impersonation"`
+}
+
+// StartImpersonationReply represents the response when starting impersonation
+type StartImpersonationReply struct {
+	rout.Reply
+	Token     string    `json:"token" description:"The impersonation token"`
+	ExpiresAt time.Time `json:"expires_at" description:"When the impersonation token expires"`
+	SessionID string    `json:"session_id" description:"The impersonation session ID"`
+	Message   string    `json:"message" description:"Success message"`
+}
+
+// EndImpersonationRequest represents a request to end an impersonation session
+type EndImpersonationRequest struct {
+	SessionID string `json:"session_id" validate:"required" description:"The session ID to end"`
+	Reason    string `json:"reason,omitempty" description:"Optional reason for ending the session"`
+}
+
+// EndImpersonationReply represents the response when ending impersonation
+type EndImpersonationReply struct {
+	rout.Reply
+	Message string `json:"message" description:"Success message"`
+}
+
+// Validate ensures the required fields are set on the StartImpersonationRequest
+func (r *StartImpersonationRequest) Validate() error {
+	r.TargetUserID = strings.TrimSpace(r.TargetUserID)
+	r.Type = strings.TrimSpace(r.Type)
+	r.Reason = strings.TrimSpace(r.Reason)
+	r.OrganizationID = strings.TrimSpace(r.OrganizationID)
+
+	switch {
+	case r.TargetUserID == "":
+		return rout.NewMissingRequiredFieldError("target_user_id")
+	case r.Type == "":
+		return rout.NewMissingRequiredFieldError("type")
+	case r.Reason == "":
+		return rout.NewMissingRequiredFieldError("reason")
+	case len(r.Reason) < MinImpersonationReasonLength:
+		return rout.InvalidField("reason must be at least 10 characters")
+	case len(r.Reason) > MaxImpersonationReasonLength:
+		return rout.InvalidField("reason must be less than 500 characters")
+	}
+
+	return nil
+}
+
+// Validate ensures the required fields are set on the EndImpersonationRequest
+func (r *EndImpersonationRequest) Validate() error {
+	r.SessionID = strings.TrimSpace(r.SessionID)
+	r.Reason = strings.TrimSpace(r.Reason)
+
+	if r.SessionID == "" {
+		return rout.NewMissingRequiredFieldError("session_id")
+	}
+
+	return nil
+}
+
 // =========
 // OAUTH INTEGRATIONS
 // =========
@@ -1377,6 +1455,35 @@ func (r *OAuthCallbackRequest) Validate() error {
 	}
 
 	return nil
+}
+
+// ExampleStartImpersonationRequest is an example request for OpenAPI documentation
+var ExampleStartImpersonationRequest = StartImpersonationRequest{
+	TargetUserID: ulids.New().String(),
+	Type:         "support",
+	Reason:       "Customer support assistance for account recovery",
+	Duration:     nil, // Use default
+}
+
+// ExampleStartImpersonationReply is an example response for OpenAPI documentation
+var ExampleStartImpersonationReply = StartImpersonationReply{
+	Reply:     rout.Reply{Success: true},
+	Token:     "imp_" + ulids.New().String(),
+	ExpiresAt: time.Now().Add(time.Hour),
+	SessionID: ulids.New().String(),
+	Message:   "Impersonation session started successfully",
+}
+
+// ExampleEndImpersonationRequest is an example request for OpenAPI documentation
+var ExampleEndImpersonationRequest = EndImpersonationRequest{
+	SessionID: ulids.New().String(),
+	Reason:    "Support task completed",
+}
+
+// ExampleEndImpersonationReply is an example response for OpenAPI documentation
+var ExampleEndImpersonationReply = EndImpersonationReply{
+	Reply:   rout.Reply{Success: true},
+	Message: "Impersonation session ended successfully",
 }
 
 // OAuthCallbackResponse contains the result of OAuth callback processing

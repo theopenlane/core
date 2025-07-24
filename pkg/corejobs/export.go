@@ -7,8 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
-	"net/http"
+	"maps"
 	"strings"
 	"time"
 
@@ -17,14 +16,14 @@ import (
 	"github.com/gocarina/gocsv"
 	"github.com/riverqueue/river"
 	"github.com/rs/zerolog/log"
-
-	"maps"
+	"github.com/theopenlane/httpsling"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 
 	"github.com/theopenlane/core/pkg/corejobs/internal/olclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
+	"github.com/theopenlane/iam/auth"
 )
 
 const (
@@ -55,6 +54,10 @@ var (
 type ExportContentArgs struct {
 	// ID of the export
 	ExportID string `json:"export_id,omitempty"`
+	// UserID of the user who requested the export (for system admin context)
+	UserID string `json:"user_id,omitempty"`
+	// OrganizationID of the organization context for the export
+	OrganizationID string `json:"organization_id,omitempty"`
 }
 
 type ExportWorkerConfig struct {
@@ -71,8 +74,8 @@ type ExportContentWorker struct {
 
 	Config ExportWorkerConfig `koanf:"config" json:"config" jsonschema:"description=the configuration for exporting"`
 
-	olClient   olclient.OpenlaneClient
-	httpClient *http.Client
+	olClient  olclient.OpenlaneClient
+	requester *httpsling.Requester
 }
 
 // WithOpenlaneClient sets the Openlane client for the worker
@@ -82,18 +85,15 @@ func (w *ExportContentWorker) WithOpenlaneClient(cl olclient.OpenlaneClient) *Ex
 	return w
 }
 
-// WithHTTPClient sets the http client to use for the outward
-// http request
-func (w *ExportContentWorker) WithHTTPClient(client *http.Client) *ExportContentWorker {
-	w.httpClient = client
+// WithRequester sets the httpsling requester to use for HTTP requests
+func (w *ExportContentWorker) WithRequester(requester *httpsling.Requester) *ExportContentWorker {
+	w.requester = requester
 	return w
 }
 
 // Work satisfies the river.Worker interface for the export content worker
 // it creates a csv, uploads it and associates it with the export
 func (w *ExportContentWorker) Work(ctx context.Context, job *river.Job[ExportContentArgs]) error {
-	log.Info().Str("export_id", job.Args.ExportID).Msg("exporting content")
-
 	if job.Args.ExportID == "" {
 		return newMissingRequiredArg("export_id", ExportContentArgs{}.Kind())
 	}
@@ -110,9 +110,16 @@ func (w *ExportContentWorker) Work(ctx context.Context, job *river.Job[ExportCon
 		w.olClient = cl
 	}
 
-	if w.httpClient == nil {
-		w.httpClient = &http.Client{
-			Timeout: time.Second * defaultHTTPTimeoutSeconds,
+	if w.requester == nil {
+		var err error
+		w.requester, err = httpsling.New(
+			httpsling.URL(w.Config.OpenlaneAPIHost),
+			httpsling.BearerAuth(w.Config.OpenlaneAPIToken),
+			httpsling.Header("Content-Type", "application/json"),
+			httpsling.Header("Accept", "application/graphql-response+json"),
+		)
+		if err != nil {
+			return err
 		}
 	}
 
@@ -163,7 +170,7 @@ func (w *ExportContentWorker) Work(ctx context.Context, job *river.Job[ExportCon
 	var after *string
 
 	for {
-		nodes, hasNext, nextCursor, err := w.fetchPage(ctx, query, rootQuery, after, where)
+		nodes, hasNext, nextCursor, err := w.fetchPage(ctx, query, rootQuery, after, where, job.Args)
 		if err != nil {
 			return w.updateExportStatus(ctx, job.Args.ExportID, enums.ExportStatusFailed, err)
 		}
@@ -300,54 +307,24 @@ func extractErrors(errs []any) error {
 	return ErrUnknownGraphQLError
 }
 
-func (w *ExportContentWorker) executeGraphQLQuery(ctx context.Context, query string, variables map[string]any) (map[string]any, error) {
+func (w *ExportContentWorker) executeGraphQLQuery(ctx context.Context, query string, variables map[string]any, jobArgs ExportContentArgs) (map[string]any, error) {
 	body := map[string]any{"query": query}
 	if len(variables) > 0 {
 		body["variables"] = variables
 	}
 
-	jsonBody, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
+	// Prepare request options
+	opts := []httpsling.Option{
+		httpsling.Post("/query"),
+		httpsling.Body(body),
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, w.Config.OpenlaneAPIHost+"/query", bytes.NewReader(jsonBody))
-	if err != nil {
-		return nil, err
+	// Add user context headers if provided (for system admin operations)
+	if jobArgs.UserID != "" {
+		opts = append(opts, httpsling.Header(auth.UserIDHeader, jobArgs.UserID))
 	}
-
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Accept", "application/graphql-response+json")
-	req.Header.Set("Authorization", "Bearer "+w.Config.OpenlaneAPIToken)
-
-	resp, err := w.httpClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		respBody, err := io.ReadAll(resp.Body)
-		if err != nil {
-			return nil, fmt.Errorf("failed to read error response: %w", err)
-		}
-
-		var result struct {
-			Errors []any `json:"errors"`
-		}
-
-		if jsonErr := json.Unmarshal(respBody, &result); jsonErr == nil && len(result.Errors) > 0 {
-			if err := extractErrors(result.Errors); err != nil {
-				return nil, err
-			}
-		}
-
-		return nil, fmt.Errorf("%w (%d): %s", ErrUnexpectedStatus, resp.StatusCode, string(respBody))
-	}
-
-	respBody, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
+	if jobArgs.OrganizationID != "" {
+		opts = append(opts, httpsling.Header(auth.OrganizationIDHeader, jobArgs.OrganizationID))
 	}
 
 	var result struct {
@@ -355,9 +332,11 @@ func (w *ExportContentWorker) executeGraphQLQuery(ctx context.Context, query str
 		Errors []any          `json:"errors"`
 	}
 
-	if err := json.Unmarshal(respBody, &result); err != nil {
+	resp, err := w.requester.ReceiveWithContext(ctx, &result, opts...)
+	if err != nil {
 		return nil, err
 	}
+	defer resp.Body.Close()
 
 	if len(result.Errors) > 0 {
 		return nil, extractErrors(result.Errors)
@@ -434,15 +413,12 @@ func (w *ExportContentWorker) updateExportStatus(ctx context.Context, exportID s
 		return err
 	}
 
-	log.Info().
-		Str("export_id", exportID).
-		Str("status", string(status)).
-		Msg("export status updated")
+	log.Info().Str("export_id", exportID).Msg("export status updated")
 
 	return nil
 }
 
-func (w *ExportContentWorker) fetchPage(ctx context.Context, query, rootQuery string, after *string, where map[string]any) ([]map[string]any, bool, string, error) {
+func (w *ExportContentWorker) fetchPage(ctx context.Context, query, rootQuery string, after *string, where map[string]any, jobArgs ExportContentArgs) ([]map[string]any, bool, string, error) {
 	vars := map[string]any{"first": defaultPageSize}
 	if after != nil {
 		vars["after"] = *after
@@ -451,7 +427,7 @@ func (w *ExportContentWorker) fetchPage(ctx context.Context, query, rootQuery st
 		vars["where"] = where
 	}
 
-	data, err := w.executeGraphQLQuery(ctx, query, vars)
+	data, err := w.executeGraphQLQuery(ctx, query, vars, jobArgs)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to execute GraphQL query")
 		return nil, false, "", err

@@ -48,6 +48,13 @@ func unauthorized() *openapi3.Response {
 		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/Unauthorized"}))
 }
 
+// forbidden is a wrapper for openaAPI forbidden response
+func forbidden() *openapi3.Response {
+	return openapi3.NewResponse().
+		WithDescription("Forbidden").
+		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/Forbidden"}))
+}
+
 // invalidInput is a wrapper for openaAPI invalidInput response
 func invalidInput() *openapi3.Response {
 	return openapi3.NewResponse().

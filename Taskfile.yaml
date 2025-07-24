@@ -41,6 +41,8 @@ env:
   GO_GENERATE_FAST_DISABLE: "false" # set to true to disable cached entries
   GO_GENERATE_FAST_RECACHE: "false" # set to true to recache all entries
   COMPOSE_PROJECT_NAME: openlane
+  # CLI demo environment variables
+  ADMIN_USER_EMAIL: "admin@admin.theopenlane.io"
 
 # load the .env file for windmill
 dotenv: ['docker/configs/windmill/.env']
@@ -504,7 +506,7 @@ tasks:
       - "[ -f $(brew --prefix)/bin/{{.DEPS}} ]"
     vars:
       DEPS: >-
-        age helm kubernetes-cli yq jq gomplate golangci-lint openfga/tap/fga pre-commit ariga/tap/atlas rover #magic___^_^___line
+        age helm kubernetes-cli yq jq gomplate golangci-lint openfga/tap/fga pre-commit ariga/tap/atlas rover theopenlane/tap/openlane #magic___^_^___line
 
   brew-installed:
     silent: true

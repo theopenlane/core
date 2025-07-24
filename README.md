@@ -54,6 +54,10 @@ to load the associated dependencies. Nearly everything in this repository
 assumes you already have a local golang environment setup so this is not
 included. Please see the associated documentation.
 
+### Installing the CLI
+
+You can install the Openlane CLI by running `brew install theopenlane/tap/openlane`
+
 ### Updating Configuration Settings
 
 See the [README](/config/README.md) in the `config` directory.
