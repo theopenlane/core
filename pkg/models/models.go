@@ -1266,6 +1266,10 @@ func (r *EndImpersonationRequest) Validate() error {
 
 	if r.SessionID == "" {
 		return rout.NewMissingRequiredFieldError("session_id")
+	}
+
+	return nil
+}
 
 // =========
 // OAUTH INTEGRATIONS
@@ -1480,7 +1484,8 @@ var ExampleEndImpersonationRequest = EndImpersonationRequest{
 var ExampleEndImpersonationReply = EndImpersonationReply{
 	Reply:   rout.Reply{Success: true},
 	Message: "Impersonation session ended successfully",
-  
+}
+
 // OAuthCallbackResponse contains the result of OAuth callback processing
 type OAuthCallbackResponse struct {
 	rout.Reply
