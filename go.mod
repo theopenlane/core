@@ -343,17 +343,17 @@ require (
 	github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 // indirect
 	github.com/projectdiscovery/blackrock v0.0.1 // indirect
 	github.com/projectdiscovery/chaos-client v0.5.2 // indirect
-	github.com/projectdiscovery/dsl v0.4.1 // indirect
+	github.com/projectdiscovery/dsl v0.5.0 // indirect
 	github.com/projectdiscovery/fastdialer v0.4.1 // indirect
 	github.com/projectdiscovery/gologger v1.1.54 // indirect
 	github.com/projectdiscovery/gostruct v0.0.2 // indirect
 	github.com/projectdiscovery/hmap v0.0.91 // indirect
 	github.com/projectdiscovery/machineid v0.0.0-20240226150047-2e2c51e35983 // indirect
 	github.com/projectdiscovery/mapcidr v1.1.34 // indirect
-	github.com/projectdiscovery/networkpolicy v0.1.17 // indirect
+	github.com/projectdiscovery/networkpolicy v0.1.18 // indirect
 	github.com/projectdiscovery/ratelimit v0.0.81 // indirect
 	github.com/projectdiscovery/retryabledns v1.0.103 // indirect
-	github.com/projectdiscovery/retryablehttp-go v1.0.117 // indirect
+	github.com/projectdiscovery/retryablehttp-go v1.0.118 // indirect
 	github.com/quasilyte/go-ruleguard v0.4.4 // indirect
 	github.com/quasilyte/go-ruleguard/dsl v0.3.22 // indirect
 	github.com/quasilyte/gogrep v0.5.0 // indirect
@@ -578,7 +578,7 @@ require (
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2
 	github.com/pquerna/otp v1.5.0
-	github.com/projectdiscovery/katana v1.1.3
+	github.com/projectdiscovery/katana v1.2.1
 	github.com/projectdiscovery/subfinder/v2 v2.8.0
 	github.com/projectdiscovery/wappalyzergo v0.2.38
 	github.com/prometheus/client_model v0.6.2 // indirect
