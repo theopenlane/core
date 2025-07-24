@@ -53,8 +53,8 @@ func (h *Handler) StartImpersonation(ctx echo.Context) error {
 	}
 
 	// Get the current authenticated user (the impersonator)
-	currentUser, ok := auth.AuthenticatedUserFromContext(ctx.Request().Context())
-	if !ok {
+	currentUser, err := auth.GetAuthenticatedUserFromContext(ctx.Request().Context())
+	if err != nil {
 		return h.Unauthorized(ctx, ErrAuthenticationRequired)
 	}
 

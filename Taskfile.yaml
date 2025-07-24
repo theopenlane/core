@@ -481,7 +481,7 @@ tasks:
       - "[ -f $(brew --prefix)/bin/{{.DEPS}} ]"
     vars:
       DEPS: >-
-        age helm kubernetes-cli yq jq gomplate golangci-lint openfga/tap/fga pre-commit ariga/tap/atlas rover #magic___^_^___line
+        age helm kubernetes-cli yq jq gomplate golangci-lint openfga/tap/fga pre-commit ariga/tap/atlas rover theopenlane/tap/openlane #magic___^_^___line
 
   brew-installed:
     silent: true
@@ -520,4 +520,3 @@ tasks:
     cmds:
       - rover install --plugin supergraph@v2.8.2
       - rover install --plugin router@v1.50.0
-

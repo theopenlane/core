@@ -38,7 +38,10 @@ tasks:
       STORE_ID:
         sh: fga store list --api-token={{ .FGA_API_TOKEN }} |jq -r '.stores.[].id'
       LOGGED_IN_USER:
-        sh: ../openlane-cli user get -z json --host {{ .OPENLANE_API_HOST }}  | jq -r '.self.id'
+        sh: openlane user get -z json --host {{ .OPENLANE_API_HOST }}  | jq -r '.self.id'
       USER_ID: "{{ .USER_ID | default .LOGGED_IN_USER }}"
     cmds:
       - fga tuple write --store-id={{ .STORE_ID }} user:{{ .USER_ID }} {{ .SYSTEM_ADMIN_RELATION }} {{ .SYSTEM_OBJECT }} --api-token={{ .FGA_API_TOKEN }}
+    preconditions:
+      - sh: which openlane
+        msg: "Openlane CLI is not installed. Please install it using 'brew install theopenlane/tap/openlane'."
