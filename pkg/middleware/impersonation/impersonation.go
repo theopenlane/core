@@ -2,6 +2,7 @@ package impersonation
 
 import (
 	"net/http"
+	"slices"
 
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
@@ -36,6 +37,7 @@ func (m *Middleware) Process(next echo.HandlerFunc) echo.HandlerFunc {
 		claims, err := m.tokenManager.ValidateImpersonationToken(ctx, tokenString)
 		if err != nil {
 			log.Warn().Err(err).Str("ip", c.RealIP()).Msg("invalid impersonation token")
+
 			return echo.NewHTTPError(http.StatusUnauthorized, "invalid impersonation token")
 		}
 
@@ -43,6 +45,7 @@ func (m *Middleware) Process(next echo.HandlerFunc) echo.HandlerFunc {
 		impersonatedUser, err := m.createImpersonatedUser(claims)
 		if err != nil {
 			log.Error().Err(err).Msg("failed to create impersonated user context")
+
 			return echo.NewHTTPError(http.StatusInternalServerError, "failed to process impersonation")
 		}
 
@@ -135,6 +138,7 @@ func BlockImpersonation() echo.MiddlewareFunc {
 
 			// Check if this is an impersonated request
 			if _, ok := auth.ImpersonatedUserFromContext(ctx); ok {
+
 				return echo.NewHTTPError(http.StatusForbidden, "action not allowed during impersonation session")
 			}
 
@@ -157,10 +161,8 @@ func AllowOnlyImpersonationType(allowedTypes ...auth.ImpersonationType) echo.Mid
 			}
 
 			// Check if the impersonation type is allowed
-			for _, allowedType := range allowedTypes {
-				if impUser.ImpersonationContext.Type == allowedType {
-					return next(c)
-				}
+			if slices.Contains(allowedTypes, impUser.ImpersonationContext.Type) {
+				return next(c)
 			}
 
 			return echo.NewHTTPError(http.StatusForbidden, "impersonation type not allowed for this endpoint")

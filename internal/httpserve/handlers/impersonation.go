@@ -1,29 +1,3 @@
-// Package handlers provides HTTP handlers for user impersonation functionality.
-//
-// Impersonation Token Flow:
-// 1. System admin authenticates with JWT, PAT, or API token
-// 2. StartImpersonation handler validates admin permissions via FGA system
-// 3. TokenManager creates signed JWT with impersonation claims
-// 4. Token contains both impersonator and target user context
-// 5. Client uses "Impersonation: Bearer <token>" header for subsequent requests
-// 6. Impersonation middleware validates token and sets impersonated user context
-// 7. All actions are performed as target user but logged with impersonator context
-//
-// Token Structure:
-// - Standard JWT claims (iss, aud, exp, etc.)
-// - user_id: Target user being impersonated
-// - impersonator_id: System admin performing impersonation
-// - type: Impersonation type (support, admin, job)
-// - reason: Reason for impersonation (for audit)
-// - session_id: Unique session identifier
-// - scopes: Allowed actions during impersonation
-//
-// Security:
-// - Only system admins can create impersonation tokens
-// - Cross-organization impersonation requires system admin privileges
-// - All impersonation activity is logged for audit
-// - Tokens have configurable expiration times
-// - Scope-based access control limits what can be done
 package handlers
 
 import (
@@ -37,7 +11,6 @@ import (
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/models"
@@ -46,15 +19,26 @@ import (
 
 // Error definitions for impersonation operations
 var (
-	ErrAuthenticationRequired         = errors.New("authentication required")
-	ErrNoActiveImpersonationSession   = errors.New("no active impersonation session")
-	ErrInvalidSessionID               = errors.New("invalid session ID")
+	// ErrAuthenticationRequired indicates that the user must be authenticated to perform this action
+	ErrAuthenticationRequired = errors.New("authentication required")
+	// ErrNoActiveImpersonationSession indicates that there is no active impersonation session
+	ErrNoActiveImpersonationSession = errors.New("no active impersonation session")
+	// ErrInvalidSessionID indicates that the provided session ID is invalid
+	ErrInvalidSessionID = errors.New("invalid session ID")
+	// ErrInsufficientPermissionsSupport indicates that the user does not have permissions to perform support impersonation
 	ErrInsufficientPermissionsSupport = errors.New("insufficient permissions for support impersonation")
-	ErrInsufficientPermissionsAdmin   = errors.New("insufficient permissions for admin impersonation")
-	ErrJobImpersonationAdminOnly      = errors.New("job impersonation only allowed for system admins")
-	ErrInvalidImpersonationType       = errors.New("invalid impersonation type")
-	ErrCannotImpersonateYourself      = errors.New("cannot impersonate yourself")
-	ErrTargetUserNotFound             = errors.New("target user not found")
+	// ErrInsufficientPermissionsAdmin indicates that the user does not have permissions to perform admin impersonation
+	ErrInsufficientPermissionsAdmin = errors.New("insufficient permissions for admin impersonation")
+	// ErrJobImpersonationAdminOnly indicates that job impersonation is only allowed for system admins
+	ErrJobImpersonationAdminOnly = errors.New("job impersonation only allowed for system admins")
+	// ErrInvalidImpersonationType indicates that the provided impersonation type is invalid
+	ErrInvalidImpersonationType = errors.New("invalid impersonation type")
+	// ErrTargetUserNotFound indicates that the target user for impersonation was not found
+	ErrTargetUserNotFound = errors.New("target user not found")
+	// ErrTokenManagerNotConfigured indicates that the token manager is not configured
+	ErrTokenManagerNotConfigured = errors.New("token manager not configured")
+	// ErrFailedToExtractSessionID indicates that the session ID could not be extracted from the token
+	ErrFailedToExtractSessionID = errors.New("failed to extract session ID from token")
 )
 
 // StartImpersonation handles requests to start user impersonation
@@ -75,7 +59,7 @@ func (h *Handler) StartImpersonation(ctx echo.Context) error {
 	}
 
 	// Validate permissions for impersonation
-	if err := h.validateImpersonationPermissions(ctx.Request().Context(), currentUser, req); err != nil {
+	if err := h.validateImpersonationPermissions(currentUser, req); err != nil {
 		return ctx.JSON(http.StatusForbidden, map[string]string{"error": err.Error()})
 	}
 
@@ -112,9 +96,9 @@ func (h *Handler) StartImpersonation(ctx echo.Context) error {
 		duration = time.Duration(*req.Duration) * time.Hour
 	}
 
-	// Use the TokenManager directly (no separate impersonation manager)
+	// Use the TokenManager to create impersonation token
 	if h.TokenManager == nil {
-		return h.InternalServerError(ctx, errors.New("token manager not configured"))
+		return h.InternalServerError(ctx, ErrTokenManagerNotConfigured)
 	}
 
 	// Create impersonation token with proper claims
@@ -134,14 +118,13 @@ func (h *Handler) StartImpersonation(ctx echo.Context) error {
 	}
 
 	// Extract session ID from the created token claims
-	// The impersonation token manager generates a session ID internally
-	// For now, we'll parse the token to extract it for the response
 	sessionID, err := h.extractSessionIDFromToken(token)
 	if err != nil {
-		// If we can't extract the session ID, generate one for the response
-		// This won't affect the token's validity
-		log.Warn().Err(err).Msg("failed to extract session ID from impersonation token")
-		sessionID = ulids.New().String()
+		// If we can't extract the session ID, the token creation was successful
+		// but we have an issue with token parsing - this should not happen
+		log.Error().Err(err).Msg("failed to extract session ID from newly created impersonation token")
+
+		return h.InternalServerError(ctx, ErrFailedToExtractSessionID)
 	}
 
 	// Log impersonation start with enhanced context for system admin tokens
@@ -230,13 +213,11 @@ func (h *Handler) EndImpersonation(ctx echo.Context) error {
 }
 
 // validateImpersonationPermissions checks if the current user can impersonate the target user
-func (h *Handler) validateImpersonationPermissions(_ context.Context, currentUser *auth.AuthenticatedUser, req models.StartImpersonationRequest) error {
+func (h *Handler) validateImpersonationPermissions(currentUser *auth.AuthenticatedUser, req models.StartImpersonationRequest) error {
 	switch req.Type {
 	case "support":
-		// Only support staff or admins can perform support impersonation
+		// Currently only system admins can perform support impersonation
 		if !currentUser.IsSystemAdmin {
-			// Check if user has support role
-			// This would integrate with your role/permission system
 			return ErrInsufficientPermissionsSupport
 		}
 	case "admin":
@@ -252,12 +233,6 @@ func (h *Handler) validateImpersonationPermissions(_ context.Context, currentUse
 	default:
 		return ErrInvalidImpersonationType
 	}
-
-	// Additional validation: can't impersonate yourself
-	// Temporarily disabled for testing
-	// if currentUser.SubjectID == req.TargetUserID {
-	//	return ErrCannotImpersonateYourself
-	// }
 
 	return nil
 }
@@ -279,9 +254,8 @@ func (h *Handler) getTargetUser(ctx context.Context, userID string, orgID string
 		return user, nil
 	}
 
-	// For now, we'll trust the system admin validation above
-	// In a production system, you would validate organization membership here
-	// This is a placeholder for organization membership validation
+	// Organization membership validation is handled by the calling function's
+	// permission checks. System admins can impersonate across organizations.
 
 	return user, nil
 }
@@ -301,14 +275,11 @@ func (h *Handler) getDefaultScopes(impType string) []string {
 }
 
 // logImpersonationEvent logs impersonation events for audit purposes
+// Currently logs to application logs only. Future enhancement will persist to database.
 func (h *Handler) logImpersonationEvent(_ context.Context, action string, auditLog *auth.ImpersonationAuditLog) error {
 	log.Info().Str("action", action).Str("target_user_id", auditLog.TargetUserID).Msg("impersonation event")
 
-	// In a production system, you would also:
-	// 1. Store in audit database table
-	// 2. Send to external audit system
-	// 3. Generate alerts for certain types of impersonation
-
+	//TODO: Add ent schema to persist impersonation events to database for audit trail
 	return nil
 }
 
@@ -344,15 +315,13 @@ func (h *Handler) BindEndImpersonationHandler() *openapi3.Operation {
 }
 
 // extractSessionIDFromToken parses an impersonation token to extract the session ID
-func (h *Handler) extractSessionIDFromToken(_ string) (string, error) {
-	// For now, we'll return a generated session ID since parsing the token
-	// would require access to the token manager's validation keys
-	// In a production system, you might want to:
-	// 1. Parse the token using the TokenManager
-	// 2. Extract the session_id claim from the ImpersonationClaims
-	// 3. Return the actual session ID
+func (h *Handler) extractSessionIDFromToken(token string) (string, error) {
+	// Use the TokenManager to validate and parse the token
+	claims, err := h.TokenManager.ValidateImpersonationToken(context.Background(), token)
+	if err != nil {
+		return "", err
+	}
 
-	// Generate a session ID for now
-	// The actual session ID is embedded in the JWT token claims
-	return ulids.New().String(), nil
+	// Return the session ID from the claims
+	return claims.SessionID, nil
 }
