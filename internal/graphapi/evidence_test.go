@@ -499,7 +499,7 @@ func TestMutationUpdateEvidence(t *testing.T) {
 			ctx:    adminUser.UserCtx,
 		},
 		{
-			name: "happy path, update multiple fields",
+			name: "happy path, update multiple fields using PAT",
 			request: openlaneclient.UpdateEvidenceInput{
 				Name:                lo.ToPtr("Updated Evidence"),
 				Description:         lo.ToPtr("This is an updated Evidence"),

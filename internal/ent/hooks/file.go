@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"fmt"
 	"strings"
@@ -9,6 +10,7 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/migrate"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
@@ -69,7 +71,7 @@ func HookFileCreate() ent.Hook {
 				}
 
 				// add the organization id to the file if its not a user file
-				orgID, err := getOrgIDForFile(ctx)
+				orgID, err := getOrgIDForFile(ctx, m)
 				if err != nil {
 					return nil, err
 				}
@@ -105,24 +107,54 @@ func fileOrgSkipper(ctx context.Context) bool {
 // getOrgIDForFile gets the organization id for a file
 // this first checks the context for the organization id
 // if it's not found, it will attempt to get the organization id from the request context
-// this is used when the owner id isn't yet set in the context because a filed
+// this is used when the owner id isn't yet set in the context because a file
 // is created by the middleware before the context could be set for personal
 // access tokens; this is safe because the transaction will be rolled back later
 // if the user has no access to the organization
-func getOrgIDForFile(ctx context.Context) (string, error) {
+func getOrgIDForFile(ctx context.Context, m *generated.FileMutation) (string, error) {
 	// add the organization id to the file if its not a user file
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
-		// check input instead
-		input := graphutils.GetMapInputVariableByName(ctx, "input")
-		if input != nil {
-			i := *input
-			if i["ownerID"] != nil {
-				owner := i["ownerID"]
-				if owner, ok := owner.(string); ok {
-					orgID = owner
+		// check input instead for create operations
+		if m.Op() == ent.OpCreate {
+			input := graphutils.GetMapInputVariableByName(ctx, "input")
+			if input != nil {
+				i := *input
+				if i["ownerID"] != nil {
+					owner := i["ownerID"]
+					if owner, ok := owner.(string); ok {
+						orgID = owner
+					}
 				}
 			}
+		} else {
+			// check input for the id of the object that owns the file
+			id := graphutils.GetStringInputVariableByName(ctx, "id")
+			if err != nil {
+				return "", err
+			}
+
+			if id == nil {
+				return "", nil
+			}
+
+			var row sql.Row
+			query := "SELECT owner_id FROM " + migrate.FilesTable.Name + " WHERE id = $1"
+			if err := m.Client().Driver().Query(ctx, query, []any{*id}, &row); err != nil {
+				return "", err
+			}
+
+			if row.Err() != nil {
+				return "", row.Err()
+			}
+
+			var ownerID string
+			if err := row.Scan(&ownerID); err != nil {
+				return "", err
+			}
+
+			orgID = ownerID
+
 		}
 	}
 
