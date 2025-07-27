@@ -70,6 +70,10 @@ func HookFileCreate() ent.Hook {
 					return next.Mutate(ctx, m)
 				}
 
+				if len(m.OrganizationIDs()) > 0 {
+					return next.Mutate(ctx, m)
+				}
+
 				// add the organization id to the file if its not a user file
 				orgID, err := getOrgIDForFile(ctx, m)
 				if err != nil {
@@ -125,6 +129,37 @@ func getOrgIDForFile(ctx context.Context, m *generated.FileMutation) (string, er
 					if owner, ok := owner.(string); ok {
 						orgID = owner
 					}
+				} else {
+					files, err := objects.FilesFromContext(ctx)
+					if err != nil {
+						return "", err
+					}
+
+					// check the first file for the owner id
+					for _, f := range files {
+						parentType := f[0].Parent.Type
+						parentID := f[0].Parent.ID
+
+						var row sql.Row
+						query := "SELECT owner_id FROM " + parentType + " WHERE id = $1"
+						if err := m.Client().Driver().Query(ctx, query, []any{parentID}, &row); err != nil {
+							return "", err
+						}
+
+						if row.Err() != nil {
+							return "", row.Err()
+						}
+
+						var ownerID string
+						if err := row.Scan(&ownerID); err != nil {
+							return "", err
+						}
+
+						orgID = ownerID
+						break
+
+					}
+
 				}
 			}
 		} else {

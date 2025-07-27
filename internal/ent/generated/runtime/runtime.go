@@ -1957,6 +1957,8 @@ func init() {
 	file.Hooks[3] = fileMixinHooks2[0]
 
 	file.Hooks[4] = fileHooks[0]
+
+	file.Hooks[5] = fileHooks[1]
 	fileMixinInters1 := fileMixin[1].Interceptors()
 	fileMixinInters2 := fileMixin[2].Interceptors()
 	fileMixinInters6 := fileMixin[6].Interceptors()
@@ -1965,6 +1967,7 @@ func init() {
 	file.Interceptors[1] = fileMixinInters2[0]
 	file.Interceptors[2] = fileMixinInters6[0]
 	file.Interceptors[3] = fileInters[0]
+	file.Interceptors[4] = fileInters[1]
 	fileMixinFields0 := fileMixin[0].Fields()
 	_ = fileMixinFields0
 	fileMixinFields3 := fileMixin[3].Fields()
