@@ -177,7 +177,7 @@ func withListObjectsFilter() objectOwnedOption { //nolint:unused
 
 }
 
-func withOverrideOwnerFieldName(fieldName string) objectOwnedOption {
+func withOverrideOwnerFieldName(fieldName string) objectOwnedOption { //nolint:unused
 	return func(o *ObjectOwnedMixin) {
 		o.OwnerFieldName = fieldName
 	}
