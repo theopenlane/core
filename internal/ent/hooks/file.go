@@ -159,7 +159,7 @@ func getOrgIDForFile(ctx context.Context, m *generated.FileMutation) (string, er
 	}
 
 	if orgID == "" {
-		return "", ErrOrganizationIDRequired
+		return "", fmt.Errorf("owner_id is required, %w", ErrFieldRequired)
 	}
 
 	return orgID, nil
