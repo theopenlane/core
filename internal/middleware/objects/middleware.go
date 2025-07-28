@@ -6,6 +6,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 
+	"github.com/gertd/go-pluralize"
 	"github.com/rs/zerolog/log"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -144,13 +145,15 @@ func createFile(ctx context.Context, u *objects.Objects, f objects.FileUpload) (
 
 // getOrgOwnerID retrieves the organization ID from the context or input
 func getOrgOwnerID(ctx context.Context, f objects.FileUpload) (string, error) {
-	// get the organization ID from the context
-	orgID, _ := auth.GetOrganizationIDFromContext(ctx) // ignore error
+	// get the organization ID from the context, ignore the error if it is not set
+	// and instead check the parent object for the owner ID
+	orgID, _ := auth.GetOrganizationIDFromContext(ctx)
 
 	if orgID == "" {
 		// check the parent
 		var rows sql.Rows
-		query := "SELECT owner_id FROM " + f.CorrelatedObjectType + "s" + " WHERE id = $1"
+		objectTable := pluralize.NewClient().Plural(f.CorrelatedObjectType)
+		query := "SELECT owner_id FROM " + objectTable + " WHERE id = $1"
 		if err := txClientFromContext(ctx).Driver().Query(ctx, query, []any{f.CorrelatedObjectID}, &rows); err != nil {
 			return "", err
 		}
