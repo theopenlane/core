@@ -227,14 +227,12 @@ coreConfiguration:
       # -- Github contains the configuration settings for the Github Oauth Provider
       github:
         clientId: ""  # @schema type:string
-        clientSecret: ""  # @schema type:string
         clientEndpoint: "http://localhost:17608"  # @schema type:string; default:http://localhost:17608
         scopes: []
         redirectUrl: "/v1/github/callback"  # @schema type:string; default:/v1/github/callback
       # -- Google contains the configuration settings for the Google Oauth Provider
       google:
         clientId: ""  # @schema type:string
-        clientSecret: ""  # @schema type:string
         clientEndpoint: "http://localhost:17608"  # @schema type:string; default:http://localhost:17608
         scopes: []
         redirectUrl: "/v1/google/callback"  # @schema type:string; default:/v1/google/callback
@@ -267,12 +265,8 @@ coreConfiguration:
     modelFile: "fga/model/model.fga"  # @schema type:string; default:fga/model/model.fga
     # -- credentials for the openFGA client
     credentials:
-      # -- api token for the openFGA client
-      apiToken: ""  # @schema type:string
       # -- client id for the openFGA client
       clientId: ""  # @schema type:string
-      # -- client secret for the openFGA client
-      clientSecret: ""  # @schema type:string
       # -- audience for the openFGA client
       audience: ""  # @schema type:string
       # -- issuer for the openFGA client
@@ -376,7 +370,6 @@ coreConfiguration:
     codeLength: 6  # @schema type:integer; default:6
     issuer: ""  # @schema type:string
     redis: true  # @schema type:boolean; default:true
-    secret: ""  # @schema type:string
     recoveryCodeCount: 16  # @schema type:integer; default:16
     recoveryCodeLength: 8  # @schema type:integer; default:8
   # -- Ratelimit contains the configuration for the rate limiter
@@ -505,6 +498,46 @@ externalSecrets:
       secretKey: "CORE_ENTCONFIG_WINDMILL_TOKEN"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-entconfig-windmill-token"  # @schema type:string
+    # -- core-auth-providers-github-clientsecret secret configuration
+    core-auth-providers-github-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for auth.providers.github.clientSecret
+      secretKey: "CORE_AUTH_PROVIDERS_GITHUB_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-auth-providers-github-clientsecret"  # @schema type:string
+    # -- core-auth-providers-google-clientsecret secret configuration
+    core-auth-providers-google-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for auth.providers.google.clientSecret
+      secretKey: "CORE_AUTH_PROVIDERS_GOOGLE_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-auth-providers-google-clientsecret"  # @schema type:string
+    # -- core-authz-credentials-apitoken secret configuration
+    core-authz-credentials-apitoken:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for authz.credentials.apiToken
+      secretKey: "CORE_AUTHZ_CREDENTIALS_APITOKEN"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-authz-credentials-apitoken"  # @schema type:string
+    # -- core-authz-credentials-clientsecret secret configuration
+    core-authz-credentials-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for authz.credentials.clientSecret
+      secretKey: "CORE_AUTHZ_CREDENTIALS_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-authz-credentials-clientsecret"  # @schema type:string
+    # -- core-totp-secret secret configuration
+    core-totp-secret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for totp.secret
+      secretKey: "CORE_TOTP_SECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-totp-secret"  # @schema type:string
     # -- core-objectstorage-accesskey secret configuration
     core-objectstorage-accesskey:
       # -- Enable this external secret
