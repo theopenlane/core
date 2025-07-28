@@ -266,8303 +266,2980 @@ type MutationResolver interface {
 func (ec *executionContext) field_Mutation_createAPIToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createAPIToken_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateAPITokenInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateAPITokenInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createAPIToken_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateAPITokenInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateAPITokenInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateAPITokenInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateAPITokenInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateAPITokenInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createActionPlan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createActionPlan_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateActionPlanInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateActionPlanInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createActionPlan_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateActionPlanInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateActionPlanInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateActionPlanInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateActionPlanInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateActionPlanInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createAsset_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createAsset_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateAssetInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateAssetInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createAsset_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateAssetInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateAssetInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateAssetInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateAssetInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateAssetInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkAPIToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkAPIToken_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateAPITokenInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateAPITokenInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkAPIToken_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateAPITokenInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateAPITokenInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateAPITokenInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateAPITokenInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateAPITokenInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkActionPlan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkActionPlan_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateActionPlanInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateActionPlanInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkActionPlan_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateActionPlanInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateActionPlanInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateActionPlanInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateActionPlanInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateActionPlanInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkAsset_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkAsset_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateAssetInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateAssetInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkAsset_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateAssetInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateAssetInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateAssetInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateAssetInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateAssetInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVAPIToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVAPIToken_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVAPIToken_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVActionPlan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVActionPlan_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVActionPlan_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVAsset_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVAsset_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVAsset_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVContact_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVContact_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVContact_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVControlImplementation_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVControlImplementation_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVControlImplementation_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVControlObjective_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVControlObjective_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVControlObjective_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVControl_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVControl_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVCustomDomain_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVCustomDomain_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVCustomDomain_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVDNSVerification_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVDNSVerification_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVDNSVerification_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVDocumentData_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVDocumentData_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVDocumentData_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVEntityType_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVEntityType_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVEntityType_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVEntity_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVEntity_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVEvent_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVEvent_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVEvent_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVGroupMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVGroupMembership_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVGroupMembership_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVGroupSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVGroupSetting_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVGroupSetting_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVGroup_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVGroup_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVGroup_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVHush_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVHush_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVHush_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVInternalPolicy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVInternalPolicy_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVInternalPolicy_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVInvite_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVInvite_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVInvite_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVJobTemplate_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVJobTemplate_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVJobTemplate_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVMappableDomain_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVMappableDomain_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVMappableDomain_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVMappedControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVMappedControl_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVMappedControl_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVNarrative_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVNarrative_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVNarrative_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVOrgMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVOrgMembership_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVOrgMembership_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVOrganizationSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVOrganizationSetting_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVOrganizationSetting_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVProcedure_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVProcedure_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVProcedure_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVProgramMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVProgramMembership_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVProgramMembership_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVProgram_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVProgram_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVProgram_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVRisk_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVRisk_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVRisk_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVScan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVScan_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVScan_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVScheduledJob_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVScheduledJob_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVScheduledJob_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVSubcontrol_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVSubcontrol_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVSubcontrol_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVSubprocessor_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVSubprocessor_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVSubprocessor_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVSubscriber_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVSubscriber_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVSubscriber_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVTask_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVTask_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVTask_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVTemplate_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVTemplate_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVTemplate_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVTrustCenterCompliance_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVTrustCenterCompliance_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVTrustCenterCompliance_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVTrustCenterSubprocessor_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVTrustCenterSubprocessor_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVTrustCenterSubprocessor_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCSVUserSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCSVUserSetting_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCSVUserSetting_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (graphql.Upload, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkContact_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkContact_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateContactInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateContactInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkContact_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateContactInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateContactInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateContactInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateContactInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateContactInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkControlImplementation_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkControlImplementation_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateControlImplementationInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateControlImplementationInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkControlImplementation_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateControlImplementationInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateControlImplementationInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateControlImplementationInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateControlImplementationInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateControlImplementationInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkControlObjective_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkControlObjective_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateControlObjectiveInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateControlObjectiveInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkControlObjective_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateControlObjectiveInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateControlObjectiveInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateControlObjectiveInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateControlObjectiveInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateControlObjectiveInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkControl_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateControlInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateControlInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkControl_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateControlInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateControlInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateControlInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateControlInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateControlInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkCustomDomain_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkCustomDomain_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateCustomDomainInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateCustomDomainInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkCustomDomain_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateCustomDomainInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateCustomDomainInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateCustomDomainInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateCustomDomainInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateCustomDomainInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkDNSVerification_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkDNSVerification_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateDNSVerificationInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateDNSVerificationInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkDNSVerification_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateDNSVerificationInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateDNSVerificationInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateDNSVerificationInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateDNSVerificationInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateDNSVerificationInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkDocumentData_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkDocumentData_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateDocumentDataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateDocumentDataInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkDocumentData_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateDocumentDataInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateDocumentDataInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateDocumentDataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateDocumentDataInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateDocumentDataInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkEntityType_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkEntityType_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateEntityTypeInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateEntityTypeInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkEntityType_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateEntityTypeInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateEntityTypeInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateEntityTypeInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateEntityTypeInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateEntityTypeInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkEntity_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateEntityInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateEntityInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkEntity_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateEntityInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateEntityInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateEntityInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateEntityInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateEntityInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkEvent_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkEvent_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateEventInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateEventInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkEvent_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateEventInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateEventInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateEventInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateEventInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateEventInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkGroupMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkGroupMembership_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateGroupMembershipInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupMembershipInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkGroupMembership_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateGroupMembershipInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateGroupMembershipInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateGroupMembershipInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupMembershipInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateGroupMembershipInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkGroupSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkGroupSetting_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateGroupSettingInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupSettingInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkGroupSetting_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateGroupSettingInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateGroupSettingInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateGroupSettingInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupSettingInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateGroupSettingInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkGroup_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkGroup_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateGroupInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkGroup_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateGroupInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateGroupInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateGroupInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateGroupInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkHush_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkHush_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateHushInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateHushInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkHush_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateHushInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateHushInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateHushInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateHushInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateHushInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkInternalPolicy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkInternalPolicy_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateInternalPolicyInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateInternalPolicyInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkInternalPolicy_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateInternalPolicyInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateInternalPolicyInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateInternalPolicyInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateInternalPolicyInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateInternalPolicyInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkInvite_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkInvite_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateInviteInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateInviteInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkInvite_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateInviteInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateInviteInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateInviteInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateInviteInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateInviteInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkJobTemplate_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkJobTemplate_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateJobTemplateInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateJobTemplateInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkJobTemplate_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateJobTemplateInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateJobTemplateInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateJobTemplateInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateJobTemplateInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateJobTemplateInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkMappableDomain_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkMappableDomain_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateMappableDomainInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateMappableDomainInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkMappableDomain_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateMappableDomainInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateMappableDomainInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateMappableDomainInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateMappableDomainInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateMappableDomainInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkMappedControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkMappedControl_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateMappedControlInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateMappedControlInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkMappedControl_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateMappedControlInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateMappedControlInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateMappedControlInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateMappedControlInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateMappedControlInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkNarrative_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkNarrative_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateNarrativeInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateNarrativeInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkNarrative_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateNarrativeInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateNarrativeInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateNarrativeInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateNarrativeInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateNarrativeInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkOrgMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkOrgMembership_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateOrgMembershipInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateOrgMembershipInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkOrgMembership_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateOrgMembershipInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateOrgMembershipInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateOrgMembershipInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateOrgMembershipInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateOrgMembershipInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkOrganizationSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkOrganizationSetting_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateOrganizationSettingInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateOrganizationSettingInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkOrganizationSetting_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateOrganizationSettingInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateOrganizationSettingInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateOrganizationSettingInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateOrganizationSettingInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateOrganizationSettingInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkProcedure_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkProcedure_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateProcedureInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateProcedureInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkProcedure_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateProcedureInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateProcedureInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateProcedureInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateProcedureInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateProcedureInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkProgramMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkProgramMembership_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateProgramMembershipInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateProgramMembershipInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkProgramMembership_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateProgramMembershipInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateProgramMembershipInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateProgramMembershipInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateProgramMembershipInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateProgramMembershipInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkProgram_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkProgram_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateProgramInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateProgramInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkProgram_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateProgramInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateProgramInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateProgramInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateProgramInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateProgramInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkRisk_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkRisk_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateRiskInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateRiskInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkRisk_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateRiskInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateRiskInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateRiskInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateRiskInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateRiskInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkScan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkScan_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateScanInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateScanInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkScan_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateScanInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateScanInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateScanInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateScanInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateScanInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkScheduledJob_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkScheduledJob_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateScheduledJobInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateScheduledJobInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkScheduledJob_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateScheduledJobInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateScheduledJobInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateScheduledJobInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateScheduledJobInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateScheduledJobInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkSubcontrol_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkSubcontrol_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateSubcontrolInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateSubcontrolInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkSubcontrol_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateSubcontrolInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateSubcontrolInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateSubcontrolInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateSubcontrolInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateSubcontrolInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkSubprocessor_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkSubprocessor_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateSubprocessorInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateSubprocessorInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkSubprocessor_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateSubprocessorInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateSubprocessorInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateSubprocessorInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateSubprocessorInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateSubprocessorInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkSubscriber_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkSubscriber_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateSubscriberInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateSubscriberInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkSubscriber_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateSubscriberInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateSubscriberInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateSubscriberInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateSubscriberInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateSubscriberInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkTask_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkTask_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateTaskInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTaskInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkTask_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateTaskInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateTaskInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateTaskInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTaskInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateTaskInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkTemplate_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkTemplate_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateTemplateInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTemplateInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkTemplate_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateTemplateInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateTemplateInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateTemplateInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTemplateInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateTemplateInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkTrustCenterCompliance_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkTrustCenterCompliance_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateTrustCenterComplianceInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterComplianceInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkTrustCenterCompliance_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateTrustCenterComplianceInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateTrustCenterComplianceInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateTrustCenterComplianceInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterComplianceInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateTrustCenterComplianceInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkTrustCenterSubprocessor_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkTrustCenterSubprocessor_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateTrustCenterSubprocessorInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterSubprocessorInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkTrustCenterSubprocessor_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateTrustCenterSubprocessorInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateTrustCenterSubprocessorInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateTrustCenterSubprocessorInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterSubprocessorInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateTrustCenterSubprocessorInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createBulkUserSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createBulkUserSetting_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateUserSettingInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateUserSettingInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createBulkUserSetting_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*generated.CreateUserSettingInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal []*generated.CreateUserSettingInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCreateUserSettingInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateUserSettingInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*generated.CreateUserSettingInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createContact_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createContact_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateContactInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateContactInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createContact_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateContactInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateContactInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateContactInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateContactInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateContactInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createControlImplementation_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createControlImplementation_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateControlImplementationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateControlImplementationInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createControlImplementation_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateControlImplementationInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateControlImplementationInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateControlImplementationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateControlImplementationInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateControlImplementationInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createControlObjective_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createControlObjective_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateControlObjectiveInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateControlObjectiveInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createControlObjective_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateControlObjectiveInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateControlObjectiveInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateControlObjectiveInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateControlObjectiveInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateControlObjectiveInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createControlWithSubcontrols_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createControlWithSubcontrols_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateControlWithSubcontrolsInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCreateControlWithSubcontrolsInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createControlWithSubcontrols_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (model.CreateControlWithSubcontrolsInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal model.CreateControlWithSubcontrolsInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateControlWithSubcontrolsInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCreateControlWithSubcontrolsInput(ctx, tmp)
-	}
-
-	var zeroVal model.CreateControlWithSubcontrolsInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createControl_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateControlInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateControlInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createControl_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateControlInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateControlInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateControlInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateControlInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateControlInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createControlsByClone_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createControlsByClone_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCloneControlInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCloneControlInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createControlsByClone_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*model.CloneControlInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal *model.CloneControlInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalOCloneControlInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCloneControlInput(ctx, tmp)
-	}
-
-	var zeroVal *model.CloneControlInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createCustomDomain_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createCustomDomain_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateCustomDomainInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateCustomDomainInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createCustomDomain_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateCustomDomainInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateCustomDomainInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateCustomDomainInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateCustomDomainInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateCustomDomainInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createDNSVerification_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createDNSVerification_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateDNSVerificationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateDNSVerificationInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createDNSVerification_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateDNSVerificationInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateDNSVerificationInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateDNSVerificationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateDNSVerificationInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateDNSVerificationInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createDocumentData_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createDocumentData_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateDocumentDataInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateDocumentDataInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createDocumentData_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateDocumentDataInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateDocumentDataInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateDocumentDataInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateDocumentDataInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateDocumentDataInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createEntityType_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createEntityType_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateEntityTypeInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateEntityTypeInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createEntityType_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateEntityTypeInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateEntityTypeInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateEntityTypeInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateEntityTypeInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateEntityTypeInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createEntity_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateEntityInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateEntityInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createEntity_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateEntityInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateEntityInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateEntityInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateEntityInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateEntityInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createEvent_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createEvent_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateEventInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateEventInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_createEvent_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateEventInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateEventInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateEventInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateEventInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateEventInput
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_createEvidence_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createEvidence_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateEvidenceInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateEvidenceInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
-	arg1, err := ec.field_Mutation_createEvidence_argsEvidenceFiles(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "evidenceFiles", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["evidenceFiles"] = arg1
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_createEvidence_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateEvidenceInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateEvidenceInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateEvidenceInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateEvidenceInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateEvidenceInput
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_createEvidence_argsEvidenceFiles(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*graphql.Upload, error) {
-	if _, ok := rawArgs["evidenceFiles"]; !ok {
-		var zeroVal []*graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("evidenceFiles"))
-	if tmp, ok := rawArgs["evidenceFiles"]; ok {
-		return ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*graphql.Upload
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_createExport_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createExport_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateExportInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateExportInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createExport_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateExportInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateExportInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateExportInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateExportInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateExportInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createFullProgram_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createFullProgram_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateFullProgramInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCreateFullProgramInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_createFullProgram_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (model.CreateFullProgramInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal model.CreateFullProgramInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateFullProgramInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCreateFullProgramInput(ctx, tmp)
-	}
-
-	var zeroVal model.CreateFullProgramInput
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_createGroupByClone_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createGroupByClone_argsGroupInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "groupInput", ec.unmarshalNCreateGroupInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupInput)
 	if err != nil {
 		return nil, err
 	}
 	args["groupInput"] = arg0
-	arg1, err := ec.field_Mutation_createGroupByClone_argsMembers(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "members", ec.unmarshalOGroupMembersInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupMembersInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["members"] = arg1
-	arg2, err := ec.field_Mutation_createGroupByClone_argsInheritGroupPermissions(ctx, rawArgs)
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "inheritGroupPermissions", ec.unmarshalOID2ᚖstring)
 	if err != nil {
 		return nil, err
 	}
 	args["inheritGroupPermissions"] = arg2
-	arg3, err := ec.field_Mutation_createGroupByClone_argsCloneGroupMembers(ctx, rawArgs)
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "cloneGroupMembers", ec.unmarshalOID2ᚖstring)
 	if err != nil {
 		return nil, err
 	}
 	args["cloneGroupMembers"] = arg3
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_createGroupByClone_argsGroupInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateGroupInput, error) {
-	if _, ok := rawArgs["groupInput"]; !ok {
-		var zeroVal generated.CreateGroupInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("groupInput"))
-	if tmp, ok := rawArgs["groupInput"]; ok {
-		return ec.unmarshalNCreateGroupInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateGroupInput
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_createGroupByClone_argsMembers(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*model.GroupMembersInput, error) {
-	if _, ok := rawArgs["members"]; !ok {
-		var zeroVal []*model.GroupMembersInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("members"))
-	if tmp, ok := rawArgs["members"]; ok {
-		return ec.unmarshalOGroupMembersInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupMembersInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*model.GroupMembersInput
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_createGroupByClone_argsInheritGroupPermissions(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*string, error) {
-	if _, ok := rawArgs["inheritGroupPermissions"]; !ok {
-		var zeroVal *string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("inheritGroupPermissions"))
-	if tmp, ok := rawArgs["inheritGroupPermissions"]; ok {
-		return ec.unmarshalOID2ᚖstring(ctx, tmp)
-	}
-
-	var zeroVal *string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_createGroupByClone_argsCloneGroupMembers(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*string, error) {
-	if _, ok := rawArgs["cloneGroupMembers"]; !ok {
-		var zeroVal *string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("cloneGroupMembers"))
-	if tmp, ok := rawArgs["cloneGroupMembers"]; ok {
-		return ec.unmarshalOID2ᚖstring(ctx, tmp)
-	}
-
-	var zeroVal *string
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_createGroupMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createGroupMembership_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateGroupMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupMembershipInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createGroupMembership_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateGroupMembershipInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateGroupMembershipInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateGroupMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupMembershipInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateGroupMembershipInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createGroupSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createGroupSetting_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateGroupSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupSettingInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_createGroupSetting_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateGroupSettingInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateGroupSettingInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateGroupSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupSettingInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateGroupSettingInput
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_createGroupWithMembers_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createGroupWithMembers_argsGroupInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "groupInput", ec.unmarshalNCreateGroupInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupInput)
 	if err != nil {
 		return nil, err
 	}
 	args["groupInput"] = arg0
-	arg1, err := ec.field_Mutation_createGroupWithMembers_argsMembers(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "members", ec.unmarshalOGroupMembersInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupMembersInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["members"] = arg1
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_createGroupWithMembers_argsGroupInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateGroupInput, error) {
-	if _, ok := rawArgs["groupInput"]; !ok {
-		var zeroVal generated.CreateGroupInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("groupInput"))
-	if tmp, ok := rawArgs["groupInput"]; ok {
-		return ec.unmarshalNCreateGroupInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateGroupInput
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_createGroupWithMembers_argsMembers(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*model.GroupMembersInput, error) {
-	if _, ok := rawArgs["members"]; !ok {
-		var zeroVal []*model.GroupMembersInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("members"))
-	if tmp, ok := rawArgs["members"]; ok {
-		return ec.unmarshalOGroupMembersInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupMembersInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*model.GroupMembersInput
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_createGroup_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createGroup_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateGroupInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createGroup_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateGroupInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateGroupInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateGroupInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateGroupInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createHush_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createHush_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateHushInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateHushInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createHush_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateHushInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateHushInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateHushInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateHushInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateHushInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createInternalPolicy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createInternalPolicy_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateInternalPolicyInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateInternalPolicyInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createInternalPolicy_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateInternalPolicyInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateInternalPolicyInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateInternalPolicyInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateInternalPolicyInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateInternalPolicyInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createInvite_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createInvite_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateInviteInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateInviteInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createInvite_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateInviteInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateInviteInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateInviteInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateInviteInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateInviteInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createJobRunnerRegistrationToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createJobRunnerRegistrationToken_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateJobRunnerRegistrationTokenInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateJobRunnerRegistrationTokenInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createJobRunnerRegistrationToken_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateJobRunnerRegistrationTokenInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateJobRunnerRegistrationTokenInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateJobRunnerRegistrationTokenInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateJobRunnerRegistrationTokenInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateJobRunnerRegistrationTokenInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createJobRunnerToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createJobRunnerToken_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateJobRunnerTokenInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateJobRunnerTokenInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createJobRunnerToken_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateJobRunnerTokenInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateJobRunnerTokenInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateJobRunnerTokenInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateJobRunnerTokenInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateJobRunnerTokenInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createJobTemplate_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createJobTemplate_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateJobTemplateInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateJobTemplateInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createJobTemplate_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateJobTemplateInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateJobTemplateInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateJobTemplateInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateJobTemplateInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateJobTemplateInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createMappableDomain_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createMappableDomain_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateMappableDomainInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateMappableDomainInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createMappableDomain_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateMappableDomainInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateMappableDomainInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateMappableDomainInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateMappableDomainInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateMappableDomainInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createMappedControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createMappedControl_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateMappedControlInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateMappedControlInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createMappedControl_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateMappedControlInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateMappedControlInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateMappedControlInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateMappedControlInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateMappedControlInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createNarrative_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createNarrative_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateNarrativeInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateNarrativeInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createNarrative_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateNarrativeInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateNarrativeInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateNarrativeInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateNarrativeInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateNarrativeInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createOnboarding_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createOnboarding_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateOnboardingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateOnboardingInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createOnboarding_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateOnboardingInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateOnboardingInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateOnboardingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateOnboardingInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateOnboardingInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createOrgMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createOrgMembership_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateOrgMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateOrgMembershipInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createOrgMembership_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateOrgMembershipInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateOrgMembershipInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateOrgMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateOrgMembershipInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateOrgMembershipInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createOrganizationSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createOrganizationSetting_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateOrganizationSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateOrganizationSettingInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_createOrganizationSetting_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateOrganizationSettingInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateOrganizationSettingInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateOrganizationSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateOrganizationSettingInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateOrganizationSettingInput
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_createOrganizationWithMembers_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createOrganizationWithMembers_argsOrganizationInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "organizationInput", ec.unmarshalNCreateOrganizationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateOrganizationInput)
 	if err != nil {
 		return nil, err
 	}
 	args["organizationInput"] = arg0
-	arg1, err := ec.field_Mutation_createOrganizationWithMembers_argsAvatarFile(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "avatarFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["avatarFile"] = arg1
-	arg2, err := ec.field_Mutation_createOrganizationWithMembers_argsMembers(ctx, rawArgs)
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "members", ec.unmarshalOOrgMembersInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrgMembersInputᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["members"] = arg2
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_createOrganizationWithMembers_argsOrganizationInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateOrganizationInput, error) {
-	if _, ok := rawArgs["organizationInput"]; !ok {
-		var zeroVal generated.CreateOrganizationInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("organizationInput"))
-	if tmp, ok := rawArgs["organizationInput"]; ok {
-		return ec.unmarshalNCreateOrganizationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateOrganizationInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateOrganizationInput
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_createOrganizationWithMembers_argsAvatarFile(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*graphql.Upload, error) {
-	if _, ok := rawArgs["avatarFile"]; !ok {
-		var zeroVal *graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("avatarFile"))
-	if tmp, ok := rawArgs["avatarFile"]; ok {
-		return ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal *graphql.Upload
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_createOrganizationWithMembers_argsMembers(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*model.OrgMembersInput, error) {
-	if _, ok := rawArgs["members"]; !ok {
-		var zeroVal []*model.OrgMembersInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("members"))
-	if tmp, ok := rawArgs["members"]; ok {
-		return ec.unmarshalOOrgMembersInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrgMembersInputᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*model.OrgMembersInput
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_createOrganization_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createOrganization_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateOrganizationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateOrganizationInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
-	arg1, err := ec.field_Mutation_createOrganization_argsAvatarFile(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "avatarFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["avatarFile"] = arg1
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_createOrganization_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateOrganizationInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateOrganizationInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateOrganizationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateOrganizationInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateOrganizationInput
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_createOrganization_argsAvatarFile(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*graphql.Upload, error) {
-	if _, ok := rawArgs["avatarFile"]; !ok {
-		var zeroVal *graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("avatarFile"))
-	if tmp, ok := rawArgs["avatarFile"]; ok {
-		return ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal *graphql.Upload
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_createPersonalAccessToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createPersonalAccessToken_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreatePersonalAccessTokenInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreatePersonalAccessTokenInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createPersonalAccessToken_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreatePersonalAccessTokenInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreatePersonalAccessTokenInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreatePersonalAccessTokenInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreatePersonalAccessTokenInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreatePersonalAccessTokenInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createProcedure_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createProcedure_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateProcedureInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateProcedureInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createProcedure_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateProcedureInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateProcedureInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateProcedureInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateProcedureInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateProcedureInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createProgramMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createProgramMembership_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateProgramMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateProgramMembershipInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createProgramMembership_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateProgramMembershipInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateProgramMembershipInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateProgramMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateProgramMembershipInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateProgramMembershipInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createProgramWithMembers_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createProgramWithMembers_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateProgramWithMembersInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCreateProgramWithMembersInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createProgramWithMembers_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (model.CreateProgramWithMembersInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal model.CreateProgramWithMembersInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateProgramWithMembersInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCreateProgramWithMembersInput(ctx, tmp)
-	}
-
-	var zeroVal model.CreateProgramWithMembersInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createProgram_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createProgram_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateProgramInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateProgramInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createProgram_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateProgramInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateProgramInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateProgramInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateProgramInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateProgramInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createRisk_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createRisk_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateRiskInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateRiskInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createRisk_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateRiskInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateRiskInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateRiskInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateRiskInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateRiskInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createScan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createScan_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateScanInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateScanInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createScan_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateScanInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateScanInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateScanInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateScanInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateScanInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createScheduledJob_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createScheduledJob_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateScheduledJobInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateScheduledJobInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createScheduledJob_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateScheduledJobInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateScheduledJobInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateScheduledJobInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateScheduledJobInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateScheduledJobInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createStandard_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createStandard_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateStandardInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateStandardInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createStandard_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateStandardInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateStandardInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateStandardInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateStandardInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateStandardInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createSubcontrol_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createSubcontrol_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateSubcontrolInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateSubcontrolInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createSubcontrol_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateSubcontrolInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateSubcontrolInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateSubcontrolInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateSubcontrolInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateSubcontrolInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createSubprocessor_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createSubprocessor_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateSubprocessorInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateSubprocessorInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
-	arg1, err := ec.field_Mutation_createSubprocessor_argsLogoFile(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "logoFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["logoFile"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createSubprocessor_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateSubprocessorInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateSubprocessorInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateSubprocessorInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateSubprocessorInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateSubprocessorInput
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_createSubprocessor_argsLogoFile(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*graphql.Upload, error) {
-	if _, ok := rawArgs["logoFile"]; !ok {
-		var zeroVal *graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("logoFile"))
-	if tmp, ok := rawArgs["logoFile"]; ok {
-		return ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal *graphql.Upload
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createSubscriber_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createSubscriber_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateSubscriberInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateSubscriberInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createSubscriber_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateSubscriberInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateSubscriberInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateSubscriberInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateSubscriberInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateSubscriberInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createTFASetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createTFASetting_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTFASettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTFASettingInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createTFASetting_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateTFASettingInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateTFASettingInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateTFASettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTFASettingInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateTFASettingInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createTask_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createTask_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTaskInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTaskInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createTask_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateTaskInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateTaskInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateTaskInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTaskInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateTaskInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createTemplate_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createTemplate_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTemplateInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTemplateInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createTemplate_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateTemplateInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateTemplateInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateTemplateInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTemplateInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateTemplateInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createTrustCenterCompliance_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createTrustCenterCompliance_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTrustCenterComplianceInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterComplianceInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_createTrustCenterCompliance_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateTrustCenterComplianceInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateTrustCenterComplianceInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateTrustCenterComplianceInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterComplianceInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateTrustCenterComplianceInput
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_createTrustCenterSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createTrustCenterSetting_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTrustCenterSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterSettingInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
-	arg1, err := ec.field_Mutation_createTrustCenterSetting_argsLogoFile(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "logoFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["logoFile"] = arg1
-	arg2, err := ec.field_Mutation_createTrustCenterSetting_argsFaviconFile(ctx, rawArgs)
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "faviconFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["faviconFile"] = arg2
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_createTrustCenterSetting_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateTrustCenterSettingInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateTrustCenterSettingInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateTrustCenterSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterSettingInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateTrustCenterSettingInput
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_createTrustCenterSetting_argsLogoFile(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*graphql.Upload, error) {
-	if _, ok := rawArgs["logoFile"]; !ok {
-		var zeroVal *graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("logoFile"))
-	if tmp, ok := rawArgs["logoFile"]; ok {
-		return ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal *graphql.Upload
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_createTrustCenterSetting_argsFaviconFile(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*graphql.Upload, error) {
-	if _, ok := rawArgs["faviconFile"]; !ok {
-		var zeroVal *graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("faviconFile"))
-	if tmp, ok := rawArgs["faviconFile"]; ok {
-		return ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal *graphql.Upload
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_createTrustCenterSubprocessor_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createTrustCenterSubprocessor_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTrustCenterSubprocessorInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterSubprocessorInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createTrustCenterSubprocessor_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateTrustCenterSubprocessorInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateTrustCenterSubprocessorInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateTrustCenterSubprocessorInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterSubprocessorInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateTrustCenterSubprocessorInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createTrustCenter_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createTrustCenter_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTrustCenterInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_createTrustCenter_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateTrustCenterInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateTrustCenterInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateTrustCenterInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateTrustCenterInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_createUserSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createUserSetting_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateUserSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateUserSettingInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_createUserSetting_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateUserSettingInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateUserSettingInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateUserSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateUserSettingInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateUserSettingInput
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createUser_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateUserInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateUserInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
-	arg1, err := ec.field_Mutation_createUser_argsAvatarFile(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "avatarFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["avatarFile"] = arg1
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_createUser_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.CreateUserInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.CreateUserInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateUserInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateUserInput(ctx, tmp)
-	}
-
-	var zeroVal generated.CreateUserInput
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_createUser_argsAvatarFile(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*graphql.Upload, error) {
-	if _, ok := rawArgs["avatarFile"]; !ok {
-		var zeroVal *graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("avatarFile"))
-	if tmp, ok := rawArgs["avatarFile"]; ok {
-		return ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal *graphql.Upload
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_deleteAPIToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteAPIToken_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteAPIToken_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteActionPlan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteActionPlan_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteActionPlan_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteAsset_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteAsset_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_deleteAsset_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_deleteBulkExport_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteBulkExport_argsIds(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["ids"] = arg0
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_deleteBulkExport_argsIds(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]string, error) {
-	if _, ok := rawArgs["ids"]; !ok {
-		var zeroVal []string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("ids"))
-	if tmp, ok := rawArgs["ids"]; ok {
-		return ec.unmarshalNID2ᚕstringᚄ(ctx, tmp)
-	}
-
-	var zeroVal []string
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_deleteContact_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteContact_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteContact_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteControlImplementation_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteControlImplementation_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteControlImplementation_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteControlObjective_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteControlObjective_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteControlObjective_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteControl_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteControl_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteCustomDomain_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteCustomDomain_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteCustomDomain_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteDNSVerification_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteDNSVerification_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteDNSVerification_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteDocumentData_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteDocumentData_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteDocumentData_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteEntityType_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteEntityType_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteEntityType_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteEntity_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteEntity_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteEvent_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteEvent_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteEvent_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteEvidence_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteEvidence_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteEvidence_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteExport_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteExport_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteExport_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteFile_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteFile_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteFile_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteGroupMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteGroupMembership_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteGroupMembership_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteGroupSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteGroupSetting_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteGroupSetting_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteGroup_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteGroup_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteGroup_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteHush_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteHush_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteHush_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteIntegration_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteIntegration_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteIntegration_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteInternalPolicy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteInternalPolicy_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteInternalPolicy_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteInvite_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteInvite_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteInvite_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteJobRunnerRegistrationToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteJobRunnerRegistrationToken_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteJobRunnerRegistrationToken_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteJobRunnerToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteJobRunnerToken_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteJobRunnerToken_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteJobRunner_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteJobRunner_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteJobRunner_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteJobTemplate_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteJobTemplate_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteJobTemplate_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteMappableDomain_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteMappableDomain_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteMappableDomain_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteMappedControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteMappedControl_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteMappedControl_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteNarrative_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteNarrative_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteNarrative_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteOrgMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteOrgMembership_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteOrgMembership_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteOrganizationSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteOrganizationSetting_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteOrganizationSetting_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteOrganization_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteOrganization_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteOrganization_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deletePersonalAccessToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deletePersonalAccessToken_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deletePersonalAccessToken_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteProcedure_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteProcedure_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteProcedure_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteProgramMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteProgramMembership_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteProgramMembership_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteProgram_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteProgram_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteProgram_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteRisk_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteRisk_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteRisk_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteScan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteScan_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteScan_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteScheduledJob_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteScheduledJob_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteScheduledJob_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteStandard_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteStandard_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteStandard_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteSubcontrol_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteSubcontrol_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteSubcontrol_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteSubprocessor_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteSubprocessor_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_deleteSubprocessor_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_deleteSubscriber_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteSubscriber_argsEmail(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "email", ec.unmarshalNString2string)
 	if err != nil {
 		return nil, err
 	}
 	args["email"] = arg0
-	arg1, err := ec.field_Mutation_deleteSubscriber_argsOwnerID(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "ownerID", ec.unmarshalOID2ᚖstring)
 	if err != nil {
 		return nil, err
 	}
 	args["ownerID"] = arg1
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_deleteSubscriber_argsEmail(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["email"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
-	if tmp, ok := rawArgs["email"]; ok {
-		return ec.unmarshalNString2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_deleteSubscriber_argsOwnerID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*string, error) {
-	if _, ok := rawArgs["ownerID"]; !ok {
-		var zeroVal *string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerID"))
-	if tmp, ok := rawArgs["ownerID"]; ok {
-		return ec.unmarshalOID2ᚖstring(ctx, tmp)
-	}
-
-	var zeroVal *string
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_deleteTask_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteTask_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteTask_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteTemplate_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteTemplate_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteTemplate_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteTrustCenterCompliance_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteTrustCenterCompliance_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteTrustCenterCompliance_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteTrustCenterSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteTrustCenterSetting_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteTrustCenterSetting_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteTrustCenterSubprocessor_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteTrustCenterSubprocessor_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteTrustCenterSubprocessor_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteTrustCenter_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteTrustCenter_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteTrustCenter_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteUser_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteUser_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteUser_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_deleteWebauthn_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_deleteWebauthn_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_deleteWebauthn_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateAPIToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateAPIToken_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateAPIToken_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateAPITokenInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateAPITokenInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateAPIToken_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateAPIToken_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateAPITokenInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateAPITokenInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateAPITokenInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateAPITokenInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateAPITokenInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateActionPlan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateActionPlan_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateActionPlan_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateActionPlanInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateActionPlanInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateActionPlan_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateActionPlan_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateActionPlanInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateActionPlanInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateActionPlanInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateActionPlanInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateActionPlanInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateAsset_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateAsset_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateAsset_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateAssetInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateAssetInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateAsset_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateAsset_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateAssetInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateAssetInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateAssetInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateAssetInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateAssetInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateContact_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateContact_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateContact_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateContactInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateContactInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateContact_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateContact_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateContactInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateContactInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateContactInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateContactInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateContactInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateControlImplementation_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateControlImplementation_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateControlImplementation_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateControlImplementationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateControlImplementationInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateControlImplementation_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateControlImplementation_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateControlImplementationInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateControlImplementationInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateControlImplementationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateControlImplementationInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateControlImplementationInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateControlObjective_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateControlObjective_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateControlObjective_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateControlObjectiveInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateControlObjectiveInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateControlObjective_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateControlObjective_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateControlObjectiveInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateControlObjectiveInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateControlObjectiveInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateControlObjectiveInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateControlObjectiveInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateControl_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateControl_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateControlInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateControlInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateControl_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateControl_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateControlInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateControlInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateControlInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateControlInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateControlInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateCustomDomain_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateCustomDomain_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateCustomDomain_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateCustomDomainInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateCustomDomainInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateCustomDomain_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateCustomDomain_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateCustomDomainInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateCustomDomainInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateCustomDomainInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateCustomDomainInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateCustomDomainInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateDNSVerification_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateDNSVerification_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateDNSVerification_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateDNSVerificationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateDNSVerificationInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateDNSVerification_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateDNSVerification_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateDNSVerificationInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateDNSVerificationInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateDNSVerificationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateDNSVerificationInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateDNSVerificationInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateDocumentData_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateDocumentData_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateDocumentData_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateDocumentDataInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateDocumentDataInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateDocumentData_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateDocumentData_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateDocumentDataInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateDocumentDataInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateDocumentDataInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateDocumentDataInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateDocumentDataInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateEntityType_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateEntityType_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateEntityType_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateEntityTypeInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateEntityTypeInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateEntityType_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateEntityType_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateEntityTypeInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateEntityTypeInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateEntityTypeInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateEntityTypeInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateEntityTypeInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateEntity_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateEntity_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateEntityInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateEntityInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateEntity_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateEntity_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateEntityInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateEntityInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateEntityInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateEntityInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateEntityInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateEvent_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateEvent_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateEvent_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateEventInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateEventInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_updateEvent_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateEvent_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateEventInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateEventInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateEventInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateEventInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateEventInput
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_updateEvidence_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateEvidence_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateEvidence_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateEvidenceInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateEvidenceInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
-	arg2, err := ec.field_Mutation_updateEvidence_argsEvidenceFiles(ctx, rawArgs)
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "evidenceFiles", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["evidenceFiles"] = arg2
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_updateEvidence_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateEvidence_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateEvidenceInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateEvidenceInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateEvidenceInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateEvidenceInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateEvidenceInput
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateEvidence_argsEvidenceFiles(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*graphql.Upload, error) {
-	if _, ok := rawArgs["evidenceFiles"]; !ok {
-		var zeroVal []*graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("evidenceFiles"))
-	if tmp, ok := rawArgs["evidenceFiles"]; ok {
-		return ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*graphql.Upload
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_updateExport_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateExport_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateExport_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateExportInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateExportInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
-	arg2, err := ec.field_Mutation_updateExport_argsExportFiles(ctx, rawArgs)
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "exportFiles", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["exportFiles"] = arg2
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_updateExport_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateExport_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateExportInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateExportInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateExportInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateExportInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateExportInput
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateExport_argsExportFiles(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*graphql.Upload, error) {
-	if _, ok := rawArgs["exportFiles"]; !ok {
-		var zeroVal []*graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("exportFiles"))
-	if tmp, ok := rawArgs["exportFiles"]; ok {
-		return ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*graphql.Upload
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_updateGroupMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateGroupMembership_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateGroupMembership_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateGroupMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateGroupMembershipInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateGroupMembership_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateGroupMembership_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateGroupMembershipInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateGroupMembershipInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateGroupMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateGroupMembershipInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateGroupMembershipInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateGroupSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateGroupSetting_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateGroupSetting_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateGroupSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateGroupSettingInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateGroupSetting_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateGroupSetting_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateGroupSettingInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateGroupSettingInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateGroupSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateGroupSettingInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateGroupSettingInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateGroup_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateGroup_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateGroup_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateGroupInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateGroupInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateGroup_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateGroup_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateGroupInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateGroupInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateGroupInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateGroupInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateGroupInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateHush_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateHush_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateHush_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateHushInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateHushInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateHush_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateHush_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateHushInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateHushInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateHushInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateHushInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateHushInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateInternalPolicy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateInternalPolicy_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateInternalPolicy_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateInternalPolicyInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateInternalPolicyInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateInternalPolicy_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateInternalPolicy_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateInternalPolicyInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateInternalPolicyInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateInternalPolicyInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateInternalPolicyInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateInternalPolicyInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateInvite_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateInvite_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateInvite_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateInviteInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateInviteInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateInvite_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateInvite_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateInviteInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateInviteInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateInviteInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateInviteInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateInviteInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateJobRunner_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateJobRunner_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateJobRunner_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateJobRunnerInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateJobRunnerInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateJobRunner_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateJobRunner_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateJobRunnerInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateJobRunnerInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateJobRunnerInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateJobRunnerInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateJobRunnerInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateJobTemplate_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateJobTemplate_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateJobTemplate_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateJobTemplateInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateJobTemplateInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateJobTemplate_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateJobTemplate_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateJobTemplateInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateJobTemplateInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateJobTemplateInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateJobTemplateInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateJobTemplateInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateMappableDomain_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateMappableDomain_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateMappableDomain_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateMappableDomainInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateMappableDomainInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateMappableDomain_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateMappableDomain_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateMappableDomainInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateMappableDomainInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateMappableDomainInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateMappableDomainInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateMappableDomainInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateMappedControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateMappedControl_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateMappedControl_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateMappedControlInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateMappedControlInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateMappedControl_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateMappedControl_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateMappedControlInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateMappedControlInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateMappedControlInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateMappedControlInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateMappedControlInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateNarrative_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateNarrative_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateNarrative_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateNarrativeInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateNarrativeInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateNarrative_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateNarrative_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateNarrativeInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateNarrativeInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateNarrativeInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateNarrativeInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateNarrativeInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateOrgMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateOrgMembership_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateOrgMembership_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateOrgMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateOrgMembershipInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateOrgMembership_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateOrgMembership_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateOrgMembershipInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateOrgMembershipInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateOrgMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateOrgMembershipInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateOrgMembershipInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateOrganizationSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateOrganizationSetting_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateOrganizationSetting_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateOrganizationSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateOrganizationSettingInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_updateOrganizationSetting_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateOrganizationSetting_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateOrganizationSettingInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateOrganizationSettingInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateOrganizationSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateOrganizationSettingInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateOrganizationSettingInput
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_updateOrganization_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateOrganization_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateOrganization_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateOrganizationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateOrganizationInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
-	arg2, err := ec.field_Mutation_updateOrganization_argsAvatarFile(ctx, rawArgs)
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "avatarFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["avatarFile"] = arg2
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_updateOrganization_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateOrganization_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateOrganizationInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateOrganizationInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateOrganizationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateOrganizationInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateOrganizationInput
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateOrganization_argsAvatarFile(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*graphql.Upload, error) {
-	if _, ok := rawArgs["avatarFile"]; !ok {
-		var zeroVal *graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("avatarFile"))
-	if tmp, ok := rawArgs["avatarFile"]; ok {
-		return ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal *graphql.Upload
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_updatePersonalAccessToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updatePersonalAccessToken_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updatePersonalAccessToken_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdatePersonalAccessTokenInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdatePersonalAccessTokenInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updatePersonalAccessToken_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updatePersonalAccessToken_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdatePersonalAccessTokenInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdatePersonalAccessTokenInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdatePersonalAccessTokenInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdatePersonalAccessTokenInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdatePersonalAccessTokenInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateProcedure_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateProcedure_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateProcedure_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateProcedureInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateProcedureInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateProcedure_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateProcedure_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateProcedureInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateProcedureInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateProcedureInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateProcedureInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateProcedureInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateProgramMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateProgramMembership_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateProgramMembership_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateProgramMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateProgramMembershipInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateProgramMembership_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateProgramMembership_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateProgramMembershipInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateProgramMembershipInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateProgramMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateProgramMembershipInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateProgramMembershipInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateProgram_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateProgram_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateProgram_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateProgramInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateProgramInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateProgram_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateProgram_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateProgramInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateProgramInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateProgramInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateProgramInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateProgramInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateRisk_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateRisk_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateRisk_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateRiskInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateRiskInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateRisk_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateRisk_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateRiskInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateRiskInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateRiskInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateRiskInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateRiskInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateScan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateScan_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateScan_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateScanInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateScanInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateScan_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateScan_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateScanInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateScanInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateScanInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateScanInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateScanInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateScheduledJob_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateScheduledJob_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateScheduledJob_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateScheduledJobInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateScheduledJobInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateScheduledJob_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateScheduledJob_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateScheduledJobInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateScheduledJobInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateScheduledJobInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateScheduledJobInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateScheduledJobInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateStandard_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateStandard_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateStandard_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateStandardInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateStandardInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateStandard_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateStandard_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateStandardInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateStandardInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateStandardInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateStandardInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateStandardInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateSubcontrol_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateSubcontrol_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateSubcontrol_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateSubcontrolInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateSubcontrolInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_updateSubcontrol_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateSubcontrol_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateSubcontrolInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateSubcontrolInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateSubcontrolInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateSubcontrolInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateSubcontrolInput
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_updateSubprocessor_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateSubprocessor_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateSubprocessor_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateSubprocessorInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateSubprocessorInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
-	arg2, err := ec.field_Mutation_updateSubprocessor_argsLogoFile(ctx, rawArgs)
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "logoFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["logoFile"] = arg2
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_updateSubprocessor_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateSubprocessor_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateSubprocessorInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateSubprocessorInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateSubprocessorInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateSubprocessorInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateSubprocessorInput
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateSubprocessor_argsLogoFile(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*graphql.Upload, error) {
-	if _, ok := rawArgs["logoFile"]; !ok {
-		var zeroVal *graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("logoFile"))
-	if tmp, ok := rawArgs["logoFile"]; ok {
-		return ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal *graphql.Upload
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_updateSubscriber_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateSubscriber_argsEmail(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "email", ec.unmarshalNString2string)
 	if err != nil {
 		return nil, err
 	}
 	args["email"] = arg0
-	arg1, err := ec.field_Mutation_updateSubscriber_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateSubscriberInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateSubscriberInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_updateSubscriber_argsEmail(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["email"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
-	if tmp, ok := rawArgs["email"]; ok {
-		return ec.unmarshalNString2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateSubscriber_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateSubscriberInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateSubscriberInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateSubscriberInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateSubscriberInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateSubscriberInput
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_updateTFASetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateTFASetting_argsInput(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTFASettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTFASettingInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg0
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_updateTFASetting_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateTFASettingInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateTFASettingInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateTFASettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTFASettingInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateTFASettingInput
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_updateTaskComment_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateTaskComment_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateTaskComment_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateNoteInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateNoteInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
-	arg2, err := ec.field_Mutation_updateTaskComment_argsNoteFiles(ctx, rawArgs)
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "noteFiles", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
 	if err != nil {
 		return nil, err
 	}
 	args["noteFiles"] = arg2
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_updateTaskComment_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateTaskComment_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateNoteInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateNoteInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateNoteInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateNoteInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateNoteInput
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateTaskComment_argsNoteFiles(
-	ctx context.Context,
-	rawArgs map[string]any,
-) ([]*graphql.Upload, error) {
-	if _, ok := rawArgs["noteFiles"]; !ok {
-		var zeroVal []*graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("noteFiles"))
-	if tmp, ok := rawArgs["noteFiles"]; ok {
-		return ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ(ctx, tmp)
-	}
-
-	var zeroVal []*graphql.Upload
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_updateTask_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateTask_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateTask_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTaskInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTaskInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateTask_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateTask_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateTaskInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateTaskInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateTaskInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTaskInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateTaskInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateTemplate_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateTemplate_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateTemplate_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTemplateInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTemplateInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateTemplate_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateTemplate_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateTemplateInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateTemplateInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateTemplateInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTemplateInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateTemplateInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateTrustCenterCompliance_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateTrustCenterCompliance_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateTrustCenterCompliance_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterComplianceInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTrustCenterComplianceInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_updateTrustCenterCompliance_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateTrustCenterCompliance_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateTrustCenterComplianceInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateTrustCenterComplianceInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateTrustCenterComplianceInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTrustCenterComplianceInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateTrustCenterComplianceInput
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_updateTrustCenterSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateTrustCenterSetting_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateTrustCenterSetting_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTrustCenterSettingInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
-	arg2, err := ec.field_Mutation_updateTrustCenterSetting_argsLogoFile(ctx, rawArgs)
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "logoFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["logoFile"] = arg2
-	arg3, err := ec.field_Mutation_updateTrustCenterSetting_argsFaviconFile(ctx, rawArgs)
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "faviconFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["faviconFile"] = arg3
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_updateTrustCenterSetting_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateTrustCenterSetting_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateTrustCenterSettingInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateTrustCenterSettingInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateTrustCenterSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTrustCenterSettingInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateTrustCenterSettingInput
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateTrustCenterSetting_argsLogoFile(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*graphql.Upload, error) {
-	if _, ok := rawArgs["logoFile"]; !ok {
-		var zeroVal *graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("logoFile"))
-	if tmp, ok := rawArgs["logoFile"]; ok {
-		return ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal *graphql.Upload
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateTrustCenterSetting_argsFaviconFile(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*graphql.Upload, error) {
-	if _, ok := rawArgs["faviconFile"]; !ok {
-		var zeroVal *graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("faviconFile"))
-	if tmp, ok := rawArgs["faviconFile"]; ok {
-		return ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal *graphql.Upload
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Mutation_updateTrustCenterSubprocessor_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateTrustCenterSubprocessor_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateTrustCenterSubprocessor_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterSubprocessorInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTrustCenterSubprocessorInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateTrustCenterSubprocessor_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateTrustCenterSubprocessor_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateTrustCenterSubprocessorInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateTrustCenterSubprocessorInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateTrustCenterSubprocessorInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTrustCenterSubprocessorInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateTrustCenterSubprocessorInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateTrustCenter_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateTrustCenter_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateTrustCenter_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTrustCenterInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateTrustCenter_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateTrustCenter_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateTrustCenterInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateTrustCenterInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateTrustCenterInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTrustCenterInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateTrustCenterInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateUserSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateUserSetting_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateUserSetting_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateUserSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateUserSettingInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateUserSetting_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateUserSetting_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateUserSettingInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateUserSettingInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateUserSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateUserSettingInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateUserSettingInput
-	return zeroVal, nil
 }
 
 func (ec *executionContext) field_Mutation_updateUser_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateUser_argsID(ctx, rawArgs)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
 	if err != nil {
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := ec.field_Mutation_updateUser_argsInput(ctx, rawArgs)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateUserInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateUserInput)
 	if err != nil {
 		return nil, err
 	}
 	args["input"] = arg1
-	arg2, err := ec.field_Mutation_updateUser_argsAvatarFile(ctx, rawArgs)
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "avatarFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
 	args["avatarFile"] = arg2
 	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateUser_argsID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (string, error) {
-	if _, ok := rawArgs["id"]; !ok {
-		var zeroVal string
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
-	}
-
-	var zeroVal string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateUser_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (generated.UpdateUserInput, error) {
-	if _, ok := rawArgs["input"]; !ok {
-		var zeroVal generated.UpdateUserInput
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateUserInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateUserInput(ctx, tmp)
-	}
-
-	var zeroVal generated.UpdateUserInput
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateUser_argsAvatarFile(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (*graphql.Upload, error) {
-	if _, ok := rawArgs["avatarFile"]; !ok {
-		var zeroVal *graphql.Upload
-		return zeroVal, nil
-	}
-
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("avatarFile"))
-	if tmp, ok := rawArgs["avatarFile"]; ok {
-		return ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, tmp)
-	}
-
-	var zeroVal *graphql.Upload
-	return zeroVal, nil
 }
 
 // endregion ***************************** args.gotpl *****************************

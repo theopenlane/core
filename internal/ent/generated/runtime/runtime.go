@@ -1965,6 +1965,7 @@ func init() {
 	file.Interceptors[1] = fileMixinInters2[0]
 	file.Interceptors[2] = fileMixinInters6[0]
 	file.Interceptors[3] = fileInters[0]
+	file.Interceptors[4] = fileInters[1]
 	fileMixinFields0 := fileMixin[0].Fields()
 	_ = fileMixinFields0
 	fileMixinFields3 := fileMixin[3].Fields()

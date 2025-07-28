@@ -6,6 +6,7 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/golang-jwt/jwt/v5"
@@ -85,12 +86,12 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 	).SaveX(ctx)
 
 	input := generated.CreateOrganizationInput{
-		Name:      gofakeit.AdjectiveDescriptive() + " " + gofakeit.Noun(),
+		Name:      gofakeit.AdjectiveDescriptive() + " " + gofakeit.Noun() + time.Now().Format("20060102150405"),
 		SettingID: &orgSetting.ID,
 	}
 
 	ssoOrg := generated.CreateOrganizationInput{
-		Name:      gofakeit.AdjectiveDescriptive() + " " + gofakeit.Noun(),
+		Name:      gofakeit.AdjectiveDescriptive() + " " + gofakeit.Noun() + time.Now().Format("20060102150405"),
 		SettingID: &ssoorgSetting.ID,
 	}
 
@@ -282,7 +283,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforced() {
 	}).SaveX(ownerCtx)
 
 	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
-		Name:      "ssoorg",
+		Name:      "ssoorg" + time.Now().Format("20060102150405"),
 		SettingID: &setting.ID,
 	}).SaveX(ownerCtx)
 

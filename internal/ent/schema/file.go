@@ -132,6 +132,7 @@ func (File) Annotations() []schema.Annotation {
 func (File) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorPresignedURL(),
+		interceptors.InterceptorFile(), // filter on the organization id
 	}
 }
 

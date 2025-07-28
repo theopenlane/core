@@ -364,6 +364,11 @@ func retrieveObjectDetails(rctx *graphql.FieldContext, key string, upload *objec
 		if argIsUpload(arg) {
 			// check if the argument name matches the key
 			if arg.Name == key {
+				objectID, ok := rctx.Args["id"].(string)
+				if ok {
+					upload.CorrelatedObjectID = objectID
+				}
+
 				upload.CorrelatedObjectType = stripOperation(rctx.Field.Name)
 				upload.Key = arg.Name
 

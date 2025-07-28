@@ -56,6 +56,8 @@ type ObjectOwnedMixin struct {
 	// UseListObjectsFilter allows to use the list objects filter for the object owned mixin instead of batch checks
 	// use sparingly, as list objects can be expensive
 	UseListObjectsFilter bool
+	// OwnerFieldName is the field name for the owner, defaults to "owner_id"
+	OwnerFieldName string
 }
 
 type HookFunc func(o ObjectOwnedMixin) ent.Hook
@@ -74,6 +76,7 @@ func newObjectOwnedMixin[V any](schema any, opts ...objectOwnedOption) ObjectOwn
 		HookFuncs:        []HookFunc{defaultTupleUpdateFunc},
 		InterceptorFuncs: []InterceptorFunc{},
 		OwnerRelation:    fgax.ParentRelation,
+		OwnerFieldName:   ownerFieldName,
 	}
 
 	// apply options
@@ -174,12 +177,18 @@ func withListObjectsFilter() objectOwnedOption { //nolint:unused
 
 }
 
+func withOverrideOwnerFieldName(fieldName string) objectOwnedOption { //nolint:unused
+	return func(o *ObjectOwnedMixin) {
+		o.OwnerFieldName = fieldName
+	}
+}
+
 // Indexes of the ObjectOwnedMixin
 func (o ObjectOwnedMixin) Indexes() []ent.Index {
 	// add the organization owner index if the flag is set or the field name is included
-	if o.IncludeOrganizationOwner || slices.Contains(o.FieldNames, ownerFieldName) {
+	if o.IncludeOrganizationOwner || slices.Contains(o.FieldNames, o.OwnerFieldName) {
 		return []ent.Index{
-			index.Fields(ownerFieldName).
+			index.Fields(o.OwnerFieldName).
 				Annotations(entsql.IndexWhere("deleted_at is NULL")),
 		}
 	}
@@ -194,7 +203,7 @@ func (o ObjectOwnedMixin) Fields() []ent.Field {
 	// add the organization owner field if the flag is set
 	if o.IncludeOrganizationOwner {
 		fields = append(fields,
-			field.String(ownerFieldName).
+			field.String(o.OwnerFieldName).
 				Comment("the ID of the organization owner of the object").
 				Immutable(). // Immutable because it is set on creation and never changes
 				Optional().  // Optional because it doesn't need to be provided as input
@@ -232,7 +241,7 @@ func (o ObjectOwnedMixin) Edges() []ent.Edge {
 	if o.IncludeOrganizationOwner {
 		edges = append(edges,
 			edge.From("owner", Organization.Type).
-				Field(ownerFieldName).
+				Field(o.OwnerFieldName).
 				Immutable().
 				Unique().
 				Ref(o.Ref))
@@ -278,7 +287,7 @@ func (o ObjectOwnedMixin) Interceptors() []ent.Interceptor {
 // P adds a storage-level predicate to the queries and mutations for the provided field name
 func (o ObjectOwnedMixin) PWithField(w interface{ WhereP(...func(*sql.Selector)) }, fieldName string, objectIDs []string) {
 	selector := sql.FieldIn(fieldName, objectIDs...)
-	if o.AllowEmptyForSystemAdmin && fieldName == ownerFieldName {
+	if o.AllowEmptyForSystemAdmin && fieldName == o.OwnerFieldName {
 		// allow for empty values if the flag is set
 		w.WhereP(
 			sql.OrPredicates(
