@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/assert"
@@ -40,7 +41,7 @@ func (suite *HandlerTestSuite) TestSwitchHandlerSSOEnforced() {
 	}).SaveX(ownerCtx)
 
 	org := suite.db.Organization.Create().SetInput(ent.CreateOrganizationInput{
-		Name:      gofakeit.Name(),
+		Name:      gofakeit.Name() + time.Now().Format("20060102150405"),
 		SettingID: &setting.ID,
 	}).SaveX(ownerCtx)
 
