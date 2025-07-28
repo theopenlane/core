@@ -3,6 +3,7 @@ package objects
 import (
 	"context"
 	"path/filepath"
+	"strings"
 
 	"entgo.io/ent/dialect/sql"
 
@@ -145,15 +146,23 @@ func createFile(ctx context.Context, u *objects.Objects, f objects.FileUpload) (
 
 // getOrgOwnerID retrieves the organization ID from the context or input
 func getOrgOwnerID(ctx context.Context, f objects.FileUpload) (string, error) {
+	// skip if the file is a user file, they will not have an organization ID
+	// as the owner and can be used across organizations
+	if strings.EqualFold(f.CorrelatedObjectType, "user") {
+		return "", nil
+	}
+
 	// get the organization ID from the context, ignore the error if it is not set
 	// and instead check the parent object for the owner ID
 	orgID, _ := auth.GetOrganizationIDFromContext(ctx)
 
 	if orgID == "" {
-		// check the parent
+		// check the parent for the owner_id
 		var rows sql.Rows
+
 		objectTable := pluralize.NewClient().Plural(f.CorrelatedObjectType)
 		query := "SELECT owner_id FROM " + objectTable + " WHERE id = $1"
+
 		if err := txClientFromContext(ctx).Driver().Query(ctx, query, []any{f.CorrelatedObjectID}, &rows); err != nil {
 			return "", err
 		}

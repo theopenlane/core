@@ -593,7 +593,6 @@ func TestMutationUpdateEvidence(t *testing.T) {
 
 	// delete created evidence
 	(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, ID: evidence.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, IDs: []string{evidence.Edges.Files[0].ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationDeleteEvidence(t *testing.T) {
