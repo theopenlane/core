@@ -465,7 +465,12 @@ func TestMutationCreateEvidence(t *testing.T) {
 				tc.ctx = testUser1.UserCtx
 			}
 
+			// delete the evidence
 			(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, ID: resp.CreateEvidence.Evidence.ID}).MustDelete(tc.ctx, t)
+			// delete the files created for the evidence
+			for _, file := range resp.CreateEvidence.Evidence.Files.Edges {
+				(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, IDs: []string{file.Node.ID}}).MustDelete(tc.ctx, t)
+			}
 		})
 	}
 	// delete created objects
@@ -580,7 +585,7 @@ func TestMutationUpdateEvidence(t *testing.T) {
 				assert.Check(t, is.Equal(*tc.request.Source, *resp.UpdateEvidence.Evidence.Source))
 			}
 
-			if tc.files != nil && len(tc.files) > 0 {
+			if len(tc.files) > 0 {
 				assert.Check(t, is.Len(resp.UpdateEvidence.Evidence.Files.Edges, len(tc.files)))
 			}
 		})
@@ -588,6 +593,7 @@ func TestMutationUpdateEvidence(t *testing.T) {
 
 	// delete created evidence
 	(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, ID: evidence.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, IDs: []string{evidence.Edges.Files[0].ID}}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationDeleteEvidence(t *testing.T) {

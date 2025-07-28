@@ -154,6 +154,5 @@ func (File) Policy() ent.Policy {
 func (File) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookFileDelete(),
-		hooks.HookFileCreate(),
 	}
 }

@@ -153,9 +153,6 @@ func TestQueryFile(t *testing.T) {
 			assert.Assert(t, resp != nil)
 
 			assert.Check(t, is.Equal(tc.queryID, resp.File.ID))
-			// add additional assertions for the File
-			// e.g.
-			// assert.Check(t, resp.File.Name !=)
 		})
 	}
 
@@ -165,7 +162,17 @@ func TestQueryFile(t *testing.T) {
 }
 
 func TestQueryFiles(t *testing.T) {
-	// create an Evidence to be queried using testUser1
+	t.Parallel()
+
+	// create users so we dont have conflicts with other tests
+	testUser := suite.userBuilder(context.Background(), t)
+	patClient := suite.setupPatClient(testUser, t)
+	tokenClient := suite.setupAPITokenClient(testUser.UserCtx, t)
+
+	orgMember := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	orgMemberCtx := auth.NewTestContextWithOrgID(orgMember.UserID, orgMember.OrganizationID)
+
+	// create an Evidence to be queried using testUser
 	uf, err := objects.NewUploadFile("testdata/uploads/orgs.csv")
 	assert.NilError(t, err)
 
@@ -177,17 +184,17 @@ func TestQueryFiles(t *testing.T) {
 	}
 
 	// create control to be used in the Evidence
-	control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	control := (&ControlBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
 	expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{*uploadFile})
 
-	evidence, err := suite.client.api.CreateEvidence(testUser1.UserCtx, openlaneclient.CreateEvidenceInput{
+	evidence, err := suite.client.api.CreateEvidence(testUser.UserCtx, openlaneclient.CreateEvidenceInput{
 		Name:       "Test Evidence",
 		ControlIDs: []string{control.ID},
 	}, []*graphql.Upload{uploadFile})
 	assert.NilError(t, err)
 
-	getEvidence, err := suite.client.api.GetEvidenceByID(testUser1.UserCtx, evidence.CreateEvidence.Evidence.ID)
+	getEvidence, err := suite.client.api.GetEvidenceByID(testUser.UserCtx, evidence.CreateEvidence.Evidence.ID)
 	assert.NilError(t, err)
 	assert.Check(t, is.Len(getEvidence.Evidence.Files.Edges, 1))
 
@@ -205,7 +212,7 @@ func TestQueryFiles(t *testing.T) {
 
 	expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{*uploadFile})
 	// update user avatar to the file
-	userResp, err := suite.client.api.UpdateUser(testUser1.UserCtx, testUser1.ID, openlaneclient.UpdateUserInput{}, uploadFile)
+	userResp, err := suite.client.api.UpdateUser(testUser.UserCtx, testUser.ID, openlaneclient.UpdateUserInput{}, uploadFile)
 	assert.NilError(t, err)
 	assert.Check(t, userResp.UpdateUser.User.AvatarFile != nil)
 
@@ -220,24 +227,24 @@ func TestQueryFiles(t *testing.T) {
 		{
 			name:            "happy path",
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             testUser.UserCtx,
 			expectedResults: 2, // 1 for evidence file, 1 for user avatar file
 		},
 		{
 			name:            "happy path, using read only user of the same org",
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             orgMemberCtx,
 			expectedResults: 2, // 1 for evidence file, 1 for user avatar file
 		},
 		{
 			name:            "happy path, using api token",
-			client:          suite.client.apiWithToken,
+			client:          tokenClient,
 			ctx:             context.Background(),
 			expectedResults: 1, // 1 for evidence file, service not able to access another user's avatar file
 		},
 		{
 			name:            "happy path, using pat",
-			client:          suite.client.apiWithPAT,
+			client:          patClient,
 			ctx:             context.Background(),
 			expectedResults: 2, // 1 for evidence file, 1 for user avatar file since its the same user's personal access token
 		},
@@ -259,7 +266,7 @@ func TestQueryFiles(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, IDs: []string{evidenceFile.ID, userFileID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, ID: evidence.CreateEvidence.Evidence.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, IDs: []string{evidenceFile.ID, userFileID}}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, ID: evidence.CreateEvidence.Evidence.ID}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser.UserCtx, t)
 }
