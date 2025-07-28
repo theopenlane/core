@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
 )
 
 type OrganizationBuilder struct {
@@ -343,7 +344,7 @@ func randomName(t *testing.T) string {
 			b.WriteRune(r)
 		}
 	}
-	return b.String() + "_" + gofakeit.UUID()
+	return b.String() + "_" + ulids.New().String()
 }
 
 // DeleteClient is an interface for deleting entities
