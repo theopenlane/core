@@ -66,19 +66,6 @@ type APITokenBulkCreatePayload {
 	apiTokens: [APIToken!]
 }
 """
-Return response for updateBulkAPIToken mutation
-"""
-type APITokenBulkUpdatePayload {
-	"""
-	Updated apiTokens
-	"""
-	apiTokens: [APIToken!]
-	"""
-	IDs of the updated apiTokens
-	"""
-	updatedIDs: [ID!]
-}
-"""
 A connection to a list of items.
 """
 type APITokenConnection {
@@ -2528,19 +2515,6 @@ input AuditLogWhereInput {
 	after: Time
 }
 """
-Input for updating a single apiToken in a bulk operation
-"""
-input BulkUpdateAPITokenInput {
-	"""
-	ID of the apiToken to update
-	"""
-	id: ID!
-	"""
-	Data to update the apiToken with
-	"""
-	input: UpdateAPITokenInput!
-}
-"""
 Input for updating a single actionPlan in a bulk operation
 """
 input BulkUpdateActionPlanInput {
@@ -2591,6 +2565,45 @@ input BulkUpdateHushInput {
 	Data to update the hush with
 	"""
 	input: UpdateHushInput!
+}
+"""
+Input for updating a single internalPolicy in a bulk operation
+"""
+input BulkUpdateInternalPolicyInput {
+	"""
+	ID of the internalPolicy to update
+	"""
+	id: ID!
+	"""
+	Data to update the internalPolicy with
+	"""
+	input: UpdateInternalPolicyInput!
+}
+"""
+Input for updating a single procedure in a bulk operation
+"""
+input BulkUpdateProcedureInput {
+	"""
+	ID of the procedure to update
+	"""
+	id: ID!
+	"""
+	Data to update the procedure with
+	"""
+	input: UpdateProcedureInput!
+}
+"""
+Input for updating a single risk in a bulk operation
+"""
+input BulkUpdateRiskInput {
+	"""
+	ID of the risk to update
+	"""
+	id: ID!
+	"""
+	Data to update the risk with
+	"""
+	input: UpdateRiskInput!
 }
 """
 Input for updating a single scan in a bulk operation
@@ -20752,6 +20765,19 @@ type InternalPolicyBulkCreatePayload {
 	internalPolicies: [InternalPolicy!]
 }
 """
+Return response for updateBulkInternalPolicy mutation
+"""
+type InternalPolicyBulkUpdatePayload {
+	"""
+	Updated internalPolicys
+	"""
+	internalPolicies: [InternalPolicy!]
+	"""
+	IDs of the updated internalPolicys
+	"""
+	updatedIDs: [ID!]
+}
+"""
 A connection to a list of items.
 """
 type InternalPolicyConnection {
@@ -25306,15 +25332,6 @@ type Mutation {
 		input: Upload!
 	): APITokenBulkCreatePayload!
 	"""
-	Update multiple existing apiTokens
-	"""
-	updateBulkAPIToken(
-		"""
-		values to update the apiTokens with
-		"""
-		input: [BulkUpdateAPITokenInput!]
-	): APITokenBulkUpdatePayload!
-	"""
 	Update an existing apiToken
 	"""
 	updateAPIToken(
@@ -26282,6 +26299,15 @@ type Mutation {
 		input: Upload!
 	): InternalPolicyBulkCreatePayload!
 	"""
+	Update multiple existing internalPolicys
+	"""
+	updateBulkInternalPolicy(
+		"""
+		values to update the internalPolicys with
+		"""
+		input: [BulkUpdateInternalPolicyInput!]
+	): InternalPolicyBulkUpdatePayload!
+	"""
 	Update an existing internalPolicy
 	"""
 	updateInternalPolicy(
@@ -26852,6 +26878,15 @@ type Mutation {
 		input: Upload!
 	): ProcedureBulkCreatePayload!
 	"""
+	Update multiple existing procedures
+	"""
+	updateBulkProcedure(
+		"""
+		values to update the procedures with
+		"""
+		input: [BulkUpdateProcedureInput!]
+	): ProcedureBulkUpdatePayload!
+	"""
 	Update an existing procedure
 	"""
 	updateProcedure(
@@ -27028,6 +27063,15 @@ type Mutation {
 		"""
 		input: Upload!
 	): RiskBulkCreatePayload!
+	"""
+	Update multiple existing risks
+	"""
+	updateBulkRisk(
+		"""
+		values to update the risks with
+		"""
+		input: [BulkUpdateRiskInput!]
+	): RiskBulkUpdatePayload!
 	"""
 	Update an existing risk
 	"""
@@ -35170,6 +35214,19 @@ type ProcedureBulkCreatePayload {
 	Created procedures
 	"""
 	procedures: [Procedure!]
+}
+"""
+Return response for updateBulkProcedure mutation
+"""
+type ProcedureBulkUpdatePayload {
+	"""
+	Updated procedures
+	"""
+	procedures: [Procedure!]
+	"""
+	IDs of the updated procedures
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.
@@ -45047,6 +45104,19 @@ type RiskBulkCreatePayload {
 	Created risks
 	"""
 	risks: [Risk!]
+}
+"""
+Return response for updateBulkRisk mutation
+"""
+type RiskBulkUpdatePayload {
+	"""
+	Updated risks
+	"""
+	risks: [Risk!]
+	"""
+	IDs of the updated risks
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.

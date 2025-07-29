@@ -54,14 +54,6 @@ type APITokenBulkCreatePayload struct {
 	APITokens []*APIToken `json:"apiTokens,omitempty"`
 }
 
-// Return response for updateBulkAPIToken mutation
-type APITokenBulkUpdatePayload struct {
-	// Updated apiTokens
-	APITokens []*APIToken `json:"apiTokens,omitempty"`
-	// IDs of the updated apiTokens
-	UpdatedIDs []string `json:"updatedIDs,omitempty"`
-}
-
 // A connection to a list of items.
 type APITokenConnection struct {
 	// A list of edges.
@@ -1590,14 +1582,6 @@ type AuditLogWhereInput struct {
 	After *time.Time `json:"after,omitempty"`
 }
 
-// Input for updating a single apiToken in a bulk operation
-type BulkUpdateAPITokenInput struct {
-	// ID of the apiToken to update
-	ID string `json:"id"`
-	// Data to update the apiToken with
-	Input *UpdateAPITokenInput `json:"input"`
-}
-
 // Input for updating a single actionPlan in a bulk operation
 type BulkUpdateActionPlanInput struct {
 	// ID of the actionPlan to update
@@ -1628,6 +1612,30 @@ type BulkUpdateHushInput struct {
 	ID string `json:"id"`
 	// Data to update the hush with
 	Input *UpdateHushInput `json:"input"`
+}
+
+// Input for updating a single internalPolicy in a bulk operation
+type BulkUpdateInternalPolicyInput struct {
+	// ID of the internalPolicy to update
+	ID string `json:"id"`
+	// Data to update the internalPolicy with
+	Input *UpdateInternalPolicyInput `json:"input"`
+}
+
+// Input for updating a single procedure in a bulk operation
+type BulkUpdateProcedureInput struct {
+	// ID of the procedure to update
+	ID string `json:"id"`
+	// Data to update the procedure with
+	Input *UpdateProcedureInput `json:"input"`
+}
+
+// Input for updating a single risk in a bulk operation
+type BulkUpdateRiskInput struct {
+	// ID of the risk to update
+	ID string `json:"id"`
+	// Data to update the risk with
+	Input *UpdateRiskInput `json:"input"`
 }
 
 // Input for updating a single scan in a bulk operation
@@ -12111,6 +12119,14 @@ type InternalPolicyBulkCreatePayload struct {
 	InternalPolicies []*InternalPolicy `json:"internalPolicies,omitempty"`
 }
 
+// Return response for updateBulkInternalPolicy mutation
+type InternalPolicyBulkUpdatePayload struct {
+	// Updated internalPolicys
+	InternalPolicies []*InternalPolicy `json:"internalPolicies,omitempty"`
+	// IDs of the updated internalPolicys
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type InternalPolicyConnection struct {
 	// A list of edges.
@@ -18758,6 +18774,14 @@ type ProcedureBulkCreatePayload struct {
 	Procedures []*Procedure `json:"procedures,omitempty"`
 }
 
+// Return response for updateBulkProcedure mutation
+type ProcedureBulkUpdatePayload struct {
+	// Updated procedures
+	Procedures []*Procedure `json:"procedures,omitempty"`
+	// IDs of the updated procedures
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type ProcedureConnection struct {
 	// A list of edges.
@@ -20529,6 +20553,14 @@ func (Risk) IsNode() {}
 type RiskBulkCreatePayload struct {
 	// Created risks
 	Risks []*Risk `json:"risks,omitempty"`
+}
+
+// Return response for updateBulkRisk mutation
+type RiskBulkUpdatePayload struct {
+	// Updated risks
+	Risks []*Risk `json:"risks,omitempty"`
+	// IDs of the updated risks
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.

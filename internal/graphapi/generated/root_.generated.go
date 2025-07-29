@@ -89,11 +89,6 @@ type ComplexityRoot struct {
 		APITokens func(childComplexity int) int
 	}
 
-	APITokenBulkUpdatePayload struct {
-		APITokens  func(childComplexity int) int
-		UpdatedIDs func(childComplexity int) int
-	}
-
 	APITokenConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -1831,6 +1826,11 @@ type ComplexityRoot struct {
 		InternalPolicies func(childComplexity int) int
 	}
 
+	InternalPolicyBulkUpdatePayload struct {
+		InternalPolicies func(childComplexity int) int
+		UpdatedIDs       func(childComplexity int) int
+	}
+
 	InternalPolicyConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -2504,11 +2504,13 @@ type ComplexityRoot struct {
 		UpdateAPIToken                       func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
 		UpdateActionPlan                     func(childComplexity int, id string, input generated.UpdateActionPlanInput) int
 		UpdateAsset                          func(childComplexity int, id string, input generated.UpdateAssetInput) int
-		UpdateBulkAPIToken                   func(childComplexity int, input []*model.BulkUpdateAPITokenInput) int
 		UpdateBulkActionPlan                 func(childComplexity int, input []*model.BulkUpdateActionPlanInput) int
 		UpdateBulkContact                    func(childComplexity int, input []*model.BulkUpdateContactInput) int
 		UpdateBulkControl                    func(childComplexity int, input []*model.BulkUpdateControlInput) int
 		UpdateBulkHush                       func(childComplexity int, input []*model.BulkUpdateHushInput) int
+		UpdateBulkInternalPolicy             func(childComplexity int, input []*model.BulkUpdateInternalPolicyInput) int
+		UpdateBulkProcedure                  func(childComplexity int, input []*model.BulkUpdateProcedureInput) int
+		UpdateBulkRisk                       func(childComplexity int, input []*model.BulkUpdateRiskInput) int
 		UpdateBulkScan                       func(childComplexity int, input []*model.BulkUpdateScanInput) int
 		UpdateBulkTask                       func(childComplexity int, input []*model.BulkUpdateTaskInput) int
 		UpdateContact                        func(childComplexity int, id string, input generated.UpdateContactInput) int
@@ -3182,6 +3184,11 @@ type ComplexityRoot struct {
 		Procedures func(childComplexity int) int
 	}
 
+	ProcedureBulkUpdatePayload struct {
+		Procedures func(childComplexity int) int
+		UpdatedIDs func(childComplexity int) int
+	}
+
 	ProcedureConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -3724,6 +3731,11 @@ type ComplexityRoot struct {
 
 	RiskBulkCreatePayload struct {
 		Risks func(childComplexity int) int
+	}
+
+	RiskBulkUpdatePayload struct {
+		Risks      func(childComplexity int) int
+		UpdatedIDs func(childComplexity int) int
 	}
 
 	RiskConnection struct {
@@ -5200,20 +5212,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.APITokenBulkCreatePayload.APITokens(childComplexity), true
-
-	case "APITokenBulkUpdatePayload.apiTokens":
-		if e.complexity.APITokenBulkUpdatePayload.APITokens == nil {
-			break
-		}
-
-		return e.complexity.APITokenBulkUpdatePayload.APITokens(childComplexity), true
-
-	case "APITokenBulkUpdatePayload.updatedIDs":
-		if e.complexity.APITokenBulkUpdatePayload.UpdatedIDs == nil {
-			break
-		}
-
-		return e.complexity.APITokenBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "APITokenConnection.edges":
 		if e.complexity.APITokenConnection.Edges == nil {
@@ -13562,6 +13560,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicyBulkCreatePayload.InternalPolicies(childComplexity), true
 
+	case "InternalPolicyBulkUpdatePayload.internalPolicies":
+		if e.complexity.InternalPolicyBulkUpdatePayload.InternalPolicies == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyBulkUpdatePayload.InternalPolicies(childComplexity), true
+
+	case "InternalPolicyBulkUpdatePayload.updatedIDs":
+		if e.complexity.InternalPolicyBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "InternalPolicyConnection.edges":
 		if e.complexity.InternalPolicyConnection.Edges == nil {
 			break
@@ -17900,18 +17912,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateAsset(childComplexity, args["id"].(string), args["input"].(generated.UpdateAssetInput)), true
 
-	case "Mutation.updateBulkAPIToken":
-		if e.complexity.Mutation.UpdateBulkAPIToken == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkAPIToken_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.UpdateBulkAPIToken(childComplexity, args["input"].([]*model.BulkUpdateAPITokenInput)), true
-
 	case "Mutation.updateBulkActionPlan":
 		if e.complexity.Mutation.UpdateBulkActionPlan == nil {
 			break
@@ -17959,6 +17959,42 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateBulkHush(childComplexity, args["input"].([]*model.BulkUpdateHushInput)), true
+
+	case "Mutation.updateBulkInternalPolicy":
+		if e.complexity.Mutation.UpdateBulkInternalPolicy == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkInternalPolicy_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkInternalPolicy(childComplexity, args["input"].([]*model.BulkUpdateInternalPolicyInput)), true
+
+	case "Mutation.updateBulkProcedure":
+		if e.complexity.Mutation.UpdateBulkProcedure == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkProcedure_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkProcedure(childComplexity, args["input"].([]*model.BulkUpdateProcedureInput)), true
+
+	case "Mutation.updateBulkRisk":
+		if e.complexity.Mutation.UpdateBulkRisk == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkRisk_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkRisk(childComplexity, args["input"].([]*model.BulkUpdateRiskInput)), true
 
 	case "Mutation.updateBulkScan":
 		if e.complexity.Mutation.UpdateBulkScan == nil {
@@ -21967,6 +22003,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ProcedureBulkCreatePayload.Procedures(childComplexity), true
+
+	case "ProcedureBulkUpdatePayload.procedures":
+		if e.complexity.ProcedureBulkUpdatePayload.Procedures == nil {
+			break
+		}
+
+		return e.complexity.ProcedureBulkUpdatePayload.Procedures(childComplexity), true
+
+	case "ProcedureBulkUpdatePayload.updatedIDs":
+		if e.complexity.ProcedureBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.ProcedureBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "ProcedureConnection.edges":
 		if e.complexity.ProcedureConnection.Edges == nil {
@@ -26564,6 +26614,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.RiskBulkCreatePayload.Risks(childComplexity), true
+
+	case "RiskBulkUpdatePayload.risks":
+		if e.complexity.RiskBulkUpdatePayload.Risks == nil {
+			break
+		}
+
+		return e.complexity.RiskBulkUpdatePayload.Risks(childComplexity), true
+
+	case "RiskBulkUpdatePayload.updatedIDs":
+		if e.complexity.RiskBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.RiskBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "RiskConnection.edges":
 		if e.complexity.RiskConnection.Edges == nil {
@@ -32728,11 +32792,13 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputAssetWhereInput,
 		ec.unmarshalInputAuditLogOrder,
 		ec.unmarshalInputAuditLogWhereInput,
-		ec.unmarshalInputBulkUpdateAPITokenInput,
 		ec.unmarshalInputBulkUpdateActionPlanInput,
 		ec.unmarshalInputBulkUpdateContactInput,
 		ec.unmarshalInputBulkUpdateControlInput,
 		ec.unmarshalInputBulkUpdateHushInput,
+		ec.unmarshalInputBulkUpdateInternalPolicyInput,
+		ec.unmarshalInputBulkUpdateProcedureInput,
+		ec.unmarshalInputBulkUpdateRiskInput,
 		ec.unmarshalInputBulkUpdateScanInput,
 		ec.unmarshalInputBulkUpdateTaskInput,
 		ec.unmarshalInputCloneControlInput,
@@ -34429,19 +34495,6 @@ type ActionPlanBulkUpdatePayload {
     ):  APIToken!
 }
 
-"""
-Input for updating a single apiToken in a bulk operation
-"""
-input BulkUpdateAPITokenInput {
-    """
-    ID of the apiToken to update
-    """
-    id: ID!
-    """
-    Data to update the apiToken with
-    """
-    input: UpdateAPITokenInput!
-}
 
 extend type Mutation{
     """
@@ -34471,15 +34524,6 @@ extend type Mutation{
         """
         input: Upload!
     ): APITokenBulkCreatePayload!
-    """
-    Update multiple existing apiTokens
-    """
-    updateBulkAPIToken(
-        """
-        values to update the apiTokens with
-        """
-        input: [BulkUpdateAPITokenInput!]
-    ): APITokenBulkUpdatePayload!
     """
     Update an existing apiToken
     """
@@ -34544,19 +34588,7 @@ type APITokenBulkCreatePayload {
     apiTokens: [APIToken!]
 }
 
-"""
-Return response for updateBulkAPIToken mutation
-"""
-type APITokenBulkUpdatePayload {
-    """
-    Updated apiTokens
-    """
-    apiTokens: [APIToken!]
-    """
-    IDs of the updated apiTokens
-    """
-    updatedIDs: [ID!]
-}`, BuiltIn: false},
+`, BuiltIn: false},
 	{Name: "../schema/asset.graphql", Input: `extend type Query {
     """
     Look up asset by ID
@@ -89915,6 +89947,20 @@ type IntegrationDeletePayload {
     ):  InternalPolicy!
 }
 
+"""
+Input for updating a single internalPolicy in a bulk operation
+"""
+input BulkUpdateInternalPolicyInput {
+    """
+    ID of the internalPolicy to update
+    """
+    id: ID!
+    """
+    Data to update the internalPolicy with
+    """
+    input: UpdateInternalPolicyInput!
+}
+
 extend type Mutation{
     """
     Create a new internalPolicy
@@ -89943,6 +89989,15 @@ extend type Mutation{
         """
         input: Upload!
     ): InternalPolicyBulkCreatePayload!
+    """
+    Update multiple existing internalPolicys
+    """
+    updateBulkInternalPolicy(
+        """
+        values to update the internalPolicys with
+        """
+        input: [BulkUpdateInternalPolicyInput!]
+    ): InternalPolicyBulkUpdatePayload!
     """
     Update an existing internalPolicy
     """
@@ -90005,6 +90060,20 @@ type InternalPolicyBulkCreatePayload {
     Created internalPolicys
     """
     internalPolicies: [InternalPolicy!]
+}
+
+"""
+Return response for updateBulkInternalPolicy mutation
+"""
+type InternalPolicyBulkUpdatePayload {
+    """
+    Updated internalPolicys
+    """
+    internalPolicies: [InternalPolicy!]
+    """
+    IDs of the updated internalPolicys
+    """
+    updatedIDs: [ID!]
 }`, BuiltIn: false},
 	{Name: "../schema/invite.graphql", Input: `extend type Query {
     """
@@ -91238,6 +91307,20 @@ type PersonalAccessTokenBulkCreatePayload {
     ):  Procedure!
 }
 
+"""
+Input for updating a single procedure in a bulk operation
+"""
+input BulkUpdateProcedureInput {
+    """
+    ID of the procedure to update
+    """
+    id: ID!
+    """
+    Data to update the procedure with
+    """
+    input: UpdateProcedureInput!
+}
+
 extend type Mutation{
     """
     Create a new procedure
@@ -91266,6 +91349,15 @@ extend type Mutation{
         """
         input: Upload!
     ): ProcedureBulkCreatePayload!
+    """
+    Update multiple existing procedures
+    """
+    updateBulkProcedure(
+        """
+        values to update the procedures with
+        """
+        input: [BulkUpdateProcedureInput!]
+    ): ProcedureBulkUpdatePayload!
     """
     Update an existing procedure
     """
@@ -91328,6 +91420,20 @@ type ProcedureBulkCreatePayload {
     Created procedures
     """
     procedures: [Procedure!]
+}
+
+"""
+Return response for updateBulkProcedure mutation
+"""
+type ProcedureBulkUpdatePayload {
+    """
+    Updated procedures
+    """
+    procedures: [Procedure!]
+    """
+    IDs of the updated procedures
+    """
+    updatedIDs: [ID!]
 }`, BuiltIn: false},
 	{Name: "../schema/program.graphql", Input: `extend type Query {
     """
@@ -91641,6 +91747,20 @@ extend input UpdateStandardInput {
     ):  Risk!
 }
 
+"""
+Input for updating a single risk in a bulk operation
+"""
+input BulkUpdateRiskInput {
+    """
+    ID of the risk to update
+    """
+    id: ID!
+    """
+    Data to update the risk with
+    """
+    input: UpdateRiskInput!
+}
+
 extend type Mutation{
     """
     Create a new risk
@@ -91669,6 +91789,15 @@ extend type Mutation{
         """
         input: Upload!
     ): RiskBulkCreatePayload!
+    """
+    Update multiple existing risks
+    """
+    updateBulkRisk(
+        """
+        values to update the risks with
+        """
+        input: [BulkUpdateRiskInput!]
+    ): RiskBulkUpdatePayload!
     """
     Update an existing risk
     """
@@ -91731,6 +91860,20 @@ type RiskBulkCreatePayload {
     Created risks
     """
     risks: [Risk!]
+}
+
+"""
+Return response for updateBulkRisk mutation
+"""
+type RiskBulkUpdatePayload {
+    """
+    Updated risks
+    """
+    risks: [Risk!]
+    """
+    IDs of the updated risks
+    """
+    updatedIDs: [ID!]
 }`, BuiltIn: false},
 	{Name: "../schema/scalars.graphql", Input: `"""
 The ` + "`" + `Upload` + "`" + ` scalar type represents a file upload.

@@ -10,6 +10,20 @@ extend type Query {
     ):  Risk!
 }
 
+"""
+Input for updating a single risk in a bulk operation
+"""
+input BulkUpdateRiskInput {
+    """
+    ID of the risk to update
+    """
+    id: ID!
+    """
+    Data to update the risk with
+    """
+    input: UpdateRiskInput!
+}
+
 extend type Mutation{
     """
     Create a new risk
@@ -38,6 +52,15 @@ extend type Mutation{
         """
         input: Upload!
     ): RiskBulkCreatePayload!
+    """
+    Update multiple existing risks
+    """
+    updateBulkRisk(
+        """
+        values to update the risks with
+        """
+        input: [BulkUpdateRiskInput!]
+    ): RiskBulkUpdatePayload!
     """
     Update an existing risk
     """
@@ -100,4 +123,18 @@ type RiskBulkCreatePayload {
     Created risks
     """
     risks: [Risk!]
+}
+
+"""
+Return response for updateBulkRisk mutation
+"""
+type RiskBulkUpdatePayload {
+    """
+    Updated risks
+    """
+    risks: [Risk!]
+    """
+    IDs of the updated risks
+    """
+    updatedIDs: [ID!]
 }

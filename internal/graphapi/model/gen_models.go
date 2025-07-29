@@ -19,14 +19,6 @@ type APITokenBulkCreatePayload struct {
 	APITokens []*generated.APIToken `json:"apiTokens,omitempty"`
 }
 
-// Return response for updateBulkAPIToken mutation
-type APITokenBulkUpdatePayload struct {
-	// Updated apiTokens
-	APITokens []*generated.APIToken `json:"apiTokens,omitempty"`
-	// IDs of the updated apiTokens
-	UpdatedIDs []string `json:"updatedIDs,omitempty"`
-}
-
 // Return response for createAPIToken mutation
 type APITokenCreatePayload struct {
 	// Created apiToken
@@ -107,14 +99,6 @@ type AssetUpdatePayload struct {
 	Asset *generated.Asset `json:"asset"`
 }
 
-// Input for updating a single apiToken in a bulk operation
-type BulkUpdateAPITokenInput struct {
-	// ID of the apiToken to update
-	ID string `json:"id"`
-	// Data to update the apiToken with
-	Input *generated.UpdateAPITokenInput `json:"input"`
-}
-
 // Input for updating a single actionPlan in a bulk operation
 type BulkUpdateActionPlanInput struct {
 	// ID of the actionPlan to update
@@ -145,6 +129,30 @@ type BulkUpdateHushInput struct {
 	ID string `json:"id"`
 	// Data to update the hush with
 	Input *generated.UpdateHushInput `json:"input"`
+}
+
+// Input for updating a single internalPolicy in a bulk operation
+type BulkUpdateInternalPolicyInput struct {
+	// ID of the internalPolicy to update
+	ID string `json:"id"`
+	// Data to update the internalPolicy with
+	Input *generated.UpdateInternalPolicyInput `json:"input"`
+}
+
+// Input for updating a single procedure in a bulk operation
+type BulkUpdateProcedureInput struct {
+	// ID of the procedure to update
+	ID string `json:"id"`
+	// Data to update the procedure with
+	Input *generated.UpdateProcedureInput `json:"input"`
+}
+
+// Input for updating a single risk in a bulk operation
+type BulkUpdateRiskInput struct {
+	// ID of the risk to update
+	ID string `json:"id"`
+	// Data to update the risk with
+	Input *generated.UpdateRiskInput `json:"input"`
 }
 
 // Input for updating a single scan in a bulk operation
@@ -781,6 +789,14 @@ type InternalPolicyBulkCreatePayload struct {
 	InternalPolicies []*generated.InternalPolicy `json:"internalPolicies,omitempty"`
 }
 
+// Return response for updateBulkInternalPolicy mutation
+type InternalPolicyBulkUpdatePayload struct {
+	// Updated internalPolicys
+	InternalPolicies []*generated.InternalPolicy `json:"internalPolicies,omitempty"`
+	// IDs of the updated internalPolicys
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createInternalPolicy mutation
 type InternalPolicyCreatePayload struct {
 	// Created internalPolicy
@@ -1087,6 +1103,14 @@ type ProcedureBulkCreatePayload struct {
 	Procedures []*generated.Procedure `json:"procedures,omitempty"`
 }
 
+// Return response for updateBulkProcedure mutation
+type ProcedureBulkUpdatePayload struct {
+	// Updated procedures
+	Procedures []*generated.Procedure `json:"procedures,omitempty"`
+	// IDs of the updated procedures
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createProcedure mutation
 type ProcedureCreatePayload struct {
 	// Created procedure
@@ -1157,6 +1181,14 @@ type ProgramUpdatePayload struct {
 type RiskBulkCreatePayload struct {
 	// Created risks
 	Risks []*generated.Risk `json:"risks,omitempty"`
+}
+
+// Return response for updateBulkRisk mutation
+type RiskBulkUpdatePayload struct {
+	// Updated risks
+	Risks []*generated.Risk `json:"risks,omitempty"`
+	// IDs of the updated risks
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createRisk mutation
