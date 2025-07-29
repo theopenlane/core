@@ -10,6 +10,20 @@ extend type Query {
     ):  ActionPlan!
 }
 
+"""
+Input for updating a single actionPlan in a bulk operation
+"""
+input BulkUpdateActionPlanInput {
+    """
+    ID of the actionPlan to update
+    """
+    id: ID!
+    """
+    Data to update the actionPlan with
+    """
+    input: UpdateActionPlanInput!
+}
+
 extend type Mutation{
     """
     Create a new actionPlan
@@ -38,6 +52,15 @@ extend type Mutation{
         """
         input: Upload!
     ): ActionPlanBulkCreatePayload!
+    """
+    Update multiple existing actionPlans
+    """
+    updateBulkActionPlan(
+        """
+        values to update the actionPlans with
+        """
+        input: [BulkUpdateActionPlanInput!]
+    ): ActionPlanBulkUpdatePayload!
     """
     Update an existing actionPlan
     """
@@ -100,4 +123,18 @@ type ActionPlanBulkCreatePayload {
     Created actionPlans
     """
     actionPlans: [ActionPlan!]
+}
+
+"""
+Return response for updateBulkActionPlan mutation
+"""
+type ActionPlanBulkUpdatePayload {
+    """
+    Updated actionPlans
+    """
+    actionPlans: [ActionPlan!]
+    """
+    IDs of the updated actionPlans
+    """
+    updatedIDs: [ID!]
 }

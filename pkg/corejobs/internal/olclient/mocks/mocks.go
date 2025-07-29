@@ -37173,6 +37173,338 @@ func (_c *MockOpenlaneGraphClient_UpdateAsset_Call) RunAndReturn(run func(ctx co
 	return _c
 }
 
+// UpdateBulkActionPlan provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) UpdateBulkActionPlan(ctx context.Context, input []*openlaneclient.BulkUpdateActionPlanInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateBulkActionPlan, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateBulkActionPlan")
+	}
+
+	var r0 *openlaneclient.UpdateBulkActionPlan
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, []*openlaneclient.BulkUpdateActionPlanInput, ...clientv2.RequestInterceptor) (*openlaneclient.UpdateBulkActionPlan, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, []*openlaneclient.BulkUpdateActionPlanInput, ...clientv2.RequestInterceptor) *openlaneclient.UpdateBulkActionPlan); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.UpdateBulkActionPlan)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, []*openlaneclient.BulkUpdateActionPlanInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_UpdateBulkActionPlan_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateBulkActionPlan'
+type MockOpenlaneGraphClient_UpdateBulkActionPlan_Call struct {
+	*mock.Call
+}
+
+// UpdateBulkActionPlan is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input []*openlaneclient.BulkUpdateActionPlanInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) UpdateBulkActionPlan(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateBulkActionPlan_Call {
+	return &MockOpenlaneGraphClient_UpdateBulkActionPlan_Call{Call: _e.mock.On("UpdateBulkActionPlan",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateBulkActionPlan_Call) Run(run func(ctx context.Context, input []*openlaneclient.BulkUpdateActionPlanInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateBulkActionPlan_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.BulkUpdateActionPlanInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.BulkUpdateActionPlanInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateBulkActionPlan_Call) Return(updateBulkActionPlan *openlaneclient.UpdateBulkActionPlan, err error) *MockOpenlaneGraphClient_UpdateBulkActionPlan_Call {
+	_c.Call.Return(updateBulkActionPlan, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateBulkActionPlan_Call) RunAndReturn(run func(ctx context.Context, input []*openlaneclient.BulkUpdateActionPlanInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateBulkActionPlan, error)) *MockOpenlaneGraphClient_UpdateBulkActionPlan_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateBulkContact provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) UpdateBulkContact(ctx context.Context, input []*openlaneclient.BulkUpdateContactInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateBulkContact, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateBulkContact")
+	}
+
+	var r0 *openlaneclient.UpdateBulkContact
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, []*openlaneclient.BulkUpdateContactInput, ...clientv2.RequestInterceptor) (*openlaneclient.UpdateBulkContact, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, []*openlaneclient.BulkUpdateContactInput, ...clientv2.RequestInterceptor) *openlaneclient.UpdateBulkContact); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.UpdateBulkContact)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, []*openlaneclient.BulkUpdateContactInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_UpdateBulkContact_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateBulkContact'
+type MockOpenlaneGraphClient_UpdateBulkContact_Call struct {
+	*mock.Call
+}
+
+// UpdateBulkContact is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input []*openlaneclient.BulkUpdateContactInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) UpdateBulkContact(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateBulkContact_Call {
+	return &MockOpenlaneGraphClient_UpdateBulkContact_Call{Call: _e.mock.On("UpdateBulkContact",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateBulkContact_Call) Run(run func(ctx context.Context, input []*openlaneclient.BulkUpdateContactInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateBulkContact_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.BulkUpdateContactInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.BulkUpdateContactInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateBulkContact_Call) Return(updateBulkContact *openlaneclient.UpdateBulkContact, err error) *MockOpenlaneGraphClient_UpdateBulkContact_Call {
+	_c.Call.Return(updateBulkContact, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateBulkContact_Call) RunAndReturn(run func(ctx context.Context, input []*openlaneclient.BulkUpdateContactInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateBulkContact, error)) *MockOpenlaneGraphClient_UpdateBulkContact_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateBulkControl provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) UpdateBulkControl(ctx context.Context, input []*openlaneclient.BulkUpdateControlInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateBulkControl, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateBulkControl")
+	}
+
+	var r0 *openlaneclient.UpdateBulkControl
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, []*openlaneclient.BulkUpdateControlInput, ...clientv2.RequestInterceptor) (*openlaneclient.UpdateBulkControl, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, []*openlaneclient.BulkUpdateControlInput, ...clientv2.RequestInterceptor) *openlaneclient.UpdateBulkControl); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.UpdateBulkControl)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, []*openlaneclient.BulkUpdateControlInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_UpdateBulkControl_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateBulkControl'
+type MockOpenlaneGraphClient_UpdateBulkControl_Call struct {
+	*mock.Call
+}
+
+// UpdateBulkControl is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input []*openlaneclient.BulkUpdateControlInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) UpdateBulkControl(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateBulkControl_Call {
+	return &MockOpenlaneGraphClient_UpdateBulkControl_Call{Call: _e.mock.On("UpdateBulkControl",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateBulkControl_Call) Run(run func(ctx context.Context, input []*openlaneclient.BulkUpdateControlInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateBulkControl_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.BulkUpdateControlInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.BulkUpdateControlInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateBulkControl_Call) Return(updateBulkControl *openlaneclient.UpdateBulkControl, err error) *MockOpenlaneGraphClient_UpdateBulkControl_Call {
+	_c.Call.Return(updateBulkControl, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateBulkControl_Call) RunAndReturn(run func(ctx context.Context, input []*openlaneclient.BulkUpdateControlInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateBulkControl, error)) *MockOpenlaneGraphClient_UpdateBulkControl_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateBulkTask provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) UpdateBulkTask(ctx context.Context, input []*openlaneclient.BulkUpdateTaskInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateBulkTask, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateBulkTask")
+	}
+
+	var r0 *openlaneclient.UpdateBulkTask
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, []*openlaneclient.BulkUpdateTaskInput, ...clientv2.RequestInterceptor) (*openlaneclient.UpdateBulkTask, error)); ok {
+		return returnFunc(ctx, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, []*openlaneclient.BulkUpdateTaskInput, ...clientv2.RequestInterceptor) *openlaneclient.UpdateBulkTask); ok {
+		r0 = returnFunc(ctx, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.UpdateBulkTask)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, []*openlaneclient.BulkUpdateTaskInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_UpdateBulkTask_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateBulkTask'
+type MockOpenlaneGraphClient_UpdateBulkTask_Call struct {
+	*mock.Call
+}
+
+// UpdateBulkTask is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input []*openlaneclient.BulkUpdateTaskInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) UpdateBulkTask(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateBulkTask_Call {
+	return &MockOpenlaneGraphClient_UpdateBulkTask_Call{Call: _e.mock.On("UpdateBulkTask",
+		append([]interface{}{ctx, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateBulkTask_Call) Run(run func(ctx context.Context, input []*openlaneclient.BulkUpdateTaskInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateBulkTask_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []*openlaneclient.BulkUpdateTaskInput
+		if args[1] != nil {
+			arg1 = args[1].([]*openlaneclient.BulkUpdateTaskInput)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateBulkTask_Call) Return(updateBulkTask *openlaneclient.UpdateBulkTask, err error) *MockOpenlaneGraphClient_UpdateBulkTask_Call {
+	_c.Call.Return(updateBulkTask, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateBulkTask_Call) RunAndReturn(run func(ctx context.Context, input []*openlaneclient.BulkUpdateTaskInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateBulkTask, error)) *MockOpenlaneGraphClient_UpdateBulkTask_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // UpdateContact provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) UpdateContact(ctx context.Context, updateContactID string, input openlaneclient.UpdateContactInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateContact, error) {
 	var tmpRet mock.Arguments

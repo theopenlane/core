@@ -106,6 +106,124 @@ func (ec *executionContext) fieldContext_ContactBulkCreatePayload_contacts(_ con
 	return fc, nil
 }
 
+func (ec *executionContext) _ContactBulkUpdatePayload_contacts(ctx context.Context, field graphql.CollectedField, obj *model.ContactBulkUpdatePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ContactBulkUpdatePayload_contacts(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Contacts, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*generated.Contact)
+	fc.Result = res
+	return ec.marshalOContact2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContactᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ContactBulkUpdatePayload_contacts(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ContactBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Contact_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Contact_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Contact_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Contact_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Contact_updatedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_Contact_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Contact_ownerID(ctx, field)
+			case "fullName":
+				return ec.fieldContext_Contact_fullName(ctx, field)
+			case "title":
+				return ec.fieldContext_Contact_title(ctx, field)
+			case "company":
+				return ec.fieldContext_Contact_company(ctx, field)
+			case "email":
+				return ec.fieldContext_Contact_email(ctx, field)
+			case "phoneNumber":
+				return ec.fieldContext_Contact_phoneNumber(ctx, field)
+			case "address":
+				return ec.fieldContext_Contact_address(ctx, field)
+			case "status":
+				return ec.fieldContext_Contact_status(ctx, field)
+			case "owner":
+				return ec.fieldContext_Contact_owner(ctx, field)
+			case "entities":
+				return ec.fieldContext_Contact_entities(ctx, field)
+			case "files":
+				return ec.fieldContext_Contact_files(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Contact", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ContactBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ContactBulkUpdatePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ContactBulkUpdatePayload_updatedIDs(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedIDs, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalOID2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ContactBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ContactBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ContactCreatePayload_contact(ctx context.Context, field graphql.CollectedField, obj *model.ContactCreatePayload) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ContactCreatePayload_contact(ctx, field)
 	if err != nil {
@@ -314,6 +432,40 @@ func (ec *executionContext) fieldContext_ContactUpdatePayload_contact(_ context.
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputBulkUpdateContactInput(ctx context.Context, obj any) (model.BulkUpdateContactInput, error) {
+	var it model.BulkUpdateContactInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"id", "input"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "input":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+			data, err := ec.unmarshalNUpdateContactInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateContactInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Input = data
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -335,6 +487,44 @@ func (ec *executionContext) _ContactBulkCreatePayload(ctx context.Context, sel a
 			out.Values[i] = graphql.MarshalString("ContactBulkCreatePayload")
 		case "contacts":
 			out.Values[i] = ec._ContactBulkCreatePayload_contacts(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var contactBulkUpdatePayloadImplementors = []string{"ContactBulkUpdatePayload"}
+
+func (ec *executionContext) _ContactBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.ContactBulkUpdatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, contactBulkUpdatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ContactBulkUpdatePayload")
+		case "contacts":
+			out.Values[i] = ec._ContactBulkUpdatePayload_contacts(ctx, field, obj)
+		case "updatedIDs":
+			out.Values[i] = ec._ContactBulkUpdatePayload_updatedIDs(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -479,6 +669,11 @@ func (ec *executionContext) _ContactUpdatePayload(ctx context.Context, sel ast.S
 
 // region    ***************************** type.gotpl *****************************
 
+func (ec *executionContext) unmarshalNBulkUpdateContactInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateContactInput(ctx context.Context, v any) (*model.BulkUpdateContactInput, error) {
+	res, err := ec.unmarshalInputBulkUpdateContactInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) marshalNContactBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐContactBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ContactBulkCreatePayload) graphql.Marshaler {
 	return ec._ContactBulkCreatePayload(ctx, sel, &v)
 }
@@ -491,6 +686,20 @@ func (ec *executionContext) marshalNContactBulkCreatePayload2ᚖgithubᚗcomᚋt
 		return graphql.Null
 	}
 	return ec._ContactBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNContactBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐContactBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ContactBulkUpdatePayload) graphql.Marshaler {
+	return ec._ContactBulkUpdatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNContactBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐContactBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ContactBulkUpdatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._ContactBulkUpdatePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNContactCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐContactCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ContactCreatePayload) graphql.Marshaler {
@@ -533,6 +742,24 @@ func (ec *executionContext) marshalNContactUpdatePayload2ᚖgithubᚗcomᚋtheop
 		return graphql.Null
 	}
 	return ec._ContactUpdatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOBulkUpdateContactInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateContactInputᚄ(ctx context.Context, v any) ([]*model.BulkUpdateContactInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []any
+	vSlice = graphql.CoerceList(v)
+	var err error
+	res := make([]*model.BulkUpdateContactInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNBulkUpdateContactInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateContactInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
 }
 
 // endregion ***************************** type.gotpl *****************************

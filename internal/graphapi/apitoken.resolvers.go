@@ -75,6 +75,23 @@ func (r *mutationResolver) CreateBulkCSVAPIToken(ctx context.Context, input grap
 	return r.bulkCreateAPIToken(ctx, data)
 }
 
+// UpdateBulkAPIToken is the resolver for the updateBulkAPIToken field.
+func (r *mutationResolver) UpdateBulkAPIToken(ctx context.Context, input []*model.BulkUpdateAPITokenInput) (*model.APITokenBulkUpdatePayload, error) {
+	if len(input) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	return r.bulkUpdateAPIToken(ctx, input)
+}
+
 // UpdateAPIToken is the resolver for the updateAPIToken field.
 func (r *mutationResolver) UpdateAPIToken(ctx context.Context, id string, input generated.UpdateAPITokenInput) (*model.APITokenUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).APIToken.Get(ctx, id)

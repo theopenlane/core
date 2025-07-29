@@ -19,6 +19,14 @@ type APITokenBulkCreatePayload struct {
 	APITokens []*generated.APIToken `json:"apiTokens,omitempty"`
 }
 
+// Return response for updateBulkAPIToken mutation
+type APITokenBulkUpdatePayload struct {
+	// Updated apiTokens
+	APITokens []*generated.APIToken `json:"apiTokens,omitempty"`
+	// IDs of the updated apiTokens
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createAPIToken mutation
 type APITokenCreatePayload struct {
 	// Created apiToken
@@ -41,6 +49,14 @@ type APITokenUpdatePayload struct {
 type ActionPlanBulkCreatePayload struct {
 	// Created actionPlans
 	ActionPlans []*generated.ActionPlan `json:"actionPlans,omitempty"`
+}
+
+// Return response for updateBulkActionPlan mutation
+type ActionPlanBulkUpdatePayload struct {
+	// Updated actionPlans
+	ActionPlans []*generated.ActionPlan `json:"actionPlans,omitempty"`
+	// IDs of the updated actionPlans
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createActionPlan mutation
@@ -91,6 +107,62 @@ type AssetUpdatePayload struct {
 	Asset *generated.Asset `json:"asset"`
 }
 
+// Input for updating a single apiToken in a bulk operation
+type BulkUpdateAPITokenInput struct {
+	// ID of the apiToken to update
+	ID string `json:"id"`
+	// Data to update the apiToken with
+	Input *generated.UpdateAPITokenInput `json:"input"`
+}
+
+// Input for updating a single actionPlan in a bulk operation
+type BulkUpdateActionPlanInput struct {
+	// ID of the actionPlan to update
+	ID string `json:"id"`
+	// Data to update the actionPlan with
+	Input *generated.UpdateActionPlanInput `json:"input"`
+}
+
+// Input for updating a single contact in a bulk operation
+type BulkUpdateContactInput struct {
+	// ID of the contact to update
+	ID string `json:"id"`
+	// Data to update the contact with
+	Input *generated.UpdateContactInput `json:"input"`
+}
+
+// Input for updating a single control in a bulk operation
+type BulkUpdateControlInput struct {
+	// ID of the control to update
+	ID string `json:"id"`
+	// Data to update the control with
+	Input *generated.UpdateControlInput `json:"input"`
+}
+
+// Input for updating a single hush in a bulk operation
+type BulkUpdateHushInput struct {
+	// ID of the hush to update
+	ID string `json:"id"`
+	// Data to update the hush with
+	Input *generated.UpdateHushInput `json:"input"`
+}
+
+// Input for updating a single scan in a bulk operation
+type BulkUpdateScanInput struct {
+	// ID of the scan to update
+	ID string `json:"id"`
+	// Data to update the scan with
+	Input *generated.UpdateScanInput `json:"input"`
+}
+
+// Input for updating a single task in a bulk operation
+type BulkUpdateTaskInput struct {
+	// ID of the task to update
+	ID string `json:"id"`
+	// Data to update the task with
+	Input *generated.UpdateTaskInput `json:"input"`
+}
+
 // CloneControlInput is used to clone controls and their subcontrols
 // under an organization (ownerID)
 type CloneControlInput struct {
@@ -108,6 +180,14 @@ type CloneControlInput struct {
 type ContactBulkCreatePayload struct {
 	// Created contacts
 	Contacts []*generated.Contact `json:"contacts,omitempty"`
+}
+
+// Return response for updateBulkContact mutation
+type ContactBulkUpdatePayload struct {
+	// Updated contacts
+	Contacts []*generated.Contact `json:"contacts,omitempty"`
+	// IDs of the updated contacts
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createContact mutation
@@ -132,6 +212,14 @@ type ContactUpdatePayload struct {
 type ControlBulkCreatePayload struct {
 	// Created controls
 	Controls []*generated.Control `json:"controls,omitempty"`
+}
+
+// Return response for updateBulkControl mutation
+type ControlBulkUpdatePayload struct {
+	// Updated controls
+	Controls []*generated.Control `json:"controls,omitempty"`
+	// IDs of the updated controls
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 type ControlCategory struct {
@@ -655,6 +743,14 @@ type HushBulkCreatePayload struct {
 	Hushes []*generated.Hush `json:"hushes,omitempty"`
 }
 
+// Return response for updateBulkHush mutation
+type HushBulkUpdatePayload struct {
+	// Updated hushs
+	Hushes []*generated.Hush `json:"hushes,omitempty"`
+	// IDs of the updated hushs
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createHush mutation
 type HushCreatePayload struct {
 	// Created hush
@@ -1087,6 +1183,14 @@ type ScanBulkCreatePayload struct {
 	Scans []*generated.Scan `json:"scans,omitempty"`
 }
 
+// Return response for updateBulkScan mutation
+type ScanBulkUpdatePayload struct {
+	// Updated scans
+	Scans []*generated.Scan `json:"scans,omitempty"`
+	// IDs of the updated scans
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createScan mutation
 type ScanCreatePayload struct {
 	// Created scan
@@ -1298,6 +1402,14 @@ type TFASettingUpdatePayload struct {
 type TaskBulkCreatePayload struct {
 	// Created tasks
 	Tasks []*generated.Task `json:"tasks,omitempty"`
+}
+
+// Return response for updateBulkTask mutation
+type TaskBulkUpdatePayload struct {
+	// Updated tasks
+	Tasks []*generated.Task `json:"tasks,omitempty"`
+	// IDs of the updated tasks
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createTask mutation

@@ -75,6 +75,23 @@ func (r *mutationResolver) CreateBulkCSVScan(ctx context.Context, input graphql.
 	return r.bulkCreateScan(ctx, data)
 }
 
+// UpdateBulkScan is the resolver for the updateBulkScan field.
+func (r *mutationResolver) UpdateBulkScan(ctx context.Context, input []*model.BulkUpdateScanInput) (*model.ScanBulkUpdatePayload, error) {
+	if len(input) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	return r.bulkUpdateScan(ctx, input)
+}
+
 // UpdateScan is the resolver for the updateScan field.
 func (r *mutationResolver) UpdateScan(ctx context.Context, id string, input generated.UpdateScanInput) (*model.ScanUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Scan.Get(ctx, id)
