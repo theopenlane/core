@@ -75,6 +75,23 @@ func (r *mutationResolver) CreateBulkCSVRisk(ctx context.Context, input graphql.
 	return r.bulkCreateRisk(ctx, data)
 }
 
+// UpdateBulkRisk is the resolver for the updateBulkRisk field.
+func (r *mutationResolver) UpdateBulkRisk(ctx context.Context, input []*model.BulkUpdateRiskInput) (*model.RiskBulkUpdatePayload, error) {
+	if len(input) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	return r.bulkUpdateRisk(ctx, input)
+}
+
 // UpdateRisk is the resolver for the updateRisk field.
 func (r *mutationResolver) UpdateRisk(ctx context.Context, id string, input generated.UpdateRiskInput) (*model.RiskUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Risk.Get(ctx, id)

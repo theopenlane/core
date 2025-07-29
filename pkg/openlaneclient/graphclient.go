@@ -212,6 +212,7 @@ type OpenlaneGraphClient interface {
 	GetIntegrationHistories(ctx context.Context, where *IntegrationHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetIntegrationHistories, error)
 	CreateBulkCSVInternalPolicy(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVInternalPolicy, error)
 	CreateBulkInternalPolicy(ctx context.Context, input []*CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkInternalPolicy, error)
+	UpdateBulkInternalPolicy(ctx context.Context, input []*BulkUpdateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkInternalPolicy, error)
 	CreateInternalPolicy(ctx context.Context, input CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateInternalPolicy, error)
 	DeleteInternalPolicy(ctx context.Context, deleteInternalPolicyID string, interceptors ...clientv2.RequestInterceptor) (*DeleteInternalPolicy, error)
 	GetAllInternalPolicies(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*InternalPolicyOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllInternalPolicies, error)
@@ -325,6 +326,7 @@ type OpenlaneGraphClient interface {
 	UpdatePersonalAccessToken(ctx context.Context, updatePersonalAccessTokenID string, input UpdatePersonalAccessTokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdatePersonalAccessToken, error)
 	CreateBulkCSVProcedure(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVProcedure, error)
 	CreateBulkProcedure(ctx context.Context, input []*CreateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkProcedure, error)
+	UpdateBulkProcedure(ctx context.Context, input []*BulkUpdateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkProcedure, error)
 	CreateProcedure(ctx context.Context, input CreateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*CreateProcedure, error)
 	DeleteProcedure(ctx context.Context, deleteProcedureID string, interceptors ...clientv2.RequestInterceptor) (*DeleteProcedure, error)
 	GetAllProcedures(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllProcedures, error)
@@ -365,6 +367,7 @@ type OpenlaneGraphClient interface {
 	GetProgramMembershipHistories(ctx context.Context, where *ProgramMembershipHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetProgramMembershipHistories, error)
 	CreateBulkCSVRisk(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVRisk, error)
 	CreateBulkRisk(ctx context.Context, input []*CreateRiskInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkRisk, error)
+	UpdateBulkRisk(ctx context.Context, input []*BulkUpdateRiskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkRisk, error)
 	CreateRisk(ctx context.Context, input CreateRiskInput, interceptors ...clientv2.RequestInterceptor) (*CreateRisk, error)
 	DeleteRisk(ctx context.Context, deleteRiskID string, interceptors ...clientv2.RequestInterceptor) (*DeleteRisk, error)
 	GetAllRisks(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*RiskOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllRisks, error)
@@ -36506,6 +36509,190 @@ func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy) GetInternalPolicies(
 	return t.InternalPolicies
 }
 
+type UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Approver struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Approver) GetID() string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Approver{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Approver) GetName() string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Approver{}
+	}
+	return t.Name
+}
+
+type UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Delegate struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Delegate) GetID() string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Delegate{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Delegate) GetName() string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Delegate{}
+	}
+	return t.Name
+}
+
+type UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies struct {
+	ApprovalRequired *bool                                                                        "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	Approver         *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Approver "json:\"approver,omitempty\" graphql:\"approver\""
+	CreatedAt        *time.Time                                                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string                                                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Delegate         *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Delegate "json:\"delegate,omitempty\" graphql:\"delegate\""
+	Details          *string                                                                      "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                                                                       "json:\"displayID\" graphql:\"displayID\""
+	ID               string                                                                       "json:\"id\" graphql:\"id\""
+	Name             string                                                                       "json:\"name\" graphql:\"name\""
+	OwnerID          *string                                                                      "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PolicyType       *string                                                                      "json:\"policyType,omitempty\" graphql:\"policyType\""
+	ReviewDue        *time.Time                                                                   "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency                                                             "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string                                                                      "json:\"revision,omitempty\" graphql:\"revision\""
+	Status           *enums.DocumentStatus                                                        "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string                                                                     "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time                                                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string                                                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.ApprovalRequired
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetApprover() *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Approver {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.Approver
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetDelegate() *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies_Delegate {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.Delegate
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetDetails() *string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.Details
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetID() string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetName() string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.Name
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetPolicyType() *string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.PolicyType
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetReviewDue() *time.Time {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.ReviewDue
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.ReviewFrequency
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetRevision() *string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.Revision
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetStatus() *enums.DocumentStatus {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.Status
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetTags() []string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.Tags
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateBulkInternalPolicy_UpdateBulkInternalPolicy struct {
+	InternalPolicies []*UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies "json:\"internalPolicies,omitempty\" graphql:\"internalPolicies\""
+	UpdatedIDs       []string                                                              "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+}
+
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy) GetInternalPolicies() []*UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy{}
+	}
+	return t.InternalPolicies
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy) GetUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy{}
+	}
+	return t.UpdatedIDs
+}
+
 type CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Controls_Edges_Node struct {
 	ID      string "json:\"id\" graphql:\"id\""
 	RefCode string "json:\"refCode\" graphql:\"refCode\""
@@ -53874,6 +54061,190 @@ func (t *CreateBulkProcedure_CreateBulkProcedure) GetProcedures() []*CreateBulkP
 	return t.Procedures
 }
 
+type UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Approver struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Approver) GetID() string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Approver{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Approver) GetName() string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Approver{}
+	}
+	return t.Name
+}
+
+type UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Delegate struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Delegate) GetID() string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Delegate{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Delegate) GetName() string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Delegate{}
+	}
+	return t.Name
+}
+
+type UpdateBulkProcedure_UpdateBulkProcedure_Procedures struct {
+	ApprovalRequired *bool                                                        "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	Approver         *UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Approver "json:\"approver,omitempty\" graphql:\"approver\""
+	CreatedAt        *time.Time                                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string                                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Delegate         *UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Delegate "json:\"delegate,omitempty\" graphql:\"delegate\""
+	Details          *string                                                      "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID        string                                                       "json:\"displayID\" graphql:\"displayID\""
+	ID               string                                                       "json:\"id\" graphql:\"id\""
+	Name             string                                                       "json:\"name\" graphql:\"name\""
+	OwnerID          *string                                                      "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ProcedureType    *string                                                      "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	ReviewDue        *time.Time                                                   "json:\"reviewDue,omitempty\" graphql:\"reviewDue\""
+	ReviewFrequency  *enums.Frequency                                             "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
+	Revision         *string                                                      "json:\"revision,omitempty\" graphql:\"revision\""
+	Status           *enums.DocumentStatus                                        "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string                                                     "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time                                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string                                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.ApprovalRequired
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetApprover() *UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Approver {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.Approver
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetDelegate() *UpdateBulkProcedure_UpdateBulkProcedure_Procedures_Delegate {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.Delegate
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetDetails() *string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.Details
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetID() string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetName() string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.Name
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetProcedureType() *string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.ProcedureType
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetReviewDue() *time.Time {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.ReviewDue
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetReviewFrequency() *enums.Frequency {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.ReviewFrequency
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetRevision() *string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.Revision
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetStatus() *enums.DocumentStatus {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.Status
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetTags() []string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.Tags
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateBulkProcedure_UpdateBulkProcedure struct {
+	Procedures []*UpdateBulkProcedure_UpdateBulkProcedure_Procedures "json:\"procedures,omitempty\" graphql:\"procedures\""
+	UpdatedIDs []string                                              "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+}
+
+func (t *UpdateBulkProcedure_UpdateBulkProcedure) GetProcedures() []*UpdateBulkProcedure_UpdateBulkProcedure_Procedures {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure{}
+	}
+	return t.Procedures
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure) GetUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure{}
+	}
+	return t.UpdatedIDs
+}
+
 type CreateProcedure_CreateProcedure_Procedure_Editors_Edges_Node struct {
 	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
@@ -61530,6 +61901,190 @@ func (t *CreateBulkRisk_CreateBulkRisk) GetRisks() []*CreateBulkRisk_CreateBulkR
 		t = &CreateBulkRisk_CreateBulkRisk{}
 	}
 	return t.Risks
+}
+
+type UpdateBulkRisk_UpdateBulkRisk_Risks_Stakeholder struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks_Stakeholder) GetID() string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks_Stakeholder{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks_Stakeholder) GetName() string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks_Stakeholder{}
+	}
+	return t.Name
+}
+
+type UpdateBulkRisk_UpdateBulkRisk_Risks_Delegate struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks_Delegate) GetID() string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks_Delegate{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks_Delegate) GetName() string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks_Delegate{}
+	}
+	return t.Name
+}
+
+type UpdateBulkRisk_UpdateBulkRisk_Risks struct {
+	BusinessCosts *string                                          "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
+	CreatedAt     *time.Time                                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Delegate      *UpdateBulkRisk_UpdateBulkRisk_Risks_Delegate    "json:\"delegate,omitempty\" graphql:\"delegate\""
+	Details       *string                                          "json:\"details,omitempty\" graphql:\"details\""
+	DisplayID     string                                           "json:\"displayID\" graphql:\"displayID\""
+	ID            string                                           "json:\"id\" graphql:\"id\""
+	Impact        *enums.RiskImpact                                "json:\"impact,omitempty\" graphql:\"impact\""
+	Likelihood    *enums.RiskLikelihood                            "json:\"likelihood,omitempty\" graphql:\"likelihood\""
+	Mitigation    *string                                          "json:\"mitigation,omitempty\" graphql:\"mitigation\""
+	Name          string                                           "json:\"name\" graphql:\"name\""
+	RiskType      *string                                          "json:\"riskType,omitempty\" graphql:\"riskType\""
+	Score         *int64                                           "json:\"score,omitempty\" graphql:\"score\""
+	Stakeholder   *UpdateBulkRisk_UpdateBulkRisk_Risks_Stakeholder "json:\"stakeholder,omitempty\" graphql:\"stakeholder\""
+	Status        *enums.RiskStatus                                "json:\"status,omitempty\" graphql:\"status\""
+	Tags          []string                                         "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetBusinessCosts() *string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.BusinessCosts
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetDelegate() *UpdateBulkRisk_UpdateBulkRisk_Risks_Delegate {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.Delegate
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetDetails() *string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.Details
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetID() string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetImpact() *enums.RiskImpact {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.Impact
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetLikelihood() *enums.RiskLikelihood {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.Likelihood
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetMitigation() *string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.Mitigation
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetName() string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.Name
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetRiskType() *string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.RiskType
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetScore() *int64 {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.Score
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetStakeholder() *UpdateBulkRisk_UpdateBulkRisk_Risks_Stakeholder {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.Stakeholder
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetStatus() *enums.RiskStatus {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.Status
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetTags() []string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.Tags
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateBulkRisk_UpdateBulkRisk struct {
+	Risks      []*UpdateBulkRisk_UpdateBulkRisk_Risks "json:\"risks,omitempty\" graphql:\"risks\""
+	UpdatedIDs []string                               "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+}
+
+func (t *UpdateBulkRisk_UpdateBulkRisk) GetRisks() []*UpdateBulkRisk_UpdateBulkRisk_Risks {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk{}
+	}
+	return t.Risks
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk) GetUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk{}
+	}
+	return t.UpdatedIDs
 }
 
 type CreateRisk_CreateRisk_Risk_Programs_Edges_Node struct {
@@ -90893,6 +91448,17 @@ func (t *CreateBulkInternalPolicy) GetCreateBulkInternalPolicy() *CreateBulkInte
 	return &t.CreateBulkInternalPolicy
 }
 
+type UpdateBulkInternalPolicy struct {
+	UpdateBulkInternalPolicy UpdateBulkInternalPolicy_UpdateBulkInternalPolicy "json:\"updateBulkInternalPolicy\" graphql:\"updateBulkInternalPolicy\""
+}
+
+func (t *UpdateBulkInternalPolicy) GetUpdateBulkInternalPolicy() *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy{}
+	}
+	return &t.UpdateBulkInternalPolicy
+}
+
 type CreateInternalPolicy struct {
 	CreateInternalPolicy CreateInternalPolicy_CreateInternalPolicy "json:\"createInternalPolicy\" graphql:\"createInternalPolicy\""
 }
@@ -92136,6 +92702,17 @@ func (t *CreateBulkProcedure) GetCreateBulkProcedure() *CreateBulkProcedure_Crea
 	return &t.CreateBulkProcedure
 }
 
+type UpdateBulkProcedure struct {
+	UpdateBulkProcedure UpdateBulkProcedure_UpdateBulkProcedure "json:\"updateBulkProcedure\" graphql:\"updateBulkProcedure\""
+}
+
+func (t *UpdateBulkProcedure) GetUpdateBulkProcedure() *UpdateBulkProcedure_UpdateBulkProcedure {
+	if t == nil {
+		t = &UpdateBulkProcedure{}
+	}
+	return &t.UpdateBulkProcedure
+}
+
 type CreateProcedure struct {
 	CreateProcedure CreateProcedure_CreateProcedure "json:\"createProcedure\" graphql:\"createProcedure\""
 }
@@ -92574,6 +93151,17 @@ func (t *CreateBulkRisk) GetCreateBulkRisk() *CreateBulkRisk_CreateBulkRisk {
 		t = &CreateBulkRisk{}
 	}
 	return &t.CreateBulkRisk
+}
+
+type UpdateBulkRisk struct {
+	UpdateBulkRisk UpdateBulkRisk_UpdateBulkRisk "json:\"updateBulkRisk\" graphql:\"updateBulkRisk\""
+}
+
+func (t *UpdateBulkRisk) GetUpdateBulkRisk() *UpdateBulkRisk_UpdateBulkRisk {
+	if t == nil {
+		t = &UpdateBulkRisk{}
+	}
+	return &t.UpdateBulkRisk
 }
 
 type CreateRisk struct {
@@ -104117,6 +104705,56 @@ func (c *Client) CreateBulkInternalPolicy(ctx context.Context, input []*CreateIn
 	return &res, nil
 }
 
+const UpdateBulkInternalPolicyDocument = `mutation UpdateBulkInternalPolicy ($input: [BulkUpdateInternalPolicyInput!]) {
+	updateBulkInternalPolicy(input: $input) {
+		internalPolicies {
+			approvalRequired
+			createdAt
+			createdBy
+			details
+			displayID
+			id
+			name
+			ownerID
+			policyType
+			reviewDue
+			reviewFrequency
+			revision
+			status
+			tags
+			updatedAt
+			updatedBy
+			approver {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+		updatedIDs
+	}
+}
+`
+
+func (c *Client) UpdateBulkInternalPolicy(ctx context.Context, input []*BulkUpdateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkInternalPolicy, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res UpdateBulkInternalPolicy
+	if err := c.Client.Post(ctx, "UpdateBulkInternalPolicy", UpdateBulkInternalPolicyDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateInternalPolicyDocument = `mutation CreateInternalPolicy ($input: CreateInternalPolicyInput!) {
 	createInternalPolicy(input: $input) {
 		internalPolicy {
@@ -109321,6 +109959,56 @@ func (c *Client) CreateBulkProcedure(ctx context.Context, input []*CreateProcedu
 	return &res, nil
 }
 
+const UpdateBulkProcedureDocument = `mutation UpdateBulkProcedure ($input: [BulkUpdateProcedureInput!]) {
+	updateBulkProcedure(input: $input) {
+		procedures {
+			approvalRequired
+			createdAt
+			createdBy
+			details
+			displayID
+			id
+			name
+			ownerID
+			procedureType
+			reviewDue
+			reviewFrequency
+			revision
+			status
+			tags
+			updatedAt
+			updatedBy
+			approver {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+		updatedIDs
+	}
+}
+`
+
+func (c *Client) UpdateBulkProcedure(ctx context.Context, input []*BulkUpdateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkProcedure, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res UpdateBulkProcedure
+	if err := c.Client.Post(ctx, "UpdateBulkProcedure", UpdateBulkProcedureDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateProcedureDocument = `mutation CreateProcedure ($input: CreateProcedureInput!) {
 	createProcedure(input: $input) {
 		procedure {
@@ -111388,6 +112076,56 @@ func (c *Client) CreateBulkRisk(ctx context.Context, input []*CreateRiskInput, i
 
 	var res CreateBulkRisk
 	if err := c.Client.Post(ctx, "CreateBulkRisk", CreateBulkRiskDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateBulkRiskDocument = `mutation UpdateBulkRisk ($input: [BulkUpdateRiskInput!]) {
+	updateBulkRisk(input: $input) {
+		risks {
+			businessCosts
+			createdAt
+			createdBy
+			details
+			id
+			displayID
+			impact
+			likelihood
+			mitigation
+			name
+			riskType
+			status
+			score
+			tags
+			updatedAt
+			updatedBy
+			stakeholder {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+		updatedIDs
+	}
+}
+`
+
+func (c *Client) UpdateBulkRisk(ctx context.Context, input []*BulkUpdateRiskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkRisk, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res UpdateBulkRisk
+	if err := c.Client.Post(ctx, "UpdateBulkRisk", UpdateBulkRiskDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -119048,6 +119786,7 @@ var DocumentOperationNames = map[string]string{
 	GetIntegrationHistoriesDocument:                "GetIntegrationHistories",
 	CreateBulkCSVInternalPolicyDocument:            "CreateBulkCSVInternalPolicy",
 	CreateBulkInternalPolicyDocument:               "CreateBulkInternalPolicy",
+	UpdateBulkInternalPolicyDocument:               "UpdateBulkInternalPolicy",
 	CreateInternalPolicyDocument:                   "CreateInternalPolicy",
 	DeleteInternalPolicyDocument:                   "DeleteInternalPolicy",
 	GetAllInternalPoliciesDocument:                 "GetAllInternalPolicies",
@@ -119161,6 +119900,7 @@ var DocumentOperationNames = map[string]string{
 	UpdatePersonalAccessTokenDocument:              "UpdatePersonalAccessToken",
 	CreateBulkCSVProcedureDocument:                 "CreateBulkCSVProcedure",
 	CreateBulkProcedureDocument:                    "CreateBulkProcedure",
+	UpdateBulkProcedureDocument:                    "UpdateBulkProcedure",
 	CreateProcedureDocument:                        "CreateProcedure",
 	DeleteProcedureDocument:                        "DeleteProcedure",
 	GetAllProceduresDocument:                       "GetAllProcedures",
@@ -119201,6 +119941,7 @@ var DocumentOperationNames = map[string]string{
 	GetProgramMembershipHistoriesDocument:          "GetProgramMembershipHistories",
 	CreateBulkCSVRiskDocument:                      "CreateBulkCSVRisk",
 	CreateBulkRiskDocument:                         "CreateBulkRisk",
+	UpdateBulkRiskDocument:                         "UpdateBulkRisk",
 	CreateRiskDocument:                             "CreateRisk",
 	DeleteRiskDocument:                             "DeleteRisk",
 	GetAllRisksDocument:                            "GetAllRisks",

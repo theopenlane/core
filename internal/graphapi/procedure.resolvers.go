@@ -75,6 +75,23 @@ func (r *mutationResolver) CreateBulkCSVProcedure(ctx context.Context, input gra
 	return r.bulkCreateProcedure(ctx, data)
 }
 
+// UpdateBulkProcedure is the resolver for the updateBulkProcedure field.
+func (r *mutationResolver) UpdateBulkProcedure(ctx context.Context, input []*model.BulkUpdateProcedureInput) (*model.ProcedureBulkUpdatePayload, error) {
+	if len(input) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	return r.bulkUpdateProcedure(ctx, input)
+}
+
 // UpdateProcedure is the resolver for the updateProcedure field.
 func (r *mutationResolver) UpdateProcedure(ctx context.Context, id string, input generated.UpdateProcedureInput) (*model.ProcedureUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Procedure.Get(ctx, id)

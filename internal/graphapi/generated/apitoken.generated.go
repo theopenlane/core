@@ -110,128 +110,6 @@ func (ec *executionContext) fieldContext_APITokenBulkCreatePayload_apiTokens(_ c
 	return fc, nil
 }
 
-func (ec *executionContext) _APITokenBulkUpdatePayload_apiTokens(ctx context.Context, field graphql.CollectedField, obj *model.APITokenBulkUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_APITokenBulkUpdatePayload_apiTokens(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.APITokens, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*generated.APIToken)
-	fc.Result = res
-	return ec.marshalOAPIToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPITokenᚄ(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_APITokenBulkUpdatePayload_apiTokens(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "APITokenBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_APIToken_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_APIToken_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_APIToken_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_APIToken_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_APIToken_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_APIToken_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_APIToken_ownerID(ctx, field)
-			case "name":
-				return ec.fieldContext_APIToken_name(ctx, field)
-			case "token":
-				return ec.fieldContext_APIToken_token(ctx, field)
-			case "expiresAt":
-				return ec.fieldContext_APIToken_expiresAt(ctx, field)
-			case "description":
-				return ec.fieldContext_APIToken_description(ctx, field)
-			case "scopes":
-				return ec.fieldContext_APIToken_scopes(ctx, field)
-			case "lastUsedAt":
-				return ec.fieldContext_APIToken_lastUsedAt(ctx, field)
-			case "isActive":
-				return ec.fieldContext_APIToken_isActive(ctx, field)
-			case "revokedReason":
-				return ec.fieldContext_APIToken_revokedReason(ctx, field)
-			case "revokedBy":
-				return ec.fieldContext_APIToken_revokedBy(ctx, field)
-			case "revokedAt":
-				return ec.fieldContext_APIToken_revokedAt(ctx, field)
-			case "ssoAuthorizations":
-				return ec.fieldContext_APIToken_ssoAuthorizations(ctx, field)
-			case "owner":
-				return ec.fieldContext_APIToken_owner(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type APIToken", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _APITokenBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.APITokenBulkUpdatePayload) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_APITokenBulkUpdatePayload_updatedIDs(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.UpdatedIDs, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]string)
-	fc.Result = res
-	return ec.marshalOID2ᚕstringᚄ(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_APITokenBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "APITokenBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _APITokenCreatePayload_apiToken(ctx context.Context, field graphql.CollectedField, obj *model.APITokenCreatePayload) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_APITokenCreatePayload_apiToken(ctx, field)
 	if err != nil {
@@ -448,40 +326,6 @@ func (ec *executionContext) fieldContext_APITokenUpdatePayload_apiToken(_ contex
 
 // region    **************************** input.gotpl *****************************
 
-func (ec *executionContext) unmarshalInputBulkUpdateAPITokenInput(ctx context.Context, obj any) (model.BulkUpdateAPITokenInput, error) {
-	var it model.BulkUpdateAPITokenInput
-	asMap := map[string]any{}
-	for k, v := range obj.(map[string]any) {
-		asMap[k] = v
-	}
-
-	fieldsInOrder := [...]string{"id", "input"}
-	for _, k := range fieldsInOrder {
-		v, ok := asMap[k]
-		if !ok {
-			continue
-		}
-		switch k {
-		case "id":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			data, err := ec.unmarshalNID2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ID = data
-		case "input":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-			data, err := ec.unmarshalNUpdateAPITokenInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateAPITokenInput(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Input = data
-		}
-	}
-
-	return it, nil
-}
-
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -503,44 +347,6 @@ func (ec *executionContext) _APITokenBulkCreatePayload(ctx context.Context, sel 
 			out.Values[i] = graphql.MarshalString("APITokenBulkCreatePayload")
 		case "apiTokens":
 			out.Values[i] = ec._APITokenBulkCreatePayload_apiTokens(ctx, field, obj)
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
-
-	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
-			Label:    label,
-			Path:     graphql.GetPath(ctx),
-			FieldSet: dfs,
-			Context:  ctx,
-		})
-	}
-
-	return out
-}
-
-var aPITokenBulkUpdatePayloadImplementors = []string{"APITokenBulkUpdatePayload"}
-
-func (ec *executionContext) _APITokenBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.APITokenBulkUpdatePayload) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, aPITokenBulkUpdatePayloadImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := make(map[string]*graphql.FieldSet)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("APITokenBulkUpdatePayload")
-		case "apiTokens":
-			out.Values[i] = ec._APITokenBulkUpdatePayload_apiTokens(ctx, field, obj)
-		case "updatedIDs":
-			out.Values[i] = ec._APITokenBulkUpdatePayload_updatedIDs(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -699,20 +505,6 @@ func (ec *executionContext) marshalNAPITokenBulkCreatePayload2ᚖgithubᚗcomᚋ
 	return ec._APITokenBulkCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNAPITokenBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.APITokenBulkUpdatePayload) graphql.Marshaler {
-	return ec._APITokenBulkUpdatePayload(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNAPITokenBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.APITokenBulkUpdatePayload) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._APITokenBulkUpdatePayload(ctx, sel, v)
-}
-
 func (ec *executionContext) marshalNAPITokenCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.APITokenCreatePayload) graphql.Marshaler {
 	return ec._APITokenCreatePayload(ctx, sel, &v)
 }
@@ -753,29 +545,6 @@ func (ec *executionContext) marshalNAPITokenUpdatePayload2ᚖgithubᚗcomᚋtheo
 		return graphql.Null
 	}
 	return ec._APITokenUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalNBulkUpdateAPITokenInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateAPITokenInput(ctx context.Context, v any) (*model.BulkUpdateAPITokenInput, error) {
-	res, err := ec.unmarshalInputBulkUpdateAPITokenInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalOBulkUpdateAPITokenInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateAPITokenInputᚄ(ctx context.Context, v any) ([]*model.BulkUpdateAPITokenInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
-	var err error
-	res := make([]*model.BulkUpdateAPITokenInput, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNBulkUpdateAPITokenInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateAPITokenInput(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
 }
 
 // endregion ***************************** type.gotpl *****************************

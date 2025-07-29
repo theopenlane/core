@@ -60,6 +60,38 @@ mutation CreateBulkInternalPolicy($input: [CreateInternalPolicyInput!]) {
   }
 }
 
+mutation UpdateBulkInternalPolicy($input: [BulkUpdateInternalPolicyInput!]) {
+  updateBulkInternalPolicy(input: $input) {
+    internalPolicies {
+      approvalRequired
+      createdAt
+      createdBy
+      details
+      displayID
+      id
+      name
+      ownerID
+      policyType
+      reviewDue
+      reviewFrequency
+      revision
+      status
+      tags
+      updatedAt
+      updatedBy
+      approver {
+        id
+        name
+      }
+      delegate {
+        id
+        name
+      }
+    }
+    updatedIDs
+  }
+}
+
 mutation CreateInternalPolicy($input: CreateInternalPolicyInput!) {
   createInternalPolicy(input: $input) {
     internalPolicy {

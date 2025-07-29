@@ -148,6 +148,166 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 	return fc, nil
 }
 
+func (ec *executionContext) _InternalPolicyBulkUpdatePayload_internalPolicies(ctx context.Context, field graphql.CollectedField, obj *model.InternalPolicyBulkUpdatePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_InternalPolicyBulkUpdatePayload_internalPolicies(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.InternalPolicies, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*generated.InternalPolicy)
+	fc.Result = res
+	return ec.marshalOInternalPolicy2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicyᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_internalPolicies(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "InternalPolicyBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_InternalPolicy_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_InternalPolicy_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_InternalPolicy_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_InternalPolicy_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_InternalPolicy_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_InternalPolicy_displayID(ctx, field)
+			case "tags":
+				return ec.fieldContext_InternalPolicy_tags(ctx, field)
+			case "revision":
+				return ec.fieldContext_InternalPolicy_revision(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_InternalPolicy_ownerID(ctx, field)
+			case "name":
+				return ec.fieldContext_InternalPolicy_name(ctx, field)
+			case "status":
+				return ec.fieldContext_InternalPolicy_status(ctx, field)
+			case "policyType":
+				return ec.fieldContext_InternalPolicy_policyType(ctx, field)
+			case "details":
+				return ec.fieldContext_InternalPolicy_details(ctx, field)
+			case "approvalRequired":
+				return ec.fieldContext_InternalPolicy_approvalRequired(ctx, field)
+			case "reviewDue":
+				return ec.fieldContext_InternalPolicy_reviewDue(ctx, field)
+			case "reviewFrequency":
+				return ec.fieldContext_InternalPolicy_reviewFrequency(ctx, field)
+			case "approverID":
+				return ec.fieldContext_InternalPolicy_approverID(ctx, field)
+			case "delegateID":
+				return ec.fieldContext_InternalPolicy_delegateID(ctx, field)
+			case "summary":
+				return ec.fieldContext_InternalPolicy_summary(ctx, field)
+			case "tagSuggestions":
+				return ec.fieldContext_InternalPolicy_tagSuggestions(ctx, field)
+			case "dismissedTagSuggestions":
+				return ec.fieldContext_InternalPolicy_dismissedTagSuggestions(ctx, field)
+			case "controlSuggestions":
+				return ec.fieldContext_InternalPolicy_controlSuggestions(ctx, field)
+			case "dismissedControlSuggestions":
+				return ec.fieldContext_InternalPolicy_dismissedControlSuggestions(ctx, field)
+			case "improvementSuggestions":
+				return ec.fieldContext_InternalPolicy_improvementSuggestions(ctx, field)
+			case "dismissedImprovementSuggestions":
+				return ec.fieldContext_InternalPolicy_dismissedImprovementSuggestions(ctx, field)
+			case "owner":
+				return ec.fieldContext_InternalPolicy_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_InternalPolicy_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_InternalPolicy_editors(ctx, field)
+			case "approver":
+				return ec.fieldContext_InternalPolicy_approver(ctx, field)
+			case "delegate":
+				return ec.fieldContext_InternalPolicy_delegate(ctx, field)
+			case "controlObjectives":
+				return ec.fieldContext_InternalPolicy_controlObjectives(ctx, field)
+			case "controls":
+				return ec.fieldContext_InternalPolicy_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_InternalPolicy_subcontrols(ctx, field)
+			case "procedures":
+				return ec.fieldContext_InternalPolicy_procedures(ctx, field)
+			case "narratives":
+				return ec.fieldContext_InternalPolicy_narratives(ctx, field)
+			case "tasks":
+				return ec.fieldContext_InternalPolicy_tasks(ctx, field)
+			case "risks":
+				return ec.fieldContext_InternalPolicy_risks(ctx, field)
+			case "programs":
+				return ec.fieldContext_InternalPolicy_programs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type InternalPolicy", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _InternalPolicyBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.InternalPolicyBulkUpdatePayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_InternalPolicyBulkUpdatePayload_updatedIDs(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedIDs, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalOID2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "InternalPolicyBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _InternalPolicyCreatePayload_internalPolicy(ctx context.Context, field graphql.CollectedField, obj *model.InternalPolicyCreatePayload) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_InternalPolicyCreatePayload_internalPolicy(ctx, field)
 	if err != nil {
@@ -440,6 +600,40 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputBulkUpdateInternalPolicyInput(ctx context.Context, obj any) (model.BulkUpdateInternalPolicyInput, error) {
+	var it model.BulkUpdateInternalPolicyInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"id", "input"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "input":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+			data, err := ec.unmarshalNUpdateInternalPolicyInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateInternalPolicyInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Input = data
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -461,6 +655,44 @@ func (ec *executionContext) _InternalPolicyBulkCreatePayload(ctx context.Context
 			out.Values[i] = graphql.MarshalString("InternalPolicyBulkCreatePayload")
 		case "internalPolicies":
 			out.Values[i] = ec._InternalPolicyBulkCreatePayload_internalPolicies(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var internalPolicyBulkUpdatePayloadImplementors = []string{"InternalPolicyBulkUpdatePayload"}
+
+func (ec *executionContext) _InternalPolicyBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.InternalPolicyBulkUpdatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, internalPolicyBulkUpdatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("InternalPolicyBulkUpdatePayload")
+		case "internalPolicies":
+			out.Values[i] = ec._InternalPolicyBulkUpdatePayload_internalPolicies(ctx, field, obj)
+		case "updatedIDs":
+			out.Values[i] = ec._InternalPolicyBulkUpdatePayload_updatedIDs(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -605,6 +837,11 @@ func (ec *executionContext) _InternalPolicyUpdatePayload(ctx context.Context, se
 
 // region    ***************************** type.gotpl *****************************
 
+func (ec *executionContext) unmarshalNBulkUpdateInternalPolicyInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateInternalPolicyInput(ctx context.Context, v any) (*model.BulkUpdateInternalPolicyInput, error) {
+	res, err := ec.unmarshalInputBulkUpdateInternalPolicyInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) marshalNInternalPolicyBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.InternalPolicyBulkCreatePayload) graphql.Marshaler {
 	return ec._InternalPolicyBulkCreatePayload(ctx, sel, &v)
 }
@@ -617,6 +854,20 @@ func (ec *executionContext) marshalNInternalPolicyBulkCreatePayload2ᚖgithubᚗ
 		return graphql.Null
 	}
 	return ec._InternalPolicyBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNInternalPolicyBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.InternalPolicyBulkUpdatePayload) graphql.Marshaler {
+	return ec._InternalPolicyBulkUpdatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNInternalPolicyBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.InternalPolicyBulkUpdatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._InternalPolicyBulkUpdatePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNInternalPolicyCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.InternalPolicyCreatePayload) graphql.Marshaler {
@@ -659,6 +910,24 @@ func (ec *executionContext) marshalNInternalPolicyUpdatePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._InternalPolicyUpdatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOBulkUpdateInternalPolicyInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateInternalPolicyInputᚄ(ctx context.Context, v any) ([]*model.BulkUpdateInternalPolicyInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []any
+	vSlice = graphql.CoerceList(v)
+	var err error
+	res := make([]*model.BulkUpdateInternalPolicyInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNBulkUpdateInternalPolicyInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐBulkUpdateInternalPolicyInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
 }
 
 // endregion ***************************** type.gotpl *****************************

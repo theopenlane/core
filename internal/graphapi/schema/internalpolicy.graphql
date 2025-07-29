@@ -10,6 +10,20 @@ extend type Query {
     ):  InternalPolicy!
 }
 
+"""
+Input for updating a single internalPolicy in a bulk operation
+"""
+input BulkUpdateInternalPolicyInput {
+    """
+    ID of the internalPolicy to update
+    """
+    id: ID!
+    """
+    Data to update the internalPolicy with
+    """
+    input: UpdateInternalPolicyInput!
+}
+
 extend type Mutation{
     """
     Create a new internalPolicy
@@ -38,6 +52,15 @@ extend type Mutation{
         """
         input: Upload!
     ): InternalPolicyBulkCreatePayload!
+    """
+    Update multiple existing internalPolicys
+    """
+    updateBulkInternalPolicy(
+        """
+        values to update the internalPolicys with
+        """
+        input: [BulkUpdateInternalPolicyInput!]
+    ): InternalPolicyBulkUpdatePayload!
     """
     Update an existing internalPolicy
     """
@@ -100,4 +123,18 @@ type InternalPolicyBulkCreatePayload {
     Created internalPolicys
     """
     internalPolicies: [InternalPolicy!]
+}
+
+"""
+Return response for updateBulkInternalPolicy mutation
+"""
+type InternalPolicyBulkUpdatePayload {
+    """
+    Updated internalPolicys
+    """
+    internalPolicies: [InternalPolicy!]
+    """
+    IDs of the updated internalPolicys
+    """
+    updatedIDs: [ID!]
 }
