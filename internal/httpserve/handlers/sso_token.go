@@ -185,8 +185,10 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context) error {
 	return h.Success(ctx, out)
 }
 
-// BindSSOTokenCallbackHandler binds the SSO token callback endpoint to the OpenAPI schema.
-func (h *Handler) BindSSOTokenCallbackHandler() *openapi3.Operation {
+// BindSSOTokenCallbackHandlerWithRegistry binds the SSO token callback endpoint using dynamic schema registry
+func (h *Handler) BindSSOTokenCallbackHandlerWithRegistry(registry interface {
+	GetOrRegister(any) (*openapi3.SchemaRef, error)
+}) (*openapi3.Operation, error) {
 	op := openapi3.NewOperation()
 	op.Description = "Complete token SSO authorization"
 	op.OperationID = "SSOTokenCallback"
@@ -195,11 +197,16 @@ func (h *Handler) BindSSOTokenCallbackHandler() *openapi3.Operation {
 
 	h.AddQueryParameter("code", op)
 	h.AddQueryParameter("state", op)
-	h.AddResponse("SSOTokenAuthorizeReply", "success", models.ExampleSSOTokenAuthorizeReply, op, http.StatusOK)
+
+	// Use dynamic schema registration
+	if err := h.AddResponseWithRegistry("success", models.ExampleSSOTokenAuthorizeReply, op, http.StatusOK, registry); err != nil {
+		return nil, err
+	}
+
 	op.AddResponse(http.StatusBadRequest, badRequest())
 	op.AddResponse(http.StatusInternalServerError, internalServerError())
 
-	return op
+	return op, nil
 }
 
 // BindSSOTokenAuthorizeHandler binds the SSO token authorization endpoint to the OpenAPI schema.

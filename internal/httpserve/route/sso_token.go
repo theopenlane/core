@@ -43,7 +43,10 @@ func registerSSOTokenCallbackHandler(router *Router) error {
 		},
 	}
 
-	op := router.Handler.BindSSOTokenCallbackHandler()
+	op, err := router.Handler.BindSSOTokenCallbackHandlerWithRegistry(router.SchemaRegistry)
+	if err != nil {
+		return err
+	}
 
 	return router.AddV1Route(path, method, op, route)
 }

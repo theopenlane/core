@@ -6,9 +6,8 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3gen"
 
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/utils/rout"
 )
 
 // NewOpenAPISpec creates a new OpenAPI 3.1.0 specification based on the configured go interfaces and the operation types appended within the individual handlers
@@ -20,15 +19,7 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 	securityschemes := make(openapi3.SecuritySchemes)
 	examples := make(openapi3.Examples)
 
-	generator := openapi3gen.NewGenerator(openapi3gen.UseAllExportedFields(), customizer)
-	for key, val := range openAPISchemas {
-		ref, err := generator.NewSchemaRefForValue(val, schemas)
-		if err != nil {
-			return nil, err
-		}
-
-		schemas[key] = ref
-	}
+	// Schemas are now dynamically registered by handlers using the schema registry
 
 	errorResponse := &openapi3.SchemaRef{
 		Ref: "#/components/schemas/ErrorReply",

@@ -1,72 +1,72 @@
 package handlers
 
 import (
+	"net/http"
+	"strings"
+
 	"github.com/getkin/kin-openapi/openapi3"
 
 	"github.com/theopenlane/httpsling"
 )
 
-// badRequest is a wrapper for openaAPI bad request response
+// commonResponse creates a response that references a common component
+func commonResponse(statusCode int) *openapi3.Response {
+	statusText := http.StatusText(statusCode)
+	componentName := strings.ReplaceAll(statusText, " ", "")
+	return openapi3.NewResponse().
+		WithDescription(statusText).
+		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/" + componentName}))
+}
+
+// Legacy wrapper functions for backward compatibility
+// These can be gradually replaced with commonResponse(statusCode) calls
+
+// badRequest is a wrapper for OpenAPI bad request response
 func badRequest() *openapi3.Response {
-	return openapi3.NewResponse().
-		WithDescription("Bad Request").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/BadRequest"}))
+	return commonResponse(http.StatusBadRequest)
 }
 
-// internalServerError is a wrapper for openaAPI internal server error response
+// internalServerError is a wrapper for OpenAPI internal server error response
 func internalServerError() *openapi3.Response {
-	return openapi3.NewResponse().
-		WithDescription("Internal Server Error").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/InternalServerError"}))
+	return commonResponse(http.StatusInternalServerError)
 }
 
-// notFound is a wrapper for openaAPI not found response
+// notFound is a wrapper for OpenAPI not found response
 func notFound() *openapi3.Response {
-	return openapi3.NewResponse().
-		WithDescription("Not Found").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/NotFound"}))
+	return commonResponse(http.StatusNotFound)
 }
 
-// created is a wrapper for openaAPI created response
+// created is a wrapper for OpenAPI created response
 func created() *openapi3.Response {
-	return openapi3.NewResponse().
-		WithDescription("Created").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/Created"}))
+	return commonResponse(http.StatusCreated)
 }
 
-// conflict is a wrapper for openaAPI conflict response
+// conflict is a wrapper for OpenAPI conflict response
 func conflict() *openapi3.Response {
-	return openapi3.NewResponse().
-		WithDescription("Conflict").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/Conflict"}))
+	return commonResponse(http.StatusConflict)
 }
 
-// unauthorized is a wrapper for openaAPI unauthorized response
+// unauthorized is a wrapper for OpenAPI unauthorized response
 func unauthorized() *openapi3.Response {
-	return openapi3.NewResponse().
-		WithDescription("Unauthorized").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/Unauthorized"}))
+	return commonResponse(http.StatusUnauthorized)
 }
 
-// forbidden is a wrapper for openaAPI forbidden response
+// forbidden is a wrapper for OpenAPI forbidden response
 func forbidden() *openapi3.Response {
-	return openapi3.NewResponse().
-		WithDescription("Forbidden").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/Forbidden"}))
+	return commonResponse(http.StatusForbidden)
 }
 
-// invalidInput is a wrapper for openaAPI invalidInput response
+// invalidInput is a wrapper for OpenAPI invalid input response
+// Note: This uses the InvalidInput component, not BadRequest
 func invalidInput() *openapi3.Response {
 	return openapi3.NewResponse().
 		WithDescription("Invalid Input").
 		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/InvalidInput"}))
 }
 
-// tooManyRequests is a wrapper for openaAPI too many requests response
+// tooManyRequests is a wrapper for OpenAPI too many requests response
 func tooManyRequests() *openapi3.Response {
-	return openapi3.NewResponse().
-		WithDescription("Too Many Requests").
-		WithContent(openapi3.NewContentWithJSONSchemaRef(&openapi3.SchemaRef{Ref: "#/components/responses/TooManyRequests"}))
+	return commonResponse(http.StatusTooManyRequests)
 }
 
 // AddRequestBody is used to add a request body definition to the OpenAPI schema
@@ -77,6 +77,25 @@ func (h *Handler) AddRequestBody(name string, body interface{}, op *openapi3.Ope
 
 	request.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
 	request.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(body)}
+}
+
+// AddRequestBodyWithRegistry is used to add a request body definition to the OpenAPI schema with automatic type registration
+func (h *Handler) AddRequestBodyWithRegistry(body interface{}, op *openapi3.Operation, registry interface {
+	GetOrRegister(any) (*openapi3.SchemaRef, error)
+}) error {
+	schemaRef, err := registry.GetOrRegister(body)
+	if err != nil {
+		return err
+	}
+
+	request := openapi3.NewRequestBody().
+		WithContent(openapi3.NewContentWithJSONSchemaRef(schemaRef))
+	op.RequestBody = &openapi3.RequestBodyRef{Value: request}
+
+	request.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
+	request.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(body)}
+
+	return nil
 }
 
 // AddQueryParameter is used to add a query parameter definition to the OpenAPI schema (e.g ?name=value)
@@ -102,6 +121,26 @@ func (h *Handler) AddResponse(name string, description string, body interface{},
 
 	response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
 	response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(body)}
+}
+
+// AddResponseWithRegistry is used to add a response definition to the OpenAPI schema with automatic type registration
+func (h *Handler) AddResponseWithRegistry(description string, body interface{}, op *openapi3.Operation, status int, registry interface {
+	GetOrRegister(any) (*openapi3.SchemaRef, error)
+}) error {
+	schemaRef, err := registry.GetOrRegister(body)
+	if err != nil {
+		return err
+	}
+
+	response := openapi3.NewResponse().
+		WithDescription(description).
+		WithContent(openapi3.NewContentWithJSONSchemaRef(schemaRef))
+	op.AddResponse(status, response)
+
+	response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
+	response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(body)}
+
+	return nil
 }
 
 // bearerSecurity is used to add a bearer security definition to the OpenAPI schema

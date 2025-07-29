@@ -22,7 +22,12 @@ func registerIntegrationOAuthStartHandler(router *Router) error {
 		},
 	}
 
-	if err := router.AddV1Route(path, method, nil, route); err != nil {
+	op, err := router.Handler.BindStartOAuthFlowHandlerWithRegistry(router.SchemaRegistry)
+	if err != nil {
+		return err
+	}
+
+	if err := router.AddV1Route(path, method, op, route); err != nil {
 		return err
 	}
 
@@ -45,7 +50,12 @@ func registerIntegrationOAuthCallbackHandler(router *Router) error {
 		},
 	}
 
-	if err := router.AddV1Route(path, method, nil, route); err != nil {
+	op, err := router.Handler.BindHandleOAuthCallbackHandlerWithRegistry(router.SchemaRegistry)
+	if err != nil {
+		return err
+	}
+
+	if err := router.AddV1Route(path, method, op, route); err != nil {
 		return err
 	}
 

@@ -665,34 +665,50 @@ func (h *Handler) RefreshIntegrationTokenHandler(ctx echo.Context) error {
 	return h.Success(ctx, out)
 }
 
-// BindStartOAuthFlowHandler binds the start OAuth flow handler to the OpenAPI schema
-func (h *Handler) BindStartOAuthFlowHandler() *openapi3.Operation {
+// BindStartOAuthFlowHandlerWithRegistry binds the OAuth start flow handler using dynamic schema registry
+func (h *Handler) BindStartOAuthFlowHandlerWithRegistry(registry interface {
+	GetOrRegister(any) (*openapi3.SchemaRef, error)
+}) (*openapi3.Operation, error) {
 	startOAuthHandler := openapi3.NewOperation()
 	startOAuthHandler.Description = "Start OAuth integration flow for third-party providers"
 	startOAuthHandler.Tags = []string{"oauth", "integrations"}
 	startOAuthHandler.OperationID = "StartOAuthFlow"
 	startOAuthHandler.Security = AllSecurityRequirements()
-	h.AddRequestBody("OAuthFlowRequest", models.ExampleOAuthFlowRequest, startOAuthHandler)
-	h.AddResponse("OAuthFlowResponse", "success", models.ExampleOAuthFlowResponse, startOAuthHandler, http.StatusOK)
+
+	// Use dynamic schema registration
+	if err := h.AddRequestBodyWithRegistry(models.ExampleOAuthFlowRequest, startOAuthHandler, registry); err != nil {
+		return nil, err
+	}
+	if err := h.AddResponseWithRegistry("success", models.ExampleOAuthFlowResponse, startOAuthHandler, http.StatusOK, registry); err != nil {
+		return nil, err
+	}
+
 	startOAuthHandler.AddResponse(http.StatusInternalServerError, internalServerError())
 	startOAuthHandler.AddResponse(http.StatusBadRequest, badRequest())
 	startOAuthHandler.AddResponse(http.StatusUnauthorized, unauthorized())
 
-	return startOAuthHandler
+	return startOAuthHandler, nil
 }
 
-// BindHandleOAuthCallbackHandler binds the OAuth callback handler to the OpenAPI schema
-func (h *Handler) BindHandleOAuthCallbackHandler() *openapi3.Operation {
+// BindHandleOAuthCallbackHandlerWithRegistry binds the OAuth callback handler using dynamic schema registry
+func (h *Handler) BindHandleOAuthCallbackHandlerWithRegistry(registry interface {
+	GetOrRegister(any) (*openapi3.SchemaRef, error)
+}) (*openapi3.Operation, error) {
 	callbackHandler := openapi3.NewOperation()
 	callbackHandler.Description = "Handle OAuth callback and store integration tokens"
 	callbackHandler.Tags = []string{"oauth", "integrations"}
 	callbackHandler.OperationID = "HandleOAuthCallback"
-	callbackHandler.Security = AllSecurityRequirements()
-	h.AddRequestBody("OAuthCallbackRequest", models.ExampleOAuthCallbackRequest, callbackHandler)
-	h.AddResponse("OAuthCallbackResponse", "success", models.ExampleOAuthCallbackResponse, callbackHandler, http.StatusOK)
+	callbackHandler.Security = &openapi3.SecurityRequirements{} // No auth required for callback
+
+	// OAuth callback typically uses query parameters, not request body
+	h.AddQueryParameter("code", callbackHandler)
+	h.AddQueryParameter("state", callbackHandler)
+	if err := h.AddResponseWithRegistry("success", models.ExampleOAuthCallbackResponse, callbackHandler, http.StatusOK, registry); err != nil {
+		return nil, err
+	}
+
 	callbackHandler.AddResponse(http.StatusInternalServerError, internalServerError())
 	callbackHandler.AddResponse(http.StatusBadRequest, badRequest())
-	callbackHandler.AddResponse(http.StatusUnauthorized, unauthorized())
 
-	return callbackHandler
+	return callbackHandler, nil
 }

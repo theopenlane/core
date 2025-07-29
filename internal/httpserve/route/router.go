@@ -1,16 +1,20 @@
 package route
 
 import (
+	"context"
+	"net/http"
 	"time"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware"
 
+	"github.com/theopenlane/core/internal/httpserve/common"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/middleware/impersonation"
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
+	"github.com/theopenlane/utils/contextx"
 )
 
 var (
@@ -29,12 +33,19 @@ var (
 
 // Router is a struct that holds the echo router, the OpenAPI schema, and the handler - it's a way to group these components together
 type Router struct {
-	Echo          *echo.Echo
-	OAS           *openapi3.T
-	Handler       *handlers.Handler
-	StartConfig   *echo.StartConfig
-	LocalFilePath string
-	Logger        *echo.Logger
+	Echo           *echo.Echo
+	OAS            *openapi3.T
+	Handler        *handlers.Handler
+	StartConfig    *echo.StartConfig
+	LocalFilePath  string
+	Logger         *echo.Logger
+	SchemaRegistry SchemaRegistry
+}
+
+// SchemaRegistry interface for dynamic schema registration
+type SchemaRegistry interface {
+	RegisterType(v any) (*openapi3.SchemaRef, error)
+	GetOrRegister(v any) (*openapi3.SchemaRef, error)
 }
 
 // RouterOption is an option function that can be used to configure the router
@@ -158,6 +169,89 @@ func (r *Router) VersionTwo() *echo.Group {
 // Base returns the base echo group - no "version" prefix for the router group
 func (r *Router) Base() *echo.Group {
 	return r.Echo.Group("")
+}
+
+// RouteConfig holds the configuration for a route with automatic OpenAPI registration
+type RouteConfig struct {
+	Path        string
+	Method      string
+	Name        string
+	Description string
+	Tags        []string
+	OperationID string
+	Security    *openapi3.SecurityRequirements
+	Middlewares []echo.MiddlewareFunc
+	Handler     func(echo.Context, *handlers.OpenAPIContext) error
+}
+
+// registrationContext is a special echo.Context implementation used during OpenAPI registration
+type registrationContext struct {
+	echo.Context
+	ctx context.Context
+}
+
+// newRegistrationContext creates a new registration context
+func newRegistrationContext() *registrationContext {
+	// Create a base context with registration marker
+	baseCtx := contextx.With(context.Background(), common.RegistrationMarker{})
+
+	return &registrationContext{
+		Context: echo.New().NewContext(nil, nil),
+		ctx:     baseCtx,
+	}
+}
+
+// Request returns a minimal request that won't panic when accessed
+func (rc *registrationContext) Request() *http.Request {
+	req, _ := http.NewRequestWithContext(rc.ctx, "POST", "/", nil)
+	return req
+}
+
+// AddV1HandlerRoute adds a route with automatic OpenAPI context injection
+func (r *Router) AddV1HandlerRoute(config RouteConfig) error {
+	// Create OpenAPI operation
+	operation := openapi3.NewOperation()
+	operation.Description = config.Description
+	operation.Tags = config.Tags
+	operation.OperationID = config.OperationID
+	if config.Security != nil {
+		operation.Security = config.Security
+	}
+
+	// Create OpenAPI context
+	openAPIContext := &handlers.OpenAPIContext{
+		Operation: operation,
+		Registry:  r.SchemaRegistry,
+	}
+
+	// Call the handler with a registration context to trigger OpenAPI registration
+	// This allows handlers to register their request/response schemas at startup
+	// We ignore the error because we're just triggering schema registration
+	regCtx := newRegistrationContext()
+	_ = config.Handler(regCtx, openAPIContext)
+
+	// Create echo route with automatic OpenAPI context injection
+	route := echo.Route{
+		Name:        config.Name,
+		Method:      config.Method,
+		Path:        config.Path,
+		Middlewares: config.Middlewares,
+		Handler: func(c echo.Context) error {
+			return config.Handler(c, openAPIContext)
+		},
+	}
+
+	// Add route to echo router
+	grp := r.VersionOne()
+	_, err := grp.AddRoute(route)
+	if err != nil {
+		return err
+	}
+
+	// Add operation to OpenAPI schema
+	r.OAS.AddOperation(config.Path, config.Method, operation)
+
+	return nil
 }
 
 // RegisterRoutes with the echo routers - Router is defined within openapi.go

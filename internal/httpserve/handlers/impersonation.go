@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
@@ -42,25 +41,21 @@ var (
 )
 
 // StartImpersonation handles requests to start user impersonation
-func (h *Handler) StartImpersonation(ctx echo.Context) error {
-	var req models.StartImpersonationRequest
-	if err := ctx.Bind(&req); err != nil {
-		return h.InvalidInput(ctx, err)
-	}
-
-	if err := req.Validate(); err != nil {
-		return h.InvalidInput(ctx, err)
+func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) error {
+	req, err := BindAndValidateWithAutoRegistry[models.StartImpersonationRequest](ctx, h, openapi.Operation, models.ExampleStartImpersonationRequest, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
 	}
 
 	// Get the current authenticated user (the impersonator)
 	currentUser, err := auth.GetAuthenticatedUserFromContext(ctx.Request().Context())
 	if err != nil {
-		return h.Unauthorized(ctx, ErrAuthenticationRequired)
+		return h.Unauthorized(ctx, ErrAuthenticationRequired, openapi)
 	}
 
 	// Validate permissions for impersonation
-	if err := h.validateImpersonationPermissions(currentUser, req); err != nil {
-		return ctx.JSON(http.StatusForbidden, map[string]string{"error": err.Error()})
+	if err := h.validateImpersonationPermissions(currentUser, *req); err != nil {
+		return h.Forbidden(ctx, err, openapi)
 	}
 
 	// Determine organization context
@@ -81,7 +76,7 @@ func (h *Handler) StartImpersonation(ctx echo.Context) error {
 	// Get target user information and validate organization membership
 	targetUser, err := h.getTargetUser(ctx.Request().Context(), req.TargetUserID, orgID)
 	if err != nil {
-		return h.InternalServerError(ctx, err)
+		return h.InternalServerError(ctx, err, openapi)
 	}
 
 	// Set default scopes based on impersonation type
@@ -114,7 +109,7 @@ func (h *Handler) StartImpersonation(ctx echo.Context) error {
 		Scopes:            scopes,
 	})
 	if err != nil {
-		return h.InternalServerError(ctx, err)
+		return h.InternalServerError(ctx, err, openapi)
 	}
 
 	// Extract session ID from the created token claims
@@ -160,29 +155,25 @@ func (h *Handler) StartImpersonation(ctx echo.Context) error {
 		Message:   "Impersonation session started successfully",
 	}
 
-	return h.Success(ctx, response)
+	return h.Success(ctx, response, openapi)
 }
 
 // EndImpersonation handles requests to end an impersonation session
-func (h *Handler) EndImpersonation(ctx echo.Context) error {
-	var req models.EndImpersonationRequest
-	if err := ctx.Bind(&req); err != nil {
-		return h.InvalidInput(ctx, err)
-	}
-
-	if err := req.Validate(); err != nil {
-		return h.InvalidInput(ctx, err)
+func (h *Handler) EndImpersonation(ctx echo.Context, openapi *OpenAPIContext) error {
+	req, err := BindAndValidateWithAutoRegistry[models.EndImpersonationRequest](ctx, h, openapi.Operation, models.ExampleEndImpersonationRequest, openapi.Registry)
+	if err != nil {
+		return h.InvalidInput(ctx, err, openapi)
 	}
 
 	// Get impersonated user from context
 	impUser, ok := auth.ImpersonatedUserFromContext(ctx.Request().Context())
 	if !ok {
-		return h.BadRequest(ctx, ErrNoActiveImpersonationSession)
+		return h.BadRequest(ctx, ErrNoActiveImpersonationSession, openapi)
 	}
 
 	// Validate session ID matches
 	if impUser.ImpersonationContext.SessionID != req.SessionID {
-		return h.BadRequest(ctx, ErrInvalidSessionID)
+		return h.BadRequest(ctx, ErrInvalidSessionID, openapi)
 	}
 
 	// Log impersonation end
@@ -209,7 +200,7 @@ func (h *Handler) EndImpersonation(ctx echo.Context) error {
 		Message: "Impersonation session ended successfully",
 	}
 
-	return h.Success(ctx, response)
+	return h.Success(ctx, response, openapi)
 }
 
 // validateImpersonationPermissions checks if the current user can impersonate the target user
@@ -283,36 +274,6 @@ func (h *Handler) logImpersonationEvent(_ context.Context, action string, auditL
 	return nil
 }
 
-// BindStartImpersonationHandler creates OpenAPI operation for start impersonation
-func (h *Handler) BindStartImpersonationHandler() *openapi3.Operation {
-	startImpersonation := openapi3.NewOperation()
-	startImpersonation.Description = "Start an impersonation session to act as another user for support, administrative, or testing purposes. Requires appropriate permissions and logs all impersonation activity for audit purposes."
-	startImpersonation.Tags = []string{"impersonation"}
-	startImpersonation.OperationID = "StartImpersonationHandler"
-	startImpersonation.Security = BearerSecurity()
-	h.AddRequestBody("StartImpersonationRequest", models.ExampleStartImpersonationRequest, startImpersonation)
-	h.AddResponse("StartImpersonationReply", "success", models.ExampleStartImpersonationReply, startImpersonation, http.StatusOK)
-	startImpersonation.AddResponse(http.StatusInternalServerError, internalServerError())
-	startImpersonation.AddResponse(http.StatusBadRequest, badRequest())
-	startImpersonation.AddResponse(http.StatusForbidden, forbidden())
-	startImpersonation.AddResponse(http.StatusUnauthorized, unauthorized())
-	return startImpersonation
-}
-
-// BindEndImpersonationHandler creates OpenAPI operation for end impersonation
-func (h *Handler) BindEndImpersonationHandler() *openapi3.Operation {
-	endImpersonation := openapi3.NewOperation()
-	endImpersonation.Description = "End an active impersonation session and return to normal user context. Logs the end of impersonation for audit purposes."
-	endImpersonation.Tags = []string{"impersonation"}
-	endImpersonation.OperationID = "EndImpersonationHandler"
-	endImpersonation.Security = BearerSecurity()
-	h.AddRequestBody("EndImpersonationRequest", models.ExampleEndImpersonationRequest, endImpersonation)
-	h.AddResponse("EndImpersonationReply", "success", models.ExampleEndImpersonationReply, endImpersonation, http.StatusOK)
-	endImpersonation.AddResponse(http.StatusInternalServerError, internalServerError())
-	endImpersonation.AddResponse(http.StatusBadRequest, badRequest())
-	endImpersonation.AddResponse(http.StatusUnauthorized, unauthorized())
-	return endImpersonation
-}
 
 // extractSessionIDFromToken parses an impersonation token to extract the session ID
 func (h *Handler) extractSessionIDFromToken(token string) (string, error) {

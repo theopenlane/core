@@ -1,57 +1,44 @@
 package route
 
 import (
+	"errors"
 	"net/http"
 
-	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 )
 
+var ErrAuthenticationRequired = errors.New("authentication required")
+
 // registerStartImpersonationHandler registers the start impersonation handler
-func registerStartImpersonationHandler(router *Router) (err error) {
-	path := "/impersonation/start"
-	method := http.MethodPost
-	name := "StartImpersonation"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
+func registerStartImpersonationHandler(router *Router) error {
+	config := RouteConfig{
+		Path:        "/impersonation/start",
+		Method:      http.MethodPost,
+		Name:        "StartImpersonation",
+		Description: "Start an impersonation session to act as another user for support, administrative, or testing purposes. Requires appropriate permissions and logs all impersonation activity for audit purposes.",
+		Tags:        []string{"impersonation"},
+		OperationID: "StartImpersonationHandler",
+		Security:    handlers.BearerSecurity(),
 		Middlewares: authMW,
-		Handler: func(c echo.Context) error {
-			return router.Handler.StartImpersonation(c)
-		},
+		Handler:     router.Handler.StartImpersonation,
 	}
 
-	startImpersonationOperation := router.Handler.BindStartImpersonationHandler()
-
-	if err := router.AddV1Route(path, method, startImpersonationOperation, route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddV1HandlerRoute(config)
 }
 
 // registerEndImpersonationHandler registers the end impersonation handler
-func registerEndImpersonationHandler(router *Router) (err error) {
-	path := "/impersonation/end"
-	method := http.MethodPost
-	name := "EndImpersonation"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
+func registerEndImpersonationHandler(router *Router) error {
+	config := RouteConfig{
+		Path:        "/impersonation/end",
+		Method:      http.MethodPost,
+		Name:        "EndImpersonation",
+		Description: "End an active impersonation session and return to normal user context. Logs the end of impersonation for audit purposes.",
+		Tags:        []string{"impersonation"},
+		OperationID: "EndImpersonationHandler",
+		Security:    handlers.BearerSecurity(),
 		Middlewares: authMW,
-		Handler: func(c echo.Context) error {
-			return router.Handler.EndImpersonation(c)
-		},
+		Handler:     router.Handler.EndImpersonation,
 	}
 
-	endImpersonationOperation := router.Handler.BindEndImpersonationHandler()
-
-	if err := router.AddV1Route(path, method, endImpersonationOperation, route); err != nil {
-		return err
-	}
-
-	return nil
+	return router.AddV1HandlerRoute(config)
 }
