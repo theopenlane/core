@@ -10,6 +10,20 @@ extend type Query {
     ):  Scan!
 }
 
+"""
+Input for updating a single scan in a bulk operation
+"""
+input BulkUpdateScanInput {
+    """
+    ID of the scan to update
+    """
+    id: ID!
+    """
+    Data to update the scan with
+    """
+    input: UpdateScanInput!
+}
+
 extend type Mutation{
     """
     Create a new scan
@@ -38,6 +52,15 @@ extend type Mutation{
         """
         input: Upload!
     ): ScanBulkCreatePayload!
+    """
+    Update multiple existing scans
+    """
+    updateBulkScan(
+        """
+        values to update the scans with
+        """
+        input: [BulkUpdateScanInput!]
+    ): ScanBulkUpdatePayload!
     """
     Update an existing scan
     """
@@ -100,4 +123,18 @@ type ScanBulkCreatePayload {
     Created scans
     """
     scans: [Scan!]
+}
+
+"""
+Return response for updateBulkScan mutation
+"""
+type ScanBulkUpdatePayload {
+    """
+    Updated scans
+    """
+    scans: [Scan!]
+    """
+    IDs of the updated scans
+    """
+    updatedIDs: [ID!]
 }

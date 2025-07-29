@@ -10,6 +10,20 @@ extend type Query {
     ):  Control!
 }
 
+"""
+Input for updating a single control in a bulk operation
+"""
+input BulkUpdateControlInput {
+    """
+    ID of the control to update
+    """
+    id: ID!
+    """
+    Data to update the control with
+    """
+    input: UpdateControlInput!
+}
+
 extend type Mutation{
     """
     Create a new control
@@ -38,6 +52,15 @@ extend type Mutation{
         """
         input: Upload!
     ): ControlBulkCreatePayload!
+    """
+    Update multiple existing controls
+    """
+    updateBulkControl(
+        """
+        values to update the controls with
+        """
+        input: [BulkUpdateControlInput!]
+    ): ControlBulkUpdatePayload!
     """
     Update an existing control
     """
@@ -100,4 +123,18 @@ type ControlBulkCreatePayload {
     Created controls
     """
     controls: [Control!]
+}
+
+"""
+Return response for updateBulkControl mutation
+"""
+type ControlBulkUpdatePayload {
+    """
+    Updated controls
+    """
+    controls: [Control!]
+    """
+    IDs of the updated controls
+    """
+    updatedIDs: [ID!]
 }

@@ -75,6 +75,23 @@ func (r *mutationResolver) CreateBulkCSVTask(ctx context.Context, input graphql.
 	return r.bulkCreateTask(ctx, data)
 }
 
+// UpdateBulkTask is the resolver for the updateBulkTask field.
+func (r *mutationResolver) UpdateBulkTask(ctx context.Context, input []*model.BulkUpdateTaskInput) (*model.TaskBulkUpdatePayload, error) {
+	if len(input) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	return r.bulkUpdateTask(ctx, input)
+}
+
 // UpdateTask is the resolver for the updateTask field.
 func (r *mutationResolver) UpdateTask(ctx context.Context, id string, input generated.UpdateTaskInput) (*model.TaskUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Task.Get(ctx, id)

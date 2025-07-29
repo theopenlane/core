@@ -52,6 +52,23 @@ func (r *mutationResolver) CreateBulkCSVHush(ctx context.Context, input graphql.
 	return r.bulkCreateHush(ctx, data)
 }
 
+// UpdateBulkHush is the resolver for the updateBulkHush field.
+func (r *mutationResolver) UpdateBulkHush(ctx context.Context, input []*model.BulkUpdateHushInput) (*model.HushBulkUpdatePayload, error) {
+	if len(input) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	return r.bulkUpdateHush(ctx, input)
+}
+
 // UpdateHush is the resolver for the updateHush field.
 func (r *mutationResolver) UpdateHush(ctx context.Context, id string, input generated.UpdateHushInput) (*model.HushUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Hush.Get(ctx, id)

@@ -62,6 +62,81 @@ mutation CreateBulkCSVControl($input: Upload!) {
   }
 }
 
+mutation UpdateBulkControl($input: [BulkUpdateControlInput!]) {
+  updateBulkControl(input: $input) {
+    controls {
+      assessmentMethods
+      assessmentObjectives
+      category
+      categoryID
+      controlQuestions
+      controlType
+      createdAt
+      createdBy
+      description
+      displayID
+      exampleEvidence
+      id
+      implementationGuidance
+      mappedCategories
+      ownerID
+      refCode
+      references
+      referenceFramework
+      source
+      standardID
+      status
+      subcategory
+      tags
+      updatedAt
+      updatedBy
+      controlOwner {
+        id
+        name
+      }
+      delegate {
+        id
+        name
+      }
+      programs {
+        edges {
+          node {
+            id
+            displayID
+            name
+          }
+        }
+      }
+      controlImplementations {
+        edges {
+          node {
+            id
+            details
+            status
+          }
+        }
+      }
+      editors {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      blockedGroups {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+    }
+    updatedIDs
+  }
+}
+
 mutation CreateControl($input: CreateControlInput!) {
   createControl(input: $input) {
     control {

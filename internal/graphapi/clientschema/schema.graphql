@@ -66,6 +66,19 @@ type APITokenBulkCreatePayload {
 	apiTokens: [APIToken!]
 }
 """
+Return response for updateBulkAPIToken mutation
+"""
+type APITokenBulkUpdatePayload {
+	"""
+	Updated apiTokens
+	"""
+	apiTokens: [APIToken!]
+	"""
+	IDs of the updated apiTokens
+	"""
+	updatedIDs: [ID!]
+}
+"""
 A connection to a list of items.
 """
 type APITokenConnection {
@@ -584,6 +597,19 @@ type ActionPlanBulkCreatePayload {
 	Created actionPlans
 	"""
 	actionPlans: [ActionPlan!]
+}
+"""
+Return response for updateBulkActionPlan mutation
+"""
+type ActionPlanBulkUpdatePayload {
+	"""
+	Updated actionPlans
+	"""
+	actionPlans: [ActionPlan!]
+	"""
+	IDs of the updated actionPlans
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.
@@ -2502,6 +2528,97 @@ input AuditLogWhereInput {
 	after: Time
 }
 """
+Input for updating a single apiToken in a bulk operation
+"""
+input BulkUpdateAPITokenInput {
+	"""
+	ID of the apiToken to update
+	"""
+	id: ID!
+	"""
+	Data to update the apiToken with
+	"""
+	input: UpdateAPITokenInput!
+}
+"""
+Input for updating a single actionPlan in a bulk operation
+"""
+input BulkUpdateActionPlanInput {
+	"""
+	ID of the actionPlan to update
+	"""
+	id: ID!
+	"""
+	Data to update the actionPlan with
+	"""
+	input: UpdateActionPlanInput!
+}
+"""
+Input for updating a single contact in a bulk operation
+"""
+input BulkUpdateContactInput {
+	"""
+	ID of the contact to update
+	"""
+	id: ID!
+	"""
+	Data to update the contact with
+	"""
+	input: UpdateContactInput!
+}
+"""
+Input for updating a single control in a bulk operation
+"""
+input BulkUpdateControlInput {
+	"""
+	ID of the control to update
+	"""
+	id: ID!
+	"""
+	Data to update the control with
+	"""
+	input: UpdateControlInput!
+}
+"""
+Input for updating a single hush in a bulk operation
+"""
+input BulkUpdateHushInput {
+	"""
+	ID of the hush to update
+	"""
+	id: ID!
+	"""
+	Data to update the hush with
+	"""
+	input: UpdateHushInput!
+}
+"""
+Input for updating a single scan in a bulk operation
+"""
+input BulkUpdateScanInput {
+	"""
+	ID of the scan to update
+	"""
+	id: ID!
+	"""
+	Data to update the scan with
+	"""
+	input: UpdateScanInput!
+}
+"""
+Input for updating a single task in a bulk operation
+"""
+input BulkUpdateTaskInput {
+	"""
+	ID of the task to update
+	"""
+	id: ID!
+	"""
+	Data to update the task with
+	"""
+	input: UpdateTaskInput!
+}
+"""
 Change is a difference between two updates to an object used by
 the audit history resolvers
 """
@@ -2642,6 +2759,19 @@ type ContactBulkCreatePayload {
 	Created contacts
 	"""
 	contacts: [Contact!]
+}
+"""
+Return response for updateBulkContact mutation
+"""
+type ContactBulkUpdatePayload {
+	"""
+	Updated contacts
+	"""
+	contacts: [Contact!]
+	"""
+	IDs of the updated contacts
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.
@@ -3953,6 +4083,19 @@ type ControlBulkCreatePayload {
 	Created controls
 	"""
 	controls: [Control!]
+}
+"""
+Return response for updateBulkControl mutation
+"""
+type ControlBulkUpdatePayload {
+	"""
+	Updated controls
+	"""
+	controls: [Control!]
+	"""
+	IDs of the updated controls
+	"""
+	updatedIDs: [ID!]
 }
 type ControlCategory {
 	name: String!
@@ -19092,6 +19235,19 @@ type HushBulkCreatePayload {
 	hushes: [Hush!]
 }
 """
+Return response for updateBulkHush mutation
+"""
+type HushBulkUpdatePayload {
+	"""
+	Updated hushs
+	"""
+	hushes: [Hush!]
+	"""
+	IDs of the updated hushs
+	"""
+	updatedIDs: [ID!]
+}
+"""
 A connection to a list of items.
 """
 type HushConnection {
@@ -25091,6 +25247,15 @@ type Mutation {
 		input: Upload!
 	): ActionPlanBulkCreatePayload!
 	"""
+	Update multiple existing actionPlans
+	"""
+	updateBulkActionPlan(
+		"""
+		values to update the actionPlans with
+		"""
+		input: [BulkUpdateActionPlanInput!]
+	): ActionPlanBulkUpdatePayload!
+	"""
 	Update an existing actionPlan
 	"""
 	updateActionPlan(
@@ -25140,6 +25305,15 @@ type Mutation {
 		"""
 		input: Upload!
 	): APITokenBulkCreatePayload!
+	"""
+	Update multiple existing apiTokens
+	"""
+	updateBulkAPIToken(
+		"""
+		values to update the apiTokens with
+		"""
+		input: [BulkUpdateAPITokenInput!]
+	): APITokenBulkUpdatePayload!
 	"""
 	Update an existing apiToken
 	"""
@@ -25241,6 +25415,15 @@ type Mutation {
 		input: Upload!
 	): ContactBulkCreatePayload!
 	"""
+	Update multiple existing contacts
+	"""
+	updateBulkContact(
+		"""
+		values to update the contacts with
+		"""
+		input: [BulkUpdateContactInput!]
+	): ContactBulkUpdatePayload!
+	"""
 	Update an existing contact
 	"""
 	updateContact(
@@ -25290,6 +25473,15 @@ type Mutation {
 		"""
 		input: Upload!
 	): ControlBulkCreatePayload!
+	"""
+	Update multiple existing controls
+	"""
+	updateBulkControl(
+		"""
+		values to update the controls with
+		"""
+		input: [BulkUpdateControlInput!]
+	): ControlBulkUpdatePayload!
 	"""
 	Update an existing control
 	"""
@@ -26021,6 +26213,15 @@ type Mutation {
 		"""
 		input: Upload!
 	): HushBulkCreatePayload!
+	"""
+	Update multiple existing hushs
+	"""
+	updateBulkHush(
+		"""
+		values to update the hushs with
+		"""
+		input: [BulkUpdateHushInput!]
+	): HushBulkUpdatePayload!
 	"""
 	Update an existing hush
 	"""
@@ -26878,6 +27079,15 @@ type Mutation {
 		input: Upload!
 	): ScanBulkCreatePayload!
 	"""
+	Update multiple existing scans
+	"""
+	updateBulkScan(
+		"""
+		values to update the scans with
+		"""
+		input: [BulkUpdateScanInput!]
+	): ScanBulkUpdatePayload!
+	"""
 	Update an existing scan
 	"""
 	updateScan(
@@ -27164,6 +27374,15 @@ type Mutation {
 		"""
 		input: Upload!
 	): TaskBulkCreatePayload!
+	"""
+	Update multiple existing tasks
+	"""
+	updateBulkTask(
+		"""
+		values to update the tasks with
+		"""
+		input: [BulkUpdateTaskInput!]
+	): TaskBulkUpdatePayload!
 	"""
 	Update an existing task
 	"""
@@ -46023,6 +46242,19 @@ type ScanBulkCreatePayload {
 	scans: [Scan!]
 }
 """
+Return response for updateBulkScan mutation
+"""
+type ScanBulkUpdatePayload {
+	"""
+	Updated scans
+	"""
+	scans: [Scan!]
+	"""
+	IDs of the updated scans
+	"""
+	updatedIDs: [ID!]
+}
+"""
 A connection to a list of items.
 """
 type ScanConnection {
@@ -51710,6 +51942,19 @@ type TaskBulkCreatePayload {
 	Created tasks
 	"""
 	tasks: [Task!]
+}
+"""
+Return response for updateBulkTask mutation
+"""
+type TaskBulkUpdatePayload {
+	"""
+	Updated tasks
+	"""
+	tasks: [Task!]
+	"""
+	IDs of the updated tasks
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.

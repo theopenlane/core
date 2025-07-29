@@ -89,6 +89,11 @@ type ComplexityRoot struct {
 		APITokens func(childComplexity int) int
 	}
 
+	APITokenBulkUpdatePayload struct {
+		APITokens  func(childComplexity int) int
+		UpdatedIDs func(childComplexity int) int
+	}
+
 	APITokenConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -151,6 +156,11 @@ type ComplexityRoot struct {
 
 	ActionPlanBulkCreatePayload struct {
 		ActionPlans func(childComplexity int) int
+	}
+
+	ActionPlanBulkUpdatePayload struct {
+		ActionPlans func(childComplexity int) int
+		UpdatedIDs  func(childComplexity int) int
 	}
 
 	ActionPlanConnection struct {
@@ -346,6 +356,11 @@ type ComplexityRoot struct {
 		Contacts func(childComplexity int) int
 	}
 
+	ContactBulkUpdatePayload struct {
+		Contacts   func(childComplexity int) int
+		UpdatedIDs func(childComplexity int) int
+	}
+
 	ContactConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -454,6 +469,11 @@ type ComplexityRoot struct {
 
 	ControlBulkCreatePayload struct {
 		Controls func(childComplexity int) int
+	}
+
+	ControlBulkUpdatePayload struct {
+		Controls   func(childComplexity int) int
+		UpdatedIDs func(childComplexity int) int
 	}
 
 	ControlCategory struct {
@@ -1653,6 +1673,11 @@ type ComplexityRoot struct {
 		Hushes func(childComplexity int) int
 	}
 
+	HushBulkUpdatePayload struct {
+		Hushes     func(childComplexity int) int
+		UpdatedIDs func(childComplexity int) int
+	}
+
 	HushConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -2479,6 +2504,13 @@ type ComplexityRoot struct {
 		UpdateAPIToken                       func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
 		UpdateActionPlan                     func(childComplexity int, id string, input generated.UpdateActionPlanInput) int
 		UpdateAsset                          func(childComplexity int, id string, input generated.UpdateAssetInput) int
+		UpdateBulkAPIToken                   func(childComplexity int, input []*model.BulkUpdateAPITokenInput) int
+		UpdateBulkActionPlan                 func(childComplexity int, input []*model.BulkUpdateActionPlanInput) int
+		UpdateBulkContact                    func(childComplexity int, input []*model.BulkUpdateContactInput) int
+		UpdateBulkControl                    func(childComplexity int, input []*model.BulkUpdateControlInput) int
+		UpdateBulkHush                       func(childComplexity int, input []*model.BulkUpdateHushInput) int
+		UpdateBulkScan                       func(childComplexity int, input []*model.BulkUpdateScanInput) int
+		UpdateBulkTask                       func(childComplexity int, input []*model.BulkUpdateTaskInput) int
 		UpdateContact                        func(childComplexity int, id string, input generated.UpdateContactInput) int
 		UpdateControl                        func(childComplexity int, id string, input generated.UpdateControlInput) int
 		UpdateControlImplementation          func(childComplexity int, id string, input generated.UpdateControlImplementationInput) int
@@ -3778,6 +3810,11 @@ type ComplexityRoot struct {
 		Scans func(childComplexity int) int
 	}
 
+	ScanBulkUpdatePayload struct {
+		Scans      func(childComplexity int) int
+		UpdatedIDs func(childComplexity int) int
+	}
+
 	ScanConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -4385,6 +4422,11 @@ type ComplexityRoot struct {
 
 	TaskBulkCreatePayload struct {
 		Tasks func(childComplexity int) int
+	}
+
+	TaskBulkUpdatePayload struct {
+		Tasks      func(childComplexity int) int
+		UpdatedIDs func(childComplexity int) int
 	}
 
 	TaskConnection struct {
@@ -5159,6 +5201,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.APITokenBulkCreatePayload.APITokens(childComplexity), true
 
+	case "APITokenBulkUpdatePayload.apiTokens":
+		if e.complexity.APITokenBulkUpdatePayload.APITokens == nil {
+			break
+		}
+
+		return e.complexity.APITokenBulkUpdatePayload.APITokens(childComplexity), true
+
+	case "APITokenBulkUpdatePayload.updatedIDs":
+		if e.complexity.APITokenBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.APITokenBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "APITokenConnection.edges":
 		if e.complexity.APITokenConnection.Edges == nil {
 			break
@@ -5479,6 +5535,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlanBulkCreatePayload.ActionPlans(childComplexity), true
+
+	case "ActionPlanBulkUpdatePayload.actionPlans":
+		if e.complexity.ActionPlanBulkUpdatePayload.ActionPlans == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanBulkUpdatePayload.ActionPlans(childComplexity), true
+
+	case "ActionPlanBulkUpdatePayload.updatedIDs":
+		if e.complexity.ActionPlanBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "ActionPlanConnection.edges":
 		if e.complexity.ActionPlanConnection.Edges == nil {
@@ -6388,6 +6458,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ContactBulkCreatePayload.Contacts(childComplexity), true
 
+	case "ContactBulkUpdatePayload.contacts":
+		if e.complexity.ContactBulkUpdatePayload.Contacts == nil {
+			break
+		}
+
+		return e.complexity.ContactBulkUpdatePayload.Contacts(childComplexity), true
+
+	case "ContactBulkUpdatePayload.updatedIDs":
+		if e.complexity.ContactBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.ContactBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "ContactConnection.edges":
 		if e.complexity.ContactConnection.Edges == nil {
 			break
@@ -7027,6 +7111,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlBulkCreatePayload.Controls(childComplexity), true
+
+	case "ControlBulkUpdatePayload.controls":
+		if e.complexity.ControlBulkUpdatePayload.Controls == nil {
+			break
+		}
+
+		return e.complexity.ControlBulkUpdatePayload.Controls(childComplexity), true
+
+	case "ControlBulkUpdatePayload.updatedIDs":
+		if e.complexity.ControlBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.ControlBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "ControlCategory.name":
 		if e.complexity.ControlCategory.Name == nil {
@@ -12676,6 +12774,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.HushBulkCreatePayload.Hushes(childComplexity), true
 
+	case "HushBulkUpdatePayload.hushes":
+		if e.complexity.HushBulkUpdatePayload.Hushes == nil {
+			break
+		}
+
+		return e.complexity.HushBulkUpdatePayload.Hushes(childComplexity), true
+
+	case "HushBulkUpdatePayload.updatedIDs":
+		if e.complexity.HushBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.HushBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "HushConnection.edges":
 		if e.complexity.HushConnection.Edges == nil {
 			break
@@ -17787,6 +17899,90 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateAsset(childComplexity, args["id"].(string), args["input"].(generated.UpdateAssetInput)), true
+
+	case "Mutation.updateBulkAPIToken":
+		if e.complexity.Mutation.UpdateBulkAPIToken == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkAPIToken_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkAPIToken(childComplexity, args["input"].([]*model.BulkUpdateAPITokenInput)), true
+
+	case "Mutation.updateBulkActionPlan":
+		if e.complexity.Mutation.UpdateBulkActionPlan == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkActionPlan_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkActionPlan(childComplexity, args["input"].([]*model.BulkUpdateActionPlanInput)), true
+
+	case "Mutation.updateBulkContact":
+		if e.complexity.Mutation.UpdateBulkContact == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkContact_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkContact(childComplexity, args["input"].([]*model.BulkUpdateContactInput)), true
+
+	case "Mutation.updateBulkControl":
+		if e.complexity.Mutation.UpdateBulkControl == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkControl_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkControl(childComplexity, args["input"].([]*model.BulkUpdateControlInput)), true
+
+	case "Mutation.updateBulkHush":
+		if e.complexity.Mutation.UpdateBulkHush == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkHush_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkHush(childComplexity, args["input"].([]*model.BulkUpdateHushInput)), true
+
+	case "Mutation.updateBulkScan":
+		if e.complexity.Mutation.UpdateBulkScan == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkScan_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkScan(childComplexity, args["input"].([]*model.BulkUpdateScanInput)), true
+
+	case "Mutation.updateBulkTask":
+		if e.complexity.Mutation.UpdateBulkTask == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkTask_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkTask(childComplexity, args["input"].([]*model.BulkUpdateTaskInput)), true
 
 	case "Mutation.updateContact":
 		if e.complexity.Mutation.UpdateContact == nil {
@@ -26772,6 +26968,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScanBulkCreatePayload.Scans(childComplexity), true
 
+	case "ScanBulkUpdatePayload.scans":
+		if e.complexity.ScanBulkUpdatePayload.Scans == nil {
+			break
+		}
+
+		return e.complexity.ScanBulkUpdatePayload.Scans(childComplexity), true
+
+	case "ScanBulkUpdatePayload.updatedIDs":
+		if e.complexity.ScanBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.ScanBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "ScanConnection.edges":
 		if e.complexity.ScanConnection.Edges == nil {
 			break
@@ -29779,6 +29989,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TaskBulkCreatePayload.Tasks(childComplexity), true
 
+	case "TaskBulkUpdatePayload.tasks":
+		if e.complexity.TaskBulkUpdatePayload.Tasks == nil {
+			break
+		}
+
+		return e.complexity.TaskBulkUpdatePayload.Tasks(childComplexity), true
+
+	case "TaskBulkUpdatePayload.updatedIDs":
+		if e.complexity.TaskBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.TaskBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "TaskConnection.edges":
 		if e.complexity.TaskConnection.Edges == nil {
 			break
@@ -32504,6 +32728,13 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputAssetWhereInput,
 		ec.unmarshalInputAuditLogOrder,
 		ec.unmarshalInputAuditLogWhereInput,
+		ec.unmarshalInputBulkUpdateAPITokenInput,
+		ec.unmarshalInputBulkUpdateActionPlanInput,
+		ec.unmarshalInputBulkUpdateContactInput,
+		ec.unmarshalInputBulkUpdateControlInput,
+		ec.unmarshalInputBulkUpdateHushInput,
+		ec.unmarshalInputBulkUpdateScanInput,
+		ec.unmarshalInputBulkUpdateTaskInput,
 		ec.unmarshalInputCloneControlInput,
 		ec.unmarshalInputContactHistoryOrder,
 		ec.unmarshalInputContactHistoryWhereInput,
@@ -32931,6 +33162,20 @@ var sources = []*ast.Source{
     ):  ActionPlan!
 }
 
+"""
+Input for updating a single actionPlan in a bulk operation
+"""
+input BulkUpdateActionPlanInput {
+    """
+    ID of the actionPlan to update
+    """
+    id: ID!
+    """
+    Data to update the actionPlan with
+    """
+    input: UpdateActionPlanInput!
+}
+
 extend type Mutation{
     """
     Create a new actionPlan
@@ -32959,6 +33204,15 @@ extend type Mutation{
         """
         input: Upload!
     ): ActionPlanBulkCreatePayload!
+    """
+    Update multiple existing actionPlans
+    """
+    updateBulkActionPlan(
+        """
+        values to update the actionPlans with
+        """
+        input: [BulkUpdateActionPlanInput!]
+    ): ActionPlanBulkUpdatePayload!
     """
     Update an existing actionPlan
     """
@@ -33021,6 +33275,20 @@ type ActionPlanBulkCreatePayload {
     Created actionPlans
     """
     actionPlans: [ActionPlan!]
+}
+
+"""
+Return response for updateBulkActionPlan mutation
+"""
+type ActionPlanBulkUpdatePayload {
+    """
+    Updated actionPlans
+    """
+    actionPlans: [ActionPlan!]
+    """
+    IDs of the updated actionPlans
+    """
+    updatedIDs: [ID!]
 }`, BuiltIn: false},
 	{Name: "../schema/adminsearch.graphql", Input: `extend type Query{
     """
@@ -34161,6 +34429,20 @@ type ActionPlanBulkCreatePayload {
     ):  APIToken!
 }
 
+"""
+Input for updating a single apiToken in a bulk operation
+"""
+input BulkUpdateAPITokenInput {
+    """
+    ID of the apiToken to update
+    """
+    id: ID!
+    """
+    Data to update the apiToken with
+    """
+    input: UpdateAPITokenInput!
+}
+
 extend type Mutation{
     """
     Create a new apiToken
@@ -34189,6 +34471,15 @@ extend type Mutation{
         """
         input: Upload!
     ): APITokenBulkCreatePayload!
+    """
+    Update multiple existing apiTokens
+    """
+    updateBulkAPIToken(
+        """
+        values to update the apiTokens with
+        """
+        input: [BulkUpdateAPITokenInput!]
+    ): APITokenBulkUpdatePayload!
     """
     Update an existing apiToken
     """
@@ -34251,6 +34542,20 @@ type APITokenBulkCreatePayload {
     Created apiTokens
     """
     apiTokens: [APIToken!]
+}
+
+"""
+Return response for updateBulkAPIToken mutation
+"""
+type APITokenBulkUpdatePayload {
+    """
+    Updated apiTokens
+    """
+    apiTokens: [APIToken!]
+    """
+    IDs of the updated apiTokens
+    """
+    updatedIDs: [ID!]
 }`, BuiltIn: false},
 	{Name: "../schema/asset.graphql", Input: `extend type Query {
     """
@@ -34488,6 +34793,20 @@ enum AuditLogOrderField {
     ):  Contact!
 }
 
+"""
+Input for updating a single contact in a bulk operation
+"""
+input BulkUpdateContactInput {
+    """
+    ID of the contact to update
+    """
+    id: ID!
+    """
+    Data to update the contact with
+    """
+    input: UpdateContactInput!
+}
+
 extend type Mutation{
     """
     Create a new contact
@@ -34516,6 +34835,15 @@ extend type Mutation{
         """
         input: Upload!
     ): ContactBulkCreatePayload!
+    """
+    Update multiple existing contacts
+    """
+    updateBulkContact(
+        """
+        values to update the contacts with
+        """
+        input: [BulkUpdateContactInput!]
+    ): ContactBulkUpdatePayload!
     """
     Update an existing contact
     """
@@ -34578,6 +34906,20 @@ type ContactBulkCreatePayload {
     Created contacts
     """
     contacts: [Contact!]
+}
+
+"""
+Return response for updateBulkContact mutation
+"""
+type ContactBulkUpdatePayload {
+    """
+    Updated contacts
+    """
+    contacts: [Contact!]
+    """
+    IDs of the updated contacts
+    """
+    updatedIDs: [ID!]
 }`, BuiltIn: false},
 	{Name: "../schema/control.graphql", Input: `extend type Query {
     """
@@ -34589,6 +34931,20 @@ type ContactBulkCreatePayload {
         """
         id: ID!
     ):  Control!
+}
+
+"""
+Input for updating a single control in a bulk operation
+"""
+input BulkUpdateControlInput {
+    """
+    ID of the control to update
+    """
+    id: ID!
+    """
+    Data to update the control with
+    """
+    input: UpdateControlInput!
 }
 
 extend type Mutation{
@@ -34619,6 +34975,15 @@ extend type Mutation{
         """
         input: Upload!
     ): ControlBulkCreatePayload!
+    """
+    Update multiple existing controls
+    """
+    updateBulkControl(
+        """
+        values to update the controls with
+        """
+        input: [BulkUpdateControlInput!]
+    ): ControlBulkUpdatePayload!
     """
     Update an existing control
     """
@@ -34681,6 +35046,20 @@ type ControlBulkCreatePayload {
     Created controls
     """
     controls: [Control!]
+}
+
+"""
+Return response for updateBulkControl mutation
+"""
+type ControlBulkUpdatePayload {
+    """
+    Updated controls
+    """
+    controls: [Control!]
+    """
+    IDs of the updated controls
+    """
+    updatedIDs: [ID!]
 }`, BuiltIn: false},
 	{Name: "../schema/controlextended.graphql", Input: `"""
 CloneControlInput is used to clone controls and their subcontrols
@@ -89363,6 +89742,20 @@ type GroupSettingBulkCreatePayload {
     ):  Hush!
 }
 
+"""
+Input for updating a single hush in a bulk operation
+"""
+input BulkUpdateHushInput {
+    """
+    ID of the hush to update
+    """
+    id: ID!
+    """
+    Data to update the hush with
+    """
+    input: UpdateHushInput!
+}
+
 extend type Mutation{
     """
     Create a new hush
@@ -89391,6 +89784,15 @@ extend type Mutation{
         """
         input: Upload!
     ): HushBulkCreatePayload!
+    """
+    Update multiple existing hushs
+    """
+    updateBulkHush(
+        """
+        values to update the hushs with
+        """
+        input: [BulkUpdateHushInput!]
+    ): HushBulkUpdatePayload!
     """
     Update an existing hush
     """
@@ -89453,6 +89855,20 @@ type HushBulkCreatePayload {
     Created hushs
     """
     hushes: [Hush!]
+}
+
+"""
+Return response for updateBulkHush mutation
+"""
+type HushBulkUpdatePayload {
+    """
+    Updated hushs
+    """
+    hushes: [Hush!]
+    """
+    IDs of the updated hushs
+    """
+    updatedIDs: [ID!]
 }`, BuiltIn: false},
 	{Name: "../schema/integration.graphql", Input: `extend type Query {
     """
@@ -91394,6 +91810,20 @@ scalar SSOAuthorizationMap
     ):  Scan!
 }
 
+"""
+Input for updating a single scan in a bulk operation
+"""
+input BulkUpdateScanInput {
+    """
+    ID of the scan to update
+    """
+    id: ID!
+    """
+    Data to update the scan with
+    """
+    input: UpdateScanInput!
+}
+
 extend type Mutation{
     """
     Create a new scan
@@ -91422,6 +91852,15 @@ extend type Mutation{
         """
         input: Upload!
     ): ScanBulkCreatePayload!
+    """
+    Update multiple existing scans
+    """
+    updateBulkScan(
+        """
+        values to update the scans with
+        """
+        input: [BulkUpdateScanInput!]
+    ): ScanBulkUpdatePayload!
     """
     Update an existing scan
     """
@@ -91484,6 +91923,20 @@ type ScanBulkCreatePayload {
     Created scans
     """
     scans: [Scan!]
+}
+
+"""
+Return response for updateBulkScan mutation
+"""
+type ScanBulkUpdatePayload {
+    """
+    Updated scans
+    """
+    scans: [Scan!]
+    """
+    IDs of the updated scans
+    """
+    updatedIDs: [ID!]
 }`, BuiltIn: false},
 	{Name: "../schema/scheduledjob.graphql", Input: `extend type Query {
     """
@@ -93250,6 +93703,20 @@ type SubscriberBulkCreatePayload {
     ):  Task!
 }
 
+"""
+Input for updating a single task in a bulk operation
+"""
+input BulkUpdateTaskInput {
+    """
+    ID of the task to update
+    """
+    id: ID!
+    """
+    Data to update the task with
+    """
+    input: UpdateTaskInput!
+}
+
 extend type Mutation{
     """
     Create a new task
@@ -93278,6 +93745,15 @@ extend type Mutation{
         """
         input: Upload!
     ): TaskBulkCreatePayload!
+    """
+    Update multiple existing tasks
+    """
+    updateBulkTask(
+        """
+        values to update the tasks with
+        """
+        input: [BulkUpdateTaskInput!]
+    ): TaskBulkUpdatePayload!
     """
     Update an existing task
     """
@@ -93340,6 +93816,20 @@ type TaskBulkCreatePayload {
     Created tasks
     """
     tasks: [Task!]
+}
+
+"""
+Return response for updateBulkTask mutation
+"""
+type TaskBulkUpdatePayload {
+    """
+    Updated tasks
+    """
+    tasks: [Task!]
+    """
+    IDs of the updated tasks
+    """
+    updatedIDs: [ID!]
 }`, BuiltIn: false},
 	{Name: "../schema/template.graphql", Input: `extend type Query {
     """

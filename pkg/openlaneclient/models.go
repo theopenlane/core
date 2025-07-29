@@ -54,6 +54,14 @@ type APITokenBulkCreatePayload struct {
 	APITokens []*APIToken `json:"apiTokens,omitempty"`
 }
 
+// Return response for updateBulkAPIToken mutation
+type APITokenBulkUpdatePayload struct {
+	// Updated apiTokens
+	APITokens []*APIToken `json:"apiTokens,omitempty"`
+	// IDs of the updated apiTokens
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type APITokenConnection struct {
 	// A list of edges.
@@ -340,6 +348,14 @@ func (ActionPlan) IsNode() {}
 type ActionPlanBulkCreatePayload struct {
 	// Created actionPlans
 	ActionPlans []*ActionPlan `json:"actionPlans,omitempty"`
+}
+
+// Return response for updateBulkActionPlan mutation
+type ActionPlanBulkUpdatePayload struct {
+	// Updated actionPlans
+	ActionPlans []*ActionPlan `json:"actionPlans,omitempty"`
+	// IDs of the updated actionPlans
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -1574,6 +1590,62 @@ type AuditLogWhereInput struct {
 	After *time.Time `json:"after,omitempty"`
 }
 
+// Input for updating a single apiToken in a bulk operation
+type BulkUpdateAPITokenInput struct {
+	// ID of the apiToken to update
+	ID string `json:"id"`
+	// Data to update the apiToken with
+	Input *UpdateAPITokenInput `json:"input"`
+}
+
+// Input for updating a single actionPlan in a bulk operation
+type BulkUpdateActionPlanInput struct {
+	// ID of the actionPlan to update
+	ID string `json:"id"`
+	// Data to update the actionPlan with
+	Input *UpdateActionPlanInput `json:"input"`
+}
+
+// Input for updating a single contact in a bulk operation
+type BulkUpdateContactInput struct {
+	// ID of the contact to update
+	ID string `json:"id"`
+	// Data to update the contact with
+	Input *UpdateContactInput `json:"input"`
+}
+
+// Input for updating a single control in a bulk operation
+type BulkUpdateControlInput struct {
+	// ID of the control to update
+	ID string `json:"id"`
+	// Data to update the control with
+	Input *UpdateControlInput `json:"input"`
+}
+
+// Input for updating a single hush in a bulk operation
+type BulkUpdateHushInput struct {
+	// ID of the hush to update
+	ID string `json:"id"`
+	// Data to update the hush with
+	Input *UpdateHushInput `json:"input"`
+}
+
+// Input for updating a single scan in a bulk operation
+type BulkUpdateScanInput struct {
+	// ID of the scan to update
+	ID string `json:"id"`
+	// Data to update the scan with
+	Input *UpdateScanInput `json:"input"`
+}
+
+// Input for updating a single task in a bulk operation
+type BulkUpdateTaskInput struct {
+	// ID of the task to update
+	ID string `json:"id"`
+	// Data to update the task with
+	Input *UpdateTaskInput `json:"input"`
+}
+
 // CloneControlInput is used to clone controls and their subcontrols
 // under an organization (ownerID)
 type CloneControlInput struct {
@@ -1622,6 +1694,14 @@ func (Contact) IsNode() {}
 type ContactBulkCreatePayload struct {
 	// Created contacts
 	Contacts []*Contact `json:"contacts,omitempty"`
+}
+
+// Return response for updateBulkContact mutation
+type ContactBulkUpdatePayload struct {
+	// Updated contacts
+	Contacts []*Contact `json:"contacts,omitempty"`
+	// IDs of the updated contacts
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -2224,6 +2304,14 @@ func (Control) IsNode() {}
 type ControlBulkCreatePayload struct {
 	// Created controls
 	Controls []*Control `json:"controls,omitempty"`
+}
+
+// Return response for updateBulkControl mutation
+type ControlBulkUpdatePayload struct {
+	// Updated controls
+	Controls []*Control `json:"controls,omitempty"`
+	// IDs of the updated controls
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 type ControlCategory struct {
@@ -11162,6 +11250,14 @@ func (Hush) IsNode() {}
 type HushBulkCreatePayload struct {
 	// Created hushs
 	Hushes []*Hush `json:"hushes,omitempty"`
+}
+
+// Return response for updateBulkHush mutation
+type HushBulkUpdatePayload struct {
+	// Updated hushs
+	Hushes []*Hush `json:"hushes,omitempty"`
+	// IDs of the updated hushs
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
@@ -21182,6 +21278,14 @@ type ScanBulkCreatePayload struct {
 	Scans []*Scan `json:"scans,omitempty"`
 }
 
+// Return response for updateBulkScan mutation
+type ScanBulkUpdatePayload struct {
+	// Updated scans
+	Scans []*Scan `json:"scans,omitempty"`
+	// IDs of the updated scans
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type ScanConnection struct {
 	// A list of edges.
@@ -24779,6 +24883,14 @@ func (Task) IsNode() {}
 type TaskBulkCreatePayload struct {
 	// Created tasks
 	Tasks []*Task `json:"tasks,omitempty"`
+}
+
+// Return response for updateBulkTask mutation
+type TaskBulkUpdatePayload struct {
+	// Updated tasks
+	Tasks []*Task `json:"tasks,omitempty"`
+	// IDs of the updated tasks
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.
